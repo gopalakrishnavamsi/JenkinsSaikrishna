@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customLabels>
+		<label>Create is unauthorized for {0} fields: {1}</label>
+		<name>CannotCreateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Create is unauthorized for object:</label>
+		<name>CannotCreateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Delete is unauthorized for object:</label>
+		<name>CannotDeleteObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Query is unauthorized for {0} fields: {1}</label>
+		<name>CannotQueryFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Query is unauthorized for object:</label>
+		<name>CannotQueryObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Update is unauthorized for {0} fields: {1}</label>
+		<name>CannotUpdateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Update is unauthorized for object:</label>
+		<name>CannotUpdateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope not found.</label>
+		<name>EnvelopeNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>for</label>
+		<name>ForLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid entity.</label>
+		<name>InvalidEntity</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid type.</label>
+		<name>InvalidType</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid UUID.</label>
+		<name>InvalidUUID</name>
+	</customLabels>
+	<customLabels>
+		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that
+			you have responded to all activation emails.
+		</label>
+		<name>MustBeActivated</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have administrator permissions to perform this operation.</label>
+		<name>MustBeAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign administrator permissions to perform this operation</label>
+		<name>MustBeDocuSignAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign user permissions to perform this operation</label>
+		<name>MustBeDocuSignUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Not the owner of the envelope</label>
+		<name>NotEnvelopeOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>Undefined ID</label>
+		<name>UndefinedId</name>
+	</customLabels>
+	<customLabels>
+		<label>Undefined type</label>
+		<name>UndefinedType</name>
+	</customLabels>
+	<customLabels>
+		<label>Unknown</label>
+		<name>Unknown</name>
+	</customLabels>
+	<customLabels>
+		<label>SUCCESS</label>
+		<name>StepSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>FAILURE</label>
+		<name>StepFailure</name>
+	</customLabels>
+	<customLabels>
+		<label>SKIPPED</label>
+		<name>StepSkipped</name>
+	</customLabels>
+	<customLabels>
+		<label>UNKNOWN</label>
+		<name>StepUnknown</name>
+	</customLabels>
+	<customLabels>
+		<label>Run Post-Install Scripts</label>
+		<name>RunPostInstallScripts</name>
+	</customLabels>
+	<customLabels>
+		<label>Post-install script criteria not met</label>
+		<name>PostInstallCriteriaNotMet</name>
+	</customLabels>
+	<customLabels>
+		<label>Assign DocuSign Administrator permission set</label>
+		<name>AssignAdminPermissionSet</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign for Salesforce Essentials post-install script results from {0}</label>
+		<name>PostInstallEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Organization: {0}\nUpgrading from: {1}\nUpgrading to: {2}\n{3}</label>
+		<name>PostInstallEmailBody_4</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialize account settings</label>
+		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialize envelope settings</label>
+		<name>InitializeEnvelopeSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialize Chatter settings</label>
+		<name>InitializeChatterSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Create default recipient roles</label>
+		<name>CreateDefaultRecipientRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid parameter in the page URL.</label>
+		<name>InvalidUrlParameter</name>
+	</customLabels>
+	<customLabels>
+		<label>None</label>
+		<name>None</name>
+	</customLabels>
+	<customLabels>
+		<label>Already complete</label>
+		<name>AlreadyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce user must be provided.</label>
+		<name>UserMustBeProvided</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid entity resolver: {0}.</label>
+		<name>InvalidEntityResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid document resolver: {0}.</label>
+		<name>InvalidDocumentResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid recipient resolver: {0}.</label>
+		<name>InvalidRecipientResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.
+		</label>
+		<name>SalesforceOrgStorageLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>Unexpected response from Salesforce API.</label>
+		<name>SalesforceApiErrorUnexpectedResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>No response received from API.</label>
+		<name>NullApiResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>Content type is not supported.</label>
+		<name>ContentTypeNotSupported</name>
+	</customLabels>
+	<customLabels>
+		<label>Remote site is not authorized: {0}.</label>
+		<name>RemoteSiteMissing_1</name>
+	</customLabels>
+	<customLabels>
+		<label>An error occurred when invoking a Salesforce API: {0}.</label>
+		<name>SalesforceApiError_1</name>
+	</customLabels>
+	<customLabels>
+		<label>English</label>
+		<name>English</name>
+	</customLabels>
+	<customLabels>
+		<label>German</label>
+		<name>German</name>
+	</customLabels>
+	<customLabels>
+		<label>Spanish</label>
+		<name>Spanish</name>
+	</customLabels>
+	<customLabels>
+		<label>French</label>
+		<name>French</name>
+	</customLabels>
+	<customLabels>
+		<label>Italian</label>
+		<name>Italian</name>
+	</customLabels>
+	<customLabels>
+		<label>Japanese</label>
+		<name>Japanese</name>
+	</customLabels>
+	<customLabels>
+		<label>Korean</label>
+		<name>Korean</name>
+	</customLabels>
+	<customLabels>
+		<label>Dutch</label>
+		<name>Dutch</name>
+	</customLabels>
+	<customLabels>
+		<label>Portuguese (Brazilian)</label>
+		<name>PortugueseBrazilian</name>
+	</customLabels>
+	<customLabels>
+		<label>Russian</label>
+		<name>Russian</name>
+	</customLabels>
+	<customLabels>
+		<label>Chinese (Simplified)</label>
+		<name>ChineseSimplified</name>
+	</customLabels>
+	<customLabels>
+		<label>Chinese (Traditional)</label>
+		<name>ChineseTraditional</name>
+	</customLabels>
+	<customLabels>
+		<label>Unrecognized language code.</label>
+		<name>UnrecognizedLanguageCode</name>
+	</customLabels>
+	<customLabels>
+		<label>--- Current Settings ---</label>
+		<name>CurrentChatterLanguageSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Chatter text is undefined.</label>
+		<name>UndefinedChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>--</label>
+		<name>UndefinedString</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid DocuSign environment.</label>
+		<name>InvalidEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>Signing Group</label>
+		<name>SigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign has not yet been configured for this account.</label>
+		<name>AccountNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign is not configured correctly. Please contact your system administrator for assistance.</label>
+		<name>ConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid username or password.</label>
+		<name>InvalidUsernameOrPassword</name>
+	</customLabels>
+	<customLabels>
+		<label>A DocuSign account already exists, but requires activation. The user should have received an email
+			message containing an activation link. Once the activation has been completed the user must click on the
+			DocuSign Admin tab and enter the password there.
+		</label>
+		<name>ActivationRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>A DocuSign account already exists for this username.</label>
+		<name>AccountAlreadyExists</name>
+	</customLabels>
+	<customLabels>
+		<label>The email address is not allowed because it belongs to a restricted domain.</label>
+		<name>UsernameNotAllowed</name>
+	</customLabels>
+	<customLabels>
+		<label>An error occurred while provisioning DocuSign account. Please contact DocuSign Support:
+			https://support.docusign.com/.
+		</label>
+		<name>AccountProvisioningFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Approve</label>
+		<name>Approve</name>
+	</customLabels>
+	<customLabels>
+		<label>Checkbox</label>
+		<name>Checkbox</name>
+	</customLabels>
+	<customLabels>
+		<label>Company</label>
+		<name>Company</name>
+	</customLabels>
+	<customLabels>
+		<label>Date Signed</label>
+		<name>DateSigned</name>
+	</customLabels>
+	<customLabels>
+		<label>Decline</label>
+		<name>Decline</name>
+	</customLabels>
+	<customLabels>
+		<label>Drop Down</label>
+		<name>DropDown</name>
+	</customLabels>
+	<customLabels>
+		<label>Email Address</label>
+		<name>EmailAddress</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope ID</label>
+		<name>EnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>First Name</label>
+		<name>FirstName</name>
+	</customLabels>
+	<customLabels>
+		<label>Formula</label>
+		<name>Formula</name>
+	</customLabels>
+	<customLabels>
+		<label>Full Name</label>
+		<name>FullName</name>
+	</customLabels>
+	<customLabels>
+		<label>Initial Here</label>
+		<name>InitialHere</name>
+	</customLabels>
+	<customLabels>
+		<label>Initial Here Optional</label>
+		<name>InitialHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>Last Name</label>
+		<name>LastName</name>
+	</customLabels>
+	<customLabels>
+		<label>Note</label>
+		<name>Note</name>
+	</customLabels>
+	<customLabels>
+		<label>Radio Button</label>
+		<name>RadioButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Sign Here</label>
+		<name>SignHere</name>
+	</customLabels>
+	<customLabels>
+		<label>Sign Here Optional</label>
+		<name>SignHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>Signer Attachment</label>
+		<name>SignerAttachment</name>
+	</customLabels>
+	<customLabels>
+		<label>Text Field</label>
+		<name>TextField</name>
+	</customLabels>
+	<customLabels>
+		<label>Title</label>
+		<name>Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Argument is undefined.</label>
+		<name>UndefinedArgument</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope is undefined.</label>
+		<name>UndefinedEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Unable to read document bytes.</label>
+		<name>CannotReadDocumentBytes</name>
+	</customLabels>
+	<customLabels>
+		<label>Signing Groups are not enabled for your account.</label>
+		<name>SigningGroupsProhibited</name>
+	</customLabels>
+	<customLabels>
+		<label>Correction permission must be turned on and envelope must be in \&apos;Sent\&apos;
+			or \&apos;Delivered\&apos; state to allow correction.</label>
+		<name>InvalidCorrectionState</name>
+	</customLabels>
+	<customLabels>
+		<label>This envelope is locked. An envelope correction is already in progress.</label>
+		<name>EnvelopeLockedCorrectionInProgress</name>
+	</customLabels>
+	<customLabels>
+		<label>The envelope either does not exist or you have no rights to it.</label>
+		<name>EnvelopeNotFoundOrUnauthorized</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
+			required, non-conditional Signature or Initials tab.</label>
+		<name>Failed21CFRPart11</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. Account settings indicate the recipient must be an active DocuSign user.</label>
+		<name>RecipientMustBeUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email
+			getDFS@docusign.com.</label>
+		<name>TrialAccountExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
+			extension unknown to DocuSign.</label>
+		<name>InvalidFileExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. Please ensure that the DocuSign account has In Session signing enabled.</label>
+		<name>AccountInSessionSigningMustBeEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>
+			There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
+			used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
+			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send
+			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these setting may be accessed by
+			logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
+			Administration console. Unless all of those settings are enabled, the integration will not function
+			properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
+			contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
+		</label>
+		<name>InvalidAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. Signing Group has no members.</label>
+		<name>EmptySigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. Invalid recipient username.</label>
+		<name>InvalidRecipientUsername</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot resolve document {0} ({1}).</label>
+		<name>CannotResolveDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot resolve recipient {0} ({1}).</label>
+		<name>CannotResolveRecipient_2</name>
+	</customLabels>
+</Translations>

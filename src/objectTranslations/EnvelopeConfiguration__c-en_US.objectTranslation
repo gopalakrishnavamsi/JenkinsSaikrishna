@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<caseValues>
+		<plural>false</plural>
+		<value>DocuSign Envelope Configuration</value>
+	</caseValues>
+	<caseValues>
+		<plural>true</plural>
+		<value>DocuSign Envelope Configurations</value>
+	</caseValues>
+	<fields>
+		<label>Active</label>
+		<name>Active__c</name>
+	</fields>
+	<fields>
+		<label>Email Message</label>
+		<name>EmailMessage__c</name>
+	</fields>
+	<fields>
+		<label>Email Subject</label>
+		<name>EmailSubject__c</name>
+	</fields>
+	<fields>
+		<label>Add Salesforce Source Documents</label>
+		<name>AddSourceDocuments__c</name>
+	</fields>
+	<fields>
+		<label>Add Salesforce Source Recipients</label>
+		<name>AddSourceRecipients__c</name>
+	</fields>
+	<fields>
+		<label>Action</label>
+		<name>Action__c</name>
+	</fields>
+	<fields>
+		<label>Object Type</label>
+		<name>ObjectType__c</name>
+	</fields>
+	<fields>
+		<label>Show Email Message</label>
+		<name>ShowEmailMessage__c</name>
+	</fields>
+	<fields>
+		<label>Show Email Subject</label>
+		<name>ShowEmailSubject__c</name>
+	</fields>
+	<fields>
+		<label>Show Remind and Expire Settings</label>
+		<name>ShowRemindExpire__c</name>
+	</fields>
+	<fields>
+		<label>Show Send Button</label>
+		<name>ShowSendButton__c</name>
+	</fields>
+	<fields>
+		<label>Show Tag Button</label>
+		<name>ShowTagButton__c</name>
+	</fields>
+	<fields>
+		<label>Show Chatter Settings</label>
+		<name>ShowChatterSettings__c</name>
+	</fields>
+	<fields>
+		<label>Expire/Void Envelope</label>
+		<name>Expire__c</name>
+	</fields>
+	<fields>
+		<label>Send Reminder in N day(s)</label>
+		<name>ReminderDays__c</name>
+	</fields>
+	<fields>
+		<label>Repeat every N day(s) until complete</label>
+		<name>ReminderRepeatInterval__c</name>
+	</fields>
+	<fields>
+		<label>Remind signers via email</label>
+		<name>Remind__c</name>
+	</fields>
+	<fields>
+		<label>Warn of expiration in N day(s) prior</label>
+		<name>ExpireWarningInterval__c</name>
+	</fields>
+	<fields>
+		<label>Expire/Void Envelope in N day(s)</label>
+		<name>ExpireDays__c</name>
+	</fields>
+	<layouts>
+		<layout>DocuSign Envelope Configuration Layout</layout>
+		<sections>
+			<label>Information</label>
+			<section>Information</section>
+		</sections>
+		<sections>
+			<label>System Information</label>
+			<section>System Information</section>
+		</sections>
+		<sections>
+			<label>Custom Links</label>
+			<section>Custom Links</section>
+		</sections>
+	</layouts>
+	<startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

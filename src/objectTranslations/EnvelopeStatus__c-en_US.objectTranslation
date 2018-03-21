@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<caseValues>
+		<plural>false</plural>
+		<value>DocuSign Envelope Status</value>
+	</caseValues>
+	<caseValues>
+		<plural>true</plural>
+		<value>DocuSign Envelope Statuses</value>
+	</caseValues>
+	<fields>
+		<label>DocuSign ID</label>
+		<name>DocuSignId__c</name>
+	</fields>
+	<fields>
+		<label>Status</label>
+		<name>Status__c</name>
+	</fields>
+	<fields>
+		<label>Salesforce Source ID</label>
+		<name>SourceId__c</name>
+	</fields>
+	<fields>
+		<label>Sent</label>
+		<name>Sent__c</name>
+	</fields>
+	<fields>
+		<label>Completed</label>
+		<name>Completed__c</name>
+	</fields>
+	<fields>
+		<label>Last Status Update</label>
+		<name>LastStatusUpdate__c</name>
+	</fields>
+	<fields>
+		<label>Sender Name</label>
+		<name>SenderName__c</name>
+	</fields>
+	<fields>
+		<label>Sender Email</label>
+		<name>SenderEmail__c</name>
+	</fields>
+	<fields>
+		<label>Email Subject</label>
+		<name>EmailSubject__c</name>
+	</fields>
+	<fields>
+		<label>Declined or Voided Reason</label>
+		<name>Reason__c</name>
+	</fields>
+	<fields>
+		<label>Time to Complete</label>
+		<name>TimeToComplete__c</name>
+	</fields>
+	<startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

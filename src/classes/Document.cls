@@ -1,0 +1,117 @@
+public class Document {
+
+	public static final String TYPE_ATTACHMENT = 'Attachment';
+	public static final String TYPE_TEMPLATE = 'Template';
+	public static final String TYPE_FILE = 'ContentVersion';
+	public static final String TYPE_DOCUMENT = 'Document';
+
+	public Id id { get; private set; }
+	public String type { get; private set; }
+	public Integer sequence { get; private set; }
+	public String name { get; private set; }
+	public Integer size { get; private set; }
+	public String sourceId { get; private set; }
+	public String extension { get; private set; }
+	public UUID templateId {
+		get {
+			if (String.isNotBlank(this.sourceId) && this.type == TYPE_TEMPLATE) {
+				return UUID.tryParse(this.sourceId);
+			}
+			return null;
+		}
+	}
+
+	public Document(
+		final Id id,
+		final String type,
+		final Integer sequence,
+		final String name,
+		final String extension,
+		final Integer size,
+		final String sourceId) {
+
+		this.id = id;
+		this.type = type;
+		this.sequence = sequence;
+		this.name = String.isNotBlank(name) ? name : '';
+		this.extension = String.isNotBlank(extension) ? extension : '';
+		this.size = size;
+		this.sourceId = sourceId;
+	}
+
+	public static Document fromContentVersion(final ContentVersion contentVersion) {
+		if (contentVersion == null) return null;
+
+		return new Document(
+			null,
+			TYPE_FILE,
+			null,
+			contentVersion == null ? null : contentVersion.Title,
+			contentVersion == null ? null : contentVersion.FileExtension,
+			contentVersion == null ? null : contentVersion.ContentSize,
+			contentVersion == null ? null : contentVersion.Id);
+	}
+
+	public static Document fromTemplate(final Template template) {
+		return new Document(
+			null,
+			TYPE_TEMPLATE,
+			null,
+			template == null ? null : template.name,
+			null,
+			null,
+			template == null ? null : String.valueOf(template.id));
+	}
+
+	public class Folder {
+		public Id id { get; private set; }
+		public String name { get; private set; }
+
+		public Folder(final Id id, final String name) {
+			this.id = id;
+			this.name = name;
+		}
+	}
+
+	public class Folders {
+		public List<Folder> folders { get; private set; }
+		public List<Document> documents { get; private set; }
+
+		public Folders(
+			final List<Folder> folders,
+			final List<Document> documents) {
+
+			this.folders = folders;
+			this.documents = documents;
+		}
+	}
+
+	public static String getFileExtension(final String name) {
+		String extension = null;
+		if (String.isNotBlank(name)) {
+			Integer i = name.lastIndexOf('.');
+			if (i > -1) {
+				extension = name.substring(i + 1);
+			}
+		}
+		return extension;
+	}
+
+	public static Document convert(final Document__c d) {
+		if (d == null) return null;
+
+		return new Document(
+			d.Id,
+			d.Type__c,
+			Integer.valueOf(d.Sequence__c),
+			d.Name,
+			String.isNotBlank(d.Extension__c) ? d.Extension__c : getFileExtension(d.Name),
+			Integer.valueOf(d.Size__c),
+			d.SourceId__c);
+	}
+
+	public Document withSequence(final Integer sequence) {
+		this.sequence = sequence;
+		return this;
+	}
+}

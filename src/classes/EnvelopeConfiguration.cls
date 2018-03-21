@@ -1,0 +1,305 @@
+public with sharing class EnvelopeConfiguration {
+
+	public static final String DEFAULT_NOTE = 'DEFAULT_NOTE';
+	public static final String KEY_SIGNING_GROUP = 'signinggroup';
+	public static final String KEY_EMAIL = 'email';
+	public static final String KEY_FIRST_NAME = 'firstname';
+	public static final String KEY_LAST_NAME = 'lastname';
+	public static final String KEY_ROLE = 'role';
+	public static final String KEY_SIGN_IN_PERSON = 'signinpersonname';
+	public static final String KEY_ROUTING_ORDER = 'routingorder';
+	public static final String KEY_ACCESS_CODE = 'accesscode';
+	public static final String KEY_NOTE = 'recipientnote';
+	public static final String KEY_SIGN_NOW = 'signnow';
+	public static final String KEY_LOAD_DEFAULT_CONTACTS = 'loaddefaultcontacts';
+	public static final String KEY_SMS = 'smsauthphone';
+	public static final String KEY_CUSTOM_PREFIX = '__custom_';
+	public static final Set<String> VALID_RECIPIENT_KEYS = new Set<String> {
+		KEY_SIGNING_GROUP, KEY_EMAIL, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_ROLE, KEY_LOAD_DEFAULT_CONTACTS,
+		KEY_SIGN_IN_PERSON, KEY_ROUTING_ORDER, KEY_ACCESS_CODE, KEY_NOTE, KEY_SIGN_NOW, KEY_SMS
+	};
+
+	public enum ClickAction {
+		Prepare, Tag, Send
+	}
+
+	public class VisibilitySettings {
+		public Boolean showTagButton { get; private set; } // STB
+		public Boolean showSendButton { get; private set; } // SSB
+		public Boolean showEmailSubject { get; private set; } // SES
+		public Boolean showEmailMessage { get; private set; } // SEM
+		public Boolean showRemindExpire { get; private set; } // SRS
+		public Boolean showChatter { get; private set; } // SCS
+		public Boolean showAddAttachment { get; private set; } // SAA
+
+		public VisibilitySettings(final Boolean showTagButton, final Boolean showSendButton,
+			final Boolean showEmailSubject, final Boolean showEmailMessage, final Boolean showRemindExpire,
+			final Boolean showChatter, final Boolean showAddAttachment) {
+
+			this.showTagButton = showTagButton;
+			this.showSendButton = showSendButton;
+			this.showEmailSubject = showEmailSubject;
+			this.showEmailMessage = showEmailMessage;
+			this.showRemindExpire = showRemindExpire;
+			this.showChatter = showChatter;
+			this.showAddAttachment = showAddAttachment;
+		}
+
+		public Map<String, String> toParameters() {
+			// Possible for parameters to be null and not included in query string.
+			Map<String, String> parameters = new Map<String, String>();
+			if (showTagButton != null) parameters.put('STB', showTagButton ? '1' : '0');
+			if (showSendButton != null) parameters.put('SSB', showSendButton ? '1' : '0');
+			if (showEmailSubject != null) parameters.put('SES', showEmailSubject ? '1' : '0');
+			if (showEmailMessage != null) parameters.put('SEM', showEmailMessage ? '1' : '0');
+			if (showRemindExpire != null) parameters.put('SRS', showRemindExpire ? '1' : '0');
+			if (showChatter != null) parameters.put('SCS', showChatter ? '1' : '0');
+			if (showAddAttachment != null) parameters.put('SAA', showAddAttachment ? '1' : '0');
+			return parameters;
+		}
+	}
+
+	public class CustomRecipient {
+		public String email { get; private set; }
+		public String firstName { get; private set; }
+		public String lastName { get; private set; }
+		public String type { get; private set; }
+		public String role { get; private set; }
+		public Integer routingOrder { get; private set; }
+		public String accessCode { get; private set; }
+		public String note { get; private set; }
+		public String inPersonSigner { get; private set; }
+		public String signingGroupName { get; private set; }
+		public Boolean isSigningGroup { get; private set; }
+		public String smsPhoneNumber { get; private set; }
+		public List<String> parseErrors { get; private set; }
+		public String name { get; private set; }
+
+		// CRL constructor
+		public CustomRecipient(final String email, final String firstName, final String lastName, final String type,
+			final String role, final Integer routingOrder, final String accessCode, final String smsPhoneNumber,
+			final String note, final String inPersonSigner, final String signingGroupName,
+			final List<String> parseErrors) {
+
+			this.email = email;
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.type = type;
+			this.role = role;
+			this.routingOrder = routingOrder;
+			this.accessCode = accessCode;
+			this.smsPhoneNumber = smsPhoneNumber;
+			this.note = note;
+			this.inPersonSigner = inPersonSigner;
+			this.signingGroupName = signingGroupName;
+			this.parseErrors = parseErrors;
+			this.isSigningGroup = String.isNotBlank(signingGroupName);
+			this.name = StringUtils.mkName(firstName, lastName);
+		}
+
+		private Recipient.Authentication getAuthentication() {
+			Recipient.Authentication result = null;
+			Boolean useSms = String.isNotBlank(this.smsPhoneNumber);
+			if (String.isNotBlank(this.accessCode) || String.isNotBlank(this.smsPhoneNumber)) {
+				result = new Recipient.Authentication(this.accessCode, useSms,
+					useSms ? new List<String> { this.smsPhoneNumber } : null);
+			}
+			return result;
+		}
+
+		public Recipient toRecipient(final Map<String, Recipient.SigningGroup> signingGroups) {
+			Recipient result = null;
+			if (this.isSigningGroup) {
+				result = Recipient.newSigningGroup(
+					this.routingOrder == null ? 1 : this.routingOrder,
+					String.isBlank(this.type) ? Recipient.TYPE_SIGNER : this.type,
+					String.isBlank(this.role) ? null : new Recipient.Role(this.role, null),
+					signingGroups.get(this.signingGroupName.toLowerCase()),
+					getAuthentication(),
+					this.note);
+			} else if (String.isNotBlank(inPersonSigner)) {
+				result = Recipient.newInPersonSigner(
+					this.routingOrder == null ? 1 : this.routingOrder,
+					String.isBlank(this.role) ? null : new Recipient.Role(this.role, null),
+					this.inPersonSigner,
+					this.email,
+					this.name,
+					this.email,
+					getAuthentication(),
+					this.note);
+			} else {
+				result = Recipient.newRecipient(
+					this.routingOrder == null ? 1 : this.routingOrder,
+					String.isBlank(this.type) ? Recipient.TYPE_SIGNER : this.type,
+					String.isBlank(this.role) ? null : new Recipient.Role(this.role, null),
+					this.name,
+					this.email,
+					getAuthentication(),
+					this.note);
+			}
+			return result;
+		}
+	}
+
+	public class RelatedContacts {
+		public Map<String, String> fieldMap { get; private set; }
+		public String relationship { get; private set; }
+		public Boolean addSourceRecipients { get; private set; }
+		public List<String> parseErrors { get; private set; }
+		public Boolean isSigningGroup { get; private set; }
+		public Boolean isSignInPerson { get; private set; }
+
+		public RelatedContacts(final Map<String, String> fieldMap, final String relationship,
+			final Boolean addSourceRecipients, final List<String> parseErrors) {
+
+			this.fieldMap = fieldMap == null ? new Map<String, String>() : fieldMap;
+			this.relationship = relationship;
+			this.addSourceRecipients = addSourceRecipients;
+			this.parseErrors = parseErrors;
+			this.isSigningGroup = this.fieldMap.containsKey(KEY_SIGNING_GROUP);
+			this.isSignInPerson = this.fieldMap.containsKey(KEY_SIGN_IN_PERSON);
+		}
+	}
+
+	public class RecipientTypeRole {
+		public String role { get; private set; }
+		public String type { get; private set; }
+
+		public RecipientTypeRole(final String role, final String type) {
+			this.role = role;
+			this.type = type;
+		}
+	}
+
+	public class RecipientSettings {
+		public List<RelatedContacts> relatedContacts { get; private set; } // CRCL
+		public Recipients recipients { get; private set; } // CRL
+		public Boolean addSourceRecipients { get; private set; }
+		public Integer recipientLimit { get; private set; } // RSL
+		public Boolean sequentialRoutingOrder { get; private set; } // RROS
+		public Integer startingRoutingOrder { get; private set; } // RSRO
+		public List<RecipientTypeRole> recipientTypeRoles { get; private set; } // RT
+		public Map<String, String> roleToTemplateRoles { get; private set; } // CCRM
+		public Map<String, String> roleToRecipientTypes { get; private set; } // CCTM
+		public Map<String, String> roleToNotes { get; private set; } // CCNM
+		public Boolean hasRelatedContacts {
+			get {
+				return this.relatedContacts != null;
+			}
+		}
+		public Boolean hasRecipients {
+			get {
+				return this.recipients != null && Collection.isNotEmpty(this.recipients.recipients);
+			}
+		}
+
+		public RecipientSettings(final List<RelatedContacts> relatedContacts, final Recipients recipients,
+			final Integer recipientLimit, final Boolean sequentialRoutingOrder, final Integer startingRoutingOrder,
+			final List<RecipientTypeRole> recipientTypeRoles, final Map<String, String> roleToTemplateRoles,
+			final Map<String, String> roleToRecipientTypes, final Map<String, String> roleToNotes) {
+
+			this.relatedContacts = relatedContacts;
+			this.recipients = recipients;
+			this.recipientLimit = recipientLimit;
+			this.sequentialRoutingOrder = sequentialRoutingOrder;
+			this.startingRoutingOrder = startingRoutingOrder >= 1 ? startingRoutingOrder : 1;
+			this.recipientTypeRoles = recipientTypeRoles;
+			this.roleToTemplateRoles = roleToTemplateRoles;
+			this.roleToRecipientTypes = roleToRecipientTypes;
+			this.roleToNotes = roleToNotes;
+			// First use CRCL LoadDefaultContacts if defined, then CRL, then default.
+			if (relatedContacts != null) {
+				for (RelatedContacts rc : relatedContacts) {
+					if (rc.addSourceRecipients == true) {
+						this.addSourceRecipients = rc.addSourceRecipients;
+						break;
+					}
+				}
+			}
+
+			if (recipients != null && recipients.addSourceRecipients != null) {
+				this.addSourceRecipients = recipients.addSourceRecipients;
+			} else {
+				// TODO: Should this default to true?
+				this.addSourceRecipients = false;
+			}
+		}
+	}
+
+	public class DocumentSettings {
+		public Boolean addSourceDocuments { get; private set; } // LA/LF
+		public Set<UUID> templateIds { get; private set; } // DST
+		public Set<Id> relatedContentIds { get; private set; } // RC
+		public Set<Id> relatedQuoteIds { get; private set; } // RQD
+		public Set<Id> fileIds { get; private set; } // Direct Files
+		public Boolean hasTemplates {
+			get {
+				return this.templateIds != null && !this.templateIds.isEmpty();
+			}
+		}
+
+		public DocumentSettings(final Boolean addSourceDocuments, final Set<UUID> templateIds,
+			final Set<Id> relatedContentIds, final Set<Id> relatedQuoteIds, final Set<Id> fileIds) {
+
+			this.addSourceDocuments = addSourceDocuments;
+			this.templateIds = templateIds;
+			this.relatedContentIds = relatedContentIds;
+			this.relatedQuoteIds = relatedQuoteIds;
+			this.fileIds = fileIds;
+		}
+	}
+
+	public Exception error { get; private set; }
+	public Id id { get; private set; }
+	public Entity source { get; private set; }
+	public ClickAction action { get; private set; } // OCO
+	public VisibilitySettings visibility { get; private set; }
+	public Envelope.Options remindersAndExpiration { get; private set; } // RES
+	public Recipient.EmailSettings email { get; private set; } // CES, CEM, CEL
+	public DocumentSettings documents { get; private set; }
+	public RecipientSettings recipients { get; private set; }
+	public Boolean hasRecipients {
+		get {
+			// Return true if CRL or CRCL is specified.
+			return this.recipients != null && (this.recipients.hasRelatedContacts || this.recipients.hasRecipients);
+		}
+	}
+	public Boolean hasTemplates {
+		get {
+			return this.documents != null && this.documents.hasTemplates;
+		}
+	}
+	public Boolean hasError {
+		get {
+			return this.error != null;
+		}
+	}
+
+	public EnvelopeConfiguration(final Exception ex) {
+		this.error = ex;
+	}
+
+	public EnvelopeConfiguration(final Id id, final Entity source, final ClickAction action,
+		final VisibilitySettings visibility, final Envelope.Options remindersAndExpiration,
+		final Recipient.EmailSettings email, final DocumentSettings documents, final RecipientSettings recipients) {
+
+		this.id = id;
+		this.source = source;
+		this.action = action;
+		this.visibility = visibility;
+		this.remindersAndExpiration = remindersAndExpiration;
+		this.email = email;
+		this.documents = documents;
+		this.recipients = recipients;
+	}
+
+	public class Recipients {
+		public List<CustomRecipient> recipients { get; private set; }
+		public Boolean addSourceRecipients { get; private set; }
+
+		public Recipients(final List<CustomRecipient> recipients, final Boolean addSourceRecipients) {
+			this.recipients = recipients;
+			this.addSourceRecipients = addSourceRecipients;
+		}
+	}
+}

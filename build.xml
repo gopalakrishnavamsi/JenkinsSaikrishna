@@ -1,0 +1,26 @@
+<project name="DocuSign for Salesforce Essentials" basedir="." xmlns:sf="antlib:com.salesforce">
+
+	<available file="my.properties" property="my.properties.exists" />
+
+	<fail message="Please create my.properties file with your login credentials.">
+		<condition>
+			<and>
+				<not>
+					<isset property="my.properties.exists"/>
+				</not>
+			</and>
+		</condition>
+	</fail>
+
+	<property file="build.properties"/>
+	<property file="my.properties"/>
+
+	<target name="pushdev">
+		<sf:deploy username="${dev.username}" password="${dev.password}${dev.securityToken}" serverurl="${dev.url}" deployRoot="/src"/>
+	</target>
+
+	<target name="test">
+		<sf:deploy username="${test.username}" password="${test.password}${test.securityToken}" serverurl="${test.url}" deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
+	</target>
+
+</project>

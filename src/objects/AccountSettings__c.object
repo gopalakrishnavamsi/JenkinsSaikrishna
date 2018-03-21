@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customSettingsType>Hierarchy</customSettingsType>
+	<enableFeeds>false</enableFeeds>
+	<fields>
+		<fullName>SetupComplete__c</fullName>
+		<defaultValue>false</defaultValue>
+		<externalId>false</externalId>
+		<label>Setup Complete</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Environment__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign Environment</label>
+		<length>20</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>BaseUrl__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign Base URL</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>AccountId__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign Account ID</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>UseSendOnBehalfOf__c</fullName>
+		<defaultValue>true</defaultValue>
+		<externalId>false</externalId>
+		<label>Use Send on Behalf of (SOBO)</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Username__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign Username</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Password__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign API Password</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Features__c</fullName>
+		<defaultValue>0</defaultValue>
+		<description>Account Feature Flags</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Account Feature Flags</inlineHelpText>
+		<label>Account Feature Flags</label>
+		<precision>10</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>FeaturesLastChecked__c</fullName>
+		<description>Account Features Last Checked</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Account Features Last Checked</inlineHelpText>
+		<label>Account Features Last Checked</label>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>DateTime</type>
+	</fields>
+	<fields>
+		<fullName>FeaturesCheckFrequency__c</fullName>
+		<defaultValue>60</defaultValue>
+		<description>Account Features Minutes Between Checks</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Account Features Minutes Between Checks</inlineHelpText>
+		<label>Account Features Minutes Between Checks</label>
+		<precision>6</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>CalloutTimeout__c</fullName>
+		<defaultValue>60000</defaultValue>
+		<externalId>false</externalId>
+		<label>Default Callout Timeout</label>
+		<precision>18</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>ManageUserFields__c</fullName>
+		<defaultValue>&quot;name,alias,username,email,DSProSFUsername__c,userroleid,managerid&quot;</defaultValue>
+		<externalId>false</externalId>
+		<label>Manage User Fields</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EntityResolvers__c</fullName>
+		<externalId>false</externalId>
+		<label>Entity Resolvers</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>DocumentResolvers__c</fullName>
+		<externalId>false</externalId>
+		<label>Document Resolvers</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientResolvers__c</fullName>
+		<externalId>false</externalId>
+		<label>Entity Resolvers</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<label>Account Settings</label>
+	<visibility>Protected</visibility>
+</CustomObject>

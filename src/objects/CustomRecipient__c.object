@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+	<actionOverrides>
+		<actionName>Accept</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>CancelEdit</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>Clone</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>Delete</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>Edit</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>Follow</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>List</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>New</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>SaveEdit</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>Tab</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<actionOverrides>
+		<actionName>View</actionName>
+		<type>Default</type>
+	</actionOverrides>
+	<allowInChatterGroups>false</allowInChatterGroups>
+	<compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+	<deploymentStatus>Deployed</deploymentStatus>
+	<enableActivities>false</enableActivities>
+	<enableBulkApi>true</enableBulkApi>
+	<enableFeeds>false</enableFeeds>
+	<enableHistory>false</enableHistory>
+	<enableReports>false</enableReports>
+	<enableSearch>false</enableSearch>
+	<enableSharing>true</enableSharing>
+	<enableStreamingApi>true</enableStreamingApi>
+	<fields>
+		<fullName>EnvelopeConfiguration__c</fullName>
+		<externalId>false</externalId>
+		<label>DocuSign Envelope Configuration</label>
+		<referenceTo>EnvelopeConfiguration__c</referenceTo>
+		<relationshipLabel>Custom Recipients</relationshipLabel>
+		<relationshipName>CustomRecipient</relationshipName>
+		<relationshipOrder>0</relationshipOrder>
+		<reparentableMasterDetail>false</reparentableMasterDetail>
+		<trackTrending>false</trackTrending>
+		<type>MasterDetail</type>
+		<writeRequiresMasterRead>false</writeRequiresMasterRead>
+	</fields>
+	<fields>
+		<fullName>Type__c</fullName>
+		<description>Type</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Type</inlineHelpText>
+		<label>Type</label>
+		<trackTrending>false</trackTrending>
+		<type>Picklist</type>
+		<valueSet>
+			<restricted>false</restricted>
+			<valueSetDefinition>
+				<sorted>false</sorted>
+				<value>
+					<fullName>Signer</fullName>
+					<default>true</default>
+					<label>Needs to Sign</label>
+				</value>
+				<value>
+					<fullName>InPersonSigner</fullName>
+					<default>false</default>
+					<label>In Person Signer</label>
+				</value>
+				<value>
+					<fullName>CarbonCopy</fullName>
+					<default>false</default>
+					<label>Receives a Copy</label>
+				</value>
+				<value>
+					<fullName>CertifiedDelivery</fullName>
+					<default>false</default>
+					<label>Needs to View</label>
+				</value>
+				<value>
+					<fullName>Agent</fullName>
+					<default>false</default>
+					<label>Specify Recipients</label>
+				</value>
+				<value>
+					<fullName>Editor</fullName>
+					<default>false</default>
+					<label>Allow to Edit</label>
+				</value>
+				<value>
+					<fullName>Intermediary</fullName>
+					<default>false</default>
+					<label>Update Recipients</label>
+				</value>
+			</valueSetDefinition>
+		</valueSet>
+	</fields>
+	<fields>
+		<fullName>AccessCode__c</fullName>
+		<description>Access Code</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Access Code</inlineHelpText>
+		<label>Access Code</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Email__c</fullName>
+		<externalId>false</externalId>
+		<label>Recipient Email</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Language__c</fullName>
+		<externalId>false</externalId>
+		<label>Language</label>
+		<length>10</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>FirstName__c</fullName>
+		<externalId>false</externalId>
+		<label>First Name</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>LastName__c</fullName>
+		<externalId>false</externalId>
+		<label>LastName</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RoutingOrder__c</fullName>
+		<defaultValue>1</defaultValue>
+		<externalId>false</externalId>
+		<inlineHelpText>Routing Order</inlineHelpText>
+		<label>Routing Order</label>
+		<precision>3</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>SmsPhoneNumber__c</fullName>
+		<externalId>false</externalId>
+		<label>SMS Phone Number</label>
+		<length>50</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Note__c</fullName>
+		<description>Note</description>
+		<externalId>false</externalId>
+		<label>Private Message</label>
+		<length>1000</length>
+		<trackTrending>false</trackTrending>
+		<type>LongTextArea</type>
+		<visibleLines>4</visibleLines>
+	</fields>
+	<fields>
+		<fullName>Role__c</fullName>
+		<description>Role</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Role</inlineHelpText>
+		<label>DocuSign Role</label>
+		<length>100</length>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>SigningGroupId__c</fullName>
+		<externalId>false</externalId>
+		<inlineHelpText>Signing Group ID</inlineHelpText>
+		<label>Signing Group ID</label>
+		<precision>10</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>SigningGroupName__c</fullName>
+		<externalId>false</externalId>
+		<label>Signing Group Name</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Relationship__c</fullName>
+		<externalId>false</externalId>
+		<label>Contact Relationship</label>
+		<length>99</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>HostEmail__c</fullName>
+		<externalId>false</externalId>
+		<label>Host Email</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>HostName__c</fullName>
+		<externalId>false</externalId>
+		<label>Host Name</label>
+		<length>100</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<label>DocuSign Custom Recipient</label>
+	<nameField>
+		<displayFormat>CBR-{000000}</displayFormat>
+		<label>Name</label>
+		<type>AutoNumber</type>
+	</nameField>
+	<pluralLabel>Custom Recipients</pluralLabel>
+	<searchLayouts/>
+	<sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

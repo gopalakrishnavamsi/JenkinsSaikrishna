@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+	<labels>
+		<fullName>CannotCreateFields_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized field create</shortDescription>
+		<value>Create is unauthorized for {0} fields: {1}</value>
+	</labels>
+	<labels>
+		<fullName>CannotCreateObject</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized object create</shortDescription>
+		<value>Create is unauthorized for object:</value>
+	</labels>
+	<labels>
+		<fullName>CannotDeleteObject</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized object delete</shortDescription>
+		<value>Delete is unauthorized for object:</value>
+	</labels>
+	<labels>
+		<fullName>CannotQueryFields_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized field query</shortDescription>
+		<value>Query is unauthorized for {0} fields: {1}</value>
+	</labels>
+	<labels>
+		<fullName>CannotQueryObject</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized object query</shortDescription>
+		<value>Query is unauthorized for object:</value>
+	</labels>
+	<labels>
+		<fullName>CannotUpdateFields_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized field update</shortDescription>
+		<value>Update is unauthorized for {0} fields: {1}</value>
+	</labels>
+	<labels>
+		<fullName>CannotUpdateObject</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized object update</shortDescription>
+		<value>Update is unauthorized for object:</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeNotFound</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Not Found</shortDescription>
+		<value>Envelope not found.</value>
+	</labels>
+	<labels>
+		<fullName>ForLabel</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>For</shortDescription>
+		<value>for</value>
+	</labels>
+	<labels>
+		<fullName>InvalidEntity</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Entity</shortDescription>
+		<value>Invalid entity.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidType</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Type</shortDescription>
+		<value>Invalid type.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidUUID</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid UUID</shortDescription>
+		<value>Invalid UUID.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeActivated</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be Activated</shortDescription>
+		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that
+			you have responded to all activation emails.
+		</value>
+	</labels>
+	<labels>
+		<fullName>MustBeAdministrator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be Administrator</shortDescription>
+		<value>You must have administrator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignAdministrator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Administrator</shortDescription>
+		<value>You must have DocuSign administrator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignUser</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign User</shortDescription>
+		<value>You must have DocuSign user permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>NotEnvelopeOwner</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Not the owner of the envelope</shortDescription>
+		<value>Not the owner of the envelope.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedId</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined ID</shortDescription>
+		<value>Undefined ID.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedType</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Type</shortDescription>
+		<value>Undefined type.</value>
+	</labels>
+	<labels>
+		<fullName>Unknown</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unknown</shortDescription>
+		<value>Unknown</value>
+	</labels>
+	<labels>
+		<fullName>StepSuccess</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install step successful</shortDescription>
+		<value>SUCCESS</value>
+	</labels>
+	<labels>
+		<fullName>StepFailure</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install step failed</shortDescription>
+		<value>FAILURE</value>
+	</labels>
+	<labels>
+		<fullName>StepSkipped</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install step skipped</shortDescription>
+		<value>SKIPPED</value>
+	</labels>
+	<labels>
+		<fullName>StepUnknown</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install step status unknown</shortDescription>
+		<value>UNKNOWN</value>
+	</labels>
+	<labels>
+		<fullName>RunPostInstallScripts</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Run Post-Install Scripts</shortDescription>
+		<value>Run Post-Install Scripts</value>
+	</labels>
+	<labels>
+		<fullName>PostInstallCriteriaNotMet</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install criteria not met</shortDescription>
+		<value>Post-install script criteria not met</value>
+	</labels>
+	<labels>
+		<fullName>AssignAdminPermissionSet</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Assign admin permission set</shortDescription>
+		<value>Assign DocuSign Administrator permission set</value>
+	</labels>
+	<labels>
+		<fullName>PostInstallEmailSubject_1</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install email subject</shortDescription>
+		<value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
+	</labels>
+	<labels>
+		<fullName>PostInstallEmailBody_4</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Post-install email body</shortDescription>
+		<value>Organization: {0}\nUpgrading from: {1}\nUpgrading to: {2}\n{3}</value>
+	</labels>
+	<labels>
+		<fullName>InitializeAccountSettings</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initialize account settings</shortDescription>
+		<value>Initialize account settings</value>
+	</labels>
+	<labels>
+		<fullName>InitializeEnvelopeSettings</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initialize envelope settings</shortDescription>
+		<value>Initialize envelope settings</value>
+	</labels>
+	<labels>
+		<fullName>InitializeChatterSettings</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initialize Chatter settings</shortDescription>
+		<value>Initialize Chatter settings</value>
+	</labels>
+	<labels>
+		<fullName>CreateDefaultRecipientRoles</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create default recipient roles</shortDescription>
+		<value>Create default recipient roles</value>
+	</labels>
+	<labels>
+		<fullName>InvalidUrlParameter</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid parameter in the page URL.</shortDescription>
+		<value>Invalid parameter in the page URL.</value>
+	</labels>
+	<labels>
+		<fullName>None</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>None</shortDescription>
+		<value>None</value>
+	</labels>
+	<labels>
+		<fullName>AlreadyComplete</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Already Complete</shortDescription>
+		<value>Already complete</value>
+	</labels>
+	<labels>
+		<fullName>UserMustBeProvided</fullName>
+		<categories>PostInstall</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>User Must Be Provided</shortDescription>
+		<value>Salesforce user must be provided.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidEntityResolver_1</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Entity Resolver</shortDescription>
+		<value>Invalid entity resolver: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidDocumentResolver_1</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Document Resolver</shortDescription>
+		<value>Invalid document resolver: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRecipientResolver_1</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Recipient Resolver</shortDescription>
+		<value>Invalid recipient resolver: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceOrgStorageLimitExceeded</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Salesforce Organization Storage Limit Exceeded</shortDescription>
+		<value>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.
+		</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceApiErrorUnexpectedResponse</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Salesforce API Error</shortDescription>
+		<value>Unexpected response from Salesforce API.</value>
+	</labels>
+	<labels>
+		<fullName>NullApiResponse</fullName>
+		<categories>API</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Null API Response</shortDescription>
+		<value>No response received from API.</value>
+	</labels>
+	<labels>
+		<fullName>ContentTypeNotSupported</fullName>
+		<categories>API</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Content Type Not Supported</shortDescription>
+		<value>Content type is not supported.</value>
+	</labels>
+	<labels>
+		<fullName>RemoteSiteMissing_1</fullName>
+		<categories>API</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Remote Site Missing</shortDescription>
+		<value>Remote site is not authorized: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceApiError_1</fullName>
+		<categories>API</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Salesforce API Error</shortDescription>
+		<value>An error occurred when invoking a Salesforce API: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>English</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>English</shortDescription>
+		<value>English</value>
+	</labels>
+	<labels>
+		<fullName>German</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>German</shortDescription>
+		<value>German</value>
+	</labels>
+	<labels>
+		<fullName>Spanish</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Spanish</shortDescription>
+		<value>Spanish</value>
+	</labels>
+	<labels>
+		<fullName>French</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>French</shortDescription>
+		<value>French</value>
+	</labels>
+	<labels>
+		<fullName>Italian</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Italian</shortDescription>
+		<value>Italian</value>
+	</labels>
+	<labels>
+		<fullName>Japanese</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Japanese</shortDescription>
+		<value>Japanese</value>
+	</labels>
+	<labels>
+		<fullName>Korean</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Korean</shortDescription>
+		<value>Korean</value>
+	</labels>
+	<labels>
+		<fullName>Dutch</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dutch</shortDescription>
+		<value>Dutch</value>
+	</labels>
+	<labels>
+		<fullName>PortugueseBrazilian</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Portuguese (Brazilian)</shortDescription>
+		<value>Portuguese (Brazilian)</value>
+	</labels>
+	<labels>
+		<fullName>Russian</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Russian</shortDescription>
+		<value>Russian</value>
+	</labels>
+	<labels>
+		<fullName>ChineseSimplified</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Chinese (Simplified)</shortDescription>
+		<value>Chinese (Simplified)</value>
+	</labels>
+	<labels>
+		<fullName>ChineseTraditional</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Chinese (Traditional)</shortDescription>
+		<value>Chinese (Traditional)</value>
+	</labels>
+	<labels>
+		<fullName>UnrecognizedLanguageCode</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unrecognized Language Code</shortDescription>
+		<value>Unrecognized language code.</value>
+	</labels>
+	<labels>
+		<fullName>CurrentChatterLanguageSettings</fullName>
+		<categories>Localization</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrentChatterLanguageSettings</shortDescription>
+		<value>--- Current Settings ---</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedChatterText</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Chatter Text</shortDescription>
+		<value>Chatter text is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedString</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined String</shortDescription>
+		<value>--</value>
+	</labels>
+	<labels>
+		<fullName>InvalidEnvironment</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Environment</shortDescription>
+		<value>Invalid DocuSign environment.</value>
+	</labels>
+	<labels>
+		<fullName>SigningGroup</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group</shortDescription>
+		<value>Signing Group</value>
+	</labels>
+	<labels>
+		<fullName>AccountNotConfigured</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Account not Configured</shortDescription>
+		<value>DocuSign has not yet been configured for this account.</value>
+	</labels>
+	<labels>
+		<fullName>ConfigurationError</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConfigurationError</shortDescription>
+		<value>DocuSign is not configured correctly. Please contact your system administrator for assistance.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidUsernameOrPassword</fullName>
+		<categories>Errors,Auth</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Username or Password</shortDescription>
+		<value>Invalid username or password.</value>
+	</labels>
+	<labels>
+		<fullName>ActivationRequired</fullName>
+		<categories>Errors,AccountAPI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign Account Activation Required</shortDescription>
+		<value>A DocuSign account already exists, but requires activation. The user should have received an email
+			message containing an activation link. Once the activation has been completed the user must click on the
+			DocuSign Admin tab and enter the password there.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AccountAlreadyExists</fullName>
+		<categories>Errors,AccountAPI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign Account Already Exists</shortDescription>
+		<value>A DocuSign account already exists for this username.</value>
+	</labels>
+	<labels>
+		<fullName>UsernameNotAllowed</fullName>
+		<categories>Errors,AccountAPI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Username not Allowed</shortDescription>
+		<value>The email address is not allowed because it belongs to a restricted domain.</value>
+	</labels>
+	<labels>
+		<fullName>AccountProvisioningFailed</fullName>
+		<categories>Errors,AccountAPI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Account Provisioning Failed</shortDescription>
+		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support:
+			https://support.docusign.com/.
+		</value>
+	</labels>
+	<labels>
+		<fullName>Approve</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Approve</shortDescription>
+		<value>Approve</value>
+	</labels>
+	<labels>
+		<fullName>Checkbox</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Checkbox</shortDescription>
+		<value>Checkbox</value>
+	</labels>
+	<labels>
+		<fullName>Company</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Company</shortDescription>
+		<value>Company</value>
+	</labels>
+	<labels>
+		<fullName>DateSigned</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Date Signed</shortDescription>
+		<value>Date Signed</value>
+	</labels>
+	<labels>
+		<fullName>EmailAddress</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Email Address</shortDescription>
+		<value>Email Address</value>
+	</labels>
+	<labels>
+		<fullName>Decline</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Decline</shortDescription>
+		<value>Decline</value>
+	</labels>
+	<labels>
+		<fullName>DropDown</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Drop Down</shortDescription>
+		<value>Drop Down</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeId</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope ID</shortDescription>
+		<value>Envelope ID</value>
+	</labels>
+	<labels>
+		<fullName>FirstName</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>First Name</shortDescription>
+		<value>First Name</value>
+	</labels>
+	<labels>
+		<fullName>Formula</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Formula</shortDescription>
+		<value>Formula</value>
+	</labels>
+	<labels>
+		<fullName>FullName</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Full Name</shortDescription>
+		<value>Full Name</value>
+	</labels>
+	<labels>
+		<fullName>Title</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Title</shortDescription>
+		<value>Title</value>
+	</labels>
+	<labels>
+		<fullName>InitialHere</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initial Here</shortDescription>
+		<value>Initial Here</value>
+	</labels>
+	<labels>
+		<fullName>InitialHereOptional</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initial Here Optional</shortDescription>
+		<value>Initial Here Optional</value>
+	</labels>
+	<labels>
+		<fullName>LastName</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Last Name</shortDescription>
+		<value>Last Name</value>
+	</labels>
+	<labels>
+		<fullName>Note</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Note</shortDescription>
+		<value>Note</value>
+	</labels>
+	<labels>
+		<fullName>SignHere</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sign Here</shortDescription>
+		<value>Sign Here</value>
+	</labels>
+	<labels>
+		<fullName>SignHereOptional</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sign Here Optional</shortDescription>
+		<value>Sign Here Optional</value>
+	</labels>
+	<labels>
+		<fullName>RadioButton</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Radio Button</shortDescription>
+		<value>Radio Button</value>
+	</labels>
+	<labels>
+		<fullName>SignerAttachment</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signer Attachment</shortDescription>
+		<value>Signer Attachment</value>
+	</labels>
+	<labels>
+		<fullName>TextField</fullName>
+		<categories>CustomTab</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Text Field</shortDescription>
+		<value>Text Field</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedArgument</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Argument</shortDescription>
+		<value>Argument is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedEnvelope</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Envelope</shortDescription>
+		<value>Envelope is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>CannotReadDocumentBytes</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot Read Document Bytes</shortDescription>
+		<value>Unable to read document bytes.</value>
+	</labels>
+	<labels>
+		<fullName>SigningGroupsProhibited</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Groups Prohibited</shortDescription>
+		<value>Signing Groups are not enabled for your account.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidCorrectionState</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Correction State</shortDescription>
+		<value>Correction permission must be turned on and envelope must be in \&apos;Sent\&apos; or \&apos;Delivered\&apos; state to allow correction.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeLockedCorrectionInProgress</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Locked</shortDescription>
+		<value>This envelope is locked. An envelope correction is already in progress.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeNotFoundOrUnauthorized</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope not Found or Unauthorized</shortDescription>
+		<value>The envelope either does not exist or you have no rights to it.</value>
+	</labels>
+	<labels>
+		<fullName>Failed21CFRPart11</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signers Required to Meet 21 CFR Part 11</shortDescription>
+		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
+			required, non-conditional Signature or Initials tab.</value>
+	</labels>
+	<labels>
+		<fullName>RecipientMustBeUser</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recipient Must Be Active User</shortDescription>
+		<value>Cannot send envelope. Account settings indicate the recipient must be an active DocuSign user.</value>
+	</labels>
+	<labels>
+		<fullName>TrialAccountExpired</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Trial Account Expired</shortDescription>
+		<value>Your free trial has ended. To continue using DocuSign for Salesforce, please email
+			getDFS@docusign.com.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidFileExtension</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid File Extension</shortDescription>
+		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
+			extension unknown to DocuSign.</value>
+	</labels>
+	<labels>
+		<fullName>AccountInSessionSigningMustBeEnabled</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Account In Session Signing Must Be Enabled</shortDescription>
+		<value>Cannot send envelope. Please ensure that the DocuSign account has In Session signing enabled.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidAccountSettings</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid User Settings</shortDescription>
+		<value>
+			There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
+			used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
+			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send
+			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these setting may be accessed by
+			logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
+			Administration console. Unless all of those settings are enabled, the integration will not function
+			properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
+			contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
+		</value>
+	</labels>
+	<labels>
+		<fullName>EmptySigningGroup</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group Has no Members</shortDescription>
+		<value>Cannot send envelope. Signing Group has no members.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRecipientUsername</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Recipient Username</shortDescription>
+		<value>Cannot send envelope. Invalid recipient username.</value>
+	</labels>
+	<labels>
+		<fullName>CannotResolveDocument_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot Resolve Document</shortDescription>
+		<value>Cannot resolve document {0} ({1}).</value>
+	</labels>
+	<labels>
+		<fullName>CannotResolveRecipient_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot Resolve Recipient</shortDescription>
+		<value>Cannot resolve recipient {0} ({1}).</value>
+	</labels>
+</CustomLabels>

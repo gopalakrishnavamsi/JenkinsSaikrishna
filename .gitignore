@@ -1,0 +1,5 @@
+my.properties
+*.iml
+.idea/
+IlluminatedCloud/
+.DS_Store

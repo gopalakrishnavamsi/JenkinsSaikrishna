@@ -1,0 +1,371 @@
+/**
+ * Source of truth for i18n-related operations.
+ */
+public with sharing class Localization {
+
+	public class ChatterText {
+		public String envelopeSent { get; private set; }
+		public String envelopeDelivered { get; private set; }
+		public String envelopeCompleted { get; private set; }
+		public String envelopeDeclined { get; private set; }
+		public String envelopeVoided { get; private set; }
+		public String recipientSent { get; private set; }
+		public String recipientDelivered { get; private set; }
+		public String recipientCompleted { get; private set; }
+		public String recipientSigned { get; private set; }
+		public String recipientDeclined { get; private set; }
+
+		public ChatterText(final String envelopeSent, final String envelopeDelivered, final String envelopeCompleted,
+			final String envelopeDeclined, final String envelopeVoided, final String recipientSent,
+			final String recipientDelivered, final String recipientCompleted, final String recipientSigned,
+			final String recipientDeclined) {
+
+			this.envelopeSent = envelopeSent;
+			this.envelopeDelivered = envelopeDelivered;
+			this.envelopeCompleted = envelopeCompleted;
+			this.envelopeDeclined = envelopeDeclined;
+			this.envelopeVoided = envelopeVoided;
+			this.recipientSent = recipientSent;
+			this.recipientDelivered = recipientDelivered;
+			this.recipientCompleted = recipientCompleted;
+			this.recipientSigned = recipientSigned;
+			this.recipientDeclined = recipientDeclined;
+		}
+
+		public String getEnvelopeStatusText(final String s) {
+			String statusText = null;
+			if (String.isNotBlank(s)) {
+				if (s == Status.SENT) {
+					statusText = this.envelopeSent;
+				} else if (s == Status.DELIVERED) {
+					statusText = this.envelopeDelivered;
+				} else if (s == Status.COMPLETED) {
+					statusText = this.envelopeCompleted;
+				} else if (s == Status.DECLINED) {
+					statusText = this.envelopeDeclined;
+				} else if (s == Status.VOIDED) {
+					statusText = this.envelopeVoided;
+				}
+			}
+			return statusText;
+		}
+
+		public String getRecipientStatusText(final String s) {
+			String statusText = null;
+			if (String.isNotBlank(s)) {
+				if (s == Status.SENT) {
+					statusText = this.recipientSent;
+				} else if (s == Status.DELIVERED) {
+					statusText = this.recipientDelivered;
+				} else if (s == Status.COMPLETED) {
+					statusText = this.recipientCompleted;
+				} else if (s == Status.DECLINED) {
+					statusText = this.recipientDeclined;
+				} else if (s == Status.SIGNED) {
+					statusText = this.recipientSigned;
+				}
+			}
+			return statusText;
+		}
+	}
+
+	public class ChatterSettings {
+		public String language { get; private set; }
+		public String languageLabel { get; private set; }
+		public ChatterText text { get; private set; }
+
+		public ChatterSettings(final String language, final String languageLabel, final ChatterText text) {
+			this.language = language;
+			this.languageLabel = languageLabel;
+			this.text = text;
+		}
+	}
+
+	// Languages
+	public static final String EN = 'en';
+	public static final String DE = 'de';
+	public static final String ES = 'es';
+	public static final String FR = 'fr';
+	public static final String IT = 'it';
+	public static final String JA = 'ja';
+	public static final String KO = 'ko';
+	public static final String NL = 'nl';
+	public static final String PT_BR = 'pt_BR';
+	public static final String RU = 'ru';
+	public static final String ZH_CN = 'zh_CN';
+	public static final String CURRENT = 'CURRENT'; // that's only for chatter text (current language settings)
+	private static final Map<String, String> LANGUAGE_TO_LABEL;
+	public static final String DEFAULT_LANGUAGE;
+
+	static {
+		LANGUAGE_TO_LABEL = new Map<String, String> {
+			EN => Label.English,
+			DE => Label.German,
+			ES => Label.Spanish,
+			FR => Label.French,
+			IT => Label.Italian,
+			JA => Label.Japanese,
+			KO => Label.Korean,
+			NL => Label.Dutch,
+			PT_BR => Label.PortugueseBrazilian,
+			RU => Label.Russian,
+			ZH_CN => Label.ChineseSimplified
+		};
+
+		String language = getCurrentLanguage();
+		if (LANGUAGE_TO_LABEL.containsKey(language)) {
+			DEFAULT_LANGUAGE = language;
+		} else {
+			DEFAULT_LANGUAGE = EN;
+		}
+	}
+
+	private static final Map<String, Recipient.EmailSettings> EMAIL_SETTINGS = new Map<String, Recipient.EmailSettings>();
+	private static Boolean accessChecked = false;
+	private static Boolean hasAccess = false;
+	private static Boolean isDirty = true;
+
+	@TestVisible
+	private static List<EnvelopeLocalization__c> getOrgEmailSettings() {
+		Permissions.verifyIsQueryable('EnvelopeLocalization__c', new List<String> {
+			'Name', 'Language__c', 'EmailSubject__c', 'EmailMessage__c'
+		});
+
+		return [
+			SELECT Id, Name, Language__c, EmailSubject__c, EmailMessage__c
+			FROM EnvelopeLocalization__c
+			LIMIT 100
+		];
+	}
+
+	public static Set<String> getAllLanguages() {
+		return LANGUAGE_TO_LABEL.keySet();
+	}
+
+	public static String getLabel(final String language) {
+		final String label = LANGUAGE_TO_LABEL.get(language);
+		return String.isNotBlank(label) ? label : '';
+	}
+
+	private static Map<String, Recipient.EmailSettings> getEmailSettingsMap() {
+		if (isDirty) {
+			EMAIL_SETTINGS.clear();
+			for (EnvelopeLocalization__c config : getOrgEmailSettings()) {
+				EMAIL_SETTINGS.put(config.Language__c, new Recipient.EmailSettings(
+					config.Language__c,
+					config.Name,
+					config.EmailSubject__c,
+					config.EmailMessage__c));
+			}
+			if (!EMAIL_SETTINGS.containsKey(DEFAULT_LANGUAGE)) {
+				Localization__mdt md = [
+					SELECT EmailSubject__c, EmailMessage__c
+					FROM Localization__mdt
+					WHERE DeveloperName = :DEFAULT_LANGUAGE
+				];
+				EMAIL_SETTINGS.put(DEFAULT_LANGUAGE, new Recipient.EmailSettings(
+					DEFAULT_LANGUAGE,
+					LANGUAGE_TO_LABEL.get(DEFAULT_LANGUAGE),
+					md.EmailSubject__c,
+					md.EmailMessage__c));
+			}
+			isDirty = false;
+		}
+		return EMAIL_SETTINGS;
+	}
+
+	public static List<Recipient.EmailSettings> getEmailSettings() {
+		return getEmailSettingsMap().values();
+	}
+
+	public static Boolean isEmailLocalizationEnabled() {
+		// If only one language is configured, localization is considered disabled.
+		return getEmailSettingsMap().size() > 1;
+	}
+
+	public static String getCurrentLanguage() {
+		String language = UserInfo.getLanguage();
+		if (String.isNotBlank(language)
+			&& language.length() >= 2
+			&& language != 'zh_CN'
+			&& language != 'pt_BR') {
+
+			language = language.substring(0, 2);
+		}
+		return language;
+	}
+
+	public static Recipient.EmailSettings getEmailSettingsForCurrentLanguage() {
+		Recipient.EmailSettings settings = getEmailSettings(getCurrentLanguage());
+		if (settings == null) settings = getEmailSettings(DEFAULT_LANGUAGE);
+		if (settings == null) throw new DocuSignException(Label.UnrecognizedLanguageCode);
+		return settings;
+	}
+
+	@TestVisible
+	private static Recipient.EmailSettings getEmailSettings(final String language) {
+		return getEmailSettingsMap().get(language);
+	}
+
+	public static Boolean updateEmailSettings(final Recipient.EmailSettings emailSettings) {
+		if (emailSettings == null || String.isBlank(emailSettings.language)
+			|| !LANGUAGE_TO_LABEL.containsKey(emailSettings.language)) {
+			throw new DocuSignException(Label.UnrecognizedLanguageCode);
+		}
+
+		Boolean result = true;
+		List<String> fields = new List<String> { 'Name', 'Language__c', 'EmailSubject__c', 'EmailMessage__c' };
+		List<EnvelopeLocalization__c> configs = [
+			SELECT Id
+			FROM EnvelopeLocalization__c
+			WHERE Language__c = :emailSettings.language
+			LIMIT 1
+		];
+		Boolean exists = Collection.isNotEmpty(configs);
+		Boolean isValid = String.isNotBlank(emailSettings.subject);
+		Boolean canCreate = !exists && isValid;
+		Boolean canUpdate = exists && isValid;
+		Boolean canDelete = exists && !isValid && emailSettings.language != DEFAULT_LANGUAGE;
+
+		if (canDelete) {
+			Permissions.verifyIsDeletable('EnvelopeLocalization__c');
+			delete configs[0];
+		} else if (canUpdate) {
+			Permissions.verifyIsUpdateable('EnvelopeLocalization__c', fields);
+			EnvelopeLocalization__c config = configs[0];
+			config.Name = emailSettings.languageLabel;
+			config.EmailSubject__c = emailSettings.subject;
+			config.EmailMessage__c = emailSettings.message;
+			update config;
+		} else if (canCreate) {
+			Permissions.verifyIsCreateable('EnvelopeLocalization__c', fields);
+			insert new EnvelopeLocalization__c(
+				Name = emailSettings.languageLabel,
+				Language__c = emailSettings.language,
+				EmailSubject__c = emailSettings.subject,
+				EmailMessage__c = emailSettings.message);
+		} else {
+			result = false;
+		}
+		isDirty = true;
+
+		return result;
+	}
+
+	public static Recipient.EmailSettings getDefaultEmailSettings(final String language) {
+		List<Localization__mdt> mds = [
+			SELECT EmailSubject__c, EmailMessage__c
+			FROM Localization__mdt
+			WHERE DeveloperName = :language
+		];
+		if (Collection.isEmpty(mds)) {
+			throw new DocuSignException(Label.UnrecognizedLanguageCode);
+		}
+
+		return new Recipient.EmailSettings(
+			language,
+			LANGUAGE_TO_LABEL.get(language),
+			mds[0].EmailSubject__c,
+			mds[0].EmailMessage__c);
+	}
+
+	/**
+	 * Gets chatter text localized to specified language code
+	 */
+	public static ChatterText getDefaultChatterText(final String language) {
+		List<Localization__mdt> mds = [
+			SELECT ChatterEnvelopeSent__c,
+				ChatterEnvelopeDelivered__c,
+				ChatterEnvelopeCompleted__c,
+				ChatterEnvelopeDeclined__c,
+				ChatterEnvelopeVoided__c,
+				ChatterRecipientSent__c,
+				ChatterRecipientDelivered__c,
+				ChatterRecipientCompleted__c,
+				ChatterRecipientSigned__c,
+				ChatterRecipientDeclined__c
+			FROM Localization__mdt
+			WHERE DeveloperName = :language
+		];
+		if (Collection.isEmpty(mds)) {
+			throw new DocuSignException(Label.UnrecognizedLanguageCode);
+		}
+
+		Localization__mdt md = mds[0];
+		return new ChatterText(
+			md.ChatterEnvelopeSent__c,
+			md.ChatterEnvelopeDelivered__c,
+			md.ChatterEnvelopeCompleted__c,
+			md.ChatterEnvelopeDeclined__c,
+			md.ChatterEnvelopeVoided__c,
+			md.ChatterRecipientSent__c,
+			md.ChatterRecipientDelivered__c,
+			md.ChatterRecipientCompleted__c,
+			md.ChatterRecipientSigned__c,
+			md.ChatterRecipientDeclined__c);
+	}
+
+	public static ChatterText getChatterText() {
+		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
+		Localization__mdt md = [
+			SELECT
+				ChatterEnvelopeSent__c,
+				ChatterEnvelopeDelivered__c,
+				ChatterEnvelopeCompleted__c,
+				ChatterEnvelopeDeclined__c,
+				ChatterEnvelopeVoided__c,
+				ChatterRecipientSent__c,
+				ChatterRecipientDelivered__c,
+				ChatterRecipientCompleted__c,
+				ChatterRecipientSigned__c,
+				ChatterRecipientDeclined__c
+			FROM Localization__mdt
+			WHERE DeveloperName = :DEFAULT_LANGUAGE
+		];
+		return new ChatterText(
+			String.isNotBlank(settings.EnvelopeSent__c) ? settings.EnvelopeSent__c : md.ChatterEnvelopeSent__c,
+			String.isNotBlank(settings.EnvelopeDelivered__c) ? settings.EnvelopeDelivered__c : md.ChatterEnvelopeDelivered__c,
+			String.isNotBlank(settings.EnvelopeCompleted__c) ? settings.EnvelopeCompleted__c : md.ChatterEnvelopeCompleted__c,
+			String.isNotBlank(settings.EnvelopeDeclined__c) ? settings.EnvelopeDeclined__c : md.ChatterEnvelopeDeclined__c,
+			String.isNotBlank(settings.EnvelopeVoided__c) ? settings.EnvelopeVoided__c : md.ChatterEnvelopeVoided__c,
+			String.isNotBlank(settings.RecipientSent__c) ? settings.RecipientSent__c : md.ChatterRecipientSent__c,
+			String.isNotBlank(settings.RecipientDelivered__c) ? settings.RecipientDelivered__c : md.ChatterRecipientDelivered__c,
+			String.isNotBlank(settings.RecipientCompleted__c) ? settings.RecipientCompleted__c : md.ChatterRecipientCompleted__c,
+			String.isNotBlank(settings.RecipientSigned__c) ? settings.RecipientSigned__c : md.ChatterRecipientSigned__c,
+			String.isNotBlank(settings.RecipientDeclined__c) ? settings.RecipientDeclined__c : md.ChatterRecipientDeclined__c);
+	}
+
+	public static void updateChatterText(final ChatterText text) {
+		if (text == null) throw new DocuSignException(Label.UndefinedChatterText);
+
+		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
+		settings.EnvelopeSent__c = text.envelopeSent;
+		settings.EnvelopeDelivered__c = text.envelopeDelivered;
+		settings.EnvelopeCompleted__c = text.envelopeCompleted;
+		settings.EnvelopeDeclined__c = text.envelopeDeclined;
+		settings.EnvelopeVoided__c = text.envelopeVoided;
+		settings.RecipientSent__c = text.recipientSent;
+		settings.RecipientDelivered__c = text.recipientDelivered;
+		settings.RecipientCompleted__c = text.recipientCompleted;
+		settings.RecipientSigned__c = text.recipientSigned;
+		settings.RecipientDeclined__c = text.recipientDeclined;
+		upsert settings;
+	}
+
+	public static List<Localization.ChatterSettings> getChatterSettings() {
+		final List<Localization.ChatterSettings> settings = new List<Localization.ChatterSettings> {
+			new Localization.ChatterSettings(
+				Localization.CURRENT,
+				Label.CurrentChatterLanguageSettings,
+				Localization.getChatterText())
+		};
+		for (String language : getAllLanguages()) {
+			settings.add(new Localization.ChatterSettings(
+				language,
+				getLabel(language),
+				getDefaultChatterText(language)
+			));
+		}
+		return settings;
+	}
+}

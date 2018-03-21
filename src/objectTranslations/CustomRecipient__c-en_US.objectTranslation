@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<caseValues>
+		<plural>false</plural>
+		<value>DocuSign Custom Recipient</value>
+	</caseValues>
+	<caseValues>
+		<plural>true</plural>
+		<value>DocuSign Custom Recipients</value>
+	</caseValues>
+	<fields>
+		<label>Email</label>
+		<name>Email__c</name>
+	</fields>
+	<fields>
+		<label>First Name</label>
+		<name>FirstName__c</name>
+	</fields>
+	<fields>
+		<label>Last Name</label>
+		<name>LastName__c</name>
+	</fields>
+	<fields>
+		<label>Contact Relationship</label>
+		<name>Relationship__c</name>
+	</fields>
+	<fields>
+		<label>Routing Order</label>
+		<name>RoutingOrder__c</name>
+	</fields>
+	<fields>
+		<label>Type</label>
+		<name>Type__c</name>
+	</fields>
+	<fields>
+		<label>Role</label>
+		<name>Role__c</name>
+	</fields>
+	<fields>
+		<label>Private Message</label>
+		<name>Note__c</name>
+	</fields>
+	<fields>
+		<label>Language</label>
+		<name>Language__c</name>
+	</fields>
+	<fields>
+		<label>SMS Phone Number</label>
+		<name>SmsPhoneNumber__c</name>
+	</fields>
+	<fields>
+		<label>Access Code</label>
+		<name>AccessCode__c</name>
+	</fields>
+	<fields>
+		<label>Signing Group ID</label>
+		<name>SigningGroupId__c</name>
+	</fields>
+	<fields>
+		<label>Signing Group Name</label>
+		<name>SigningGroupName__c</name>
+	</fields>
+	<fields>
+		<label>Host Name</label>
+		<name>HostName__c</name>
+	</fields>
+	<fields>
+		<label>Host Email</label>
+		<name>HostEmail__c</name>
+	</fields>
+	<fields>
+		<label>Envelope Configuration</label>
+		<name>EnvelopeConfiguration__c</name>
+	</fields>
+	<layouts>
+		<layout>DocuSign Custom Recipient Layout</layout>
+		<sections>
+			<label>Information</label>
+			<section>Information</section>
+		</sections>
+		<sections>
+			<label>System Information</label>
+			<section>System Information</section>
+		</sections>
+		<sections>
+			<label>Custom Links</label>
+			<section>Custom Links</section>
+		</sections>
+	</layouts>
+	<startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customSettingsType>Hierarchy</customSettingsType>
+	<enableFeeds>false</enableFeeds>
+	<fields>
+		<fullName>Flags__c</fullName>
+		<defaultValue>788</defaultValue>
+		<externalId>false</externalId>
+		<label>Enabled Chatter Events</label>
+		<precision>18</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EnvelopeCompleted__c</fullName>
+		<externalId>false</externalId>
+		<label>Envelope Completed Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EnvelopeDeclined__c</fullName>
+		<externalId>false</externalId>
+		<label>Envelope Declined Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EnvelopeDelivered__c</fullName>
+		<externalId>false</externalId>
+		<label>Envelope Delivered Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EnvelopeSent__c</fullName>
+		<externalId>false</externalId>
+		<label>Envelope Sent Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>EnvelopeVoided__c</fullName>
+		<externalId>false</externalId>
+		<label>Envelope Voided Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientCompleted__c</fullName>
+		<externalId>false</externalId>
+		<label>Recipient Completed Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientDeclined__c</fullName>
+		<externalId>false</externalId>
+		<label>Recipient Declined Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientDelivered__c</fullName>
+		<externalId>false</externalId>
+		<label>Recipient Delivered Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientSent__c</fullName>
+		<externalId>false</externalId>
+		<inlineHelpText>t</inlineHelpText>
+		<label>Recipient Sent Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>RecipientSigned__c</fullName>
+		<externalId>false</externalId>
+		<label>Recipient Signed Chatter Text</label>
+		<length>255</length>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<label>Chatter Settings</label>
+	<visibility>Protected</visibility>
+</CustomObject>
