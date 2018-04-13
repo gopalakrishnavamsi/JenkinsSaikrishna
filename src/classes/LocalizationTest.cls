@@ -124,6 +124,9 @@ private class LocalizationTest {
 			//Chinese
 			Recipient.EmailSettings defaultZhcn = Localization.getDefaultEmailSettings('zh_CN');
 			System.assertEquals(defaultLocalization('zh_CN').EmailSubject__c, defaultZhcn.subject);
+			// All
+			List<Recipient.EmailSettings> defaults = Localization.getDefaultEmailSettings();
+			System.assertEquals(11, defaults.size());
 
 			Boolean getDefaultSettingsLanguageCodeError = false;
 			try {

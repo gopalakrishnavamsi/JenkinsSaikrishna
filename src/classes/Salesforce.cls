@@ -60,22 +60,6 @@ public with sharing class Salesforce {
 		Production, Sandbox
 	}
 
-	public class Credentials {
-		public String username { get; private set; }
-		public String password { get; private set; }
-		public String environment { get; private set; }
-		public Boolean useMetadataApi { get; private set; }
-
-		public Credentials(final String username, final String password, final Environment environment,
-			final Boolean useMetadataApi) {
-
-			this.username = username;
-			this.password = password;
-			this.environment = environment != null ? environment.name() : null;
-			this.useMetadataApi = useMetadataApi;
-		}
-	}
-
 	public class Configuration {
 		public String host { get; private set; }   // this is a host name got from HTTP headers
 		public String baseUrl { get; private set; } // this is a host name in https://XXX.salesforce.com format

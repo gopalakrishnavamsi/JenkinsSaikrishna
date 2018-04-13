@@ -41,7 +41,7 @@ private class RecipientResponseTest {
 		System.assert(!result1.success);
 		System.assert(!Collection.isEmpty(result1.messages));
 		System.assertEquals(1, result1.messages.size());
-		System.assertEquals('fail', result1.messages[0]);
+		System.assertEquals('fail', result1.messages[0].description);
 		System.assertEquals(null, result1.recipients);
 		System.assertEquals(null, result1.removedIds);
 
@@ -49,8 +49,8 @@ private class RecipientResponseTest {
 		System.assert(!result2.success);
 		System.assert(!Collection.isEmpty(result2.messages));
 		System.assertEquals(2, result2.messages.size());
-		System.assertEquals('fail1', result2.messages[0]);
-		System.assertEquals('fail2', result2.messages[1]);
+		System.assertEquals('fail1', result2.messages[0].description);
+		System.assertEquals('fail2', result2.messages[1].description);
 		System.assertEquals(null, result2.recipients);
 		System.assertEquals(null, result2.removedIds);
 	}

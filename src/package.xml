@@ -67,8 +67,8 @@
         <members>EnvironmentTest</members>
         <members>EnvelopeSettings</members>
         <members>EnvelopeSettingsTest</members>
-        <members>MetadataService</members>
-        <members>MetadataServiceTest</members>
+        <members>MetadataAPI</members>
+        <members>MetadataAPITest</members>
         <members>DocumentResponse</members>
         <members>DocumentResponseTest</members>
         <members>EnvelopeResponse</members>
@@ -95,6 +95,12 @@
         <members>DefaultDocumentResolverTest</members>
         <members>DefaultRecipientResolver</members>
         <members>DefaultRecipientResolverTest</members>
+        <members>AccountService</members>
+        <members>AccountServiceTest</members>
+        <members>AdminResponse</members>
+        <members>AdminResponseTest</members>
+        <members>AccountSoapAPI</members>
+        <members>AccountSoapAPITest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -208,6 +214,9 @@
         <members>Failed21CFRPart11</members>
         <members>RecipientMustBeUser</members>
         <members>TrialAccountExpired</members>
+        <members>TrialAccountExpiresToday</members>
+        <members>TrialAccountExpiresOneDay</members>
+        <members>TrialAccountExpiresSoon_1</members>
         <members>InvalidFileExtension</members>
         <members>AccountInSessionSigningMustBeEnabled</members>
         <members>InvalidAccountSettings</members>
@@ -215,6 +224,14 @@
         <members>InvalidRecipientUsername</members>
         <members>CannotResolveDocument_2</members>
         <members>CannotResolveRecipient_2</members>
+        <members>NoValidAccounts</members>
+        <members>CompanyRequired</members>
+        <members>NameRequired</members>
+        <members>EmailRequired</members>
+        <members>MustAgreeToTCs</members>
+        <members>InvalidEmail</members>
+        <members>InvalidTrialAccount</members>
+        <members>UnauthorizedPageAccess</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -467,12 +484,27 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>Security</members>
+        <name>Settings</name>
+    </types>
+    <types>
         <members>Envelope__c-DocuSign Envelope Layout</members>
         <members>CustomParameterMap__c-DocuSign Custom Parameter Map Layout</members>
         <members>EnvelopeConfiguration__c-DocuSign Envelope Configuration Layout</members>
         <members>CustomRecipient__c-DocuSign Custom Recipient Layout</members>
         <members>EnvelopeStatus__c-DocuSign Envelope Status Layout</members>
         <name>Layout</name>
+    </types>
+    <types>
+        <members>Demo</members>
+        <members>ProductionAU</members>
+        <members>ProductionCA</members>
+        <members>ProductionEU</members>
+        <members>ProductionNA1</members>
+        <members>ProductionNA2</members>
+        <members>ProductionNA3</members>
+        <members>Stage</members>
+        <name>RemoteSiteSetting</name>
     </types>
     <version>42.0</version>
 </Package>

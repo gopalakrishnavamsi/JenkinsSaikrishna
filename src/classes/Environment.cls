@@ -10,7 +10,7 @@ public class Environment {
 	private static final UUID trial2DayPlanId = UUID.fromString('98c3e733-e3d3-4b39-89c6-961ed4125b6f');
 
 	public enum Target {
-		Invalid, Test, Stage, Demo, Production, Other
+		Invalid, Stage, Demo, Production, Other
 	}
 
 	private static final Map<String, Target> nameTarget = new Map<String, Target> {
@@ -18,24 +18,21 @@ public class Environment {
 		'prod' => Target.Production,
 		'demo' => Target.Demo,
 		'stage' => Target.Stage,
-		'test' => Target.Test,
-		'test1' => Target.Test,
-		'test2' => Target.Test,
 		'eu' => Target.Production,
+		'au' => Target.Production,
+		'ca' => Target.Production,
 		'other' => Target.Other
 	};
 	private static final Map<String, URL> nameToBaseURL = new Map<String, URL> {
-		'test' => new URL('https://test.docusign.net/'),
-		'test1' => new URL('https://test1.docusign.net/'),
-		'test2' => new URL('https://test2.docusign.net/'),
 		'stage' => new URL('https://stage.docusign.net/'),
 		'demo' => new URL('https://demo.docusign.net/'),
 		'prod' => new URL('https://www.docusign.net/'),
 		'production' => new URL('https://www.docusign.net/'),
-		'eu' => new URL('https://eu.docusign.net/')
+		'eu' => new URL('https://eu.docusign.net/'),
+		'au' => new URL('https://au.docusign.net/'),
+		'ca' => new URL('https://ca.docusign.net/')
 	};
 	private static final Map<Target, URL> envToBaseURL = new Map<Target, URL> {
-		Target.Test => new URL('https://test.docusign.net/'),
 		Target.Stage => new URL('https://stage.docusign.net/'),
 		Target.Demo => new URL('https://demo.docusign.net/'),
 		Target.Production => new URL('https://www.docusign.net/')
@@ -44,7 +41,6 @@ public class Environment {
 		'stage.docusign.net' => Target.Stage,
 		'demo.docusign.net' => Target.Demo,
 		'www.docusign.net' => Target.Production,
-		'na1.docusign.net' => Target.Production,
 		'na2.docusign.net' => Target.Production,
 		'na3.docusign.net' => Target.Production,
 		'eu.docusign.net' => Target.Production,
@@ -73,7 +69,7 @@ public class Environment {
 			if (url != null) {
 				if (url.getProtocol().equalsIgnoreCase('https')) { // Must be HTTPS
 					// Matches valid host?
-					this.environment = getTarget(url.getHost().toLowerCase());
+					this.environment = getTarget(url.getHost().trim().toLowerCase());
 					if (this.isValid) {
 						this.baseURL = new URL(url.getProtocol() + '://' + url.getAuthority() + '/');
 					}
@@ -96,7 +92,7 @@ public class Environment {
 		if (url != null) {
 			if (url.getProtocol().equalsIgnoreCase('https')) { // Must be HTTPS
 				// Matches valid host?
-				this.environment = getTarget(url.getHost().toLowerCase());
+				this.environment = getTarget(url.getHost().trim().toLowerCase());
 			}
 		}
 
@@ -126,31 +122,11 @@ public class Environment {
 		return new Environment(t, u);
 	}
 
-	public static URL getBaseURL(final String t) {
-		URL baseURL = null;
-
-		if (String.isNotBlank(t)) {
-			baseURL = nameToBaseURL.get(t.toLowerCase());
-		}
-
-		return baseURL;
-	}
-
-	public static URL getBaseURL(final Target t) {
-		URL baseURL = null;
-
-		if (t != null) {
-			baseURL = envToBaseURL.get(t);
-		}
-
-		return baseURL;
-	}
-
 	private static Target getTarget(final String host) {
 		Target result = Target.Invalid;
 
 		if (String.isNotBlank(host)) {
-			Target t = hostTarget.get(host.toLowerCase());
+			Target t = hostTarget.get(host.trim().toLowerCase());
 			if (t != null) result = t; else if (isValidHost(host)) result = Target.Other;
 		}
 
@@ -165,26 +141,13 @@ public class Environment {
 		Boolean result = false;
 
 		if (String.isNotBlank(host)) {
-			String h = host.toLowerCase();
+			String h = host.trim().toLowerCase();
 
 			for (String domain : domainWhitelist) {
 				if (h.endsWith(domain)) {
 					result = true;
 					break;
 				}
-			}
-		}
-
-		return result;
-	}
-
-	public static URL parseBaseURL(final URL u) {
-		URL result = null;
-
-		if (u != null) {
-			Environment e = new Environment(u);
-			if (e.isValid) {
-				result = e.baseURL;
 			}
 		}
 
@@ -200,7 +163,7 @@ public class Environment {
 		Target result = Target.Invalid;
 
 		if (String.isNotBlank(s)) {
-			Target t = nameTarget.get(s.toLowerCase());
+			Target t = nameTarget.get(s.trim().toLowerCase());
 			result = t == null ? Target.Invalid : t;
 		}
 

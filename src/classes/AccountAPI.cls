@@ -109,7 +109,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
-	private class NewAccount {
+	private class TrialAccount {
 		private final String accountName;
 		private final APIUser initialUser;
 		private final String distributorCode;
@@ -119,9 +119,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		private final Plan planInformation;
 		private final List<Setting> accountSettings;
 
-		public NewAccount(final Account.Trial a, final UUID planId) {
+		public TrialAccount(final Account.Trial a, final UUID planId) {
 			if (a != null) {
-				this.accountName = a.name;
+				this.accountName = a.company;
 				this.initialUser = new APIUser(a.user);
 				this.initialUser.enableConnectForUser = 'true';
 				this.initialUser.userSettings = new List<Setting> {
@@ -143,17 +143,17 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
-	private class NewAccounts {
-		public List<NewAccount> newAccountRequests;
+	private class TrialAccounts {
+		public List<TrialAccount> newAccountRequests;
 
-		public NewAccounts(final Account.Trial a, final UUID planId) {
-			this.newAccountRequests = new List<NewAccount> {
-				new NewAccount(a, planId)
+		public TrialAccounts(final Account.Trial a, final UUID planId) {
+			this.newAccountRequests = new List<TrialAccount> {
+				new TrialAccount(a, planId)
 			};
 		}
 	}
 
-	private class NewAccountResult {
+	private class TrialAccountResult {
 		public String accountId;
 		public String accountIdGuid;
 		public String accountName;
@@ -173,8 +173,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
-	private class NewAccountResults {
-		public List<NewAccountResult> newAccounts;
+	private class TrialAccountResults {
+		public List<TrialAccountResult> newAccounts;
 
 		public Account.Membership toExternalForm() {
 			Account.Membership account = null;
@@ -195,7 +195,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			new List<Object> { 'accounts' },
 			QueryString.empty,
 			this.getDefaultHeaders(),
-			JSON.serialize(new NewAccounts(account, this.environment.trialPlanId)),
+			JSON.serialize(new TrialAccounts(account, this.environment.trialPlanId)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to create account: ' + response.error);
@@ -213,7 +213,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			throw new APIException(errorMsg);
 		}
 
-		return ((NewAccountResults)JSON.deserialize(response.body, NewAccountResults.class)).toExternalForm();
+		return ((TrialAccountResults)JSON.deserialize(response.body, TrialAccountResults.class)).toExternalForm();
 	}
 
 	// Serialization objects for getAccount
@@ -444,7 +444,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 
 	@TestVisible
 	private Account.Memberships getAccounts(final String authHeader, final Integer timeout) {
-		final RestAPI.Response response = get(
+		RestAPI.Response response = get(
 			this.apiBaseURL,
 			new List<Object> { 'login_information' },
 			new QueryString(new Map<String, String> {
@@ -462,7 +462,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			this.log.error('GET login_information failed: ' + response.error);
 			throw new APIException(response.error);
 		}
-
 		return ((LoginInformation)JSON.deserialize(response.body, LoginInformation.class)).toExternalForm();
 	}
 
@@ -497,7 +496,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		if (this.baseURL == null || this.username == null || String.isBlank(this.password))
 			throw new DocuSignException(Label.AccountNotConfigured);
 
-		final Account.Memberships login = this.getAccounts(
+		Account.Memberships login = this.getAccounts(
 			JSON.serialize(new LegacyCredentials(this.username, this.password)),
 			timeout);
 		if (login != null && login.accounts != null && !login.accounts.isEmpty()) {
@@ -585,6 +584,17 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				new Setting('canSendEnvelope', String.valueOf(user.canSendEnvelope))
 			};
 			this.userStatus = userStatusToString(user.status);
+		}
+
+		public APIUser(final Account.TrialUser user) {
+			this.email = user.email;
+			this.firstName = user.firstName;
+			this.lastName = user.lastName;
+			this.userName = user.email;
+			this.userSettings = new List<Setting> {
+				new Setting('canManageAccount', 'true'),
+				new Setting('canSendEnvelope', 'true')
+			};
 		}
 
 		private APIError errorExternalForm() {

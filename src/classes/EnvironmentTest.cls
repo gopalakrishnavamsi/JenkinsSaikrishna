@@ -181,29 +181,6 @@ private class EnvironmentTest {
 		System.assert(!e4.isValid, 'Environment is valid with bad URL');
 	}
 
-	static testMethod void test_getBaseURL() {
-		URL bu1 = Environment.getBaseURL('production');
-		System.assertEquals('https://www.docusign.net/', bu1.toExternalForm());
-
-		URL bu2 = Environment.getBaseURL('DEMO');
-		System.assertEquals('https://demo.docusign.net/', bu2.toExternalForm());
-
-		URL bu3 = Environment.getBaseURL('STagE');
-		System.assertEquals('https://stage.docusign.net/', bu3.toExternalForm());
-
-		URL bu4 = Environment.getBaseURL('other');
-		System.assertEquals(null, bu4);
-
-		URL bu5 = Environment.getBaseURL((String)null);
-		System.assertEquals(null, bu5);
-
-		URL bu6 = Environment.getBaseURL((Environment.Target)null);
-		System.assertEquals(null, bu6);
-
-		URL bu7 = Environment.getBaseURL(Environment.Target.Other);
-		System.assertEquals(null, bu7);
-	}
-
 	static testMethod void test_isValid() {
 		System.assert(Environment.isValid(new Environment(Environment.Target.Production, null)),
 			'Environment invalid');
@@ -221,21 +198,14 @@ private class EnvironmentTest {
 			'Environment valid');
 	}
 
-	static testMethod void test_parseBaseURL() {
-		System.assertEquals('https://www.docusign.net/', Environment.parseBaseURL(new URL('https://www.docusign.net/restapi/v2/blah')).toExternalForm());
-		System.assertEquals('https://demo.docusign.net/', Environment.parseBaseURL(new URL('https://demo.docusign.net/restapi/v2/blah')).toExternalForm());
-		System.assertEquals('https://other.docusignhq.com/', Environment.parseBaseURL(new URL('https://other.docusignhq.com/restapi/v2/blah')).toExternalForm());
-		System.assertEquals(null, Environment.parseBaseURL(new URL('https://other.evil.com/restapi/v2/blah')));
-		System.assertEquals(null, Environment.parseBaseURL(new URL('https://other.evil-docusign.net/restapi/v2/blah')));
-		System.assertEquals(null, Environment.parseBaseURL(new URL('https://some.evil.site/?demo.docusign.net')));
-		System.assertEquals(null, Environment.parseBaseURL(null));
-	}
-
 	static testMethod void test_parseTarget() {
 		System.assertEquals(Environment.Target.Production, Environment.parseTarget('production'));
-		System.assertEquals(Environment.Target.Demo, Environment.parseTarget('demo'));
+		System.assertEquals(Environment.Target.Production, Environment.parseTarget(' prod '));
+		System.assertEquals(Environment.Target.Production, Environment.parseTarget('eu'));
+		System.assertEquals(Environment.Target.Production, Environment.parseTarget('au'));
+		System.assertEquals(Environment.Target.Production, Environment.parseTarget('ca'));
+		System.assertEquals(Environment.Target.Demo, Environment.parseTarget('\ndemo'));
 		System.assertEquals(Environment.Target.Stage, Environment.parseTarget('STAGE'));
-		System.assertEquals(Environment.Target.Test, Environment.parseTarget('Test'));
 		System.assertEquals(Environment.Target.Other, Environment.parseTarget('oTheR'));
 
 		System.assertEquals(Environment.Target.Invalid, Environment.parseTarget('invalid'));

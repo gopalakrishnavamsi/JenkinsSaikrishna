@@ -252,6 +252,18 @@ public with sharing class Localization {
 		return result;
 	}
 
+	public static List<Recipient.EmailSettings> getDefaultEmailSettings() {
+		List<Recipient.EmailSettings> result = new List<Recipient.EmailSettings>();
+		for (Localization__mdt l : [SELECT DeveloperName, EmailSubject__c, EmailMessage__c FROM Localization__mdt]) {
+			result.add(new Recipient.EmailSettings(
+				l.DeveloperName,
+				LANGUAGE_TO_LABEL.get(l.DeveloperName),
+				l.EmailSubject__c,
+				l.EmailMessage__c));
+		}
+		return result;
+	}
+
 	public static Recipient.EmailSettings getDefaultEmailSettings(final String language) {
 		List<Localization__mdt> mds = [
 			SELECT EmailSubject__c, EmailMessage__c

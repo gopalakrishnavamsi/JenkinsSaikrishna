@@ -1,0 +1,6 @@
+dev.username = fred.wade.dfs-le@docusign.com
+dev.password = docusign@1
+dev.securityToken = l3wFgJszHnNk17pUk3T1Aygd
+test.username = ${dev.username}
+test.password = ${dev.password}
+test.securityToken = ${dev.securityToken}

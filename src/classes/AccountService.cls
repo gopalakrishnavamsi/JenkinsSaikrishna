@@ -1,0 +1,283 @@
+public with sharing class AccountService {
+
+	private static final Database DB = new AccountService.Database();
+	private static final LoggerService LOG = LoggerService.getInstance();
+	private static Account currentAccount;
+
+	private class Database {
+
+		public User queryUser(final Id userId) {
+			Permissions.verifyIsQueryable('User', new List<String> {
+				'Phone', 'MobilePhone', 'Street', 'City', 'State',
+				'PostalCode', 'Country'
+			});
+			return [
+				SELECT
+					Phone, MobilePhone, Street, City, State, PostalCode, Country
+				FROM User
+				WHERE Id = :userId
+				LIMIT 1
+			];
+		}
+	}
+
+	public enum LoginStatus {
+		Success, Failure, SelectAccount
+	}
+
+	public class LoginResult {
+		public LoginStatus status { get; private set; }
+		public List<AccountOption> accountOptions { get; private set; }
+
+		private LoginResult(final LoginStatus status, final List<AccountOption> accountOptions) {
+			this.status = status == null ? LoginStatus.Failure : status;
+			this.accountOptions = accountOptions == null ? new List<AccountOption>() : accountOptions;
+		}
+	}
+
+	public class AccountOption {
+		public Long id { get; private set; }
+		public String display { get; private set; }
+
+		private AccountOption(final Long id, final String display) {
+			this.id = id;
+			this.display = display;
+		}
+	}
+
+	@TestVisible
+	private class TrialStatus {
+		public Boolean isExpired { get; private set; }
+		public String message { get; private set; }
+
+		public TrialStatus(final Boolean isExpired, final String message) {
+			this.isExpired = isExpired;
+			this.message = message;
+		}
+	}
+
+	public static Account getAccount() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (currentAccount == null) {
+			currentAccount = AccountAPI.getInstance().getAccount();
+		}
+		return currentAccount;
+	}
+
+	@TestVisible
+	private static TrialStatus getTrialStatus(final Account account) {
+		Boolean isExpired = false;
+		String message = null;
+
+		if (account != null
+			&& account.billing != null
+			&& account.environment != null
+			&& account.plan != null
+			&& account.plan.id == account.environment.trialPlanId) {
+
+			Integer intDays = Date.today().daysBetween(account.billing.endDate);
+			if (intDays < 0) {
+				isExpired = true;
+				message = Label.TrialAccountExpired;
+			} else if (intDays == 0) {
+				message = Label.TrialAccountExpiresToday;
+			} else if (intDays == 1) {
+				message = Label.TrialAccountExpiresOneDay;
+			} else if (intDays < 7) {
+				message = String.format(Label.TrialAccountExpiresSoon_1, new List<String> { String.valueOf(intDays) });
+			}
+		}
+		return new TrialStatus(isExpired, message);
+	}
+
+	@TestVisible
+	private static Environment parseEnvironment(final String environmentName, final String otherUrl) {
+		// Parse and validate the supplied environment to ensure it is a docusign domain.
+		Environment env;
+		try {
+			env = Environment.fromTarget(environmentName, otherURL);
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to parse DocuSign environment');
+			env = Environment.Invalid;
+		}
+		return env;
+	}
+
+	public static LoginResult login(final String username, final String password, final String environmentName,
+		final String otherUrl, Long selectedAccountId) {
+
+		Permissions.verifyIsDocuSignAdministrator();
+
+		// 1) Parse valid DocuSign environment.
+		Environment env = parseEnvironment(environmentName, otherUrl);
+		if (!Environment.isValid(env)) {
+			LOG.error('Invalid DocuSign environment: ' + environmentName + ' => ' + otherURL);
+			throw new DocuSignException(Label.InvalidEnvironment);
+		}
+
+		// 2) Get valid DocuSign accounts.
+		Account.Memberships memberships;
+		try {
+			memberships = AccountAPI.getInstance(env, username, password).getValidAccounts();
+		} catch (UnauthorizedException ex) {
+			LOG.exception(ex, 'Failed to read available accounts');
+			throw new UnauthorizedException(Label.InvalidUsernameOrPassword);
+		}
+
+		if (memberships == null || Collection.isEmpty(memberships.accounts)) {
+			throw new DocuSignException(Label.NoValidAccounts);
+		}
+
+		// 3) Filter valid accounts.
+		List<AccountOption> options = new List<AccountOption>();
+		Account.Membership validMembership;
+		Boolean selectAccount = selectedAccountId == null || selectedAccountId <= 0L;
+		for (Account.Membership a : memberships.accounts) {
+			if (selectAccount || selectedAccountId == a.accountId) {
+				options.add(new AccountOption(a.accountId, a.name + ' (' + a.accountId + ')'));
+				validMembership = a;
+			}
+		}
+
+		// 4) Save results if only one account is filtered, or return list for user selection.
+		LoginStatus status = null;
+		if (options.size() == 1) {
+			Environment ae = Environment.fromURL(validMembership.baseURL);
+			String envString = ae.Environment.name().toLowerCase();
+			LOG.debug('AdminManager.login: account base URL = ' + validMembership.baseURL.toExternalForm()
+				+ ', parsed base = ' + ae.baseURL.toExternalForm()
+				+ ', environment = ' + ae.Environment.name().toLowerCase());
+
+			credentials.save(ae, validMembership.accountUUID, String.valueOf(validMembership.userId),
+				validMembership.apiPassword, true, true);
+			status = LoginStatus.Success;
+		} else { // more than 1 valid account, just return results
+			status = LoginStatus.SelectAccount;
+		}
+
+		return new LoginResult(options.size() > 1 ? LoginStatus.SelectAccount : LoginStatus.Success, options);
+	}
+
+	private static AccountSettings__c completeSetup() {
+		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+		accountSettings.SetupComplete__c = true;
+		accountSettings.Features__c = null;
+		update accountSettings;
+		return accountSettings;
+	}
+
+	public static String connect(final String username, final String password) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		String result = AccountSoapAPI.getInstance().setConnectCredentials(username, password);
+		completeSetup();
+		return result;
+	}
+
+	public static Account.Trial prepareTrial(final String email) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		User u = DB.queryUser(UserInfo.getUserId());
+		return new Account.Trial(
+			UserInfo.getOrganizationName(),
+			new Account.TrialUser(
+				email,
+				UserInfo.getFirstName(),
+				UserInfo.getLastName()),
+			new Account.Address(
+				u.Street,
+				null,
+				u.City,
+				u.State,
+				u.PostalCode,
+				u.Country,
+				String.isBlank(u.Phone) ? u.MobilePhone : u.Phone),
+			false);
+	}
+
+	public static Account.Membership createTrial(final Account.Trial trial) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		ValidationResult vr = validate(trial);
+		if (!vr.isValid) {
+			throw new ValidationException(Label.InvalidTrialAccount, vr);
+		}
+
+		Account.Membership result = AccountAPI.getInstance(Environment.production).createTrialAccount(trial);
+		Credentials.save(Environment.fromURL(result.baseUrl), result.accountUUID, String.valueOf(result.userId),
+			result.apiPassword, true, false);
+		return result.scrub(); // Don't return sensitive info.
+	}
+
+	@TestVisible
+	private static ValidationResult validate(final Account.Trial trial) {
+		ValidationResult result = new ValidationResult();
+		if (trial == null) {
+			result.add(Label.UndefinedArgument);
+		} else {
+			if (trial.user == null || String.isBlank(trial.user.email)) {
+				result.add(Label.EmailRequired);
+			} else if (trial.user != null && !StringUtils.isValidEmail(trial.user.email)) {
+				result.add(Label.InvalidEmail);
+			}
+			if (trial.user == null || String.isBlank(trial.user.name)) {
+				result.add(Label.NameRequired);
+			}
+			if (String.isBlank(trial.company)) {
+				result.add(Label.CompanyRequired);
+			}
+			if (!trial.termsAccepted) {
+				result.add(Label.MustAgreeToTCs);
+			}
+		}
+		return result;
+	}
+
+	public static Url getDocuSignUrl() {
+		if (!Permissions.isDocuSignUser()
+			|| String.isBlank(UserSettings__c.getInstance(UserInfo.getUserId()).Username__c)) {
+
+			throw new UnauthorizedException(Label.UnauthorizedPageAccess);
+		}
+
+		return AccountAPI.getInstance().getConsoleViewURL();
+	}
+
+	public class Settings {
+		public EnvelopeSettings envelope { get; private set; }
+		public List<Recipient.EmailSettings> currentEmailLocalizations { get; private set; }
+		public List<Recipient.EmailSettings> defaultEmailLocalizations { get; private set; }
+		public Localization.ChatterText currentChatterLocalization { get; private set; }
+		public List<Localization.ChatterSettings> defaultChatterLocalizations { get; private set; }
+		public Integer calloutTimeout { get; private set; }
+
+		public Settings(
+			final EnvelopeSettings envelope,
+			final List<Recipient.EmailSettings> currentEmailLocalizations,
+			final List<Recipient.EmailSettings> defaultEmailLocalizations,
+			final Localization.ChatterText currentChatterLocalization,
+			final List<Localization.ChatterSettings> defaultChatterLocalizations,
+			final Integer calloutTimeout) {
+
+			this.envelope = envelope;
+			this.currentEmailLocalizations = currentEmailLocalizations;
+			this.defaultEmailLocalizations = defaultEmailLocalizations;
+			this.currentChatterLocalization = currentChatterLocalization;
+			this.defaultChatterLocalizations = defaultChatterLocalizations;
+			this.calloutTimeout = calloutTimeout;
+		}
+	}
+
+	public static Settings getSettings() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return new Settings(
+			EnvelopeSettings.getInstance(),
+			Localization.getEmailSettings(),
+			Localization.getDefaultEmailSettings(),
+			Localization.getChatterText(),
+			Localization.getChatterSettings(),
+			Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c));
+	}
+}

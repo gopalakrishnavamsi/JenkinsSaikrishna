@@ -1,6 +1,6 @@
 public class ValidationResult {
 
-	private List<String> messages;
+	public List<String> messages { get; private set; }
 	public Boolean isValid {
 		get {
 			return Collection.isEmpty(messages);

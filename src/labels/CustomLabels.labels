@@ -806,8 +806,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Signers Required to Meet 21 CFR Part 11</shortDescription>
-		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
-			required, non-conditional Signature or Initials tab.</value>
+		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one required, non-conditional Signature or Initials tab.</value>
 	</labels>
 	<labels>
 		<fullName>RecipientMustBeUser</fullName>
@@ -823,8 +822,31 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. To continue using DocuSign for Salesforce, please email
-			getDFS@docusign.com.</value>
+		<value>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.</value>
+	</labels>
+	<labels>
+		<fullName>TrialAccountExpiresToday</fullName>
+		<categories>Warnings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Trial Account Expires Today</shortDescription>
+		<value>Today is last day on your trial. To upgrade, please email getdfs@docusign.com.</value>
+	</labels>
+	<labels>
+		<fullName>TrialAccountExpiresOneDay</fullName>
+		<categories>Warnings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Trial Account Expires in One Day</shortDescription>
+		<value>You have one day remaining on your trial. To upgrade, please email getdfs@docusign.com.</value>
+	</labels>
+	<labels>
+		<fullName>TrialAccountExpiresSoon_1</fullName>
+		<categories>Warnings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Trial Account Expires Soon</shortDescription>
+		<value>You have {0} days remaining on your trial. To upgrade, please email getdfs@docusign.com.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidFileExtension</fullName>
@@ -891,5 +913,74 @@
 		<protected>true</protected>
 		<shortDescription>Cannot Resolve Recipient</shortDescription>
 		<value>Cannot resolve recipient {0} ({1}).</value>
+	</labels>
+	<labels>
+		<fullName>NoValidAccounts</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>No Valid Accounts</shortDescription>
+		<value>
+			There is an issue with your DocuSign account settings. The following permissions must all be enabled:
+			&apos;Manage Account&apos;, &apos;Send Envelopes&apos;, &apos;Send on Behalf Of&apos;, and
+			&apos;API Account Wide Access&apos;. To update these settings, log in to DocuSign, select Preferences,
+			then select Permissions.
+		</value>
+	</labels>
+	<labels>
+		<fullName>CompanyRequired</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Specify Company</shortDescription>
+		<value>Company name is required.</value>
+	</labels>
+	<labels>
+		<fullName>EmailRequired</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Specify Email</shortDescription>
+		<value>Email address is required.</value>
+	</labels>
+	<labels>
+		<fullName>NameRequired</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Specify Name</shortDescription>
+		<value>Full name is required.</value>
+	</labels>
+	<labels>
+		<fullName>MustAgreeToTCs</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Agree to DocuSign T&amp;Cs</shortDescription>
+		<value>You must agree to the DocuSign terms and conditions.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidEmail</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Email Address</shortDescription>
+		<value>The email address is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidTrialAccount</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Trial Account</shortDescription>
+		<value>The trial account is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>UnauthorizedPageAccess</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized Page Access</shortDescription>
+		<value>Sorry, you do not have access to this page.</value>
 	</labels>
 </CustomLabels>

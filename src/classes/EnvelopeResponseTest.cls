@@ -28,7 +28,7 @@ private class EnvelopeResponseTest {
 		System.assert(!er1.success);
 		System.assert(!Collection.isEmpty(er1.messages));
 		System.assertEquals(1, er1.messages.size());
-		System.assertEquals('fail', er1.messages[0]);
+		System.assertEquals('fail', er1.messages[0].description);
 		System.assertEquals(null, er1.envelope);
 		System.assert(String.isBlank(er1.url));
 
@@ -36,8 +36,8 @@ private class EnvelopeResponseTest {
 		System.assert(!er2.success);
 		System.assert(!Collection.isEmpty(er2.messages));
 		System.assertEquals(2, er2.messages.size());
-		System.assertEquals('fail1', er2.messages[0]);
-		System.assertEquals('fail2', er2.messages[1]);
+		System.assertEquals('fail1', er2.messages[0].description);
+		System.assertEquals('fail2', er2.messages[1].description);
 		System.assertEquals(null, er2.envelope);
 		System.assert(String.isBlank(er2.url));
 	}

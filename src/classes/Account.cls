@@ -140,15 +140,33 @@ public class Account {
 		}
 	}
 
+	public class TrialUser {
+
+		public String email { get; private set; }
+		public String firstName { get; private set; }
+		public String lastName { get; private set; }
+		public String name {
+			get {
+				return StringUtils.mkName(firstName, lastName);
+			}
+		}
+
+		public TrialUser(final String email, final String firstName, final String lastName) {
+			this.email = email;
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
+	}
+
 	public class Trial {
 
-		public String name { get; private set; }
-		public User user { get; private set; }
+		public String company { get; private set; }
+		public TrialUser user { get; private set; }
 		public Address address { get; private set; }
 		public Boolean termsAccepted { get; private set; }
 
-		public Trial(final String name, final User user, final Address address, final Boolean termsAccepted) {
-			this.name = name;
+		public Trial(final String company, final TrialUser user, final Address address, final Boolean termsAccepted) {
+			this.company = company;
 			this.user = user;
 			this.address = address;
 			this.termsAccepted = termsAccepted;
@@ -200,6 +218,11 @@ public class Account {
 				result = String.isNotBlank(value) && Boolean.valueOf(value);
 			}
 			return result;
+		}
+
+		public Membership scrub() {
+			this.apiPassword = null;
+			return this;
 		}
 	}
 

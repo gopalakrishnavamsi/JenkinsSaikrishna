@@ -415,13 +415,23 @@
 		<name>RecipientMustBeUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email
-			getDFS@docusign.com.</label>
+		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-			extension unknown to DocuSign.</label>
+		<label>Today is last day on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<name>TrialAccountExpiresToday</name>
+	</customLabels>
+	<customLabels>
+		<label>You have one day remaining on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<name>TrialAccountExpiresOneDay</name>
+	</customLabels>
+	<customLabels>
+		<label>You have {0} days remaining on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<name>TrialAccountExpiresSoon_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</label>
 		<name>InvalidFileExtension</name>
 	</customLabels>
 	<customLabels>
@@ -456,5 +466,42 @@
 	<customLabels>
 		<label>Cannot resolve recipient {0} ({1}).</label>
 		<name>CannotResolveRecipient_2</name>
+	</customLabels>
+	<customLabels>
+		<label>
+			There is an issue with your DocuSign account settings. The following permissions must all be enabled:
+			&apos;Manage Account&apos;, &apos;Send Envelopes&apos;, &apos;Send on Behalf Of&apos;, and
+			&apos;API Account Wide Access&apos;. To update these settings, log in to DocuSign, select Preferences,
+			then select Permissions.
+		</label>
+		<name>NoValidAccounts</name>
+	</customLabels>
+	<customLabels>
+		<label>Company name is required.</label>
+		<name>CompanyRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Company name is required.</label>
+		<name>NameRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Email address is required.</label>
+		<name>EmailRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>You must agree to the DocuSign terms and conditions.</label>
+		<name>MustAgreeToTCs</name>
+	</customLabels>
+	<customLabels>
+		<label>The email address is invalid.</label>
+		<name>InvalidEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>The trial account is invalid.</label>
+		<name>InvalidTrialAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Sorry, you do not have access to this page.</label>
+		<name>UnauthorizedPageAccess</name>
 	</customLabels>
 </Translations>
