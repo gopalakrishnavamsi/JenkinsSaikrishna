@@ -1,7 +1,7 @@
 @IsTest
 private class DefaultDocumentResolverTest {
 
-	static testMethod void test_canResolveDocument() {
+	static testMethod void test_canResolveDocuments() {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
