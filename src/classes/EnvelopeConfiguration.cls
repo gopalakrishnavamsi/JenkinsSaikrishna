@@ -30,11 +30,11 @@ public with sharing class EnvelopeConfiguration {
 		public Boolean showEmailMessage { get; private set; } // SEM
 		public Boolean showRemindExpire { get; private set; } // SRS
 		public Boolean showChatter { get; private set; } // SCS
-		public Boolean showAddAttachment { get; private set; } // SAA
+		public Boolean showAddFile { get; private set; } // SAF
 
 		public VisibilitySettings(final Boolean showTagButton, final Boolean showSendButton,
 			final Boolean showEmailSubject, final Boolean showEmailMessage, final Boolean showRemindExpire,
-			final Boolean showChatter, final Boolean showAddAttachment) {
+			final Boolean showChatter, final Boolean showAddFile) {
 
 			this.showTagButton = showTagButton;
 			this.showSendButton = showSendButton;
@@ -42,7 +42,7 @@ public with sharing class EnvelopeConfiguration {
 			this.showEmailMessage = showEmailMessage;
 			this.showRemindExpire = showRemindExpire;
 			this.showChatter = showChatter;
-			this.showAddAttachment = showAddAttachment;
+			this.showAddFile = showAddFile;
 		}
 
 		public Map<String, String> toParameters() {
@@ -54,7 +54,7 @@ public with sharing class EnvelopeConfiguration {
 			if (showEmailMessage != null) parameters.put('SEM', showEmailMessage ? '1' : '0');
 			if (showRemindExpire != null) parameters.put('SRS', showRemindExpire ? '1' : '0');
 			if (showChatter != null) parameters.put('SCS', showChatter ? '1' : '0');
-			if (showAddAttachment != null) parameters.put('SAA', showAddAttachment ? '1' : '0');
+			if (showAddFile != null) parameters.put('SAF', showAddFile ? '1' : '0');
 			return parameters;
 		}
 	}

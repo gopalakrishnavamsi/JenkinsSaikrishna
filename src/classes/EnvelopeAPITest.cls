@@ -64,16 +64,94 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getDocumentBytes() {
-		TestUtils.createAccountConfiguration();
-		ContentVersion cv = TestUtils.createContentVersion();
+	static testMethod void test_buildCustomFields() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
 
-		Test.startTest();
-		Blob result = EnvelopeAPI.getDocumentBytes(cv.Id);
-		Test.stopTest();
+			CustomField cf1 = new CustomField('n1', 'v1', true, false);
+			CustomField cf2 = new CustomField('n2', 'v2', false, true);
+			CustomField cf3 = new CustomField('n3', 'v3', new List<String> { 'v1', 'v2', 'v3' }, true, true);
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
 
-		System.assertNotEquals(null, result);
-		System.assertEquals(cv.VersionData.toString(), result.toString());
+			Test.startTest();
+			EnvelopeAPI.CustomFields result = EnvelopeAPI.buildCustomFields(new List<CustomField> { cf1, cf2, cf3 },
+				Entity.resolve(o.Id));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+
+			System.assertNotEquals(null, result.textCustomFields);
+			System.assertEquals(9, result.textCustomFields.size());
+
+			System.assertNotEquals(null, result.listCustomFields);
+			System.assertEquals(1, result.listCustomFields.size());
+			System.assertEquals('n3', result.listCustomFields[0].name);
+			System.assertEquals('v3', result.listCustomFields[0].value);
+			System.assertEquals(new List<String> { 'v1', 'v2', 'v3' }, result.listCustomFields[0].listItems);
+			System.assertEquals('true', result.listCustomFields[0].required);
+			System.assertEquals('true', result.listCustomFields[0].show);
+		}
+	}
+
+	static testMethod void test_getDocumentContent_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+			Schema.Document d1 = TestUtils.createDocument();
+			Document t1 = new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, UUID.randomUUID().toString());
+
+			Test.startTest();
+			Map<Id, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
+				t1,
+				Document.fromContentVersion(cv1),
+				Document.fromContentVersion(cv2),
+				Document.fromDocument(d1)
+			}, false);
+			Map<Id, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
+				t1,
+				Document.fromContentVersion(cv1),
+				Document.fromContentVersion(cv2),
+				Document.fromDocument(d1)
+			}, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(3, result1.size());
+			System.assertEquals(cv1.VersionData.toString(), result1.get(cv1.Id).toString());
+			System.assertEquals(cv2.VersionData.toString(), result1.get(cv2.Id).toString());
+			System.assertEquals(d1.Body.toString(), result1.get(d1.Id).toString());
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals(3, result2.size());
+			System.assertEquals(cv1.Id, result2.get(cv1.Id).toString());
+			System.assertEquals(cv2.Id, result2.get(cv2.Id).toString());
+			System.assertEquals(d1.Id, result2.get(d1.Id).toString());
+		}
+	}
+
+	static testMethod void test_getDocumentContent_error() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getDocumentContent(new List<Document> {
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest1.pdf', 'pdf', 1234, UserInfo.getUserId()),
+					Document.fromContentVersion(cv1),
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest2.pdf', 'pdf', 1234, UserInfo.getOrganizationId()),
+					new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, UUID.randomUUID().toString())
+				}, false);
+				throw new AssertException('Expected getDocumentContent to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotReadDocumentContent_1, new List<String> {
+					'UnitTest1.pdf (' + UserInfo.getUserId() + '), UnitTest2.pdf (' + UserInfo.getOrganizationId() + ')'
+				}), ex.getMessage());
+			}
+			Test.stopTest();
+		}
 	}
 
 	static testMethod void test_getSenderViewURL_success() {
@@ -609,14 +687,15 @@ private class EnvelopeAPITest {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
-			Document__c doc = TestUtils.createEnvelopeDocument(e1.Id);
+			Document doc = Document.convert(TestUtils.createEnvelopeDocument(e1.Id));
+
+			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
 
 			Test.startTest();
 			List<EnvelopeAPI.CompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
 				new List<Document> {
 					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, UUID.randomUUID().toString()),
-					new Document(doc.Id, Document.TYPE_DOCUMENT, 2, doc.Name, doc.Extension__c,
-						Integer.valueOf(doc.Size__c), doc.SourceId__c)
+					doc
 				},
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
@@ -625,7 +704,8 @@ private class EnvelopeAPITest {
 					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2),
 						'Recipient Two', 'r2@unit.test', null, 'note2')
 				},
-				true, true);
+				true,
+				content);
 			Test.stopTest();
 			System.assertEquals(2, compositeTemplatesList.size());
 			System.assertEquals(1, compositeTemplatesList[0].serverTemplates.size());
@@ -672,11 +752,9 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			Schema.Account a = TestUtils.createAccount();
-			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createDocument(UserInfo.getUserId()), 1);
-			Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createAttachment(o.Id), 2);
+			Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 2);
 			Document__c d3 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 3);
 			Integer sequence = 1;
 			List<Document> docs = new List<Document> {
@@ -761,7 +839,8 @@ private class EnvelopeAPITest {
 				client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.CannotReadDocumentBytes + ' ' + d.SourceId__c + ' (ContentVersion)', ex.getMessage());
+				System.assertEquals(String.format(Label.CannotReadDocumentContent_1,
+					new List<String> { d.Name + ' (' + d.SourceId__c + ')' }), ex.getMessage());
 			}
 			Test.stopTest();
 		}

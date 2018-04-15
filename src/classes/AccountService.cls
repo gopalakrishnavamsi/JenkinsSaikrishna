@@ -246,38 +246,65 @@ public with sharing class AccountService {
 
 	public class Settings {
 		public EnvelopeSettings envelope { get; private set; }
-		public List<Recipient.EmailSettings> currentEmailLocalizations { get; private set; }
 		public List<Recipient.EmailSettings> defaultEmailLocalizations { get; private set; }
-		public Localization.ChatterText currentChatterLocalization { get; private set; }
 		public List<Localization.ChatterSettings> defaultChatterLocalizations { get; private set; }
 		public Integer calloutTimeout { get; private set; }
+		public List<String> entityResolvers { get; private set; }
+		public List<String> documentResolvers { get; private set; }
+		public List<String> recipientResolvers { get; private set; }
 
 		public Settings(
 			final EnvelopeSettings envelope,
-			final List<Recipient.EmailSettings> currentEmailLocalizations,
 			final List<Recipient.EmailSettings> defaultEmailLocalizations,
-			final Localization.ChatterText currentChatterLocalization,
 			final List<Localization.ChatterSettings> defaultChatterLocalizations,
-			final Integer calloutTimeout) {
+			final Integer calloutTimeout,
+			final List<String> entityResolvers,
+			final List<String> documentResolvers,
+			final List<String> recipientResolvers) {
 
 			this.envelope = envelope;
-			this.currentEmailLocalizations = currentEmailLocalizations;
 			this.defaultEmailLocalizations = defaultEmailLocalizations;
-			this.currentChatterLocalization = currentChatterLocalization;
 			this.defaultChatterLocalizations = defaultChatterLocalizations;
 			this.calloutTimeout = calloutTimeout;
+			this.entityResolvers = entityResolvers;
+			this.documentResolvers = documentResolvers;
+			this.recipientResolvers = recipientResolvers;
 		}
 	}
 
 	public static Settings getSettings() {
 		Permissions.verifyIsDocuSignAdministrator();
 
+		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		return new Settings(
 			EnvelopeSettings.getInstance(),
-			Localization.getEmailSettings(),
 			Localization.getDefaultEmailSettings(),
-			Localization.getChatterText(),
 			Localization.getChatterSettings(),
-			Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c));
+			Integer.valueOf(accountSettings.CalloutTimeout__c),
+			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
+			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
+			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','));
+	}
+
+	public static Settings saveSettings(final Settings settings) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (settings == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+		accountSettings.CalloutTimeout__c = settings.calloutTimeout;
+		accountSettings.EntityResolvers__c = Collection.mkString(settings.entityResolvers, ',');
+		accountSettings.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');
+		accountSettings.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
+		upsert accountSettings;
+
+		return new Settings(
+			EnvelopeSettings.save(settings.envelope),
+			Localization.getDefaultEmailSettings(),
+			Localization.getChatterSettings(),
+			Integer.valueOf(accountSettings.CalloutTimeout__c),
+			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
+			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
+			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','));
 	}
 }

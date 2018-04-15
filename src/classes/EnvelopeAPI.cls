@@ -280,6 +280,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for templates
+	@TestVisible
 	private class ListCustomField {
 		public String name;
 		public String required;
@@ -298,6 +299,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TextCustomField {
 		public String name;
 		public String required;
@@ -321,6 +323,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class CustomFields {
 		public List<TextCustomField> textCustomFields;
 		public List<ListCustomField> listCustomFields;
@@ -419,46 +422,19 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
-	@TestVisible
-	private static Blob getDocumentBytes(final Id sourceId) {
-		if (sourceId == null) throw new DocuSignException(Label.UndefinedId);
-		Entity e = new Entity(sourceId);
-
-		Blob result = null;
-		for (DocumentResolver resolver : DOCUMENT_RESOLVERS) {
-			if (resolver.canResolve(e.type)) {
-				result = resolver.getBytes(e.type, e.id);
-			}
-			if (result != null) break;
-		}
-		return result;
-	}
-
 	private class APIDocument {
 		public String documentId;
 		public String name;
 		public String fileExtension;
 		public String documentBase64;
 
-		public APIDocument(final Document doc, final Boolean fetchDocuments) {
+		public APIDocument(final Document doc, final Blob content) {
 			if (doc != null && doc.type != Document.TYPE_TEMPLATE) {
 				this.documentId = String.valueOf(doc.sequence);
 				this.name = doc.name;
 				this.fileExtension = doc.extension;
-
-				Blob documentBytes = null;
-				if (fetchDocuments && !Salesforce.isCommunitySite && String.isNotBlank(doc.sourceId)) {
-					documentBytes = Blob.valueOf(doc.sourceId);
-				} else if (doc.type != Document.TYPE_TEMPLATE) {
-					documentBytes = getDocumentBytes(doc.sourceId);
-				}
-
-				if (documentBytes != null) {
-					this.documentBase64 = EncodingUtil.base64Encode(documentBytes);
-				} else if (doc.type != Document.TYPE_TEMPLATE) {
-					throw new DocuSignException(String.format('{0} {1} ({2})', new List<String> {
-						Label.CannotReadDocumentBytes, doc.sourceId, doc.type
-					}));
+				if (content != null) {
+					this.documentBase64 = EncodingUtil.base64Encode(content);
 				}
 			}
 		}
@@ -658,25 +634,26 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 	private class InlineTemplate {
 		public String sequence;
-		public List<EnvelopeAPI.APIDocument> documents;
-		public EnvelopeAPI.Recipients recipients;
+		public List<APIDocument> documents;
+		public Recipients recipients;
 
 		public InlineTemplate(
 			final Document doc,
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Boolean fetchDocuments) {
+			final Map<Id, Blob> documentContent) {
 
 			if (doc != null) {
 				this.sequence = String.valueOf(sequence);
 				if (doc.type != Document.TYPE_TEMPLATE) {
-					this.documents = new List<EnvelopeAPI.APIDocument> {
-						new EnvelopeAPI.APIDocument(doc, fetchDocuments)
+					Blob content = String.isBlank(doc.sourceId) ? null : documentContent.get(doc.sourceId);
+					this.documents = new List<APIDocument> {
+						new APIDocument(doc, content)
 					};
 				}
 				if (recipients != null) {
-					this.recipients = new EnvelopeAPI.Recipients(recipients, this.sequence, includeDefaultAnchorTags);
+					this.recipients = new Recipients(recipients, this.sequence, includeDefaultAnchorTags);
 				}
 			}
 		}
@@ -694,25 +671,25 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 	@TestVisible
 	private class CompositeTemplate {
-		public EnvelopeAPI.APIDocument document;
-		public List<EnvelopeAPI.InlineTemplate> inlineTemplates;
-		public List<EnvelopeAPI.ServerTemplate> serverTemplates;
+		public APIDocument document;
+		public List<InlineTemplate> inlineTemplates;
+		public List<ServerTemplate> serverTemplates;
 
 		public CompositeTemplate(
 			final Document document,
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Boolean fetchDocuments) {
+			final Map<Id, Blob> documentContent) {
 
 			if (document != null) {
 				if (document.templateId != null) {
-					this.serverTemplates = new List<EnvelopeAPI.ServerTemplate> {
-						new EnvelopeAPI.ServerTemplate(document.templateId, sequence)
+					this.serverTemplates = new List<ServerTemplate> {
+						new ServerTemplate(document.templateId, sequence)
 					};
 				}
-				this.inlineTemplates = new List<EnvelopeAPI.InlineTemplate> {
-					new EnvelopeAPI.InlineTemplate(document, sequence, recipients, includeDefaultAnchorTags, fetchDocuments)
+				this.inlineTemplates = new List<InlineTemplate> {
+					new InlineTemplate(document, sequence, recipients, includeDefaultAnchorTags, documentContent)
 				};
 			}
 		}
@@ -775,24 +752,87 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	@TestVisible
 	// FIXME. Don't think this logic is entirely correct. Copied from DocuSignCreateAndSendEnvelope.
 	// FIXME? Why are default anchor tags added to each envelope recipient, and only once for the first composite template? Confusing!
-	private static List<EnvelopeAPI.CompositeTemplate> buildCompositeTemplates(
+	private static List<CompositeTemplate> buildCompositeTemplates(
 		final List<Document> documents,
 		final List<Recipient> recipients,
 		final Boolean includeDefaultAnchorTags,
-		final Boolean fetchDocuments) {
+		final Map<Id, Blob> documentContent) {
 
-		List<EnvelopeAPI.CompositeTemplate> compositeTemplates = null;
+		List<CompositeTemplate> compositeTemplates = null;
 		if (documents != null) {
-			compositeTemplates = new List<EnvelopeAPI.CompositeTemplate>();
+			compositeTemplates = new List<CompositeTemplate>();
 			Integer sequence = 1;
 			Boolean addTags = includeDefaultAnchorTags;
 			for (Document d : documents) {
 				// FIXME: All recipients should not be added to every document in every case.
-				compositeTemplates.add(new EnvelopeAPI.CompositeTemplate(d, sequence++, recipients, addTags, fetchDocuments));
+				compositeTemplates.add(new CompositeTemplate(d, sequence++, recipients, addTags, documentContent));
 				addTags = false;
 			}
 		}
 		return compositeTemplates;
+	}
+
+	private static Map<Id, Blob> getDocumentContent(final List<Entity> sources) {
+		if (sources == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		Map<String, Set<Id>> sourceTypes = new Map<String, Set<Id>>();
+		for (Entity e : sources) {
+			if (sourceTypes.containsKey(e.type)) {
+				sourceTypes.get(e.type).add(e.id);
+			} else {
+				sourceTypes.put(e.type, new Set<Id> { e.id });
+			}
+		}
+
+		Map<Id, Blob> result = new Map<Id, Blob>();
+		for (String type : sourceTypes.keySet()) {
+			for (DocumentResolver resolver : DOCUMENT_RESOLVERS) {
+				if (resolver.canResolveDocument(type)) {
+					Map<Id, Blob> m = resolver.getDocumentContent(type, sourceTypes.get(type));
+					if (m != null) {
+						result.putAll(m);
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<Id, Blob> getDocumentContent(final List<Document> documents, final Boolean fetchDocuments) {
+		Map<Id, Blob> result = new Map<Id, Blob>();
+		if (documents != null) {
+			if (fetchDocuments && !Salesforce.isCommunitySite) { // Encode the source IDs
+				for (Document d : documents) {
+					if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)) {
+						result.put(d.sourceId, Blob.valueOf(d.sourceId));
+					}
+				}
+			} else { // Retrieve document bytes
+				List<Entity> sources = new List<Entity>();
+				for (Document d : documents) {
+					if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)) {
+						sources.add(new Entity(d.sourceId));
+					}
+				}
+				result.putAll(getDocumentContent(sources));
+			}
+
+			List<String> missingContent = new List<String>();
+			for (Document d : Documents) {
+				if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId) && result.get(d.sourceId) == null) {
+					missingContent.add(String.format('{0} ({1})', new List<String> { d.name, d.sourceId }));
+				}
+			}
+
+			if (Collection.isNotEmpty(missingContent)) {
+				throw new DocuSignException(String.format(Label.CannotReadDocumentContent_1, new List<String> {
+					Collection.mkString(missingContent, ', ')
+				}));
+			}
+		}
+		return result;
 	}
 
 	private class APIEnvelope {
@@ -815,21 +855,24 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				this.transactionId = e.id;
 				this.emailBlurb = e.emailMessage;
 				this.emailSubject = e.emailSubject;
-				this.notification = new EnvelopeAPI.EnvelopeNotification(e.notifications, useAccountNotificationDefaults);
+				this.notification = new EnvelopeNotification(e.notifications, useAccountNotificationDefaults);
 				this.customFields = buildCustomFields(e.customFields, e.source);
 
+				Map<Id, Blob> documentContent = e.hasDocuments ? getDocumentContent(e.documents, fetchDocuments) : null;
 				if (e.hasTemplates) {
-					this.compositeTemplates = buildCompositeTemplates(e.documents, e.recipients, includeDefaultAnchorTags,
-						fetchDocuments);
+					this.compositeTemplates = buildCompositeTemplates(e.documents, e.recipients,
+						includeDefaultAnchorTags, documentContent);
 				} else {
 					if (e.documents != null) {
-						this.documents = new List<EnvelopeAPI.APIDocument>();
+						this.documents = new List<APIDocument>();
 						for (Document d : e.documents) {
-							this.documents.add(new EnvelopeAPI.APIDocument(d, fetchDocuments));
+							this.documents.add(new APIDocument(d,
+								d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)
+									? documentContent.get(d.sourceId) : null));
 						}
 					}
 					if (e.recipients != null) {
-						this.recipients = new EnvelopeAPI.Recipients(e.recipients, null, includeDefaultAnchorTags);
+						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags);
 					}
 				}
 			}

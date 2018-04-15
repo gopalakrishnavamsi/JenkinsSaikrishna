@@ -46,8 +46,8 @@
         <members>RestAPITest</members>
         <members>SalesforceAPI</members>
         <members>SalesforceAPITest</members>
-        <members>ChatterFlags</members>
-        <members>ChatterFlagsTest</members>
+        <members>ChatterEvents</members>
+        <members>ChatterEventsTest</members>
         <members>Localization</members>
         <members>LocalizationTest</members>
         <members>Status</members>
@@ -101,6 +101,8 @@
         <members>AdminResponseTest</members>
         <members>AccountSoapAPI</members>
         <members>AccountSoapAPITest</members>
+        <members>DocumentService</members>
+        <members>DocumentServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -206,7 +208,7 @@
         <members>Title</members>
         <members>UndefinedArgument</members>
         <members>UndefinedEnvelope</members>
-        <members>CannotReadDocumentBytes</members>
+        <members>CannotReadDocumentContent_1</members>
         <members>SigningGroupsProhibited</members>
         <members>InvalidCorrectionState</members>
         <members>EnvelopeLockedCorrectionInProgress</members>
@@ -222,8 +224,8 @@
         <members>InvalidAccountSettings</members>
         <members>EmptySigningGroup</members>
         <members>InvalidRecipientUsername</members>
-        <members>CannotResolveDocument_2</members>
-        <members>CannotResolveRecipient_2</members>
+        <members>CannotResolveDocumentType_1</members>
+        <members>CannotResolveRecipientType_1</members>
         <members>NoValidAccounts</members>
         <members>CompanyRequired</members>
         <members>NameRequired</members>
@@ -232,6 +234,10 @@
         <members>InvalidEmail</members>
         <members>InvalidTrialAccount</members>
         <members>UnauthorizedPageAccess</members>
+        <members>MyPersonalContent</members>
+        <members>AllValuesMustNotBeBlank</members>
+        <members>InvalidEmailSettings</members>
+        <members>InvalidChatterText</members>
         <name>CustomLabel</name>
     </types>
     <types>

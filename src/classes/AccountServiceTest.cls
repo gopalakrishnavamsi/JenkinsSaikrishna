@@ -539,11 +539,53 @@ private class AccountServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
-			System.assertNotEquals(null, result.currentEmailLocalizations);
 			System.assertNotEquals(null, result.defaultEmailLocalizations);
-			System.assertNotEquals(null, result.currentChatterLocalization);
 			System.assertNotEquals(null, result.defaultChatterLocalizations);
 			System.assertNotEquals(null, result.calloutTimeout);
+			System.assertNotEquals(null, result.entityResolvers);
+			System.assertNotEquals(null, result.documentResolvers);
+			System.assertNotEquals(null, result.recipientResolvers);
+		}
+	}
+
+	static testMethod void test_saveSettings_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				AccountService.saveSettings(null);
+				throw new AssertException('Expected save to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_saveSettings_success() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			AccountService.Settings s = new AccountService.Settings(
+				EnvelopeSettings.getInstance(),
+				null,
+				null,
+				12345,
+				new List<String> { 'er1', 'er2' },
+				new List<String> { 'dr1', 'dr2' },
+				new List<String> { 'rr1', 'rr2' });
+
+			Test.startTest();
+			AccountService.Settings result = AccountService.saveSettings(s);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(!(result === s));
+			System.assertNotEquals(null, result.defaultEmailLocalizations);
+			System.assertNotEquals(null, result.defaultChatterLocalizations);
+			System.assertEquals(12345, result.calloutTimeout);
+			System.assertEquals(new List<String> { 'er1', 'er2' }, result.entityResolvers);
+			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
+			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
 		}
 	}
 }

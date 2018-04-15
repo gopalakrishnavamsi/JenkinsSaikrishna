@@ -159,19 +159,6 @@ public class TestUtils {
 		return ed;
 	}
 
-	public static Document__c createEnvelopeDocument(final Id envelopeId, final Attachment attachment, final Integer sequence) {
-		Document__c ed = new Document__c(
-			Envelope__c = envelopeId,
-			Name = attachment.Name,
-			SourceId__c = attachment.Id,
-			Sequence__c = sequence,
-			Size__c = 1234,
-			Extension__c = 'pdf',
-			Type__c = Document.TYPE_ATTACHMENT);
-		insert ed;
-		return ed;
-	}
-
 	public static Document__c createEnvelopeDocument(final Id envelopeId, final Schema.Document doc, final Integer sequence) {
 		Document__c ed = new Document__c(
 			Envelope__c = envelopeId,
@@ -286,23 +273,10 @@ public class TestUtils {
 
 		insert new EnvelopeLocalization__c(
 			Name = 'English',
-			Language__c = 'en_US',
+			Language__c = 'en',
 			EmailSubject__c = 'Please sign this document',
 			EmailMessage__c = 'This email contains a document');
 		return accountId;
-	}
-
-	public static Attachment createAttachment() {
-		return createAttachment(createAccount().Id);
-	}
-
-	public static Attachment createAttachment(final Id parentId) {
-		Attachment a = new Attachment(
-			Name = UUID.randomUUID().toString() + '.pdf',
-			Body = Blob.valueOf(UUID.randomUUID().toString()),
-			ParentId = parentId);
-		insert a;
-		return [SELECT Name, Body, BodyLength, ParentId FROM Attachment WHERE Id = :a.Id LIMIT 1];
 	}
 
 	public static Schema.Document createDocument() {
@@ -316,5 +290,40 @@ public class TestUtils {
 			FolderId = folderId);
 		insert d;
 		return [SELECT Name, Type, Body, BodyLength, FolderId FROM Document WHERE Id = :d.Id LIMIT 1];
+	}
+
+	public static ContentWorkspace createContentWorkspace() {
+		ContentWorkspace cw = new ContentWorkspace(Name = UUID.randomUUID().toString());
+		insert cw;
+		return cw;
+	}
+
+	public static ContentWorkspace getFirstAvailableContentWorkspace() {
+		List<ContentWorkspace> cws = [SELECT Id, Name FROM ContentWorkspace ORDER BY Name LIMIT 1];
+		if (Collection.isNotEmpty(cws)) {
+			return cws[0];
+		}
+		return null;
+	}
+
+	public static ContentWorkspaceDoc createContentWorkspaceDoc(final Id contentWorkspaceId, final Id contentDocumentId) {
+		ContentWorkspaceDoc cwd = new ContentWorkspaceDoc(
+			ContentWorkspaceId = contentWorkspaceId,
+			ContentDocumentId = contentDocumentId);
+		insert cwd;
+		return cwd;
+	}
+
+	public static ContentDocumentLink createContentDocumentLink(final Id linkedEntityId) {
+		return createContentDocumentLink(linkedEntityId, createContentVersion());
+	}
+
+	public static ContentDocumentLink createContentDocumentLink(final Id linkedEntityId, final ContentVersion contentVersion) {
+		ContentDocumentLink cdl = new ContentDocumentLink(
+			ContentDocumentId = contentVersion.ContentDocumentId,
+			LinkedEntityId = linkedEntityId,
+			ShareType = 'I');
+		insert cdl;
+		return cdl;
 	}
 }

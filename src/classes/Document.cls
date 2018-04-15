@@ -1,6 +1,5 @@
 public class Document {
 
-	public static final String TYPE_ATTACHMENT = 'Attachment';
 	public static final String TYPE_TEMPLATE = 'Template';
 	public static final String TYPE_FILE = 'ContentVersion';
 	public static final String TYPE_DOCUMENT = 'Document';
@@ -50,6 +49,19 @@ public class Document {
 			contentVersion == null ? null : contentVersion.FileExtension,
 			contentVersion == null ? null : contentVersion.ContentSize,
 			contentVersion == null ? null : contentVersion.Id);
+	}
+
+	public static Document fromDocument(final Schema.Document doc) {
+		if (doc == null) return null;
+
+		return new Document(
+			null,
+			TYPE_DOCUMENT,
+			null,
+			doc == null ? null : doc.Name,
+			doc == null ? null : doc.Type,
+			doc == null ? null : doc.BodyLength,
+			doc == null ? null : doc.Id);
 	}
 
 	public static Document fromTemplate(final Template template) {

@@ -207,49 +207,51 @@ public with sharing class Localization {
 		return getEmailSettingsMap().get(language);
 	}
 
-	public static Boolean updateEmailSettings(final Recipient.EmailSettings emailSettings) {
-		if (emailSettings == null || String.isBlank(emailSettings.language)
-			|| !LANGUAGE_TO_LABEL.containsKey(emailSettings.language)) {
-			throw new DocuSignException(Label.UnrecognizedLanguageCode);
-		}
+	public static List<Recipient.EmailSettings> save(final List<Recipient.EmailSettings> emailSettings) {
+		if (emailSettings == null) throw new DocuSignException(Label.UndefinedArgument);
 
-		Boolean result = true;
 		List<String> fields = new List<String> { 'Name', 'Language__c', 'EmailSubject__c', 'EmailMessage__c' };
-		List<EnvelopeLocalization__c> configs = [
-			SELECT Id
-			FROM EnvelopeLocalization__c
-			WHERE Language__c = :emailSettings.language
-			LIMIT 1
-		];
-		Boolean exists = Collection.isNotEmpty(configs);
-		Boolean isValid = String.isNotBlank(emailSettings.subject);
-		Boolean canCreate = !exists && isValid;
-		Boolean canUpdate = exists && isValid;
-		Boolean canDelete = exists && !isValid && emailSettings.language != DEFAULT_LANGUAGE;
+		Permissions.verifyIsCreateable('EnvelopeLocalization__c', fields);
+		Permissions.verifyIsUpdateable('EnvelopeLocalization__c', fields);
+		Permissions.verifyIsDeletable('EnvelopeLocalization__c');
 
-		if (canDelete) {
-			Permissions.verifyIsDeletable('EnvelopeLocalization__c');
-			delete configs[0];
-		} else if (canUpdate) {
-			Permissions.verifyIsUpdateable('EnvelopeLocalization__c', fields);
-			EnvelopeLocalization__c config = configs[0];
-			config.Name = emailSettings.languageLabel;
-			config.EmailSubject__c = emailSettings.subject;
-			config.EmailMessage__c = emailSettings.message;
-			update config;
-		} else if (canCreate) {
-			Permissions.verifyIsCreateable('EnvelopeLocalization__c', fields);
-			insert new EnvelopeLocalization__c(
-				Name = emailSettings.languageLabel,
-				Language__c = emailSettings.language,
-				EmailSubject__c = emailSettings.subject,
-				EmailMessage__c = emailSettings.message);
-		} else {
-			result = false;
+		Map<String, EnvelopeLocalization__c> current = new Map<String, EnvelopeLocalization__c>();
+		for (EnvelopeLocalization__c el : [
+			SELECT Name, Language__c, EmailSubject__c, EmailMessage__c
+			FROM EnvelopeLocalization__c
+		]) {
+			current.put(el.Language__c, el);
 		}
+
+		List<EnvelopeLocalization__c> toUpsert = new List<EnvelopeLocalization__c>();
+		for (Recipient.EmailSettings s : emailSettings) {
+			ValidationResult vr = validate(s);
+			if (!vr.isValid) {
+				throw new ValidationException(Label.InvalidEmailSettings, vr);
+			}
+
+			if (current.containsKey(s.language)) {
+				EnvelopeLocalization__c loc = current.get(s.language);
+				loc.Name = LANGUAGE_TO_LABEL.get(s.language);
+				loc.EmailSubject__c = s.subject;
+				loc.EmailMessage__c = s.message;
+				toUpsert.add(loc);
+			} else {
+				toUpsert.add(new EnvelopeLocalization__c(
+					Name = LANGUAGE_TO_LABEL.get(s.language),
+					Language__c = s.language,
+					EmailSubject__c = s.subject,
+					EmailMessage__c = s.message));
+			}
+			current.remove(s.language); // Remaining settings are to be deleted.
+		}
+		current.remove(DEFAULT_LANGUAGE); // Ensure default localization is not deleted
+
+		upsert toUpsert;
+		delete current.values();
 		isDirty = true;
 
-		return result;
+		return getEmailSettings();
 	}
 
 	public static List<Recipient.EmailSettings> getDefaultEmailSettings() {
@@ -347,20 +349,24 @@ public with sharing class Localization {
 			String.isNotBlank(settings.RecipientDeclined__c) ? settings.RecipientDeclined__c : md.ChatterRecipientDeclined__c);
 	}
 
-	public static void updateChatterText(final ChatterText text) {
-		if (text == null) throw new DocuSignException(Label.UndefinedChatterText);
+	public static void save(final ChatterText chatterText) {
+		if (chatterText == null) throw new DocuSignException(Label.UndefinedChatterText);
+		ValidationResult vr = validate(chatterText);
+		if (!vr.isValid) {
+			throw new ValidationException(Label.InvalidChatterText, vr);
+		}
 
 		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
-		settings.EnvelopeSent__c = text.envelopeSent;
-		settings.EnvelopeDelivered__c = text.envelopeDelivered;
-		settings.EnvelopeCompleted__c = text.envelopeCompleted;
-		settings.EnvelopeDeclined__c = text.envelopeDeclined;
-		settings.EnvelopeVoided__c = text.envelopeVoided;
-		settings.RecipientSent__c = text.recipientSent;
-		settings.RecipientDelivered__c = text.recipientDelivered;
-		settings.RecipientCompleted__c = text.recipientCompleted;
-		settings.RecipientSigned__c = text.recipientSigned;
-		settings.RecipientDeclined__c = text.recipientDeclined;
+		settings.EnvelopeSent__c = chatterText.envelopeSent;
+		settings.EnvelopeDelivered__c = chatterText.envelopeDelivered;
+		settings.EnvelopeCompleted__c = chatterText.envelopeCompleted;
+		settings.EnvelopeDeclined__c = chatterText.envelopeDeclined;
+		settings.EnvelopeVoided__c = chatterText.envelopeVoided;
+		settings.RecipientSent__c = chatterText.recipientSent;
+		settings.RecipientDelivered__c = chatterText.recipientDelivered;
+		settings.RecipientCompleted__c = chatterText.recipientCompleted;
+		settings.RecipientSigned__c = chatterText.recipientSigned;
+		settings.RecipientDeclined__c = chatterText.recipientDeclined;
 		upsert settings;
 	}
 
@@ -379,5 +385,34 @@ public with sharing class Localization {
 			));
 		}
 		return settings;
+	}
+
+	@TestVisible
+	private static ValidationResult validate(final Recipient.EmailSettings settings) {
+		ValidationResult result = new ValidationResult();
+		if (settings != null
+			&& (String.isBlank(settings.language) || !LANGUAGE_TO_LABEL.containsKey(settings.language))) {
+
+			result.add(Label.UnrecognizedLanguageCode);
+		}
+		if (settings == null || String.isBlank(settings.subject) || String.isBlank(settings.message)) {
+			result.add(Label.AllValuesMustNotBeBlank);
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static ValidationResult validate(final ChatterText chatterText) {
+		ValidationResult result = new ValidationResult();
+		if (chatterText == null || String.isBlank(chatterText.envelopeCompleted)
+			|| String.isBlank(chatterText.envelopeDeclined) || String.isBlank(chatterText.envelopeDelivered)
+			|| String.isBlank(chatterText.envelopeSent) || String.isBlank(chatterText.envelopeVoided)
+			|| String.isBlank(chatterText.recipientCompleted) || String.isBlank(chatterText.recipientDeclined)
+			|| String.isBlank(chatterText.recipientDelivered) || String.isBlank(chatterText.recipientSent)
+			|| String.isBlank(chatterText.recipientSigned)) {
+
+			result.add(Label.AllValuesMustNotBeBlank);
+		}
+		return result;
 	}
 }

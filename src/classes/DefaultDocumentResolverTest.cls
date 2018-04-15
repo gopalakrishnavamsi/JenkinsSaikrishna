@@ -1,142 +1,306 @@
 @IsTest
 private class DefaultDocumentResolverTest {
 
-	static testMethod void test_canResolve() {
+	static testMethod void test_canResolveDocument() {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
-		System.assert(dr.canResolve('ContentVersion'));
-		System.assert(dr.canResolve(' attachment '));
-		System.assert(dr.canResolve('DOCUMENT'));
-		System.assert(!dr.canResolve('whatever'));
-		System.assert(!dr.canResolve(null));
-		System.assert(!dr.canResolve(' '));
+		System.assert(dr.canResolveDocument('ContentVersion'));
+		System.assert(dr.canResolveDocument(' DOCUMENT '));
+		System.assert(!dr.canResolveDocument('whatever'));
+		System.assert(!dr.canResolveDocument(null));
+		System.assert(!dr.canResolveDocument(' '));
 		Test.stopTest();
 	}
 
-	static testMethod void test_resolve_ContentVersion() {
+	static testMethod void test_getDocuments_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			ContentVersion obj = TestUtils.createContentVersion();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			Document result = dr.resolve('contentVersion\t', obj.Id);
+			List<Document> result = dr.getDocuments('contentVersion\t', new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(Document.TYPE_FILE, result.type);
-			System.assertEquals(obj.Title, result.name);
-			System.assertEquals(obj.FileExtension, result.extension);
-			System.assertEquals(obj.ContentSize, result.size);
-			System.assertEquals(obj.Id, result.sourceId);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(Document.TYPE_FILE, result[0].type);
+			System.assertEquals(null, result[0].sequence);
+			System.assertEquals(cv1.Title, result[0].name);
+			System.assertEquals(cv1.FileExtension, result[0].extension);
+			System.assertEquals(cv1.ContentSize, result[0].size);
+			System.assertEquals(cv1.Id, result[0].sourceId);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(Document.TYPE_FILE, result[1].type);
+			System.assertEquals(null, result[1].sequence);
+			System.assertEquals(cv2.Title, result[1].name);
+			System.assertEquals(cv2.FileExtension, result[1].extension);
+			System.assertEquals(cv2.ContentSize, result[1].size);
+			System.assertEquals(cv2.Id, result[1].sourceId);
 		}
 	}
 
-	static testMethod void test_resolve_Attachment() {
+	static testMethod void test_getDocuments_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			Attachment obj = TestUtils.createAttachment();
+			Schema.Document d1 = TestUtils.createDocument();
+			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			Document result = dr.resolve(' Attachment ', obj.Id);
+			List<Document> result = dr.getDocuments('\nDOCUMENT', new Set<Id> { d1.Id, d2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(Document.TYPE_ATTACHMENT, result.type);
-			System.assertEquals(obj.Name, result.name);
-			System.assertEquals(Document.getFileExtension(obj.Name), result.extension);
-			System.assertEquals(obj.BodyLength, result.size);
-			System.assertEquals(obj.Id, result.sourceId);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(Document.TYPE_DOCUMENT, result[0].type);
+			System.assertEquals(null, result[0].sequence);
+			System.assertEquals(d1.Name, result[0].name);
+			System.assertEquals(d1.Type, result[0].extension);
+			System.assertEquals(d1.BodyLength, result[0].size);
+			System.assertEquals(d1.Id, result[0].sourceId);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(Document.TYPE_DOCUMENT, result[1].type);
+			System.assertEquals(null, result[1].sequence);
+			System.assertEquals(d2.Name, result[1].name);
+			System.assertEquals(d2.Type, result[1].extension);
+			System.assertEquals(d2.BodyLength, result[1].size);
+			System.assertEquals(d2.Id, result[1].sourceId);
 		}
 	}
 
-	static testMethod void test_resolve_Document() {
-		System.runAs(TestUtils.createUser()) {
-			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			Schema.Document obj = TestUtils.createDocument();
-
-			Test.startTest();
-			Document result = dr.resolve('\nDOCUMENT', obj.Id);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(Document.TYPE_DOCUMENT, result.type);
-			System.assertEquals(obj.Name, result.name);
-			System.assertEquals(obj.Type, result.extension);
-			System.assertEquals(obj.BodyLength, result.size);
-			System.assertEquals(obj.Id, result.sourceId);
-		}
-	}
-
-	static testMethod void test_resolve_invalid() {
+	static testMethod void test_getDocuments_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
 			try {
-				dr.resolve('User', UserInfo.getUserId());
-				throw new AssertException('Expected resolve to fail');
+				dr.getDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected getDocuments to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.CannotResolveDocument_2,
-					new List<String> { UserInfo.getUserId(), 'User' }), ex.getMessage());
+				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
 			}
 			Test.stopTest();
 		}
 	}
 
-	static testMethod void test_getBytes_ContentVersion() {
+	static testMethod void test_getDocumentContent_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			ContentVersion obj = TestUtils.createContentVersion();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			Blob result = dr.getBytes('ContentVersion', obj.Id);
+			Map<Id, Blob> result = dr.getDocumentContent('ContentVersion', new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(obj.VersionData.toString(), result.toString());
+			System.assertEquals(2, result.size());
+
+			for (Id id : result.keySet()) {
+				Blob b = result.get(id);
+				System.assertNotEquals(null, b);
+				if (id == cv1.Id) {
+					System.assertEquals(cv1.VersionData.toString(), b.toString());
+				} else if (id == cv2.Id) {
+					System.assertEquals(cv2.VersionData.toString(), b.toString());
+				} else {
+					throw new AssertException('Unexpected content version: ' + id);
+				}
+			}
 		}
 	}
 
-	static testMethod void test_getBytes_Attachment() {
+	static testMethod void test_getDocumentContent_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			Attachment obj = TestUtils.createAttachment();
+			Schema.Document d1 = TestUtils.createDocument();
+			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			Blob result = dr.getBytes('Attachment', obj.Id);
+			Map<Id, Blob> result = dr.getDocumentContent('Document', new Set<Id> { d1.Id, d2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(obj.Body.toString(), result.toString());
+			System.assertEquals(2, result.size());
+
+			for (Id id : result.keySet()) {
+				Blob b = result.get(id);
+				System.assertNotEquals(null, b);
+				if (id == d1.Id) {
+					System.assertEquals(d1.Body.toString(), b.toString());
+				} else if (id == d2.Id) {
+					System.assertEquals(d2.Body.toString(), b.toString());
+				} else {
+					throw new AssertException('Unexpected document: ' + id);
+				}
+			}
 		}
 	}
 
-	static testMethod void test_getBytes_Document() {
-		System.runAs(TestUtils.createUser()) {
-			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-			Schema.Document obj = TestUtils.createDocument();
-
-			Test.startTest();
-			Blob result = dr.getBytes('Document', obj.Id);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(obj.Body.toString(), result.toString());
-		}
-	}
-
-	static testMethod void test_getBytes_invalid() {
+	static testMethod void test_getDocumentContent_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
 			try {
-				dr.getBytes('User', UserInfo.getUserId());
-				throw new AssertException('Expected getBytes to fail');
+				dr.getDocumentContent('User', new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected getDocumentContent to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.CannotResolveDocument_2,
-					new List<String> { UserInfo.getUserId(), 'User' }), ex.getMessage());
+				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_getDocumentFolders_ContentVersion() {
+		System.runAs(TestUtils.createUser()) {
+			ContentWorkspace cw1 = TestUtils.createContentWorkspace();
+			ContentWorkspace cw2 = TestUtils.createContentWorkspace();
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			List<Document.Folder> result = dr.getDocumentFolders('ContentVersion');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.size() >= 2); // There can be extra workspaces available, but there must be at least 2.
+
+			Boolean foundCW1, foundCW2;
+			for (Document.Folder f : result) {
+				if (f.id == cw1.Id) {
+					foundCW1 = true;
+					System.assertEquals(cw1.Name, f.name);
+				} else if (f.id == cw2.Id) {
+					foundCW2 = true;
+					System.assertEquals(cw2.Name, f.name);
+				}
+			}
+			System.assert(foundCW1);
+			System.assert(foundCW2);
+		}
+	}
+
+	static testMethod void test_getDocumentFolders_Document() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			List<Document.Folder> result = dr.getDocumentFolders('Document');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			// No way to control folders returned. DML not allowed on Folder metadata objects, so we are at the mercy
+			// of whatever folders already exist in the org.
+		}
+	}
+
+	static testMethod void test_getDocumentFolders_invalid() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			try {
+				dr.getDocumentFolders('User');
+				throw new AssertException('Expected getDocumentFolders to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_getFolderDocuments_ContentVersion() {
+		// Cannot create and link doc to workspace in one go, so try using existing one. Otherwise skip test.
+		ContentWorkspace lib = TestUtils.getFirstAvailableContentWorkspace();
+		ContentVersion cv1, cv2;
+		ContentWorkSpaceDoc libDoc1, libDoc2;
+
+		if (lib != null) {
+			System.runAs(TestUtils.createAdministrator()) {
+				cv1 = TestUtils.createContentVersion();
+				cv2 = TestUtils.createContentVersion();
+				libDoc1 = TestUtils.createContentWorkspaceDoc(lib.Id, cv1.ContentDocumentId);
+				libDoc2 = TestUtils.createContentWorkspaceDoc(lib.Id, cv2.ContentDocumentId);
+			}
+		}
+
+		System.runAs(TestUtils.createAdministrator()) {
+			ContentVersion cv3 = TestUtils.createContentVersion();
+			ContentVersion cv4 = TestUtils.createContentVersion();
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			Set<Id> folderIds = new Set<Id> { UserInfo.getUserId() };
+			if (lib != null) folderIds.add(lib.Id);
+
+			Test.startTest();
+			List<Document> result = dr.getFolderDocuments('ContentVersion', folderIds);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(lib == null ? 2 : 4, result.size());
+
+			Boolean foundCV1, foundCV2, foundCV3, foundCV4;
+			for (Document d : result) {
+				ContentVersion cv;
+				if (d.sourceId == cv1.Id) {
+					foundCV1 = true;
+					cv = cv1;
+				} else if (d.sourceId == cv2.Id) {
+					foundCV2 = true;
+					cv = cv2;
+				} else if (d.sourceId == cv3.Id) {
+					foundCV3 = true;
+					cv = cv3;
+				} else if (d.sourceId == cv4.Id) {
+					foundCV4 = true;
+					cv = cv4;
+				} else {
+					throw new AssertException('Unexpected document: ' + d);
+				}
+				System.assertEquals(cv.Title, d.name);
+				System.assertEquals(cv.FileExtension, d.extension);
+				System.assertEquals(cv.ContentSize, d.size);
+			}
+			System.assert(lib == null || foundCV1);
+			System.assert(lib == null || foundCV2);
+			System.assert(foundCV3);
+			System.assert(foundCV4);
+		}
+	}
+
+	static testMethod void test_getFolderDocuments_Document() {
+		System.runAs(TestUtils.createUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Schema.Document d1 = TestUtils.createDocument();
+			Schema.Document d2 = TestUtils.createDocument();
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			List<Document> result = dr.getFolderDocuments('Document', new Set<Id> { UserInfo.getUserId() });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+		}
+	}
+
+	static testMethod void test_getFolderDocuments_invalid() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			try {
+				dr.getFolderDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected getFolderDocuments to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
 			}
 			Test.stopTest();
 		}

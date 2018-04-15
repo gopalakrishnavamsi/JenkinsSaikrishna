@@ -385,8 +385,8 @@
 		<name>UndefinedEnvelope</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to read document bytes.</label>
-		<name>CannotReadDocumentBytes</name>
+		<label>Unable to read content for documents: {0}.</label>
+		<name>CannotReadDocumentContent_1</name>
 	</customLabels>
 	<customLabels>
 		<label>Signing Groups are not enabled for your account.</label>
@@ -460,12 +460,12 @@
 		<name>InvalidRecipientUsername</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot resolve document {0} ({1}).</label>
-		<name>CannotResolveDocument_2</name>
+		<label>Cannot resolve document type {0}.</label>
+		<name>CannotResolveDocumentType_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot resolve recipient {0} ({1}).</label>
-		<name>CannotResolveRecipient_2</name>
+		<label>Cannot resolve recipient type {0}.</label>
+		<name>CannotResolveRecipientType_1</name>
 	</customLabels>
 	<customLabels>
 		<label>
@@ -503,5 +503,21 @@
 	<customLabels>
 		<label>Sorry, you do not have access to this page.</label>
 		<name>UnauthorizedPageAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>My Personal Content</label>
+		<name>MyPersonalContent</name>
+	</customLabels>
+	<customLabels>
+		<label>All values must not be blank.</label>
+		<name>AllValuesMustNotBeBlank</name>
+	</customLabels>
+	<customLabels>
+		<label>Email settings are invalid. All values must not be blank.</label>
+		<name>InvalidEmailSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Chatter text is invalid. All values must not be blank.</label>
+		<name>InvalidChatterText</name>
 	</customLabels>
 </Translations>

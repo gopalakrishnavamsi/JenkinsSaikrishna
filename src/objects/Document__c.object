@@ -127,11 +127,6 @@
 					<label>Template</label>
 				</value>
 				<value>
-					<fullName>Attachment</fullName>
-					<default>true</default>
-					<label>Attachment</label>
-				</value>
-				<value>
 					<fullName>Document</fullName>
 					<default>false</default>
 					<label>Document</label>

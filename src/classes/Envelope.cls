@@ -14,19 +14,29 @@ public class Envelope {
 	public DateTime sent { get; private set; }
 	public Boolean isSent {
 		get {
-			return sent != null && sent <= DateTime.now();
+			return this.sent != null && this.sent <= DateTime.now();
+		}
+	}
+	public Boolean hasDocuments {
+		get {
+			return Collection.isNotEmpty(this.documents);
 		}
 	}
 	public Boolean hasTemplates {
 		get {
-			if (documents != null) {
-				for (Document d : documents) {
+			if (this.documents != null) {
+				for (Document d : this.documents) {
 					if (d.templateId != null) {
 						return true;
 					}
 				}
 			}
 			return false;
+		}
+	}
+	public Boolean hasRecipients {
+		get {
+			return Collection.isNotEmpty(this.recipients);
 		}
 	}
 

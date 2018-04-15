@@ -22,58 +22,50 @@ private class LocalizationTest {
 			// By default localization settings should only contain english as a language setting
 			System.assertEquals(1, localizationSettings.size());
 
-			//updating english
-			Localization.updateEmailSettings(new Recipient.EmailSettings('en', 'English', 'test subject en', ''));
+			Localization.save(new List<Recipient.EmailSettings> {
+				new Recipient.EmailSettings('en', 'English', 'test subject en', 'm'),
+				new Recipient.EmailSettings('de', 'German', 'test subject de', 'm'),
+				new Recipient.EmailSettings('es', 'Spanish', 'test subject es', 'm'),
+				new Recipient.EmailSettings('fr', 'French', 'test subject fr', 'm'),
+				new Recipient.EmailSettings('it', 'Italian', 'test subject it', 'm'),
+				new Recipient.EmailSettings('ja', 'Japanese', 'test subject ja', 'm'),
+				new Recipient.EmailSettings('ko', 'Korean', 'test subject ko', 'm'),
+				new Recipient.EmailSettings('nl', 'Dutch', 'test subject nl', 'm'),
+				new Recipient.EmailSettings('pt_BR', 'Portuguese-Brazil', 'test subject pt_BR', 'm'),
+				new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', 'm'),
+				new Recipient.EmailSettings('zh_CN', 'Chinese-simplified', 'test subject zh_CN', 'm')
+			});
+
 			Recipient.EmailSettings enSetting = Localization.getEmailSettings('en');
 			System.assertEquals('test subject en', enSetting.subject);
 
-			//adding and verifying german has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('de', 'German', 'test subject de', ''));
 			Recipient.EmailSettings deSetting = Localization.getEmailSettings('de');
 			System.assertEquals('test subject de', deSetting.subject);
 
-			//adding and verifying spanish has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('es', 'Spanish', 'test subject es', ''));
 			Recipient.EmailSettings esSetting = Localization.getEmailSettings('es');
 			System.assertEquals('test subject es', esSetting.subject);
 
-			//adding and verifying french has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('fr', 'French', 'test subject fr', ''));
 			Recipient.EmailSettings frSetting = Localization.getEmailSettings('fr');
 			System.assertEquals('test subject fr', frSetting.subject);
 
-			//adding and verifying italian has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('it', 'Italian', 'test subject it', ''));
 			Recipient.EmailSettings itSetting = Localization.getEmailSettings('it');
 			System.assertEquals('test subject it', itSetting.subject);
 
-			//adding and verifying japanese has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('ja', 'Japanese', 'test subject ja', ''));
 			Recipient.EmailSettings jaSetting = Localization.getEmailSettings('ja');
 			System.assertEquals('test subject ja', jaSetting.subject);
 
-			//adding and verifying korean has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('ko', 'Korean', 'test subject ko', ''));
 			Recipient.EmailSettings koSetting = Localization.getEmailSettings('ko');
 			System.assertEquals('test subject ko', koSetting.subject);
 
-			//adding and verifying dutch has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('nl', 'Dutch', 'test subject nl', ''));
 			Recipient.EmailSettings nlSetting = Localization.getEmailSettings('nl');
 			System.assertEquals('test subject nl', nlSetting.subject);
 
-			//adding and verifying portuguese brazilian has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('pt_BR', 'Portuguese-Brazil', 'test subject pt_BR', ''));
 			Recipient.EmailSettings ptbrSetting = Localization.getEmailSettings('pt_BR');
 			System.assertEquals('test subject pt_BR', ptbrSetting.subject);
 
-			//adding and verifying russian has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', ''));
 			Recipient.EmailSettings ruSetting = Localization.getEmailSettings('ru');
 			System.assertEquals('test subject ru', ruSetting.subject);
 
-			//adding and verifying chinese traditional has been added
-			Localization.updateEmailSettings(new Recipient.EmailSettings('zh_CN', 'Chinese-simplified', 'test subject zh_CN', ''));
 			Recipient.EmailSettings zhCNSetting = Localization.getEmailSettings('zh_CN');
 			System.assertEquals('test subject zh_CN', zhCNSetting.subject);
 
@@ -82,13 +74,6 @@ private class LocalizationTest {
 			System.assertEquals(11, localizationSettings.size());
 
 			System.assertEquals(null, Localization.getEmailSettings('aa'));
-
-			Boolean updateEmailSettingsLanguageCodeError = false;
-			try {
-				Localization.updateEmailSettings(new Recipient.EmailSettings('ab', '', '', ''));
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UnrecognizedLanguageCode, ex.getMessage());
-			}
 
 			//testing getDefaultSettings
 			//english
@@ -154,23 +139,89 @@ private class LocalizationTest {
 			LanguageLocaleKey = localeKey);
 	}
 
-	static testMethod void test_updateEmailSettings() {
+	static testMethod void test_save_Recipient_EmailSettings_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
+			insert new List<EnvelopeLocalization__c> {
+				new EnvelopeLocalization__c(
+					Name = Localization.getLabel('de'),
+					Language__c = 'de',
+					EmailSubject__c = 'de subject',
+					EmailMessage__c = 'de message'),
+				new EnvelopeLocalization__c(
+					Name = Localization.getLabel('ru'),
+					Language__c = 'ru',
+					EmailSubject__c = 'ru subject',
+					EmailMessage__c = 'ru message')
+			};
 
 			Test.startTest();
-			// Add language
-			final Boolean r1 = Localization.updateEmailSettings(new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', ''));
-			final Boolean r2 = Localization.updateEmailSettings(new Recipient.EmailSettings('en', 'English', 'test subject en', ''));
-			// Remove language (subject blank)
-			final Boolean r3 = Localization.updateEmailSettings(new Recipient.EmailSettings('ru', 'Russian', null, null));
-			final Boolean r4 = Localization.updateEmailSettings(new Recipient.EmailSettings(Localization.DEFAULT_LANGUAGE, 'Default', null, null));
+			List<Recipient.EmailSettings> result = Localization.save(new List<Recipient.EmailSettings> {
+				// new IT
+				new Recipient.EmailSettings('it', 'replaced', 'it subject', 'it message'),
+				// updated DE
+				new Recipient.EmailSettings('de', 'replaced', 'de subject2', 'de message2')
+				// delete RU
+			});
 			Test.stopTest();
 
-			System.assert(r1);
-			System.assert(r2);
-			System.assert(r3);
-			System.assert(!r4);
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size()); // IT, DE, DEFAULT
+
+			Boolean foundDefault = false, foundDE = false, foundIT = false;
+			for (Recipient.EmailSettings s : result) {
+				System.assertNotEquals(null, s);
+				if (s.language == Localization.DEFAULT_LANGUAGE) {
+					foundDefault = true;
+				} else if (s.language == Localization.DE) {
+					foundDE = true;
+					System.assertEquals(Localization.getLabel(Localization.DE), s.languageLabel);
+					System.assertEquals('de subject2', s.subject);
+					System.assertEquals('de message2', s.message);
+				} else if (s.language == Localization.IT) {
+					foundIT = true;
+					System.assertEquals(Localization.getLabel(Localization.IT), s.languageLabel);
+					System.assertEquals('it subject', s.subject);
+					System.assertEquals('it message', s.message);
+				} else {
+					throw new AssertException('Unexpected localization: ' + s);
+				}
+			}
+			System.assert(foundDefault);
+			System.assert(foundIT);
+			System.assert(foundDE);
+		}
+	}
+
+	static testMethod void test_save_Recipient_EmailSettings_unauthorized() {
+		System.runAs(TestUtils.createRestrictedUser()) {
+			Test.startTest();
+			try {
+				Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ab', '', '', '') });
+				throw new AssertException('Expected save to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.CannotCreateObject + ' ' + Application.namespacePrefix + 'EnvelopeLocalization__c', ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_save_Recipient_EmailSettings_error() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				Localization.save((List<Recipient.EmailSettings>)null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings(Localization.PT_BR, 'blah', '', '') });
+				throw new AssertException('Expected save to fail');
+			} catch (ValidationException ex) {
+				System.assertEquals(Label.InvalidEmailSettings + '\n' + Label.AllValuesMustNotBeBlank, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 
@@ -209,7 +260,7 @@ private class LocalizationTest {
 	static testMethod void test_isEmailLocalizationEnabled_enabled() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Localization.updateEmailSettings(new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', ''));
+			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', 'm') });
 
 			Test.startTest();
 			final Boolean result = Localization.isEmailLocalizationEnabled();
@@ -222,7 +273,7 @@ private class LocalizationTest {
 	static testMethod void test_getEmailSettingsForCurrentLanguage() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Localization.updateEmailSettings(new Recipient.EmailSettings('it', 'Italian', 'subject-italian', 'message-italian'));
+			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('it', 'Italian', 'subject-italian', 'message-italian') });
 		}
 
 		User u1 = getUser('en_US');
@@ -276,13 +327,24 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_updateChatterText() {
+	static testMethod void test_save_ChatterText() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
-			final Localization.ChatterText text = new Localization.ChatterText(
+			Localization.ChatterText text = new Localization.ChatterText(
 				'a',
 				'b',
+				'c',
+				'd',
+				'e',
+				'f',
+				'g',
+				'h',
+				'i',
+				'j');
+			Localization.ChatterText text1 = new Localization.ChatterText(
+				'a',
+				null,
 				'c',
 				'd',
 				'e',
@@ -294,12 +356,18 @@ private class LocalizationTest {
 
 			Test.startTest();
 			try {
-				Localization.updateChatterText(null);
-				throw new AssertException('Expected updateChatterText to fail with null input');
+				Localization.save((Localization.ChatterText)null);
+				throw new AssertException('Expected save to fail with null input');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedChatterText, ex.getMessage());
 			}
-			Localization.updateChatterText(text);
+			try {
+				Localization.save(text1);
+				throw new AssertException('Expected save to fail with invalid input');
+			} catch (ValidationException ex) {
+				System.assert(ex.getMessage().startsWith(Label.InvalidChatterText));
+			}
+			Localization.save(text);
 			Test.stopTest();
 
 			ChatterSettings__c c = ChatterSettings__c.getOrgDefaults();
@@ -379,6 +447,67 @@ private class LocalizationTest {
 		System.assertEquals(ct.recipientDelivered, ct.getRecipientStatusText(Status.DELIVERED));
 		System.assertEquals(ct.recipientSent, ct.getRecipientStatusText(Status.SENT));
 		System.assertEquals(ct.recipientSigned, ct.getRecipientStatusText(Status.SIGNED));
+		Test.stopTest();
+	}
+
+	static testMethod void test_validate_Recipient_EmailSettings() {
+		Recipient.EmailSettings es1 = new Recipient.EmailSettings(Localization.ES, '', 's', 'm');
+		Recipient.EmailSettings es2 = new Recipient.EmailSettings(null, '', 's', 'm');
+		Recipient.EmailSettings es3 = new Recipient.EmailSettings('l', '', '  \n', 'm');
+		Recipient.EmailSettings es4 = new Recipient.EmailSettings('l', '', 's', '');
+		Recipient.EmailSettings es5 = null;
+		Recipient.EmailSettings es6 = new Recipient.EmailSettings('l', '', 's', '');
+
+		Test.startTest();
+		System.assert(Localization.validate(es1).isValid);
+		System.assert(!Localization.validate(es2).isValid);
+		System.assert(!Localization.validate(es3).isValid);
+		System.assert(!Localization.validate(es4).isValid);
+		System.assert(!Localization.validate(es5).isValid);
+		Test.stopTest();
+	}
+
+	static testMethod void test_validate_ChatterText() {
+		Localization.ChatterText ct1 = new Localization.ChatterText(
+			'Envelope Sent',
+			'Envelope Delivered',
+			'Envelope Completed',
+			'Envelope Declined',
+			'Envelope Voided',
+			'Recipient Sent',
+			'Recipient Delivered',
+			'Recipient Completed',
+			'Recipient Signed',
+			'Recipient Declined');
+		Localization.ChatterText ct2 = new Localization.ChatterText(
+			'Envelope Sent',
+			'Envelope Delivered',
+			'Envelope Completed',
+			' ',
+			'Envelope Voided',
+			'Recipient Sent',
+			'Recipient Delivered',
+			'Recipient Completed',
+			'Recipient Signed',
+			'Recipient Declined');
+		Localization.ChatterText ct3 = new Localization.ChatterText(
+			'Envelope Sent',
+			'Envelope Delivered',
+			'Envelope Completed',
+			'Envelope Declined',
+			null,
+			'Recipient Sent',
+			'Recipient Delivered',
+			'Recipient Completed',
+			'Recipient Signed',
+			'Recipient Declined');
+		Localization.ChatterText ct4 = null;
+
+		Test.startTest();
+		System.assert(Localization.validate(ct1).isValid);
+		System.assert(!Localization.validate(ct2).isValid);
+		System.assert(!Localization.validate(ct3).isValid);
+		System.assert(!Localization.validate(ct4).isValid);
 		Test.stopTest();
 	}
 }

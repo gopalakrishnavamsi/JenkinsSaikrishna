@@ -761,12 +761,12 @@
 		<value>Envelope is undefined.</value>
 	</labels>
 	<labels>
-		<fullName>CannotReadDocumentBytes</fullName>
+		<fullName>CannotReadDocumentContent_1</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Cannot Read Document Bytes</shortDescription>
-		<value>Unable to read document bytes.</value>
+		<shortDescription>Cannot Read Document Content</shortDescription>
+		<value>Unable to read content for documents: {0}.</value>
 	</labels>
 	<labels>
 		<fullName>SigningGroupsProhibited</fullName>
@@ -899,20 +899,20 @@
 		<value>Cannot send envelope. Invalid recipient username.</value>
 	</labels>
 	<labels>
-		<fullName>CannotResolveDocument_2</fullName>
+		<fullName>CannotResolveDocumentType_1</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Cannot Resolve Document</shortDescription>
-		<value>Cannot resolve document {0} ({1}).</value>
+		<value>Cannot resolve document type {0}.</value>
 	</labels>
 	<labels>
-		<fullName>CannotResolveRecipient_2</fullName>
+		<fullName>CannotResolveRecipientType_1</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Cannot Resolve Recipient</shortDescription>
-		<value>Cannot resolve recipient {0} ({1}).</value>
+		<value>Cannot resolve recipient type {0}.</value>
 	</labels>
 	<labels>
 		<fullName>NoValidAccounts</fullName>
@@ -982,5 +982,37 @@
 		<protected>true</protected>
 		<shortDescription>Unauthorized Page Access</shortDescription>
 		<value>Sorry, you do not have access to this page.</value>
+	</labels>
+	<labels>
+		<fullName>MyPersonalContent</fullName>
+		<categories>Document</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>My Personal Content</shortDescription>
+		<value>My Personal Content</value>
+	</labels>
+	<labels>
+		<fullName>AllValuesMustNotBeBlank</fullName>
+		<categories>Errors,Validation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>All value must not be blank</shortDescription>
+		<value>All values must not be blank.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidEmailSettings</fullName>
+		<categories>Errors,Validation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid email settings</shortDescription>
+		<value>Email settings are invalid.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidChatterText</fullName>
+		<categories>Errors,Validation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Chatter text</shortDescription>
+		<value>Chatter text is invalid.</value>
 	</labels>
 </CustomLabels>
