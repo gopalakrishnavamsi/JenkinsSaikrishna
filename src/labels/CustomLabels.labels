@@ -757,8 +757,24 @@
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Undefined Envelope</shortDescription>
+		<shortDescription>Undefined envelope</shortDescription>
 		<value>Envelope is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedDocument</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined document</shortDescription>
+		<value>Document is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedRecipient</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined recipient</shortDescription>
+		<value>Recipient is undefined.</value>
 	</labels>
 	<labels>
 		<fullName>CannotReadDocumentContent_1</fullName>
@@ -1014,5 +1030,21 @@
 		<protected>true</protected>
 		<shortDescription>Invalid Chatter text</shortDescription>
 		<value>Chatter text is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>AtLeastOneDocumentIsRequired</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>At least one document is required</shortDescription>
+		<value>At least one document is required.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidFileType</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid file type</shortDescription>
+		<value>File type is unsupported.</value>
 	</labels>
 </CustomLabels>

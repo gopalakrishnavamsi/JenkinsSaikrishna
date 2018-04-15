@@ -13,7 +13,7 @@ public interface DocumentResolver {
 	Boolean canResolveDocument(String sObjectType);
 
 	/**
-	 * Resolves an SObject to a document.
+	 * Retrieves a list of documents by ID.
 	 *
 	 * @param sObjectType The document SObject type name.
 	 * @param sObjectIds The document SObject IDs.
@@ -21,6 +21,16 @@ public interface DocumentResolver {
 	 * @return The resolved documents.
 	 */
 	List<Document> getDocuments(String sObjectType, Set<Id> sObjectIds);
+
+	/**
+	 * Retrieves a list of linked documents by parent ID.
+	 *
+	 * @param sObjectType The document SObject type name.
+	 * @param linkedEntityIds The linked SObject IDs.
+	 *
+	 * @return
+	 */
+	List<Document> getLinkedDocuments(String sObjectType, Set<Id> linkedEntityIds);
 
 	/**
 	 * Retrieves document folders for the specified type.

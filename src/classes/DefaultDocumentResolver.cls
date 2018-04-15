@@ -9,21 +9,32 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document> getContentVersions(final Set<Id> contentVersionIds) {
-		Permissions.verifyIsQueryable('ContentVersion', new List<String> { 'Title', 'ContentSize', 'FileExtension' });
+		Permissions.verifyIsQueryable('ContentVersion', new List<String> {
+			'Id', 'Title', 'FileExtension', 'ContentSize'
+		});
 
 		List<Document> result = new List<Document>();
-		for (ContentVersion cv : [SELECT Title, ContentSize, FileExtension FROM ContentVersion WHERE Id IN :contentVersionIds]) {
-			result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize, cv.Id));
+		if (!Collection.isEmpty(contentVersionIds)) {
+			for (ContentVersion cv : [
+				SELECT Id, Title, ContentSize, FileExtension
+				FROM ContentVersion
+				WHERE Id IN :contentVersionIds
+			]) {
+				result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize,
+					cv.Id));
+			}
 		}
 		return result;
 	}
 
 	private static List<Document> getDocuments(final Set<Id> documentIds) {
-		Permissions.verifyIsQueryable('Document', new List<String> { 'Name', 'Type', 'BodyLength' });
+		Permissions.verifyIsQueryable('Document', new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
 
 		List<Document> result = new List<Document>();
-		for (Schema.Document d : [SELECT Name, Type, BodyLength FROM Document WHERE Id IN :documentIds]) {
-			result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.Id));
+		if (!Collection.isEmpty(documentIds)) {
+			for (Schema.Document d : [SELECT Id, Name, Type, BodyLength FROM Document WHERE Id IN :documentIds]) {
+				result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.Id));
+			}
 		}
 		return result;
 	}
@@ -36,7 +47,51 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		} else if (t == 'Document') {
 			result = getDocuments(sObjectIds);
 		} else {
-			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> { sObjectType }));
+			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
+				new List<String> { sObjectType }));
+		}
+		return result;
+	}
+
+	private static List<Document> getLinkedContentVersions(final Set<Id> linkedEntityIds) {
+		Permissions.verifyIsQueryable('ContentVersion', new List<String> {
+			'Id', 'Title', 'FileExtension', 'ContentSize'
+		});
+
+		List<Document> documents = new List<Document>();
+		if (Collection.isNotEmpty(linkedEntityIds)) {
+			Integer sequence = 1;
+			for (ContentDocumentLink cdl : [
+				SELECT ContentDocument.LatestPublishedVersion.Id,
+					ContentDocument.LatestPublishedVersion.Title,
+					ContentDocument.LatestPublishedVersion.FileExtension,
+					ContentDocument.LatestPublishedVersion.ContentSize
+				FROM ContentDocumentLink
+				WHERE LinkedEntityId IN :linkedEntityIds
+				AND ContentDocument.PublishStatus != 'U'
+				AND ContentDocument.LatestPublishedVersion.ContentSize > 0
+				ORDER BY ContentDocument.LatestPublishedVersion.Title
+				LIMIT 100
+			]) {
+				if (cdl != null && cdl.ContentDocument != null && cdl.ContentDocument.LatestPublishedVersion != null) {
+					ContentVersion cv = cdl.ContentDocument.LatestPublishedVersion;
+					documents.add(new Document(null, Document.TYPE_FILE, sequence++, cv.Title, cv.FileExtension,
+						cv.ContentSize, cv.Id));
+				}
+			}
+
+		}
+		return documents;
+	}
+
+	public List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds) {
+		List<Document> result = null;
+		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
+		if (t == 'ContentVersion') { // Only content versions have parentIds
+			result = getLinkedContentVersions(linkedEntityIds);
+		} else if (t != 'Document') {
+			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
+				new List<String> { sObjectType }));
 		}
 		return result;
 	}

@@ -385,6 +385,14 @@
 		<name>UndefinedEnvelope</name>
 	</customLabels>
 	<customLabels>
+		<label>Document is undefined.</label>
+		<name>UndefinedDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>Recipient is undefined.</label>
+		<name>UndefinedRecipient</name>
+	</customLabels>
+	<customLabels>
 		<label>Unable to read content for documents: {0}.</label>
 		<name>CannotReadDocumentContent_1</name>
 	</customLabels>
@@ -394,7 +402,8 @@
 	</customLabels>
 	<customLabels>
 		<label>Correction permission must be turned on and envelope must be in \&apos;Sent\&apos;
-			or \&apos;Delivered\&apos; state to allow correction.</label>
+			or \&apos;Delivered\&apos; state to allow correction.
+		</label>
 		<name>InvalidCorrectionState</name>
 	</customLabels>
 	<customLabels>
@@ -407,7 +416,8 @@
 	</customLabels>
 	<customLabels>
 		<label>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
-			required, non-conditional Signature or Initials tab.</label>
+			required, non-conditional Signature or Initials tab.
+		</label>
 		<name>Failed21CFRPart11</name>
 	</customLabels>
 	<customLabels>
@@ -415,7 +425,8 @@
 		<name>RecipientMustBeUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.</label>
+		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.
+		</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
@@ -431,7 +442,9 @@
 		<name>TrialAccountExpiresSoon_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</label>
+		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
+			extension unknown to DocuSign.
+		</label>
 		<name>InvalidFileExtension</name>
 	</customLabels>
 	<customLabels>
@@ -442,8 +455,10 @@
 		<label>
 			There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
 			used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
-			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send
-			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these setting may be accessed by
+			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
+			Send
+			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
+			setting may be accessed by
 			logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
 			Administration console. Unless all of those settings are enabled, the integration will not function
 			properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
@@ -519,5 +534,13 @@
 	<customLabels>
 		<label>Chatter text is invalid. All values must not be blank.</label>
 		<name>InvalidChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>At least one document is required.</label>
+		<name>AtLeastOneDocumentIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>File type is unsupported.</label>
+		<name>InvalidFileType</name>
 	</customLabels>
 </Translations>

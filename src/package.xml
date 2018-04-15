@@ -208,6 +208,8 @@
         <members>Title</members>
         <members>UndefinedArgument</members>
         <members>UndefinedEnvelope</members>
+        <members>UndefinedDocument</members>
+        <members>UndefinedRecipient</members>
         <members>CannotReadDocumentContent_1</members>
         <members>SigningGroupsProhibited</members>
         <members>InvalidCorrectionState</members>
@@ -238,6 +240,8 @@
         <members>AllValuesMustNotBeBlank</members>
         <members>InvalidEmailSettings</members>
         <members>InvalidChatterText</members>
+        <members>AtLeastOneDocumentIsRequired</members>
+        <members>InvalidFileType</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -305,11 +309,11 @@
         <members>EnvelopeConfiguration__c.AddSourceDocuments__c</members>
         <members>EnvelopeConfiguration__c.AddSourceRecipients__c</members>
         <members>EnvelopeConfiguration__c.Remind__c</members>
-        <members>EnvelopeConfiguration__c.ReminderDays__c</members>
-        <members>EnvelopeConfiguration__c.ReminderRepeatInterval__c</members>
-        <members>EnvelopeConfiguration__c.Expire__c</members>
-        <members>EnvelopeConfiguration__c.ExpireDays__c</members>
-        <members>EnvelopeConfiguration__c.ExpireWarningInterval__c</members>
+        <members>EnvelopeConfiguration__c.RemindAfterDays__c</members>
+        <members>EnvelopeConfiguration__c.RemindFrequencyDays__c</members>
+        <members>EnvelopeConfiguration__c.Expires__c</members>
+        <members>EnvelopeConfiguration__c.ExpireAfterDays__c</members>
+        <members>EnvelopeConfiguration__c.ExpireWarnDays__c</members>
         <members>Document__c.Envelope__c</members>
         <members>Document__c.Sequence__c</members>
         <members>Document__c.Type__c</members>

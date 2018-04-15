@@ -16,9 +16,10 @@ private class LocalizationTest {
 	}
 
 	static testMethod void test_email_settings() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		List<Recipient.EmailSettings> localizationSettings;
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
-			List<Recipient.EmailSettings> localizationSettings = Localization.getEmailSettings();
+			localizationSettings = Localization.getEmailSettings();
 			// By default localization settings should only contain english as a language setting
 			System.assertEquals(1, localizationSettings.size());
 
@@ -140,7 +141,7 @@ private class LocalizationTest {
 	}
 
 	static testMethod void test_save_Recipient_EmailSettings_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			insert new List<EnvelopeLocalization__c> {
 				new EnvelopeLocalization__c(
@@ -194,7 +195,7 @@ private class LocalizationTest {
 	}
 
 	static testMethod void test_save_Recipient_EmailSettings_unauthorized() {
-		System.runAs(TestUtils.createRestrictedUser()) {
+		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ab', '', '', '') });
@@ -258,20 +259,20 @@ private class LocalizationTest {
 	}
 
 	static testMethod void test_isEmailLocalizationEnabled_enabled() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', 'm') });
+		}
 
+		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
-			final Boolean result = Localization.isEmailLocalizationEnabled();
+			System.assert(Localization.isEmailLocalizationEnabled());
 			Test.stopTest();
-
-			System.assert(result);
 		}
 	}
 
 	static testMethod void test_getEmailSettingsForCurrentLanguage() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('it', 'Italian', 'subject-italian', 'message-italian') });
 		}

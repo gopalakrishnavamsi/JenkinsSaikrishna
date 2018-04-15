@@ -90,6 +90,89 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
+	static testMethod void test_getLinkedDocuments_ContentVersion() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			Schema.Account a1 = TestUtils.createAccount();
+			Opportunity o1 = TestUtils.createOpportunity(a1.Id);
+			Contact c1 = TestUtils.createContact(a1.Id);
+			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv2 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv3 = TestUtils.createContentVersion(o1.Id);
+
+			Test.startTest();
+			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id, o1.Id, c1.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+
+			Boolean foundCV1 = false, foundCV2 = false, foundCV3 = false;
+			for (Document d : result) {
+				System.assertNotEquals(null, d);
+				if (d.sourceId == cv1.Id) {
+					foundCV1 = true;
+					System.assertEquals(Document.TYPE_FILE, d.type);
+					System.assertNotEquals(null, d.sequence);
+					System.assertEquals(cv1.Title, d.name);
+					System.assertEquals(cv1.FileExtension, d.extension);
+					System.assertEquals(cv1.ContentSize, d.size);
+					System.assertEquals(cv1.Id, d.sourceId);
+				} else if (d.sourceId == cv2.Id) {
+					foundCV2 = true;
+					System.assertEquals(Document.TYPE_FILE, d.type);
+					System.assertNotEquals(null, d.sequence);
+					System.assertEquals(cv2.Title, d.name);
+					System.assertEquals(cv2.FileExtension, d.extension);
+					System.assertEquals(cv2.ContentSize, d.size);
+					System.assertEquals(cv2.Id, d.sourceId);
+				} else if (d.sourceId == cv3.Id) {
+					foundCV3 = true;
+					System.assertEquals(Document.TYPE_FILE, d.type);
+					System.assertNotEquals(null, d.sequence);
+					System.assertEquals(cv3.Title, d.name);
+					System.assertEquals(cv3.FileExtension, d.extension);
+					System.assertEquals(cv3.ContentSize, d.size);
+					System.assertEquals(cv3.Id, d.sourceId);
+				} else {
+					throw new AssertException('Unexpected document: ' + d);
+				}
+			}
+			System.assert(foundCV1);
+			System.assert(foundCV2);
+			System.assert(foundCV3);
+		}
+	}
+
+	static testMethod void test_getLinkedDocuments_Document() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			Schema.Account a = TestUtils.createAccount();
+
+			Test.startTest();
+			List<Document> result = dr.getLinkedDocuments('\nDOCUMENT', new Set<Id> { a.Id });
+			Test.stopTest();
+
+			// Documents cannot be linked to entities, so will never return a result.
+			System.assert(Collection.isEmpty(result));
+		}
+	}
+
+	static testMethod void test_getLinkedDocuments_invalid() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+
+			Test.startTest();
+			try {
+				dr.getLinkedDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected getLinkedDocuments to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	static testMethod void test_getDocumentContent_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();

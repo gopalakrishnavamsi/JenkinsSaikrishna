@@ -9,8 +9,8 @@
 		<value>DocuSign Envelopes</value>
 	</caseValues>
 	<fields>
-		<help>DocuSign Envelope ID</help>
-		<label>DocuSign Envelope ID</label>
+		<help>DocuSign envelope ID</help>
+		<label>DocuSign envelope ID</label>
 		<name>DocuSignId__c</name>
 	</fields>
 	<fields>
@@ -24,12 +24,12 @@
 			envelope expires, DocuSign for Salesforce voids the envelope and sends a notification to both sender and
 			recipient.
 		</help>
-		<label>Expire/Void Envelope</label>
+		<label>Expire/void Envelope</label>
 		<name>Expires__c</name>
 	</fields>
 	<fields>
 		<help>Indicate the number of days until this transaction is expired.</help>
-		<label>Expire/Void Envelope in N day(s)</label>
+		<label>Expire/void envelope in N day(s)</label>
 		<name>ExpireAfterDays__c</name>
 	</fields>
 	<fields>
@@ -48,36 +48,36 @@
 	</fields>
 	<fields>
 		<help>Indicate how many days should pass before the first reminder is sent</help>
-		<label>Send Reminder in N day(s)</label>
+		<label>Send reminder in N day(s)</label>
 		<name>RemindAfterDays__c</name>
 	</fields>
 	<fields>
 		<help>Indicate how often (in days) the reminder should repeat until the transaction is complete.</help>
-		<label>Repeat every N day(s) until complete</label>
+		<label>Remind every N day(s) until complete</label>
 		<name>RemindFrequencyDays__c</name>
 	</fields>
 	<fields>
 		<help>Check to show chatter during DocuSign signature workflow.</help>
-		<label>Enable Chatter Status Updates</label>
+		<label>Enable Chatter status updates</label>
 		<name>UpdateChatter__c</name>
 	</fields>
 	<fields>
-		<help>Change this default Email Subject text and it will appear as the Subject Line in the notification to Sign
+		<help>Change this default email subject text and it will appear as the Subject Line in the notification to Sign
 			for your DocuSign Recipients.
 		</help>
-		<label>Email Subject</label>
+		<label>Email subject</label>
 		<name>EmailSubject__c</name>
 	</fields>
 	<fields>
-		<help>Edit this Email Message Text (up to 2,000 characters) and it will appear in the notification to sign for
+		<help>Edit this email message Text (up to 2,000 characters) and it will appear in the notification to sign for
 			your DocuSign Recipient.
 		</help>
-		<label>Email Message</label>
+		<label>Email message</label>
 		<name>EmailMessage__c</name>
 	</fields>
 	<fields>
-		<help>Salesforce Source ID</help>
-		<label>Salesforce Source ID</label>
+		<help>Salesforce source ID</help>
+		<label>Salesforce source ID</label>
 		<name>SourceId__c</name>
 	</fields>
 	<fields>

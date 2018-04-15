@@ -48,7 +48,8 @@ public class TestUtils {
 	}
 
 	public static User createDocuSignUser(final String dsUsername, final String dsPassword) {
-		User u = createUser(UserInfo.getProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername);
+		Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+		User u = createUser(p.Id, UUID.randomUUID().toString() + '@unit.test', dsUsername);
 		if (String.isNotBlank(dsUsername)) {
 			UserSettings__c us = UserSettings__c.getInstance(u.Id);
 			us.Username__c = dsUsername;
@@ -119,6 +120,12 @@ public class TestUtils {
 			VersionData = Blob.valueOf(UUID.randomUUID().toString()));
 		insert cv;
 		return [SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize FROM ContentVersion WHERE Id = :cv.Id LIMIT 1];
+	}
+
+	public static ContentVersion createContentVersion(final Id sourceId) {
+		ContentVersion cv = createContentVersion();
+		createContentDocumentLink(sourceId, cv);
+		return cv;
 	}
 
 	public static Document__c createEnvelopeDocument(final Id envelopeId) {
@@ -325,5 +332,20 @@ public class TestUtils {
 			ShareType = 'I');
 		insert cdl;
 		return cdl;
+	}
+
+	public static EnvelopeLocalization__c createEnvelopeLocalization(final String language) {
+		return createEnvelopeLocalization(new Recipient.EmailSettings(language, Localization.getLabel(language),
+			language + ' subject', language + ' message'));
+	}
+
+	public static EnvelopeLocalization__c createEnvelopeLocalization(final Recipient.EmailSettings loc) {
+		EnvelopeLocalization__c el = new EnvelopeLocalization__c(
+			Name = loc.languageLabel,
+			Language__c = loc.language,
+			EmailSubject__c = loc.subject,
+			EmailMessage__c = loc.message);
+		insert el;
+		return el;
 	}
 }

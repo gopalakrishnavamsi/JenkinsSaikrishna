@@ -4,8 +4,8 @@ private class DocumentResponseTest {
 	static testMethod void test_success() {
 		Envelope__c dse = TestUtils.createEnvelope();
 		List<Document> ds = new List<Document> {
-			Document.convert(TestUtils.createEnvelopeDocument(dse.Id)),
-			Document.convert(TestUtils.createEnvelopeDocument(dse.Id))
+			DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id)),
+			DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id))
 		};
 		List<CustomField> cfs = new List<CustomField> {
 			new CustomField('n1', 'v1', true, true),

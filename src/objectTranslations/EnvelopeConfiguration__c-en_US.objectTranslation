@@ -13,19 +13,19 @@
 		<name>Active__c</name>
 	</fields>
 	<fields>
-		<label>Email Message</label>
+		<label>Email message</label>
 		<name>EmailMessage__c</name>
 	</fields>
 	<fields>
-		<label>Email Subject</label>
+		<label>Email subject</label>
 		<name>EmailSubject__c</name>
 	</fields>
 	<fields>
-		<label>Add Salesforce Source Documents</label>
+		<label>Add Salesforce source documents</label>
 		<name>AddSourceDocuments__c</name>
 	</fields>
 	<fields>
-		<label>Add Salesforce Source Recipients</label>
+		<label>Add Salesforce source recipients</label>
 		<name>AddSourceRecipients__c</name>
 	</fields>
 	<fields>
@@ -33,44 +33,44 @@
 		<name>Action__c</name>
 	</fields>
 	<fields>
-		<label>Object Type</label>
+		<label>Object type</label>
 		<name>ObjectType__c</name>
 	</fields>
 	<fields>
-		<label>Show Email Message</label>
+		<label>Show email message</label>
 		<name>ShowEmailMessage__c</name>
 	</fields>
 	<fields>
-		<label>Show Email Subject</label>
+		<label>Show email subject</label>
 		<name>ShowEmailSubject__c</name>
 	</fields>
 	<fields>
-		<label>Show Remind and Expire Settings</label>
+		<label>Show remind and expire settings</label>
 		<name>ShowRemindExpire__c</name>
 	</fields>
 	<fields>
-		<label>Show Send Button</label>
+		<label>Show send button</label>
 		<name>ShowSendButton__c</name>
 	</fields>
 	<fields>
-		<label>Show Tag Button</label>
+		<label>Show tag button</label>
 		<name>ShowTagButton__c</name>
 	</fields>
 	<fields>
-		<label>Show Chatter Settings</label>
+		<label>Show Chatter settings</label>
 		<name>ShowChatterSettings__c</name>
 	</fields>
 	<fields>
-		<label>Expire/Void Envelope</label>
-		<name>Expire__c</name>
+		<label>Expire/void Envelope</label>
+		<name>Expires__c</name>
 	</fields>
 	<fields>
-		<label>Send Reminder in N day(s)</label>
-		<name>ReminderDays__c</name>
+		<label>Send reminder in N day(s)</label>
+		<name>RemindAfterDays__c</name>
 	</fields>
 	<fields>
-		<label>Repeat every N day(s) until complete</label>
-		<name>ReminderRepeatInterval__c</name>
+		<label>Remind every N day(s) until complete</label>
+		<name>RemindFrequencyDays__c</name>
 	</fields>
 	<fields>
 		<label>Remind signers via email</label>
@@ -78,11 +78,11 @@
 	</fields>
 	<fields>
 		<label>Warn of expiration in N day(s) prior</label>
-		<name>ExpireWarningInterval__c</name>
+		<name>ExpireWarnDays__c</name>
 	</fields>
 	<fields>
-		<label>Expire/Void Envelope in N day(s)</label>
-		<name>ExpireDays__c</name>
+		<label>Expire/void Envelope in N day(s)</label>
+		<name>ExpireAfterDays__c</name>
 	</fields>
 	<layouts>
 		<layout>DocuSign Envelope Configuration Layout</layout>

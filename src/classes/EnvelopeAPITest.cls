@@ -643,7 +643,7 @@ private class EnvelopeAPITest {
 			TestUtils.createAccountConfiguration();
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
-			Localization.updateEmailSettings(new Recipient.EmailSettings('de', 'German', 'German subject', 'German message'));
+			TestUtils.createEnvelopeLocalization(Localization.DE);
 
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope e2 = new Envelope(
@@ -687,7 +687,7 @@ private class EnvelopeAPITest {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
-			Document doc = Document.convert(TestUtils.createEnvelopeDocument(e1.Id));
+			Document doc = DocumentService.convert(TestUtils.createEnvelopeDocument(e1.Id));
 
 			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
 
@@ -827,7 +827,7 @@ private class EnvelopeAPITest {
 				Type__c = Document.TYPE_FILE);
 			insert d;
 			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
-				new List<Document> { Document.convert(d) },
+				new List<Document> { DocumentService.convert(d) },
 				new List<Recipient>(),
 				new List<CustomField>(),
 				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',

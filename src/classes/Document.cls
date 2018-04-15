@@ -9,8 +9,8 @@ public class Document {
 	public Integer sequence { get; private set; }
 	public String name { get; private set; }
 	public Integer size { get; private set; }
-	public String sourceId { get; private set; }
 	public String extension { get; private set; }
+	public String sourceId { get; private set; }
 	public UUID templateId {
 		get {
 			if (String.isNotBlank(this.sourceId) && this.type == TYPE_TEMPLATE) {
@@ -32,8 +32,8 @@ public class Document {
 		this.id = id;
 		this.type = type;
 		this.sequence = sequence;
-		this.name = String.isNotBlank(name) ? name : '';
-		this.extension = String.isNotBlank(extension) ? extension : '';
+		this.name = String.isNotBlank(name) ? name : null;
+		this.extension = String.isNotBlank(extension) ? extension : null;
 		this.size = size;
 		this.sourceId = sourceId;
 	}
@@ -96,30 +96,6 @@ public class Document {
 			this.folders = folders;
 			this.documents = documents;
 		}
-	}
-
-	public static String getFileExtension(final String name) {
-		String extension = null;
-		if (String.isNotBlank(name)) {
-			Integer i = name.lastIndexOf('.');
-			if (i > -1) {
-				extension = name.substring(i + 1);
-			}
-		}
-		return extension;
-	}
-
-	public static Document convert(final Document__c d) {
-		if (d == null) return null;
-
-		return new Document(
-			d.Id,
-			d.Type__c,
-			Integer.valueOf(d.Sequence__c),
-			d.Name,
-			String.isNotBlank(d.Extension__c) ? d.Extension__c : getFileExtension(d.Name),
-			Integer.valueOf(d.Size__c),
-			d.SourceId__c);
 	}
 
 	public Document withSequence(final Integer sequence) {

@@ -30,11 +30,6 @@ private class SalesforceTest {
 		System.assertNotEquals(null, new Salesforce.Configuration('host', 'https://unit.test'));
 	}
 
-	static testMethod void test_Credentials() {
-		System.assertNotEquals(null, new Salesforce.Credentials('unit.test', UUID.randomUUID().toString(),
-			Salesforce.Environment.Production, true));
-	}
-
 	static testMethod void test_MergeObject() {
 		Salesforce.MergeObject mo1 = new Salesforce.MergeObject('A', null, true);
 		Salesforce.MergeObject mo2 = new Salesforce.MergeObject('B', '', true);
