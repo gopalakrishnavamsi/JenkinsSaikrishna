@@ -4,7 +4,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		'contentversion', 'document'
 	};
 
-	public Boolean canResolveDocument(final String sObjectType) {
+	public Boolean canResolveDocuments(final String sObjectType) {
 		return String.isNotBlank(sObjectType) && TYPES.contains(sObjectType.trim().toLowerCase());
 	}
 

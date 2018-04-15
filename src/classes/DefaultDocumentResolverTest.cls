@@ -5,11 +5,11 @@ private class DefaultDocumentResolverTest {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
-		System.assert(dr.canResolveDocument('ContentVersion'));
-		System.assert(dr.canResolveDocument(' DOCUMENT '));
-		System.assert(!dr.canResolveDocument('whatever'));
-		System.assert(!dr.canResolveDocument(null));
-		System.assert(!dr.canResolveDocument(' '));
+		System.assert(dr.canResolveDocuments('ContentVersion'));
+		System.assert(dr.canResolveDocuments(' DOCUMENT '));
+		System.assert(!dr.canResolveDocuments('whatever'));
+		System.assert(!dr.canResolveDocuments(null));
+		System.assert(!dr.canResolveDocuments(' '));
 		Test.stopTest();
 	}
 

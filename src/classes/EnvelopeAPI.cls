@@ -787,7 +787,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		Map<Id, Blob> result = new Map<Id, Blob>();
 		for (String type : sourceTypes.keySet()) {
 			for (DocumentResolver resolver : DOCUMENT_RESOLVERS) {
-				if (resolver.canResolveDocument(type)) {
+				if (resolver.canResolveDocuments(type)) {
 					Map<Id, Blob> m = resolver.getDocumentContent(type, sourceTypes.get(type));
 					if (m != null) {
 						result.putAll(m);

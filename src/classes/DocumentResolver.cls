@@ -10,7 +10,7 @@ public interface DocumentResolver {
 	 *
 	 * @return True if this implementation can resolve the SObject type, false otherwise.
 	 */
-	Boolean canResolveDocument(String sObjectType);
+	Boolean canResolveDocuments(String sObjectType);
 
 	/**
 	 * Retrieves a list of documents by ID.

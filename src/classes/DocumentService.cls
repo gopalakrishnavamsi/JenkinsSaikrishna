@@ -244,7 +244,7 @@ public with sharing class DocumentService {
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocument(sObjectType)) {
+			if (dr.canResolveDocuments(sObjectType)) {
 				result = dr.getDocuments(sObjectType, sObjectIds);
 				break;
 			}
@@ -257,7 +257,7 @@ public with sharing class DocumentService {
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocument(sObjectType)) {
+			if (dr.canResolveDocuments(sObjectType)) {
 				result = dr.getLinkedDocuments(sObjectType, linkedEntityIds);
 				break;
 			}
@@ -273,7 +273,7 @@ public with sharing class DocumentService {
 		};
 		List<Document> personalDocuments = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocument(sObjectType)) {
+			if (dr.canResolveDocuments(sObjectType)) {
 				List<Document.Folder> fs = dr.getDocumentFolders(sObjectType);
 				if (fs != null) {
 					folders.addAll(fs);
@@ -290,7 +290,7 @@ public with sharing class DocumentService {
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocument(sObjectType)) {
+			if (dr.canResolveDocuments(sObjectType)) {
 				result = dr.getFolderDocuments(sObjectType, folderIds);
 				break;
 			}
