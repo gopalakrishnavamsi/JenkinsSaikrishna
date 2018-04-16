@@ -34,10 +34,12 @@ public interface RecipientResolver {
 	 * Retrieves a list of recipients by name.
 	 *
 	 * @param sObjectType The SObject type name.
-	 * @param name The name to search.
-	 * @param behavior How the search is performed.
+	 * @param firstName The first name to search. The only search term honored for compound searches.
+	 * @param lastName The last name to search. Ignored for compound searches.
+	 * @param behavior How the search is performed. This may be overridden at runtime if predicate fields do not support
+	 * filtering.
 	 *
 	 * @return The recipients matching the search criteria.
 	 */
-	List<Recipient> searchRecipients(String sObjectType, String name, SearchBehavior behavior);
+	List<Recipient> searchRecipients(String sObjectType, String firstName, String lastName, SearchBehavior behavior);
 }

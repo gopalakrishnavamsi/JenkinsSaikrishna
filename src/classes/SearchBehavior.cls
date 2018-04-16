@@ -1,5 +1,8 @@
 public enum SearchBehavior {
-	MatchBeginning,
-	MatchExact,
-	MatchAny
+	CompoundMatchBeginning,
+	CompoundMatchExact,
+	CompoundMatchAny,
+	SimpleMatchBeginning,
+	SimpleMatchExact,
+	SimpleMatchAny
 }

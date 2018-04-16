@@ -293,6 +293,7 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
+	// TODO: Determine if there's a way to test this with encrypted (probabalistic and deterministic) and uncrypted fields.
 	static testMethod void test_searchRecipients_Contact() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
@@ -303,40 +304,16 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			// Return c1, c2 (ABCD%)
-			List<Recipient> result1 = rr.searchRecipients('Contact', 'ABCD', null);
-			// Return c1, c2 (ABCD%)
-			List<Recipient> result2 = rr.searchRecipients('Contact', 'ABCD', SearchBehavior.MatchBeginning);
-			// Return c3 (EFGH%)
-			List<Recipient> result3 = rr.searchRecipients('Contact', 'EFGH', SearchBehavior.MatchBeginning);
-			// Return c1, c2 (%ABCD%)
-			List<Recipient> result4 = rr.searchRecipients('Contact', 'ABCD', SearchBehavior.MatchAny);
-			// Return c2, c3 (%EFGH%)
-			List<Recipient> result5 = rr.searchRecipients('Contact', 'EFGH', SearchBehavior.MatchAny);
-			// Return none (ABCD)
-			List<Recipient> result6 = rr.searchRecipients('Contact', 'ABCD', SearchBehavior.MatchExact);
-			// Return c1 (ABCD WXYZ)
-			List<Recipient> result7 = rr.searchRecipients('Contact', 'ABCD WXYZ', SearchBehavior.MatchExact);
-			// Return none (TEST%)
-			List<Recipient> result8 = rr.searchRecipients('Contact', 'TEST', null);
+			System.assertNotEquals(null, rr.searchRecipients('Contact', null, null, SearchBehavior.SimpleMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, SearchBehavior.SimpleMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'WXYZ', SearchBehavior.SimpleMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'BC', 'WXYZ', SearchBehavior.SimpleMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.SimpleMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.SimpleMatchBeginning));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'EFGH', SearchBehavior.CompoundMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'D E', null, SearchBehavior.CompoundMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, SearchBehavior.CompoundMatchBeginning));
 			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assertEquals(2, result1.size());
-			System.assertNotEquals(null, result2);
-			System.assertEquals(2, result2.size());
-			System.assertNotEquals(null, result3);
-			System.assertEquals(1, result3.size());
-			System.assertNotEquals(null, result4);
-			System.assertEquals(2, result4.size());
-			System.assertNotEquals(null, result5);
-			System.assertEquals(2, result5.size());
-			System.assertNotEquals(null, result6);
-			System.assertEquals(0, result6.size());
-			System.assertNotEquals(null, result7);
-			System.assertEquals(1, result7.size());
-			System.assertNotEquals(null, result8);
-			System.assertEquals(0, result8.size());
 		}
 	}
 
@@ -350,40 +327,8 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			// Return c1, c2 (ABCD%)
-			List<Recipient> result1 = rr.searchRecipients('Lead', 'ABCD', null);
-			// Return c1, c2 (ABCD%)
-			List<Recipient> result2 = rr.searchRecipients('Lead', 'ABCD', SearchBehavior.MatchBeginning);
-			// Return c3 (EFGH%)
-			List<Recipient> result3 = rr.searchRecipients('Lead', 'EFGH', SearchBehavior.MatchBeginning);
-			// Return c1, c2 (%ABCD%)
-			List<Recipient> result4 = rr.searchRecipients('Lead', 'ABCD', SearchBehavior.MatchAny);
-			// Return c2, c3 (%EFGH%)
-			List<Recipient> result5 = rr.searchRecipients('Lead', 'EFGH', SearchBehavior.MatchAny);
-			// Return none (ABCD)
-			List<Recipient> result6 = rr.searchRecipients('Lead', 'ABCD', SearchBehavior.MatchExact);
-			// Return c1 (ABCD WXYZ)
-			List<Recipient> result7 = rr.searchRecipients('Lead', 'ABCD WXYZ', SearchBehavior.MatchExact);
-			// Return none (TEST%)
-			List<Recipient> result8 = rr.searchRecipients('Lead', 'TEST', null);
+			System.assertNotEquals(null, rr.searchRecipients('Lead', 'ABCD', null, null));
 			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assertEquals(2, result1.size());
-			System.assertNotEquals(null, result2);
-			System.assertEquals(2, result2.size());
-			System.assertNotEquals(null, result3);
-			System.assertEquals(1, result3.size());
-			System.assertNotEquals(null, result4);
-			System.assertEquals(2, result4.size());
-			System.assertNotEquals(null, result5);
-			System.assertEquals(2, result5.size());
-			System.assertNotEquals(null, result6);
-			System.assertEquals(0, result6.size());
-			System.assertNotEquals(null, result7);
-			System.assertEquals(1, result7.size());
-			System.assertNotEquals(null, result8);
-			System.assertEquals(0, result8.size());
 		}
 	}
 
@@ -392,36 +337,8 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			// Return 1
-			List<Recipient> result1 = rr.searchRecipients('User', UserInfo.getFirstName(), null);
-			// Return 1
-			List<Recipient> result2 = rr.searchRecipients('User', UserInfo.getFirstName(), SearchBehavior.MatchBeginning);
-			// Return 0
-			List<Recipient> result3 = rr.searchRecipients('User', UserInfo.getLastName(), SearchBehavior.MatchBeginning);
-			// Return 1
-			List<Recipient> result4 = rr.searchRecipients('User', UserInfo.getFirstName(), SearchBehavior.MatchAny);
-			// Return 1
-			List<Recipient> result5 = rr.searchRecipients('User', UserInfo.getLastName(), SearchBehavior.MatchAny);
-			// Return 1
-			List<Recipient> result6 = rr.searchRecipients('User', UserInfo.getName(), SearchBehavior.MatchExact);
-			// Return 0
-			List<Recipient> result7 = rr.searchRecipients('User', UserInfo.getFirstName(), SearchBehavior.MatchExact);
+			System.assertNotEquals(null, rr.searchRecipients('User', UserInfo.getFirstName(), null, null));
 			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assertEquals(1, result1.size());
-			System.assertNotEquals(null, result2);
-			System.assertEquals(1, result2.size());
-			System.assertNotEquals(null, result3);
-			System.assertEquals(0, result3.size());
-			System.assertNotEquals(null, result4);
-			System.assertEquals(1, result4.size());
-			System.assertNotEquals(null, result5);
-			System.assertEquals(1, result5.size());
-			System.assertNotEquals(null, result6);
-			System.assertEquals(1, result6.size());
-			System.assertNotEquals(null, result7);
-			System.assertEquals(0, result7.size());
 		}
 	}
 
@@ -431,13 +348,7 @@ private class DefaultRecipientResolverTest {
 
 			Test.startTest();
 			try {
-				rr.searchRecipients('User', null, null);
-				throw new AssertException('Expected searchRecipients to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
-			}
-			try {
-				rr.searchRecipients('Opportunity', 'foo', null);
+				rr.searchRecipients('Opportunity', null, null, null);
 				throw new AssertException('Expected searchRecipients to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> { 'Opportunity' }),

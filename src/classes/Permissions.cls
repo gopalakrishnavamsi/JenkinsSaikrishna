@@ -307,7 +307,7 @@ public with sharing class Permissions {
 	}
 
 	public enum FlsAccess {
-		Createable, Deletable, Queryable, Updateable
+		Createable, Deletable, Queryable, Updateable, Filterable, Unencrypted
 	}
 
 	public enum FlsStatus {
@@ -401,8 +401,12 @@ public with sharing class Permissions {
 						message = String.format(Label.CannotQueryFields_2, new List<String> { objectResult.name, Collection.mkString(unauthorizedFields, ', ') });
 					} else if (requestedAccess == FlsAccess.Updateable) {
 						message = String.format(Label.CannotUpdateFields_2, new List<String> { objectResult.name, Collection.mkString(unauthorizedFields, ', ') });
-					} else {
+					} else if (requestedAccess == FlsAccess.Createable) {
 						message = String.format(Label.CannotCreateFields_2, new List<String> { objectResult.name, Collection.mkString(unauthorizedFields, ', ') });
+					} else if (requestedAccess == FlsAccess.Filterable) {
+						message = String.format(Label.CannotFilterFields_2, new List<String> { objectResult.name, Collection.mkString(unauthorizedFields, ', ') });
+					} else { // encrypted
+						message = String.format(Label.EncryptedFields_2, new List<String> { objectResult.name, Collection.mkString(unauthorizedFields, ', ') });
 					}
 				}
 			}
@@ -425,6 +429,11 @@ public with sharing class Permissions {
 			status = fieldDescribe.isUpdateable() ? FlsStatus.OK : FlsStatus.Unauthorized;
 		} else if (requestedAccess == FlsAccess.Createable) {
 			status = fieldDescribe.isCreateable() ? FlsStatus.OK : FlsStatus.Unauthorized;
+		} else if (requestedAccess == FlsAccess.Filterable) {
+			status = fieldDescribe.isFilterable() ? FlsStatus.OK : FlsStatus.Unauthorized;
+		} else if (requestedAccess == FlsAccess.Unencrypted) {
+			// isEncrypted can return null
+			status = !(fieldDescribe.isEncrypted() == true) ? FlsStatus.OK : FlsStatus.Unauthorized;
 		}
 		return new FlsResult(fieldName, status);
 	}
@@ -445,6 +454,8 @@ public with sharing class Permissions {
 			status = objectDescribe.isCreateable() ? FlsStatus.OK : FlsStatus.Unauthorized;
 		} else if (requestedAccess == FlsAccess.Deletable) {
 			status = objectDescribe.isDeletable() ? FlsStatus.OK : FlsStatus.Unauthorized;
+		} else { // Filterable or Unencrypted are only at the field level
+			status = FlsStatus.OK;
 		}
 		return new FlsResult(objectName, status);
 	}
@@ -544,6 +555,28 @@ public with sharing class Permissions {
 
 	public static void verifyIsUpdateable(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isUpdateable(objectName, fieldNames);
+		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+	}
+
+	public static FlsResults isFilterable(final String objectName, final List<String> fieldNames) {
+		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Filterable, true, null, null);
+
+		return getFlsResults(FlsAccess.Filterable, objectName, fieldNames);
+	}
+
+	public static void verifyIsFilterable(final String objectName, final List<String> fieldNames) {
+		FlsResults results = isFilterable(objectName, fieldNames);
+		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+	}
+
+	public static FlsResults isUnencrypted(final String objectName, final List<String> fieldNames) {
+		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Unencrypted, true, null, null);
+
+		return getFlsResults(FlsAccess.Unencrypted, objectName, fieldNames);
+	}
+
+	public static void verifyIsUnencrypted(final String objectName, final List<String> fieldNames) {
+		FlsResults results = isUnencrypted(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 }

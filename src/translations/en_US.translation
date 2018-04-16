@@ -29,6 +29,14 @@
 		<name>CannotUpdateObject</name>
 	</customLabels>
 	<customLabels>
+		<label>Cannot filter {0} on fields: {1}</label>
+		<name>CannotFilterFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Object {0} has encrypted fields: {1}</label>
+		<name>EncryptedFields_2</name>
+	</customLabels>
+	<customLabels>
 		<label>Envelope not found.</label>
 		<name>EnvelopeNotFound</name>
 	</customLabels>

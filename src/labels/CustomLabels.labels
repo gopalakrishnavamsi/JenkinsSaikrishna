@@ -57,6 +57,22 @@
 		<value>Update is unauthorized for object:</value>
 	</labels>
 	<labels>
+		<fullName>CannotFilterFields_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Fields not filterable</shortDescription>
+		<value>Cannot filter {0} on fields: {1}</value>
+	</labels>
+	<labels>
+		<fullName>EncryptedFields_2</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Fields are encrypted</shortDescription>
+		<value>Object {0} has encrypted fields: {1}</value>
+	</labels>
+	<labels>
 		<fullName>EnvelopeNotFound</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>

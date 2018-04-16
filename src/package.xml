@@ -124,6 +124,8 @@
         <members>CannotQueryObject</members>
         <members>CannotUpdateFields_2</members>
         <members>CannotUpdateObject</members>
+        <members>CannotFilterFields_2</members>
+        <members>EncryptedFields_2</members>
         <members>EnvelopeNotFound</members>
         <members>ForLabel</members>
         <members>InvalidEntity</members>

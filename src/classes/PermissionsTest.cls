@@ -651,6 +651,102 @@ private class PermissionsTest {
 		System.assertEquals(Label.CannotUpdateObject + ' ' + OBJECT_NAME, ex2.getMessage());
 	}
 
+	static testMethod void test_isFilterable_authorized() {
+		User u = TestUtils.createDocuSignUser();
+		Permissions.FlsResults r1, r2;
+
+		Test.startTest();
+		System.runAs(u) {
+			r1 = Permissions.isFilterable(OBJECT_NAME, null);
+			r2 = Permissions.isFilterable(OBJECT_NAME, new List<String> { FIELD_NAME });
+		}
+		Test.stopTest();
+
+		System.assertNotEquals(null, r1);
+		System.assert(r1.isAuthorized);
+		System.assertNotEquals(null, r2);
+		System.assert(r2.isAuthorized);
+	}
+
+	static testMethod void test_isFilterable_unauthorized() {
+		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+	}
+
+	static testMethod void test_verifyIsFilterable_authorized() {
+		User u = TestUtils.createDocuSignUser();
+		UnauthorizedException ex1, ex2;
+
+		Test.startTest();
+		System.runAs(u) {
+			try {
+				Permissions.verifyIsFilterable(OBJECT_NAME, null);
+			} catch (UnauthorizedException ex) {
+				ex1 = ex;
+			}
+			try {
+				Permissions.verifyIsFilterable(OBJECT_NAME, new List<String> { FIELD_NAME });
+			} catch (UnauthorizedException ex) {
+				ex2 = ex;
+			}
+		}
+		Test.stopTest();
+
+		System.assertEquals(null, ex1);
+		System.assertEquals(null, ex2);
+	}
+
+	static testMethod void test_verifyIsFilterable_unauthorized() {
+		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+	}
+
+	static testMethod void test_isUnencrypted_authorized() {
+		User u = TestUtils.createDocuSignUser();
+		Permissions.FlsResults r1, r2;
+
+		Test.startTest();
+		System.runAs(u) {
+			r1 = Permissions.isUnencrypted(OBJECT_NAME, null);
+			r2 = Permissions.isUnencrypted(OBJECT_NAME, new List<String> { FIELD_NAME });
+		}
+		Test.stopTest();
+
+		System.assertNotEquals(null, r1);
+		System.assert(r1.isAuthorized);
+		System.assertNotEquals(null, r2);
+		System.assert(r2.isAuthorized);
+	}
+
+	static testMethod void test_isUnencrypted_unauthorized() {
+		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+	}
+
+	static testMethod void test_verifyIsUnencrypted_authorized() {
+		User u = TestUtils.createDocuSignUser();
+		UnauthorizedException ex1, ex2;
+
+		Test.startTest();
+		System.runAs(u) {
+			try {
+				Permissions.verifyIsUnencrypted(OBJECT_NAME, null);
+			} catch (UnauthorizedException ex) {
+				ex1 = ex;
+			}
+			try {
+				Permissions.verifyIsUnencrypted(OBJECT_NAME, new List<String> { FIELD_NAME });
+			} catch (UnauthorizedException ex) {
+				ex2 = ex;
+			}
+		}
+		Test.stopTest();
+
+		System.assertEquals(null, ex1);
+		System.assertEquals(null, ex2);
+	}
+
+	static testMethod void test_verifyIsUnencrypted_unauthorized() {
+		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+	}
+
 	static testMethod void test_getDocuSignAdministratorPermissionSetId() {
 		Id id = [
 			SELECT Id
