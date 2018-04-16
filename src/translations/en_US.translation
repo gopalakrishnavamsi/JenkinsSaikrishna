@@ -479,8 +479,8 @@
 		<name>CannotResolveDocumentType_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot resolve recipient type {0}.</label>
-		<name>CannotResolveRecipientType_1</name>
+		<label>Cannot resolve recipient source {0}.</label>
+		<name>CannotResolveRecipientSource_1</name>
 	</customLabels>
 	<customLabels>
 		<label>

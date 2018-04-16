@@ -211,14 +211,24 @@ public class TestUtils {
 		return o;
 	}
 
-	public static Case createCase() {
-		return createCase(createAccount().Id);
+	public static OpportunityContactRole createOpportunityContactRole(final Id opportunityId, final Id contactId) {
+		OpportunityContactRole ocr = new OpportunityContactRole(
+			OpportunityId = opportunityId,
+			ContactId = contactId,
+			Role = UUID.randomUUID().toString());
+		insert ocr;
+		return ocr;
 	}
 
-	public static Case createCase(final Id accountId) {
-		Case c = new Case(AccountId = accountId);
+	public static Case createCase() {
+		Schema.Account a = createAccount();
+		return createCase(a.Id, createContact(a.Id).Id);
+	}
+
+	public static Case createCase(final Id accountId, final Id contactId) {
+		Case c = new Case(AccountId = accountId, ContactId = contactId);
 		insert c;
-		c = [SELECT Id, CaseNumber, Account.Id, Account.Name FROM Case WHERE Id = :c.Id];
+		c = [SELECT Id, CaseNumber, Account.Id, Account.Name, Contact.Id, Contact.Name FROM Case WHERE Id = :c.Id];
 		return c;
 	}
 
@@ -229,23 +239,23 @@ public class TestUtils {
 	public static Contact createContact(final Id accountId) {
 		Contact c = new Contact(
 			AccountId = accountId,
-			FirstName = 'UNIT',
-			LastName = 'TEST',
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString(),
 			Email = UUID.randomUUID().toString() + '@unit.test',
 			Phone = '5555555555');
 		insert c;
-		return c;
+		return [SELECT AccountId, Name, FirstName, LastName, Email, Phone FROM Contact WHERE Id = :c.Id LIMIT 1];
 	}
 
 	public static Lead createLead() {
-		final Lead l = new Lead(
-			FirstName = 'UNIT',
-			LastName = 'TEST',
+		Lead l = new Lead(
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString(),
 			Company = 'Acme Corp.',
 			Email = UUID.randomUUID().toString() + '@unit.test',
 			Phone = '5555555555');
 		insert l;
-		return l;
+		return [SELECT Company, Name, FirstName, LastName, Email, Phone FROM Lead WHERE Id = :l.Id LIMIT 1];
 	}
 
 	public static UUID createAccountConfiguration() {

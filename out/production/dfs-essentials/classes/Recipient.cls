@@ -142,15 +142,36 @@ public class Recipient implements Comparable {
 			null);
 	}
 
-	public static Recipient fromSource(final String name, final String email, final String phone, final String role,
-		final Entity source) {
+	public static Recipient fromSource(final String name, final String email, final String phone,
+		final String role, final Integer routingOrder, final Entity source) {
 
 		return new Recipient(
 			null,
 			TYPE_SIGNER,
 			null,
 			null,
-			String.isBlank(role) ? null : new Role(role, null),
+			null,
+			name,
+			email,
+			null,
+			phone,
+			null,
+			null,
+			null,
+			null,
+			null,
+			source);
+	}
+
+	public static Recipient fromSource(final String name, final String email, final String phone,
+		final String role, final Integer routingOrder, final Entity source) {
+
+		return new Recipient(
+			null,
+			TYPE_SIGNER,
+			null,
+			routingOrder,
+			new Role(role, null),
 			name,
 			email,
 			null,
@@ -303,11 +324,6 @@ public class Recipient implements Comparable {
 
 	public Recipient withSequence(final Integer sequence) {
 		this.sequence = sequence;
-		return this;
-	}
-
-	public Recipient withRoutingOrder(final Integer routingOrder) {
-		this.routingOrder = routingOrder;
 		return this;
 	}
 

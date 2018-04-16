@@ -923,12 +923,12 @@
 		<value>Cannot resolve document type {0}.</value>
 	</labels>
 	<labels>
-		<fullName>CannotResolveRecipientType_1</fullName>
+		<fullName>CannotResolveRecipientSource_1</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Cannot Resolve Recipient</shortDescription>
-		<value>Cannot resolve recipient type {0}.</value>
+		<shortDescription>Cannot resolve recipient source</shortDescription>
+		<value>Cannot resolve recipient source {0}.</value>
 	</labels>
 	<labels>
 		<fullName>NoValidAccounts</fullName>

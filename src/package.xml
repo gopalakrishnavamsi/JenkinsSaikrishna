@@ -103,6 +103,9 @@
         <members>AccountSoapAPITest</members>
         <members>DocumentService</members>
         <members>DocumentServiceTest</members>
+        <members>RecipientService</members>
+        <members>RecipientServiceTest</members>
+        <members>SearchBehavior</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -227,7 +230,7 @@
         <members>EmptySigningGroup</members>
         <members>InvalidRecipientUsername</members>
         <members>CannotResolveDocumentType_1</members>
-        <members>CannotResolveRecipientType_1</members>
+        <members>CannotResolveRecipientSource_1</members>
         <members>NoValidAccounts</members>
         <members>CompanyRequired</members>
         <members>NameRequired</members>
