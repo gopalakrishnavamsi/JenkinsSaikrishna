@@ -1,6 +1,23 @@
 @IsTest
 private class EntityTest {
 
+	static testMethod void test_bad_resolver() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.EntityResolvers__c = 'bad_resolver';
+			upsert s;
+
+			Test.startTest();
+			try {
+				Entity.resolve(null);
+				throw new AssertException('Expected initialization to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.InvalidEntityResolver_1, new List<String> { 'bad_resolver' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	static testMethod void test_equals() {
 		Entity e1 = new Entity(UserInfo.getUserId());
 		Entity e2 = new Entity(UserInfo.getUserId());

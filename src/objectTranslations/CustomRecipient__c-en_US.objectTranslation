@@ -69,6 +69,10 @@
 		<name>HostEmail__c</name>
 	</fields>
 	<fields>
+		<label>Sign now</label>
+		<name>SignNow__c</name>
+	</fields>
+	<fields>
 		<label>Envelope Configuration</label>
 		<name>EnvelopeConfiguration__c</name>
 	</fields>

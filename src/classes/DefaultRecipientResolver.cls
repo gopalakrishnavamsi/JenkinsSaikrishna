@@ -200,7 +200,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			}
 		}
 		if (Collection.isNotEmpty(filters)) {
-			result += ' WHERE ' + Collection.mkString(filters, ' AND ');
+			result += ' WHERE' + Collection.mkString(filters, ' AND ');
 		}
 		result += ' LIMIT 100';
 		return result;
@@ -285,9 +285,9 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	private static String buildSearchTerm(final String name, final SearchBehavior behavior) {
 		String result = name == null ? null : name.trim();
 		if (result != null) {
-			if (behavior == SearchBehavior.CompoundMatchExact || behavior == SearchBehavior.SimpleMatchExact) {
+			if (behavior == SearchBehavior.CompoundMatchExact || behavior == SearchBehavior.DiscreteMatchExact) {
 				result = result;
-			} else if (behavior == SearchBehavior.CompoundMatchAny || behavior == SearchBehavior.SimpleMatchAny) {
+			} else if (behavior == SearchBehavior.CompoundMatchAny || behavior == SearchBehavior.DiscreteMatchAny) {
 				result = '%' + result + '%'; // This is super inefficient, so avoid if possible.
 			} else { // MatchBeginning
 				result += '%';

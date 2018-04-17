@@ -72,13 +72,14 @@ public with sharing class EnvelopeConfiguration {
 		public String signingGroupName { get; private set; }
 		public Boolean isSigningGroup { get; private set; }
 		public String smsPhoneNumber { get; private set; }
+		public Boolean signNow { get; private set; }
 		public List<String> parseErrors { get; private set; }
 		public String name { get; private set; }
 
 		// CRL constructor
 		public CustomRecipient(final String email, final String firstName, final String lastName, final String type,
 			final String role, final Integer routingOrder, final String accessCode, final String smsPhoneNumber,
-			final String note, final String inPersonSigner, final String signingGroupName,
+			final String note, final String inPersonSigner, final String signingGroupName, final Boolean signNow,
 			final List<String> parseErrors) {
 
 			this.email = email;
@@ -94,6 +95,7 @@ public with sharing class EnvelopeConfiguration {
 			this.signingGroupName = signingGroupName;
 			this.parseErrors = parseErrors;
 			this.isSigningGroup = String.isNotBlank(signingGroupName);
+			this.signNow = signNow;
 			this.name = StringUtils.mkName(firstName, lastName);
 		}
 
@@ -126,7 +128,8 @@ public with sharing class EnvelopeConfiguration {
 					this.name,
 					this.email,
 					getAuthentication(),
-					this.note);
+					this.note,
+					this.signNow);
 			} else {
 				result = Recipient.newRecipient(
 					this.routingOrder == null ? 1 : this.routingOrder,
@@ -135,7 +138,8 @@ public with sharing class EnvelopeConfiguration {
 					this.name,
 					this.email,
 					getAuthentication(),
-					this.note);
+					this.note,
+					this.signNow);
 			}
 			return result;
 		}

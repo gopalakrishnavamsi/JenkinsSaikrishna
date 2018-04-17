@@ -27,6 +27,7 @@ public class Recipient implements Comparable {
 	public EmailSettings emailSettings { get; private set; }
 	public String hostName { get; private set; }
 	public String hostEmail { get; private set; }
+	public Boolean signNow { get; private set; }
 	public Entity source { get; private set; }
 	public Boolean isContact {
 		get {
@@ -54,7 +55,7 @@ public class Recipient implements Comparable {
 		}
 	}
 
-	private Recipient(
+	public Recipient(
 		final Id id,
 		final String type,
 		final Integer sequence,
@@ -69,6 +70,7 @@ public class Recipient implements Comparable {
 		final EmailSettings emailSettings,
 		final String hostName,
 		final String hostEmail,
+		final Boolean signNow,
 		final Entity source) {
 
 		this.id = id;
@@ -85,6 +87,7 @@ public class Recipient implements Comparable {
 		this.emailSettings = emailSettings;
 		this.hostName = hostName;
 		this.hostEmail = hostEmail;
+		this.signNow = signNow;
 		this.source = source;
 	}
 
@@ -111,6 +114,7 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			null,
+			false,
 			null);
 	}
 
@@ -122,7 +126,8 @@ public class Recipient implements Comparable {
 		final String hostName,
 		final String hostEmail,
 		final Authentication authentication,
-		final String note) {
+		final String note,
+		final Boolean signNow) {
 
 		return new Recipient(
 			null,
@@ -139,6 +144,7 @@ public class Recipient implements Comparable {
 			null,
 			hostName,
 			hostEmail,
+			signNow,
 			null);
 	}
 
@@ -160,6 +166,7 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			null,
+			false,
 			source);
 	}
 
@@ -170,7 +177,8 @@ public class Recipient implements Comparable {
 		final String name,
 		final String email,
 		final Authentication authentication,
-		final String note) {
+		final String note,
+		final Boolean signNow) {
 
 		return new Recipient(
 			null,
@@ -187,6 +195,7 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			null,
+			signNow,
 			null);
 	}
 
@@ -271,36 +280,6 @@ public class Recipient implements Comparable {
 		return -1;
 	}
 
-	public static Recipient convert(final Recipient__c r) {
-		if (r == null) return null;
-
-		return new Recipient(
-			r.Id,
-			r.Type__c,
-			Integer.valueOf(r.Sequence__c),
-			Integer.valueOf(r.RoutingOrder__c),
-			new Role(r.Role__c, null),
-			r.Name,
-			r.Email__c,
-			r.SigningGroupId__c != null || String.isNotBlank(r.SigningGroupName__c)
-				? new SigningGroup(Integer.valueOf(r.SigningGroupId__c), r.SigningGroupName__c) : null,
-			r.SmsPhoneNumber__c,
-			new Authentication(
-				r.AccessCode__c,
-				r.IdCheckRequired__c,
-				r.IdCheckRequired__c && String.isNotBlank(r.SmsPhoneNumber__c)
-					? new List<String> { r.SmsPhoneNumber__c } : null),
-			r.Note__c,
-			new EmailSettings(
-				r.Language__c,
-				Localization.getLabel(r.Language__c),
-				r.EmailSubject__c,
-				r.EmailMessage__c),
-			r.HostName__c,
-			r.HostEmail__c,
-			String.isNotBlank(r.SourceId__c) ? new Entity(Id.valueOf(r.SourceId__c), r.Name, null) : null);
-	}
-
 	public Recipient withSequence(final Integer sequence) {
 		this.sequence = sequence;
 		return this;
@@ -313,6 +292,11 @@ public class Recipient implements Comparable {
 
 	public Recipient withSource(final Entity source) {
 		this.source = source;
+		return this;
+	}
+
+	public Recipient withEmailSettings(final Recipient.EmailSettings emailSettings) {
+		this.emailSettings = emailSettings;
 		return this;
 	}
 }

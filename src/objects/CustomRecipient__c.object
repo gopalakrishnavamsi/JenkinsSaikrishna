@@ -266,6 +266,15 @@
 		<type>Text</type>
 		<unique>false</unique>
 	</fields>
+	<fields>
+		<fullName>SignNow__c</fullName>
+		<defaultValue>false</defaultValue>
+		<externalId>false</externalId>
+		<label>Sign now</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
 	<label>DocuSign Custom Recipient</label>
 	<nameField>
 		<displayFormat>CBR-{000000}</displayFormat>

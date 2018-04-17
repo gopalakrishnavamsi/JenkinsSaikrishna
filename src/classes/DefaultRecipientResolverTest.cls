@@ -304,12 +304,12 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			System.assertNotEquals(null, rr.searchRecipients('Contact', null, null, SearchBehavior.SimpleMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, SearchBehavior.SimpleMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'WXYZ', SearchBehavior.SimpleMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'BC', 'WXYZ', SearchBehavior.SimpleMatchAny));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.SimpleMatchAny));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.SimpleMatchBeginning));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', null, null, SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'WXYZ', SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', 'BC', 'WXYZ', SearchBehavior.DiscreteMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.DiscreteMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', SearchBehavior.DiscreteMatchBeginning));
 			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'EFGH', SearchBehavior.CompoundMatchExact));
 			System.assertNotEquals(null, rr.searchRecipients('Contact', 'D E', null, SearchBehavior.CompoundMatchAny));
 			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, SearchBehavior.CompoundMatchBeginning));

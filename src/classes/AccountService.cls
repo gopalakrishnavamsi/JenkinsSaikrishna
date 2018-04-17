@@ -252,6 +252,7 @@ public with sharing class AccountService {
 		public List<String> entityResolvers { get; private set; }
 		public List<String> documentResolvers { get; private set; }
 		public List<String> recipientResolvers { get; private set; }
+		public SearchBehavior recipientSearchBehavior { get; private set; }
 
 		public Settings(
 			final EnvelopeSettings envelope,
@@ -260,7 +261,8 @@ public with sharing class AccountService {
 			final Integer calloutTimeout,
 			final List<String> entityResolvers,
 			final List<String> documentResolvers,
-			final List<String> recipientResolvers) {
+			final List<String> recipientResolvers,
+			final SearchBehavior recipientSearchBehavior) {
 
 			this.envelope = envelope;
 			this.defaultEmailLocalizations = defaultEmailLocalizations;
@@ -269,7 +271,30 @@ public with sharing class AccountService {
 			this.entityResolvers = entityResolvers;
 			this.documentResolvers = documentResolvers;
 			this.recipientResolvers = recipientResolvers;
+			this.recipientSearchBehavior = recipientSearchBehavior;
 		}
+	}
+
+	@TestVisible
+	private static SearchBehavior stringToSearchBehavior(final String s) {
+		SearchBehavior result = SearchBehavior.DiscreteMatchBeginning;
+		if (String.isNotBlank(s)) {
+			String s2 = s.trim();
+			if (s2 == 'CompoundMatchBeginning') {
+				result = SearchBehavior.CompoundMatchBeginning;
+			} else if (s2 == 'CompoundMatchExact') {
+				result = SearchBehavior.CompoundMatchExact;
+			} else if (s2 == 'CompoundMatchAny') {
+				result = SearchBehavior.CompoundMatchAny;
+			} else if (s2 == 'DiscreteMatchAny') {
+				result = SearchBehavior.DiscreteMatchAny;
+			} else if (s2 == 'DiscreteMatchExact') {
+				result = SearchBehavior.DiscreteMatchExact;
+			} else {
+				result = SearchBehavior.DiscreteMatchBeginning;
+			}
+		}
+		return result;
 	}
 
 	public static Settings getSettings() {
@@ -283,7 +308,8 @@ public with sharing class AccountService {
 			Integer.valueOf(accountSettings.CalloutTimeout__c),
 			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
 			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
-			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','));
+			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
+			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
 	}
 
 	public static Settings saveSettings(final Settings settings) {
@@ -296,6 +322,8 @@ public with sharing class AccountService {
 		accountSettings.EntityResolvers__c = Collection.mkString(settings.entityResolvers, ',');
 		accountSettings.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');
 		accountSettings.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
+		accountSettings.RecipientSearchBehavior__c = settings.recipientSearchBehavior == null
+			? SearchBehavior.DiscreteMatchBeginning.name() : settings.recipientSearchBehavior.name();
 		upsert accountSettings;
 
 		return new Settings(
@@ -305,6 +333,7 @@ public with sharing class AccountService {
 			Integer.valueOf(accountSettings.CalloutTimeout__c),
 			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
 			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
-			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','));
+			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
+			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
 	}
 }

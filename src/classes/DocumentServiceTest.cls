@@ -1,6 +1,23 @@
 @IsTest
 private class DocumentServiceTest {
 
+	static testMethod void test_bad_resolver() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.DocumentResolvers__c = 'bad_resolver';
+			upsert s;
+
+			Test.startTest();
+			try {
+				DocumentService.getDocuments(null, null);
+				throw new AssertException('Expected initialization to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.InvalidDocumentResolver_1, new List<String> { 'bad_resolver' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	static testMethod void test_getFileExtension() {
 		Test.startTest();
 		System.assertEquals(null, DocumentService.getFileExtension(null));

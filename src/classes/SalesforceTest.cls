@@ -79,7 +79,7 @@ private class SalesforceTest {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c = TestUtils.createContact(a.Id);
 			Opportunity o = TestUtils.createOpportunity(a.Id);
-			Case cs = TestUtils.createCase(a.Id);
+			Case cs = TestUtils.createCase(a.Id, c.Id);
 
 			Test.startTest();
 			System.assert(Salesforce.isSObjectId('Account', a.Id));

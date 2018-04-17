@@ -270,6 +270,7 @@
         <members>AccountSettings__c.EntityResolvers__c</members>
         <members>AccountSettings__c.DocumentResolvers__c</members>
         <members>AccountSettings__c.RecipientResolvers__c</members>
+        <members>AccountSettings__c.RecipientSearchBehavior__c</members>
         <members>ChatterSettings__c.Flags__c</members>
         <members>ChatterSettings__c.EnvelopeCompleted__c</members>
         <members>ChatterSettings__c.EnvelopeDeclined__c</members>
@@ -346,6 +347,7 @@
         <members>Recipient__c.HostEmail__c</members>
         <members>Recipient__c.HostName__c</members>
         <members>Recipient__c.SourceId__c</members>
+		<members>Recipient__c.SignNow__c</members>
         <members>EnvelopeSettings__c.Chatter__c</members>
         <members>EnvelopeSettings__c.FetchDocuments__c</members>
         <members>EnvelopeSettings__c.AddFiles__c</members>
@@ -364,6 +366,7 @@
         <members>EnvelopeSettings__c.ReminderRepeatInterval__c</members>
         <members>EnvelopeSettings__c.TagInNewWindow__c</members>
         <members>EnvelopeSettings__c.SignInNewWindow__c</members>
+        <members>EnvelopeSettings__c.AllowSequentialSignNow__c</members>
         <members>Localization__mdt.EmailSubject__c</members>
         <members>Localization__mdt.EmailMessage__c</members>
         <members>Localization__mdt.ChatterEnvelopeSent__c</members>
@@ -396,6 +399,7 @@
         <members>CustomRecipient__c.Relationship__c</members>
         <members>CustomRecipient__c.HostName__c</members>
         <members>CustomRecipient__c.HostEmail__c</members>
+        <members>CustomRecipient__c.SignNow__c</members>
         <members>RoleSettings__c.Value__c</members>
         <members>UserSettings__c.HideWriteReview__c</members>
         <members>UserSettings__c.Username__c</members>

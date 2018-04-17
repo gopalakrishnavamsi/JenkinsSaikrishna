@@ -40,6 +40,7 @@ private class EnvelopeSettingsTest {
 			s.HideEmailSubject__c = false;
 			s.HideEmailMessage__c = false;
 			s.HideRemindExpire__c = true;
+			s.AllowSequentialSignNow__c = true;
 			s.Chatter__c = 'EnabledDefaultOn';
 			update s;
 
@@ -60,6 +61,7 @@ private class EnvelopeSettingsTest {
 			System.assert(ec.allowEditEmailSubject);
 			System.assert(ec.allowEditEmailMessage);
 			System.assert(!ec.showRemindAndExpireSettings);
+			System.assert(ec.allowSequentialSignNow);
 			if (Salesforce.isChatterEnabled) {
 				System.assert(ec.isChatterEnabled);
 				System.assert(ec.showChatter);
@@ -146,6 +148,7 @@ private class EnvelopeSettingsTest {
 					new Recipient.EmailSettings(Localization.ZH_CN, 'whatever', 'zh-CN subject', 'zh-CN message')
 				},
 				true,
+				true,
 				EnvelopeSettings.CHATTER_ENABLED_DEFAULT_OFF,
 				new ChatterEvents(true, false, true, false, true, false, true, false, true, false),
 				new Localization.ChatterText('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
@@ -170,6 +173,7 @@ private class EnvelopeSettingsTest {
 			System.assertNotEquals(null, result.emailLocalizations);
 			System.assertEquals(3, result.emailLocalizations.size());
 			System.assert(result.isSmsEnabled);
+			System.assert(result.allowSequentialSignNow);
 			System.assertEquals(EnvelopeSettings.CHATTER_ENABLED_DEFAULT_OFF, result.chatterSetting);
 			System.assertNotEquals(null, result.chatterPostEvents);
 			System.assert(result.chatterPostEvents.postEnvelopeSent);

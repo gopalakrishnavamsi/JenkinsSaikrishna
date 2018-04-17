@@ -186,6 +186,9 @@ public class TestUtils {
 	public static Recipient__c createEnvelopeRecipient(final Id envelopeId, final Integer sequence) {
 		Recipient__c r = new Recipient__c(
 			Envelope__c = envelopeId,
+			Type__c = Recipient.TYPE_SIGNER,
+			Name = UUID.randomUUID().toString(),
+			Email__c = UUID.randomUUID().toString() + '@unit.test',
 			Sequence__c = sequence);
 		insert r;
 		return r;

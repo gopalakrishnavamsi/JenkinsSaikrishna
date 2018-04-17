@@ -109,5 +109,9 @@
 		<label>Sequence</label>
 		<name>Sequence__c</name>
 	</fields>
+	<fields>
+		<label>Sign now</label>
+		<name>SignNow__c</name>
+	</fields>
 	<startsWith>Consonant</startsWith>
 </CustomObjectTranslation>

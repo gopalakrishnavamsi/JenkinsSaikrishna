@@ -20,6 +20,7 @@ public with sharing class EnvelopeSettings {
 	}
 	public List<Recipient.EmailSettings> emailLocalizations { get; private set; }
 	public Boolean isSmsEnabled { get; private set; }
+	public Boolean allowSequentialSignNow { get; private set; }
 	public String chatterSetting { get; private set; }
 	public Boolean isChatterEnabled {
 		get {
@@ -61,6 +62,7 @@ public with sharing class EnvelopeSettings {
 		final Boolean allowEditEmailMessage,
 		final List<Recipient.EmailSettings> emailLocalizations,
 		final Boolean isSmsEnabled,
+		final Boolean allowSequentialSignNow,
 		final String chatterSetting,
 		final ChatterEvents chatterPostEvents,
 		final Localization.ChatterText chatterLocalization,
@@ -75,6 +77,7 @@ public with sharing class EnvelopeSettings {
 		this.allowEditEmailMessage = allowEditEmailMessage;
 		this.emailLocalizations = emailLocalizations;
 		this.isSmsEnabled = isSmsEnabled;
+		this.allowSequentialSignNow = allowSequentialSignNow;
 		this.chatterSetting = chatterSetting;
 		this.chatterPostEvents = chatterPostEvents;
 		this.chatterLocalization = chatterLocalization;
@@ -125,6 +128,7 @@ public with sharing class EnvelopeSettings {
 			isEnabled(this.allowEditEmailMessage, overrides.showEmailMessage),
 			this.emailLocalizations,
 			this.isSmsEnabled,
+			this.allowSequentialSignNow,
 			getChatterSetting(
 				isEnabled(this.isChatterEnabled, overrides.showChatter),
 				this.chatterSetting == CHATTER_ENABLED_DEFAULT_ON,
@@ -150,6 +154,7 @@ public with sharing class EnvelopeSettings {
 					settings == null || settings.HideEmailMessage__c == false,
 					Localization.getEmailSettings(),
 					settings == null ? false : settings.IsSmsEnabled__c,
+					settings == null ? false : settings.AllowSequentialSignNow__c,
 					Salesforce.isChatterEnabled ? settings.Chatter__c : CHATTER_DISABLED,
 					ChatterEvents.getInstance(),
 					Localization.getChatterText(),
@@ -157,8 +162,8 @@ public with sharing class EnvelopeSettings {
 					errorMessage);
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to get settings');
-				self = new EnvelopeSettings(true, true, false, true, true, true, null, false, null, null, null, null,
-					ex.getMessage());
+				self = new EnvelopeSettings(true, true, false, true, true, true, null, false, false, null, null, null,
+					null, ex.getMessage());
 			}
 		}
 		return self;
@@ -190,6 +195,7 @@ public with sharing class EnvelopeSettings {
 		s.HideEmailSubject__c = settings.allowEditEmailSubject == false;
 		s.HideEmailMessage__c = settings.allowEditEmailMessage == false;
 		s.IsSmsEnabled__c = settings.isSmsEnabled == true;
+		s.AllowSequentialSignNow__c = settings.allowSequentialSignNow == true;
 		s.Chatter__c = getCanonicalChatterSetting(settings.chatterSetting);
 		upsert s;
 

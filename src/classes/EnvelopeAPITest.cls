@@ -1,6 +1,23 @@
 @IsTest
 private class EnvelopeAPITest {
 
+	static testMethod void test_bad_resolver() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.DocumentResolvers__c = 'bad_resolver';
+			upsert s;
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance();
+				throw new AssertException('Expected getInstance to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.InvalidDocumentResolver_1, new List<String> { 'bad_resolver' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	static testMethod void test_getError() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
@@ -658,15 +675,68 @@ private class EnvelopeAPITest {
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
 						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
-							new List<String> { '5555555555' }), 'note1').withSequence(1),
+							new List<String> { '5555555555' }), 'note1', true).withSequence(1),
 					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2), 'Recipient Two',
-						'r2@unit.test', null, 'note2').withSequence(2)
+						'r2@unit.test', null, 'note2', false).withSequence(2)
 				},
 				new List<CustomField> {
 					new CustomField('cf1', '1', true, true),
 					new CustomField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 				},
 				new Envelope.Notifications(false, 0, 0, false, 0, 0, false),
+				'subject',
+				'body',
+				new Entity(o.Id),
+				null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			Test.stopTest();
+
+			System.assertEquals(TestUtils.id1, result);
+		}
+	}
+
+	static testMethod void test_createEnvelope_success_with_Recipient_EmailSettings() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+			TestUtils.createEnvelopeLocalization(Localization.DE);
+
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e2 = new Envelope(
+				e1.Id,
+				e1.Name,
+				null,
+				null,
+				new List<Document> {
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, UUID.randomUUID().toString()),
+					Document.fromContentVersion(TestUtils.createContentVersion()).withSequence(2)
+				},
+				new List<Recipient> {
+					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
+						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
+							new List<String> { '5555555555' }), 'note1', true).withSequence(1).withEmailSettings(new Recipient.EmailSettings(
+						Localization.KO,
+						Localization.getLabel(Localization.KO),
+						'ko subject',
+						'ko message')),
+					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2), 'Recipient Two',
+						'r2@unit.test', null, 'note2', false).withSequence(2).withEmailSettings(new Recipient.EmailSettings(
+						Localization.NL,
+						Localization.getLabel(Localization.NL),
+						'nl subject',
+						'nl message'))
+				},
+				new List<CustomField> {
+					new CustomField('cf1', '1', true, true),
+					new CustomField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+				},
+				null,
 				'subject',
 				'body',
 				new Entity(o.Id),
@@ -700,9 +770,9 @@ private class EnvelopeAPITest {
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
 						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
-							new List<String> { '5555555555' }), 'note1'),
+							new List<String> { '5555555555' }), 'note1', true),
 					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2),
-						'Recipient Two', 'r2@unit.test', null, 'note2')
+						'Recipient Two', 'r2@unit.test', null, 'note2', false)
 				},
 				true,
 				content);
@@ -724,15 +794,15 @@ private class EnvelopeAPITest {
 				new List<Document>(),
 				new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_AGENT, new Recipient.Role('Signer 1', 1),
-						'Recipient One', 'r1@unit.test', null, null),
+						'Recipient One', 'r1@unit.test', null, null, false),
 					Recipient.newRecipient(2, Recipient.TYPE_CARBON_COPY, new Recipient.Role('Signer 2', 2),
-						'Recipient Two', 'r2@unit.test', null, null),
+						'Recipient Two', 'r2@unit.test', null, null, false),
 					Recipient.newRecipient(3, Recipient.TYPE_CERTIFIED_DELIVERY, new Recipient.Role('Signer 3', 3),
-						'Recipient Three', 'r3@unit.test', null, null),
+						'Recipient Three', 'r3@unit.test', null, null, false),
 					Recipient.newRecipient(4, Recipient.TYPE_EDITOR, new Recipient.Role('Signer 4', 4),
-						'Recipient Four', 'r4@unit.test', null, null),
+						'Recipient Four', 'r4@unit.test', null, null, false),
 					Recipient.newRecipient(5, Recipient.TYPE_INTERMEDIARY, new Recipient.Role('Signer 5', 5),
-						'Recipient Five', 'r5@unit.test', null, null)
+						'Recipient Five', 'r5@unit.test', null, null, false)
 				},
 				new List<CustomField>(),
 				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
@@ -1096,7 +1166,7 @@ private class EnvelopeAPITest {
 
 	static testMethod void test_getRecipientCustomFields() {
 		TestUtils.createAccountConfiguration();
-		Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null);
+		Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null, false);
 		Entity e = Entity.resolve(UserInfo.getUserId());
 
 		Test.startTest();

@@ -516,6 +516,20 @@ private class AccountServiceTest {
 		}
 	}
 
+	static testMethod void test_stringToSearchBehavior() {
+		Test.startTest();
+		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(null));
+		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(''));
+		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior('\t'));
+		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(' discretematchbeginning'));
+		System.assertEquals(SearchBehavior.DiscreteMatchAny, AccountService.stringToSearchBehavior('DISCRETEMATCHANY\n'));
+		System.assertEquals(SearchBehavior.DiscreteMatchExact, AccountService.stringToSearchBehavior('DiscreteMatchExact'));
+		System.assertEquals(SearchBehavior.CompoundMatchExact, AccountService.stringToSearchBehavior('CompoundMatchExact'));
+		System.assertEquals(SearchBehavior.CompoundMatchBeginning, AccountService.stringToSearchBehavior('CompoundMatchBeginning'));
+		System.assertEquals(SearchBehavior.CompoundMatchAny, AccountService.stringToSearchBehavior('CompoundMatchAny'));
+		Test.stopTest();
+	}
+
 	static testMethod void test_getSettings_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
@@ -545,6 +559,7 @@ private class AccountServiceTest {
 			System.assertNotEquals(null, result.entityResolvers);
 			System.assertNotEquals(null, result.documentResolvers);
 			System.assertNotEquals(null, result.recipientResolvers);
+			System.assertNotEquals(null, result.recipientSearchBehavior);
 		}
 	}
 
@@ -572,7 +587,8 @@ private class AccountServiceTest {
 				12345,
 				new List<String> { 'er1', 'er2' },
 				new List<String> { 'dr1', 'dr2' },
-				new List<String> { 'rr1', 'rr2' });
+				new List<String> { 'rr1', 'rr2' },
+				SearchBehavior.CompoundMatchBeginning);
 
 			Test.startTest();
 			AccountService.Settings result = AccountService.saveSettings(s);
@@ -586,6 +602,7 @@ private class AccountServiceTest {
 			System.assertEquals(new List<String> { 'er1', 'er2' }, result.entityResolvers);
 			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
 			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
+			System.assertEquals(SearchBehavior.CompoundMatchBeginning, result.recipientSearchBehavior);
 		}
 	}
 }

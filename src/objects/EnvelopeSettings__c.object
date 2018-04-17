@@ -178,6 +178,15 @@
 		<type>Checkbox</type>
 		<unique>false</unique>
 	</fields>
+	<fields>
+		<fullName>AllowSequentialSignNow__c</fullName>
+		<defaultValue>false</defaultValue>
+		<externalId>false</externalId>
+		<label>Allow sequential sign now</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
 	<label>Envelope Settings</label>
 	<visibility>Protected</visibility>
 </CustomObject>
