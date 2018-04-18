@@ -187,9 +187,11 @@ public class TestUtils {
 		Recipient__c r = new Recipient__c(
 			Envelope__c = envelopeId,
 			Type__c = Recipient.TYPE_SIGNER,
+			Sequence__c = sequence,
+			RoutingOrder__c = sequence,
+			Role__c = 'rr' + sequence,
 			Name = UUID.randomUUID().toString(),
-			Email__c = UUID.randomUUID().toString() + '@unit.test',
-			Sequence__c = sequence);
+			Email__c = UUID.randomUUID().toString() + '@unit.test');
 		insert r;
 		return r;
 	}

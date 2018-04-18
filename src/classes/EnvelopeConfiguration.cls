@@ -18,6 +18,9 @@ public with sharing class EnvelopeConfiguration {
 		KEY_SIGNING_GROUP, KEY_EMAIL, KEY_FIRST_NAME, KEY_LAST_NAME, KEY_ROLE, KEY_LOAD_DEFAULT_CONTACTS,
 		KEY_SIGN_IN_PERSON, KEY_ROUTING_ORDER, KEY_ACCESS_CODE, KEY_NOTE, KEY_SIGN_NOW, KEY_SMS
 	};
+	private static final Set<String> SIGN_NOW_TYPES = new Set<String> {
+		Recipient.TYPE_SIGNER.toLowerCase(), Recipient.TYPE_IN_PERSON_SIGNER.toLowerCase()
+	};
 
 	public enum ClickAction {
 		Prepare, Tag, Send
@@ -165,11 +168,21 @@ public with sharing class EnvelopeConfiguration {
 		}
 	}
 
-	public class RecipientTypeRole {
-		public String role { get; private set; }
+	public class RecipientType {
 		public String type { get; private set; }
+		public Boolean signNow { get; private set; }
 
-		public RecipientTypeRole(final String role, final String type) {
+		public RecipientType(final String type, final Boolean signNow) {
+			this.type = String.isBlank(type) ? Recipient.TYPE_SIGNER : type.trim();
+			this.signNow = signNow == true && SIGN_NOW_TYPES.contains(this.type.toLowerCase());
+		}
+	}
+
+	public class RecipientRoleType {
+		public String role { get; private set; }
+		public RecipientType type { get; private set; }
+
+		public RecipientRoleType(final String role, final RecipientType type) {
 			this.role = role;
 			this.type = type;
 		}
@@ -182,9 +195,9 @@ public with sharing class EnvelopeConfiguration {
 		public Integer recipientLimit { get; private set; } // RSL
 		public Boolean sequentialRoutingOrder { get; private set; } // RROS
 		public Integer startingRoutingOrder { get; private set; } // RSRO
-		public List<RecipientTypeRole> recipientTypeRoles { get; private set; } // RT
+		public List<RecipientRoleType> recipientRoleTypes { get; private set; } // RT
 		public Map<String, String> roleToTemplateRoles { get; private set; } // CCRM
-		public Map<String, String> roleToRecipientTypes { get; private set; } // CCTM
+		public Map<String, RecipientType> roleToRecipientTypes { get; private set; } // CCTM
 		public Map<String, String> roleToNotes { get; private set; } // CCNM
 		public Boolean hasRelatedContacts {
 			get {
@@ -199,15 +212,15 @@ public with sharing class EnvelopeConfiguration {
 
 		public RecipientSettings(final List<RelatedContacts> relatedContacts, final Recipients recipients,
 			final Integer recipientLimit, final Boolean sequentialRoutingOrder, final Integer startingRoutingOrder,
-			final List<RecipientTypeRole> recipientTypeRoles, final Map<String, String> roleToTemplateRoles,
-			final Map<String, String> roleToRecipientTypes, final Map<String, String> roleToNotes) {
+			final List<RecipientRoleType> recipientRoleTypes, final Map<String, String> roleToTemplateRoles,
+			final Map<String, RecipientType> roleToRecipientTypes, final Map<String, String> roleToNotes) {
 
 			this.relatedContacts = relatedContacts;
 			this.recipients = recipients;
 			this.recipientLimit = recipientLimit;
 			this.sequentialRoutingOrder = sequentialRoutingOrder;
 			this.startingRoutingOrder = startingRoutingOrder >= 1 ? startingRoutingOrder : 1;
-			this.recipientTypeRoles = recipientTypeRoles;
+			this.recipientRoleTypes = recipientRoleTypes;
 			this.roleToTemplateRoles = roleToTemplateRoles;
 			this.roleToRecipientTypes = roleToRecipientTypes;
 			this.roleToNotes = roleToNotes;

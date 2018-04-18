@@ -29,26 +29,6 @@ public class Recipient implements Comparable {
 	public String hostEmail { get; private set; }
 	public Boolean signNow { get; private set; }
 	public Entity source { get; private set; }
-	public Boolean isContact {
-		get {
-			return source != null && source.type == SOURCE_CONTACT;
-		}
-	}
-	public Boolean isLead {
-		get {
-			return source != null && source.type == SOURCE_LEAD;
-		}
-	}
-	public Boolean isUser {
-		get {
-			return source != null && source.type == SOURCE_USER;
-		}
-	}
-	public Boolean isCustom {
-		get {
-			return source != null && source.type == SOURCE_CUSTOM;
-		}
-	}
 	public Boolean isSigningGroup {
 		get {
 			return this.signingGroup != null;
@@ -280,6 +260,12 @@ public class Recipient implements Comparable {
 		return -1;
 	}
 
+	public Recipient withType(final String type, final Boolean signNow) {
+		this.type = type;
+		this.signNow = signNow;
+		return this;
+	}
+
 	public Recipient withSequence(final Integer sequence) {
 		this.sequence = sequence;
 		return this;
@@ -295,8 +281,23 @@ public class Recipient implements Comparable {
 		return this;
 	}
 
-	public Recipient withEmailSettings(final Recipient.EmailSettings emailSettings) {
+	public Recipient withEmailSettings(final EmailSettings emailSettings) {
 		this.emailSettings = emailSettings;
+		return this;
+	}
+
+	public Recipient withRole(final Role role) {
+		this.role = role;
+		return this;
+	}
+
+	public Recipient withNote(final String note) {
+		this.note = note;
+		return this;
+	}
+
+	public Recipient withAuthentication(final Authentication authentication) {
+		this.authentication = authentication;
 		return this;
 	}
 }

@@ -132,6 +132,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 				Role
 			FROM OpportunityContactRole
 			WHERE OpportunityId IN :opportunityIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				c.Contact.Name,

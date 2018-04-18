@@ -342,6 +342,45 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
+	// DFS-4571
+	static testMethod void test_search_with_apostrophe() {
+		System.runAs(TestUtils.createAdministrator()) {
+			Contact c = new Contact(FirstName = 'Amy', LastName = 'O\'Hare');
+			insert c;
+
+			Lead l = new Lead(FirstName = 'Amy', LastName = 'O\'Hare', Company = 'test');
+			insert l;
+
+			User u = new User(FirstName = 'Amy', LastName = 'O\'Hare', Username = UUID.randomUUID().toString() + '@unit.test',
+				Alias = 'test', TimeZoneSidKey = 'America/Los_Angeles', LocaleSidKey = 'en_US', EmailEncodingKey = 'ISO-8859-1',
+				ProfileId = UserInfo.getProfileId(), LanguageLocaleKey = 'en_US', Email = UUID.randomUUID().toString() + '@unit.test');
+			insert u;
+
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			List<Recipient> contacts = rr.searchRecipients('Contact', 'Amy O\'H', null, SearchBehavior.CompoundMatchBeginning);
+			List<Recipient> leads = rr.searchRecipients('Lead', 'Amy O\'H', null, SearchBehavior.CompoundMatchBeginning);
+			List<Recipient> users = rr.searchRecipients('User', 'Amy O\'H', null, SearchBehavior.CompoundMatchBeginning);
+			Test.stopTest();
+
+			System.assertNotEquals(null, contacts);
+			System.assertEquals(1, contacts.size());
+			System.assertNotEquals(null, contacts[0].source);
+			System.assertEquals(c.Id, contacts[0].source.id);
+
+			System.assertNotEquals(null, leads);
+			System.assertEquals(1, leads.size());
+			System.assertNotEquals(null, leads[0].source);
+			System.assertEquals(l.Id, leads[0].source.id);
+
+			System.assertNotEquals(null, users);
+			System.assertEquals(1, users.size());
+			System.assertNotEquals(null, users[0].source);
+			System.assertEquals(u.Id, users[0].source.id);
+		}
+	}
+
 	static testMethod void test_searchRecipients_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
