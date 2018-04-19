@@ -9,8 +9,8 @@
 		<value>DocuSign Envelope Statuses</value>
 	</caseValues>
 	<fields>
-		<label>DocuSign ID</label>
-		<name>DocuSignId__c</name>
+		<label>DocuSign envelope ID</label>
+		<name>DocuSignEnvelopeId__c</name>
 	</fields>
 	<fields>
 		<label>Status</label>

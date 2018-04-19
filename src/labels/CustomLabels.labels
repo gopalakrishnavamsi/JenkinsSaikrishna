@@ -113,13 +113,28 @@
 		<value>Invalid UUID.</value>
 	</labels>
 	<labels>
+		<fullName>InvalidEnvelope</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid envelope</shortDescription>
+		<value>The envelope is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSource</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid source</shortDescription>
+		<value>The source is invalid.</value>
+	</labels>
+	<labels>
 		<fullName>MustBeActivated</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
-		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that
-			you have responded to all activation emails.
+		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that you have responded to all activation emails.
 		</value>
 	</labels>
 	<labels>
@@ -805,7 +820,7 @@
 		<categories>Errors,Account</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Signing Groups Prohibited</shortDescription>
+		<shortDescription>Signing Groups prohibited</shortDescription>
 		<value>Signing Groups are not enabled for your account.</value>
 	</labels>
 	<labels>
@@ -1056,11 +1071,91 @@
 		<value>At least one document is required.</value>
 	</labels>
 	<labels>
+		<fullName>AtLeastOneRecipientIsRequired</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>At least one recipient is required</shortDescription>
+		<value>At least one recipient is required.</value>
+	</labels>
+	<labels>
 		<fullName>InvalidFileType</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid file type</shortDescription>
 		<value>File type is unsupported.</value>
+	</labels>
+	<labels>
+		<fullName>RequiredCustomFieldsMissing</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>At least one required custom field value is missing</shortDescription>
+		<value>At least one required custom field value is missing</value>
+	</labels>
+	<labels>
+		<fullName>EmailSubjectRequired</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Email subject is required</shortDescription>
+		<value>An email subject is required and must be less than 100 characters in length.</value>
+	</labels>
+	<labels>
+		<fullName>EmailMessageTooLarge</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Email message too large</shortDescription>
+		<value>Email message is limited to 2000 characters.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidNotificationSettings</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid notification settings</shortDescription>
+		<value>Invalid reminders and expiration settings. Values must be non-negative if defined.</value>
+	</labels>
+	<labels>
+		<fullName>PlaceholderRecipientMustHaveRole</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Placeholder role required</shortDescription>
+		<value>Placeholder recipient must have a role.</value>
+	</labels>
+	<labels>
+		<fullName>RequiredEmptyList</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Empty List</shortDescription>
+		<value>Custom field(s) are not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRelatedContact</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid related contact</shortDescription>
+		<value>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column mappings.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedSigningGroup</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Signing Group</shortDescription>
+		<value>Undefined Signing Group.</value>
+	</labels>
+	<labels>
+		<fullName>SigningGroupNotFound</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group not found</shortDescription>
+		<value>Signing Group does not exist.</value>
 	</labels>
 </CustomLabels>

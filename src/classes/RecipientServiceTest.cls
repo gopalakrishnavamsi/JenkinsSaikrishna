@@ -111,12 +111,13 @@ private class RecipientServiceTest {
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'r2', new Entity(UserInfo.getOrganizationId()));
 
 			Test.startTest();
-			Recipient__c result1 = RecipientService.convert(r1, e.Id);
-			Recipient__c result2 = RecipientService.convert(r2, e.Id);
+			Recipient__c result1 = RecipientService.DB.convert(r1, e.Id, 1);
+			Recipient__c result2 = RecipientService.DB.convert(r2, e.Id, 2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
 			System.assertEquals(e.Id, result1.Envelope__c);
+			System.assertEquals(1, result1.Sequence__c);
 			System.assertEquals(r1.name, result1.Name);
 			System.assertEquals(r1.email, result1.Email__c);
 			System.assertEquals(r1.authentication.accessCode, result1.AccessCode__c);
@@ -129,6 +130,7 @@ private class RecipientServiceTest {
 
 			System.assertNotEquals(null, result2);
 			System.assertEquals(e.Id, result2.Envelope__c);
+			System.assertEquals(2, result2.Sequence__c);
 			System.assertEquals(r2.name, result2.Name);
 			System.assertEquals(r2.email, result2.Email__c);
 			System.assertEquals(null, result2.AccessCode__c);
@@ -324,7 +326,24 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_queryRoles() {
+	static testMethod void test_Database_queryMaxSequence() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope__c e2 = TestUtils.createEnvelope();
+			Recipient__c d1 = TestUtils.createEnvelopeRecipient(e1.Id, 1);
+			Recipient__c d2 = TestUtils.createEnvelopeRecipient(e1.Id, 2);
+
+			Test.startTest();
+			Integer result1 = RecipientService.DB.queryMaxSequence(e1.Id);
+			Integer result2 = RecipientService.DB.queryMaxSequence(e2.Id);
+			Test.stopTest();
+
+			System.assertEquals(2, result1);
+			SYstem.assertEquals(0, result2);
+		}
+	}
+
+	static testMethod void test_Database_queryRoles() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
@@ -341,7 +360,7 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_queryRecipients_by_sequence() {
+	static testMethod void test_Database_queryRecipients_by_sequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
@@ -367,7 +386,7 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_queryRecipients_by_routing_order() {
+	static testMethod void test_Database_queryRecipients_by_routing_order() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 3);
@@ -393,7 +412,7 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_updateRecipientSequence_by_sequence() {
+	static testMethod void test_Database_updateRecipientSequence_by_sequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 2);
@@ -421,7 +440,7 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_updateRecipientSequence_by_routing_order() {
+	static testMethod void test_Database_updateRecipientSequence_by_routing_order() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 12);
@@ -456,15 +475,15 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_db_upsertRecipients() {
+	static testMethod void test_Database_insertRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'r1', null);
-			Recipient r2 = RecipientService.convert(TestUtils.createEnvelopeRecipient(e.Id));
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, 'r2', null);
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', null, 'r3', null);
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.DB.upsertRecipients(e.Id, new List<Recipient> { r1, r2, r3 });
+			List<Recipient> result = RecipientService.DB.insertRecipients(e.Id, new List<Recipient> { r1, r2, r3 });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -712,9 +731,9 @@ private class RecipientServiceTest {
 				new RoleSettings__c(Name = 'dr3', Value__c = 3)
 			};
 			Envelope__c e = TestUtils.createEnvelope();
-			Recipient r1 = RecipientService.convert(TestUtils.createEnvelopeRecipient(e.Id));
-			Recipient r2 = RecipientService.convert(TestUtils.createEnvelopeRecipient(e.Id));
-			Recipient r3 = RecipientService.convert(TestUtils.createEnvelopeRecipient(e.Id));
+			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
+			Recipient r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
+			Recipient r3 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
 			Map<String, String> roleMap = new Map<String, String> {
 				'rr1' => 'tr1',
 				'rr2' => 'dr2',
@@ -849,7 +868,7 @@ private class RecipientServiceTest {
 	static testMethod void test_mergeCustomSettings() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
-			Recipient r1 = RecipientService.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
+			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'rr2', null);
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5555553333', 'rr3', null);
 			Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '5555554444', 'rr4', null);

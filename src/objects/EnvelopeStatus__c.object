@@ -14,9 +14,9 @@
 	<enableSharing>true</enableSharing>
 	<enableStreamingApi>true</enableStreamingApi>
 	<fields>
-		<fullName>DocuSignId__c</fullName>
+		<fullName>DocuSignEnvelopeId__c</fullName>
 		<externalId>false</externalId>
-		<label>DocuSign ID</label>
+		<label>DocuSign envelope ID</label>
 		<length>40</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>

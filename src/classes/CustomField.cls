@@ -41,6 +41,10 @@ public class CustomField {
 		this.show = show;
 	}
 
+	public CustomField copy() {
+		return new CustomField(this.type, this.name, this.value, this.items.clone(), this.required, this.show);
+	}
+
 	public CustomField withValue(final String value) {
 		return new CustomField(this.type, this.name, value, this.items, this.required, this.show);
 	}

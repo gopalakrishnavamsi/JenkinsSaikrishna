@@ -98,6 +98,10 @@ public class Document {
 		}
 	}
 
+	public Document copy() {
+		return new Document(null, this.type, this.sequence, this.name, this.extension, this.size, this.sourceId);
+	}
+
 	public Document withSequence(final Integer sequence) {
 		this.sequence = sequence;
 		return this;

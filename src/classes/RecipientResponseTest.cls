@@ -3,8 +3,8 @@ private class RecipientResponseTest {
 
 	static testMethod void test_success() {
 		Envelope__c dse = TestUtils.createEnvelope();
-		Recipient r1 = RecipientService.convert(TestUtils.createEnvelopeRecipient(dse.Id));
-		Recipient r2 = RecipientService.convert(TestUtils.createEnvelopeRecipient(dse.Id));
+		Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(dse.Id));
+		Recipient r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(dse.Id));
 		Set<Id> removedIds = new Set<Id> { r1.id, r2.id };
 
 		Test.startTest();

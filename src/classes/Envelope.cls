@@ -11,10 +11,10 @@ public class Envelope {
 	public String emailSubject { get; private set; }
 	public String emailMessage { get; private set; }
 	public Entity source { get; private set; }
-	public DateTime sent { get; private set; }
+	public Datetime sent { get; private set; }
 	public Boolean isSent {
 		get {
-			return this.sent != null && this.sent <= DateTime.now();
+			return this.sent != null && this.sent <= Datetime.now();
 		}
 	}
 	public Boolean hasDocuments {
@@ -52,7 +52,7 @@ public class Envelope {
 		final String emailSubject,
 		final String emailMessage,
 		final Entity source,
-		final DateTime sent) {
+		final Datetime sent) {
 
 		this.id = id;
 		this.name = name;
@@ -90,6 +90,11 @@ public class Envelope {
 			this.expireWarnDays = expireWarnDays;
 			this.updateChatter = updateChatter;
 		}
+
+		public Notifications copy() {
+			return new Notifications(this.remind, this.remindAfterDays, this.remindFrequencyDays, this.expires,
+				this.expireAfterDays, this.expireWarnDays, this.updateChatter);
+		}
 	}
 
 	public class Options {
@@ -112,28 +117,88 @@ public class Envelope {
 		}
 	}
 
-	public static Envelope convert(final Envelope__c e) {
-		if (e == null) return null;
+	public Envelope copy() {
+		List<Document> copiedDocuments = null;
+		if (this.documents != null) {
+			copiedDocuments = new List<Document>();
+			for (Document d : this.documents) {
+				copiedDocuments.add(d.copy());
+			}
+		}
+		List<Recipient> copiedRecipients = null;
+		if (this.recipients != null) {
+			copiedRecipients = new List<Recipient>();
+			for (Recipient r : this.recipients) {
+				copiedRecipients.add(r.copy());
+			}
+		}
+		List<CustomField> copiedCustomFields = null;
+		if (this.customFields == null) {
+			copiedCustomFields = new List<CustomField>();
+			for (CustomField cf : this.customFields) {
+				copiedCustomFields.add(cf.copy());
+			}
+		}
 
-		return new Envelope(
-			e.Id,
-			e.Name,
-			UUID.tryParse(e.DocuSignId__c),
-			e.EnvelopeConfiguration__c,
-			null,
-			null,
-			null,
-			new Notifications(
-				e.Remind__c,
-				Integer.valueOf(e.RemindAfterDays__c),
-				Integer.valueOf(e.RemindFrequencyDays__c),
-				e.Expires__c,
-				Integer.valueOf(e.ExpireAfterDays__c),
-				Integer.valueOf(e.ExpireWarnDays__c),
-				e.UpdateChatter__c),
-			e.EmailSubject__c,
-			e.EmailMessage__c,
-			e.SourceId__c == null ? null : new Entity(e.SourceId__c),
-			e.Sent__c);
+		return new Envelope(null, this.name, null, this.envelopeConfigurationId, copiedDocuments, copiedRecipients,
+			copiedCustomFields, this.notifications.copy(), this.emailSubject, this.emailMessage, this.source.copy(),
+			null);
+	}
+
+	public Envelope withDocuSignId(final UUID docuSignId) {
+		this.docuSignId = docuSignId;
+		return this;
+	}
+
+	public Envelope withEnvelopeConfigurationId(final Id envelopeConfigurationId) {
+		this.envelopeConfigurationId = envelopeConfigurationId;
+		return this;
+	}
+
+	public Envelope addDocuments(final List<Document> documents) {
+		if (this.documents == null) {
+			this.documents = new List<Document>();
+		}
+		if (Collection.isNotEmpty(documents)) this.documents.addAll(documents);
+		return this;
+	}
+
+	public Envelope withDocuments(final List<Document> documents) {
+		this.documents = documents;
+		return this;
+	}
+
+	public Envelope addRecipients(final List<Recipient> recipients) {
+		if (this.recipients == null) {
+			this.recipients = new List<Recipient>();
+		}
+		if (Collection.isNotEmpty(recipients)) this.recipients.addAll(recipients);
+		return this;
+	}
+
+	public Envelope withRecipients(final List<Recipient> recipients) {
+		this.recipients = recipients;
+		return this;
+	}
+
+	public Envelope withCustomFields(final List<CustomField> customFields) {
+		this.customFields = customFields;
+		return this;
+	}
+
+	public Envelope withNotifications(final Notifications notifications) {
+		this.notifications = notifications;
+		return this;
+	}
+
+	public Envelope withEmail(final String emailSubject, final String emailMessage) {
+		this.emailSubject = emailSubject;
+		this.emailMessage = emailMessage;
+		return this;
+	}
+
+	public Envelope withSent(final Datetime sent) {
+		this.sent = sent;
+		return this;
 	}
 }

@@ -757,7 +757,7 @@ private class EnvelopeAPITest {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
-			Document doc = DocumentService.convert(TestUtils.createEnvelopeDocument(e1.Id));
+			Document doc = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e1.Id));
 
 			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
 
@@ -852,7 +852,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -897,7 +897,7 @@ private class EnvelopeAPITest {
 				Type__c = Document.TYPE_FILE);
 			insert d;
 			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
-				new List<Document> { DocumentService.convert(d) },
+				new List<Document> { DocumentService.DB.convert(d) },
 				new List<Recipient>(),
 				new List<CustomField>(),
 				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
@@ -932,7 +932,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -963,7 +963,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -994,7 +994,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1025,7 +1025,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1056,7 +1056,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1087,7 +1087,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1118,7 +1118,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1149,7 +1149,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
-			Envelope e = Envelope.convert(TestUtils.createEnvelope());
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();

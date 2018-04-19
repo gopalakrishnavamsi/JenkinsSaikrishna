@@ -14,8 +14,12 @@
 		<relationshipLabel>DocuSign Recipient Status</relationshipLabel>
 	</fields>
 	<fields>
-		<label>DocuSign ID</label>
-		<name>DocuSignId__c</name>
+		<label>DocuSign Recipient ID</label>
+		<name>DocuSignRecipientId__c</name>
+	</fields>
+	<fields>
+		<label>DocuSign Envelope ID</label>
+		<name>DocuSignEnvelopeId__c</name>
 	</fields>
 	<fields>
 		<label>Routing Order</label>

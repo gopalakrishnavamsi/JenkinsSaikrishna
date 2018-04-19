@@ -65,7 +65,7 @@
 		<label>DocuSign Envelope</label>
 		<referenceTo>Envelope__c</referenceTo>
 		<relationshipLabel>DocuSign Envelope Documents</relationshipLabel>
-		<relationshipName>Document</relationshipName>
+		<relationshipName>Documents</relationshipName>
 		<reparentableMasterDetail>false</reparentableMasterDetail>
 		<trackTrending>false</trackTrending>
 		<type>MasterDetail</type>

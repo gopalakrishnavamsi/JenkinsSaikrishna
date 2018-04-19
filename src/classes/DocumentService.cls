@@ -42,44 +42,14 @@ public with sharing class DocumentService {
 		return extension;
 	}
 
-	@TestVisible
 	public static List<Document> convert(final List<Document__c> docs) {
 		List<Document> result = new List<Document>();
 		if (docs != null) {
 			for (Document__c d : docs) {
-				result.add(convert(d));
+				result.add(DB.convert(d));
 			}
 		}
 		return result;
-	}
-
-	@TestVisible
-	public static Document convert(final Document__c doc) {
-		if (doc == null) return null;
-
-		return new Document(
-			doc.Id,
-			doc.Type__c,
-			Integer.valueOf(doc.Sequence__c),
-			doc.Name,
-			String.isNotBlank(doc.Extension__c) ? doc.Extension__c : getFileExtension(doc.Name),
-			Integer.valueOf(doc.Size__c),
-			doc.SourceId__c);
-	}
-
-	@TestVisible
-	private static Document__c convert(final Document doc, final Id envelopeId, final Integer sequence) {
-		if (doc == null) return null;
-
-		return new Document__c(
-			Id = doc.id,
-			Envelope__c = envelopeId,
-			Type__c = doc.type,
-			Sequence__c = sequence,
-			Name = doc.name,
-			Extension__c = doc.extension,
-			Size__c = doc.size,
-			SourceId__c = doc.sourceId);
 	}
 
 	public static ValidationResult validate(final List<Document> documents) {
@@ -109,6 +79,35 @@ public with sharing class DocumentService {
 	private class Database {
 
 		@TestVisible
+		private Document convert(final Document__c doc) {
+			if (doc == null) return null;
+
+			return new Document(
+				doc.Id,
+				doc.Type__c,
+				Integer.valueOf(doc.Sequence__c),
+				doc.Name,
+				String.isNotBlank(doc.Extension__c) ? doc.Extension__c : getFileExtension(doc.Name),
+				Integer.valueOf(doc.Size__c),
+				doc.SourceId__c);
+		}
+
+		@TestVisible
+		private Document__c convert(final Document doc, final Id envelopeId, final Integer sequence) {
+			if (doc == null) return null;
+
+			return new Document__c(
+				Id = doc.id,
+				Envelope__c = envelopeId,
+				Type__c = doc.type,
+				Sequence__c = sequence,
+				Name = doc.name,
+				Extension__c = doc.extension,
+				Size__c = doc.size,
+				SourceId__c = doc.sourceId);
+		}
+
+		@TestVisible
 		private Integer queryMaxSequence(final Id envelopeId) {
 			Integer sequence = 0;
 			List<AggregateResult> maxSequence = [
@@ -124,7 +123,11 @@ public with sharing class DocumentService {
 		}
 
 		@TestVisible
-		private List<Document__c> queryEnvelopeDocumentsInternal(final Id envelopeId) {
+		private List<Document__c> queryDocumentsInternal(final Id envelopeId) {
+			Permissions.verifyIsQueryable('Document__c', new List<String> {
+				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+			});
+
 			return [
 				SELECT Id,
 					Envelope__c,
@@ -140,33 +143,30 @@ public with sharing class DocumentService {
 			];
 		}
 
-		public List<Document> queryEnvelopeDocuments(final Id envelopeId) {
-			Permissions.verifyIsQueryable('Document__c', new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
-			});
-
-			return convert(queryEnvelopeDocumentsInternal(envelopeId));
+		public List<Document> queryDocuments(final Id envelopeId) {
+			return convert(queryDocumentsInternal(envelopeId));
 		}
 
-		public List<Document> insertEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
+		public List<Document> insertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable('Document__c', new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
 
-			List<Document> newDocuments = new List<Document>();
+			List<Document> result = new List<Document>();
 			if (documents != null) {
-				final List<Document__c> envDocs = new List<Document__c>();
+				List<Document__c> ds = new List<Document__c>();
 				Integer sequence = queryMaxSequence(envelopeId);
 				for (Document d : documents) {
-					envDocs.add(convert(d, envelopeId, ++sequence));
+					ds.add(convert(d, envelopeId, ++sequence));
 				}
-				insert envDocs;
-				newDocuments.addAll(convert(envDocs));
+				insert ds;
+
+				result.addAll(convert(ds));
 			}
-			return newDocuments;
+			return result;
 		}
 
-		public List<Document> upsertEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
+		public List<Document> upsertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable('Document__c', new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
@@ -187,7 +187,7 @@ public with sharing class DocumentService {
 			return updatedDocuments;
 		}
 
-		public Boolean deleteEnvelopeDocuments(final Set<Id> documentIds) {
+		public Boolean deleteDocuments(final Set<Id> documentIds) {
 			Permissions.verifyIsDeletable('Document__c');
 
 			Boolean result = false;
@@ -202,12 +202,12 @@ public with sharing class DocumentService {
 			return result;
 		}
 
-		public List<Document> updateEnvelopeDocumentSequence(final Id envelopeId) {
+		public List<Document> updateDocumentSequence(final Id envelopeId) {
 			Permissions.verifyIsUpdateable('Document__c', new List<String> { 'Sequence__c' });
 
 			Boolean reordered = false;
 			Decimal sequence = 1;
-			List<Document__c> documents = queryEnvelopeDocumentsInternal(envelopeId);
+			List<Document__c> documents = queryDocumentsInternal(envelopeId);
 			for (Document__c d : documents) {
 				if (d.Sequence__c != sequence) {
 					d.Sequence__c = sequence;
@@ -223,7 +223,7 @@ public with sharing class DocumentService {
 			return convert(documents);
 		}
 
-		public List<Document> updateEnvelopeDocumentSequence(final Id envelopeId, final Map<Id, Integer> newSequence) {
+		public List<Document> updateDocumentSequence(final Id envelopeId, final Map<Id, Integer> newSequence) {
 			Permissions.verifyIsUpdateable('Document__c', new List<String> { 'Sequence__c' });
 
 			if (newSequence != null && !newSequence.isEmpty()) {
@@ -235,7 +235,8 @@ public with sharing class DocumentService {
 				}
 				update docs;
 			}
-			return queryEnvelopeDocuments(envelopeId);
+
+			return queryDocuments(envelopeId);
 		}
 	}
 
@@ -303,7 +304,7 @@ public with sharing class DocumentService {
 
 		Permissions.verifyIsOwner(envelopeId);
 
-		return DB.queryEnvelopeDocuments(envelopeId);
+		return DB.queryDocuments(envelopeId);
 	}
 
 	public static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
@@ -312,7 +313,7 @@ public with sharing class DocumentService {
 
 		Permissions.verifyIsOwner(envelopeId);
 
-		return DB.insertEnvelopeDocuments(envelopeId, documents);
+		return DB.insertDocuments(envelopeId, documents);
 	}
 
 	public static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
@@ -321,8 +322,8 @@ public with sharing class DocumentService {
 
 		Permissions.verifyIsOwner(envelopeId);
 
-		DB.deleteEnvelopeDocuments(documentIds);
-		return DB.updateEnvelopeDocumentSequence(envelopeId);
+		DB.deleteDocuments(documentIds);
+		return DB.updateDocumentSequence(envelopeId);
 	}
 
 	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
@@ -331,7 +332,7 @@ public with sharing class DocumentService {
 
 		Permissions.verifyIsOwner(envelopeId);
 
-		return DB.updateEnvelopeDocumentSequence(envelopeId, newSequence);
+		return DB.updateDocumentSequence(envelopeId, newSequence);
 	}
 
 	public static List<Document> updateEnvelopeDocuments(
@@ -358,7 +359,28 @@ public with sharing class DocumentService {
 			}
 		}
 
-		DB.deleteEnvelopeDocuments(Collection.difference(originalIds, updatedIds));
-		return DB.upsertEnvelopeDocuments(envelopeId, updatedDocuments);
+		DB.deleteDocuments(Collection.difference(originalIds, updatedIds));
+		return DB.upsertDocuments(envelopeId, updatedDocuments);
+	}
+
+	public static List<Document> resolveFiles(final Set<Id> fileIds) {
+		return getDocuments('ContentVersion', fileIds);
+	}
+
+	public static List<Document> resolveTemplates(final Set<UUID> templateIds) {
+		List<Document> templates = new List<Document>();
+		if (templateIds != null) {
+			TemplateAPI client = TemplateAPI.getInstance();
+			for (UUID templateId : templateIds) {
+				templates.add(client.getTemplate(templateId).toDocument());
+			}
+		}
+		return templates;
+	}
+
+	public static List<Document> resolveLinkedFiles(final Set<Id> linkedEntityIds) {
+		if (Collection.isEmpty(linkedEntityIds)) throw new DocuSignException(Label.InvalidSource);
+
+		return getLinkedDocuments('ContentVersion', linkedEntityIds);
 	}
 }

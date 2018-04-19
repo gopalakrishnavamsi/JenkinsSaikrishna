@@ -115,9 +115,8 @@ public with sharing class EnvelopeConfiguration {
 		public Recipient toRecipient(final Map<String, Recipient.SigningGroup> signingGroups) {
 			Recipient result = null;
 			if (this.isSigningGroup) {
-				result = Recipient.newSigningGroup(
+				result = Recipient.fromSigningGroup(
 					this.routingOrder == null ? 1 : this.routingOrder,
-					String.isBlank(this.type) ? Recipient.TYPE_SIGNER : this.type,
 					String.isBlank(this.role) ? null : new Recipient.Role(this.role, null),
 					signingGroups.get(this.signingGroupName.toLowerCase()),
 					getAuthentication(),
@@ -149,6 +148,7 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class RelatedContacts {
+
 		public Map<String, String> fieldMap { get; private set; }
 		public String relationship { get; private set; }
 		public Boolean addSourceRecipients { get; private set; }
@@ -246,22 +246,16 @@ public with sharing class EnvelopeConfiguration {
 	public class DocumentSettings {
 		public Boolean addSourceDocuments { get; private set; } // LA/LF
 		public Set<UUID> templateIds { get; private set; } // DST
-		public Set<Id> relatedContentIds { get; private set; } // RC
-		public Set<Id> relatedQuoteIds { get; private set; } // RQD
-		public Set<Id> fileIds { get; private set; } // Direct Files
+		public Set<Id> fileIds { get; private set; } // RC
 		public Boolean hasTemplates {
 			get {
 				return this.templateIds != null && !this.templateIds.isEmpty();
 			}
 		}
 
-		public DocumentSettings(final Boolean addSourceDocuments, final Set<UUID> templateIds,
-			final Set<Id> relatedContentIds, final Set<Id> relatedQuoteIds, final Set<Id> fileIds) {
-
+		public DocumentSettings(final Boolean addSourceDocuments, final Set<UUID> templateIds, final Set<Id> fileIds) {
 			this.addSourceDocuments = addSourceDocuments;
 			this.templateIds = templateIds;
-			this.relatedContentIds = relatedContentIds;
-			this.relatedQuoteIds = relatedQuoteIds;
 			this.fileIds = fileIds;
 		}
 	}
@@ -271,7 +265,7 @@ public with sharing class EnvelopeConfiguration {
 	public Entity source { get; private set; }
 	public ClickAction action { get; private set; } // OCO
 	public VisibilitySettings visibility { get; private set; }
-	public Envelope.Options remindersAndExpiration { get; private set; } // RES
+	public Envelope.Notifications notifications { get; private set; } // RES
 	public Recipient.EmailSettings email { get; private set; } // CES, CEM, CEL
 	public DocumentSettings documents { get; private set; }
 	public RecipientSettings recipients { get; private set; }
@@ -297,14 +291,14 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public EnvelopeConfiguration(final Id id, final Entity source, final ClickAction action,
-		final VisibilitySettings visibility, final Envelope.Options remindersAndExpiration,
+		final VisibilitySettings visibility, final Envelope.Notifications notifications,
 		final Recipient.EmailSettings email, final DocumentSettings documents, final RecipientSettings recipients) {
 
 		this.id = id;
 		this.source = source;
 		this.action = action;
 		this.visibility = visibility;
-		this.remindersAndExpiration = remindersAndExpiration;
+		this.notifications = notifications;
 		this.email = email;
 		this.documents = documents;
 		this.recipients = recipients;

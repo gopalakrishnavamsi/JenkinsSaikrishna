@@ -10,8 +10,7 @@ public class Template {
 		this.customFields = customFields;
 	}
 
-	public Document toDocument(final Integer sequence) {
-		return new Document(null, Document.TYPE_TEMPLATE, sequence, this.name, null,
-			0, UUID.toString(this.id));
+	public Document toDocument() {
+		return new Document(null, Document.TYPE_TEMPLATE, null, this.name, null, 0, UUID.toString(this.id));
 	}
 }

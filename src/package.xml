@@ -106,6 +106,10 @@
         <members>RecipientService</members>
         <members>RecipientServiceTest</members>
         <members>SearchBehavior</members>
+        <members>EnvelopeService</members>
+        <members>EnvelopeServiceTest</members>
+        <members>AccountFeatures</members>
+        <members>AccountFeaturesTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -129,8 +133,10 @@
         <members>EnvelopeNotFound</members>
         <members>ForLabel</members>
         <members>InvalidEntity</members>
-        <members>InvalidUUID</members>
         <members>InvalidType</members>
+        <members>InvalidUUID</members>
+        <members>InvalidEnvelope</members>
+        <members>InvalidSource</members>
         <members>MustBeActivated</members>
         <members>MustBeAdministrator</members>
         <members>MustBeDocuSignAdministrator</members>
@@ -246,7 +252,17 @@
         <members>InvalidEmailSettings</members>
         <members>InvalidChatterText</members>
         <members>AtLeastOneDocumentIsRequired</members>
+        <members>AtLeastOneRecipientIsRequired</members>
         <members>InvalidFileType</members>
+        <members>RequiredCustomFieldsMissing</members>
+        <members>EmailSubjectRequired</members>
+        <members>EmailMessageTooLarge</members>
+        <members>InvalidNotificationSettings</members>
+        <members>PlaceholderRecipientMustHaveRole</members>
+        <members>RequiredEmptyList</members>
+        <members>InvalidRelatedContact</members>
+        <members>UndefinedSigningGroup</members>
+        <members>SigningGroupNotFound</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -347,7 +363,7 @@
         <members>Recipient__c.HostEmail__c</members>
         <members>Recipient__c.HostName__c</members>
         <members>Recipient__c.SourceId__c</members>
-		<members>Recipient__c.SignNow__c</members>
+        <members>Recipient__c.SignNow__c</members>
         <members>EnvelopeSettings__c.Chatter__c</members>
         <members>EnvelopeSettings__c.FetchDocuments__c</members>
         <members>EnvelopeSettings__c.AddFiles__c</members>
@@ -404,7 +420,7 @@
         <members>UserSettings__c.HideWriteReview__c</members>
         <members>UserSettings__c.Username__c</members>
         <members>UserSettings__c.Password__c</members>
-        <members>EnvelopeStatus__c.DocuSignId__c</members>
+        <members>EnvelopeStatus__c.DocuSignEnvelopeId__c</members>
         <members>EnvelopeStatus__c.Status__c</members>
         <members>EnvelopeStatus__c.SourceId__c</members>
         <members>EnvelopeStatus__c.Sent__c</members>
@@ -416,12 +432,12 @@
         <members>EnvelopeStatus__c.Reason__c</members>
         <members>EnvelopeStatus__c.TimeToComplete__c</members>
         <members>RecipientStatus__c.EnvelopeStatus__c</members>
-        <members>RecipientStatus__c.DocuSignId__c</members>
+        <members>RecipientStatus__c.DocuSignRecipientId__c</members>
+        <members>RecipientStatus__c.DocuSignEnvelopeId__c</members>
         <members>RecipientStatus__c.Type__c</members>
         <members>RecipientStatus__c.Status__c</members>
         <members>RecipientStatus__c.SourceId__c</members>
         <members>RecipientStatus__c.Email__c</members>
-        <members>RecipientStatus__c.DocuSignId__c</members>
         <members>RecipientStatus__c.Email__c</members>
         <members>RecipientStatus__c.Sent__c</members>
         <members>RecipientStatus__c.Completed__c</members>

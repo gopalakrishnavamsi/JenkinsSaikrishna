@@ -71,9 +71,8 @@ public class Recipient implements Comparable {
 		this.source = source;
 	}
 
-	public static Recipient newSigningGroup(
+	public static Recipient fromSigningGroup(
 		final Integer routingOrder,
-		final String type,
 		final Role role,
 		final SigningGroup signingGroup,
 		final Authentication authentication,
@@ -81,7 +80,7 @@ public class Recipient implements Comparable {
 
 		return new Recipient(
 			null,
-			type,
+			Recipient.TYPE_SIGNER,
 			null,
 			routingOrder,
 			role,
@@ -188,6 +187,10 @@ public class Recipient implements Comparable {
 			this.id = id;
 			this.name = name;
 		}
+
+		public SigningGroup copy() {
+			return new SigningGroup(this.id, this.name);
+		}
 	}
 
 	public class Role implements Comparable {
@@ -223,6 +226,10 @@ public class Recipient implements Comparable {
 			this.idCheckRequired = idCheckRequired;
 			this.smsPhoneNumbers = smsPhoneNumbers;
 		}
+
+		public Authentication copy() {
+			return new Authentication(this.accessCode, this.idCheckRequired, this.smsPhoneNumbers.clone());
+		}
 	}
 
 	public class EmailSettings {
@@ -238,6 +245,10 @@ public class Recipient implements Comparable {
 			this.languageLabel = languageLabel;
 			this.subject = subject;
 			this.message = message;
+		}
+
+		public EmailSettings copy() {
+			return new EmailSettings(this.language, this.languageLabel, this.subject, this.message);
 		}
 
 		public EmailSettings withSubject(final String subject) {
@@ -258,6 +269,12 @@ public class Recipient implements Comparable {
 		if (this.sequence == r.sequence) return 0;
 		if (this.sequence > r.sequence) return 1;
 		return -1;
+	}
+
+	public Recipient copy() {
+		return new Recipient(null, this.type, this.sequence, this.routingOrder, this.role, this.name, this.email,
+			this.signingGroup.copy(), this.phone, this.authentication.copy(), this.note, this.emailSettings.copy(),
+			this.hostName, this.hostEmail, this.signNow, this.source.copy());
 	}
 
 	public Recipient withType(final String type, final Boolean signNow) {

@@ -53,7 +53,7 @@ private class DocumentServiceTest {
 		insert dseds;
 
 		Test.startTest();
-		Document result1 = DocumentService.convert(dsed1);
+		Document result1 = DocumentService.DB.convert(dsed1);
 		List<Document> result2 = DocumentService.convert(dseds);
 		Test.stopTest();
 
@@ -118,7 +118,7 @@ private class DocumentServiceTest {
 		System.assertEquals(Label.InvalidFileType + '\n' + Label.InvalidFileType, result5.toString());
 	}
 
-	static testMethod void test_convert() {
+	static testMethod void test_Database_convert() {
 		Envelope__c dse = TestUtils.createEnvelope();
 		Document__c dsed = TestUtils.createEnvelopeDocument(dse.Id);
 		Document d = new Document(dsed.Id, dsed.Type__c,
@@ -126,7 +126,7 @@ private class DocumentServiceTest {
 			Integer.valueOf(dsed.Size__c), dsed.SourceId__c);
 
 		Test.startTest();
-		Document__c result = DocumentService.convert(d, dse.Id, 3);
+		Document__c result = DocumentService.DB.convert(d, dse.Id, 3);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -157,7 +157,7 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryEnvelopeDocuments() {
+	static testMethod void test_Database_queryDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c dse = TestUtils.createEnvelope(a.Id);
@@ -165,7 +165,7 @@ private class DocumentServiceTest {
 			Document__c dsed2 = TestUtils.createEnvelopeDocument(dse.Id, TestUtils.createContentVersion(), 2);
 
 			Test.startTest();
-			List<Document> result = DocumentService.DB.queryEnvelopeDocuments(dse.Id);
+			List<Document> result = DocumentService.DB.queryDocuments(dse.Id);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -191,17 +191,17 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_insertEnvelopeDocuments() {
+	static testMethod void test_Database_insertDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(e.Id));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.Id);
 			String tId = UUID.randomUUID().toString();
 			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tId);
 
 			Test.startTest();
-			List<Document> result = DocumentService.DB.insertEnvelopeDocuments(e.Id, new List<Document> { d2, d3 });
+			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -227,10 +227,10 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_upsertEnvelopeDocuments() {
+	static testMethod void test_Database_upsertDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 			Document d2 = new Document(
 				null,
 				Document.TYPE_TEMPLATE,
@@ -239,10 +239,10 @@ private class DocumentServiceTest {
 				null,
 				null,
 				UUID.randomUUID().toString());
-			Document d3 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
 			Test.startTest();
-			List<Document> result = DocumentService.DB.upsertEnvelopeDocuments(dse.Id, new List<Document> { d1, d2, d3 });
+			List<Document> result = DocumentService.DB.upsertDocuments(dse.Id, new List<Document> { d1, d2, d3 });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -277,17 +277,17 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_deleteEnvelopeDocuments() {
+	static testMethod void test_Database_deleteDocuments() {
 		System.runAs(TestUtils.createDocusignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
-			Document d2 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
-			Document d3 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
+			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
+			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
 
 			Test.startTest();
 			List<Document> result = null;
-			if (DocumentService.DB.deleteEnvelopeDocuments(new Set<Id> { d2.id })) {
-				result = DocumentService.DB.queryEnvelopeDocuments(dse.id);
+			if (DocumentService.DB.deleteDocuments(new Set<Id> { d2.id })) {
+				result = DocumentService.DB.queryDocuments(dse.id);
 			}
 			Test.stopTest();
 
@@ -314,16 +314,16 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateEnvelopeDocumentSequence() {
+	static testMethod void test_Database_updateDocumentSequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
-			Document d2 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
-			Document d3 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
+			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
+			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
 
 			Test.startTest();
-			List<Document> result1 = DocumentService.DB.updateEnvelopeDocumentSequence(dse.Id);
-			List<Document> result2 = DocumentService.DB.updateEnvelopeDocumentSequence(dse.Id, new Map<Id, Integer> {
+			List<Document> result1 = DocumentService.DB.updateDocumentSequence(dse.Id);
+			List<Document> result2 = DocumentService.DB.updateDocumentSequence(dse.Id, new Map<Id, Integer> {
 				d3.id => 1,
 				d2.id => 2,
 				d1.id => 3
@@ -627,8 +627,8 @@ private class DocumentServiceTest {
 
 		System.runAs(u) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
-			Document d2 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
 			Test.startTest();
 			List<Document> result = DocumentService.getEnvelopeDocuments(dse.Id);
@@ -680,8 +680,8 @@ private class DocumentServiceTest {
 
 		System.runAs(u) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
-			Document d2 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
+			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
 			Exception ex1, ex2;
 
 			Test.startTest();
@@ -718,9 +718,9 @@ private class DocumentServiceTest {
 
 		System.runAs(u) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
-			Document d2 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
-			Document d3 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
+			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
+			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
 			Exception ex1, ex2;
 
 			Test.startTest();
@@ -765,7 +765,7 @@ private class DocumentServiceTest {
 
 		System.runAs(u) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 			Document d2 = new Document(
 				null,
 				Document.TYPE_TEMPLATE,
@@ -774,7 +774,7 @@ private class DocumentServiceTest {
 				null,
 				null,
 				UUID.randomUUID().toString());
-			Document d3 = DocumentService.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
 			Test.startTest();
 			List<Document> result = DocumentService.updateEnvelopeDocuments(

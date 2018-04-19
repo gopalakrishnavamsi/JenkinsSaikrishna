@@ -21,4 +21,8 @@ public class SigningGroup {
 			this.email = email;
 		}
 	}
+
+	public Recipient.SigningGroup toRecipientSigningGroup() {
+		return new Recipient.SigningGroup(this.id, this.name);
+	}
 }

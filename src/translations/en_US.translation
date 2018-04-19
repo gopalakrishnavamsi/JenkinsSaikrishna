@@ -57,9 +57,15 @@
 		<name>InvalidUUID</name>
 	</customLabels>
 	<customLabels>
-		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that
-			you have responded to all activation emails.
-		</label>
+		<label>The envelope is invalid.</label>
+		<name>InvalidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>The source is invalid.</label>
+		<name>InvalidSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that you have responded to all activation emails.</label>
 		<name>MustBeActivated</name>
 	</customLabels>
 	<customLabels>
@@ -548,7 +554,47 @@
 		<name>AtLeastOneDocumentIsRequired</name>
 	</customLabels>
 	<customLabels>
+		<label>At least one recipient is required.</label>
+		<name>AtLeastOneRecipientIsRequired</name>
+	</customLabels>
+	<customLabels>
 		<label>File type is unsupported.</label>
 		<name>InvalidFileType</name>
+	</customLabels>
+	<customLabels>
+		<label>At least one required custom field value is missing</label>
+		<name>RequiredCustomFieldsMissing</name>
+	</customLabels>
+	<customLabels>
+		<label>An email subject is required and must be less than 100 characters in length.</label>
+		<name>EmailSubjectRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Email message is limited to 2000 characters.</label>
+		<name>EmailMessageTooLarge</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid reminders and expiration settings. Values must be non-negative if defined.</label>
+		<name>InvalidNotificationSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Placeholder recipient must have a role.</label>
+		<name>PlaceholderRecipientMustHaveRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Custom field(s) are not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</label>
+		<name>RequiredEmptyList</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column mappings.</label>
+		<name>InvalidRelatedContact</name>
+	</customLabels>
+	<customLabels>
+		<label>Undefined signing group.</label>
+		<name>UndefinedSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Signing group does not exist.</label>
+		<name>SigningGroupNotFound</name>
 	</customLabels>
 </Translations>
