@@ -108,23 +108,24 @@ public class Account {
 		public UserStatus status { get; private set; }
 		public Boolean canManageAccount { get; private set; }
 		public Boolean canSendEnvelope { get; private set; }
+		public Id sourceId { get; private set; }
 		public APIError error { get; private set; }
 		public Boolean hasError { get; private set; }
 
 		public User(final UUID id) {
-			this(id, null, null, null, null, null, UserStatus.Unknown, false, true, APIError.none);
+			this(id, null, null, null, null, null, UserStatus.Unknown, false, true, null, APIError.none);
 		}
 
 		public User(final String username, final String email, final String firstName, final String lastName,
 			final Boolean canManageAccount) {
 
 			this(null, username, email, firstName, lastName, null, UserStatus.Unknown, canManageAccount,
-				true, APIError.none);
+				true, null, APIError.none);
 		}
 
 		public User(final UUID id, final String username, final String email, final String firstName, final String lastName,
 			final String apiPassword, final UserStatus status, final Boolean canManageAccount,
-			final Boolean canSendEnvelope, final APIError error) {
+			final Boolean canSendEnvelope, final Id sourceId, final APIError error) {
 
 			this.id = id;
 			this.username = username;
@@ -135,8 +136,14 @@ public class Account {
 			this.status = status;
 			this.canManageAccount = canManageAccount;
 			this.canSendEnvelope = canSendEnvelope;
+			this.sourceId = sourceId;
 			this.error = error == null ? APIError.none : error;
 			this.hasError = this.error != APIError.none;
+		}
+
+		public User withError(final APIError error) {
+			this.error = error;
+			return this;
 		}
 	}
 

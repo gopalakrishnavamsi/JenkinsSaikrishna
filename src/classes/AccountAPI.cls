@@ -612,7 +612,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			return e;
 		}
 
-		public Account.User toExternalForm() {
+		public Account.User toExternalForm(final Id sourceId) {
 			Boolean canManageAccount = false;
 			Boolean canSendEnvelope = true;
 			if (this.userSettings != null) {
@@ -634,6 +634,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				stringToUserStatus(this.userStatus),
 				canManageAccount,
 				canSendEnvelope,
+				sourceId,
 				errorExternalForm());
 		}
 	}
@@ -650,14 +651,19 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			}
 		}
 
-		public List<Account.User> toExternalForm() {
-			final List<Account.User> users = new List<Account.User>();
+		public List<Account.User> toExternalForm(final List<Account.User> users) {
+			Map<String, Account.User> emailToUsers = new Map<String, Account.User>();
+			for (Account.User u : users) {
+				emailToUsers.put(u.email, u);
+			}
+			List<Account.User> result = new List<Account.User>();
 			if (this.newUsers != null) {
 				for (AccountAPI.APIUser u : this.newUsers) {
-					users.add(u.toExternalForm());
+					Account.User original = emailToUsers.get(u.email);
+					result.add(u.toExternalForm(original == null ? null : original.sourceId));
 				}
 			}
-			return users;
+			return result;
 		}
 	}
 
@@ -677,7 +683,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			throw new APIException(response.error);
 		}
 
-		return ((NewUsers)JSON.deserialize(response.body, NewUsers.class)).toExternalForm();
+		return ((NewUsers)JSON.deserialize(response.body, NewUsers.class)).toExternalForm(users);
 	}
 
 	// Serialization objects for removeUsers
@@ -693,14 +699,19 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			}
 		}
 
-		public List<Account.User> toExternalForm() {
-			List<Account.User> dsUsers = new List<Account.User>();
+		public List<Account.User> toExternalForm(final List<Account.User> users) {
+			Map<String, Account.User> emailToUsers = new Map<String, Account.User>();
+			for (Account.User u : users) {
+				emailToUsers.put(u.email, u);
+			}
+			List<Account.User> result = new List<Account.User>();
 			if (this.users != null) {
 				for (AccountAPI.APIUser u : this.users) {
-					dsUsers.add(u.toExternalForm());
+					Account.User original = emailToUsers.get(u.email);
+					result.add(u.toExternalForm(original == null ? null : original.sourceId));
 				}
 			}
-			return dsUsers;
+			return result;
 		}
 	}
 
@@ -720,7 +731,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			throw new APIException(response.error);
 		}
 
-		return ((RemoveUsers)JSON.deserialize(response.body, RemoveUsers.class)).toExternalForm();
+		return ((RemoveUsers)JSON.deserialize(response.body, RemoveUsers.class)).toExternalForm(users);
 	}
 
 	// Serialization objects for custom fields

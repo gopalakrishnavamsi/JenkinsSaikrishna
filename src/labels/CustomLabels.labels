@@ -1158,4 +1158,12 @@
 		<shortDescription>Signing Group not found</shortDescription>
 		<value>Signing Group does not exist.</value>
 	</labels>
+	<labels>
+		<fullName>CannotRemoveSelf</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot remove self</shortDescription>
+		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</value>
+	</labels>
 </CustomLabels>

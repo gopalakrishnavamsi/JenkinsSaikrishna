@@ -597,4 +597,8 @@
 		<label>Signing group does not exist.</label>
 		<name>SigningGroupNotFound</name>
 	</customLabels>
+	<customLabels>
+		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</label>
+		<name>CannotRemoveSelf</name>
+	</customLabels>
 </Translations>

@@ -336,4 +336,80 @@ public with sharing class AccountService {
 			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
 			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
 	}
+
+	@TestVisible
+	private static List<Account.User> addUsers2(final List<Account.User> users) {
+		if (Collection.isEmpty(users)) return users;
+
+		// Update the username and password for the users
+		List<Account.User> result = new List<Account.User>();
+		Boolean useSOBO = AccountSettings__c.getOrgDefaults().UseSendOnBehalfOf__c;
+		Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
+		for (Account.User u : users) {
+			if (u.hasError && u.error.code == APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
+				// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
+				result.add(u.withError(null));
+			} else if (u.hasError) {
+				result.add(u);
+			} else {
+				creds.put(u.sourceId, new Credentials.UserCredentials(
+					String.valueOf(u.id),
+					useSOBO && String.isNotBlank(u.apiPassword) ? u.apiPassword : null,
+					u.canManageAccount));
+				result.add(u);
+			}
+		}
+
+		Credentials.addUsers(creds);
+
+		return result;
+	}
+
+	public static List<Account.User> addUsers(final List<Account.User> users) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return addUsers2(AccountAPI.getInstance().addUsers(users));
+	}
+
+	@TestVisible
+	private static Set<Id> getUserIdsToRemove(final List<Account.User> users) {
+		Set<Id> result = new Set<Id>();
+		if (users != null) {
+			String currentDSUsername = UserSettings__c.getInstance().Username__c;
+			Id currentUserId = UserInfo.getUserId();
+			for (Account.User u : users) {
+				if (u.sourceId == currentUserId
+					|| (String.isNotBlank(currentDSUsername)
+					&& (String.valueOf(u.id) == currentDSUsername
+					|| u.username == currentDSUsername))) {
+
+					throw new DocuSignException(Label.CannotRemoveSelf);
+				}
+				result.add(u.sourceId);
+			}
+		}
+		return result;
+	}
+
+	public List<Account.User> removeUsers(final List<Account.User> users, final Boolean closeMembership) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		Set<Id> userIds = getUserIdsToRemove(users);
+
+		List<Account.User> result = new List<Account.User>();
+		if (closeMembership) {
+			for (Account.User u : AccountAPI.getInstance().removeUsers(users)) {
+				if (u.hasError && u.error.code == APIErrorCode.UNKNOWN_USER) {
+					// Ignore errors where user is unknown to DS. The user was already removed from the account.
+					result.add(u.withError(null));
+				} else {
+					result.add(u);
+				}
+			}
+		}
+
+		Credentials.clear(userIds);
+
+		return result;
+	}
 }

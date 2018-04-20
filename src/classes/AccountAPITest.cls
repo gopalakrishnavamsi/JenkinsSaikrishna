@@ -564,9 +564,9 @@ private class AccountAPITest {
 			Test.startTest();
 			final List<Account.User> users = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null),
+					Account.UserStatus.Active, true, true, UserInfo.getUserId(), null),
 				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
-					Account.UserStatus.PendingActivation, false, true, null)
+					Account.UserStatus.PendingActivation, false, true, null, null)
 			});
 			Test.stopTest();
 
@@ -581,6 +581,7 @@ private class AccountAPITest {
 			System.assertEquals('User', users[0].firstName);
 			System.assertEquals('One', users[0].lastName);
 			System.assertEquals('fake-password', users[0].apiPassword);
+			System.assertEquals(UserInfo.getUserId(), users[0].sourceId);
 			System.assertEquals(Account.UserStatus.Active, users[0].status);
 			System.assert(users[0].canManageAccount);
 			System.assert(users[0].canSendEnvelope);
@@ -620,7 +621,7 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null)
+					Account.UserStatus.Active, true, true, null, null)
 			});
 			Test.stopTest();
 
@@ -655,7 +656,7 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null)
+					Account.UserStatus.Active, true, true, null, null)
 			});
 			Test.stopTest();
 
@@ -679,7 +680,10 @@ private class AccountAPITest {
 
 			Test.startTest();
 			try {
-				client.addUsers(new List<Account.User> { new Account.User(UUID.randomUUID(), '', '', '', '', '', Account.UserStatus.UNKNOWN, true, true, null) });
+				client.addUsers(new List<Account.User> {
+					new Account.User(UUID.randomUUID(), '', '', '', '', '',
+						Account.UserStatus.UNKNOWN, true, true, null, null)
+				});
 				throw new AssertException('Expected addUsers to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -701,9 +705,9 @@ private class AccountAPITest {
 			Test.startTest();
 			final List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null),
+					Account.UserStatus.Active, true, true, UserInfo.getUserId(), null),
 				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
-					Account.UserStatus.PendingActivation, false, true, null)
+					Account.UserStatus.PendingActivation, false, true, null, null)
 			});
 			Test.stopTest();
 
@@ -730,7 +734,10 @@ private class AccountAPITest {
 
 			Test.startTest();
 			try {
-				client.removeUsers(new List<Account.User> { new Account.User(UUID.randomUUID(), '', '', '', '', '', Account.UserStatus.UNKNOWN, true, true, null) });
+				client.removeUsers(new List<Account.User> {
+					new Account.User(UUID.randomUUID(), '', '', '', '', '',
+						Account.UserStatus.UNKNOWN, true, true, null, null)
+				});
 				throw new AssertException('Expected removeUsers to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -763,7 +770,7 @@ private class AccountAPITest {
 			Test.startTest();
 			final List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null)
+					Account.UserStatus.Active, true, true, null, null)
 			});
 			Test.stopTest();
 

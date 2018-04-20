@@ -263,6 +263,7 @@
         <members>InvalidRelatedContact</members>
         <members>UndefinedSigningGroup</members>
         <members>SigningGroupNotFound</members>
+        <members>CannotRemoveSelf</members>
         <name>CustomLabel</name>
     </types>
     <types>
