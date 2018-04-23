@@ -26,6 +26,18 @@ private class SalesforceTest {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('WorkOrder'), Salesforce.areWorkOrdersEnabled);
 	}
 
+	static testMethod void test_canUseApi_default() {
+		System.assert(!Salesforce.canUseApi);
+	}
+
+	static testMethod void test_canUseApi_enabled() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.CanUseSalesforceApi__c = true;
+		insert s;
+
+		System.assert(Salesforce.canUseApi);
+	}
+
 	static testMethod void test_Configuration() {
 		System.assertNotEquals(null, new Salesforce.Configuration('host', 'https://unit.test'));
 	}

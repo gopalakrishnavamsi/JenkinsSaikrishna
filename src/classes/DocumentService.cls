@@ -364,10 +364,14 @@ public with sharing class DocumentService {
 	}
 
 	public static List<Document> resolveFiles(final Set<Id> fileIds) {
+		Permissions.verifyIsDocuSignUser();
+
 		return getDocuments('ContentVersion', fileIds);
 	}
 
 	public static List<Document> resolveTemplates(final Set<UUID> templateIds) {
+		Permissions.verifyIsDocuSignUser();
+
 		List<Document> templates = new List<Document>();
 		if (templateIds != null) {
 			TemplateAPI client = TemplateAPI.getInstance();
@@ -379,6 +383,8 @@ public with sharing class DocumentService {
 	}
 
 	public static List<Document> resolveLinkedFiles(final Set<Id> linkedEntityIds) {
+		Permissions.verifyIsDocuSignUser();
+
 		if (Collection.isEmpty(linkedEntityIds)) throw new DocuSignException(Label.InvalidSource);
 
 		return getLinkedDocuments('ContentVersion', linkedEntityIds);

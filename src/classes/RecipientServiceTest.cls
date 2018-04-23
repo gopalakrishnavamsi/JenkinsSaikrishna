@@ -18,6 +18,48 @@ private class RecipientServiceTest {
 		}
 	}
 
+	static testMethod void test_validate_send_later() {
+		// Placeholder: invalid no role
+		Recipient r1 = Recipient.fromSource('R1', null, null, null, null);
+		// Placeholder: valid has role
+		Recipient r2 = Recipient.fromSource('R2', null, null, 'r2', null);
+		// Valid
+		Recipient r3 = Recipient.fromSource('R2', 'r1@unit.test', '5555555555', 'r2', null);
+		// Signing group
+		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new Recipient.SigningGroup(1234, 'SG4'), null, 'n4');
+
+		Test.startTest();
+		System.assert(!RecipientService.validate((List<Recipient>)null, false).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient>(), false).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient> { null }, false).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient> { r1 }, false).isValid);
+		System.assert(RecipientService.validate(new List<Recipient> { r2 }, false).isValid);
+		System.assert(RecipientService.validate(new List<Recipient> { r3 }, false).isValid);
+		System.assert(RecipientService.validate(new List<Recipient> { r4 }, false).isValid);
+		Test.stopTest();
+	}
+
+	static testMethod void test_validate_send_now() {
+		// Placeholder: invalid no role
+		Recipient r1 = Recipient.fromSource('R1', null, null, null, null);
+		// Placeholder: valid has role
+		Recipient r2 = Recipient.fromSource('R2', null, null, 'r2', null);
+		// Valid
+		Recipient r3 = Recipient.fromSource('R2', 'r1@unit.test', '5555555555', 'r2', null);
+		// Signing group
+		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new Recipient.SigningGroup(1234, 'SG4'), null, 'n4');
+
+		Test.startTest();
+		System.assert(!RecipientService.validate((List<Recipient>)null, true).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient>(), true).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient> { null }, true).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient> { r1 }, true).isValid);
+		System.assert(!RecipientService.validate(new List<Recipient> { r2 }, true).isValid);
+		System.assert(RecipientService.validate(new List<Recipient> { r3 }, true).isValid);
+		System.assert(RecipientService.validate(new List<Recipient> { r4 }, true).isValid);
+		Test.stopTest();
+	}
+
 	static testMethod void test_convert_Recipient_sobject() {
 		Envelope__c e = TestUtils.createEnvelope();
 		Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
@@ -496,7 +538,257 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_getDefaultRoles() {
+	static testMethod void test_Database_getRelatedObjectName() {
+		Test.startTest();
+		System.assertEquals(null, RecipientService.DB.getRelatedObjectName(null, null));
+		System.assertEquals('OpportunityContactRole', RecipientService.DB.getRelatedObjectName('Opportunity', 'OpportunityContactRoles'));
+		Test.stopTest();
+	}
+
+	static testMethod void test_Database_queryRelatedContacts_signing_group() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a1.Id);
+			Contact c2 = TestUtils.createContact(a1.Id);
+			// Valid signing group mapping
+			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'signinggroup' => 'Name',
+					'smsauthphone' => 'Phone',
+					'role' => 'LastName'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+			// Invalid signing group mapping
+			EnvelopeConfiguration.RelatedContacts rc2 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'signinggroup' => 'Birthdate',
+					'role' => 'LastName'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+			// Valid - has all mappings
+			Map<String, Recipient.SigningGroup> sgs1 = new Map<String, Recipient.SigningGroup> {
+				c1.Name => new Recipient.SigningGroup(1111, c1.Name),
+				c2.Name => new Recipient.SigningGroup(2222, c2.Name)
+			};
+			// Invalid - missing mapping for c2
+			Map<String, Recipient.SigningGroup> sgs2 = new Map<String, Recipient.SigningGroup> {
+				c1.Name => new Recipient.SigningGroup(1111, c1.Name)
+			};
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, sgs1);
+			try {
+				RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, sgs2);
+				throw new AssertException('Expected queryRelatedContacts to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.SigningGroupNotFound, ex.getMessage());
+			}
+			try {
+				RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc2, sgs1);
+				throw new AssertException('Expected queryRelatedContacts to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedSigningGroup, ex.getMessage());
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(sgs1.get(c1.Name), result[0].signingGroup);
+			System.assertNotEquals(null, result[0].role);
+			System.assertEquals(c1.LastName, result[0].role.name);
+			System.assertNotEquals(null, result[0].authentication);
+			System.assertEquals(new List<String> { c1.Phone }, result[0].authentication.smsPhoneNumbers);
+			System.assertNotEquals(null, result[0].authentication);
+			System.assertNotEquals(null, result[0].source);
+			System.assertEquals(c1.Id, result[0].source.id);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(sgs1.get(c2.Name), result[1].signingGroup);
+			System.assertNotEquals(null, result[1].role);
+			System.assertEquals(c2.LastName, result[1].role.name);
+			System.assertNotEquals(null, result[1].authentication);
+			System.assertEquals(new List<String> { c2.Phone }, result[1].authentication.smsPhoneNumbers);
+			System.assertNotEquals(null, result[1].source);
+			System.assertEquals(c2.Id, result[1].source.id);
+		}
+	}
+
+	static testMethod void test_Database_queryRelatedContacts_sign_in_person() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a1.Id);
+			Contact c2 = TestUtils.createContact(a1.Id);
+			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'firstname' => 'FirstName',
+					'lastname' => 'LastName',
+					'email' => 'Email',
+					'signinpersonname' => 'Name',
+					'role' => 'Phone'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(c1.Name, result[0].name);
+			System.assertEquals(null, result[0].email);
+			System.assertEquals(c1.Name, result[0].hostName);
+			System.assertEquals(c1.Email, result[0].hostEmail);
+			System.assertNotEquals(null, result[0].role);
+			System.assertEquals(c1.Phone, result[0].role.name);
+			System.assertEquals(null, result[0].authentication);
+			System.assertNotEquals(null, result[0].source);
+			System.assertEquals(c1.Id, result[0].source.id);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(c2.Name, result[1].name);
+			System.assertEquals(null, result[1].email);
+			System.assertEquals(c2.Name, result[1].hostName);
+			System.assertEquals(c2.Email, result[1].hostEmail);
+			System.assertNotEquals(null, result[1].role);
+			System.assertEquals(c2.Phone, result[1].role.name);
+			System.assertEquals(null, result[1].authentication);
+			System.assertNotEquals(null, result[1].source);
+			System.assertEquals(c2.Id, result[1].source.id);
+		}
+	}
+
+	static testMethod void test_Database_queryRelatedContacts_success() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a1.Id);
+			Contact c2 = TestUtils.createContact(a1.Id);
+			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'firstname' => 'FirstName',
+					'lastname' => 'LastName',
+					'email' => 'Email',
+					'role' => 'Phone'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(c1.Name, result[0].name);
+			System.assertEquals(c1.Email, result[0].email);
+			System.assertEquals(null, result[0].hostName);
+			System.assertEquals(null, result[0].hostEmail);
+			System.assertNotEquals(null, result[0].role);
+			System.assertEquals(c1.Phone, result[0].role.name);
+			System.assertEquals(null, result[0].authentication);
+			System.assertNotEquals(null, result[0].source);
+			System.assertEquals(c1.Id, result[0].source.id);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(c2.Name, result[1].name);
+			System.assertEquals(c2.Email, result[1].email);
+			System.assertEquals(null, result[1].hostName);
+			System.assertEquals(null, result[1].hostEmail);
+			System.assertNotEquals(null, result[1].role);
+			System.assertEquals(c2.Phone, result[1].role.name);
+			System.assertEquals(null, result[1].authentication);
+			System.assertNotEquals(null, result[1].source);
+			System.assertEquals(c2.Id, result[1].source.id);
+		}
+	}
+
+	static testMethod void test_Database_querySigningGroups() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a1.Id);
+			Contact c2 = TestUtils.createContact(a1.Id);
+			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'signinggroup' => 'Name'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+
+			Test.startTest();
+			Set<String> result = RecipientService.DB.querySigningGroups(new Entity(a1.Id), rc1);
+			Test.stopTest();
+
+			System.assertEquals(new Set<String> { c1.Name, c2.Name }, result);
+		}
+	}
+
+	static testMethod void test_Database_deleteRecipients() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e = TestUtils.createEnvelope();
+			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
+			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
+			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e.Id, 3);
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.DB.deleteRecipients(e.Id, new Set<Id> { r2.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(r1.Id, result[0].id);
+			System.assertEquals(1, result[0].sequence);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(r3.Id, result[1].id);
+			System.assertEquals(2, result[1].sequence);
+		}
+	}
+
+	static testMethod void test_Database_upsertRecipients() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e = TestUtils.createEnvelope();
+			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
+			Recipient r2 = Recipient.newRecipient(2, Recipient.TYPE_SIGNER, null, 'R2', 'r2@unit.test', null, 'n2', false);
+			Recipient r3 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 3));
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.DB.upsertRecipients(e.Id, new List<Recipient> { r1, r2, r3 });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(r1.id, result[0].id);
+			System.assertEquals(1, result[0].sequence);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].id);
+			System.assertEquals(r2.email, result[1].email);
+			System.assertEquals(2, result[1].sequence);
+
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(r3.id, result[2].id);
+			System.assertEquals(3, result[2].sequence);
+		}
+	}
+
+	static testMethod void test_getDefaultRoles_success() {
 		insert new List<RoleSettings__c> {
 			new RoleSettings__c(Name = 'Role1', Value__c = 1),
 			new RoleSettings__c(Name = 'Role2', Value__c = 2),
@@ -881,7 +1173,8 @@ private class RecipientServiceTest {
 				'zh-CN subject', 'zh-CN message');
 			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
 				new List<EnvelopeConfiguration.RelatedContacts>(),
-				null,
+				new List<EnvelopeConfiguration.CustomRecipient>(),
+				false,
 				10,
 				true,
 				1,
@@ -959,6 +1252,417 @@ private class RecipientServiceTest {
 			System.assertEquals(es.languageLabel, result2[2].emailSettings.languageLabel);
 			System.assertEquals(es.subject, result2[2].emailSettings.subject);
 			System.assertEquals(es.message, result2[2].emailSettings.message);
+		}
+	}
+
+	static testMethod void test_mergeUserTags() {
+		System.runAs(TestUtils.createUser()) {
+			Recipient r1 = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, null, false)
+				.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Localization.getLabel(Localization.EN),
+					'subject1: [FirstName][LastName][Email]', 'message1'));
+			Recipient r2 = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r2', 'r2@unit.test', null, null, false)
+				.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Localization.getLabel(Localization.EN),
+					'subject2', 'message2: [FirstName][LastName][Email]'));
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.mergeUserTags(new List<Recipient> { r1, r2 });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].emailSettings);
+			System.assertEquals('subject1: ' + UserInfo.getFirstName() + UserInfo.getLastName() + UserInfo.getUserEmail(),
+				result[0].emailSettings.subject);
+			System.assertEquals('message1', result[0].emailSettings.message);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].emailSettings);
+			System.assertEquals('subject2', result[1].emailSettings.subject);
+			System.assertEquals('message2: ' + UserInfo.getFirstName() + UserInfo.getLastName() + UserInfo.getUserEmail(),
+				result[1].emailSettings.message);
+		}
+	}
+
+	static testMethod void test_addEnvelopeRecipients_unauthorized() {
+		Envelope__c e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = TestUtils.createEnvelope();
+		}
+
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.addEnvelopeRecipients(e.Id, null);
+				throw new AssertException('Expected addEnvelopeRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_addEnvelopeRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope__c e2 = TestUtils.createEnvelope();
+			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id, 1));
+			Recipient e2r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e2.Id, 1));
+			Recipient r2 = Recipient.newRecipient(2, Recipient.TYPE_SIGNER, null, 'r2', 'r2@unit.test', null, null, false);
+			Recipient r3 = Recipient.newRecipient(3, Recipient.TYPE_SIGNER, null, 'r3', 'r3@unit.test', null, null, false);
+
+			Test.startTest();
+			List<Recipient> result1 = RecipientService.addEnvelopeRecipients(e1.Id, new List<Recipient> { r2, r3 });
+			List<Recipient> result2 = RecipientService.addEnvelopeRecipients(e2.Id, new List<Recipient> { r2, r3 },
+				new Recipient.EmailSettings(
+					Localization.EN,
+					Localization.getLabel(Localization.EN),
+					'en subject',
+					'en message'),
+				null);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(2, result1.size());
+			System.assertNotEquals(null, result1[0]);
+			System.assertEquals(2, result1[0].sequence);
+			System.assertNotEquals(null, result1[1]);
+			System.assertEquals(3, result1[1].sequence);
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals(2, result2.size());
+			System.assertNotEquals(null, result2[0]);
+			System.assertEquals(2, result2[0].sequence);
+			System.assertNotEquals(null, result2[1]);
+			System.assertEquals(3, result2[1].sequence);
+		}
+	}
+
+	static testMethod void test_removeEnvelopeRecipients_unauthorized() {
+		Envelope__c e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = TestUtils.createEnvelope();
+		}
+
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.removeEnvelopeRecipients(e.Id, null);
+				throw new AssertException('Expected removeEnvelopeRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_removeEnvelopeRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e = TestUtils.createEnvelope();
+			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
+			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
+			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e.Id, 3);
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.removeEnvelopeRecipients(e.Id, new Set<Id> { r1.Id, r2.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(r3.Id, result[0].id);
+			System.assertEquals(1, result[0].sequence);
+		}
+	}
+
+	static testMethod void test_updateEnvelopeRecipients_unauthorized() {
+		Envelope__c e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = TestUtils.createEnvelope();
+		}
+
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.updateEnvelopeRecipients(e.Id, null, null);
+				throw new AssertException('Expected updateEnvelopeRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_updateEnvelopeRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e = TestUtils.createEnvelope();
+			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
+			Recipient r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 2));
+			Recipient r3 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 3));
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.updateEnvelopeRecipients(e.Id,
+				new List<Recipient> { r1, r2, r3 },
+				new List<Recipient> { r1, r3 });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(r1.Id, result[0].id);
+			System.assertEquals(1, result[0].sequence);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(r3.Id, result[1].id);
+			System.assertEquals(2, result[1].sequence);
+		}
+	}
+
+	static testMethod void test_resolveRelatedContacts_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.resolveRelatedContacts(null, null, null);
+				throw new AssertException('Expected resolveRelatedContacts to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveRelatedContacts_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a1.Id);
+			Contact c2 = TestUtils.createContact(a1.Id);
+			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
+				new Map<String, String> {
+					'firstname' => 'FirstName',
+					'lastname' => 'LastName',
+					'email' => 'Email',
+					'role' => 'Phone'
+				},
+				'Contacts',
+				false, // addSourceRecipients
+				null); // parseErrors
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.resolveRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+		}
+	}
+
+	static testMethod void test_resolveDefaultRecipients_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.resolveDefaultRecipients(null, null);
+				throw new AssertException('Expected resolveDefaultRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveDefaultRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Schema.Account a = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a.Id);
+			Contact c2 = TestUtils.createContact(a.Id);
+			Recipient.EmailSettings es = new Recipient.EmailSettings(
+				Localization.NL,
+				Localization.getLabel(Localization.NL),
+				'nl subject',
+				'nl message');
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.resolveDefaultRecipients(new Entity(a.Id), es);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			Boolean foundC1 = false, foundC2 = false;
+			for (Recipient r : result) {
+				System.assertNotEquals(null, r.source);
+				System.assertEquals(es, r.emailSettings);
+				if (r.source.id == c1.Id) {
+					foundC1 = true;
+					System.assertEquals(c1.Name, r.name);
+					System.assertEquals(c1.Email, r.email);
+					System.assertEquals(c1.Phone, r.phone);
+				} else if (r.source.id == c2.Id) {
+					foundC2 = true;
+					System.assertEquals(c2.Name, r.name);
+					System.assertEquals(c2.Email, r.email);
+					System.assertEquals(c2.Phone, r.phone);
+				} else {
+					throw new AssertException('Unexpected recipient: ' + r);
+				}
+			}
+			System.assert(foundC1);
+			System.assert(foundC2);
+		}
+	}
+
+	static testMethod void test_resolveCustomRecipients_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.resolveCustomRecipients(null, null, null);
+				throw new AssertException('Expected resolveCustomRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveCustomRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			List<EnvelopeConfiguration.CustomRecipient> crs = new List<EnvelopeConfiguration.CustomRecipient> {
+				// Normal signer
+				new EnvelopeConfiguration.CustomRecipient('r1@unit.test', 'Recipient', 'One', Recipient.TYPE_SIGNER,
+					'r1', 1, '1111', '5551111', 'n1', null, null, false, null),
+				// In-person signer, sign now
+				new EnvelopeConfiguration.CustomRecipient('r2@unit.test', 'Recipient', 'Two', Recipient.TYPE_IN_PERSON_SIGNER,
+					'r2', 2, '2222', '5552222', 'n2', 'Signer One', null, true, null),
+				// Signing group
+				new EnvelopeConfiguration.CustomRecipient(null, null, null, Recipient.TYPE_SIGNER,
+					'r3', 3, '3333', '5553333', 'n3', null, 'sg3', false, null)
+			};
+			Map<String, Recipient.SigningGroup> sgs = new Map<String, Recipient.SigningGroup> {
+				'sg3' => new Recipient.SigningGroup(3333, 'sg3')
+			};
+			Recipient.EmailSettings es = new Recipient.EmailSettings(
+				Localization.NL,
+				Localization.getLabel(Localization.NL),
+				'nl subject',
+				'nl message');
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.resolveCustomRecipients(crs, sgs, es);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(Recipient.TYPE_SIGNER, result[0].type);
+			System.assertEquals(es, result[0].emailSettings);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result[1].type);
+			System.assert(result[1].signNow);
+			System.assertEquals(es, result[1].emailSettings);
+
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(Recipient.TYPE_SIGNER, result[2].type);
+			System.assertNotEquals(null, result[2].signingGroup);
+			System.assertEquals('sg3', result[2].signingGroup.name);
+			System.assertEquals(es, result[2].emailSettings);
+		}
+	}
+
+	static testMethod void test_resolveSigningGroups_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.resolveSigningGroups(null, null);
+				throw new AssertException('Expected resolveCustomRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveSigningGroups_not_found() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Schema.Account a = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a.Id);
+			c1.LastName = 'sg1x';
+			Contact c2 = TestUtils.createContact(a.Id);
+			c2.LastName = 'sg2x';
+			update new List<Contact> { c1, c2 };
+
+			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
+				new List<EnvelopeConfiguration.RelatedContacts> {
+					new EnvelopeConfiguration.RelatedContacts(
+						new Map<String, String> {
+							'role' => 'FirstName',
+							'signinggroup' => 'LastName'
+						},
+						'Contacts',
+						false,
+						null)
+				},
+				new List<EnvelopeConfiguration.CustomRecipient> {
+					new EnvelopeConfiguration.CustomRecipient(null, null, null, null, null, 1, null, null, null, null,
+						'sg3x', false, null)
+				},
+				false, 0, true, 1, null, null, null, null);
+
+			Test.startTest();
+			try {
+				RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
+				throw new AssertException('Expected resolveSigningGroups to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.SigningGroupNotFound, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveSigningGroups_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Schema.Account a = TestUtils.createAccount();
+			Contact c1 = TestUtils.createContact(a.Id);
+			c1.LastName = 'sg1';
+			Contact c2 = TestUtils.createContact(a.Id);
+			c2.LastName = 'sg2';
+			update new List<Contact> { c1, c2 };
+
+			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
+				new List<EnvelopeConfiguration.RelatedContacts> {
+					new EnvelopeConfiguration.RelatedContacts(
+						new Map<String, String> {
+							'role' => 'FirstName',
+							'signinggroup' => 'LastName'
+						},
+						'Contacts',
+						false,
+						null)
+				},
+				new List<EnvelopeConfiguration.CustomRecipient> {
+					new EnvelopeConfiguration.CustomRecipient(null, null, null, null, null, 1, null, null, null, null,
+						'sg3', false, null)
+				},
+				false, 0, true, 1, null, null, null, null);
+
+			Test.startTest();
+			Map<String, Recipient.SigningGroup> result = RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<String> { 'sg1', 'sg2', 'sg3' }, result.keySet());
 		}
 	}
 }

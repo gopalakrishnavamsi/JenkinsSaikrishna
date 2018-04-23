@@ -45,37 +45,29 @@ public with sharing class AccountService {
 		}
 	}
 
-	@TestVisible
-	private class TrialStatus {
-		public Boolean isExpired { get; private set; }
-		public String message { get; private set; }
-
-		public TrialStatus(final Boolean isExpired, final String message) {
-			this.isExpired = isExpired;
-			this.message = message;
-		}
-	}
-
 	public static Account getAccount() {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		if (currentAccount == null) {
-			currentAccount = AccountAPI.getInstance().getAccount();
+			Account a = AccountAPI.getInstance().getAccount();
+			if (a.isTrial) {
+				Account.TrialStatus ts = getTrialStatus(a);
+				if (ts.isExpired) {
+					throw new DocuSignException(ts.message);
+				}
+				currentAccount = a.withTrialStatus(ts);
+			} else {
+				currentAccount = a;
+			}
 		}
 		return currentAccount;
 	}
 
 	@TestVisible
-	private static TrialStatus getTrialStatus(final Account account) {
+	private static Account.TrialStatus getTrialStatus(final Account account) {
 		Boolean isExpired = false;
 		String message = null;
-
-		if (account != null
-			&& account.billing != null
-			&& account.environment != null
-			&& account.plan != null
-			&& account.plan.id == account.environment.trialPlanId) {
-
+		if (account != null && account.isTrial) {
 			Integer intDays = Date.today().daysBetween(account.billing.endDate);
 			if (intDays < 0) {
 				isExpired = true;
@@ -88,7 +80,7 @@ public with sharing class AccountService {
 				message = String.format(Label.TrialAccountExpiresSoon_1, new List<String> { String.valueOf(intDays) });
 			}
 		}
-		return new TrialStatus(isExpired, message);
+		return new Account.TrialStatus(isExpired, message);
 	}
 
 	@TestVisible
@@ -346,17 +338,16 @@ public with sharing class AccountService {
 		Boolean useSOBO = AccountSettings__c.getOrgDefaults().UseSendOnBehalfOf__c;
 		Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
 		for (Account.User u : users) {
-			if (u.hasError && u.error.code == APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
-				// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
-				result.add(u.withError(null));
-			} else if (u.hasError) {
+			// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
+			if (u.hasError && u.error.code != APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
+				LOG.warn('Error while adding user ' + u.email + ': ' + u.error);
 				result.add(u);
 			} else {
 				creds.put(u.sourceId, new Credentials.UserCredentials(
 					String.valueOf(u.id),
 					useSOBO && String.isNotBlank(u.apiPassword) ? u.apiPassword : null,
 					u.canManageAccount));
-				result.add(u);
+				result.add(u.withError(null));
 			}
 		}
 
@@ -391,7 +382,7 @@ public with sharing class AccountService {
 		return result;
 	}
 
-	public List<Account.User> removeUsers(final List<Account.User> users, final Boolean closeMembership) {
+	public static List<Account.User> removeUsers(final List<Account.User> users, final Boolean closeMembership) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		Set<Id> userIds = getUserIdsToRemove(users);
@@ -399,11 +390,12 @@ public with sharing class AccountService {
 		List<Account.User> result = new List<Account.User>();
 		if (closeMembership) {
 			for (Account.User u : AccountAPI.getInstance().removeUsers(users)) {
-				if (u.hasError && u.error.code == APIErrorCode.UNKNOWN_USER) {
-					// Ignore errors where user is unknown to DS. The user was already removed from the account.
-					result.add(u.withError(null));
-				} else {
+				// Ignore errors where user is unknown to DS. The user was already removed from the account.
+				if (u.hasError && u.error.code != APIErrorCode.UNKNOWN_USER) {
+					if (u.sourceId != null) userIds.remove(u.sourceId);
 					result.add(u);
+				} else {
+					result.add(u.withError(null));
 				}
 			}
 		}
@@ -411,5 +403,22 @@ public with sharing class AccountService {
 		Credentials.clear(userIds);
 
 		return result;
+	}
+
+	public static PostInstallResults executePostInstallScripts() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return new PostInstall(true).execute(
+			UserInfo.getOrganizationId(),
+			UserInfo.getUserId(),
+			null,
+			false,
+			false);
+	}
+
+	public static void resetCredentials(final Boolean resetUsers) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		Credentials.clear(resetUsers);
 	}
 }

@@ -14,6 +14,70 @@ private class AccountServiceTest {
 		}
 	}
 
+	private class ExpiredAccountMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (request.getEndpoint().endsWith('/billing_plan')) {
+				response.setBody('{"billingPlan": {"planId": "83db741d-13af-470f-8beb-0ad0fba6e4a3","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+			} else { // GET account
+				response.setBody('{"currentPlanId":"83db741d-13af-470f-8beb-0ad0fba6e4a3","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2017-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2017-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+			}
+			return response;
+		}
+	}
+
+	static testMethod void test_getAccount_expired() {
+		Test.setMock(HttpCalloutMock.class, new ExpiredAccountMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				AccountService.getAccount();
+				throw new AssertException('Expected getAccount to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.TrialAccountExpired, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class TrialAccountMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (request.getEndpoint().endsWith('/billing_plan')) {
+				response.setBody('{"billingPlan": {"planId": "83db741d-13af-470f-8beb-0ad0fba6e4a3","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+			} else { // GET account
+				Datetime billingStart = DateTime.now().addDays(-1);
+				Datetime billingEnd = billingStart.addDays(10);
+				response.setBody('{"currentPlanId":"83db741d-13af-470f-8beb-0ad0fba6e4a3","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":' + JSON.serialize(billingStart) + ',"billingPeriodEndDate":' + JSON.serialize(billingEnd) + ',"billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+			}
+			return response;
+		}
+	}
+
+	static testMethod void test_getAccount_trial() {
+		Test.setMock(HttpCalloutMock.class, new TrialAccountMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Account result = AccountService.getAccount();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.trialStatus);
+		}
+	}
+
 	static testMethod void test_getAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
@@ -27,6 +91,7 @@ private class AccountServiceTest {
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1 === result2);
+			System.assertEquals(null, result1.trialStatus);
 		}
 	}
 
@@ -76,12 +141,12 @@ private class AccountServiceTest {
 			Environment.production);
 
 		Test.startTest();
-		AccountService.TrialStatus result1 = AccountService.getTrialStatus(account1); // today
-		AccountService.TrialStatus result2 = AccountService.getTrialStatus(account2); // 1 day
-		AccountService.TrialStatus result3 = AccountService.getTrialStatus(account3); // 2 days
-		AccountService.TrialStatus result4 = AccountService.getTrialStatus(account4); // expired
-		AccountService.TrialStatus result5 = AccountService.getTrialStatus(account5); // > 7 days
-		AccountService.TrialStatus result6 = AccountService.getTrialStatus(account6); // not trial
+		Account.TrialStatus result1 = AccountService.getTrialStatus(account1); // today
+		Account.TrialStatus result2 = AccountService.getTrialStatus(account2); // 1 day
+		Account.TrialStatus result3 = AccountService.getTrialStatus(account3); // 2 days
+		Account.TrialStatus result4 = AccountService.getTrialStatus(account4); // expired
+		Account.TrialStatus result5 = AccountService.getTrialStatus(account5); // > 7 days
+		Account.TrialStatus result6 = AccountService.getTrialStatus(account6); // not trial
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -603,6 +668,369 @@ private class AccountServiceTest {
 			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
 			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
 			System.assertEquals(SearchBehavior.CompoundMatchBeginning, result.recipientSearchBehavior);
+		}
+	}
+
+	class UserPartialSuccessMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+			if (request.getMethod() == 'POST') {
+				response.setBody('{"newUsers": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","errorDetails": {"errorCode": "SOME_ERROR","message": "Error message"}}]}');
+			} else { // DELETE
+				response.setBody('{"users": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","errorDetails": {"errorCode": "SOME_ERROR","message":"Error message"}}]}');
+			}
+
+			return response;
+		}
+	}
+
+	class UserExistenceMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+			if (request.getMethod() == 'POST') {
+				response.setBody('{"newUsers": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","errorDetails": {"errorCode": "USER_ALREADY_EXISTS_IN_ACCOUNT","message": "User already exists"}}]}');
+			} else { // DELETE
+				response.setBody('{"users": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","apiPassword":"pw2","errorDetails": {"errorCode": "USER_DOES_NOT_EXIST_IN_SYSTEM","message": "User not found"}}]}');
+			}
+
+			return response;
+		}
+	}
+
+	static testMethod void test_addUsers_already_exists() {
+		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+
+			Test.startTest();
+			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
+				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
+				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(TestUtils.ID1.toString(), UserSettings__c.getInstance(u1.Id).Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(!result[1].hasError);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(TestUtils.ID2.toString(), UserSettings__c.getInstance(u2.Id).Username__c);
+		}
+	}
+
+	static testMethod void test_addUsers_success_partial() {
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+
+			Test.startTest();
+			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
+				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
+				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(TestUtils.ID1.toString(), UserSettings__c.getInstance(u1.Id).Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(result[1].hasError);
+			System.assertNotEquals(null, result[1].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[1].error.code);
+			System.assertEquals('[SOME_ERROR] Error message', result[1].error.description);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Username__c);
+		}
+	}
+
+	static testMethod void test_addUsers_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+
+			Test.startTest();
+			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
+				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
+					Account.UserStatus.Active, true, true, u1.Id, null),
+				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
+					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(TestUtils.ID1.toString(), UserSettings__c.getInstance(u1.Id).Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(!result[1].hasError);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(TestUtils.ID2.toString(), UserSettings__c.getInstance(u2.Id).Username__c);
+		}
+	}
+
+	static testMethod void test_removeUsers_self() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			User u1 = TestUtils.createUser();
+
+			Test.startTest();
+			try {
+				AccountService.removeUsers(new List<Account.User> {
+					new Account.User('u1', 'u1@unit.test', 'User', 'One', true).withSourceId(u1.Id),
+					new Account.User('u2', 'u2@unit.test', 'User', 'Two', false).withSourceId(UserInfo.getUserId())
+				}, true);
+				throw new AssertException('Expected removeUsers to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.CannotRemoveSelf, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_removeUsers_not_found() {
+		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
+			us1.Username__c = u1.Username__c;
+			us1.Password__c = UUID.randomUUID().toString();
+			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
+			us2.Username__c = u2.Username__c;
+			us2.Password__c = UUID.randomUUID().toString();
+			insert new List<UserSettings__c> { us1, us2 };
+
+			Test.startTest();
+			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
+				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
+				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+			}, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Username__c);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Password__c);
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u1.Id].Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(!result[1].hasError);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Username__c);
+			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Password__c);
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u2.Id].Username__c);
+		}
+	}
+
+	static testMethod void test_removeUsers_success_partial() {
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
+			us1.Username__c = u1.Username__c;
+			us1.Password__c = UUID.randomUUID().toString();
+			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
+			us2.Username__c = u2.Username__c;
+			us2.Password__c = UUID.randomUUID().toString();
+			insert new List<UserSettings__c> { us1, us2 };
+
+			Test.startTest();
+			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
+				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
+				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+			}, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Username__c);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Password__c);
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u1.Id].Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(result[1].hasError);
+			System.assertNotEquals(null, result[1].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[1].error.code);
+			System.assertEquals('[SOME_ERROR] Error message', result[1].error.description);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(u2.Username__c, UserSettings__c.getInstance(u2.Id).Username__c);
+			System.assertNotEquals(null, UserSettings__c.getInstance(u2.Id).Password__c);
+			System.assertEquals(u2.Username__c, [SELECT Username__c FROM User WHERE Id = :u2.Id].Username__c);
+		}
+	}
+
+	static testMethod void test_removeUsers_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
+			us1.Username__c = u1.Username__c;
+			us1.Password__c = UUID.randomUUID().toString();
+			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
+			us2.Username__c = u2.Username__c;
+			us2.Password__c = UUID.randomUUID().toString();
+			insert new List<UserSettings__c> { us1, us2 };
+
+			Test.startTest();
+			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
+				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
+					Account.UserStatus.Active, true, true, u1.Id, null),
+				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
+					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
+			}, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assert(!result[0].hasError);
+			System.assertEquals(TestUtils.ID1, result[0].id);
+			System.assertEquals(u1.Id, result[0].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Username__c);
+			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Password__c);
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u1.Id].Username__c);
+
+			System.assertNotEquals(null, result[1]);
+			System.assert(!result[1].hasError);
+			System.assertEquals(TestUtils.ID2, result[1].id);
+			System.assertEquals(u2.Id, result[1].sourceId);
+			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Username__c);
+			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Password__c);
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u2.Id].Username__c);
+		}
+	}
+
+	static testMethod void test_executePostInstallScripts_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				AccountService.executePostInstallScripts();
+				throw new AssertException('Expected executePostInstallScripts to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_executePostInstallScripts_success() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+
+			Test.startTest();
+			PostInstallResults result = AccountService.executePostInstallScripts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+		}
+	}
+
+	static testMethod void test_resetCredentials_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				AccountService.resetCredentials(true);
+				throw new AssertException('Expected resetCredentials to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resetCredentials_success() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			AccountService.resetCredentials(true);
+			Test.stopTest();
+
+			AccountSettings__c s1 = AccountSettings__c.getOrgDefaults();
+			System.assertEquals(null, s1.Username__c);
+			System.assertEquals(null, s1.Password__c);
+
+			UserSettings__c s2 = UserSettings__c.getInstance();
+			System.assertEquals(null, s2.Username__c);
+			System.assertEquals(null, s2.Password__c);
+
+			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId()].Username__c);
 		}
 	}
 }

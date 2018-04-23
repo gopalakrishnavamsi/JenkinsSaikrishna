@@ -6,6 +6,15 @@ public class Account {
 	public Billing billing { get; private set; }
 	public ConnectPermission connect { get; private set; }
 	public transient Environment environment { get; private set; }
+	public Boolean isTrial {
+		get {
+			return this.billing != null
+				&& this.plan != null
+				&& this.environment != null
+				&& this.plan.id == this.environment.trialPlanId;
+		}
+	}
+	public TrialStatus trialStatus { get; private set; }
 
 	public Account(final UUID id, final String name, final Plan plan, final Billing billing,
 		final ConnectPermission connect, final Environment environment) {
@@ -21,6 +30,21 @@ public class Account {
 	public Account withPlanId(final UUID planId) {
 		this.plan = this.plan.withId(planId);
 		return this;
+	}
+
+	public Account withTrialStatus(final TrialStatus trialStatus) {
+		this.trialStatus = trialStatus;
+		return this;
+	}
+
+	public class TrialStatus {
+		public Boolean isExpired { get; private set; }
+		public String message { get; private set; }
+
+		public TrialStatus(final Boolean isExpired, final String message) {
+			this.isExpired = isExpired;
+			this.message = message;
+		}
 	}
 
 	public class Plan {
@@ -110,7 +134,11 @@ public class Account {
 		public Boolean canSendEnvelope { get; private set; }
 		public Id sourceId { get; private set; }
 		public APIError error { get; private set; }
-		public Boolean hasError { get; private set; }
+		public Boolean hasError {
+			get {
+				return this.error != null && this.error != APIError.none;
+			}
+		}
 
 		public User(final UUID id) {
 			this(id, null, null, null, null, null, UserStatus.Unknown, false, true, null, APIError.none);
@@ -138,11 +166,15 @@ public class Account {
 			this.canSendEnvelope = canSendEnvelope;
 			this.sourceId = sourceId;
 			this.error = error == null ? APIError.none : error;
-			this.hasError = this.error != APIError.none;
 		}
 
 		public User withError(final APIError error) {
 			this.error = error;
+			return this;
+		}
+
+		public User withSourceId(final Id sourceId) {
+			this.sourceId = sourceId;
 			return this;
 		}
 	}

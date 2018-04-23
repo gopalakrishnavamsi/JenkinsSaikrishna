@@ -228,50 +228,43 @@ public with sharing class RecipientService {
 		private void verifyRelatedContacts(final EnvelopeConfiguration.RelatedContacts relatedContacts) {
 			if (relatedContacts == null
 				|| Collection.isEmpty(relatedContacts.fieldMap)
-				|| String.isBlank(relatedContacts.relationship))
-				throw new DocuSignException(Label.InvalidRelatedContact);
+				|| String.isBlank(relatedContacts.relationship)) throw new DocuSignException(Label.InvalidRelatedContact);
 		}
 
-		public String queryRelatedObjectName(final Entity source, final String relationship) {
+		@TestVisible
+		private String getRelatedObjectName(final String sObjectType, final String relationshipName) {
 			String relatedObjectName = null;
-			if (source != null) {
-				Id sourceId = source.id;
-				String q = String.format('SELECT (SELECT Id FROM {0}) FROM {1} WHERE Id = :sourceId LIMIT 1',
-					new List<String> { relationship, String.escapeSingleQuotes(source.type) });
-				List<SObject> objs = System.Database.query(q);
-				if (Collection.isNotEmpty(objs)) {
-					List<SObject> children = objs[0].getSObjects(relationship);
-					if (Collection.isNotEmpty(children)) {
-						relatedObjectName = children[0].getSObjectType().getDescribe().getName();
+			if (String.isNotBlank(sObjectType) && String.isNotBlank(relationshipName)) {
+				List<Schema.DescribeSObjectResult> ds = Schema.describeSObjects(new List<String> { sObjectType });
+				if (Collection.isNotEmpty(ds)) {
+					for (Schema.ChildRelationship cr : ds[0].getChildRelationships()) {
+						if (cr.getRelationshipName() == relationshipName) {
+							relatedObjectName = cr.getChildSObject().getDescribe().getLocalName();
+							break;
+						}
 					}
 				}
 			}
 			return relatedObjectName;
 		}
 
-		public List<String> getFieldNames(final Map<String, String> fieldMap) {
+		private List<String> getFieldNames(final Map<String, String> fieldMap) {
 			List<String> fieldNames = new List<String>(fieldMap.values());
 			fieldNames.add('Id');
 			fieldNames.add('CreatedDate');
 			return fieldNames;
 		}
 
-		@TestVisible
 		private String getValue(final Map<String, String> fieldMap, final SObject obj, final String key) {
 			String field = fieldMap.get(key);
-			if (String.isNotBlank(field)) {
-				return (String)obj.get(field);
-			}
+			if (String.isNotBlank(field)) return (String)obj.get(field);
 			return null;
 		}
 
-		@TestVisible
 		private Recipient.Authentication getAuthentication(final String accessCode, final String smsPhoneNumber) {
 			Boolean useSms = String.isNotBlank(smsPhoneNumber);
-			if (String.isNotBlank(accessCode) || useSms) {
-				return new Recipient.Authentication(accessCode, useSms,
-					useSms ? new List<String> { smsPhoneNumber } : null);
-			}
+			if (String.isNotBlank(accessCode) || useSms) return new Recipient.Authentication(accessCode, useSms,
+				useSms ? new List<String> { smsPhoneNumber } : null);
 			return null;
 		}
 
@@ -284,7 +277,7 @@ public with sharing class RecipientService {
 			verifyRelatedContacts(relatedContacts);
 
 			List<String> fieldNames = getFieldNames(relatedContacts.fieldMap);
-			Permissions.verifyIsQueryable(queryRelatedObjectName(source, relatedContacts.relationship), fieldNames);
+			Permissions.verifyIsQueryable(getRelatedObjectName(source.type, relatedContacts.relationship), fieldNames);
 
 			List<Recipient> recipients = new List<Recipient>();
 			Id sourceId = source.id;
@@ -304,7 +297,7 @@ public with sharing class RecipientService {
 						String roleName = getValue(relatedContacts.fieldMap, contact, EnvelopeConfiguration.KEY_ROLE);
 						Recipient.Role role = String.isBlank(roleName) ? null : new Recipient.Role(roleName, 0);
 
-						if (relatedContacts.isSigningGroup && String.isblank(fullName) && String.isblank(email)) {
+						if (relatedContacts.isSigningGroup && String.isBlank(fullName) && String.isBlank(email)) {
 							if (String.isNotBlank(sgName) && signingGroups.containsKey(sgName.toLowerCase())) {
 								recipients.add(Recipient.fromSigningGroup(
 									StringUtils.parseInteger(
@@ -369,7 +362,7 @@ public with sharing class RecipientService {
 			if (relatedContacts.isSigningGroup) {
 				String sgField = relatedContacts.fieldMap.get(EnvelopeConfiguration.KEY_SIGNING_GROUP);
 
-				Permissions.verifyIsQueryable(queryRelatedObjectName(source, relatedContacts.relationship),
+				Permissions.verifyIsQueryable(getRelatedObjectName(source.type, relatedContacts.relationship),
 					new List<String> { sgField });
 
 				Id sourceId = source.id;
@@ -486,7 +479,8 @@ public with sharing class RecipientService {
 		}
 	}
 
-	public static List<Recipient.Role> getDefaultRoles() {
+	@TestVisible
+	private static List<Recipient.Role> getDefaultRoles() {
 		if (DEFAULT_ROLES == null) {
 			DEFAULT_ROLES = new List<Recipient.Role>();
 			for (RoleSettings__c s : RoleSettings__c.getAll().values()) {
@@ -809,6 +803,8 @@ public with sharing class RecipientService {
 		final Recipient.EmailSettings emailSettings,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
+		Permissions.verifyIsOwner(envelopeId);
+
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(recipients)) throw new DocuSignException(Label.UndefinedRecipient);
 
@@ -821,21 +817,60 @@ public with sharing class RecipientService {
 			recipientSettings)));
 	}
 
+	public static List<Recipient> removeEnvelopeRecipients(
+		final Id envelopeId,
+		final Set<Id> recipientIds) {
+
+		Permissions.verifyIsOwner(envelopeId);
+
+		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
+		if (Collection.isEmpty(recipientIds)) throw new DocuSignException(Label.UndefinedRecipient);
+
+		return DB.deleteRecipients(envelopeId, recipientIds);
+	}
+
+	public static List<Recipient> updateEnvelopeRecipients(
+		final Id envelopeId,
+		final List<Recipient> originalRecipients,
+		final List<Recipient> updatedRecipients) {
+
+		Permissions.verifyIsOwner(envelopeId);
+
+		// Create two sets of IDs: original and updated.
+		Set<Id> originalIds = new Set<Id>();
+		if (originalRecipients != null) {
+			for (Recipient r : originalRecipients) {
+				originalIds.add(r.id);
+			}
+		}
+
+		Set<Id> updatedIds = new Set<Id>();
+		if (updatedRecipients != null) {
+			for (Recipient r : updatedRecipients) {
+				if (r.id != null) updatedIds.add(r.id);
+			}
+		}
+
+		DB.deleteRecipients(envelopeId, Collection.difference(originalIds, updatedIds));
+		return DB.upsertRecipients(envelopeId, mergeUserTags(updatedRecipients));
+	}
+
 	public static List<Recipient> resolveRelatedContacts(
 		final Entity source,
 		final EnvelopeConfiguration.RelatedContacts relatedContacts,
 		final Map<String, Recipient.SigningGroup> signingGroups) {
 
-		List<Recipient> recipients = null;
-		if (relatedContacts != null) {
-			recipients = DB.queryRelatedContacts(source, relatedContacts, signingGroups);
-		}
-		return recipients == null ? new List<Recipient>() : recipients;
+		Permissions.verifyIsDocuSignUser();
+
+		List<Recipient> result = DB.queryRelatedContacts(source, relatedContacts, signingGroups);
+		return result == null ? new List<Recipient>() : result;
 	}
 
 	public static List<Recipient> resolveDefaultRecipients(
 		final Entity source,
 		final Recipient.EmailSettings defaultEmailSettings) {
+
+		Permissions.verifyIsDocuSignUser();
 
 		if (source == null) return null;
 
@@ -849,13 +884,15 @@ public with sharing class RecipientService {
 	}
 
 	public static List<Recipient> resolveCustomRecipients(
-		final EnvelopeConfiguration.Recipients customRecipients,
+		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
 		final Map<String, Recipient.SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
+		Permissions.verifyIsDocuSignUser();
+
 		List<Recipient> recipients = new List<Recipient>();
-		if (customRecipients != null && customRecipients.recipients != null) {
-			for (EnvelopeConfiguration.CustomRecipient r : customRecipients.recipients) {
+		if (Collection.isNotEmpty(customRecipients)) {
+			for (EnvelopeConfiguration.CustomRecipient r : customRecipients) {
 				recipients.add(r.toRecipient(signingGroups).withEmailSettings(
 					defaultEmailSettings != null ? defaultEmailSettings : null));
 			}
@@ -863,7 +900,6 @@ public with sharing class RecipientService {
 		return recipients;
 	}
 
-	@TestVisible
 	private static Set<String> getSigningGroups(final Entity source,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
@@ -875,7 +911,7 @@ public with sharing class RecipientService {
 				}
 			}
 			if (recipientSettings.hasRecipients) {
-				for (EnvelopeConfiguration.CustomRecipient r : recipientSettings.recipients.recipients) {
+				for (EnvelopeConfiguration.CustomRecipient r : recipientSettings.recipients) {
 					if (r.isSigningGroup) {
 						signingGroups.add(r.signingGroupName.trim().toLowerCase());
 					}
@@ -889,12 +925,12 @@ public with sharing class RecipientService {
 		final Entity source,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
+		Permissions.verifyIsDocuSignUser();
+
 		Map<String, Recipient.SigningGroup> resolvedSigningGroups = new Map<String, Recipient.SigningGroup>();
 		if (recipientSettings != null) {
 			Set<String> targetSigningGroups = getSigningGroups(source, recipientSettings);
 			if (Collection.isNotEmpty(targetSigningGroups)) {
-				if (!AccountFeatures.getInstance().signingGroups) throw new DocuSignException(Label.SigningGroupsProhibited);
-
 				List<SigningGroup> sgs = EnvelopeAPI.getInstance().getSigningGroups();
 				if (sgs != null) {
 					for (SigningGroup sg : sgs) {
@@ -919,29 +955,5 @@ public with sharing class RecipientService {
 		}
 
 		return resolvedSigningGroups;
-	}
-
-	public static List<Recipient> updateEnvelopeRecipients(
-		final Id envelopeId,
-		final List<Recipient> originalRecipients,
-		final List<Recipient> updatedRecipients) {
-
-		// Create two sets of IDs: original and updated.
-		Set<Id> originalIds = new Set<Id>();
-		if (originalRecipients != null) {
-			for (Recipient r : originalRecipients) {
-				originalIds.add(r.id);
-			}
-		}
-
-		Set<Id> updatedIds = new Set<Id>();
-		if (updatedRecipients != null) {
-			for (Recipient r : updatedRecipients) {
-				if (r.id != null) updatedIds.add(r.id);
-			}
-		}
-
-		DB.deleteRecipients(envelopeId, Collection.difference(originalIds, updatedIds));
-		return DB.upsertRecipients(envelopeId, mergeUserTags(updatedRecipients));
 	}
 }

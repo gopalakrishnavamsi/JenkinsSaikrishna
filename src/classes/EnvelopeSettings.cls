@@ -234,7 +234,7 @@ public with sharing class EnvelopeSettings {
 		return new Envelope.Options(
 			sendNow,
 			settings != null && settings.AddAnchorTags__c == true,
-			settings != null && settings.FetchDocuments__c == true,
+			settings != null && settings.FetchDocuments__c == true && Salesforce.canUseApi,
 			settings != null && settings.UseNotificationDefaults__c == true);
 	}
 }

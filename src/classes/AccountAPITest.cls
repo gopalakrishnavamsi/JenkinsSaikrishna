@@ -96,7 +96,7 @@ private class AccountAPITest {
 			System.assertNotEquals(null, a.billing);
 			System.assertEquals(UUID.fromString('67db8eaa-8e05-486b-a146-8cb2b93d1aa4'), a.id);
 			System.assertEquals('DocuSign', a.name);
-			System.assertEquals(Environment.trial30DayPlanId, a.plan.id);
+			System.assertNotEquals(null, a.plan.id);
 			System.assertEquals('DEVCENTER_DEMO_APRIL2013', a.plan.name);
 			System.assertEquals(Date.newInstance(2017, 1, 5), a.plan.startDate);
 			System.assertEquals(Date.newInstance(2018, 1, 5), a.plan.endDate);
@@ -155,7 +155,7 @@ private class AccountAPITest {
 
 			System.assertNotEquals(null, a2);
 			System.assertNotEquals(null, a2.plan);
-			System.assertEquals(Environment.trial30DayPlanId, a2.plan.id);
+			System.assertNotEquals(null, a2.plan.id);
 		}
 	}
 
@@ -559,14 +559,19 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+
+			String u1Email = 'user1@unit.test';
+			String u2Email = 'user2@unit.test';
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final List<Account.User> users = client.addUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, UserInfo.getUserId(), null),
-				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
-					Account.UserStatus.PendingActivation, false, true, null, null)
+			List<Account.User> users = client.addUsers(new List<Account.User> {
+				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
+					Account.UserStatus.Active, true, true, u1.Id, null),
+				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
+					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
 			});
 			Test.stopTest();
 
@@ -577,11 +582,11 @@ private class AccountAPITest {
 			System.assert(!users[0].hasError);
 			System.assertEquals(TestUtils.ID1, users[0].id);
 			System.assertEquals('user1', users[0].username);
-			System.assertEquals('user1@test.com', users[0].email);
+			System.assertEquals(u1Email, users[0].email);
 			System.assertEquals('User', users[0].firstName);
 			System.assertEquals('One', users[0].lastName);
-			System.assertEquals('fake-password', users[0].apiPassword);
-			System.assertEquals(UserInfo.getUserId(), users[0].sourceId);
+			System.assertEquals('pw1', users[0].apiPassword);
+			System.assertEquals(u1.Id, users[0].sourceId);
 			System.assertEquals(Account.UserStatus.Active, users[0].status);
 			System.assert(users[0].canManageAccount);
 			System.assert(users[0].canSendEnvelope);
@@ -590,10 +595,11 @@ private class AccountAPITest {
 			System.assert(!users[1].hasError);
 			System.assertEquals(TestUtils.ID2, users[1].id);
 			System.assertEquals('user2', users[1].username);
-			System.assertEquals('user2@test.com', users[1].email);
+			System.assertEquals(u2Email, users[1].email);
 			System.assertEquals('User', users[1].firstName);
 			System.assertEquals('Two', users[1].lastName);
-			System.assertEquals('fake-password', users[1].apiPassword);
+			System.assertEquals('pw2', users[1].apiPassword);
+			System.assertEquals(u2.Id, users[1].sourceId);
 			System.assertEquals(Account.UserStatus.PendingActivation, users[1].status);
 			System.assert(!users[1].canManageAccount);
 			System.assert(users[1].canSendEnvelope);

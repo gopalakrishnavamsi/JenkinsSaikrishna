@@ -395,7 +395,7 @@ public with sharing class EnvelopeService {
 	@TestVisible
 	private static Envelope addCustomRecipients(
 		final Envelope envelope,
-		final EnvelopeConfiguration.Recipients customRecipients,
+		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
 		final Map<String, Recipient.SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 

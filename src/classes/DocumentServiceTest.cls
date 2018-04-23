@@ -805,4 +805,93 @@ private class DocumentServiceTest {
 			System.assertEquals(d2.sourceId, result[1].sourceId);
 		}
 	}
+
+	static testMethod void test_resolveFiles_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				DocumentService.resolveFiles(null);
+				throw new AssertException('Expected resolveFiles to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveFiles_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+
+			Test.startTest();
+			List<Document> result = DocumentService.resolveFiles(new Set<Id> { cv1.Id, cv2.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+		}
+	}
+
+	static testMethod void test_resolveTemplates_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				DocumentService.resolveTemplates(null);
+				throw new AssertException('Expected resolveTemplates to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveTemplates_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			List<Document> result = DocumentService.resolveTemplates(new Set<UUID> { UUID.randomUUID(), UUID.randomUUID() });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+		}
+	}
+
+	static testMethod void test_resolveLinkedFiles_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				DocumentService.resolveLinkedFiles(null);
+				throw new AssertException('Expected resolveLinkedFiles to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	static testMethod void test_resolveLinkedFiles_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Schema.Account a1 = TestUtils.createAccount();
+			Schema.Account a2 = TestUtils.createAccount();
+			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv2 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv3 = TestUtils.createContentVersion(a2.Id);
+
+			Test.startTest();
+			List<Document> result = DocumentService.resolveLinkedFiles(new Set<Id> { a1.Id, a2.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+		}
+	}
 }

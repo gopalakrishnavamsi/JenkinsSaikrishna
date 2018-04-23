@@ -280,6 +280,7 @@ public class TestUtils {
 		accountSettings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 		accountSettings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 		accountSettings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		accountSettings.CanUseSalesforceApi__c = true;
 		insert accountSettings;
 
 		insert EnvelopeSettings__c.getOrgDefaults();

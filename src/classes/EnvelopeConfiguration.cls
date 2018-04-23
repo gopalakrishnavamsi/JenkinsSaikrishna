@@ -27,6 +27,7 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class VisibilitySettings {
+
 		public Boolean showTagButton { get; private set; } // STB
 		public Boolean showSendButton { get; private set; } // SSB
 		public Boolean showEmailSubject { get; private set; } // SES
@@ -63,6 +64,7 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class CustomRecipient {
+
 		public String email { get; private set; }
 		public String firstName { get; private set; }
 		public String lastName { get; private set; }
@@ -169,6 +171,7 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class RecipientType {
+
 		public String type { get; private set; }
 		public Boolean signNow { get; private set; }
 
@@ -179,6 +182,7 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class RecipientRoleType {
+
 		public String role { get; private set; }
 		public RecipientType type { get; private set; }
 
@@ -189,8 +193,9 @@ public with sharing class EnvelopeConfiguration {
 	}
 
 	public class RecipientSettings {
+
 		public List<RelatedContacts> relatedContacts { get; private set; } // CRCL
-		public Recipients recipients { get; private set; } // CRL
+		public List<CustomRecipient> recipients { get; private set; } // CRL
 		public Boolean addSourceRecipients { get; private set; }
 		public Integer recipientLimit { get; private set; } // RSL
 		public Boolean sequentialRoutingOrder { get; private set; } // RROS
@@ -201,22 +206,30 @@ public with sharing class EnvelopeConfiguration {
 		public Map<String, String> roleToNotes { get; private set; } // CCNM
 		public Boolean hasRelatedContacts {
 			get {
-				return this.relatedContacts != null;
+				return Collection.isNotEmpty(this.relatedContacts);
 			}
 		}
 		public Boolean hasRecipients {
 			get {
-				return this.recipients != null && Collection.isNotEmpty(this.recipients.recipients);
+				return Collection.isNotEmpty(this.recipients);
 			}
 		}
 
-		public RecipientSettings(final List<RelatedContacts> relatedContacts, final Recipients recipients,
-			final Integer recipientLimit, final Boolean sequentialRoutingOrder, final Integer startingRoutingOrder,
-			final List<RecipientRoleType> recipientRoleTypes, final Map<String, String> roleToTemplateRoles,
-			final Map<String, RecipientType> roleToRecipientTypes, final Map<String, String> roleToNotes) {
+		public RecipientSettings(
+			final List<RelatedContacts> relatedContacts,
+			final List<CustomRecipient> recipients,
+			final Boolean addSourceRecipients,
+			final Integer recipientLimit,
+			final Boolean sequentialRoutingOrder,
+			final Integer startingRoutingOrder,
+			final List<RecipientRoleType> recipientRoleTypes,
+			final Map<String, String> roleToTemplateRoles,
+			final Map<String, RecipientType> roleToRecipientTypes,
+			final Map<String, String> roleToNotes) {
 
 			this.relatedContacts = relatedContacts;
 			this.recipients = recipients;
+			this.addSourceRecipients = addSourceRecipients;
 			this.recipientLimit = recipientLimit;
 			this.sequentialRoutingOrder = sequentialRoutingOrder;
 			this.startingRoutingOrder = startingRoutingOrder >= 1 ? startingRoutingOrder : 1;
@@ -224,26 +237,11 @@ public with sharing class EnvelopeConfiguration {
 			this.roleToTemplateRoles = roleToTemplateRoles;
 			this.roleToRecipientTypes = roleToRecipientTypes;
 			this.roleToNotes = roleToNotes;
-			// First use CRCL LoadDefaultContacts if defined, then CRL, then default.
-			if (relatedContacts != null) {
-				for (RelatedContacts rc : relatedContacts) {
-					if (rc.addSourceRecipients == true) {
-						this.addSourceRecipients = rc.addSourceRecipients;
-						break;
-					}
-				}
-			}
-
-			if (recipients != null && recipients.addSourceRecipients != null) {
-				this.addSourceRecipients = recipients.addSourceRecipients;
-			} else {
-				// TODO: Should this default to true?
-				this.addSourceRecipients = false;
-			}
 		}
 	}
 
 	public class DocumentSettings {
+
 		public Boolean addSourceDocuments { get; private set; } // LA/LF
 		public Set<UUID> templateIds { get; private set; } // DST
 		public Set<Id> fileIds { get; private set; } // RC
@@ -290,9 +288,15 @@ public with sharing class EnvelopeConfiguration {
 		this.error = ex;
 	}
 
-	public EnvelopeConfiguration(final Id id, final Entity source, final ClickAction action,
-		final VisibilitySettings visibility, final Envelope.Notifications notifications,
-		final Recipient.EmailSettings email, final DocumentSettings documents, final RecipientSettings recipients) {
+	public EnvelopeConfiguration(
+		final Id id,
+		final Entity source,
+		final ClickAction action,
+		final VisibilitySettings visibility,
+		final Envelope.Notifications notifications,
+		final Recipient.EmailSettings email,
+		final DocumentSettings documents,
+		final RecipientSettings recipients) {
 
 		this.id = id;
 		this.source = source;
@@ -302,15 +306,5 @@ public with sharing class EnvelopeConfiguration {
 		this.email = email;
 		this.documents = documents;
 		this.recipients = recipients;
-	}
-
-	public class Recipients {
-		public List<CustomRecipient> recipients { get; private set; }
-		public Boolean addSourceRecipients { get; private set; }
-
-		public Recipients(final List<CustomRecipient> recipients, final Boolean addSourceRecipients) {
-			this.recipients = recipients;
-			this.addSourceRecipients = addSourceRecipients;
-		}
 	}
 }

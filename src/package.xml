@@ -113,7 +113,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DocuSign_for_Salesforce</members>
+        <members>DocuSign_for_Salesforce_Essentials</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -288,6 +288,7 @@
         <members>AccountSettings__c.DocumentResolvers__c</members>
         <members>AccountSettings__c.RecipientResolvers__c</members>
         <members>AccountSettings__c.RecipientSearchBehavior__c</members>
+        <members>AccountSettings__c.CanUseSalesforceApi__c</members>
         <members>ChatterSettings__c.Flags__c</members>
         <members>ChatterSettings__c.EnvelopeCompleted__c</members>
         <members>ChatterSettings__c.EnvelopeDeclined__c</members>
