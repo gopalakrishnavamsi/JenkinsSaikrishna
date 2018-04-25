@@ -6,9 +6,7 @@ public with sharing class EnvelopeService {
 
 	@TestVisible
 	private static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
-		if (envelope == null) {
-			return new ValidationResult(Label.UndefinedEnvelope);
-		}
+		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
 
 		ValidationResult result = new ValidationResult();
 
@@ -25,18 +23,22 @@ public with sharing class EnvelopeService {
 				if (cf.isList) {
 					if (cf.required && cf.show) {
 						if (Collection.isEmpty(cf.items)) {
-							result.add(Label.RequiredEmptyList);
-							break;
+							result.add(String.format(Label.RequiredEmptyList_1, new List<String> { cf.name }));
 						} else if (String.isBlank(cf.value)) {
-							result.add(Label.RequiredCustomFieldsMissing);
-							break;
+							result.add(String.format(Label.RequiredCustomField_1, new List<String> { cf.name }));
 						}
 					}
 				} else if (cf.required && cf.show && String.isBlank(cf.value)) {
-					result.add(Label.RequiredCustomFieldsMissing);
-					break;
+					result.add(String.format(Label.RequiredCustomField_1, new List<String> { cf.name }));
 				}
 			}
+		}
+
+		if (envelope.notifications != null &&
+			(envelope.notifications.remindAfterDays < 0 || envelope.notifications.remindFrequencyDays < 0
+				|| envelope.notifications.expireAfterDays < 0 || envelope.notifications.expireWarnDays < 0)) {
+
+			result.add(Label.InvalidNotificationSettings);
 		}
 
 		if (String.isBlank(envelope.emailSubject) || envelope.emailSubject.length() > 100) {
@@ -45,13 +47,6 @@ public with sharing class EnvelopeService {
 
 		if (String.isNotBlank(envelope.emailMessage) && envelope.emailMessage.length() > 2000) {
 			result.add(Label.EmailMessageTooLarge);
-		}
-
-		if (envelope.notifications != null &&
-			(envelope.notifications.remindAfterDays < 0 || envelope.notifications.remindFrequencyDays < 0
-				|| envelope.notifications.expireAfterDays < 0 || envelope.notifications.expireWarnDays < 0)) {
-
-			result.add(Label.InvalidNotificationSettings);
 		}
 
 		return result;
@@ -94,16 +89,17 @@ public with sharing class EnvelopeService {
 				Id = e.id,
 				DocuSignId__c = UUID.toString(e.docuSignId),
 				EnvelopeConfiguration__c = e.envelopeConfigurationId,
-				Remind__c = e.notifications == null ? null : e.notifications.remind,
-				RemindAfterDays__c = e.notifications == null ? null : e.notifications.remindAfterDays,
-				RemindFrequencyDays__c = e.notifications == null ? null : e.notifications.remindFrequencyDays,
-				Expires__c = e.notifications == null ? null : e.notifications.expires,
-				ExpireAfterDays__c = e.notifications == null ? null : e.notifications.expireAfterDays,
-				ExpireWarnDays__c = e.notifications == null ? null : e.notifications.expireWarnDays,
-				UpdateChatter__c = e.notifications == null ? null : e.notifications.updateChatter,
+				Remind__c = e.notifications == null ? false : e.notifications.remind,
+				RemindAfterDays__c = e.notifications == null ? 0 : e.notifications.remindAfterDays,
+				RemindFrequencyDays__c = e.notifications == null ? 0 : e.notifications.remindFrequencyDays,
+				Expires__c = e.notifications == null ? false : e.notifications.expires,
+				ExpireAfterDays__c = e.notifications == null ? 0 : e.notifications.expireAfterDays,
+				ExpireWarnDays__c = e.notifications == null ? 0 : e.notifications.expireWarnDays,
+				UpdateChatter__c = e.notifications == null ? false : e.notifications.updateChatter,
 				EmailSubject__c = e.emailSubject,
 				EmailMessage__c = e.emailMessage,
-				SourceId__c = e.source == null || e.source.id == null ? null : e.source.id);
+				SourceId__c = e.source == null || e.source.id == null ? null : e.source.id,
+				Sent__c = e.sent);
 		}
 
 		public Envelope queryEnvelope(final Id envelopeId) {
@@ -137,7 +133,7 @@ public with sharing class EnvelopeService {
 					EmailMessage__c,
 					SourceId__c,
 					Sent__c,
-					Owner.Id, (
+					OwnerId, (
 					SELECT Id,
 						Type__c,
 						Sequence__c,
@@ -178,7 +174,6 @@ public with sharing class EnvelopeService {
 
 			Envelope e = null;
 			if (Collection.isNotEmpty(dses)) {
-				// DFS-4283: Ensure current user owns the requested envelope.
 				if (dses[0].OwnerId != UserInfo.getUserId()) throw UnauthorizedException.notEnvelopeOwner();
 				e = convert(dses[0]);
 			}
@@ -195,7 +190,7 @@ public with sharing class EnvelopeService {
 			if (envelope == null) return envelope;
 
 			Envelope__c e = convert(envelope);
-			upsert e;
+			insert e;
 
 			return convert(e)
 				.withDocuments(envelope.documents)
@@ -312,58 +307,45 @@ public with sharing class EnvelopeService {
 	}
 
 	@TestVisible
-	private static Envelope addNotifications(
-		final Envelope envelope,
-		final Envelope.Notifications notifications) {
-
+	private static Envelope addNotifications(final Envelope envelope, final Envelope.Notifications notifications) {
 		if (envelope == null || notifications == null) return envelope;
 
 		return envelope.withNotifications(notifications);
 	}
 
 	@TestVisible
-	private static Envelope addEmail(
-		final Envelope envelope,
-		final Recipient.EmailSettings emailSettings) {
-
-		if (envelope == null || emailSettings == null) return envelope;
+	private static Envelope addEmail(final Envelope envelope, final String emailSubject, final String emailMessage) {
+		if (envelope == null || (String.isBlank(emailSubject) && String.isBlank(emailMessage))) return envelope;
 
 		return envelope
 			.withEmail(
-				StringUtils.replaceUserTags(String.isNotBlank(emailSettings.subject) ? emailSettings.subject : envelope.emailSubject),
-				StringUtils.replaceUserTags(String.isNotBlank(emailSettings.message) ? emailSettings.message : envelope.emailMessage));
+				StringUtils.replaceUserTags(String.isNotBlank(emailSubject) ? emailSubject : envelope.emailSubject),
+				StringUtils.replaceUserTags(String.isNotBlank(emailMessage) ? emailMessage : envelope.emailMessage));
 	}
 
 	@TestVisible
-	private static Envelope addFiles(
-		final Envelope envelope,
-		final Set<Id> fileIds) {
-
+	private static Envelope addFiles(final Envelope envelope, final Set<Id> fileIds) {
 		if (envelope == null || Collection.isEmpty(fileIds)) return envelope;
 
 		return envelope.addDocuments(DocumentService.resolveFiles(fileIds));
 	}
 
 	@TestVisible
-	private static Envelope addTemplates(
-		final Envelope envelope,
-		final Set<UUID> templateIds) {
-
+	private static Envelope addTemplates(final Envelope envelope, final Set<UUID> templateIds) {
 		if (envelope == null || Collection.isEmpty(templateIds)) return envelope;
 
 		return envelope.addDocuments(DocumentService.resolveTemplates(templateIds));
 	}
 
 	@TestVisible
-	private static Envelope addDefaultDocuments(
-		final Envelope envelope,
-		final Entity source,
-		final Boolean addSourceDocuments) {
+	private static Envelope addSourceDocuments(final Envelope envelope, final Entity source,
+		final Boolean addLastUpdatedOnly) {
 
-		if (envelope == null || source == null || !addSourceDocuments) return envelope;
+		if (envelope == null || source == null) return envelope;
 
 		return envelope.addDocuments(DocumentService.resolveLinkedFiles(
-			envelope.id == null ? new Set<Id> { source.id } : new Set<Id> { source.id, envelope.id }));
+			envelope.id == null ? new Set<Id> { source.id } : new Set<Id> { source.id, envelope.id },
+			addLastUpdatedOnly));
 	}
 
 	@TestVisible
@@ -383,13 +365,13 @@ public with sharing class EnvelopeService {
 	}
 
 	@TestVisible
-	private static Envelope addDefaultRecipients(
+	private static Envelope addSourceRecipients(
 		final Envelope envelope,
 		final Entity source,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
 		if (envelope == null || source == null) return envelope;
-		return envelope.addRecipients(RecipientService.resolveDefaultRecipients(source, defaultEmailSettings));
+		return envelope.addRecipients(RecipientService.resolveSourceRecipients(source, defaultEmailSettings));
 	}
 
 	@TestVisible
@@ -407,7 +389,9 @@ public with sharing class EnvelopeService {
 	public static Envelope createEnvelope(
 		final Envelope envelope,
 		final EnvelopeConfiguration envelopeConfiguration,
-		final Boolean loadDefaults) {
+		final Boolean addFromSource) {
+
+		Permissions.verifyIsDocuSignUser();
 
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -425,7 +409,9 @@ public with sharing class EnvelopeService {
 			// Envelope-level customization
 			result = result.withEnvelopeConfigurationId(envelopeConfiguration.id);
 			result = addNotifications(result, envelopeConfiguration.notifications);
-			result = addEmail(result, envelopeConfiguration.email);
+			if (envelopeConfiguration.email != null) {
+				result = addEmail(result, envelopeConfiguration.email.subject, envelopeConfiguration.email.message);
+			}
 			if (envelopeConfiguration.id != null) result.withEnvelopeConfigurationId(envelopeConfiguration.id);
 
 			if (envelopeConfiguration.documents != null) {
@@ -434,23 +420,27 @@ public with sharing class EnvelopeService {
 				// Document-level customization
 				result = addFiles(result, envelopeConfiguration.documents.fileIds);
 				result = addTemplates(result, envelopeConfiguration.documents.templateIds);
-				result = addDefaultDocuments(result, envelopeConfiguration.source, envelopeConfiguration.documents.addSourceDocuments);
+			}
+			if (envelopeConfiguration.documents == null || envelopeConfiguration.documents.addSourceDocuments) {
+				result = addSourceDocuments(result, envelopeConfiguration.source,
+					envelopeConfiguration.documents.addLastUpdatedOnly);
 			}
 
 			if (envelopeConfiguration.hasRecipients) {
 				// Recipient-level customization
 				Map<String, Recipient.SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
 					envelopeConfiguration.source, envelopeConfiguration.recipients);
-				result = addRelatedContacts(result, envelopeConfiguration.source, envelopeConfiguration.recipients.relatedContacts, signingGroups);
-				result = addCustomRecipients(result, envelopeConfiguration.recipients.recipients, signingGroups, defaultEmailSettings);
-
+				result = addRelatedContacts(result, envelopeConfiguration.source,
+					envelopeConfiguration.recipients.relatedContacts, signingGroups);
+				result = addCustomRecipients(result, envelopeConfiguration.recipients.recipients, signingGroups,
+					defaultEmailSettings);
 			}
-			if (envelopeConfiguration.recipients != null && envelopeConfiguration.recipients.addSourceRecipients) {
-				result = addDefaultRecipients(result, envelopeConfiguration.source, defaultEmailSettings);
+			if (envelopeConfiguration.recipients == null || envelopeConfiguration.recipients.addSourceRecipients) {
+				result = addSourceRecipients(result, envelopeConfiguration.source, defaultEmailSettings);
 			}
-		} else if (loadDefaults) { // Default settings if custom button is undefined?
-			result = addDefaultDocuments(result, result.source, EnvelopeSettings__c.getOrgDefaults().AddFiles__c);
-			result = addDefaultRecipients(result, result.source, defaultEmailSettings);
+		} else if (addFromSource) { // Default settings if custom button is undefined?
+			result = addSourceDocuments(result, result.source, false);
+			result = addSourceRecipients(result, result.source, defaultEmailSettings);
 		}
 
 		return saveEnvelope(result, envelopeConfiguration);
@@ -458,16 +448,24 @@ public with sharing class EnvelopeService {
 
 	public static Envelope getEnvelope(final Id envelopeId) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
-		final Envelope envelope = DB.queryEnvelope(envelopeId);
+
+		// queryEnvelope verifies ownership
+		Envelope envelope = DB.queryEnvelope(envelopeId);
+
 		if (envelope == null) throw new DocuSignException(Label.EnvelopeNotFound);
 		return envelope;
 	}
 
 	public static Envelope copyEnvelope(final Id envelopeId) {
+		// queryEnvelope via getEnvelope verifies ownership
 		return saveEnvelope(getEnvelope(envelopeId).copy(), null);
 	}
 
 	public static Envelope updateEnvelopeNotifications(final Envelope envelope) {
+		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
+
+		Permissions.verifyIsOwner(envelope.id);
+
 		ValidationResult vr = validate(envelope, false);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
@@ -475,6 +473,10 @@ public with sharing class EnvelopeService {
 	}
 
 	public static Envelope updateEnvelope(final Envelope envelope) {
+		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
+
+		Permissions.verifyIsOwner(envelope.id);
+
 		ValidationResult vr = validate(envelope, false);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
@@ -487,38 +489,49 @@ public with sharing class EnvelopeService {
 	}
 
 	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
+		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
+
+		Permissions.verifyIsOwner(envelope.id);
+
 		ValidationResult vr = validate(envelope, sendNow);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
 		Envelope result = replaceUserTags(envelope);
 		UUID docuSignId = EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow));
-		result = result.withDocuSignId(docuSignId).withSent(Datetime.now());
+		result = result.withDocuSignId(docuSignId);
+		if (sendNow) result = result.withSent(Datetime.now());
 		// Can update in some workflows, but not in others due to subsequent callouts (e.g. mobile)
-		if (updateNow) {
-			result = DB.updateEnvelope2(result, sendNow);
-		}
+		if (updateNow) result = DB.updateEnvelope2(result, sendNow);
 
 		return result;
 	}
 
-	public static Boolean markSent(
+	public static Boolean markEnvelopeSent(
 		final Envelope envelope,
 		final Boolean sendNow) {
+
+		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
+
+		Permissions.verifyIsOwner(envelope.id);
 
 		Envelope result = replaceUserTags(envelope);
 		return DB.updateEnvelopeSent(result.id, result.docuSignId, result.emailSubject, result.emailMessage, sendNow);
 	}
 
 	public static Id deleteEnvelope(final Id envelopeId) {
+		Permissions.verifyIsOwner(envelopeId);
+
 		return DB.deleteEnvelope2(envelopeId);
 	}
 
 	public static Envelope getEmptyEnvelope(final Entity source) {
+		Permissions.verifyIsDocuSignUser();
+
 		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
-		Integer remindAfterDays = Integer.valueOf(settings.ReminderDays__c);
-		Integer remindFrequencyDays = Integer.valueOf(settings.ReminderRepeatInterval__c);
-		Integer expireAfterDays = Integer.valueOf(settings.ExpireDays__c);
-		Integer expireWarnDays = Integer.valueOf(settings.ExpireWarningInterval__c);
+		Integer remindAfterDays = Integer.valueOf(settings.RemindAfterDays__c);
+		Integer remindFrequencyDays = Integer.valueOf(settings.RemindFrequencyDays__c);
+		Integer expireAfterDays = Integer.valueOf(settings.ExpireAfterDays__c);
+		Integer expireWarnDays = Integer.valueOf(settings.ExpireWarnDays__c);
 		Recipient.EmailSettings emailSettings = Localization.getEmailSettingsForCurrentLanguage();
 		return new Envelope(
 			null,
@@ -535,7 +548,9 @@ public with sharing class EnvelopeService {
 				expireAfterDays >= 0,
 				expireAfterDays >= 0 ? expireAfterDays : null,
 				expireWarnDays >= 0 ? expireWarnDays : null,
-				Salesforce.isChatterEnabled && settings.Chatter__c == EnvelopeSettings.CHATTER_ENABLED_ALWAYS_ON),
+				Salesforce.isChatterEnabled
+					&& (settings.Chatter__c == EnvelopeSettings.CHATTER_ENABLED_ALWAYS_ON
+					|| settings.Chatter__c == EnvelopeSettings.CHATTER_ENABLED_DEFAULT_ON)),
 			emailSettings.subject,
 			emailSettings.message,
 			source,

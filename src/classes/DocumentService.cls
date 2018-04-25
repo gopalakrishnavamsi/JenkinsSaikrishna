@@ -253,13 +253,15 @@ public with sharing class DocumentService {
 		return result;
 	}
 
-	public static List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds) {
+	public static List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds,
+		final Boolean getLastUpdatedOnly) {
+
 		Permissions.verifyIsDocuSignUser();
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
 			if (dr.canResolveDocuments(sObjectType)) {
-				result = dr.getLinkedDocuments(sObjectType, linkedEntityIds);
+				result = dr.getLinkedDocuments(sObjectType, linkedEntityIds, getLastUpdatedOnly);
 				break;
 			}
 		}
@@ -382,11 +384,11 @@ public with sharing class DocumentService {
 		return templates;
 	}
 
-	public static List<Document> resolveLinkedFiles(final Set<Id> linkedEntityIds) {
+	public static List<Document> resolveLinkedFiles(final Set<Id> linkedEntityIds, final Boolean getLastUpdatedOnly) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (Collection.isEmpty(linkedEntityIds)) throw new DocuSignException(Label.InvalidSource);
 
-		return getLinkedDocuments('ContentVersion', linkedEntityIds);
+		return getLinkedDocuments('ContentVersion', linkedEntityIds, getLastUpdatedOnly);
 	}
 }

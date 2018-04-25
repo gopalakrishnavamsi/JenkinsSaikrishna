@@ -228,7 +228,10 @@ public class Recipient implements Comparable {
 		}
 
 		public Authentication copy() {
-			return new Authentication(this.accessCode, this.idCheckRequired, this.smsPhoneNumbers.clone());
+			return new Authentication(
+				this.accessCode,
+				this.idCheckRequired,
+				this.smsPhoneNumbers == null ? null : this.smsPhoneNumbers.clone());
 		}
 	}
 
@@ -248,7 +251,11 @@ public class Recipient implements Comparable {
 		}
 
 		public EmailSettings copy() {
-			return new EmailSettings(this.language, this.languageLabel, this.subject, this.message);
+			return new EmailSettings(
+				this.language,
+				this.languageLabel,
+				this.subject,
+				this.message);
 		}
 
 		public EmailSettings withSubject(final String subject) {
@@ -272,9 +279,23 @@ public class Recipient implements Comparable {
 	}
 
 	public Recipient copy() {
-		return new Recipient(null, this.type, this.sequence, this.routingOrder, this.role, this.name, this.email,
-			this.signingGroup.copy(), this.phone, this.authentication.copy(), this.note, this.emailSettings.copy(),
-			this.hostName, this.hostEmail, this.signNow, this.source.copy());
+		return new Recipient(
+			null,
+			this.type,
+			this.sequence,
+			this.routingOrder,
+			this.role,
+			this.name,
+			this.email,
+			this.signingGroup == null ? null : this.signingGroup.copy(),
+			this.phone,
+			this.authentication == null ? null : this.authentication.copy(),
+			this.note,
+			this.emailSettings == null ? null : this.emailSettings.copy(),
+			this.hostName,
+			this.hostEmail,
+			this.signNow,
+			this.source == null ? null : this.source.copy());
 	}
 
 	public Recipient withType(final String type, final Boolean signNow) {

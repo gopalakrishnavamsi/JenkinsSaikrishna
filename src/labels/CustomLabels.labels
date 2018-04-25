@@ -1087,12 +1087,12 @@
 		<value>File type is unsupported.</value>
 	</labels>
 	<labels>
-		<fullName>RequiredCustomFieldsMissing</fullName>
+		<fullName>RequiredCustomField_1</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>At least one required custom field value is missing</shortDescription>
-		<value>At least one required custom field value is missing</value>
+		<shortDescription>A required custom field value is missing</shortDescription>
+		<value>Required custom field &apos;{0}&apos; value is missing.</value>
 	</labels>
 	<labels>
 		<fullName>EmailSubjectRequired</fullName>
@@ -1127,12 +1127,12 @@
 		<value>Placeholder recipient must have a role.</value>
 	</labels>
 	<labels>
-		<fullName>RequiredEmptyList</fullName>
+		<fullName>RequiredEmptyList_1</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Empty List</shortDescription>
-		<value>Custom field(s) are not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</value>
+		<value>Custom field &apos;{0}&apos; is not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidRelatedContact</fullName>

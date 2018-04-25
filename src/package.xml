@@ -2,6 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DocuSign for Salesforce Essentials</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
+    <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink></setupWeblink>
     <types>
         <members>Application</members>
@@ -254,12 +255,12 @@
         <members>AtLeastOneDocumentIsRequired</members>
         <members>AtLeastOneRecipientIsRequired</members>
         <members>InvalidFileType</members>
-        <members>RequiredCustomFieldsMissing</members>
+        <members>RequiredCustomField_1</members>
         <members>EmailSubjectRequired</members>
         <members>EmailMessageTooLarge</members>
         <members>InvalidNotificationSettings</members>
         <members>PlaceholderRecipientMustHaveRole</members>
-        <members>RequiredEmptyList</members>
+        <members>RequiredEmptyList_1</members>
         <members>InvalidRelatedContact</members>
         <members>UndefinedSigningGroup</members>
         <members>SigningGroupNotFound</members>
@@ -378,10 +379,10 @@
         <members>EnvelopeSettings__c.HideEmailSubject__c</members>
         <members>EnvelopeSettings__c.HideEmailMessage__c</members>
         <members>EnvelopeSettings__c.HideRemindExpire__c</members>
-        <members>EnvelopeSettings__c.ExpireDays__c</members>
-        <members>EnvelopeSettings__c.ExpireWarningInterval__c</members>
-        <members>EnvelopeSettings__c.ReminderDays__c</members>
-        <members>EnvelopeSettings__c.ReminderRepeatInterval__c</members>
+        <members>EnvelopeSettings__c.ExpireAfterDays__c</members>
+        <members>EnvelopeSettings__c.ExpireWarnDays__c</members>
+        <members>EnvelopeSettings__c.RemindAfterDays__c</members>
+        <members>EnvelopeSettings__c.RemindFrequencyDays__c</members>
         <members>EnvelopeSettings__c.TagInNewWindow__c</members>
         <members>EnvelopeSettings__c.SignInNewWindow__c</members>
         <members>EnvelopeSettings__c.AllowSequentialSignNow__c</members>

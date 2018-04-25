@@ -562,8 +562,8 @@
 		<name>InvalidFileType</name>
 	</customLabels>
 	<customLabels>
-		<label>At least one required custom field value is missing</label>
-		<name>RequiredCustomFieldsMissing</name>
+		<label>Required custom field &apos;{0}&apos; value is missing.</label>
+		<name>RequiredCustomField_1</name>
 	</customLabels>
 	<customLabels>
 		<label>An email subject is required and must be less than 100 characters in length.</label>
@@ -582,8 +582,8 @@
 		<name>PlaceholderRecipientMustHaveRole</name>
 	</customLabels>
 	<customLabels>
-		<label>Custom field(s) are not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</label>
-		<name>RequiredEmptyList</name>
+		<label>Custom field &apos;{0}&apos; is not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</label>
+		<name>RequiredEmptyList_1</name>
 	</customLabels>
 	<customLabels>
 		<label>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column mappings.</label>

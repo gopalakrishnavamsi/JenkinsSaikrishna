@@ -153,7 +153,7 @@ private class DocumentServiceTest {
 			Test.stopTest();
 
 			System.assertEquals(2, result1);
-			SYstem.assertEquals(0, result2);
+			System.assertEquals(0, result2);
 		}
 	}
 
@@ -433,7 +433,7 @@ private class DocumentServiceTest {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
-				DocumentService.getLinkedDocuments(null, null);
+				DocumentService.getLinkedDocuments(null, null, false);
 				throw new AssertException('Expected getLinkedDocuments to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -453,7 +453,8 @@ private class DocumentServiceTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
 
 			Test.startTest();
-			List<Document> result = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { o1.Id, a1.Id });
+			List<Document> result = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { o1.Id, a1.Id },
+				false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -867,7 +868,7 @@ private class DocumentServiceTest {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
-				DocumentService.resolveLinkedFiles(null);
+				DocumentService.resolveLinkedFiles(null, false);
 				throw new AssertException('Expected resolveLinkedFiles to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -887,7 +888,7 @@ private class DocumentServiceTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(a2.Id);
 
 			Test.startTest();
-			List<Document> result = DocumentService.resolveLinkedFiles(new Set<Id> { a1.Id, a2.Id });
+			List<Document> result = DocumentService.resolveLinkedFiles(new Set<Id> { a1.Id, a2.Id }, false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

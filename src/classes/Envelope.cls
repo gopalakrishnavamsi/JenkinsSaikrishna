@@ -68,6 +68,15 @@ public class Envelope {
 		this.sent = sent;
 	}
 
+	public Envelope(
+		final Notifications notifications,
+		final String emailSubject,
+		final String emailMessage,
+		final Entity source) {
+
+		this(null, null, null, null, null, null, null, notifications, emailSubject, emailMessage, source, null);
+	}
+
 	public class Notifications {
 
 		public Boolean remind { get; private set; }
@@ -92,8 +101,14 @@ public class Envelope {
 		}
 
 		public Notifications copy() {
-			return new Notifications(this.remind, this.remindAfterDays, this.remindFrequencyDays, this.expires,
-				this.expireAfterDays, this.expireWarnDays, this.updateChatter);
+			return new Notifications(
+				this.remind,
+				this.remindAfterDays,
+				this.remindFrequencyDays,
+				this.expires,
+				this.expireAfterDays,
+				this.expireWarnDays,
+				this.updateChatter);
 		}
 	}
 
@@ -133,16 +148,31 @@ public class Envelope {
 			}
 		}
 		List<CustomField> copiedCustomFields = null;
-		if (this.customFields == null) {
+		if (this.customFields != null) {
 			copiedCustomFields = new List<CustomField>();
 			for (CustomField cf : this.customFields) {
 				copiedCustomFields.add(cf.copy());
 			}
 		}
 
-		return new Envelope(null, this.name, null, this.envelopeConfigurationId, copiedDocuments, copiedRecipients,
-			copiedCustomFields, this.notifications.copy(), this.emailSubject, this.emailMessage, this.source.copy(),
+		return new Envelope(
+			null,
+			this.name,
+			null,
+			this.envelopeConfigurationId,
+			copiedDocuments,
+			copiedRecipients,
+			copiedCustomFields,
+			this.notifications == null ? null : this.notifications.copy(),
+			this.emailSubject,
+			this.emailMessage,
+			this.source == null ? null : this.source.copy(),
 			null);
+	}
+
+	public Envelope withId(final Id id) {
+		this.id = id;
+		return this;
 	}
 
 	public Envelope withDocuSignId(final UUID docuSignId) {
@@ -156,9 +186,7 @@ public class Envelope {
 	}
 
 	public Envelope addDocuments(final List<Document> documents) {
-		if (this.documents == null) {
-			this.documents = new List<Document>();
-		}
+		if (this.documents == null) this.documents = new List<Document>();
 		if (Collection.isNotEmpty(documents)) this.documents.addAll(documents);
 		return this;
 	}
@@ -169,9 +197,7 @@ public class Envelope {
 	}
 
 	public Envelope addRecipients(final List<Recipient> recipients) {
-		if (this.recipients == null) {
-			this.recipients = new List<Recipient>();
-		}
+		if (this.recipients == null) this.recipients = new List<Recipient>();
 		if (Collection.isNotEmpty(recipients)) this.recipients.addAll(recipients);
 		return this;
 	}

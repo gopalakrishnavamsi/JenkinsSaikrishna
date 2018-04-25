@@ -381,7 +381,7 @@ private class RecipientServiceTest {
 			Test.stopTest();
 
 			System.assertEquals(2, result1);
-			SYstem.assertEquals(0, result2);
+			System.assertEquals(0, result2);
 		}
 	}
 
@@ -1458,12 +1458,12 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveDefaultRecipients_unauthorized() {
+	static testMethod void test_resolveSourceRecipients_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
-				RecipientService.resolveDefaultRecipients(null, null);
-				throw new AssertException('Expected resolveDefaultRecipients to fail');
+				RecipientService.resolveSourceRecipients(null, null);
+				throw new AssertException('Expected resolveSourceRecipients to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
@@ -1471,7 +1471,7 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveDefaultRecipients_success() {
+	static testMethod void test_resolveSourceRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -1485,7 +1485,7 @@ private class RecipientServiceTest {
 				'nl message');
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.resolveDefaultRecipients(new Entity(a.Id), es);
+			List<Recipient> result = RecipientService.resolveSourceRecipients(new Entity(a.Id), es);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

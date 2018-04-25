@@ -53,42 +53,64 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	private static List<Document> getLinkedContentVersions(final Set<Id> linkedEntityIds) {
+	private static List<Document> getLinkedContentVersions(final Set<Id> linkedEntityIds,
+		final Boolean getLastUpdatedOnly) {
+
 		Permissions.verifyIsQueryable('ContentVersion', new List<String> {
 			'Id', 'Title', 'FileExtension', 'ContentSize'
 		});
 
 		List<Document> documents = new List<Document>();
 		if (Collection.isNotEmpty(linkedEntityIds)) {
+			List<ContentDocumentLink> cdls;
+			if (getLastUpdatedOnly) {
+				cdls = [
+					SELECT ContentDocument.LatestPublishedVersion.Id,
+						ContentDocument.LatestPublishedVersion.Title,
+						ContentDocument.LatestPublishedVersion.FileExtension,
+						ContentDocument.LatestPublishedVersion.ContentSize
+					FROM ContentDocumentLink
+					WHERE LinkedEntityId IN :linkedEntityIds
+					AND ContentDocument.PublishStatus != 'U'
+					AND ContentDocument.LatestPublishedVersion.ContentSize > 0
+					ORDER BY ContentDocument.LatestPublishedVersion.LastModifiedDate DESC,
+						ContentDocument.LatestPublishedVersion.Id DESC
+					LIMIT 1
+				];
+			} else {
+				cdls = [
+					SELECT ContentDocument.LatestPublishedVersion.Id,
+						ContentDocument.LatestPublishedVersion.Title,
+						ContentDocument.LatestPublishedVersion.FileExtension,
+						ContentDocument.LatestPublishedVersion.ContentSize
+					FROM ContentDocumentLink
+					WHERE LinkedEntityId IN :linkedEntityIds
+					AND ContentDocument.PublishStatus != 'U'
+					AND ContentDocument.LatestPublishedVersion.ContentSize > 0
+					ORDER BY ContentDocument.LatestPublishedVersion.Title
+					LIMIT 100
+				];
+			}
+
 			Integer sequence = 1;
-			for (ContentDocumentLink cdl : [
-				SELECT ContentDocument.LatestPublishedVersion.Id,
-					ContentDocument.LatestPublishedVersion.Title,
-					ContentDocument.LatestPublishedVersion.FileExtension,
-					ContentDocument.LatestPublishedVersion.ContentSize
-				FROM ContentDocumentLink
-				WHERE LinkedEntityId IN :linkedEntityIds
-				AND ContentDocument.PublishStatus != 'U'
-				AND ContentDocument.LatestPublishedVersion.ContentSize > 0
-				ORDER BY ContentDocument.LatestPublishedVersion.Title
-				LIMIT 100
-			]) {
+			for (ContentDocumentLink cdl : cdls) {
 				if (cdl != null && cdl.ContentDocument != null && cdl.ContentDocument.LatestPublishedVersion != null) {
 					ContentVersion cv = cdl.ContentDocument.LatestPublishedVersion;
 					documents.add(new Document(null, Document.TYPE_FILE, sequence++, cv.Title, cv.FileExtension,
 						cv.ContentSize, cv.Id));
 				}
 			}
-
 		}
 		return documents;
 	}
 
-	public List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds) {
+	public List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds,
+		final Boolean getLastUpdatedOnly) {
+
 		List<Document> result = null;
 		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
 		if (t == 'ContentVersion') { // Only content versions have parentIds
-			result = getLinkedContentVersions(linkedEntityIds);
+			result = getLinkedContentVersions(linkedEntityIds, getLastUpdatedOnly);
 		} else if (t != 'Document') {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
 				new List<String> { sObjectType }));

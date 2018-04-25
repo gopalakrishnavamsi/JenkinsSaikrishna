@@ -866,7 +866,7 @@ public with sharing class RecipientService {
 		return result == null ? new List<Recipient>() : result;
 	}
 
-	public static List<Recipient> resolveDefaultRecipients(
+	public static List<Recipient> resolveSourceRecipients(
 		final Entity source,
 		final Recipient.EmailSettings defaultEmailSettings) {
 

@@ -27,10 +27,11 @@ public interface DocumentResolver {
 	 *
 	 * @param sObjectType The document SObject type name.
 	 * @param linkedEntityIds The linked SObject IDs.
+	 * @param getLastUpdatedOnly Whether to load only the last updated document or all linked documents.
 	 *
 	 * @return
 	 */
-	List<Document> getLinkedDocuments(String sObjectType, Set<Id> linkedEntityIds);
+	List<Document> getLinkedDocuments(String sObjectType, Set<Id> linkedEntityIds, Boolean getLastUpdatedOnly);
 
 	/**
 	 * Retrieves document folders for the specified type.

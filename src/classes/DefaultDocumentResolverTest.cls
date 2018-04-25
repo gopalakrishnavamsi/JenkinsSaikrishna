@@ -90,7 +90,7 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_ContentVersion() {
+	static testMethod void test_getLinkedDocuments_ContentVersion_all() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
@@ -101,7 +101,7 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(o1.Id);
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id, o1.Id, c1.Id });
+			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id, o1.Id, c1.Id }, false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -144,13 +144,32 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
+	static testMethod void test_getLinkedDocuments_ContentVersion_last_updated_only() {
+		System.runAs(TestUtils.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			Schema.Account a1 = TestUtils.createAccount();
+			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv2 = TestUtils.createContentVersion(a1.Id);
+			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
+
+			Test.startTest();
+			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id }, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(cv3.Id, result[0].sourceId);
+		}
+	}
+
 	static testMethod void test_getLinkedDocuments_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments('\nDOCUMENT', new Set<Id> { a.Id });
+			List<Document> result = dr.getLinkedDocuments('\nDOCUMENT', new Set<Id> { a.Id }, false);
 			Test.stopTest();
 
 			// Documents cannot be linked to entities, so will never return a result.
@@ -164,7 +183,7 @@ private class DefaultDocumentResolverTest {
 
 			Test.startTest();
 			try {
-				dr.getLinkedDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				dr.getLinkedDocuments('User', new Set<Id> { UserInfo.getUserId() }, false);
 				throw new AssertException('Expected getLinkedDocuments to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());

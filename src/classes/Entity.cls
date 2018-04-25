@@ -65,7 +65,10 @@ public with sharing class Entity {
 	}
 
 	public Entity copy() {
-		return new Entity(this.id, this.name, this.parent.copy());
+		return new Entity(
+			this.id,
+			this.name,
+			this.parent == null ? null : this.parent.copy());
 	}
 
 	public Entity withName(final String name) {

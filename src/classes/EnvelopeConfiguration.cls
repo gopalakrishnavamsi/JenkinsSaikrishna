@@ -243,16 +243,20 @@ public with sharing class EnvelopeConfiguration {
 	public class DocumentSettings {
 
 		public Boolean addSourceDocuments { get; private set; } // LA/LF
+		public Boolean addLastUpdatedOnly { get; private set; } // MRL
 		public Set<UUID> templateIds { get; private set; } // DST
-		public Set<Id> fileIds { get; private set; } // RC
+		public Set<Id> fileIds { get; private set; } // FILES
 		public Boolean hasTemplates {
 			get {
 				return this.templateIds != null && !this.templateIds.isEmpty();
 			}
 		}
 
-		public DocumentSettings(final Boolean addSourceDocuments, final Set<UUID> templateIds, final Set<Id> fileIds) {
+		public DocumentSettings(final Boolean addSourceDocuments, final Boolean addLastUpdatedOnly,
+			final Set<UUID> templateIds, final Set<Id> fileIds) {
+
 			this.addSourceDocuments = addSourceDocuments;
+			this.addLastUpdatedOnly = addLastUpdatedOnly;
 			this.templateIds = templateIds;
 			this.fileIds = fileIds;
 		}
