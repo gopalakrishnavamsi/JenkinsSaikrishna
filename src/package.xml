@@ -110,6 +110,8 @@
         <members>EnvelopeServiceTest</members>
         <members>AccountFeatures</members>
         <members>AccountFeaturesTest</members>
+        <members>StatusService</members>
+        <members>StatusServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>

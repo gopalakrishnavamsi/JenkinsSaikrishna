@@ -1,3 +1,7 @@
+/**
+ * This class is the entry point for DocuSign for Salesforce envelope document management. It provides methods to
+ * retrieve Salesforce source documents and add or remove documents from an envelope.
+ */
 public with sharing class DocumentService {
 
 	@TestVisible
@@ -42,6 +46,15 @@ public with sharing class DocumentService {
 		return extension;
 	}
 
+	/**
+	 * Converts a list of <code>Document__c</code> objects to their domain object form.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param docs The documents to convert.
+	 *
+	 * @return The converted documents.
+	 */
 	public static List<Document> convert(final List<Document__c> docs) {
 		List<Document> result = new List<Document>();
 		if (docs != null) {
@@ -52,6 +65,19 @@ public with sharing class DocumentService {
 		return result;
 	}
 
+	/**
+	 * Validates a list of DocuSign envelope documents. They are checked for the following:
+	 * <ul>
+	 *     <li>At least one document is defined.</li>
+	 *     <li>Non-DocuSign template documents are of a supported type.</li>
+	 * </ul>
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param documents The documents to validate.
+	 *
+	 * @return The result of the validation.
+	 */
 	public static ValidationResult validate(final List<Document> documents) {
 		if (Collection.isEmpty(documents)) {
 			return new ValidationResult(Label.AtLeastOneDocumentIsRequired);
@@ -240,6 +266,19 @@ public with sharing class DocumentService {
 		}
 	}
 
+	/**
+	 * Retrieves a list of Salesforce source documents by IDs.
+	 * <p>
+	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
+	 * may be supported via plugins.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param sObjectIds The Salesforce object IDs.
+	 *
+	 * @return A list of envelope documents.
+	 */
 	public static List<Document> getDocuments(final String sObjectType, final Set<Id> sObjectIds) {
 		Permissions.verifyIsDocuSignUser();
 
@@ -253,6 +292,24 @@ public with sharing class DocumentService {
 		return result;
 	}
 
+	/**
+	 * Retrieves a list of Salesforce source documents by linked entity IDs.
+	 * <p>
+	 * For example, to pull in all of an Opportunity's Notes and Attachments related list:
+	 * <pre>
+	 * List<Document> docs = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { opp.Id }, false);
+	 * </pre>
+	 * <p>
+	 * By default, only <code>ContentVersion</code> types are supported. More types may be supported via plugins.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param linkedEntityIds The Salesforce parent IDs.
+	 * @param getLastUpdatedOnly Whether to retrieve only the last updated linked document.
+	 *
+	 * @return A list of DocuSign envelope documents.
+	 */
 	public static List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
 
@@ -268,6 +325,21 @@ public with sharing class DocumentService {
 		return result;
 	}
 
+	/**
+	 * Retrieves a list of Salesforce source documents folders by object type. The current user's personal folder, and
+	 * the documents contained within, is always returned as the first element in the list. The returned folder IDs
+	 * may be used in subsequent calls to <code>DocumentService.getFolderDocuments</code>.
+	 * <p>
+	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
+	 * may be supported via plugins.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 *
+	 * @return A list of document folders.
+	 * @see DocumentService.getFolderDocuments
+	 */
 	public static Document.Folders getDocumentFolders(final String sObjectType) {
 		Permissions.verifyIsDocuSignUser();
 
@@ -288,6 +360,21 @@ public with sharing class DocumentService {
 		return new Document.Folders(folders, personalDocuments);
 	}
 
+	/**
+	 * Retrieves a list of Salesforce source documents by folder IDs. The folder IDs may be retrieved by calling
+	 * <code>DocumentService.getDocumentFolders</code> first.
+	 * <p>
+	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
+	 * may be supported via plugins.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param folderIds The folder IDs.
+	 *
+	 * @return A list of documents contained within the target folders.
+	 * @see DocumentService.getDocumentFolders
+	 */
 	public static List<Document> getFolderDocuments(final String sObjectType, final Set<Id> folderIds) {
 		Permissions.verifyIsDocuSignUser();
 
@@ -301,6 +388,15 @@ public with sharing class DocumentService {
 		return result;
 	}
 
+	/**
+	 * Retrieves a list of a DocuSign envelope's documents.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 *
+	 * @return A list of documents contained within the envelope.
+	 */
 	public static List<Document> getEnvelopeDocuments(final Id envelopeId) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -309,6 +405,16 @@ public with sharing class DocumentService {
 		return DB.queryDocuments(envelopeId);
 	}
 
+	/**
+	 * Adds one or more documents to a DocuSign envelope.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param documents The documents to add.
+	 *
+	 * @return The updated envelope documents.
+	 */
 	public static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documents)) throw new DocuSignException(Label.UndefinedDocument);
@@ -318,6 +424,16 @@ public with sharing class DocumentService {
 		return DB.insertDocuments(envelopeId, documents);
 	}
 
+	/**
+	 * Removes one or more documents from a DocuSign envelope.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param documentIds The IDs of documents to remove.
+	 *
+	 * @return The updated envelope documents.
+	 */
 	public static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documentIds)) throw new DocuSignException(Label.UndefinedDocument);
@@ -328,6 +444,16 @@ public with sharing class DocumentService {
 		return DB.updateDocumentSequence(envelopeId);
 	}
 
+	/**
+	 * Reorders DocuSign envelope documents.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param newSequence A map of document ID to new sequence. This must be sequential starting at 1 with no gaps.
+	 *
+	 * @return The updated envelope documents.
+	 */
 	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (newSequence == null || newSequence.isEmpty()) throw new DocuSignException(Label.UndefinedDocument);
@@ -337,6 +463,17 @@ public with sharing class DocumentService {
 		return DB.updateDocumentSequence(envelopeId, newSequence);
 	}
 
+	/**
+	 * Updates a DocuSign envelope's documents. Documents may be deleted or upserted by this method.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param originalDocuments The original list of documents.
+	 * @param updatedDocuments The new list of documents.
+	 *
+	 * @return The updated envelope documents.
+	 */
 	public static List<Document> updateEnvelopeDocuments(
 		final Id envelopeId,
 		final List<Document> originalDocuments,
@@ -365,12 +502,35 @@ public with sharing class DocumentService {
 		return DB.upsertDocuments(envelopeId, updatedDocuments);
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope documents by <code>ContentVersion</code> IDs.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param fileIds The file IDs.
+	 *
+	 * @return A list of envelope documents.
+	 */
 	public static List<Document> resolveFiles(final Set<Id> fileIds) {
 		Permissions.verifyIsDocuSignUser();
 
 		return getDocuments('ContentVersion', fileIds);
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope documents by DocuSign template IDs. This method may invoke multiple
+	 * callouts depending on the number of templates being resolved.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param templateIds The template IDs.
+	 *
+	 * @return A list of envelope documents.
+	 */
 	public static List<Document> resolveTemplates(final Set<UUID> templateIds) {
 		Permissions.verifyIsDocuSignUser();
 
@@ -384,6 +544,19 @@ public with sharing class DocumentService {
 		return templates;
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope documents by linked entity IDs. Only the <code>ContentVersion</code> type
+	 * is supported.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param linkedEntityIds The linked entity IDs.
+	 * @param getLastUpdatedOnly Whether to retrieve only the last updated linked document.
+	 *
+	 * @return A list of envelope documents.
+	 */
 	public static List<Document> resolveLinkedFiles(final Set<Id> linkedEntityIds, final Boolean getLastUpdatedOnly) {
 		Permissions.verifyIsDocuSignUser();
 

@@ -1,3 +1,7 @@
+/**
+ * This class is the entry point for DocuSign for Salesforce envelope recipient management. It provides methods to
+ * retrieve Salesforce source recipients and add or remove recipients from an envelope.
+ */
 public with sharing class RecipientService {
 
 	@TestVisible
@@ -22,6 +26,21 @@ public with sharing class RecipientService {
 		}
 	}
 
+	/**
+	 * Validates a list of DocuSign envelope recipients. They are checked for the following:
+	 * <ul>
+	 *     <li>At least one recipient is defined.</li>
+	 *     <li>If sending now and the recipient is not a signing group, the email address must not be blank.</li>
+	 *     <li>If not sending now and the email address is blank, the role name must not be blank.</li>
+	 * </ul>
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param recipients The recipients to validate.
+	 * @param sendNow Whether the intention is to send the envelope now or to continue preparation.
+	 *
+	 * @return The result of the validation.
+	 */
 	public static ValidationResult validate(final List<Recipient> recipients, final Boolean sendNow) {
 		if (Collection.isEmpty(recipients)) {
 			return new ValidationResult(Label.AtLeastOneRecipientIsRequired);
@@ -59,6 +78,15 @@ public with sharing class RecipientService {
 		return result;
 	}
 
+	/**
+	 * Converts a list of <code>Recipient__c</code> objects to their domain object form.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param recipients The recipients to convert.
+	 *
+	 * @return The converted recipients.
+	 */
 	public static List<Recipient> convert(final List<Recipient__c> recipients) {
 		List<Recipient> result = new List<Recipient>();
 		if (recipients != null) {
@@ -424,6 +452,19 @@ public with sharing class RecipientService {
 		}
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope recipients from Salesforce source objects.
+	 * <p>
+	 * By default, the Salesforce <code>Account</code>, <code>Case</code>, <code>Contact</code>, <code>Lead</code>,
+	 * and <code>Opportunity</code> types are supported. More types may be supported via plugins.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param sObjectIds The Salesforce object IDs.
+	 *
+	 * @return A list of envelope recipients.
+	 */
 	public static List<Recipient> getRecipients(final String sObjectType, final Set<Id> sObjectIds) {
 		Permissions.verifyIsDocuSignUser();
 
@@ -454,6 +495,24 @@ public with sharing class RecipientService {
 		return result;
 	}
 
+	/**
+	 * Searches for DocuSign envelope recipients from Salesforce source objects.
+	 * <p>
+	 * By default, the Salesforce <code>Contact</code>, <code>Lead</code>, and <code>User</code> types are supported.
+	 * More types may be supported via plugins.
+	 * <p>
+	 * Search behavior is defined and stored in account settings. See <code>Recipient.SearchBehavior</code> and
+	 * <code>AccountService.Settings</code> for more details.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param firstName The first name to match.
+	 * @param lastName The last name to match. Ignored for compound search behaviors.
+	 *
+	 * @return A list of envelope recipients.
+	 * @see Recipient.SearchBehavior for more details on search options.
+	 */
 	public static List<Recipient> searchRecipients(final String sObjectType, final String firstName,
 		final String lastName) {
 
@@ -794,10 +853,34 @@ public with sharing class RecipientService {
 		return result;
 	}
 
+	/**
+	 * Adds one or more recipients to a DocuSign envelope.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param recipients The recipients to add.
+	 *
+	 * @return The updated envelope recipients.
+	 */
 	public static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
 		return addEnvelopeRecipients(envelopeId, recipients, null, null);
 	}
 
+	/**
+	 * Adds one or more recipients to a DocuSign envelope with optional customizations.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param recipients The recipients to add.
+	 * @param emailSettings Optional localized email.
+	 * @param recipientSettings Optional recipient customizations.
+	 *
+	 * @return The updated envelope recipients.
+	 */
 	public static List<Recipient> addEnvelopeRecipients(
 		final Id envelopeId,
 		final List<Recipient> recipients,
@@ -818,6 +901,16 @@ public with sharing class RecipientService {
 			recipientSettings)));
 	}
 
+	/**
+	 * Removes one or more recipients from a DocuSign envelope.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param recipientIds The IDs of recipients to remove.
+	 *
+	 * @return The updated envelope recipients.
+	 */
 	public static List<Recipient> removeEnvelopeRecipients(
 		final Id envelopeId,
 		final Set<Id> recipientIds) {
@@ -830,6 +923,17 @@ public with sharing class RecipientService {
 		return DB.deleteRecipients(envelopeId, recipientIds);
 	}
 
+	/**
+	 * Updates a DocuSign envelope's recipients. Recipients may be deleted or upserted by this method.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 * @param originalRecipients The original list of recipients.
+	 * @param updatedRecipients The new list of recipients.
+	 *
+	 * @return The updated envelope recipients.
+	 */
 	public static List<Recipient> updateEnvelopeRecipients(
 		final Id envelopeId,
 		final List<Recipient> originalRecipients,
@@ -856,6 +960,19 @@ public with sharing class RecipientService {
 		return DB.upsertRecipients(envelopeId, mergeUserTags(updatedRecipients));
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope recipients related to a Salesforce source entity.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param source The Salesforce source entity.
+	 * @param relatedContacts The related contacts to resolve.
+	 * @param signingGroups Mapping of DocuSign signing group name to signing groups.
+	 *
+	 * @return A list of envelope recipients.
+	 */
 	public static List<Recipient> resolveRelatedContacts(
 		final Entity source,
 		final EnvelopeConfiguration.RelatedContacts relatedContacts,
@@ -867,6 +984,18 @@ public with sharing class RecipientService {
 		return result == null ? new List<Recipient>() : result;
 	}
 
+	/**
+	 * Retrieves a list of DocuSign envelope recipients associated with a Salesforce source entity.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param source The Salesforce source entity.
+	 * @param defaultEmailSettings The default email localization.
+	 *
+	 * @return A list of envelope recipients.
+	 */
 	public static List<Recipient> resolveSourceRecipients(
 		final Entity source,
 		final Recipient.EmailSettings defaultEmailSettings) {
@@ -884,6 +1013,19 @@ public with sharing class RecipientService {
 		return result;
 	}
 
+	/**
+	 * Retrieves a list of custom DocuSign envelope recipients.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param customRecipients The custom recipients.
+	 * @param signingGroups Mapping of DocuSign signing group name to signing groups.
+	 * @param defaultEmailSettings The default email localization.
+	 *
+	 * @return A list of envelope recipients.
+	 */
 	public static List<Recipient> resolveCustomRecipients(
 		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
 		final Map<String, Recipient.SigningGroup> signingGroups,
@@ -922,6 +1064,18 @@ public with sharing class RecipientService {
 		return signingGroups;
 	}
 
+	/**
+	 * Retrieves DocuSign signing groups associated with custom recipients. This method invokes a callout.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param source The Salesforce source entity.
+	 * @param recipientSettings The recipient customizations.
+	 *
+	 * @return A mapping of DocuSign signing group name to signing groups.
+	 */
 	public static Map<String, Recipient.SigningGroup> resolveSigningGroups(
 		final Entity source,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {

@@ -6,15 +6,15 @@ public class LoggerService {
 	private static LoggerService self;
 	private static final Integer HEAP_LOG_PERCENTAGE_LIMIT = 80;
 
-	public Boolean logAllOnErrorLevel { get; set; }
-	public String totalLog { get; private set; }
+	public Boolean useInMemoryLog { get; private set; }
+	public String inMemoryLog { get; private set; }
 
 	/**
 	 * LoggerService Constructor.
 	 */
 	private LoggerService() {
-		this.totalLog = '';
-		this.logAllOnErrorLevel = false;
+		this.useInMemoryLog = false; // Disabled for now.
+		this.inMemoryLog = '';
 	}
 
 	public static LoggerService getInstance() {
@@ -33,21 +33,21 @@ public class LoggerService {
 	}
 
 	/**
-	 * This method builds and logs a message at error logging level using the provided
-	 * Exception and additional information string.
-	 * @param e Exception object to log
-	 * @param additionalInfo String to log
+	 * This method builds and logs a message at error logging level using the provided exception and additional context.
+	 *
+	 * @param ex The exception to log.
+	 * @param context Additional context to log.
 	 */
-	public void exception(final Exception e, final String additionalInfo) {
+	public void exception(final Exception ex, final String context) {
 		String fullMessage = '';
-		if (String.isNotBlank(additionalInfo)) {
-			fullMessage += additionalInfo + '\n';
+		if (String.isNotBlank(context)) {
+			fullMessage += context + '\n';
 		}
-		if (e != null) {
+		if (ex != null) {
 			fullMessage += String.format('{0}: {1}\n{2}', new List<String> {
-				e.getTypeName(),
-				e.getMessage(),
-				e.getStackTraceString()
+				ex.getTypeName(),
+				ex.getMessage(),
+				ex.getStackTraceString()
 			});
 		}
 		if (String.isNotBlank(fullMessage)) {
@@ -93,24 +93,23 @@ public class LoggerService {
 	 * @param message String to log
 	 */
 	public void log(final System.LoggingLevel level, final String message) {
-		try {
-			if (String.isEmpty(message)) {
-				return;
+		if (String.isNotBlank(message)) {
+			System.debug(level, message);
+			if (this.useInMemoryLog) writeToInMemoryLog(level, message);
+		}
+	}
+
+	private void writeToInMemoryLog(final System.LoggingLevel level, final String message) {
+		Integer heapSize = Limits.getHeapSize();
+		Integer limitHeapSize = Limits.getLimitHeapSize();
+		Boolean hasEnoughHeapSpace = LoggerService.getHeapPercentUsage(heapSize, limitHeapSize) < HEAP_LOG_PERCENTAGE_LIMIT;
+		if (hasEnoughHeapSpace || level == System.LoggingLevel.ERROR) {
+			String msg = formatMessage(level, message);
+			// Double check if we have enough memory to store to log message
+			// FIXME: This is broken as Strings are immutable. This will add way more to the heap than what's calculated.
+			if ((heapSize + (msg.length() * 4)) < limitHeapSize) {
+				this.inMemoryLog += msg;
 			}
-			final System.LoggingLevel correctedLevel = logAllOnErrorLevel ? System.Logginglevel.ERROR : level;
-			System.debug(correctedLevel, message);
-			final Boolean hasEnoughtHeapFreeSpace = LoggerService.getHeapPercentUsage() < HEAP_LOG_PERCENTAGE_LIMIT;
-			final Boolean logLevelIsError = correctedLevel == System.Logginglevel.ERROR;
-			final Boolean collectThisLog = hasEnoughtHeapFreeSpace || logLevelIsError;
-			if (collectThisLog) {
-				final String msg = formatMessage(level, message);
-				//Double check if we have enough memory to store to log message
-				if ((Limits.getHeapSize() + msg.length()) < Limits.getLimitHeapSize()) {
-					this.totalLog += msg;
-				}
-			}
-		} catch (Exception e) {
-			// logger should be exception safe anyway
 		}
 	}
 
@@ -120,7 +119,7 @@ public class LoggerService {
 	 * @param message String to log
 	 */
 	private String formatMessage(final System.LoggingLevel level, final String message) {
-		String levelName = 'UNK: ';
+		String levelName;
 		if (level == System.LoggingLevel.ERROR) {
 			levelName = 'ERR: ';
 		} else if (level == System.LoggingLevel.WARN) {
@@ -137,8 +136,8 @@ public class LoggerService {
 	 * This method calculates the heap percentage used using Salesforce Limits api.
 	 * @return Integer heap percentage used
 	 */
-	private static Integer getHeapPercentUsage() {
-		final Decimal usagePart = Limits.getHeapSize() / Limits.getLimitHeapSize();
-		return (Integer)usagePart.round(System.Roundingmode.DOWN) * 100;
+	private static Integer getHeapPercentUsage(final Integer heapSize, final Integer limitHeapSize) {
+		Decimal usagePart = heapSize / limitHeapSize;
+		return (Integer)usagePart.round(System.RoundingMode.DOWN) * 100;
 	}
 }
