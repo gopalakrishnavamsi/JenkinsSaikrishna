@@ -1,3 +1,6 @@
+/**
+ * Represents a Salesforce object.
+ */
 public with sharing class Entity {
 
 	private static final List<EntityResolver> RESOLVERS = new List<EntityResolver>();
@@ -18,17 +21,47 @@ public with sharing class Entity {
 		}
 	}
 
+	/**
+	 * The Salesforce object ID.
+	 */
 	public Id id { get; private set; }
+	/**
+	 * The Salesforce object type.
+	 */
 	public String type { get; private set; }
+	/**
+	 * The localized Salesforce object label.
+	 */
 	public String label { get; private set; }
+	/**
+	 * The Salesforce object name.
+	 */
 	public String name { get; private set; }
+	/**
+	 * The Salesforce object parent (e.g. Account for Opportunity).
+	 */
 	public Entity parent { get; private set; }
+	/**
+	 * Whether the entity is valid or not. It is considered valid if the ID is defined.
+	 */
 	public Boolean isValid { get; private set; }
 
+	/**
+	 * Constructs an entity. This will populate the type and label via SObject describe.
+	 *
+	 * @param id The Salesforce object ID.
+	 */
 	public Entity(final Id id) {
 		this(id, null, null);
 	}
 
+	/**
+	 * Constructs an entity. This will populate the type and label via SObject describe.
+	 *
+	 * @param id The Salesforce object ID.
+	 * @param name The Salesforce object name.
+	 * @param parent The Salesforce object parent.
+	 */
 	public Entity(final Id id, final String name, final Entity parent) {
 		if (id != null) {
 			DescribeSObjectResult d = id.getSobjectType().getDescribe();
@@ -43,6 +76,13 @@ public with sharing class Entity {
 		this.parent = parent;
 	}
 
+	/**
+	 * Tests whether an entity is equal to an object. The <code>id</code> property is compared for equality.
+	 *
+	 * @param obj The object to test.
+	 *
+	 * @return <code>true</code> if <code>obj</code> is an entity and the <code>id</code> properties are equal, <code>false</code> otherwise.
+	 */
 	public Boolean equals(Object obj) {
 		if (this === obj) return true;
 		if (obj == null || !(obj instanceof Entity)) return false;
@@ -50,6 +90,11 @@ public with sharing class Entity {
 		return (this.id == other.id);
 	}
 
+	/**
+	 * Creates a display string for the entity based on the label, name, and parent.
+	 *
+	 * @return The string representation of the entity.
+	 */
 	override public String toString() {
 		String result = String.isNotBlank(this.label) ? this.label : '';
 		if (String.isNotBlank(this.name)) {
@@ -64,6 +109,11 @@ public with sharing class Entity {
 		return result;
 	}
 
+	/**
+	 * Creates a deep copy of the entity.
+	 *
+	 * @return The copied entity.
+	 */
 	public Entity copy() {
 		return new Entity(
 			this.id,
@@ -71,20 +121,49 @@ public with sharing class Entity {
 			this.parent == null ? null : this.parent.copy());
 	}
 
+	/**
+	 * Sets the <code>name</code> property on an entity.
+	 *
+	 * @param name The Salesforce object name.
+	 *
+	 * @return The entity with the updated <code>name</code> property.
+	 */
 	public Entity withName(final String name) {
 		this.name = name;
 		return this;
 	}
 
+	/**
+	 * Sets the <code>parent</code> property on an entity.
+	 *
+	 * @param name The Salesforce object parent entity.
+	 *
+	 * @return The entity with the updated <code>parent</code> property.
+	 */
 	public Entity withParent(final Entity parent) {
 		this.parent = parent;
 		return this;
 	}
 
+	/**
+	 * Tests whether an entity is valid. It is considered valid if it is non-null and the ID is defined.
+	 *
+	 * @param entity The entity to test.
+	 *
+	 * @return <code>true</code> if the entity is valid, <code>false</code> otherwise.
+	 */
 	public static Boolean isValid(final Entity entity) {
 		return entity != null && entity.isValid;
 	}
 
+	/**
+	 * Resolves an entity by ID. This operation may involve one or more SOQL queries. Use this overload
+	 * when the Salesforce object type is unknown.
+	 *
+	 * @param sObjectId The Salesforce object ID.
+	 *
+	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
+	 */
 	public static Entity resolve(final Id sObjectId) {
 		if (sObjectId == null) throw new DocuSignException(Label.UndefinedId);
 
@@ -96,6 +175,15 @@ public with sharing class Entity {
 		return resolve(d.getName(), sObjectId);
 	}
 
+	/**
+	 * Resolves an entity by type and ID. This operation may involve one or more SOQL queries. Use this
+	 * overload when the Salesforce object type is known.
+	 *
+	 * @param sObjectType The Salesforce object type.
+	 * @param sObjectId The Salesforce object ID.
+	 *
+	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
+	 */
 	public static Entity resolve(final String sObjectType, final Id sObjectId) {
 		if (String.isBlank(sObjectType)) throw new DocuSignException(Label.UndefinedType);
 		if (sObjectId == null) throw new DocuSignException(Label.UndefinedId);

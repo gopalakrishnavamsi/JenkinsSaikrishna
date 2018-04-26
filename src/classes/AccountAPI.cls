@@ -12,13 +12,13 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	private final String username;
 	private final String password;
 	private Account account = null;
-	private final URL apiBaseURL;
+	private final Url apiBaseUrl;
 
 	@TestVisible
 	private AccountAPI(final Credentials apiCredentials) {
 		super(apiCredentials);
 
-		this.apiBaseURL = new URL(this.baseURL, '/restapi/v2/');
+		this.apiBaseUrl = new Url(this.baseUrl, '/restapi/v2/');
 		if (apiCredentials != null) {
 			this.username = apiCredentials.username;
 			this.password = apiCredentials.password;
@@ -162,13 +162,13 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String baseUrl;
 
 		public Account.Membership toExternalForm() {
-			final URL aURL = String.isBlank(baseUrl) ? null : new URL(baseUrl);
+			final Url aUrl = String.isBlank(baseUrl) ? null : new Url(baseUrl);
 			return new Account.Membership(
 				Long.valueOf(accountId),
 				UUID.fromString(accountIdGuid),
 				accountName,
 				UUID.fromString(userId),
-				new URL('https://' + (new URL(baseURL).getAuthority().toLowerCase()) + '/'),
+				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
 				String.isBlank(apiPassword) ? '' : apiPassword);
 		}
 	}
@@ -191,7 +191,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 
 	public Account.Membership createTrialAccount(final Account.Trial account, final Integer timeout) {
 		final RestAPI.Response response = super.post(
-			this.apiBaseURL,
+			this.apiBaseUrl,
 			new List<Object> { 'accounts' },
 			QueryString.empty,
 			this.getDefaultHeaders(),
@@ -278,7 +278,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	// HACK: Workaround for API-900. Need to call another API to get the correct planId :`(
+	// HACK: Workaround for API-900. Need to call another API to get the correct planId :(
 	private Account addPlanId(final Account account, final Integer timeout) {
 		final RestAPI.Response response = this.get(
 			'billing_plan',
@@ -301,11 +301,11 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String url;
 	}
 
-	public URL getConsoleViewURL() {
-		return this.getConsoleViewURL(RestAPI.defaultTimeout);
+	public Url getConsoleViewUrl() {
+		return this.getConsoleViewUrl(RestAPI.defaultTimeout);
 	}
 
-	public URL getConsoleViewURL(final Integer timeout) {
+	public Url getConsoleViewUrl(final Integer timeout) {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'views', 'console' },
 			'{"suppressNavigation":"true"}',
@@ -315,7 +315,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			throw new APIException(response.error);
 		}
 
-		return new URL(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
 	private class Setting {
@@ -334,7 +334,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String accountIdGuid;
 		public String name;
 		public String userId;
-		public String baseURL;
+		public String baseUrl;
 		public List<Setting> loginUserSettings;
 		private Map<String, String> userSettings;
 
@@ -344,7 +344,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				UUID.fromString(accountIdGuid),
 				name,
 				UUID.fromString(userId),
-				new URL('https://' + (new URL(baseURL).getAuthority().toLowerCase()) + '/'),
+				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
 				getUserSettings());
 		}
 
@@ -414,9 +414,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private Map<String, String> getUserSettings(final URL baseURL, final Long accountId, final UUID userId, final Integer timeout) {
+	private Map<String, String> getUserSettings(final Url baseUrl, final Long accountId, final UUID userId, final Integer timeout) {
 		final RestAPI.Response response = super.get(
-			baseURL,
+			baseUrl,
 			new List<Object> { 'restapi', 'v2', 'accounts', accountId, 'users', userId, 'settings' },
 			QueryString.empty,
 			this.getDefaultHeaders(),
@@ -445,7 +445,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	@TestVisible
 	private Account.Memberships getAccounts(final String authHeader, final Integer timeout) {
 		RestAPI.Response response = get(
-			this.apiBaseURL,
+			this.apiBaseUrl,
 			new List<Object> { 'login_information' },
 			new QueryString(new Map<String, String> {
 				'api_password' => 'true',
@@ -465,12 +465,12 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return ((LoginInformation)JSON.deserialize(response.body, LoginInformation.class)).toExternalForm();
 	}
 
-	public Account.Credentials getAccountCredentials(final UUID accountUUID) {
-		return this.getAccountCredentials(accountUUID, RestAPI.defaultTimeout);
+	public Account.Credentials getAccountCredentials(final UUID accountId) {
+		return this.getAccountCredentials(accountId, RestAPI.defaultTimeout);
 	}
 
-	public Account.Credentials getAccountCredentials(final UUID accountUUID, final Integer timeout) {
-		Long accountId = 0L;
+	public Account.Credentials getAccountCredentials(final UUID accountId, final Integer timeout) {
+		Long accountNumber = 0L;
 		String apiPassword = '';
 
 		final Account.Memberships login = this.getAccounts(this.legacyAuthHeader, timeout);
@@ -478,14 +478,14 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			apiPassword = login.apiPassword;
 			if (login.accounts != null && !login.accounts.isEmpty()) {
 				for (Account.Membership a : login.accounts) {
-					if (a.accountUUID == accountUUID) {
-						accountId = a.accountId;
+					if (a.accountId == accountId) {
+						accountNumber = a.accountNumber;
 						break;
 					}
 				}
 			}
 		}
-		return new Account.Credentials(accountId, accountUUID, apiPassword);
+		return new Account.Credentials(accountNumber, accountId, apiPassword);
 	}
 
 	public Account.Memberships getValidAccounts() {
@@ -493,7 +493,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	public Account.Memberships getValidAccounts(final Integer timeout) {
-		if (this.baseURL == null || this.username == null || String.isBlank(this.password))
+		if (this.baseUrl == null || this.username == null || String.isBlank(this.password))
 			throw new DocuSignException(Label.AccountNotConfigured);
 
 		Account.Memberships login = this.getAccounts(
@@ -512,7 +512,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				final List<Account.Membership> validAccounts = new List<Account.Membership>();
 				for (Account.Membership ua : login.accounts) {
 					Account.Membership us = ua
-						.withSettings(getUserSettings(ua.baseURL, ua.accountId, ua.userId, timeout));
+						.withSettings(getUserSettings(ua.baseUrl, ua.accountNumber, ua.userId, timeout));
 					if (isValidAccount(us)) {
 						validAccounts.add(us);
 					} else {
@@ -743,7 +743,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public List<String> listItems;
 
 		public CustomField toExternalForm() {
-			return new CustomField('list', name, value, listItems, StringUtils.parseBoolean(required),
+			return CustomField.newListField(name, value, listItems, StringUtils.parseBoolean(required),
 				StringUtils.parseBoolean(show));
 		}
 	}
@@ -755,7 +755,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String value;
 
 		public CustomField toExternalForm() {
-			return new CustomField('text', name, value, null, StringUtils.parseBoolean(required), StringUtils.parseBoolean(show));
+			return CustomField.newTextField(name, value, StringUtils.parseBoolean(required),
+				StringUtils.parseBoolean(show));
 		}
 	}
 

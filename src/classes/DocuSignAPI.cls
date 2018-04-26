@@ -5,7 +5,7 @@
  * 		types from public methods.
  * 	2) Do not expose more methods than we are actually using. These extra methods require unit tests and maintenance
  * 		in addition to bloating our package.
- * 	3) Do not construct URLs or JSON by hand. This exposes potential security issues with URL rewriting or JSON
+ * 	3) Do not construct Urls or JSON by hand. This exposes potential security issues with URL rewriting or JSON
  * 		injection. There are appropriate helper methods to do this safely.
  * 	4) Avoid special-casing any API calls. Use defaults wherever possible such as base URL and headers.
  * 	5) Avoid noisy logging. Log only failures with enough information to troubleshoot the issue.
@@ -27,8 +27,8 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 	@TestVisible
 	protected transient final String legacyAuthHeader;
 	@TestVisible
-	protected transient final URL baseURL;
-	private transient URL accountBaseURL;
+	protected transient final Url baseUrl;
+	private transient Url accountBaseUrl;
 	@TestVisible
 	protected transient final Environment environment;
 	private final UUID accountId;
@@ -64,11 +64,11 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 	protected DocuSignAPI(final Credentials apiCredentials) {
 		super();
 
-		if (apiCredentials == null || apiCredentials.environment == null || apiCredentials.environment.baseURL == null)
+		if (apiCredentials == null || apiCredentials.environment == null || apiCredentials.environment.baseUrl == null)
 			throw new DocuSignException(Label.AccountNotConfigured);
 
 		this.environment = apiCredentials.environment;
-		this.baseURL = apiCredentials.environment.baseURL;
+		this.baseUrl = apiCredentials.environment.baseUrl;
 		this.legacyAuthHeader = JSON.serialize(
 			new LegacyCredentials(
 				apiCredentials.username,
@@ -90,14 +90,14 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 	}
 
 	@TestVisible
-	protected virtual URL getBaseURL() {
-		if (accountBaseURL == null) {
+	protected virtual Url getBaseUrl() {
+		if (accountBaseUrl == null) {
 			if (this.accountId == null) {
 				throw new DocuSignException(Label.AccountNotConfigured);
 			}
-			accountBaseURL = new URL(this.baseURL, '/restapi/v2/accounts/' + this.accountId + '/');
+			accountBaseUrl = new Url(this.baseUrl, '/restapi/v2/accounts/' + this.accountId + '/');
 		}
-		return accountBaseURL;
+		return accountBaseUrl;
 	}
 
 	@TestVisible
@@ -106,39 +106,39 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 	}
 
 	protected virtual RestAPI.Response get(final List<Object> path, final QueryString queryString, final Integer timeout) {
-		return super.get(getBaseURL(), path, queryString, getDefaultHeaders(), timeout);
+		return super.get(getBaseUrl(), path, queryString, getDefaultHeaders(), timeout);
 	}
 
 	protected virtual RestAPI.Response get(final String path, final Integer timeout) {
-		return super.get(getBaseURL(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), timeout);
+		return super.get(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), timeout);
 	}
 
 	protected virtual RestAPI.Response get(final String path, final QueryString queryString, final Integer timeout) {
-		return super.get(getBaseURL(), new List<Object> { path }, queryString, getDefaultHeaders(), timeout);
+		return super.get(getBaseUrl(), new List<Object> { path }, queryString, getDefaultHeaders(), timeout);
 	}
 
 	protected virtual RestAPI.Response post(final String path, final String body, final Integer timeout) {
-		return super.post(getBaseURL(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.post(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	protected virtual RestAPI.Response post(final List<Object> path, final String body, final Integer timeout) {
-		return super.post(getBaseURL(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.post(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	protected virtual RestAPI.Response put(final List<Object> path, final String body, final Integer timeout) {
-		return super.put(getBaseURL(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.put(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	protected virtual RestAPI.Response put(final List<Object> path, final QueryString queryString, final String body, final Integer timeout) {
-		return super.put(getBaseURL(), path, queryString, getDefaultHeaders(), body, timeout);
+		return super.put(getBaseUrl(), path, queryString, getDefaultHeaders(), body, timeout);
 	}
 
 	protected virtual RestAPI.Response del(final List<Object> path, final Integer timeout) {
-		return super.del(getBaseURL(), path, QueryString.empty, getDefaultHeaders(), null, timeout);
+		return super.del(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), null, timeout);
 	}
 
 	protected virtual RestAPI.Response del(final String path, final String body, final Integer timeout) {
-		return super.del(getBaseURL(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.del(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	// UGH. Apex doesn't allow protected inner classes, so we either leak an API implementation-specific type or
@@ -198,7 +198,7 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 		Boolean result = false;
 		try {
 			super.get(
-				baseURL,
+				baseUrl,
 				new List<Object> { 'service_information' },
 				QueryString.empty,
 				new Map<String, String>(),

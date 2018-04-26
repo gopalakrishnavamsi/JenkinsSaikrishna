@@ -37,7 +37,8 @@ public with sharing class RecipientService {
 		return result;
 	}
 
-	public static ValidationResult validate(final Recipient recipient, final Boolean sendNow) {
+	@TestVisible
+	private static ValidationResult validate(final Recipient recipient, final Boolean sendNow) {
 		if (recipient == null) {
 			return new ValidationResult(Label.UndefinedRecipient);
 		}
@@ -436,19 +437,19 @@ public with sharing class RecipientService {
 		return result;
 	}
 
-	private static SearchBehavior getSearchBehavior() {
-		SearchBehavior result = SearchBehavior.DiscreteMatchBeginning;
+	private static Recipient.SearchBehavior getSearchBehavior() {
+		Recipient.SearchBehavior result = Recipient.SearchBehavior.DiscreteMatchBeginning;
 		String sb = AccountSettings__c.getOrgDefaults().RecipientSearchBehavior__c;
 		if (sb == 'CompoundMatchBeginning') {
-			result = SearchBehavior.CompoundMatchBeginning;
+			result = Recipient.SearchBehavior.CompoundMatchBeginning;
 		} else if (sb == 'CompoundMatchExact') {
-			result = SearchBehavior.CompoundMatchExact;
+			result = Recipient.SearchBehavior.CompoundMatchExact;
 		} else if (sb == 'CompoundMatchAny') {
-			result = SearchBehavior.CompoundMatchAny;
+			result = Recipient.SearchBehavior.CompoundMatchAny;
 		} else if (sb == 'DiscreteMatchExact') {
-			result = SearchBehavior.DiscreteMatchExact;
+			result = Recipient.SearchBehavior.DiscreteMatchExact;
 		} else if (sb == 'DiscreteMatchAny') {
-			result = SearchBehavior.DiscreteMatchAny;
+			result = Recipient.SearchBehavior.DiscreteMatchAny;
 		}
 		return result;
 	}

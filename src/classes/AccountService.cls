@@ -1,3 +1,6 @@
+/**
+ * Primary interface point for DocuSign for Salesforce account management.
+ */
 public with sharing class AccountService {
 
 	private static final Database DB = new AccountService.Database();
@@ -21,30 +24,77 @@ public with sharing class AccountService {
 		}
 	}
 
+	/**
+	 * Login statuses:
+	 * <ul>
+	 *     <li><code>Success</code>: Login was successful and mapped to a single valid DocuSign account.</li>
+	 *     <li><code>Failure</code>: Invalid DocuSign username or password.</li>
+	 *     <li><code>SelectAccount</code>: Login was successful, but maps to mulitple valid DocuSign accounts.</li>
+	 * </ul>
+	 */
 	public enum LoginStatus {
 		Success, Failure, SelectAccount
 	}
 
+	/**
+	 * Representation of the result of a login attempt.
+	 */
 	public class LoginResult {
+		/**
+		 * The status of the login attempt.
+		 */
 		public LoginStatus status { get; private set; }
+		/**
+		 * Valid DocuSign accounts from which to choose. Populated if the <code>status</code> is
+		 * <code>SelectAccount</code>.
+		 */
 		public List<AccountOption> accountOptions { get; private set; }
 
+		/**
+		 * Constructs a login result.
+		 *
+		 * @param status The status of the login attempt.
+		 * @param accountOptions Valid DocuSign accounts.
+		 */
 		private LoginResult(final LoginStatus status, final List<AccountOption> accountOptions) {
 			this.status = status == null ? LoginStatus.Failure : status;
 			this.accountOptions = accountOptions == null ? new List<AccountOption>() : accountOptions;
 		}
 	}
 
+	/**
+	 * Representation of a DocuSign account option when more than one is available after login.
+	 */
 	public class AccountOption {
-		public Long id { get; private set; }
+		/**
+		 * The DocuSign account number.
+		 */
+		public Long accountNumber { get; private set; }
+		/**
+		 * The string to display to the user for this option.
+		 */
 		public String display { get; private set; }
 
-		private AccountOption(final Long id, final String display) {
-			this.id = id;
+		/**
+		 * Constructs a DocuSign account option.
+		 *
+		 * @param accountNumber The DocuSign account number.
+		 * @param display The string to display to the user for this option.
+		 */
+		private AccountOption(final Long accountNumber, final String display) {
+			this.accountNumber = accountNumber;
 			this.display = display;
 		}
 	}
 
+	/**
+	 * Retrieves information for the current DocuSign account. This includes DocuSign trial status if the current
+	 * account is a trial account.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return The current DocuSign account.
+	 */
 	public static Account getAccount() {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -83,28 +133,38 @@ public with sharing class AccountService {
 		return new Account.TrialStatus(isExpired, message);
 	}
 
-	@TestVisible
-	private static Environment parseEnvironment(final String environmentName, final String otherUrl) {
-		// Parse and validate the supplied environment to ensure it is a docusign domain.
-		Environment env;
-		try {
-			env = Environment.fromTarget(environmentName, otherURL);
-		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to parse DocuSign environment');
-			env = Environment.Invalid;
-		}
-		return env;
-	}
-
-	public static LoginResult login(final String username, final String password, final String environmentName,
-		final String otherUrl, Long selectedAccountId) {
+	/**
+	 * Attempts login to DocuSign with the supplied credentials. This must be invoked successfully prior to any other
+	 * DocuSign for Salesforce actions. If the login is successful and maps to a single valid
+	 * DocuSign account, DocuSign for Salesforce will be updated with these credentials. If the login is successful and
+	 * maps to valid multiple accounts, those account options are returned to the caller to select the desired account
+	 * in a subsequent call to this method.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param username The DocuSign username.
+	 * @param password The DocuSign password.
+	 * @param target The DocuSign environment. Valid values are <code>Stage</code>, <code>Demo</code>,
+	 * <code>Production</code>, or <code>Other</code>. If <code>Other</code> is specified, a valid DocuSign base URL
+	 * must be supplied via the <code>otherUrl</code> parameter.
+	 * @param otherUrl The DocuSign base URL. This must be a valid DocuSign URL if <code>target</code> is
+	 * <code>Other</code>
+	 * @param selectedAccountNumber The DocuSign account number for the desired DocuSign for Salesforce account. Used
+	 * to select an account when the user credentials map to multiple valid DocuSign accounts.
+	 *
+	 * @return The result of the login. This may succeed with a single account (no additional action is
+	 * required to configure DocuSign for Salesforce), or with multiple accounts in which case this method should be
+	 * called again with the same parameters and <code>selectedAccountNumber</code> defined with the desired account.
+	 */
+	public static LoginResult login(final String username, final String password, final Environment.Target target,
+		final Url otherUrl, Long selectedAccountNumber) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
 		// 1) Parse valid DocuSign environment.
-		Environment env = parseEnvironment(environmentName, otherUrl);
+		Environment env = Environment.fromTarget(target, otherUrl);
 		if (!Environment.isValid(env)) {
-			LOG.error('Invalid DocuSign environment: ' + environmentName + ' => ' + otherURL);
+			LOG.error('Invalid DocuSign environment: ' + env.environment.name() + ' => ' + otherUrl);
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
 
@@ -124,10 +184,10 @@ public with sharing class AccountService {
 		// 3) Filter valid accounts.
 		List<AccountOption> options = new List<AccountOption>();
 		Account.Membership validMembership;
-		Boolean selectAccount = selectedAccountId == null || selectedAccountId <= 0L;
+		Boolean selectAccount = selectedAccountNumber == null || selectedAccountNumber <= 0L;
 		for (Account.Membership a : memberships.accounts) {
-			if (selectAccount || selectedAccountId == a.accountId) {
-				options.add(new AccountOption(a.accountId, a.name + ' (' + a.accountId + ')'));
+			if (selectAccount || selectedAccountNumber == a.accountNumber) {
+				options.add(new AccountOption(a.accountNumber, a.name + ' (' + a.accountNumber + ')'));
 				validMembership = a;
 			}
 		}
@@ -135,13 +195,13 @@ public with sharing class AccountService {
 		// 4) Save results if only one account is filtered, or return list for user selection.
 		LoginStatus status = null;
 		if (options.size() == 1) {
-			Environment ae = Environment.fromURL(validMembership.baseURL);
+			Environment ae = Environment.fromUrl(validMembership.baseUrl);
 			String envString = ae.Environment.name().toLowerCase();
-			LOG.debug('AdminManager.login: account base URL = ' + validMembership.baseURL.toExternalForm()
-				+ ', parsed base = ' + ae.baseURL.toExternalForm()
+			LOG.debug('AdminManager.login: account base URL = ' + validMembership.baseUrl.toExternalForm()
+				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
 				+ ', environment = ' + ae.Environment.name().toLowerCase());
 
-			credentials.save(ae, validMembership.accountUUID, String.valueOf(validMembership.userId),
+			credentials.save(ae, validMembership.accountId, String.valueOf(validMembership.userId),
 				validMembership.apiPassword, true, true);
 			status = LoginStatus.Success;
 		} else { // more than 1 valid account, just return results
@@ -159,6 +219,16 @@ public with sharing class AccountService {
 		return accountSettings;
 	}
 
+	/**
+	 * Connects DocuSign to Salesforce for document retrieval, merge field resolution, and status events.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param username The Salesforce username.
+	 * @param password The Salesforce password.
+	 *
+	 * @return The connection test result from DocuSign.
+	 */
 	public static String connect(final String username, final String password) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -167,6 +237,17 @@ public with sharing class AccountService {
 		return result;
 	}
 
+	/**
+	 * Prepares a DocuSign for Salesforce trial account based on the current Salesforce user. This account is not
+	 * actually created at DocuSign. A subsequent call must be made to AccountService.createTrial to do so.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param email The email address for the desired trial account.
+	 *
+	 * @return A DocuSign trial account that may be used in subsequent calls.
+	 * @see AccountService.createTrial for trial account creation details.
+	 */
 	public static Account.Trial prepareTrial(final String email) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -188,16 +269,33 @@ public with sharing class AccountService {
 			false);
 	}
 
+	/**
+	 * Creates a DocuSign for Salesforce trial account. This account may be prepared via AccountService.prepareTrial.
+	 * <p>
+	 * Trial accounts are validated to ensure:
+	 * <ul>
+	 *     <li>The trial account is non-null</li>
+	 *     <li>The trial email is a valid email address</li>
+	 *     <li>The trial user's name is not blank</li>
+	 *     <li>The trial company is not blank</li>
+	 *     <li>The trial user has agreed to DocuSign's terms and conditions.</li>
+	 * </ul>
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param trial The trial account to create.
+	 *
+	 * @return Details about the newly-created trial account membership.
+	 * @see AccountService.prepareTrial for details on how the trial account can be prepared.
+	 */
 	public static Account.Membership createTrial(final Account.Trial trial) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		ValidationResult vr = validate(trial);
-		if (!vr.isValid) {
-			throw new ValidationException(Label.InvalidTrialAccount, vr);
-		}
+		if (!vr.isValid) throw new ValidationException(Label.InvalidTrialAccount, vr);
 
 		Account.Membership result = AccountAPI.getInstance(Environment.production).createTrialAccount(trial);
-		Credentials.save(Environment.fromURL(result.baseUrl), result.accountUUID, String.valueOf(result.userId),
+		Credentials.save(Environment.fromUrl(result.baseUrl), result.accountId, String.valueOf(result.userId),
 			result.apiPassword, true, false);
 		return result.scrub(); // Don't return sensitive info.
 	}
@@ -226,6 +324,14 @@ public with sharing class AccountService {
 		return result;
 	}
 
+	/**
+	 * Retrieves a URL that can be used to display the DocuSign console. This URL can only be used once.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set, and must be an active member of the
+	 * DocuSign account.
+	 *
+	 * @return The DocuSign console URL.
+	 */
 	public static Url getDocuSignUrl() {
 		if (!Permissions.isDocuSignUser()
 			|| String.isBlank(UserSettings__c.getInstance(UserInfo.getUserId()).Username__c)) {
@@ -233,19 +339,65 @@ public with sharing class AccountService {
 			throw new UnauthorizedException(Label.UnauthorizedPageAccess);
 		}
 
-		return AccountAPI.getInstance().getConsoleViewURL();
+		return AccountAPI.getInstance().getConsoleViewUrl();
 	}
 
+	/**
+	 * DocuSign for Salesforce account-level settings.
+	 */
 	public class Settings {
+		/**
+		 * Envelope-related settings.
+		 */
 		public EnvelopeSettings envelope { get; private set; }
+		/**
+		 * Default recipient email localizations. Can be modified and saved at the account level.
+		 */
 		public List<Recipient.EmailSettings> defaultEmailLocalizations { get; private set; }
+		/**
+		 * Default Chatter event localizations. Can be modified and saved at the account level.
+		 */
 		public List<Localization.ChatterSettings> defaultChatterLocalizations { get; private set; }
+		/**
+		 * Apex callout timeout. The default is 90 seconds.
+		 */
 		public Integer calloutTimeout { get; private set; }
+		/**
+		 * Salesforce entity resolvers. May be extended to resolve Salesforce objects unknown to DocuSign for Salesforce.
+		 */
 		public List<String> entityResolvers { get; private set; }
+		/**
+		 * DocuSign envelope document resolvers. May be extended to resolve Salesforce document types unknown to
+		 * DocuSign for Salesforce.
+		 */
 		public List<String> documentResolvers { get; private set; }
+		/**
+		 * DocuSign envelope recipient resolvers. May be extended to resolve Salesforce recipient types unknown to
+		 * DocuSign for Salesforce.
+		 */
 		public List<String> recipientResolvers { get; private set; }
-		public SearchBehavior recipientSearchBehavior { get; private set; }
+		/**
+		 * How to perform recipient searches. The ideal method is depended upon the subscriber org (number of contacts,
+		 * platform encryption). The default search behavior is <code>DiscreteMatchBeginning</code> which allows partial
+		 * matches on the beginning of first and last names. This is an efficient option for most subscriber orgs
+		 * and can support deterministic platform encryption of these fields.
+		 *
+		 * @see Recipient.SearchBehavior for more details on search options.
+		 */
+		public Recipient.SearchBehavior recipientSearchBehavior { get; private set; }
 
+		/**
+		 * Constructs account-level settings.
+		 *
+		 * @param envelope Envelope-related settings.
+		 * @param defaultEmailLocalizations Default recipient email localizations.
+		 * @param defaultChatterLocalizations Default Chatter status update localizations.
+		 * @param calloutTimeout Apex callout timeout.
+		 * @param entityResolvers Entity resolvers.
+		 * @param documentResolvers Document resolvers.
+		 * @param recipientResolvers Recipient resolvers.
+		 * @param recipientSearchBehavior Recipient search behavior.
+		 */
 		public Settings(
 			final EnvelopeSettings envelope,
 			final List<Recipient.EmailSettings> defaultEmailLocalizations,
@@ -254,7 +406,7 @@ public with sharing class AccountService {
 			final List<String> entityResolvers,
 			final List<String> documentResolvers,
 			final List<String> recipientResolvers,
-			final SearchBehavior recipientSearchBehavior) {
+			final Recipient.SearchBehavior recipientSearchBehavior) {
 
 			this.envelope = envelope;
 			this.defaultEmailLocalizations = defaultEmailLocalizations;
@@ -268,27 +420,34 @@ public with sharing class AccountService {
 	}
 
 	@TestVisible
-	private static SearchBehavior stringToSearchBehavior(final String s) {
-		SearchBehavior result = SearchBehavior.DiscreteMatchBeginning;
+	private static Recipient.SearchBehavior stringToSearchBehavior(final String s) {
+		Recipient.SearchBehavior result = Recipient.SearchBehavior.DiscreteMatchBeginning;
 		if (String.isNotBlank(s)) {
 			String s2 = s.trim();
 			if (s2 == 'CompoundMatchBeginning') {
-				result = SearchBehavior.CompoundMatchBeginning;
+				result = Recipient.SearchBehavior.CompoundMatchBeginning;
 			} else if (s2 == 'CompoundMatchExact') {
-				result = SearchBehavior.CompoundMatchExact;
+				result = Recipient.SearchBehavior.CompoundMatchExact;
 			} else if (s2 == 'CompoundMatchAny') {
-				result = SearchBehavior.CompoundMatchAny;
+				result = Recipient.SearchBehavior.CompoundMatchAny;
 			} else if (s2 == 'DiscreteMatchAny') {
-				result = SearchBehavior.DiscreteMatchAny;
+				result = Recipient.SearchBehavior.DiscreteMatchAny;
 			} else if (s2 == 'DiscreteMatchExact') {
-				result = SearchBehavior.DiscreteMatchExact;
+				result = Recipient.SearchBehavior.DiscreteMatchExact;
 			} else {
-				result = SearchBehavior.DiscreteMatchBeginning;
+				result = Recipient.SearchBehavior.DiscreteMatchBeginning;
 			}
 		}
 		return result;
 	}
 
+	/**
+	 * Retrieves DocuSign for Salesforce account settings.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return The account settings.
+	 */
 	public static Settings getSettings() {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -304,6 +463,15 @@ public with sharing class AccountService {
 			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
 	}
 
+	/**
+	 * Updates DocuSign for Salesforce account settings.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param settings The settings to update.
+	 *
+	 * @return The updated settings.
+	 */
 	public static Settings saveSettings(final Settings settings) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -315,7 +483,7 @@ public with sharing class AccountService {
 		accountSettings.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');
 		accountSettings.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
 		accountSettings.RecipientSearchBehavior__c = settings.recipientSearchBehavior == null
-			? SearchBehavior.DiscreteMatchBeginning.name() : settings.recipientSearchBehavior.name();
+			? Recipient.SearchBehavior.DiscreteMatchBeginning.name() : settings.recipientSearchBehavior.name();
 		upsert accountSettings;
 
 		return new Settings(
@@ -356,6 +524,17 @@ public with sharing class AccountService {
 		return result;
 	}
 
+	/**
+	 * Adds one or more users as members of the current DocuSign account.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param users A list of users to add.
+	 *
+	 * @return The users added. This may be partially successful with details in the returned <code>User.error</code>
+	 * property.
+	 * @see Account.User.error for details on any errors.
+	 */
 	public static List<Account.User> addUsers(final List<Account.User> users) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -382,6 +561,17 @@ public with sharing class AccountService {
 		return result;
 	}
 
+	/**
+	 * Removes one or more users from the current DocuSign account.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param users A list of users to remove.
+	 *
+	 * @return The users removed. This may be partially successful with details in the returned <code>User.error</code>
+	 * property.
+	 * @see Account.User.error for details on any errors.
+	 */
 	public static List<Account.User> removeUsers(final List<Account.User> users, final Boolean closeMembership) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -405,6 +595,14 @@ public with sharing class AccountService {
 		return result;
 	}
 
+	/**
+	 * Runs all post-install scripts again if needed to solve a problem. This is a safe operation as it will not
+	 * overwrite current settings if they exist.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return The results of the post-install script execution.
+	 */
 	public static PostInstallResults executePostInstallScripts() {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -416,6 +614,14 @@ public with sharing class AccountService {
 			false);
 	}
 
+	/**
+	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
+	 * so invoke only after confirming with the administrator.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param resetUsers Whether or not to also clear user credentials.
+	 */
 	public static void resetCredentials(final Boolean resetUsers) {
 		Permissions.verifyIsDocuSignAdministrator();
 

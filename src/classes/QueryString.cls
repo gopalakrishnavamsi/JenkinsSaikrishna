@@ -82,7 +82,8 @@ public virtual class QueryString {
 	}
 
 	/**
-	* Return the boolean value from an URL parameter.  A default needs to be provided.
+	* Return the boolean value from an URL parameter. A default value must be provided.
+	*
 	* @key String the name of the URL parameter
 	* @defaultValue Boolean the default value
 	* @return Boolean the boolean value of the URL parameter

@@ -4,39 +4,39 @@ private class AccountAPITest {
 	static testMethod void test_getError() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
-			final HttpResponse r1 = new HttpResponse();
+			AccountAPI client = AccountAPI.getInstance();
+			HttpResponse r1 = new HttpResponse();
 			r1.setStatusCode(200);
 			r1.setStatus('OK');
 			r1.setHeader('Content-Type', 'application/json');
 			r1.setBody('{"some":"value"}');
-			final HttpResponse r2 = new HttpResponse();
+			HttpResponse r2 = new HttpResponse();
 			r2.setStatusCode(400);
 			r2.setStatus('BAD_REQUEST');
 			r2.setHeader('Content-Type', 'application/json');
 			r2.setBody('{"errorCode":"SOME_ERROR","message":"Some error"}');
-			final HttpResponse r3 = new HttpResponse();
+			HttpResponse r3 = new HttpResponse();
 			r3.setStatusCode(400);
 			r3.setStatus('BAD_REQUEST');
 			r3.setHeader('Content-Type', 'application/json');
 			r3.setBody('{"errorCode":"USER_ALREADY_EXISTS_IN_ACCOUNT","message":"User already exists in account"}');
-			final HttpResponse r4 = new HttpResponse();
+			HttpResponse r4 = new HttpResponse();
 			r4.setStatusCode(400);
 			r4.setStatus('BAD_REQUEST');
 			r4.setHeader('Content-Type', 'application/json');
 			r4.setBody('{"errorCode":"USER_DOES_NOT_EXIST_IN_SYSTEM","message":"User does not exist"}');
-			final HttpResponse r5 = new HttpResponse();
+			HttpResponse r5 = new HttpResponse();
 			r5.setStatusCode(400);
 			r5.setStatus('BAD_REQUEST');
 			r5.setHeader('Content-Type', 'application/json');
 			r5.setBody('{"errorCode":"INVALID_USERID","message":"Invalid user ID"}');
 
 			Test.startTest();
-			final APIError e1 = client.getError(r1);
-			final APIError e2 = client.getError(r2);
-			final APIError e3 = client.getError(r3);
-			final APIError e4 = client.getError(r4);
-			final APIError e5 = client.getError(r5);
+			APIError e1 = client.getError(r1);
+			APIError e2 = client.getError(r2);
+			APIError e3 = client.getError(r3);
+			APIError e4 = client.getError(r4);
+			APIError e5 = client.getError(r5);
 			Test.stopTest();
 
 			System.assertEquals(APIError.none, e1);
@@ -82,12 +82,12 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final Account a = client.getAccount();
+			Account a = client.getAccount();
 			// Second call should be cached
-			final Account a2 = client.getAccount();
+			Account a2 = client.getAccount();
 			Test.stopTest();
 
 			System.assert(a === a2);
@@ -111,7 +111,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -134,8 +134,8 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
-			final Account a1 = new Account(
+			AccountAPI client = AccountAPI.getInstance();
+			Account a1 = new Account(
 				UUID.randomUUID(),
 				'UNIT TEST',
 				new Account.Plan(
@@ -150,7 +150,7 @@ private class AccountAPITest {
 				Environment.production);
 
 			Test.startTest();
-			final Account a2 = client.addPlanId(a1, 30000);
+			Account a2 = client.addPlanId(a1, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, a2);
@@ -164,8 +164,8 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
-			final Account a1 = new Account(
+			AccountAPI client = AccountAPI.getInstance();
+			Account a1 = new Account(
 				UUID.randomUUID(),
 				'UNIT TEST',
 				new Account.Plan(
@@ -194,8 +194,8 @@ private class AccountAPITest {
 	}
 
 	class AddPlanIdErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -209,9 +209,9 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
-			final UUID initialPlanId = UUID.randomUUID();
-			final Account a1 = new Account(
+			AccountAPI client = AccountAPI.getInstance();
+			UUID initialPlanId = UUID.randomUUID();
+			Account a1 = new Account(
 				UUID.randomUUID(),
 				'UNIT TEST',
 				new Account.Plan(
@@ -226,7 +226,7 @@ private class AccountAPITest {
 				Environment.production);
 
 			Test.startTest();
-			final Account a2 = client.addPlanId(a1, 30000);
+			Account a2 = client.addPlanId(a1, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, a2);
@@ -241,16 +241,16 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
-			final URL baseURL = new URL('https://unit.test/');
-			Account.Membership ua1 = new Account.Membership(1L, UUID.randomUUID(), 'Account 1', TestUtils.ID1, baseURL, new Map<String, String>());
-			Account.Membership ua2 = new Account.Membership(2L, UUID.randomUUID(), 'Account 2', TestUtils.ID2, baseURL, new Map<String, String>());
-			Account.Membership ua3 = new Account.Membership(3L, UUID.randomUUID(), 'Account 3', TestUtils.ID3, baseURL, new Map<String, String>());
+			AccountAPI client = AccountAPI.getInstance();
+			Url baseUrl = new Url('https://unit.test/');
+			Account.Membership ua1 = new Account.Membership(1L, UUID.randomUUID(), 'Account 1', TestUtils.ID1, baseUrl, new Map<String, String>());
+			Account.Membership ua2 = new Account.Membership(2L, UUID.randomUUID(), 'Account 2', TestUtils.ID2, baseUrl, new Map<String, String>());
+			Account.Membership ua3 = new Account.Membership(3L, UUID.randomUUID(), 'Account 3', TestUtils.ID3, baseUrl, new Map<String, String>());
 
 			Test.startTest();
-			ua1 = ua1.withSettings(client.getUserSettings(baseURL, 1111L, TestUtils.ID1, 30000));
-			ua2 = ua2.withSettings(client.getUserSettings(baseURL, 2222L, TestUtils.ID2, 30000));
-			ua3 = ua3.withSettings(client.getUserSettings(baseURL, 3333L, TestUtils.ID3, 30000));
+			ua1 = ua1.withSettings(client.getUserSettings(baseUrl, 1111L, TestUtils.ID1, 30000));
+			ua2 = ua2.withSettings(client.getUserSettings(baseUrl, 2222L, TestUtils.ID2, 30000));
+			ua3 = ua3.withSettings(client.getUserSettings(baseUrl, 3333L, TestUtils.ID3, 30000));
 			Test.stopTest();
 
 			System.assertNotEquals(null, ua1);
@@ -287,12 +287,12 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
 			try {
-				client.getUserSettings(new URL('https://unit.test/'), 1111L, TestUtils.ID1, 30000);
+				client.getUserSettings(new Url('https://unit.test/'), 1111L, TestUtils.ID1, 30000);
 				throw new AssertException('Expected getUserSettings to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -309,14 +309,14 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final Account.Credentials a = client.getAccountCredentials(TestUtils.ID2);
+			Account.Credentials a = client.getAccountCredentials(TestUtils.ID2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, a);
-			System.assertEquals(22222222L, a.accountId);
+			System.assertEquals(22222222L, a.accountNumber);
 			System.assertEquals('fake-password', a.apiPassword);
 		}
 	}
@@ -326,7 +326,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex;
 
 			Test.startTest();
@@ -344,8 +344,8 @@ private class AccountAPITest {
 	}
 
 	class LoginInformationNoAccountsMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json');
@@ -358,17 +358,17 @@ private class AccountAPITest {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			UUID accountUUID = UUID.randomUUID();
-			TestUtils.createAccountConfiguration(accountUUID, accountUUID.toString() + '@unit.test');
-			final AccountAPI client = AccountAPI.getInstance();
+			UUID accountId = UUID.randomUUID();
+			TestUtils.createAccountConfiguration(accountId, accountId.toString() + '@unit.test');
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final Account.Credentials a = client.getAccountCredentials(accountUUID);
+			Account.Credentials a = client.getAccountCredentials(accountId);
 			Test.stopTest();
 
 			System.assertNotEquals(null, a);
-			System.assertEquals(0L, a.accountId);
-			System.assertEquals(accountUUID, a.accountUUID);
+			System.assertEquals(0L, a.accountNumber);
+			System.assertEquals(accountId, a.accountId);
 			System.assertEquals('fake-password', a.apiPassword);
 		}
 	}
@@ -390,11 +390,11 @@ private class AccountAPITest {
 	static testMethod void test_getValidAccounts_none() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 		TestUtils.createAccountConfiguration();
-		final AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 		APIException ex;
 
 		Test.startTest();
-		final Account.Memberships uas = client.getValidAccounts();
+		Account.Memberships uas = client.getValidAccounts();
 		Test.stopTest();
 
 		System.assertNotEquals(null, uas);
@@ -404,8 +404,8 @@ private class AccountAPITest {
 	}
 
 	class LoginInformationSingleValidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json');
@@ -417,10 +417,10 @@ private class AccountAPITest {
 	static testMethod void test_getValidAccounts_single_valid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleValidAccountMock());
 		TestUtils.createAccountConfiguration();
-		final AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		final Account.Memberships uas = client.getValidAccounts();
+		Account.Memberships uas = client.getValidAccounts();
 		Test.stopTest();
 
 		System.assertNotEquals(null, uas);
@@ -430,8 +430,8 @@ private class AccountAPITest {
 	}
 
 	class LoginInformationSingleInvalidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json');
@@ -443,10 +443,10 @@ private class AccountAPITest {
 	static testMethod void test_getValidAccounts_single_invalid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleInvalidAccountMock());
 		TestUtils.createAccountConfiguration();
-		final AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		final Account.Memberships uas = client.getValidAccounts();
+		Account.Memberships uas = client.getValidAccounts();
 		Test.stopTest();
 
 		System.assertNotEquals(null, uas);
@@ -456,9 +456,9 @@ private class AccountAPITest {
 	}
 
 	class LoginInformationMultipleValidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
-			final String endpoint = request.getEndpoint();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			String endpoint = request.getEndpoint();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json');
@@ -483,18 +483,18 @@ private class AccountAPITest {
 	static testMethod void test_getValidAccounts_multiple() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationMultipleValidAccountMock());
 		TestUtils.createAccountConfiguration();
-		final AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		final Account.Memberships uas = client.getValidAccounts();
+		Account.Memberships uas = client.getValidAccounts();
 		Test.stopTest();
 
 		System.assertNotEquals(null, uas);
 		System.assertEquals('fake-password', uas.apiPassword);
 		System.assertNotEquals(null, uas.accounts);
 		System.assertEquals(2, uas.accounts.size());
-		System.assertEquals(TestUtils.ID2, uas.accounts[0].accountUUID);
-		System.assertEquals(TestUtils.ID3, uas.accounts[1].accountUUID);
+		System.assertEquals(TestUtils.ID2, uas.accounts[0].accountId);
+		System.assertEquals(TestUtils.ID3, uas.accounts[1].accountId);
 	}
 
 	static testMethod void test_stringToUserStatus() {
@@ -515,15 +515,15 @@ private class AccountAPITest {
 		System.assertEquals('activationSent', AccountAPI.userStatusToString(Account.UserStatus.PendingActivation));
 	}
 
-	static testMethod void test_getConsoleViewURL_success() {
+	static testMethod void test_getConsoleViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final URL u = client.getConsoleViewURL();
+			Url u = client.getConsoleViewUrl();
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
@@ -531,17 +531,17 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewURL_failure() {
+	static testMethod void test_getConsoleViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
 			try {
-				client.getConsoleViewURL();
+				client.getConsoleViewUrl();
 				throw new AssertException('Expected getConsoleView call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -607,8 +607,8 @@ private class AccountAPITest {
 	}
 
 	private class UserAlreadyExistsMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -622,7 +622,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
@@ -642,8 +642,8 @@ private class AccountAPITest {
 	}
 
 	private class UserOtherErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -657,7 +657,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
@@ -681,7 +681,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -706,10 +706,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final List<Account.User> users = client.removeUsers(new List<Account.User> {
+			List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.UserStatus.Active, true, true, UserInfo.getUserId(), null),
 				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
@@ -735,7 +735,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -756,8 +756,8 @@ private class AccountAPITest {
 	}
 
 	private class UnknownUserMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -771,10 +771,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final List<Account.User> users = client.removeUsers(new List<Account.User> {
+			List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.UserStatus.Active, true, true, null, null)
 			});
@@ -803,13 +803,13 @@ private class AccountAPITest {
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
-		System.assertEquals(111111L, result.accountId);
-		System.assertEquals(TestUtils.ID1, result.accountUUID);
+		System.assertEquals(111111L, result.accountNumber);
+		System.assertEquals(TestUtils.ID1, result.accountId);
 		System.assertEquals('UNIT TEST', result.name);
 		System.assertEquals(TestUtils.ID2, result.userId);
 		System.assertEquals('fake-password', result.apiPassword);
-		System.assertNotEquals(null, result.baseURL);
-		System.assertEquals('https://unit.test.docusign.net/', result.baseURL.toExternalForm());
+		System.assertNotEquals(null, result.baseUrl);
+		System.assertEquals('https://unit.test.docusign.net/', result.baseUrl.toExternalForm());
 	}
 
 	static testMethod void test_createTrialAccount_failure() {
@@ -817,7 +817,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -839,9 +839,9 @@ private class AccountAPITest {
 	}
 
 	class CreateAccountErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			final HttpResponse response = new HttpResponse();
-			final String reqBody = request.getBody();
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			String reqBody = request.getBody();
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 
 			if (reqBody.contains('no_results')) {
@@ -876,11 +876,11 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex1, ex2, ex3, ex4, ex5;
 
 			Test.startTest();
-			final Account.Membership a = client.createTrialAccount(new Account.Trial(
+			Account.Membership a = client.createTrialAccount(new Account.Trial(
 				'no_results',
 				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
 				new Account.Address(null, null, null, null, null, null, null),
@@ -961,10 +961,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final List<CustomField> cfs = client.getCustomFields();
+			List<CustomField> cfs = client.getCustomFields();
 			Test.stopTest();
 
 			System.assertNotEquals(null, cfs);
@@ -992,7 +992,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex;
 
 			Test.startTest();
@@ -1014,10 +1014,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final List<DocumentCustomField> customTabs = client.getDocumentCustomFields();
+			List<DocumentCustomField> customTabs = client.getDocumentCustomFields();
 			Test.stopTest();
 
 			System.assertNotEquals(null, customTabs);
@@ -1130,7 +1130,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -1152,10 +1152,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final UUID u = client.saveDocumentCustomField(new DocumentCustomField(
+			UUID u = client.saveDocumentCustomField(new DocumentCustomField(
 				null,
 				'',
 				'text',
@@ -1179,10 +1179,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final UUID u = client.saveDocumentCustomField(new DocumentCustomField(
+			UUID u = client.saveDocumentCustomField(new DocumentCustomField(
 				TestUtils.ID2,
 				'',
 				'text',
@@ -1209,7 +1209,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
@@ -1243,10 +1243,10 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			final Boolean result = client.deleteDocumentCustomField(UUID.randomUUID());
+			Boolean result = client.deleteDocumentCustomField(UUID.randomUUID());
 			Test.stopTest();
 
 			System.assert(result);
@@ -1258,7 +1258,7 @@ private class AccountAPITest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
-			final AccountAPI client = AccountAPI.getInstance();
+			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();

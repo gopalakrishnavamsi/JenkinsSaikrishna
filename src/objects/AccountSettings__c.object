@@ -163,7 +163,7 @@
 	</fields>
 	<fields>
 		<fullName>RecipientSearchBehavior__c</fullName>
-		<defaultValue>&quot;SimpleMatchBeginning&quot;</defaultValue>
+		<defaultValue>&quot;DiscreteMatchBeginning&quot;</defaultValue>
 		<externalId>false</externalId>
 		<label>Recipient search behavior</label>
 		<length>30</length>

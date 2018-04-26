@@ -174,26 +174,11 @@ private class AccountServiceTest {
 		System.assertEquals(null, result6.message);
 	}
 
-	static testMethod void test_parseEnvironment() {
-		Test.startTest();
-		System.assertEquals(Environment.production, AccountService.parseEnvironment('production', 'whatever'));
-		System.assertEquals(Environment.production, AccountService.parseEnvironment('prod', 'whatever'));
-		System.assertEquals(Environment.production, AccountService.parseEnvironment('eu', null));
-		System.assertEquals(Environment.production, AccountService.parseEnvironment('au', null));
-		System.assertEquals(Environment.production, AccountService.parseEnvironment('ca', null));
-		System.assertEquals(Environment.demo, AccountService.parseEnvironment('demo', null));
-		System.assertEquals(Environment.invalid, AccountService.parseEnvironment('whatever', null));
-		System.assertEquals(Environment.invalid, AccountService.parseEnvironment(' ', null));
-		System.assertEquals(Environment.invalid, AccountService.parseEnvironment(null, null));
-		System.assertEquals(Environment.invalid, AccountService.parseEnvironment('other', 'not-a-url'));
-		Test.stopTest();
-	}
-
 	static testMethod void test_login_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
-				AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, null);
+				AccountService.login('u@unit.test', UUID.randomUUID().toString(), Environment.Target.Production, null, null);
 				throw new AssertException('Expected login to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -208,7 +193,7 @@ private class AccountServiceTest {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, null);
+				AccountService.login('u@unit.test', UUID.randomUUID().toString(), Environment.Target.Production, null, null);
 				throw new AssertException('Expected login to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -238,7 +223,7 @@ private class AccountServiceTest {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'demo', null, null);
+				AccountService.login('u@unit.test', UUID.randomUUID().toString(), Environment.Target.Demo, null, null);
 				throw new AssertException('Expected login to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidUsernameOrPassword, ex.getMessage());
@@ -251,8 +236,8 @@ private class AccountServiceTest {
 		public HTTPResponse respond(final HTTPRequest request) {
 			final HttpResponse response = new HttpResponse();
 			response.setHeader('Content-Type', 'application/json; charset=UTF-8');
-			final String reqURL = request.getEndpoint();
-			if (reqURL.contains('/login_information')) {
+			final String reqUrl = request.getEndpoint();
+			if (reqUrl.contains('/login_information')) {
 				response.setStatusCode(200);
 				response.setBody('{"apiPassword": "a", "loginAccounts": []}');
 			}
@@ -266,7 +251,8 @@ private class AccountServiceTest {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, null);
+				AccountService.login('u@unit.test', UUID.randomUUID().toString(), Environment.Target.Production, null,
+					null);
 				throw new AssertException('Expected login to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.NoValidAccounts, ex.getMessage());
@@ -295,7 +281,8 @@ private class AccountServiceTest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, null);
+			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(),
+				Environment.Target.Production, null, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -310,14 +297,15 @@ private class AccountServiceTest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, 2222L);
+			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(),
+				Environment.Target.Production, null, 2222L);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(AccountService.LoginStatus.Success, result.status);
 			System.assertNotEquals(null, result.accountOptions);
 			System.assertEquals(1, result.accountOptions.size());
-			System.assertEquals(2222L, result.accountOptions[0].id);
+			System.assertEquals(2222L, result.accountOptions[0].accountNumber);
 		}
 	}
 
@@ -326,13 +314,14 @@ private class AccountServiceTest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'prod', null, null);
+			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(),
+				Environment.Target.Production, null, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(AccountService.LoginStatus.Success, result.status);
 			System.assertEquals(1, result.accountOptions.size());
-			System.assertEquals(22222222L, result.accountOptions[0].id);
+			System.assertEquals(22222222L, result.accountOptions[0].accountNumber);
 		}
 	}
 
@@ -347,12 +336,13 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_base_URL() {
+	static testMethod void test_login_base_Url() {
 		Test.setMock(HttpCalloutMock.class, new BaseUrlMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(), 'other', 'https://unit.test.docusign.net', null);
+			AccountService.LoginResult result = AccountService.login('u@unit.test', UUID.randomUUID().toString(),
+				Environment.Target.Other, new Url('https://unit.test.docusign.net'), null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -527,7 +517,7 @@ private class AccountServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.accountId);
-			System.assertNotEquals(null, result.accountUUID);
+			System.assertNotEquals(null, result.accountNumber);
 			System.assert(String.isNotBlank(result.name));
 			System.assertNotEquals(null, result.baseUrl);
 			System.assertNotEquals(null, result.settings);
@@ -583,15 +573,15 @@ private class AccountServiceTest {
 
 	static testMethod void test_stringToSearchBehavior() {
 		Test.startTest();
-		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(null));
-		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(''));
-		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior('\t'));
-		System.assertEquals(SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(' discretematchbeginning'));
-		System.assertEquals(SearchBehavior.DiscreteMatchAny, AccountService.stringToSearchBehavior('DISCRETEMATCHANY\n'));
-		System.assertEquals(SearchBehavior.DiscreteMatchExact, AccountService.stringToSearchBehavior('DiscreteMatchExact'));
-		System.assertEquals(SearchBehavior.CompoundMatchExact, AccountService.stringToSearchBehavior('CompoundMatchExact'));
-		System.assertEquals(SearchBehavior.CompoundMatchBeginning, AccountService.stringToSearchBehavior('CompoundMatchBeginning'));
-		System.assertEquals(SearchBehavior.CompoundMatchAny, AccountService.stringToSearchBehavior('CompoundMatchAny'));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(null));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(''));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior('\t'));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(' discretematchbeginning'));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchAny, AccountService.stringToSearchBehavior('DISCRETEMATCHANY\n'));
+		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchExact, AccountService.stringToSearchBehavior('DiscreteMatchExact'));
+		System.assertEquals(Recipient.SearchBehavior.CompoundMatchExact, AccountService.stringToSearchBehavior('CompoundMatchExact'));
+		System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning, AccountService.stringToSearchBehavior('CompoundMatchBeginning'));
+		System.assertEquals(Recipient.SearchBehavior.CompoundMatchAny, AccountService.stringToSearchBehavior('CompoundMatchAny'));
 		Test.stopTest();
 	}
 
@@ -653,7 +643,7 @@ private class AccountServiceTest {
 				new List<String> { 'er1', 'er2' },
 				new List<String> { 'dr1', 'dr2' },
 				new List<String> { 'rr1', 'rr2' },
-				SearchBehavior.CompoundMatchBeginning);
+				Recipient.SearchBehavior.CompoundMatchBeginning);
 
 			Test.startTest();
 			AccountService.Settings result = AccountService.saveSettings(s);
@@ -667,7 +657,7 @@ private class AccountServiceTest {
 			System.assertEquals(new List<String> { 'er1', 'er2' }, result.entityResolvers);
 			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
 			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
-			System.assertEquals(SearchBehavior.CompoundMatchBeginning, result.recipientSearchBehavior);
+			System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning, result.recipientSearchBehavior);
 		}
 	}
 

@@ -283,12 +283,16 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return recipients;
 	}
 
-	private static String buildSearchTerm(final String name, final SearchBehavior behavior) {
+	private static String buildSearchTerm(final String name, final Recipient.SearchBehavior behavior) {
 		String result = name == null ? null : name.trim();
 		if (result != null) {
-			if (behavior == SearchBehavior.CompoundMatchExact || behavior == SearchBehavior.DiscreteMatchExact) {
+			if (behavior == Recipient.SearchBehavior.CompoundMatchExact
+				|| behavior == Recipient.SearchBehavior.DiscreteMatchExact) {
+
 				result = result;
-			} else if (behavior == SearchBehavior.CompoundMatchAny || behavior == SearchBehavior.DiscreteMatchAny) {
+			} else if (behavior == Recipient.SearchBehavior.CompoundMatchAny
+				|| behavior == Recipient.SearchBehavior.DiscreteMatchAny) {
+
 				result = '%' + result + '%'; // This is super inefficient, so avoid if possible.
 			} else { // MatchBeginning
 				result += '%';
@@ -298,7 +302,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	public List<Recipient> searchRecipients(final String sObjectType, final String firstName, final String lastName,
-		final SearchBehavior behavior) {
+		final Recipient.SearchBehavior behavior) {
 
 		List<Recipient> result = null;
 		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();

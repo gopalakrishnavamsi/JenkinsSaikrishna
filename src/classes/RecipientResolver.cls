@@ -41,5 +41,6 @@ public interface RecipientResolver {
 	 *
 	 * @return The recipients matching the search criteria.
 	 */
-	List<Recipient> searchRecipients(String sObjectType, String firstName, String lastName, SearchBehavior behavior);
+	List<Recipient> searchRecipients(String sObjectType, String firstName, String lastName,
+		Recipient.SearchBehavior behavior);
 }

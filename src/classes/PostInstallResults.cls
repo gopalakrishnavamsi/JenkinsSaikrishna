@@ -1,14 +1,40 @@
+/**
+ * The results of post-install script execution.
+ */
 public class PostInstallResults {
 
+	/**
+	 * Post-install script step statuses:
+	 * <ul>
+	 *     <li><code>SKIPPED</code>: The step was skipped.</li>
+	 *     <li><code>STARTED</code>: The step started but may not have completed.</li>
+	 *     <li><code>SUCCESS</code>: The step completed successfully.</li>
+	 *     <li><code>FAILURE</code>: The step failed.</li>
+	 * </ul>
+	 */
 	public enum StepStatus {
 		SKIPPED, STARTED, SUCCESS, FAILURE
 	}
 
+	/**
+	 * A step in the post-install script.
+	 */
 	public class Step implements Comparable {
-
+		/**
+		 * Ordinal sequence of the post-install step.
+		 */
 		public Integer sequence { get; private set; }
+		/**
+		 * The name of the post-install step.
+		 */
 		public String name { get; private set; }
+		/**
+		 * The execution status of the post-install step.
+		 */
 		public StepStatus status { get; private set; }
+		/**
+		 * Additional context (e.g. error message) related to the post-install step.
+		 */
 		public Object context { get; private set; }
 
 		private Step(final Integer sequence, final String name, final StepStatus status, final Object context) {
@@ -29,6 +55,13 @@ public class PostInstallResults {
 			return this;
 		}
 
+		/**
+		 * Used to sort post-install steps.
+		 *
+		 * @param compareTo The step to which to compare.
+		 *
+		 * @return The result of the comparison.
+		 */
 		public Integer compareTo(final Object compareTo) {
 			Step other = (Step)compareTo;
 			if (this.sequence == other.sequence) return 0;
@@ -47,6 +80,11 @@ public class PostInstallResults {
 			return Label.StepUnknown;
 		}
 
+		/**
+		 * Generates a string representation of the post-install step.
+		 *
+		 * @return The string representation of the post-install step.
+		 */
 		override public String toString() {
 			String result = null;
 			if (this.status == StepStatus.FAILURE && this.context != null) {
@@ -72,26 +110,58 @@ public class PostInstallResults {
 		}
 	}
 
+	/**
+	 * The number of steps in the post-install script.
+	 */
 	public Integer count { get; private set; }
 	private Map<String, Step> stepMap;
+	/**
+	 * Whether the post install script was successful. All step statuses must either be <code>SUCCESS</code> or
+	 * <code>SKIPPED</code> for the script to be considered successful.
+	 */
 	public Boolean success { get; private set; }
 
+	/**
+	 * Constructs empty post-install results.
+	 */
 	public PostInstallResults() {
 		this.count = 0;
 		this.stepMap = new Map<String, Step>();
 		this.success = true;
 	}
 
+	/**
+	 * Begins a post-install step.
+	 *
+	 * @param name The name of the post-install step.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults beginStep(final String name) {
 		stepMap.put(name, new Step(++this.count, name, StepStatus.STARTED, null));
 		return this;
 	}
 
+	/**
+	 * Skips a post-install step.
+	 *
+	 * @param name The name of the post-install step.
+	 * @param reason Why the step was skipped.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults skipStep(final String name, final String reason) {
 		stepMap.put(name, new Step(++this.count, name, StepStatus.SKIPPED, reason));
 		return this;
 	}
 
+	/**
+	 * Ends a post-install step successfully.
+	 *
+	 * @param name The name of the post-install step.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults endStepSuccess(final String name) {
 		if (stepMap.containsKey(name)) {
 			stepMap.put(name, stepMap.get(name).complete(true, null));
@@ -101,6 +171,14 @@ public class PostInstallResults {
 		return this;
 	}
 
+	/**
+	 * Ends a post-install step successfully with additional context.
+	 *
+	 * @param name The name of the post-install step.
+	 * @param context Additional context.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults endStepSuccess(final String name, final Object context) {
 		if (stepMap.containsKey(name)) {
 			stepMap.put(name, stepMap.get(name).complete(true, context));
@@ -110,6 +188,14 @@ public class PostInstallResults {
 		return this;
 	}
 
+	/**
+	 * Ends a post-install step unsuccessfully with error details.
+	 *
+	 * @param name The name of the post-install step.
+	 * @param ex The exception that failed the step.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults endStepFailure(final String name, final Exception ex) {
 		if (stepMap.containsKey(name)) {
 			stepMap.put(name, stepMap.get(name).complete(false, ex));
@@ -120,6 +206,13 @@ public class PostInstallResults {
 		return this;
 	}
 
+	/**
+	 * Adds post-install results to the current results.
+	 *
+	 * @param results The results to add.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults addResults(final PostInstallResults results) {
 		if (results != null) {
 			for (Step s : results.getSteps()) {
@@ -130,6 +223,14 @@ public class PostInstallResults {
 		return this;
 	}
 
+	/**
+	 * Adds named post-install results to the current results.
+	 *
+	 * @param name The name of the post-install results.
+	 * @param results The results to add.
+	 *
+	 * @return The current post-install results.
+	 */
 	public PostInstallResults addResults(final String name, final PostInstallResults results) {
 		if (results != null) {
 			for (Step s : results.getSteps()) {
@@ -140,6 +241,11 @@ public class PostInstallResults {
 		return this;
 	}
 
+	/**
+	 * Gets all post-install step failure messages.
+	 *
+	 * @return The post-install failure messages.
+	 */
 	public List<String> getFailureMessages() {
 		List<String> messages = new List<String>();
 		for (Step s : getSteps()) {
@@ -164,12 +270,22 @@ public class PostInstallResults {
 		return messages;
 	}
 
+	/**
+	 * Gets the post-install steps executed as part of the current results.
+	 *
+	 * @return The post-install steps.
+	 */
 	public List<Step> getSteps() {
 		List<Step> steps = this.stepMap.values();
 		steps.sort();
 		return steps;
 	}
 
+	/**
+	 * Generates a string representation of the post-install results.
+	 *
+	 * @return The string representation of the post-install results.
+	 */
 	override public String toString() {
 		return Collection.mkString(getSteps(), '\n');
 	}

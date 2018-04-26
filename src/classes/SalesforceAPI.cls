@@ -7,7 +7,7 @@ public class SalesforceAPI extends RestAPI {
 
 	private static SalesforceAPI self = null;
 	private static final String remoteSite = Url.getSalesforceBaseUrl().toExternalForm();
-	private static final Url baseURL = new Url(Url.getSalesforceBaseUrl(), '/services/data/v' +
+	private static final Url baseUrl = new Url(Url.getSalesforceBaseUrl(), '/services/data/v' +
 		Salesforce.API_VERSION + '/');
 	private final Map<String, String> defaultHeaders;
 
@@ -70,7 +70,7 @@ public class SalesforceAPI extends RestAPI {
 
 	private RestAPI.Response get(final List<Object> path, final Integer timeout) {
 		try {
-			return super.get(baseURL, path, QueryString.empty, this.defaultHeaders, timeout);
+			return super.get(baseUrl, path, QueryString.empty, this.defaultHeaders, timeout);
 		} catch (CalloutException ex) {
 			this.log.error('Salesforce API CalloutException: ' + ex.getMessage());
 			if (ex.getMessage().contains(remoteSite)) {

@@ -10,7 +10,7 @@ private class EnvelopeServiceTest {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 			},
 			new List<CustomField> {
-				new CustomField('n1', 'v1', true, true)
+				CustomField.newTextField('n1', 'v1', true, true)
 			},
 			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
@@ -33,7 +33,7 @@ private class EnvelopeServiceTest {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 			},
 			new List<CustomField> {
-				new CustomField('n1', 'v1', true, true)
+				CustomField.newTextField('n1', 'v1', true, true)
 			},
 			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
@@ -57,7 +57,7 @@ private class EnvelopeServiceTest {
 			},
 			null,
 			new List<CustomField> {
-				new CustomField('n1', 'v1', true, true)
+				CustomField.newTextField('n1', 'v1', true, true)
 			},
 			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
@@ -83,9 +83,9 @@ private class EnvelopeServiceTest {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 			},
 			new List<CustomField> {
-				new CustomField('n1', '', true, true),
-				new CustomField('n2', null, new List<String> { 'v1', 'v2' }, true, true),
-				new CustomField('n3', 'v1', null, true, true)
+				CustomField.newTextField('n1', '', true, true),
+				CustomField.newListField('n2', null, new List<String> { 'v1', 'v2' }, true, true),
+				CustomField.newListField('n3', 'v1', null, true, true)
 			},
 			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
@@ -116,7 +116,7 @@ private class EnvelopeServiceTest {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 			},
 			new List<CustomField> {
-				new CustomField('n1', 'v1', true, true)
+				CustomField.newTextField('n1', 'v1', true, true)
 			},
 			new Envelope.Notifications(true, -1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
@@ -144,7 +144,7 @@ private class EnvelopeServiceTest {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 			},
 			new List<CustomField> {
-				new CustomField('n1', 'v1', true, true)
+				CustomField.newTextField('n1', 'v1', true, true)
 			},
 			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
 			null,
@@ -410,7 +410,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 
 			Test.startTest();
@@ -438,7 +438,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 			Envelope.Notifications n = new Envelope.Notifications(true, 1, 2, true, 3, 4, true);
 
@@ -468,7 +468,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 			String es = 'subject2';
 			String em = 'message2';
@@ -502,7 +502,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
@@ -540,7 +540,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 
 			Test.startTest();
@@ -574,7 +574,7 @@ private class EnvelopeServiceTest {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
 				})
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', false, false)
+					CustomField.newTextField('n1', 'v1', false, false)
 				});
 			ContentVersion cv1 = TestUtils.createContentVersion(l.Id);
 			ContentVersion cv2 = TestUtils.createContentVersion(l.Id);
@@ -618,7 +618,6 @@ private class EnvelopeServiceTest {
 					'role' => 'Phone'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 
 			Test.startTest();
@@ -710,7 +709,7 @@ private class EnvelopeServiceTest {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope e = new Envelope(null, 's', 'm', new Entity(a.Id))
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', true, false)
+					CustomField.newTextField('n1', 'v1', true, false)
 				});
 			Contact c = TestUtils.createContact(a.Id);
 			ContentVersion cv = TestUtils.createContentVersion(a.Id);
@@ -734,7 +733,7 @@ private class EnvelopeServiceTest {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope e = new Envelope(null, 's', 'm', new Entity(a.Id))
 				.withCustomFields(new List<CustomField> {
-					new CustomField('n1', 'v1', true, false)
+					CustomField.newTextField('n1', 'v1', true, false)
 				});
 			Contact c1 = TestUtils.createContact(a.Id);
 			Contact c2 = TestUtils.createContact(a.Id);

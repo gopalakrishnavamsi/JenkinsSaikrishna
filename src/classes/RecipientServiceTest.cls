@@ -246,7 +246,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.CompoundMatchBeginning.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchBeginning.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -267,7 +267,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.CompoundMatchExact.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchExact.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -288,7 +288,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.CompoundMatchAny.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchAny.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -309,7 +309,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.DiscreteMatchBeginning.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchBeginning.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -330,7 +330,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.DiscreteMatchExact.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchExact.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -351,7 +351,7 @@ private class RecipientServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.RecipientSearchBehavior__c = SearchBehavior.DiscreteMatchAny.name();
+			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchAny.name();
 			update s;
 
 			Lead l1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -558,7 +558,6 @@ private class RecipientServiceTest {
 					'role' => 'LastName'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 			// Invalid signing group mapping
 			EnvelopeConfiguration.RelatedContacts rc2 = new EnvelopeConfiguration.RelatedContacts(
@@ -567,7 +566,6 @@ private class RecipientServiceTest {
 					'role' => 'LastName'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 			// Valid - has all mappings
 			Map<String, Recipient.SigningGroup> sgs1 = new Map<String, Recipient.SigningGroup> {
@@ -633,7 +631,6 @@ private class RecipientServiceTest {
 					'role' => 'Phone'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 
 			Test.startTest();
@@ -680,7 +677,6 @@ private class RecipientServiceTest {
 					'role' => 'Phone'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 
 			Test.startTest();
@@ -724,7 +720,6 @@ private class RecipientServiceTest {
 					'signinggroup' => 'Name'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 
 			Test.startTest();
@@ -1446,7 +1441,6 @@ private class RecipientServiceTest {
 					'role' => 'Phone'
 				},
 				'Contacts',
-				false, // addSourceRecipients
 				null); // parseErrors
 
 			Test.startTest();
@@ -1607,7 +1601,6 @@ private class RecipientServiceTest {
 							'signinggroup' => 'LastName'
 						},
 						'Contacts',
-						false,
 						null)
 				},
 				new List<EnvelopeConfiguration.CustomRecipient> {
@@ -1648,7 +1641,6 @@ private class RecipientServiceTest {
 							'signinggroup' => 'LastName'
 						},
 						'Contacts',
-						false,
 						null)
 				},
 				new List<EnvelopeConfiguration.CustomRecipient> {

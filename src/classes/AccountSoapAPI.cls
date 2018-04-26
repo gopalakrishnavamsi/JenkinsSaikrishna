@@ -173,7 +173,7 @@ public class AccountSoapAPI {
 			request_x.AccountId = UUID.toString(Credentials.getInstance().accountId);
 			request_x.ConnectUsername = sfdcUsername;
 			request_x.ConnectPassword = sfdcPassword;
-			request_x.SalesforceEnvironment = new Url(URL.getSalesforceBaseUrl(), '/services/Soap/u/'
+			request_x.SalesforceEnvironment = new Url(Url.getSalesforceBaseUrl(), '/services/Soap/u/'
 				+ Salesforce.API_VERSION).toExternalForm();
 			request_x.ConnectConfigurationId = getDefaultConnectConfigurationId();
 			Map<String, AccountSoapAPI.SetConnectCredentialsResponse_element> response_map_x =
@@ -217,7 +217,7 @@ public class AccountSoapAPI {
 				'X-DocuSign-Authentication' => getCredentialsXml(credentials.username, credentials.password),
 				'User-Agent' => Application.userAgent
 			};
-			self.endpoint_x = new URL(credentials.environment.baseURL, 'api/3.0/accountmanagement.asmx').toExternalForm();
+			self.endpoint_x = new Url(credentials.environment.baseUrl, 'api/3.0/accountmanagement.asmx').toExternalForm();
 			self.timeout_x = RestAPI.defaultTimeout;
 		}
 		return self;

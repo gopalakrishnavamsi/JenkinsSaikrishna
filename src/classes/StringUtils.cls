@@ -3,6 +3,9 @@ This class contains utility methods for dealing with strings to/from string-valu
 relied upon by the client. In an ideal world, this wouldn't be necessary. However, there is still much spaghetti to
 untangle upstream, and the v2 DocuSign APIs serialize all primitive types as strings.
  */
+/**
+ * String utilities.
+ */
 public class StringUtils {
 
 	private static final Pattern emailPattern = Pattern.compile(
@@ -10,24 +13,62 @@ public class StringUtils {
 
 	public static final String ENCODING = 'UTF-8';
 
+	/**
+	 * Url-encodes a string with UTF-8 encoding.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The Url-encoded string or an empty string if the input is blank.
+	 */
 	public static String encode(final String s) {
 		if (String.isBlank(s)) return '';
 		return EncodingUtil.UrlEncode(s, ENCODING);
 	}
 
+	/**
+	 * Url-decodes a string with UTF-8 encoding.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The Url-decoded string or an empty string if the input is blank.
+	 */
 	public static String decode(final String s) {
 		if (String.isBlank(s)) return '';
 		return EncodingUtil.UrlDecode(s, ENCODING);
 	}
 
+	/**
+	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true`; anything
+	 * else evaluates to <code>false</code>.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The boolean representation of the input string.
+	 */
 	public static Boolean parseBoolean(final String s) {
 		return String.isNotBlank(s) && (s == '1' || Boolean.valueOf(s));
 	}
 
+	/**
+	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true`, any
+	 * other non-blank value evaluates to 'false', and blank inputs evaluate to <code>defaultValue</code>.
+	 *
+	 * @param s The input string.
+	 * @param defaultValue The value to use if the input string is blank,
+	 *
+	 * @return The boolean representation of the input string, or the default value if the input string is blank.
+	 */
 	public static Boolean parseBoolean(final String s, final Boolean defaultValue) {
 		if (String.isBlank(s)) return defaultValue; else return s == '1' || Boolean.valueOf(s);
 	}
 
+	/**
+	 * Parses a string as a decimal value.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The decimal representation of the input string, or <code>null</code> if the input string is blank or otherwise invalid.
+	 */
 	public static Decimal parseDecimal(final String s) {
 		try {
 			return String.isBlank(s) ? null : Decimal.valueOf(s);
@@ -36,6 +77,13 @@ public class StringUtils {
 		}
 	}
 
+	/**
+	 * Parses a string as an integer value.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The integer representation of the input string, or <code>null</code> if the input string is blank or otherwise invalid.
+	 */
 	public static Integer parseInteger(final String s) {
 		try {
 			return String.isBlank(s) ? null : Integer.valueOf(s);
@@ -44,6 +92,13 @@ public class StringUtils {
 		}
 	}
 
+	/**
+	 * Parses a string as an integer value with a default value to use if the string cannot be parsed.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The integer representation of the input string, or <code>defaultValue</code> if the input string is blank or otherwise invalid.
+	 */
 	public static Integer parseInteger(final String s, final Integer defaultValue) {
 		try {
 			return String.isBlank(s) ? defaultValue : Integer.valueOf(s);
@@ -52,14 +107,36 @@ public class StringUtils {
 		}
 	}
 
+	/**
+	 * Converts a blank or placeholder string to null. All other input values are returned unchanged.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The unmodified input string if not blank or does not equal placeholder text, <code>null</code> otherwise.
+	 */
 	public static String fromString(final String s) {
 		return String.isBlank(s) || s == Label.UndefinedString ? null : s;
 	}
 
-	public static DateTime parseDateTime(final String s) {
+	/**
+	 * Parses an ISO 8601 formatted string as <code>Datetime</code>.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The <code>Datetime</code> representation for a valid input string, <code>null</code> otherwise.
+	 */
+	public static Datetime parseDateTime(final String s) {
 		return String.isBlank(s) ? null : (DateTime)JSON.deserialize('"' + s + '"', DateTime.class);
 	}
 
+	/**
+	 * Merges first and last names into one name, allowing for one or the other to be blank and trimming the output.
+	 *
+	 * @param firstName The first name.
+	 * @param lastName The last name.
+	 *
+	 * @return The combined name.
+	 */
 	public static String mkName(final String firstName, final String lastName) {
 		String name = '';
 		if (String.isNotBlank(firstName)) name += firstName.trim();
@@ -67,21 +144,42 @@ public class StringUtils {
 		return name.trim();
 	}
 
-	public static Boolean isValidEmail(final String email) {
-		return String.isNotBlank(email) && emailPattern.matcher(email.trim().toLowerCase()).matches();
+	/**
+	 * Tests whether an input string is a valid email address.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return <code>true</code> if the input string is a valid email address, <code>false</code> otherwise.
+	 */
+	public static Boolean isValidEmail(final String s) {
+		return String.isNotBlank(s) && emailPattern.matcher(s.trim().toLowerCase()).matches();
 	}
 
-	public static String replaceUserTags(final String param) {
-		if (String.isEmpty(param)) {
-			return param;
+	/**
+	 * Replaces user tags '[FirstName]', '[LastName]', or '[Email]' with the current user's corresponding values.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The string with replaced user tags, if any.
+	 */
+	public static String replaceUserTags(final String s) {
+		if (String.isEmpty(s)) {
+			return s;
 		} else {
-			return param
+			return s
 				.replace('[FirstName]', ((UserInfo.getFirstName() == null) ? '' : UserInfo.getFirstName()))
 				.replace('[LastName]', ((UserInfo.getLastName() == null) ? '' : UserInfo.getLastName()))
 				.replace('[Email]', ((UserInfo.getUserEmail() == null) ? '' : UserInfo.getUserEmail()));
 		}
 	}
 
+	/**
+	 * Replaces note tags: '_COMMA_' with ',', '_SEMI_' with ';', '_TILDE_' with '~', and '\\n' with '\n'.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The string with replaced note tags, if any.
+	 */
 	public static String replaceNoteTags(final String s) {
 		if (String.isBlank(s)) return null;
 

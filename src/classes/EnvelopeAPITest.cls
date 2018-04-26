@@ -85,9 +85,9 @@ private class EnvelopeAPITest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
-			CustomField cf1 = new CustomField('n1', 'v1', true, false);
-			CustomField cf2 = new CustomField('n2', 'v2', false, true);
-			CustomField cf3 = new CustomField('n3', 'v3', new List<String> { 'v1', 'v2', 'v3' }, true, true);
+			CustomField cf1 = CustomField.newTextField('n1', 'v1', true, false);
+			CustomField cf2 = CustomField.newTextField('n2', 'v2', false, true);
+			CustomField cf3 = CustomField.newListField('n3', 'v3', new List<String> { 'v1', 'v2', 'v3' }, true, true);
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 
@@ -171,7 +171,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSenderViewURL_success() {
+	static testMethod void test_getSenderViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -179,7 +179,7 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			URL u = client.getSenderViewURL(UUID.randomUUID(), new URL('https://unit.test.return/'));
+			Url u = client.getSenderViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
@@ -187,7 +187,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSenderViewURL_failure() {
+	static testMethod void test_getSenderViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -197,8 +197,8 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.getSenderViewURL(UUID.randomUUID(), new URL('https://unit.test.return/'));
-				throw new AssertException('Expected getSenderViewURL call to fail');
+				client.getSenderViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'));
+				throw new AssertException('Expected getSenderViewUrl call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
 
@@ -211,7 +211,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewURL_success() {
+	static testMethod void test_getRecipientViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -219,8 +219,8 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			URL u = client.getRecipientViewURL(
-				UUID.randomUUID(), new URL('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
+			Url u = client.getRecipientViewUrl(
+				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
@@ -228,7 +228,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewURL_failure() {
+	static testMethod void test_getRecipientViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -238,8 +238,8 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.getRecipientViewURL(
-					UUID.randomUUID(), new URL('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
+				client.getRecipientViewUrl(
+					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
 				throw new AssertException('Expected getRecipientView call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -253,7 +253,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewURL_success() {
+	static testMethod void test_getConsoleViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -261,7 +261,7 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			URL u = client.getConsoleViewURL(UUID.randomUUID(), new URL('https://unit.test/return'));
+			Url u = client.getConsoleViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
@@ -269,7 +269,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewURL_failure() {
+	static testMethod void test_getConsoleViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -279,7 +279,7 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.getConsoleViewURL(UUID.randomUUID(), new URL('https://unit.test/return'));
+				client.getConsoleViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
 				throw new AssertException('Expected getConsoleView call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -293,7 +293,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewURL_success() {
+	static testMethod void test_getCorrectViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -301,7 +301,7 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			URL u = client.getCorrectViewURL(UUID.randomUUID(), new URL('https://unit.test/return'));
+			Url u = client.getCorrectViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
@@ -309,7 +309,7 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewURL_failure() {
+	static testMethod void test_getCorrectViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -319,7 +319,7 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.getCorrectViewURL(UUID.randomUUID(), new URL('https://unit.test/return'));
+				client.getCorrectViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
 				throw new AssertException('Expected getCorrectView call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -355,43 +355,43 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewURL_error() {
+	static testMethod void test_getCorrectViewUrl_error() {
 		Test.setMock(HttpCalloutMock.class, new CorrectViewErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
-			URL returnURL = new URL('https://unit.test/return');
+			Url returnUrl = new Url('https://unit.test/return');
 			APIException ex1, ex2, ex3, ex4, ex5;
 
 			Test.startTest();
 			try {
-				client.getCorrectViewURL(TestUtils.ID1, returnURL);
-				throw new AssertException('Expected getCorrectViewURL to fail');
+				client.getCorrectViewUrl(TestUtils.ID1, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex1 = ex;
 			}
 			try {
-				client.getCorrectViewURL(TestUtils.ID2, returnURL);
-				throw new AssertException('Expected getCorrectViewURL to fail');
+				client.getCorrectViewUrl(TestUtils.ID2, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex2 = ex;
 			}
 			try {
-				client.getCorrectViewURL(TestUtils.ID3, returnURL);
-				throw new AssertException('Expected getCorrectViewURL to fail');
+				client.getCorrectViewUrl(TestUtils.ID3, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex3 = ex;
 			}
 			try {
-				client.getCorrectViewURL(TestUtils.ID4, returnURL);
-				throw new AssertException('Expected getCorrectViewURL to fail');
+				client.getCorrectViewUrl(TestUtils.ID4, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex4 = ex;
 			}
 			try {
-				client.getCorrectViewURL(TestUtils.ID5, returnURL);
-				throw new AssertException('Expected getCorrectViewURL to fail');
+				client.getCorrectViewUrl(TestUtils.ID5, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex5 = ex;
 			}
@@ -504,7 +504,7 @@ private class EnvelopeAPITest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeAPI client1 = EnvelopeAPI.getInstance();
-			client1.getBaseURL();
+			client1.getBaseUrl();
 			EnvelopeAPI client2 = new EnvelopeAPI(new Credentials(Environment.demo, TestUtils.ID1,
 				UUID.randomUUID().toString(), UUID.randomUUID().toString(), true, UUID.randomUUID().toString(), false));
 			APIException ex1, ex2 = null;
@@ -680,8 +680,8 @@ private class EnvelopeAPITest {
 						'r2@unit.test', null, 'note2', false).withSequence(2)
 				},
 				new List<CustomField> {
-					new CustomField('cf1', '1', true, true),
-					new CustomField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+					CustomField.newTextField('cf1', '1', true, true),
+					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 				},
 				new Envelope.Notifications(false, 0, 0, false, 0, 0, false),
 				'subject',
@@ -733,8 +733,8 @@ private class EnvelopeAPITest {
 						'nl message'))
 				},
 				new List<CustomField> {
-					new CustomField('cf1', '1', true, true),
-					new CustomField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+					CustomField.newTextField('cf1', '1', true, true),
+					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 				},
 				null,
 				'subject',

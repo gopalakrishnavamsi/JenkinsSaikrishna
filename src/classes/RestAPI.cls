@@ -66,7 +66,7 @@ public virtual class RestAPI {
 	}
 
 	/**
-     * @description Make a http request
+     * Make a http request
 	 * @param Url  the request endpoint
 	 * @param method  the http request method
 	 * @param headers  a list of request headers
@@ -84,7 +84,7 @@ public virtual class RestAPI {
 		final String reqBody,
 		final Integer timeout) {
 
-		// Build request URL
+		// Build request Url
 		String spec = '';
 		Boolean prependSlash = false;
 		for (Object p : path) {
@@ -128,7 +128,7 @@ public virtual class RestAPI {
 	}
 
 	/**
-	 * @description Validate the http response from DocuSign Rest service.
+	 * Validate the http response from DocuSign Rest service.
 	 *              Checks the following:
 	 *              1) Response is not null.
 	 *              2) If the body is defined, Content-Type is application/json.

@@ -1,10 +1,10 @@
 @IsTest
 public class DocuSignAPITest {
 
-	public static final String CONSOLE_VIEW_URL = 'https://unit.test/view/console';
-	public static final String RECIPIENT_VIEW_URL = 'https://unit.test/view/recipient';
-	public static final String SENDER_VIEW_URL = 'https://unit.test/view/sender';
-	public static final String CORRECT_VIEW_URL = 'https://unit.test/view/correct';
+	public static final String CONSOLE_VIEW_Url = 'https://unit.test/view/console';
+	public static final String RECIPIENT_VIEW_Url = 'https://unit.test/view/recipient';
+	public static final String SENDER_VIEW_Url = 'https://unit.test/view/sender';
+	public static final String CORRECT_VIEW_Url = 'https://unit.test/view/correct';
 
 	// Basic API success mock
 	public class SuccessMock implements HttpCalloutMock {
@@ -59,13 +59,13 @@ public class DocuSignAPITest {
 				} else if (endpoint.endsWith('/oauth2/revoke')) {
 					// Do nothing
 				} else if (endpoint.endsWith('/views/sender')) {
-					response.setBody('{"url":"' + SENDER_VIEW_URL + '"}');
+					response.setBody('{"url":"' + SENDER_VIEW_Url + '"}');
 				} else if (endpoint.endsWith('/views/recipient')) {
-					response.setBody('{"url":"' + RECIPIENT_VIEW_URL + '"}');
+					response.setBody('{"url":"' + RECIPIENT_VIEW_Url + '"}');
 				} else if (endpoint.endsWith('/views/console')) {
-					response.setBody('{"url":"' + CONSOLE_VIEW_URL + '"}');
+					response.setBody('{"url":"' + CONSOLE_VIEW_Url + '"}');
 				} else if (endpoint.endsWith('/views/correct')) {
-					response.setBody('{"url":"' + CORRECT_VIEW_URL + '"}');
+					response.setBody('{"url":"' + CORRECT_VIEW_Url + '"}');
 				} else if (endpoint.endsWith('/tab_definitions')) {
 					response.setBody('{"customTabId":"11111111-1111-1111-1111-111111111111"}');
 				} else if (endpoint.endsWith('/users')) {
@@ -249,10 +249,10 @@ public class DocuSignAPITest {
 				'Accept' => 'application/json',
 				'X-DocuSign-Authentication' => c.legacyAuthHeader
 			}, c.defaultHeaders);
-			System.assertNotEquals(null, c.baseURL);
+			System.assertNotEquals(null, c.baseUrl);
 			System.assertNotEquals(null, c.environment);
 			System.assertEquals(Environment.Target.Other, c.environment.environment);
-			System.assertEquals(credentials.environment.baseURL.toExternalForm(), c.baseURL.toExternalForm());
+			System.assertEquals(credentials.environment.baseUrl.toExternalForm(), c.baseUrl.toExternalForm());
 			System.assertEquals(Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c), RestAPI.defaultTimeout);
 		}
 	}
@@ -283,10 +283,10 @@ public class DocuSignAPITest {
 			'Accept' => 'application/json',
 			'X-DocuSign-Authentication' => c.legacyAuthHeader
 		}, c.defaultHeaders);
-		System.assertNotEquals(null, c.baseURL);
+		System.assertNotEquals(null, c.baseUrl);
 		System.assertEquals(
-			creds.environment.baseURL.toExternalForm(),
-			c.baseURL.toExternalForm());
+			creds.environment.baseUrl.toExternalForm(),
+			c.baseUrl.toExternalForm());
 		System.assertEquals(Environment.Target.Demo, c.environment.environment);
 		System.assertEquals(
 			Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c),
@@ -304,26 +304,26 @@ public class DocuSignAPITest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getBaseURL_success() {
+	static testMethod void test_getBaseUrl_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID accountID = TestUtils.createAccountConfiguration();
 			DocuSignAPI client = DocuSignAPI.getInstance();
 
 			Test.startTest();
-			URL u = client.getBaseURL();
+			Url u = client.getBaseUrl();
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals(TestUtils.BASE_URL + 'restapi/v2/accounts/' + accountID + '/', u.toExternalForm());
+			System.assertEquals(TestUtils.BASE_Url + 'restapi/v2/accounts/' + accountID + '/', u.toExternalForm());
 		}
 	}
 
-	static testMethod void test_getBaseURL_failure() {
+	static testMethod void test_getBaseUrl_failure() {
 		Test.startTest();
 		try {
 			new DocuSignAPI(new Credentials(Environment.production, null, null, null, false, null, false))
-				.getBaseURL();
-			throw new AssertException('Expected getBaseURL to fail');
+				.getBaseUrl();
+			throw new AssertException('Expected getBaseUrl to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
 		}

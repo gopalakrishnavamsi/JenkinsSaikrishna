@@ -120,7 +120,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return this.sgs;
 	}
 
-	// get*View URL serialization objects
+	// get*View Url serialization objects
 	private class ViewRequest {
 		public String authenticationMethod { get; private set; }
 		public String email { get; private set; }
@@ -130,20 +130,20 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String envelopeId { get; private set; }
 		public Boolean suppressNavigation { get; private set; }
 
-		public ViewRequest(final UUID envelopeId, final URL returnURL) {
+		public ViewRequest(final UUID envelopeId, final Url returnUrl) {
 			this.authenticationMethod = null;
 			this.email = null;
-			this.returnUrl = returnURL == null ? null : returnURL.toExternalForm();
+			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
 			this.userName = null;
 			this.recipientId = null;
 			this.envelopeId = UUID.toString(envelopeId);
 			this.suppressNavigation = true;
 		}
 
-		public ViewRequest(final URL returnURL) {
+		public ViewRequest(final Url returnUrl) {
 			this.authenticationMethod = null;
 			this.email = null;
-			this.returnUrl = returnURL == null ? null : returnURL.toExternalForm();
+			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
 			this.userName = null;
 			this.recipientId = null;
 			this.envelopeId = null;
@@ -152,13 +152,13 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 		public ViewRequest(final String authenticationMethod,
 			final String email,
-			final URL returnURL,
+			final Url returnUrl,
 			final String userName,
 			final Integer recipientId) {
 
 			this.authenticationMethod = authenticationMethod;
 			this.email = email;
-			this.returnUrl = returnURL == null ? null : returnURL.toExternalForm();
+			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
 			this.userName = userName;
 			this.recipientId = String.valueOf(recipientId);
 			this.envelopeId = null;
@@ -170,74 +170,74 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String url;
 	}
 
-	public URL getSenderViewURL(final UUID envelopeId, final URL returnURL) {
-		return this.getSenderViewURL(envelopeId, returnURL, RestAPI.defaultTimeout);
+	public Url getSenderViewUrl(final UUID envelopeId, final Url returnUrl) {
+		return this.getSenderViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public URL getSenderViewURL(final UUID envelopeId, final URL returnURL, final Integer timeout) {
+	public Url getSenderViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'sender' },
-			JSON.serialize(new ViewRequest(returnURL)),
+			JSON.serialize(new ViewRequest(returnUrl)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get sender view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return new URL(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
 	/*
-	* @description Obtains recipient view for specified account envelope
+	* Obtains recipient view for specified account envelope
 	* @param envelopeId
 	* @param email
 	* @param userName
 	*/
-	public URL getRecipientViewURL(final UUID envelopeId, final URL returnURL, final String email, final String userName,
+	public Url getRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String email, final String userName,
 		final Integer recipientId) {
 
-		return this.getRecipientViewURL(envelopeId, returnURL, email, userName, recipientId, RestAPI.defaultTimeout);
+		return this.getRecipientViewUrl(envelopeId, returnUrl, email, userName, recipientId, RestAPI.defaultTimeout);
 	}
 
-	public URL getRecipientViewURL(final UUID envelopeId, final URL returnURL, final String email, final String userName,
+	public Url getRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String email, final String userName,
 		final Integer recipientId, final Integer timeout) {
 
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
-			JSON.serialize(new ViewRequest('email', email, returnURL, userName, recipientId)),
+			JSON.serialize(new ViewRequest('email', email, returnUrl, userName, recipientId)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get recipient view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return new URL(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
-	public URL getConsoleViewURL(final UUID envelopeId, final URL returnURL) {
-		return this.getConsoleViewURL(envelopeId, returnURL, RestAPI.defaultTimeout);
+	public Url getConsoleViewUrl(final UUID envelopeId, final Url returnUrl) {
+		return this.getConsoleViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public URL getConsoleViewURL(final UUID envelopeId, final URL returnURL, final Integer timeout) {
+	public Url getConsoleViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'views', 'console' },
-			JSON.serialize(new ViewRequest(envelopeId, returnURL)),
+			JSON.serialize(new ViewRequest(envelopeId, returnUrl)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get console view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
-		return new URL(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
-	public URL getCorrectViewURL(final UUID envelopeId, final URL returnURL) {
-		return this.getCorrectViewURL(envelopeId, returnURL, RestAPI.defaultTimeout);
+	public Url getCorrectViewUrl(final UUID envelopeId, final Url returnUrl) {
+		return this.getCorrectViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public URL getCorrectViewURL(final UUID envelopeId, final URL returnURL, final Integer timeout) {
+	public Url getCorrectViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'correct' },
-			JSON.serialize(new ViewRequest(returnURL)),
+			JSON.serialize(new ViewRequest(returnUrl)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get correct view: ' + response.error.toString());
@@ -256,7 +256,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			throw new APIException(error);
 		}
 
-		return new URL(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
 	public Boolean resendEnvelope(final UUID envelopeId) {
@@ -363,7 +363,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	/**
-	 @description Special case of update recipients API assuming current user is host, and the first recipient is in-person.
+	 Special case of update recipients API assuming current user is host, and the first recipient is in-person.
 	 */
 	public Boolean updateInPersonSigner(final UUID envelopeId, final String signerEmail) {
 		return updateInPersonSigner(envelopeId, signerEmail, RestAPI.defaultTimeout);
@@ -886,7 +886,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	@TestVisible
 	private String getExternalUrl() {
 		return String.format('{0}/services/Soap/u/{1}/{2}', new List<String> {
-			Salesforce.BASE_URL, String.valueOf(Salesforce.API_VERSION), UserInfo.getOrganizationId()
+			Salesforce.BASE_Url, String.valueOf(Salesforce.API_VERSION), UserInfo.getOrganizationId()
 		});
 	}
 
@@ -909,7 +909,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		RestAPI.Response response = this.post(
-			getBaseURL(),
+			getBaseUrl(),
 			new List<Object> { 'envelopes' },
 			QueryString.empty,
 			getCreateHeaders(),

@@ -54,7 +54,7 @@ public class MetadataAPI {
 		private String[] field_order_type_info = new String[] { 'result' };
 	}
 	public class PasswordPolicies {
-		public String apiOnlyUserHomePageURL;
+		public String apiOnlyUserHomePageUrl;
 		public String complexity;
 		public String expiration;
 		public String historyRestriction;
@@ -64,9 +64,9 @@ public class MetadataAPI {
 		public Boolean minimumPasswordLifetime;
 		public Boolean obscureSecretAnswer;
 		public String passwordAssistanceMessage;
-		public String passwordAssistanceURL;
+		public String passwordAssistanceUrl;
 		public String questionRestriction;
-		private String[] apiOnlyUserHomePageURL_type_info = new String[] { 'apiOnlyUserHomePageURL', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
+		private String[] apiOnlyUserHomePageUrl_type_info = new String[] { 'apiOnlyUserHomePageUrl', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] complexity_type_info = new String[] { 'complexity', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] expiration_type_info = new String[] { 'expiration', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] historyRestriction_type_info = new String[] { 'historyRestriction', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
@@ -76,10 +76,10 @@ public class MetadataAPI {
 		private String[] minimumPasswordLifetime_type_info = new String[] { 'minimumPasswordLifetime', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] obscureSecretAnswer_type_info = new String[] { 'obscureSecretAnswer', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] passwordAssistanceMessage_type_info = new String[] { 'passwordAssistanceMessage', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
-		private String[] passwordAssistanceURL_type_info = new String[] { 'passwordAssistanceURL', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
+		private String[] passwordAssistanceUrl_type_info = new String[] { 'passwordAssistanceUrl', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] questionRestriction_type_info = new String[] { 'questionRestriction', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { 'http://soap.sforce.com/2006/04/metadata', 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'apiOnlyUserHomePageURL', 'complexity', 'expiration', 'historyRestriction', 'lockoutInterval', 'maxLoginAttempts', 'minPasswordLength', 'minimumPasswordLifetime', 'obscureSecretAnswer', 'passwordAssistanceMessage', 'passwordAssistanceURL', 'questionRestriction' };
+		private String[] field_order_type_info = new String[] { 'apiOnlyUserHomePageUrl', 'complexity', 'expiration', 'historyRestriction', 'lockoutInterval', 'maxLoginAttempts', 'minPasswordLength', 'minimumPasswordLifetime', 'obscureSecretAnswer', 'passwordAssistanceMessage', 'passwordAssistanceUrl', 'questionRestriction' };
 	}
 	public class LogInfo {
 		public String category;
@@ -314,7 +314,7 @@ public class MetadataAPI {
 		public Boolean identityConfirmationOnTwoFactorRegistrationEnabled;
 		public Boolean lockSessionsToDomain;
 		public Boolean lockSessionsToIp;
-		public String logoutURL;
+		public String logoutUrl;
 		public Boolean redirectionWarning;
 		public Boolean referrerPolicy;
 		public Boolean requireHttpOnly;
@@ -343,7 +343,7 @@ public class MetadataAPI {
 		private String[] identityConfirmationOnTwoFactorRegistrationEnabled_type_info = new String[] { 'identityConfirmationOnTwoFactorRegistrationEnabled', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] lockSessionsToDomain_type_info = new String[] { 'lockSessionsToDomain', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] lockSessionsToIp_type_info = new String[] { 'lockSessionsToIp', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
-		private String[] logoutURL_type_info = new String[] { 'logoutURL', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
+		private String[] logoutUrl_type_info = new String[] { 'logoutUrl', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] redirectionWarning_type_info = new String[] { 'redirectionWarning', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] referrerPolicy_type_info = new String[] { 'referrerPolicy', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] requireHttpOnly_type_info = new String[] { 'requireHttpOnly', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
@@ -351,7 +351,7 @@ public class MetadataAPI {
 		private String[] securityCentralKillSession_type_info = new String[] { 'securityCentralKillSession', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] sessionTimeout_type_info = new String[] { 'sessionTimeout', 'http://soap.sforce.com/2006/04/metadata', null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { 'http://soap.sforce.com/2006/04/metadata', 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'disableTimeoutWarning', 'enableCSPOnEmail', 'enableCSRFOnGet', 'enableCSRFOnPost', 'enableCacheAndAutocomplete', 'enableClickjackNonsetupSFDC', 'enableClickjackNonsetupUser', 'enableClickjackNonsetupUserHeaderless', 'enableClickjackSetup', 'enableContentSniffingProtection', 'enablePostForSessions', 'enableSMSIdentity', 'enableUpgradeInsecureRequests', 'enableXssProtection', 'enforceIpRangesEveryRequest', 'forceLogoutOnSessionTimeout', 'forceRelogin', 'identityConfirmationOnTwoFactorRegistrationEnabled', 'lockSessionsToDomain', 'lockSessionsToIp', 'logoutURL', 'requireHttpOnly', 'requireHttps', 'securityCentralKillSession', 'sessionTimeout' };
+		private String[] field_order_type_info = new String[] { 'disableTimeoutWarning', 'enableCSPOnEmail', 'enableCSRFOnGet', 'enableCSRFOnPost', 'enableCacheAndAutocomplete', 'enableClickjackNonsetupSFDC', 'enableClickjackNonsetupUser', 'enableClickjackNonsetupUserHeaderless', 'enableClickjackSetup', 'enableContentSniffingProtection', 'enablePostForSessions', 'enableSMSIdentity', 'enableUpgradeInsecureRequests', 'enableXssProtection', 'enforceIpRangesEveryRequest', 'forceLogoutOnSessionTimeout', 'forceRelogin', 'identityConfirmationOnTwoFactorRegistrationEnabled', 'lockSessionsToDomain', 'lockSessionsToIp', 'logoutUrl', 'requireHttpOnly', 'requireHttps', 'securityCentralKillSession', 'sessionTimeout' };
 	}
 	public class PrimaryTabComponents {
 		public MetadataAPI.Container[] containers;
@@ -770,7 +770,7 @@ public class MetadataAPI {
 		private String[] field_order_type_info = new String[] { 'allOrNone' };
 	}
 	public class MetadataPort {
-		public String endpoint_x = URL.getSalesforceBaseUrl().toExternalForm() + '/services/Soap/m/' + Salesforce.API_VERSION;
+		public String endpoint_x = Url.getSalesforceBaseUrl().toExternalForm() + '/services/Soap/m/' + Salesforce.API_VERSION;
 		public Map<String, String> inputHttpHeaders_x;
 		public Map<String, String> outputHttpHeaders_x;
 		public String clientCertName_x;

@@ -17,4 +17,5 @@ https://jira.corp.docusign.com/browse/<FILL-IN>
 - [ ] Unit tests 100% passing
 - [ ] Unit test code coverage is as good or better (> 75%)
 - [ ] Code adheres to style guidelines
+- [ ] Global and public types, properties, and methods are annotated with ApexDoc.
 - [ ] PMD Apex linting passed with no errors

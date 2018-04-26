@@ -1,3 +1,14 @@
+/**
+ * Primary interface point for DocuSign for Salesforce envelope management. A basic flow would be:
+ * <pre>
+ * // Get an empty envelope definition to begin.
+ * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
+ * // Create envelope and add source documents and recipients
+ * e = EnvelopeService.createEnvelope(e, null, true);
+ * // Send the envelope
+ * e = EnvelopeService.sendEnvelope(e, true, true);
+ * </pre>
+ */
 public with sharing class EnvelopeService {
 
 	@TestVisible
@@ -386,6 +397,20 @@ public with sharing class EnvelopeService {
 			defaultEmailSettings));
 	}
 
+	/**
+	 * Creates a DocuSign envelope. This method does not send the envelope; to do so call
+	 * <code>EnvelopeService.sendEnvelope</code>.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param envelope The envelope to create.
+	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope.
+	 * @param addFromSource Load source documents and recipients if <code>envelopeConfiguration</code> is
+	 * <code>null</code>.
+	 *
+	 * @return The newly-created envelope.
+	 * @see EnvelopeService.sendEnvelope for details on how to send the created envelope.
+	 */
 	public static Envelope createEnvelope(
 		final Envelope envelope,
 		final EnvelopeConfiguration envelopeConfiguration,
@@ -446,6 +471,15 @@ public with sharing class EnvelopeService {
 		return saveEnvelope(result, envelopeConfiguration);
 	}
 
+	/**
+	 * Retrieves a DocuSign envelope by ID.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The ID of the envelope.
+	 *
+	 * @return The envelope matching the ID.
+	 */
 	public static Envelope getEnvelope(final Id envelopeId) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -456,11 +490,32 @@ public with sharing class EnvelopeService {
 		return envelope;
 	}
 
+	/**
+	 * Creates a copy of an envelope that can be resent.
+	 * <p>
+	 * The caller must be the owner of the original envelope.
+	 *
+	 * @param envelopeId The ID of the envelope.
+	 *
+	 * @return A copy of the envelope.
+	 * @see Envelope.copy for more details.
+	 */
 	public static Envelope copyEnvelope(final Id envelopeId) {
 		// queryEnvelope via getEnvelope verifies ownership
 		return saveEnvelope(getEnvelope(envelopeId).copy(), null);
 	}
 
+	/**
+	 * Updates envelope notification and email settings. This method does not update the envelope documents or
+	 * recipients; use <code>EnvelopeService.updateEnvelope</code> to update everything.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The envelope to update.
+	 *
+	 * @return The updated envelope.
+	 * @see EnvelopeService.updateEnvelope to update all envelope properties.
+	 */
 	public static Envelope updateEnvelopeNotifications(final Envelope envelope) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -472,6 +527,16 @@ public with sharing class EnvelopeService {
 		return DB.updateEnvelope2(replaceUserTags(envelope), false);
 	}
 
+	/**
+	 * Updates an envelope, including documents and recipients. This is a more expensive call than
+	 * <code>EnvelopeService.updateEnvelopeNotifications</code> as it updates and recalculates child entries.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The envelope to update.
+	 *
+	 * @return The updated envelope.
+	 */
 	public static Envelope updateEnvelope(final Envelope envelope) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -488,6 +553,21 @@ public with sharing class EnvelopeService {
 			.withDocuments(DocumentService.updateEnvelopeDocuments(envelope.id, original.documents, envelope.documents));
 	}
 
+	/**
+	 * Sends an envelope to DocuSign. The envelope must have been previously created via
+	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The envelope to send.
+	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
+	 * @param updateNow Whether to update the envelope record immediately. This update may be deferred if the current
+	 * transaction involves subsequent callouts to avoid MIXED_DML errors. To update later, call
+	 * <code>EnvelopeService.markEnvelopeSent</code>.
+	 *
+	 * @return The sent envelope.
+	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
+	 */
 	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -506,6 +586,18 @@ public with sharing class EnvelopeService {
 		return result;
 	}
 
+	/**
+	 * Marks an envelope's record as sent. Used for deferred updates from <code>EnvelopeService.sendEnvelope</code>. If
+	 * the envelope was updated immediately after being sent, this method does not need to be called.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The envelope that was sent.
+	 * @param sendNow Whether the envelope was immediately sent or saved as a draft in DocuSign.
+	 *
+	 * @return <code>true</code> if the update was successful, <code>false</code> otherwise.
+	 * @see EnvelopeService.sendEnvelope for more details.
+	 */
 	public static Boolean markEnvelopeSent(
 		final Envelope envelope,
 		final Boolean sendNow) {
@@ -518,12 +610,31 @@ public with sharing class EnvelopeService {
 		return DB.updateEnvelopeSent(result.id, result.docuSignId, result.emailSubject, result.emailMessage, sendNow);
 	}
 
+	/**
+	 * Deletes an envelope.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The ID of the envelope to delete.
+	 *
+	 * @return The Salesforce source ID of the envelope. This can be used to redirect the user upon deletion.
+	 */
 	public static Id deleteEnvelope(final Id envelopeId) {
 		Permissions.verifyIsOwner(envelopeId);
 
 		return DB.deleteEnvelope2(envelopeId);
 	}
 
+	/**
+	 * Gets an empty envelope definition that can be subsequently completed, created, and sent. This envelope will
+	 * be populated with appropriate defaults based on the current account settings and localizations.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param source The originating Salesforce entity for the envelope.
+	 *
+	 * @return The empty envelope.
+	 */
 	public static Envelope getEmptyEnvelope(final Entity source) {
 		Permissions.verifyIsDocuSignUser();
 

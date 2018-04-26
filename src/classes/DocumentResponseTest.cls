@@ -8,8 +8,8 @@ private class DocumentResponseTest {
 			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id))
 		};
 		List<CustomField> cfs = new List<CustomField> {
-			new CustomField('n1', 'v1', true, true),
-			new CustomField('n2', 'v2', true, true)
+			CustomField.newTextField('n1', 'v1', true, true),
+			CustomField.newTextField('n2', 'v2', true, true)
 		};
 		List<Document.Folder> fs = new List<Document.Folder> {
 			new Document.Folder(UserInfo.getUserId(), 'f1'),

@@ -26,7 +26,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public List<String> listItems;
 
 		public CustomField toExternalForm() {
-			return new CustomField('list', name, value, listItems, StringUtils.parseBoolean(required),
+			return CustomField.newListField(name, value, listItems, StringUtils.parseBoolean(required),
 				StringUtils.parseBoolean(show));
 		}
 	}
@@ -38,7 +38,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public String value;
 
 		public CustomField toExternalForm() {
-			return new CustomField('text', name, value, null, StringUtils.parseBoolean(required),
+			return CustomField.newTextField(name, value, StringUtils.parseBoolean(required),
 				StringUtils.parseBoolean(show));
 		}
 	}

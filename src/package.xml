@@ -106,7 +106,6 @@
         <members>DocumentServiceTest</members>
         <members>RecipientService</members>
         <members>RecipientServiceTest</members>
-        <members>SearchBehavior</members>
         <members>EnvelopeService</members>
         <members>EnvelopeServiceTest</members>
         <members>AccountFeatures</members>

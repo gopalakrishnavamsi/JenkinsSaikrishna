@@ -291,7 +291,7 @@ public with sharing class Credentials {
 				return new AccountCredentials(Environment.invalid, null, null, null, false);
 
 			return new AccountCredentials(
-				Environment.fromURL(settings.BaseUrl__c == null ? null : new URL(settings.BaseUrl__c)),
+				Environment.fromUrl(settings.BaseUrl__c == null ? null : new Url(settings.BaseUrl__c)),
 				UUID.tryParse(settings.AccountId__c),
 				settings.Username__c,
 				settings.Password__c,
@@ -314,8 +314,8 @@ public with sharing class Credentials {
 			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
 			orgSettings.Environment__c = environment == null || environment.environment == null
 				? null : environment.environment.name().toLowerCase();
-			orgSettings.BaseUrl__c = environment == null || environment.baseURL == null
-				? null : environment.baseURL.toExternalForm();
+			orgSettings.BaseUrl__c = environment == null || environment.baseUrl == null
+				? null : environment.baseUrl.toExternalForm();
 			orgSettings.AccountId__c = String.valueOf(accountId);
 			orgSettings.UseSendOnBehalfOf__c = useSendOnBehalfOf != null && useSendOnBehalfOf;
 			orgSettings.Username__c = username;

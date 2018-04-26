@@ -1,7 +1,7 @@
 @IsTest
 public class TestUtils {
 
-	public static final String BASE_URL = 'https://unit.test.docusign.net/';
+	public static final String BASE_Url = 'https://unit.test.docusign.net/';
 	public static final UUID ID1 = UUID.fromString('11111111-1111-1111-1111-111111111111');
 	public static final UUID ID2 = UUID.fromString('22222222-2222-2222-2222-222222222222');
 	public static final UUID ID3 = UUID.fromString('33333333-3333-3333-3333-333333333333');
@@ -271,7 +271,7 @@ public class TestUtils {
 	public static UUID createAccountConfiguration(final UUID accountId, final String username) {
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		accountSettings.Environment__c = 'other';
-		accountSettings.BaseUrl__c = BASE_URL;
+		accountSettings.BaseUrl__c = BASE_Url;
 		accountSettings.AccountId__c = String.valueOf(accountId);
 		accountSettings.Username__c = username;
 		accountSettings.Password__c = UUID.randomUUID().toShortString();

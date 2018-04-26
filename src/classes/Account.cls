@@ -1,11 +1,34 @@
+/**
+ * Representation of a DocuSign account.
+ */
 public class Account {
-
+	/**
+	 * The DocuSign account ID.
+	 */
 	public UUID id { get; private set; }
+	/**
+	 * The DocuSign account name.
+	 */
 	public String name { get; private set; }
+	/**
+	 * The DocuSign account plan.
+	 */
 	public Plan plan { get; private set; }
+	/**
+	 * The DocuSign account billing information.
+	 */
 	public Billing billing { get; private set; }
+	/**
+	 * The DocuSign Connect permissions for the account.
+	 */
 	public ConnectPermission connect { get; private set; }
+	/**
+	 * The DocuSign environment.
+	 */
 	public transient Environment environment { get; private set; }
+	/**
+	 * Read-only property describing whether the account is a trial account.
+	 */
 	public Boolean isTrial {
 		get {
 			return this.billing != null
@@ -14,8 +37,21 @@ public class Account {
 				&& this.plan.id == this.environment.trialPlanId;
 		}
 	}
+	/**
+	 * The status of the DocuSign account trial.
+	 */
 	public TrialStatus trialStatus { get; private set; }
 
+	/**
+	 * Constructs a DocuSign account.
+	 *
+	 * @param id The DocuSign account ID.
+	 * @param name The DocuSign account name.
+	 * @param plan The DocuSign account plan.
+	 * @param billing The DocuSign account billing information.
+	 * @param connect The DocuSign Connect permissions for the account.
+	 * @param environment The DocuSign environment.
+	 */
 	public Account(final UUID id, final String name, final Plan plan, final Billing billing,
 		final ConnectPermission connect, final Environment environment) {
 
@@ -27,35 +63,92 @@ public class Account {
 		this.environment = environment;
 	}
 
+	/**
+	 * Updates a DocuSign account's <code>plan</code>.
+	 *
+	 * @param planId The DocuSign account plan ID.
+	 *
+	 * @return The DocuSign account with updated <code>plan</code>.
+	 */
 	public Account withPlanId(final UUID planId) {
 		this.plan = this.plan.withId(planId);
 		return this;
 	}
 
+	/**
+	 * Updates a DocuSign account's <code>trialStatus</code>.
+	 *
+	 * @param trialStatus The DocuSign account trial status.
+	 *
+	 * @return The DocuSign account with updated <code>trialStatus</code>.
+	 */
 	public Account withTrialStatus(final TrialStatus trialStatus) {
 		this.trialStatus = trialStatus;
 		return this;
 	}
 
+	/**
+	 * Represention of the status of a DocuSign trial account.
+	 */
 	public class TrialStatus {
+		/**
+		 * Whether or not the trial has expired.
+		 */
 		public Boolean isExpired { get; private set; }
+		/**
+		 * The trial status message. This may be a friendly warning to upgrade soon.
+		 */
 		public String message { get; private set; }
 
+		/**
+		 * Constructs a DocuSign account trial status.
+		 *
+		 * @param isExpired Whether or not the trial has expired.
+		 * @param message The trial status message.
+		 */
 		public TrialStatus(final Boolean isExpired, final String message) {
 			this.isExpired = isExpired;
 			this.message = message;
 		}
 	}
 
+	/**
+	 * Representation of a DocuSign account plan.
+	 */
 	public class Plan {
-
+		/**
+		 * The plan ID.
+		 */
 		public UUID id { get; private set; }
+		/**
+		 * The plan name.
+		 */
 		public String name { get; private set; }
+		/**
+		 * The plan start date.
+		 */
 		public Date startDate { get; private set; }
+		/**
+		 * The plan start date formatted according to current locale rules.
+		 */
 		public String startDateFormatted { get; private set; }
+		/**
+		 * The plan end date.
+		 */
 		public Date endDate { get; private set; }
+		/**
+		 * The plan end date formatted according to current locale rules.
+		 */
 		public String endDateFormatted { get; private set; }
 
+		/**
+		 * Constructs a DocuSign account plan.
+		 *
+		 * @param id The plan ID.
+		 * @param name The plan name.
+		 * @param startDate The plan start date.
+		 * @param endDate The plan end date.
+		 */
 		public Plan(final UUID id, final String name, final Date startDate, final Date endDate) {
 			this.id = id;
 			this.name = name;
@@ -65,19 +158,46 @@ public class Account {
 			this.endDateFormatted = endDate != null ? endDate.format() : '';
 		}
 
+		/**
+		 * Updates a DocuSign account plan's <code>id</code>.
+		 *
+		 * @param id The new plan ID.
+		 *
+		 * @return The DocuSign account plan with updated <code>id</code>.
+		 */
 		public Plan withId(final UUID id) {
 			this.id = id;
 			return this;
 		}
 	}
 
+	/**
+	 * Representation of DocuSign account billing information.
+	 */
 	public class Billing {
-
+		/**
+		 * The billing start date.
+		 */
 		public Date startDate { get; private set; }
+		/**
+		 * The billing start date formatted according to current locale rules.
+		 */
 		public String startDateFormatted { get; private set; }
+		/**
+		 * The billing end date.
+		 */
 		public Date endDate { get; private set; }
+		/**
+		 * The billing end date formatted according to current locale rules.
+		 */
 		public String endDateFormatted { get; private set; }
 
+		/**
+		 * Constructs DocuSign account billing information.
+		 *
+		 * @param startDate The billing start date.
+		 * @param endDate The billing end date.
+		 */
 		public Billing(final Date startDate, final Date endDate) {
 			this.startDate = startDate;
 			this.startDateFormatted = startDate != null ? startDate.format() : '';
@@ -86,19 +206,62 @@ public class Account {
 		}
 	}
 
+	/**
+	 * Possible DocuSign Connect permissions:
+	 * <ul>
+	 *     <li><code>None</code></li>
+	 *     <li><code>Full</code></li>
+	 *     <li><code>SendOnly</code></li>
+	 * </ul>
+	 */
 	public enum ConnectPermission {
 		None, Full, SendOnly
 	}
 
+	/**
+	 * Representation of an address used for creating DocuSign trial accounts.
+	 */
 	public class Address {
+		/**
+		 * Line 1 of the address, typically the street and number.
+		 */
 		public String address1 { get; private set; }
+		/**
+		 * Line 2 of the address (e.g. suite, building, etc.).
+		 */
 		public String address2 { get; private set; }
+		/**
+		 * The city.
+		 */
 		public String city { get; private set; }
+		/**
+		 * The state, province, or administrative region.
+		 */
 		public String region { get; private set; }
+		/**
+		 * The ZIP or postal code.
+		 */
 		public String postalCode { get; private set; }
+		/**
+		 * The country.
+		 */
 		public String country { get; private set; }
+		/**
+		 * The phone number.
+		 */
 		public String phone { get; private set; }
 
+		/**
+		 * Constructs an address.
+		 *
+		 * @param address1 Line 1 of the address.
+		 * @param address2 Line 2 of the address.
+		 * @param city The city.
+		 * @param region The state, province, or adminsistrative region.
+		 * @param postalCode The ZIP or postal code.
+		 * @param country The country.
+		 * @param phone The phone number.
+		 */
 		public Address(final String address1, final String address2, final String city, final String region,
 			final String postalCode, final String country, final String phone) {
 
@@ -112,38 +275,103 @@ public class Account {
 		}
 	}
 
+	/**
+	 * Possible user statuses:
+	 * <ul>
+	 *     <li><code>Unknown</code>: Could not determine current status.</li>
+	 *     <li><code>PendingActivation</code>: User must activate membership via email.</li>
+	 *     <li><code>Active</code>: User is active within the account. Users with this status are able to use
+	 *     DocuSign for Salesforce</li>
+	 *     <li><code>Closed</code>: User account membership has been closed.</li>
+	 * </ul>
+	 */
 	public enum UserStatus {
 		Unknown, PendingActivation, Active, Closed
 	}
 
+	/**
+	 * Representation of a DocuSign account user or member.
+	 */
 	public class User {
-
+		/**
+		 * The DocuSign user ID.
+		 */
 		public UUID id { get; private set; }
+		/**
+		 * The DocuSign username.
+		 */
 		public String username { get; private set; }
+		/**
+		 * The DocuSign user email.
+		 */
 		public String email { get; private set; }
+		/**
+		 * The DocuSign user first name.
+		 */
 		public String firstName { get; private set; }
+		/**
+		 * The DocuSign user last name.
+		 */
 		public String lastName { get; private set; }
+		/**
+		 * Read-only DocuSign user name based on <code>firstName</code> and <code>lastName<code>.
+		 */
 		public String name {
 			get {
 				return StringUtils.mkName(firstName, lastName);
 			}
 		}
+		/**
+		 * The API password for the user. This is never returned through public methods.
+		 */
 		public String apiPassword { get; private set; }
+		/**
+		 * The user status.
+		 */
 		public UserStatus status { get; private set; }
+		/**
+		 * Whether or not the user is a DocuSign account administrator.
+		 */
 		public Boolean canManageAccount { get; private set; }
+		/**
+		 * Whether or not the user can send DocuSign envelopes.
+		 */
 		public Boolean canSendEnvelope { get; private set; }
+		/**
+		 * The Salesforce ID of the user.
+		 */
 		public Id sourceId { get; private set; }
+		/**
+		 * The error returned by the API for bulk add or remove account member operations.
+		 */
 		public APIError error { get; private set; }
+		/**
+		 * Read-only property indicating whether there was an error with an associated API operation.
+		 */
 		public Boolean hasError {
 			get {
 				return this.error != null && this.error != APIError.none;
 			}
 		}
 
+		/**
+		 * Constructs a DocuSign user from a DocuSign user ID.
+		 *
+		 * @param id The DocuSign user ID.
+		 */
 		public User(final UUID id) {
 			this(id, null, null, null, null, null, UserStatus.Unknown, false, true, null, APIError.none);
 		}
 
+		/**
+		 * Constructs a DocuSign user.
+		 *
+		 * @param username The username.
+		 * @param email The user's email.
+		 * @param firstName The user's first name.
+		 * @param lastName The user's last name.
+		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
+		 */
 		public User(final String username, final String email, final String firstName, final String lastName,
 			final Boolean canManageAccount) {
 
@@ -151,6 +379,21 @@ public class Account {
 				true, null, APIError.none);
 		}
 
+		/**
+		 * Constructs a DocuSign user.
+		 *
+		 * @param id The DocuSign user ID.
+		 * @param username The username.
+		 * @param email The user's email.
+		 * @param firstName The user's first name.
+		 * @param lastName The user's last name.
+		 * @param apiPassword The user's API password.
+		 * @param status The user's status.
+		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
+		 * @param canSendEnvelope Whether or not the user can send DocuSign envelopes.
+		 * @param sourceId The Salesforce ID of the user.
+		 * @param error The error returned by the API for bulk add or remove account member operations.
+		 */
 		public User(final UUID id, final String username, final String email, final String firstName, final String lastName,
 			final String apiPassword, final UserStatus status, final Boolean canManageAccount,
 			final Boolean canSendEnvelope, final Id sourceId, final APIError error) {
@@ -168,28 +411,63 @@ public class Account {
 			this.error = error == null ? APIError.none : error;
 		}
 
+		/**
+		 * Updates a user's <code>error</code> property.
+		 *
+		 * @param error The new API error.
+		 *
+		 * @return The user with an updated <code>error</code> property.
+		 */
 		public User withError(final APIError error) {
 			this.error = error;
 			return this;
 		}
 
+		/**
+		 * Updates a user's <code>sourceId</code> property.
+		 *
+		 * @param sourceId The Salesforce ID of the user.
+		 *
+		 * @return The user with an updated <code>sourceId</code> property.
+		 */
 		public User withSourceId(final Id sourceId) {
 			this.sourceId = sourceId;
 			return this;
 		}
 	}
 
+	/**
+	 * Representation of a DocuSign trial account user or member.
+	 */
 	public class TrialUser {
-
+		/**
+		 * The user's email.
+		 */
 		public String email { get; private set; }
+		/**
+		 * The user's first name.
+		 */
 		public String firstName { get; private set; }
+		/**
+		 * The user's last name.
+		 */
 		public String lastName { get; private set; }
+		/**
+		 * Read-only name of the user based on <code>firstName</code> and <code>lastName</code>.
+		 */
 		public String name {
 			get {
 				return StringUtils.mkName(firstName, lastName);
 			}
 		}
 
+		/**
+		 * Constructs a DocuSign trial account user.
+		 *
+		 * @param email The user's email.
+		 * @param firstName The user's first name.
+		 * @param lastName The user's last name.
+		 */
 		public TrialUser(final String email, final String firstName, final String lastName) {
 			this.email = email;
 			this.firstName = firstName;
@@ -197,13 +475,35 @@ public class Account {
 		}
 	}
 
+	/**
+	 * Representation of a DocuSign trial account.
+	 */
 	public class Trial {
-
+		/**
+		 * The company of the trial account.
+		 */
 		public String company { get; private set; }
+		/**
+		 * The user of the trial account.
+		 */
 		public TrialUser user { get; private set; }
+		/**
+		 * The address of the trial account.
+		 */
 		public Address address { get; private set; }
+		/**
+		 * Whether or not DocuSign trial account terms and conditions have been accepted.
+		 */
 		public Boolean termsAccepted { get; private set; }
 
+		/**
+		 * Constructs a trial account.
+		 *
+		 * @param company The trial account company.
+		 * @param user The trial account user.
+		 * @param address The trial account address.
+		 * @param termsAccepted Whether or not DocuSign trial account terms and conditions have been accepted.
+		 */
 		public Trial(final String company, final TrialUser user, final Address address, final Boolean termsAccepted) {
 			this.company = company;
 			this.user = user;
@@ -212,33 +512,87 @@ public class Account {
 		}
 	}
 
+	/**
+	 * Representation of a DocuSign account membership.
+	 */
 	public class Membership {
-
-		public Long accountId { get; private set; }
-		public UUID accountUUID { get; private set; }
+		/**
+		 * The DocuSign account number.
+		 */
+		public Long accountNumber { get; private set; }
+		/**
+		 * The DocuSign account ID.
+		 */
+		public UUID accountId { get; private set; }
+		/**
+		 * The DocuSign account name.
+		 */
 		public String name { get; private set; }
+		/**
+		 * The DocuSign user ID within an account.
+		 */
 		public UUID userId { get; private set; }
+		/**
+		 * The DocuSign API password. This is never returned by public methods.
+		 */
 		public transient String apiPassword { get; private set; }
+		/**
+		 * The DocuSign API base Url.
+		 */
 		public transient Url baseUrl { get; private set; }
+		/**
+		 * The DocuSign account settings.
+		 */
 		public Map<String, String> settings { get; private set; }
 
-		public Membership(final Long accountId, final UUID accountUUID, final String name, final UUID userId,
+		/**
+		 * Constructs a DocuSign account membership.
+		 *
+		 * @param accountNumber The DocuSign account number.
+		 * @param accountId The DocuSign account ID.
+		 * @param name The DocuSign account name.
+		 * @param userId The DocuSign user ID in the context of an account.
+		 * @param baseUrl The DocuSign API base Url.
+		 * @param apiPassword The DocuSign API password.
+		 */
+		public Membership(final Long accountNumber, final UUID accountId, final String name, final UUID userId,
 			final Url baseUrl, final String apiPassword) {
 
-			this(accountId, accountUUID, name, userId, baseUrl, null, apiPassword);
+			this(accountNumber, accountId, name, userId, baseUrl, null, apiPassword);
 		}
 
-		public Membership(final Long accountId, final UUID accountUUID, final String name, final UUID userId,
+		/**
+		 * Constructs a DocuSign account membership.
+		 *
+		 * @param accountNumber The DocuSign account number.
+		 * @param accountId The DocuSign account ID.
+		 * @param name The DocuSign account name.
+		 * @param userId The DocuSign user ID in the context of an account.
+		 * @param baseUrl The DocuSign API base Url.
+		 * @param settings The DocuSign account settings.
+		 */
+		public Membership(final Long accountNumber, final UUID accountId, final String name, final UUID userId,
 			final Url baseUrl, final Map<String, String> settings) {
 
-			this(accountId, accountUUID, name, userId, baseUrl, settings, null);
+			this(accountNumber, accountId, name, userId, baseUrl, settings, null);
 		}
 
-		public Membership(final Long accountId, final UUID accountUUID, final String name, final UUID userId,
+		/**
+		 * Constructs a DocuSign account membership.
+		 *
+		 * @param accountNumber The DocuSign account number.
+		 * @param accountId The DocuSign account ID.
+		 * @param name The DocuSign account name.
+		 * @param userId The DocuSign user ID in the context of an account.
+		 * @param baseUrl The DocuSign API base Url.
+		 * @param settings The DocuSign account settings.
+		 * @param apiPassword The DocuSign API password.
+		 */
+		public Membership(final Long accountNumber, final UUID accountId, final String name, final UUID userId,
 			final Url baseUrl, final Map<String, String> settings, String apiPassword) {
 
+			this.accountNumber = accountNumber;
 			this.accountId = accountId;
-			this.accountUUID = accountUUID;
 			this.name = name;
 			this.userId = userId;
 			this.baseUrl = baseUrl;
@@ -246,44 +600,95 @@ public class Account {
 			this.apiPassword = apiPassword;
 		}
 
+		/**
+		 * Updates the DocuSign account membership <code>settings</code> property.
+		 *
+		 * @param settings The new account settings.
+		 *
+		 * @return The DocuSign account membership with updated <code>settings</code>.
+		 */
 		public Membership withSettings(final Map<String, String> settings) {
-			return new Membership(accountId, accountUUID, name, userId, baseUrl, settings);
+			return new Membership(accountNumber, accountId, name, userId, baseUrl, settings);
 		}
 
+		/**
+		 * Gets a boolean value for a given account settings key.
+		 *
+		 * @param key The account settings key.
+		 *
+		 * @return <code>true</code> if the setting exists and is set to 'true' or '1', <code>false</code> otherwise.
+		 */
 		public Boolean getFlag(final String key) {
 			Boolean result = false;
 			if (String.isNotBlank(key)) {
-				final String value = settings.get(key);
-				result = String.isNotBlank(value) && Boolean.valueOf(value);
+				result = StringUtils.parseBoolean(settings.get(key), false);
 			}
 			return result;
 		}
 
+		/**
+		 * Removes sensitive information from the account membership.
+		 *
+		 * @return The scrubbed account membership.
+		 */
 		public Membership scrub() {
 			this.apiPassword = null;
 			return this;
 		}
 	}
 
+	/**
+	 * Representation of DocuSign account memberships.
+	 */
 	public class Memberships {
-
+		/**
+		 * The DocuSign accounts that a user is a member of.
+		 */
 		public List<Membership> accounts { get; private set; }
+		/**
+		 * The DocuSign API password. This is never returned by public methods.
+		 */
 		public transient String apiPassword { get; private set; }
 
+		/**
+		 * Constructs DocuSign account memberships.
+		 *
+		 * @param accounts The DocuSign accounts to which a user belongs.
+		 * @param apiPassword The DocuSign API password.
+		 */
 		public Memberships(final List<Membership> accounts, final String apiPassword) {
 			this.accounts = accounts;
 			this.apiPassword = apiPassword;
 		}
 	}
 
+	/**
+	 * Representation of DocuSign account credentials.
+	 */
 	public class Credentials {
-		public Long accountId { get; private set; }
-		public UUID accountUUID { get; private set; }
+		/**
+		 * The DocuSign account number.
+		 */
+		public Long accountNumber { get; private set; }
+		/**
+		 * The DocuSign account ID.
+		 */
+		public UUID accountId { get; private set; }
+		/**
+		 * The DocuSign API password. This is never returned by public methods.
+		 */
 		public String apiPassword { get; private set; }
 
-		public Credentials(final Long accountId, final UUID accountUUID, final String apiPassword) {
+		/**
+		 * Constructs DocuSign account credentials.
+		 *
+		 * @param accountNumber The DocuSign account number.
+		 * @param accountId The DocuSign account ID.
+		 * @param apiPassword The DocuSign API password.
+		 */
+		public Credentials(final Long accountNumber, final UUID accountId, final String apiPassword) {
+			this.accountNumber = accountNumber;
 			this.accountId = accountId;
-			this.accountUUID = accountUUID;
 			this.apiPassword = apiPassword;
 		}
 	}

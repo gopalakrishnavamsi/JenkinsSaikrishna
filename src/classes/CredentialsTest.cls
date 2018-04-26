@@ -104,8 +104,8 @@ private class CredentialsTest {
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
 			System.assertNotEquals(null, result1.environment);
-			System.assertNotEquals(null, result1.environment.baseURL);
-			System.assertEquals(TestUtils.BASE_URL, result1.environment.baseURL.toExternalForm());
+			System.assertNotEquals(null, result1.environment.baseUrl);
+			System.assertEquals(TestUtils.BASE_Url, result1.environment.baseUrl.toExternalForm());
 			System.assert(result1.useSendOnBehalfOf);
 			System.assertEquals(UserSettings__c.getInstance().Username__c, result1.sendOnBehalfOf);
 

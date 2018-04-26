@@ -1,16 +1,51 @@
+/**
+ * Representation of a DocuSign envelope document.
+ */
 public class Document {
-
+	/**
+	 * DocuSign template document type constant.
+	 */
 	public static final String TYPE_TEMPLATE = 'Template';
+	/**
+	 * Salesforce file/content version document type constant.
+	 */
 	public static final String TYPE_FILE = 'ContentVersion';
+	/**
+	 * Salesforce document type constant.
+	 */
 	public static final String TYPE_DOCUMENT = 'Document';
 
+	/**
+	 * The ID of the associated Document__c record.
+	 */
 	public Id id { get; private set; }
+	/**
+	 * The type of the document.
+	 */
 	public String type { get; private set; }
+	/**
+	 * The ordinal sequence of the document as it appears in an envelope.
+	 */
 	public Integer sequence { get; private set; }
+	/**
+	 * The name of the document.
+	 */
 	public String name { get; private set; }
+	/**
+	 * The size of the document in bytes.
+	 */
 	public Integer size { get; private set; }
+	/**
+	 * The file extension of the document.
+	 */
 	public String extension { get; private set; }
+	/**
+	 * The Salesforce source record ID or the DocuSign template ID.
+	 */
 	public String sourceId { get; private set; }
+	/**
+	 * Read-only property representing the DocuSign template ID if any.
+	 */
 	public UUID templateId {
 		get {
 			if (String.isNotBlank(this.sourceId) && this.type == TYPE_TEMPLATE) {
@@ -20,6 +55,17 @@ public class Document {
 		}
 	}
 
+	/**
+	 * Constructs a new DocuSign envelope document.
+	 *
+	 * @param id The ID of the associated Document__c record.
+	 * @param type The type of the document.
+	 * @param sequence The ordinal sequence of the document as it appears in an envelope.
+	 * @param name The name of the document.
+	 * @param extension The file extension of the document.
+	 * @param size The file extension of the document.
+	 * @param sourceId The Salesforce source record ID or the DocuSign template ID.
+	 */
 	public Document(
 		final Id id,
 		final String type,
@@ -38,6 +84,13 @@ public class Document {
 		this.sourceId = sourceId;
 	}
 
+	/**
+	 * Factory method to construct a DocuSign envelope document from a Salesforce content version.
+	 *
+	 * @param contentVersion The content version from which to construct a document.
+	 *
+	 * @return The DocuSign envelope document representation of the content version.
+	 */
 	public static Document fromContentVersion(final ContentVersion contentVersion) {
 		if (contentVersion == null) return null;
 
@@ -51,6 +104,13 @@ public class Document {
 			contentVersion == null ? null : contentVersion.Id);
 	}
 
+	/**
+	 * Factory method to construct a DocuSign envelope document from a Salesforce document.
+	 *
+	 * @param doc The Salesforce document from which to construct a document.
+	 *
+	 * @return The DocuSign envelope document representation of the Salesforce document.
+	 */
 	public static Document fromDocument(final Schema.Document doc) {
 		if (doc == null) return null;
 
@@ -64,6 +124,13 @@ public class Document {
 			doc == null ? null : doc.Id);
 	}
 
+	/**
+	 * Factory method to construct a DocuSign envelope document from a DocuSign template.
+	 *
+	 * @param template The DocuSign template from which to construct a document.
+	 *
+	 * @return The DocuSign envelope document representation of the DocuSign template.
+	 */
 	public static Document fromTemplate(final Template template) {
 		return new Document(
 			null,
@@ -75,20 +142,50 @@ public class Document {
 			template == null ? null : String.valueOf(template.id));
 	}
 
+	/**
+	 * Representation of a Salesforce file folder.
+	 */
 	public class Folder {
+		/**
+		 * The Salesforce folder ID.
+		 */
 		public Id id { get; private set; }
+		/**
+		 * The Salesforce folder name.
+		 */
 		public String name { get; private set; }
 
+		/**
+		 * Constructs a folder.
+		 *
+		 * @param id The Salesforce folder ID.
+		 * @param name The Salesforce folder name.
+		 */
 		public Folder(final Id id, final String name) {
 			this.id = id;
 			this.name = name;
 		}
 	}
 
+	/**
+	 * Representation of a list of Salesforce file folders and documents contained within.
+	 */
 	public class Folders {
+		/**
+		 * The list of Salesforce folders.
+		 */
 		public List<Folder> folders { get; private set; }
+		/**
+		 * The list of DocuSign envelope documents contained within the folders.
+		 */
 		public List<Document> documents { get; private set; }
 
+		/**
+		 * Constructs a new list of folders and documents.
+		 *
+		 * @param folders The list of Salesforce folders.
+		 * @param documents The list of DocuSign envelope documents contained within the folders.
+		 */
 		public Folders(
 			final List<Folder> folders,
 			final List<Document> documents) {
@@ -98,6 +195,11 @@ public class Document {
 		}
 	}
 
+	/**
+	 * Creates a deep copy of the DocuSign envelope document.
+	 *
+	 * @return The copied DocuSign envelope document.
+	 */
 	public Document copy() {
 		return new Document(
 			null,
@@ -109,6 +211,13 @@ public class Document {
 			this.sourceId);
 	}
 
+	/**
+	 * Sets the DocuSign envelope document <code>sequence</code> property.
+	 *
+	 * @param sequence The new sequence.
+	 *
+	 * @return The DocuSign envelope document with the updated <code>sequence</code> property.
+	 */
 	public Document withSequence(final Integer sequence) {
 		this.sequence = sequence;
 		return this;

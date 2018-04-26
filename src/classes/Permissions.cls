@@ -1,3 +1,6 @@
+/**
+ * Contains permissions-related operations.
+ */
 public with sharing class Permissions {
 
 	private static final Permissions.Database DB = new Permissions.Database();
@@ -133,20 +136,28 @@ public with sharing class Permissions {
 		return permissionSetIds;
 	}
 
-	public static Id getDocuSignAdministratorPermissionSetId() {
+	@TestVisible
+	private static Id getDocuSignAdministratorPermissionSetId() {
 		if (dsUserPermissionSetId == null) {
 			dsUserPermissionSetId = getPermissionSetMap().get(DOCUSIGN_ADMINISTRATOR);
 		}
 		return dsUserPermissionSetId;
 	}
 
-	public static Id getDocuSignUserPermissionSetId() {
+	@TestVisible
+	private static Id getDocuSignUserPermissionSetId() {
 		if (dsAdministratorPermissionSetId == null) {
 			dsAdministratorPermissionSetId = getPermissionSetMap().get(DOCUSIGN_USER);
 		}
 		return dsAdministratorPermissionSetId;
 	}
 
+	/**
+	 * Checks whether the current user is assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce administrator, <code>false</code>
+	 * otherwise.
+	 */
 	public static Boolean isDocuSignAdministrator() {
 		return isDocuSignAdministrator(UserInfo.getUserId());
 	}
@@ -168,6 +179,10 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>DocuSign Administrator</code> permission set.
+	 */
 	public static void verifyIsDocuSignAdministrator() {
 		verifyIsDocuSignAdministrator(UserInfo.getUserId());
 	}
@@ -178,6 +193,13 @@ public with sharing class Permissions {
 			throw UnauthorizedException.notDocuSignAdministrator();
 	}
 
+	/**
+	 * Checks whether the current user is assigned the <code>DocuSign User</code> or
+	 * <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce user, <code>false</code>
+	 * otherwise.
+	 */
 	public static Boolean isDocuSignUser() {
 		return isDocuSignUser(UserInfo.getUserId());
 	}
@@ -197,6 +219,10 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>DocuSign User</code> or <code>DocuSign Administrator</code> permission set.
+	 */
 	public static void verifyIsDocuSignUser() {
 		verifyIsDocuSignUser(UserInfo.getUserId());
 	}
@@ -206,6 +232,13 @@ public with sharing class Permissions {
 		if (String.isBlank(userId) || !isDocuSignUser(userId)) throw UnauthorizedException.notDocuSignUser();
 	}
 
+	/**
+	 * Assigns the <code>DocuSign User</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
 	public static Boolean assignDocuSignUserPermissionSet(final Set<Id> userIds) {
 		Boolean result = Collection.isNotEmpty(userIds);
 		if (result) {
@@ -217,6 +250,13 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	/**
+	 * Assigns the <code>DocuSign Administrator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
 	public static Boolean assignDocuSignAdministratorPermissionSet(final Set<Id> userIds) {
 		Boolean result = Collection.isNotEmpty(userIds);
 		if (result) {
@@ -229,6 +269,14 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	/**
+	 * Removes the <code>DocuSign Administrator</code> and <code>DocuSign User</code> permission sets from one or more
+	 * users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set removals were successful, <code>false</code> otherwise.
+	 */
 	public static Boolean removeDocuSignPermissionSets(final Set<Id> userIds) {
 		Boolean result = Collection.isNotEmpty(userIds);
 		if (result) {
@@ -241,6 +289,13 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	/**
+	 * Checks whether the current user is the owner of an envelope. Involves a SOQL query.
+	 *
+	 * @param envelopeId The envelope ID.
+	 *
+	 * @return <code>true</code> if the current user owns the envelope, <code>false</code> otherwise.
+	 */
 	public static Boolean isOwner(final Id envelopeId) {
 		return String.isNotBlank(envelopeId) && isOwner(envelopeId, UserInfo.getUserId());
 	}
@@ -254,6 +309,11 @@ public with sharing class Permissions {
 		return false;
 	}
 
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 */
 	public static void verifyIsOwner(final Id envelopeId) {
 		verifyIsOwner(envelopeId, UserInfo.getUserId());
 	}
@@ -263,6 +323,13 @@ public with sharing class Permissions {
 		if (!isOwner(envelopeId, userId)) throw UnauthorizedException.notEnvelopeOwner();
 	}
 
+	/**
+	 * Checks whether the current user is the owner of an envelope. Involves a SOQL query.
+	 *
+	 * @param dsEnvelopeId The DocuSign envelope ID.
+	 *
+	 * @return <code>true</code> if the current user owns the envelope, <code>false</code> otherwise.
+	 */
 	public static Boolean isOwner(final UUID dsEnvelopeId) {
 		return dsEnvelopeId != null && isOwner(dsEnvelopeId, UserInfo.getUserId());
 	}
@@ -275,6 +342,11 @@ public with sharing class Permissions {
 		return false;
 	}
 
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not the owner of the envelope.
+	 *
+	 * @param dsEnvelopeId The DocuSign envelope ID.
+	 */
 	public static void verifyIsOwner(final UUID dsEnvelopeId) {
 		verifyIsOwner(dsEnvelopeId, UserInfo.getUserId());
 	}
@@ -306,34 +378,71 @@ public with sharing class Permissions {
 		return FIELD_DESCRIBE_MAP.get(key);
 	}
 
+	/**
+	 * Requested field-level access:
+	 * <ul>
+	 *     <li><code>Createable</code></li>
+	 *     <li><code>Deletable</code></li>
+	 *     <li><code>Queryable</code></li>
+	 *     <li><code>Updateable</code></li>
+	 *     <li><code>Filterable</code></li>
+	 *     <li><code>Unencrypted</code></li>
+	 * </ul>
+	 */
 	public enum FlsAccess {
 		Createable, Deletable, Queryable, Updateable, Filterable, Unencrypted
 	}
 
+	/**
+	 * The status of the field-level access request:
+	 * <ul>
+	 *     <li><code>OK</code></li>
+	 *     <li><code>BadRequest</code></li>
+	 *     <li><code>NotFound</code></li>
+	 *     <li><code>Unauthorized</code></li>
+	 * </ul>
+	 */
 	public enum FlsStatus {
 		OK, BadRequest, NotFound, Unauthorized
 	}
 
+	/**
+	 * The result of a field-level access request.
+	 */
 	public class FlsResult {
-		public String name {
-			get;
-			private set;
-		}
-		public FlsStatus status {
-			get;
-			private set;
-		}
+		/**
+		 * The name of the object or field that was checked.
+		 */
+		public String name { get; private set; }
+		/**
+		 * The status of the access request.
+		 */
+		public FlsStatus status { get; private set; }
+		/**
+		 * Read-only property indicating whether the request was authorized.
+		 */
 		public Boolean isAuthorized {
 			get {
 				return status == FlsStatus.OK;
 			}
 		}
 
+		/**
+		 * Constructs a field-level access request result.
+		 *
+		 * @param name The name of the object or field that was checked.
+		 * @param status The status of the access request.
+		 */
 		public FlsResult(final String name, final FlsStatus status) {
 			this.name = name;
 			this.status = status;
 		}
 
+		/**
+		 * Generates a string representation of the field-level access request result.
+		 *
+		 * @return The string representation of the field-level access request result.
+		 */
 		override public String toString() {
 			if (this.status != FlsStatus.Unauthorized && this.status != FlsStatus.OK) {
 				return String.format('{0} ({1})', new List<String> { this.name, this.status.name() });
@@ -342,24 +451,35 @@ public with sharing class Permissions {
 		}
 	}
 
+	/**
+	 * The combined results of an object and field-level access requests.
+	 */
 	public class FlsResults {
-		public FlsAccess requestedAccess {
-			get;
-			private set;
-		}
-		public Boolean isAuthorized {
-			get;
-			private set;
-		}
-		public FlsResult objectResult {
-			get;
-			private set;
-		}
-		public List<FlsResult> fieldResults {
-			get;
-			private set;
-		}
+		/**
+		 * The access requested.
+		 */
+		public FlsAccess requestedAccess { get; private set; }
+		/**
+		 * Whether or not the request was authorized.
+		 */
+		public Boolean isAuthorized { get; private set; }
+		/**
+		 * The result of the object access request.
+		 */
+		public FlsResult objectResult { get; private set; }
+		/**
+		 * The results of the field access requests.
+		 */
+		public List<FlsResult> fieldResults { get; private set; }
 
+		/**
+		 * Constructs the results of object and field-level access requests.
+		 *
+		 * @param requestedAccess The access requested.
+		 * @param isAuthorized Whether or not the request was authorized.
+		 * @param objectResult The result of the object access request.
+		 * @param fieldResults The results of the field access requests.
+		 */
 		public FlsResults(final FlsAccess requestedAccess, final Boolean isAuthorized, final FlsResult objectResult,
 			final List<FlsResult> fieldResults) {
 
@@ -382,6 +502,11 @@ public with sharing class Permissions {
 			return ufs;
 		}
 
+		/**
+		 * Generates a localized, combined error message if the request was unauthorized.
+		 *
+		 * @return The error message.
+		 */
 		public String getErrorMessage() {
 			String message = '';
 			if (!isAuthorized) {
@@ -514,67 +639,153 @@ public with sharing class Permissions {
 		return new FlsResults(requestedAccess, isAuthorized, objectResult, fieldResults);
 	}
 
+	/**
+	 * Tests whether an object and its fields are createable by the current user.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isCreateable(final String objectName, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Createable, true, null, null);
 
 		return getFlsResults(FlsAccess.Createable, objectName, fieldNames);
 	}
 
+	/**
+	 * Tests whether an object and its fields are createable by the current user. If not, an
+	 * <code>UnauthorizedException</code> is thrown.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 */
 	public static void verifyIsCreateable(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isCreateable(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
+	/**
+	 * Tests whether an object is deletable by the current user.
+	 *
+	 * @param objectName The object name.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isDeletable(final String objectName) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Deletable, true, null, null);
 
 		return getFlsResults(FlsAccess.Deletable, objectName, null);
 	}
 
+	/**
+	 * Tests whether an object is deletable by the current user. If not, an <code>UnauthorizedException</code> is
+	 * thrown.
+	 *
+	 * @param objectName The object name.
+	 */
 	public static void verifyIsDeletable(final String objectName) {
 		FlsResults results = isDeletable(objectName);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
+	/**
+	 * Tests whether an object and its fields are queryable by the current user.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isQueryable(final String objectName, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Queryable, true, null, null);
 
 		return getFlsResults(FlsAccess.Queryable, objectName, fieldNames);
 	}
 
+	/**
+	 * Tests whether an object and its fields are queryable by the current user. If not, an
+	 * <code>UnauthorizedException</code> is thrown.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 */
 	public static void verifyIsQueryable(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isQueryable(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
+	/**
+	 * Tests whether an object and its fields are updateable by the current user.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isUpdateable(final String objectName, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Updateable, true, null, null);
 
 		return getFlsResults(FlsAccess.Updateable, objectName, fieldNames);
 	}
 
+	/**
+	 * Tests whether an object and its fields are updateable by the current user. If not, an
+	 * <code>UnauthorizedException</code> is thrown.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 */
 	public static void verifyIsUpdateable(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isUpdateable(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
+	/**
+	 * Tests whether an object's fields are filterable.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isFilterable(final String objectName, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Filterable, true, null, null);
 
 		return getFlsResults(FlsAccess.Filterable, objectName, fieldNames);
 	}
 
+	/**
+	 * Tests whether an object's fields are filterable. If not, an <code>UnauthorizedException</code> is thrown.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 */
 	public static void verifyIsFilterable(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isFilterable(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
+	/**
+	 * Tests whether an object's fields are unencrypted.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 *
+	 * @return The results of the access request.
+	 */
 	public static FlsResults isUnencrypted(final String objectName, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Unencrypted, true, null, null);
 
 		return getFlsResults(FlsAccess.Unencrypted, objectName, fieldNames);
 	}
 
+	/**
+	 * Tests whether an object's fields are unencrypted. If not, an <code>UnauthorizedException</code> is thrown.
+	 *
+	 * @param objectName The object name.
+	 * @param fieldNames The field names.
+	 */
 	public static void verifyIsUnencrypted(final String objectName, final List<String> fieldNames) {
 		FlsResults results = isUnencrypted(objectName, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
