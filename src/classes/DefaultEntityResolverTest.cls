@@ -5,14 +5,9 @@ private class DefaultEntityResolverTest {
 		EntityResolver resolver = new DefaultEntityResolver();
 
 		Test.startTest();
-		System.assert(resolver.canResolve('Account'));
-		System.assert(resolver.canResolve('account'));
-		System.assert(resolver.canResolve('OPPORTUNITY'));
-		System.assert(resolver.canResolve('\tEnvelope__c  '));
+		System.assert(resolver.canResolve(Schema.Account.getSObjectType()));
+		System.assert(resolver.canResolve(Schema.UserSettings__c.getSObjectType()));
 		System.assert(!resolver.canResolve(null));
-		System.assert(!resolver.canResolve(''));
-		System.assert(!resolver.canResolve('\r'));
-		System.assert(!resolver.canResolve('unittest__BogusObject__c'));
 		Test.stopTest();
 	}
 
@@ -22,12 +17,12 @@ private class DefaultEntityResolverTest {
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
-			Entity result = Entity.resolve('Account', a.Id);
+			Entity result = Entity.resolve(a.Id);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
-			System.assertEquals('Account', result.type);
+			System.assertEquals(Schema.Account.getSObjectType(), result.type);
 			System.assertEquals(a.Id, result.id);
 			System.assertEquals(a.Name, result.name);
 			System.assertEquals(null, result.parent);
@@ -40,12 +35,12 @@ private class DefaultEntityResolverTest {
 			Opportunity o = TestUtils.createOpportunity();
 
 			Test.startTest();
-			Entity result = Entity.resolve('Opportunity', o.Id);
+			Entity result = Entity.resolve(o.Id);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
-			System.assertEquals('Opportunity', result.type);
+			System.assertEquals(Opportunity.getSObjectType(), result.type);
 			System.assertEquals(o.Id, result.id);
 			System.assertNotEquals(null, result.parent);
 			System.assertEquals(o.AccountId, result.parent.id);
@@ -58,12 +53,12 @@ private class DefaultEntityResolverTest {
 			Contact c = TestUtils.createContact();
 
 			Test.startTest();
-			Entity result = Entity.resolve('Contact', c.Id);
+			Entity result = Entity.resolve(c.Id);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
-			System.assertEquals('Contact', result.type);
+			System.assertEquals(Contact.getSObjectType(), result.type);
 			System.assertEquals(c.Id, result.id);
 			System.assertNotEquals(null, result.parent);
 			System.assertEquals(c.AccountId, result.parent.id);
@@ -76,12 +71,12 @@ private class DefaultEntityResolverTest {
 			Case c = TestUtils.createCase();
 
 			Test.startTest();
-			Entity result = Entity.resolve('Case', c.Id);
+			Entity result = Entity.resolve(c.Id);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
-			System.assertEquals('Case', result.type);
+			System.assertEquals(Case.getSObjectType(), result.type);
 			System.assertEquals(c.Id, result.id);
 			System.assertNotEquals(null, result.parent);
 			System.assertEquals(c.AccountId, result.parent.id);
@@ -103,21 +98,21 @@ private class DefaultEntityResolverTest {
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertEquals('User', result1.type);
+			System.assertEquals(User.getSObjectType(), result1.type);
 			System.assertEquals(u.Id, result1.id);
 			System.assertEquals(u.FirstName + ' ' + u.LastName, result1.name);
 			System.assertEquals(null, result1.parent);
 
 			System.assertNotEquals(null, result2);
 			System.assert(result2.isValid);
-			System.assertEquals('Account', result2.type);
+			System.assertEquals(Schema.Account.getSObjectType(), result2.type);
 			System.assertEquals(a.Id, result2.id);
 			System.assertEquals(a.Name, result2.name);
 			System.assertEquals(null, result2.parent);
 
 			System.assertNotEquals(null, result3);
 			System.assert(result3.isValid);
-			System.assertEquals('Lead', result3.type);
+			System.assertEquals(Lead.getSObjectType(), result3.type);
 			System.assertEquals(l.Id, result3.id);
 			System.assertEquals(l.FirstName + ' ' + l.LastName, result3.name);
 			System.assertEquals(null, result3.parent);
@@ -129,13 +124,7 @@ private class DefaultEntityResolverTest {
 
 		Test.startTest();
 		try {
-			resolver.resolve(null, null);
-			throw new AssertException('Expected DefaultEntityResolver.resolve() to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.UndefinedType, ex.getMessage());
-		}
-		try {
-			resolver.resolve('test', null);
+			resolver.resolve(null);
 			throw new AssertException('Expected DefaultEntityResolver.resolve() to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.UndefinedId, ex.getMessage());

@@ -1,7 +1,8 @@
 @IsTest
 private class PermissionsTest {
 
-	static final String OBJECT_NAME = Application.namespacePrefix + 'Envelope__c';
+	static final SObjectType OBJECT_TYPE = Envelope__c.getSObjectType();
+	static final String OBJECT_NAME = OBJECT_TYPE.getDescribe().getName();
 	static final String FIELD_NAME = Application.namespacePrefix + 'DocuSignId__c';
 
 	static testMethod void test_isFlsSupported() {
@@ -14,28 +15,10 @@ private class PermissionsTest {
 			Permissions.IS_FLS_SUPPORTED);
 	}
 
-	static testMethod void test_describeObject() {
-		Test.startTest();
-		DescribeSObjectResult r1 = Permissions.describeObject(null);
-		DescribeSObjectResult r2 = Permissions.describeObject(OBJECT_NAME);
-		DescribeSObjectResult r3 = Permissions.describeObject('Account');
-		DescribeSObjectResult r4 = Permissions.describeObject(UUID.randomUUID().toShortString());
-		Test.stopTest();
-
-		System.assertEquals(null, r1);
-		System.assertNotEquals(null, r2);
-		System.assertEquals(OBJECT_NAME, r2.getName());
-		System.assertNotEquals(null, r3);
-		System.assertEquals('Account', r3.getName());
-		System.assertEquals(null, r4);
-	}
-
 	static testMethod void test_describeField() {
-		Map<String, SObjectField> fieldMap = Permissions.describeObject(OBJECT_NAME).fields.getMap();
-
 		Test.startTest();
 		DescribeFieldResult r1 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, null);
-		DescribeFieldResult r2 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, fieldMap.get(FIELD_NAME));
+		DescribeFieldResult r2 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
 		Test.stopTest();
 
 		System.assertEquals(null, r1);
@@ -162,16 +145,14 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			DescribeSObjectResult objectDescribe = Permissions.describeObject(OBJECT_NAME);
-			Map<String, SObjectField> fieldMap = objectDescribe.fields.getMap();
-			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, fieldMap.get(FIELD_NAME));
+			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
 			r1 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, FIELD_NAME, dfr);
 			r2 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, FIELD_NAME, dfr);
 			r3 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, FIELD_NAME, dfr);
-			r4 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, OBJECT_NAME, objectDescribe);
-			r5 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, OBJECT_NAME, objectDescribe);
-			r6 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, OBJECT_NAME, objectDescribe);
-			r7 = Permissions.getFlsResult(Permissions.FlsAccess.Deletable, OBJECT_NAME, objectDescribe);
+			r4 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r5 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r6 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r7 = Permissions.getFlsResult(Permissions.FlsAccess.Deletable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
 		}
 		Test.stopTest();
 
@@ -192,21 +173,18 @@ private class PermissionsTest {
 	}
 
 	static testMethod void test_getFlsResult_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
-		System.runAs(u) {
-			DescribeSObjectResult objectDescribe = Permissions.describeObject(OBJECT_NAME);
-			Map<String, SObjectField> fieldMap = objectDescribe.fields.getMap();
-			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, fieldMap.get(FIELD_NAME));
+		System.runAs(TestUtils.createRestrictedUser()) {
+			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
 			r1 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, FIELD_NAME, dfr);
 			r2 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, FIELD_NAME, dfr);
 			r3 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, FIELD_NAME, dfr);
-			r4 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, OBJECT_NAME, objectDescribe);
-			r5 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, OBJECT_NAME, objectDescribe);
-			r6 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, OBJECT_NAME, objectDescribe);
-			r7 = Permissions.getFlsResult(Permissions.FlsAccess.Deletable, OBJECT_NAME, objectDescribe);
+			r4 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r5 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r6 = Permissions.getFlsResult(Permissions.FlsAccess.Updateable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
+			r7 = Permissions.getFlsResult(Permissions.FlsAccess.Deletable, OBJECT_NAME, OBJECT_TYPE.getDescribe());
 		}
 		Test.stopTest();
 
@@ -232,18 +210,17 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			DescribeSObjectResult objectDescribe = Permissions.describeObject(OBJECT_NAME);
-			Map<String, SObjectField> fieldMap = objectDescribe.fields.getMap();
+			Map<String, SObjectField> fieldMap = OBJECT_TYPE.getDescribe().fields.getMap();
 			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, fieldMap.get(FIELD_NAME));
 			r1 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, null, null);
-			r2 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_NAME, null);
-			r3 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r4 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r5 = Permissions.getFlsResults(Permissions.FlsAccess.Updateable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r6 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, OBJECT_NAME, null);
-			r7 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, null, objectDescribe, null, fieldMap);
-			r8 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, 'DocuSign_Invalid__c', null);
-			r9 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, objectDescribe, new List<String> { '' }, fieldMap);
+			r2 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_TYPE, null);
+			r3 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r4 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r5 = Permissions.getFlsResults(Permissions.FlsAccess.Updateable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r6 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, OBJECT_TYPE, null);
+			r7 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, null, OBJECT_TYPE.getDescribe(), null, fieldMap);
+			r8 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, null, null);
+			r9 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, OBJECT_TYPE.getDescribe(), new List<String> { '' }, fieldMap);
 		}
 		Test.stopTest();
 
@@ -273,19 +250,18 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			DescribeSObjectResult objectDescribe = Permissions.describeObject(OBJECT_NAME);
-			Map<String, SObjectField> fieldMap = objectDescribe.fields.getMap();
+			Map<String, SObjectField> fieldMap = OBJECT_TYPE.getDescribe().fields.getMap();
 			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, fieldMap.get(FIELD_NAME));
 			r1 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, null, null);
-			r2 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_NAME, null);
-			r3 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r4 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r5 = Permissions.getFlsResults(Permissions.FlsAccess.Updateable, OBJECT_NAME, new List<String> { FIELD_NAME });
-			r6 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, OBJECT_NAME, null);
-			r7 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, null, objectDescribe, null, fieldMap);
-			r8 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, 'DocuSign_Invalid__c', null);
-			r9 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, objectDescribe, new List<String> { '' }, fieldMap);
-			r10 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, objectDescribe, new List<String> { 'Invalid__c' }, fieldMap);
+			r2 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_TYPE, null);
+			r3 = Permissions.getFlsResults(Permissions.FlsAccess.Createable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r4 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r5 = Permissions.getFlsResults(Permissions.FlsAccess.Updateable, OBJECT_TYPE, new List<String> { FIELD_NAME });
+			r6 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, OBJECT_TYPE, null);
+			r7 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, null, OBJECT_TYPE.getDescribe(), null, fieldMap);
+			r8 = Permissions.getFlsResults(Permissions.FlsAccess.Deletable, null, null);
+			r9 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, OBJECT_TYPE.getDescribe(), new List<String> { '' }, fieldMap);
+			r10 = Permissions.getFlsResults(Permissions.FlsAccess.Queryable, OBJECT_NAME, OBJECT_TYPE.getDescribe(), new List<String> { 'Invalid__c' }, fieldMap);
 		}
 		Test.stopTest();
 
@@ -317,8 +293,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isCreateable('Envelope__c', null);
-			r2 = Permissions.isCreateable('Envelope__c', new List<String> { FIELD_NAME });
+			r1 = Permissions.isCreateable(OBJECT_TYPE, null);
+			r2 = Permissions.isCreateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -334,8 +310,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isCreateable('Envelope__c', null);
-			r2 = Permissions.isCreateable('Envelope__c', new List<String> { FIELD_NAME });
+			r1 = Permissions.isCreateable(OBJECT_TYPE, null);
+			r2 = Permissions.isCreateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -352,12 +328,12 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsCreateable('Envelope__c', null);
+				Permissions.verifyIsCreateable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsCreateable('Envelope__c', new List<String> { FIELD_NAME });
+				Permissions.verifyIsCreateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -375,13 +351,13 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsCreateable('Envelope__c', null);
+				Permissions.verifyIsCreateable(OBJECT_TYPE, null);
 				throw new AssertException('Expected verifyIsCreateable to throw exception');
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsCreateable('Envelope__c', new List<String> { FIELD_NAME });
+				Permissions.verifyIsCreateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 				throw new AssertException('Expected verifyIsCreateable to throw exception');
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
@@ -402,7 +378,7 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			r1 = Permissions.isDeletable(null);
-			r2 = Permissions.isDeletable(OBJECT_NAME);
+			r2 = Permissions.isDeletable(OBJECT_TYPE);
 		}
 		Test.stopTest();
 
@@ -419,7 +395,7 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			r1 = Permissions.isDeletable(null);
-			r2 = Permissions.isDeletable(OBJECT_NAME);
+			r2 = Permissions.isDeletable(OBJECT_TYPE);
 		}
 		Test.stopTest();
 
@@ -441,7 +417,7 @@ private class PermissionsTest {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsDeletable(OBJECT_NAME);
+				Permissions.verifyIsDeletable(OBJECT_TYPE);
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -465,7 +441,7 @@ private class PermissionsTest {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsDeletable(OBJECT_NAME);
+				Permissions.verifyIsDeletable(OBJECT_TYPE);
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -484,8 +460,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isQueryable(OBJECT_NAME, null);
-			r2 = Permissions.isQueryable(OBJECT_NAME, new List<String> { FIELD_NAME });
+			r1 = Permissions.isQueryable(OBJECT_TYPE, null);
+			r2 = Permissions.isQueryable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -502,10 +478,10 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u1) {
-			r1 = Permissions.isQueryable(OBJECT_NAME, null);
+			r1 = Permissions.isQueryable(OBJECT_TYPE, null);
 		}
 		System.runAs(u2) {
-			r2 = Permissions.isQueryable(OBJECT_NAME, new List<String> { 'Invalid__c' });
+			r2 = Permissions.isQueryable(OBJECT_TYPE, new List<String> { 'Invalid__c' });
 		}
 		Test.stopTest();
 
@@ -522,12 +498,12 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsQueryable(OBJECT_NAME, null);
+				Permissions.verifyIsQueryable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsQueryable(OBJECT_NAME, new List<String> { FIELD_NAME });
+				Permissions.verifyIsQueryable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -546,14 +522,14 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u1) {
 			try {
-				Permissions.verifyIsQueryable(OBJECT_NAME, null);
+				Permissions.verifyIsQueryable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 		}
 		System.runAs(u2) {
 			try {
-				Permissions.verifyIsQueryable(OBJECT_NAME, new List<String> { 'Invalid__c' });
+				Permissions.verifyIsQueryable(OBJECT_TYPE, new List<String> { 'Invalid__c' });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -563,7 +539,7 @@ private class PermissionsTest {
 		System.assertNotEquals(null, ex1);
 		System.assertEquals(Label.CannotQueryObject + ' ' + OBJECT_NAME, ex1.getMessage());
 		System.assertNotEquals(null, ex2);
-		System.assertEquals(Label.CannotQueryObject + ' ' + OBJECT_NAME, ex2.getMessage());
+		System.assertEquals(String.format(Label.CannotQueryFields_2, new List<String> { OBJECT_NAME, 'Invalid__c (NotFound)' }), ex2.getMessage());
 	}
 
 	static testMethod void test_isUpdateable_authorized() {
@@ -572,8 +548,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isUpdateable(OBJECT_NAME, null);
-			r2 = Permissions.isUpdateable(OBJECT_NAME, new List<String> { FIELD_NAME });
+			r1 = Permissions.isUpdateable(OBJECT_TYPE, null);
+			r2 = Permissions.isUpdateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -589,8 +565,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isUpdateable(OBJECT_NAME, null);
-			r2 = Permissions.isUpdateable(OBJECT_NAME, new List<String> { FIELD_NAME });
+			r1 = Permissions.isUpdateable(OBJECT_TYPE, null);
+			r2 = Permissions.isUpdateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -607,12 +583,12 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsUpdateable(OBJECT_NAME, null);
+				Permissions.verifyIsUpdateable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsUpdateable(OBJECT_NAME, new List<String> { FIELD_NAME });
+				Permissions.verifyIsUpdateable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -631,14 +607,14 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u1) {
 			try {
-				Permissions.verifyIsUpdateable(OBJECT_NAME, null);
+				Permissions.verifyIsUpdateable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 		}
 		System.runAs(u2) {
 			try {
-				Permissions.verifyIsUpdateable(OBJECT_NAME, new List<String> { 'Invalid__c' });
+				Permissions.verifyIsUpdateable(OBJECT_TYPE, new List<String> { 'Invalid__c' });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -648,7 +624,7 @@ private class PermissionsTest {
 		System.assertNotEquals(null, ex1);
 		System.assertEquals(Label.CannotUpdateObject + ' ' + OBJECT_NAME, ex1.getMessage());
 		System.assertNotEquals(null, ex2);
-		System.assertEquals(Label.CannotUpdateObject + ' ' + OBJECT_NAME, ex2.getMessage());
+		System.assertEquals(String.format(Label.CannotUpdateFields_2, new List<String> { OBJECT_NAME, 'Invalid__c (NotFound)' }), ex2.getMessage());
 	}
 
 	static testMethod void test_isFilterable_authorized() {
@@ -657,8 +633,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isFilterable(OBJECT_NAME, null);
-			r2 = Permissions.isFilterable(OBJECT_NAME, new List<String> { FIELD_NAME });
+			r1 = Permissions.isFilterable(OBJECT_TYPE, null);
+			r2 = Permissions.isFilterable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -679,12 +655,12 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsFilterable(OBJECT_NAME, null);
+				Permissions.verifyIsFilterable(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsFilterable(OBJECT_NAME, new List<String> { FIELD_NAME });
+				Permissions.verifyIsFilterable(OBJECT_TYPE, new List<String> { FIELD_NAME });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}
@@ -705,8 +681,8 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u) {
-			r1 = Permissions.isUnencrypted(OBJECT_NAME, null);
-			r2 = Permissions.isUnencrypted(OBJECT_NAME, new List<String> { FIELD_NAME });
+			r1 = Permissions.isUnencrypted(OBJECT_TYPE, null);
+			r2 = Permissions.isUnencrypted(OBJECT_TYPE, new List<String> { FIELD_NAME });
 		}
 		Test.stopTest();
 
@@ -727,12 +703,12 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsUnencrypted(OBJECT_NAME, null);
+				Permissions.verifyIsUnencrypted(OBJECT_TYPE, null);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}
 			try {
-				Permissions.verifyIsUnencrypted(OBJECT_NAME, new List<String> { FIELD_NAME });
+				Permissions.verifyIsUnencrypted(OBJECT_TYPE, new List<String> { FIELD_NAME });
 			} catch (UnauthorizedException ex) {
 				ex2 = ex;
 			}

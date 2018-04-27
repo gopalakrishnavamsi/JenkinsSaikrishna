@@ -986,7 +986,7 @@ private class EnvelopeServiceTest {
 			Recipient r3 = r2.copy();
 
 			Test.startTest();
-			Envelope result = EnvelopeService.updateEnvelopeNotifications(e
+			Envelope result = EnvelopeService.updateEnvelope(e
 				.withDocuments(new List<Document> { d1, d2, d3 })
 				.withRecipients(new List<Recipient> { r1, r2, r3 })
 				.withEmail('s2', 'm2')

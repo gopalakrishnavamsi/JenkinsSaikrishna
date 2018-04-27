@@ -75,12 +75,11 @@ public class TestUtils {
 	}
 
 	public static User createUser(final String profileName) {
-		Profile p = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1];
-		return createUser(p.Id, UUID.randomUUID().toString() + '@unit.test', null);
+		return createUser([SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1].Id,
+			UUID.randomUUID().toString() + '@unit.test', null);
 	}
 
 	public static User createUser(final Id profileId, final String email, final String dsUsername) {
-		String ts = String.valueOf(Datetime.now().getTime());
 		User u = new User(
 			Email = email,
 			Phone = '5555555555',

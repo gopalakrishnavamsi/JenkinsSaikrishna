@@ -677,5 +677,4 @@ public class Recipient implements Comparable {
 		DiscreteMatchExact,
 		DiscreteMatchAny
 	}
-
 }

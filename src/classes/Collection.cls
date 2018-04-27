@@ -131,4 +131,21 @@ public class Collection {
 
 		return (Id)s.iterator().next();
 	}
+
+	public static Map<SObjectType, Set<Id>> getSObjectTypeMap(final Set<Id> ids) {
+		Map<SObjectType, Set<Id>> result = new Map<SObjectType, Set<Id>>();
+		if (ids != null) {
+			for (Id id : ids) {
+				if (id != null) {
+					SObjectType type = id.getSobjectType();
+					if (result.containsKey(type)) {
+						result.get(type).add(id);
+					} else {
+						result.put(type, new Set<Id> { id });
+					}
+				}
+			}
+		}
+		return result;
+	}
 }

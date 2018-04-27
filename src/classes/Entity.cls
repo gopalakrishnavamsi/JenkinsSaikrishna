@@ -28,7 +28,7 @@ public with sharing class Entity {
 	/**
 	 * The Salesforce object type.
 	 */
-	public String type { get; private set; }
+	public SObjectType type { get; private set; }
 	/**
 	 * The localized Salesforce object label.
 	 */
@@ -64,10 +64,9 @@ public with sharing class Entity {
 	 */
 	public Entity(final Id id, final String name, final Entity parent) {
 		if (id != null) {
-			DescribeSObjectResult d = id.getSobjectType().getDescribe();
 			this.id = id;
-			this.type = d.getName();
-			this.label = d.getLabel();
+			this.type = id.getSobjectType();
+			this.label = this.type.getDescribe().getLabel();
 			this.isValid = true;
 		} else {
 			this.isValid = false;
@@ -157,42 +156,20 @@ public with sharing class Entity {
 	}
 
 	/**
-	 * Resolves an entity by ID. This operation may involve one or more SOQL queries. Use this overload
-	 * when the Salesforce object type is unknown.
+	 * Resolves an entity by type and ID. This operation may involve one or more SOQL queries.
 	 *
-	 * @param sObjectId The Salesforce object ID.
-	 *
-	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
-	 */
-	public static Entity resolve(final Id sObjectId) {
-		if (sObjectId == null) throw new DocuSignException(Label.UndefinedId);
-
-		SObjectType t = sObjectId.getSobjectType();
-		if (t == null) throw new DocuSignException(Label.InvalidType);
-		DescribeSObjectResult d = t.getDescribe();
-		if (d == null) throw new DocuSignException(Label.InvalidType);
-
-		return resolve(d.getName(), sObjectId);
-	}
-
-	/**
-	 * Resolves an entity by type and ID. This operation may involve one or more SOQL queries. Use this
-	 * overload when the Salesforce object type is known.
-	 *
-	 * @param sObjectType The Salesforce object type.
-	 * @param sObjectId The Salesforce object ID.
+	 * @param id The Salesforce object ID.
 	 *
 	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
 	 */
-	public static Entity resolve(final String sObjectType, final Id sObjectId) {
-		if (String.isBlank(sObjectType)) throw new DocuSignException(Label.UndefinedType);
-		if (sObjectId == null) throw new DocuSignException(Label.UndefinedId);
+	public static Entity resolve(final Id id) {
+		if (id == null) throw new DocuSignException(Label.UndefinedId);
 
-		String resolvedType = Application.resolveType(sObjectType);
+		SObjectType type = id.getSobjectType();
 		Entity result = null;
 		for (EntityResolver resolver : RESOLVERS) {
-			if (resolver.canResolve(resolvedType)) {
-				result = resolver.resolve(resolvedType, sObjectId);
+			if (resolver.canResolve(type)) {
+				result = resolver.resolve(id);
 			}
 			if (result != null) break;
 		}

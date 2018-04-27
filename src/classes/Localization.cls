@@ -3,6 +3,8 @@
  */
 public with sharing class Localization {
 
+	private static final SObjectType TYPE_ENVELOPE_LOCALIZATION = EnvelopeLocalization__c.getSObjectType();
+
 	public class ChatterText {
 		public String envelopeSent { get; private set; }
 		public String envelopeDelivered { get; private set; }
@@ -127,7 +129,7 @@ public with sharing class Localization {
 
 	@TestVisible
 	private static List<EnvelopeLocalization__c> getOrgEmailSettings() {
-		Permissions.verifyIsQueryable('EnvelopeLocalization__c', new List<String> {
+		Permissions.verifyIsQueryable(TYPE_ENVELOPE_LOCALIZATION, new List<String> {
 			'Name', 'Language__c', 'EmailSubject__c', 'EmailMessage__c'
 		});
 
@@ -211,9 +213,9 @@ public with sharing class Localization {
 		if (emailSettings == null) throw new DocuSignException(Label.UndefinedArgument);
 
 		List<String> fields = new List<String> { 'Name', 'Language__c', 'EmailSubject__c', 'EmailMessage__c' };
-		Permissions.verifyIsCreateable('EnvelopeLocalization__c', fields);
-		Permissions.verifyIsUpdateable('EnvelopeLocalization__c', fields);
-		Permissions.verifyIsDeletable('EnvelopeLocalization__c');
+		Permissions.verifyIsCreateable(TYPE_ENVELOPE_LOCALIZATION, fields);
+		Permissions.verifyIsUpdateable(TYPE_ENVELOPE_LOCALIZATION, fields);
+		Permissions.verifyIsDeletable(TYPE_ENVELOPE_LOCALIZATION);
 
 		Map<String, EnvelopeLocalization__c> current = new Map<String, EnvelopeLocalization__c>();
 		for (EnvelopeLocalization__c el : [

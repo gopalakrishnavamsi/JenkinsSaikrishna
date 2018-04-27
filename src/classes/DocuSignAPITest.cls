@@ -370,7 +370,7 @@ public class DocuSignAPITest {
 			System.assertNotEquals(null, ex);
 			System.assertEquals(Label.MustBeActivated, ex.getMessage());
 			System.assertEquals(UserInfo.getUserId(), ex.userId);
-			System.assertEquals(UnauthorizedException.RequiredPermissionSet.DocuSignUser, ex.requirement);
+			System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
 		}
 	}
 

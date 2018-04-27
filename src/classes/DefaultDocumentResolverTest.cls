@@ -5,11 +5,10 @@ private class DefaultDocumentResolverTest {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
-		System.assert(dr.canResolveDocuments('ContentVersion'));
-		System.assert(dr.canResolveDocuments(' DOCUMENT '));
-		System.assert(!dr.canResolveDocuments('whatever'));
+		System.assert(dr.canResolveDocuments(Schema.ContentVersion.getSObjectType()));
+		System.assert(dr.canResolveDocuments(Schema.Document.getSObjectType()));
+		System.assert(!dr.canResolveDocuments(Schema.Lead.getSObjectType()));
 		System.assert(!dr.canResolveDocuments(null));
-		System.assert(!dr.canResolveDocuments(' '));
 		Test.stopTest();
 	}
 
@@ -20,7 +19,7 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			List<Document> result = dr.getDocuments('contentVersion\t', new Set<Id> { cv1.Id, cv2.Id });
+			List<Document> result = dr.getDocuments(ContentVersion.getSObjectType(), new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -51,7 +50,7 @@ private class DefaultDocumentResolverTest {
 			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			List<Document> result = dr.getDocuments('\nDOCUMENT', new Set<Id> { d1.Id, d2.Id });
+			List<Document> result = dr.getDocuments(Schema.Document.getSObjectType(), new Set<Id> { d1.Id, d2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -81,7 +80,7 @@ private class DefaultDocumentResolverTest {
 
 			Test.startTest();
 			try {
-				dr.getDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				dr.getDocuments(Schema.User.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 				throw new AssertException('Expected getDocuments to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
@@ -101,7 +100,7 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(o1.Id);
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id, o1.Id, c1.Id }, false);
+			List<Document> result = dr.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { a1.Id, o1.Id, c1.Id }, false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -153,7 +152,7 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments('contentVersion\t', new Set<Id> { a1.Id }, true);
+			List<Document> result = dr.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { a1.Id }, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -169,27 +168,22 @@ private class DefaultDocumentResolverTest {
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments('\nDOCUMENT', new Set<Id> { a.Id }, false);
+			List<Document> result = dr.getLinkedDocuments(Schema.Document.getSObjectType(), new Set<Id> { a.Id }, false);
 			Test.stopTest();
 
-			// Documents cannot be linked to entities, so will never return a result.
 			System.assert(Collection.isEmpty(result));
 		}
 	}
 
 	static testMethod void test_getLinkedDocuments_invalid() {
-		System.runAs(TestUtils.createUser()) {
-			DefaultDocumentResolver dr = new DefaultDocumentResolver();
-
-			Test.startTest();
-			try {
-				dr.getLinkedDocuments('User', new Set<Id> { UserInfo.getUserId() }, false);
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
-			}
-			Test.stopTest();
+		Test.startTest();
+		try {
+			new DefaultDocumentResolver().getLinkedDocuments(User.getSObjectType(), null, false);
+			throw new AssertException('Expected getLinkedDocuments to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
 		}
+		Test.stopTest();
 	}
 
 	static testMethod void test_getDocumentContent_ContentVersion() {
@@ -199,23 +193,13 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			Map<Id, Blob> result = dr.getDocumentContent('ContentVersion', new Set<Id> { cv1.Id, cv2.Id });
+			Map<Id, Blob> result = dr.getDocumentContent(ContentVersion.getSObjectType(), new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-
-			for (Id id : result.keySet()) {
-				Blob b = result.get(id);
-				System.assertNotEquals(null, b);
-				if (id == cv1.Id) {
-					System.assertEquals(cv1.VersionData.toString(), b.toString());
-				} else if (id == cv2.Id) {
-					System.assertEquals(cv2.VersionData.toString(), b.toString());
-				} else {
-					throw new AssertException('Unexpected content version: ' + id);
-				}
-			}
+			System.assertEquals(cv1.VersionData.toString(), result.get(cv1.Id).toString());
+			System.assertEquals(cv2.VersionData.toString(), result.get(cv2.Id).toString());
 		}
 	}
 
@@ -226,23 +210,13 @@ private class DefaultDocumentResolverTest {
 			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			Map<Id, Blob> result = dr.getDocumentContent('Document', new Set<Id> { d1.Id, d2.Id });
+			Map<Id, Blob> result = dr.getDocumentContent(Schema.Document.getSObjectType(), new Set<Id> { d1.Id, d2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-
-			for (Id id : result.keySet()) {
-				Blob b = result.get(id);
-				System.assertNotEquals(null, b);
-				if (id == d1.Id) {
-					System.assertEquals(d1.Body.toString(), b.toString());
-				} else if (id == d2.Id) {
-					System.assertEquals(d2.Body.toString(), b.toString());
-				} else {
-					throw new AssertException('Unexpected document: ' + id);
-				}
-			}
+			System.assertEquals(d1.Body.toString(), result.get(d1.Id).toString());
+			System.assertEquals(d2.Body.toString(), result.get(d2.Id).toString());
 		}
 	}
 
@@ -252,7 +226,7 @@ private class DefaultDocumentResolverTest {
 
 			Test.startTest();
 			try {
-				dr.getDocumentContent('User', new Set<Id> { UserInfo.getUserId() });
+				dr.getDocumentContent(User.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 				throw new AssertException('Expected getDocumentContent to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
@@ -268,7 +242,7 @@ private class DefaultDocumentResolverTest {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
-			List<Document.Folder> result = dr.getDocumentFolders('ContentVersion');
+			List<Document.Folder> result = dr.getDocumentFolders(Schema.ContentVersion.getSObjectType());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -294,7 +268,7 @@ private class DefaultDocumentResolverTest {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
-			List<Document.Folder> result = dr.getDocumentFolders('Document');
+			List<Document.Folder> result = dr.getDocumentFolders(Schema.Document.getSObjectType());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -309,7 +283,7 @@ private class DefaultDocumentResolverTest {
 
 			Test.startTest();
 			try {
-				dr.getDocumentFolders('User');
+				dr.getDocumentFolders(Schema.User.getSObjectType());
 				throw new AssertException('Expected getDocumentFolders to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
@@ -341,7 +315,7 @@ private class DefaultDocumentResolverTest {
 			if (lib != null) folderIds.add(lib.Id);
 
 			Test.startTest();
-			List<Document> result = dr.getFolderDocuments('ContentVersion', folderIds);
+			List<Document> result = dr.getFolderDocuments(Schema.ContentVersion.getSObjectType(), folderIds);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -385,7 +359,7 @@ private class DefaultDocumentResolverTest {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
-			List<Document> result = dr.getFolderDocuments('Document', new Set<Id> { UserInfo.getUserId() });
+			List<Document> result = dr.getFolderDocuments(Schema.Document.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -399,7 +373,7 @@ private class DefaultDocumentResolverTest {
 
 			Test.startTest();
 			try {
-				dr.getFolderDocuments('User', new Set<Id> { UserInfo.getUserId() });
+				dr.getFolderDocuments(Schema.User.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 				throw new AssertException('Expected getFolderDocuments to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());

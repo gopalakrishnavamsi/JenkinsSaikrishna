@@ -105,4 +105,24 @@ private class CollectionTest {
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA' }));
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA', '00541000002aMAB' }));
 	}
+
+	static testMethod void test_getSObjectTypeMap() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a1 = TestUtils.createAccount();
+			Schema.Account a2 = TestUtils.createAccount();
+			Lead l1 = TestUtils.createLead();
+			Lead l2 = TestUtils.createLead();
+
+			Test.startTest();
+			System.assert(Collection.getSObjectTypeMap(null).isEmpty());
+			System.assert(Collection.getSObjectTypeMap(new Set<Id>()).isEmpty());
+			Map<SObjectType, Set<Id>> result = Collection.getSObjectTypeMap(new Set<Id> { a1.Id, l1.Id, a2.Id, l2.Id, null });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+			System.assertEquals(new Set<Id> { a1.Id, a2.Id }, result.get(Schema.Account.getSObjectType()));
+			System.assertEquals(new Set<Id> { l1.Id, l2.Id }, result.get(Lead.getSObjectType()));
+		}
+	}
 }

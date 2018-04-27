@@ -5,35 +5,35 @@ public interface RecipientResolver {
 	/**
 	 * Tests whether recipients can be resolved by the source SObject type.
 	 *
-	 * @param sObjectType The SObject type name.
+	 * @param type The SObject type.
 	 *
 	 * @return True if this implementation can resolve recipients from the source SObject type, false otherwise.
 	 */
-	Boolean canResolveRecipients(String sObjectType);
+	Boolean canResolveRecipients(SObjectType type);
 
 	/**
 	 * Tests whether recipient SObjects can be searched.
 	 *
-	 * @param sObjectType The SObject type name.
+	 * @param type The SObject type.
 	 *
 	 * @return True if this implementation can search the recipient SObject.
 	 */
-	Boolean canSearchRecipients(String sObjectType);
+	Boolean canSearchRecipients(SObjectType type);
 
 	/**
 	 * Reads recipients from SObjects.
 	 *
-	 * @param sObjectType The SObject type name.
-	 * @param sObjectIds The source SObject IDs.
+	 * @param type The SObject type.
+	 * @param ids The source SObject IDs.
 	 *
 	 * @return The resolved recipients.
 	 */
-	List<Recipient> getRecipients(String sObjectType, Set<Id> sObjectIds);
+	List<Recipient> getRecipients(SObjectType type, Set<Id> ids);
 
 	/**
 	 * Retrieves a list of recipients by name.
 	 *
-	 * @param sObjectType The SObject type name.
+	 * @param type The SObject type.
 	 * @param firstName The first name to search. The only search term honored for compound searches.
 	 * @param lastName The last name to search. Ignored for compound searches.
 	 * @param behavior How the search is performed. This may be overridden at runtime if predicate fields do not support
@@ -41,6 +41,6 @@ public interface RecipientResolver {
 	 *
 	 * @return The recipients matching the search criteria.
 	 */
-	List<Recipient> searchRecipients(String sObjectType, String firstName, String lastName,
+	List<Recipient> searchRecipients(SObjectType type, String firstName, String lastName,
 		Recipient.SearchBehavior behavior);
 }

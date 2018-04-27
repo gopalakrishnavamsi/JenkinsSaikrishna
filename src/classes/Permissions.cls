@@ -4,10 +4,9 @@
 public with sharing class Permissions {
 
 	private static final Permissions.Database DB = new Permissions.Database();
+	private static final SObjectType TYPE_PERMISSION_SET_ASSIGNMENT = PermissionSetAssignment.getSObjectType();
 	@TestVisible
 	private static final Boolean IS_FLS_SUPPORTED;
-	private static final Map<String, SObjectType> GLOBAL_SCHEMA = Schema.getGlobalDescribe();
-	private static final Map<String, DescribeSObjectResult> OBJECT_DESCRIBE_MAP = new Map<String, DescribeSObjectResult>();
 	private static final Map<String, DescribeFieldResult> FIELD_DESCRIBE_MAP = new Map<String, DescribeFieldResult>();
 	@TestVisible
 	private static final String DOCUSIGN_ADMINISTRATOR = 'DocuSign_Administrator';
@@ -33,7 +32,7 @@ public with sharing class Permissions {
 	private with sharing class Database {
 
 		private Boolean upsertPermissionSetAssignments(final Id permissionSetId, final Set<Id> userIds) {
-			Permissions.verifyIsCreateable('PermissionSetAssignment', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_PERMISSION_SET_ASSIGNMENT, new List<String> {
 				'PermissionSetId', 'AssigneeId'
 			});
 			// Doesn't actually update during upsert. It just doesn't fail to insert if the assignment already exists.
@@ -51,7 +50,7 @@ public with sharing class Permissions {
 		}
 
 		private Boolean deletePermissionSetAssignments(final Set<Id> userIds) {
-			Permissions.verifyIsDeletable('PermissionSetAssignment');
+			Permissions.verifyIsDeletable(TYPE_PERMISSION_SET_ASSIGNMENT);
 
 			Boolean result = false;
 			if (Collection.isNotEmpty(userIds)) {
@@ -357,18 +356,9 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static DescribeSObjectResult describeObject(final String objectName) {
-		if (String.isBlank(objectName)) return null;
+	private static DescribeFieldResult describeField(final String objectName, final String fieldName,
+		final SObjectField field) {
 
-		if (!OBJECT_DESCRIBE_MAP.containsKey(objectName)) {
-			SObjectType sobjectType = GLOBAL_SCHEMA.get(objectName);
-			OBJECT_DESCRIBE_MAP.put(objectName, sobjectType == null ? null : sobjectType.getDescribe());
-		}
-		return OBJECT_DESCRIBE_MAP.get(objectName);
-	}
-
-	@TestVisible
-	private static DescribeFieldResult describeField(final String objectName, final String fieldName, final SObjectField field) {
 		if (field == null) return null;
 
 		String key = objectName + '.' + fieldName;
@@ -586,22 +576,22 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static FlsResults getFlsResults(final FlsAccess requestedAccess, final String objectName,
+	private static FlsResults getFlsResults(final FlsAccess requestedAccess, final SObjectType type,
 		final List<String> fieldNames) {
 
-		if (String.isBlank(objectName)) {
+		if (type == null) {
 			return new FlsResults(requestedAccess, false, new FlsResult(Label.Unknown, FlsStatus.BadRequest),
 				new List<FlsResult>());
 		}
 
-		String resolvedName = Application.resolveType(objectName);
-		DescribeSObjectResult objectDescribe = describeObject(resolvedName);
+		String objectName = String.valueOf(type);
+		DescribeSObjectResult objectDescribe = type.getDescribe();
 		if (objectDescribe == null) {
-			return new FlsResults(requestedAccess, false, new FlsResult(resolvedName, FlsStatus.NotFound),
+			return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound),
 				new List<FlsResult>());
 		}
 
-		return getFlsResults(requestedAccess, resolvedName, objectDescribe, fieldNames,
+		return getFlsResults(requestedAccess, objectName, objectDescribe, fieldNames,
 			Collection.isNotEmpty(fieldNames) ? objectDescribe.fields.getMap() : null);
 	}
 
@@ -647,10 +637,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isCreateable(final String objectName, final List<String> fieldNames) {
+	public static FlsResults isCreateable(final SObjectType type, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Createable, true, null, null);
 
-		return getFlsResults(FlsAccess.Createable, objectName, fieldNames);
+		return getFlsResults(FlsAccess.Createable, type, fieldNames);
 	}
 
 	/**
@@ -660,8 +650,8 @@ public with sharing class Permissions {
 	 * @param objectName The object name.
 	 * @param fieldNames The field names.
 	 */
-	public static void verifyIsCreateable(final String objectName, final List<String> fieldNames) {
-		FlsResults results = isCreateable(objectName, fieldNames);
+	public static void verifyIsCreateable(final SObjectType type, final List<String> fieldNames) {
+		FlsResults results = isCreateable(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
@@ -672,10 +662,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isDeletable(final String objectName) {
+	public static FlsResults isDeletable(final SObjectType type) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Deletable, true, null, null);
 
-		return getFlsResults(FlsAccess.Deletable, objectName, null);
+		return getFlsResults(FlsAccess.Deletable, type, null);
 	}
 
 	/**
@@ -684,8 +674,8 @@ public with sharing class Permissions {
 	 *
 	 * @param objectName The object name.
 	 */
-	public static void verifyIsDeletable(final String objectName) {
-		FlsResults results = isDeletable(objectName);
+	public static void verifyIsDeletable(final SObjectType type) {
+		FlsResults results = isDeletable(type);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
@@ -697,10 +687,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isQueryable(final String objectName, final List<String> fieldNames) {
+	public static FlsResults isQueryable(final SObjectType type, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Queryable, true, null, null);
 
-		return getFlsResults(FlsAccess.Queryable, objectName, fieldNames);
+		return getFlsResults(FlsAccess.Queryable, type, fieldNames);
 	}
 
 	/**
@@ -710,8 +700,8 @@ public with sharing class Permissions {
 	 * @param objectName The object name.
 	 * @param fieldNames The field names.
 	 */
-	public static void verifyIsQueryable(final String objectName, final List<String> fieldNames) {
-		FlsResults results = isQueryable(objectName, fieldNames);
+	public static void verifyIsQueryable(final SObjectType type, final List<String> fieldNames) {
+		FlsResults results = isQueryable(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
@@ -723,10 +713,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isUpdateable(final String objectName, final List<String> fieldNames) {
+	public static FlsResults isUpdateable(final SObjectType type, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Updateable, true, null, null);
 
-		return getFlsResults(FlsAccess.Updateable, objectName, fieldNames);
+		return getFlsResults(FlsAccess.Updateable, type, fieldNames);
 	}
 
 	/**
@@ -736,8 +726,8 @@ public with sharing class Permissions {
 	 * @param objectName The object name.
 	 * @param fieldNames The field names.
 	 */
-	public static void verifyIsUpdateable(final String objectName, final List<String> fieldNames) {
-		FlsResults results = isUpdateable(objectName, fieldNames);
+	public static void verifyIsUpdateable(final SObjectType type, final List<String> fieldNames) {
+		FlsResults results = isUpdateable(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
@@ -749,10 +739,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isFilterable(final String objectName, final List<String> fieldNames) {
+	public static FlsResults isFilterable(final SObjectType type, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Filterable, true, null, null);
 
-		return getFlsResults(FlsAccess.Filterable, objectName, fieldNames);
+		return getFlsResults(FlsAccess.Filterable, type, fieldNames);
 	}
 
 	/**
@@ -761,8 +751,8 @@ public with sharing class Permissions {
 	 * @param objectName The object name.
 	 * @param fieldNames The field names.
 	 */
-	public static void verifyIsFilterable(final String objectName, final List<String> fieldNames) {
-		FlsResults results = isFilterable(objectName, fieldNames);
+	public static void verifyIsFilterable(final SObjectType type, final List<String> fieldNames) {
+		FlsResults results = isFilterable(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 
@@ -774,10 +764,10 @@ public with sharing class Permissions {
 	 *
 	 * @return The results of the access request.
 	 */
-	public static FlsResults isUnencrypted(final String objectName, final List<String> fieldNames) {
+	public static FlsResults isUnencrypted(final SObjectType type, final List<String> fieldNames) {
 		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Unencrypted, true, null, null);
 
-		return getFlsResults(FlsAccess.Unencrypted, objectName, fieldNames);
+		return getFlsResults(FlsAccess.Unencrypted, type, fieldNames);
 	}
 
 	/**
@@ -786,8 +776,8 @@ public with sharing class Permissions {
 	 * @param objectName The object name.
 	 * @param fieldNames The field names.
 	 */
-	public static void verifyIsUnencrypted(final String objectName, final List<String> fieldNames) {
-		FlsResults results = isUnencrypted(objectName, fieldNames);
+	public static void verifyIsUnencrypted(final SObjectType type, final List<String> fieldNames) {
+		FlsResults results = isUnencrypted(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
 	}
 }

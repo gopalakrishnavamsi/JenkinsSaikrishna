@@ -1,15 +1,20 @@
 public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
-	private static final Set<String> TYPES = new Set<String> {
-		'contentversion', 'document'
+	private static final SObjectType TYPE_CONTENT_VERSION = ContentVersion.getSObjectType();
+	private static final SObjectType TYPE_DOCUMENT = Schema.Document.getSObjectType();
+	private static final SObjectType TYPE_CONTENT_WORKSPACE = ContentWorkspace.getSObjectType();
+	private static final SObjectType TYPE_FOLDER = Folder.getSObjectType();
+
+	private static final Set<SObjectType> TYPES = new Set<SObjectType> {
+		TYPE_CONTENT_VERSION, TYPE_DOCUMENT
 	};
 
-	public Boolean canResolveDocuments(final String sObjectType) {
-		return String.isNotBlank(sObjectType) && TYPES.contains(sObjectType.trim().toLowerCase());
+	public Boolean canResolveDocuments(final SObjectType type) {
+		return type != null && TYPES.contains(type);
 	}
 
 	private static List<Document> getContentVersions(final Set<Id> contentVersionIds) {
-		Permissions.verifyIsQueryable('ContentVersion', new List<String> {
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
 			'Id', 'Title', 'FileExtension', 'ContentSize'
 		});
 
@@ -28,7 +33,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document> getDocuments(final Set<Id> documentIds) {
-		Permissions.verifyIsQueryable('Document', new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
+		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
 
 		List<Document> result = new List<Document>();
 		if (!Collection.isEmpty(documentIds)) {
@@ -39,16 +44,17 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	public List<Document> getDocuments(final String sObjectType, final Set<Id> sObjectIds) {
+	public List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Document> result = null;
-		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
-		if (t == 'ContentVersion') {
-			result = getContentVersions(sObjectIds);
-		} else if (t == 'Document') {
-			result = getDocuments(sObjectIds);
+		if (type == TYPE_CONTENT_VERSION) {
+			result = getContentVersions(documentIds);
+		} else if (type == TYPE_DOCUMENT) {
+			result = getDocuments(documentIds);
 		} else {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
-				new List<String> { sObjectType }));
+				new List<String> { String.valueOf(type) }));
 		}
 		return result;
 	}
@@ -56,7 +62,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	private static List<Document> getLinkedContentVersions(final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
 
-		Permissions.verifyIsQueryable('ContentVersion', new List<String> {
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
 			'Id', 'Title', 'FileExtension', 'ContentSize'
 		});
 
@@ -104,22 +110,23 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return documents;
 	}
 
-	public List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds,
+	public List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
 
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Document> result = null;
-		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
-		if (t == 'ContentVersion') { // Only content versions have parentIds
+		if (type == TYPE_CONTENT_VERSION) {
 			result = getLinkedContentVersions(linkedEntityIds, getLastUpdatedOnly);
-		} else if (t != 'Document') {
+		} else if (type != TYPE_DOCUMENT) {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
-				new List<String> { sObjectType }));
+				new List<String> { String.valueOf(type) }));
 		}
 		return result;
 	}
 
 	private static List<Document.Folder> getContentVersionFolders() {
-		Permissions.verifyIsQueryable('ContentWorkspace', new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_CONTENT_WORKSPACE, new List<String> { 'Id', 'Name' });
 
 		List<Document.Folder> folders = new List<Document.Folder>();
 		for (ContentWorkspace f : [SELECT Id, Name FROM ContentWorkspace ORDER BY Name]) {
@@ -129,7 +136,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document.Folder> getDocumentFolders() {
-		Permissions.verifyIsQueryable('Folder', new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_FOLDER, new List<String> { 'Id', 'Name' });
 
 		List<Document.Folder> folders = new List<Document.Folder>();
 		for (Folder f : [SELECT Id, Name FROM Folder ORDER BY Name]) {
@@ -138,15 +145,18 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return folders;
 	}
 
-	public List<Document.Folder> getDocumentFolders(final String sObjectType) {
+	public List<Document.Folder> getDocumentFolders(final SObjectType type) {
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Document.Folder> result = null;
-		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
-		if (t == 'ContentVersion') {
+		if (type == TYPE_CONTENT_VERSION) {
 			result = getContentVersionFolders();
-		} else if (t == 'Document') {
+		} else if (type == TYPE_DOCUMENT) {
 			result = getDocumentFolders();
 		} else {
-			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> { sObjectType }));
+			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> {
+				String.valueOf(type)
+			}));
 		}
 		return result;
 	}
@@ -194,7 +204,10 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document> getFolderContentVersions(final Set<Id> folderIds) {
-		Permissions.verifyIsQueryable('ContentVersion', new List<String> { 'Id', 'Title', 'FileExtension', 'ContentSize' });
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
+			'Id', 'Title', 'FileExtension',
+			'ContentSize'
+		});
 
 		List<Document> result = new List<Document>();
 		if (Collection.isNotEmpty(folderIds)) {
@@ -205,7 +218,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document> getFolderDocuments(final Set<Id> folderIds) {
-		Permissions.verifyIsQueryable('Document', new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
+		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
 
 		List<Document> result = new List<Document>();
 		for (Schema.Document d : [SELECT Id, Name, Type, BodyLength FROM Document WHERE FolderId IN :folderIds ORDER BY Name]) {
@@ -214,21 +227,24 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	public List<Document> getFolderDocuments(final String sObjectType, final Set<Id> folderIds) {
+	public List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Document> result = null;
-		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
-		if (t == 'ContentVersion') {
+		if (type == TYPE_CONTENT_VERSION) {
 			result = getFolderContentVersions(folderIds);
-		} else if (t == 'Document') {
+		} else if (type == TYPE_DOCUMENT) {
 			result = getFolderDocuments(folderIds);
 		} else {
-			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> { sObjectType }));
+			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> {
+				String.valueOf(type)
+			}));
 		}
 		return result;
 	}
 
 	private static Map<Id, Blob> getContentVersionContent(final Set<Id> contentVersionIds) {
-		Permissions.verifyIsQueryable('ContentVersion', new List<String> { 'VersionData' });
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> { 'VersionData' });
 
 		Map<Id, Blob> result = new Map<Id, Blob>();
 		for (ContentVersion cv : [SELECT VersionData FROM ContentVersion WHERE Id IN :contentVersionIds]) {
@@ -238,7 +254,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static Map<Id, Blob> getDocumentContent(final Set<Id> documentIds) {
-		Permissions.verifyIsQueryable('Document', new List<String> { 'Body' });
+		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> { 'Body' });
 
 		Map<Id, Blob> result = new Map<Id, Blob>();
 		for (Schema.Document d : [SELECT Body FROM Document WHERE Id IN :documentIds]) {
@@ -247,15 +263,18 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	public Map<Id, Blob> getDocumentContent(String sObjectType, Set<Id> sObjectIds) {
+	public Map<Id, Blob> getDocumentContent(SObjectType type, Set<Id> documentIds) {
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		Map<Id, Blob> result = null;
-		String t = String.isBlank(sObjectType) ? null : sObjectType.trim();
-		if (t == 'ContentVersion') {
-			result = getContentVersionContent(sObjectIds);
-		} else if (t == 'Document') {
-			result = getDocumentContent(sObjectIds);
+		if (type == TYPE_CONTENT_VERSION) {
+			result = getContentVersionContent(documentIds);
+		} else if (type == TYPE_DOCUMENT) {
+			result = getDocumentContent(documentIds);
 		} else {
-			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> { sObjectType }));
+			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> {
+				String.valueOf(type)
+			}));
 		}
 		return result;
 	}

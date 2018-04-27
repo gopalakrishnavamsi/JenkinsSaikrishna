@@ -324,7 +324,7 @@ public class Account {
 		/**
 		 * The API password for the user. This is never returned through public methods.
 		 */
-		public String apiPassword { get; private set; }
+		public transient String apiPassword { get; private set; }
 		/**
 		 * The user status.
 		 */
@@ -677,7 +677,7 @@ public class Account {
 		/**
 		 * The DocuSign API password. This is never returned by public methods.
 		 */
-		public String apiPassword { get; private set; }
+		public transient String apiPassword { get; private set; }
 
 		/**
 		 * Constructs DocuSign account credentials.

@@ -413,7 +413,7 @@ private class DocumentServiceTest {
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			List<Document> result = DocumentService.getDocuments('ContentVersion', new Set<Id> { cv1.Id, cv2.Id });
+			List<Document> result = DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -453,7 +453,7 @@ private class DocumentServiceTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
 
 			Test.startTest();
-			List<Document> result = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { o1.Id, a1.Id },
+			List<Document> result = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { o1.Id, a1.Id },
 				false);
 			Test.stopTest();
 
@@ -497,7 +497,7 @@ private class DocumentServiceTest {
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			Document.Folders result = DocumentService.getDocumentFolders('ContentVersion');
+			Document.Folders result = DocumentService.getDocumentFolders(ContentVersion.getSObjectType());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -541,7 +541,7 @@ private class DocumentServiceTest {
 			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			Document.Folders result = DocumentService.getDocumentFolders('Document');
+			Document.Folders result = DocumentService.getDocumentFolders(Schema.Document.getSObjectType());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -598,7 +598,7 @@ private class DocumentServiceTest {
 				ContentWorkspaceDoc cwd2 = TestUtils.createContentWorkspaceDoc(cw.Id, cv2.ContentDocumentId);
 
 				Test.startTest();
-				List<Document> result = DocumentService.getFolderDocuments('ContentVersion', new Set<Id> { cw.Id });
+				List<Document> result = DocumentService.getFolderDocuments(ContentVersion.getSObjectType(), new Set<Id> { cw.Id });
 				Test.stopTest();
 
 				System.assertNotEquals(null, result);
@@ -615,7 +615,7 @@ private class DocumentServiceTest {
 			Schema.Document d2 = TestUtils.createDocument();
 
 			Test.startTest();
-			List<Document> result = DocumentService.getFolderDocuments('Document', new Set<Id> { UserInfo.getUserId() });
+			List<Document> result = DocumentService.getFolderDocuments(Schema.Document.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

@@ -9,7 +9,7 @@ private class UnauthorizedExceptionTest {
 		System.assertNotEquals(null, ex);
 		System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
-		System.assertEquals(UnauthorizedException.RequiredPermissionSet.DocuSignAdministrator, ex.requirement);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignAdministrator, ex.requirement);
 	}
 
 	static testMethod void test_notDocuSignUser() {
@@ -20,7 +20,7 @@ private class UnauthorizedExceptionTest {
 		System.assertNotEquals(null, ex);
 		System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
-		System.assertEquals(UnauthorizedException.RequiredPermissionSet.DocuSignUser, ex.requirement);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
 	}
 
 	static testMethod void test_notSalesforceAdministrator() {
@@ -31,7 +31,7 @@ private class UnauthorizedExceptionTest {
 		System.assertNotEquals(null, ex);
 		System.assertEquals(Label.MustBeAdministrator, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
-		System.assertEquals(UnauthorizedException.RequiredPermissionSet.SalesforceAdministrator, ex.requirement);
+		System.assertEquals(UnauthorizedException.AccessRequirement.SalesforceAdministrator, ex.requirement);
 	}
 
 	static testMethod void test_notEnvelopeOwner() {
@@ -42,7 +42,7 @@ private class UnauthorizedExceptionTest {
 		System.assertNotEquals(null, ex);
 		System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
-		System.assertEquals(UnauthorizedException.RequiredPermissionSet.EnvelopeOwner, ex.requirement);
+		System.assertEquals(UnauthorizedException.AccessRequirement.EnvelopeOwner, ex.requirement);
 	}
 
 	static testMethod void test_mayRequireActivation() {
@@ -53,7 +53,7 @@ private class UnauthorizedExceptionTest {
 		System.assertNotEquals(null, ex);
 		System.assertEquals(Label.MustBeActivated, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
-		System.assertEquals(UnauthorizedException.RequiredPermissionSet.DocuSignUser, ex.requirement);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
 	}
 
 	static testMethod void test_results() {

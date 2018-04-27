@@ -521,9 +521,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	@TestVisible
 	private static List<String> getRecipientCustomFields(final Recipient r) {
 		List<String> customFields = null;
-		if (r != null && r.source != null && String.isNotBlank(r.source.id) && String.isNotBlank(r.source.type)) {
+		if (r != null && r.source != null && String.isNotBlank(r.source.id) && r.source.type != null) {
 			customFields = new List<String> {
-				String.format('##SF{0}:{1}', new List<String> { r.source.type, r.source.id })
+				String.format('##SF{0}:{1}', new List<String> { String.valueOf(r.source.type), r.source.id })
 			};
 		}
 		return customFields;
@@ -772,23 +772,14 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return compositeTemplates;
 	}
 
-	private static Map<Id, Blob> getDocumentContent(final List<Entity> sources) {
-		if (sources == null) throw new DocuSignException(Label.UndefinedArgument);
-
-		Map<String, Set<Id>> sourceTypes = new Map<String, Set<Id>>();
-		for (Entity e : sources) {
-			if (sourceTypes.containsKey(e.type)) {
-				sourceTypes.get(e.type).add(e.id);
-			} else {
-				sourceTypes.put(e.type, new Set<Id> { e.id });
-			}
-		}
+	private static Map<Id, Blob> getDocumentContent(final Map<SObjectType, Set<Id>> sourceMap) {
+		if (sourceMap == null) throw new DocuSignException(Label.UndefinedArgument);
 
 		Map<Id, Blob> result = new Map<Id, Blob>();
-		for (String type : sourceTypes.keySet()) {
+		for (SObjectType type : sourceMap.keySet()) {
 			for (DocumentResolver resolver : DOCUMENT_RESOLVERS) {
 				if (resolver.canResolveDocuments(type)) {
-					Map<Id, Blob> m = resolver.getDocumentContent(type, sourceTypes.get(type));
+					Map<Id, Blob> m = resolver.getDocumentContent(type, sourceMap.get(type));
 					if (m != null) {
 						result.putAll(m);
 						break;
@@ -810,13 +801,18 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					}
 				}
 			} else { // Retrieve document bytes
-				List<Entity> sources = new List<Entity>();
+				Map<SObjectType, Set<Id>> sourceMap = new Map<SObjectType, Set<Id>>();
 				for (Document d : documents) {
 					if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)) {
-						sources.add(new Entity(d.sourceId));
+						Entity source = new Entity(d.sourceId);
+						if (sourceMap.containsKey(source.type)) {
+							sourceMap.get(source.type).add(source.id);
+						} else {
+							sourceMap.put(source.type, new Set<Id> { source.id });
+						}
 					}
 				}
-				result.putAll(getDocumentContent(sources));
+				result.putAll(getDocumentContent(sourceMap));
 			}
 
 			List<String> missingContent = new List<String>();

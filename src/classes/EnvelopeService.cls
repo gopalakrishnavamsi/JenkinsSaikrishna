@@ -13,6 +13,9 @@ public with sharing class EnvelopeService {
 
 	@TestVisible
 	private static final EnvelopeService.Database DB = new EnvelopeService.Database();
+	private static final SObjectType TYPE_ENVELOPE = Envelope__c.getSObjectType();
+	private static final SObjectType TYPE_DOCUMENT = Document__c.getSObjectType();
+	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static final LoggerService LOG = LoggerService.getInstance();
 
 	@TestVisible
@@ -114,15 +117,15 @@ public with sharing class EnvelopeService {
 		}
 
 		public Envelope queryEnvelope(final Id envelopeId) {
-			Permissions.verifyIsQueryable('Envelope__c', new List<String> {
+			Permissions.verifyIsQueryable(TYPE_ENVELOPE, new List<String> {
 				'Id', 'Name', 'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
 				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
 				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
 			});
-			Permissions.verifyIsQueryable('Document__c', new List<String> {
+			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
 				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
-			Permissions.verifyIsQueryable('Recipient__c', new List<String> {
+			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
 				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
 				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
 				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
@@ -192,7 +195,7 @@ public with sharing class EnvelopeService {
 		}
 
 		public Envelope insertEnvelope(final Envelope envelope) {
-			Permissions.verifyIsCreateable('Envelope__c', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
 				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
 				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
 				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
@@ -210,7 +213,7 @@ public with sharing class EnvelopeService {
 		}
 
 		public Envelope updateEnvelope2(final Envelope envelope, final Boolean sendNow) {
-			Permissions.verifyIsUpdateable('Envelope__c', new List<String> {
+			Permissions.verifyIsUpdateable(TYPE_ENVELOPE, new List<String> {
 				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
 				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
 				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
@@ -233,7 +236,7 @@ public with sharing class EnvelopeService {
 		public Boolean updateEnvelopeSent(final Id envelopeId, final UUID dsEnvelopeId,
 			final String emailSubject, final String emailMessage, final Boolean sendNow) {
 
-			Permissions.verifyIsUpdateable('Envelope__c', new List<String> {
+			Permissions.verifyIsUpdateable(TYPE_ENVELOPE, new List<String> {
 				'DocuSignId__c', 'EmailSubject__c', 'EmailMessage__c', 'Sent__c'
 			});
 
@@ -247,15 +250,13 @@ public with sharing class EnvelopeService {
 		}
 
 		public Id deleteEnvelope2(final Id envelopeId) {
-			Permissions.verifyIsQueryable('Envelope__c', new List<String> { 'SourceId__c' });
-			Permissions.verifyIsDeletable('Recipient__c');
-			Permissions.verifyIsDeletable('Document__c');
-			Permissions.verifyIsDeletable('Envelope__c');
+			Permissions.verifyIsQueryable(TYPE_ENVELOPE, new List<String> { 'SourceId__c' });
+			Permissions.verifyIsDeletable(TYPE_RECIPIENT);
+			Permissions.verifyIsDeletable(TYPE_DOCUMENT);
+			Permissions.verifyIsDeletable(TYPE_ENVELOPE);
 			// Removing status deletion. This isn't necessary because the only time we delete is when we cancel
 			// from EEP or the tagger, so no status will be present yet. Also, DS Users do not have delete permission
 			// on the status objects.
-//			Permissions.verifyIsDeletable('EnvelopeStatus__c');
-//			Permissions.verifyIsDeletable('RecipientStatus__c');
 
 			Id sourceId = null;
 			if (envelopeId != null) {
@@ -274,10 +275,6 @@ public with sharing class EnvelopeService {
 							LOG.exception(ex, 'Failed to parse envelope SourceId__c as Id: ' + e.SourceId__c);
 						}
 					}
-//					if (String.isNotBlank(e.DocuSignId__c)) {
-//						delete [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignEnvelopeId__c = :e.DocuSignId__c];
-//						delete [SELECT Id FROM RecipientStatus__c WHERE DocuSignEnvelopeId__c = :e.DocuSignId__c];
-//					}
 					delete [SELECT Id FROM Recipient__c WHERE Envelope__c = :envelopeId];
 					delete [SELECT Id FROM Document__c WHERE Envelope__c = :envelopeId];
 					delete e;
@@ -562,7 +559,7 @@ public with sharing class EnvelopeService {
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
 	 * @param updateNow Whether to update the envelope record immediately. This update may be deferred if the current
-	 * transaction involves subsequent callouts to avoid MIXED_DML errors. To update later, call
+	 * transaction involves subsequent callouts to avoid errors. To update later, call
 	 * <code>EnvelopeService.markEnvelopeSent</code>.
 	 *
 	 * @return The sent envelope.

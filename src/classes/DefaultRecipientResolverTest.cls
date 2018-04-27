@@ -5,14 +5,13 @@ private class DefaultRecipientResolverTest {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();
-		System.assert(rr.canResolveRecipients('Account'));
-		System.assert(rr.canResolveRecipients(' CASE '));
-		System.assert(rr.canResolveRecipients('\ncontact'));
-		System.assert(rr.canResolveRecipients('Lead'));
-		System.assert(rr.canResolveRecipients('Opportunity'));
-		System.assert(!rr.canResolveRecipients('whatever'));
+		System.assert(rr.canResolveRecipients(Schema.Account.getSObjectType()));
+		System.assert(rr.canResolveRecipients(Schema.Case.getSObjectType()));
+		System.assert(rr.canResolveRecipients(Schema.Contact.getSObjectType()));
+		System.assert(rr.canResolveRecipients(Schema.Lead.getSObjectType()));
+		System.assert(rr.canResolveRecipients(Schema.Opportunity.getSObjectType()));
+		System.assert(!rr.canResolveRecipients(Schema.Envelope__c.getSObjectType()));
 		System.assert(!rr.canResolveRecipients(null));
-		System.assert(!rr.canResolveRecipients(' '));
 		Test.stopTest();
 	}
 
@@ -20,12 +19,11 @@ private class DefaultRecipientResolverTest {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();
-		System.assert(rr.canSearchRecipients('Contact'));
-		System.assert(rr.canSearchRecipients(' LEAD '));
-		System.assert(rr.canSearchRecipients('\nuser'));
-		System.assert(!rr.canSearchRecipients('whatever'));
+		System.assert(rr.canSearchRecipients(Schema.Contact.getSObjectType()));
+		System.assert(rr.canSearchRecipients(Schema.Lead.getSObjectType()));
+		System.assert(rr.canSearchRecipients(Schema.User.getSObjectType()));
+		System.assert(!rr.canSearchRecipients(Schema.Envelope__c.getSObjectType()));
 		System.assert(!rr.canSearchRecipients(null));
-		System.assert(!rr.canSearchRecipients(' '));
 		Test.stopTest();
 	}
 
@@ -39,7 +37,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients('Account', new Set<Id> { a1.Id, a2.Id });
+			List<Recipient> result = rr.getRecipients(Schema.Account.getSObjectType(), new Set<Id> { a1.Id, a2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -49,9 +47,9 @@ private class DefaultRecipientResolverTest {
 			for (Recipient r : result) {
 				System.assertNotEquals(null, r);
 				System.assertNotEquals(null, r.source);
-				System.assertEquals('Contact', r.source.type);
+				System.assertEquals(Schema.Contact.getSObjectType(), r.source.type);
 				System.assertNotEquals(null, r.source.parent);
-				System.assertEquals('Account', r.source.parent.type);
+				System.assertEquals(Schema.Account.getSObjectType(), r.source.parent.type);
 				if (r.source.id == c1.Id) {
 					foundC1 = true;
 					System.assertEquals(a1.Id, r.source.parent.id);
@@ -94,7 +92,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients('Case', new Set<Id> { cs1.Id, cs2.Id });
+			List<Recipient> result = rr.getRecipients(Schema.Case.getSObjectType(), new Set<Id> { cs1.Id, cs2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -104,9 +102,9 @@ private class DefaultRecipientResolverTest {
 			for (Recipient r : result) {
 				System.assertNotEquals(null, r);
 				System.assertNotEquals(null, r.source);
-				System.assertEquals('Contact', r.source.type);
+				System.assertEquals(Schema.Contact.getSObjectType(), r.source.type);
 				System.assertNotEquals(null, r.source.parent);
-				System.assertEquals('Case', r.source.parent.type);
+				System.assertEquals(Schema.Case.getSObjectType(), r.source.parent.type);
 				if (r.source.id == c1.Id) {
 					foundC1 = true;
 					System.assertEquals(cs1.Id, r.source.parent.id);
@@ -138,7 +136,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients('Contact', new Set<Id> { c1.Id, c2.Id });
+			List<Recipient> result = rr.getRecipients(Schema.Contact.getSObjectType(), new Set<Id> { c1.Id, c2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -148,11 +146,11 @@ private class DefaultRecipientResolverTest {
 			for (Recipient r : result) {
 				System.assertNotEquals(null, r);
 				System.assertNotEquals(null, r.source);
-				System.assertEquals('Contact', r.source.type);
+				System.assertEquals(Schema.Contact.getSObjectType(), r.source.type);
 				if (r.source.id == c1.Id) {
 					foundC1 = true;
 					System.assertNotEquals(null, r.source.parent);
-					System.assertEquals('Account', r.source.parent.type);
+					System.assertEquals(Schema.Account.getSObjectType(), r.source.parent.type);
 					System.assertEquals(a1.Id, r.source.parent.id);
 					System.assertEquals(a1.Name, r.source.parent.name);
 					System.assertEquals(c1.Name, r.name);
@@ -181,7 +179,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients('Lead', new Set<Id> { l1.Id, l2.Id });
+			List<Recipient> result = rr.getRecipients(Schema.Lead.getSObjectType(), new Set<Id> { l1.Id, l2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -191,7 +189,7 @@ private class DefaultRecipientResolverTest {
 			for (Recipient r : result) {
 				System.assertNotEquals(null, r);
 				System.assertNotEquals(null, r.source);
-				System.assertEquals('Lead', r.source.type);
+				System.assertEquals(Schema.Lead.getSObjectType(), r.source.type);
 				System.assertEquals(null, r.source.parent);
 				if (r.source.id == l1.Id) {
 					foundL1 = true;
@@ -227,7 +225,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients('Opportunity', new Set<Id> { o1.Id, o2.Id });
+			List<Recipient> result = rr.getRecipients(Schema.Opportunity.getSObjectType(), new Set<Id> { o1.Id, o2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -237,9 +235,9 @@ private class DefaultRecipientResolverTest {
 			for (Recipient r : result) {
 				System.assertNotEquals(null, r);
 				System.assertNotEquals(null, r.source);
-				System.assertEquals('Contact', r.source.type);
+				System.assertEquals(Schema.Contact.getSObjectType(), r.source.type);
 				System.assertNotEquals(null, r.source.parent);
-				System.assertEquals('Account', r.source.parent.type);
+				System.assertEquals(Schema.Account.getSObjectType(), r.source.parent.type);
 				if (r.source.id == c1.Id) {
 					foundC1 = true;
 					System.assertEquals(a1.Id, r.source.parent.id);
@@ -283,17 +281,18 @@ private class DefaultRecipientResolverTest {
 
 			Test.startTest();
 			try {
-				rr.getRecipients('User', new Set<Id> { UserInfo.getUserId() });
+				rr.getRecipients(Schema.User.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
 				throw new AssertException('Expected getRecipients to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> { 'User' }),
-					ex.getMessage());
+				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> {
+					String.valueOf(Schema.User.getSObjectType())
+				}), ex.getMessage());
 			}
 			Test.stopTest();
 		}
 	}
 
-	// TODO: Determine if there's a way to test this with encrypted (probabalistic and deterministic) and uncrypted fields.
+	// TODO: Determine if there's a way to test this with encrypted (probabilistic and deterministic) and unencrypted fields.
 	static testMethod void test_searchRecipients_Contact() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
@@ -304,15 +303,15 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			System.assertNotEquals(null, rr.searchRecipients('Contact', null, null, Recipient.SearchBehavior.DiscreteMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, Recipient.SearchBehavior.DiscreteMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'WXYZ', Recipient.SearchBehavior.DiscreteMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'BC', 'WXYZ', Recipient.SearchBehavior.DiscreteMatchAny));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', Recipient.SearchBehavior.DiscreteMatchAny));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', '', 'EF', Recipient.SearchBehavior.DiscreteMatchBeginning));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', 'EFGH', Recipient.SearchBehavior.CompoundMatchExact));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'D E', null, Recipient.SearchBehavior.CompoundMatchAny));
-			System.assertNotEquals(null, rr.searchRecipients('Contact', 'ABCD', null, Recipient.SearchBehavior.CompoundMatchBeginning));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), null, null, Recipient.SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'ABCD', null, Recipient.SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'ABCD', 'WXYZ', Recipient.SearchBehavior.DiscreteMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'BC', 'WXYZ', Recipient.SearchBehavior.DiscreteMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), '', 'EF', Recipient.SearchBehavior.DiscreteMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), '', 'EF', Recipient.SearchBehavior.DiscreteMatchBeginning));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'ABCD', 'EFGH', Recipient.SearchBehavior.CompoundMatchExact));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'D E', null, Recipient.SearchBehavior.CompoundMatchAny));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Contact.getSObjectType(), 'ABCD', null, Recipient.SearchBehavior.CompoundMatchBeginning));
 			Test.stopTest();
 		}
 	}
@@ -327,7 +326,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			System.assertNotEquals(null, rr.searchRecipients('Lead', 'ABCD', null, null));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.Lead.getSObjectType(), 'ABCD', null, null));
 			Test.stopTest();
 		}
 	}
@@ -337,7 +336,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			System.assertNotEquals(null, rr.searchRecipients('User', UserInfo.getFirstName(), null, null));
+			System.assertNotEquals(null, rr.searchRecipients(Schema.User.getSObjectType(), UserInfo.getFirstName(), null, null));
 			Test.stopTest();
 		}
 	}
@@ -359,9 +358,9 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> contacts = rr.searchRecipients('Contact', 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
-			List<Recipient> leads = rr.searchRecipients('Lead', 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
-			List<Recipient> users = rr.searchRecipients('User', 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
+			List<Recipient> contacts = rr.searchRecipients(Schema.Contact.getSObjectType(), 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
+			List<Recipient> leads = rr.searchRecipients(Schema.Lead.getSObjectType(), 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
+			List<Recipient> users = rr.searchRecipients(Schema.User.getSObjectType(), 'Amy O\'H', null, Recipient.SearchBehavior.CompoundMatchBeginning);
 			Test.stopTest();
 
 			System.assertNotEquals(null, contacts);
@@ -387,11 +386,12 @@ private class DefaultRecipientResolverTest {
 
 			Test.startTest();
 			try {
-				rr.searchRecipients('Opportunity', null, null, null);
+				rr.searchRecipients(Schema.Opportunity.getSObjectType(), null, null, null);
 				throw new AssertException('Expected searchRecipients to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> { 'Opportunity' }),
-					ex.getMessage());
+				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> {
+					String.valueOf(Schema.Opportunity.getSObjectType())
+				}), ex.getMessage());
 			}
 			Test.stopTest();
 		}

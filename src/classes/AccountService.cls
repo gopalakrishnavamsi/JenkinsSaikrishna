@@ -10,7 +10,7 @@ public with sharing class AccountService {
 	private class Database {
 
 		public User queryUser(final Id userId) {
-			Permissions.verifyIsQueryable('User', new List<String> {
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
 				'Phone', 'MobilePhone', 'Street', 'City', 'State',
 				'PostalCode', 'Country'
 			});

@@ -6,6 +6,7 @@ public with sharing class DocumentService {
 
 	@TestVisible
 	private static final DocumentService.Database DB = new DocumentService.Database();
+	private static final SObjectType TYPE_DOCUMENT = Document__c.getSObjectType();
 	@TestVisible
 	private static final Document.Folder PERSONAL_FOLDER = new Document.Folder(UserInfo.getUserId(), Label.MyPersonalContent);
 	@TestVisible
@@ -150,7 +151,7 @@ public with sharing class DocumentService {
 
 		@TestVisible
 		private List<Document__c> queryDocumentsInternal(final Id envelopeId) {
-			Permissions.verifyIsQueryable('Document__c', new List<String> {
+			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
 				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
 
@@ -174,7 +175,7 @@ public with sharing class DocumentService {
 		}
 
 		public List<Document> insertDocuments(final Id envelopeId, final List<Document> documents) {
-			Permissions.verifyIsCreateable('Document__c', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
 
@@ -193,10 +194,10 @@ public with sharing class DocumentService {
 		}
 
 		public List<Document> upsertDocuments(final Id envelopeId, final List<Document> documents) {
-			Permissions.verifyIsCreateable('Document__c', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
-			Permissions.verifyIsUpdateable('Document__c', new List<String> {
+			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
 			});
 
@@ -214,7 +215,7 @@ public with sharing class DocumentService {
 		}
 
 		public Boolean deleteDocuments(final Set<Id> documentIds) {
-			Permissions.verifyIsDeletable('Document__c');
+			Permissions.verifyIsDeletable(TYPE_DOCUMENT);
 
 			Boolean result = false;
 			if (Collection.isNotEmpty(documentIds)) {
@@ -229,7 +230,7 @@ public with sharing class DocumentService {
 		}
 
 		public List<Document> updateDocumentSequence(final Id envelopeId) {
-			Permissions.verifyIsUpdateable('Document__c', new List<String> { 'Sequence__c' });
+			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> { 'Sequence__c' });
 
 			Boolean reordered = false;
 			Decimal sequence = 1;
@@ -250,7 +251,7 @@ public with sharing class DocumentService {
 		}
 
 		public List<Document> updateDocumentSequence(final Id envelopeId, final Map<Id, Integer> newSequence) {
-			Permissions.verifyIsUpdateable('Document__c', new List<String> { 'Sequence__c' });
+			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> { 'Sequence__c' });
 
 			if (newSequence != null && !newSequence.isEmpty()) {
 				List<Document__c> docs = new List<Document__c>();
@@ -274,18 +275,20 @@ public with sharing class DocumentService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
-	 * @param sObjectIds The Salesforce object IDs.
+	 * @param type The Salesforce object type.
+	 * @param documentIds The Salesforce object IDs.
 	 *
 	 * @return A list of envelope documents.
 	 */
-	public static List<Document> getDocuments(final String sObjectType, final Set<Id> sObjectIds) {
+	public static List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
 		Permissions.verifyIsDocuSignUser();
+
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocuments(sObjectType)) {
-				result = dr.getDocuments(sObjectType, sObjectIds);
+			if (dr.canResolveDocuments(type)) {
+				result = dr.getDocuments(type, documentIds);
 				break;
 			}
 		}
@@ -304,21 +307,23 @@ public with sharing class DocumentService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
+	 * @param type The Salesforce object type.
 	 * @param linkedEntityIds The Salesforce parent IDs.
 	 * @param getLastUpdatedOnly Whether to retrieve only the last updated linked document.
 	 *
 	 * @return A list of DocuSign envelope documents.
 	 */
-	public static List<Document> getLinkedDocuments(final String sObjectType, final Set<Id> linkedEntityIds,
+	public static List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
 
 		Permissions.verifyIsDocuSignUser();
 
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocuments(sObjectType)) {
-				result = dr.getLinkedDocuments(sObjectType, linkedEntityIds, getLastUpdatedOnly);
+			if (dr.canResolveDocuments(type)) {
+				result = dr.getLinkedDocuments(type, linkedEntityIds, getLastUpdatedOnly);
 				break;
 			}
 		}
@@ -335,24 +340,26 @@ public with sharing class DocumentService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
+	 * @param type The Salesforce object type.
 	 *
 	 * @return A list of document folders.
 	 * @see DocumentService.getFolderDocuments
 	 */
-	public static Document.Folders getDocumentFolders(final String sObjectType) {
+	public static Document.Folders getDocumentFolders(final SObjectType type) {
 		Permissions.verifyIsDocuSignUser();
+
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document.Folder> folders = new List<Document.Folder> {
 			PERSONAL_FOLDER
 		};
 		List<Document> personalDocuments = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocuments(sObjectType)) {
-				List<Document.Folder> fs = dr.getDocumentFolders(sObjectType);
+			if (dr.canResolveDocuments(type)) {
+				List<Document.Folder> fs = dr.getDocumentFolders(type);
 				if (fs != null) {
 					folders.addAll(fs);
-					personalDocuments = getFolderDocuments(sObjectType, new Set<Id> { PERSONAL_FOLDER.id });
+					personalDocuments = getFolderDocuments(type, new Set<Id> { PERSONAL_FOLDER.id });
 					break;
 				}
 			}
@@ -369,19 +376,21 @@ public with sharing class DocumentService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
+	 * @param type The Salesforce object type.
 	 * @param folderIds The folder IDs.
 	 *
 	 * @return A list of documents contained within the target folders.
 	 * @see DocumentService.getDocumentFolders
 	 */
-	public static List<Document> getFolderDocuments(final String sObjectType, final Set<Id> folderIds) {
+	public static List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
 		Permissions.verifyIsDocuSignUser();
+
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
-			if (dr.canResolveDocuments(sObjectType)) {
-				result = dr.getFolderDocuments(sObjectType, folderIds);
+			if (dr.canResolveDocuments(type)) {
+				result = dr.getFolderDocuments(type, folderIds);
 				break;
 			}
 		}
@@ -516,7 +525,7 @@ public with sharing class DocumentService {
 	public static List<Document> resolveFiles(final Set<Id> fileIds) {
 		Permissions.verifyIsDocuSignUser();
 
-		return getDocuments('ContentVersion', fileIds);
+		return getDocuments(ContentVersion.getSObjectType(), fileIds);
 	}
 
 	/**
@@ -562,6 +571,6 @@ public with sharing class DocumentService {
 
 		if (Collection.isEmpty(linkedEntityIds)) throw new DocuSignException(Label.InvalidSource);
 
-		return getLinkedDocuments('ContentVersion', linkedEntityIds, getLastUpdatedOnly);
+		return getLinkedDocuments(ContentVersion.getSObjectType(), linkedEntityIds, getLastUpdatedOnly);
 	}
 }

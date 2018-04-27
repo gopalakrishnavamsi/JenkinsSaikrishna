@@ -350,7 +350,7 @@ public with sharing class Credentials {
 
 		public void updateUserCredentials(final Map<Id, UserCredentials> credentials) {
 			if (credentials != null && !credentials.isEmpty()) {
-				Permissions.verifyIsUpdateable('User', new List<String> { 'Username__c' });
+				Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> { 'Username__c' });
 
 				List<User> users = [SELECT Id, Username__c FROM User WHERE Id IN :credentials.keySet()];
 				List<UserSettings__c> settings = new List<UserSettings__c>();
@@ -386,7 +386,7 @@ public with sharing class Credentials {
 
 		public void deleteUserCredentials(final List<User> users) {
 			if (Collection.isNotEmpty(users)) {
-				Permissions.verifyIsUpdateable('User', new List<String> { 'Username__c' });
+				Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> { 'Username__c' });
 
 				List<User> toRemove = new List<User>();
 				List<UserSettings__c> settings = new List<UserSettings__c>();

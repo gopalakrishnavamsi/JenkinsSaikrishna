@@ -209,7 +209,7 @@ private class RecipientServiceTest {
 			Contact c3 = TestUtils.createContact(a2.Id);
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.getRecipients('Account', new Set<Id> { a1.Id, a2.Id });
+			List<Recipient> result = RecipientService.getRecipients(Schema.Account.getSObjectType(), new Set<Id> { a1.Id, a2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -219,13 +219,13 @@ private class RecipientServiceTest {
 			System.assertEquals(null, result[0].id);
 			System.assertEquals(Recipient.TYPE_SIGNER, result[0].type);
 			System.assertNotEquals(null, result[0].source);
-			System.assertEquals('Contact', result[0].source.type);
+			System.assertEquals(Contact.getSObjectType(), result[0].source.type);
 
 			System.assertNotEquals(null, result[1]);
 			System.assertEquals(null, result[1].id);
 			System.assertEquals(Recipient.TYPE_SIGNER, result[1].type);
 			System.assertNotEquals(null, result[1].source);
-			System.assertEquals('Contact', result[1].source.type);
+			System.assertEquals(Contact.getSObjectType(), result[1].source.type);
 		}
 	}
 
@@ -255,7 +255,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'AB', null);
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'AB', null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -276,7 +276,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'AB', null);
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'AB', null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -297,7 +297,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'WX', null);
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'WX', null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -318,7 +318,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'AB', 'WX');
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'AB', 'WX');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -339,7 +339,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'ABCD', 'EFGH');
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'ABCD', 'EFGH');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -360,7 +360,7 @@ private class RecipientServiceTest {
 			insert new List<Lead> { l1, l2, l3 };
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.searchRecipients('Lead', 'BC', 'XY');
+			List<Recipient> result = RecipientService.searchRecipients(Lead.getSObjectType(), 'BC', 'XY');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -538,10 +538,11 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_getRelatedObjectName() {
+	static testMethod void test_Database_getRelatedObjectType() {
 		Test.startTest();
-		System.assertEquals(null, RecipientService.DB.getRelatedObjectName(null, null));
-		System.assertEquals('OpportunityContactRole', RecipientService.DB.getRelatedObjectName('Opportunity', 'OpportunityContactRoles'));
+		System.assertEquals(null, RecipientService.DB.getRelatedObjectType(null, null));
+		System.assertEquals(OpportunityContactRole.getSObjectType(),
+			RecipientService.DB.getRelatedObjectType(Opportunity.getSObjectType(), 'OpportunityContactRoles'));
 		Test.stopTest();
 	}
 

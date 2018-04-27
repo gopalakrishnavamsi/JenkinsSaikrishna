@@ -7,6 +7,7 @@ public with sharing class RecipientService {
 	@TestVisible
 	private static final RecipientService.Database DB = new RecipientService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
+	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static List<Recipient.Role> DEFAULT_ROLES = null;
 	private static final List<RecipientResolver> RECIPIENT_RESOLVERS = new List<RecipientResolver>();
 
@@ -162,7 +163,7 @@ public with sharing class RecipientService {
 		}
 
 		public Set<String> queryRoles(final Id envelopeId) {
-			Permissions.verifyIsQueryable('Recipient__c', new List<String> { 'Role__c' });
+			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> { 'Role__c' });
 
 			Set<String> roles = new Set<String>();
 			for (Recipient__c r : [SELECT Role__c FROM Recipient__c WHERE Envelope__c = :envelopeId]) {
@@ -187,7 +188,7 @@ public with sharing class RecipientService {
 		}
 
 		private List<Recipient__c> queryRecipientsInternal(final Id envelopeId, final Boolean orderBySequence) {
-			Permissions.verifyIsQueryable('Recipient__c', new List<String> {
+			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
 				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
 				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
 				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
@@ -230,7 +231,7 @@ public with sharing class RecipientService {
 		}
 
 		public List<Recipient> insertRecipients(final Id envelopeId, final List<Recipient> recipients) {
-			Permissions.verifyIsCreateable('Recipient__c', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_RECIPIENT, new List<String> {
 				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
 				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
 				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
@@ -261,20 +262,17 @@ public with sharing class RecipientService {
 		}
 
 		@TestVisible
-		private String getRelatedObjectName(final String sObjectType, final String relationshipName) {
-			String relatedObjectName = null;
-			if (String.isNotBlank(sObjectType) && String.isNotBlank(relationshipName)) {
-				List<Schema.DescribeSObjectResult> ds = Schema.describeSObjects(new List<String> { sObjectType });
-				if (Collection.isNotEmpty(ds)) {
-					for (Schema.ChildRelationship cr : ds[0].getChildRelationships()) {
-						if (cr.getRelationshipName() == relationshipName) {
-							relatedObjectName = cr.getChildSObject().getDescribe().getLocalName();
-							break;
-						}
+		private SObjectType getRelatedObjectType(final SObjectType type, final String relationshipName) {
+			SObjectType relatedObjectType = null;
+			if (type != null && String.isNotBlank(relationshipName)) {
+				for (Schema.ChildRelationship cr : type.getDescribe().getChildRelationships()) {
+					if (cr.getRelationshipName() == relationshipName) {
+						relatedObjectType = cr.getChildSObject();
+						break;
 					}
 				}
 			}
-			return relatedObjectName;
+			return relatedObjectType;
 		}
 
 		private List<String> getFieldNames(final Map<String, String> fieldMap) {
@@ -306,14 +304,15 @@ public with sharing class RecipientService {
 			verifyRelatedContacts(relatedContacts);
 
 			List<String> fieldNames = getFieldNames(relatedContacts.fieldMap);
-			Permissions.verifyIsQueryable(getRelatedObjectName(source.type, relatedContacts.relationship), fieldNames);
+			Permissions.verifyIsQueryable(getRelatedObjectType(source.type, relatedContacts.relationship), fieldNames);
 
 			List<Recipient> recipients = new List<Recipient>();
 			Id sourceId = source.id;
 			String q = String.format('SELECT Id, (SELECT {0} FROM {1}) FROM {2} WHERE Id = :sourceId',
 				new List<String> {
 					Collection.mkString(fieldNames, ','),
-					relatedContacts.relationship, String.escapeSingleQuotes(source.type)
+					relatedContacts.relationship,
+					String.valueOf(source.type)
 				});
 			for (SObject parent : System.Database.query(q)) {
 				List<SObject> contacts = parent.getSObjects(relatedContacts.relationship);
@@ -391,12 +390,16 @@ public with sharing class RecipientService {
 			if (relatedContacts.isSigningGroup) {
 				String sgField = relatedContacts.fieldMap.get(EnvelopeConfiguration.KEY_SIGNING_GROUP);
 
-				Permissions.verifyIsQueryable(getRelatedObjectName(source.type, relatedContacts.relationship),
+				Permissions.verifyIsQueryable(getRelatedObjectType(source.type, relatedContacts.relationship),
 					new List<String> { sgField });
 
 				Id sourceId = source.id;
 				String query = String.format('SELECT Id, (SELECT {0} FROM {1}) FROM {2} WHERE Id = :sourceId',
-					new List<String> { sgField, relatedContacts.relationship, String.escapeSingleQuotes(source.type) });
+					new List<String> {
+						sgField,
+						relatedContacts.relationship,
+						String.valueOf(source.type)
+					});
 				for (SObject parent : System.Database.query(query)) {
 					List<SObject> contacts = parent.getSObjects(relatedContacts.relationship);
 					if (contacts != null) {
@@ -413,7 +416,7 @@ public with sharing class RecipientService {
 		}
 
 		public List<Recipient> deleteRecipients(final Id envelopeId, final Set<Id> recipientIds) {
-			Permissions.verifyIsDeletable('Recipient__c');
+			Permissions.verifyIsDeletable(TYPE_RECIPIENT);
 
 			Boolean result = false;
 			if (recipientIds != null) {
@@ -428,12 +431,12 @@ public with sharing class RecipientService {
 		}
 
 		public List<Recipient> upsertRecipients(final Id envelopeId, final List<Recipient> recipients) {
-			Permissions.verifyIsCreateable('Recipient__c', new List<String> {
+			Permissions.verifyIsCreateable(TYPE_RECIPIENT, new List<String> {
 				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
 				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
 				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
 			});
-			Permissions.verifyIsUpdateable('Recipient__c', new List<String> {
+			Permissions.verifyIsUpdateable(TYPE_RECIPIENT, new List<String> {
 				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
 				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
 				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
@@ -460,18 +463,20 @@ public with sharing class RecipientService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
+	 * @param type The Salesforce object type.
 	 * @param sObjectIds The Salesforce object IDs.
 	 *
 	 * @return A list of envelope recipients.
 	 */
-	public static List<Recipient> getRecipients(final String sObjectType, final Set<Id> sObjectIds) {
+	public static List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
 		Permissions.verifyIsDocuSignUser();
+
+		if (type == null) throw new DocuSignException(Label.InvalidType);
 
 		List<Recipient> result = null;
 		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
-			if (rr.canResolveRecipients(sObjectType)) {
-				result = rr.getRecipients(sObjectType, sObjectIds);
+			if (rr.canResolveRecipients(type)) {
+				result = rr.getRecipients(type, sObjectIds);
 				break;
 			}
 		}
@@ -506,22 +511,24 @@ public with sharing class RecipientService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param sObjectType The Salesforce object type.
+	 * @param type The Salesforce object type.
 	 * @param firstName The first name to match.
 	 * @param lastName The last name to match. Ignored for compound search behaviors.
 	 *
 	 * @return A list of envelope recipients.
 	 * @see Recipient.SearchBehavior for more details on search options.
 	 */
-	public static List<Recipient> searchRecipients(final String sObjectType, final String firstName,
+	public static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
 		final String lastName) {
 
 		Permissions.verifyIsDocuSignUser();
 
+		if (type == null) throw new DocuSignException(Label.UndefinedType);
+
 		List<Recipient> result = null;
 		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
-			if (rr.canSearchRecipients(sObjectType)) {
-				result = rr.searchRecipients(sObjectType, firstName, lastName, getSearchBehavior());
+			if (rr.canSearchRecipients(type)) {
+				result = rr.searchRecipients(type, firstName, lastName, getSearchBehavior());
 				break;
 			}
 		}

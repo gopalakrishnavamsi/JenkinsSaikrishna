@@ -4,26 +4,32 @@
  */
 public with sharing class DefaultEntityResolver implements EntityResolver {
 
+	private static final SObjectType TYPE_ACCOUNT = Schema.Account.getSObjectType();
+	private static final SObjectType TYPE_CASE = Case.getSObjectType();
+	private static final SObjectType TYPE_CONTACT = Contact.getSObjectType();
+	private static final SObjectType TYPE_OPPORTUNITY = Opportunity.getSObjectType();
+
 	@TestVisible
 	private static final DefaultEntityResolver.Database DB = new DefaultEntityResolver.Database();
 
 	@TestVisible
 	private with sharing class Database {
 
-		public Entity queryEntity(final String sObjectType, final Id sObjectId) {
-			if (sObjectId == null || String.isBlank(sObjectType)) return null;
+		public Entity queryEntity(final Id id) {
+			if (id == null) return null;
 
-			Entity result = new Entity(sObjectId);
+			Entity result = new Entity(id);
 			String name = Label.Unknown;
 			Entity parent = null;
-			if (sObjectType == 'Opportunity') {
-				Permissions.verifyIsQueryable('Opportunity', new List<String> { 'Name' });
-				Permissions.verifyIsQueryable('Account', new List<String> { 'Id', 'Name' });
+			SObjectType type = id.getSobjectType();
+			if (type == TYPE_OPPORTUNITY) {
+				Permissions.verifyIsQueryable(TYPE_OPPORTUNITY, new List<String> { 'Name' });
+				Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
 
 				List<Opportunity> opportunities = [
 					SELECT Name, Account.Id, Account.Name
 					FROM Opportunity
-					WHERE Id = :sObjectId
+					WHERE Id = :id
 					LIMIT 1
 				];
 				if (Collection.isNotEmpty(opportunities)) {
@@ -31,14 +37,14 @@ public with sharing class DefaultEntityResolver implements EntityResolver {
 					name = o.Name;
 					parent = o.Account == null ? null : new Entity(o.Account.Id, o.Account.Name, null);
 				}
-			} else if (sObjectType == 'Contact') {
-				Permissions.verifyIsQueryable('Contact', new List<String> { 'Name' });
-				Permissions.verifyIsQueryable('Account', new List<String> { 'Id', 'Name' });
+			} else if (type == TYPE_CONTACT) {
+				Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name' });
+				Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
 
 				List<Contact> contacts = [
 					SELECT Name, Account.Id, Account.Name
 					FROM Contact
-					WHERE Id = :sObjectId
+					WHERE Id = :id
 					LIMIT 1
 				];
 				if (Collection.isNotEmpty(contacts)) {
@@ -46,14 +52,14 @@ public with sharing class DefaultEntityResolver implements EntityResolver {
 					name = c.Name;
 					parent = c.Account == null ? null : new Entity(c.Account.Id, c.Account.Name, null);
 				}
-			} else if (sObjectType == 'Case') {
-				Permissions.verifyIsQueryable('Case', new List<String> { 'CaseNumber' });
-				Permissions.verifyIsQueryable('Account', new List<String> { 'Id', 'Name' });
+			} else if (type == TYPE_CASE) {
+				Permissions.verifyIsQueryable(TYPE_CASE, new List<String> { 'CaseNumber' });
+				Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
 
 				List<Case> cases = [
 					SELECT CaseNumber, Account.Id, Account.Name
 					FROM Case
-					WHERE Id = :sObjectId
+					WHERE Id = :id
 					LIMIT 1
 				];
 				if (Collection.isNotEmpty(cases)) {
@@ -62,10 +68,10 @@ public with sharing class DefaultEntityResolver implements EntityResolver {
 					parent = c.Account == null ? null : new Entity(c.Account.Id, c.Account.Name, null);
 				}
 			} else {
-				Permissions.verifyIsQueryable(sObjectType, new List<String> { 'Id', 'Name' });
+				Permissions.verifyIsQueryable(type, new List<String> { 'Id', 'Name' });
 
-				List<SObject> objs = System.Database.query('SELECT Id, Name FROM ' + String.escapeSingleQuotes(sObjectType)
-					+ ' WHERE Id = :sObjectId LIMIT 1');
+				List<SObject> objs = System.Database.query('SELECT Id, Name FROM ' + String.escapeSingleQuotes(type.getDescribe().getName())
+					+ ' WHERE Id = :id LIMIT 1');
 				if (Collection.isNotEmpty(objs)) {
 					name = (String)objs[0].get('Name');
 				}
@@ -77,15 +83,14 @@ public with sharing class DefaultEntityResolver implements EntityResolver {
 		}
 	}
 
-	public Boolean canResolve(final String sObjectType) {
+	public Boolean canResolve(final SObjectType type) {
 		// The default entity resolver is the ultimate fallback for unknown types.
-		return String.isNotBlank(sObjectType) && Salesforce.exists(Application.resolveType(sObjectType));
+		return type != null;
 	}
 
-	public Entity resolve(final String sObjectType, final Id sObjectId) {
-		if (String.isBlank(sObjectType)) throw new DocuSignException(Label.UndefinedType);
-		if (sObjectId == null) throw new DocuSignException(Label.UndefinedId);
+	public Entity resolve(final Id id) {
+		if (id == null) throw new DocuSignException(Label.UndefinedId);
 
-		return DB.queryEntity(sObjectType, sObjectId);
+		return DB.queryEntity(id);
 	}
 }
