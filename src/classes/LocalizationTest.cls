@@ -417,11 +417,11 @@ private class LocalizationTest {
 		System.assertEquals(null, ct.getEnvelopeStatusText(''));
 		System.assertEquals(null, ct.getEnvelopeStatusText('\t'));
 		System.assertEquals(null, ct.getEnvelopeStatusText('bad'));
-		System.assertEquals(ct.envelopeCompleted, ct.getEnvelopeStatusText(Status.COMPLETED));
-		System.assertEquals(ct.envelopeDeclined, ct.getEnvelopeStatusText(Status.DECLINED));
-		System.assertEquals(ct.envelopeDelivered, ct.getEnvelopeStatusText(Status.DELIVERED));
-		System.assertEquals(ct.envelopeSent, ct.getEnvelopeStatusText(Status.SENT));
-		System.assertEquals(ct.envelopeVoided, ct.getEnvelopeStatusText(Status.VOIDED));
+		System.assertEquals(ct.envelopeCompleted, ct.getEnvelopeStatusText(Envelope.STATUS_COMPLETED));
+		System.assertEquals(ct.envelopeDeclined, ct.getEnvelopeStatusText(Envelope.STATUS_DECLINED));
+		System.assertEquals(ct.envelopeDelivered, ct.getEnvelopeStatusText(Envelope.STATUS_DELIVERED));
+		System.assertEquals(ct.envelopeSent, ct.getEnvelopeStatusText(Envelope.STATUS_SENT));
+		System.assertEquals(ct.envelopeVoided, ct.getEnvelopeStatusText(Envelope.STATUS_VOIDED));
 		Test.stopTest();
 	}
 
@@ -443,11 +443,11 @@ private class LocalizationTest {
 		System.assertEquals(null, ct.getRecipientStatusText(''));
 		System.assertEquals(null, ct.getRecipientStatusText('\t'));
 		System.assertEquals(null, ct.getRecipientStatusText('bad'));
-		System.assertEquals(ct.recipientCompleted, ct.getRecipientStatusText(Status.COMPLETED));
-		System.assertEquals(ct.recipientDeclined, ct.getRecipientStatusText(Status.DECLINED));
-		System.assertEquals(ct.recipientDelivered, ct.getRecipientStatusText(Status.DELIVERED));
-		System.assertEquals(ct.recipientSent, ct.getRecipientStatusText(Status.SENT));
-		System.assertEquals(ct.recipientSigned, ct.getRecipientStatusText(Status.SIGNED));
+		System.assertEquals(ct.recipientCompleted, ct.getRecipientStatusText(Recipient.STATUS_COMPLETED));
+		System.assertEquals(ct.recipientDeclined, ct.getRecipientStatusText(Recipient.STATUS_DECLINED));
+		System.assertEquals(ct.recipientDelivered, ct.getRecipientStatusText(Recipient.STATUS_DELIVERED));
+		System.assertEquals(ct.recipientSent, ct.getRecipientStatusText(Recipient.STATUS_SENT));
+		System.assertEquals(ct.recipientSigned, ct.getRecipientStatusText(Recipient.STATUS_SIGNED));
 		Test.stopTest();
 	}
 

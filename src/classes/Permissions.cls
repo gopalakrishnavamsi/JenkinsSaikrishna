@@ -89,31 +89,43 @@ public with sharing class Permissions {
 			return result;
 		}
 
-		public Id queryOwner(final Id envelopeId) {
+		public Set<Id> queryOwners(final Set<Id> envelopeIds) {
+			if (envelopeIds == null) return null;
+
 			List<Envelope__c> es = [
 				SELECT OwnerId
 				FROM Envelope__c
-				WHERE Id = :envelopeId
-				LIMIT 1
+				WHERE Id IN :envelopeIds
 			];
-			if (es == null || es.isEmpty()) {
-				throw new DocuSignException(Label.EnvelopeNotFound);
+			if (Collection.isEmpty(es)) throw new DocuSignException(Label.EnvelopeNotFound);
+
+			Set<Id> result = new Set<Id>();
+			for (Envelope__c e : es) {
+				result.add(e.OwnerId);
 			}
-			return es[0].OwnerId;
+			return result;
 		}
 
-		public Id queryOwner(final UUID dsEnvelopeId) {
-			Id ownerId = null;
+		public Set<Id> queryOwners(final Set<UUID> dsEnvelopeIds) {
+			if (dsEnvelopeIds == null) return null;
+
+			Set<String> dseIds = new Set<String>();
+			for (UUID dseId : dsEnvelopeIds) {
+				dseIds.add(String.valueOf(dseId));
+			}
+
 			List<Envelope__c> es = [
 				SELECT OwnerId
 				FROM Envelope__c
-				WHERE DocuSignId__c = :String.valueOf(dsEnvelopeId)
-				LIMIT 1
+				WHERE DocuSignId__c IN :dseIds
 			];
-			if (es != null && !es.isEmpty()) {
-				ownerId = es[0].OwnerId;
+			if (Collection.isEmpty(es)) throw new DocuSignException(Label.EnvelopeNotFound);
+
+			Set<Id> result = new Set<Id>();
+			for (Envelope__c e : es) {
+				result.add(e.OwnerId);
 			}
-			return ownerId;
+			return result;
 		}
 	}
 
@@ -296,16 +308,29 @@ public with sharing class Permissions {
 	 * @return <code>true</code> if the current user owns the envelope, <code>false</code> otherwise.
 	 */
 	public static Boolean isOwner(final Id envelopeId) {
-		return String.isNotBlank(envelopeId) && isOwner(envelopeId, UserInfo.getUserId());
+		return String.isNotBlank(envelopeId) && isOwner(new Set<Id> { envelopeId }, UserInfo.getUserId());
+	}
+
+	/**
+	 * Checks whether the current user is the owner of multiple envelopes. Involves a SOQL query.
+	 *
+	 * @param envelopeIds The envelope IDs.
+	 *
+	 * @return <code>true</code> if the current user owns all of the envelopes, <code>false</code> otherwise.
+	 */
+	public static Boolean isOwner(final Set<Id> envelopeIds) {
+		return envelopeIds != null && isOwner(envelopeIds, UserInfo.getUserId());
 	}
 
 	@TestVisible
-	private static Boolean isOwner(final Id envelopeId, final Id userId) {
-		if (String.isNotBlank(envelopeId) && String.isNotBlank(userId)) {
-			Id ownerId = DB.queryOwner(envelopeId);
-			return ownerId == null || userId == ownerId;
+	private static Boolean isOwner(final Set<Id> envelopeIds, final Id userId) {
+		if (envelopeIds == null) return false;
+
+		Set<Id> ownerIds = DB.queryOwners(envelopeIds);
+		for (Id ownerId : ownerIds) {
+			if (ownerId != userId) return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -314,12 +339,21 @@ public with sharing class Permissions {
 	 * @param envelopeId The envelope ID.
 	 */
 	public static void verifyIsOwner(final Id envelopeId) {
-		verifyIsOwner(envelopeId, UserInfo.getUserId());
+		verifyIsOwner(new Set<Id> { envelopeId }, UserInfo.getUserId());
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not the owner of all the envelopes.
+	 *
+	 * @param envelopeIds The envelope IDs.
+	 */
+	public static void verifyIsOwner(final Set<Id> envelopeIds) {
+		verifyIsOwner(envelopeIds, UserInfo.getUserId());
 	}
 
 	@TestVisible
-	private static void verifyIsOwner(final Id envelopeId, final Id userId) {
-		if (!isOwner(envelopeId, userId)) throw UnauthorizedException.notEnvelopeOwner();
+	private static void verifyIsOwner(final Set<Id> envelopeIds, final Id userId) {
+		if (!isOwner(envelopeIds, userId)) throw UnauthorizedException.notEnvelopeOwner();
 	}
 
 	/**
@@ -330,15 +364,29 @@ public with sharing class Permissions {
 	 * @return <code>true</code> if the current user owns the envelope, <code>false</code> otherwise.
 	 */
 	public static Boolean isOwner(final UUID dsEnvelopeId) {
-		return dsEnvelopeId != null && isOwner(dsEnvelopeId, UserInfo.getUserId());
+		return dsEnvelopeId != null && isOwner(new Set<UUID> { dsEnvelopeId }, UserInfo.getUserId());
+	}
+
+	/**
+	 * Checks whether the current user is the owner of multiple envelopes. Involves a SOQL query.
+	 *
+	 * @param dsEnvelopeIds The DocuSign envelope IDs.
+	 *
+	 * @return <code>true</code> if the current user owns all of the envelopes, <code>false</code> otherwise.
+	 */
+	public static Boolean isOwner(final Set<UUID> dsEnvelopeIds) {
+		return dsEnvelopeIds != null && isOwner(dsEnvelopeIds, UserInfo.getUserId());
 	}
 
 	@TestVisible
-	private static Boolean isOwner(final UUID dsEnvelopeId, final Id userId) {
-		if (dsEnvelopeId != null && String.isNotBlank(userId)) {
-			return userId == DB.queryOwner(dsEnvelopeId);
+	private static Boolean isOwner(final Set<UUID> dsEnvelopeIds, final Id userId) {
+		if (dsEnvelopeIds == null) return false;
+
+		Set<Id> ownerIds = DB.queryOwners(dsEnvelopeIds);
+		for (Id ownerId : ownerIds) {
+			if (ownerId != userId) return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -347,12 +395,21 @@ public with sharing class Permissions {
 	 * @param dsEnvelopeId The DocuSign envelope ID.
 	 */
 	public static void verifyIsOwner(final UUID dsEnvelopeId) {
-		verifyIsOwner(dsEnvelopeId, UserInfo.getUserId());
+		verifyIsOwner(new Set<UUID> { dsEnvelopeId }, UserInfo.getUserId());
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not the owner of all of the envelopes.
+	 *
+	 * @param dsEnvelopeIds The DocuSign envelope IDs.
+	 */
+	public static void verifyIsOwner(final Set<UUID> dsEnvelopeIds) {
+		verifyIsOwner(dsEnvelopeIds, UserInfo.getUserId());
 	}
 
 	@TestVisible
-	private static void verifyIsOwner(final UUID dsEnvelopeId, final Id userId) {
-		if (!isOwner(dsEnvelopeId, userId)) throw UnauthorizedException.notEnvelopeOwner();
+	private static void verifyIsOwner(final Set<UUID> dsEnvelopeIds, final Id userId) {
+		if (!isOwner(dsEnvelopeIds, userId)) throw UnauthorizedException.notEnvelopeOwner();
 	}
 
 	@TestVisible
@@ -586,10 +643,8 @@ public with sharing class Permissions {
 
 		String objectName = String.valueOf(type);
 		DescribeSObjectResult objectDescribe = type.getDescribe();
-		if (objectDescribe == null) {
-			return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound),
-				new List<FlsResult>());
-		}
+		if (objectDescribe == null)
+			return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound), new List<FlsResult>());
 
 		return getFlsResults(requestedAccess, objectName, objectDescribe, fieldNames,
 			Collection.isNotEmpty(fieldNames) ? objectDescribe.fields.getMap() : null);

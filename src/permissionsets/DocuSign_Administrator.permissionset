@@ -389,12 +389,7 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>RecipientStatus__c.DocuSignEnvelopeId__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>RecipientStatus__c.DocuSignRecipientId__c</field>
+		<field>RecipientStatus__c.Sequence__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -444,7 +439,7 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeStatus__c.DocuSignEnvelopeId__c</field>
+		<field>EnvelopeStatus__c.DocuSignId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>

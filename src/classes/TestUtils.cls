@@ -98,15 +98,24 @@ public class TestUtils {
 	}
 
 	public static Envelope__c createEnvelope() {
-		return createEnvelope(null);
+		return createEnvelope(null, UUID.randomUUID());
 	}
 
 	public static Envelope__c createEnvelope(final Id sourceId) {
+		return createEnvelope(sourceId, UUID.randomUUID());
+	}
+
+	public static Envelope__c createEnvelope(final UUID docuSignId) {
+		return createEnvelope(null, docuSignId);
+	}
+
+	public static Envelope__c createEnvelope(final Id sourceId, final UUID docuSignId) {
 		Envelope__c e = new Envelope__c(
 			SourceId__c = sourceId,
-			DocuSignId__c = UUID.randomUUID().toString(),
+			DocuSignId__c = String.valueOf(docuSignId),
 			EmailSubject__c = 'Subject',
-			EmailMessage__c = 'Message');
+			EmailMessage__c = 'Message',
+			Sent__c = docuSignId == null ? null : DateTime.now());
 		insert e;
 		return e;
 	}
@@ -362,5 +371,61 @@ public class TestUtils {
 			EmailMessage__c = loc.message);
 		insert el;
 		return el;
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus() {
+		return createEnvelopeStatus(UUID.randomUUID());
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus(final UUID dseId) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			DocuSignId__c = String.valueOf(dseId),
+			Status__c = Envelope.STATUS_CREATED,
+			EmailSubject__c = 'Unit test subject',
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus(final Envelope__c e) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			SourceId__c = e.SourceId__c,
+			DocuSignId__c = e.DocuSignId__c,
+			Status__c = e.Sent__c == null ? Envelope.STATUS_CREATED : Envelope.STATUS_SENT,
+			Sent__c = e.Sent__c,
+			EmailSubject__c = e.EmailSubject__c,
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
+	public static RecipientStatus__c createRecipientStatus(final Id esId, final Integer sequence) {
+		RecipientStatus__c rs = new RecipientStatus__c(
+			EnvelopeStatus__c = esId,
+			SourceId__c = UserInfo.getUserId(),
+			Type__c = Recipient.TYPE_SIGNER,
+			Sequence__c = sequence,
+			Status__c = Recipient.STATUS_CREATED,
+			Name = 'Unit Test',
+			Email__c = 'r@unit.test',
+			RoutingOrder__c = sequence,
+			LastStatusUpdate__c = Datetime.now());
+		insert rs;
+		return rs;
+	}
+
+	public static RecipientStatus__c createRecipientStatus(final Id esId, final Recipient__c r) {
+		RecipientStatus__c rs = new RecipientStatus__c(
+			EnvelopeStatus__c = esId,
+			SourceId__c = r.SourceId__c,
+			Type__c = r.Type__c,
+			Sequence__c = r.Sequence__c,
+			Status__c = Recipient.STATUS_CREATED,
+			Name = r.Name,
+			Email__c = r.Email__c,
+			RoutingOrder__c = r.RoutingOrder__c,
+			LastStatusUpdate__c = Datetime.now());
+		insert rs;
+		return rs;
 	}
 }

@@ -30,6 +30,30 @@ public class Recipient implements Comparable {
 	 * Intermediary (Update Recipients) recipient type constant.
 	 */
 	public static final String TYPE_INTERMEDIARY = 'Intermediary';
+	/**
+	 * Created status constant.
+	 */
+	public static final String STATUS_CREATED = 'created';
+	/**
+	 * Sent status constant.
+	 */
+	public static final String STATUS_SENT = 'sent';
+	/**
+	 * Delivered status constant.
+	 */
+	public static final String STATUS_DELIVERED = 'delivered';
+	/**
+	 * Declined status constant.
+	 */
+	public static final String STATUS_DECLINED = 'declined';
+	/**
+	 * Completed status constant.
+	 */
+	public static final String STATUS_COMPLETED = 'completed';
+	/**
+	 * Signed status constant.
+	 */
+	public static final String STATUS_SIGNED = 'signed';
 
 	/**
 	 * The ID of the associated Recipient__c record.
@@ -520,6 +544,146 @@ public class Recipient implements Comparable {
 	}
 
 	/**
+	 * DocuSign recipient status.
+	 */
+	public class Status implements Comparable {
+		/**
+		 * The ID of the underlying RecipientStatus__c record.
+		 */
+		public Id id { get; private set; }
+		/**
+		 * The Salesforce source entity.
+		 */
+		public Entity source { get; private set; }
+		/**
+		 * The recipient sequence.
+		 */
+		public Integer sequence { get; private set; }
+		/**
+		 * The DocuSign recipient type.
+		 */
+		public String type { get; private set; }
+		/**
+		 * The current status.
+		 */
+		public String status { get; private set; }
+		/**
+		 * The name of the recipient.
+		 */
+		public String name { get; private set; }
+		/**
+		 * The email address of the recipient.
+		 */
+		public String email { get; private set; }
+		/**
+		 * The routing order of the recipient.
+		 */
+		public Integer routingOrder { get; private set; }
+		/**
+		 * Date and time when the recipient received the envelope.
+		 */
+		public Datetime sent { get; private set; }
+		/**
+		 * Date and time when the recipient completed signing the envelope.
+		 */
+		public Datetime completed { get; private set; }
+		/**
+		 * The reason the recipient declined signing the envelope.
+		 */
+		public String reason { get; private set; }
+		/**
+		 * Date and time when the status was last updated.
+		 */
+		public Datetime lastStatusUpdate { get; private set; }
+
+		/**
+		 * Constructs a DocuSign recipient status.
+		 *
+		 *
+		 * @param id The ID of the underlying RecipientStatus__c record.
+		 * @param source The Salesforce source entity.
+		 * @param sequence The recipient sequence.
+		 * @param type The DocuSign recipient type.
+		 * @param status The current status.
+		 * @param name The name of the recipient.
+		 * @param email The email address of the recipient.
+		 * @param routingOrder The routing order of the recipient.
+		 * @param sent Date and time when the recipient received the envelope.
+		 * @param completed Date and time when the recipient completed signing the envelope.
+		 * @param reason The reason the recipient declined signing the envelope.
+		 * @param lastStatusUpdate Date and time when the status was last updated.
+		 */
+		public Status(
+			final Id id,
+			final Entity source,
+			final String type,
+			final Integer sequence,
+			final String status,
+			final String name,
+			final String email,
+			final Integer routingOrder,
+			final Datetime sent,
+			final Datetime completed,
+			final String reason,
+			final Datetime lastStatusUpdate) {
+
+			this.id = id;
+			this.source = source;
+			this.sequence = sequence;
+			this.type = type;
+			this.status = status;
+			this.name = name;
+			this.email = email;
+			this.routingOrder = routingOrder;
+			this.sent = sent;
+			this.completed = completed;
+			this.reason = reason;
+			this.lastStatusUpdate = lastStatusUpdate;
+		}
+
+		/**
+		 * Used to sort recipient statuses by ascending routing order with nulls or non-roles sorted first.
+		 *
+		 * @param compareTo The object to compare.
+		 *
+		 * @return The comparison value.
+		 */
+		public Integer compareTo(final Object compareTo) {
+			if (compareTo == null || !(compareTo instanceof Recipient.Status)) return -1;
+
+			Recipient.Status that = (Recipient.Status)compareTo;
+			if (this.routingOrder == that.routingOrder) return 0;
+			if (this.routingOrder > that.routingOrder) return 1;
+			return -1;
+		}
+	}
+
+	/**
+	 * Converts a recipient to recipient status.
+	 *
+	 * @param envelopeSent The date and time when the envelope was sent, or <code>null</code> if the envelope is a
+	 * draft.
+	 *
+	 * @return The recipient status corresponding to the recipient.
+	 */
+	public Recipient.Status toRecipientStatus(final Datetime envelopeSent) {
+		Boolean isSent = envelopeSent != null && this.routingOrder == 1;
+		return new Recipient.Status(
+			null,
+			this.source,
+			this.type,
+			this.sequence,
+			isSent ? STATUS_SENT : STATUS_CREATED,
+			this.name,
+			this.email,
+			this.routingOrder,
+			isSent ? envelopeSent : null,
+			null,
+			null,
+			Datetime.now());
+	}
+
+	/**
 	 * Used to sort recipients by ascending sequence with nulls or non-recipients sorted first.
 	 *
 	 * @param compareTo The object to compare.
@@ -536,7 +700,7 @@ public class Recipient implements Comparable {
 	}
 
 	/**
-	 * Creates a deep copy of the DocuSign envelope recipient.
+	 * Creates a deep copy of the DocuSign envelope recipient for resending. The <code>id</code> is nulled-out.
 	 *
 	 * @return A copy of the recipient.
 	 */
@@ -659,6 +823,18 @@ public class Recipient implements Comparable {
 	}
 
 	/**
+	 * Sets the recipient <code>signNow</code> property.
+	 *
+	 * @param signNow Whether the recipient should sign now.
+	 *
+	 * @return The recipient with updated <code>signNow</code>.
+	 */
+	public Recipient withSignNow(final Boolean signNow) {
+		this.signNow = signNow;
+		return this;
+	}
+
+	/**
 	 * Recipient search behaviors:
 	 * <ul>
 	 *     <li><code>CompoundMatchBeginning</code>: Match beginning of compound name field: <code>SELECT X FROM Y WHERE Name LIKE 'name%'</code>.</li>
@@ -676,5 +852,42 @@ public class Recipient implements Comparable {
 		DiscreteMatchBeginning,
 		DiscreteMatchExact,
 		DiscreteMatchAny
+	}
+
+	/**
+	 * Recipient resend result.
+	 */
+	public class ResendResult {
+		/**
+		 * The recipient sequence.
+		 */
+		public Integer sequence { get; private set; }
+		/**
+		 * The recipient email address.
+		 */
+		public String email { get; private set; }
+		/**
+		 * The recipient routing order.
+		 */
+		public Integer routingOrder { get; private set; }
+		/**
+		 * The error encountered during update, if any.
+		 */
+		public APIError error { get; private set; }
+
+		/**
+		 * Constructs a recipient resend result.
+		 *
+		 * @param sequence The recipient sequence.
+		 * @param email The recipient email address.
+		 * @param routingOrder The recipient routing order.
+		 * @param error The error encountered during update, if any.
+		 */
+		public ResendResult(final Integer sequence, final String email, final Integer routingOrder, final APIError error) {
+			this.sequence = sequence;
+			this.email = email;
+			this.routingOrder = routingOrder;
+			this.error = error;
+		}
 	}
 }

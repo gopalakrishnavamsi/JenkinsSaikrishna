@@ -103,6 +103,22 @@ private class PermissionsTest {
 				new Permissions.FlsResult('Test1', Permissions.FlsStatus.Unauthorized),
 				new Permissions.FlsResult('Test2', Permissions.FlsStatus.Unauthorized)
 			});
+		Permissions.FlsResults r9 = new Permissions.FlsResults(
+			Permissions.FlsAccess.Filterable,
+			false,
+			new Permissions.FlsResult('Unit', Permissions.FlsStatus.OK),
+			new List<Permissions.FlsResult> {
+				new Permissions.FlsResult('Test1', Permissions.FlsStatus.Unauthorized),
+				new Permissions.FlsResult('Test2', Permissions.FlsStatus.Unauthorized)
+			});
+		Permissions.FlsResults r10 = new Permissions.FlsResults(
+			Permissions.FlsAccess.Unencrypted,
+			false,
+			new Permissions.FlsResult('Unit', Permissions.FlsStatus.OK),
+			new List<Permissions.FlsResult> {
+				new Permissions.FlsResult('Test1', Permissions.FlsStatus.Unauthorized),
+				new Permissions.FlsResult('Test2', Permissions.FlsStatus.Unauthorized)
+			});
 		Test.stopTest();
 
 		System.assertNotEquals(null, r1);
@@ -137,6 +153,12 @@ private class PermissionsTest {
 		System.assert(!r8.isAuthorized);
 		System.assertEquals(2, r8.filterUnauthorizedFields().size());
 		System.assertEquals(String.format(Label.CannotQueryFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r8.getErrorMessage());
+		System.assert(!r9.isAuthorized);
+		System.assertEquals(2, r9.filterUnauthorizedFields().size());
+		System.assertEquals(String.format(Label.CannotFilterFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r9.getErrorMessage());
+		System.assert(!r10.isAuthorized);
+		System.assertEquals(2, r10.filterUnauthorizedFields().size());
+		System.assertEquals(String.format(Label.EncryptedFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r10.getErrorMessage());
 	}
 
 	static testMethod void test_getFlsResult_authorized() {
@@ -921,38 +943,50 @@ private class PermissionsTest {
 			update envelope;
 
 			Test.startTest();
-			System.assert(Permissions.isOwner(envelope.Id, u1.Id));
-			System.assert(Permissions.isOwner(dsEnvelopeId, u1.Id));
-			System.assert(!Permissions.isOwner(envelope.Id, u2.Id));
-			System.assert(!Permissions.isOwner(dsEnvelopeId, u2.Id));
+			System.assert(Permissions.isOwner(new Set<Id> { envelope.Id }, u1.Id));
+			System.assert(Permissions.isOwner(new Set<UUID> { dsEnvelopeId }, u1.Id));
+			System.assert(!Permissions.isOwner(new Set<Id> { envelope.Id }, u2.Id));
+			System.assert(!Permissions.isOwner(new Set<UUID> { dsEnvelopeId }, u2.Id));
 			try {
-				Permissions.verifyIsOwner(envelope.Id, u2.Id);
+				Permissions.verifyIsOwner(new Set<Id> { envelope.Id }, u2.Id);
 				throw new AssertException('Expected UnauthorizedException');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
 			}
 			try {
-				Permissions.verifyIsOwner(dsEnvelopeId, u2.Id);
+				Permissions.verifyIsOwner(new Set<UUID> { dsEnvelopeId }, u2.Id);
 				throw new AssertException('Expected UnauthorizedException');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
 			}
 			try {
-				Permissions.verifyIsOwner(u1.Id, u1.Id);
+				Permissions.verifyIsOwner(new Set<Id> { u1.Id }, u1.Id);
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.EnvelopeNotFound, ex.getMessage());
 			}
 			System.runAs(u1) {
 				System.assert(Permissions.isOwner(envelope.Id));
+				System.assert(Permissions.isOwner(new Set<Id> { envelope.Id }));
 				System.assert(Permissions.isOwner(dsEnvelopeId));
+				System.assert(Permissions.isOwner(new Set<UUID> { dsEnvelopeId }));
 				Permissions.verifyIsOwner(envelope.Id);
+				Permissions.verifyIsOwner(new Set<Id> { envelope.Id });
 				Permissions.verifyISOwner(dsEnvelopeId);
+				Permissions.verifyISOwner(new Set<UUID> { dsEnvelopeId });
 			}
 			System.runAs(u2) {
 				System.assert(!Permissions.isOwner(envelope.Id));
+				System.assert(!Permissions.isOwner(new Set<Id> { envelope.Id }));
 				System.assert(!Permissions.isOwner(dsEnvelopeId));
+				System.assert(!Permissions.isOwner(new Set<UUID> { dsEnvelopeId }));
 				try {
 					Permissions.verifyIsOwner(envelope.Id);
+					throw new AssertException('Expected UnauthorizedException');
+				} catch (UnauthorizedException ex) {
+					System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+				}
+				try {
+					Permissions.verifyIsOwner(new Set<Id> { envelope.Id });
 					throw new AssertException('Expected UnauthorizedException');
 				} catch (UnauthorizedException ex) {
 					System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
@@ -963,11 +997,19 @@ private class PermissionsTest {
 				} catch (UnauthorizedException ex) {
 					System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
 				}
+				try {
+					Permissions.verifyIsOwner(new Set<UUID> { dsEnvelopeId });
+					throw new AssertException('Expected UnauthorizedException');
+				} catch (UnauthorizedException ex) {
+					System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+				}
 			}
 			System.assert(!Permissions.isOwner((Id)null));
+			System.assert(!Permissions.isOwner((Set<Id>)null));
 			System.assert(!Permissions.isOwner((UUID)null));
-			System.assert(!Permissions.isOwner(envelope.Id, null));
-			System.assert(!Permissions.isOwner(dsEnvelopeId, null));
+			System.assert(!Permissions.isOwner((Set<UUID>)null));
+			System.assert(!Permissions.isOwner(new Set<Id> { envelope.Id }, null));
+			System.assert(!Permissions.isOwner(new Set<UUID> { dsEnvelopeId }, null));
 			Test.stopTest();
 		}
 	}

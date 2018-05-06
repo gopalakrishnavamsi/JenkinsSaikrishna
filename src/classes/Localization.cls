@@ -37,15 +37,15 @@ public with sharing class Localization {
 		public String getEnvelopeStatusText(final String s) {
 			String statusText = null;
 			if (String.isNotBlank(s)) {
-				if (s == Status.SENT) {
+				if (s == Envelope.STATUS_SENT) {
 					statusText = this.envelopeSent;
-				} else if (s == Status.DELIVERED) {
+				} else if (s == Envelope.STATUS_DELIVERED) {
 					statusText = this.envelopeDelivered;
-				} else if (s == Status.COMPLETED) {
+				} else if (s == Envelope.STATUS_COMPLETED) {
 					statusText = this.envelopeCompleted;
-				} else if (s == Status.DECLINED) {
+				} else if (s == Envelope.STATUS_DECLINED) {
 					statusText = this.envelopeDeclined;
-				} else if (s == Status.VOIDED) {
+				} else if (s == Envelope.STATUS_VOIDED) {
 					statusText = this.envelopeVoided;
 				}
 			}
@@ -55,15 +55,15 @@ public with sharing class Localization {
 		public String getRecipientStatusText(final String s) {
 			String statusText = null;
 			if (String.isNotBlank(s)) {
-				if (s == Status.SENT) {
+				if (s == Recipient.STATUS_SENT) {
 					statusText = this.recipientSent;
-				} else if (s == Status.DELIVERED) {
+				} else if (s == Recipient.STATUS_DELIVERED) {
 					statusText = this.recipientDelivered;
-				} else if (s == Status.COMPLETED) {
+				} else if (s == Recipient.STATUS_COMPLETED) {
 					statusText = this.recipientCompleted;
-				} else if (s == Status.DECLINED) {
+				} else if (s == Recipient.STATUS_DECLINED) {
 					statusText = this.recipientDeclined;
-				} else if (s == Status.SIGNED) {
+				} else if (s == Recipient.STATUS_SIGNED) {
 					statusText = this.recipientSigned;
 				}
 			}

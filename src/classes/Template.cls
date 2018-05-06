@@ -28,8 +28,4 @@ public class Template {
 		this.name = name;
 		this.customFields = customFields;
 	}
-
-	public Document toDocument() {
-		return new Document(null, Document.TYPE_TEMPLATE, null, this.name, null, 0, UUID.toString(this.id));
-	}
 }

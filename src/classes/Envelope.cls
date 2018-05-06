@@ -3,6 +3,31 @@
  */
 public class Envelope {
 	/**
+	 * Created status constant.
+	 */
+	public static final String STATUS_CREATED = 'created';
+	/**
+	 * Sent status constant.
+	 */
+	public static final String STATUS_SENT = 'sent';
+	/**
+	 * Delivered status constant.
+	 */
+	public static final String STATUS_DELIVERED = 'delivered';
+	/**
+	 * Declined status constant.
+	 */
+	public static final String STATUS_DECLINED = 'declined';
+	/**
+	 * Voided status constant.
+	 */
+	public static final String STATUS_VOIDED = 'voided';
+	/**
+	 * Completed status constant.
+	 */
+	public static final String STATUS_COMPLETED = 'completed';
+
+	/**
 	 * The ID of the associated Envelope__c record.
 	 */
 	public Id id { get; private set; }
@@ -270,6 +295,163 @@ public class Envelope {
 			this.fetchDocuments = fetchDocuments;
 			this.useAccountNotificationDefaults = useAccountNotificationDefaults;
 		}
+	}
+
+	/**
+	 * DocuSign envelope status.
+	 */
+	public class Status {
+		/**
+		 * The ID of the underlying EnvelopeStatus__c record.
+		 */
+		public Id id { get; private set; }
+		/**
+		 * The Salesforce source entity.
+		 */
+		public Entity source { get; private set; }
+		/**
+		 * The DocuSign envelope ID.
+		 */
+		public UUID docuSignId { get; private set; }
+		/**
+		 * The current status.
+		 */
+		public String status { get; private set; }
+		/**
+		 * The sender name.
+		 */
+		public String senderName { get; private set; }
+		/**
+		 * The sender email address.
+		 */
+		public String senderEmail { get; private set; }
+		/**
+		 * Associated recipient statuses.
+		 */
+		public List<Recipient.Status> recipients { get; private set; }
+		/**
+		 * Date and time when the envelope was sent.
+		 */
+		public Datetime sent { get; private set; }
+		/**
+		 * Date and time when the envelope was completed.
+		 */
+		public Datetime completed { get; private set; }
+		/**
+		 * The subject of the email message sent.
+		 */
+		public String emailSubject { get; private set; }
+		/**
+		 * The reason the envelope was declined or voided.
+		 */
+		public String reason { get; private set; }
+		/**
+		 * Date and time when the status was last updated.
+		 */
+		public Datetime lastStatusUpdate { get; private set; }
+
+		/**
+		 * Constructs a DocuSign envelope status.
+		 *
+		 * @param id The ID of the underlying EnvelopeStatus__c record.
+		 * @param docuSignId The DocuSign envelope ID.
+		 * @param source The Salesforce source entity.
+		 * @param status The current status.
+		 * @param senderName The sender name.
+		 * @param senderEmail The sender email address.
+		 * @param recipients Associated recipient statuses.
+		 * @param sent Date and time when the envelope was sent.
+		 * @param completed Date and time when the envelope was completed.
+		 * @param emailSubject The subject of the email message sent.
+		 * @param reason The reason the envelope was declined or voided.
+		 * @param lastStatusUpdate Date and time when the status was last updated.
+		 */
+		public Status(
+			final Id id,
+			final Entity source,
+			final UUID docuSignId,
+			final String status,
+			final String senderName,
+			final String senderEmail,
+			final List<Recipient.Status> recipients,
+			final Datetime sent,
+			final Datetime completed,
+			final String emailSubject,
+			final String reason,
+			final Datetime lastStatusUpdate) {
+
+			this.id = id;
+			this.source = source;
+			this.docuSignId = docuSignId;
+			this.status = status;
+			this.senderName = senderName;
+			this.senderEmail = senderEmail;
+			this.recipients = recipients;
+			this.sent = sent;
+			this.completed = completed;
+			this.emailSubject = emailSubject;
+			this.reason = reason;
+			this.lastStatusUpdate = lastStatusUpdate;
+		}
+
+		/**
+		 * Adds one or more recipient statuses to an envelope status.
+		 *
+		 * @param recipients The recipient statuses to add.
+		 *
+		 * @return The envelope status with updated recipient statuses.
+		 */
+		public Envelope.Status addRecipients(final List<Recipient.Status> recipients) {
+			if (this.recipients == null) {
+				this.recipients = recipients;
+			} else {
+				this.recipients.addAll(recipients);
+			}
+			return this;
+		}
+
+		/**
+		 * Sets an envelope status's <code>id</property>.
+		 *
+		 * @param id The new envelope status ID.
+		 *
+		 * @return The envelope status with updated <code>id</code>.
+		 */
+		public Envelope.Status withId(final Id id) {
+			this.id = id;
+			return this;
+		}
+	}
+
+	/**
+	 * Converts an envelope to an envelope status. The envelope must be either created in DocuSign or sent with a valid
+	 * <code>docuSignId</code>. The current user is set as the envelope's sender.
+	 *
+	 * @return The envelope status corresponding to the envelope.
+	 */
+	public Envelope.Status toEnvelopeStatus() {
+		if (!this.isSent || this.docuSignId == null)
+			throw new DocuSignException(Label.EnvelopesMustBeSent);
+
+		List<Recipient.Status> rss = new List<Recipient.Status>();
+		if (this.hasRecipients) {
+			for (Recipient r : this.recipients) {
+				rss.add(r.toRecipientStatus(this.sent));
+			}
+		}
+		return new Envelope.Status(
+			null,
+			this.source,
+			this.docuSignId,
+			this.isSent ? STATUS_SENT : STATUS_CREATED,
+			UserInfo.getName(),
+			UserInfo.getUserEmail(),
+			rss,
+			this.sent,
+			null,
+			this.emailSubject,
+			null,
+			Datetime.now());
 	}
 
 	/**

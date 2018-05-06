@@ -86,6 +86,22 @@ public class Collection {
 		return result;
 	}
 
+	public static Set<UUID> difference(final Set<UUID> left, final Set<UUID> right) {
+		Set<UUID> result = new Set<UUID>();
+		if (left != null) {
+			if (right == null) {
+				result.addAll(left);
+			} else {
+				for (UUID u : left) {
+					if (!right.contains(u)) {
+						result.add(u);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	public static Set<Id> intersection(final Set<Id> left, final Set<Id> right) {
 		Set<Id> result = new Set<Id>();
 		if (left != null && right != null) {

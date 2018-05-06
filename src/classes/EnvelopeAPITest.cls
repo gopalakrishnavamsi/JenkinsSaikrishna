@@ -72,12 +72,12 @@ private class EnvelopeAPITest {
 			System.assertNotEquals(null, e4);
 			System.assert(!(e4 instanceof DocuSignAPI.Error));
 			System.assertEquals(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, e4.code);
-			System.assertEquals('Recipient not in sequence', e4.description);
+			System.assertEquals(Label.InvalidRecipientSequence, e4.description);
 
 			System.assertNotEquals(null, e5);
 			System.assert(!(e5 instanceof DocuSignAPI.Error));
 			System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, e5.code);
-			System.assertEquals('Unknown envelope recipient', e5.description);
+			System.assertEquals(Label.UnknownEnvelopeRecipient, e5.description);
 		}
 	}
 
@@ -250,6 +250,68 @@ private class EnvelopeAPITest {
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
 			System.assertEquals(404, ex.error.code);
+		}
+	}
+
+	private class UnknownRecipientMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"UNKNOWN_ENVELOPE_RECIPIENT","message":"whatever"}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getRecipientViewUrl_unknown_recipient() {
+		Test.setMock(HttpCalloutMock.class, new UnknownRecipientMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
+					'a@b.c', 'a@b.c', 1);
+				throw new AssertException('Expected getRecipientView call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, ex.error.code);
+				System.assertEquals(Label.UnknownEnvelopeRecipient, ex.error.description);
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class InvalidSequenceMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"RECIPIENT_NOT_IN_SEQUENCE","message":"whatever"}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getRecipientViewUrl_invalid_sequence() {
+		Test.setMock(HttpCalloutMock.class, new InvalidSequenceMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
+					'a@b.c', 'a@b.c', 1);
+				throw new AssertException('Expected getRecipientView call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, ex.error.code);
+				System.assertEquals(Label.InvalidRecipientSequence, ex.error.description);
+			}
+			Test.stopTest();
 		}
 	}
 
@@ -452,6 +514,60 @@ private class EnvelopeAPITest {
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
 			System.assertEquals(415, ex.error.code);
+		}
+	}
+
+	static testMethod void test_resendRecipients_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			List<Recipient.ResendResult> result = EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+				Recipient.fromSource('n', 'r@unit.test', null, null, null)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(6, result.size());
+			Integer sequence = 1;
+			for (Recipient.ResendResult rr : result) {
+				System.assertNotEquals(null, rr);
+				System.assertEquals(sequence, rr.sequence);
+				System.assertNotEquals(null, rr.error);
+				if (sequence == 2) {
+					System.assertEquals(APIErrorCode.BAD_REQUEST, rr.error.code);
+					System.assertEquals('Unit test error 1', rr.error.description);
+				} else if (sequence == 5) {
+					System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, rr.error.code);
+					System.assertEquals(Label.UnknownEnvelopeRecipient, rr.error.description);
+				} else {
+					System.assertEquals(APIError.none, rr.error);
+				}
+				sequence++;
+			}
+		}
+	}
+
+	static testMethod void test_resendRecipients_failure() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+					Recipient.fromSource('n', 'r@unit.test', null, null, null)
+				});
+				throw new AssertException('Expected resendRecipients to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex);
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(415, ex.error.code);
+			}
+			Test.stopTest();
 		}
 	}
 
@@ -1174,5 +1290,325 @@ private class EnvelopeAPITest {
 		System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(r));
 		System.assertEquals(new List<String> { '##SFUser:' + UserInfo.getUserId() }, EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
 		Test.stopTest();
+	}
+
+	static testMethod void test_getEnvelopeStatus_failure() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+				throw new AssertException('Expected getEnvelopeStatus to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class StatusCreatedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"created","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"created"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_created() {
+		Test.setMock(HttpCalloutMock.class, new StatusCreatedMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_CREATED, result.status);
+			System.assertEquals(UserInfo.getName(), result.senderName);
+			System.assertEquals(UserInfo.getUserEmail(), result.senderEmail);
+			System.assertEquals(null, result.sent);
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+				System.assertEquals(i, rs.sequence);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertEquals(null, rs.sent);
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusSentMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"sent","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"delivered","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_sent() {
+		Test.setMock(HttpCalloutMock.class, new StatusSentMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_SENT, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				if (i == 1) {
+					System.assertEquals(Recipient.STATUS_DELIVERED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+				} else {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+				}
+				i++;
+			}
+		}
+	}
+
+	private class StatusCompletedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"completed","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}]}}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_completed() {
+		Test.setMock(HttpCalloutMock.class, new StatusCompletedMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_COMPLETED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				System.assertEquals(Recipient.STATUS_COMPLETED, rs.status);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.sent);
+				System.assertNotEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusDeclinedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"declined","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","declinedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"declined","deliveredDateTime":"2018-04-18T22:05:57.9470000Z","declinedDateTime":"2018-04-18T22:05:57.9470000Z","declinedReason":"declined to sign"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_declined() {
+		Test.setMock(HttpCalloutMock.class, new StatusDeclinedMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_DECLINED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				if (i == 7) {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+					System.assertEquals(null, rs.completed);
+					System.assertEquals(null, rs.reason);
+				} else if (i == 6) {
+					System.assertEquals(Recipient.STATUS_DECLINED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+					System.assertNotEquals(null, rs.completed);
+					System.assertEquals('declined to sign', rs.reason);
+				} else {
+					System.assertEquals(Recipient.STATUS_COMPLETED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+					System.assertNotEquals(null, rs.completed);
+					System.assertEquals(null, rs.reason);
+				}
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusVoidedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"voided","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","voidedDateTime":"2018-04-19T01:01:01.10000000Z","voidedReason":"voided envelope","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"delivered","deliveredDateTime":"2018-04-18T22:06:06.2770000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_voided() {
+		Test.setMock(HttpCalloutMock.class, new StatusVoidedMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_VOIDED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals('voided envelope', result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				if (i == 1) {
+					System.assertEquals(Recipient.STATUS_DELIVERED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+				} else {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+				}
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusSentNoRecipientsMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			String endpoint = request.getEndpoint();
+			if (endpoint.contains('include=recipients')) {
+				response.setStatusCode(400);
+				response.setStatus('BAD_REQUEST');
+			} else {
+				response.setStatusCode(200);
+				response.setStatus('OK');
+				response.setHeader('Content-Type', 'application/json; charset=utf-8');
+				response.setBody('{"status":"sent","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z"}');
+			}
+			return response;
+		}
+	}
+
+	static testMethod void test_getEnvelopeStatus_without_recipients() {
+		Test.setMock(HttpCalloutMock.class, new StatusSentNoRecipientsMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_SENT, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assert(Collection.isEmpty(result.recipients));
+		}
 	}
 }

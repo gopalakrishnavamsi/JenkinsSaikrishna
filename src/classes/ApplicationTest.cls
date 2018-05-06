@@ -21,6 +21,10 @@ private class ApplicationTest {
 		System.assertEquals('DFS-LE ' + (Application.isManaged ? System.requestVersion() : new Version(1, 0, 0)), Application.name);
 	}
 
+	static testMethod void test_packageNamespace() {
+		System.assertEquals('dfsle', Application.packageNamespace);
+	}
+
 	static testMethod void test_namespacePrefix() {
 		String orgNS = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
 		System.assertEquals(Application.isManaged ? 'dfsle__' : (String.isNotBlank(orgNS) ? orgNS + '__' : ''), Application.namespacePrefix);

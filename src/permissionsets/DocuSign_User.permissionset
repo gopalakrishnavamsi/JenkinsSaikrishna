@@ -386,107 +386,102 @@
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
-		<field>RecipientStatus__c.DocuSignEnvelopeId__c</field>
+		<editable>true</editable>
+		<field>RecipientStatus__c.Sequence__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
-		<field>RecipientStatus__c.DocuSignRecipientId__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.RoutingOrder__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Type__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Status__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.SourceId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Email__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Sent__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Completed__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.LastStatusUpdate__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Reason__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
-		<field>EnvelopeStatus__c.DocuSignEnvelopeId__c</field>
+		<editable>true</editable>
+		<field>EnvelopeStatus__c.DocuSignId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.Status__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.SourceId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.Sent__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.Completed__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.LastStatusUpdate__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.SenderName__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.SenderEmail__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.EmailSubject__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.Reason__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -561,8 +556,8 @@
 	</objectPermissions>
 	<objectPermissions>
 		<allowCreate>true</allowCreate>
-		<allowDelete>false</allowDelete>
-		<allowEdit>false</allowEdit>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
 		<allowRead>true</allowRead>
 		<modifyAllRecords>false</modifyAllRecords>
 		<object>RecipientStatus__c</object>
@@ -570,8 +565,8 @@
 	</objectPermissions>
 	<objectPermissions>
 		<allowCreate>true</allowCreate>
-		<allowDelete>false</allowDelete>
-		<allowEdit>false</allowEdit>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
 		<allowRead>true</allowRead>
 		<modifyAllRecords>false</modifyAllRecords>
 		<object>EnvelopeStatus__c</object>

@@ -10,7 +10,7 @@
 	</caseValues>
 	<fields>
 		<label>DocuSign envelope ID</label>
-		<name>DocuSignEnvelopeId__c</name>
+		<name>DocuSignId__c</name>
 	</fields>
 	<fields>
 		<label>Status</label>

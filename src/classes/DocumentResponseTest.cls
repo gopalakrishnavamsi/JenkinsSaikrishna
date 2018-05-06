@@ -2,46 +2,48 @@
 private class DocumentResponseTest {
 
 	static testMethod void test_success() {
-		Envelope__c dse = TestUtils.createEnvelope();
-		List<Document> ds = new List<Document> {
-			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id)),
-			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id))
-		};
-		List<CustomField> cfs = new List<CustomField> {
-			CustomField.newTextField('n1', 'v1', true, true),
-			CustomField.newTextField('n2', 'v2', true, true)
-		};
-		List<Document.Folder> fs = new List<Document.Folder> {
-			new Document.Folder(UserInfo.getUserId(), 'f1'),
-			new Document.Folder(UserInfo.getOrganizationId(), 'f2')
-		};
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c dse = TestUtils.createEnvelope();
+			List<Document> ds = new List<Document> {
+				DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id)),
+				DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id))
+			};
+			List<CustomField> cfs = new List<CustomField> {
+				CustomField.newTextField('n1', 'v1', true, true),
+				CustomField.newTextField('n2', 'v2', true, true)
+			};
+			List<Document.Folder> fs = new List<Document.Folder> {
+				new Document.Folder(UserInfo.getUserId(), 'f1'),
+				new Document.Folder(UserInfo.getOrganizationId(), 'f2')
+			};
 
-		Test.startTest();
-		DocumentResponse result1 = DocumentResponse.success(new Document.Folders(fs, ds));
-		DocumentResponse result2 = DocumentResponse.success(ds);
-		DocumentResponse result3 = DocumentResponse.success(ds, cfs);
-		Test.stopTest();
+			Test.startTest();
+			DocumentResponse result1 = DocumentResponse.success(new Document.Folders(fs, ds));
+			DocumentResponse result2 = DocumentResponse.success(ds);
+			DocumentResponse result3 = DocumentResponse.success(ds, cfs);
+			Test.stopTest();
 
-		System.assertNotEquals(null, result1);
-		System.assert(result1.success);
-		System.assert(Collection.isEmpty(result1.messages));
-		System.assertEquals(fs, result1.folders);
-		System.assertEquals(ds, result1.documents);
-		System.assertEquals(null, result1.customFields);
+			System.assertNotEquals(null, result1);
+			System.assert(result1.success);
+			System.assert(Collection.isEmpty(result1.messages));
+			System.assertEquals(fs, result1.folders);
+			System.assertEquals(ds, result1.documents);
+			System.assertEquals(null, result1.customFields);
 
-		System.assertNotEquals(null, result2);
-		System.assert(result2.success);
-		System.assert(Collection.isEmpty(result2.messages));
-		System.assertEquals(null, result2.folders);
-		System.assertEquals(ds, result2.documents);
-		System.assertEquals(null, result2.customFields);
+			System.assertNotEquals(null, result2);
+			System.assert(result2.success);
+			System.assert(Collection.isEmpty(result2.messages));
+			System.assertEquals(null, result2.folders);
+			System.assertEquals(ds, result2.documents);
+			System.assertEquals(null, result2.customFields);
 
-		System.assertNotEquals(null, result3);
-		System.assert(result3.success);
-		System.assert(Collection.isEmpty(result3.messages));
-		System.assertEquals(null, result3.folders);
-		System.assertEquals(ds, result3.documents);
-		System.assertEquals(cfs, result3.customFields);
+			System.assertNotEquals(null, result3);
+			System.assert(result3.success);
+			System.assert(Collection.isEmpty(result3.messages));
+			System.assertEquals(null, result3.folders);
+			System.assertEquals(ds, result3.documents);
+			System.assertEquals(cfs, result3.customFields);
+		}
 	}
 
 	static testMethod void test_failure() {

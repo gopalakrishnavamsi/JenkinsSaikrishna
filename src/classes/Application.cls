@@ -67,6 +67,12 @@ public with sharing class Application {
 		}
 	}
 
+	public static String packageNamespace {
+		get {
+			return PACKAGE_NAMESPACE;
+		}
+	}
+
 	public static String namespacePrefix {
 		get {
 			return IS_MANAGED_PACKAGE ? NAMESPACE_PREFIX : ORG_NAMESPACE_PREFIX;

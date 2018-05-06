@@ -18,8 +18,8 @@
 		<externalId>false</externalId>
 		<label>DocuSign Envelope Status</label>
 		<referenceTo>EnvelopeStatus__c</referenceTo>
-		<relationshipLabel>DocuSign Recipient Status</relationshipLabel>
-		<relationshipName>R00NS0000000WUO2MAO</relationshipName>
+		<relationshipLabel>DocuSign Recipient Statuses</relationshipLabel>
+		<relationshipName>Recipients</relationshipName>
 		<relationshipOrder>0</relationshipOrder>
 		<reparentableMasterDetail>false</reparentableMasterDetail>
 		<trackHistory>false</trackHistory>
@@ -28,10 +28,21 @@
 		<writeRequiresMasterRead>false</writeRequiresMasterRead>
 	</fields>
 	<fields>
-		<fullName>DocuSignRecipientId__c</fullName>
+		<fullName>Sequence__c</fullName>
 		<externalId>true</externalId>
-		<label>DocuSign recipient ID</label>
-		<length>36</length>
+		<label>Sequence</label>
+		<precision>10</precision>
+		<required>false</required>
+		<scale>0</scale>
+		<trackTrending>false</trackTrending>
+		<type>Number</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>Status__c</fullName>
+		<externalId>false</externalId>
+		<label>Status</label>
+		<length>56</length>
 		<required>false</required>
 		<trackHistory>false</trackHistory>
 		<trackTrending>false</trackTrending>
@@ -39,10 +50,10 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
-		<fullName>DocuSignEnvelopeId__c</fullName>
-		<externalId>true</externalId>
-		<label>DocuSign envelope ID</label>
-		<length>36</length>
+		<fullName>Type__c</fullName>
+		<externalId>false</externalId>
+		<label>Type</label>
+		<length>56</length>
 		<required>false</required>
 		<trackHistory>false</trackHistory>
 		<trackTrending>false</trackTrending>
@@ -62,25 +73,13 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
-		<fullName>Type__c</fullName>
+		<fullName>Email__c</fullName>
 		<externalId>false</externalId>
-		<label>Type</label>
-		<length>56</length>
+		<label>Email</label>
 		<required>false</required>
 		<trackHistory>false</trackHistory>
 		<trackTrending>false</trackTrending>
-		<type>Text</type>
-		<unique>false</unique>
-	</fields>
-	<fields>
-		<fullName>Status__c</fullName>
-		<externalId>false</externalId>
-		<label>Status</label>
-		<length>56</length>
-		<required>false</required>
-		<trackHistory>false</trackHistory>
-		<trackTrending>false</trackTrending>
-		<type>Text</type>
+		<type>Email</type>
 		<unique>false</unique>
 	</fields>
 	<fields>
@@ -91,16 +90,6 @@
 		<required>false</required>
 		<trackTrending>false</trackTrending>
 		<type>Text</type>
-		<unique>false</unique>
-	</fields>
-	<fields>
-		<fullName>Email__c</fullName>
-		<externalId>false</externalId>
-		<label>Email</label>
-		<required>false</required>
-		<trackHistory>false</trackHistory>
-		<trackTrending>false</trackTrending>
-		<type>Email</type>
 		<unique>false</unique>
 	</fields>
 	<fields>

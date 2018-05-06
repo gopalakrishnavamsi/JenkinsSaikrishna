@@ -64,15 +64,29 @@ private class CollectionTest {
 		System.assertEquals(new Set<Id> { '00541000002aMAA', '00541000002aMAB', '00541000002aMAC' }, Collection.union(s1, s2));
 	}
 
-	static testMethod void test_difference() {
+	static testMethod void test_difference_Id() {
 		Set<Id> s1 = new Set<Id> { '00541000002aMAA', '00541000002aMAB' };
 		Set<Id> s2 = new Set<Id> { '00541000002aMAA', '00541000002aMAC' };
 
-		System.assertEquals(new Set<Id>(), Collection.difference(null, null));
+		System.assertEquals(new Set<Id>(), Collection.difference((Set<Id>)null, (Set<Id>)null));
 		System.assertEquals(new Set<Id>(), Collection.difference(null, s2));
 		System.assertEquals(s1, Collection.difference(s1, null));
 		System.assertEquals(new Set<Id> { '00541000002aMAB' }, Collection.difference(s1, s2));
 		System.assertEquals(new Set<Id> { '00541000002aMAC' }, Collection.difference(s2, s1));
+	}
+
+	static testMethod void test_difference_UUID() {
+		UUID u1 = UUID.randomUUID();
+		UUID u2 = UUID.randomUUID();
+		UUID u3 = UUID.randomUUID();
+		Set<UUID> s1 = new Set<UUID> { u1, u2 };
+		Set<UUID> s2 = new Set<UUID> { u1, u3 };
+
+		System.assertEquals(new Set<UUID>(), Collection.difference((Set<UUID>)null, (Set<UUID>)null));
+		System.assertEquals(new Set<UUID>(), Collection.difference((Set<UUID>)null, s2));
+		System.assertEquals(s1, Collection.difference(s1, (Set<UUID>)null));
+		System.assertEquals(new Set<UUID> { u2 }, Collection.difference(s1, s2));
+		System.assertEquals(new Set<UUID> { u3 }, Collection.difference(s2, s1));
 	}
 
 	static testMethod void test_intersection_Id() {

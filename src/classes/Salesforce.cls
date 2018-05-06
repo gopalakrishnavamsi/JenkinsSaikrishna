@@ -159,4 +159,10 @@ public with sharing class Salesforce {
 		}
 		return result;
 	}
+
+	public static String getLightningHost() {
+		String host = Url.getSalesforceBaseUrl().getHost();
+		return host.substringBefore('.').remove('--c').remove('--' + Application.packageNamespace)
+			+ '.lightning.force.com';
+	}
 }

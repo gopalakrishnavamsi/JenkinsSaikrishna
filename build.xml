@@ -14,6 +14,7 @@
 
 	<property file="build.properties"/>
 	<property file="my.properties"/>
+	<property file="pkg.properties"/>
 
 	<target name="pushdev">
 		<sf:deploy username="${dev.username}" password="${dev.password}${dev.securityToken}" serverurl="${dev.url}" deployRoot="/src"/>
@@ -21,6 +22,10 @@
 
 	<target name="test">
 		<sf:deploy username="${test.username}" password="${test.password}${test.securityToken}" serverurl="${test.url}" deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
+	</target>
+
+	<target name="pushpkg">
+		<sf:deploy username="${pkg.username}" password="${pkg.password}${pkg.securityToken}" serverurl="${pkg.url}" deployRoot="/src"/>
 	</target>
 
 </project>

@@ -13,7 +13,7 @@
 			</layoutItems>
 			<layoutItems>
 				<behavior>Edit</behavior>
-				<field>DocuSignEnvelopeId__c</field>
+				<field>DocuSignId__c</field>
 			</layoutItems>
 			<layoutItems>
 				<behavior>Edit</behavior>

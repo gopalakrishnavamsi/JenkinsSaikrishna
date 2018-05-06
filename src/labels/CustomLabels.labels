@@ -829,7 +829,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid Correction State</shortDescription>
-		<value>Correction permission must be turned on and envelope must be in \&apos;Sent\&apos; or \&apos;Delivered\&apos; state to allow correction.</value>
+		<value>Correction permission must be turned on and envelope must be in &apos;sent&apos; or &apos;delivered&apos; state to allow correction.</value>
 	</labels>
 	<labels>
 		<fullName>EnvelopeLockedCorrectionInProgress</fullName>
@@ -968,10 +968,7 @@
 		<protected>true</protected>
 		<shortDescription>No Valid Accounts</shortDescription>
 		<value>
-			There is an issue with your DocuSign account settings. The following permissions must all be enabled:
-			&apos;Manage Account&apos;, &apos;Send Envelopes&apos;, &apos;Send on Behalf Of&apos;, and
-			&apos;API Account Wide Access&apos;. To update these settings, log in to DocuSign, select Preferences,
-			then select Permissions.
+			There is an issue with your DocuSign account settings. The following permissions must all be enabled: &apos;Manage Account&apos;, &apos;Send Envelopes&apos;, &apos;Send on Behalf Of&apos;, and &apos;API Account Wide Access&apos;. To update these settings, log in to DocuSign, select Preferences, then select Permissions.
 		</value>
 	</labels>
 	<labels>
@@ -1165,5 +1162,93 @@
 		<protected>true</protected>
 		<shortDescription>Cannot remove self</shortDescription>
 		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>StatusNotFound_1</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Status not found</shortDescription>
+		<value>DocuSign status not found for envelope {0}.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedDocuSignEnvelopeId</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined DocuSign envelope ID</shortDescription>
+		<value>DocuSign envelope ID is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>AtLeastOneEnvelopeIsRequired</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>At least one envelope is required</shortDescription>
+		<value>At least one envelope is required.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopesMustBeSent</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelopes must be sent</shortDescription>
+		<value>All envelopes must be in &apos;sent&apos; or &apos;created&apos; state with a valid DocuSign ID to create associated status records.</value>
+	</labels>
+	<labels>
+		<fullName>CannotCreateStatus</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot create status</shortDescription>
+		<value>Cannot create status.</value>
+	</labels>
+	<labels>
+		<fullName>CannotVoidEnvelope</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot void envelope</shortDescription>
+		<value>Void is only available if the envelope status is &apos;sent&apos; or &apos;delivered&apos;.</value>
+	</labels>
+	<labels>
+		<fullName>CannotCorrectEnvelope</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Cannot correct envelope</shortDescription>
+		<value>Correct is only available if the envelope status is &apos;sent&apos; or &apos;delivered&apos;.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidStatus</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid DocuSign status</shortDescription>
+		<value>DocuSign status not found or invalid.</value>
+	</labels>
+	<labels>
+		<fullName>UnknownEnvelopeRecipient</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unknown recipient</shortDescription>
+		<value>The recipient you have identified is not a valid recipient of the specified envelope.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRecipientSequence</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid recipient sequence</shortDescription>
+		<value>The recipient sequence has changed since the envelope was created.</value>
+	</labels>
+	<labels>
+		<fullName>CannotResendEnvelope</fullName>
+		<categories>Errors,Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot resent envelope</shortDescription>
+		<value>Envelope cannot be resent. It is not in the &apos;sent&apos; or &apos;delivered&apos; state.</value>
 	</labels>
 </CustomLabels>

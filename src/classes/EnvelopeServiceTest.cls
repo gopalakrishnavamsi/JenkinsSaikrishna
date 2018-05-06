@@ -308,7 +308,10 @@ private class EnvelopeServiceTest {
 	static testMethod void test_Database_updateEnvelope2() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
-			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope(a.Id))
+			Envelope__c ee = TestUtils.createEnvelope(a.Id);
+			ee.Sent__c = null;
+			update ee;
+			Envelope e = EnvelopeService.DB.convert(ee)
 				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true))
 				.withEmail('subject2', 'message2');
 			UUID docuSignId = UUID.randomUUID();
@@ -1037,6 +1040,7 @@ private class EnvelopeServiceTest {
 
 			Envelope__c ee1 = TestUtils.createEnvelope();
 			ee1.DocuSignId__c = null;
+			ee1.Sent__c = null;
 			Envelope e1 = EnvelopeService.DB.convert(ee1)
 				.withDocuments(new List<Document> {
 					DocumentService.DB.convert(TestUtils.createEnvelopeDocument(ee1.Id))
@@ -1046,6 +1050,7 @@ private class EnvelopeServiceTest {
 				});
 			Envelope__c ee2 = TestUtils.createEnvelope();
 			ee2.DocuSignId__c = null;
+			ee2.Sent__c = null;
 			Envelope e2 = EnvelopeService.DB.convert(ee2)
 				.withDocuments(new List<Document> {
 					DocumentService.DB.convert(TestUtils.createEnvelopeDocument(ee2.Id))

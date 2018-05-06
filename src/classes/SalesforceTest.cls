@@ -118,4 +118,14 @@ private class SalesforceTest {
 		System.assert(!Salesforce.exists('User', new Set<String> { 'Name', 'unitest__BogusField__c', 'Email' }));
 		Test.stopTest();
 	}
+
+	static testMethod void test_getLightningHost() {
+		String host = Url.getSalesforceBaseUrl().getHost();
+		host = host.substring(0, host.indexOf('.')).remove('--c').remove('--' + Application.packageNamespace)
+			+ '.lightning.force.com';
+
+		Test.startTest();
+		System.assertEquals(host, Salesforce.getLightningHost());
+		Test.stopTest();
+	}
 }

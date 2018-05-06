@@ -38,15 +38,19 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 	@TestVisible
 	override protected APIError getError(final HttpResponse response) {
-		APIError e = super.getError(response);
-		if (e != APIError.none && e instanceof DocuSignAPI.Error) {
-			DocuSignAPI.Error dse = (DocuSignAPI.Error)e;
+		return getError(super.getError(response));
+	}
+
+	private static APIError getError(final APIError error) {
+		APIError e = error;
+		if (error != APIError.none && error instanceof DocuSignAPI.Error) {
+			DocuSignAPI.Error dse = (DocuSignAPI.Error)error;
 			if (dse.docuSignCode == ACCOUNT_LACKS_PERMISSIONS) {
 				e = new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, dse.description);
 			} else if (dse.docuSignCode == RECIPIENT_NOT_IN_SEQUENCE) {
-				e = new APIError(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, dse.description);
+				e = new APIError(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, Label.InvalidRecipientSequence);
 			} else if (dse.docuSignCode == UNKNOWN_ENVELOPE_RECIPIENT) {
-				e = new APIError(APIErrorCode.UNKNOWN_RECIPIENT, dse.description);
+				e = new APIError(APIErrorCode.UNKNOWN_RECIPIENT, Label.UnknownEnvelopeRecipient);
 			}
 		}
 		return e;
@@ -279,6 +283,61 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return isResent;
 	}
 
+	// Serialization objects for resendRecipients
+	private class ResendResult {
+		public DocuSignAPI.ErrorDetails errorDetails;
+		public String recipientId;
+
+		public Recipient.ResendResult toExternalForm(final Recipient r) {
+			return new Recipient.ResendResult(
+				StringUtils.parseInteger(this.recipientId, null),
+				r == null ? null : r.email,
+				r == null ? null : r.routingOrder,
+				this.errorDetails == null ? null : getError(this.errorDetails.toExternalForm()));
+		}
+	}
+
+	private class ResendResults {
+		public List<ResendResult> recipientUpdateResults;
+
+		public List<Recipient.ResendResult> toExternalForm(final Map<String, Recipient> recipients) {
+			List<Recipient.ResendResult> result = new List<Recipient.ResendResult>();
+			if (this.recipientUpdateResults != null) {
+				for (ResendResult rr : this.recipientUpdateResults) {
+					result.add(rr.toExternalForm(recipients.get(rr.recipientId)));
+				}
+			}
+			return result;
+		}
+	}
+
+	public List<Recipient.ResendResult> resendRecipients(final UUID envelopeId, final List<Recipient> recipients) {
+		return this.resendRecipients(envelopeId, recipients, RestAPI.defaultTimeout);
+	}
+
+	public List<Recipient.ResendResult> resendRecipients(final UUID envelopeId, final List<Recipient> recipients,
+		final Integer timeout) {
+
+		if (envelopeId == null) throw new DocuSignException(Label.InvalidEnvelope);
+		if (Collection.isEmpty(recipients)) throw new DocuSignException(Label.AtLeastOneRecipientIsRequired);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'envelopes', envelopeId, 'recipients' },
+			new QueryString('resend_envelope', 'true'),
+			JSON.serialize(new Recipients(recipients, null, false)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to resend envelope: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		Map<String, Recipient> rMap = new Map<String, Recipient>();
+		for (Recipient r : recipients) {
+			rMap.put(String.valueOf(r.sequence), r);
+		}
+		return ((ResendResults)JSON.deserialize(response.body, ResendResults.class)).toExternalForm(rMap);
+	}
+
 	// Serialization objects for templates
 	@TestVisible
 	private class ListCustomField {
@@ -481,6 +540,11 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public EnvelopeAPI.SmsAuthentication smsAuthentication;
 		public String note;
 		public DefaultAnchorTags tabs;
+		public String status;
+		public String deliveredDateTime;
+		public String signedDateTime;
+		public String declinedDateTime;
+		public String declinedReason;
 
 		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags) {
 			if (r != null) {
@@ -515,6 +579,24 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 						? '' : String.valueOf(r.role.value));
 				}
 			}
+		}
+
+		public Recipient.Status toExternalForm(final String type) {
+			Boolean inPersonSigner = type == Recipient.TYPE_IN_PERSON_SIGNER;
+			return new Recipient.Status(
+				null, // id
+				null, // source
+				type,
+				Integer.valueOf(this.recipientId),
+				this.status,
+				inPersonSigner ? this.signerName : this.name,
+				inPersonSigner ? this.signerEmail : this.email,
+				Integer.valueOf(this.routingOrder),
+				StringUtils.parseDateTime(this.deliveredDateTime),
+				String.isNotBlank(this.declinedDateTime) ? StringUtils.parseDateTime(this.declinedDateTime)
+					: StringUtils.parseDateTime(this.signedDateTime),
+				this.declinedReason,
+				Datetime.now());
 		}
 	}
 
@@ -565,6 +647,47 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					}
 				}
 			}
+		}
+
+		public List<Recipient.Status> toExternalForm() {
+			List<Recipient.Status> result = new List<Recipient.Status>();
+			if (this.agents != null) {
+				for (EnvelopeAPI.APIRecipient r : this.agents) {
+					result.add(r.toExternalForm(Recipient.TYPE_AGENT));
+				}
+			}
+			if (this.carbonCopies != null) {
+				for (EnvelopeAPI.APIRecipient r : this.carbonCopies) {
+					result.add(r.toExternalForm(Recipient.TYPE_CARBON_COPY));
+				}
+			}
+			if (this.certifiedDeliveries != null) {
+				for (EnvelopeAPI.APIRecipient r : this.certifiedDeliveries) {
+					result.add(r.toExternalForm(Recipient.TYPE_CERTIFIED_DELIVERY));
+				}
+			}
+			if (this.editors != null) {
+				for (EnvelopeAPI.APIRecipient r : this.editors) {
+					result.add(r.toExternalForm(Recipient.TYPE_EDITOR));
+				}
+			}
+			if (this.intermediaries != null) {
+				for (EnvelopeAPI.APIRecipient r : this.intermediaries) {
+					result.add(r.toExternalForm(Recipient.TYPE_INTERMEDIARY));
+				}
+			}
+			if (this.inPersonSigners != null) {
+				for (EnvelopeAPI.APIRecipient r : this.inPersonSigners) {
+					result.add(r.toExternalForm(Recipient.TYPE_IN_PERSON_SIGNER));
+				}
+			}
+			if (this.signers != null) {
+				for (EnvelopeAPI.APIRecipient r : this.signers) {
+					result.add(r.toExternalForm(Recipient.TYPE_SIGNER));
+				}
+			}
+			result.sort();
+			return result;
 		}
 	}
 
@@ -832,6 +955,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	private class APIEnvelope {
+		public String envelopeId;
 		public String status;
 		public String transactionId;
 		public EnvelopeAPI.CustomFields customFields;
@@ -842,6 +966,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String emailSubject;
 		public EnvelopeAPI.EnvelopeNotification notification;
 		public EnvelopeAPI.DefaultAnchorTags tabs;
+		public String completedDateTime;
+		public String deliveredDateTime;
+		public String declinedDateTime;
+		public String sentDateTime;
+		public String voidedDateTime;
+		public String voidedReason;
 
 		public APIEnvelope(final Envelope e, final Boolean send, final Boolean includeDefaultAnchorTags,
 			final Boolean fetchDocuments, final Boolean useAccountNotificationDefaults) {
@@ -872,6 +1002,34 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					}
 				}
 			}
+		}
+
+		private Datetime getCompletedDatetime() {
+			Datetime result = null;
+			if (this.status == 'voided') {
+				result = StringUtils.parseDateTime(this.voidedDateTime);
+			} else if (this.status == 'declined') {
+				result = StringUtils.parseDateTime(this.declinedDateTime);
+			} else if (this.status == 'completed') {
+				result = StringUtils.parseDateTime(this.completedDateTime);
+			}
+			return result;
+		}
+
+		public Envelope.Status toExternalForm() {
+			return new Envelope.Status(
+				null, // id
+				null, // source
+				UUID.fromString(this.envelopeId),
+				this.status == null ? null : this.status.toLowerCase(),
+				UserInfo.getName(),
+				UserInfo.getUserEmail(),
+				this.recipients == null ? null : this.recipients.toExternalForm(),
+				StringUtils.parseDateTime(this.sentDateTime),
+				getCompletedDatetime(),
+				this.emailSubject,
+				this.voidedReason,
+				Datetime.now());
 		}
 	}
 
@@ -975,5 +1133,26 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			throw new APIException(error);
 		}
 		return true;
+	}
+
+	public Envelope.Status getEnvelopeStatus(final UUID envelopeId, final Boolean includeRecipients) {
+		return getEnvelopeStatus(envelopeId, includeRecipients, RestAPI.defaultTimeout);
+	}
+
+	public Envelope.Status getEnvelopeStatus(final UUID envelopeId, final Boolean includeRecipients,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.get(
+			new List<Object> { 'envelopes', String.valueOf(envelopeId) },
+			includeRecipients ? new QueryString(new Map<String, String> {
+				'include' => 'recipients',
+				'advanced_update' => 'true'
+			}) : QueryString.empty,
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to retrieve envelope: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+		return ((APIEnvelope)JSON.deserialize(response.body, APIEnvelope.class)).toExternalForm();
 	}
 }

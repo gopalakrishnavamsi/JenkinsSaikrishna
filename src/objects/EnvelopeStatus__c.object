@@ -14,14 +14,14 @@
 	<enableSharing>true</enableSharing>
 	<enableStreamingApi>true</enableStreamingApi>
 	<fields>
-		<fullName>DocuSignEnvelopeId__c</fullName>
+		<fullName>DocuSignId__c</fullName>
 		<externalId>false</externalId>
 		<label>DocuSign envelope ID</label>
-		<length>40</length>
+		<length>36</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>
 		<type>Text</type>
-		<unique>false</unique>
+		<unique>true</unique>
 	</fields>
 	<fields>
 		<fullName>Status__c</fullName>

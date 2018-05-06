@@ -2,7 +2,6 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DocuSign for Salesforce Essentials</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
-    <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink></setupWeblink>
     <types>
         <members>Application</members>
@@ -51,7 +50,6 @@
         <members>ChatterEventsTest</members>
         <members>Localization</members>
         <members>LocalizationTest</members>
-        <members>Status</members>
         <members>CustomField</members>
         <members>Recipient</members>
         <members>Document</members>
@@ -112,6 +110,8 @@
         <members>AccountFeaturesTest</members>
         <members>StatusService</members>
         <members>StatusServiceTest</members>
+        <members>SigningService</members>
+        <members>SigningServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -266,6 +266,17 @@
         <members>UndefinedSigningGroup</members>
         <members>SigningGroupNotFound</members>
         <members>CannotRemoveSelf</members>
+        <members>StatusNotFound_1</members>
+        <members>UndefinedDocuSignEnvelopeId</members>
+        <members>AtLeastOneEnvelopeIsRequired</members>
+        <members>EnvelopesMustBeSent</members>
+        <members>CannotCreateStatus</members>
+        <members>CannotVoidEnvelope</members>
+        <members>CannotCorrectEnvelope</members>
+        <members>InvalidStatus</members>
+        <members>UnknownEnvelopeRecipient</members>
+        <members>InvalidRecipientSequence</members>
+        <members>CannotResendEnvelope</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -424,7 +435,7 @@
         <members>UserSettings__c.HideWriteReview__c</members>
         <members>UserSettings__c.Username__c</members>
         <members>UserSettings__c.Password__c</members>
-        <members>EnvelopeStatus__c.DocuSignEnvelopeId__c</members>
+        <members>EnvelopeStatus__c.DocuSignId__c</members>
         <members>EnvelopeStatus__c.Status__c</members>
         <members>EnvelopeStatus__c.SourceId__c</members>
         <members>EnvelopeStatus__c.Sent__c</members>
@@ -436,8 +447,7 @@
         <members>EnvelopeStatus__c.Reason__c</members>
         <members>EnvelopeStatus__c.TimeToComplete__c</members>
         <members>RecipientStatus__c.EnvelopeStatus__c</members>
-        <members>RecipientStatus__c.DocuSignRecipientId__c</members>
-        <members>RecipientStatus__c.DocuSignEnvelopeId__c</members>
+        <members>RecipientStatus__c.Sequence__c</members>
         <members>RecipientStatus__c.Type__c</members>
         <members>RecipientStatus__c.Status__c</members>
         <members>RecipientStatus__c.SourceId__c</members>

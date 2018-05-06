@@ -601,4 +601,48 @@
 		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</label>
 		<name>CannotRemoveSelf</name>
 	</customLabels>
+	<customLabels>
+		<label>DocuSign status not found for envelope {0}.</label>
+		<name>StatusNotFound_1</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign envelope ID is undefined.</label>
+		<name>UndefinedDocuSignEnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>At least one envelope is required.</label>
+		<name>AtLeastOneEnvelopeIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>All envelopes must be in &apos;sent&apos; or &apos;created&apos; state with a valid DocuSign ID to create associated status records.</label>
+		<name>EnvelopesMustBeSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot create status.</label>
+		<name>CannotCreateStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Void is only available if the envelope status is &apos;sent&apos; or &apos;delivered&apos;.</label>
+		<name>CannotVoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Correct is only available if the envelope status is &apos;sent&apos; or &apos;delivered&apos;.</label>
+		<name>CannotCorrectEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign status not found or invalid.</label>
+		<name>InvalidStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>The recipient you have identified is not a valid recipient of the specified envelope.</label>
+		<name>UnknownEnvelopeRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>The recipient sequence has changed since the envelope was created.</label>
+		<name>InvalidRecipientSequence</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope cannot be resent. It is not in the &apos;sent&apos; or &apos;delivered&apos; state.</label>
+		<name>CannotResendEnvelope</name>
+	</customLabels>
 </Translations>

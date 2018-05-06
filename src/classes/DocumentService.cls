@@ -547,7 +547,7 @@ public with sharing class DocumentService {
 		if (templateIds != null) {
 			TemplateAPI client = TemplateAPI.getInstance();
 			for (UUID templateId : templateIds) {
-				templates.add(client.getTemplate(templateId).toDocument());
+				templates.add(Document.fromTemplate(client.getTemplate(templateId)));
 			}
 		}
 		return templates;
