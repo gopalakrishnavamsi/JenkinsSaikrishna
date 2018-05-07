@@ -443,15 +443,15 @@ public with sharing class StatusService {
 	}
 
 	/**
-	 * Voids a DocuSign envelopes. The envelope must be in the 'sent' or 'delivered' state and a non-blank
-	 * reason must be provided.
+	 * Voids a DocuSign envelope. The envelope must be in the 'sent' or 'delivered' state and a non-blank reason must be
+	 * provided.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
 	 * @param docuSignId The DocuSign envelope ID.
-	 * @param reason The reason to void the envelopes.
+	 * @param reason The reason to void the envelope.
 	 *
-	 * @return <code>true</code> if the void operations was successful, <code>false</code> otherwise.
+	 * @return <code>true</code> if the void operation was successful, <code>false</code> otherwise.
 	 */
 	public static Boolean voidEnvelope(final UUID docuSignId, final String reason) {
 		Permissions.verifyIsOwner(docuSignId);

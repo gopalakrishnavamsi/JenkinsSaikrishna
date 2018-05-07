@@ -1,3 +1,6 @@
+/**
+ * Encapsulates signing-related operations.
+ */
 public with sharing class SigningService {
 	
 	@TestVisible
@@ -54,7 +57,18 @@ public with sharing class SigningService {
 		return result;
 	}
 
+	/**
+	 * Determines whether the next DocuSign envelope recipient should sign now.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The DocuSign envelope.
+	 *
+	 * @return <code>true</code> if the next recipient should sign now, <code>false</code> otherwise.
+	 */
 	public static Boolean shouldSignNow(final Envelope envelope) {
+		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
+
 		Boolean result = false;
 		if (envelope != null && Collection.isNotEmpty(envelope.recipients)) {
 			for (Recipient r : envelope.recipients) {
@@ -68,7 +82,20 @@ public with sharing class SigningService {
 		return result;
 	}
 
+	/**
+	 * Retrieves the signing URL for the next 'sign now' signer, either in-person or the current user as signer.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelope The DocuSign envelope.
+	 * @param returnUrl Where to redirect after signing.
+	 * @param checkFirstRecipientOnly Whether to check only the first recipient or all recipients.
+	 *
+	 * @return The signing URL.
+	 */
 	public static Url getSigningUrl(final Envelope envelope, final Url returnUrl, final Boolean checkFirstRecipientOnly) {
+		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
+
 		Url result = null;
 		if (envelope != null && envelope.docuSignId != null) {
 			String name = UserInfo.getName();

@@ -1,6 +1,6 @@
 @IsTest
 private class SigningServiceTest {
-	
+
 	static testMethod void test_Database_completeSignNow() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
@@ -183,23 +183,28 @@ private class SigningServiceTest {
 	}
 
 	static testMethod void test_shouldSignNow() {
-		Envelope e1 = new Envelope(null, 'subject1', 'message1', null);
-		Envelope e2 = new Envelope(null, 'subject2', 'message2', null)
-			.withRecipients(new List<Recipient> {
-				Recipient.fromSource('Unit Test1', 'r1@unit.test', null, null, null).withSignNow(false),
-				Recipient.fromSource('Unit Test2', 'r2@unit.test', null, null, null).withSignNow(false),
-				Recipient.fromSource('Unit Test3', 'r3@unit.test', null, null, null).withSignNow(true)
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			Envelope e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			e2 = e2.withRecipients(new List<Recipient> {
+				RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e2.id)),
+				RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e2.id))
 			});
+			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e2.id);
+			r3.SignNow__c = true;
+			update r3;
+			e2 = e2.addRecipients(new List<Recipient> { RecipientService.DB.convert(r3) });
 
-		Test.startTest();
-		Boolean result1 = SigningService.shouldSignNow(null);
-		Boolean result2 = SigningService.shouldSignNow(e1);
-		Boolean result3 = SigningService.shouldSignNow(e2);
-		Test.stopTest();
+			Test.startTest();
+			Boolean result1 = SigningService.shouldSignNow(null);
+			Boolean result2 = SigningService.shouldSignNow(e1);
+			Boolean result3 = SigningService.shouldSignNow(e2);
+			Test.stopTest();
 
-		System.assert(!result1);
-		System.assert(!result2);
-		System.assert(result3);
+			System.assert(!result1);
+			System.assert(!result2);
+			System.assert(result3);
+		}
 	}
 
 	static testMethod void test_getSigningUrl_success() {
@@ -249,8 +254,10 @@ private class SigningServiceTest {
 			System.assertEquals(3, rs.size());
 
 			Envelope e1 = new Envelope(null, 'subject', 'message', null)
+				.withId(dse.id)
 				.withRecipients(rs);
 			Envelope e2 = new Envelope(null, 'subject', 'message', null)
+				.withId(dse.id)
 				.withDocuSignId(UUID.randomUUID())
 				.withRecipients(rs);
 			Url returnUrl = new Url('https://unit.test/return');
@@ -319,6 +326,7 @@ private class SigningServiceTest {
 			System.assertEquals(3, rs.size());
 
 			Envelope e = new Envelope(null, 'subject', 'message', null)
+				.withId(dse.Id)
 				.withDocuSignId(UUID.randomUUID())
 				.withRecipients(rs);
 			Url returnUrl = new Url('https://unit.test/return');
