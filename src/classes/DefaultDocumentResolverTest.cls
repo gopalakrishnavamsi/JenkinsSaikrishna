@@ -1,7 +1,8 @@
 @IsTest
 private class DefaultDocumentResolverTest {
 
-	static testMethod void test_canResolveDocuments() {
+	@IsTest
+	static void test_canResolveDocuments() {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
@@ -12,7 +13,8 @@ private class DefaultDocumentResolverTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getDocuments_ContentVersion() {
+	@IsTest
+	static void test_getDocuments_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -43,7 +45,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocuments_Document() {
+	@IsTest
+	static void test_getDocuments_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Document d1 = TestUtils.createDocument();
@@ -74,7 +77,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocuments_invalid() {
+	@IsTest
+	static void test_getDocuments_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
@@ -89,7 +93,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_ContentVersion_all() {
+	@IsTest
+	static void test_getLinkedDocuments_ContentVersion_all() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
@@ -143,7 +148,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_ContentVersion_last_updated_only() {
+	@IsTest
+	static void test_getLinkedDocuments_ContentVersion_last_updated_only() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
@@ -162,7 +168,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_Document() {
+	@IsTest
+	static void test_getLinkedDocuments_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a = TestUtils.createAccount();
@@ -175,7 +182,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_invalid() {
+	@IsTest
+	static void test_getLinkedDocuments_invalid() {
 		Test.startTest();
 		try {
 			new DefaultDocumentResolver().getLinkedDocuments(User.getSObjectType(), null, false);
@@ -186,7 +194,8 @@ private class DefaultDocumentResolverTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getDocumentContent_ContentVersion() {
+	@IsTest
+	static void test_getDocumentContent_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -203,7 +212,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocumentContent_Document() {
+	@IsTest
+	static void test_getDocumentContent_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Document d1 = TestUtils.createDocument();
@@ -220,7 +230,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocumentContent_invalid() {
+	@IsTest
+	static void test_getDocumentContent_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
@@ -235,7 +246,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_ContentVersion() {
+	@IsTest
+	static void test_getDocumentFolders_ContentVersion() {
 		System.runAs(TestUtils.createUser()) {
 			ContentWorkspace cw1 = TestUtils.createContentWorkspace();
 			ContentWorkspace cw2 = TestUtils.createContentWorkspace();
@@ -263,7 +275,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_Document() {
+	@IsTest
+	static void test_getDocumentFolders_Document() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
@@ -277,7 +290,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_invalid() {
+	@IsTest
+	static void test_getDocumentFolders_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
@@ -292,7 +306,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_ContentVersion() {
+	@IsTest
+	static void test_getFolderDocuments_ContentVersion() {
 		// Cannot create and link doc to workspace in one go, so try using existing one. Otherwise skip test.
 		ContentWorkspace lib = TestUtils.getFirstAvailableContentWorkspace();
 		ContentVersion cv1, cv2;
@@ -350,7 +365,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_Document() {
+	@IsTest
+	static void test_getFolderDocuments_Document() {
 		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -367,7 +383,8 @@ private class DefaultDocumentResolverTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_invalid() {
+	@IsTest
+	static void test_getFolderDocuments_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 

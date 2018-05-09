@@ -1,4 +1,4 @@
-@IsTest
+@IsTest(isParallel = true)
 private class QueryStringTest {
 
 	static final Map<String, String> params = new Map<String, String> {
@@ -45,7 +45,8 @@ private class QueryStringTest {
 		'whitespace' => '\f'
 	};
 
-	static testMethod void test_constructor() {
+	@IsTest
+	static void test_constructor() {
 		final QueryString qs = new QueryString(params);
 		final Set<String> validKeys = new Set<String>();
 		for (String k : params.keySet()) {
@@ -64,7 +65,8 @@ private class QueryStringTest {
 		System.assertEquals('value', qs2.get('test'));
 	}
 
-	static testMethod void test_equality() {
+	@IsTest
+	static void test_equality() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals(qs, qs);
@@ -73,19 +75,22 @@ private class QueryStringTest {
 		System.assertNotEquals(QueryString.empty, new QueryString(params));
 	}
 
-	static testMethod void test_toString() {
+	@IsTest
+	static void test_toString() {
 		System.assertEquals('notBlank=someValue&nonEncodedKey=%3Cencoded%25value%3E&encoded+%26key=nonEncodedValue',
 			new QueryString(params2).toString());
 		System.assertEquals('', QueryString.empty.toString());
 	}
 
-	static testMethod void test_isEmpty() {
+	@IsTest
+	static void test_isEmpty() {
 		System.assert(QueryString.empty.isEmpty());
 		System.assert(new QueryString(null).isEmpty());
 		System.assert(new QueryString(new Map<String, String>()).isEmpty());
 	}
 
-	static testMethod void test_fromCurrentPage() {
+	@IsTest
+	static void test_fromCurrentPage() {
 		System.assertEquals(QueryString.empty, QueryString.fromCurrentPage());
 
 		PageReference p1 = new PageReference('/apex/UnitTest');
@@ -99,7 +104,8 @@ private class QueryStringTest {
 		System.assertEquals(QueryString.empty, QueryString.fromCurrentPage());
 	}
 
-	static testMethod void test_fromString() {
+	@IsTest
+	static void test_fromString() {
 		System.assertEquals(QueryString.empty, QueryString.fromString(null));
 		System.assertEquals(QueryString.empty, QueryString.fromString(''));
 		System.assertEquals(QueryString.empty, QueryString.fromString('\t\n'));
@@ -114,7 +120,8 @@ private class QueryStringTest {
 		System.assertEquals(qs2, QueryString.fromString(qs2.toString()));
 	}
 
-	static testMethod void test_get() {
+	@IsTest
+	static void test_get() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals('abcd', qs.get('stringABCD'));
@@ -124,7 +131,8 @@ private class QueryStringTest {
 		System.assertEquals(null, qs.get(null));
 	}
 
-	static testMethod void test_getBoolean() {
+	@IsTest
+	static void test_getBoolean() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals(true, qs.getBoolean('booleanTrue'));
@@ -182,7 +190,8 @@ private class QueryStringTest {
 		}
 	}
 
-	static testMethod void test_getId() {
+	@IsTest
+	static void test_getId() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals('000000000000000000', qs.getId('id0'));
@@ -237,7 +246,8 @@ private class QueryStringTest {
 		}
 	}
 
-	static testMethod void test_getInteger() {
+	@IsTest
+	static void test_getInteger() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals(-2147483647, qs.getInteger('integerMin'));
@@ -296,7 +306,8 @@ private class QueryStringTest {
 		}
 	}
 
-	static testMethod void test_getString() {
+	@IsTest
+	static void test_getString() {
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals('abcd', qs.getString('stringABCD'));
@@ -344,7 +355,8 @@ private class QueryStringTest {
 		}
 	}
 
-	static testMethod void test_getUUID() {
+	@IsTest
+	static void test_getUUID() {
 		final UUID uuid0 = UUID.fromString('00000000-0000-0000-0000-000000000000');
 		final UUID uuid1 = UUID.fromString('11111111-1111-1111-1111-111111111111');
 		final QueryString qs = new QueryString(params);
@@ -401,7 +413,8 @@ private class QueryStringTest {
 		}
 	}
 
-	static testMethod void test_copyTo() {
+	@IsTest
+	static void test_copyTo() {
 		final Map<String, String> paramsEmpty = new Map<String, String>();
 		final Map<String, String> paramsSome = new Map<String, String> { 'param1' => 'one', 'param2' => 'two' };
 		final Map<String, String> params2Copy = new Map<String, String>(params2);
@@ -419,7 +432,8 @@ private class QueryStringTest {
 		System.assertEquals(QueryString.empty, new QueryString(paramsNull));
 	}
 
-	static testMethod void test_taggerParameters() {
+	@IsTest
+	static void test_taggerParameters() {
 		final Id eId = 'a07d0000018Lf9gAAC';
 		final Id sId = 'a0Od000000bk6A0';
 		final UUID envelopeId = UUID.fromString('78e5dfd5-aee7-4ba9-b849-4cd892dfe364');
@@ -434,7 +448,8 @@ private class QueryStringTest {
 		System.assertEquals(false, qs.getBoolean('nw', false));
 	}
 
-	static testMethod void test_isDefined() {
+	@IsTest
+	static void test_isDefined() {
 		QueryString qs = new QueryString(params);
 
 		System.assert(qs.isDefined('booleanTrue'));

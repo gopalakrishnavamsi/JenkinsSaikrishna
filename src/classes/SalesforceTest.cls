@@ -1,36 +1,43 @@
 @IsTest
 private class SalesforceTest {
 
-	@IsTest(SeeAllData = true) // Required for ConnectApi call.
-	static void test_isChatterEnabled() {
-		System.assertEquals(ConnectApi.Organization.getSettings().features.chatter, Salesforce.isChatterEnabled);
-	}
+//	@IsTest(seeAllData = true) // Required for ConnectApi call.
+//	static void test_isChatterEnabled() {
+//		System.assertEquals(ConnectApi.Organization.getSettings().features.chatter, Salesforce.isChatterEnabled);
+//	}
 
-	static testMethod void test_isCpqEnabled() {
+	@IsTest
+	static void test_isCpqEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('SBQQ__QuoteDocument__c'), Salesforce.isCpqEnabled);
 	}
 
-	static testMethod void test_areContractsEnabled() {
+	@IsTest
+	static void test_areContractsEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('Contract'), Salesforce.areContractsEnabled);
 	}
 
-	static testMethod void test_areQuotesEnabled() {
+	@IsTest
+	static void test_areQuotesEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('QuoteDocument'), Salesforce.areQuotesEnabled);
 	}
 
-	static testMethod void test_isCommunitySite() {
+	@IsTest
+	static void test_isCommunitySite() {
 		System.assertEquals(Site.getSiteType() == 'ChatterNetwork', Salesforce.isCommunitySite);
 	}
 
-	static testMethod void test_areWorkOrdersEnabled() {
+	@IsTest
+	static void test_areWorkOrdersEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('WorkOrder'), Salesforce.areWorkOrdersEnabled);
 	}
 
-	static testMethod void test_canUseApi_default() {
+	@IsTest
+	static void test_canUseApi_default() {
 		System.assert(!Salesforce.canUseApi);
 	}
 
-	static testMethod void test_canUseApi_enabled() {
+	@IsTest
+	static void test_canUseApi_enabled() {
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 		s.CanUseSalesforceApi__c = true;
 		insert s;
@@ -38,11 +45,13 @@ private class SalesforceTest {
 		System.assert(Salesforce.canUseApi);
 	}
 
-	static testMethod void test_Configuration() {
+	@IsTest
+	static void test_Configuration() {
 		System.assertNotEquals(null, new Salesforce.Configuration('host', 'https://unit.test'));
 	}
 
-	static testMethod void test_MergeObject() {
+	@IsTest
+	static void test_MergeObject() {
 		Salesforce.MergeObject mo1 = new Salesforce.MergeObject('A', null, true);
 		Salesforce.MergeObject mo2 = new Salesforce.MergeObject('B', '', true);
 		Salesforce.MergeObject mo3 = new Salesforce.MergeObject('C', ' ', true);
@@ -64,7 +73,8 @@ private class SalesforceTest {
 		System.assertEquals(mos1, mos2);
 	}
 
-	static testMethod void test_MergeField() {
+	@IsTest
+	static void test_MergeField() {
 		Salesforce.MergeField mf1 = new Salesforce.MergeField(1, 'A', 'A', null, null, null, false);
 		Salesforce.MergeField mf2 = new Salesforce.MergeField(1, 'B', 'B', '', null, null, false);
 		Salesforce.MergeField mf3 = new Salesforce.MergeField(1, 'C', 'C', ' ', null, null, false);
@@ -86,7 +96,8 @@ private class SalesforceTest {
 		System.assertEquals(mfs1, mfs2);
 	}
 
-	static testMethod void test_isSObjectId() {
+	@IsTest
+	static void test_isSObjectId() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c = TestUtils.createContact(a.Id);
@@ -104,7 +115,8 @@ private class SalesforceTest {
 		}
 	}
 
-	static testMethod void test_exists() {
+	@IsTest
+	static void test_exists() {
 		Test.startTest();
 		// Object exists
 		System.assert(Salesforce.exists('User'));
@@ -119,7 +131,8 @@ private class SalesforceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getLightningHost() {
+	@IsTest
+	static void test_getLightningHost() {
 		String host = Url.getSalesforceBaseUrl().getHost();
 		host = host.substring(0, host.indexOf('.')).remove('--c').remove('--' + Application.packageNamespace)
 			+ '.lightning.force.com';

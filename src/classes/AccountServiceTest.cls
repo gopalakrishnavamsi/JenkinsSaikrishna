@@ -1,7 +1,8 @@
 @IsTest
 private class AccountServiceTest {
 
-	static testMethod void test_getAccount_unauthorized() {
+	@IsTest
+	static void test_getAccount_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -29,7 +30,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getAccount_expired() {
+	@IsTest
+	static void test_getAccount_expired() {
 		Test.setMock(HttpCalloutMock.class, new ExpiredAccountMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -63,7 +65,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getAccount_trial() {
+	@IsTest
+	static void test_getAccount_trial() {
 		Test.setMock(HttpCalloutMock.class, new TrialAccountMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -78,7 +81,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getAccount_success() {
+	@IsTest
+	static void test_getAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -95,7 +99,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getTrialStatus() {
+	@IsTest
+	static void test_getTrialStatus() {
 		Date today = Date.today();
 
 		// Expires today
@@ -174,7 +179,8 @@ private class AccountServiceTest {
 		System.assertEquals(null, result6.message);
 	}
 
-	static testMethod void test_login_unauthorized() {
+	@IsTest
+	static void test_login_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -187,7 +193,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_error() {
+	@IsTest
+	static void test_login_error() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -204,7 +211,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_invalid_environment() {
+	@IsTest
+	static void test_login_invalid_environment() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -217,7 +225,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_invalid_credentials() {
+	@IsTest
+	static void test_login_invalid_credentials() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.UnauthorizedMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -245,7 +254,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_no_accounts() {
+	@IsTest
+	static void test_login_no_accounts() {
 		Test.setMock(HttpCalloutMock.class, new NoAccountsMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -276,7 +286,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_multiple_accounts() {
+	@IsTest
+	static void test_login_multiple_accounts() {
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -292,7 +303,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_multiple_accounts_select_one() {
+	@IsTest
+	static void test_login_multiple_accounts_select_one() {
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -309,7 +321,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_success() {
+	@IsTest
+	static void test_login_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -336,7 +349,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_login_base_Url() {
+	@IsTest
+	static void test_login_base_Url() {
 		Test.setMock(HttpCalloutMock.class, new BaseUrlMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -351,7 +365,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_connect_unauthorized() {
+	@IsTest
+	static void test_connect_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -364,7 +379,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_connect() {
+	@IsTest
+	static void test_connect() {
 		Test.setMock(WebServiceMock.class, new AccountSoapAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -376,7 +392,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_validate_Account_Trial() {
+	@IsTest
+	static void test_validate_Account_Trial() {
 		Account.Trial a1 = null;
 		Account.Trial a2 = new Account.Trial(null, new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, true);
 		Account.Trial a3 = new Account.Trial('Unit Test', null, null, true);
@@ -436,7 +453,8 @@ private class AccountServiceTest {
 		System.assert(result7.isValid);
 	}
 
-	static testMethod void test_prepareTrial_unauthorized() {
+	@IsTest
+	static void test_prepareTrial_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -449,7 +467,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_prepareTrial() {
+	@IsTest
+	static void test_prepareTrial() {
 		User u = TestUtils.createDocuSignAdministrator();
 		u.Phone = '5555551111';
 		u.MobilePhone = '5555552222';
@@ -486,7 +505,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_createTrial_unauthorized() {
+	@IsTest
+	static void test_createTrial_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -499,7 +519,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_createTrial_success() {
+	@IsTest
+	static void test_createTrial_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -529,7 +550,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_createTrial_failure() {
+	@IsTest
+	static void test_createTrial_failure() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Account.Trial a = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, false);
 
@@ -544,7 +566,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocuSignUrl_success() {
+	@IsTest
+	static void test_getDocuSignUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -558,7 +581,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocuSignUrl_failure() {
+	@IsTest
+	static void test_getDocuSignUrl_failure() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -571,7 +595,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_stringToSearchBehavior() {
+	@IsTest
+	static void test_stringToSearchBehavior() {
 		Test.startTest();
 		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(null));
 		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(''));
@@ -585,7 +610,8 @@ private class AccountServiceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getSettings_unauthorized() {
+	@IsTest
+	static void test_getSettings_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -598,7 +624,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_getSettings_success() {
+	@IsTest
+	static void test_getSettings_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 
@@ -618,7 +645,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_saveSettings_unauthorized() {
+	@IsTest
+	static void test_saveSettings_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -631,7 +659,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_saveSettings_success() {
+	@IsTest
+	static void test_saveSettings_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 
@@ -695,7 +724,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_addUsers_already_exists() {
+	@IsTest
+	static void test_addUsers_already_exists() {
 		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -730,7 +760,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_addUsers_success_partial() {
+	@IsTest
+	static void test_addUsers_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -768,7 +799,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_addUsers_success() {
+	@IsTest
+	static void test_addUsers_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -805,7 +837,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_removeUsers_self() {
+	@IsTest
+	static void test_removeUsers_self() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			User u1 = TestUtils.createUser();
 
@@ -823,7 +856,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_removeUsers_not_found() {
+	@IsTest
+	static void test_removeUsers_not_found() {
 		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -869,7 +903,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_removeUsers_success_partial() {
+	@IsTest
+	static void test_removeUsers_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -918,7 +953,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_removeUsers_success() {
+	@IsTest
+	static void test_removeUsers_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -966,7 +1002,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_executePostInstallScripts_unauthorized() {
+	@IsTest
+	static void test_executePostInstallScripts_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -979,7 +1016,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_executePostInstallScripts_success() {
+	@IsTest
+	static void test_executePostInstallScripts_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 
 			Test.startTest();
@@ -991,7 +1029,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_resetCredentials_unauthorized() {
+	@IsTest
+	static void test_resetCredentials_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1004,7 +1043,8 @@ private class AccountServiceTest {
 		}
 	}
 
-	static testMethod void test_resetCredentials_success() {
+	@IsTest
+	static void test_resetCredentials_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 

@@ -1,7 +1,8 @@
 @IsTest
 private class EntityTest {
 
-	static testMethod void test_bad_resolver() {
+	@IsTest
+	static void test_bad_resolver() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.EntityResolvers__c = 'bad_resolver';
@@ -18,7 +19,8 @@ private class EntityTest {
 		}
 	}
 
-	static testMethod void test_equals() {
+	@IsTest
+	static void test_equals() {
 		Entity e1 = new Entity(UserInfo.getUserId());
 		Entity e2 = new Entity(UserInfo.getUserId());
 		Entity e3 = new Entity(UserInfo.getOrganizationId());
@@ -29,7 +31,8 @@ private class EntityTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_toString() {
+	@IsTest
+	static void test_toString() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
@@ -49,7 +52,8 @@ private class EntityTest {
 		}
 	}
 
-	static testMethod void test_copy() {
+	@IsTest
+	static void test_copy() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
@@ -70,7 +74,8 @@ private class EntityTest {
 		}
 	}
 
-	static testMethod void test_isValid() {
+	@IsTest
+	static void test_isValid() {
 		Test.startTest();
 		System.assert(Entity.isValid(new Entity(UserInfo.getUserId())));
 		System.assert(!Entity.isValid(new Entity(null)));
@@ -78,7 +83,8 @@ private class EntityTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_resolve() {
+	@IsTest
+	static void test_resolve() {
 		System.runAs(TestUtils.createAdministrator()) {
 			TestUtils.createAccountConfiguration();
 
@@ -115,7 +121,8 @@ private class EntityTest {
 		}
 	}
 
-	static testMethod void test_resolve_error() {
+	@IsTest
+	static void test_resolve_error() {
 		Test.startTest();
 		try {
 			Entity.resolve(null);

@@ -1,4 +1,4 @@
-@IsTest
+@IsTest(isParallel = true)
 private class APIExceptionTest {
 
 	@IsTest

@@ -1,4 +1,4 @@
-@IsTest
+@IsTest(isParallel = true)
 private class RestAPITest {
 
 	class RestAPIMock implements HttpCalloutMock {
@@ -28,13 +28,15 @@ private class RestAPITest {
 		}
 	}
 
-	static testMethod void test_defaultTimeout() {
+	@IsTest
+	static void test_defaultTimeout() {
 		Test.startTest();
 		System.assertEquals(60000, RestAPI.defaultTimeout);
 		Test.stopTest();
 	}
 
-	static testMethod void test_sendRequest() {
+	@IsTest
+	static void test_sendRequest() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -62,7 +64,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"value"}', response.body);
 	}
 
-	static testMethod void test_getError_null_response() {
+	@IsTest
+	static void test_getError_null_response() {
 		final RestAPI client = new RestAPI();
 
 		Test.startTest();
@@ -74,7 +77,8 @@ private class RestAPITest {
 		System.assertEquals(Label.NullApiResponse, error.description);
 	}
 
-	static testMethod void test_get_success() {
+	@IsTest
+	static void test_get_success() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -122,7 +126,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"json"}', r2.body);
 	}
 
-	static testMethod void test_get_failure() {
+	@IsTest
+	static void test_get_failure() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -172,7 +177,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"error"}', r2.body);
 	}
 
-	static testMethod void test_post_success() {
+	@IsTest
+	static void test_post_success() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -220,7 +226,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"json"}', r2.body);
 	}
 
-	static testMethod void test_post_failure() {
+	@IsTest
+	static void test_post_failure() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -270,7 +277,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"error"}', r2.body);
 	}
 
-	static testMethod void test_put_success() {
+	@IsTest
+	static void test_put_success() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -320,7 +328,8 @@ private class RestAPITest {
 		System.assertEquals('', r2.body);
 	}
 
-	static testMethod void test_put_failure() {
+	@IsTest
+	static void test_put_failure() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -370,7 +379,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"error"}', r2.body);
 	}
 
-	static testMethod void test_del_success() {
+	@IsTest
+	static void test_del_success() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 
@@ -420,7 +430,8 @@ private class RestAPITest {
 		System.assertEquals('{"some":"json"}', r2.body);
 	}
 
-	static testMethod void test_del_failure() {
+	@IsTest
+	static void test_del_failure() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
 

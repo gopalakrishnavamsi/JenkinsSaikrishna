@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class UIThemeTest {
 
-	static testMethod void test_Classic_Theme1() {
+	@IsTest
+	static void test_Classic_Theme1() {
 		UITheme.setTheme('Theme1');
 
 		Test.startTest();
@@ -12,7 +13,8 @@ private class UIThemeTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_Classic_Theme2() {
+	@IsTest
+	static void test_Classic_Theme2() {
 		UITheme.setTheme('Theme2');
 
 		Test.startTest();
@@ -23,7 +25,8 @@ private class UIThemeTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_Classic_Theme3() {
+	@IsTest
+	static void test_Classic_Theme3() {
 		UITheme.setTheme('Theme3');
 
 		Test.startTest();
@@ -34,7 +37,8 @@ private class UIThemeTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_Salesforce1() {
+	@IsTest
+	static void test_Salesforce1() {
 		UITheme.setTheme('Theme4t');
 
 		Test.startTest();
@@ -45,7 +49,8 @@ private class UIThemeTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_Lightning() {
+	@IsTest
+	static void test_Lightning() {
 		UITheme.setTheme('Theme4d');
 
 		Test.startTest();
@@ -56,7 +61,8 @@ private class UIThemeTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_other() {
+	@IsTest
+	static void test_other() {
 		UITheme.setTheme('PortalDefault');
 
 		Test.startTest();

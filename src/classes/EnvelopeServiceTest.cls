@@ -1,7 +1,8 @@
 @IsTest
 private class EnvelopeServiceTest {
 
-	static testMethod void test_validate_valid() {
+	@IsTest
+	static void test_validate_valid() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
 				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
@@ -26,7 +27,8 @@ private class EnvelopeServiceTest {
 		System.assert(result2.isValid);
 	}
 
-	static testMethod void test_validate_documents() {
+	@IsTest
+	static void test_validate_documents() {
 		Envelope e = new Envelope(null, null, null, null,
 			null,
 			new List<Recipient> {
@@ -50,7 +52,8 @@ private class EnvelopeServiceTest {
 		System.assertEquals(new List<String> { Label.AtLeastOneDocumentIsRequired }, result2.messages);
 	}
 
-	static testMethod void test_validate_recipients() {
+	@IsTest
+	static void test_validate_recipients() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
 				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
@@ -74,7 +77,8 @@ private class EnvelopeServiceTest {
 		System.assertEquals(new List<String> { Label.AtLeastOneRecipientIsRequired }, result2.messages);
 	}
 
-	static testMethod void test_validate_custom_fields() {
+	@IsTest
+	static void test_validate_custom_fields() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
 				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
@@ -107,7 +111,8 @@ private class EnvelopeServiceTest {
 		System.assertEquals(new List<String> { m1, m2, m3 }, result2.messages);
 	}
 
-	static testMethod void test_validate_notifications() {
+	@IsTest
+	static void test_validate_notifications() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
 				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
@@ -135,7 +140,8 @@ private class EnvelopeServiceTest {
 		System.assertEquals(new List<String> { Label.InvalidNotificationSettings }, result2.messages);
 	}
 
-	static testMethod void test_validate_email() {
+	@IsTest
+	static void test_validate_email() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
 				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
@@ -184,7 +190,8 @@ private class EnvelopeServiceTest {
 		System.assertEquals(new List<String> { Label.EmailSubjectRequired, Label.EmailMessageTooLarge }, result2.messages);
 	}
 
-	static testMethod void test_Database_convert() {
+	@IsTest
+	static void test_Database_convert() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e.Id, 1);
@@ -217,7 +224,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryEnvelope_unauthorized() {
+	@IsTest
+	static void test_Database_queryEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -235,7 +243,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryEnvelope_success() {
+	@IsTest
+	static void test_Database_queryEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c e = TestUtils.createEnvelope(a.Id);
@@ -273,7 +282,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_insertEnvelope() {
+	@IsTest
+	static void test_Database_insertEnvelope() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope e = new Envelope(new Envelope.Notifications(true, 1, 2, true, 3, 4, true), 'subject', 'message',
@@ -305,7 +315,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateEnvelope2() {
+	@IsTest
+	static void test_Database_updateEnvelope2() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c ee = TestUtils.createEnvelope(a.Id);
@@ -348,7 +359,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateEnvelopeSent() {
+	@IsTest
+	static void test_Database_updateEnvelopeSent() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c e = TestUtils.createEnvelope(a.Id);
@@ -369,7 +381,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_deleteEnvelope2() {
+	@IsTest
+	static void test_Database_deleteEnvelope2() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c e = TestUtils.createEnvelope(a.Id);
@@ -388,7 +401,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_replaceUserTags() {
+	@IsTest
+	static void test_replaceUserTags() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e = new Envelope(null, '[FirstName][LastName]', '[Email]', null);
 
@@ -402,7 +416,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_saveEnvelope() {
+	@IsTest
+	static void test_saveEnvelope() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
@@ -430,7 +445,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addNotifications() {
+	@IsTest
+	static void test_addNotifications() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
@@ -460,7 +476,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addEmail() {
+	@IsTest
+	static void test_addEmail() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
@@ -492,7 +509,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addFiles() {
+	@IsTest
+	static void test_addFiles() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -528,7 +546,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addTemplates() {
+	@IsTest
+	static void test_addTemplates() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -564,7 +583,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addSourceDocuments() {
+	@IsTest
+	static void test_addSourceDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -607,7 +627,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addRelatedContacts() {
+	@IsTest
+	static void test_addRelatedContacts() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Envelope e = new Envelope(null, 's', 'm', new Entity(a1.Id));
@@ -635,7 +656,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addSourceRecipients() {
+	@IsTest
+	static void test_addSourceRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -659,7 +681,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_addCustomRecipients() {
+	@IsTest
+	static void test_addCustomRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e = new Envelope(null, 's', 'm', null);
 			List<EnvelopeConfiguration.CustomRecipient> crs = new List<EnvelopeConfiguration.CustomRecipient> {
@@ -692,7 +715,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_unauthorized() {
+	@IsTest
+	static void test_createEnvelope_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -705,7 +729,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_no_source() {
+	@IsTest
+	static void test_createEnvelope_no_source() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -729,7 +754,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_add_from_source() {
+	@IsTest
+	static void test_createEnvelope_add_from_source() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -758,7 +784,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_custom() {
+	@IsTest
+	static void test_createEnvelope_custom() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -831,7 +858,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_getEnvelope_unauthorized() {
+	@IsTest
+	static void test_getEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -849,7 +877,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_getEnvelope_success() {
+	@IsTest
+	static void test_getEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e.Id);
@@ -869,7 +898,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_copyEnvelope_unauthorized() {
+	@IsTest
+	static void test_copyEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -887,7 +917,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_copyEnvelope_success() {
+	@IsTest
+	static void test_copyEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e.Id);
@@ -908,7 +939,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelopeNotifications_unauthorized() {
+	@IsTest
+	static void test_updateEnvelopeNotifications_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -926,7 +958,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelopeNotifications_success() {
+	@IsTest
+	static void test_updateEnvelopeNotifications_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
@@ -960,7 +993,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelope_unauthorized() {
+	@IsTest
+	static void test_updateEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -978,7 +1012,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelope_success() {
+	@IsTest
+	static void test_updateEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
@@ -1014,7 +1049,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_sendEnvelope_unauthorized() {
+	@IsTest
+	static void test_sendEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1032,7 +1068,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_sendEnvelope_update_later() {
+	@IsTest
+	static void test_sendEnvelope_update_later() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1101,7 +1138,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_sendEnvelope_update_now() {
+	@IsTest
+	static void test_sendEnvelope_update_now() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1148,7 +1186,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_markEnvelopeSent_unauthorized() {
+	@IsTest
+	static void test_markEnvelopeSent_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1166,7 +1205,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_markEnvelopeSent_success() {
+	@IsTest
+	static void test_markEnvelopeSent_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Envelope e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -1191,7 +1231,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_deleteEnvelope_unauthorized() {
+	@IsTest
+	static void test_deleteEnvelope_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1209,7 +1250,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_deleteEnvelope_success() {
+	@IsTest
+	static void test_deleteEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Contact c = TestUtils.createContact();
 			Envelope__c e = TestUtils.createEnvelope(c.Id);
@@ -1227,7 +1269,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_getEmptyEnvelope_unauthorized() {
+	@IsTest
+	static void test_getEmptyEnvelope_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1240,7 +1283,8 @@ private class EnvelopeServiceTest {
 		}
 	}
 
-	static testMethod void test_getEmptyEnvelope_success() {
+	@IsTest
+	static void test_getEmptyEnvelope_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
 			s.RemindAfterDays__c = 1;

@@ -1,7 +1,8 @@
-@IsTest
-public with sharing class StringUtilsTest {
+@IsTest(isParallel = true)
+private class StringUtilsTest {
 
-	static testMethod void test_encode() {
+	@IsTest
+	static void test_encode() {
 		System.assertEquals('test', StringUtils.encode('test'));
 		System.assertEquals('%3Funit%2Ftest+path%3A', StringUtils.encode('?unit/test path:'));
 		System.assertEquals('', StringUtils.encode(null));
@@ -9,7 +10,8 @@ public with sharing class StringUtilsTest {
 		System.assertEquals('', StringUtils.encode(' \n'));
 	}
 
-	static testMethod void test_decode() {
+	@IsTest
+	static void test_decode() {
 		System.assertEquals('test', StringUtils.decode('test'));
 		System.assertEquals('?unit/test path:', StringUtils.decode('%3Funit%2Ftest+path%3A'));
 		System.assertEquals('', StringUtils.decode(null));
@@ -17,7 +19,8 @@ public with sharing class StringUtilsTest {
 		System.assertEquals('', StringUtils.decode(' \n'));
 	}
 
-	static testMethod void test_parseBoolean() {
+	@IsTest
+	static void test_parseBoolean() {
 		System.assert(StringUtils.parseBoolean('true'));
 		System.assert(!StringUtils.parseBoolean('false'));
 		System.assert(!StringUtils.parseBoolean(null));
@@ -32,7 +35,8 @@ public with sharing class StringUtilsTest {
 		System.assert(!StringUtils.parseBoolean('\n', false));
 	}
 
-	static testMethod void test_parseDecimal() {
+	@IsTest
+	static void test_parseDecimal() {
 		System.assertEquals(1.99, StringUtils.parseDecimal('1.99'));
 		System.assertEquals(0, StringUtils.parseDecimal('0'));
 		System.assertEquals(-1.99, StringUtils.parseDecimal('-1.99'));
@@ -41,7 +45,8 @@ public with sharing class StringUtilsTest {
 		System.assertEquals(null, StringUtils.parseDecimal('whatever'));
 	}
 
-	static testMethod void test_parseInteger() {
+	@IsTest
+	static void test_parseInteger() {
 		System.assertEquals(1, StringUtils.parseInteger('1'));
 		System.assertEquals(0, StringUtils.parseInteger('0'));
 		System.assertEquals(-1, StringUtils.parseInteger('-1'));
@@ -53,7 +58,8 @@ public with sharing class StringUtilsTest {
 		System.assertEquals(2, StringUtils.parseInteger('not-an-integer', 2));
 	}
 
-	static testMethod void test_fromString() {
+	@IsTest
+	static void test_fromString() {
 		System.assertEquals(null, StringUtils.fromString(null));
 		System.assertEquals(null, StringUtils.fromString(''));
 		System.assertEquals(null, StringUtils.fromString('\r'));
@@ -61,7 +67,8 @@ public with sharing class StringUtilsTest {
 		System.assertEquals('test', StringUtils.fromString('test'));
 	}
 
-	static testMethod void test_parseDateTime() {
+	@IsTest
+	static void test_parseDateTime() {
 		System.assertEquals(
 			DateTime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
 			StringUtils.parseDateTime('2017-06-17T10:59:34.823Z'));
@@ -94,7 +101,8 @@ public with sharing class StringUtilsTest {
 		}
 	}
 
-	static testMethod void test_isValidEmail() {
+	@IsTest
+	static void test_isValidEmail() {
 		String email1 = 'abc.EFG@gmail.com';
 		System.assertEquals(true, StringUtils.isValidEmail(email1));
 
@@ -124,7 +132,8 @@ public with sharing class StringUtilsTest {
 		System.assert(!StringUtils.isValidEmail('\r\n '));
 	}
 
-	static testMethod void test_mkName() {
+	@IsTest
+	static void test_mkName() {
 		Test.startTest();
 		String n1 = StringUtils.mkName(null, ' ');
 		String n2 = StringUtils.mkName('', 'Last ');
@@ -136,19 +145,19 @@ public with sharing class StringUtilsTest {
 		System.assertEquals('First Last', n3);
 	}
 
-	static testMethod void test_replaceUserTags() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			Test.startTest();
-			System.assertEquals(null, StringUtils.replaceUserTags(null));
-			System.assertEquals('', StringUtils.replaceUserTags(''));
-			System.assertEquals('   ', StringUtils.replaceUserTags('   '));
-			System.assertEquals('Replaced ' + UserInfo.getFirstName() + ' ' + UserInfo.getLastName(), StringUtils.replaceUserTags('Replaced [FirstName] [LastName]'));
-			System.assertEquals(UserInfo.getUserEmail(), StringUtils.replaceUserTags('[Email]'));
-			Test.stopTest();
-		}
+	@IsTest
+	static void test_replaceUserTags() {
+		Test.startTest();
+		System.assertEquals(null, StringUtils.replaceUserTags(null));
+		System.assertEquals('', StringUtils.replaceUserTags(''));
+		System.assertEquals('   ', StringUtils.replaceUserTags('   '));
+		System.assertEquals('Replaced ' + UserInfo.getFirstName() + ' ' + UserInfo.getLastName(), StringUtils.replaceUserTags('Replaced [FirstName] [LastName]'));
+		System.assertEquals(UserInfo.getUserEmail(), StringUtils.replaceUserTags('[Email]'));
+		Test.stopTest();
 	}
 
-	static testMethod void test_replaceNoteTags() {
+	@IsTest
+	static void test_replaceNoteTags() {
 		Test.startTest();
 		System.assertEquals(',', StringUtils.replaceNoteTags('_COMMA_'));
 		System.assertEquals(';', StringUtils.replaceNoteTags('_SEMI_'));

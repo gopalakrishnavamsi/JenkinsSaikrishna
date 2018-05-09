@@ -1,7 +1,8 @@
 @IsTest
 private class PostInstallTest {
 
-	static testMethod void test_generateEmail() {
+	@IsTest
+	static void test_generateEmail() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			PostInstallResults pir = new PostInstallResults();
 			pir.endStepFailure('STEP1', new DocuSignException('FAILURE1'));
@@ -22,7 +23,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_notify() {
+	@IsTest
+	static void test_notify() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			PostInstallResults pir = new PostInstallResults();
 			pir.endStepFailure('STEP1', new DocuSignException('FAILURE1'));
@@ -40,7 +42,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_assignDocuSignAdministratorPermissionSet() {
+	@IsTest
+	static void test_assignDocuSignAdministratorPermissionSet() {
 		System.runAs(TestUtils.createUser()) {
 
 			Test.startTest();
@@ -74,7 +77,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeAccountSettings_new() {
+	@IsTest
+	static void test_initializeAccountSettings_new() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeAccountSettings();
@@ -110,7 +114,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeAccountSettings_upgrade() {
+	@IsTest
+	static void test_initializeAccountSettings_upgrade() {
 		System.runAs(TestUtils.createUser()) {
 			String password = UUID.randomUUID().toString();
 			String accountId = UUID.randomUUID().toString();
@@ -160,7 +165,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeSettings_envelope_new() {
+	@IsTest
+	static void test_initializeSettings_envelope_new() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeSettings(
@@ -178,7 +184,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeSettings_envelope_upgrade() {
+	@IsTest
+	static void test_initializeSettings_envelope_upgrade() {
 		System.runAs(TestUtils.createUser()) {
 			insert EnvelopeSettings__c.getOrgDefaults();
 
@@ -198,7 +205,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeSettings_Chatter_new() {
+	@IsTest
+	static void test_initializeSettings_Chatter_new() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeSettings(
@@ -216,7 +224,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_initializeSettings_Chatter_upgrade() {
+	@IsTest
+	static void test_initializeSettings_Chatter_upgrade() {
 		System.runAs(TestUtils.createUser()) {
 			insert ChatterSettings__c.getOrgDefaults();
 
@@ -236,7 +245,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_createDefaultRecipientRoles_new() {
+	@IsTest
+	static void test_createDefaultRecipientRoles_new() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.createDefaultRecipientRoles();
@@ -270,7 +280,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_createDefaultRecipientRoles_upgrade() {
+	@IsTest
+	static void test_createDefaultRecipientRoles_upgrade() {
 		System.runAs(TestUtils.createUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role A', Value__c = 1),
@@ -305,7 +316,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_shouldExecute() {
+	@IsTest
+	static void test_shouldExecute() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			// Always returns true
@@ -314,7 +326,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_execute() {
+	@IsTest
+	static void test_execute() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			PostInstallResults result = new PostInstall().execute(UserInfo.getOrganizationId(), UserInfo.getUserId(),
@@ -328,7 +341,8 @@ private class PostInstallTest {
 		}
 	}
 
-	static testMethod void test_install() {
+	@IsTest
+	static void test_install() {
 		System.runAs(TestUtils.createUser()) {
 
 			Test.startTest();

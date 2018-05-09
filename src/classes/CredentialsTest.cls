@@ -1,7 +1,8 @@
 @IsTest
 private class CredentialsTest {
 
-	static testMethod void test_getAccountCredentials() {
+	@IsTest
+	static void test_getAccountCredentials() {
 		UUID accountId = UUID.randomUUID();
 		TestUtils.createAccountConfiguration(accountId, accountId.toString());
 
@@ -17,7 +18,8 @@ private class CredentialsTest {
 		System.assert(result2 === result1);
 	}
 
-	static testMethod void test_getUserCredentials() {
+	@IsTest
+	static void test_getUserCredentials() {
 		User u1 = TestUtils.createUser();
 		User u2 = TestUtils.createUser();
 
@@ -45,7 +47,8 @@ private class CredentialsTest {
 		System.assert(result4 === result3);
 	}
 
-	static testMethod void test_buildAPICredentials() {
+	@IsTest
+	static void test_buildAPICredentials() {
 		UUID accountId = UUID.randomUUID();
 		String au = UUID.randomUUID().toString();
 		String ap = UUID.randomUUID().toString();
@@ -92,7 +95,8 @@ private class CredentialsTest {
 		System.assertEquals(null, result2.sendOnBehalfOf);
 	}
 
-	static testMethod void test_getInstance_default() {
+	@IsTest
+	static void test_getInstance_default() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -113,7 +117,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_getInstance_custom() {
+	@IsTest
+	static void test_getInstance_custom() {
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
 
@@ -154,7 +159,8 @@ private class CredentialsTest {
 		System.assert(!result6.isValid);
 	}
 
-	static testMethod void test_getInstance_user() {
+	@IsTest
+	static void test_getInstance_user() {
 		User u1 = TestUtils.createDocuSignUser();
 		User u2 = TestUtils.createDocuSignUser();
 
@@ -185,7 +191,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_getInstance_error() {
+	@IsTest
+	static void test_getInstance_error() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -198,7 +205,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_save_insert_sobo() {
+	@IsTest
+	static void test_save_insert_sobo() {
 		UUID accountId = UUID.randomUUID();
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
@@ -228,7 +236,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_save_insert_no_sobo() {
+	@IsTest
+	static void test_save_insert_no_sobo() {
 		UUID accountId = UUID.randomUUID();
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
@@ -258,7 +267,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_save_update() {
+	@IsTest
+	static void test_save_update() {
 		UUID accountId = UUID.randomUUID();
 		UUID username = UUID.randomUUID();
 		String password = UUID.randomUUID().toString();
@@ -292,7 +302,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_addUsers() {
+	@IsTest
+	static void test_addUsers() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		UUID dsaUsername = UUID.randomUUID();
 		User dsa = TestUtils.createDocuSignAdministrator();
@@ -332,7 +343,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_clear_account() {
+	@IsTest
+	static void test_clear_account() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
 		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);
@@ -394,7 +406,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_clear_all() {
+	@IsTest
+	static void test_clear_all() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
 		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);
@@ -456,7 +469,8 @@ private class CredentialsTest {
 		}
 	}
 
-	static testMethod void test_clear_users() {
+	@IsTest
+	static void test_clear_users() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
 		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);

@@ -1,7 +1,8 @@
 @IsTest
 private class StatusServiceTest {
 
-	static testMethod void test_validate() {
+	@IsTest
+	static void test_validate() {
 		// Valid
 		Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.randomUUID(),
 			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, DateTime.now().addDays(-1),
@@ -43,7 +44,8 @@ private class StatusServiceTest {
 		System.assert(result5.isValid);
 	}
 
-	static testMethod void test_Database_convert_EnvelopeStatus() {
+	@IsTest
+	static void test_Database_convert_EnvelopeStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(TestUtils.createEnvelope());
 			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(TestUtils.createEnvelope());
@@ -83,7 +85,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_convert_RecipientStatus() {
+	@IsTest
+	static void test_Database_convert_RecipientStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
@@ -129,7 +132,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryStatus() {
+	@IsTest
+	static void test_Database_queryStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID e1Id = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1Id);
@@ -238,7 +242,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_insertStatus() {
+	@IsTest
+	static void test_Database_insertStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Datetime now = DateTime.now();
 			Schema.Account a1 = TestUtils.createAccount();
@@ -363,7 +368,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_upsertStatus() {
+	@IsTest
+	static void test_Database_upsertStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Datetime now = DateTime.now();
 			Envelope.Status e1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus());
@@ -481,7 +487,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_deleteStatus() {
+	@IsTest
+	static void test_Database_deleteStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Datetime now = DateTime.now();
 			UUID e1Id = UUID.randomUUID();
@@ -509,7 +516,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateStatus() {
+	@IsTest
+	static void test_Database_updateStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID dseId1 = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -540,7 +548,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_createStatus_unauthorized() {
+	@IsTest
+	static void test_createStatus_unauthorized() {
 		Envelope e1, e2;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -560,7 +569,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_createStatus_no_envelopes() {
+	@IsTest
+	static void test_createStatus_no_envelopes() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -579,7 +589,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_createStatus_invalid_envelopes() {
+	@IsTest
+	static void test_createStatus_invalid_envelopes() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
@@ -603,7 +614,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_createStatus_valid() {
+	@IsTest
+	static void test_createStatus_valid() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id));
@@ -641,7 +653,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_getStatus_unauthorized() {
+	@IsTest
+	static void test_getStatus_unauthorized() {
 		Envelope e1, e2;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -661,7 +674,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_getStatus_no_update() {
+	@IsTest
+	static void test_getStatus_no_update() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c e1 = TestUtils.createEnvelope();
@@ -697,7 +711,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_getStatus_with_update() {
+	@IsTest
+	static void test_getStatus_with_update() {
 		Test.setMock(HttpCalloutMock.class, new EnvelopeStatusMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -727,7 +742,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_getStatus_not_exists() {
+	@IsTest
+	static void test_getStatus_not_exists() {
 		Test.setMock(HttpCalloutMock.class, new EnvelopeStatusMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -756,7 +772,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_deleteStatus_unauthorized() {
+	@IsTest
+	static void test_deleteStatus_unauthorized() {
 		Envelope e1, e2;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -776,7 +793,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_deleteStatus_not_found() {
+	@IsTest
+	static void test_deleteStatus_not_found() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID dseId1 = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -792,7 +810,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_deleteStatus_success() {
+	@IsTest
+	static void test_deleteStatus_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
@@ -812,7 +831,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendEnvelope_unauthorized() {
+	@IsTest
+	static void test_resendEnvelope_unauthorized() {
 		Envelope e1;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -830,7 +850,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendEnvelope_invalid_status() {
+	@IsTest
+	static void test_resendEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
@@ -849,7 +870,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendEnvelope_success() {
+	@IsTest
+	static void test_resendEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -864,7 +886,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendRecipients_unauthorized() {
+	@IsTest
+	static void test_resendRecipients_unauthorized() {
 		Envelope e1;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -882,7 +905,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendRecipients_invalid_status() {
+	@IsTest
+	static void test_resendRecipients_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
@@ -901,7 +925,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_resendRecipients_success() {
+	@IsTest
+	static void test_resendRecipients_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -920,7 +945,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_unauthorized() {
+	@IsTest
+	static void test_voidEnvelope_unauthorized() {
 		Envelope e1;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -938,7 +964,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_not_found() {
+	@IsTest
+	static void test_voidEnvelope_not_found() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
@@ -955,7 +982,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_invalid_status() {
+	@IsTest
+	static void test_voidEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
@@ -974,7 +1002,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_success() {
+	@IsTest
+	static void test_voidEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1007,7 +1036,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_correctEnvelope_unauthorized() {
+	@IsTest
+	static void test_correctEnvelope_unauthorized() {
 		Envelope e1;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -1025,7 +1055,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_correctEnvelope_not_found() {
+	@IsTest
+	static void test_correctEnvelope_not_found() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 
@@ -1042,7 +1073,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_correctEnvelope_invalid_status() {
+	@IsTest
+	static void test_correctEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.fromString(e1.DocuSignId__c));
@@ -1060,7 +1092,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_correctEnvelope_success() {
+	@IsTest
+	static void test_correctEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1078,7 +1111,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_viewEnvelope_invalid() {
+	@IsTest
+	static void test_viewEnvelope_invalid() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -1091,7 +1125,8 @@ private class StatusServiceTest {
 		}
 	}
 
-	static testMethod void test_viewEnvelope_success() {
+	@IsTest
+	static void test_viewEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

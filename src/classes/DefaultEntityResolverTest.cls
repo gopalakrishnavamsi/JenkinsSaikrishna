@@ -1,7 +1,8 @@
 @IsTest
 private class DefaultEntityResolverTest {
 
-	static testMethod void test_canResolve() {
+	@IsTest
+	static void test_canResolve() {
 		EntityResolver resolver = new DefaultEntityResolver();
 
 		Test.startTest();
@@ -11,7 +12,8 @@ private class DefaultEntityResolverTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_resolve_Account() {
+	@IsTest
+	static void test_resolve_Account() {
 		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Schema.Account a = TestUtils.createAccount();
@@ -29,7 +31,8 @@ private class DefaultEntityResolverTest {
 		}
 	}
 
-	static testMethod void test_resolve_Opportunity() {
+	@IsTest
+	static void test_resolve_Opportunity() {
 		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Opportunity o = TestUtils.createOpportunity();
@@ -47,7 +50,8 @@ private class DefaultEntityResolverTest {
 		}
 	}
 
-	static testMethod void test_resolve_Contact() {
+	@IsTest
+	static void test_resolve_Contact() {
 		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Contact c = TestUtils.createContact();
@@ -65,7 +69,8 @@ private class DefaultEntityResolverTest {
 		}
 	}
 
-	static testMethod void test_resolve_Case() {
+	@IsTest
+	static void test_resolve_Case() {
 		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Case c = TestUtils.createCase();
@@ -83,7 +88,8 @@ private class DefaultEntityResolverTest {
 		}
 	}
 
-	static testMethod void test_resolve_other() {
+	@IsTest
+	static void test_resolve_other() {
 		System.runAs(TestUtils.createAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			User u = TestUtils.createUser();
@@ -119,7 +125,8 @@ private class DefaultEntityResolverTest {
 		}
 	}
 
-	static testMethod void test_resolve_error() {
+	@IsTest
+	static void test_resolve_error() {
 		DefaultEntityResolver resolver = new DefaultEntityResolver();
 
 		Test.startTest();

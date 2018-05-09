@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class DeviceTest {
 
-	static testMethod void test_constructor() {
+	@IsTest
+	static void test_constructor() {
 		Test.startTest();
 		Device d1 = new Device(Device.OS.Other, Device.Type.Other, false);
 		Device d2 = new Device(Device.OS.IOS, Device.Type.Phone, true);
@@ -20,7 +21,8 @@ private class DeviceTest {
 		System.assert(d2.isMobile);
 	}
 
-	static testMethod void test_fromUserAgent() {
+	@IsTest
+	static void test_fromUserAgent() {
 		String otherUA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36';
 		String iPhoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A403 Safari/602.1';
 		String iPadUA = 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/30.0.1599.12 Mobile/11A465 Safari/8536.25 (3B92C18B-D9DE-4CB7-A02A-22FD2AF17C8F)';

@@ -1,7 +1,8 @@
 @IsTest
 private class AccountAPITest {
 
-	static testMethod void test_getError() {
+	@IsTest
+	static void test_getError() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			AccountAPI client = AccountAPI.getInstance();
@@ -64,7 +65,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_stringToConnectPermission() {
+	@IsTest
+	static void test_stringToConnectPermission() {
 		Test.startTest();
 		System.assertEquals(Account.ConnectPermission.None, AccountAPI.stringToConnectPermission(null));
 		System.assertEquals(Account.ConnectPermission.None, AccountAPI.stringToConnectPermission(''));
@@ -77,7 +79,8 @@ private class AccountAPITest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getAccount_success() {
+	@IsTest
+	static void test_getAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -106,7 +109,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getAccount_failure() {
+	@IsTest
+	static void test_getAccount_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -129,7 +133,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addPlanId_success() {
+	@IsTest
+	static void test_addPlanId_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -159,7 +164,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addPlanId_failure() {
+	@IsTest
+	static void test_addPlanId_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -204,7 +210,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addPlanId_error() {
+	@IsTest
+	static void test_addPlanId_error() {
 		Test.setMock(HttpCalloutMock.class, new AddPlanIdErrorMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -236,7 +243,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getUserSettings_success() {
+	@IsTest
+	static void test_getUserSettings_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -282,7 +290,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getUserSettings_failure() {
+	@IsTest
+	static void test_getUserSettings_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -304,7 +313,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getAccountCredentials_success() {
+	@IsTest
+	static void test_getAccountCredentials_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -321,7 +331,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getAccountCredentials_failure() {
+	@IsTest
+	static void test_getAccountCredentials_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -354,7 +365,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getAccountCredentials_no_accounts() {
+	@IsTest
+	static void test_getAccountCredentials_no_accounts() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -373,7 +385,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getValidAccounts_no_credentials() {
+	@IsTest
+	static void test_getValidAccounts_no_credentials() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -387,7 +400,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getValidAccounts_none() {
+	@IsTest
+	static void test_getValidAccounts_none() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 		TestUtils.createAccountConfiguration();
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
@@ -414,7 +428,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getValidAccounts_single_valid() {
+	@IsTest
+	static void test_getValidAccounts_single_valid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleValidAccountMock());
 		TestUtils.createAccountConfiguration();
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
@@ -440,7 +455,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getValidAccounts_single_invalid() {
+	@IsTest
+	static void test_getValidAccounts_single_invalid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleInvalidAccountMock());
 		TestUtils.createAccountConfiguration();
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
@@ -480,7 +496,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getValidAccounts_multiple() {
+	@IsTest
+	static void test_getValidAccounts_multiple() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationMultipleValidAccountMock());
 		TestUtils.createAccountConfiguration();
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
@@ -497,7 +514,8 @@ private class AccountAPITest {
 		System.assertEquals(TestUtils.ID3, uas.accounts[1].accountId);
 	}
 
-	static testMethod void test_stringToUserStatus() {
+	@IsTest
+	static void test_stringToUserStatus() {
 		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus(null));
 		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus(''));
 		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus('\t'));
@@ -507,7 +525,8 @@ private class AccountAPITest {
 		System.assertEquals(Account.UserStatus.PendingActivation, AccountAPI.stringToUserStatus('activationSENT'));
 	}
 
-	static testMethod void test_userStatusToString() {
+	@IsTest
+	static void test_userStatusToString() {
 		System.assertEquals(null, AccountAPI.userStatusToString(null));
 		System.assertEquals(null, AccountAPI.userStatusToString(Account.UserStatus.Unknown));
 		System.assertEquals('active', AccountAPI.userStatusToString(Account.UserStatus.Active));
@@ -515,7 +534,8 @@ private class AccountAPITest {
 		System.assertEquals('activationSent', AccountAPI.userStatusToString(Account.UserStatus.PendingActivation));
 	}
 
-	static testMethod void test_getConsoleViewUrl_success() {
+	@IsTest
+	static void test_getConsoleViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -531,7 +551,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewUrl_failure() {
+	@IsTest
+	static void test_getConsoleViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -554,7 +575,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addUsers_success() {
+	@IsTest
+	static void test_addUsers_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -617,7 +639,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addUsers_user_already_exists() {
+	@IsTest
+	static void test_addUsers_user_already_exists() {
 		Test.setMock(HttpCalloutMock.class, new UserAlreadyExistsMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -652,7 +675,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addUsers_other_error() {
+	@IsTest
+	static void test_addUsers_other_error() {
 		Test.setMock(HttpCalloutMock.class, new UserOtherErrorMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -676,7 +700,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_addUsers_failure() {
+	@IsTest
+	static void test_addUsers_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -701,7 +726,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_removeUsers_success() {
+	@IsTest
+	static void test_removeUsers_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -730,7 +756,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_removeUsers_failure() {
+	@IsTest
+	static void test_removeUsers_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -766,7 +793,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_removeUsers_not_found() {
+	@IsTest
+	static void test_removeUsers_not_found() {
 		Test.setMock(HttpCalloutMock.class, new UnknownUserMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -790,7 +818,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_createTrialAccount_success() {
+	@IsTest
+	static void test_createTrialAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		Test.startTest();
@@ -812,7 +841,8 @@ private class AccountAPITest {
 		System.assertEquals('https://unit.test.docusign.net/', result.baseUrl.toExternalForm());
 	}
 
-	static testMethod void test_createTrialAccount_failure() {
+	@IsTest
+	static void test_createTrialAccount_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -871,7 +901,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_createTrialAccount_errors() {
+	@IsTest
+	static void test_createTrialAccount_errors() {
 		Test.setMock(HttpCalloutMock.class, new CreateAccountErrorMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -956,7 +987,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getCustomFields_success() {
+	@IsTest
+	static void test_getCustomFields_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -987,7 +1019,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getCustomFields_failure() {
+	@IsTest
+	static void test_getCustomFields_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1009,7 +1042,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getDocumentCustomFields_success() {
+	@IsTest
+	static void test_getDocumentCustomFields_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1125,7 +1159,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_getDocumentCustomFields_failure() {
+	@IsTest
+	static void test_getDocumentCustomFields_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1147,7 +1182,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_saveDocumentCustomField_success_create() {
+	@IsTest
+	static void test_saveDocumentCustomField_success_create() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1174,7 +1210,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_saveDocumentCustomField_success_update() {
+	@IsTest
+	static void test_saveDocumentCustomField_success_update() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1204,7 +1241,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_saveDocumentCustomField_failure() {
+	@IsTest
+	static void test_saveDocumentCustomField_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1238,7 +1276,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_deleteDocumentCustomField_success() {
+	@IsTest
+	static void test_deleteDocumentCustomField_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -1253,7 +1292,8 @@ private class AccountAPITest {
 		}
 	}
 
-	static testMethod void test_deleteDocumentCustomField_failure() {
+	@IsTest
+	static void test_deleteDocumentCustomField_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {

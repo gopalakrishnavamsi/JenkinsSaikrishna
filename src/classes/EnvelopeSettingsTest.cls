@@ -1,7 +1,8 @@
 @IsTest
 private class EnvelopeSettingsTest {
 
-	static testMethod void test_getInstance() {
+	@IsTest
+	static void test_getInstance() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -19,7 +20,8 @@ private class EnvelopeSettingsTest {
 		}
 	}
 
-	static testMethod void test_getInstance_error() {
+	@IsTest
+	static void test_getInstance_error() {
 		System.runAs(TestUtils.createRestrictedUser()) {
 			Test.startTest();
 			EnvelopeSettings result = EnvelopeSettings.getInstance();
@@ -31,7 +33,8 @@ private class EnvelopeSettingsTest {
 		}
 	}
 
-	static testMethod void test_mergeWith() {
+	@IsTest
+	static void test_mergeWith() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
@@ -70,7 +73,8 @@ private class EnvelopeSettingsTest {
 		}
 	}
 
-	static testMethod void test_getOptions() {
+	@IsTest
+	static void test_getOptions() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
@@ -97,7 +101,8 @@ private class EnvelopeSettingsTest {
 		}
 	}
 
-	static testMethod void test_getChatterSetting() {
+	@IsTest
+	static void test_getChatterSetting() {
 		Test.startTest();
 		if (!Salesforce.isChatterEnabled) {
 			System.assertEquals(EnvelopeSettings.CHATTER_DISABLED, EnvelopeSettings.getChatterSetting(true, true, true));
@@ -112,7 +117,8 @@ private class EnvelopeSettingsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getCanonicalChatterSetting() {
+	@IsTest
+	static void test_getCanonicalChatterSetting() {
 		Test.startTest();
 		System.assertEquals(EnvelopeSettings.CHATTER_DISABLED, EnvelopeSettings.getCanonicalChatterSetting(null));
 		System.assertEquals(EnvelopeSettings.CHATTER_DISABLED, EnvelopeSettings.getCanonicalChatterSetting(''));
@@ -132,7 +138,8 @@ private class EnvelopeSettingsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_save() {
+	@IsTest
+	static void test_save() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 

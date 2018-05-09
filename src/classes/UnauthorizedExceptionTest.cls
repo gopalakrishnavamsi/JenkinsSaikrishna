@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class UnauthorizedExceptionTest {
 
-	static testMethod void test_notDocuSignAdministrator() {
+	@IsTest
+	static void test_notDocuSignAdministrator() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notDocuSignAdministrator();
 		Test.stopTest();
@@ -12,7 +13,8 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignAdministrator, ex.requirement);
 	}
 
-	static testMethod void test_notDocuSignUser() {
+	@IsTest
+	static void test_notDocuSignUser() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notDocuSignUser();
 		Test.stopTest();
@@ -23,7 +25,8 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
 	}
 
-	static testMethod void test_notSalesforceAdministrator() {
+	@IsTest
+	static void test_notSalesforceAdministrator() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notSalesforceAdministrator();
 		Test.stopTest();
@@ -34,7 +37,8 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UnauthorizedException.AccessRequirement.SalesforceAdministrator, ex.requirement);
 	}
 
-	static testMethod void test_notEnvelopeOwner() {
+	@IsTest
+	static void test_notEnvelopeOwner() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notEnvelopeOwner();
 		Test.stopTest();
@@ -45,7 +49,8 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UnauthorizedException.AccessRequirement.EnvelopeOwner, ex.requirement);
 	}
 
-	static testMethod void test_mayRequireActivation() {
+	@IsTest
+	static void test_mayRequireActivation() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.mayRequireActivation();
 		Test.stopTest();
@@ -56,7 +61,8 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
 	}
 
-	static testMethod void test_results() {
+	@IsTest
+	static void test_results() {
 		Test.startTest();
 		UnauthorizedException ex1 = new UnauthorizedException('', null);
 		UnauthorizedException ex2 = new UnauthorizedException('Message1', null);

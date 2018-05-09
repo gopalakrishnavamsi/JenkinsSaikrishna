@@ -28,7 +28,7 @@
 * This is a dummy test class to obtain 100% coverage for the generated WSDL2Apex code, it is not a funcitonal test class
 *   You should follow the usual practices to cover your other code, as shown in the MetadataCreateJobTest.cls
 **/
-@isTest
+@isTest(isParallel = true)
 private class MetadataAPITest {
 
 	/**
@@ -53,7 +53,8 @@ private class MetadataAPITest {
 		}
 	}
 
-	static testMethod void coverGeneratedCodeCRUDOperations() {
+	@IsTest
+	static void coverGeneratedCodeCRUDOperations() {
 		// Null Web Service mock implementation
 		System.Test.setMock(WebServiceMock.class, new WebServiceMockImpl());
 		// Only required to workaround a current code coverage bug in the platform
@@ -68,7 +69,8 @@ private class MetadataAPITest {
 		System.assert(true);
 	}
 
-	static testMethod void coverGeneratedCodeFileBasedOperations1() {
+	@IsTest
+	static void coverGeneratedCodeFileBasedOperations1() {
 		// Null Web Service mock implementation
 		System.Test.setMock(WebServiceMock.class, new WebServiceMockImpl());
 		// Only required to workaround a current code coverage bug in the platform
@@ -86,7 +88,8 @@ private class MetadataAPITest {
 		System.assert(true);
 	}
 
-	static testMethod void coverGeneratedCodeTypes() {
+	@IsTest
+	static void coverGeneratedCodeTypes() {
 		// Reference types
 		Test.startTest();
 		new MetadataAPI();

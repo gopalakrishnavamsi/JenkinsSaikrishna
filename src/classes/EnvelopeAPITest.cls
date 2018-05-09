@@ -1,7 +1,8 @@
 @IsTest
 private class EnvelopeAPITest {
 
-	static testMethod void test_bad_resolver() {
+	@IsTest
+	static void test_bad_resolver() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.DocumentResolvers__c = 'bad_resolver';
@@ -18,7 +19,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getError() {
+	@IsTest
+	static void test_getError() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
@@ -81,7 +83,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_buildCustomFields() {
+	@IsTest
+	static void test_buildCustomFields() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -111,7 +114,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getDocumentContent_success() {
+	@IsTest
+	static void test_getDocumentContent_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -148,7 +152,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getDocumentContent_error() {
+	@IsTest
+	static void test_getDocumentContent_error() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -171,7 +176,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSenderViewUrl_success() {
+	@IsTest
+	static void test_getSenderViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -187,7 +193,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSenderViewUrl_failure() {
+	@IsTest
+	static void test_getSenderViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -211,7 +218,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewUrl_success() {
+	@IsTest
+	static void test_getRecipientViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -228,7 +236,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewUrl_failure() {
+	@IsTest
+	static void test_getRecipientViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -264,7 +273,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewUrl_unknown_recipient() {
+	@IsTest
+	static void test_getRecipientViewUrl_unknown_recipient() {
 		Test.setMock(HttpCalloutMock.class, new UnknownRecipientMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -295,7 +305,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientViewUrl_invalid_sequence() {
+	@IsTest
+	static void test_getRecipientViewUrl_invalid_sequence() {
 		Test.setMock(HttpCalloutMock.class, new InvalidSequenceMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -315,7 +326,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewUrl_success() {
+	@IsTest
+	static void test_getConsoleViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -331,7 +343,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getConsoleViewUrl_failure() {
+	@IsTest
+	static void test_getConsoleViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -355,7 +368,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewUrl_success() {
+	@IsTest
+	static void test_getCorrectViewUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -371,7 +385,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewUrl_failure() {
+	@IsTest
+	static void test_getCorrectViewUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -417,7 +432,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getCorrectViewUrl_error() {
+	@IsTest
+	static void test_getCorrectViewUrl_error() {
 		Test.setMock(HttpCalloutMock.class, new CorrectViewErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -481,7 +497,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_resendEnvelope_success() {
+	@IsTest
+	static void test_resendEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -494,7 +511,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_resendEnvelope_failure() {
+	@IsTest
+	static void test_resendEnvelope_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -517,7 +535,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_resendRecipients_success() {
+	@IsTest
+	static void test_resendRecipients_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -550,7 +569,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_resendRecipients_failure() {
+	@IsTest
+	static void test_resendRecipients_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -571,7 +591,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSigningGroups_success() {
+	@IsTest
+	static void test_getSigningGroups_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -614,7 +635,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getSigningGroups_failure() {
+	@IsTest
+	static void test_getSigningGroups_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -649,7 +671,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_updateInPersonSigner_success() {
+	@IsTest
+	static void test_updateInPersonSigner_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -662,7 +685,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_updateInPersonSigner_failure() {
+	@IsTest
+	static void test_updateInPersonSigner_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -685,7 +709,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_success() {
+	@IsTest
+	static void test_voidEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -698,7 +723,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_failure() {
+	@IsTest
+	static void test_voidEnvelope_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -736,7 +762,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_voidEnvelope_errors() {
+	@IsTest
+	static void test_voidEnvelope_errors() {
 		Test.setMock(HttpCalloutMock.class, new VoidEnvelopeErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -769,7 +796,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_success() {
+	@IsTest
+	static void test_createEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -814,7 +842,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_success_with_Recipient_EmailSettings() {
+	@IsTest
+	static void test_createEnvelope_success_with_Recipient_EmailSettings() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -867,7 +896,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_buildCompositeTemplates_success() {
+	@IsTest
+	static void test_buildCompositeTemplates_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			Schema.Account a = TestUtils.createAccount();
@@ -899,7 +929,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_recipient_types() {
+	@IsTest
+	static void test_createEnvelope_recipient_types() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -933,7 +964,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_document_types() {
+	@IsTest
+	static void test_createEnvelope_document_types() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -963,7 +995,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_failure() {
+	@IsTest
+	static void test_createEnvelope_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -983,7 +1016,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_null_envelope() {
+	@IsTest
+	static void test_createEnvelope_null_envelope() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
@@ -999,7 +1033,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_fetch_invalid_document() {
+	@IsTest
+	static void test_createEnvelope_fetch_invalid_document() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c e1 = TestUtils.createEnvelope();
@@ -1043,7 +1078,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_21_cfr_part_11() {
+	@IsTest
+	static void test_createEnvelope_error_21_cfr_part_11() {
 		Test.setMock(HttpCalloutMock.class, new CfrErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1074,7 +1110,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_user_not_activated() {
+	@IsTest
+	static void test_createEnvelope_error_user_not_activated() {
 		Test.setMock(HttpCalloutMock.class, new UserNotActivatedErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1105,7 +1142,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_trial_expired() {
+	@IsTest
+	static void test_createEnvelope_error_trial_expired() {
 		Test.setMock(HttpCalloutMock.class, new TrialExpiredErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1136,7 +1174,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_account_permissions() {
+	@IsTest
+	static void test_createEnvelope_error_account_permissions() {
 		Test.setMock(HttpCalloutMock.class, new AccountPermissionErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1167,7 +1206,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_user_permissions() {
+	@IsTest
+	static void test_createEnvelope_error_user_permissions() {
 		Test.setMock(HttpCalloutMock.class, new UserPermissionErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1198,7 +1238,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_invalid_document() {
+	@IsTest
+	static void test_createEnvelope_error_invalid_document() {
 		Test.setMock(HttpCalloutMock.class, new InvalidDocumentErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1229,7 +1270,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_invalid_signing_group() {
+	@IsTest
+	static void test_createEnvelope_error_invalid_signing_group() {
 		Test.setMock(HttpCalloutMock.class, new InvalidSigningGroupErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1260,7 +1302,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_createEnvelope_error_invalid_recipient() {
+	@IsTest
+	static void test_createEnvelope_error_invalid_recipient() {
 		Test.setMock(HttpCalloutMock.class, new InvalidRecipientErrorMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1280,7 +1323,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getRecipientCustomFields() {
+	@IsTest
+	static void test_getRecipientCustomFields() {
 		TestUtils.createAccountConfiguration();
 		Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null, false);
 		Entity e = Entity.resolve(UserInfo.getUserId());
@@ -1292,7 +1336,8 @@ private class EnvelopeAPITest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getEnvelopeStatus_failure() {
+	@IsTest
+	static void test_getEnvelopeStatus_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1321,7 +1366,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_created() {
+	@IsTest
+	static void test_getEnvelopeStatus_created() {
 		Test.setMock(HttpCalloutMock.class, new StatusCreatedMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1371,7 +1417,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_sent() {
+	@IsTest
+	static void test_getEnvelopeStatus_sent() {
 		Test.setMock(HttpCalloutMock.class, new StatusSentMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1424,7 +1471,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_completed() {
+	@IsTest
+	static void test_getEnvelopeStatus_completed() {
 		Test.setMock(HttpCalloutMock.class, new StatusCompletedMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1472,7 +1520,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_declined() {
+	@IsTest
+	static void test_getEnvelopeStatus_declined() {
 		Test.setMock(HttpCalloutMock.class, new StatusDeclinedMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1532,7 +1581,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_voided() {
+	@IsTest
+	static void test_getEnvelopeStatus_voided() {
 		Test.setMock(HttpCalloutMock.class, new StatusVoidedMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1591,7 +1641,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeStatus_without_recipients() {
+	@IsTest
+	static void test_getEnvelopeStatus_without_recipients() {
 		Test.setMock(HttpCalloutMock.class, new StatusSentNoRecipientsMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

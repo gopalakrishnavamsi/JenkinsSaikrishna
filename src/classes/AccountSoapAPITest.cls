@@ -111,7 +111,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_getDefaultConnectConfigurationId_success() {
+	@IsTest
+	static void test_getDefaultConnectConfigurationId_success() {
 		Test.setMock(WebServiceMock.class, new SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -148,7 +149,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_getDefaultConnectConfigurationId_failure() {
+	@IsTest
+	static void test_getDefaultConnectConfigurationId_failure() {
 		Test.setMock(WebServiceMock.class, new GetDefaultConnectConfigurationIdErrorMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -165,7 +167,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_setConnectCredentials_success() {
+	@IsTest
+	static void test_setConnectCredentials_success() {
 		Test.setMock(WebServiceMock.class, new SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -178,7 +181,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_setConnectCredentials_failure() {
+	@IsTest
+	static void test_setConnectCredentials_failure() {
 		Test.setMock(WebServiceMock.class, new FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -232,7 +236,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_setConnectCredentials_unauthorized() {
+	@IsTest
+	static void test_setConnectCredentials_unauthorized() {
 		Test.setMock(WebServiceMock.class, new SetConnectCredentialsUnauthorizedMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -249,7 +254,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_getConnectUsername_success() {
+	@IsTest
+	static void test_getConnectUsername_success() {
 		Test.setMock(WebServiceMock.class, new SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
@@ -261,7 +267,8 @@ public class AccountSoapAPITest {
 		}
 	}
 
-	static testMethod void test_getConnectUsername_failure() {
+	@IsTest
+	static void test_getConnectUsername_failure() {
 		Test.setMock(WebServiceMock.class, new FailureMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {

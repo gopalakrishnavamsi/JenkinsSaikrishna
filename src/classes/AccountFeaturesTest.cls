@@ -8,7 +8,8 @@ private class AccountFeaturesTest {
 		| AccountFeatures.FLAG_SIGNING_GROUPS
 		| AccountFeatures.FLAG_SMS_AUTHENTICATION;
 
-	static testMethod void test_getInstance() {
+	@IsTest
+	static void test_getInstance() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -33,7 +34,8 @@ private class AccountFeaturesTest {
 		}
 	}
 
-	static testMethod void test_getApiAccountFeatures_success() {
+	@IsTest
+	static void test_getApiAccountFeatures_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -82,7 +84,8 @@ private class AccountFeaturesTest {
 		}
 	}
 
-	static testMethod void test_getApiAccountFeatures_failure() {
+	@IsTest
+	static void test_getApiAccountFeatures_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -105,7 +108,8 @@ private class AccountFeaturesTest {
 		}
 	}
 
-	static testMethod void test_resolveFeatures() {
+	@IsTest
+	static void test_resolveFeatures() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -138,7 +142,8 @@ private class AccountFeaturesTest {
 		}
 	}
 
-	static testMethod void test_getFlags() {
+	@IsTest
+	static void test_getFlags() {
 		AccountFeatures.APIAccountFeature f1 = new AccountFeatures.ApiAccountFeature();
 		f1.name = 'dataFieldRegexEnabled';
 		f1.value = 'true';

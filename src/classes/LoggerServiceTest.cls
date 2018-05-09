@@ -1,9 +1,10 @@
-@IsTest
+@IsTest(isParallel = true)
 private class LoggerServiceTest {
 
 	private static final DocuSignException TEST_EXCEPTION = new DocuSignException('Test exception');
 
-	static testMethod void test_getInstance() {
+	@IsTest
+	static void test_getInstance() {
 		Test.startTest();
 		LoggerService result1 = LoggerService.getInstance();
 		LoggerService result2 = LoggerService.getInstance();
@@ -13,7 +14,8 @@ private class LoggerServiceTest {
 		System.assert(result1 === result2);
 	}
 
-	static testMethod void test_exception() {
+	@IsTest
+	static void test_exception() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -23,7 +25,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_exception_null_and_blank() {
+	@IsTest
+	static void test_exception_null_and_blank() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -35,7 +38,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_exception_blank_context() {
+	@IsTest
+	static void test_exception_blank_context() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -47,7 +51,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_exception_null_exception() {
+	@IsTest
+	static void test_exception_null_exception() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -57,7 +62,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_error() {
+	@IsTest
+	static void test_error() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -68,7 +74,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_warning() {
+	@IsTest
+	static void test_warning() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -79,7 +86,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_info() {
+	@IsTest
+	static void test_info() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -90,7 +98,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_debug() {
+	@IsTest
+	static void test_debug() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -101,7 +110,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_fine() {
+	@IsTest
+	static void test_fine() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -111,7 +121,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_finer() {
+	@IsTest
+	static void test_finer() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -121,7 +132,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_finest() {
+	@IsTest
+	static void test_finest() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -131,7 +143,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_empty_message() {
+	@IsTest
+	static void test_empty_message() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -151,7 +164,8 @@ private class LoggerServiceTest {
 		System.assertNotEquals(null, logger);
 	}
 
-	static testMethod void test_null_message() {
+	@IsTest
+	static void test_null_message() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();

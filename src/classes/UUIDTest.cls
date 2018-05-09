@@ -1,4 +1,4 @@
-@IsTest
+@IsTest(isParallel = true)
 private class UUIDTest {
 
 	static testmethod void test_randomUUID() {
@@ -121,7 +121,8 @@ private class UUIDTest {
 		System.assertEquals('', UUID.toString((UUID)null));
 	}
 
-	static testMethod void test_isDefined() {
+	@IsTest
+	static void test_isDefined() {
 		System.assert(UUID.isDefined(UUID.randomUUID()));
 		System.assert(!UUID.isDefined(null));
 		System.assert(!UUID.isDefined((UUID)JSON.deserialize('{"value":""}', UUID.class)));

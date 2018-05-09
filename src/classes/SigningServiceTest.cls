@@ -1,7 +1,8 @@
 @IsTest
 private class SigningServiceTest {
 
-	static testMethod void test_Database_completeSignNow() {
+	@IsTest
+	static void test_Database_completeSignNow() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r = new Recipient__c(
@@ -21,7 +22,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_getNextSignNowRecipient_allow_sequential() {
+	@IsTest
+	static void test_getNextSignNowRecipient_allow_sequential() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
@@ -78,7 +80,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_getNextSignNowRecipient_check_first_only() {
+	@IsTest
+	static void test_getNextSignNowRecipient_check_first_only() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
@@ -125,7 +128,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_getNextSignNowRecipient_prohibit_sequential() {
+	@IsTest
+	static void test_getNextSignNowRecipient_prohibit_sequential() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
@@ -182,7 +186,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_shouldSignNow() {
+	@IsTest
+	static void test_shouldSignNow() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Envelope e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -207,7 +212,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_getSigningUrl_success() {
+	@IsTest
+	static void test_getSigningUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -279,7 +285,8 @@ private class SigningServiceTest {
 		}
 	}
 
-	static testMethod void test_getSigningUrl_failure() {
+	@IsTest
+	static void test_getSigningUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

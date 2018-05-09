@@ -1,7 +1,8 @@
 @IsTest
 private class DefaultRecipientResolverTest {
 
-	static testMethod void test_canResolveRecipients() {
+	@IsTest
+	static void test_canResolveRecipients() {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();
@@ -15,7 +16,8 @@ private class DefaultRecipientResolverTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_canSearchRecipients() {
+	@IsTest
+	static void test_canSearchRecipients() {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();
@@ -27,7 +29,8 @@ private class DefaultRecipientResolverTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getRecipients_Account() {
+	@IsTest
+	static void test_getRecipients_Account() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -81,7 +84,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_Case() {
+	@IsTest
+	static void test_getRecipients_Case() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -128,7 +132,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_Contact() {
+	@IsTest
+	static void test_getRecipients_Contact() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -171,7 +176,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_Lead() {
+	@IsTest
+	static void test_getRecipients_Lead() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead l1 = TestUtils.createLead();
@@ -210,7 +216,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_Opportunity() {
+	@IsTest
+	static void test_getRecipients_Opportunity() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -275,7 +282,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_invalid() {
+	@IsTest
+	static void test_getRecipients_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
@@ -293,7 +301,8 @@ private class DefaultRecipientResolverTest {
 	}
 
 	// TODO: Determine if there's a way to test this with encrypted (probabilistic and deterministic) and unencrypted fields.
-	static testMethod void test_searchRecipients_Contact() {
+	@IsTest
+	static void test_searchRecipients_Contact() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = new Contact(FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111', AccountId = a1.Id);
@@ -316,7 +325,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_Lead() {
+	@IsTest
+	static void test_searchRecipients_Lead() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead c1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
@@ -331,7 +341,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_User() {
+	@IsTest
+	static void test_searchRecipients_User() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
@@ -342,7 +353,8 @@ private class DefaultRecipientResolverTest {
 	}
 
 	// DFS-4571
-	static testMethod void test_search_with_apostrophe() {
+	@IsTest
+	static void test_search_with_apostrophe() {
 		System.runAs(TestUtils.createAdministrator()) {
 			Contact c = new Contact(FirstName = 'Amy', LastName = 'O\'Hare');
 			insert c;
@@ -380,7 +392,8 @@ private class DefaultRecipientResolverTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_invalid() {
+	@IsTest
+	static void test_searchRecipients_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 

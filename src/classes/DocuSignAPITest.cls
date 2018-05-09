@@ -173,7 +173,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_ErrorDetails() {
+	@IsTest
+	static void test_ErrorDetails() {
 		DocuSignAPI.ErrorDetails ed1 = new DocuSignAPI.ErrorDetails();
 		ed1.errorCode = 'SUCCESS';
 		ed1.message = 'No error';
@@ -225,7 +226,8 @@ public class DocuSignAPITest {
 		System.assertEquals('SOME_ERROR', ((DocuSignAPI.Error)e5).docuSignCode);
 	}
 
-	static testMethod void test_constructor_default_creds() {
+	@IsTest
+	static void test_constructor_default_creds() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 		}
@@ -259,7 +261,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_constructor_non_default_creds() {
+	@IsTest
+	static void test_constructor_non_default_creds() {
 		TestUtils.createAccountConfiguration();
 		final Credentials creds = new Credentials(
 			Environment.demo,
@@ -295,7 +298,8 @@ public class DocuSignAPITest {
 			RestAPI.defaultTimeout);
 	}
 
-	static testMethod void test_constructor_failure() {
+	@IsTest
+	static void test_constructor_failure() {
 		Test.startTest();
 		try {
 			new DocuSignAPI(Credentials.getInstance(null, null, null));
@@ -306,7 +310,8 @@ public class DocuSignAPITest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getBaseUrl_success() {
+	@IsTest
+	static void test_getBaseUrl_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID accountID = TestUtils.createAccountConfiguration();
 			DocuSignAPI client = DocuSignAPI.getInstance();
@@ -320,7 +325,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_getBaseUrl_failure() {
+	@IsTest
+	static void test_getBaseUrl_failure() {
 		Test.startTest();
 		try {
 			new DocuSignAPI(new Credentials(Environment.production, null, null, null, false, null, false))
@@ -332,7 +338,8 @@ public class DocuSignAPITest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getError_exception() {
+	@IsTest
+	static void test_getError_exception() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			DocuSignAPI client = DocuSignAPI.getInstance();
@@ -351,7 +358,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_getError_unauthorized() {
+	@IsTest
+	static void test_getError_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			DocuSignAPI client = DocuSignAPI.getInstance();
@@ -376,7 +384,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_ping_success() {
+	@IsTest
+	static void test_ping_success() {
 		Test.setMock(HttpCalloutMock.class, new SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -388,7 +397,8 @@ public class DocuSignAPITest {
 		}
 	}
 
-	static testMethod void test_ping_failure() {
+	@IsTest
+	static void test_ping_failure() {
 		Test.setMock(HttpCalloutMock.class, new FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

@@ -1,13 +1,15 @@
-@IsTest
+@IsTest(isParallel = true)
 private class APIErrorTest {
 
-	static testMethod void test_constructor() {
+	@IsTest
+	static void test_constructor() {
 		final APIError e = new APIError(APIErrorCode.NULL_RESPONSE, 'Null response');
 		System.assertEquals(APIErrorCode.NULL_RESPONSE, e.code);
 		System.assertEquals('Null response', e.description);
 	}
 
-	static testMethod void test_equality() {
+	@IsTest
+	static void test_equality() {
 		final APIError e1 = new APIError(APIErrorCode.UNAUTHORIZED, 'Unauthorized');
 		final APIError e2 = new APIError(APIErrorCode.UNAUTHORIZED, 'Unauthorized');
 		final APIError e3 = new APIError(APIErrorCode.UNAUTHORIZED, 'Go away');
@@ -28,7 +30,8 @@ private class APIErrorTest {
 		System.assertEquals(APIError.generic, e6);
 	}
 
-	static testMethod void test_toString() {
+	@IsTest
+	static void test_toString() {
 		final APIError e1 = new APIError(APIErrorCode.UNSUPPORTED_MEDIA_TYPE, 'Unsupported media type');
 		final APIError e2 = new APIError(APIErrorCode.UNPROCESSABLE_ENTITY, '');
 		final APIError e3 = new APIError(APIErrorCode.INTERNAL_SERVER_ERROR, '\t');
@@ -42,7 +45,8 @@ private class APIErrorTest {
 		System.assertEquals('Successful', e5.toString());
 	}
 
-	static testMethod void test_fromException() {
+	@IsTest
+	static void test_fromException() {
 		APIException apiEx = new APIException(new APIError(APIErrorCode.UNSUPPORTED_MEDIA_TYPE, 'UNSUPPORTED'));
 		ValidationException vEx = new ValidationException('INVALID');
 		UnauthorizedException uaEx = new UnauthorizedException('UNAUTHORIZED');

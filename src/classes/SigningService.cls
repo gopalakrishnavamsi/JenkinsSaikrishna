@@ -2,7 +2,7 @@
  * Encapsulates signing-related operations.
  */
 public with sharing class SigningService {
-	
+
 	@TestVisible
 	private static final SigningService.Database DB = new SigningService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();

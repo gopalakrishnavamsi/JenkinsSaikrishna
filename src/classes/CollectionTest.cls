@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class CollectionTest {
 
-	static testMethod void test_isEmpty() {
+	@IsTest
+	static void test_isEmpty() {
 		System.assert(Collection.isEmpty((List<Object>)null));
 		System.assert(Collection.isEmpty((Set<String>)null));
 		System.assert(Collection.isEmpty((Set<Id>)null));
@@ -19,7 +20,8 @@ private class CollectionTest {
 		System.assert(!Collection.isEmpty(new Set<UUID> { UUID.randomUUID() }));
 	}
 
-	static testMethod void test_isNotEmpty() {
+	@IsTest
+	static void test_isNotEmpty() {
 		System.assert(!Collection.isNotEmpty((List<Object>)null));
 		System.assert(!Collection.isNotEmpty((Set<String>)null));
 		System.assert(!Collection.isNotEmpty((Set<Id>)null));
@@ -37,14 +39,16 @@ private class CollectionTest {
 		System.assert(Collection.isNotEmpty(new Set<UUID> { UUID.randomUUID() }));
 	}
 
-	static testMethod void test_mkString() {
+	@IsTest
+	static void test_mkString() {
 		System.assertEquals('', Collection.mkString(null, ', '));
 		System.assertEquals('', Collection.mkString(new List<Object>(), ', '));
 		System.assertEquals('1', Collection.mkString(new List<Object> { 1 }, ', '));
 		System.assertEquals('1, 2, null', Collection.mkString(new List<Object> { 1, 2, null }, ', '));
 	}
 
-	static testMethod void test_containsKey() {
+	@IsTest
+	static void test_containsKey() {
 		System.assert(!Collection.containsKey(null, 'key'));
 		System.assert(!Collection.containsKey(new Map<String, Object>(), 'key'));
 		System.assert(!Collection.containsKey(new Map<String, Object> { '1' => 1 }, 'key'));
@@ -54,7 +58,8 @@ private class CollectionTest {
 		System.assert(!Collection.containsKey(new Map<String, Object> { '1' => 1, 'key' => 2 }, ' \t'));
 	}
 
-	static testMethod void test_union() {
+	@IsTest
+	static void test_union() {
 		Set<Id> s1 = new Set<Id> { '00541000002aMAA', '00541000002aMAB' };
 		Set<Id> s2 = new Set<Id> { '00541000002aMAA', '00541000002aMAC' };
 
@@ -64,7 +69,8 @@ private class CollectionTest {
 		System.assertEquals(new Set<Id> { '00541000002aMAA', '00541000002aMAB', '00541000002aMAC' }, Collection.union(s1, s2));
 	}
 
-	static testMethod void test_difference_Id() {
+	@IsTest
+	static void test_difference_Id() {
 		Set<Id> s1 = new Set<Id> { '00541000002aMAA', '00541000002aMAB' };
 		Set<Id> s2 = new Set<Id> { '00541000002aMAA', '00541000002aMAC' };
 
@@ -75,7 +81,8 @@ private class CollectionTest {
 		System.assertEquals(new Set<Id> { '00541000002aMAC' }, Collection.difference(s2, s1));
 	}
 
-	static testMethod void test_difference_UUID() {
+	@IsTest
+	static void test_difference_UUID() {
 		UUID u1 = UUID.randomUUID();
 		UUID u2 = UUID.randomUUID();
 		UUID u3 = UUID.randomUUID();
@@ -89,7 +96,8 @@ private class CollectionTest {
 		System.assertEquals(new Set<UUID> { u3 }, Collection.difference(s2, s1));
 	}
 
-	static testMethod void test_intersection_Id() {
+	@IsTest
+	static void test_intersection_Id() {
 		Set<Id> s1 = new Set<Id> { '00541000002aMAA', '00541000002aMAB' };
 		Set<Id> s2 = new Set<Id> { '00541000002aMAA', '00541000002aMAC' };
 
@@ -99,7 +107,8 @@ private class CollectionTest {
 		System.assertEquals(new Set<Id> { '00541000002aMAA' }, Collection.intersection(s1, s2));
 	}
 
-	static testMethod void test_intersection_String() {
+	@IsTest
+	static void test_intersection_String() {
 		Set<String> s1 = new Set<String> { 'string1', 'string2' };
 		Set<String> s2 = new Set<String> { 'string1', 'string3' };
 
@@ -109,7 +118,8 @@ private class CollectionTest {
 		System.assertEquals(new Set<String> { 'string1' }, Collection.intersection(s1, s2));
 	}
 
-	static testMethod void test_head() {
+	@IsTest
+	static void test_head() {
 		System.assertEquals(null, Collection.head((List<Object>)null));
 		System.assertEquals(null, Collection.head((Set<Id>)null));
 		System.assertEquals(null, Collection.head(new List<String>()));
@@ -118,25 +128,5 @@ private class CollectionTest {
 		System.assertEquals(1, Collection.head(new List<Integer> { 1, 2, 3 }));
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA' }));
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA', '00541000002aMAB' }));
-	}
-
-	static testMethod void test_getSObjectTypeMap() {
-		System.runAs(TestUtils.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
-			Schema.Account a2 = TestUtils.createAccount();
-			Lead l1 = TestUtils.createLead();
-			Lead l2 = TestUtils.createLead();
-
-			Test.startTest();
-			System.assert(Collection.getSObjectTypeMap(null).isEmpty());
-			System.assert(Collection.getSObjectTypeMap(new Set<Id>()).isEmpty());
-			Map<SObjectType, Set<Id>> result = Collection.getSObjectTypeMap(new Set<Id> { a1.Id, l1.Id, a2.Id, l2.Id, null });
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-			System.assertEquals(new Set<Id> { a1.Id, a2.Id }, result.get(Schema.Account.getSObjectType()));
-			System.assertEquals(new Set<Id> { l1.Id, l2.Id }, result.get(Lead.getSObjectType()));
-		}
 	}
 }

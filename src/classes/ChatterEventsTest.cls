@@ -1,13 +1,15 @@
-@IsTest
+@IsTest(isParallel = true)
 private class ChatterEventsTest {
 
-	static testMethod void test_pack() {
+	@IsTest
+	static void test_pack() {
 		Test.startTest();
 		System.assertEquals(788, ChatterEvents.pack(new ChatterEvents(false, false, true, false, true, false, false, false, true, true)));
 		Test.stopTest();
 	}
 
-	static testMethod void test_unpack() {
+	@IsTest
+	static void test_unpack() {
 		Test.startTest();
 		ChatterEvents result = ChatterEvents.unpack(788);
 		Test.stopTest();
@@ -25,7 +27,8 @@ private class ChatterEventsTest {
 		System.assert(result.postRecipientDeclined);
 	}
 
-	static testMethod void test_getInstance() {
+	@IsTest
+	static void test_getInstance() {
 		Test.startTest();
 		ChatterEvents result1 = ChatterEvents.getInstance();
 		ChatterEvents result2 = ChatterEvents.getInstance();
@@ -35,7 +38,8 @@ private class ChatterEventsTest {
 		System.assert(result1 === result2);
 	}
 
-	static testMethod void test_save() {
+	@IsTest
+	static void test_save() {
 		ChatterEvents events = new ChatterEvents(false, false, true, false, true, false, false, false, true, true);
 
 		Test.startTest();

@@ -57,7 +57,6 @@
         <members>EnvelopeConfiguration</members>
         <members>UITheme</members>
         <members>UIThemeTest</members>
-        <members>RemoteActionResponse</members>
         <members>Device</members>
         <members>DeviceTest</members>
         <members>MobileConfiguration</members>
@@ -68,12 +67,6 @@
         <members>EnvelopeSettingsTest</members>
         <members>MetadataAPI</members>
         <members>MetadataAPITest</members>
-        <members>DocumentResponse</members>
-        <members>DocumentResponseTest</members>
-        <members>EnvelopeResponse</members>
-        <members>EnvelopeResponseTest</members>
-        <members>RecipientResponse</members>
-        <members>RecipientResponseTest</members>
         <members>Credentials</members>
         <members>CredentialsTest</members>
         <members>DocuSignAPI</members>
@@ -96,8 +89,6 @@
         <members>DefaultRecipientResolverTest</members>
         <members>AccountService</members>
         <members>AccountServiceTest</members>
-        <members>AdminResponse</members>
-        <members>AdminResponseTest</members>
         <members>AccountSoapAPI</members>
         <members>AccountSoapAPITest</members>
         <members>DocumentService</members>

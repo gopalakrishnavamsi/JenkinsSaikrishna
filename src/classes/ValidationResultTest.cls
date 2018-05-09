@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class ValidationResultTest {
 
-	static testMethod void test_ValidationResult() {
+	@IsTest
+	static void test_ValidationResult() {
 		Test.startTest();
 		ValidationResult vr = new ValidationResult();
 		System.assertNotEquals(null, vr);

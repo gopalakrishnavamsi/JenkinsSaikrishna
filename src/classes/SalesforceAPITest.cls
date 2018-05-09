@@ -1,4 +1,4 @@
-@IsTest
+@IsTest(isParallel = true)
 public with sharing class SalesforceAPITest {
 
 	public class SuccessMock implements HttpCalloutMock {
@@ -35,7 +35,8 @@ public with sharing class SalesforceAPITest {
 		}
 	}
 
-	static testMethod void test_getMergeObjects_success() {
+	@IsTest
+	static void test_getMergeObjects_success() {
 		Test.setMock(HttpCalloutMock.class, new SuccessMock());
 		final SalesforceAPI sfService = SalesforceAPI.getInstance();
 
@@ -50,7 +51,8 @@ public with sharing class SalesforceAPITest {
 		System.assertEquals('Opportunity', sfObjects[1].name);
 	}
 
-	static testMethod void test_getMergeObjects_failure() {
+	@IsTest
+	static void test_getMergeObjects_failure() {
 		Test.setMock(HttpCalloutMock.class, new FailureMock());
 		final SalesforceAPI sfService = SalesforceAPI.getInstance();
 		APIException ex = null;
@@ -67,7 +69,8 @@ public with sharing class SalesforceAPITest {
 		System.assertEquals(400, ex.error.code);
 	}
 
-	static testMethod void test_getMergeFields_success() {
+	@IsTest
+	static void test_getMergeFields_success() {
 		Test.setMock(HttpCalloutMock.class, new SuccessMock());
 		final SalesforceAPI sfService = SalesforceAPI.getInstance();
 
@@ -99,7 +102,8 @@ public with sharing class SalesforceAPITest {
 		System.assertEquals('Name', oppoDescLevel3[2].name);
 	}
 
-	static testMethod void test_getMergeFields_failure() {
+	@IsTest
+	static void test_getMergeFields_failure() {
 		Test.setMock(HttpCalloutMock.class, new FailureMock());
 		final SalesforceAPI sfService = SalesforceAPI.getInstance();
 		APIException ex = null;
@@ -161,7 +165,8 @@ public with sharing class SalesforceAPITest {
 		}
 	}
 
-	static testMethod void test_SFDC_errors() {
+	@IsTest
+	static void test_SFDC_errors() {
 		Test.setMock(HttpCalloutMock.class, new SalesforceApiErrorMock());
 		final SalesforceAPI sfService = SalesforceAPI.getInstance();
 

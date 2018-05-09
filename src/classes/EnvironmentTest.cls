@@ -1,7 +1,8 @@
-@IsTest
+@IsTest(isParallel = true)
 private class EnvironmentTest {
 
-	static testMethod void test_constructor() {
+	@IsTest
+	static void test_constructor() {
 		Environment e1 = new Environment(Environment.Target.Production, new Url('http://fake.com'));
 		System.assertEquals(Environment.Target.Production, e1.environment);
 		System.assertEquals('https://www.docusign.net/', e1.baseUrl.toExternalForm());
@@ -43,7 +44,8 @@ private class EnvironmentTest {
 		System.assertEquals(Environment.trial30DayPlanId, e8.trialPlanId);
 	}
 
-	static testMethod void test_constructor_invalid() {
+	@IsTest
+	static void test_constructor_invalid() {
 		// require HTTPS
 		Environment e1 = new Environment(Environment.Target.Other, new Url('http://www.docusign.net'));
 		System.assertEquals(Environment.Target.Invalid, e1.environment);
@@ -80,7 +82,8 @@ private class EnvironmentTest {
 		System.assertEquals(e8.baseUrl, null);
 	}
 
-	static testMethod void test_equality() {
+	@IsTest
+	static void test_equality() {
 		System.assertEquals(
 			new Environment(Environment.Target.Production, null),
 			new Environment(Environment.Target.Production, null));
@@ -97,7 +100,8 @@ private class EnvironmentTest {
 			new Environment(Environment.Target.Other, new Url('https://other2.docusign.net')));
 	}
 
-	static testMethod void test_hashCode() {
+	@IsTest
+	static void test_hashCode() {
 		System.assertEquals(0, Environment.Invalid.hashCode());
 		System.assertEquals(
 			new Environment(Environment.Target.Production, new Url('https://whatever')).hashCode(),
@@ -107,14 +111,16 @@ private class EnvironmentTest {
 			new Environment(Environment.Target.Other, new Url('https://other2.docusign.net')).hashCode());
 	}
 
-	static testMethod void test_toString() {
+	@IsTest
+	static void test_toString() {
 		System.assertEquals(
 			'Production => https://www.docusign.net/',
 			new Environment(new Url('https://www.docusign.net')).toString());
 		System.assertEquals('Invalid', Environment.Invalid.toString());
 	}
 
-	static testMethod void test_fromTarget() {
+	@IsTest
+	static void test_fromTarget() {
 		Environment e1 = Environment.fromTarget(Environment.Target.Production, null);
 		System.assertEquals(e1.environment, Environment.Target.Production);
 		System.assertEquals(e1.baseUrl.toExternalForm(), 'https://www.docusign.net/');
@@ -132,7 +138,8 @@ private class EnvironmentTest {
 		System.assertEquals(e4.baseUrl.toExternalForm(), 'https://other.docusignhq.com/');
 	}
 
-	static testMethod void test_fromTarget_invalid() {
+	@IsTest
+	static void test_fromTarget_invalid() {
 		Environment e1 = Environment.fromTarget(null, null);
 		System.assert(!e1.isValid, 'Environment is valid with null target');
 
@@ -146,7 +153,8 @@ private class EnvironmentTest {
 		System.assert(!e4.isValid, 'Environment is valid with bad URL');
 	}
 
-	static testMethod void test_fromUrl() {
+	@IsTest
+	static void test_fromUrl() {
 		Environment e1 = Environment.fromUrl(new Url('https://www.docusign.net/'));
 		System.assertEquals(Environment.Target.Production, e1.environment);
 
@@ -160,7 +168,8 @@ private class EnvironmentTest {
 		System.assertEquals(Environment.Target.Other, e4.environment);
 	}
 
-	static testMethod void test_fromUrl_invalid() {
+	@IsTest
+	static void test_fromUrl_invalid() {
 		Environment e1 = Environment.fromUrl(null);
 		System.assert(!e1.isValid, 'Environment is valid with null target');
 
@@ -174,7 +183,8 @@ private class EnvironmentTest {
 		System.assert(!e4.isValid, 'Environment is valid with bad URL');
 	}
 
-	static testMethod void test_isValid() {
+	@IsTest
+	static void test_isValid() {
 		System.assert(Environment.isValid(new Environment(Environment.Target.Production, null)),
 			'Environment invalid');
 		System.assert(Environment.isValid(new Environment(Environment.Target.Demo, null)),
@@ -191,7 +201,8 @@ private class EnvironmentTest {
 			'Environment valid');
 	}
 
-	static testMethod void test_static_environments() {
+	@IsTest
+	static void test_static_environments() {
 		System.assertEquals(Environment.invalid, Environment.invalid);
 		System.assertEquals(Environment.demo, Environment.demo);
 		System.assertEquals(Environment.production, Environment.production);

@@ -1,7 +1,8 @@
 @IsTest
 private class RecipientServiceTest {
 
-	static testMethod void test_bad_resolver() {
+	@IsTest
+	static void test_bad_resolver() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientResolvers__c = 'bad_resolver';
@@ -18,7 +19,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_validate_send_later() {
+	@IsTest
+	static void test_validate_send_later() {
 		// Placeholder: invalid no role
 		Recipient r1 = Recipient.fromSource('R1', null, null, null, null);
 		// Placeholder: valid has role
@@ -39,7 +41,8 @@ private class RecipientServiceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_validate_send_now() {
+	@IsTest
+	static void test_validate_send_now() {
 		// Placeholder: invalid no role
 		Recipient r1 = Recipient.fromSource('R1', null, null, null, null);
 		// Placeholder: valid has role
@@ -60,7 +63,8 @@ private class RecipientServiceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_convert_Recipient_sobject() {
+	@IsTest
+	static void test_convert_Recipient_sobject() {
 		Envelope__c e = TestUtils.createEnvelope();
 		Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
 		r1.RoutingOrder__c = 2;
@@ -145,7 +149,8 @@ private class RecipientServiceTest {
 		System.assertEquals(r2.SourceId__c, result[1].source.id);
 	}
 
-	static testMethod void test_convert_Recipient() {
+	@IsTest
+	static void test_convert_Recipient() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5555551111', 'r1', new Entity(UserInfo.getUserId()))
@@ -185,7 +190,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_unauthorized() {
+	@IsTest
+	static void test_getRecipients_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -198,7 +204,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_getRecipients_success() {
+	@IsTest
+	static void test_getRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -229,7 +236,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_unauthorized() {
+	@IsTest
+	static void test_searchRecipients_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -242,7 +250,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_CompoundMatchBeginning() {
+	@IsTest
+	static void test_searchRecipients_CompoundMatchBeginning() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -263,7 +272,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_CompoundMatchExact() {
+	@IsTest
+	static void test_searchRecipients_CompoundMatchExact() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -284,7 +294,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_CompoundMatchAny() {
+	@IsTest
+	static void test_searchRecipients_CompoundMatchAny() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -305,7 +316,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_DiscreteMatchBeginning() {
+	@IsTest
+	static void test_searchRecipients_DiscreteMatchBeginning() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -326,7 +338,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_DiscreteMatchExact() {
+	@IsTest
+	static void test_searchRecipients_DiscreteMatchExact() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -347,7 +360,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_searchRecipients_DiscreteMatchAny() {
+	@IsTest
+	static void test_searchRecipients_DiscreteMatchAny() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
@@ -368,7 +382,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryMaxSequence() {
+	@IsTest
+	static void test_Database_queryMaxSequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
@@ -385,7 +400,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryRoles() {
+	@IsTest
+	static void test_Database_queryRoles() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
@@ -402,7 +418,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryRecipients_by_sequence() {
+	@IsTest
+	static void test_Database_queryRecipients_by_sequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
@@ -428,7 +445,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryRecipients_by_routing_order() {
+	@IsTest
+	static void test_Database_queryRecipients_by_routing_order() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 3);
@@ -454,7 +472,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateRecipientSequence_by_sequence() {
+	@IsTest
+	static void test_Database_updateRecipientSequence_by_sequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 2);
@@ -482,7 +501,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateRecipientSequence_by_routing_order() {
+	@IsTest
+	static void test_Database_updateRecipientSequence_by_routing_order() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 12);
@@ -517,7 +537,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_insertRecipients() {
+	@IsTest
+	static void test_Database_insertRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'r1', null);
@@ -538,7 +559,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_getRelatedObjectType() {
+	@IsTest
+	static void test_Database_getRelatedObjectType() {
 		Test.startTest();
 		System.assertEquals(null, RecipientService.DB.getRelatedObjectType(null, null));
 		System.assertEquals(OpportunityContactRole.getSObjectType(),
@@ -546,7 +568,8 @@ private class RecipientServiceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_Database_queryRelatedContacts_signing_group() {
+	@IsTest
+	static void test_Database_queryRelatedContacts_signing_group() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -618,7 +641,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryRelatedContacts_sign_in_person() {
+	@IsTest
+	static void test_Database_queryRelatedContacts_sign_in_person() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -665,7 +689,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryRelatedContacts_success() {
+	@IsTest
+	static void test_Database_queryRelatedContacts_success() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -711,7 +736,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_querySigningGroups() {
+	@IsTest
+	static void test_Database_querySigningGroups() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -731,7 +757,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_deleteRecipients() {
+	@IsTest
+	static void test_Database_deleteRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
@@ -755,7 +782,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_upsertRecipients() {
+	@IsTest
+	static void test_Database_upsertRecipients() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
@@ -784,7 +812,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_getDefaultRoles_success() {
+	@IsTest
+	static void test_getDefaultRoles_success() {
 		insert new List<RoleSettings__c> {
 			new RoleSettings__c(Name = 'Role1', Value__c = 1),
 			new RoleSettings__c(Name = 'Role2', Value__c = 2),
@@ -808,7 +837,8 @@ private class RecipientServiceTest {
 		System.assertEquals(4, result[3].value);
 	}
 
-	static testMethod void test_resolveRole() {
+	@IsTest
+	static void test_resolveRole() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
@@ -827,7 +857,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_mergeAvailableRole() {
+	@IsTest
+	static void test_mergeAvailableRole() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
@@ -891,7 +922,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_mergeDefaultSettings() {
+	@IsTest
+	static void test_mergeDefaultSettings() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			insert new List<RoleSettings__c> {
@@ -946,7 +978,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_mergeEmailSettings() {
+	@IsTest
+	static void test_mergeEmailSettings() {
 		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5555555555', 'r1', null);
 		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555555555', 'r2', null);
 		Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5555555555', 'r3', null);
@@ -1011,7 +1044,8 @@ private class RecipientServiceTest {
 		System.assertEquals(defaultSettings.message, result4.recipient.emailSettings.message);
 	}
 
-	static testMethod void test_mergeTemplateRoleWithRole() {
+	@IsTest
+	static void test_mergeTemplateRoleWithRole() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'dr1', Value__c = 1),
@@ -1053,7 +1087,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_mergeNoteWithRole() {
+	@IsTest
+	static void test_mergeNoteWithRole() {
 		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
 		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '555552222', 'rr2', null);
 		Map<String, String> noteMap = new Map<String, String> {
@@ -1081,7 +1116,8 @@ private class RecipientServiceTest {
 		System.assert(!result3.isMerged);
 	}
 
-	static testMethod void test_mergeTypeWithRole() {
+	@IsTest
+	static void test_mergeTypeWithRole() {
 		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
 		Map<String, EnvelopeConfiguration.RecipientType> typeMap = new Map<String, EnvelopeConfiguration.RecipientType> {
 			'rr1' => new EnvelopeConfiguration.RecipientType(Recipient.TYPE_IN_PERSON_SIGNER, true),
@@ -1107,7 +1143,8 @@ private class RecipientServiceTest {
 		System.assert(!result3.isMerged);
 	}
 
-	static testMethod void test_mergeRoleType() {
+	@IsTest
+	static void test_mergeRoleType() {
 		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
 		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '555552222', 'rr2', null);
 		Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '555553333', 'rr3', null);
@@ -1153,7 +1190,8 @@ private class RecipientServiceTest {
 		System.assert(!result5.isMerged);
 	}
 
-	static testMethod void test_mergeCustomSettings() {
+	@IsTest
+	static void test_mergeCustomSettings() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
@@ -1251,7 +1289,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_mergeUserTags() {
+	@IsTest
+	static void test_mergeUserTags() {
 		System.runAs(TestUtils.createUser()) {
 			Recipient r1 = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, null, false)
 				.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Localization.getLabel(Localization.EN),
@@ -1281,7 +1320,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_addEnvelopeRecipients_unauthorized() {
+	@IsTest
+	static void test_addEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1299,7 +1339,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_addEnvelopeRecipients_success() {
+	@IsTest
+	static void test_addEnvelopeRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
@@ -1335,7 +1376,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_removeEnvelopeRecipients_unauthorized() {
+	@IsTest
+	static void test_removeEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1353,7 +1395,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_removeEnvelopeRecipients_success() {
+	@IsTest
+	static void test_removeEnvelopeRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
@@ -1372,7 +1415,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelopeRecipients_unauthorized() {
+	@IsTest
+	static void test_updateEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
 		System.runAs(TestUtils.createDocuSignUser()) {
 			e = TestUtils.createEnvelope();
@@ -1390,7 +1434,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelopeRecipients_success() {
+	@IsTest
+	static void test_updateEnvelopeRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
@@ -1416,7 +1461,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveRelatedContacts_unauthorized() {
+	@IsTest
+	static void test_resolveRelatedContacts_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1429,7 +1475,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveRelatedContacts_success() {
+	@IsTest
+	static void test_resolveRelatedContacts_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -1453,7 +1500,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveSourceRecipients_unauthorized() {
+	@IsTest
+	static void test_resolveSourceRecipients_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1466,7 +1514,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveSourceRecipients_success() {
+	@IsTest
+	static void test_resolveSourceRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -1509,7 +1558,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveCustomRecipients_unauthorized() {
+	@IsTest
+	static void test_resolveCustomRecipients_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1522,7 +1572,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveCustomRecipients_success() {
+	@IsTest
+	static void test_resolveCustomRecipients_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			List<EnvelopeConfiguration.CustomRecipient> crs = new List<EnvelopeConfiguration.CustomRecipient> {
 				// Normal signer
@@ -1568,7 +1619,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveSigningGroups_unauthorized() {
+	@IsTest
+	static void test_resolveSigningGroups_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -1581,7 +1633,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveSigningGroups_not_found() {
+	@IsTest
+	static void test_resolveSigningGroups_not_found() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -1621,7 +1674,8 @@ private class RecipientServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveSigningGroups_success() {
+	@IsTest
+	static void test_resolveSigningGroups_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

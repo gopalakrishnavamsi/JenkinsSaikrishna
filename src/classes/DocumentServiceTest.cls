@@ -1,7 +1,8 @@
 @IsTest
 private class DocumentServiceTest {
 
-	static testMethod void test_bad_resolver() {
+	@IsTest
+	static void test_bad_resolver() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.DocumentResolvers__c = 'bad_resolver';
@@ -18,7 +19,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getFileExtension() {
+	@IsTest
+	static void test_getFileExtension() {
 		Test.startTest();
 		System.assertEquals(null, DocumentService.getFileExtension(null));
 		System.assertEquals(null, DocumentService.getFileExtension(''));
@@ -31,7 +33,8 @@ private class DocumentServiceTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_conversion() {
+	@IsTest
+	static void test_conversion() {
 		Envelope__c dse = TestUtils.createEnvelope();
 		Document__c dsed1 = new Document__c(
 			Envelope__c = dse.Id,
@@ -85,7 +88,8 @@ private class DocumentServiceTest {
 		System.assertEquals(dsed2.SourceId__c, result2[1].sourceId);
 	}
 
-	static testMethod void test_validate() {
+	@IsTest
+	static void test_validate() {
 		Document d1 = new Document(null, Document.TYPE_DOCUMENT, 1, 'doc1', 'docx', 1234, '1234');
 		Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'quote', 5678, '5678');
 		Document d3 = new Document(null, Document.TYPE_DOCUMENT, 3, 'doc3', '', 9012, '9012');
@@ -118,7 +122,8 @@ private class DocumentServiceTest {
 		System.assertEquals(Label.InvalidFileType + '\n' + Label.InvalidFileType, result5.toString());
 	}
 
-	static testMethod void test_Database_convert() {
+	@IsTest
+	static void test_Database_convert() {
 		Envelope__c dse = TestUtils.createEnvelope();
 		Document__c dsed = TestUtils.createEnvelopeDocument(dse.Id);
 		Document d = new Document(dsed.Id, dsed.Type__c,
@@ -140,7 +145,8 @@ private class DocumentServiceTest {
 		System.assertEquals(d.sourceId, result.SourceId__c);
 	}
 
-	static testMethod void test_Database_queryMaxSequence() {
+	@IsTest
+	static void test_Database_queryMaxSequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
@@ -157,7 +163,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_queryDocuments() {
+	@IsTest
+	static void test_Database_queryDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c dse = TestUtils.createEnvelope(a.Id);
@@ -191,7 +198,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_insertDocuments() {
+	@IsTest
+	static void test_Database_insertDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
@@ -227,7 +235,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_upsertDocuments() {
+	@IsTest
+	static void test_Database_upsertDocuments() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
@@ -277,7 +286,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_deleteDocuments() {
+	@IsTest
+	static void test_Database_deleteDocuments() {
 		System.runAs(TestUtils.createDocusignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
@@ -314,7 +324,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_Database_updateDocumentSequence() {
+	@IsTest
+	static void test_Database_updateDocumentSequence() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
@@ -392,7 +403,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocuments_unauthorized() {
+	@IsTest
+	static void test_getDocuments_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -405,7 +417,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocuments_success() {
+	@IsTest
+	static void test_getDocuments_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -429,7 +442,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_unauthorized() {
+	@IsTest
+	static void test_getLinkedDocuments_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -442,7 +456,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getLinkedDocuments_success() {
+	@IsTest
+	static void test_getLinkedDocuments_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -474,7 +489,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_unauthorized() {
+	@IsTest
+	static void test_getDocumentFolders_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -487,7 +503,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_ContentVersion() {
+	@IsTest
+	static void test_getDocumentFolders_ContentVersion() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -533,7 +550,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getDocumentFolders_Document() {
+	@IsTest
+	static void test_getDocumentFolders_Document() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -572,7 +590,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_unauthorized() {
+	@IsTest
+	static void test_getFolderDocuments_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -585,7 +604,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_ContentVersion() {
+	@IsTest
+	static void test_getFolderDocuments_ContentVersion() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -607,7 +627,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getFolderDocuments_Document() {
+	@IsTest
+	static void test_getFolderDocuments_Document() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -623,7 +644,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_getEnvelopeDocuments() {
+	@IsTest
+	static void test_getEnvelopeDocuments() {
 		User u = TestUtils.createDocuSignUser();
 
 		System.runAs(u) {
@@ -640,7 +662,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_addEnvelopeDocuments() {
+	@IsTest
+	static void test_addEnvelopeDocuments() {
 		User u = TestUtils.createDocuSignUser();
 
 		System.runAs(u) {
@@ -676,7 +699,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_removeEnvelopeDocuments() {
+	@IsTest
+	static void test_removeEnvelopeDocuments() {
 		User u = TestUtils.createDocuSignUser();
 
 		System.runAs(u) {
@@ -714,7 +738,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_reorderEnvelopeDocuments() {
+	@IsTest
+	static void test_reorderEnvelopeDocuments() {
 		User u = TestUtils.createDocuSignUser();
 
 		System.runAs(u) {
@@ -761,7 +786,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_updateEnvelopeDocuments() {
+	@IsTest
+	static void test_updateEnvelopeDocuments() {
 		User u = TestUtils.createDocuSignUser();
 
 		System.runAs(u) {
@@ -807,7 +833,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveFiles_unauthorized() {
+	@IsTest
+	static void test_resolveFiles_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -820,7 +847,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveFiles_success() {
+	@IsTest
+	static void test_resolveFiles_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -836,7 +864,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveTemplates_unauthorized() {
+	@IsTest
+	static void test_resolveTemplates_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -849,7 +878,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveTemplates_success() {
+	@IsTest
+	static void test_resolveTemplates_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -864,7 +894,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveLinkedFiles_unauthorized() {
+	@IsTest
+	static void test_resolveLinkedFiles_unauthorized() {
 		System.runAs(TestUtils.createUser()) {
 			Test.startTest();
 			try {
@@ -877,7 +908,8 @@ private class DocumentServiceTest {
 		}
 	}
 
-	static testMethod void test_resolveLinkedFiles_success() {
+	@IsTest
+	static void test_resolveLinkedFiles_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 

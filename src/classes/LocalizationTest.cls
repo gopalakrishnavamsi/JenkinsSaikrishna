@@ -15,7 +15,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_email_settings() {
+	@IsTest
+	static void test_email_settings() {
 		List<Recipient.EmailSettings> localizationSettings;
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
@@ -140,7 +141,8 @@ private class LocalizationTest {
 			LanguageLocaleKey = localeKey);
 	}
 
-	static testMethod void test_save_Recipient_EmailSettings_success() {
+	@IsTest
+	static void test_save_Recipient_EmailSettings_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			insert new List<EnvelopeLocalization__c> {
@@ -194,7 +196,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_save_Recipient_EmailSettings_unauthorized() {
+	@IsTest
+	static void test_save_Recipient_EmailSettings_unauthorized() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -207,7 +210,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_save_Recipient_EmailSettings_error() {
+	@IsTest
+	static void test_save_Recipient_EmailSettings_error() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -226,7 +230,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_getCurrentLanguage() {
+	@IsTest
+	static void test_getCurrentLanguage() {
 		TestUtils.createAccountConfiguration();
 		User u1 = getUser('es_MX');
 		User u2 = getUser('FR');
@@ -248,7 +253,8 @@ private class LocalizationTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_isEmailLocalizationEnabled_disabled() {
+	@IsTest
+	static void test_isEmailLocalizationEnabled_disabled() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			final Boolean result = Localization.isEmailLocalizationEnabled();
@@ -258,7 +264,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_isEmailLocalizationEnabled_enabled() {
+	@IsTest
+	static void test_isEmailLocalizationEnabled_enabled() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', 'm') });
@@ -271,7 +278,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_getEmailSettingsForCurrentLanguage() {
+	@IsTest
+	static void test_getEmailSettingsForCurrentLanguage() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('it', 'Italian', 'subject-italian', 'message-italian') });
@@ -304,7 +312,8 @@ private class LocalizationTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getDefaultChatterText() {
+	@IsTest
+	static void test_getDefaultChatterText() {
 		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.EN));
 		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.DE));
 		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.ES));
@@ -318,7 +327,8 @@ private class LocalizationTest {
 		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.ZH_CN));
 	}
 
-	static testMethod void test_getChatterText() {
+	@IsTest
+	static void test_getChatterText() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -328,7 +338,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_save_ChatterText() {
+	@IsTest
+	static void test_save_ChatterText() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -385,7 +396,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_getChatterSettings() {
+	@IsTest
+	static void test_getChatterSettings() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 
@@ -399,7 +411,8 @@ private class LocalizationTest {
 		}
 	}
 
-	static testMethod void test_ChatterText_getEnvelopeStatusText() {
+	@IsTest
+	static void test_ChatterText_getEnvelopeStatusText() {
 		Localization.ChatterText ct = new Localization.ChatterText(
 			'Envelope Sent',
 			'Envelope Delivered',
@@ -425,7 +438,8 @@ private class LocalizationTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_ChatterText_getRecipientStatusText() {
+	@IsTest
+	static void test_ChatterText_getRecipientStatusText() {
 		Localization.ChatterText ct = new Localization.ChatterText(
 			'Envelope Sent',
 			'Envelope Delivered',
@@ -451,7 +465,8 @@ private class LocalizationTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_validate_Recipient_EmailSettings() {
+	@IsTest
+	static void test_validate_Recipient_EmailSettings() {
 		Recipient.EmailSettings es1 = new Recipient.EmailSettings(Localization.ES, '', 's', 'm');
 		Recipient.EmailSettings es2 = new Recipient.EmailSettings(null, '', 's', 'm');
 		Recipient.EmailSettings es3 = new Recipient.EmailSettings('l', '', '  \n', 'm');
@@ -468,7 +483,8 @@ private class LocalizationTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_validate_ChatterText() {
+	@IsTest
+	static void test_validate_ChatterText() {
 		Localization.ChatterText ct1 = new Localization.ChatterText(
 			'Envelope Sent',
 			'Envelope Delivered',

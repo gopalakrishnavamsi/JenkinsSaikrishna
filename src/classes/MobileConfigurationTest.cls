@@ -1,7 +1,8 @@
 @IsTest
 private class MobileConfigurationTest {
 
-	static testMethod void test_getInstance() {
+	@IsTest
+	static void test_getInstance() {
 		Test.startTest();
 		MobileConfiguration mc1 = MobileConfiguration.getInstance();
 		MobileConfiguration mc2 = MobileConfiguration.getInstance();
@@ -17,7 +18,8 @@ private class MobileConfigurationTest {
 		System.assert(!mc1.allowInPersonSigning);
 	}
 
-	static testMethod void test_getInstance_from_current_page() {
+	@IsTest
+	static void test_getInstance_from_current_page() {
 		PageReference pg = new PageReference('/apex/UnitTest');
 		// iPad native SF1 user agent
 		pg.getHeaders().put('User-Agent', 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/30.0.1599.12 Mobile/11A465 Safari/8536.25 SalesforceTouchContainer (3B92C18B-D9DE-4CB7-A02A-22FD2AF17C8F)');
@@ -40,7 +42,8 @@ private class MobileConfigurationTest {
 		System.assert(mc.allowInPersonSigning);
 	}
 
-	static testMethod void test_getInstance_from_user_agent() {
+	@IsTest
+	static void test_getInstance_from_user_agent() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
 			s.UseMobileTagger__c = true;
@@ -60,7 +63,8 @@ private class MobileConfigurationTest {
 		}
 	}
 
-	static testMethod void test_showMobileTagger() {
+	@IsTest
+	static void test_showMobileTagger() {
 		// SF1 native => showMobileTagger
 		Device d1 = new Device(Device.OS.Android, Device.Type.Phone, true);
 		// !SF1 native => !showMobileTaggger
@@ -77,7 +81,8 @@ private class MobileConfigurationTest {
 		System.assert(!mc2.showMobileTagger);
 	}
 
-	static testMethod void test_showIFrameTagger() {
+	@IsTest
+	static void test_showIFrameTagger() {
 		// Other device => showIFrameTagger
 		Device d1 = new Device(Device.OS.Other, Device.Type.Other, true);
 		// !iPad => !showIframeTagger
@@ -108,7 +113,8 @@ private class MobileConfigurationTest {
 		System.assert(mc6.showIFrameTagger);
 	}
 
-	static testMethod void test_allowInPersonSigning() {
+	@IsTest
+	static void test_allowInPersonSigning() {
 		// !iPad => !allowInPersonSigning
 		Device d1 = new Device(Device.OS.Android, Device.Type.Tablet, true);
 		// iPad => allowInPersonSigning && !isMobileTaggerEnabled

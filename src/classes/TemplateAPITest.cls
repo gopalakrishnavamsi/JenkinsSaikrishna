@@ -1,7 +1,8 @@
 @IsTest
 private class TemplateAPITest {
 
-	static testMethod void test_getTemplate_success() {
+	@IsTest
+	static void test_getTemplate_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -29,7 +30,8 @@ private class TemplateAPITest {
 		}
 	}
 
-	static testMethod void test_getTemplate_failure() {
+	@IsTest
+	static void test_getTemplate_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -51,7 +53,8 @@ private class TemplateAPITest {
 		}
 	}
 
-	static testMethod void test_getTemplates_success() {
+	@IsTest
+	static void test_getTemplates_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {
@@ -83,7 +86,8 @@ private class TemplateAPITest {
 		}
 	}
 
-	static testMethod void test_getTemplates_failure() {
+	@IsTest
+	static void test_getTemplates_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
 		System.runAs(TestUtils.createDocuSignUser()) {

@@ -5,7 +5,8 @@ private class PermissionsTest {
 	static final String OBJECT_NAME = OBJECT_TYPE.getDescribe().getName();
 	static final String FIELD_NAME = Application.namespacePrefix + 'DocuSignId__c';
 
-	static testMethod void test_isFlsSupported() {
+	@IsTest
+	static void test_isFlsSupported() {
 		String orgType = null;
 		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
 		if (Collection.isNotEmpty(orgs)) {
@@ -15,7 +16,8 @@ private class PermissionsTest {
 			Permissions.IS_FLS_SUPPORTED);
 	}
 
-	static testMethod void test_describeField() {
+	@IsTest
+	static void test_describeField() {
 		Test.startTest();
 		DescribeFieldResult r1 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, null);
 		DescribeFieldResult r2 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
@@ -26,7 +28,8 @@ private class PermissionsTest {
 		System.assertEquals(FIELD_NAME, r2.getName());
 	}
 
-	static testMethod void test_FlsResult() {
+	@IsTest
+	static void test_FlsResult() {
 		Test.startTest();
 		Permissions.FlsResult r1 = new Permissions.FlsResult('Test', Permissions.FlsStatus.OK);
 		Permissions.FlsResult r2 = new Permissions.FlsResult('Test', Permissions.FlsStatus.Unauthorized);
@@ -48,7 +51,8 @@ private class PermissionsTest {
 		System.assertEquals('Test (NotFound)', r4.toString());
 	}
 
-	static testMethod void test_FlsResults() {
+	@IsTest
+	static void test_FlsResults() {
 		Test.startTest();
 		Permissions.FlsResults r1 = new Permissions.FlsResults(
 			Permissions.FlsAccess.Queryable,
@@ -161,7 +165,8 @@ private class PermissionsTest {
 		System.assertEquals(String.format(Label.EncryptedFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r10.getErrorMessage());
 	}
 
-	static testMethod void test_getFlsResult_authorized() {
+	@IsTest
+	static void test_getFlsResult_authorized() {
 		User u = TestUtils.createDocuSignAdministrator();
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
@@ -194,7 +199,8 @@ private class PermissionsTest {
 		System.assert(r7.isAuthorized);
 	}
 
-	static testMethod void test_getFlsResult_unauthorized() {
+	@IsTest
+	static void test_getFlsResult_unauthorized() {
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
@@ -226,7 +232,8 @@ private class PermissionsTest {
 		System.assert(!r7.isAuthorized);
 	}
 
-	static testMethod void test_getFlsResults_authorized() {
+	@IsTest
+	static void test_getFlsResults_authorized() {
 		User u = TestUtils.createDocuSignAdministrator();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9;
 
@@ -266,7 +273,8 @@ private class PermissionsTest {
 		System.assert(!r9.isAuthorized);
 	}
 
-	static testMethod void test_getFlsResults_unauthorized() {
+	@IsTest
+	static void test_getFlsResults_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9, r10;
 
@@ -309,7 +317,8 @@ private class PermissionsTest {
 		System.assert(!r10.isAuthorized);
 	}
 
-	static testMethod void test_isCreateable_authorized() {
+	@IsTest
+	static void test_isCreateable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -326,7 +335,8 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isCreateable_unauthorized() {
+	@IsTest
+	static void test_isCreateable_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
@@ -343,7 +353,8 @@ private class PermissionsTest {
 		System.assert(!r2.isAuthorized);
 	}
 
-	static testMethod void test_verifyIsCreateable_authorized() {
+	@IsTest
+	static void test_verifyIsCreateable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -366,7 +377,8 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsCreateable_unauthorized() {
+	@IsTest
+	static void test_verifyIsCreateable_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
@@ -393,7 +405,8 @@ private class PermissionsTest {
 		System.assertEquals(Label.CannotCreateObject + ' ' + OBJECT_NAME, ex1.getMessage());
 	}
 
-	static testMethod void test_isDeletable_authorized() {
+	@IsTest
+	static void test_isDeletable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -410,7 +423,8 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isDeletable_unauthorized() {
+	@IsTest
+	static void test_isDeletable_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
@@ -427,7 +441,8 @@ private class PermissionsTest {
 		System.assert(!r2.isAuthorized);
 	}
 
-	static testMethod void test_verifyIsDeletable_authorized() {
+	@IsTest
+	static void test_verifyIsDeletable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -451,7 +466,8 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsDeletable_unauthorized() {
+	@IsTest
+	static void test_verifyIsDeletable_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
@@ -476,7 +492,8 @@ private class PermissionsTest {
 		System.assertEquals(Label.CannotDeleteObject + ' ' + OBJECT_NAME, ex2.getMessage());
 	}
 
-	static testMethod void test_isQueryable_authorized() {
+	@IsTest
+	static void test_isQueryable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -493,7 +510,8 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isQueryable_unauthorized() {
+	@IsTest
+	static void test_isQueryable_unauthorized() {
 		User u1 = TestUtils.createRestrictedUser();
 		User u2 = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
@@ -513,7 +531,8 @@ private class PermissionsTest {
 		System.assert(!r2.isAuthorized);
 	}
 
-	static testMethod void test_verifyIsQueryable_authorized() {
+	@IsTest
+	static void test_verifyIsQueryable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -536,7 +555,8 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsQueryable_unauthorized() {
+	@IsTest
+	static void test_verifyIsQueryable_unauthorized() {
 		User u1 = TestUtils.createRestrictedUser();
 		User u2 = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
@@ -564,7 +584,8 @@ private class PermissionsTest {
 		System.assertEquals(String.format(Label.CannotQueryFields_2, new List<String> { OBJECT_NAME, 'Invalid__c (NotFound)' }), ex2.getMessage());
 	}
 
-	static testMethod void test_isUpdateable_authorized() {
+	@IsTest
+	static void test_isUpdateable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -581,7 +602,8 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isUpdateable_unauthorized() {
+	@IsTest
+	static void test_isUpdateable_unauthorized() {
 		User u = TestUtils.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
@@ -598,7 +620,8 @@ private class PermissionsTest {
 		System.assert(!r2.isAuthorized);
 	}
 
-	static testMethod void test_verifyIsUpdateable_authorized() {
+	@IsTest
+	static void test_verifyIsUpdateable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -621,7 +644,8 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsUpdateable_unauthorized() {
+	@IsTest
+	static void test_verifyIsUpdateable_unauthorized() {
 		User u1 = TestUtils.createRestrictedUser();
 		User u2 = TestUtils.createDocuSignAdministrator();
 		UnauthorizedException ex1, ex2;
@@ -649,7 +673,8 @@ private class PermissionsTest {
 		System.assertEquals(String.format(Label.CannotUpdateFields_2, new List<String> { OBJECT_NAME, 'Invalid__c (NotFound)' }), ex2.getMessage());
 	}
 
-	static testMethod void test_isFilterable_authorized() {
+	@IsTest
+	static void test_isFilterable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -666,11 +691,13 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isFilterable_unauthorized() {
+	@IsTest
+	static void test_isFilterable_unauthorized() {
 		// No good way to test this. Would need to toggle Shield/PE on standard fields.
 	}
 
-	static testMethod void test_verifyIsFilterable_authorized() {
+	@IsTest
+	static void test_verifyIsFilterable_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -693,11 +720,13 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsFilterable_unauthorized() {
+	@IsTest
+	static void test_verifyIsFilterable_unauthorized() {
 		// No good way to test this. Would need to toggle Shield/PE on standard fields.
 	}
 
-	static testMethod void test_isUnencrypted_authorized() {
+	@IsTest
+	static void test_isUnencrypted_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
@@ -714,11 +743,13 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	static testMethod void test_isUnencrypted_unauthorized() {
+	@IsTest
+	static void test_isUnencrypted_unauthorized() {
 		// No good way to test this. Would need to toggle Shield/PE on standard fields.
 	}
 
-	static testMethod void test_verifyIsUnencrypted_authorized() {
+	@IsTest
+	static void test_verifyIsUnencrypted_authorized() {
 		User u = TestUtils.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
@@ -741,11 +772,13 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	static testMethod void test_verifyIsUnencrypted_unauthorized() {
+	@IsTest
+	static void test_verifyIsUnencrypted_unauthorized() {
 		// No good way to test this. Would need to toggle Shield/PE on standard fields.
 	}
 
-	static testMethod void test_getDocuSignAdministratorPermissionSetId() {
+	@IsTest
+	static void test_getDocuSignAdministratorPermissionSetId() {
 		Id id = [
 			SELECT Id
 			FROM PermissionSet
@@ -758,7 +791,8 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_getDocuSignUserPermissionSetId() {
+	@IsTest
+	static void test_getDocuSignUserPermissionSetId() {
 		Id id = [
 			SELECT Id
 			FROM PermissionSet
@@ -771,7 +805,8 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_assignDocuSignUserPermissionSet() {
+	@IsTest
+	static void test_assignDocuSignUserPermissionSet() {
 		final User testUser = TestUtils.createUser();
 
 		Test.startTest();
@@ -786,7 +821,8 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_assignDocuSignAdministratorPermissionSet() {
+	@IsTest
+	static void test_assignDocuSignAdministratorPermissionSet() {
 		final User testUser = TestUtils.createUser();
 
 		Test.startTest();
@@ -801,7 +837,8 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_removeDocuSignPermissionSets() {
+	@IsTest
+	static void test_removeDocuSignPermissionSets() {
 		User dsUser = TestUtils.createDocuSignUser();
 		User dsAdmin = TestUtils.createDocuSignAdministrator();
 		User nonDocuSignUser = TestUtils.createUser();
@@ -932,7 +969,8 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testMethod void test_isOwner() {
+	@IsTest
+	static void test_isOwner() {
 		System.runAs(TestUtils.createAdministrator()) {
 			final User u1 = TestUtils.createDocuSignUser();
 			final User u2 = TestUtils.createDocuSignUser();
