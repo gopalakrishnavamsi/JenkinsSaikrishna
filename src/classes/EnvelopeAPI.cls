@@ -1006,11 +1006,11 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 		private Datetime getCompletedDatetime() {
 			Datetime result = null;
-			if (this.status == 'voided') {
+			if (this.status == Envelope.STATUS_VOIDED) {
 				result = StringUtils.parseDateTime(this.voidedDateTime);
-			} else if (this.status == 'declined') {
+			} else if (this.status == Envelope.STATUS_DECLINED) {
 				result = StringUtils.parseDateTime(this.declinedDateTime);
-			} else if (this.status == 'completed') {
+			} else if (this.status == Envelope.STATUS_COMPLETED) {
 				result = StringUtils.parseDateTime(this.completedDateTime);
 			}
 			return result;
