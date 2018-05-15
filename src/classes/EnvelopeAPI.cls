@@ -324,7 +324,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId, 'recipients' },
 			new QueryString('resend_envelope', 'true'),
-			JSON.serialize(new Recipients(recipients, null, false)),
+			JSON.serialize(new Recipients(recipients, null, false, false)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to resend envelope: ' + response.error.toString());
@@ -521,6 +521,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIRecipient {
 		public String recipientId;
 		public String name;
@@ -546,7 +547,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String declinedDateTime;
 		public String declinedReason;
 
-		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags) {
+		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags,
+			final Boolean hasTemplates) {
+
 			if (r != null) {
 				this.recipientId = String.valueOf(r.sequence);
 				if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
@@ -558,8 +561,10 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					this.name = r.name;
 					this.email = r.email;
 				}
-				this.roleName = r.role == null ? null : r.role.name;
-				this.routingOrder = String.valueOf(r.routingOrder);
+				// API requires a defined value for roleName when templates are used. Empty strings are OK.
+				this.roleName = r.role == null || String.isBlank(r.role.name) ? '' : r.role.name;
+				// Don't set routing order if these recipients are added to a template envelope
+				this.routingOrder = hasTemplates ? '' : String.valueOf(r.routingOrder);
 				this.signingGroupId = r.isSigningGroup ? String.valueOf(r.signingGroup.id) : null;
 				this.customFields = getRecipientCustomFields(r);
 				this.emailNotification = Localization.isEmailLocalizationEnabled()
@@ -574,9 +579,10 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					}
 				}
 				this.note = r.note;
-				if (includeDefaultAnchorTags) {
-					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId, r.role == null
-						? '' : String.valueOf(r.role.value));
+				if (includeDefaultAnchorTags && r.role != null && r.role.hasValue) {
+					// Only add default anchor tags if role is defined and has a valid (> 0) value.
+					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId,
+						String.valueOf(r.role.value));
 				}
 			}
 		}
@@ -611,6 +617,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return customFields;
 	}
 
+	@TestVisible
 	private class Recipients {
 		public List<APIRecipient> agents;
 		public List<APIRecipient> carbonCopies;
@@ -620,7 +627,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public List<APIRecipient> intermediaries;
 		public List<APIRecipient> signers;
 
-		public Recipients(final List<Recipient> rs, final String documentId, final Boolean includeDefaultAnchorTags) {
+		public Recipients(final List<Recipient> rs, final String documentId, final Boolean includeDefaultAnchorTags,
+			final Boolean hasTemplates) {
+
 			if (rs != null) {
 				this.agents = new List<APIRecipient>();
 				this.carbonCopies = new List<APIRecipient>();
@@ -631,19 +640,19 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				this.signers = new List<APIRecipient>();
 				for (Recipient r : rs) {
 					if (r.type == Recipient.TYPE_AGENT) {
-						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_CARBON_COPY) {
-						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_CERTIFIED_DELIVERY) {
-						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_EDITOR) {
-						this.editors.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.editors.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_INTERMEDIARY) {
-						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
-						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else { // Recipient.TYPE_SIGNER
-						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					}
 				}
 			}
@@ -691,6 +700,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class AnchorTag {
 		public String documentId;
 		public String recipientId;
@@ -719,6 +729,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class DefaultAnchorTags {
 		public List<AnchorTag> signHereTabs;
 		public List<AnchorTag> initialHereTabs;
@@ -755,17 +766,21 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class InlineTemplate {
 		public String sequence;
 		public List<APIDocument> documents;
 		public Recipients recipients;
+		public EnvelopeAPI.CustomFields customFields;
 
 		public InlineTemplate(
 			final Document doc,
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Map<Id, Blob> documentContent) {
+			final Map<Id, Blob> documentContent,
+			final List<CustomField> customFields,
+			final Entity source) {
 
 			if (doc != null) {
 				this.sequence = String.valueOf(sequence);
@@ -776,8 +791,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					};
 				}
 				if (recipients != null) {
-					this.recipients = new Recipients(recipients, this.sequence, includeDefaultAnchorTags);
+					this.recipients = new Recipients(recipients, this.sequence, includeDefaultAnchorTags, true);
 				}
+				this.customFields = buildCustomFields(customFields, source);
 			}
 		}
 	}
@@ -803,7 +819,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Map<Id, Blob> documentContent) {
+			final Map<Id, Blob> documentContent,
+			final List<CustomField> customFields,
+			final Entity source) {
 
 			if (document != null) {
 				if (document.templateId != null) {
@@ -812,7 +830,8 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					};
 				}
 				this.inlineTemplates = new List<InlineTemplate> {
-					new InlineTemplate(document, sequence, recipients, includeDefaultAnchorTags, documentContent)
+					new InlineTemplate(document, sequence, recipients, includeDefaultAnchorTags, documentContent,
+						customFields, source)
 				};
 			}
 		}
@@ -879,7 +898,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		final List<Document> documents,
 		final List<Recipient> recipients,
 		final Boolean includeDefaultAnchorTags,
-		final Map<Id, Blob> documentContent) {
+		final Map<Id, Blob> documentContent,
+		final List<CustomField> customFields,
+		final Entity source) {
 
 		List<CompositeTemplate> compositeTemplates = null;
 		if (documents != null) {
@@ -888,7 +909,8 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			Boolean addTags = includeDefaultAnchorTags;
 			for (Document d : documents) {
 				// FIXME: All recipients should not be added to every document in every case.
-				compositeTemplates.add(new CompositeTemplate(d, sequence++, recipients, addTags, documentContent));
+				compositeTemplates.add(new CompositeTemplate(d, sequence++, recipients, addTags, documentContent,
+					customFields, source));
 				addTags = false;
 			}
 		}
@@ -982,12 +1004,11 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				this.emailBlurb = e.emailMessage;
 				this.emailSubject = e.emailSubject;
 				this.notification = new EnvelopeNotification(e.notifications, useAccountNotificationDefaults);
-				this.customFields = buildCustomFields(e.customFields, e.source);
 
 				Map<Id, Blob> documentContent = e.hasDocuments ? getDocumentContent(e.documents, fetchDocuments) : null;
 				if (e.hasTemplates) {
 					this.compositeTemplates = buildCompositeTemplates(e.documents, e.recipients,
-						includeDefaultAnchorTags, documentContent);
+						includeDefaultAnchorTags, documentContent, e.customFields, e.source);
 				} else {
 					if (e.documents != null) {
 						this.documents = new List<APIDocument>();
@@ -998,8 +1019,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 						}
 					}
 					if (e.recipients != null) {
-						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags);
+						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags, false);
 					}
+					this.customFields = buildCustomFields(e.customFields, e.source);
 				}
 			}
 		}

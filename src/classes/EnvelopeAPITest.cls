@@ -904,7 +904,10 @@ private class EnvelopeAPITest {
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document doc = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e1.Id));
-
+			List<CustomField> cfs = new List<CustomField> {
+				CustomField.newTextField('cf1', '1', true, true),
+				CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+			};
 			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
 
 			Test.startTest();
@@ -921,11 +924,23 @@ private class EnvelopeAPITest {
 						'Recipient Two', 'r2@unit.test', null, 'note2', false)
 				},
 				true,
-				content);
+				content,
+				cfs,
+				new Entity(o.Id));
 			Test.stopTest();
+
 			System.assertEquals(2, compositeTemplatesList.size());
 			System.assertEquals(1, compositeTemplatesList[0].serverTemplates.size());
 			System.assertEquals(1, compositeTemplatesList[1].inlineTemplates.size());
+			System.assertEquals('', compositeTemplatesList[1].inlineTemplates[0].recipients.signers[0].routingOrder);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.listCustomFields);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.textCustomFields);
+			System.assertEquals(1, compositeTemplatesList[0].inlineTemplates[0].customFields.listCustomFields.size());
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields);
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields.listCustomFields);
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields.textCustomFields);
+			System.assertEquals(1, compositeTemplatesList[1].inlineTemplates[0].customFields.listCustomFields.size());
 		}
 	}
 
@@ -1660,6 +1675,65 @@ private class EnvelopeAPITest {
 			System.assertEquals(null, result.reason);
 			System.assertNotEquals(null, result.lastStatusUpdate);
 			System.assert(Collection.isEmpty(result.recipients));
+		}
+	}
+
+	@IsTest
+	static void test_APIRecipient_anchor_tag_conversion() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, null, null).withRole(new Recipient.Role('DefaultRole1', 1));
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, 'TemplateRole', null);
+			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', null, null, null);
+
+			Test.startTest();
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no auto anchor tags
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r1, '1', true, false); // with auto anchor tags, with role value
+			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r2, '1', true, false); // with auto anchor tags, with no role value
+			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r3, '1', true, false); // with auto anchor tags, with null role
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(null, result1.tabs);
+
+			System.assertNotEquals(null, result2);
+			System.assertNotEquals(null, result2.tabs);
+
+			System.assertNotEquals(null, result3);
+			System.assertEquals(null, result3.tabs);
+
+			System.assertNotEquals(null, result4);
+			System.assertEquals(null, result4.tabs);
+		}
+	}
+
+	@IsTest
+	static void test_APIRecipient_template_conversion() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'TemplateRole', null).withRoutingOrder(1);
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, null, null).withRoutingOrder(2);
+
+			Test.startTest();
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no template, has role
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r2, '1', false, false); // no template, no role
+			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r1, '1', false, true); // has template, has role
+			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r2, '1', false, true); // has template, no role
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals('TemplateRole', result1.roleName);
+			System.assertEquals('1', result1.routingOrder);
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals('', result2.roleName);
+			System.assertEquals('2', result2.routingOrder);
+
+			System.assertNotEquals(null, result3);
+			System.assertEquals('TemplateRole', result3.roleName);
+			System.assertEquals('', result3.routingOrder);
+
+			System.assertNotEquals(null, result4);
+			System.assertEquals('', result4.roleName);
+			System.assertEquals('', result4.routingOrder);
 		}
 	}
 }

@@ -510,6 +510,16 @@ public class Account {
 			this.address = address;
 			this.termsAccepted = termsAccepted;
 		}
+
+		/**
+		 * Accepts DocuSign trial account terms and conditions.
+		 *
+		 * @return The trial account with <code>termsAccepted</code> set to <code>true</code>.
+		 */
+		public Trial acceptTermsAndConditions() {
+			this.termsAccepted = true;
+			return this;
+		}
 	}
 
 	/**

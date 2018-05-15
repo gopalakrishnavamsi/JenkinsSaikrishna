@@ -285,6 +285,30 @@ public with sharing class EnvelopeService {
 	}
 
 	@TestVisible
+	private static Envelope applyRecipientLimit(
+		final Envelope envelope,
+		final Integer recipientLimit) {
+
+		if (envelope == null || Collection.isEmpty(envelope.recipients) || recipientLimit <= 0) return envelope;
+
+		List<Recipient> rs = new List<Recipient>();
+		Integer counter = 1;
+		for (Recipient r : envelope.recipients) {
+			if (counter++ > recipientLimit) {
+				LOG.warn(String.format('Envelope recipient count {0} is greater than the configured limit {1}.',
+					new List<String> {
+						String.valueOf(envelope.recipients.size()),
+						String.valueOf(recipientLimit)
+					}));
+				break;
+			}
+			rs.add(r);
+		}
+
+		return envelope.withRecipients(rs);
+	}
+
+	@TestVisible
 	private static Envelope replaceUserTags(final Envelope envelope) {
 		if (envelope == null) return envelope;
 
@@ -459,6 +483,9 @@ public with sharing class EnvelopeService {
 			}
 			if (envelopeConfiguration.recipients == null || envelopeConfiguration.recipients.addSourceRecipients) {
 				result = addSourceRecipients(result, envelopeConfiguration.source, defaultEmailSettings);
+			}
+			if (envelopeConfiguration.recipients != null) {
+				result = applyRecipientLimit(result, envelopeConfiguration.recipients.recipientLimit);
 			}
 		} else if (addFromSource) { // Default settings if custom button is undefined?
 			result = addSourceDocuments(result, result.source, false);

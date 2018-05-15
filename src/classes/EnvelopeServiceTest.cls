@@ -1315,4 +1315,46 @@ private class EnvelopeServiceTest {
 			System.assertEquals(l.Id, result.source.id);
 		}
 	}
+
+	static testMethod void test_applyRecipientLimit() {
+		Envelope e = new Envelope(null, null, null, null);
+		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, null, null);
+		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, null, null);
+		List<Recipient> rs = new List<Recipient> { r1, r2 };
+
+		Test.startTest();
+		Envelope result1 = EnvelopeService.applyRecipientLimit(null, null); // null
+		Envelope result2 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(null), null); // null
+		Envelope result3 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(rs), null); // { r1, r2  }
+		Envelope result4 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(rs), -1); // { r1, r2  }
+		Envelope result5 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(rs), 0); // { r1, r2  }
+		Envelope result6 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(rs), 1); // { r1 }
+		Envelope result7 = EnvelopeService.applyRecipientLimit(e.copy().withRecipients(rs), 2); // { r1, r2  }
+		Test.stopTest();
+
+		System.assertEquals(null, result1);
+
+		System.assertNotEquals(null, result2);
+		System.assert(Collection.isEmpty(result2.recipients));
+
+		System.assertNotEquals(null, result3);
+		System.assertNotEquals(null, result3.recipients);
+		System.assertEquals(2, result3.recipients.size());
+
+		System.assertNotEquals(null, result4);
+		System.assertNotEquals(null, result4.recipients);
+		System.assertEquals(2, result4.recipients.size());
+
+		System.assertNotEquals(null, result5);
+		System.assertNotEquals(null, result5.recipients);
+		System.assertEquals(2, result5.recipients.size());
+
+		System.assertNotEquals(null, result6);
+		System.assertNotEquals(null, result6.recipients);
+		System.assertEquals(1, result6.recipients.size());
+
+		System.assertNotEquals(null, result7);
+		System.assertNotEquals(null, result7.recipients);
+		System.assertEquals(2, result7.recipients.size());
+	}
 }

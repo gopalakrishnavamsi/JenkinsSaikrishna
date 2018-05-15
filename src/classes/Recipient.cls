@@ -285,7 +285,7 @@ public class Recipient implements Comparable {
 			TYPE_SIGNER,
 			null,
 			null,
-			String.isBlank(role) ? null : new Role(role, null),
+			String.isBlank(role) ? null : new Role(role),
 			name,
 			email,
 			null,
@@ -390,6 +390,25 @@ public class Recipient implements Comparable {
 		 * The role ordinal used for mapping to automatic anchor tags.
 		 */
 		public Integer value { get; private set; }
+		/**
+		 * Read-only property describing whether this role has a valid value. If <code>true</code> (> 0),
+		 * the role is mapped to automatic anchor tags.
+		 */
+		public Boolean hasValue {
+			get {
+				return this.value > 0;
+			}
+		}
+
+		/**
+		 * Constructs a DocuSign envelope recipient role with no value. This role will not be used for automatic
+		 * anchor tags.
+		 *
+		 * @param name The role name.
+		 */
+		public Role(final String name) {
+			this(name, null);
+		}
 
 		/**
 		 * Constructs a DocuSign envelope recipient role.

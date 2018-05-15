@@ -858,7 +858,7 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
-	static void test_mergeAvailableRole() {
+	static void test_mergeRole() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
@@ -867,7 +867,7 @@ private class RecipientServiceTest {
 			};
 
 			Test.startTest();
-			RecipientService.MergeResult result = RecipientService.mergeAvailableRole(Recipient.fromSource(
+			RecipientService.MergeResult result = RecipientService.mergeRole(Recipient.fromSource(
 				'r1',
 				'r1@unit.test',
 				'5555551111',
@@ -881,7 +881,7 @@ private class RecipientServiceTest {
 			System.assertEquals('Role1', result.recipient.role.name);
 			System.assertEquals(1, result.recipient.role.value);
 
-			result = RecipientService.mergeAvailableRole(Recipient.fromSource(
+			result = RecipientService.mergeRole(Recipient.fromSource(
 				'r1',
 				'r1@unit.test',
 				'5555551111',
@@ -895,7 +895,7 @@ private class RecipientServiceTest {
 			System.assertEquals('Role1', result.recipient.role.name);
 			System.assertEquals(1, result.recipient.role.value);
 
-			result = RecipientService.mergeAvailableRole(Recipient.fromSource(
+			result = RecipientService.mergeRole(Recipient.fromSource(
 				'r1',
 				'r1@unit.test',
 				'5555551111',
@@ -903,13 +903,11 @@ private class RecipientServiceTest {
 				null),
 				new Set<String> { 'Role1', 'Role3' });
 			System.assertNotEquals(null, result);
-			System.assert(result.isMerged);
+			System.assert(!result.isMerged);
 			System.assertNotEquals(null, result.recipient);
-			System.assertNotEquals(null, result.recipient.role);
-			System.assertEquals('Role2', result.recipient.role.name);
-			System.assertEquals(2, result.recipient.role.value);
+			System.assertEquals(null, result.recipient.role);
 
-			result = RecipientService.mergeAvailableRole(Recipient.fromSource(
+			result = RecipientService.mergeRole(Recipient.fromSource(
 				'r1',
 				'r1@unit.test',
 				'5555551111',
@@ -968,13 +966,13 @@ private class RecipientServiceTest {
 
 			System.assertNotEquals(null, result2[1]);
 			System.assertNotEquals(null, result2[1].role);
-			System.assertEquals('Role2', result2[1].role.name);
-			System.assertEquals(2, result2[1].role.value);
+			System.assertEquals('Some other role', result2[1].role.name);
+			System.assertEquals(null, result2[1].role.value);
 
 			System.assertNotEquals(null, result2[2]);
 			System.assertNotEquals(null, result2[2].role);
 			System.assertEquals('Role3', result2[2].role.name);
-			System.assertEquals(0, result2[2].role.value);
+			System.assertEquals(null, result2[2].role.value);
 		}
 	}
 
@@ -1073,7 +1071,7 @@ private class RecipientServiceTest {
 			System.assertNotEquals(null, result1.recipient);
 			System.assertNotEquals(null, result1.recipient.role);
 			System.assertEquals('tr1', result1.recipient.role.name);
-			System.assertEquals(0, result1.recipient.role.value);
+			System.assertEquals(null, result1.recipient.role.value);
 
 			System.assertNotEquals(null, result2);
 			System.assert(result2.isMerged);
@@ -1197,7 +1195,7 @@ private class RecipientServiceTest {
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'rr2', null);
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5555553333', 'rr3', null);
-			Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '5555554444', 'rr4', null);
+			Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '5555554444', '', null);
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
 				new RoleSettings__c(Name = 'Role2', Value__c = 2),
@@ -1256,7 +1254,7 @@ private class RecipientServiceTest {
 			System.assert(!result2[1].signNow);
 			System.assertNotEquals(null, result2[1].role);
 			System.assertEquals('tr2', result2[1].role.name);
-			System.assertEquals(0, result2[1].role.value);
+			System.assertEquals(null, result2[1].role.value);
 			System.assertEquals(null, result2[1].note);
 			System.assertEquals(es.language, result2[1].emailSettings.language);
 			System.assertEquals(es.languageLabel, result2[1].emailSettings.languageLabel);
@@ -1267,8 +1265,8 @@ private class RecipientServiceTest {
 			System.assertEquals(Recipient.TYPE_SIGNER, result2[2].type);
 			System.assert(!result2[2].signNow);
 			System.assertNotEquals(null, result2[2].role);
-			System.assertEquals('Role2', result2[2].role.name);
-			System.assertEquals(2, result2[2].role.value);
+			System.assertEquals('rr3', result2[2].role.name);
+			System.assertEquals(null, result2[2].role.value);
 			System.assertEquals('n3', result2[2].note);
 			System.assertEquals(es.language, result2[2].emailSettings.language);
 			System.assertEquals(es.languageLabel, result2[2].emailSettings.languageLabel);
@@ -1278,9 +1276,7 @@ private class RecipientServiceTest {
 			System.assertNotEquals(null, result2[3]);
 			System.assertEquals(Recipient.TYPE_SIGNER, result2[3].type);
 			System.assert(!result2[3].signNow);
-			System.assertNotEquals(null, result2[3].role);
-			System.assertEquals('Role3', result2[3].role.name);
-			System.assertEquals(3, result2[3].role.value);
+			System.assertEquals(null, result2[3].role);
 			System.assertEquals(null, result2[3].note);
 			System.assertEquals(es.language, result2[2].emailSettings.language);
 			System.assertEquals(es.languageLabel, result2[2].emailSettings.languageLabel);

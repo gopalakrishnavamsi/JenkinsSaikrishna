@@ -110,7 +110,7 @@ public with sharing class RecipientService {
 				r.Type__c,
 				Integer.valueOf(r.Sequence__c),
 				Integer.valueOf(r.RoutingOrder__c),
-				new Recipient.Role(r.Role__c, null),
+				new Recipient.Role(r.Role__c),
 				r.Name,
 				r.Email__c,
 				r.SigningGroupId__c != null || String.isNotBlank(r.SigningGroupName__c)
@@ -323,7 +323,7 @@ public with sharing class RecipientService {
 						String email = getValue(relatedContacts.fieldMap, contact, EnvelopeConfiguration.KEY_EMAIL);
 						String sgName = getValue(relatedContacts.fieldMap, contact, EnvelopeConfiguration.KEY_SIGNING_GROUP);
 						String roleName = getValue(relatedContacts.fieldMap, contact, EnvelopeConfiguration.KEY_ROLE);
-						Recipient.Role role = String.isBlank(roleName) ? null : new Recipient.Role(roleName, 0);
+						Recipient.Role role = String.isBlank(roleName) ? null : new Recipient.Role(roleName);
 
 						if (relatedContacts.isSigningGroup && String.isBlank(fullName) && String.isBlank(email)) {
 							if (String.isNotBlank(sgName) && signingGroups.containsKey(sgName.toLowerCase())) {
@@ -573,17 +573,17 @@ public with sharing class RecipientService {
 			}
 		}
 
-		if (result == null) {
-			result = new Recipient.Role(roleName, 0);
+		if (result == null && String.isNotBlank(roleName)) {
+			result = new Recipient.Role(roleName);
 		}
 
 		return result;
 	}
 
 	@TestVisible
-	private static MergeResult mergeAvailableRole(final Recipient recipient, final Set<String> rolesInUse) {
-		MergeResult result = null;
-		Recipient.Role rr = null;
+	private static MergeResult mergeRole(final Recipient recipient, final Set<String> rolesInUse) {
+		Recipient.Role role = null;
+
 		if (rolesInUse != null
 			&& recipient.role != null
 			&& String.isNotBlank(recipient.role.name)
@@ -591,25 +591,10 @@ public with sharing class RecipientService {
 			|| !rolesInUse.contains(recipient.role.name))) {
 
 			// either already added to envelope with a valid role or not in use
-			rr = resolveRole(recipient.role.name);
+			role = resolveRole(recipient.role.name);
 		}
 
-		if (rr == null || rr.value == 0) {
-			List<Recipient.Role> roles = getDefaultRoles();
-			for (Recipient.Role role : roles) {
-				if (rolesInUse != null && !rolesInUse.contains(role.name)) {
-					rr = role;
-					break;
-				}
-			}
-		}
-
-		if (rr == null || rr.value == 0) {
-			// TODO: Is it appropriate to add a role with value 0?
-			return new MergeResult(recipient.withRole(rr), false);
-		}
-
-		return new MergeResult(recipient.withRole(rr), true);
+		return new MergeResult(recipient.withRole(role), role != null);
 	}
 
 	@TestVisible
@@ -622,7 +607,7 @@ public with sharing class RecipientService {
 		Set<String> rolesInUse = DB.queryRoles(envelopeId);
 		List<Recipient> mergedRecipients = new List<Recipient>();
 		for (Recipient r : recipients) {
-			MergeResult mr = mergeAvailableRole(r, rolesInUse);
+			MergeResult mr = mergeRole(r, rolesInUse);
 			if (mr.isMerged && mr.recipient != null && mr.recipient.role != null) {
 				mergedRecipients.add(mr.recipient);
 				if (String.isNotBlank(mr.recipient.role.name)) rolesInUse.add(mr.recipient.role.name);
@@ -822,7 +807,7 @@ public with sharing class RecipientService {
 				result = mergeRoleType(result.recipient, index, recipientSettings.recipientRoleTypes);
 				rolesInUse = markRoleUsed(result, rolesInUse);
 				if (!isRoleMerged && !result.isMerged) {
-					result = mergeAvailableRole(result.recipient, rolesInUse);
+					result = mergeRole(result.recipient, rolesInUse);
 					rolesInUse = markRoleUsed(result, rolesInUse);
 				}
 			}
