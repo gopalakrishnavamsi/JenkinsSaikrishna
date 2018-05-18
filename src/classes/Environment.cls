@@ -3,10 +3,14 @@
  */
 public class Environment {
 
-	@TestVisible // 30-day plan (PROD)
-	private static final UUID trial30DayPlanId = UUID.fromString('83db741d-13af-470f-8beb-0ad0fba6e4a3');
-	@TestVisible // 2-day plan (PROD)
-	private static final UUID trial2DayPlanId = UUID.fromString('98c3e733-e3d3-4b39-89c6-961ed4125b6f');
+	// TODO: Use environment-specific trial plan IDs. Support multiple if necessary.
+	@TestVisible
+	private static final UUID TRIAL_PLAN_ID = UUID.fromString([
+		SELECT TrialPlanId__c
+		FROM Organization__mdt
+		WHERE DeveloperName = 'SecureSettings'
+		LIMIT 1
+	].TrialPlanId__c);
 
 	/**
 	 * Possible DocuSign environment targets:
@@ -115,8 +119,7 @@ public class Environment {
 		}
 
 		this.baseUrlString = this.baseUrl == null ? '' : this.baseUrl.toExternalForm();
-		// TODO: Use environment-specific trial plan IDs. Support multiple if necessary.
-		this.trialPlanId = trial30DayPlanId;
+		this.trialPlanId = TRIAL_PLAN_ID;
 	}
 
 	@TestVisible
@@ -133,8 +136,7 @@ public class Environment {
 		if (this.isValid) this.baseUrl = new Url(url.getProtocol() + '://' + url.getAuthority() + '/');
 
 		this.baseUrlString = this.baseUrl == null ? '' : this.baseUrl.toExternalForm();
-		// TODO: Use environment-specific trial plan IDs. Support multiple if necessary.
-		this.trialPlanId = trial30DayPlanId;
+		this.trialPlanId = TRIAL_PLAN_ID;
 	}
 
 	/**

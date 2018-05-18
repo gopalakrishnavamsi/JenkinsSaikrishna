@@ -338,14 +338,15 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public List<Setting> loginUserSettings;
 		private Map<String, String> userSettings;
 
-		public Account.Membership toExternalForm() {
+		public Account.Membership toExternalForm(final String apiPassword) {
 			return new Account.Membership(
 				Long.valueOf(accountId),
 				UUID.fromString(accountIdGuid),
 				name,
 				UUID.fromString(userId),
 				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
-				getUserSettings());
+				getUserSettings(),
+				apiPassword);
 		}
 
 		public Map<String, String> getUserSettings() {
@@ -365,14 +366,14 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String apiPassword;
 		public List<LoginAccount> loginAccounts;
 
-		public Account.Memberships toExternalForm() {
-			List<Account.Membership> accounts = new List<Account.Membership>();
+		public List<Account.Membership> toExternalForm() {
+			List<Account.Membership> result = new List<Account.Membership>();
 			if (loginAccounts != null) {
 				for (LoginAccount la : loginAccounts) {
-					accounts.add(la.toExternalForm());
+					result.add(la.toExternalForm(apiPassword));
 				}
 			}
-			return new Account.Memberships(accounts, apiPassword);
+			return result;
 		}
 	}
 
@@ -443,7 +444,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private Account.Memberships getAccounts(final String authHeader, final Integer timeout) {
+	private List<Account.Membership> getAccounts(final String authHeader, final Integer timeout) {
 		RestAPI.Response response = get(
 			this.apiBaseUrl,
 			new List<Object> { 'login_information' },
@@ -470,51 +471,47 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	public Account.Credentials getAccountCredentials(final UUID accountId, final Integer timeout) {
-		Long accountNumber = 0L;
-		String apiPassword = '';
+		Long accountNumber = null;
+		String apiPassword = null;
 
-		final Account.Memberships login = this.getAccounts(this.legacyAuthHeader, timeout);
-		if (login != null) {
-			apiPassword = login.apiPassword;
-			if (login.accounts != null && !login.accounts.isEmpty()) {
-				for (Account.Membership a : login.accounts) {
-					if (a.accountId == accountId) {
-						accountNumber = a.accountNumber;
-						break;
-					}
+		List<Account.Membership> memberships = this.getAccounts(this.legacyAuthHeader, timeout);
+		if (Collection.isNotEmpty(memberships)) {
+			apiPassword = memberships[0].apiPassword;
+			for (Account.Membership m : memberships) {
+				if (m.accountId == accountId) {
+					accountNumber = m.accountNumber;
+					break;
 				}
 			}
 		}
 		return new Account.Credentials(accountNumber, accountId, apiPassword);
 	}
 
-	public Account.Memberships getValidAccounts() {
+	public List<Account.Membership> getValidAccounts() {
 		return getValidAccounts(RestAPI.defaultTimeout);
 	}
 
-	public Account.Memberships getValidAccounts(final Integer timeout) {
+	public List<Account.Membership> getValidAccounts(final Integer timeout) {
 		if (this.baseUrl == null || this.username == null || String.isBlank(this.password))
 			throw new DocuSignException(Label.AccountNotConfigured);
 
-		Account.Memberships login = this.getAccounts(
+		List<Account.Membership> result = new List<Account.Membership>();
+		List<Account.Membership> memberships = this.getAccounts(
 			JSON.serialize(new LegacyCredentials(this.username, this.password)),
 			timeout);
-		if (login != null && login.accounts != null && !login.accounts.isEmpty()) {
-			if (login.accounts.size() == 1) {
+		if (Collection.isNotEmpty(memberships)) {
+			if (memberships.size() == 1) {
 				// Only one account returned. No need to call secondary API to get user settings.
-				if (isValidAccount(login.accounts[0])) {
-					return login;
-				} else {
-					return new Account.Memberships(new List<Account.Membership>(), null);
+				if (isValidAccount(memberships[0])) {
+					result.add(memberships[0]);
 				}
 			} else {
 				// DFS-3626: Work around API issue with user settings
-				final List<Account.Membership> validAccounts = new List<Account.Membership>();
-				for (Account.Membership ua : login.accounts) {
+				for (Account.Membership ua : memberships) {
 					Account.Membership us = ua
 						.withSettings(getUserSettings(ua.baseUrl, ua.accountNumber, ua.userId, timeout));
 					if (isValidAccount(us)) {
-						validAccounts.add(us);
+						result.add(us);
 					} else {
 						log.info(String.format(
 							'Invalid account ({0}) for DFS:\n\tManage account = {1}\n\tSend Envelopes = {2}'
@@ -528,11 +525,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 							}));
 					}
 				}
-				return new Account.Memberships(validAccounts, login.apiPassword);
 			}
-		} else {
-			return new Account.Memberships(new List<Account.Membership>(), null);
 		}
+		return result;
 	}
 
 	// Serialization objects for getUser

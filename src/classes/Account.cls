@@ -611,14 +611,15 @@ public class Account {
 		}
 
 		/**
-		 * Updates the DocuSign account membership <code>settings</code> property.
+		 * Copies the DocuSign account membership with an updated <code>settings</code> property.
 		 *
-		 * @param settings The new account settings.
+		 * @param settings The copied account membership.
 		 *
-		 * @return The DocuSign account membership with updated <code>settings</code>.
+		 * @return A copy of the DocuSign account membership with updated <code>settings</code>.
 		 */
 		public Membership withSettings(final Map<String, String> settings) {
-			return new Membership(accountNumber, accountId, name, userId, baseUrl, settings);
+			return new Membership(this.accountNumber, this.accountId, this.name, this.userId, this.baseUrl, settings,
+				this.apiPassword);
 		}
 
 		/**
@@ -644,31 +645,6 @@ public class Account {
 		public Membership scrub() {
 			this.apiPassword = null;
 			return this;
-		}
-	}
-
-	/**
-	 * Representation of DocuSign account memberships.
-	 */
-	public class Memberships {
-		/**
-		 * The DocuSign accounts that a user is a member of.
-		 */
-		public List<Membership> accounts { get; private set; }
-		/**
-		 * The DocuSign API password. This is never returned by public methods.
-		 */
-		public transient String apiPassword { get; private set; }
-
-		/**
-		 * Constructs DocuSign account memberships.
-		 *
-		 * @param accounts The DocuSign accounts to which a user belongs.
-		 * @param apiPassword The DocuSign API password.
-		 */
-		public Memberships(final List<Membership> accounts, final String apiPassword) {
-			this.accounts = accounts;
-			this.apiPassword = apiPassword;
 		}
 	}
 

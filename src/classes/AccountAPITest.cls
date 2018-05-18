@@ -379,9 +379,9 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, a);
-			System.assertEquals(0L, a.accountNumber);
+			System.assertEquals(null, a.accountNumber);
 			System.assertEquals(accountId, a.accountId);
-			System.assertEquals('fake-password', a.apiPassword);
+			System.assertEquals(null, a.apiPassword);
 		}
 	}
 
@@ -405,16 +405,13 @@ private class AccountAPITest {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 		TestUtils.createAccountConfiguration();
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-		APIException ex;
 
 		Test.startTest();
-		Account.Memberships uas = client.getValidAccounts();
+		List<Account.Membership> result = client.getValidAccounts();
 		Test.stopTest();
 
-		System.assertNotEquals(null, uas);
-		System.assertEquals(null, uas.apiPassword);
-		System.assertNotEquals(null, uas.accounts);
-		System.assert(uas.accounts.isEmpty());
+		System.assertNotEquals(null, result);
+		System.assert(result.isEmpty());
 	}
 
 	class LoginInformationSingleValidAccountMock implements HttpCalloutMock {
@@ -435,13 +432,20 @@ private class AccountAPITest {
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		Account.Memberships uas = client.getValidAccounts();
+		List<Account.Membership> result = client.getValidAccounts();
 		Test.stopTest();
 
-		System.assertNotEquals(null, uas);
-		System.assertEquals('fake-password', uas.apiPassword);
-		System.assertNotEquals(null, uas.accounts);
-		System.assertEquals(1, uas.accounts.size());
+		System.assertNotEquals(null, result);
+		System.assertEquals(1, result.size());
+		System.assertEquals(22222222L, result[0].accountNumber);
+		System.assertEquals(UUID.fromString('22222222-2222-2222-2222-222222222222'), result[0].accountId);
+		System.assertEquals('Account 2 (VALID)', result[0].name);
+		System.assertEquals(UUID.fromString('22222222-2222-2222-2222-222222222222'), result[0].userId);
+		System.assertEquals('fake-password', result[0].apiPassword);
+		System.assertNotEquals(null, result[0].baseUrl);
+		System.assertEquals('https://www.docusign.net/', result[0].baseUrl.toExternalForm());
+		System.assertNotEquals(null, result[0].settings);
+		System.assertEquals(6, result[0].settings.size());
 	}
 
 	class LoginInformationSingleInvalidAccountMock implements HttpCalloutMock {
@@ -462,13 +466,11 @@ private class AccountAPITest {
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		Account.Memberships uas = client.getValidAccounts();
+		List<Account.Membership> result = client.getValidAccounts();
 		Test.stopTest();
 
-		System.assertNotEquals(null, uas);
-		System.assertEquals(null, uas.apiPassword);
-		System.assertNotEquals(null, uas.accounts);
-		System.assert(uas.accounts.isEmpty());
+		System.assertNotEquals(null, result);
+		System.assert(result.isEmpty());
 	}
 
 	class LoginInformationMultipleValidAccountMock implements HttpCalloutMock {
@@ -503,15 +505,11 @@ private class AccountAPITest {
 		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
 		Test.startTest();
-		Account.Memberships uas = client.getValidAccounts();
+		List<Account.Membership> result = client.getValidAccounts();
 		Test.stopTest();
 
-		System.assertNotEquals(null, uas);
-		System.assertEquals('fake-password', uas.apiPassword);
-		System.assertNotEquals(null, uas.accounts);
-		System.assertEquals(2, uas.accounts.size());
-		System.assertEquals(TestUtils.ID2, uas.accounts[0].accountId);
-		System.assertEquals(TestUtils.ID3, uas.accounts[1].accountId);
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, result.size());
 	}
 
 	@IsTest

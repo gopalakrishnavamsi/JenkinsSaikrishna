@@ -6,42 +6,42 @@ private class EnvironmentTest {
 		Environment e1 = new Environment(Environment.Target.Production, new Url('http://fake.com'));
 		System.assertEquals(Environment.Target.Production, e1.environment);
 		System.assertEquals('https://www.docusign.net/', e1.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e1.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e1.trialPlanId);
 
 		Environment e2 = new Environment(Environment.Target.Demo, null);
 		System.assertEquals(Environment.Target.Demo, e2.environment);
 		System.assertEquals('https://demo.docusign.net/', e2.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e2.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e2.trialPlanId);
 
 		Environment e3 = new Environment(Environment.Target.Stage, new Url('https://demo.docusign.net'));
 		System.assertEquals(Environment.Target.Stage, e3.environment);
 		System.assertEquals('https://stage.docusign.net/', e3.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e3.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e3.trialPlanId);
 
 		Environment e4 = new Environment(Environment.Target.Other, new Url('https://other.docusignhq.com'));
 		System.assertEquals(Environment.Target.Other, e4.environment);
 		System.assertEquals('https://other.docusignhq.com/', e4.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e4.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e4.trialPlanId);
 
 		Environment e5 = new Environment(new Url('https://na3.docusign.net'));
 		System.assertEquals(Environment.Target.Production, e5.environment);
 		System.assertEquals('https://na3.docusign.net/', e5.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e5.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e5.trialPlanId);
 
 		Environment e6 = new Environment(new Url('https://other.docusign.net'));
 		System.assertEquals(Environment.Target.Other, e6.environment);
 		System.assertEquals('https://other.docusign.net/', e6.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e6.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e6.trialPlanId);
 
 		Environment e7 = new Environment(new Url('https://au.docusign.net'));
 		System.assertEquals(Environment.Target.Production, e7.environment);
 		System.assertEquals('https://au.docusign.net/', e7.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e7.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e7.trialPlanId);
 
 		Environment e8 = new Environment(new Url('https://ca.docusign.net'));
 		System.assertEquals(Environment.Target.Production, e8.environment);
 		System.assertEquals('https://ca.docusign.net/', e8.baseUrl.toExternalForm());
-		System.assertEquals(Environment.trial30DayPlanId, e8.trialPlanId);
+		System.assertEquals(Environment.TRIAL_PLAN_ID, e8.trialPlanId);
 	}
 
 	@IsTest

@@ -3,6 +3,13 @@
     <label>SecureSettings</label>
     <protected>true</protected>
     <values>
+        <field>TrialPlanId__c</field>
+        <!-- 2-day trial for testing -->
+        <value xsi:type="xsd:string">98c3e733-e3d3-4b39-89c6-961ed4125b6f</value>
+        <!-- 30-day trial -->
+        <!-- <value xsi:type="xsd:string">83db741d-13af-470f-8beb-0ad0fba6e4a3</value> -->
+    </values>
+    <values>
         <field>DistributorCode__c</field>
         <value xsi:type="xsd:string">DocuSignforSalesforceTrialFromManagedPackage</value>
     </values>

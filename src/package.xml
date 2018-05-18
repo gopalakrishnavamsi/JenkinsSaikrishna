@@ -401,6 +401,7 @@
         <members>Localization__mdt.ChatterRecipientCompleted__c</members>
         <members>Localization__mdt.ChatterRecipientSigned__c</members>
         <members>Localization__mdt.ChatterRecipientDeclined__c</members>
+        <members>Organization__mdt.TrialPlanId__c</members>
         <members>Organization__mdt.DistributorCode__c</members>
         <members>Organization__mdt.DistributorPassword__c</members>
         <members>Organization__mdt.IntegratorKey__c</members>

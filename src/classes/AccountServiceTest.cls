@@ -22,9 +22,9 @@ private class AccountServiceTest {
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 			if (request.getEndpoint().endsWith('/billing_plan')) {
-				response.setBody('{"billingPlan": {"planId": "83db741d-13af-470f-8beb-0ad0fba6e4a3","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+				response.setBody('{"billingPlan": {"planId": "' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
 			} else { // GET account
-				response.setBody('{"currentPlanId":"83db741d-13af-470f-8beb-0ad0fba6e4a3","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2017-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2017-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+				response.setBody('{"currentPlanId":"' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2017-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2017-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
 			}
 			return response;
 		}
@@ -55,11 +55,11 @@ private class AccountServiceTest {
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 			if (request.getEndpoint().endsWith('/billing_plan')) {
-				response.setBody('{"billingPlan": {"planId": "83db741d-13af-470f-8beb-0ad0fba6e4a3","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+				response.setBody('{"billingPlan": {"planId": "' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
 			} else { // GET account
 				Datetime billingStart = DateTime.now().addDays(-1);
 				Datetime billingEnd = billingStart.addDays(10);
-				response.setBody('{"currentPlanId":"83db741d-13af-470f-8beb-0ad0fba6e4a3","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":' + JSON.serialize(billingStart) + ',"billingPeriodEndDate":' + JSON.serialize(billingEnd) + ',"billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+				response.setBody('{"currentPlanId":"' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":' + JSON.serialize(billingStart) + ',"billingPeriodEndDate":' + JSON.serialize(billingEnd) + ',"billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
 			}
 			return response;
 		}
@@ -105,35 +105,35 @@ private class AccountServiceTest {
 
 		// Expires today
 		Account account1 = new Account(UUID.randomUUID(), 'Unit test 1',
-			new Account.Plan(Environment.trial30DayPlanId, 'Plan 1', today, today),
+			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 1', today, today),
 			new Account.Billing(today, today),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in 1 day
 		Account account2 = new Account(UUID.randomUUID(), 'Unit test 2',
-			new Account.Plan(Environment.trial30DayPlanId, 'Plan 2', today, today.addDays(1)),
+			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 2', today, today.addDays(1)),
 			new Account.Billing(today, today.addDays(1)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in 2 days
 		Account account3 = new Account(UUID.randomUUID(), 'Unit test 3',
-			new Account.Plan(Environment.trial30DayPlanId, 'Plan 3', today, today.addDays(2)),
+			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 3', today, today.addDays(2)),
 			new Account.Billing(today, today.addDays(2)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expired yesterday
 		Account account4 = new Account(UUID.randomUUID(), 'Unit test 4',
-			new Account.Plan(Environment.trial30DayPlanId, 'Plan 4', today, today.addDays(-1)),
+			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 4', today, today.addDays(-1)),
 			new Account.Billing(today, today.addDays(-1)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in > 7 days
 		Account account5 = new Account(UUID.randomUUID(), 'Unit test 5',
-			new Account.Plan(Environment.trial30DayPlanId, 'Plan 5', today, today.addDays(10)),
+			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 5', today, today.addDays(10)),
 			new Account.Billing(today, today.addDays(10)),
 			Account.ConnectPermission.Full,
 			Environment.production);
@@ -318,6 +318,10 @@ private class AccountServiceTest {
 			System.assertNotEquals(null, result.accountOptions);
 			System.assertEquals(1, result.accountOptions.size());
 			System.assertEquals(2222L, result.accountOptions[0].accountNumber);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
 		}
 	}
 
@@ -335,6 +339,10 @@ private class AccountServiceTest {
 			System.assertEquals(AccountService.LoginStatus.Success, result.status);
 			System.assertEquals(1, result.accountOptions.size());
 			System.assertEquals(22222222L, result.accountOptions[0].accountNumber);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
 		}
 	}
 

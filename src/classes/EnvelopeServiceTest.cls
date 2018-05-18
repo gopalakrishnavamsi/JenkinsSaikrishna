@@ -1357,4 +1357,40 @@ private class EnvelopeServiceTest {
 		System.assertNotEquals(null, result7.recipients);
 		System.assertEquals(2, result7.recipients.size());
 	}
+
+	@IsTest
+	static void test_getSenderViewUrl_unauthorized() {
+		Envelope__c e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = TestUtils.createEnvelope();
+		}
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeService.getSenderViewUrl(UUID.fromString(e.DocuSignId__c), null);
+				throw new AssertException('Expected getSenderViewUrl to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getSenderViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			Envelope__c e = TestUtils.createEnvelope();
+
+			Test.startTest();
+			Url result = EnvelopeService.getSenderViewUrl(UUID.fromString(e.DocuSignId__c),
+				new Url('https://unit.test/return'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
 }

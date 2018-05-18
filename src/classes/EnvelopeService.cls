@@ -5,8 +5,11 @@
  * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
  * // Create envelope and add source documents and recipients
  * e = EnvelopeService.createEnvelope(e, null, true);
- * // Send the envelope
- * e = EnvelopeService.sendEnvelope(e, true, true);
+ * // Create the envelope in draft state
+ * e = EnvelopeService.sendEnvelope(e, false, true);
+ * // Get tagger URL
+ * Url u = EnvelopeService.getSenderViewUrl(e.docuSignId, new Url('https://my.return.url'));
+ * // Host the tagging session with the returned URL
  * </pre>
  */
 public with sharing class EnvelopeService {
@@ -690,5 +693,33 @@ public with sharing class EnvelopeService {
 			emailSettings.message,
 			source,
 			null);
+	}
+
+	/**
+	 * Retrieves a sender view URL. This will return a one-time use DocuSign tagger URL if called right after an
+	 * envelope is created in the draft state.
+	 * <p>
+	 * When redirected back to the supplied <code>returnUrl</code>, DocuSign appends an <code>event</code> parameter
+	 * to the query string. Possible values include:
+	 * <ul>
+	 *     <li><code>sent</code>: The envelope was sent from the tagger. It may be appropriate to initiate signing
+	 *     at this point assuming the first signer or host is the current user.</li>
+	 *     <li><code>save</code>: The envelope was saved as a draft in DocuSign.</li>
+	 *     <li><code>cancel</code>: The draft was canceled. Delete the envelope via the
+	 *     <code>EnvelopeService.deleteEnvelope</code> method.</li>
+	 *     <li><code>error</code>: An error was encountered.</li>
+	 * </ul>
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param docuSignId The DocuSign envelope ID.
+	 * @param returnUrl The URL to redirect to once the sender action is complete.
+	 *
+	 * @return The sender view URL.
+	 */
+	public static Url getSenderViewUrl(final UUID docuSignId, final Url returnUrl) {
+		Permissions.verifyIsOwner(docuSignId);
+
+		return EnvelopeAPI.getInstance().getSenderViewUrl(docuSignId, returnUrl);
 	}
 }

@@ -169,7 +169,7 @@ public with sharing class AccountService {
 		}
 
 		// 2) Get valid DocuSign accounts.
-		Account.Memberships memberships;
+		List<Account.Membership> memberships;
 		try {
 			memberships = AccountAPI.getInstance(env, username, password).getValidAccounts();
 		} catch (UnauthorizedException ex) {
@@ -177,7 +177,7 @@ public with sharing class AccountService {
 			throw new UnauthorizedException(Label.InvalidUsernameOrPassword);
 		}
 
-		if (memberships == null || Collection.isEmpty(memberships.accounts)) {
+		if (Collection.isEmpty(memberships)) {
 			throw new DocuSignException(Label.NoValidAccounts);
 		}
 
@@ -185,7 +185,7 @@ public with sharing class AccountService {
 		List<AccountOption> options = new List<AccountOption>();
 		Account.Membership validMembership;
 		Boolean selectAccount = selectedAccountNumber == null || selectedAccountNumber <= 0L;
-		for (Account.Membership a : memberships.accounts) {
+		for (Account.Membership a : memberships) {
 			if (selectAccount || selectedAccountNumber == a.accountNumber) {
 				options.add(new AccountOption(a.accountNumber, a.name + ' (' + a.accountNumber + ')'));
 				validMembership = a;
@@ -197,11 +197,10 @@ public with sharing class AccountService {
 		if (options.size() == 1) {
 			Environment ae = Environment.fromUrl(validMembership.baseUrl);
 			String envString = ae.Environment.name().toLowerCase();
-			LOG.debug('AdminManager.login: account base URL = ' + validMembership.baseUrl.toExternalForm()
+			LOG.debug('AccountService.login: account base URL = ' + validMembership.baseUrl.toExternalForm()
 				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
 				+ ', environment = ' + ae.Environment.name().toLowerCase());
-
-			credentials.save(ae, validMembership.accountId, String.valueOf(validMembership.userId),
+			Credentials.save(ae, validMembership.accountId, String.valueOf(validMembership.userId),
 				validMembership.apiPassword, true, true);
 			status = LoginStatus.Success;
 		} else { // more than 1 valid account, just return results
