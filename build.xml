@@ -1,6 +1,6 @@
 <project name="DocuSign for Salesforce Essentials" basedir="." xmlns:sf="antlib:com.salesforce">
 
-	<available file="my.properties" property="my.properties.exists" />
+	<available file="my.properties" property="my.properties.exists"/>
 
 	<fail message="Please create my.properties file with your login credentials.">
 		<condition>
@@ -14,18 +14,58 @@
 
 	<property file="build.properties"/>
 	<property file="my.properties"/>
-	<property file="pkg.properties"/>
+	<property file="prod.properties"/>
+
+	<macrodef name="xmlcomment">
+		<attribute name="file"/>
+		<attribute name="element"/>
+		<sequential>
+			<replaceregexp file="@{file}"
+						   match="(?&lt;!\&lt;!--)(\s*)(&lt;@{element}&gt;.*&lt;/@{element}&gt;)"
+						   replace="\1&lt;!--\2--&gt;"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="xmluncomment">
+		<attribute name="file"/>
+		<attribute name="element"/>
+		<sequential>
+			<replaceregexp file="@{file}"
+						   match="&lt;!--\s*(&lt;@{element}&gt;.*&lt;/@{element}&gt;)\s*--&gt;"
+						   replace="\1"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="setDevPackageXml">
+		<sequential>
+			<xmlcomment file="./src/package.xml" element="namespacePrefix"/>
+			<xmlcomment file="./src/package.xml" element="postInstallClass"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="setProdPackageXml">
+		<sequential>
+			<xmluncomment file="./src/package.xml" element="postInstallClass"/>
+			<xmluncomment file="./src/package.xml" element="namespacePrefix"/>
+		</sequential>
+	</macrodef>
 
 	<target name="pushdev">
-		<sf:deploy username="${dev.username}" password="${dev.password}${dev.securityToken}" serverurl="${dev.url}" deployRoot="/src"/>
+		<setDevPackageXml/>
+		<sf:deploy username="${dev.username}" password="${dev.password}${dev.securityToken}" serverurl="${dev.url}"
+				   deployRoot="/src"/>
+		<setProdPackageXml/>
 	</target>
 
 	<target name="test">
-		<sf:deploy username="${test.username}" password="${test.password}${test.securityToken}" serverurl="${test.url}" deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
+		<sf:deploy username="${test.username}" password="${test.password}${test.securityToken}" serverurl="${test.url}"
+				   deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
 	</target>
 
-	<target name="pushpkg">
-		<sf:deploy username="${pkg.username}" password="${pkg.password}${pkg.securityToken}" serverurl="${pkg.url}" deployRoot="/src"/>
+	<target name="pushprod">
+		<setProdPackageXml/>
+		<sf:deploy username="${prod.username}" password="${prod.password}${prod.securityToken}" serverurl="${prod.url}"
+				   deployRoot="/src"/>
 	</target>
 
 </project>
