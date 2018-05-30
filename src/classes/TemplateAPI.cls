@@ -107,7 +107,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 			}
 
 			return new Recipient.Authentication(
-				this.accessCode,
+				nullIfBlank(this.accessCode),
 				this.requireIdLookup == 'true',
 				this.phoneAuthentication == null ? null : this.phoneAuthentication.senderProvidedNumbers);
 		}
@@ -119,11 +119,12 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 
 		public Recipient toExternalForm(final String type) {
 			Boolean inPersonSigner = type == Recipient.TYPE_IN_PERSON_SIGNER;
+			Integer routingOrder = StringUtils.parseInteger(this.routingOrder, null);
 			return new Recipient(
 				null, // id
 				type,
-				null,
-				Integer.valueOf(this.routingOrder),
+				routingOrder == null ? 1 : routingOrder,
+				routingOrder,
 				String.isBlank(this.roleName) ? null : new Recipient.Role(this.roleName),
 				inPersonSigner ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
 				inPersonSigner ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
@@ -131,7 +132,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 					new Recipient.SigningGroup(Integer.valueOf(this.signingGroupId), this.signingGroupName),
 				null, // phone
 				getAuthentication(),
-				this.note,
+				nullIfBlank(this.note),
 				null, // emailSettings
 				nullIfBlank(this.hostName),
 				nullIfBlank(this.hostEmail),
@@ -184,8 +185,8 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				}
 			}
 
-			if (Collection.isNotEmpty(this.inPersonSigners)) {
-				for (APIRecipient r : this.inPersonSigners) {
+			if (Collection.isNotEmpty(this.intermediaries)) {
+				for (APIRecipient r : this.intermediaries) {
 					if (r != null) result.add(r.toExternalForm(Recipient.TYPE_INTERMEDIARY));
 				}
 			}
@@ -196,6 +197,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				}
 			}
 
+			// Ensure ordinal sequence is ascending and sequential
 			result.sort(); // sorts by routing order
 			for (Integer i = 0; i < result.size(); i++) {
 				result[i] = result[i].withSequence(i + 1);

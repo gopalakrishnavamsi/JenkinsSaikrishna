@@ -39,6 +39,111 @@ private class TemplateAPITest {
 			System.assertEquals('Unit test message', t.emailMessage);
 			System.assertNotEquals(null, t.recipients);
 			System.assertEquals(7, t.recipients.size());
+			Integer sequence = 1;
+			for (Recipient r : t.recipients) {
+				System.assertNotEquals(null, r);
+				System.assertEquals(sequence, r.sequence);
+				System.assertEquals(sequence, r.routingOrder);
+				if (sequence == 1) {
+					System.assertEquals(Recipient.TYPE_INTERMEDIARY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('INTERMEDIARY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertNotEquals(null, r.authentication);
+					System.assertEquals('1234', r.authentication.accessCode);
+					System.assert(!r.authentication.idCheckRequired);
+					System.assertEquals(null, r.authentication.smsPhoneNumbers);
+					System.assertEquals(null, r.note);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 2) {
+					System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, r.type);
+					System.assertEquals('In-Person Signer', r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals('h1@unit.test', r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('IN_PERSON_SIGNER', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 3) {
+					System.assertEquals(Recipient.TYPE_CARBON_COPY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('CARBON_COPY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertNotEquals(null, r.authentication);
+					System.assertEquals(null, r.authentication.accessCode);
+					System.assert(r.authentication.idCheckRequired);
+					System.assertNotEquals(null, r.authentication.smsPhoneNumbers);
+					System.assertEquals(1, r.authentication.smsPhoneNumbers.size());
+					System.assertEquals('+1 415-555-5555', r.authentication.smsPhoneNumbers[0]);
+					System.assertEquals(null, r.note);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 4) {
+					System.assertEquals(Recipient.TYPE_CERTIFIED_DELIVERY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('CERTIFIED_DELIVERY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 5) {
+					System.assertEquals(Recipient.TYPE_AGENT, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('AGENT', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assert(!r.readOnly);
+				} else if (sequence == 6) {
+					System.assertEquals(Recipient.TYPE_EDITOR, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('EDITOR', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 7) {
+					System.assertEquals(Recipient.TYPE_SIGNER, r.type);
+					System.assertEquals('SG1', r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('SIGNER', r.role.name);
+					System.assertNotEquals(null, r.signingGroup);
+					System.assertEquals(11512, r.signingGroup.id);
+					System.assertEquals('SG1', r.signingGroup.name);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assert(r.readOnly);
+					System.assert(r.required);
+				}
+				sequence++;
+			}
 		}
 	}
 
