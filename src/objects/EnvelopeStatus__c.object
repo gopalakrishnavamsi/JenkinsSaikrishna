@@ -15,8 +15,8 @@
 	<enableStreamingApi>true</enableStreamingApi>
 	<fields>
 		<fullName>DocuSignId__c</fullName>
-		<externalId>false</externalId>
-		<label>DocuSign envelope ID</label>
+		<externalId>true</externalId>
+		<label>DocuSign Envelope ID</label>
 		<length>36</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>

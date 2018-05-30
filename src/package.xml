@@ -104,6 +104,8 @@
         <members>StatusServiceTest</members>
         <members>SigningService</members>
         <members>SigningServiceTest</members>
+        <members>TemplateService</members>
+        <members>TemplateServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>

@@ -1,5 +1,5 @@
-/**
- * Primary interface point for DocuSign for Salesforce envelope management. A basic flow would be:
+/**Primary interface point for DocuSign for Salesforce envelope management.
+ *  A basic flow would be:
  * <pre>
  * // Get an empty envelope definition to begin.
  * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));

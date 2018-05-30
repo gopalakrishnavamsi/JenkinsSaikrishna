@@ -127,6 +127,14 @@ public class Recipient implements Comparable {
 			return this.signingGroup != null;
 		}
 	}
+	/**
+	 * Whether this recipient may be modified. Used with DocuSign templates.
+	 */
+	public Boolean readOnly { get; private set; }
+	/**
+	 * Whether this recipient is required. Used with DocuSign templates.
+	 */
+	public Boolean required { get; private set; }
 
 	/**
 	 * Constructs a DocuSign envelope recipient.
@@ -147,6 +155,8 @@ public class Recipient implements Comparable {
 	 * @param hostEmail The host email of the recipient, used for in-person signing.
 	 * @param signNow Whether the recipient should sign now.
 	 * @param source The Salesforce source object for the recipient.
+	 * @param readOnly Whether this recipient may be modified. Used with DocuSign templates.
+	 * @param required Whether this recipient is required. Used with DocuSign templates.
 	 */
 	public Recipient(
 		final Id id,
@@ -164,7 +174,9 @@ public class Recipient implements Comparable {
 		final String hostName,
 		final String hostEmail,
 		final Boolean signNow,
-		final Entity source) {
+		final Entity source,
+		final Boolean readOnly,
+		final Boolean required) {
 
 		this.id = id;
 		this.type = type;
@@ -182,6 +194,8 @@ public class Recipient implements Comparable {
 		this.hostEmail = hostEmail;
 		this.signNow = signNow;
 		this.source = source;
+		this.readOnly = readOnly;
+		this.required = required;
 	}
 
 	/**
@@ -218,7 +232,9 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			false,
-			null);
+			null,
+			false,
+			false);
 	}
 
 	/**
@@ -263,7 +279,9 @@ public class Recipient implements Comparable {
 			hostName,
 			hostEmail,
 			signNow,
-			null);
+			null,
+			false,
+			false);
 	}
 
 	/**
@@ -275,7 +293,7 @@ public class Recipient implements Comparable {
 	 * @param role The recipient role.
 	 * @param source The source Salesforce entity.
 	 *
-	 * @return
+	 * @return The recipient based on the Salesforce source entity.
 	 */
 	public static Recipient fromSource(final String name, final String email, final String phone, final String role,
 		final Entity source) {
@@ -296,7 +314,9 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			false,
-			source);
+			source,
+			false,
+			false);
 	}
 
 	/**
@@ -340,7 +360,9 @@ public class Recipient implements Comparable {
 			null,
 			null,
 			signNow,
-			null);
+			null,
+			false,
+			false);
 	}
 
 	/**
@@ -740,7 +762,9 @@ public class Recipient implements Comparable {
 			this.hostName,
 			this.hostEmail,
 			this.signNow,
-			this.source == null ? null : this.source.copy());
+			this.source == null ? null : this.source.copy(),
+			this.readOnly,
+			this.required);
 	}
 
 	/**

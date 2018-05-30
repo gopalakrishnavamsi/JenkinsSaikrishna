@@ -27,6 +27,18 @@ private class TemplateAPITest {
 			System.assertEquals(new List<String> { 'listField2Item1', 'listField2Item2', 'listField2Item3' }, t.customFields[2].items);
 			System.assert(t.customFields[2].required);
 			System.assert(t.customFields[2].show);
+			System.assertNotEquals(null, t.notifications);
+			System.assert(t.notifications.remind);
+			System.assertEquals(10, t.notifications.remindAfterDays);
+			System.assertEquals(5, t.notifications.remindFrequencyDays);
+			System.assert(t.notifications.expires);
+			System.assertEquals(11, t.notifications.expireAfterDays);
+			System.assertEquals(6, t.notifications.expireWarnDays);
+			System.assertEquals(EnvelopeSettings__c.getOrgDefaults().Chatter__c.endsWith('On'), t.notifications.updateChatter);
+			System.assertEquals('Unit test subject', t.emailSubject);
+			System.assertEquals('Unit test message', t.emailMessage);
+			System.assertNotEquals(null, t.recipients);
+			System.assertEquals(7, t.recipients.size());
 		}
 	}
 
