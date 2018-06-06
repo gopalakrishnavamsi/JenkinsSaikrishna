@@ -87,7 +87,8 @@ public class Document {
 	/**
 	 * Factory method to construct a DocuSign envelope document from a Salesforce content version.
 	 *
-	 * @param contentVersion The content version from which to construct a document.
+	 * @param contentVersion The content version from which to construct a document. This must have the
+	 * <code>Title</code>, <code>FileExtension</code>, and <code>Content</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the content version.
 	 */
@@ -107,7 +108,8 @@ public class Document {
 	/**
 	 * Factory method to construct a DocuSign envelope document from a Salesforce document.
 	 *
-	 * @param doc The Salesforce document from which to construct a document.
+	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
+	 * <code>Type</code>, and <code>BodyLength</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the Salesforce document.
 	 */
