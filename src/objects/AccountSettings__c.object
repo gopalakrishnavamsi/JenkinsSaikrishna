@@ -176,7 +176,7 @@
 		<fullName>CanUseSalesforceApi__c</fullName>
 		<defaultValue>false</defaultValue>
 		<externalId>false</externalId>
-		<label>Setup Complete</label>
+		<label>Can use Salesforce API</label>
 		<trackTrending>false</trackTrending>
 		<type>Checkbox</type>
 		<unique>false</unique>
