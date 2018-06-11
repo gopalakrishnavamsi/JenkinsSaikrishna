@@ -227,19 +227,23 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String accountName;
 		public String accountIdGuid;
 		public String connectPermission;
+		public String suspensionStatus;
+		public String suspensionDate;
 
 		public Account toExternalForm(final Environment env) {
+			Date psd = StringUtils.parseDateTime(planStartDate).date();
+			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDateTime(this.suspensionDate).date();
 			return new Account(
 				UUID.fromString(accountIdGuid),
 				accountName,
 				new Account.Plan(
 					UUID.fromString(currentPlanId),
 					planName,
-					StringUtils.parseDateTime(planStartDate).date(),
+					psd,
 					StringUtils.parseDateTime(planEndDate).date()),
 				new Account.Billing(
-					StringUtils.parseDateTime(billingPeriodStartDate).date(),
-					StringUtils.parseDateTime(billingPeriodEndDate).date()),
+					sd == null ? StringUtils.parseDateTime(billingPeriodStartDate).date() : psd,
+					sd == null ? StringUtils.parseDateTime(billingPeriodEndDate).date() : sd),
 				stringToConnectPermission(connectPermission),
 				env);
 		}

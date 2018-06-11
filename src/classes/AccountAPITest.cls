@@ -133,6 +133,40 @@ private class AccountAPITest {
 		}
 	}
 
+	private class TrialExpiredMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (request.getEndpoint().endsWith('/billing_plan')) {
+				response.setBody('{"billingPlan": {"planId": "' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+			} else { // GET account
+				response.setBody('{"currentPlanId":"' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2030-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2030-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"freetrialexpired","suspensionDate":"2017-02-05T17:54:37.1800000Z","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getAccount_trial_expired() {
+		Test.setMock(HttpCalloutMock.class, new TrialExpiredMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			Account result = AccountAPI.getInstance().getAccount();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isTrial);
+			System.assertNotEquals(null, result.billing);
+			System.assertEquals(Date.newInstance(2017, 1, 5), result.billing.startDate);
+			System.assertEquals(Date.newInstance(2017, 2, 5), result.billing.endDate);
+		}
+	}
+
 	@IsTest
 	static void test_addPlanId_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
