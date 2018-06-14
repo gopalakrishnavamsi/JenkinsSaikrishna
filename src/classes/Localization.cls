@@ -145,8 +145,8 @@ public with sharing class Localization {
 	}
 
 	public static String getLabel(final String language) {
-		final String label = LANGUAGE_TO_LABEL.get(language);
-		return String.isNotBlank(label) ? label : '';
+		String label = String.isBlank(language) ? null : LANGUAGE_TO_LABEL.get(language);
+		return String.isBlank(label) ? '' : label;
 	}
 
 	private static Map<String, Recipient.EmailSettings> getEmailSettingsMap() {

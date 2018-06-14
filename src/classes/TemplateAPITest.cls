@@ -58,6 +58,7 @@ private class TemplateAPITest {
 					System.assert(!r.authentication.idCheckRequired);
 					System.assertEquals(null, r.authentication.smsPhoneNumbers);
 					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
 					System.assert(!r.readOnly);
 					System.assert(!r.required);
 				} else if (sequence == 2) {
@@ -71,6 +72,7 @@ private class TemplateAPITest {
 					System.assertEquals(null, r.signingGroup);
 					System.assertEquals(null, r.authentication);
 					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
 					System.assert(!r.readOnly);
 					System.assert(!r.required);
 				} else if (sequence == 3) {
@@ -89,6 +91,7 @@ private class TemplateAPITest {
 					System.assertEquals(1, r.authentication.smsPhoneNumbers.size());
 					System.assertEquals('+1 415-555-5555', r.authentication.smsPhoneNumbers[0]);
 					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
 					System.assert(!r.readOnly);
 					System.assert(!r.required);
 				} else if (sequence == 4) {
@@ -101,6 +104,8 @@ private class TemplateAPITest {
 					System.assertEquals('CERTIFIED_DELIVERY', r.role.name);
 					System.assertEquals(null, r.signingGroup);
 					System.assertEquals(null, r.authentication);
+					System.assertEquals('unit test', r.note);
+					System.assertEquals(null, r.emailSettings);
 					System.assert(!r.readOnly);
 					System.assert(!r.required);
 				} else if (sequence == 5) {
@@ -113,6 +118,13 @@ private class TemplateAPITest {
 					System.assertEquals('AGENT', r.role.name);
 					System.assertEquals(null, r.signingGroup);
 					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertNotEquals(null, r.emailSettings);
+					// "Unsupported" language Bulgarian
+					System.assertEquals('bg', r.emailSettings.language);
+					System.assertEquals('', r.emailSettings.languageLabel);
+					System.assertEquals('bg subject', r.emailSettings.subject);
+					System.assertEquals('bg message', r.emailSettings.message);
 					System.assert(!r.readOnly);
 				} else if (sequence == 6) {
 					System.assertEquals(Recipient.TYPE_EDITOR, r.type);
@@ -124,6 +136,8 @@ private class TemplateAPITest {
 					System.assertEquals('EDITOR', r.role.name);
 					System.assertEquals(null, r.signingGroup);
 					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
 					System.assert(!r.readOnly);
 					System.assert(!r.required);
 				} else if (sequence == 7) {
@@ -139,6 +153,12 @@ private class TemplateAPITest {
 					System.assertEquals('SG1', r.signingGroup.name);
 					System.assertEquals(null, r.authentication);
 					System.assertEquals(null, r.note);
+					System.assertNotEquals(null, r.emailSettings);
+					// "Supported" language French
+					System.assertEquals('fr', r.emailSettings.language);
+					System.assertEquals(Label.French, r.emailSettings.languageLabel);
+					System.assertEquals('fr subject', r.emailSettings.subject);
+					System.assertEquals('fr message', r.emailSettings.message);
 					System.assert(r.readOnly);
 					System.assert(r.required);
 				}

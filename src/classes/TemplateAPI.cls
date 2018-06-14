@@ -79,6 +79,20 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public List<String> senderProvidedNumbers;
 	}
 
+	private class APIEmailSettings {
+		public String emailSubject;
+		public String emailBody;
+		public String supportedLanguage;
+
+		public Recipient.EmailSettings toExternalForm() {
+			return new Recipient.EmailSettings(
+				this.supportedLanguage,
+				Localization.getLabel(this.supportedLanguage),
+				this.emailSubject,
+				this.emailBody);
+		}
+	}
+
 	private class APIRecipient {
 		public String recipientId;
 		public String name;
@@ -97,6 +111,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public String note;
 		public String templateLocked;
 		public String templateRequired;
+		public APIEmailSettings emailNotification;
 
 		private Recipient.Authentication getAuthentication() {
 			if (String.isBlank(accessCode)
@@ -133,7 +148,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				null, // phone
 				getAuthentication(),
 				nullIfBlank(this.note),
-				null, // emailSettings
+				this.emailNotification == null ? null : this.emailNotification.toExternalForm(),
 				nullIfBlank(this.hostName),
 				nullIfBlank(this.hostEmail),
 				getSignNow(),
