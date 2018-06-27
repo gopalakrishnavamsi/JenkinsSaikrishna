@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
 	<fields>
-		<label>DocuSign Username</label>
+		<label>DocuSign username</label>
 		<name>Username__c</name>
+	</fields>
+	<fields>
+		<label>Can manage DocuSign account</label>
+		<name>CanManageAccount__c</name>
 	</fields>
 </CustomObjectTranslation>

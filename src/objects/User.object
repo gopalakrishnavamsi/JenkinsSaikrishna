@@ -2,13 +2,24 @@
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
 	<fields>
 		<fullName>Username__c</fullName>
-		<description>DocuSign Username</description>
+		<description>DocuSign username</description>
 		<externalId>false</externalId>
-		<label>DocuSign Username</label>
-		<length>50</length>
+		<label>DocuSign username</label>
+		<length>100</length>
 		<required>false</required>
 		<trackFeedHistory>false</trackFeedHistory>
 		<type>Text</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
+		<fullName>CanManageAccount__c</fullName>
+		<defaultValue>false</defaultValue>
+		<description>Can manage DocuSign account</description>
+		<externalId>false</externalId>
+		<label>Can manage DocuSign account</label>
+		<required>false</required>
+		<trackFeedHistory>false</trackFeedHistory>
+		<type>Checkbox</type>
 		<unique>false</unique>
 	</fields>
 	<listViews>

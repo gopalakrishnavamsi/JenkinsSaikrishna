@@ -409,6 +409,7 @@
         <members>Organization__mdt.DistributorPassword__c</members>
         <members>Organization__mdt.IntegratorKey__c</members>
         <members>Organization__mdt.NotificationEmail__c</members>
+        <members>Setup__mdt.State__c</members>
         <members>CustomRecipient__c.EnvelopeConfiguration__c</members>
         <members>CustomRecipient__c.Type__c</members>
         <members>CustomRecipient__c.AccessCode__c</members>
@@ -454,6 +455,7 @@
         <members>RecipientStatus__c.Reason__c</members>
         <members>RecipientStatus__c.RoutingOrder__c</members>
         <members>User.Username__c</members>
+        <members>User.CanManageAccount__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -478,6 +480,7 @@
         <members>EnvelopeLocalization__c</members>
         <members>Organization__mdt</members>
         <members>Localization__mdt</members>
+        <members>Setup__mdt</members>
         <members>RoleSettings__c</members>
         <members>UserSettings__c</members>
         <members>Envelope__c</members>
@@ -489,6 +492,7 @@
         <members>EnvelopeStatus__c</members>
         <members>RecipientStatus__c</members>
         <members>User</members>
+        <members>Setup__mdt</members>
         <name>CustomObject</name>
     </types>
     <types>

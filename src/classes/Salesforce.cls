@@ -9,7 +9,7 @@ public with sharing class Salesforce {
 	private static final Boolean IS_COMMUNITY_SITE;
 	private static final Boolean CAN_USE_API;
 	public static final String BASE_Url;
-	public static final Double API_VERSION = 42.0;
+	public static final Double API_VERSION = 43.0;
 	public static final String MAGIC_PARAMETER = 'isdtp';
 	public static Boolean isChatterEnabled {
 		get {
