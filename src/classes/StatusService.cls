@@ -37,6 +37,7 @@ public with sharing class StatusService {
 				es.SenderEmail__c,
 				convert(es.Recipients__r),
 				es.Sent__c,
+				es.Expires__c,
 				es.Completed__c,
 				es.EmailSubject__c,
 				es.Reason__c,
@@ -73,10 +74,26 @@ public with sharing class StatusService {
 				rs.LastStatusUpdate__c);
 		}
 
+		public Set<UUID> querySourceEnvelopes(final Set<Id> sourceIds, final Integer maximumRecords) {
+			Permissions.verifyIsQueryable(Envelope__c.getSObjectType(), new List<String> { 'DocuSignId__c' });
+
+			Set<UUID> result = new Set<UUID>();
+			for (Envelope__c e : [
+				SELECT DocuSignId__c
+				FROM Envelope__c
+				WHERE SourceId__c IN :sourceIds AND DocuSignId__c != NULL
+				ORDER BY CreatedDate ASC
+				LIMIT :maximumRecords
+			]) {
+				result.add(UUID.fromString(e.DocuSignId__c));
+			}
+			return result;
+		}
+
 		public List<Envelope.Status> queryStatus(final Set<UUID> docuSignIds) {
 			Permissions.verifyIsQueryable(EnvelopeStatus__c.getSObjectType(), new List<String> {
 				'Id', 'SourceId__c', 'DocuSignId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c',
-				'EmailSubject__c', 'Sent__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
+				'EmailSubject__c', 'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
 			Permissions.verifyIsQueryable(RecipientStatus__c.getSObjectType(), new List<String> {
 				'Id', 'EnvelopeStatus__c', 'SourceId__c', 'Type__c', 'Sequence__c', 'Status__c',
@@ -94,7 +111,7 @@ public with sharing class StatusService {
 			return convert([
 				SELECT
 					Id, SourceId__c, DocuSignId__c, Status__c, SenderName__c, SenderEmail__c, EmailSubject__c, Sent__c,
-					Completed__c, Reason__c, LastStatusUpdate__c, (
+					Expires__c, Completed__c, Reason__c, LastStatusUpdate__c, (
 					SELECT
 						Id, SourceId__c, Type__c, Sequence__c, Status__c, RoutingOrder__c,
 						Name, Email__c, Sent__c, Completed__c, Reason__c, LastStatusUpdate__c
@@ -109,7 +126,7 @@ public with sharing class StatusService {
 		public List<Envelope.Status> insertStatus(final List<Envelope.Status> envelopes) {
 			Permissions.verifyIsCreateable(EnvelopeStatus__c.getSObjectType(), new List<String> {
 				'DocuSignId__c', 'SourceId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c', 'EmailSubject__c',
-				'Sent__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
+				'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
 			Permissions.verifyIsCreateable(RecipientStatus__c.getSObjectType(), new List<String> {
 				'EnvelopeStatus__c', 'SourceId__c', 'Sequence__c', 'Type__c', 'Status__c', 'RoutingOrder__c', 'Name',
@@ -131,6 +148,7 @@ public with sharing class StatusService {
 					SenderEmail__c = e.senderEmail,
 					EmailSubject__c = e.emailSubject,
 					Sent__c = e.sent,
+					Expires__c = e.expires,
 					Completed__c = e.completed,
 					Reason__c = e.reason,
 					LastStatusUpdate__c = e.lastStatusUpdate);
@@ -143,9 +161,6 @@ public with sharing class StatusService {
 			List<RecipientStatus__c> rss = new List<RecipientStatus__c>();
 			for (Envelope.Status e : envelopes) {
 				EnvelopeStatus__c es = esMap.get(e.docuSignId);
-				if (es == null) throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
-					String.valueOf(e.docuSignId)
-				}));
 				if (e.recipients != null) {
 					for (Recipient.Status r : e.recipients) {
 						rss.add(new RecipientStatus__c(
@@ -172,7 +187,7 @@ public with sharing class StatusService {
 		public List<Envelope.Status> upsertStatus(final List<Envelope.Status> envelopes) {
 			Permissions.verifyIsUpdateable(EnvelopeStatus__c.getSObjectType(), new List<String> {
 				'DocuSignId__c', 'SourceId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c', 'EmailSubject__c',
-				'Sent__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
+				'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
 			Permissions.verifyIsDeletable(RecipientStatus__c.getSObjectType());
 			Permissions.verifyIsCreateable(RecipientStatus__c.getSObjectType(), new List<String> {
@@ -198,6 +213,7 @@ public with sharing class StatusService {
 					SenderEmail__c = e.senderEmail,
 					EmailSubject__c = e.emailSubject,
 					Sent__c = e.sent,
+					Expires__c = e.expires,
 					Completed__c = e.completed,
 					Reason__c = e.reason,
 					LastStatusUpdate__c = Datetime.now());
@@ -213,9 +229,6 @@ public with sharing class StatusService {
 			List<RecipientStatus__c> rss = new List<RecipientStatus__c>();
 			for (Envelope.Status e : envelopes) {
 				EnvelopeStatus__c es = esMap.get(e.docuSignId);
-				if (es == null) throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
-					String.valueOf(e.docuSignId)
-				}));
 				if (e.recipients != null) {
 					for (Recipient.Status r : e.recipients) {
 						rss.add(new RecipientStatus__c(
@@ -332,7 +345,7 @@ public with sharing class StatusService {
 	 * @return A list of envelope statuses.
 	 */
 	public static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
-		Permissions.verifyIsOwner(docuSignIds);
+		Permissions.verifyIsOwner(docuSignIds); // FIXME: This will break layouts.
 
 		List<Envelope.Status> result = new List<Envelope.Status>();
 		List<Envelope.Status> toUpdate = new List<Envelope.Status>();
@@ -358,6 +371,18 @@ public with sharing class StatusService {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Retrieves envelope statuses associated with Salesforce source records.
+	 *
+	 * @param sourceIds The IDs of the initiating Salesforce objects.
+	 * @param maximumRecords The maximum number of records to retrieve.
+	 *
+	 * @return A list of envelope statuses.
+	 */
+	public static List<Envelope.Status> getStatus(final Set<Id> sourceIds, final Integer maximumRecords) {
+		return getStatus(DB.querySourceEnvelopes(sourceIds, maximumRecords));
 	}
 
 	/**

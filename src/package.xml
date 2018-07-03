@@ -2,7 +2,6 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DocuSign for Salesforce Essentials</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
-    <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink></setupWeblink>
     <types>
         <members>Application</members>
@@ -106,6 +105,9 @@
         <members>SigningServiceTest</members>
         <members>TemplateService</members>
         <members>TemplateServiceTest</members>
+        <members>StatusController</members>
+        <members>StatusControllerTest</members>
+        <members>Controller</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -271,6 +273,31 @@
         <members>UnknownEnvelopeRecipient</members>
         <members>InvalidRecipientSequence</members>
         <members>CannotResendEnvelope</members>
+        <members>EnvelopeStatus</members>
+        <members>NoEnvelopesSent</members>
+        <members>Expand</members>
+        <members>Created</members>
+        <members>Sent</members>
+        <members>Completed</members>
+        <members>Declined</members>
+        <members>Voided</members>
+        <members>Signed</members>
+        <members>MailTo</members>
+        <members>SentAnEnvelope</members>
+        <members>LastStatusUpdate</members>
+        <members>Status</members>
+        <members>Reason</members>
+        <members>Expires</members>
+        <members>Show</members>
+        <members>More</members>
+        <members>Less</members>
+        <members>IsQueued</members>
+        <members>WillReceive</members>
+        <members>NoAction</members>
+        <members>HasDeclined</members>
+        <members>HasViewed</members>
+        <members>HasSigned</members>
+        <members>ViewAll</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -435,6 +462,7 @@
         <members>EnvelopeStatus__c.Status__c</members>
         <members>EnvelopeStatus__c.SourceId__c</members>
         <members>EnvelopeStatus__c.Sent__c</members>
+        <members>EnvelopeStatus__c.Expires__c</members>
         <members>EnvelopeStatus__c.Completed__c</members>
         <members>EnvelopeStatus__c.LastStatusUpdate__c</members>
         <members>EnvelopeStatus__c.SenderName__c</members>
@@ -553,6 +581,12 @@
         <members>ProductionNA3</members>
         <members>Stage</members>
         <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>Status</members>
+        <members>Sending</members>
+        <members>defaultTokens</members>
+        <name>AuraDefinitionBundle</name>
     </types>
     <version>42.0</version>
 </Package>

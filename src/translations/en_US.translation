@@ -645,4 +645,104 @@
 		<label>Envelope cannot be resent. It is not in the &apos;sent&apos; or &apos;delivered&apos; state.</label>
 		<name>CannotResendEnvelope</name>
 	</customLabels>
+	<customLabels>
+		<label>DocuSign Envelope Status</label>
+		<name>EnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>No envelopes have been sent</label>
+		<name>NoEnvelopesSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Expand</label>
+		<name>Expand</name>
+	</customLabels>
+	<customLabels>
+		<label>Created</label>
+		<name>Created</name>
+	</customLabels>
+	<customLabels>
+		<label>Sent</label>
+		<name>Sent</name>
+	</customLabels>
+	<customLabels>
+		<label>Completed</label>
+		<name>Completed</name>
+	</customLabels>
+	<customLabels>
+		<label>Declined</label>
+		<name>Declined</name>
+	</customLabels>
+	<customLabels>
+		<label>Voided</label>
+		<name>Voided</name>
+	</customLabels>
+	<customLabels>
+		<label>Signed</label>
+		<name>Signed</name>
+	</customLabels>
+	<customLabels>
+		<label>mailto:</label>
+		<name>MailTo</name>
+	</customLabels>
+	<customLabels>
+		<label>sent an envelope</label>
+		<name>SentAnEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Last Status Update</label>
+		<name>LastStatusUpdate</name>
+	</customLabels>
+	<customLabels>
+		<label>Status</label>
+		<name>Status</name>
+	</customLabels>
+	<customLabels>
+		<label>Reason</label>
+		<name>Reason</name>
+	</customLabels>
+	<customLabels>
+		<label>Expires</label>
+		<name>Expires</name>
+	</customLabels>
+	<customLabels>
+		<label>Show</label>
+		<name>Show</name>
+	</customLabels>
+	<customLabels>
+		<label>More</label>
+		<name>More</name>
+	</customLabels>
+	<customLabels>
+		<label>Less</label>
+		<name>Less</name>
+	</customLabels>
+	<customLabels>
+		<label>is queued to receive the envelope</label>
+		<name>IsQueued</name>
+	</customLabels>
+	<customLabels>
+		<label>will receive the envelope soon</label>
+		<name>WillReceive</name>
+	</customLabels>
+	<customLabels>
+		<label>has not taken action</label>
+		<name>NoAction</name>
+	</customLabels>
+	<customLabels>
+		<label>has declined to sign</label>
+		<name>HasDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>has viewed the envelope</label>
+		<name>HasViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>has signed the envelope</label>
+		<name>HasSigned</name>
+	</customLabels>
+	<customLabels>
+		<label>View All</label>
+		<name>ViewAll</name>
+	</customLabels>
 </Translations>

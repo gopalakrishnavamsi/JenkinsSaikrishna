@@ -1039,6 +1039,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 
 		public Envelope.Status toExternalForm() {
+			Datetime sent = StringUtils.parseDateTime(this.sentDateTime);
 			return new Envelope.Status(
 				null, // id
 				null, // source
@@ -1047,7 +1048,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				UserInfo.getName(),
 				UserInfo.getUserEmail(),
 				this.recipients == null ? null : this.recipients.toExternalForm(),
-				StringUtils.parseDateTime(this.sentDateTime),
+				sent,
+				sent != null
+					&& this.notification != null
+					&& this.notification.expirations != null
+					&& String.isNotBlank(this.notification.expirations.expireAfter)
+					? sent.addDays(Integer.valueOf(this.notification.expirations.expireAfter)) : null,
 				getCompletedDatetime(),
 				this.emailSubject,
 				this.voidedReason,

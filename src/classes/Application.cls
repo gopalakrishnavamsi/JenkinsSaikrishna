@@ -4,6 +4,7 @@
 public with sharing class Application {
 
 	private static final String PACKAGE_NAMESPACE = 'dfsle';
+	private static final String ORG_NAMESPACE;
 	private static final String ORG_NAMESPACE_PREFIX;
 	private static final String ORG_CLASS_NAMESPACE_PREFIX;
 	private static final String NAMESPACE_PREFIX = 'dfsle__';
@@ -30,9 +31,9 @@ public with sharing class Application {
 			// Not managed
 		}
 		IS_MANAGED_PACKAGE = result != null;
-		String orgNS = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
-		ORG_NAMESPACE_PREFIX = String.isNotBlank(orgNS) ? orgNS + '__' : '';
-		ORG_CLASS_NAMESPACE_PREFIX = String.isNotBlank(orgNS) ? orgNS + '.' : '';
+		ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
+		ORG_NAMESPACE_PREFIX = String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE + '__' : '';
+		ORG_CLASS_NAMESPACE_PREFIX = String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE + '.' : '';
 
 		// Don't call System.requestVersion outside managed package. It will throw an un-catchable ProcedureException.
 		// Don't use versions < 1. They make SFDC unhappy.
@@ -82,6 +83,12 @@ public with sharing class Application {
 	public static String classNamespacePrefix {
 		get {
 			return IS_MANAGED_PACKAGE ? CLASS_NAMESPACE_PREFIX : ORG_CLASS_NAMESPACE_PREFIX;
+		}
+	}
+
+	public static String lightningNamespace {
+		get {
+			return IS_MANAGED_PACKAGE ? PACKAGE_NAMESPACE : (String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE : 'c');
 		}
 	}
 

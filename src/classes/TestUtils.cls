@@ -387,6 +387,17 @@ public class TestUtils {
 		return es;
 	}
 
+	public static EnvelopeStatus__c createEnvelopeStatus(final Id sourceId) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			DocuSignId__c = UUID.randomUUID().toString(),
+			SourceId__c = sourceId,
+			Status__c = Envelope.STATUS_CREATED,
+			EmailSubject__c = 'Unit test subject',
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
 	public static EnvelopeStatus__c createEnvelopeStatus(final Envelope__c e) {
 		EnvelopeStatus__c es = new EnvelopeStatus__c(
 			SourceId__c = e.SourceId__c,

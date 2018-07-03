@@ -25,6 +25,10 @@
 		<name>Sent__c</name>
 	</fields>
 	<fields>
+		<label>Expires</label>
+		<name>Expires__c</name>
+	</fields>
+	<fields>
 		<label>Completed</label>
 		<name>Completed__c</name>
 	</fields>

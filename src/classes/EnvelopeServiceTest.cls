@@ -402,6 +402,22 @@ private class EnvelopeServiceTest {
 	}
 
 	@IsTest
+	static void test_Database_deleteEnvelope2_invalid_SourceId() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			Envelope__c e = TestUtils.createEnvelope(a.Id);
+			e.SourceId__c = 'bad';
+			update e;
+
+			Test.startTest();
+			Id result = EnvelopeService.DB.deleteEnvelope2(e.Id);
+			Test.stopTest();
+
+			System.assertEquals(null, result);
+		}
+	}
+
+	@IsTest
 	static void test_replaceUserTags() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope e = new Envelope(null, '[FirstName][LastName]', '[Email]', null);
@@ -1111,6 +1127,8 @@ private class EnvelopeServiceTest {
 			System.assertEquals(1, result1.documents.size());
 			System.assertNotEquals(null, result1.recipients);
 			System.assertEquals(1, result1.recipients.size());
+			List<EnvelopeStatus__c> statuses = [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c = :result1.docusignId.toString()];
+			System.assert(Collection.isEmpty(statuses));
 
 			System.assertNotEquals(null, result2);
 			System.assertNotEquals(null, result2.docuSignId);
@@ -1129,6 +1147,8 @@ private class EnvelopeServiceTest {
 			System.assert(result2.notifications.updateChatter);
 			System.assertEquals('s2', result2.emailSubject);
 			System.assertEquals('m2', result2.emailMessage);
+			statuses = [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c = :result2.docusignId.toString()];
+			System.assert(Collection.isEmpty(statuses));
 
 			Set<Id> ids = new Set<Id> { ee1.Id, ee2.Id };
 			for (Envelope__c e : [SELECT DocuSignId__c, Sent__c FROM Envelope__c WHERE Id IN :ids]) {
@@ -1183,6 +1203,10 @@ private class EnvelopeServiceTest {
 			Envelope__c e = [SELECT DocuSignId__c, Sent__c FROM Envelope__c WHERE Id = :ee1.Id];
 			System.assertNotEquals(null, e.DocuSignId__c);
 			System.assertNotEquals(null, e.Sent__c);
+
+			List<EnvelopeStatus__c> statuses = [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c = :result.docusignId.toString()];
+			System.assertNotEquals(null, statuses);
+			System.assertEquals(1, statuses.size());
 		}
 	}
 

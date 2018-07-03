@@ -53,6 +53,14 @@
 		<type>DateTime</type>
 	</fields>
 	<fields>
+		<fullName>Expires__c</fullName>
+		<externalId>false</externalId>
+		<label>Expires</label>
+		<required>false</required>
+		<trackTrending>false</trackTrending>
+		<type>DateTime</type>
+	</fields>
+	<fields>
 		<fullName>Completed__c</fullName>
 		<externalId>false</externalId>
 		<label>Completed</label>

@@ -304,50 +304,67 @@ public class Envelope {
 		/**
 		 * The ID of the underlying EnvelopeStatus__c record.
 		 */
+		@AuraEnabled
 		public Id id { get; private set; }
 		/**
 		 * The Salesforce source entity.
 		 */
+		@AuraEnabled
 		public Entity source { get; private set; }
 		/**
 		 * The DocuSign envelope ID.
 		 */
+		@AuraEnabled
 		public UUID docuSignId { get; private set; }
 		/**
 		 * The current status.
 		 */
+		@AuraEnabled
 		public String status { get; private set; }
 		/**
 		 * The sender name.
 		 */
+		@AuraEnabled
 		public String senderName { get; private set; }
 		/**
 		 * The sender email address.
 		 */
+		@AuraEnabled
 		public String senderEmail { get; private set; }
 		/**
 		 * Associated recipient statuses.
 		 */
+		@AuraEnabled
 		public List<Recipient.Status> recipients { get; private set; }
 		/**
 		 * Date and time when the envelope was sent.
 		 */
+		@AuraEnabled
 		public Datetime sent { get; private set; }
+		/**
+		 * Date and time when the envelope expires.
+		 */
+		@AuraEnabled
+		public Datetime expires { get; private set; }
 		/**
 		 * Date and time when the envelope was completed.
 		 */
+		@AuraEnabled
 		public Datetime completed { get; private set; }
 		/**
 		 * The subject of the email message sent.
 		 */
+		@AuraEnabled
 		public String emailSubject { get; private set; }
 		/**
 		 * The reason the envelope was declined or voided.
 		 */
+		@AuraEnabled
 		public String reason { get; private set; }
 		/**
 		 * Date and time when the status was last updated.
 		 */
+		@AuraEnabled
 		public Datetime lastStatusUpdate { get; private set; }
 
 		/**
@@ -361,6 +378,7 @@ public class Envelope {
 		 * @param senderEmail The sender email address.
 		 * @param recipients Associated recipient statuses.
 		 * @param sent Date and time when the envelope was sent.
+		 * @param expires Date and time when the envelope expires.
 		 * @param completed Date and time when the envelope was completed.
 		 * @param emailSubject The subject of the email message sent.
 		 * @param reason The reason the envelope was declined or voided.
@@ -375,6 +393,7 @@ public class Envelope {
 			final String senderEmail,
 			final List<Recipient.Status> recipients,
 			final Datetime sent,
+			final Datetime expires,
 			final Datetime completed,
 			final String emailSubject,
 			final String reason,
@@ -388,6 +407,7 @@ public class Envelope {
 			this.senderEmail = senderEmail;
 			this.recipients = recipients;
 			this.sent = sent;
+			this.expires = expires;
 			this.completed = completed;
 			this.emailSubject = emailSubject;
 			this.reason = reason;
@@ -448,6 +468,8 @@ public class Envelope {
 			UserInfo.getUserEmail(),
 			rss,
 			this.sent,
+			this.sent != null && this.notifications != null && this.notifications.expireAfterDays != null
+				? this.sent.addDays(this.notifications.expireAfterDays) : null,
 			null,
 			this.emailSubject,
 			null,

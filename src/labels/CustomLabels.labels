@@ -1251,4 +1251,204 @@
 		<shortDescription>Cannot resent envelope</shortDescription>
 		<value>Envelope cannot be resent. It is not in the &apos;sent&apos; or &apos;delivered&apos; state.</value>
 	</labels>
+	<labels>
+		<fullName>EnvelopeStatus</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope status</shortDescription>
+		<value>DocuSign Envelope Status</value>
+	</labels>
+	<labels>
+		<fullName>NoEnvelopesSent</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>No envelopes sent</shortDescription>
+		<value>No envelopes have been sent</value>
+	</labels>
+	<labels>
+		<fullName>Expand</fullName>
+		<categories>UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Expand</shortDescription>
+		<value>Expand</value>
+	</labels>
+	<labels>
+		<fullName>Created</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Created</shortDescription>
+		<value>Created</value>
+	</labels>
+	<labels>
+		<fullName>Sent</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sent</shortDescription>
+		<value>Sent</value>
+	</labels>
+	<labels>
+		<fullName>Completed</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Completed</shortDescription>
+		<value>Completed</value>
+	</labels>
+	<labels>
+		<fullName>Declined</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Declined</shortDescription>
+		<value>Declined</value>
+	</labels>
+	<labels>
+		<fullName>Voided</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Voided</shortDescription>
+		<value>Voided</value>
+	</labels>
+	<labels>
+		<fullName>Signed</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signed</shortDescription>
+		<value>Signed</value>
+	</labels>
+	<labels>
+		<fullName>MailTo</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Mail to</shortDescription>
+		<value>mailto:</value>
+	</labels>
+	<labels>
+		<fullName>SentAnEnvelope</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sent an envelope</shortDescription>
+		<value>sent an envelope</value>
+	</labels>
+	<labels>
+		<fullName>LastStatusUpdate</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Last status update</shortDescription>
+		<value>Last Status Update</value>
+	</labels>
+	<labels>
+		<fullName>Status</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Status</shortDescription>
+		<value>Status</value>
+	</labels>
+	<labels>
+		<fullName>Reason</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Reason</shortDescription>
+		<value>Reason</value>
+	</labels>
+	<labels>
+		<fullName>Expires</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Expires</shortDescription>
+		<value>Expires</value>
+	</labels>
+	<labels>
+		<fullName>Show</fullName>
+		<categories>UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Show</shortDescription>
+		<value>Show</value>
+	</labels>
+	<labels>
+		<fullName>More</fullName>
+		<categories>UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>More</shortDescription>
+		<value>More</value>
+	</labels>
+	<labels>
+		<fullName>Less</fullName>
+		<categories>UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Less</shortDescription>
+		<value>Less</value>
+	</labels>
+	<labels>
+		<fullName>IsQueued</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Is queued</shortDescription>
+		<value>is queued to receive the envelope</value>
+	</labels>
+	<labels>
+		<fullName>WillReceive</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Will receive</shortDescription>
+		<value>will receive the envelope soon</value>
+	</labels>
+	<labels>
+		<fullName>NoAction</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>No action</shortDescription>
+		<value>has not taken action</value>
+	</labels>
+	<labels>
+		<fullName>HasDeclined</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Has declined</shortDescription>
+		<value>has declined to sign</value>
+	</labels>
+	<labels>
+		<fullName>HasViewed</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Has viewed</shortDescription>
+		<value>has viewed the envelope</value>
+	</labels>
+	<labels>
+		<fullName>HasSigned</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Has signed</shortDescription>
+		<value>has signed the envelope</value>
+	</labels>
+	<labels>
+		<fullName>ViewAll</fullName>
+		<categories>UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>View all</shortDescription>
+		<value>View All</value>
+	</labels>
 </CustomLabels>

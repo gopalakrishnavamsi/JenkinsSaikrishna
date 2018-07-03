@@ -6,14 +6,14 @@ private class StatusServiceTest {
 		// Valid
 		Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.randomUUID(),
 			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, DateTime.now().addDays(-1),
-			Datetime.now(), 's1', null, Datetime.now());
+			null, Datetime.now(), 's1', null, Datetime.now());
 		// Invalid - no DocuSign ID
 		Envelope.Status es2 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), null,
 			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, DateTime.now().addDays(-1),
-			Datetime.now(), 's1', null, Datetime.now());
+			Datetime.now().addDays(1), Datetime.now(), 's1', null, Datetime.now());
 		// Invalid - not created/sent
 		Envelope.Status es3 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.randomUUID(),
-			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, null,
+			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, null, null,
 			null, 's1', null, Datetime.now());
 
 		Test.startTest();
@@ -66,6 +66,7 @@ private class StatusServiceTest {
 			System.assertEquals(es1.SenderName__c, es.senderName);
 			System.assertEquals(es1.SenderEmail__c, es.senderEmail);
 			System.assertEquals(es1.Sent__c, es.sent);
+			System.assertEquals(es1.Expires__c, es.expires);
 			System.assertEquals(es1.Completed__c, es.completed);
 			System.assertEquals(es1.Reason__c, es.reason);
 			System.assertEquals(es1.LastStatusUpdate__c, es.lastStatusUpdate);
@@ -79,6 +80,7 @@ private class StatusServiceTest {
 			System.assertEquals(es2.SenderName__c, es.senderName);
 			System.assertEquals(es2.SenderEmail__c, es.senderEmail);
 			System.assertEquals(es2.Sent__c, es.sent);
+			System.assertEquals(es1.Expires__c, es.expires);
 			System.assertEquals(es2.Completed__c, es.completed);
 			System.assertEquals(es2.Reason__c, es.reason);
 			System.assertEquals(es2.LastStatusUpdate__c, es.lastStatusUpdate);
@@ -133,7 +135,38 @@ private class StatusServiceTest {
 	}
 
 	@IsTest
-	static void test_Database_queryStatus() {
+	static void test_Database_querySourceEnvelopes() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			Lead l = TestUtils.createLead();
+			UUID e1Id = UUID.randomUUID();
+			TestUtils.createEnvelope(a.Id, e1Id);
+			UUID e2Id = UUID.randomUUID();
+			TestUtils.createEnvelope(a.Id, e2Id);
+			UUID e3Id = UUID.randomUUID();
+			TestUtils.createEnvelope(l.Id, e3Id);
+			UUID e4Id = UUID.randomUUID();
+			TestUtils.createEnvelope(l.Id, e4Id);
+			Set<UUID> validIds = new Set<UUID> { e1Id, e2Id, e3Id, e4Id };
+
+			Test.startTest();
+			Set<UUID> result = StatusService.DB.querySourceEnvelopes(new Set<Id> { a.Id, l.Id }, 3);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			Set<UUID> usedIds = new Set<UUID>();
+			for (UUID id : result) {
+				System.assertNotEquals(null, id);
+				System.assert(validIds.contains(id));
+				System.assert(!usedIds.contains(id));
+				usedIds.add(id);
+			}
+		}
+	}
+
+	@IsTest
+	static void test_Database_queryStatus_by_envelope_id() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			UUID e1Id = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1Id);
@@ -159,6 +192,7 @@ private class StatusServiceTest {
 			System.assertEquals(es1.SenderName__c, es.senderName);
 			System.assertEquals(es1.SenderEmail__c, es.senderEmail);
 			System.assertEquals(es1.Sent__c, es.sent);
+			System.assertEquals(es1.Expires__c, es.expires);
 			System.assertEquals(es1.Completed__c, es.completed);
 			System.assertEquals(es1.Reason__c, es.reason);
 			System.assertEquals(es1.LastStatusUpdate__c, es.lastStatusUpdate);
@@ -204,6 +238,7 @@ private class StatusServiceTest {
 			System.assertEquals(es2.SenderName__c, es.senderName);
 			System.assertEquals(es2.SenderEmail__c, es.senderEmail);
 			System.assertEquals(es2.Sent__c, es.sent);
+			System.assertEquals(es2.Expires__c, es.expires);
 			System.assertEquals(es2.Completed__c, es.completed);
 			System.assertEquals(es2.Reason__c, es.reason);
 			System.assertEquals(es2.LastStatusUpdate__c, es.lastStatusUpdate);
@@ -243,6 +278,24 @@ private class StatusServiceTest {
 	}
 
 	@IsTest
+	static void test_Database_insertStatus_null_docuSignId() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Datetime now = Datetime.now();
+			Envelope.Status es = new Envelope.Status(null, null, null,
+				Envelope.STATUS_COMPLETED, 'e1', 'e1@unit.test', new List<Recipient.Status>(),
+				now.addDays(-10), now.addDays(-1), now.addDays(-2), 'e1', null, now.addDays(-1));
+
+			Test.startTest();
+			try {
+				StatusService.DB.insertStatus(new List<Envelope.Status> { es });
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedDocuSignEnvelopeId, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_Database_insertStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Datetime now = DateTime.now();
@@ -257,7 +310,7 @@ private class StatusServiceTest {
 				null, now.addDays(-2));
 			Envelope.Status e1 = new Envelope.Status(null, new Entity(a1.Id), UUID.randomUUID(),
 				Envelope.STATUS_COMPLETED, 'e1', 'e1@unit.test', new List<Recipient.Status> { e1r1, e1r2 }, now.addDays(-10),
-				now.addDays(-2), 'e1', null, now.addDays(-1));
+				now.addDays(-1), now.addDays(-2), 'e1', null, now.addDays(-1));
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact a2c1 = TestUtils.createContact(a2.Id);
 			Contact a2c2 = TestUtils.createContact(a2.Id);
@@ -269,7 +322,7 @@ private class StatusServiceTest {
 				'decline reason', now.addDays(-2));
 			Envelope.Status e2 = new Envelope.Status(null, new Entity(a2.Id), UUID.randomUUID(),
 				Envelope.STATUS_DECLINED, 'e2', 'e2@unit.test', new List<Recipient.Status> { e2r1, e2r2 }, now.addDays(-4),
-				now.addDays(-2), 'e2', null, now.addDays(-2));
+				now.addDays(-1), now.addDays(-2), 'e2', null, now.addDays(-2));
 
 			Test.startTest();
 			List<Envelope.Status> result = StatusService.DB.insertStatus(new List<Envelope.Status> { e1, e2 });
@@ -286,6 +339,7 @@ private class StatusServiceTest {
 			System.assertEquals(e1.senderName, es.senderName);
 			System.assertEquals(e1.senderEmail, es.senderEmail);
 			System.assertEquals(e1.sent, es.sent);
+			System.assertEquals(e1.expires, es.expires);
 			System.assertEquals(e1.completed, es.completed);
 			System.assertEquals(e1.reason, es.reason);
 			System.assertEquals(e1.lastStatusUpdate, es.lastStatusUpdate);
@@ -330,6 +384,7 @@ private class StatusServiceTest {
 			System.assertEquals(e2.senderName, es.senderName);
 			System.assertEquals(e2.senderEmail, es.senderEmail);
 			System.assertEquals(e2.sent, es.sent);
+			System.assertEquals(e2.expires, es.expires);
 			System.assertEquals(e2.completed, es.completed);
 			System.assertEquals(e2.reason, es.reason);
 			System.assertEquals(e2.lastStatusUpdate, es.lastStatusUpdate);
@@ -388,7 +443,7 @@ private class StatusServiceTest {
 				'decline reason', now.addDays(-2));
 			Envelope.Status e2 = new Envelope.Status(null, new Entity(a2.Id), UUID.randomUUID(),
 				Envelope.STATUS_DECLINED, 'e2', 'e2@unit.test', new List<Recipient.Status> { e2r1, e2r2 }, now.addDays(-4),
-				now.addDays(-2), 'e2', null, now.addDays(-2));
+				now.addDays(-1), now.addDays(-2), 'e2', null, now.addDays(-2));
 
 			Test.startTest();
 			List<Envelope.Status> result = StatusService.DB.upsertStatus(new List<Envelope.Status> { e1, e2 });
@@ -405,6 +460,7 @@ private class StatusServiceTest {
 			System.assertEquals(e1.senderName, es.senderName);
 			System.assertEquals(e1.senderEmail, es.senderEmail);
 			System.assertEquals(e1.sent, es.sent);
+			System.assertEquals(e1.expires, es.expires);
 			System.assertEquals(e1.completed, es.completed);
 			System.assertEquals(e1.reason, es.reason);
 			System.assertNotEquals(null, es.lastStatusUpdate);
@@ -449,6 +505,7 @@ private class StatusServiceTest {
 			System.assertEquals(e2.senderName, es.senderName);
 			System.assertEquals(e2.senderEmail, es.senderEmail);
 			System.assertEquals(e2.sent, es.sent);
+			System.assertEquals(e2.expires, es.expires);
 			System.assertEquals(e2.completed, es.completed);
 			System.assertEquals(e2.reason, es.reason);
 			System.assertNotEquals(null, es.lastStatusUpdate);
@@ -597,10 +654,10 @@ private class StatusServiceTest {
 			e2.Sent__c = null; // make invalid
 			update e2;
 			Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.fromString(e1.DocuSignId__c),
-				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e1.Sent__c,
+				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e1.Sent__c, null,
 				Datetime.now(), 's1', null, Datetime.now());
 			Envelope.Status es2 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.fromString(e2.DocuSignId__c),
-				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e2.Sent__c,
+				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e2.Sent__c, null,
 				Datetime.now(), 's2', null, Datetime.now());
 
 			Test.startTest();
@@ -671,6 +728,30 @@ private class StatusServiceTest {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_by_source_id() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			Schema.Account a = TestUtils.createAccount();
+			Lead l = TestUtils.createLead();
+			Envelope__c e1 = TestUtils.createEnvelope(a.Id);
+			Envelope__c e2 = TestUtils.createEnvelope(a.Id);
+			Envelope__c e3 = TestUtils.createEnvelope(l.Id);
+			Envelope__c e4 = TestUtils.createEnvelope(l.Id);
+			Envelope.Status es1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
+			Envelope.Status es2 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e2));
+			Envelope.Status es3 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e3));
+			Envelope.Status es4 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e4));
+
+			Test.startTest();
+			List<Envelope.Status> result = StatusService.getStatus(new Set<Id> { a.Id, l.Id }, 3);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
 		}
 	}
 

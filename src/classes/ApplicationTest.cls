@@ -42,6 +42,12 @@ private class ApplicationTest {
 	}
 
 	@IsTest
+	static void test_lightningNamespace() {
+		String orgNS = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
+		System.assertEquals(Application.isManaged ? 'dfsle' : (String.isNotBlank(orgNS) ? orgNS : 'c'), Application.lightningNamespace);
+	}
+
+	@IsTest
 	static void test_userAgent() {
 		System.assertEquals(String.format('DFS-LE/{0} ({1}) SFDC-Callout/{2}', new List<String> {
 			String.valueOf(Application.version), UserInfo.getOrganizationId(), String.valueOf(Salesforce.API_VERSION)

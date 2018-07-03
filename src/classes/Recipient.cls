@@ -591,50 +591,62 @@ public class Recipient implements Comparable {
 		/**
 		 * The ID of the underlying RecipientStatus__c record.
 		 */
+		@AuraEnabled
 		public Id id { get; private set; }
 		/**
 		 * The Salesforce source entity.
 		 */
+		@AuraEnabled
 		public Entity source { get; private set; }
 		/**
 		 * The recipient sequence.
 		 */
+		@AuraEnabled
 		public Integer sequence { get; private set; }
 		/**
 		 * The DocuSign recipient type.
 		 */
+		@AuraEnabled
 		public String type { get; private set; }
 		/**
 		 * The current status.
 		 */
+		@AuraEnabled
 		public String status { get; private set; }
 		/**
 		 * The name of the recipient.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 		/**
 		 * The email address of the recipient.
 		 */
+		@AuraEnabled
 		public String email { get; private set; }
 		/**
 		 * The routing order of the recipient.
 		 */
+		@AuraEnabled
 		public Integer routingOrder { get; private set; }
 		/**
 		 * Date and time when the recipient received the envelope.
 		 */
+		@AuraEnabled
 		public Datetime sent { get; private set; }
 		/**
 		 * Date and time when the recipient completed signing the envelope.
 		 */
+		@AuraEnabled
 		public Datetime completed { get; private set; }
 		/**
 		 * The reason the recipient declined signing the envelope.
 		 */
+		@AuraEnabled
 		public String reason { get; private set; }
 		/**
 		 * Date and time when the status was last updated.
 		 */
+		@AuraEnabled
 		public Datetime lastStatusUpdate { get; private set; }
 
 		/**

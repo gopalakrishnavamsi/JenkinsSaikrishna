@@ -608,7 +608,10 @@ public with sharing class EnvelopeService {
 		result = result.withDocuSignId(docuSignId);
 		if (sendNow) result = result.withSent(Datetime.now());
 		// Can update in some workflows, but not in others due to subsequent callouts (e.g. mobile)
-		if (updateNow) result = DB.updateEnvelope2(result, sendNow);
+		if (updateNow) {
+			result = DB.updateEnvelope2(result, sendNow);
+			if (sendNow) StatusService.createStatus(new List<Envelope.Status> { result.toEnvelopeStatus() });
+		}
 
 		return result;
 	}
@@ -633,8 +636,11 @@ public with sharing class EnvelopeService {
 
 		Permissions.verifyIsOwner(envelope.id);
 
-		Envelope result = replaceUserTags(envelope);
-		return DB.updateEnvelopeSent(result.id, result.docuSignId, result.emailSubject, result.emailMessage, sendNow);
+		Envelope e = replaceUserTags(envelope);
+		Boolean result = DB.updateEnvelopeSent(e.id, e.docuSignId, e.emailSubject, e.emailMessage, sendNow);
+		StatusService.createStatus(new List<Envelope.Status> { e.toEnvelopeStatus() });
+
+		return result;
 	}
 
 	/**

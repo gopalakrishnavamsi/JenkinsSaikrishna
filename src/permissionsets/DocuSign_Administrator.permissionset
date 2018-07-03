@@ -459,6 +459,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>EnvelopeStatus__c.Expires__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>EnvelopeStatus__c.Completed__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

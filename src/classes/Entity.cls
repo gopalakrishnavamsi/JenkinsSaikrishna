@@ -24,26 +24,32 @@ public with sharing class Entity {
 	/**
 	 * The Salesforce object ID.
 	 */
+	@AuraEnabled
 	public Id id { get; private set; }
 	/**
 	 * The Salesforce object type.
 	 */
+	@AuraEnabled
 	public SObjectType type { get; private set; }
 	/**
 	 * The localized Salesforce object label.
 	 */
+	@AuraEnabled
 	public String label { get; private set; }
 	/**
 	 * The Salesforce object name.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The Salesforce object parent (e.g. Account for Opportunity).
 	 */
+	@AuraEnabled
 	public Entity parent { get; private set; }
 	/**
 	 * Whether the entity is valid or not. It is considered valid if the ID is defined.
 	 */
+	@AuraEnabled
 	public Boolean isValid { get; private set; }
 
 	/**

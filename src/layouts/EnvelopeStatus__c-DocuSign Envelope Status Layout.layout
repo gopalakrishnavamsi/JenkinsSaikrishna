@@ -39,6 +39,10 @@
 			</layoutItems>
 			<layoutItems>
 				<behavior>Edit</behavior>
+				<field>Expires__c</field>
+			</layoutItems>
+			<layoutItems>
+				<behavior>Edit</behavior>
 				<field>Completed__c</field>
 			</layoutItems>
 			<layoutItems>
