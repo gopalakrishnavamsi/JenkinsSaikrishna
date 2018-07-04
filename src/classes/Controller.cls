@@ -6,4 +6,7 @@ public with sharing abstract class Controller {
 			return Application.lightningNamespace;
 		}
 	}
+
+	@AuraEnabled
+	public Map<String, String> labels { get; protected set; }
 }

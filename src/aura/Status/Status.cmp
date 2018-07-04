@@ -7,6 +7,7 @@
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="errorMessage" type="String"/>
     <aura:attribute name="labels" type="Map"/>
+    <aura:attribute name="controller" type="StatusController"/>
 
     <lightning:card variant="base">
         <div class="slds-card__header slds-grid">

@@ -18,32 +18,27 @@
           envelopes.forEach(function (envelope) {
             if (envelope.expires) {
               envelope.expires = {
-                value: new Date(envelope.expires),
-                daysBetween: helper.getDaysBetween(envelope.expires)
+                value: new Date(envelope.expires), daysBetween: helper.getDaysBetween(envelope.expires)
               };
             }
             envelope.sent = {
-              value: new Date(envelope.sent),
-              daysBetween: helper.getDaysBetween(envelope.sent)
+              value: new Date(envelope.sent), daysBetween: helper.getDaysBetween(envelope.sent)
             };
             envelope.lastStatusUpdate = {
-              value: new Date(envelope.lastStatusUpdate),
-              daysBetween: helper.getDaysBetween(envelope.lastStatusUpdate)
+              value: new Date(envelope.lastStatusUpdate), daysBetween: helper.getDaysBetween(envelope.lastStatusUpdate)
             };
             envelope.recipients.forEach(function (recipient) {
               recipient.completed = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
               recipient.sent = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
               if (recipient.sent) {
                 recipient.sent = {
-                  value: new Date(recipient.sent),
-                  daysBetween: helper.getDaysBetween(recipient.sent)
+                  value: new Date(recipient.sent), daysBetween: helper.getDaysBetween(recipient.sent)
                 };
               }
 
               if (recipient.completed) {
                 recipient.completed = {
-                  value: new Date(recipient.completed),
-                  daysBetween: helper.getDaysBetween(recipient.completed)
+                  value: new Date(recipient.completed), daysBetween: helper.getDaysBetween(recipient.completed)
                 };
               }
             });
@@ -55,13 +50,7 @@
         component.set('v.envelopes', envelopes);
       } else {
         component.set('v.loading', false);
-        var errors = response.getError();
-        var errMsg = errors;
-        if (!$A.util.isEmpty(errors)) {
-          errMsg = errors[0].message;
-        }
-        console.error(errMsg);
-        component.set('v.errorMessage', errMsg);
+        helper.setError(component, response);
       }
     });
     $A.enqueueAction(getStatus);
@@ -94,19 +83,23 @@
   },
 
   handleViewAllClick: function (component, event, helper) {
-    var listViews = component.get('c.getEnvelopeListView');
+    var listViews = component.get('c.getStatusListViews');
     listViews.setCallback(this, function (response) {
       var state = response.getState();
       if (state === "SUCCESS") {
-        var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-        if ($A.util.isEmpty(errMsg)) {
-          var listView = JSON.parse(response.getReturnValue()).results.listView;
+        var listViews = response.getReturnValue();
+        if (!$A.util.isEmpty(listViews)) {
+          var listView = listViews[0]; // TODO: Allow selection or default?
           var navEvent = $A.get('e.force:navigateToList');
           navEvent.setParams({
-            "listViewId": listView.Id, "listViewName": listView.Name, "scope": /*namespaceApi +*/ 'Envelope__c'
+            listViewId: listView.Id,
+            listViewName: listView.Name,
+            scope: listView.SobjectType
           });
           navEvent.fire();
         }
+      } else {
+        helper.setError(component, response);
       }
     });
     $A.enqueueAction(listViews);
