@@ -1,59 +1,7 @@
 ({
-  onInit: function (component, event, helper) {
-    // var namespace = component.get('c.namespace');
-    // component.set('v.labels', {
-    //   EnvelopeStatus: $A.get('$Label.' + namespace + '.EnvelopeStatus')
-    // });
+  initialize: function (component, event, helper) {
     component.set('v.loading', true);
-    var getStatus = component.get('c.getStatus');
-    getStatus.setParams({
-      sourceId: component.get('v.recordId')
-    });
-
-    getStatus.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        var envelopes = response.getReturnValue();
-        if (!$A.util.isEmpty(envelopes)) {
-          envelopes.forEach(function (envelope) {
-            if (envelope.expires) {
-              envelope.expires = {
-                value: new Date(envelope.expires), daysBetween: helper.getDaysBetween(envelope.expires)
-              };
-            }
-            envelope.sent = {
-              value: new Date(envelope.sent), daysBetween: helper.getDaysBetween(envelope.sent)
-            };
-            envelope.lastStatusUpdate = {
-              value: new Date(envelope.lastStatusUpdate), daysBetween: helper.getDaysBetween(envelope.lastStatusUpdate)
-            };
-            envelope.recipients.forEach(function (recipient) {
-              recipient.completed = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
-              recipient.sent = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
-              if (recipient.sent) {
-                recipient.sent = {
-                  value: new Date(recipient.sent), daysBetween: helper.getDaysBetween(recipient.sent)
-                };
-              }
-
-              if (recipient.completed) {
-                recipient.completed = {
-                  value: new Date(recipient.completed), daysBetween: helper.getDaysBetween(recipient.completed)
-                };
-              }
-            });
-          });
-        } else {
-          component.set('v.loading', false);
-        }
-        component.set('v.loading', false);
-        component.set('v.envelopes', envelopes);
-      } else {
-        component.set('v.loading', false);
-        helper.setError(component, response);
-      }
-    });
-    $A.enqueueAction(getStatus);
+    helper.initialize(component, helper);
   },
 
   handleEnvelopeNameClick: function (component, event, helper) {
@@ -75,8 +23,9 @@
     recipients = Array.isArray(recipients) ? recipients : [recipients];
 
     for (var i = 0; i < recipients.length; i++) {
-      if (parseInt(recipients[i].getElement().dataset.envelopeIndex, 10) === targetEnvelopeIndex && parseInt(recipients[i].getElement().dataset.index, 10) === targetIndex) {
-        $A.util.toggleClass(recipients[i].getElement(), 'ds-recipient_details-shown');
+      var element = recipients[i].getElement();
+      if (parseInt(element.dataset.envelopeIndex, 10) === targetEnvelopeIndex && parseInt(element.dataset.index, 10) === targetIndex) {
+        $A.util.toggleClass(element, 'ds-recipient_details-shown');
         break;
       }
     }

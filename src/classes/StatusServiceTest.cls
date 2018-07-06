@@ -777,6 +777,44 @@ private class StatusServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_getStatus_no_update_final_status() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope__c e2 = TestUtils.createEnvelope();
+			Envelope__c e3 = TestUtils.createEnvelope();
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
+			es1.LastStatusUpdate__c = null;
+			es1.Status__c = Envelope.STATUS_COMPLETED;
+			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(e2);
+			es2.LastStatusUpdate__c = null;
+			es2.Status__c = Envelope.STATUS_VOIDED;
+			EnvelopeStatus__c es3 = TestUtils.createEnvelopeStatus(e3);
+			es3.LastStatusUpdate__c = null;
+			es3.Status__c = Envelope.STATUS_DECLINED;
+			update new List<EnvelopeStatus__c> { es1, es2, es3 };
+
+			Test.startTest();
+			List<Envelope.Status> result = StatusService.getStatus(new Set<UUID> {
+				UUID.fromString(es1.DocuSignId__c), UUID.fromString(es2.DocuSignId__c), UUID.fromString(es3.DocuSignId__c)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(es1.id, result[0].id);
+			System.assertEquals(null, result[0].lastStatusUpdate);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(es2.id, result[1].id);
+			System.assertEquals(null, result[1].lastStatusUpdate);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(es3.id, result[2].id);
+			System.assertEquals(null, result[2].lastStatusUpdate);
+		}
+	}
+
 	private class EnvelopeStatusMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			String endpoint = request.getEndpoint();

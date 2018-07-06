@@ -355,7 +355,7 @@ public with sharing class StatusService {
 		for (Envelope.Status es : DB.queryStatus(docuSignIds)) {
 			idsFound.add(es.docuSignId);
 			Long elapsedMs = es.lastStatusUpdate == null ? STATUS_POLL_INTERVAL_MS : now - es.lastStatusUpdate.getTime();
-			if (elapsedMs >= STATUS_POLL_INTERVAL_MS) {
+			if (!es.isFinal && elapsedMs >= STATUS_POLL_INTERVAL_MS) {
 				toUpdate.add(api.getEnvelopeStatus(es.docuSignId, true).withId(es.id));
 			} else {
 				result.add(es);
