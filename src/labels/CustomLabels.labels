@@ -1292,6 +1292,14 @@
 		<value>Sent</value>
 	</labels>
 	<labels>
+		<fullName>Delivered</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Delivered</shortDescription>
+		<value>Delivered</value>
+	</labels>
+	<labels>
 		<fullName>Completed</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
@@ -1324,20 +1332,12 @@
 		<value>Signed</value>
 	</labels>
 	<labels>
-		<fullName>MailTo</fullName>
-		<categories>Status,UI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mail to</shortDescription>
-		<value>mailto:</value>
-	</labels>
-	<labels>
-		<fullName>SentAnEnvelope</fullName>
+		<fullName>SentAnEnvelope_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Sent an envelope</shortDescription>
-		<value>sent an envelope</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</value>
 	</labels>
 	<labels>
 		<fullName>LastStatusUpdate</fullName>
@@ -1372,76 +1372,68 @@
 		<value>Expires</value>
 	</labels>
 	<labels>
-		<fullName>Show</fullName>
+		<fullName>ShowMore</fullName>
 		<categories>UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Show</shortDescription>
-		<value>Show</value>
+		<shortDescription>Show more</shortDescription>
+		<value>Show More</value>
 	</labels>
 	<labels>
-		<fullName>More</fullName>
+		<fullName>ShowLess</fullName>
 		<categories>UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>More</shortDescription>
-		<value>More</value>
+		<shortDescription>Show less</shortDescription>
+		<value>Show Less</value>
 	</labels>
 	<labels>
-		<fullName>Less</fullName>
-		<categories>UI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Less</shortDescription>
-		<value>Less</value>
-	</labels>
-	<labels>
-		<fullName>IsQueued</fullName>
+		<fullName>IsQueued_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Is queued</shortDescription>
-		<value>is queued to receive the envelope</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</value>
 	</labels>
 	<labels>
-		<fullName>WillReceive</fullName>
+		<fullName>WillReceive_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Will receive</shortDescription>
-		<value>will receive the envelope soon</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will receive the envelope soon</value>
 	</labels>
 	<labels>
-		<fullName>NoAction</fullName>
+		<fullName>NoAction_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>No action</shortDescription>
-		<value>has not taken action</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</value>
 	</labels>
 	<labels>
-		<fullName>HasDeclined</fullName>
+		<fullName>HasDeclined_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Has declined</shortDescription>
-		<value>has declined to sign</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</value>
 	</labels>
 	<labels>
-		<fullName>HasViewed</fullName>
+		<fullName>HasViewed_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Has viewed</shortDescription>
-		<value>has viewed the envelope</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
 	</labels>
 	<labels>
-		<fullName>HasSigned</fullName>
+		<fullName>HasSigned_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Has signed</shortDescription>
-		<value>has signed the envelope</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</value>
 	</labels>
 	<labels>
 		<fullName>ViewAll</fullName>
@@ -1450,5 +1442,133 @@
 		<protected>true</protected>
 		<shortDescription>View all</shortDescription>
 		<value>View All</value>
+	</labels>
+	<labels>
+		<fullName>ConnectToDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Connect to DocuSign</shortDescription>
+		<value>Connect Salesforce to DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>ConnectDocuSignToSalesforce</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Connect DocuSign to Salesforce</shortDescription>
+		<value>Connect your DocuSign account to this Salesforce organization</value>
+	</labels>
+	<labels>
+		<fullName>ConnectDocuSignUser</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Connect DocuSign user</shortDescription>
+		<value>Create users in DocuSign based on the users in this Salesforce org</value>
+	</labels>
+	<labels>
+		<fullName>ManageUsers</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Manage users</shortDescription>
+		<value>Manage Users</value>
+	</labels>
+	<labels>
+		<fullName>CompleteConnection</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Complete section below</shortDescription>
+		<value>Complete the section below to set up connection.</value>
+	</labels>
+	<labels>
+		<fullName>CompleteSetup</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Complete section below</shortDescription>
+		<value>Complete the sections below to set up DocuSign for Salesforce Essentials.</value>
+	</labels>
+	<labels>
+		<fullName>GetStarted</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Get started</shortDescription>
+		<value>Get Started</value>
+	</labels>
+	<labels>
+		<fullName>AllSet</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>All_Set</shortDescription>
+		<value>You&apos;re all set! You can edit the sections below to update your configuration.</value>
+	</labels>
+	<labels>
+		<fullName>ContinueSetup</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Continue setup</shortDescription>
+		<value>Continue Setup</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceUser</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Salesforce user</shortDescription>
+		<value>Salesforce User</value>
+	</labels>
+	<labels>
+		<fullName>Admin</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Admin</shortDescription>
+		<value>Admin</value>
+	</labels>
+	<labels>
+		<fullName>Remove</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Remove</shortDescription>
+		<value>Remove</value>
+	</labels>
+	<labels>
+		<fullName>FieldError</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Field error</shortDescription>
+		<value>Complete this field</value>
+	</labels>
+	<labels>
+		<fullName>AlreadyMember_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Already DocuSign user</shortDescription>
+		<value>{0} is already a DocuSign user</value>
+	</labels>
+	<labels>
+		<fullName>MemberRemoved_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>DocuSign member removed</shortDescription>
+		<value>{0} has been removed</value>
+	</labels>
+	<labels>
+		<fullName>MemberAdded_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>DocuSign member added</shortDescription>
+		<value>{0} has been added</value>
 	</labels>
 </CustomLabels>

@@ -366,6 +366,15 @@ public class Envelope {
 		 */
 		@AuraEnabled
 		public Datetime lastStatusUpdate { get; private set; }
+		/**
+		 * Whether or not the envelope is in a final state.
+		 */
+		@AuraEnabled
+		public Boolean isFinal {
+			get {
+				return this.status == STATUS_VOIDED || this.status == STATUS_DECLINED || this.status == STATUS_COMPLETED;
+			}
+		}
 
 		/**
 		 * Constructs a DocuSign envelope status.

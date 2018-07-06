@@ -666,6 +666,10 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>Delivered</label>
+		<name>Delivered</name>
+	</customLabels>
+	<customLabels>
 		<label>Completed</label>
 		<name>Completed</name>
 	</customLabels>
@@ -682,12 +686,8 @@
 		<name>Signed</name>
 	</customLabels>
 	<customLabels>
-		<label>mailto:</label>
-		<name>MailTo</name>
-	</customLabels>
-	<customLabels>
-		<label>sent an envelope</label>
-		<name>SentAnEnvelope</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</label>
+		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Last Status Update</label>
@@ -706,43 +706,103 @@
 		<name>Expires</name>
 	</customLabels>
 	<customLabels>
-		<label>Show</label>
-		<name>Show</name>
+		<label>Show More</label>
+		<name>ShowMore</name>
 	</customLabels>
 	<customLabels>
-		<label>More</label>
-		<name>More</name>
+		<label>Show Less</label>
+		<name>ShowLess</name>
 	</customLabels>
 	<customLabels>
-		<label>Less</label>
-		<name>Less</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</label>
+		<name>IsQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>is queued to receive the envelope</label>
-		<name>IsQueued</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will receive the envelope soon</label>
+		<name>WillReceive_2</name>
 	</customLabels>
 	<customLabels>
-		<label>will receive the envelope soon</label>
-		<name>WillReceive</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</label>
+		<name>NoAction_2</name>
 	</customLabels>
 	<customLabels>
-		<label>has not taken action</label>
-		<name>NoAction</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</label>
+		<name>HasDeclined_2</name>
 	</customLabels>
 	<customLabels>
-		<label>has declined to sign</label>
-		<name>HasDeclined</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</label>
+		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
-		<label>has viewed the envelope</label>
-		<name>HasViewed</name>
-	</customLabels>
-	<customLabels>
-		<label>has signed the envelope</label>
-		<name>HasSigned</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</label>
+		<name>HasSigned_2</name>
 	</customLabels>
 	<customLabels>
 		<label>View All</label>
 		<name>ViewAll</name>
+	</customLabels>
+	<customLabels>
+		<label>Connect Salesforce to DocuSign</label>
+		<name>ConnectToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Connect your DocuSign account to this Salesforce organization</label>
+		<name>ConnectDocuSignToSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Create users in DocuSign based on the users in this Salesforce org</label>
+		<name>ConnectDocuSignUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Manage Users</label>
+		<name>ManageUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Complete the section below to set up connection.</label>
+		<name>CompleteConnection</name>
+	</customLabels>
+	<customLabels>
+		<label>Complete the sections below to set up DocuSign for Salesforce Essentials.</label>
+		<name>CompleteSetup</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Started</label>
+		<name>GetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>You&apos;re all set! You can edit the sections below to update your configuration.</label>
+		<name>AllSet</name>
+	</customLabels>
+	<customLabels>
+		<label>Continue Setup</label>
+		<name>ContinueSetup</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce User</label>
+		<name>SalesforceUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Admin</label>
+		<name>Admin</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove</label>
+		<name>Remove</name>
+	</customLabels>
+	<customLabels>
+		<label>Complete this field</label>
+		<name>FieldError</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} is already a DocuSign user</label>
+		<name>AlreadyMember_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} has been removed</label>
+		<name>MemberRemoved_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} has been added</label>
+		<name>MemberAdded_1</name>
 	</customLabels>
 </Translations>
