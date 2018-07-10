@@ -869,7 +869,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.</value>
+		<value>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresToday</fullName>
@@ -877,7 +877,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Today</shortDescription>
-		<value>Today is last day on your trial. To upgrade, please email getdfs@docusign.com.</value>
+		<value>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresOneDay</fullName>
@@ -885,7 +885,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires in One Day</shortDescription>
-		<value>You have one day remaining on your trial. To upgrade, please email getdfs@docusign.com.</value>
+		<value>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresSoon_1</fullName>
@@ -893,7 +893,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Soon</shortDescription>
-		<value>You have {0} days remaining on your trial. To upgrade, please email getdfs@docusign.com.</value>
+		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidFileExtension</fullName>
@@ -901,8 +901,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid File Extension</shortDescription>
-		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-			extension unknown to DocuSign.</value>
+		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>AccountInSessionSigningMustBeEnabled</fullName>
@@ -1533,7 +1532,7 @@
 	</labels>
 	<labels>
 		<fullName>Remove</fullName>
-		<categories>Setup</categories>
+		<categories>General</categories>
 		<language>en_US</language>
 		<protected>false</protected>
 		<shortDescription>Remove</shortDescription>
@@ -1570,5 +1569,557 @@
 		<protected>false</protected>
 		<shortDescription>DocuSign member added</shortDescription>
 		<value>{0} has been added</value>
+	</labels>
+	<labels>
+		<fullName>HavingTrouble</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Having trouble?</shortDescription>
+		<value>Having trouble?</value>
+	</labels>
+	<labels>
+		<fullName>SupportInfo</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Support info</shortDescription>
+		<value>At DocuSign, we're dedicated to customer success. We've created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers to common questions, and display system performance information.</value>
+	</labels>
+	<labels>
+		<fullName>SupportPrep</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Support preparation</shortDescription>
+		<value>If you can't find what you're looking for, you can always contact support directly. Please be sure to have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.</value>
+	</labels>
+	<labels>
+		<fullName>ContactSupport</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Contact support</shortDescription>
+		<value>Contact Support</value>
+	</labels>
+	<labels>
+		<fullName>HelpfulLinks</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Helpful links</shortDescription>
+		<value>Helpful Links</value>
+	</labels>
+	<labels>
+		<fullName>SupportCenter</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Support Center</shortDescription>
+		<value>Support Center</value>
+	</labels>
+	<labels>
+		<fullName>Community</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Community</shortDescription>
+		<value>Community</value>
+	</labels>
+	<labels>
+		<fullName>TrustCenter</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Trust Center</shortDescription>
+		<value>Trust Center</value>
+	</labels>
+	<labels>
+		<fullName>SupportPlans</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Support plans</shortDescription>
+		<value>Support Plans</value>
+	</labels>
+	<labels>
+		<fullName>UpgradeNow</fullName>
+		<categories>Support</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upgrade now</shortDescription>
+		<value>Upgrade Now</value>
+	</labels>
+	<labels>
+		<fullName>LandingProgress_2</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Landing Progress</shortDescription>
+		<value>{0} out of {1} sections completed</value>
+	</labels>
+	<labels>
+		<fullName>Edit</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Edit</shortDescription>
+		<value>Edit</value>
+	</labels>
+	<labels>
+		<fullName>ContinueLabel</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Continue</shortDescription>
+		<value>Continue</value>
+	</labels>
+	<labels>
+		<fullName>Close</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Close</shortDescription>
+		<value>Close</value>
+	</labels>
+	<labels>
+		<fullName>NextSteps</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Next steps</shortDescription>
+		<value>Next Steps</value>
+	</labels>
+	<labels>
+		<fullName>HelpSection1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Help section 1</shortDescription>
+		<value>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</value>
+	</labels>
+	<labels>
+		<fullName>HelpSection2</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Help section 2</shortDescription>
+		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;.</value>
+	</labels>
+	<labels>
+		<fullName>LogoutConfirm_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Logout confirm</shortDescription>
+		<value>Are you sure you want to log {0} out of DocuSign?</value>
+	</labels>
+	<labels>
+		<fullName>Cancel</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Cancel</shortDescription>
+		<value>Cancel</value>
+	</labels>
+	<labels>
+		<fullName>Info</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Info</shortDescription>
+		<value>Info</value>
+	</labels>
+	<labels>
+		<fullName>No</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>No</shortDescription>
+		<value>No</value>
+	</labels>
+	<labels>
+		<fullName>Yes</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Yes</shortDescription>
+		<value>Yes</value>
+	</labels>
+	<labels>
+		<fullName>TrialExpired_2</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Trial expired</shortDescription>
+		<value>Trial for {0} ({1}) has expired</value>
+	</labels>
+	<labels>
+		<fullName>LoggedInAs_2</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Logged in as</shortDescription>
+		<value>Logged in as {0} ({1})</value>
+	</labels>
+	<labels>
+		<fullName>UpgradeAccount</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upgrade account</shortDescription>
+		<value>Upgrade Account</value>
+	</labels>
+	<labels>
+		<fullName>TrialInstructions</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Trial instructions</shortDescription>
+		<value>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</value>
+	</labels>
+	<labels>
+		<fullName>ContinueToLogIn</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Continue to log in</shortDescription>
+		<value>Continue to Log In</value>
+	</labels>
+	<labels>
+		<fullName>TryDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Try DocuSign</shortDescription>
+		<value>Try DocuSign free for 30 days</value>
+	</labels>
+	<labels>
+		<fullName>ClickGetStarted</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Get started</shortDescription>
+		<value>By clicking the &apos;Get Started&apos; button, you agree to the &lt;a href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot; target=&quot;_blank&quot;&gt;Terms &amp; Conditions&lt;/a&gt; and &lt;a href=&quot;https://www.docusign.com/company/privacy-policy&quot; target=&quot;_blank&quot;&gt;Privacy Policy&lt;/a&gt;.</value>
+	</labels>
+	<labels>
+		<fullName>PleaseLogIn</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Please log in</shortDescription>
+		<value>Please log in to your account</value>
+	</labels>
+	<labels>
+		<fullName>LogIn</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Log in</shortDescription>
+		<value>Log In</value>
+	</labels>
+	<labels>
+		<fullName>LogOut</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Log out</shortDescription>
+		<value>Log Out</value>
+	</labels>
+	<labels>
+		<fullName>Password</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Password</shortDescription>
+		<value>Password</value>
+	</labels>
+	<labels>
+		<fullName>SelectLabel</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Select</shortDescription>
+		<value>Select</value>
+	</labels>
+	<labels>
+		<fullName>MultipleAccountsMessage</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Multiple_Accounts_Message</shortDescription>
+		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce org.</value>
+	</labels>
+	<labels>
+		<fullName>LogInToExisting</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Log into existing</shortDescription>
+		<value>Log in to an existing account</value>
+	</labels>
+	<labels>
+		<fullName>NoAccount</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>No account</shortDescription>
+		<value>No account? Sign up for free</value>
+	</labels>
+	<labels>
+		<fullName>AddToDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add to DocuSign</shortDescription>
+		<value>Add to DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>AddToDocuSignDetails</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add to DocuSign details</shortDescription>
+		<value>Select which Salesforce users will have access to this DocuSign integration by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
+	</labels>
+	<labels>
+		<fullName>AddUser</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add user</shortDescription>
+		<value>Add User</value>
+	</labels>
+	<labels>
+		<fullName>EnabledInDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Enabled in DocuSign</shortDescription>
+		<value>Enabled in DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>Search</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Search</shortDescription>
+		<value>Search</value>
+	</labels>
+	<labels>
+		<fullName>NoSearchResults</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>No search results</shortDescription>
+		<value>Your search returned no results</value>
+	</labels>
+	<labels>
+		<fullName>SelectUser</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Select user</shortDescription>
+		<value>Select a user</value>
+	</labels>
+	<labels>
+		<fullName>CanManage</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Can manage</shortDescription>
+		<value>User can manage account</value>
+	</labels>
+	<labels>
+		<fullName>Add</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add</shortDescription>
+		<value>Add</value>
+	</labels>
+	<labels>
+		<fullName>RemoveUser</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Remove user</shortDescription>
+		<value>Remove User</value>
+	</labels>
+	<labels>
+		<fullName>RemoveUserConfirm_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Remove user confirmation</shortDescription>
+		<value>Are you sure you want to remove {0} from this DocuSign account?</value>
+	</labels>
+	<labels>
+		<fullName>SearchByName</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Search by name</shortDescription>
+		<value>Search by Name</value>
+	</labels>
+	<labels>
+		<fullName>Back</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Back</shortDescription>
+		<value>Back</value>
+	</labels>
+	<labels>
+		<fullName>ExitLabel</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Exit</shortDescription>
+		<value>Exit</value>
+	</labels>
+	<labels>
+		<fullName>Finish</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Finish</shortDescription>
+		<value>Finish</value>
+	</labels>
+	<labels>
+		<fullName>SectionModalTitle</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Section modal title</shortDescription>
+		<value>Are you sure you want to exit?</value>
+	</labels>
+	<labels>
+		<fullName>SectionModalWarning</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Section modal warning</shortDescription>
+		<value>Unsaved changes will be lost if you leave the Setup Assistant.</value>
+	</labels>
+	<labels>
+		<fullName>SectionProgress_1</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Section progress</shortDescription>
+		<value>Setup progress: {0}%</value>
+	</labels>
+	<labels>
+		<fullName>SignInOrStartTrial</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Sign in or start a trial</shortDescription>
+		<value>Sign in or start a trial</value>
+	</labels>
+	<labels>
+		<fullName>ConnectDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Connect DocuSign</shortDescription>
+		<value>Connect DocuSign to your Salesforce org by logging in to your account or starting a trial.</value>
+	</labels>
+	<labels>
+		<fullName>EnableSalesforceUsers</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Enable Salesforce users</shortDescription>
+		<value>Enable Salesforce users in DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>SelectSalesforceUsers</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Select Salesforce users</shortDescription>
+		<value>Select which Salesforce users will have access to this DocuSign integration.</value>
+	</labels>
+	<labels>
+		<fullName>AddDocuSignButtons</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add_DocuSign_Buttons</shortDescription>
+		<value>Add DocuSign buttons and components to page layouts</value>
+	</labels>
+	<labels>
+		<fullName>AddSendWithDocuSign</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Add Send with DocuSign</shortDescription>
+		<value>Add the Send with DocuSign button and the Envelope Status component to your page layouts.</value>
+	</labels>
+	<labels>
+		<fullName>ContinueToSetup</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Continue to Setup</shortDescription>
+		<value>Continue to Setup</value>
+	</labels>
+	<labels>
+		<fullName>Upgrade</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upgrade</shortDescription>
+		<value>Upgrade Account</value>
+	</labels>
+	<labels>
+		<fullName>AdvancedOptions</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Advanced options</shortDescription>
+		<value>Advanced Options</value>
+	</labels>
+	<labels>
+		<fullName>Environment</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Environment</shortDescription>
+		<value>Environment</value>
+	</labels>
+	<labels>
+		<fullName>OtherUrl</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Other URL</shortDescription>
+		<value>Other URL</value>
+	</labels>
+	<labels>
+		<fullName>Production</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Production</shortDescription>
+		<value>Production</value>
+	</labels>
+	<labels>
+		<fullName>Demo</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Demo</shortDescription>
+		<value>Demo</value>
+	</labels>
+	<labels>
+		<fullName>Other</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Other</shortDescription>
+		<value>Other</value>
 	</labels>
 </CustomLabels>

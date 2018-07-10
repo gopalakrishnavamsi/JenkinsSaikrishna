@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Called by landing and continue">
+	<aura:attribute name="showNextStepsPopup" type="Boolean" />
+</aura:event>

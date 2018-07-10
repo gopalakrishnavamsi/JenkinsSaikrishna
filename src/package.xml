@@ -107,11 +107,20 @@
         <members>TemplateServiceTest</members>
         <members>StatusController</members>
         <members>StatusControllerTest</members>
-        <members>Controller</members>
+        <members>SetupController</members>
+        <members>SetupControllerTest</members>
+        <members>MetadataDeployCallback</members>
+        <members>MetadataDeployCallbackTest</members>
+        <members>strike_lookupController</members>
+        <members>strike_lookupControllerTest</members>
+        <members>strike_responseData</members>
+        <members>strike_utilities</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>DocuSign_for_Salesforce_Essentials</members>
+        <members>DocuSign_Setup</members>
+        <members>DocuSign_Setup_Classic</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -278,26 +287,110 @@
         <members>Expand</members>
         <members>Created</members>
         <members>Sent</members>
+        <members>Delivered</members>
         <members>Completed</members>
         <members>Declined</members>
         <members>Voided</members>
         <members>Signed</members>
-        <members>MailTo</members>
-        <members>SentAnEnvelope</members>
+        <members>SentAnEnvelope_2</members>
         <members>LastStatusUpdate</members>
         <members>Status</members>
         <members>Reason</members>
         <members>Expires</members>
-        <members>Show</members>
-        <members>More</members>
-        <members>Less</members>
-        <members>IsQueued</members>
-        <members>WillReceive</members>
-        <members>NoAction</members>
-        <members>HasDeclined</members>
-        <members>HasViewed</members>
-        <members>HasSigned</members>
+        <members>ShowMore</members>
+        <members>ShowLess</members>
+        <members>IsQueued_2</members>
+        <members>WillReceive_2</members>
+        <members>NoAction_2</members>
+        <members>HasDeclined_2</members>
+        <members>HasViewed_2</members>
+        <members>HasSigned_2</members>
         <members>ViewAll</members>
+        <members>ConnectToDocuSign</members>
+        <members>ConnectDocuSignToSalesforce</members>
+        <members>ConnectDocuSignUser</members>
+        <members>ManageUsers</members>
+        <members>CompleteConnection</members>
+        <members>CompleteSetup</members>
+        <members>GetStarted</members>
+        <members>AllSet</members>
+        <members>ContinueSetup</members>
+        <members>SalesforceUser</members>
+        <members>Admin</members>
+        <members>Remove</members>
+        <members>FieldError</members>
+        <members>AlreadyMember_1</members>
+        <members>MemberRemoved_1</members>
+        <members>MemberAdded_1</members>
+        <members>HavingTrouble</members>
+        <members>SupportInfo</members>
+        <members>SupportPrep</members>
+        <members>ContactSupport</members>
+        <members>HelpfulLinks</members>
+        <members>SupportCenter</members>
+        <members>Community</members>
+        <members>TrustCenter</members>
+        <members>SupportPlans</members>
+        <members>UpgradeNow</members>
+        <members>LandingProgress_2</members>
+        <members>Edit</members>
+        <members>ContinueLabel</members>
+        <members>Close</members>
+        <members>NextSteps</members>
+        <members>HelpSection1</members>
+        <members>HelpSection2</members>
+        <members>LogoutConfirm_1</members>
+        <members>Cancel</members>
+        <members>Info</members>
+        <members>No</members>
+        <members>Yes</members>
+        <members>TrialExpired_2</members>
+        <members>LoggedInAs_2</members>
+        <members>UpgradeAccount</members>
+        <members>TrialInstructions</members>
+        <members>ContinueToLogIn</members>
+        <members>TryDocuSign</members>
+        <members>ClickGetStarted</members>
+        <members>PleaseLogIn</members>
+        <members>LogIn</members>
+        <members>LogOut</members>
+        <members>Password</members>
+        <members>SelectLabel</members>
+        <members>MultipleAccountsMessage</members>
+        <members>LogInToExisting</members>
+        <members>NoAccount</members>
+        <members>AddToDocuSign</members>
+        <members>AddToDocuSignDetails</members>
+        <members>AddUser</members>
+        <members>EnabledInDocuSign</members>
+        <members>Search</members>
+        <members>NoSearchResults</members>
+        <members>SelectUser</members>
+        <members>CanManage</members>
+        <members>Add</members>
+        <members>RemoveUser</members>
+        <members>RemoveUserConfirm_1</members>
+        <members>SearchByName</members>
+        <members>Back</members>
+        <members>ExitLabel</members>
+        <members>Finish</members>
+        <members>SectionModalTitle</members>
+        <members>SectionModalWarning</members>
+        <members>SectionProgress_1</members>
+        <members>SignInOrStartTrial</members>
+        <members>ConnectDocuSign</members>
+        <members>EnableSalesforceUsers</members>
+        <members>SelectSalesforceUsers</members>
+        <members>AddDocuSignButtons</members>
+        <members>AddSendWithDocuSign</members>
+        <members>ContinueToSetup</members>
+        <members>Upgrade</members>
+        <members>AdvancedOptions</members>
+        <members>Environment</members>
+        <members>OtherUrl</members>
+        <members>Production</members>
+        <members>Demo</members>
+        <members>Other</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -537,6 +630,7 @@
         <name>CustomObjectTranslation</name>
     </types>
     <types>
+        <members>Setup</members>
         <name>CustomTab</name>
     </types>
     <types>
@@ -557,6 +651,8 @@
         <name>PermissionSet</name>
     </types>
     <types>
+        <members>Setup</members>
+        <members>SetupWizard</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -584,9 +680,41 @@
     </types>
     <types>
         <members>Status</members>
-        <members>Sending</members>
-        <members>defaultTokens</members>
+        <members>DefaultTokens</members>
+        <members>Setup</members>
+        <members>SetupWizard</members>
+        <members>Support</members>
+        <members>strike_dataGrid</members>
+        <members>strike_evt</members>
+        <members>strike_input</members>
+        <members>strike_lookup</members>
+        <members>strike_modal</members>
+        <members>strike_row</members>
+        <members>NextSectionEvent</members>
+        <members>NavigateToSection</members>
+        <members>Login</members>
+        <members>SetupUsers</members>
+        <members>SaveDataEvent</members>
+        <members>ManageUsers</members>
+        <members>Users</members>
+        <members>Toast</members>
+        <members>SetupAccount</members>
+        <members>LightningOutApp</members>
         <name>AuraDefinitionBundle</name>
     </types>
-    <version>42.0</version>
+    <types>
+        <members>Logo</members>
+        <members>SetupImages</members>
+        <name>StaticResource</name>
+    </types>
+    <types>
+        <members>DocuSign</members>
+        <members>DocuSign/Classic_App_Logo.png</members>
+        <name>Document</name>
+    </types>
+    <types>
+        <members>CSP_icon_meta1</members>
+        <name>ContentAsset</name>
+    </types>
+    <version>43.0</version>
 </Package>

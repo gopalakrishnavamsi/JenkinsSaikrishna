@@ -1,0 +1,112 @@
+<aura:component>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="section" type="Object"/>
+    <aura:attribute name="sections" type="Object"/>
+    <aura:attribute name="activeStep" type="Integer" default="{!0}"/>
+    <aura:attribute name="progressAmount" type="Decimal" default="{!0}"/>
+    <aura:attribute name="loggedIn" type="Boolean"/>
+    <aura:attribute name="showExitModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="selectedSection" type="String"/>
+    <aura:attribute name="continueButtonDisabled" type="Boolean" default="{!true}"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="showToast" type="Boolean" default="{!false}"/>
+    <aura:attribute name="trialIsExpired" type="Boolean"/>
+
+    <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
+    <aura:registerEvent name="finishClicked" type="c:NextSectionEvent"/>
+    <aura:registerEvent name="saveToBackend" type="c:SaveDataEvent"/>
+
+    <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
+                  action="{!c.handleConfirmExitClick}"/>
+
+
+    <!-- Header -->
+    <div class="slds-scope strike-wizard">
+        <header class="strike-wizard__header slds-is-relative">
+            <h2 class="{!'strike-wizard__title slds-text-heading_large slds-align_absolute-center ' + if(v.section.steps.length > 1, '', ' slds-m-bottom_none')}">{!$Label.c.ConnectToDocuSign}</h2>
+            <!-- Wizard -->
+            <div class="{!if(v.section.steps.length > 1, '', 'strike-hide')}">
+                <div class="strike-progress slds-progress slds-progress_shade">
+                    <ol class="strike-progress__list slds-progress__list">
+                        <!-- Steps -->
+                        <aura:iteration items="{!v.section.steps}" var="step" indexVar="i">
+                            <li class="{!'slds-progress__item'  + if(v.activeStep == i, ' slds-is-active', if(v.activeStep > i, ' slds-is-completed', ''))}">
+                                <button class="{!'slds-button slds-progress__marker' + if(v.activeStep > i, ' slds-progress__marker_icon slds-button_icon', '')}">
+                                    <lightning:icon class="{!if(v.activeStep > i, '', 'slds-hide')}"
+                                                    iconName="utility:check" size="x-small"/>
+                                    <span class="slds-assistive-text">{!step.stepName}</span>
+                                </button>
+                            </li>
+                        </aura:iteration>
+                        <!-- /Steps -->
+                    </ol>
+                    <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100"
+                         aria-valuenow="0" role="progressbar">
+                        <span class="slds-progress-bar__value" style="{!'width: ' + v.progressAmount + '%'}">
+                                <span class="slds-assistive-text">{!format($Label.c.SectionProgress_1, v.progressAmount)}
+                                    %</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Wizard -->
+        </header>
+        <!-- Header -->
+        <!-- Content -->
+        <div class="strike-wizard__body">
+            <div class="slds-container_small slds-container_center slds-p-horizontal_medium">
+                <div class="{!if(v.activeStep == 0, '', 'slds-hide')}">
+                    <c:Login aura:id="salesforceToThirdParty"
+                             loggedIn="{!v.loggedIn}"
+                             continueButtonDisabled="{!v.continueButtonDisabled}"
+                             selectedSection="{!v.selectedSection}"
+                             activeStep="{!v.activeStep}"
+                             message="{!v.message}"
+                             mode="{!v.mode}"
+                             showToast="{!v.showToast}"
+                             section="{!v.section}"
+                             saveToBackend="{!c.handleSaveEvent}"
+                             trialIsExpired="{!v.trialIsExpired}"/>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+        <footer class="strike-wizard__footer slds-is-relative">
+            <div class="slds-grid slds-grid_pull-padded">
+                <div class="slds-col slds-no-flex slds-p-horizontal_small">
+                    <lightning:buttonGroup>
+                        <aura:if isTrue="{!v.activeStep != 0}">
+                            <lightning:button class="slds-button slds-button_neutral" label="{!$Label.c.Back}"
+                                              onclick="{!c.handleBackClick}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.activeStep != v.section.steps.length}">
+                            <lightning:button class="slds-button slds-button_neutral"
+                                              label="{!if(v.activeStep == 0, $Label.c.Cancel, $Label.c.ExitLabel)}"
+                                              onclick="{!c.handleExitClick}"/>
+                        </aura:if>
+                    </lightning:buttonGroup>
+                </div>
+                <div class="slds-col slds-p-horizontal_small">
+
+                    <lightning:button aura:id="continueButton" class="slds-button slds-button_brand"
+                                      label="{!if(v.sections.setupData[1].status == 'complete', $Label.c.Finish, $Label.c.ContinueLabel)}"
+                                      onclick="{!c.handleContinueClick}" disabled="{!v.continueButtonDisabled}"/>
+                </div>
+            </div>
+        </footer>
+        <!-- Exit Modal -->
+        <c:strike_modal title="{!$Label.c.SectionModalTitle}"
+                        primaryButtonLabel="{!$Label.c.Yes}"
+                        secondaryButtonLabel="{!$Label.c.No}"
+                        showHeader="true"
+                        showFooter="true"
+                        showModal="{!v.showExitModal}">
+            <p class="slds-text-align_center">{!$Label.c.SectionModalWarning}</p>
+        </c:strike_modal>
+        <!-- /Exit Modal -->
+        <!-- Toast -->
+        <c:toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
+        <!-- /Toast -->
+    </div>
+</aura:component>

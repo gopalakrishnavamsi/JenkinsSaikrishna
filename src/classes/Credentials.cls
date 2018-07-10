@@ -115,10 +115,11 @@ public with sharing class Credentials {
 		final UUID accountId,
 		final String username,
 		final String password,
+		final Boolean canManageAccount,
 		final Boolean useSendOnBehalfOf,
 		final Boolean setupComplete) {
 
-		return save(UserInfo.getUserId(), environment, accountId, username, password,
+		return save(UserInfo.getUserId(), environment, accountId, username, password, canManageAccount,
 			useSendOnBehalfOf, setupComplete);
 	}
 
@@ -129,6 +130,7 @@ public with sharing class Credentials {
 		final UUID accountId,
 		final String username,
 		final String password,
+		final Boolean canManageAccount,
 		final Boolean useSendOnBehalfOf,
 		final Boolean setupComplete) {
 
@@ -142,7 +144,8 @@ public with sharing class Credentials {
 		Credentials.UserCredentials uc = DB.updateUserCredentials(
 			userId,
 			username,
-			useSendOnBehalfOf ? null : password);
+			useSendOnBehalfOf ? null : password,
+			canManageAccount);
 		Credentials.userCredentials.put(userId, uc);
 		self = buildAPICredentials(Credentials.accountCredentials, uc);
 		return self;
@@ -154,7 +157,7 @@ public with sharing class Credentials {
 		for (Id userId : userCredentials.keySet()) {
 			UserCredentials uc = userCredentials.get(userId);
 			if (uc != null) {
-				if (uc.isAdmin) {
+				if (uc.canManageAccount) {
 					adminIds.add(userId);
 				} else {
 					userIds.add(userId);
@@ -178,7 +181,12 @@ public with sharing class Credentials {
 			Set<Id> userIds = new Set<Id>();
 			Boolean isWorking = true;
 			while (isWorking) {
-				List<User> users = [SELECT Id, Username__c FROM User WHERE Username__c != null LIMIT 200];
+				List<User> users = [
+					SELECT Id, Username__c, CanManageAccount__c
+					FROM User
+					WHERE Username__c != null
+					LIMIT 200
+				];
 				if (Collection.isNotEmpty(users)) {
 					DB.deleteUserCredentials(users);
 					for (User u : users) {
@@ -201,29 +209,17 @@ public with sharing class Credentials {
 
 	@Future
 	private static void assignAdminPermissionSet(final Set<Id> userIds) {
-		try {
-			Permissions.assignDocuSignAdministratorPermissionSet(userIds);
-		} catch (Exception ex) {
-			LoggerService.getInstance().exception(ex, 'Failed to assign the DocuSign Administrator permission set');
-		}
+		Permissions.assignDocuSignAdministratorPermissionSet(userIds);
 	}
 
 	@Future
 	private static void assignUserPermissionSet(final Set<Id> userIds) {
-		try {
-			Permissions.assignDocuSignUserPermissionSet(userIds);
-		} catch (Exception ex) {
-			LoggerService.getInstance().exception(ex, 'Failed to assign the DocuSign User permission set');
-		}
+		Permissions.assignDocuSignUserPermissionSet(userIds);
 	}
 
 	@Future
 	private static void removePermissionSets(final Set<Id> userIds) {
-		try {
-			Permissions.removeDocuSignPermissionSets(userIds);
-		} catch (Exception ex) {
-			LoggerService.getInstance().exception(ex, 'Failed to remove the DocuSign permission sets');
-		}
+		Permissions.removeDocuSignPermissionSets(userIds);
 	}
 
 	@TestVisible
@@ -268,16 +264,16 @@ public with sharing class Credentials {
 	public class UserCredentials {
 		public String username { get; private set; }
 		public String password { get; private set; }
-		public Boolean isAdmin { get; private set; }
+		public Boolean canManageAccount { get; private set; }
 
 		public UserCredentials(final String username, final String password) {
 			this(username, password, false);
 		}
 
-		public UserCredentials(final String username, final String password, final Boolean isAdmin) {
+		public UserCredentials(final String username, final String password, final Boolean canManageAccount) {
 			this.username = username;
 			this.password = password;
-			this.isAdmin = isAdmin;
+			this.canManageAccount = canManageAccount;
 		}
 	}
 
@@ -329,14 +325,17 @@ public with sharing class Credentials {
 		public UserCredentials updateUserCredentials(
 			final Id userId,
 			final String username,
-			final String password) {
+			final String password,
+			final Boolean canManageAccount) {
 
-			// Cannot enforce FLS on first run as no one has edit permissions to the custom field.
-			//Permissions.verifyIsUpdateable('User', new List<String> { 'Username__c' });
+			Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
+				'Username__c', 'CanManageAccount__c'
+			});
 
 			List<User> users = [SELECT Id, Username__c FROM User WHERE Id = :userId LIMIT 1];
 			if (Collection.isNotEmpty(users)) {
 				users[0].Username__c = username;
+				users[0].CanManageAccount__c = canManageAccount;
 				update users[0];
 			}
 
@@ -345,7 +344,7 @@ public with sharing class Credentials {
 			userSettings.Password__c = password;
 			upsert userSettings;
 
-			return new UserCredentials(username, password);
+			return new UserCredentials(username, password, canManageAccount);
 		}
 
 		public void updateUserCredentials(final Map<Id, UserCredentials> credentials) {
@@ -359,10 +358,12 @@ public with sharing class Credentials {
 					UserSettings__c us = UserSettings__c.getInstance(u.Id);
 					if (uc == null) {
 						u.Username__c = null;
+						u.CanManageAccount__c = false;
 						us.Username__c = null;
 						us.Password__c = null;
 					} else {
 						u.Username__c = uc.username;
+						u.CanManageAccount__c = uc.canManageAccount;
 						us.Username__c = uc.username;
 						us.Password__c = uc.password;
 					}
@@ -394,6 +395,7 @@ public with sharing class Credentials {
 				for (User u : users) {
 					if (String.isNotBlank(u.Username__c)) {
 						u.Username__c = null;
+						u.CanManageAccount__c = false;
 						toRemove.add(u);
 					}
 

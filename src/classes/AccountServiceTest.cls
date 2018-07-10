@@ -698,6 +698,36 @@ private class AccountServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_getUsers_unauthorized() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				AccountService.getUsers();
+				throw new AssertException('Expected getUsers to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getUsers_success() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			User u1 = TestUtils.createDocuSignUser();
+			User u2 = TestUtils.createDocuSignUser();
+			User a1 = TestUtils.createDocuSignAdministrator();
+
+			Test.startTest();
+			List<Account.User> result = AccountService.getUsers();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.size() >= 4);
+		}
+	}
+
 	class UserPartialSuccessMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
@@ -741,8 +771,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null, false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null, false);
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
@@ -777,8 +807,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null, false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null, false);
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
@@ -816,8 +846,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null, false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null, false);
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
@@ -873,8 +903,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString(), false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString(), false);
 			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
 			us1.Username__c = u1.Username__c;
 			us1.Password__c = UUID.randomUUID().toString();
@@ -920,8 +950,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString(), false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString(), false);
 			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
 			us1.Username__c = u1.Username__c;
 			us1.Password__c = UUID.randomUUID().toString();
@@ -970,8 +1000,8 @@ private class AccountServiceTest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString());
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString());
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID().toString(), false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID().toString(), false);
 			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
 			us1.Username__c = u1.Username__c;
 			us1.Password__c = UUID.randomUUID().toString();

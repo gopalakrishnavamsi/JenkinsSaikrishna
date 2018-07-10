@@ -1,20 +1,5 @@
 ({
   initialize: function(component, helper) {
-    var init = component.get('c.newController');
-    init.setCallback(this, function(response) {
-      if (response.getState() === 'SUCCESS') {
-        var apexController = response.getReturnValue();
-        component.set('v.namespace', apexController.namespace);
-        component.set('v.labels', apexController.labels);
-        this.getStatus(component, helper);
-      } else {
-        this.setError(component, response);
-      }
-    });
-    $A.enqueueAction(init);
-  },
-
-  getStatus: function(component, helper) {
     var gs = component.get('c.getStatus');
     gs.setParams({
       sourceId: component.get('v.recordId')
@@ -25,9 +10,8 @@
       if (status === 'SUCCESS') {
         var envelopes = response.getReturnValue();
         if (!$A.util.isEmpty(envelopes)) {
-          var labels = component.get('v.labels');
           envelopes.forEach(function (envelope) {
-            envelope.status = helper.getStatusLabel(envelope.status, labels);
+            envelope.status = helper.getStatusLabel(envelope.status);
             if (envelope.expires) {
               envelope.expires = {
                 value: new Date(envelope.expires), daysBetween: helper.getDaysBetween(envelope.expires)
@@ -43,9 +27,9 @@
               value: new Date(envelope.lastStatusUpdate), daysBetween: helper.getDaysBetween(envelope.lastStatusUpdate)
             };
             envelope.recipients.forEach(function (recipient) {
-              recipient.status = helper.getStatusLabel(recipient.status, labels);
+              recipient.status = helper.getStatusLabel(recipient.status);
               recipient.completed = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
-              recipient.sent = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
+              recipient.sent = $A.util.isEmpty(recipient.sent) ? null : new Date(recipient.sent).toLocaleString().replace(/,/g, '');
               if (recipient.sent) {
                 recipient.sent = {
                   value: new Date(recipient.sent), daysBetween: helper.getDaysBetween(recipient.sent)
@@ -98,29 +82,29 @@
     return new Date(date);
   },
 
-  getStatusLabel: function(status, labels) {
+  getStatusLabel: function(status) {
     var result = '';
     switch (status) {
       case 'created':
-        result = labels.Created;
+        result = $A.get('$Label.c.Created');
         break;
       case 'sent':
-        result = labels.Sent;
+        result = $A.get('$Label.c.Sent');
         break;
       case 'delivered':
-        result = labels.Delivered;
+        result = $A.get('$Label.c.Delivered');
         break;
       case 'declined':
-        result = labels.Declined;
+        result = $A.get('$Label.c.Declined');
         break;
       case 'voided':
-        result = labels.Voided;
+        result = $A.get('$Label.c.Voided');
         break;
       case 'signed':
-        result = labels.Signed;
+        result = $A.get('$Label.c.Signed');
         break;
       case 'completed':
-        result = labels.Completed;
+        result = $A.get('$Label.c.Completed');
         break;
       default:
         break;

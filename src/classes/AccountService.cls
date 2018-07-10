@@ -9,11 +9,24 @@ public with sharing class AccountService {
 
 	private class Database {
 
+		private Account.User convert(final User u) {
+			if (u == null) return null;
+
+			return new Account.User(
+				u.Username__c,
+				u.Email,
+				u.FirstName,
+				u.LastName,
+				u.CanManageAccount__c)
+				.withSourceId(u.Id);
+		}
+
 		public User queryUser(final Id userId) {
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
 				'Phone', 'MobilePhone', 'Street', 'City', 'State',
 				'PostalCode', 'Country'
 			});
+
 			return [
 				SELECT
 					Phone, MobilePhone, Street, City, State, PostalCode, Country
@@ -21,6 +34,22 @@ public with sharing class AccountService {
 				WHERE Id = :userId
 				LIMIT 1
 			];
+		}
+
+		public List<Account.User> queryUsers() {
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+				'Id', 'Email', 'FirstName', 'LastName', 'Username__c', 'CanManageAccount__c'
+			});
+
+			List<Account.User> result = new List<Account.User>();
+			for (User u : [
+				SELECT Id, Email, FirstName, LastName, Username__c, CanManageAccount__c
+				FROM User
+				WHERE Username__c != NULL
+			]) {
+				result.add(convert(u));
+			}
+			return result;
 		}
 	}
 
@@ -43,11 +72,13 @@ public with sharing class AccountService {
 		/**
 		 * The status of the login attempt.
 		 */
+		@AuraEnabled
 		public LoginStatus status { get; private set; }
 		/**
 		 * Valid DocuSign accounts from which to choose. Populated if the <code>status</code> is
 		 * <code>SelectAccount</code>.
 		 */
+		@AuraEnabled
 		public List<AccountOption> accountOptions { get; private set; }
 
 		/**
@@ -69,10 +100,12 @@ public with sharing class AccountService {
 		/**
 		 * The DocuSign account number.
 		 */
+		@AuraEnabled
 		public Long accountNumber { get; private set; }
 		/**
 		 * The string to display to the user for this option.
 		 */
+		@AuraEnabled
 		public String display { get; private set; }
 
 		/**
@@ -201,7 +234,7 @@ public with sharing class AccountService {
 				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
 				+ ', environment = ' + ae.Environment.name().toLowerCase());
 			Credentials.save(ae, validMembership.accountId, String.valueOf(validMembership.userId),
-				validMembership.apiPassword, true, true);
+				validMembership.apiPassword, true, true, true);
 			status = LoginStatus.Success;
 		} else { // more than 1 valid account, just return results
 			status = LoginStatus.SelectAccount;
@@ -295,7 +328,7 @@ public with sharing class AccountService {
 
 		Account.Membership result = AccountAPI.getInstance(Environment.production).createTrialAccount(trial);
 		Credentials.save(Environment.fromUrl(result.baseUrl), result.accountId, String.valueOf(result.userId),
-			result.apiPassword, true, false);
+			result.apiPassword, true, true, false);
 		return result.scrub(); // Don't return sensitive info.
 	}
 
@@ -494,6 +527,17 @@ public with sharing class AccountService {
 			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
 			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
 			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
+	}
+
+	/**
+	 * Retrieves a list of DocuSign account members.
+	 *
+	 * @return The current DocuSign account members.
+	 */
+	public static List<Account.User> getUsers() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return DB.queryUsers();
 	}
 
 	@TestVisible

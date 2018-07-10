@@ -439,26 +439,23 @@
 		<name>RecipientMustBeUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. To continue using DocuSign for Salesforce, please email getDFS@docusign.com.
-		</label>
+		<label>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
-		<label>Today is last day on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<label>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
 		<name>TrialAccountExpiresToday</name>
 	</customLabels>
 	<customLabels>
-		<label>You have one day remaining on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<label>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
 		<name>TrialAccountExpiresOneDay</name>
 	</customLabels>
 	<customLabels>
-		<label>You have {0} days remaining on your trial. To upgrade, please email getdfs@docusign.com.</label>
+		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
 		<name>TrialAccountExpiresSoon_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-			extension unknown to DocuSign.
-		</label>
+		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</label>
 		<name>InvalidFileExtension</name>
 	</customLabels>
 	<customLabels>
@@ -804,5 +801,281 @@
 	<customLabels>
 		<label>{0} has been added</label>
 		<name>MemberAdded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Having trouble?</label>
+		<name>HavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>At DocuSign, we're dedicated to customer success. We've created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers to common questions, and display system performance information.</label>
+		<name>SupportInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>If you can't find what you're looking for, you can always contact support directly. Please be sure to have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.</label>
+		<name>SupportPrep</name>
+	</customLabels>
+	<customLabels>
+		<label>Contact Support</label>
+		<name>ContactSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>Helpful Links</label>
+		<name>HelpfulLinks</name>
+	</customLabels>
+	<customLabels>
+		<label>Support Center</label>
+		<name>SupportCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>Community</label>
+		<name>Community</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>Support Plans</label>
+		<name>SupportPlans</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Now</label>
+		<name>UpgradeNow</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} out of {1} sections completed</label>
+		<name>LandingProgress_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit</label>
+		<name>Edit</name>
+	</customLabels>
+	<customLabels>
+		<label>Continue</label>
+		<name>ContinueLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Close</label>
+		<name>Close</name>
+	</customLabels>
+	<customLabels>
+		<label>Next Steps</label>
+		<name>NextSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</label>
+		<name>HelpSection1</name>
+	</customLabels>
+	<customLabels>
+		<label>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;.</label>
+		<name>HelpSection2</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to log {0} out of DocuSign?</label>
+		<name>LogoutConfirm_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Cancel</label>
+		<name>Cancel</name>
+	</customLabels>
+	<customLabels>
+		<label>Info</label>
+		<name>Info</name>
+	</customLabels>
+	<customLabels>
+		<label>No</label>
+		<name>No</name>
+	</customLabels>
+	<customLabels>
+		<label>Yes</label>
+		<name>Yes</name>
+	</customLabels>
+	<customLabels>
+		<label>Trial for {0} ({1}) has expired</label>
+		<name>TrialExpired_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Logged in as {0} ({1})</label>
+		<name>LoggedInAs_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Account</label>
+		<name>UpgradeAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</label>
+		<name>TrialInstructions</name>
+	</customLabels>
+	<customLabels>
+		<label>Continue to Log In</label>
+		<name>ContinueToLogIn</name>
+	</customLabels>
+	<customLabels>
+		<label>Try DocuSign free for 30 days</label>
+		<name>TryDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>By clicking the &apos;Get Started&apos; button, you agree to the &lt;a href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot; target=&quot;_blank&quot;&gt;Terms &amp; Conditions&lt;/a&gt; and &lt;a href=&quot;https://www.docusign.com/company/privacy-policy&quot; target=&quot;_blank&quot;&gt;Privacy Policy&lt;/a&gt;.</label>
+		<name>ClickGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Please log in to your account</label>
+		<name>PleaseLogIn</name>
+	</customLabels>
+	<customLabels>
+		<label>Log In</label>
+		<name>LogIn</name>
+	</customLabels>
+	<customLabels>
+		<label>Log Out</label>
+		<name>LogOut</name>
+	</customLabels>
+	<customLabels>
+		<label>Password</label>
+		<name>Password</name>
+	</customLabels>
+	<customLabels>
+		<label>Select</label>
+		<name>SelectLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce org.</label>
+		<name>MultipleAccountsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Log in to an existing account</label>
+		<name>LogInToExisting</name>
+	</customLabels>
+	<customLabels>
+		<label>No account? Sign up for free</label>
+		<name>NoAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Add to DocuSign</label>
+		<name>AddToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Select which Salesforce users will have access to this DocuSign integration by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
+		<name>AddToDocuSignDetails</name>
+	</customLabels>
+	<customLabels>
+		<label>Add User</label>
+		<name>AddUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Enabled in DocuSign</label>
+		<name>EnabledInDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Search</label>
+		<name>Search</name>
+	</customLabels>
+	<customLabels>
+		<label>Your search returned no results</label>
+		<name>NoSearchResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Select a user</label>
+		<name>SelectUser</name>
+	</customLabels>
+	<customLabels>
+		<label>User can manage account</label>
+		<name>CanManage</name>
+	</customLabels>
+	<customLabels>
+		<label>Add</label>
+		<name>Add</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove User</label>
+		<name>RemoveUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to remove {0} from this DocuSign account?</label>
+		<name>RemoveUserConfirm_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Search by Name</label>
+		<name>SearchByName</name>
+	</customLabels>
+	<customLabels>
+		<label>Back</label>
+		<name>Back</name>
+	</customLabels>
+	<customLabels>
+		<label>Exit</label>
+		<name>ExitLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Finish</label>
+		<name>Finish</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to exit?</label>
+		<name>SectionModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Unsaved changes will be lost if you leave the Setup Assistant.</label>
+		<name>SectionModalWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>Setup progress: {0}%</label>
+		<name>SectionProgress_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Sign in or start a trial</label>
+		<name>SignInOrStartTrial</name>
+	</customLabels>
+	<customLabels>
+		<label>Connect DocuSign to your Salesforce org by logging in to your account or starting a trial.</label>
+		<name>ConnectDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Enable Salesforce users in DocuSign</label>
+		<name>EnableSalesforceUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Select which Salesforce users will have access to this DocuSign integration.</label>
+		<name>SelectSalesforceUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Add DocuSign buttons and components to page layouts</label>
+		<name>AddDocuSignButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>Add the Send with DocuSign button and the Envelope Status component to your page layouts.</label>
+		<name>AddSendWithDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Continue to Setup</label>
+		<name>ContinueToSetup</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Account</label>
+		<name>Upgrade</name>
+	</customLabels>
+	<customLabels>
+		<label>Advanced Options</label>
+		<name>AdvancedOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Environment</label>
+		<name>Environment</name>
+	</customLabels>
+	<customLabels>
+		<label>Other URL</label>
+		<name>OtherUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>Production</label>
+		<name>Production</name>
+	</customLabels>
+	<customLabels>
+		<label>Demo</label>
+		<name>Demo</name>
+	</customLabels>
+	<customLabels>
+		<label>Other</label>
+		<name>Other</name>
 	</customLabels>
 </Translations>

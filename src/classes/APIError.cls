@@ -14,10 +14,12 @@ public virtual class APIError {
 	/**
 	 * The error code.
 	 */
+	@AuraEnabled
 	public Integer code { get; private set; }
 	/**
 	 * The error description.
 	 */
+	@AuraEnabled
 	public String description { get; private set; }
 
 	/**

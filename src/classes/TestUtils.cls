@@ -26,7 +26,7 @@ public class TestUtils {
 	}
 
 	public static User createDocuSignAdministrator(final String dsUsername, final String dsPassword) {
-		User u = createUser(UserInfo.getProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername);
+		User u = createUser(UserInfo.getProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername, true);
 		if (String.isNotBlank(dsUsername)) {
 			UserSettings__c us = UserSettings__c.getInstance(u.Id);
 			us.Username__c = dsUsername;
@@ -49,7 +49,7 @@ public class TestUtils {
 
 	public static User createDocuSignUser(final String dsUsername, final String dsPassword) {
 		Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
-		User u = createUser(p.Id, UUID.randomUUID().toString() + '@unit.test', dsUsername);
+		User u = createUser(p.Id, UUID.randomUUID().toString() + '@unit.test', dsUsername, false);
 		if (String.isNotBlank(dsUsername)) {
 			UserSettings__c us = UserSettings__c.getInstance(u.Id);
 			us.Username__c = dsUsername;
@@ -76,10 +76,12 @@ public class TestUtils {
 
 	public static User createUser(final String profileName) {
 		return createUser([SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1].Id,
-			UUID.randomUUID().toString() + '@unit.test', null);
+			UUID.randomUUID().toString() + '@unit.test', null, false);
 	}
 
-	public static User createUser(final Id profileId, final String email, final String dsUsername) {
+	public static User createUser(final Id profileId, final String email, final String dsUsername,
+		final Boolean canManageAccount) {
+
 		User u = new User(
 			Email = email,
 			Phone = '5555555555',
@@ -92,7 +94,8 @@ public class TestUtils {
 			EmailEncodingKey = 'ISO-8859-1',
 			ProfileId = profileId,
 			LanguageLocaleKey = 'en_US',
-			Username__c = dsUsername);
+			Username__c = dsUsername,
+			CanManageAccount__c = canManageAccount);
 		insert u;
 		return u;
 	}

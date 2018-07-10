@@ -206,6 +206,24 @@ private class CredentialsTest {
 	}
 
 	@IsTest
+	static void test_getInstance_invalid_sobo() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+		}
+
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				Credentials.getInstance(UserInfo.getUserId(), true);
+				throw new AssertException('Expected getInstance to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_save_insert_sobo() {
 		UUID accountId = UUID.randomUUID();
 		String username = UUID.randomUUID().toString();
@@ -215,7 +233,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId,
-				username, password, true, true);
+				username, password, true, true, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -228,7 +246,9 @@ private class CredentialsTest {
 			System.assertEquals(true, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(result1.useSendOnBehalfOf);
 			System.assertEquals(username, result1.sendOnBehalfOf);
-			System.assertEquals(username, [SELECT Username__c FROM User WHERE Id = :u.Id LIMIT 1].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
+			System.assertEquals(username, uu.Username__c);
+			System.assert(uu.CanManageAccount__c);
 			System.assertEquals(username, UserSettings__c.getInstance().Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance().Password__c);
 
@@ -246,7 +266,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId,
-				username, password, false, false);
+				username, password, false, false, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -259,7 +279,9 @@ private class CredentialsTest {
 			System.assertEquals(false, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(!result1.useSendOnBehalfOf);
 			System.assertEquals(null, result1.sendOnBehalfOf);
-			System.assertEquals(username, [SELECT Username__c FROM User WHERE Id = :u.Id LIMIT 1].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
+			System.assertEquals(username, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assertEquals(username, UserSettings__c.getInstance().Username__c);
 			System.assertEquals(password, UserSettings__c.getInstance().Password__c);
 
@@ -280,7 +302,7 @@ private class CredentialsTest {
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId,
-				String.valueOf(username), password, false, true);
+				String.valueOf(username), password, true, false, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -294,7 +316,9 @@ private class CredentialsTest {
 			System.assertEquals(true, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(!result1.useSendOnBehalfOf);
 			System.assertEquals(null, result1.sendOnBehalfOf);
-			System.assertEquals(String.valueOf(username), [SELECT Username__c FROM User WHERE Id = :u.Id LIMIT 1].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
+			System.assertEquals(String.valueOf(username), uu.Username__c);
+			System.assert(uu.CanManageAccount__c);
 			System.assertEquals(String.valueOf(username), UserSettings__c.getInstance().Username__c);
 			System.assertEquals(password, UserSettings__c.getInstance().Password__c);
 
@@ -327,17 +351,23 @@ private class CredentialsTest {
 
 			System.assertEquals(dsu1Username, UserSettings__c.getInstance(dsu1.Id).Username__c);
 			System.assertEquals('password1', UserSettings__c.getInstance(dsu1.Id).Password__c);
-			System.assertEquals(dsu1Username, [SELECT Username__c FROM User WHERE Id = :dsu1.Id].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
+			System.assertEquals(dsu1Username, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignAdministrator(dsu1.Id));
 			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
 			System.assertEquals(dsu2Username, UserSettings__c.getInstance(dsu2.Id).Username__c);
 			System.assertEquals('password2', UserSettings__c.getInstance(dsu2.Id).Password__c);
-			System.assertEquals(dsu2Username, [SELECT Username__c FROM User WHERE Id = :dsu2.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
+			System.assertEquals(dsu2Username, uu.Username__c);
+			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsu2.Id));
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu3.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignAdministrator(dsu3.Id));
 			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
@@ -386,22 +416,30 @@ private class CredentialsTest {
 
 			System.assertEquals(String.valueOf(dsaUsername), UserSettings__c.getInstance(dsa.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
-			System.assertEquals(String.valueOf(dsaUsername), [SELECT Username__c FROM User WHERE Id = :dsa.Id].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
+			System.assertEquals(String.valueOf(dsaUsername), uu.Username__c);
+			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			System.assertEquals(String.valueOf(dsu1Username), UserSettings__c.getInstance(dsu1.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
-			System.assertEquals(String.valueOf(dsu1Username), [SELECT Username__c FROM User WHERE Id = :dsu1.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
+			System.assertEquals(String.valueOf(dsu1Username), uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
 			System.assertEquals(String.valueOf(dsu2Username), UserSettings__c.getInstance(dsu2.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
-			System.assertEquals(String.valueOf(dsu2Username), [SELECT Username__c FROM User WHERE Id = :dsu2.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
+			System.assertEquals(String.valueOf(dsu2Username), uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
 			System.assertEquals(String.valueOf(dsu3Username), UserSettings__c.getInstance(dsu3.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
-			System.assertEquals(String.valueOf(dsu3Username), [SELECT Username__c FROM User WHERE Id = :dsu3.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
+			System.assertEquals(String.valueOf(dsu3Username), uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
@@ -449,22 +487,30 @@ private class CredentialsTest {
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsa.Id].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu1.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu2.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu2.Id));
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu3.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
@@ -512,22 +558,30 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, UserSettings__c.getInstance(dsa.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
-			System.assertNotEquals(null, [SELECT Username__c FROM User WHERE Id = :dsa.Id].Username__c);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
+			System.assertNotEquals(null, uu.Username__c);
+			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu1.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
 			System.assertNotEquals(null, UserSettings__c.getInstance(dsu2.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
-			System.assertNotEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu2.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
+			System.assertNotEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :dsu3.Id].Username__c);
+			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
+			System.assertEquals(null, uu.Username__c);
+			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}

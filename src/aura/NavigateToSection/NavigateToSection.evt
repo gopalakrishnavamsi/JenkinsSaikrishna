@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Navigates to first unfinished step" >
+    <aura:attribute name="section" type="String" />
+</aura:event>

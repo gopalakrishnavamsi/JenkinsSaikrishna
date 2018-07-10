@@ -6,7 +6,11 @@ public class UUID {
 	private static final Pattern uuidPattern =
 		Pattern.compile('[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
 
-	private final String value;
+	/**
+	 * The string representation of the UUID.
+	 */
+	@AuraEnabled
+	public String value { get; private set; }
 
 	private UUID(final String canonical) {
 		this.value = canonical.toLowerCase();

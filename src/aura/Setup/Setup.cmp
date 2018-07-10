@@ -1,0 +1,55 @@
+<aura:component controller="SetupController">
+    <aura:attribute name="sections" type="Object"/>
+    <aura:attribute name="loggedIn" type="Boolean"/>
+    <aura:attribute name="progressionStatus" type="String"/>
+    <aura:attribute name="completedCounter" type="Integer"/>
+    <aura:attribute name="selectedSection" type="String" default="Landing"/>
+    <aura:attribute name="trialIsExpired" type="Boolean"/>
+    <aura:attribute name="showNextSteps" type="Boolean" default="{!false}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+
+    <div class="slds-scope">
+        <div class="slds-grid slds-grid_vertical">
+            <!-- Landing -->
+            <div aura:id="landingDiv" class="{!'slds-col' + if(v.selectedSection == 'Landing', '', ' slds-hide')}">
+                <c:SetupWizard data="{!v.sections.setupData}"
+                               progressionStatus="{!v.progressionStatus}"
+                               completedCounter="{!v.completedCounter}"
+                               landingButtonClicked="{!c.goToNextSection}"
+                               rowButtonClicked="{!c.handleSectionChange}"
+                               trialIsExpired="{!v.trialIsExpired}"
+                               loggedIn="{!v.loggedIn}"
+                               showNextSteps="{!v.showNextSteps}"/>
+            </div>
+            <!--/Landing -->
+
+            <!-- Sections -->
+            <aura:if isTrue="{!v.selectedSection == 'systemConnections'}">
+                <div class="{!'slds-col' + if(v.selectedSection == 'systemConnections', '', ' slds-hide')}">
+                    <c:SetupAccount aura:id="systemConnections"
+                                       loggedIn="{!v.loggedIn}"
+                                       exitClicked="{!c.handleSectionChange}"
+                                       finishClicked="{!c.goToNextSection}"
+                                       saveToBackend="{!c.handleSave}"
+                                       selectedSection="{!v.selectedSection}"
+                                       section="{!v.sections.setupData[0]}"
+                                       sections="{!v.sections}"
+                                       trialIsExpired="{!v.trialIsExpired}"/>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!v.selectedSection == 'manageUsers'}">
+                <div class="{!'slds-col' + if(v.selectedSection == 'manageUsers', '', ' slds-hide')}">
+                    <c:SetupUsers aura:id="manageUsers"
+                                   exitClicked="{!c.handleSectionChange}"
+                                   finishClicked="{!c.goToNextSection}"
+                                   saveToBackend="{!c.handleSave}"
+                                   section="{!v.sections.setupData[1]}"
+                                   selectedSection="{!v.selectedSection}"/>
+                </div>
+            </aura:if>
+            <!--/Sections -->
+        </div>
+    </div>
+</aura:component>

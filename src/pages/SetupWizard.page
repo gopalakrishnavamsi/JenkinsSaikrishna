@@ -1,0 +1,128 @@
+<apex:page sidebar="false" showHeader="false">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <apex:includeLightning/>
+    <apex:slds/>
+
+    <style type="text/css">
+        .slds-scope .ds-carousel__panel,
+        .slds-scope .ds-carousel__panel:focus {
+            border: 1px solid rgb(221, 219, 218);
+            outline: 0;
+            box-shadow: none;
+            cursor: default;
+            background: white;
+        }
+
+        .slds-scope .ds-carousel__panel_container {
+            flex-basis: 30%;
+            flex-grow: 0;
+        }
+
+        .slds-scope .ds-full-height {
+            height: 100%;
+        }
+
+        .slds-scope .ds-carousel__content {
+            height: auto;
+            padding: 1.25rem;
+        }
+
+        .slds-scope .ds-carousel__content-title {
+            font-size: 0.875rem;
+        }
+
+        .slds-scope .ds-carousel__image {
+            background-color: #005cb9;
+        }
+    </style>
+
+    <div class="slds-scope slds-p-around_large">
+        <div class="slds-container slds-container_large slds-container_center">
+            <!-- Next Steps -->
+            <div class="slds-grid slds-grid_vertical-stretch">
+
+                <!-- Step -->
+                <div class="ds-carousel__panel_container slds-col">
+                    <div class="ds-full-height slds-carousel__panel">
+                        <div class="ds-carousel__panel ds-full-height slds-carousel__panel-action slds-text-link_reset"
+                             tabindex="-1">
+                            <div class="ds-carousel__image slds-carousel__image">
+                                <img src="{!URLFOR($Resource.SetupImages, 'setup-01.png')}"/>
+                            </div>
+                            <div class="ds-carousel__content slds-carousel__content">
+                                <h2 class="ds-carousel__content-title slds-carousel__content-title slds-m-bottom_small">{!$Label.SignInOrStartTrial}</h2>
+                                <p class="slds-text-body_small">{!$Label.ConnectDocuSign}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Step -->
+
+                <!-- Arrow -->
+                <div class="slds-col">
+                    <div class="ds-full-height slds-grid slds-grid_vertical-align-center slds-text-align_center">
+                            <span class="slds-icon_container slds-size_1-of-1">
+                                <svg class="slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#forward')}"></use>
+                                </svg>
+                            </span>
+                    </div>
+                </div>
+                <!-- /Arrow -->
+
+                <!-- Step -->
+                <div class="ds-carousel__panel_container slds-col">
+                    <div class="ds-full-height slds-carousel__panel">
+                        <div class="ds-carousel__panel ds-full-height slds-carousel__panel-action slds-text-link_reset"
+                             tabindex="-1">
+                            <div class="ds-carousel__image slds-carousel__image">
+                                <img src="{!URLFOR($Resource.SetupImages, 'setup-02.png')}"/>
+                            </div>
+                            <div class="ds-carousel__content slds-carousel__content">
+                                <h2 class="ds-carousel__content-title slds-carousel__content-title slds-m-bottom_small">{!$Label.EnableSalesforceUsers}</h2>
+                                <p class="slds-text-body_small">{!$Label.SelectSalesforceUsers}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Step -->
+
+                <!-- Arrow -->
+                <div class="slds-col">
+                    <div class="ds-full-height slds-grid slds-grid_vertical-align-center slds-text-align_center">
+                            <span class="slds-icon_container slds-size_1-of-1">
+                                <svg class="slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#forward')}"></use>
+                                </svg>
+                            </span>
+                    </div>
+                </div>
+                <!-- /Arrow -->
+
+                <!-- Step -->
+                <div class="ds-carousel__panel_container slds-col">
+                    <div class="ds-full-height slds-carousel__panel">
+                        <div class="ds-carousel__panel ds-full-height slds-carousel__panel-action slds-text-link_reset"
+                             tabindex="-1">
+                            <div class="ds-carousel__image slds-carousel__image">
+                                <img src="{!URLFOR($Resource.SetupImages, 'setup-03.png')}"/>
+                            </div>
+                            <div class="ds-carousel__content slds-carousel__content">
+                                <h2 class="ds-carousel__content-title slds-carousel__content-title slds-m-bottom_small">{!$Label.AddDocuSignButtons}</h2>
+                                <p class="slds-text-body_small">{!$Label.AddSendWithDocuSign}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Step -->
+
+            </div>
+            <!-- /Next Steps -->
+            <div class="slds-m-top_large slds-text-align_center">
+                <a href="/lightning/n/Setup" target="_blank"
+                   class="slds-button slds-button_brand">{!$Label.ContinueToSetup}</a>
+            </div>
+        </div>
+    </div>
+    </html>
+</apex:page>

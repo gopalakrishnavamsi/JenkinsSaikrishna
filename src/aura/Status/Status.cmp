@@ -5,8 +5,6 @@
     <aura:attribute name="envelopes" type="List"/>
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="errorMessage" type="String"/>
-    <aura:attribute name="namespace" type="String"/>
-    <aura:attribute name="labels" type="Map"/>
 
     <lightning:card variant="base">
         <div class="slds-card__header slds-grid">
@@ -17,7 +15,7 @@
                          class="slds-icon slds-icon_small"/>
                 </div>
                 <div class="slds-media__body">
-                    <h2 class="slds-text-heading_small">{!v.labels.EnvelopeStatus}</h2>
+                    <h2 class="slds-text-heading_small">{!$Label.c.EnvelopeStatus}</h2>
                 </div>
             </header>
         </div>
@@ -38,7 +36,7 @@
                             <aura:if isTrue="{!empty(v.envelopes)}">
                                 <!-- Empty State -->
                                 <div class="slds-text-color_weak slds-m-vertical_large slds-text-align_center">
-                                    <em>{!v.labels.NoEnvelopesSent}</em>
+                                    <em>{!$Label.c.NoEnvelopesSent}</em>
                                 </div>
                                 <!-- /Empty State -->
 
@@ -53,7 +51,7 @@
                                                     <div class="slds-media__figure">
                                                         <lightning:buttonIcon
                                                                 iconName="utility:switch"
-                                                                alternativeText="{!v.labels.Expand}"
+                                                                alternativeText="{!$Label.c.Expand}"
                                                                 class="slds-timeline__details-action-icon slds-button_icon"
                                                                 size="medium"
                                                                 variant="bare"
@@ -73,10 +71,10 @@
                                                             <div class="slds-col">
                                                                 <lightning:badge label="{!envelope.status}" class="{!
                                                                         'ds-status-badge_inline'
-                                                                                + if(envelope.status == v.labels.Completed, ' slds-theme_success')
-                                                                                + if(envelope.status == v.labels.Declined, ' slds-theme_error')
-                                                                                + if(envelope.status == v.labels.Voided, ' slds-theme_error')
-                                                                                + if(envelope.status == v.labels.Signed, ' slds-theme_alert-texture')
+                                                                                + if(envelope.status == $Label.c.Completed, ' slds-theme_success')
+                                                                                + if(envelope.status == $Label.c.Declined, ' slds-theme_error')
+                                                                                + if(envelope.status == $Label.c.Voided, ' slds-theme_error')
+                                                                                + if(envelope.status == $Label.c.Signed, ' slds-theme_alert-texture')
                                                                         }"/>
                                                             </div>
                                                             <div class="slds-col slds-no-flex slds-gutters_small">
@@ -102,7 +100,7 @@
                                                         </div>
                                                         <p class="slds-m-horizontal_xx-small">
                                                             <aura:unescapedHtml
-                                                                    value="{!format(v.labels.SentAnEnvelope_2, envelope.senderEmail, envelope.senderName)}"/>
+                                                                    value="{!format($Label.c.SentAnEnvelope_2, envelope.senderEmail, envelope.senderName)}"/>
                                                         </p>
                                                         <!-- Envelope Details -->
                                                         <div class="slds-timeline__item_details">
@@ -110,7 +108,7 @@
                                                                 <div class="slds-grid slds-gutters slds-wrap">
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Sent}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
                                                                                 <aura:if
                                                                                         isTrue="{!not(empty(envelope.sent.daysBetween))}">
@@ -134,7 +132,7 @@
                                                                     </div>
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Completed}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
                                                                                 <aura:if
                                                                                         isTrue="{!envelope.completed.daysBetween lt 7}">
@@ -155,20 +153,20 @@
                                                                     </div>
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Status}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Status}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none ds-capitalize">{!envelope.status}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Reason}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Reason}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                title="{!envelope.reason}">{!envelope.reason}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Expires}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Expires}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
                                                                                 <aura:if
                                                                                         isTrue="{!envelope.expires.daysBetween lt 7}">
@@ -189,7 +187,7 @@
                                                                     </div>
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
-                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.LastStatusUpdate}</h6>
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
                                                                                 <aura:if
                                                                                         isTrue="{!envelope.lastStatusUpdate.daysBetween lt 7}">
@@ -221,10 +219,10 @@
                                                                             <span class="slds-assistive-text">{!recipient.status}</span>
                                                                             <div class="slds-media">
                                                                                 <div class="slds-media__body">
-                                                                                    <div class="{!'slds-media slds-timeline__media' + if(or(recipient.status == v.labels.Completed, recipient.status == v.labels.Signed), ' ds-timeline__media_completed', if(recipient.status == v.labels.Declined, ' ds-timeline__media_declined', ' ds-timeline__media_incomplete'))}">
+                                                                                    <div class="{!'slds-media slds-timeline__media' + if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), ' ds-timeline__media_completed', if(recipient.status == $Label.c.Declined, ' ds-timeline__media_declined', ' ds-timeline__media_incomplete'))}">
                                                                                         <div class="slds-media__figure slds-timeline__icon">
                                                                                             <lightning:icon
-                                                                                                    iconName="{!if(or(recipient.status == v.labels.Completed, recipient.status == v.labels.Signed), 'standard:task2', if(recipient.status == v.labels.Declined, 'action:remove', 'standard:avatar_loading'))}"
+                                                                                                    iconName="{!if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), 'standard:task2', if(recipient.status == $Label.c.Declined, 'action:remove', 'standard:avatar_loading'))}"
                                                                                                     size="small"/>
                                                                                         </div>
                                                                                         <div aura:id="recipient"
@@ -237,9 +235,9 @@
                                                                                                             label="{!recipient.status}"
                                                                                                             class="{!
                                                                                                                     'slds-show_inline-block slds-m-top_xx-small slds-m-bottom_xx-small'
-                                                                                                                            + if(recipient.status == v.labels.Signed, ' slds-theme_success')
-                                                                                                                            + if(recipient.status == v.labels.Completed, ' slds-theme_success')
-                                                                                                                            + if(recipient.status == v.labels.Declined, ' slds-theme_error')
+                                                                                                                            + if(recipient.status == $Label.c.Signed, ' slds-theme_success')
+                                                                                                                            + if(recipient.status == $Label.c.Completed, ' slds-theme_success')
+                                                                                                                            + if(recipient.status == $Label.c.Declined, ' slds-theme_error')
                                                                                                                     }"/>
                                                                                                 </div>
                                                                                                 <div class="slds-col slds-no-flex">
@@ -248,47 +246,47 @@
                                                                                                        href="javascript:void(0);"
                                                                                                        data-envelope-index="{!envelopeIndex}"
                                                                                                        data-index="{!recipientIndex}"
-                                                                                                       onclick="{!c.toggleRecipientDetails}">{!v.labels.ShowMore}</a>
+                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowMore}</a>
                                                                                                     </span>
                                                                                                     <span class="ds-recipient__toggle_less">
                                                                                                     <a class="slds-show_inline-block slds-m-top_xx-small"
                                                                                                        href="javascript:void(0);"
                                                                                                        data-envelope-index="{!envelopeIndex}"
                                                                                                        data-index="{!recipientIndex}"
-                                                                                                       onclick="{!c.toggleRecipientDetails}">{!v.labels.ShowLess}</a>
+                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowLess}</a>
                                                                                                     </span>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <p>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Created}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Created}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.IsQueued_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.IsQueued_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Sent}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Sent}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.WillReceive_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.WillReceive_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Delivered}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Delivered}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.NoAction_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.NoAction_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Declined}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Declined}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.HasDeclined_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.HasDeclined_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Completed}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Completed}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.HasViewed_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.HasViewed_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
-                                                                                                        isTrue="{!recipient.status == v.labels.Signed}">
+                                                                                                        isTrue="{!recipient.status == $Label.c.Signed}">
                                                                                                     <aura:unescapedHtml
-                                                                                                            value="{!format(v.labels.HasSigned_2, recipient.email, recipient.name)}"/>
+                                                                                                            value="{!format($Label.c.HasSigned_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                             </p>
                                                                                             <!-- Recipient Details -->
@@ -296,7 +294,7 @@
                                                                                                 <div class="slds-grid slds-gutters slds-wrap">
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
-                                                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Sent}</h6>
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                                                title="{!recipient.sent.value}">
                                                                                                                 <aura:if
@@ -322,7 +320,7 @@
                                                                                                     </div>
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
-                                                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Completed}</h6>
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                                                title="{!recipient.completed}">
                                                                                                                 <aura:if
@@ -345,21 +343,21 @@
                                                                                                     </div>
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
-                                                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Status}</h6>
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Status}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate ds-capitalize"
                                                                                                                title="{!recipient.status}">{!recipient.status}</p>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
-                                                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.Reason}</h6>
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Reason}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                                                title="{!recipient.reason}">{!recipient.reason}</p>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
-                                                                                                            <h6 class="slds-form-element__label slds-show">{!v.labels.LastStatusUpdate}</h6>
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
                                                                                                                 <aura:if
                                                                                                                         isTrue="{!recipient.lastStatusUpdate.daysBetween lt 7}">
@@ -402,7 +400,7 @@
 
                                     <div class="slds-text-align_right slds-m-top_medium">
                                         <a href="javascript:void(0)"
-                                           onclick="{!c.handleViewAllClick}">{!v.labels.ViewAll}</a>
+                                           onclick="{!c.handleViewAllClick}">{!$Label.c.ViewAll}</a>
                                     </div>
                                 </aura:set>
                             </aura:if>

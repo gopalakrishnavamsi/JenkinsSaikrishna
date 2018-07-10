@@ -5,22 +5,27 @@ public class Account {
 	/**
 	 * The DocuSign account ID.
 	 */
+	@AuraEnabled
 	public UUID id { get; private set; }
 	/**
 	 * The DocuSign account name.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The DocuSign account plan.
 	 */
+	@AuraEnabled
 	public Plan plan { get; private set; }
 	/**
 	 * The DocuSign account billing information.
 	 */
+	@AuraEnabled
 	public Billing billing { get; private set; }
 	/**
 	 * The DocuSign Connect permissions for the account.
 	 */
+	@AuraEnabled
 	public ConnectPermission connect { get; private set; }
 	/**
 	 * The DocuSign environment.
@@ -40,6 +45,7 @@ public class Account {
 	/**
 	 * The status of the DocuSign account trial.
 	 */
+	@AuraEnabled
 	public TrialStatus trialStatus { get; private set; }
 
 	/**
@@ -94,10 +100,12 @@ public class Account {
 		/**
 		 * Whether or not the trial has expired.
 		 */
+		@AuraEnabled
 		public Boolean isExpired { get; private set; }
 		/**
 		 * The trial status message. This may be a friendly warning to upgrade soon.
 		 */
+		@AuraEnabled
 		public String message { get; private set; }
 
 		/**
@@ -119,27 +127,23 @@ public class Account {
 		/**
 		 * The plan ID.
 		 */
+		@AuraEnabled
 		public UUID id { get; private set; }
 		/**
 		 * The plan name.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 		/**
 		 * The plan start date.
 		 */
+		@AuraEnabled
 		public Date startDate { get; private set; }
-		/**
-		 * The plan start date formatted according to current locale rules.
-		 */
-		public String startDateFormatted { get; private set; }
 		/**
 		 * The plan end date.
 		 */
+		@AuraEnabled
 		public Date endDate { get; private set; }
-		/**
-		 * The plan end date formatted according to current locale rules.
-		 */
-		public String endDateFormatted { get; private set; }
 
 		/**
 		 * Constructs a DocuSign account plan.
@@ -153,9 +157,7 @@ public class Account {
 			this.id = id;
 			this.name = name;
 			this.startDate = startDate;
-			this.startDateFormatted = startDate != null ? startDate.format() : '';
 			this.endDate = endDate;
-			this.endDateFormatted = endDate != null ? endDate.format() : '';
 		}
 
 		/**
@@ -178,19 +180,13 @@ public class Account {
 		/**
 		 * The billing start date.
 		 */
+		@AuraEnabled
 		public Date startDate { get; private set; }
-		/**
-		 * The billing start date formatted according to current locale rules.
-		 */
-		public String startDateFormatted { get; private set; }
 		/**
 		 * The billing end date.
 		 */
+		@AuraEnabled
 		public Date endDate { get; private set; }
-		/**
-		 * The billing end date formatted according to current locale rules.
-		 */
-		public String endDateFormatted { get; private set; }
 
 		/**
 		 * Constructs DocuSign account billing information.
@@ -200,9 +196,7 @@ public class Account {
 		 */
 		public Billing(final Date startDate, final Date endDate) {
 			this.startDate = startDate;
-			this.startDateFormatted = startDate != null ? startDate.format() : '';
 			this.endDate = endDate;
-			this.endDateFormatted = endDate != null ? endDate.format() : '';
 		}
 	}
 
@@ -225,30 +219,37 @@ public class Account {
 		/**
 		 * Line 1 of the address, typically the street and number.
 		 */
+		@AuraEnabled
 		public String address1 { get; private set; }
 		/**
 		 * Line 2 of the address (e.g. suite, building, etc.).
 		 */
+		@AuraEnabled
 		public String address2 { get; private set; }
 		/**
 		 * The city.
 		 */
+		@AuraEnabled
 		public String city { get; private set; }
 		/**
 		 * The state, province, or administrative region.
 		 */
+		@AuraEnabled
 		public String region { get; private set; }
 		/**
 		 * The ZIP or postal code.
 		 */
+		@AuraEnabled
 		public String postalCode { get; private set; }
 		/**
 		 * The country.
 		 */
+		@AuraEnabled
 		public String country { get; private set; }
 		/**
 		 * The phone number.
 		 */
+		@AuraEnabled
 		public String phone { get; private set; }
 
 		/**
@@ -296,26 +297,32 @@ public class Account {
 		/**
 		 * The DocuSign user ID.
 		 */
+		@AuraEnabled
 		public UUID id { get; private set; }
 		/**
 		 * The DocuSign username.
 		 */
+		@AuraEnabled
 		public String username { get; private set; }
 		/**
 		 * The DocuSign user email.
 		 */
+		@AuraEnabled
 		public String email { get; private set; }
 		/**
 		 * The DocuSign user first name.
 		 */
+		@AuraEnabled
 		public String firstName { get; private set; }
 		/**
 		 * The DocuSign user last name.
 		 */
+		@AuraEnabled
 		public String lastName { get; private set; }
 		/**
 		 * Read-only DocuSign user name based on <code>firstName</code> and <code>lastName<code>.
 		 */
+		@AuraEnabled
 		public String name {
 			get {
 				return StringUtils.mkName(firstName, lastName);
@@ -328,10 +335,12 @@ public class Account {
 		/**
 		 * The user status.
 		 */
+		@AuraEnabled
 		public UserStatus status { get; private set; }
 		/**
 		 * Whether or not the user is a DocuSign account administrator.
 		 */
+		@AuraEnabled
 		public Boolean canManageAccount { get; private set; }
 		/**
 		 * Whether or not the user can send DocuSign envelopes.
@@ -340,14 +349,17 @@ public class Account {
 		/**
 		 * The Salesforce ID of the user.
 		 */
+		@AuraEnabled
 		public Id sourceId { get; private set; }
 		/**
 		 * The error returned by the API for bulk add or remove account member operations.
 		 */
+		@AuraEnabled
 		public APIError error { get; private set; }
 		/**
 		 * Read-only property indicating whether there was an error with an associated API operation.
 		 */
+		@AuraEnabled
 		public Boolean hasError {
 			get {
 				return this.error != null && this.error != APIError.none;
@@ -443,18 +455,22 @@ public class Account {
 		/**
 		 * The user's email.
 		 */
+		@AuraEnabled
 		public String email { get; private set; }
 		/**
 		 * The user's first name.
 		 */
+		@AuraEnabled
 		public String firstName { get; private set; }
 		/**
 		 * The user's last name.
 		 */
+		@AuraEnabled
 		public String lastName { get; private set; }
 		/**
 		 * Read-only name of the user based on <code>firstName</code> and <code>lastName</code>.
 		 */
+		@AuraEnabled
 		public String name {
 			get {
 				return StringUtils.mkName(firstName, lastName);
@@ -482,18 +498,22 @@ public class Account {
 		/**
 		 * The company of the trial account.
 		 */
+		@AuraEnabled
 		public String company { get; private set; }
 		/**
 		 * The user of the trial account.
 		 */
+		@AuraEnabled
 		public TrialUser user { get; private set; }
 		/**
 		 * The address of the trial account.
 		 */
+		@AuraEnabled
 		public Address address { get; private set; }
 		/**
 		 * Whether or not DocuSign trial account terms and conditions have been accepted.
 		 */
+		@AuraEnabled
 		public Boolean termsAccepted { get; private set; }
 
 		/**
@@ -529,18 +549,22 @@ public class Account {
 		/**
 		 * The DocuSign account number.
 		 */
+		@AuraEnabled
 		public Long accountNumber { get; private set; }
 		/**
 		 * The DocuSign account ID.
 		 */
+		@AuraEnabled
 		public UUID accountId { get; private set; }
 		/**
 		 * The DocuSign account name.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 		/**
 		 * The DocuSign user ID within an account.
 		 */
+		@AuraEnabled
 		public UUID userId { get; private set; }
 		/**
 		 * The DocuSign API password. This is never returned by public methods.

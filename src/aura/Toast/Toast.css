@@ -1,0 +1,24 @@
+.THIS.ds-toast {
+    pointer-events: none;
+    transition: all 250ms ease 0ms;
+    transform: translateY(calc(90px - 1.5rem));
+    opacity: 0;
+    position: fixed;
+}
+
+.THIS.ds-toast.ds-toast_vf {
+	transform: translateY(-1.5rem);
+}
+
+.THIS.ds-toast.ds-toast_shown {
+    transform: translateY(90px);
+    opacity: 1;
+}
+
+.THIS.ds-toast.ds-toast_vf.ds-toast_shown {
+	transform: none;
+}
+
+.THIS.ds-toast.ds-toast_shown > * {
+	pointer-events: auto;
+}
