@@ -1,4 +1,6 @@
 <aura:component controller="SetupController">
+    <ltng:require scripts="{!$Resource.UtilJS}"/>
+
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
     <aura:attribute name="data" type="Object"/>
     <aura:attribute name="formData" type="Object"/>
@@ -9,6 +11,7 @@
     <aura:attribute name="showSuccessToast" type="Boolean"/>
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="dsUserSearchTerm" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="{!false}"/>
 
     <aura:attribute name="lookupValue" type="String"/>
@@ -34,7 +37,7 @@
                     </p>
                 </div>
                 <div class="slds-col slds-no-flex">
-                    <lightning:button label="{!$Label.c.AddUser}" variant="brand" onclick="{!c.addUser}"/>
+                    <lightning:button label="{!$Label.c.AddUser}" variant="brand" onclick="{!c.showAddUserModal}"/>
                 </div>
             </div>
         </div>
@@ -46,11 +49,10 @@
             <div class="slds-col slds-size_2-of-3 slds-p-horizontal_small slds-text-align_right slds-grid slds-gutters_xx-small">
                 <div class="slds-col">
                     <lightning:input aura:id="searchBy" variant="label-hidden" label="Search By"
+                                     value="{!v.dsUserSearchTerm}"
                                      class="slds-show_inline-block" type="search"
+                                     onchange="{!c.handleDocuSignUsersChange}"
                                      placeholder="{!$Label.c.SearchByName}"/>
-                </div>
-                <div class="slds-col slds-no-flex">
-                    <lightning:button label="{!$Label.c.Search}" onclick="{!c.searchTable}"/>
                 </div>
             </div>
         </div>
@@ -84,10 +86,9 @@
                                      subtitleField="Email"
                                      order="Name"
                                      limit="3"
-                                     loadingMessage="Loading..."
-                                     errorMessage="Complete this field"
-                                     required="true"
-                    />
+                                     loadingMessage="{!$Label.c.Loading}"
+                                     errorMessage="{!$Label.c.FieldError}"
+                                     required="true"/>
 
                     <hr class="slds-m-top_large slds-m-bottom_medium"/>
 
@@ -96,7 +97,7 @@
                             <aura:if isTrue="{!v.showAddUserModal}">
                                 <!-- Resets lightning:input error states when closed -->
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.FirstName)}"
+                                                value="{!if(empty(v.formData.user), '', v.formData.user.firstName)}"
                                                 type="text"
                                                 label="{!$Label.c.FirstName}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -106,7 +107,7 @@
                                 />
 
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.LastName)}"
+                                                value="{!if(empty(v.formData.user), '', v.formData.user.lastName)}"
                                                 type="text"
                                                 label="{!$Label.c.LastName}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -116,7 +117,7 @@
                                 />
 
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.Email)}"
+                                                value="{!if(empty(v.formData.user), '', v.formData.user.email)}"
                                                 type="email"
                                                 label="{!$Label.c.EmailAddress}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -127,7 +128,7 @@
 
                                 <div class="slds-form-element slds-col slds-size_1-of-2 slds-grow-none">
                                     <div class="slds-form-element__label">&nbsp;</div>
-                                    <c:strike_input aura:id="canManage" type="checkbox"
+                                    <c:strike_input aura:id="canManageAccount" type="checkbox"
                                                     label="{!$Label.c.CanManage}"
                                                     disabled="{!empty(v.formData.user)}"
                                     />
@@ -160,7 +161,7 @@
                             variant="error"
                             showModal="{!v.showRemoveUserModal}"
                             strike_evt_modalCloseButtonClicked="{!c.hideRemoveUserModal}">
-                <p class="slds-text-align_center">{!format($Label.c.RemoveUserConfirm_1, v.formData.user.EmailAddress)}</p>
+                <p class="slds-text-align_center">{!format($Label.c.RemoveUserConfirm_1, v.formData.user.email)}</p>
 
                 <aura:set attribute="footerButtons">
                     <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.hideRemoveUserModal}"/>

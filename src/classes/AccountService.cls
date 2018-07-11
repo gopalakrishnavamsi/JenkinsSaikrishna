@@ -13,12 +13,12 @@ public with sharing class AccountService {
 			if (u == null) return null;
 
 			return new Account.User(
+				u.Id,
 				u.Username__c,
 				u.Email,
 				u.FirstName,
 				u.LastName,
-				u.CanManageAccount__c)
-				.withSourceId(u.Id);
+				u.CanManageAccount__c);
 		}
 
 		public User queryUser(final Id userId) {

@@ -548,22 +548,25 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_stringToUserStatus() {
-		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus(null));
-		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus(''));
-		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus('\t'));
-		System.assertEquals(Account.UserStatus.Unknown, AccountAPI.stringToUserStatus('blah'));
-		System.assertEquals(Account.UserStatus.Active, AccountAPI.stringToUserStatus('active'));
-		System.assertEquals(Account.UserStatus.Closed, AccountAPI.stringToUserStatus('Closed'));
-		System.assertEquals(Account.UserStatus.PendingActivation, AccountAPI.stringToUserStatus('activationSENT'));
+		System.assertEquals(Account.USER_STATUS_UNKNOWN, AccountAPI.stringToUserStatus(null));
+		System.assertEquals(Account.USER_STATUS_UNKNOWN, AccountAPI.stringToUserStatus(''));
+		System.assertEquals(Account.USER_STATUS_UNKNOWN, AccountAPI.stringToUserStatus('\t'));
+		System.assertEquals(Account.USER_STATUS_UNKNOWN, AccountAPI.stringToUserStatus('blah'));
+		System.assertEquals(Account.USER_STATUS_ACTIVE, AccountAPI.stringToUserStatus('active'));
+		System.assertEquals(Account.USER_STATUS_CLOSED, AccountAPI.stringToUserStatus('Closed'));
+		System.assertEquals(Account.USER_STATUS_PENDING_ACTIVATION, AccountAPI.stringToUserStatus('activationSENT'));
+		System.assertEquals(Account.USER_STATUS_PENDING_ACTIVATION, AccountAPI.stringToUserStatus('activationRequired'));
+		System.assertEquals(Account.USER_STATUS_DISABLED, AccountAPI.stringToUserStatus('DISABLED'));
 	}
 
 	@IsTest
 	static void test_userStatusToString() {
 		System.assertEquals(null, AccountAPI.userStatusToString(null));
-		System.assertEquals(null, AccountAPI.userStatusToString(Account.UserStatus.Unknown));
-		System.assertEquals('active', AccountAPI.userStatusToString(Account.UserStatus.Active));
-		System.assertEquals('closed', AccountAPI.userStatusToString(Account.UserStatus.Closed));
-		System.assertEquals('activationSent', AccountAPI.userStatusToString(Account.UserStatus.PendingActivation));
+		System.assertEquals(null, AccountAPI.userStatusToString(Account.USER_STATUS_UNKNOWN));
+		System.assertEquals('active', AccountAPI.userStatusToString(Account.USER_STATUS_ACTIVE));
+		System.assertEquals('closed', AccountAPI.userStatusToString(Account.USER_STATUS_CLOSED));
+		System.assertEquals('activationSent', AccountAPI.userStatusToString(Account.USER_STATUS_PENDING_ACTIVATION));
+		System.assertEquals('disabled', AccountAPI.userStatusToString(Account.USER_STATUS_DISABLED));
 	}
 
 	@IsTest
@@ -616,16 +619,16 @@ private class AccountAPITest {
 
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null);
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null);
+			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null, false);
+			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null, true);
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> users = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
-					Account.UserStatus.Active, true, true, u1.Id, null),
+					Account.USER_STATUS_ACTIVE, u1.CanManageAccount__c, true, u1.Id, null),
 				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
-					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
+					Account.USER_STATUS_PENDING_ACTIVATION, u2.CanManageAccount__c, true, u2.Id, null)
 			});
 			Test.stopTest();
 
@@ -641,8 +644,8 @@ private class AccountAPITest {
 			System.assertEquals('One', users[0].lastName);
 			System.assertEquals('pw1', users[0].apiPassword);
 			System.assertEquals(u1.Id, users[0].sourceId);
-			System.assertEquals(Account.UserStatus.Active, users[0].status);
-			System.assert(users[0].canManageAccount);
+			System.assertEquals(Account.USER_STATUS_ACTIVE, users[0].status);
+			System.assert(!users[0].canManageAccount);
 			System.assert(users[0].canSendEnvelope);
 
 			System.assertNotEquals(null, users[1]);
@@ -654,8 +657,8 @@ private class AccountAPITest {
 			System.assertEquals('Two', users[1].lastName);
 			System.assertEquals('pw2', users[1].apiPassword);
 			System.assertEquals(u2.Id, users[1].sourceId);
-			System.assertEquals(Account.UserStatus.PendingActivation, users[1].status);
-			System.assert(!users[1].canManageAccount);
+			System.assertEquals(Account.USER_STATUS_PENDING_ACTIVATION, users[1].status);
+			System.assert(users[1].canManageAccount);
 			System.assert(users[1].canSendEnvelope);
 		}
 	}
@@ -682,7 +685,7 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null, null)
+					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
 
@@ -718,7 +721,7 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null, null)
+					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
 
@@ -745,7 +748,7 @@ private class AccountAPITest {
 			try {
 				client.addUsers(new List<Account.User> {
 					new Account.User(UUID.randomUUID(), '', '', '', '', '',
-						Account.UserStatus.UNKNOWN, true, true, null, null)
+						Account.USER_STATUS_UNKNOWN, true, true, null, null)
 				});
 				throw new AssertException('Expected addUsers to fail');
 			} catch (APIException ex2) {
@@ -769,9 +772,9 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, UserInfo.getUserId(), null),
+					Account.USER_STATUS_ACTIVE, true, true, UserInfo.getUserId(), null),
 				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
-					Account.UserStatus.PendingActivation, false, true, null, null)
+					Account.USER_STATUS_PENDING_ACTIVATION, false, true, null, null)
 			});
 			Test.stopTest();
 
@@ -801,7 +804,7 @@ private class AccountAPITest {
 			try {
 				client.removeUsers(new List<Account.User> {
 					new Account.User(UUID.randomUUID(), '', '', '', '', '',
-						Account.UserStatus.UNKNOWN, true, true, null, null)
+						Account.USER_STATUS_UNKNOWN, true, true, null, null)
 				});
 				throw new AssertException('Expected removeUsers to fail');
 			} catch (APIException ex2) {
@@ -836,7 +839,7 @@ private class AccountAPITest {
 			Test.startTest();
 			List<Account.User> users = client.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
-					Account.UserStatus.Active, true, true, null, null)
+					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
 

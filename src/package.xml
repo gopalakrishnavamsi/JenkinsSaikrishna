@@ -391,6 +391,13 @@
         <members>Production</members>
         <members>Demo</members>
         <members>Other</members>
+        <members>Loading</members>
+        <members>NothingToRemove</members>
+        <members>PendingActivation</members>
+        <members>Active</members>
+        <members>Closed</members>
+        <members>UserNotFound</members>
+        <members>Disabled</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -705,6 +712,7 @@
     <types>
         <members>Logo</members>
         <members>SetupImages</members>
+        <members>UtilJS</members>
         <name>StaticResource</name>
     </types>
     <types>

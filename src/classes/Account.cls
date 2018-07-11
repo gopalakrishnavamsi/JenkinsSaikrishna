@@ -277,18 +277,25 @@ public class Account {
 	}
 
 	/**
-	 * Possible user statuses:
-	 * <ul>
-	 *     <li><code>Unknown</code>: Could not determine current status.</li>
-	 *     <li><code>PendingActivation</code>: User must activate membership via email.</li>
-	 *     <li><code>Active</code>: User is active within the account. Users with this status are able to use
-	 *     DocuSign for Salesforce</li>
-	 *     <li><code>Closed</code>: User account membership has been closed.</li>
-	 * </ul>
+	 * Unknown user status.
 	 */
-	public enum UserStatus {
-		Unknown, PendingActivation, Active, Closed
-	}
+	public static final String USER_STATUS_UNKNOWN = Label.Unknown;
+	/**
+	 * User must respond to activation email.
+	 */
+	public static final String USER_STATUS_PENDING_ACTIVATION = Label.PendingActivation;
+	/**
+	 * User is an active member of the account.
+	 */
+	public static final String USER_STATUS_ACTIVE = Label.Active;
+	/**
+	 * The user account membership has been closed.
+	 */
+	public static final String USER_STATUS_CLOSED = Label.Closed;
+	/**
+	 * The user account membership has been disabled.
+	 */
+	public static final String USER_STATUS_DISABLED = Label.Disabled;
 
 	/**
 	 * Representation of a DocuSign account user or member.
@@ -335,8 +342,7 @@ public class Account {
 		/**
 		 * The user status.
 		 */
-		@AuraEnabled
-		public UserStatus status { get; private set; }
+		public String status { get; private set; }
 		/**
 		 * Whether or not the user is a DocuSign account administrator.
 		 */
@@ -372,23 +378,35 @@ public class Account {
 		 * @param id The DocuSign user ID.
 		 */
 		public User(final UUID id) {
-			this(id, null, null, null, null, null, UserStatus.Unknown, false, true, null, APIError.none);
+			this(id, null, null, null, null, null, USER_STATUS_UNKNOWN, false, true, null, APIError.none);
+		}
+
+		/**
+		 * Constructs a DocuSign user from a source ID and username.
+		 *
+		 * @param sourceId The ID of the Salesforce User.
+		 * @param username The DocuSign username.
+		 */
+		public User(final Id sourceId, final String username) {
+			this(UUID.tryParse(username), username, null, null, null, null, USER_STATUS_UNKNOWN, false, false, sourceId,
+				APIError.none);
 		}
 
 		/**
 		 * Constructs a DocuSign user.
 		 *
+		 * @param sourceId The Salesforce User ID.
 		 * @param username The username.
 		 * @param email The user's email.
 		 * @param firstName The user's first name.
 		 * @param lastName The user's last name.
 		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
 		 */
-		public User(final String username, final String email, final String firstName, final String lastName,
-			final Boolean canManageAccount) {
+		public User(final Id sourceId, final String username, final String email, final String firstName,
+			final String lastName, final Boolean canManageAccount) {
 
-			this(null, username, email, firstName, lastName, null, UserStatus.Unknown, canManageAccount,
-				true, null, APIError.none);
+			this(null, username, email, firstName, lastName, null, USER_STATUS_UNKNOWN, canManageAccount,
+				true, sourceId, APIError.none);
 		}
 
 		/**
@@ -407,7 +425,7 @@ public class Account {
 		 * @param error The error returned by the API for bulk add or remove account member operations.
 		 */
 		public User(final UUID id, final String username, final String email, final String firstName, final String lastName,
-			final String apiPassword, final UserStatus status, final Boolean canManageAccount,
+			final String apiPassword, final String status, final Boolean canManageAccount,
 			final Boolean canSendEnvelope, final Id sourceId, final APIError error) {
 
 			this.id = id;

@@ -1078,4 +1078,32 @@
 		<label>Other</label>
 		<name>Other</name>
 	</customLabels>
+	<customLabels>
+		<label>Loading...</label>
+		<name>Loading</name>
+	</customLabels>
+	<customLabels>
+		<label>Nothing to remove</label>
+		<name>NothingToRemove</name>
+	</customLabels>
+	<customLabels>
+		<label>Pending Activation</label>
+		<name>PendingActivation</name>
+	</customLabels>
+	<customLabels>
+		<label>Active</label>
+		<name>Active</name>
+	</customLabels>
+	<customLabels>
+		<label>Closed</label>
+		<name>Closed</name>
+	</customLabels>
+	<customLabels>
+		<label>User not found</label>
+		<name>UserNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Disabled</label>
+		<name>Disabled</name>
+	</customLabels>
 </Translations>

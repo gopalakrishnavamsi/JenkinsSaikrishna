@@ -111,7 +111,6 @@ public with sharing class strike_lookupController {
                 }
             }
         } else {
-            System.debug('THESE: ' + results);
             for(List<SObject> objectList : results) {
                 for(SObject obj : objectList) {
                     String sObjType = obj.Id.getSObjectType().getDescribe().getName();

@@ -536,27 +536,32 @@ public with sharing class AccountAPI extends DocuSignAPI {
 
 	// Serialization objects for getUser
 	@TestVisible
-	private static Account.UserStatus stringToUserStatus(final String s) {
+	private static String stringToUserStatus(final String s) {
 		if (s == 'Active') {
-			return Account.UserStatus.Active;
+			return Account.USER_STATUS_ACTIVE;
 		} else if (s == 'Closed') {
-			return Account.UserStatus.Closed;
-		} else if (s == 'ActivationSent') {
-			return Account.UserStatus.PendingActivation;
+			return Account.USER_STATUS_CLOSED;
+		} else if (s == 'ActivationSent' || s == 'ActivationRequired') {
+			return Account.USER_STATUS_PENDING_ACTIVATION;
+		} else if (s == 'Disabled') {
+			return Account.USER_STATUS_DISABLED;
 		} else {
-			return Account.UserStatus.Unknown;
+			return Account.USER_STATUS_UNKNOWN;
 		}
 	}
 
 	@TestVisible
-	private static String userStatusToString(final Account.UserStatus status) {
-		if (status == null || status == Account.UserStatus.Unknown) {
-			return null;
-		} else if (status == Account.UserStatus.PendingActivation) {
+	private static String userStatusToString(final String status) {
+		if (status == Account.USER_STATUS_PENDING_ACTIVATION) {
 			return 'activationSent';
-		} else {
-			return status.name().uncapitalize();
+		} else if (status == Account.USER_STATUS_ACTIVE) {
+			return 'active';
+		} else if (status == Account.USER_STATUS_CLOSED) {
+			return 'closed';
+		} else if (status == Account.USER_STATUS_DISABLED) {
+			return 'disabled';
 		}
+		return null;
 	}
 
 	private class APIUser {
@@ -611,15 +616,16 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			return e;
 		}
 
-		public Account.User toExternalForm(final Id sourceId) {
-			Boolean canManageAccount = false;
-			Boolean canSendEnvelope = true;
+		public Account.User toExternalForm(final Id sourceId, final Boolean canManageAccount) {
+
+			Boolean isAdmin = canManageAccount;
+			Boolean isSender = true;
 			if (this.userSettings != null) {
 				for (Setting s : this.userSettings) {
 					if (s.name == 'canManageAccount') {
-						canManageAccount = StringUtils.parseBoolean(s.value);
+						isAdmin = StringUtils.parseBoolean(s.value);
 					} else if (s.name == 'canSendEnvelope') {
-						canSendEnvelope = StringUtils.parseBoolean(s.value);
+						isSender = StringUtils.parseBoolean(s.value);
 					}
 				}
 			}
@@ -631,8 +637,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				this.lastName,
 				this.apiPassword,
 				stringToUserStatus(this.userStatus),
-				canManageAccount,
-				canSendEnvelope,
+				isAdmin,
+				isSender,
 				sourceId,
 				errorExternalForm());
 		}
@@ -659,7 +665,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			if (this.newUsers != null) {
 				for (AccountAPI.APIUser u : this.newUsers) {
 					Account.User original = emailToUsers.get(u.email);
-					result.add(u.toExternalForm(original == null ? null : original.sourceId));
+					result.add(u.toExternalForm(original == null ? null : original == null ? null : original.sourceId,
+						original == null ? false : original.canManageAccount));
 				}
 			}
 			return result;
@@ -707,7 +714,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			if (this.users != null) {
 				for (AccountAPI.APIUser u : this.users) {
 					Account.User original = emailToUsers.get(u.email);
-					result.add(u.toExternalForm(original == null ? null : original.sourceId));
+					result.add(u.toExternalForm(original == null ? null : original == null ? null : original.sourceId,
+						original == null ? false : original.canManageAccount));
 				}
 			}
 			return result;

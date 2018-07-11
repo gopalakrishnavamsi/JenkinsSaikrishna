@@ -776,8 +776,8 @@ private class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
-				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
-				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
 			});
 			Test.stopTest();
 
@@ -812,8 +812,8 @@ private class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
-				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
-				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
 			});
 			Test.stopTest();
 
@@ -852,9 +852,9 @@ private class AccountServiceTest {
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
-					Account.UserStatus.Active, true, true, u1.Id, null),
+					Account.USER_STATUS_ACTIVE, true, true, u1.Id, null),
 				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
-					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
+					Account.USER_STATUS_PENDING_ACTIVATION, false, true, u2.Id, null)
 			});
 			Test.stopTest();
 
@@ -883,8 +883,8 @@ private class AccountServiceTest {
 			Test.startTest();
 			try {
 				AccountService.removeUsers(new List<Account.User> {
-					new Account.User('u1', 'u1@unit.test', 'User', 'One', true).withSourceId(u1.Id),
-					new Account.User('u2', 'u2@unit.test', 'User', 'Two', false).withSourceId(UserInfo.getUserId())
+					new Account.User(u1.Id, 'u1', 'u1@unit.test', 'User', 'One', true),
+					new Account.User(UserInfo.getUserId(), 'u2', 'u2@unit.test', 'User', 'Two', false)
 				}, true);
 				throw new AssertException('Expected removeUsers to fail');
 			} catch (DocuSignException ex) {
@@ -915,8 +915,8 @@ private class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
-				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
-				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
 			}, true);
 			Test.stopTest();
 
@@ -962,8 +962,8 @@ private class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
-				new Account.User(u1Email, u1Email, 'User', 'One', true).withSourceId(u1.Id),
-				new Account.User(u2Email, u2Email, 'User', 'Two', false).withSourceId(u2.Id)
+				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
 			}, true);
 			Test.stopTest();
 
@@ -1013,9 +1013,9 @@ private class AccountServiceTest {
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
 				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
-					Account.UserStatus.Active, true, true, u1.Id, null),
+					Account.USER_STATUS_ACTIVE, true, true, u1.Id, null),
 				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
-					Account.UserStatus.PendingActivation, false, true, u2.Id, null)
+					Account.USER_STATUS_PENDING_ACTIVATION, false, true, u2.Id, null)
 			}, true);
 			Test.stopTest();
 

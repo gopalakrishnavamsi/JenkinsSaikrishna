@@ -4,7 +4,7 @@
     helper.getDocuSignUsers(component, event, helper);
   },
 
-  addUser: function (component, event, helper) {
+  showAddUserModal: function (component, event, helper) {
     component.set('v.showAddUserModal', true);
     window.setTimeout($A.getCallback(function () {
       component.find('lookup').focus();
@@ -86,10 +86,6 @@
     }
   },
 
-  searchTable: function (component, event, helper) {
-    helper.searchTable(component, event, helper);
-  },
-
   handleUsersChange: function (component, event, helper) {
     helper.buildUsersTable(component, event, helper);
   },
@@ -98,8 +94,10 @@
     var searched = component.find('searchBy').get('v.value');
     component.set('v.users', component.get('v.docuSignUsers'));
 
-    if (searched) {
-      helper.filterTable(component, event, helper);
+    if ($A.util.isEmpty(component.get('v.dsUserSearchTerm'))) {
+      helper.resetUsersTable(component, event, helper);
+    } else if (searched) {
+      helper.searchTable(component, event, helper);
     }
   }
 });

@@ -79,9 +79,13 @@ public with sharing class SetupController {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> addUsers(final List<Account.User> users) {
+	public static List<Account.User> addUser(final Id sourceId, final String email, final String firstName,
+		final String lastName, final Boolean canManageAccount) {
+
 		try {
-			return AccountService.addUsers(users);
+			return AccountService.addUsers(new List<Account.User> {
+				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
+			});
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to add DocuSign account users.');
 			throw new AuraHandledException(ex.getMessage());
@@ -89,9 +93,11 @@ public with sharing class SetupController {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> removeUsers(final List<Account.User> users, final Boolean closeMembership) {
+	public static List<Account.User> removeUser(final Id sourceId, final String username) {
 		try {
-			return AccountService.removeUsers(users, closeMembership);
+			return AccountService.removeUsers(new List<Account.User> {
+				new Account.User(sourceId, username)
+			}, true);
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to remove DocuSign account users.');
 			throw new AuraHandledException(ex.getMessage());
@@ -99,7 +105,7 @@ public with sharing class SetupController {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> getDocuSignUsers() {
+	public static List<Account.User> getUsers() {
 		try {
 			return AccountService.getUsers();
 		} catch (Exception ex) {
@@ -110,11 +116,11 @@ public with sharing class SetupController {
 
 	// TODO: Why do we need this method? Remove if possible.
 	@AuraEnabled
-	public static User getUser(String userId) {
+	public static User getUser(final Id userId) {
 		try {
-			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> { 'Id', 'Email' });
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> { 'Id', 'Email', 'FirstName', 'LastName' });
 
-			return [SELECT Id, Email FROM User WHERE Id = :userId LIMIT 1];
+			return [SELECT Id, Email, FirstName, LastName FROM User WHERE Id = :userId LIMIT 1];
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to read user.');
 			throw new AuraHandledException(ex.getMessage());

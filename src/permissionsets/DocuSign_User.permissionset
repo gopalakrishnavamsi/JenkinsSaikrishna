@@ -12,6 +12,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>false</editable>
+		<field>User.CanManageAccount__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
 		<field>EnvelopeLocalization__c.Language__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

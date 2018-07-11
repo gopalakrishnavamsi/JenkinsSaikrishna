@@ -504,6 +504,11 @@
         <field>User.Username__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>User.CanManageAccount__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
     <hasActivationRequired>false</hasActivationRequired>
     <label>DocuSign Administrator</label>
     <objectPermissions>

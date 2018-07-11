@@ -1,37 +1,35 @@
 ({
-  format: function(s) {
-    if (s) {
-      var outerArguments = arguments;
-      return s.replace(/\{(\d+)\}/g, function () {
-        return outerArguments[parseInt(arguments[1]) + 1];
-      });
-    }
-    return '';
-  },
-
-  setError: function (component, response) {
+  getError: function (component, response) {
+    var message = '';
     if (component && response) {
       var errors = response.getError();
-      var errMsg = errors;
+      message = errors;
       if (!$A.util.isEmpty(errors)) {
-        errMsg = errors[0].message;
+        message = errors[0].message;
       }
-      console.error(errMsg);
-      component.set('v.message', errMsg);
+    }
+    return message;
+  },
+
+  setError: function (component, message) {
+    if (component && message) {
+      console.error(message);
+      component.set('v.message', message);
       component.set('v.mode', 'error');
       component.set('v.showToast', true);
+      component.set('v.tableLoading', false);
       component.set('v.modalLoading', false);
     }
   },
 
   getDocuSignUsers: function (component, event, helper) {
-    var getDocuSignUsers = component.get('c.getDocuSignUsers');
+    var getDocuSignUsers = component.get('c.getUsers');
     getDocuSignUsers.setCallback(this, function (response) {
       var status = response.getState();
       if (status === "SUCCESS") {
         component.set('v.docuSignUsers', response.getReturnValue());
       } else {
-        helper.setError(component, response);
+        helper.setError(component, helper.getError(component, response));
       }
     });
     $A.enqueueAction(getDocuSignUsers);
@@ -47,36 +45,41 @@
       }
     };
 
+    var currentUserId = $A.get("$SObjectType.CurrentUser.Id");
     docuSignUsers.forEach(function (user, index) {
-      var removeButton = {
-        'type': 'lightning:buttonIcon', 'attributes': {
-          'value': index,
-          'iconName': 'utility:close',
-          'onclick': component.getReference('c.showRemoveUser'),
-          'size': 'medium',
-          'variant': 'bare',
-          'class': 'ds-remove'
-        }
-      };
-      var row = {
-        SalesforceUser: user.Name,
-        EmailAddress: user.Email,
-        Admin: user.CanManageUsers__c === 'true' ? checkIcon : null,
-        Remove: removeButton,
-        Id: user.Id
-      };
-      userRows.push(row);
+      // CurrentUser.Id uses 15-character Id and API returns 18-character version. T.I.S.
+      var allowRemove = user.sourceId.indexOf(currentUserId) !== 0;
+      userRows.push({
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        name: user.name,
+        email: user.email,
+        admin: !!user.canManageAccount ? checkIcon : null,
+        remove: {
+          'type': 'lightning:buttonIcon', 'attributes': {
+            'value': index,
+            'iconName': 'utility:close',
+            'onclick': allowRemove ? component.getReference('c.showRemoveUser') : null,
+            'size': 'medium',
+            'variant': 'bare',
+            'class': allowRemove ? 'ds-remove' : 'ds-remove-disabled'
+          }
+        },
+        sourceId: user.sourceId
+      });
     });
 
     var data = {
       'columns': [{
-        'sortable': true, 'label': $A.get('$Label.c.SalesforceUser'), 'dataType': 'STRING', 'name': 'SalesforceUser'
+        'sortable': true, 'label': $A.get('$Label.c.SalesforceUser'), 'dataType': 'STRING', 'name': 'name'
       }, {
-        'sortable': true, 'label': $A.get('$Label.c.EmailAddress'), 'dataType': 'STRING', 'name': 'EmailAddress'
+        'sortable': true, 'label': $A.get('$Label.c.EmailAddress'), 'dataType': 'STRING', 'name': 'email'
       }, {
-        'sortable': true, 'label': $A.get('$Label.c.Admin'), 'dataType': 'COMPONENT', 'name': 'Admin'
+        'sortable': true, 'label': $A.get('$Label.c.Admin'), 'dataType': 'COMPONENT', 'name': 'admin'
       }, {
-        'sortable': false, 'label': $A.get('$Label.c.Remove'), 'dataType': 'COMPONENT', 'name': 'Remove'
+        'sortable': false, 'label': $A.get('$Label.c.Remove'), 'dataType': 'COMPONENT', 'name': 'remove'
       }], 'rows': userRows
     };
 
@@ -98,24 +101,32 @@
       var status = response.getState();
       if (status === "SUCCESS") {
         var user = response.getReturnValue();
-        var userMatches = docuSignUsers.filter(function (u) {
-          return u.Id.match(user.Id);
-        });
-        if ($A.util.isEmpty(userMatches)) {
-          component.set('v.lookupError', false);
-          component.find('primaryFooterButton').set('v.disabled', false);
-          component.set('v.formData', results);
-          component.set('v.modalLoading', false);
+        if ($A.util.isEmpty(user)) {
+          helper.setError(component, $A.get('$Label.c.UserNotFound'));
         } else {
-          component.set('v.lookupError', true);
-          component.find('primaryFooterButton').set('v.disabled', true);
-          component.find('lookup').set('v.error', true);
-          component.find('lookup').set('v.errorMessage', helper.format($A.get('$Label.c.AlreadyMember_1'), user.Email));
-          component.set('v.formData', {});
-          component.set('v.modalLoading', false);
+          var userMatches = docuSignUsers.filter(function (u) {
+            return u.sourceId.indexOf(user.Id) === 0;
+          });
+          if ($A.util.isEmpty(userMatches)) {
+            component.set('v.lookupError', false);
+            component.find('primaryFooterButton').set('v.disabled', false);
+            component.set('v.formData', {
+              user: {
+                email: user.Email, firstName: user.FirstName, lastName: user.LastName, sourceId: user.Id
+              }
+            });
+            component.set('v.modalLoading', false);
+          } else {
+            component.set('v.lookupError', true);
+            component.find('primaryFooterButton').set('v.disabled', true);
+            component.find('lookup').set('v.error', true);
+            component.find('lookup').set('v.errorMessage', _format($A.get('$Label.c.AlreadyMember_1'), user.Email));
+            component.set('v.formData', {});
+            component.set('v.modalLoading', false);
+          }
         }
       } else {
-        helper.setError(component, response);
+        helper.setError(component, helper.getError(component, response));
       }
     });
     $A.enqueueAction(getUser);
@@ -126,7 +137,7 @@
     var users = component.get('v.docuSignUsers');
 
     var updateUsersTable = users.filter(function (user) {
-      return user.Name.toUpperCase().match(searchBy.toUpperCase());
+      return user.name.toUpperCase().match(searchBy.toUpperCase());
     });
 
     if (!$A.util.isEmpty(updateUsersTable)) {
@@ -137,25 +148,24 @@
   },
 
   createUser: function (component, event, helper) {
-    var addToDocuSign = component.get('c.addUsers');
+    var addUser = component.get('c.addUser');
     var user = component.get('v.formData.user');
-    var canManage = component.find('canManage').get('v.checked');
 
-    addToDocuSign.setParams([{
-      source: user.Id,
-      userName: user.Email,
-      email: user.Email,
-      firstName: user.FirstName,
-      lastName: user.LastName,
-      canManageAccount: !!canManage
-    }]);
+    addUser.setParams({
+      sourceId: user.sourceId,
+      username: user.email,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      canManageAccount: !!component.find('canManageAccount').get('v.checked')
+    });
 
-    addToDocuSign.setCallback(this, function (response) {
+    addUser.setCallback(this, function (response) {
       var status = response.getState();
       if (status === "SUCCESS") {
         var users = response.getReturnValue();
         helper.getDocuSignUsers(component, event, helper);
-        component.set('v.message', helper.format($A.get('$Label.c.MemberAdded_1'), user.Email));
+        component.set('v.message', _format($A.get('$Label.c.MemberAdded_1'), user.email));
         component.set('v.mode', 'success');
         component.set('v.showToast', true);
         component.set('v.showAddUserModal', false);
@@ -167,48 +177,51 @@
           component.set('v.formData', {});
         }), 3000);
       } else {
-        helper.setError(component, response);
+        helper.setError(component, helper.getError(component, response));
       }
     });
-    $A.enqueueAction(addToDocuSign);
+    $A.enqueueAction(addUser);
   },
 
   removeUser: function (component, event, helper) {
     component.set('v.showRemoveUserModal', false);
+    var user = component.get('v.formData.user');
+    if ($A.util.isEmpty(user)) {
+      helper.setError(component, $A.get('$Label.c.NothingToRemove'));
+    } else {
+      setTimeout($A.getCallback(function () {
+        component.set('v.tableLoading', true);
+        var removeFromDocuSign = component.get('c.removeUser');
 
-    setTimeout($A.getCallback(function () {
-      component.set('v.tableLoading', true);
-      var removeFromDocuSign = component.get('c.removeUsers');
-      var user = component.get('v.formData.user');
-      var params = [{
-        source: user.Id
-      }];
+        removeFromDocuSign.setParams({
+          sourceId: user.sourceId, username: user.username
+        });
 
-      removeFromDocuSign.setParams({
-        userJson: JSON.stringify(params), closeMembership: true
-      });
+        removeFromDocuSign.setCallback(this, function (response) {
+          var status = response.getState();
+          if (status === "SUCCESS") {
+            helper.getDocuSignUsers(component, event, helper);
+            component.set('v.message', _format($A.get('$Label.c.MemberRemoved_1'), user.email));
+            component.set('v.mode', 'success');
+            component.set('v.showToast', true);
 
-      removeFromDocuSign.setCallback(this, function (response) {
-        var status = response.getState();
-        if (status === "SUCCESS") {
-          var users = response.getReturnValue();
-          helper.getDocuSignUsers(component, event, helper);
-          component.set('v.message', helper.format($A.get('$Label.c.MemberRemoved_1'), user.EmailAddress));
-          component.set('v.mode', 'success');
-          component.set('v.showToast', true);
+            setTimeout($A.getCallback(function () {
+              component.set('v.showToast', false);
+              component.set('v.tableLoading', false);
+              component.set('v.showRemoveUserModal', false);
+              component.set('v.lookupValue', null);
+              component.set('v.formData', {});
+            }), 3000);
+          } else {
+            helper.setError(component, helper.getError(component, response));
+          }
+        });
+        $A.enqueueAction(removeFromDocuSign);
+      }), 300);
+    }
+  },
 
-          setTimeout($A.getCallback(function () {
-            component.set('v.showToast', false);
-            component.set('v.tableLoading', false);
-            component.set('v.showRemoveUserModal', false);
-            component.set('v.lookupValue', null);
-            component.set('v.formData', {});
-          }), 3000);
-        } else {
-          helper.setError(component, response);
-        }
-      });
-      $A.enqueueAction(removeFromDocuSign);
-    }), 300);
+  resetUsersTable: function (component, event, helper) {
+    component.set('v.users', component.get('v.docuSignUsers'));
   }
 });

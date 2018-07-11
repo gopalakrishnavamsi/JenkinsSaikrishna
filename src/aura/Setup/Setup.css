@@ -1277,6 +1277,11 @@ DocuSign Setup Styles
     fill: t(colorTextError);
 }
 
+.THIS .ds-user-table .ds-remove-disabled .slds-button__icon {
+    color: t(colorTextIconDefaultDisabled);
+    fill: t(colorTextIconDefaultDisabled);
+}
+
 .THIS .ds-login-box {
     min-height: 100px;
 }
