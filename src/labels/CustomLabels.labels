@@ -1464,7 +1464,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Connect DocuSign user</shortDescription>
-		<value>Create users in DocuSign based on the users in this Salesforce org</value>
+		<value>Create users in DocuSign based on the users in this Salesforce organization</value>
 	</labels>
 	<labels>
 		<fullName>ManageUsers</fullName>
@@ -1848,7 +1848,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Multiple_Accounts_Message</shortDescription>
-		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce org.</value>
+		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce organization.</value>
 	</labels>
 	<labels>
 		<fullName>LogInToExisting</fullName>
@@ -2024,7 +2024,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Connect DocuSign</shortDescription>
-		<value>Connect DocuSign to your Salesforce org by logging in to your account or starting a trial.</value>
+		<value>Connect DocuSign to your Salesforce organization by logging in to your account or starting a trial.</value>
 	</labels>
 	<labels>
 		<fullName>EnableSalesforceUsers</fullName>
@@ -2177,5 +2177,53 @@
 		<protected>true</protected>
 		<shortDescription>Disabled</shortDescription>
 		<value>Disabled</value>
+	</labels>
+	<labels>
+		<fullName>Upload</fullName>
+		<categories>Files</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upload</shortDescription>
+		<value>Upload</value>
+	</labels>
+	<labels>
+		<fullName>UploadFile</fullName>
+		<categories>Files</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upload file</shortDescription>
+		<value>Upload File</value>
+	</labels>
+	<labels>
+		<fullName>UploadSuccessful</fullName>
+		<categories>Files</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Upload successful</shortDescription>
+		<value>File was uploaded successfully</value>
+	</labels>
+	<labels>
+		<fullName>FileSizeLimit</fullName>
+		<categories>Files</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>File size limit</shortDescription>
+		<value>File size limit is 4MB.</value>
+	</labels>
+	<labels>
+		<fullName>FileSizeLimitReached</fullName>
+		<categories>Files</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>File size limit reached</shortDescription>
+		<value>This file exceeds the maximum size limit</value>
+	</labels>
+	<labels>
+		<fullName>SomethingWrong</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Something went wrong</shortDescription>
+		<value>Something went wrong. Please try again.</value>
 	</labels>
 </CustomLabels>

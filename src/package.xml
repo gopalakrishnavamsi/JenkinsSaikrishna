@@ -115,6 +115,8 @@
         <members>strike_lookupControllerTest</members>
         <members>strike_responseData</members>
         <members>strike_utilities</members>
+        <members>FileController</members>
+        <members>FileControllerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -398,6 +400,12 @@
         <members>Closed</members>
         <members>UserNotFound</members>
         <members>Disabled</members>
+        <members>Upload</members>
+        <members>UploadFile</members>
+        <members>UploadSuccessful</members>
+        <members>FileSizeLimit</members>
+        <members>FileSizeLimitReached</members>
+        <members>SomethingWrong</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -659,7 +667,8 @@
     </types>
     <types>
         <members>Setup</members>
-        <members>SetupWizard</members>
+        <members>SetupSplash</members>
+        <members>FileUploader</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -707,6 +716,8 @@
         <members>Toast</members>
         <members>SetupAccount</members>
         <members>LightningOutApp</members>
+        <members>Sending</members>
+        <members>FileUploader</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
