@@ -18,7 +18,7 @@
         var index = '{!JSENCODE($CurrentPage.Parameters.index)}';
 
         // SEND MESSAGE TO LIGHTNING COMPONENT
-        var vfUrl = '{!JSENCODE(serverUrl)}';
+        var vfUrl = '{!JSENCODE(baseUrl)}';
         var instance = '{!JSENCODE(instanceName)}';
         var namespace = '{!JSENCODE(namespace)}';
         var lexOrigin = vfUrl.split('--')[0] + '--' + namespace + '.' + instance + '.visual.force.com';

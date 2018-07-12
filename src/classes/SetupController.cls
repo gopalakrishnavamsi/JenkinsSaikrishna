@@ -1,4 +1,4 @@
-public with sharing class SetupController {
+public with sharing class SetupController extends Controller {
 
 	private static final LoggerService LOG = LoggerService.getInstance();
 

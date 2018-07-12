@@ -117,6 +117,7 @@
         <members>strike_utilities</members>
         <members>FileController</members>
         <members>FileControllerTest</members>
+        <members>Controller</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -406,6 +407,24 @@
         <members>FileSizeLimit</members>
         <members>FileSizeLimitReached</members>
         <members>SomethingWrong</members>
+        <members>Signer</members>
+        <members>InPersonSigner</members>
+        <members>CarbonCopy</members>
+        <members>CertifiedDelivery</members>
+        <members>Agent</members>
+        <members>Editor</members>
+        <members>Intermediary</members>
+        <members>Type</members>
+        <members>AccessAuthentication</members>
+        <members>PrivateMessage</members>
+        <members>CustomEmailSubject</members>
+        <members>CustomEmailMessage</members>
+        <members>Language</members>
+        <members>Subject</members>
+        <members>Message</members>
+        <members>Done</members>
+        <members>AccessCode</members>
+        <members>Value</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -718,6 +737,7 @@
         <members>LightningOutApp</members>
         <members>Sending</members>
         <members>FileUploader</members>
+        <members>Recipient</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

@@ -8,9 +8,21 @@ public with sharing class Salesforce {
 	private static final Boolean ARE_WORK_ORDERS_ENABLED;
 	private static final Boolean IS_COMMUNITY_SITE;
 	private static final Boolean CAN_USE_API;
-	public static final String BASE_Url;
+	public static final Url BASE_URL;
+	public static final String INSTANCE_NAME;
 	public static final Double API_VERSION = 43.0;
 	public static final String MAGIC_PARAMETER = 'isdtp';
+
+	public static Url baseUrl {
+		get {
+			return BASE_URL;
+		}
+	}
+	public static String instanceName {
+		get {
+			return INSTANCE_NAME;
+		}
+	}
 	public static Boolean isChatterEnabled {
 		get {
 			return IS_CHATTER_ENABLED;
@@ -49,7 +61,8 @@ public with sharing class Salesforce {
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
-		BASE_Url = String.isNotBlank(siteBaseUrl) ? siteBaseUrl : Url.getSalesforceBaseUrl().toExternalForm();
+		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getSalesforceBaseUrl();
+		INSTANCE_NAME = [SELECT InstanceName FROM Organization LIMIT 1].InstanceName;
 		GLOBAL_DESCRIBE = Schema.getGlobalDescribe();
 		ARE_CONTRACTS_ENABLED = GLOBAL_DESCRIBE.containsKey('Contract');
 		ARE_QUOTES_ENABLED = GLOBAL_DESCRIBE.containsKey('QuoteDocument');

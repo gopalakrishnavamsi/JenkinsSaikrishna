@@ -1,21 +1,5 @@
-public with sharing class FileController {
+public with sharing class FileController extends Controller {
 
-	public String namespace {
-		get {
-			return Application.lightningNamespace;
-		}
-	}
-	// TODO: Move these to Salesforce.cls
-	public String serverUrl {
-		get {
-			return System.Url.getSalesforceBaseUrl().toExternalForm();
-		}
-	}
-	public String instanceName {
-		get {
-			return [SELECT Id, InstanceName FROM Organization LIMIT 1].InstanceName;
-		}
-	}
 	public Boolean uploadFinished { get; set; }
 	public Id contentDocumentId { get; set; }
 	public String contentDocumentTitle { get; set; }

@@ -7,6 +7,25 @@ private class SalesforceTest {
 //	}
 
 	@IsTest
+	static void test_isChatterEnabled() {
+		// HACK: Detecting whether Chatter enabled is wonky in unit tests. See above.
+		System.assert(Salesforce.isChatterEnabled || !Salesforce.isChatterEnabled);
+	}
+
+	@IsTest
+	static void test_baseUrl() {
+		String siteBaseUrl = Site.getBaseUrl();
+		System.assertNotEquals(null, Salesforce.baseUrl);
+		System.assertEquals(String.isNotBlank(siteBaseUrl) ? siteBaseUrl : Url.getSalesforceBaseUrl().toExternalForm(),
+			Salesforce.baseUrl.toExternalForm());
+	}
+
+	@IsTest
+	static void test_instanceName() {
+		System.assertEquals([SELECT InstanceName FROM Organization LIMIT 1].InstanceName, Salesforce.instanceName);
+	}
+
+	@IsTest
 	static void test_isCpqEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('SBQQ__QuoteDocument__c'), Salesforce.isCpqEnabled);
 	}

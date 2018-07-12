@@ -1,0 +1,180 @@
+.THIS {
+    position: relative;
+}
+
+.THIS.ds-quick-action-modal {
+    margin: -1rem -2rem;
+    height: 600px; /* Configure the action to be 600px as well */
+    max-height: calc(100vh - 96px);
+    display: flex;
+    flex-direction: column;
+}
+
+.THIS.ds-visualforce {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.THIS.ds-quick-action-modal .ds-modal__header,
+.THIS.ds-quick-action-modal .ds-modal__footer,
+.THIS.ds-visualforce .ds-visualforce__footer {
+    flex: 0 0 auto;
+}
+
+.THIS.ds-visualforce .ds-visualforce__footer {
+    background-color: #fafaf9;
+    border-top: 1px solid t(colorBorder);
+}
+
+.THIS.ds-quick-action-modal .ds-modal__content,
+.THIS.ds-visualforce .ds-visualforce__body {
+    flex: 1 1 300px;
+}
+
+.THIS.ds-visualforce .ds-visualforce__body {
+    flex-basis: 100vh;
+}
+
+.THIS.ds-visualforce .ds-visualforce__header,
+.THIS.ds-visualforce .ds-visualforce__footer {
+    z-index: 11;
+}
+
+.THIS .ds-no-label .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-form-element__label,
+.THIS .ds-no-label lightning-input .slds-form-element__label {
+    display: none;
+}
+
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox--faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio_faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio--faux {
+    margin: 0;
+}
+
+.THIS .ds-icon-adjustment .slds-icon,
+.THIS .ds-icon-adjustment .slds-button__icon {
+    transform: translateY(-2px);
+}
+
+.THIS .ds-dragged .slds-popover {
+    display: none;
+}
+
+.THIS .slds-section:not(.slds-is-open) .slds-section__content {
+    display: none;
+}
+
+.THIS .slds-section .slds-section__title-action .slds-button__icon {
+    transform: rotate(-90deg);
+}
+
+.THIS .slds-section.slds-is-open .slds-section__title-action .slds-button__icon {
+    transform: none;
+}
+
+.THIS .ds-input_inline,
+.THIS.ds-visualforce .ds-input_inline {
+    display: inline-block;
+    width: 80px;
+}
+
+.THIS .ds-input_inline .slds-input,
+.THIS .ds-input_inline .slds-form-element__control {
+    display: block;
+    width: 100%;
+}
+
+.THIS .ds-input_inline .slds-form-element__label {
+    display: none;
+}
+
+.THIS .ds-file-uploader {
+    position: relative;
+    top: 1px;
+}
+
+.THIS .ds-pointer-events_none {
+    pointer-events: none;
+}
+
+.THIS .ds-remove .slds-button__icon {
+    pointer-events: none;
+    fill: t(colorTextError);
+}
+
+.THIS .ds-files__empty-state {
+    display: none;
+    padding-top: 0;
+}
+
+.THIS .ds-files__empty-state:only-child {
+    display: block;
+}
+
+.THIS .ds-carousel__indicators {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.THIS .ds-routing-order__dropzone {
+    border-color: t(colorBorder);
+    user-select: none;
+    background-color: white;
+}
+
+.THIS .ds-routing-order__dropzone_dragged-over {
+    border-color: t(colorBorderSuccess);
+    background-color: #e5f8ed;
+}
+
+.THIS .ds-routing-order__dropzone_suppress-pointer-events * {
+    pointer-events: none;
+}
+
+.THIS .ds-routing-order__pill {
+    cursor: -webkit-grab;
+    cursor: grab;
+}
+
+.THIS .ds-routing-order__pill:hover {
+    background-color: white;
+}
+
+.THIS .ds-template-roles .ds-template-roles__role + .ds-template-roles__role:before,
+.THIS .ds-recipients .ds-recipients__recipient + .ds-recipients__recipient:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    top: -0.125rem;
+    border-top: 1px solid t(colorBorder);
+}
+
+.THIS .ds-recipients .ds-recipients__recipient:only-child .ds-remove {
+    pointer-events: none;
+}
+.THIS .ds-recipients .ds-recipients__recipient:first-child {
+    margin-top: 0;
+}
+
+.THIS .ds-recipients .ds-recipients__recipient:only-child .ds-remove .slds-button__icon {
+    fill: t(colorTextIconDefaultDisabled);
+}
+
+.THIS .ds-template-roles .ds-template-roles__title + .ds-template-roles__role {
+    border-top: none;
+    margin-top: 0;
+}
+
+.THIS .ds-spinner_visualforce {
+    position: fixed;
+    z-index: 10;
+}
+
+.THIS .slds-textarea {
+    min-height: 116px;
+}

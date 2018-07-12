@@ -65,7 +65,9 @@
 		<name>InvalidSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that you have responded to all activation emails.</label>
+		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that
+			you have responded to all activation emails.
+		</label>
 		<name>MustBeActivated</name>
 	</customLabels>
 	<customLabels>
@@ -439,23 +441,33 @@
 		<name>RecipientMustBeUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
+		<label>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade
+			your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
-		<label>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
+		<label>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		</label>
 		<name>TrialAccountExpiresToday</name>
 	</customLabels>
 	<customLabels>
-		<label>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
+		<label>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		</label>
 		<name>TrialAccountExpiresOneDay</name>
 	</customLabels>
 	<customLabels>
-		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
+		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		</label>
 		<name>TrialAccountExpiresSoon_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</label>
+		<label>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
+			extension unknown to DocuSign.
+		</label>
 		<name>InvalidFileExtension</name>
 	</customLabels>
 	<customLabels>
@@ -579,11 +591,15 @@
 		<name>PlaceholderRecipientMustHaveRole</name>
 	</customLabels>
 	<customLabels>
-		<label>Custom field &apos;{0}&apos; is not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</label>
+		<label>Custom field &apos;{0}&apos; is not configured correctly for your account: a required list field does not
+			have any options. Please contact your DocuSign administrator to correct the custom field.
+		</label>
 		<name>RequiredEmptyList_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column mappings.</label>
+		<label>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column
+			mappings.
+		</label>
 		<name>InvalidRelatedContact</name>
 	</customLabels>
 	<customLabels>
@@ -595,7 +611,9 @@
 		<name>SigningGroupNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</label>
+		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to
+			administer DocuSign for Salesforce.
+		</label>
 		<name>CannotRemoveSelf</name>
 	</customLabels>
 	<customLabels>
@@ -611,7 +629,9 @@
 		<name>AtLeastOneEnvelopeIsRequired</name>
 	</customLabels>
 	<customLabels>
-		<label>All envelopes must be in &apos;sent&apos; or &apos;created&apos; state with a valid DocuSign ID to create associated status records.</label>
+		<label>All envelopes must be in &apos;sent&apos; or &apos;created&apos; state with a valid DocuSign ID to create
+			associated status records.
+		</label>
 		<name>EnvelopesMustBeSent</name>
 	</customLabels>
 	<customLabels>
@@ -807,11 +827,17 @@
 		<name>HavingTrouble</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we're dedicated to customer success. We've created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers to common questions, and display system performance information.</label>
+		<label>At DocuSign, we're dedicated to customer success. We've created a &lt;a href=&quot;https://support.docusign.com/home&quot;
+			target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
+			to common questions, and display system performance information.
+		</label>
 		<name>SupportInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>If you can't find what you're looking for, you can always contact support directly. Please be sure to have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.</label>
+		<label>If you can't find what you're looking for, you can always contact support directly. Please be sure to
+			have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot;
+			target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
+		</label>
 		<name>SupportPrep</name>
 	</customLabels>
 	<customLabels>
@@ -863,11 +889,18 @@
 		<name>NextSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</label>
+		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope
+			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
+			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
+			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
+		</label>
 		<name>HelpSection1</name>
 	</customLabels>
 	<customLabels>
-		<label>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;.</label>
+		<label>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
+			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot;
+			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;.
+		</label>
 		<name>HelpSection2</name>
 	</customLabels>
 	<customLabels>
@@ -903,7 +936,9 @@
 		<name>UpgradeAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</label>
+		<label>You will receive email with instructions on how to activate your account. You will then be able to log in
+			using your credentials.
+		</label>
 		<name>TrialInstructions</name>
 	</customLabels>
 	<customLabels>
@@ -915,7 +950,10 @@
 		<name>TryDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>By clicking the &apos;Get Started&apos; button, you agree to the &lt;a href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot; target=&quot;_blank&quot;&gt;Terms &amp; Conditions&lt;/a&gt; and &lt;a href=&quot;https://www.docusign.com/company/privacy-policy&quot; target=&quot;_blank&quot;&gt;Privacy Policy&lt;/a&gt;.</label>
+		<label>By clicking the &apos;Get Started&apos; button, you agree to the &lt;a href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;
+			target=&quot;_blank&quot;&gt;Terms &amp; Conditions&lt;/a&gt; and &lt;a href=&quot;https://www.docusign.com/company/privacy-policy&quot;
+			target=&quot;_blank&quot;&gt;Privacy Policy&lt;/a&gt;.
+		</label>
 		<name>ClickGetStarted</name>
 	</customLabels>
 	<customLabels>
@@ -939,7 +977,9 @@
 		<name>SelectLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce organization.</label>
+		<label>Multiple accounts are associated with the credentials you provided. Please select the account you would
+			like to connect with your Salesforce organization.
+		</label>
 		<name>MultipleAccountsMessage</name>
 	</customLabels>
 	<customLabels>
@@ -955,7 +995,9 @@
 		<name>AddToDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to this DocuSign integration by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
+		<label>Select which Salesforce users will have access to this DocuSign integration by adding them to the list
+			below. Each new user will automatically be added to the DocuSign account.
+		</label>
 		<name>AddToDocuSignDetails</name>
 	</customLabels>
 	<customLabels>
@@ -1027,7 +1069,8 @@
 		<name>SignInOrStartTrial</name>
 	</customLabels>
 	<customLabels>
-		<label>Connect DocuSign to your Salesforce organization by logging in to your account or starting a trial.</label>
+		<label>Connect DocuSign to your Salesforce organization by logging in to your account or starting a trial.
+		</label>
 		<name>ConnectDocuSign</name>
 	</customLabels>
 	<customLabels>
@@ -1129,5 +1172,77 @@
 	<customLabels>
 		<label>Something went wrong. Please try again.</label>
 		<name>SomethingWrong</name>
+	</customLabels>
+	<customLabels>
+		<label>Needs to Sign</label>
+		<name>Signer</name>
+	</customLabels>
+	<customLabels>
+		<label>In Person Signer</label>
+		<name>InPersonSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Receives a Copy</label>
+		<name>CarbonCopy</name>
+	</customLabels>
+	<customLabels>
+		<label>Needs to View</label>
+		<name>CertifiedDelivery</name>
+	</customLabels>
+	<customLabels>
+		<label>Specify Recipients</label>
+		<name>Agent</name>
+	</customLabels>
+	<customLabels>
+		<label>Allow to Edit</label>
+		<name>Editor</name>
+	</customLabels>
+	<customLabels>
+		<label>Update Recipients</label>
+		<name>Intermediary</name>
+	</customLabels>
+	<customLabels>
+		<label>Type</label>
+		<name>Type</name>
+	</customLabels>
+	<customLabels>
+		<label>Access Authentication</label>
+		<name>AccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Private Message</label>
+		<name>PrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Custom Email Subject</label>
+		<name>CustomEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Custom Email Message</label>
+		<name>CustomEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Language</label>
+		<name>Language</name>
+	</customLabels>
+	<customLabels>
+		<label>Subject</label>
+		<name>Subject</name>
+	</customLabels>
+	<customLabels>
+		<label>Message</label>
+		<name>Message</name>
+	</customLabels>
+	<customLabels>
+		<label>Done</label>
+		<name>Done</name>
+	</customLabels>
+	<customLabels>
+		<label>Access Code</label>
+		<name>AccessCode</name>
+	</customLabels>
+	<customLabels>
+		<label>Value</label>
+		<name>Value</name>
 	</customLabels>
 </Translations>

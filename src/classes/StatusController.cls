@@ -1,4 +1,4 @@
-public class StatusController {
+public class StatusController extends Controller {
 
 	private static final LoggerService LOG = LoggerService.getInstance();
 
