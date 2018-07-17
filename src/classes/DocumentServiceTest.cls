@@ -43,6 +43,7 @@ private class DocumentServiceTest {
 			Name = 'test.pdf',
 			Extension__c = '',
 			Size__c = null,
+			Created__c = Datetime.now(),
 			SourceId__c = '1234');
 		Document__c dsed2 = new Document__c(
 			Envelope__c = dse.Id,
@@ -51,6 +52,7 @@ private class DocumentServiceTest {
 			Name = 'test.pdf',
 			Extension__c = 'docx',
 			Size__c = 1234,
+			Created__c = Datetime.now(),
 			SourceId__c = UUID.randomUUID().toString());
 		List<Document__c> dseds = new List<Document__c> { dsed1, dsed2 };
 		insert dseds;
@@ -67,6 +69,7 @@ private class DocumentServiceTest {
 		System.assertEquals(dsed1.Name, result1.name);
 		System.assertEquals('pdf', result1.extension);
 		System.assertEquals(dsed1.Size__c, Decimal.valueOf(result1.size));
+		System.assertEquals(dsed1.Created__c, result1.created);
 		System.assertEquals(dsed1.SourceId__c, result1.sourceId);
 
 		System.assertNotEquals(null, result2);
@@ -77,6 +80,7 @@ private class DocumentServiceTest {
 		System.assertEquals(dsed1.Name, result2[0].name);
 		System.assertEquals('pdf', result2[0].extension);
 		System.assertEquals(dsed1.Size__c, Decimal.valueOf(result2[0].size));
+		System.assertEquals(dsed1.Created__c, result2[0].created);
 		System.assertEquals(dsed1.SourceId__c, result2[0].sourceId);
 
 		System.assertEquals(dsed2.Id, result2[1].id);
@@ -85,14 +89,15 @@ private class DocumentServiceTest {
 		System.assertEquals(dsed2.Name, result2[1].name);
 		System.assertEquals(dsed2.Extension__c, result2[1].extension);
 		System.assertEquals(dsed2.Size__c, Decimal.valueOf(result2[1].size));
+		System.assertEquals(dsed2.Created__c, result2[1].created);
 		System.assertEquals(dsed2.SourceId__c, result2[1].sourceId);
 	}
 
 	@IsTest
 	static void test_validate() {
-		Document d1 = new Document(null, Document.TYPE_DOCUMENT, 1, 'doc1', 'docx', 1234, '1234');
-		Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'quote', 5678, '5678');
-		Document d3 = new Document(null, Document.TYPE_DOCUMENT, 3, 'doc3', '', 9012, '9012');
+		Document d1 = new Document(null, Document.TYPE_DOCUMENT, 1, 'doc1', 'docx', 1234, Datetime.now(), '1234');
+		Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'quote', 5678, Datetime.now(), '5678');
+		Document d3 = new Document(null, Document.TYPE_DOCUMENT, 3, 'doc3', '', 9012, Datetime.now(), '9012');
 
 		Test.startTest();
 		ValidationResult result1 = DocumentService.validate((Document)null);
@@ -128,7 +133,7 @@ private class DocumentServiceTest {
 		Document__c dsed = TestUtils.createEnvelopeDocument(dse.Id);
 		Document d = new Document(dsed.Id, dsed.Type__c,
 			Integer.valueOf(dsed.Sequence__c), dsed.Name, dsed.Extension__c,
-			Integer.valueOf(dsed.Size__c), dsed.SourceId__c);
+			Integer.valueOf(dsed.Size__c), dsed.Created__c, dsed.SourceId__c);
 
 		Test.startTest();
 		Document__c result = DocumentService.DB.convert(d, dse.Id, 3);
@@ -142,6 +147,7 @@ private class DocumentServiceTest {
 		System.assertEquals(d.name, result.Name);
 		System.assertEquals(d.extension, result.Extension__c);
 		System.assertEquals(d.size, Integer.valueOf(result.Size__c));
+		System.assertEquals(d.created, result.Created__c);
 		System.assertEquals(d.sourceId, result.SourceId__c);
 	}
 
@@ -185,6 +191,7 @@ private class DocumentServiceTest {
 			System.assertEquals(dsed1.Name, result[0].name);
 			System.assertEquals(dsed1.Extension__c, result[0].extension);
 			System.assertEquals(dsed1.Size__c, Decimal.valueOf(result[0].size));
+			System.assertEquals(dsed1.Created__c, result[0].created);
 			System.assertEquals(dsed1.SourceId__c, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -194,6 +201,7 @@ private class DocumentServiceTest {
 			System.assertEquals(dsed2.Name, result[1].name);
 			System.assertEquals(dsed2.Extension__c, result[1].extension);
 			System.assertEquals(dsed2.Size__c, Decimal.valueOf(result[1].size));
+			System.assertEquals(dsed2.Created__c, result[1].created);
 			System.assertEquals(dsed2.SourceId__c, result[1].sourceId);
 		}
 	}
@@ -204,9 +212,10 @@ private class DocumentServiceTest {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
-			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.Id);
+			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.CreatedDate, d.Id);
 			String tId = UUID.randomUUID().toString();
-			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tId);
+			Datetime tCreated = Datetime.now();
+			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tCreated, tId);
 
 			Test.startTest();
 			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
@@ -222,6 +231,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d.Name, result[0].name);
 			System.assertEquals(d.Type, result[0].extension);
 			System.assertEquals(d.BodyLength, result[0].size);
+			System.assertEquals(d.CreatedDate, result[0].created);
 			System.assertEquals(d.Id, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -231,6 +241,7 @@ private class DocumentServiceTest {
 			System.assertEquals('template1', result[1].name);
 			System.assertEquals(null, result[1].extension);
 			System.assertEquals(null, result[1].size);
+			System.assertEquals(tCreated, result[1].created);
 			System.assertEquals(tId, result[1].sourceId);
 		}
 	}
@@ -247,6 +258,7 @@ private class DocumentServiceTest {
 				UUID.randomUUID().toString(),
 				null,
 				null,
+				Datetime.now(),
 				UUID.randomUUID().toString());
 			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
@@ -264,6 +276,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d1.name, result[0].name);
 			System.assertEquals(d1.extension, result[0].extension);
 			System.assertEquals(d1.size, result[0].size);
+			System.assertEquals(d1.created, result[0].created);
 			System.assertEquals(d1.sourceId, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -273,6 +286,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d2.name, result[1].name);
 			System.assertEquals(d2.extension, result[1].extension);
 			System.assertEquals(d2.size, result[1].size);
+			System.assertEquals(d2.created, result[1].created);
 			System.assertEquals(d2.sourceId, result[1].sourceId);
 
 			System.assertNotEquals(null, result[2]);
@@ -282,6 +296,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d3.name, result[2].name);
 			System.assertEquals(d3.extension, result[2].extension);
 			System.assertEquals(d3.size, result[2].size);
+			System.assertEquals(d3.created, result[2].created);
 			System.assertEquals(d3.sourceId, result[2].sourceId);
 		}
 	}
@@ -311,6 +326,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d1.name, result[0].name);
 			System.assertEquals(d1.extension, result[0].extension);
 			System.assertEquals(d1.size, result[0].size);
+			System.assertEquals(d1.created, result[0].created);
 			System.assertEquals(d1.sourceId, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -320,6 +336,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d3.name, result[1].name);
 			System.assertEquals(d3.extension, result[1].extension);
 			System.assertEquals(d3.size, result[1].size);
+			System.assertEquals(d3.created, result[1].created);
 			System.assertEquals(d3.sourceId, result[1].sourceId);
 		}
 	}
@@ -351,6 +368,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d1.name, result1[0].name);
 			System.assertEquals(d1.extension, result1[0].extension);
 			System.assertEquals(d1.size, result1[0].size);
+			System.assertEquals(d1.created, result1[0].created);
 			System.assertEquals(d1.sourceId, result1[0].sourceId);
 
 			System.assertNotEquals(null, result1[1]);
@@ -360,6 +378,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d2.name, result1[1].name);
 			System.assertEquals(d2.extension, result1[1].extension);
 			System.assertEquals(d2.size, result1[1].size);
+			System.assertEquals(d2.created, result1[1].created);
 			System.assertEquals(d2.sourceId, result1[1].sourceId);
 
 			System.assertNotEquals(null, result1[2]);
@@ -369,6 +388,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d3.name, result1[2].name);
 			System.assertEquals(d3.extension, result1[2].extension);
 			System.assertEquals(d3.size, result1[2].size);
+			System.assertEquals(d3.created, result1[2].created);
 			System.assertEquals(d3.sourceId, result1[2].sourceId);
 
 			System.assertNotEquals(null, result2);
@@ -381,6 +401,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d3.name, result2[0].name);
 			System.assertEquals(d3.extension, result2[0].extension);
 			System.assertEquals(d3.size, result2[0].size);
+			System.assertEquals(d3.created, result2[0].created);
 			System.assertEquals(d3.sourceId, result2[0].sourceId);
 
 			System.assertNotEquals(null, result2[1]);
@@ -390,6 +411,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d2.name, result2[1].name);
 			System.assertEquals(d2.extension, result2[1].extension);
 			System.assertEquals(d2.size, result2[1].size);
+			System.assertEquals(d2.created, result2[1].created);
 			System.assertEquals(d2.sourceId, result2[1].sourceId);
 
 			System.assertNotEquals(null, result2[2]);
@@ -399,6 +421,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d1.name, result2[2].name);
 			System.assertEquals(d1.extension, result2[2].extension);
 			System.assertEquals(d1.size, result2[2].size);
+			System.assertEquals(d1.created, result2[2].created);
 			System.assertEquals(d1.sourceId, result2[2].sourceId);
 		}
 	}
@@ -668,8 +691,8 @@ private class DocumentServiceTest {
 
 		System.runAs(u) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = new Document(null, Document.TYPE_TEMPLATE, 1, 'doc1', null, null, UUID.randomUUID().toString());
-			Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'pdf', 1234, UUID.randomUUID().toString());
+			Document d1 = new Document(null, Document.TYPE_TEMPLATE, 1, 'doc1', null, null, Datetime.now(), UUID.randomUUID().toString());
+			Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'pdf', 1234, Datetime.now(), UUID.randomUUID().toString());
 			Exception ex1, ex2;
 
 			Test.startTest();
@@ -800,6 +823,7 @@ private class DocumentServiceTest {
 				UUID.randomUUID().toString(),
 				null,
 				null,
+				Datetime.now(),
 				UUID.randomUUID().toString());
 			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
@@ -820,6 +844,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d1.name, result[0].name);
 			System.assertEquals(d1.extension, result[0].extension);
 			System.assertEquals(d1.size, result[0].size);
+			System.assertEquals(d1.created, result[0].created);
 			System.assertEquals(d1.sourceId, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -829,6 +854,7 @@ private class DocumentServiceTest {
 			System.assertEquals(d2.name, result[1].name);
 			System.assertEquals(d2.extension, result[1].extension);
 			System.assertEquals(d2.size, result[1].size);
+			System.assertEquals(d2.created, result[1].created);
 			System.assertEquals(d2.sourceId, result[1].sourceId);
 		}
 	}

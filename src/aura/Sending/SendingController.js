@@ -1,91 +1,11 @@
 ({
-  init: function (component, event, helper) {
-    var getInitData = component.get('c.getInitData');
-    var getAccount = component.get('c.getDocuSignAccount');
-
-    component.set('v.loading', true);
-    getInitData.setParams({
-      recordId: component.get('v.recordId')
-    });
-
-    getAccount.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-        if ($A.util.isEmpty(errMsg)) {
-          getInitData.setCallback(this, function (response) {
-            var status = response.getState();
-            if (status === "SUCCESS") {
-              var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-              if ($A.util.isEmpty(errMsg)) {
-                var data = JSON.parse(response.getReturnValue()).results.data;
-                component.labels = data.labels;
-                var templates = data.templates;
-                var documents = data.documents;
-                var recipients = data.recipients;
-                var recipientType = data.recipientType;
-                var expirationDate = new Date();
-                expirationDate = expirationDate.setDate(expirationDate.getDate() + component.get('v.expireAfterDays'));
-                documents.forEach(function (document) {
-                  document.checked = false;
-                  document.CreatedDate = new Date(document.CreatedDate).toLocaleString().replace(/,/g, '');
-                  document.ContentSize = helper.formatSize(document.ContentSize, 0);
-                });
-                //make attribute on templates to hold selected value, if empty authentication or email settings make objects to write to
-                templates.forEach(function (template) {
-                  template.selected = false;
-                  template.recipients.forEach(function (recipient) {
-                    if ($A.util.isEmpty(recipient.emailSettings)) {
-                      recipient.emailSettings = {};
-                    }
-                    if ($A.util.isEmpty(recipient.authentication)) {
-                      recipient.authentication = {};
-                    }
-                  });
-                });
-                component.set('v.docuSignTemplates', templates);
-                component.set('v.documents', documents);
-                component.set('v.selectedRecipients', recipients);
-                component.set('v.recipientType', recipientType);
-                component.set('v.expiresOn', expirationDate);
-                component.set('v.loading', false);
-              } else {
-                component.set('v.loading', false);
-                component.set('v.message', errMsg);
-                component.set('v.mode', 'error');
-                component.set('v.showToast', true);
-              }
-            } else {
-              var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-              component.set('v.loading', false);
-              component.set('v.message', errMsg);
-              component.set('v.mode', 'error');
-              component.set('v.showToast', true);
-            }
-          });
-          $A.enqueueAction(getInitData);
-
-          helper.addBlankRecipient(component);
-        } else {
-          component.set('v.loading', false);
-          component.set('v.message', errMsg);
-          component.set('v.mode', 'error');
-          component.set('v.showToast', true);
-        }
-      } else {
-        var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-        component.set('v.loading', false);
-        component.set('v.message', errMsg);
-        component.set('v.mode', 'error');
-        component.set('v.showToast', true);
-      }
-    });
-    $A.enqueueAction(getAccount);
+  initialize: function (component, event, helper) {
+    helper.createEnvelope(component, helper, component.get('v.recordId'));
   },
 
   handleUpload: function (component, event, helper) {
     var labels = component.labels;
-    if (component.get('v.uploadMessage') === labels.Upload_Success) {
+    if (component.get('v.uploadMessage') === $A.get('$Label.c.UploadSuccessful')) {
       helper.handleUploadFinished(component, event, helper);
     }
   },
@@ -111,7 +31,7 @@
     var getEmptyEnvelope = component.get('c.getEmptyEnvelope');
     var sendEnvelope = component.get('c.sendEnvelope');
     var getTaggingUrl = component.get('c.getTaggingUrl');
-    var recipientSettings = component.get('v.recipientSettings');
+    var recipientSettings = component.get('v.recipients');
     var templates = component.get('v.templates');
     var templateIds = [];
     var documents = [];
@@ -178,7 +98,7 @@
 
                 getTaggingUrl.setParams({
                   envelopeId: newEnvelope,
-                  returnUrl: window.location.origin + '/one/one.app#/sObject/' + component.get('v.recordId') + '/view'
+                  returnUrl: window.location.origin + '/' + component.get('v.recordId')
                 });
                 getTaggingUrl.setCallback(this, function (response) {
                   var status = response.getState();
@@ -236,15 +156,15 @@
 
   addTemplate: function (component, event, helper) {
     var templates = component.get('v.templates');
-    var docuSignTemplates = component.get('v.docuSignTemplates');
+    var availableTemplates = component.get('v.availableTemplates');
     var selectedTemplate;
 
     if (templates.length === 0) {
-      selectedTemplate = docuSignTemplates[templates.length];
+      selectedTemplate = availableTemplates[templates.length];
     } else {
-      for (var i = 0; i < docuSignTemplates.length; i++) {
-        if (!docuSignTemplates[i].selected) {
-          selectedTemplate = docuSignTemplates[i];
+      for (var i = 0; i < availableTemplates.length; i++) {
+        if (!availableTemplates[i].selected) {
+          selectedTemplate = availableTemplates[i];
           break;
         }
       }
@@ -258,9 +178,9 @@
   removeTemplate: function (component, event, helper) {
     var targetIndex = event.getSource().get('v.value');
     var templates = component.get('v.templates');
-    var docuSignTemplates = component.get('v.docuSignTemplates');
+    var availableTemplates = component.get('v.availableTemplates');
 
-    docuSignTemplates.forEach(function (template) {
+    availableTemplates.forEach(function (template) {
       if (template.id.value === templates[targetIndex].id.value) {
         template.selected = false;
         template.recipients.forEach(function (recipient) {
@@ -277,19 +197,15 @@
       helper.handleFilesChange(component, event, helper);
     }
     component.set('v.templates', templates);
-    component.set('v.docuSignTemplates', docuSignTemplates);
+    component.set('v.availableTemplates', availableTemplates);
   },
 
   removeRecipient: function (component, event, helper) {
     var targetIndex = event.getSource().get('v.value');
-    var recipientSettings = component.get('v.recipientSettings');
+    var recipientSettings = component.get('v.recipients');
 
     recipientSettings.splice(targetIndex, 1);
-    component.set('v.recipientSettings', recipientSettings);
-  },
-
-  setLoadingState: function (component, event, helper) {
-    component.set('v.loading', false);
+    component.set('v.recipients', recipientSettings);
   },
 
   setTemplate: function (component, event, helper) {
@@ -301,7 +217,24 @@
   },
 
   cancel: function (component, event, helper) {
-    helper.navigateBackToRecord(component, event, helper);
+    var envelopeId = component.get('v.envelope.id');
+    if (envelopeId) {
+      var deleteEnvelope = component.get('c.deleteEnvelope');
+      deleteEnvelope.setParams({
+        envelopeId: envelopeId
+      });
+      deleteEnvelope.setCallback(this, function (response) {
+        if (response.getState() !== 'SUCCESS') {
+          helper.setError(component, _getErrorMessage(response));
+        }
+      });
+      $A.enqueueAction(deleteEnvelope);
+    }
+
+    var sourceId = component.get('v.recordId');
+    if (sourceId) {
+      _navigateToSObject(sourceId);
+    }
   },
 
   goBack: function (component, event, helper) {
@@ -334,7 +267,7 @@
 
       fileCheckboxes.forEach(function (file, index) {
         if (typeof(file) !== 'undefined' && file.get('v.checked')) {
-          selectedFileTitles += ', ' + documents[file.get('v.value')].Title;
+          selectedFileTitles += ', ' + documents[file.get('v.value')].name;
         }
       });
       selectedFileTitles = selectedFileTitles.slice(2);

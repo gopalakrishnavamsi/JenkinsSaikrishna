@@ -227,6 +227,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Document__c.Created__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Document__c.Type__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

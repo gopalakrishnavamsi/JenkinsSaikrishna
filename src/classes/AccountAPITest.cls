@@ -1123,7 +1123,7 @@ private class AccountAPITest {
 			System.assertEquals('', customTabs[0].validation.errorMessage);
 			System.assertEquals('Field 1 name', customTabs[0].tooltip);
 			System.assertEquals('Field 1 anchor', customTabs[0].autoPlaceText);
-			System.assertEquals(DateTime.newInstanceGmt(2017, 3, 13, 11, 43, 33), customTabs[0].lastModified);
+			System.assertEquals(Datetime.newInstanceGmt(2017, 3, 13, 11, 43, 33), customTabs[0].lastModified);
 
 			System.assertNotEquals(null, customTabs[1]);
 			System.assertEquals(TestUtils.ID2, customTabs[1].id);

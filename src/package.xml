@@ -118,6 +118,8 @@
         <members>FileController</members>
         <members>FileControllerTest</members>
         <members>Controller</members>
+        <members>SendingController</members>
+        <members>SendingControllerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -425,6 +427,33 @@
         <members>Done</members>
         <members>AccessCode</members>
         <members>Value</members>
+        <members>DocuSignTemplate</members>
+        <members>AddTemplate</members>
+        <members>Recipients</members>
+        <members>AddRecipient</members>
+        <members>TemplateRoles</members>
+        <members>NoRoles</members>
+        <members>EmailHelpText</members>
+        <members>EmailMessage</members>
+        <members>Save</members>
+        <members>DocuSign</members>
+        <members>SendEnvelope</members>
+        <members>Files</members>
+        <members>Select</members>
+        <members>Show</members>
+        <members>Hide</members>
+        <members>Reminders</members>
+        <members>SendAutomaticReminders</members>
+        <members>DaysBeforeFirstReminder</members>
+        <members>DaysBetweenReminders</members>
+        <members>Expiration</members>
+        <members>EnvelopeExpires</members>
+        <members>DaysBeforeExpires</members>
+        <members>EnvelopeExpiresOn_1</members>
+        <members>DaysBeforeExpiresWarn</members>
+        <members>Next</members>
+        <members>ContinueAndTag</members>
+        <members>NoFilesAttached</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -503,6 +532,7 @@
         <members>Document__c.Sequence__c</members>
         <members>Document__c.Type__c</members>
         <members>Document__c.SourceId__c</members>
+        <members>Document__c.Created__c</members>
         <members>Document__c.Size__c</members>
         <members>Document__c.Extension__c</members>
         <members>EnvelopeLocalization__c.Language__c</members>
@@ -648,6 +678,7 @@
         <members>RecipientStatus__c</members>
         <members>User</members>
         <members>Setup__mdt</members>
+        <members>Opportunity</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -661,6 +692,7 @@
         <members>EnvelopeStatus__c-en_US</members>
         <members>RecipientStatus__c-en_US</members>
         <members>User-en_US</members>
+        <members>Opportunity-en_US</members>
         <name>CustomObjectTranslation</name>
     </types>
     <types>
@@ -677,6 +709,7 @@
     </types>
     <types>
         <members>Envelope__c.LearnMore</members>
+        <members>Opportunity.SendWithDocuSign</members>
         <name>WebLink</name>
     </types>
     <types>
@@ -688,6 +721,7 @@
         <members>Setup</members>
         <members>SetupSplash</members>
         <members>FileUploader</members>
+        <members>CreateEnvelopeFromOpportunity</members>
         <name>ApexPage</name>
     </types>
     <types>

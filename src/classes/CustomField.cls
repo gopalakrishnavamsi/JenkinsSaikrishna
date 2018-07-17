@@ -9,30 +9,37 @@ public class CustomField {
 	/**
 	 * The type of the custom field, list or text.
 	 */
+	@AuraEnabled
 	public String type { get; private set; }
 	/**
 	 * The name of the custom field.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The value of the custom field.
 	 */
+	@AuraEnabled
 	public String value { get; private set; }
 	/**
 	 * List items for the custom field. Ignored if this is a text custom field.
 	 */
+	@AuraEnabled
 	public List<String> items { get; private set; }
 	/**
 	 * Whether a value is required for the custom field.
 	 */
+	@AuraEnabled
 	public Boolean required { get; private set; }
 	/**
 	 * Whether to display the custom field to recipients.
 	 */
+	@AuraEnabled
 	public Boolean show { get; private set; }
 	/**
 	 * Read-only property indicating whether this is a text custom field.
 	 */
+	@AuraEnabled
 	public Boolean isText {
 		get {
 			return this.type == TYPE_TEXT;
@@ -41,6 +48,7 @@ public class CustomField {
 	/**
 	 * Read-only property indicating whether this is a list custom field.
 	 */
+	@AuraEnabled
 	public Boolean isList {
 		get {
 			return this.type == TYPE_LIST;

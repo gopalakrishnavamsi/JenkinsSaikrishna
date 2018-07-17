@@ -5,7 +5,13 @@ public with sharing class FileController extends Controller {
 	public String contentDocumentTitle { get; set; }
 	public String message { get; set; }
 	public String messageType { get; set; }
-	public transient ContentVersion contentVersion { get; set; }
+	public transient ContentVersion contentVersion;
+
+	// Use getter so we can make contentVersion transient
+	public ContentVersion getContentVersion() {
+		contentVersion = new ContentVersion();
+		return contentVersion;
+	}
 
 	public void uploadFile() {
 		try {

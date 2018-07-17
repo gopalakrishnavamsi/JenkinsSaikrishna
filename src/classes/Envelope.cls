@@ -30,54 +30,67 @@ public class Envelope {
 	/**
 	 * The ID of the associated Envelope__c record.
 	 */
+	@AuraEnabled
 	public Id id { get; private set; }
 	/**
 	 * The name of the envelope.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The DocuSign ID of the envelope, assigned when the envelope is sent or a draft envelope is created.
 	 */
+	@AuraEnabled
 	public UUID docuSignId { get; private set; }
 	/**
 	 * The ID of the configuration (f.k.a custom button) used to create the envelope.
 	 */
+	@AuraEnabled
 	public Id envelopeConfigurationId { get; private set; }
 	/**
 	 * A list of documents contained by the envelope.
 	 */
+	@AuraEnabled
 	public List<Document> documents { get; private set; }
 	/**
 	 * A list of recipients who receive the envelope.
 	 */
+	@AuraEnabled
 	public List<Recipient> recipients { get; private set; }
 	/**
 	 * A list of envelope custom fields. These are not persisted via the Envelope__c object.
 	 */
+	@AuraEnabled
 	public List<CustomField> customFields { get; private set; }
 	/**
 	 * The reminder and expiration settings for the envelope.
 	 */
+	@AuraEnabled
 	public Notifications notifications { get; private set; }
 	/**
 	 * The subject of the email recipients receive.
 	 */
+	@AuraEnabled
 	public String emailSubject { get; private set; }
 	/**
 	 * The message of the email recipients receive. This is contained within the standard DocuSign email body.
 	 */
+	@AuraEnabled
 	public String emailMessage { get; private set; }
 	/**
 	 * The Salesforce source object for the envelope (e.g. Opportunity or Lead).
 	 */
+	@AuraEnabled
 	public Entity source { get; private set; }
 	/**
 	 * The date and time when the envelope was sent.
 	 */
+	@AuraEnabled
 	public Datetime sent { get; private set; }
 	/**
 	 * Read-only property indicating whether the envelope is sent.
 	 */
+	@AuraEnabled
 	public Boolean isSent {
 		get {
 			return this.sent != null && this.sent <= Datetime.now();
@@ -86,6 +99,7 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains documents.
 	 */
+	@AuraEnabled
 	public Boolean hasDocuments {
 		get {
 			return Collection.isNotEmpty(this.documents);
@@ -94,6 +108,7 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains DocuSign templates.
 	 */
+	@AuraEnabled
 	public Boolean hasTemplates {
 		get {
 			if (this.documents != null) {
@@ -109,6 +124,7 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains recipients.
 	 */
+	@AuraEnabled
 	public Boolean hasRecipients {
 		get {
 			return Collection.isNotEmpty(this.recipients);
@@ -183,30 +199,37 @@ public class Envelope {
 		/**
 		 * Whether or not to remind recipients to sign.
 		 */
+		@AuraEnabled
 		public Boolean remind { get; private set; }
 		/**
 		 * How many days to wait before sending a reminder.
 		 */
+		@AuraEnabled
 		public Integer remindAfterDays { get; private set; }
 		/**
 		 * How many days between sending reminders.
 		 */
+		@AuraEnabled
 		public Integer remindFrequencyDays { get; private set; }
 		/**
 		 * Whether or not the envelope automatically expires (is voided).
 		 */
+		@AuraEnabled
 		public Boolean expires { get; private set; }
 		/**
 		 * How many days before the envelope expires.
 		 */
+		@AuraEnabled
 		public Integer expireAfterDays { get; private set; }
 		/**
 		 * How many days prior to expiration to send a warning to recipients.
 		 */
+		@AuraEnabled
 		public Integer expireWarnDays { get; private set; }
 		/**
 		 * Whether or not to update Chatter with envelope and recipient events.
 		 */
+		@AuraEnabled
 		public Boolean updateChatter { get; private set; }
 
 		/**

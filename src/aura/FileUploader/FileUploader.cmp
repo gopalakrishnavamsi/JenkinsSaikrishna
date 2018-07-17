@@ -1,13 +1,10 @@
 <aura:component implements="force:hasRecordId" access="global">
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:attribute name="frameSrc" type="String"/>
-
     <aura:attribute name="frameWidth" type="String" default="124"/>
     <aura:attribute name="frameHeight" type="String" default="100"/>
-
     <!-- Needed to send messages to VF page. But we will get it from VF itself -->
     <aura:attribute name="vfHost" type="String" default=""/>
-
     <!-- Domain of LC for VF to send message -->
     <aura:attribute name="lcHost" type="String"/>
     <aura:attribute name="namespace" type="String" description="Namespace."/>

@@ -68,33 +68,33 @@ private class StringUtilsTest {
 	}
 
 	@IsTest
-	static void test_parseDateTime() {
+	static void test_parseDatetime() {
 		System.assertEquals(
-			DateTime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
-			StringUtils.parseDateTime('2017-06-17T10:59:34.823Z'));
+			Datetime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
+			StringUtils.parseDatetime('2017-06-17T10:59:34.823Z'));
 		System.assertEquals(
-			DateTime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
-			StringUtils.parseDateTime('2017-06-17T10:59:34Z'));
+			Datetime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
+			StringUtils.parseDatetime('2017-06-17T10:59:34Z'));
 		System.assertEquals(
-			DateTime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
-			StringUtils.parseDateTime('2017-06-17T10:59:34'));
+			Datetime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
+			StringUtils.parseDatetime('2017-06-17T10:59:34'));
 		System.assertEquals(
-			DateTime.newInstanceGmt(2017, 6, 17),
-			StringUtils.parseDateTime('2017-06-17'));
-		System.assertEquals(
-			null,
-			StringUtils.parseDateTime(null));
+			Datetime.newInstanceGmt(2017, 6, 17),
+			StringUtils.parseDatetime('2017-06-17'));
 		System.assertEquals(
 			null,
-			StringUtils.parseDateTime(''));
+			StringUtils.parseDatetime(null));
+		System.assertEquals(
+			null,
+			StringUtils.parseDatetime(''));
 		try {
-			StringUtils.parseDateTime('Garbage');
+			StringUtils.parseDatetime('Garbage');
 			throw new AssertException('Expected exception to be thrown for invalid input');
 		} catch (JSONException ex) {
 			// OK
 		}
 		try {
-			StringUtils.parseDateTime('1234567890');
+			StringUtils.parseDatetime('1234567890');
 			throw new AssertException('Expected exception to be thrown for invalid input');
 		} catch (JSONException ex) {
 			// OK

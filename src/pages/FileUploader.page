@@ -15,42 +15,37 @@
     </style>
 
     <script>
-        var index = '{!JSENCODE($CurrentPage.Parameters.index)}';
+      var targetOrigin = 'https://{!JSENCODE(visualforceHost)}';
 
-        // SEND MESSAGE TO LIGHTNING COMPONENT
-        var vfUrl = '{!JSENCODE(baseUrl)}';
-        var instance = '{!JSENCODE(instanceName)}';
-        var namespace = '{!JSENCODE(namespace)}';
-        var lexOrigin = vfUrl.split('--')[0] + '--' + namespace + '.' + instance + '.visual.force.com';
-
-        function sendToLC(message) {
-            if (typeof(lexOrigin) !== 'undefined') {
-                parent.postMessage(message, lexOrigin);
-            }
+      function sendToLightningComponent(message) {
+        if (!!targetOrigin) {
+          parent.postMessage(message, targetOrigin);
         }
+      }
 
-        sendToLC({'state': 'LOADED', 'vfHost': "{!LEFT($CurrentPage.URL, FIND('/', $CurrentPage.URL,9))}"});
+      sendToLightningComponent({
+        'state': 'LOADED', 'vfHost': "{!LEFT($CurrentPage.URL, FIND('/', $CurrentPage.URL,9))}"
+      });
 
-        // FUNCTION TO CLICK UPLOAD FUNCTION
-        function clickUploadFile() {
-            showSpinner();
-            document.getElementById('{!$Component.theForm.uploadFileButton}').click();
-        }
+      // FUNCTION TO CLICK UPLOAD FUNCTION
+      function clickUploadFile() {
+        showSpinner();
+        document.getElementById('{!$Component.theForm.uploadFileButton}').click();
+      }
 
-        function showSpinner() {
-            document.getElementById('spinner').style.display = 'block';
-        }
+      function showSpinner() {
+        document.getElementById('spinner').style.display = 'block';
+      }
     </script>
 
     <!-- SPINNER -->
     <div style="display: none;" id="spinner"></div>
     <script>
-        var namespace = '{!JSENCODE(namespace)}';
-        $Lightning.use(namespace + ':lightningOutApp', function () {
-            $Lightning.createComponent('lightning:spinner', {
-                size: 'small', variant: 'brand', alternativeText: 'Loading...'
-            }, 'spinner');
-        });
+      $Lightning.use('{!JSENCODE(namespace)}' + ':LightningOutApp', function () {
+        $Lightning.createComponent('lightning:spinner', {
+          size: 'small', variant: 'brand', alternativeText: '{!$Label.Loading}'
+        }, 'spinner');
+      });
     </script>
     <!-- SPINNER -->
 
@@ -64,7 +59,7 @@
                         <use xmlns:xlink="http://www.w3.org/1999/xlink"
                              xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#upload')}"></use>
                     </svg>
-                        {!$Label.UploadFile}
+                    {!$Label.UploadFile}
                 </span>
             <apex:inputFile value="{!contentVersion.VersionData}"
                             fileName="{!contentVersion.PathOnClient}"
@@ -76,17 +71,17 @@
 
     <apex:pageBlock rendered="{!uploadFinished == true}" id="theBlock">
         <script>
-            // HIDE PAGE BLOCK SINCE WE ONLY NEED IT TO RUN THE SCRIPT
-            var theBlock = document.getElementById('{!$Component.theBlock}');
-            theBlock.style.border = 'none';
-            theBlock.style.display = 'none';
+          // HIDE PAGE BLOCK SINCE WE ONLY NEED IT TO RUN THE SCRIPT
+          var theBlock = document.getElementById('{!$Component.theBlock}');
+          theBlock.style.border = 'none';
+          theBlock.style.display = 'none';
 
-            // SEND FILE UPLOADED MESSAGE
-            sendToLC({
-                'state': 'uploadFinished', 'message': '{!message}', 'messageType': '{!messageType}', 'receipt': {
-                    Id: '{!ContentDocumentId}', Title: '{!ContentDocumentTitle}'
-                }, 'index': index
-            });
+          // SEND FILE UPLOADED MESSAGE
+          sendToLightningComponent({
+            'state': 'uploadFinished', 'message': '{!message}', 'messageType': '{!messageType}', 'receipt': {
+              Id: '{!contentDocumentId}', Title: '{!contentDocumentTitle}'
+            }, 'index': '{!JSENCODE($CurrentPage.Parameters.index)}'
+          });
         </script>
     </apex:pageBlock>
     </html>

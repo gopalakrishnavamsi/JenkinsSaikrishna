@@ -1,3 +1,6 @@
+/**
+ * Available DocuSign account features.
+ */
 public with sharing class AccountFeatures extends DocuSignAPI {
 	@TestVisible
 	private static final Integer FLAG_MERGE_FIELDS = 1;
@@ -17,21 +20,64 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 	private static final Integer FLAG_SIGNING_GROUPS = 128;
 	@TestVisible
 	private static final Integer FLAG_SMS_AUTHENTICATION = 256;
+	@TestVisible
+	private static final Integer FLAG_TEMPLATES = 512;
 
 	private static AccountFeatures self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 1440; // 1 hour
 
 	private transient final Integer features;
 
+	/**
+	 * Whether merge fields are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean mergeFields { get; private set; }
+	/**
+	 * Whether shared custom tabs are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean sharedCustomTabs { get; private set; }
+	/**
+	 * Whether saved custom tabs are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean savingCustomTabs { get; private set; }
+	/**
+	 * Whether data field regular expressions are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean dataFieldRegexes { get; private set; }
+	/**
+	 * Whether data field sizes are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean dataFieldSizes { get; private set; }
+	/**
+	 * Whether custom tab text formatting is enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean tabTextFormatting { get; private set; }
+	/**
+	 * Whether custom tab data labels are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean tabDataLabels { get; private set; }
+	/**
+	 * Whether signing groups are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean signingGroups { get; private set; }
+	/**
+	 * Whether recipient SMS authentication is enabled on the DocuSign account.
+	 */
+	@AuraEnabled
 	public Boolean smsAuthentication { get; private set; }
+	/**
+	 * Whether envelope templates are enabled on the DocuSign account.
+	 */
+	@AuraEnabled
+	public Boolean templates { get; private set; }
 
 	@TestVisible
 	private AccountFeatures(final Credentials apiCredentials) {
@@ -51,25 +97,26 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 		this.tabTextFormatting = (this.features & FLAG_TAB_TEXT_FORMATTING) == FLAG_TAB_TEXT_FORMATTING;
 		this.signingGroups = (this.features & FLAG_SIGNING_GROUPS) == FLAG_SIGNING_GROUPS;
 		this.smsAuthentication = (this.features & FLAG_SMS_AUTHENTICATION) == FLAG_SMS_AUTHENTICATION;
+		this.templates = (this.features & FLAG_TEMPLATES) == FLAG_TEMPLATES;
 	}
 
 	@TestVisible
 	private Integer resolveFeatures(
 		final Integer configuredFeatures,
-		final DateTime lastChecked,
+		final Datetime lastChecked,
 		final Integer checkFrequencyMinutes) {
 
 		Integer resolvedFeatures = 0;
 		if (configuredFeatures == null
 			|| lastChecked == null
 			|| checkFrequencyMinutes == null
-			|| lastChecked.addMinutes(checkFrequencyMinutes) <= DateTime.now()) {
+			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
 
 			try {
 				resolvedFeatures = getFlags(getApiAccountFeatures());
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				settings.Features__c = resolvedFeatures;
-				settings.FeaturesLastChecked__c = DateTime.now();
+				settings.FeaturesLastChecked__c = Datetime.now();
 				settings.FeaturesCheckFrequency__c = checkFrequencyMinutes == null
 					? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
 				upsert settings;
@@ -106,6 +153,8 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 					result |= FLAG_TAB_DATA_LABELS;
 				} else if (accountSetting.name == 'enableSMSAuthentication' && accountSetting.value == 'true') {
 					result |= FLAG_SMS_AUTHENTICATION;
+				} else if (accountSetting.name == 'allowServerTemplates' && accountSetting.value == 'true') {
+					result |= FLAG_TEMPLATES;
 				}
 			}
 		}
@@ -134,6 +183,11 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 		return (ApiAccountFeatures)JSON.deserialize(response.body, ApiAccountFeatures.class);
 	}
 
+	/**
+	 * Retrieves DocuSign account features.
+	 *
+	 * @return A DocuSign account features instance.
+	 */
 	public static AccountFeatures getInstance() {
 		if (self == null) {
 			self = new AccountFeatures(Credentials.getInstance());

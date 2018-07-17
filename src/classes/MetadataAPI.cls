@@ -548,13 +548,13 @@ public class MetadataAPI {
 	public class FileProperties {
 		public String createdById;
 		public String createdByName;
-		public DateTime createdDate;
+		public Datetime createdDate;
 		public String fileName;
 		public String fullName;
 		public String id;
 		public String lastModifiedById;
 		public String lastModifiedByName;
-		public DateTime lastModifiedDate;
+		public Datetime lastModifiedDate;
 		public String manageableState;
 		public String namespacePrefix;
 		public String type_x;

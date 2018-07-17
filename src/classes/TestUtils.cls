@@ -118,7 +118,7 @@ public class TestUtils {
 			DocuSignId__c = String.valueOf(docuSignId),
 			EmailSubject__c = 'Subject',
 			EmailMessage__c = 'Message',
-			Sent__c = docuSignId == null ? null : DateTime.now());
+			Sent__c = docuSignId == null ? null : Datetime.now());
 		insert e;
 		return e;
 	}
@@ -130,7 +130,12 @@ public class TestUtils {
 			PathOnClient = id.toString() + '.pdf',
 			VersionData = Blob.valueOf(UUID.randomUUID().toString()));
 		insert cv;
-		return [SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize FROM ContentVersion WHERE Id = :cv.Id LIMIT 1];
+		return [
+			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, CreatedDate
+			FROM ContentVersion
+			WHERE Id = :cv.Id
+			LIMIT 1
+		];
 	}
 
 	public static ContentVersion createContentVersion(final Id sourceId) {
@@ -323,7 +328,7 @@ public class TestUtils {
 			Body = Blob.valueOf(UUID.randomUUID().toString()),
 			FolderId = folderId);
 		insert d;
-		return [SELECT Name, Type, Body, BodyLength, FolderId FROM Document WHERE Id = :d.Id LIMIT 1];
+		return [SELECT Name, Type, Body, BodyLength, FolderId, CreatedDate FROM Document WHERE Id = :d.Id LIMIT 1];
 	}
 
 	public static ContentWorkspace createContentWorkspace() {

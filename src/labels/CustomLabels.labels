@@ -2126,7 +2126,7 @@
 	</labels>
 	<labels>
 		<fullName>AdvancedOptions</fullName>
-		<categories>Setup</categories>
+		<categories>Setup,Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Advanced options</shortDescription>
@@ -2278,7 +2278,7 @@
 	</labels>
 	<labels>
 		<fullName>Signer</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Signer</shortDescription>
@@ -2286,7 +2286,7 @@
 	</labels>
 	<labels>
 		<fullName>InPersonSigner</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>In Person Signer</shortDescription>
@@ -2294,7 +2294,7 @@
 	</labels>
 	<labels>
 		<fullName>CarbonCopy</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Carbon Copy</shortDescription>
@@ -2302,7 +2302,7 @@
 	</labels>
 	<labels>
 		<fullName>CertifiedDelivery</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Certified Delivery</shortDescription>
@@ -2310,7 +2310,7 @@
 	</labels>
 	<labels>
 		<fullName>Agent</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Agent</shortDescription>
@@ -2318,7 +2318,7 @@
 	</labels>
 	<labels>
 		<fullName>Editor</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Editor</shortDescription>
@@ -2326,7 +2326,7 @@
 	</labels>
 	<labels>
 		<fullName>Intermediary</fullName>
-		<categories>Envelope</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Intermediary</shortDescription>
@@ -2334,7 +2334,7 @@
 	</labels>
 	<labels>
 		<fullName>Type</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>false</protected>
 		<shortDescription>Type</shortDescription>
@@ -2342,7 +2342,7 @@
 	</labels>
 	<labels>
 		<fullName>AccessAuthentication</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Access Authentication</shortDescription>
@@ -2350,7 +2350,7 @@
 	</labels>
 	<labels>
 		<fullName>PrivateMessage</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Note</shortDescription>
@@ -2358,7 +2358,7 @@
 	</labels>
 	<labels>
 		<fullName>CustomEmailSubject</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Custom Email Subject</shortDescription>
@@ -2366,7 +2366,7 @@
 	</labels>
 	<labels>
 		<fullName>CustomEmailMessage</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Custom Email Message</shortDescription>
@@ -2374,7 +2374,7 @@
 	</labels>
 	<labels>
 		<fullName>Language</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Language</shortDescription>
@@ -2382,7 +2382,7 @@
 	</labels>
 	<labels>
 		<fullName>Subject</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Subject</shortDescription>
@@ -2390,7 +2390,7 @@
 	</labels>
 	<labels>
 		<fullName>Message</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Message</shortDescription>
@@ -2406,7 +2406,7 @@
 	</labels>
 	<labels>
 		<fullName>AccessCode</fullName>
-		<categories>Recipients</categories>
+		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Access Code</shortDescription>
@@ -2419,5 +2419,221 @@
 		<protected>true</protected>
 		<shortDescription>Value</shortDescription>
 		<value>Value</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignTemplate</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign Template</shortDescription>
+		<value>DocuSign Template</value>
+	</labels>
+	<labels>
+		<fullName>AddTemplate</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Template</shortDescription>
+		<value>Add Template</value>
+	</labels>
+	<labels>
+		<fullName>Recipients</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recipients</shortDescription>
+		<value>Recipients</value>
+	</labels>
+	<labels>
+		<fullName>AddRecipient</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Recipient</shortDescription>
+		<value>Add Recipient</value>
+	</labels>
+	<labels>
+		<fullName>TemplateRoles</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template Roles</shortDescription>
+		<value>Template Roles</value>
+	</labels>
+	<labels>
+		<fullName>NoRoles</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>No Roles</shortDescription>
+		<value>No Roles</value>
+	</labels>
+	<labels>
+		<fullName>EmailHelpText</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Email help text</shortDescription>
+		<value>Custom Email Messages configured in the previous step will override these settings</value>
+	</labels>
+	<labels>
+		<fullName>EmailMessage</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Email Message</shortDescription>
+		<value>Email Message</value>
+	</labels>
+	<labels>
+		<fullName>Save</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Save</shortDescription>
+		<value>Save</value>
+	</labels>
+	<labels>
+		<fullName>DocuSign</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>DocuSign</shortDescription>
+		<value>DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>SendEnvelope</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Send envelope</shortDescription>
+		<value>Send Envelope</value>
+	</labels>
+	<labels>
+		<fullName>Files</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Files</shortDescription>
+		<value>Files</value>
+	</labels>
+	<labels>
+		<fullName>Select</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Select</shortDescription>
+		<value>Select</value>
+	</labels>
+	<labels>
+		<fullName>Show</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Show</shortDescription>
+		<value>Show</value>
+	</labels>
+	<labels>
+		<fullName>Hide</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Hide</shortDescription>
+		<value>Hide</value>
+	</labels>
+	<labels>
+		<fullName>Reminders</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Reminders</shortDescription>
+		<value>Reminders</value>
+	</labels>
+	<labels>
+		<fullName>SendAutomaticReminders</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Send automatic reminders</shortDescription>
+		<value>Send automatic reminders</value>
+	</labels>
+	<labels>
+		<fullName>DaysBeforeFirstReminder</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Days before first reminder</shortDescription>
+		<value>days before sending first reminder</value>
+	</labels>
+	<labels>
+		<fullName>DaysBetweenReminders</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Days between reminders</shortDescription>
+		<value>days between reminders</value>
+	</labels>
+	<labels>
+		<fullName>Expiration</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Expiration</shortDescription>
+		<value>Expiration</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeExpires</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Envelope expires</shortDescription>
+		<value>Envelope expires</value>
+	</labels>
+	<labels>
+		<fullName>DaysBeforeExpires</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Days before expires</shortDescription>
+		<value>days before envelope expires</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeExpiresOn_1</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Envelope expires on</shortDescription>
+		<value>(Envelope will expire on {0})</value>
+	</labels>
+	<labels>
+		<fullName>DaysBeforeExpiresWarn</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Days before expire warning</shortDescription>
+		<value>days in which to warn signers before expiration</value>
+	</labels>
+	<labels>
+		<fullName>Next</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Next</shortDescription>
+		<value>Next</value>
+	</labels>
+	<labels>
+		<fullName>ContinueAndTag</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>Continue and Tag</shortDescription>
+		<value>Continue and Tag</value>
+	</labels>
+	<labels>
+		<fullName>NoFilesAttached</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>false</protected>
+		<shortDescription>No files attached</shortDescription>
+		<value>No files attached</value>
 	</labels>
 </CustomLabels>

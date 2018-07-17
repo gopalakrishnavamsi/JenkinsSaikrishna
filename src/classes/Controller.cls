@@ -6,15 +6,15 @@ public abstract with sharing class Controller {
 		}
 	}
 
-	public String baseUrl {
+	public String lightningHost {
 		get {
-			return Salesforce.baseUrl.toExternalForm();
+			return Salesforce.getLightningHost();
 		}
 	}
 
-	public String instanceName {
+	public String visualforceHost {
 		get {
-			return Salesforce.instanceName;
+			return Salesforce.getVisualforceHost();
 		}
 	}
 }

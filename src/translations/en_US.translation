@@ -1245,4 +1245,112 @@
 		<label>Value</label>
 		<name>Value</name>
 	</customLabels>
+	<customLabels>
+		<label>DocuSign Template</label>
+		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Template</label>
+		<name>AddTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Recipients</label>
+		<name>Recipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Recipient</label>
+		<name>AddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Template Roles</label>
+		<name>TemplateRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>No Roles</label>
+		<name>NoRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Custom Email Messages configured in the previous step will override these settings</label>
+		<name>EmailHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Email Message</label>
+		<name>EmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Save</label>
+		<name>Save</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign</label>
+		<name>DocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Send Envelope</label>
+		<name>SendEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Files</label>
+		<name>Files</name>
+	</customLabels>
+	<customLabels>
+		<label>Select</label>
+		<name>Select</name>
+	</customLabels>
+	<customLabels>
+		<label>Hide</label>
+		<name>Hide</name>
+	</customLabels>
+	<customLabels>
+		<label>Reminders</label>
+		<name>Reminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Send automatic reminders</label>
+		<name>SendAutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>days before sending first reminder</label>
+		<name>DaysBeforeFirstReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>days between reminders</label>
+		<name>DaysBetweenReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Expiration</label>
+		<name>Expiration</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope expires</label>
+		<name>EnvelopeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>days before envelope expires</label>
+		<name>DaysBeforeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>(Envelope will expire on &lt;strong&gt;{0}&lt;/strong&gt;)</label>
+		<name>EnvelopeExpiresOn_1</name>
+	</customLabels>
+	<customLabels>
+		<label>days in which to warn signers before expiration</label>
+		<name>DaysBeforeExpiresWarn</name>
+	</customLabels>
+	<customLabels>
+		<label>Next</label>
+		<name>Next</name>
+	</customLabels>
+	<customLabels>
+		<label>Continue and Tag</label>
+		<name>ContinueAndTag</name>
+	</customLabels>
+	<customLabels>
+		<label>No files attached</label>
+		<name>NoFilesAttached</name>
+	</customLabels>
+	<customLabels>
+		<label>Show</label>
+		<name>Show</name>
+	</customLabels>
 </Translations>

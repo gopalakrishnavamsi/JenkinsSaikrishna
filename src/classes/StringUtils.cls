@@ -125,8 +125,8 @@ public class StringUtils {
 	 *
 	 * @return The <code>Datetime</code> representation for a valid input string, <code>null</code> otherwise.
 	 */
-	public static Datetime parseDateTime(final String s) {
-		return String.isBlank(s) ? null : (DateTime)JSON.deserialize('"' + s + '"', DateTime.class);
+	public static Datetime parseDatetime(final String s) {
+		return String.isBlank(s) ? null : (Datetime)JSON.deserialize('"' + s + '"', Datetime.class);
 	}
 
 	/**

@@ -5,7 +5,7 @@ private class EnvelopeServiceTest {
 	static void test_validate_valid() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
-				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 			},
 			new List<Recipient> {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -56,7 +56,7 @@ private class EnvelopeServiceTest {
 	static void test_validate_recipients() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
-				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 			},
 			null,
 			new List<CustomField> {
@@ -81,7 +81,7 @@ private class EnvelopeServiceTest {
 	static void test_validate_custom_fields() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
-				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 			},
 			new List<Recipient> {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -115,7 +115,7 @@ private class EnvelopeServiceTest {
 	static void test_validate_notifications() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
-				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 			},
 			new List<Recipient> {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -144,7 +144,7 @@ private class EnvelopeServiceTest {
 	static void test_validate_email() {
 		Envelope e = new Envelope(null, null, null, null,
 			new List<Document> {
-				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+				new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 			},
 			new List<Recipient> {
 				Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -438,7 +438,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -467,7 +467,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -498,7 +498,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -533,7 +533,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -572,7 +572,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)
@@ -607,7 +607,7 @@ private class EnvelopeServiceTest {
 			Lead l = TestUtils.createLead();
 			Envelope e = new Envelope(null, 'subject', 'message', new Entity(l.Id))
 				.withDocuments(new List<Document> {
-					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, null)
+					new Document(null, Document.TYPE_FILE, 1, 'd1', 'pdf', 1234, Datetime.now(), null)
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, 'n1', false)

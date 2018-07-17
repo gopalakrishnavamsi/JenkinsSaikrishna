@@ -29,8 +29,16 @@ public with sharing class Entity {
 	/**
 	 * The Salesforce object type.
 	 */
+	public transient SObjectType type { get; private set; }
+	/**
+	 * The name of the Salesforce object type.
+	 */
 	@AuraEnabled
-	public SObjectType type { get; private set; }
+	public String typeName {
+		get {
+			return String.valueOf(this.type);
+		}
+	}
 	/**
 	 * The localized Salesforce object label.
 	 */

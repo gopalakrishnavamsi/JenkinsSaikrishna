@@ -8,8 +8,8 @@ public with sharing class Salesforce {
 	private static final Boolean ARE_WORK_ORDERS_ENABLED;
 	private static final Boolean IS_COMMUNITY_SITE;
 	private static final Boolean CAN_USE_API;
-	public static final Url BASE_URL;
-	public static final String INSTANCE_NAME;
+	private static final Url BASE_URL;
+	private static final String INSTANCE_NAME;
 	public static final Double API_VERSION = 43.0;
 	public static final String MAGIC_PARAMETER = 'isdtp';
 
@@ -144,7 +144,7 @@ public with sharing class Salesforce {
 
 		SObjectType objectType;
 		try {
-			objectType = sObjectId.getSObjectType();
+			objectType = sObjectId.getSobjectType();
 		} catch (SObjectException ex) {
 			objectType = null;
 		}
@@ -174,8 +174,12 @@ public with sharing class Salesforce {
 	}
 
 	public static String getLightningHost() {
-		String host = Url.getSalesforceBaseUrl().getHost();
+		String host = baseUrl.getHost();
 		return host.substringBefore('.').remove('--c').remove('--' + Application.packageNamespace)
 			+ '.lightning.force.com';
+	}
+
+	public static String getVisualforceHost() {
+		return baseUrl.getHost().substringBefore('.') + '.visualforce.com';
 	}
 }

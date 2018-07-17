@@ -18,34 +18,47 @@ public class Document {
 	/**
 	 * The ID of the associated Document__c record.
 	 */
+	@AuraEnabled
 	public Id id { get; private set; }
 	/**
 	 * The type of the document.
 	 */
+	@AuraEnabled
 	public String type { get; private set; }
 	/**
 	 * The ordinal sequence of the document as it appears in an envelope.
 	 */
+	@AuraEnabled
 	public Integer sequence { get; private set; }
 	/**
 	 * The name of the document.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The size of the document in bytes.
 	 */
+	@AuraEnabled
 	public Integer size { get; private set; }
 	/**
 	 * The file extension of the document.
 	 */
+	@AuraEnabled
 	public String extension { get; private set; }
+	/**
+	 * Date and time when the document was created.
+	 */
+	@AuraEnabled
+	public Datetime created { get; private set; }
 	/**
 	 * The Salesforce source record ID or the DocuSign template ID.
 	 */
+	@AuraEnabled
 	public String sourceId { get; private set; }
 	/**
 	 * Read-only property representing the DocuSign template ID if any.
 	 */
+	@AuraEnabled
 	public UUID templateId {
 		get {
 			if (String.isNotBlank(this.sourceId) && this.type == TYPE_TEMPLATE) {
@@ -64,6 +77,7 @@ public class Document {
 	 * @param name The name of the document.
 	 * @param extension The file extension of the document.
 	 * @param size The file extension of the document.
+	 * @param created Date and time when the document was created.
 	 * @param sourceId The Salesforce source record ID or the DocuSign template ID.
 	 */
 	public Document(
@@ -73,6 +87,7 @@ public class Document {
 		final String name,
 		final String extension,
 		final Integer size,
+		final Datetime created,
 		final String sourceId) {
 
 		this.id = id;
@@ -81,6 +96,7 @@ public class Document {
 		this.name = String.isNotBlank(name) ? name : null;
 		this.extension = String.isNotBlank(extension) ? extension : null;
 		this.size = size;
+		this.created = created;
 		this.sourceId = sourceId;
 	}
 
@@ -88,7 +104,7 @@ public class Document {
 	 * Factory method to construct a DocuSign envelope document from a Salesforce content version.
 	 *
 	 * @param contentVersion The content version from which to construct a document. This must have the
-	 * <code>Title</code>, <code>FileExtension</code>, and <code>Content</code> fields defined.
+	 * <code>Title</code>, <code>FileExtension</code>, <code>Content</code>, and <code>CreatedDate</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the content version.
 	 */
@@ -102,6 +118,7 @@ public class Document {
 			contentVersion == null ? null : contentVersion.Title,
 			contentVersion == null ? null : contentVersion.FileExtension,
 			contentVersion == null ? null : contentVersion.ContentSize,
+			contentVersion == null ? null : contentVersion.CreatedDate,
 			contentVersion == null ? null : contentVersion.Id);
 	}
 
@@ -109,7 +126,7 @@ public class Document {
 	 * Factory method to construct a DocuSign envelope document from a Salesforce document.
 	 *
 	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
-	 * <code>Type</code>, and <code>BodyLength</code> fields defined.
+	 * <code>Type</code>, <code>BodyLength</code>, and <code>CreatedDate</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the Salesforce document.
 	 */
@@ -123,6 +140,7 @@ public class Document {
 			doc == null ? null : doc.Name,
 			doc == null ? null : doc.Type,
 			doc == null ? null : doc.BodyLength,
+			doc == null ? null : doc.CreatedDate,
 			doc == null ? null : doc.Id);
 	}
 
@@ -141,6 +159,7 @@ public class Document {
 			template == null ? null : template.name,
 			null,
 			null,
+			template == null ? null : template.created,
 			template == null ? null : String.valueOf(template.id));
 	}
 
@@ -151,10 +170,12 @@ public class Document {
 		/**
 		 * The Salesforce folder ID.
 		 */
+		@AuraEnabled
 		public Id id { get; private set; }
 		/**
 		 * The Salesforce folder name.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 
 		/**
@@ -176,10 +197,12 @@ public class Document {
 		/**
 		 * The list of Salesforce folders.
 		 */
+		@AuraEnabled
 		public List<Folder> folders { get; private set; }
 		/**
 		 * The list of DocuSign envelope documents contained within the folders.
 		 */
+		@AuraEnabled
 		public List<Document> documents { get; private set; }
 
 		/**
@@ -210,6 +233,7 @@ public class Document {
 			this.name,
 			this.extension,
 			this.size,
+			this.created,
 			this.sourceId);
 	}
 

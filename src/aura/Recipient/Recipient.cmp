@@ -12,6 +12,7 @@
     <aura:attribute name="index" type="Integer"/>
     <aura:attribute name="name" type="String"/>
     <aura:attribute name="recordType" type="String"/>
+    <aura:attribute name="enabledLanguages" type="Object[]"/>
 
     <aura:handler name="change" value="{!v.recipientId}" action="{!c.handleRecipientIdChange}"/>
 
@@ -147,11 +148,19 @@
         <c:strike_modal aura:id="custom-email-message-modal" title="{!$Label.c.CustomEmailMessage}"
                         primaryButtonLabel="{!$Label.c.Save}">
             <div class="slds-form_stacked slds-m-bottom_xx-small">
-                <!-- TODO: Only display language options if localization is enabled. Use enabled options -->
-                <lightning:select class="slds-form-element" aura:id="language-input" name="{!$Label.c.Language}"
-                                  label="{!$Label.c.Language}">
-                    <option value="en">{!$Label.c.English}</option>
-                </lightning:select>
+                <aura:if isTrue="{!not(empty(v.enabledLanguages))}">
+                    <lightning:select class="slds-form-element" aura:id="language-input" name="{!$Label.c.Language}"
+                                      label="{!$Label.c.Language}">
+                        <aura:iteration items="{!v.enabledLanguages}" var="enabledLanguage" indexVar="elIndex">
+                            <aura:if isTrue="{!if(if(empty(language), and(elIndex == 1)), or(language == enabledLanguage.language))}">
+                                <option value="{!enabledLanguage.language}" selected="selected">{!enabledLanguage.label}</option>
+                                <aura:set attribute="else">
+                                    <option value="{!enabledLanguage.language}">{!enabledLanguage.label}</option>
+                                </aura:set>
+                            </aura:if>
+                        </aura:iteration>
+                    </lightning:select>
+                </aura:if>
                 <lightning:input class="slds-form-element" aura:id="subject-input" name="{!$Label.c.CustomEmailSubject}"
                                  value="{!v.emailSubject}" label="{!$Label.c.Subject}"/>
                 <lightning:textarea class="slds-form-element" aura:id="body-input" name="{!$Label.c.CustomEmailMessage}"

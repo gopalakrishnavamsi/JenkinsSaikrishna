@@ -5,11 +5,11 @@ private class StatusServiceTest {
 	static void test_validate() {
 		// Valid
 		Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.randomUUID(),
-			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, DateTime.now().addDays(-1),
+			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, Datetime.now().addDays(-1),
 			null, Datetime.now(), 's1', null, Datetime.now());
 		// Invalid - no DocuSign ID
 		Envelope.Status es2 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), null,
-			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, DateTime.now().addDays(-1),
+			Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, Datetime.now().addDays(-1),
 			Datetime.now().addDays(1), Datetime.now(), 's1', null, Datetime.now());
 		// Invalid - not created/sent
 		Envelope.Status es3 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.randomUUID(),
@@ -298,7 +298,7 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_Database_insertStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
-			Datetime now = DateTime.now();
+			Datetime now = Datetime.now();
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact a1c1 = TestUtils.createContact(a1.Id);
 			Contact a1c2 = TestUtils.createContact(a1.Id);
@@ -426,7 +426,7 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_Database_upsertStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
-			Datetime now = DateTime.now();
+			Datetime now = Datetime.now();
 			Envelope.Status e1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus());
 			Recipient.Status e1r1 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.Id, 1));
 			Recipient.Status e1r2 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.Id, 2));
@@ -547,7 +547,7 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_Database_deleteStatus() {
 		System.runAs(TestUtils.createDocuSignUser()) {
-			Datetime now = DateTime.now();
+			Datetime now = Datetime.now();
 			UUID e1Id = UUID.randomUUID();
 			EnvelopeStatus__c e1 = TestUtils.createEnvelopeStatus(e1Id);
 			RecipientStatus__c e1r1 = TestUtils.createRecipientStatus(e1.Id, 1);

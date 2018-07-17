@@ -116,6 +116,7 @@ public with sharing class DocumentService {
 				doc.Name,
 				String.isNotBlank(doc.Extension__c) ? doc.Extension__c : getFileExtension(doc.Name),
 				Integer.valueOf(doc.Size__c),
+				doc.Created__c,
 				doc.SourceId__c);
 		}
 
@@ -131,7 +132,8 @@ public with sharing class DocumentService {
 				Name = doc.name,
 				Extension__c = doc.extension,
 				Size__c = doc.size,
-				SourceId__c = doc.sourceId);
+				SourceId__c = doc.sourceId,
+				Created__c = doc.created);
 		}
 
 		@TestVisible
@@ -152,7 +154,7 @@ public with sharing class DocumentService {
 		@TestVisible
 		private List<Document__c> queryDocumentsInternal(final Id envelopeId) {
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
 			});
 
 			return [
@@ -163,7 +165,8 @@ public with sharing class DocumentService {
 					Name,
 					Extension__c,
 					Size__c,
-					SourceId__c
+					SourceId__c,
+					Created__c
 				FROM Document__c
 				WHERE Envelope__c = :envelopeId
 				ORDER BY Sequence__c
@@ -176,7 +179,7 @@ public with sharing class DocumentService {
 
 		public List<Document> insertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
 			});
 
 			List<Document> result = new List<Document>();

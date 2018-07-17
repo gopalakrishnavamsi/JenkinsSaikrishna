@@ -6,7 +6,8 @@ private class AccountFeaturesTest {
 		| AccountFeatures.FLAG_SAVING_CUSTOM_TABS
 		| AccountFeatures.FLAG_DATA_FIELD_SIZES
 		| AccountFeatures.FLAG_SIGNING_GROUPS
-		| AccountFeatures.FLAG_SMS_AUTHENTICATION;
+		| AccountFeatures.FLAG_SMS_AUTHENTICATION
+		| AccountFeatures.FLAG_TEMPLATES;
 
 	@IsTest
 	static void test_getInstance() {
@@ -31,6 +32,7 @@ private class AccountFeaturesTest {
 			System.assert(!af1.tabDataLabels);
 			System.assert(af1.signingGroups);
 			System.assert(af1.smsAuthentication);
+			System.assert(af1.templates);
 		}
 	}
 
@@ -66,6 +68,8 @@ private class AccountFeaturesTest {
 						result.put(AccountFeatures.FLAG_TAB_DATA_LABELS, accountSetting.value == 'true');
 					} else if (accountSetting.name == 'enableSMSAuthentication') {
 						result.put(AccountFeatures.FLAG_SMS_AUTHENTICATION, accountSetting.value == 'true');
+					} else if (accountSetting.name == 'allowServerTemplates') {
+						result.put(AccountFeatures.FLAG_TEMPLATES, accountSetting.value == 'true');
 					}
 				}
 			}
@@ -81,6 +85,7 @@ private class AccountFeaturesTest {
 			System.assert(!result.get(AccountFeatures.FLAG_TAB_DATA_LABELS));
 			System.assert(result.get(AccountFeatures.FLAG_SIGNING_GROUPS));
 			System.assert(result.get(AccountFeatures.FLAG_SMS_AUTHENTICATION));
+			System.assert(result.get(AccountFeatures.FLAG_TEMPLATES));
 		}
 	}
 
@@ -122,11 +127,11 @@ private class AccountFeaturesTest {
 			AccountSettings__c config0 = AccountSettings__c.getOrgDefaults();
 
 			// Force check API, update config
-			Integer features1 = af.resolveFeatures(0, DateTime.now().addDays(-2), 1);
+			Integer features1 = af.resolveFeatures(0, Datetime.now().addDays(-2), 1);
 			AccountSettings__c config1 = AccountSettings__c.getOrgDefaults();
 
 			// Read from config, no update
-			Integer features2 = af.resolveFeatures(3, DateTime.now().addMinutes(-10), 60);
+			Integer features2 = af.resolveFeatures(3, Datetime.now().addMinutes(-10), 60);
 			AccountSettings__c config2 = AccountSettings__c.getOrgDefaults();
 			Test.stopTest();
 
@@ -135,7 +140,7 @@ private class AccountFeaturesTest {
 			System.assertEquals(DEFAULT_FLAGS, features1);
 			System.assertEquals(features1, Integer.valueOf(config1.Features__c));
 			System.assertNotEquals(null, config1.FeaturesLastChecked__c);
-			System.assertEquals(DateTime.now().dayOfYear(), config1.FeaturesLastChecked__c.dayOfYear());
+			System.assertEquals(Datetime.now().dayOfYear(), config1.FeaturesLastChecked__c.dayOfYear());
 			System.assertEquals(3, features2);
 			System.assertEquals(config1.Features__c, config2.Features__c);
 			System.assertEquals(config1.FeaturesLastChecked__c, config2.FeaturesLastChecked__c);
@@ -144,17 +149,17 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_getFlags() {
-		AccountFeatures.APIAccountFeature f1 = new AccountFeatures.ApiAccountFeature();
+		AccountFeatures.ApiAccountFeature f1 = new AccountFeatures.ApiAccountFeature();
 		f1.name = 'dataFieldRegexEnabled';
 		f1.value = 'true';
-		AccountFeatures.APIAccountFeature f2 = new AccountFeatures.ApiAccountFeature();
+		AccountFeatures.ApiAccountFeature f2 = new AccountFeatures.ApiAccountFeature();
 		f2.name = 'tabTextFormattingEnabled';
 		f2.value = 'true';
-		AccountFeatures.APIAccountFeature f3 = new AccountFeatures.ApiAccountFeature();
+		AccountFeatures.ApiAccountFeature f3 = new AccountFeatures.ApiAccountFeature();
 		f3.name = 'tabDataLabelEnabled';
 		f3.value = 'true';
 		AccountFeatures.ApiAccountFeatures af = new AccountFeatures.ApiAccountFeatures();
-		af.accountSettings = new List<AccountFeatures.APIAccountFeature> { f1, f2, f3 };
+		af.accountSettings = new List<AccountFeatures.ApiAccountFeature> { f1, f2, f3 };
 
 		Test.startTest();
 		Integer features = AccountFeatures.getFlags(af);
@@ -169,5 +174,6 @@ private class AccountFeaturesTest {
 		System.assertEquals(AccountFeatures.FLAG_TAB_DATA_LABELS, features & AccountFeatures.FLAG_TAB_DATA_LABELS);
 		System.assertNotEquals(AccountFeatures.FLAG_SIGNING_GROUPS, features & AccountFeatures.FLAG_SIGNING_GROUPS);
 		System.assertNotEquals(AccountFeatures.FLAG_SMS_AUTHENTICATION, features & AccountFeatures.FLAG_SMS_AUTHENTICATION);
+		System.assertNotEquals(AccountFeatures.FLAG_TEMPLATES, features & AccountFeatures.FLAG_TEMPLATES);
 	}
 }

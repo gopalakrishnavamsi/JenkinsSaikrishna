@@ -58,70 +58,87 @@ public class Recipient implements Comparable {
 	/**
 	 * The ID of the associated Recipient__c record.
 	 */
+	@AuraEnabled
 	public Id id { get; private set; }
 	/**
 	 * The type of the recipient.
 	 */
+	@AuraEnabled
 	public String type { get; private set; }
 	/**
 	 * The ordinal sequence of the recipient as displayed on the DocuSign envelope.
 	 */
+	@AuraEnabled
 	public Integer sequence { get; private set; }
 	/**
 	 * The routing order of the recipient. This is distinct from <code>sequence</code> and need not be unique across an envelope's recipients.
 	 */
+	@AuraEnabled
 	public Integer routingOrder { get; private set; }
 	/**
 	 * The role of the recipient. Used to tie the recipient to DocuSign template roles or for use with automatic anchor tags.
 	 */
+	@AuraEnabled
 	public Role role { get; private set; }
 	/**
 	 * The name of the recipient.
 	 */
+	@AuraEnabled
 	public String name { get; private set; }
 	/**
 	 * The email of the recipient.
 	 */
+	@AuraEnabled
 	public String email { get; private set; }
 	/**
 	 * The DocuSign signing group.
 	 */
+	@AuraEnabled
 	public SigningGroup signingGroup { get; private set; }
 	/**
 	 * The phone number of the recipient. Can be used for SMS authentication.
 	 */
+	@AuraEnabled
 	public String phone { get; private set; }
 	/**
 	 * The recipient authentication options.
 	 */
+	@AuraEnabled
 	public Authentication authentication { get; private set; }
 	/**
 	 * The private note sent to the recipient.
 	 */
+	@AuraEnabled
 	public String note { get; private set; }
 	/**
 	 * The email settings for the recipient.
 	 */
+	@AuraEnabled
 	public EmailSettings emailSettings { get; private set; }
 	/**
 	 * The host name of the recipient. Used only for in-person signing.
 	 */
+	@AuraEnabled
 	public String hostName { get; private set; }
 	/**
 	 * The host email of the recipient. Used only for in-person signing.
 	 */
+	@AuraEnabled
 	public String hostEmail { get; private set; }
 	/**
 	 * Whether the recipient should sign now. Honored only for in-person signing or when the first signer is the current user.
 	 */
+	@AuraEnabled
 	public Boolean signNow { get; private set; }
 	/**
 	 * The Salesforce source object for the recipient (Contact, Lead, or User).
 	 */
+	@AuraEnabled
 	public Entity source { get; private set; }
 	/**
 	 * Read-only property indicating whether the recipient is a signing group.
 	 */
+	@AuraEnabled
 	public Boolean isSigningGroup {
 		get {
 			return this.signingGroup != null;
@@ -130,10 +147,12 @@ public class Recipient implements Comparable {
 	/**
 	 * Whether this recipient may be modified. Used with DocuSign templates.
 	 */
+	@AuraEnabled
 	public Boolean readOnly { get; private set; }
 	/**
 	 * Whether this recipient is required. Used with DocuSign templates.
 	 */
+	@AuraEnabled
 	public Boolean required { get; private set; }
 
 	/**
@@ -372,10 +391,12 @@ public class Recipient implements Comparable {
 		/**
 		 * The DocuSign signing group ID.
 		 */
+		@AuraEnabled
 		public Integer id { get; private set; }
 		/**
 		 * The DocuSign signing group name.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 
 		/**
@@ -407,15 +428,18 @@ public class Recipient implements Comparable {
 		/**
 		 * The role name.
 		 */
+		@AuraEnabled
 		public String name { get; private set; }
 		/**
 		 * The role ordinal used for mapping to automatic anchor tags.
 		 */
+		@AuraEnabled
 		public Integer value { get; private set; }
 		/**
 		 * Read-only property describing whether this role has a valid value. If <code>true</code> (> 0),
 		 * the role is mapped to automatic anchor tags.
 		 */
+		@AuraEnabled
 		public Boolean hasValue {
 			get {
 				return this.value > 0;
@@ -467,15 +491,18 @@ public class Recipient implements Comparable {
 		/**
 		 * Access code a recipient must enter before opening an envelope.
 		 */
+		@AuraEnabled
 		public String accessCode { get; private set; }
 		/**
 		 * Whether the recipient's ID should be checked.
 		 */
+		@AuraEnabled
 		public Boolean idCheckRequired { get; private set; }
 		/**
 		 * A list of phone numbers to which a SMS authentication code may be sent. Currently only one
 		 * phone number is supported.
 		 */
+		@AuraEnabled
 		public List<String> smsPhoneNumbers { get; private set; }
 
 		/**
@@ -515,18 +542,22 @@ public class Recipient implements Comparable {
 		/**
 		 * The language code for the localized emails (e.g 'en', 'pt_BR').
 		 */
+		@AuraEnabled
 		public String language { get; private set; }
 		/**
 		 * The localized language label.
 		 */
+		@AuraEnabled
 		public String languageLabel { get; private set; }
 		/**
 		 * The localized email subject.
 		 */
+		@AuraEnabled
 		public String subject { get; private set; }
 		/**
 		 * The localized email message.
 		 */
+		@AuraEnabled
 		public String message { get; private set; }
 
 		/**
@@ -916,18 +947,22 @@ public class Recipient implements Comparable {
 		/**
 		 * The recipient sequence.
 		 */
+		@AuraEnabled
 		public Integer sequence { get; private set; }
 		/**
 		 * The recipient email address.
 		 */
+		@AuraEnabled
 		public String email { get; private set; }
 		/**
 		 * The recipient routing order.
 		 */
+		@AuraEnabled
 		public Integer routingOrder { get; private set; }
 		/**
 		 * The error encountered during update, if any.
 		 */
+		@AuraEnabled
 		public APIError error { get; private set; }
 
 		/**

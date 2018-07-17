@@ -598,9 +598,9 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				inPersonSigner ? this.signerName : this.name,
 				inPersonSigner ? this.signerEmail : this.email,
 				Integer.valueOf(this.routingOrder),
-				StringUtils.parseDateTime(this.deliveredDateTime),
-				String.isNotBlank(this.declinedDateTime) ? StringUtils.parseDateTime(this.declinedDateTime)
-					: StringUtils.parseDateTime(this.signedDateTime),
+				StringUtils.parseDatetime(this.deliveredDateTime),
+				String.isNotBlank(this.declinedDateTime) ? StringUtils.parseDatetime(this.declinedDateTime)
+					: StringUtils.parseDatetime(this.signedDateTime),
 				this.declinedReason,
 				Datetime.now());
 		}
@@ -1029,17 +1029,17 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		private Datetime getCompletedDatetime() {
 			Datetime result = null;
 			if (this.status == Envelope.STATUS_VOIDED) {
-				result = StringUtils.parseDateTime(this.voidedDateTime);
+				result = StringUtils.parseDatetime(this.voidedDateTime);
 			} else if (this.status == Envelope.STATUS_DECLINED) {
-				result = StringUtils.parseDateTime(this.declinedDateTime);
+				result = StringUtils.parseDatetime(this.declinedDateTime);
 			} else if (this.status == Envelope.STATUS_COMPLETED) {
-				result = StringUtils.parseDateTime(this.completedDateTime);
+				result = StringUtils.parseDatetime(this.completedDateTime);
 			}
 			return result;
 		}
 
 		public Envelope.Status toExternalForm() {
-			Datetime sent = StringUtils.parseDateTime(this.sentDateTime);
+			Datetime sent = StringUtils.parseDatetime(this.sentDateTime);
 			return new Envelope.Status(
 				null, // id
 				null, // source
@@ -1068,7 +1068,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	@TestVisible
 	private String getExternalUrl() {
 		return String.format('{0}/services/Soap/u/{1}/{2}', new List<String> {
-			Salesforce.BASE_Url, String.valueOf(Salesforce.API_VERSION), UserInfo.getOrganizationId()
+			Salesforce.baseUrl.toExternalForm(), String.valueOf(Salesforce.API_VERSION), UserInfo.getOrganizationId()
 		});
 	}
 

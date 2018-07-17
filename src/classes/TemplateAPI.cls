@@ -69,6 +69,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 	private class TemplateId {
 		public String templateId;
 		public String name;
+		public String created;
 	}
 
 	private static String nullIfBlank(final String s) {
@@ -94,7 +95,6 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 	}
 
 	private class APIRecipient {
-		public String recipientId;
 		public String name;
 		public String email;
 		public String roleName;
@@ -267,7 +267,9 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				this.notification == null ? null : this.notification.toExternalForm(),
 				nullIfBlank(this.emailSubject),
 				nullIfBlank(this.emailBlurb),
-				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm());
+				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm(),
+				this.envelopeTemplateDefinition == null
+					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.created));
 		}
 	}
 
@@ -301,6 +303,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public String emailSubject;
 		public String emailBlurb;
 		public APIRecipients recipients;
+		public String created;
 
 		public Template toExternalForm() {
 			return new Template(
@@ -310,7 +313,8 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				this.notification == null ? null : this.notification.toExternalForm(),
 				nullIfBlank(this.emailSubject),
 				nullIfBlank(this.emailBlurb),
-				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm());
+				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm(),
+				StringUtils.parseDatetime(this.created));
 		}
 	}
 

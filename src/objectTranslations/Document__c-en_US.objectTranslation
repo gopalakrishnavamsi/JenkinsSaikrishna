@@ -26,6 +26,10 @@
 		<name>SourceId__c</name>
 	</fields>
 	<fields>
+		<label>Source Created</label>
+		<name>Created__c</name>
+	</fields>
+	<fields>
 		<label>Type</label>
 		<name>Type__c</name>
 		<picklistValues>

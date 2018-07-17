@@ -160,4 +160,12 @@ private class SalesforceTest {
 		System.assertEquals(host, Salesforce.getLightningHost());
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_getVisualforceHost() {
+		Test.startTest();
+		System.assertEquals(Url.getSalesforceBaseUrl().getHost().substringBefore('.') + '.visualforce.com',
+			Salesforce.getVisualforceHost());
+		Test.stopTest();
+	}
 }

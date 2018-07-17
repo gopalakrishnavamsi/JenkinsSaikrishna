@@ -126,7 +126,7 @@ public with sharing class EnvelopeService {
 				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
 				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
@@ -157,6 +157,7 @@ public with sharing class EnvelopeService {
 						Name,
 						Extension__c,
 						Size__c,
+						Created__c,
 						SourceId__c
 					FROM Documents__r
 					ORDER BY Sequence__c
@@ -226,7 +227,7 @@ public with sharing class EnvelopeService {
 
 			Envelope__c e = convert(envelope);
 			if (sendNow) {
-				e.Sent__c = DateTime.now();
+				e.Sent__c = Datetime.now();
 			}
 			update e;
 
@@ -248,7 +249,7 @@ public with sharing class EnvelopeService {
 				DocuSignId__c = UUID.toString(dsEnvelopeId),
 				EmailSubject__c = emailSubject,
 				EmailMessage__c = emailMessage,
-				Sent__c = sendNow ? DateTime.now() : null);
+				Sent__c = sendNow ? Datetime.now() : null);
 			return true;
 		}
 

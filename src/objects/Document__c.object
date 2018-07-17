@@ -105,6 +105,15 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
+		<fullName>Created__c</fullName>
+		<description>Source Created</description>
+		<externalId>false</externalId>
+		<inlineHelpText>Source Created</inlineHelpText>
+		<label>Source Created</label>
+		<type>DateTime</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
 		<fullName>Type__c</fullName>
 		<description>Document Type</description>
 		<externalId>false</externalId>
