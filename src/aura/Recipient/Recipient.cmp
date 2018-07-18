@@ -1,20 +1,17 @@
 <aura:component>
-    <aura:attribute name="iconName" type="String"/>
-    <aura:attribute name="authenticationValue" type="String"/>
-    <aura:attribute name="role" type="String"/>
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="language" type="String"/>
-    <aura:attribute name="emailSubject" type="String"/>
-    <aura:attribute name="emailBody" type="String"/>
-    <aura:attribute name="recipientId" type="String"/>
-    <aura:attribute name="recipientType" type="String" default="Signer"/>
-    <aura:attribute name="templateId" type="String"/>
-    <aura:attribute name="index" type="Integer"/>
-    <aura:attribute name="name" type="String"/>
-    <aura:attribute name="recordType" type="String"/>
-    <aura:attribute name="enabledLanguages" type="Object[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
-    <aura:handler name="change" value="{!v.recipientId}" action="{!c.handleRecipientIdChange}"/>
+    <aura:attribute name="recipient" type="Recipient" required="true"/>
+    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
+    <aura:attribute name="recordType" type="String" default="Contact"/>
+
+    <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="selectedLanguage" type="String" access="private"/>
+    <aura:attribute name="iconName" type="String" access="private"/>
+    <aura:attribute name="recipientSourceId" type="Id" access="private"/>
+    <aura:attribute name="recipientName" type="String" access="private"/>
+
+    <aura:handler name="change" value="{!v.recipientSourceId}" action="{!c.handleRecipientIdChange}"/>
 
     <aura:registerEvent name="onEditAccessAuthentication" type="c:strike_evt"/>
     <aura:registerEvent name="onEditPrivateMessage" type="c:strike_evt"/>
@@ -24,16 +21,16 @@
     <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-gutters_xx-small">
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <c:strike_lookup placeholder="{!$Label.c.SearchByName}" object="{!v.recordType}"
-                             iconName="{!'standard:' + v.recordType}" searchField="Name" value="{!v.recipientId}"
-                             subtitleField="Email" valueLabel="{!v.name}"/>
+                             iconName="{!'standard:' + v.recordType}" searchField="Name" value="{!v.recipientSourceId}"
+                             subtitleField="Email" valueLabel="{!v.recipientName}"/>
         </div>
 
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
-                    <aura:if isTrue="{!empty(v.role)}">
+                    <aura:if isTrue="{!empty(v.recipient.role)}">
                         <!-- Recipient Type -->
-                        <lightning:select value="{!v.recipientType}" label="{!$Label.c.Type}" class="ds-no-label">
+                        <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="Signer">{!$Label.c.Signer}</option>
                             <option value="InPersonSigner">{!$Label.c.InPersonSigner}</option>
                             <option value="CarbonCopy">{!$Label.c.CarbonCopy}</option>
@@ -46,8 +43,8 @@
 
                         <aura:set attribute="else">
                             <!-- Role -->
-                            <div class="slds-input slds-is-disabled slds-truncate" title="{!v.role}">
-                                {!v.role}
+                            <div class="slds-input slds-is-disabled slds-truncate" title="{!v.recipient.role.name}">
+                                {!v.recipient.role.name}
                             </div>
                             <!-- /Role -->
                         </aura:set>
@@ -71,7 +68,7 @@
                                             size="medium"
                                             variant="border-filled"
                                             onclick="{!c.handleEditAccessAuthentication}"
-                                            class="{!if(not(empty(v.authenticationValue)), 'ds-button-icon_has-value')}"
+                                            class="{!if(not(empty(v.recipient.authentication.accessCode)), 'ds-button-icon_has-value')}"
                                     />
                                 </span>
                                 <!-- /Access Authentication Button -->
@@ -88,7 +85,7 @@
                                             size="medium"
                                             variant="border-filled"
                                             onclick="{!c.handleEditPrivateMessage}"
-                                            class="{!if(not(empty(v.message)), 'ds-button-icon_has-value')}"
+                                            class="{!if(not(empty(v.recipient.note)), 'ds-button-icon_has-value')}"
                                     />
                                 </span>
                                 <!-- /Private Message Button -->
@@ -105,7 +102,7 @@
                                             size="medium"
                                             variant="border-filled"
                                             onclick="{!c.handleEditCustomEmailMessage}"
-                                            class="{!if(or(not(empty(v.emailSubject)), not(empty(v.emailBody))), 'ds-button-icon_has-value')}"
+                                            class="{!if(or(not(empty(v.recipient.emailSettings.subject)), not(empty(v.recipient.emailSettings.message))), 'ds-button-icon_has-value')}"
                                     />
                                 </span>
                                 <!-- /Custom Email Message Button -->
@@ -121,7 +118,7 @@
                         primaryButtonLabel="{!$Label.c.Save}">
             <div class="slds-form_stacked slds-m-bottom_xx-small">
                 <lightning:input class="slds-form-element" aura:id="authentication-input" name="{!$Label.c.Value}"
-                                 value="{!v.authenticationValue}" label="{!$Label.c.AccessCode}"/>
+                                 value="{!v.recipient.authentication.accessCode}" label="{!$Label.c.AccessCode}"/>
             </div>
             <aura:set attribute="footerButtons">
                 <lightning:button label="{!$Label.c.Done}" variant="brand"
@@ -135,7 +132,7 @@
                         primaryButtonLabel="{!$Label.c.Save}">
             <div class="slds-form_stacked slds-m-bottom_xx-small">
                 <lightning:textarea class="slds-form-element" aura:id="message-input"
-                                    name="{!$Label.c.PrivateMessage}" value="{!v.message}"
+                                    name="{!$Label.c.PrivateMessage}" value="{!v.recipient.note}"
                                     label="{!$Label.c.Message}"/>
             </div>
             <aura:set attribute="footerButtons">
@@ -148,23 +145,23 @@
         <c:strike_modal aura:id="custom-email-message-modal" title="{!$Label.c.CustomEmailMessage}"
                         primaryButtonLabel="{!$Label.c.Save}">
             <div class="slds-form_stacked slds-m-bottom_xx-small">
-                <aura:if isTrue="{!not(empty(v.enabledLanguages))}">
-                    <lightning:select class="slds-form-element" aura:id="language-input" name="{!$Label.c.Language}"
-                                      label="{!$Label.c.Language}">
-                        <aura:iteration items="{!v.enabledLanguages}" var="enabledLanguage" indexVar="elIndex">
-                            <aura:if isTrue="{!if(if(empty(language), and(elIndex == 1)), or(language == enabledLanguage.language))}">
-                                <option value="{!enabledLanguage.language}" selected="selected">{!enabledLanguage.label}</option>
+                <aura:if isTrue="{!v.isEmailLocalizationEnabled}">
+                    <lightning:select class="slds-form-element" aura:id="email-language" name="{!$Label.c.Language}"
+                                      label="{!$Label.c.Language}" onchange="{!c.onEmailLanguageChange}">
+                        <aura:iteration items="{!v.emailLocalizations}" var="el" indexVar="elIndex">
+                            <aura:if isTrue="{!if(or(if(and(empty(v.selectedLanguage), elIndex == 1)), v.selectedLanguage == el.language))}">
+                                <option value="{!el.language}" selected="selected">{!el.label}</option>
                                 <aura:set attribute="else">
-                                    <option value="{!enabledLanguage.language}">{!enabledLanguage.label}</option>
+                                    <option value="{!el.language}">{!el.label}</option>
                                 </aura:set>
                             </aura:if>
                         </aura:iteration>
                     </lightning:select>
                 </aura:if>
-                <lightning:input class="slds-form-element" aura:id="subject-input" name="{!$Label.c.CustomEmailSubject}"
-                                 value="{!v.emailSubject}" label="{!$Label.c.Subject}"/>
-                <lightning:textarea class="slds-form-element" aura:id="body-input" name="{!$Label.c.CustomEmailMessage}"
-                                    value="{!v.emailBody}" label="{!$Label.c.Message}"/>
+                <lightning:input class="slds-form-element" aura:id="email-subject" name="{!$Label.c.CustomEmailSubject}"
+                                 value="{!v.recipient.emailSettings.subject}" label="{!$Label.c.Subject}"/>
+                <lightning:textarea class="slds-form-element" aura:id="email-body" name="{!$Label.c.CustomEmailMessage}"
+                                    value="{!v.recipient.emailSettings.message}" label="{!$Label.c.Message}"/>
             </div>
             <aura:set attribute="footerButtons">
                 <lightning:button label="{!$Label.c.Done}" variant="brand" onclick="{!c.closeCustomEmailMessageModal}"/>

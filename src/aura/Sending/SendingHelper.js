@@ -22,7 +22,10 @@
           });
         }
         if (!$A.util.isEmpty(draftEnvelope.recipients)) {
-          draftEnvelope.recipients.forEach(helper.addRecipientProperties);
+          draftEnvelope.recipients.forEach(function (r) {
+            r = helper.addRecipientProperties(r, false);
+            r.role = {}; // TODO: Roles only apply to templates for now.
+          });
         }
         if (!$A.util.isEmpty(draftEnvelope.templates)) {
           draftEnvelope.templates.forEach(function (template) {
@@ -35,15 +38,28 @@
         component.set('v.envelope', draftEnvelope.envelope);
         component.set('v.availableTemplates', draftEnvelope.templates);
         component.set('v.documents', draftEnvelope.documents);
-        component.set('v.recipients', draftEnvelope.recipients);
-        component.set('v.enabledLanguages', draftEnvelope.emailSettings);
-        //component.set('v.emailSubject', draftEnvelope.envelope.emailSubject);
+        component.set('v.selectedRecipients', draftEnvelope.recipients);
+        component.set('v.emailLocalizations', draftEnvelope.emailLocalizations);
+        component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(draftEnvelope.emailLocalizations) && draftEnvelope.emailLocalizations.length > 0)
+        helper.setExpiry(component, draftEnvelope.envelope.notifications.expireAfterDays);
         component.set('v.loading', false);
       } else {
         helper.setError(component, _getErrorMessage(response));
       }
     });
     $A.enqueueAction(createDraftEnvelope);
+  },
+
+  // TODO: Validate expiry assumptions. Does NDSE force expiration after 120 days?
+  setExpiry: function (component, expireAfterDays) {
+    var expirationDate = new Date();
+    if ($A.util.isEmpty(expireAfterDays)) {
+      expireAfterDays = 120;
+      component.set('v.envelope.notifications.expires', true);
+      component.set('v.envelope.notifications.expireAfterDays', expireAfterDays);
+    }
+    expirationDate.setDate(expirationDate.getDate() + parseInt(expireAfterDays, 10));
+    component.set('v.expiresOn', expirationDate.toLocaleDateString());
   },
 
   addDocumentProperties: function (doc, selected) {
@@ -145,18 +161,19 @@
 
   addBlankRecipient: function (component, recipient) {
     var recipients = component.get('v.recipients');
+    var isRecipientDefined = !$A.util.isEmpty(recipient);
     var newRecipient = {
-      id: $A.util.isEmpty(recipient) ? null : recipient.id,
+      source: isRecipientDefined ? recipient.source : null,
+      name: isRecipientDefined ? recipient.name : null,
       role: {},
-      name: $A.util.isEmpty(recipient) ? null : recipient.name,
       type: 'Signer',
       authentication: {},
       note: null,
       emailSettings: {}
     };
-    if (recipient) {
+    if (isRecipientDefined) {
       if (!$A.util.isEmpty(recipients[0]) && $A.util.isEmpty(recipients[0].id)) {
-        recipients[0].id = recipient.id;
+        recipients[0].source = recipient.source;
         recipients[0].name = recipient.name;
       } else {
         recipients.push(newRecipient);
@@ -170,14 +187,14 @@
   updateTemplates: function (component, event, helper, index) {
     var targetIndex = index;
     var templates = component.get('v.templates');
-    var docuSignTemplates = component.get('v.availableTemplates');
+    var availableTemplates = component.get('v.availableTemplates');
     var selectedTemplate;
 
     availableTemplates.forEach(function (template) {
       if (templates[targetIndex].id.value === template.id.value) {
         template.selected = false;
-        template.recipients.forEach(function (t) {
-          recipient.id = null;
+        template.recipients.forEach(function (tr) {
+          tr.source = {};
         });
       } else if (event.getSource().get('v.value') === template.id.value) {
         selectedTemplate = template;
@@ -234,7 +251,8 @@
           var recipients = component.get('v.recipients');
 
           for (var i = 0; i < recipients.length; i++) {
-            if (!$A.util.isEmpty(recipients[i].id)) {
+            var recipient = recipients[i];
+            if (!$A.util.isEmpty(recipient.source) && !$A.util.isEmpty(recipient.source.id)) {
               return true;
             }
           }

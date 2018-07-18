@@ -2594,7 +2594,7 @@
 		<language>en_US</language>
 		<protected>false</protected>
 		<shortDescription>Days before expires</shortDescription>
-		<value>days before envelope expires</value>
+		<value>days until envelope expires</value>
 	</labels>
 	<labels>
 		<fullName>EnvelopeExpiresOn_1</fullName>

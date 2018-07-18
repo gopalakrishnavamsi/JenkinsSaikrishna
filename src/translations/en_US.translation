@@ -1326,7 +1326,7 @@
 		<name>EnvelopeExpires</name>
 	</customLabels>
 	<customLabels>
-		<label>days before envelope expires</label>
+		<label>days until envelope expires</label>
 		<name>DaysBeforeExpires</name>
 	</customLabels>
 	<customLabels>

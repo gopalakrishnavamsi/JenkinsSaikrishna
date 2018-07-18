@@ -21,7 +21,7 @@ public with sharing class SendingController extends Controller {
 		@AuraEnabled
 		public List<Recipient> recipients { get; private set; }
 		@AuraEnabled
-		public List<Recipient.EmailSettings> emailSettings { get; private set; }
+		public List<Recipient.EmailSettings> emailLocalizations { get; private set; }
 
 		private DraftEnvelope(
 			final AccountFeatures accountFeatures,
@@ -29,14 +29,14 @@ public with sharing class SendingController extends Controller {
 			final List<Template> templates,
 			final List<Document> documents,
 			final List<Recipient> recipients,
-			final List<Recipient.EmailSettings> emailSettings) {
+			final List<Recipient.EmailSettings> emailLocalizations) {
 
 			this.accountFeatures = accountFeatures;
 			this.envelope = envelope;
 			this.templates = templates;
 			this.documents = documents;
 			this.recipients = recipients;
-			this.emailSettings = emailSettings;
+			this.emailLocalizations = emailLocalizations;
 		}
 	}
 
@@ -48,15 +48,15 @@ public with sharing class SendingController extends Controller {
 			List<Template> templates = TemplateAPI.getInstance().getTemplates();
 			return new DraftEnvelope(
 				AccountFeatures.getInstance(),
-				null,
-//				EnvelopeService.createEnvelope(
-//					EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
-//					null, // envelope configuration
-//					false),
+				EnvelopeService.createEnvelope(
+					EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
+					null, // envelope configuration
+					false),
 				templates,
 				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
 				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
-				Localization.getEmailSettings());
+				Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettings()
+					: new List<Recipient.EmailSettings>());
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to get draft envelope');
 			throw new AuraHandledException(ex.getMessage());
@@ -73,6 +73,35 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static Envelope updateEnvelope(final Envelope envelope) {
+		try {
+			return EnvelopeService.updateEnvelope(envelope);
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to update envelope');
+			throw new AuraHandledException(ex.getMessage());
+		}
+	}
+
+	@AuraEnabled
+	public static Envelope sendEnvelope(final Envelope envelope) {
+		try {
+			return EnvelopeService.sendEnvelope(envelope, false, true);
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to send envelope');
+			throw new AuraHandledException(ex.getMessage());
+		}
+	}
+
+	@AuraEnabled
+	public static String getTaggerUrl(final String dsEnvelopeId, final String returnUrl) {
+		try {
+			return EnvelopeService.getSenderViewUrl(UUID.fromString(dsEnvelopeId), new Url(returnUrl)).toExternalForm();
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to get tagger URL');
+			throw new AuraHandledException(ex.getMessage());
+		}
+	}
 
 	@AuraEnabled
 	public static void deleteEnvelope(final Id envelopeId) {

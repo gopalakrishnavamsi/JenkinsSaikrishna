@@ -15,17 +15,6 @@
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean"/>
     <aura:attribute name="loading" type="Boolean"/>
-    <aura:attribute name="emailSubject" type="String"/>
-    <aura:attribute name="emailMessage" type="String"/>
-    <aura:attribute name="language" type="String"/>
-    <aura:attribute name="remind" type="Boolean" default="{!false}"/>
-    <aura:attribute name="remindAfterDays" type="Integer" default="{!0}"/>
-    <aura:attribute name="remindFrequencyDays" type="Integer" default="{!0}"/>
-    <aura:attribute name="expires" type="Boolean" default="{!true}"/>
-    <aura:attribute name="expireAfterDays" type="Integer" default="120"/>
-    <aura:attribute name="expireWarnDays" type="Integer" default="{!0}"/>
-    <aura:attribute name="expiresOn" type="Date"/>
-    <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
     <aura:attribute name="taggingUrl" type="String"/>
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}"/>
     <aura:attribute name="selectedFileTitles" type="String"/>
@@ -34,15 +23,18 @@
     <aura:attribute name="uploadMessage" type="String"/>
     <aura:attribute name="lcHost" type="String"/>
     <aura:attribute name="namespace" type="String"/>
-    <aura:attribute name="selectedRecipients" type="Map[]"/>
-    <aura:attribute name="recordType" type="String"/>
-    <aura:attribute name="enabledLanguages" type="Object[]"/>
+    <aura:attribute name="selectedRecipients" type="Map"/>
+    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
+
+    <aura:attribute name="expiresOn" type="Date" access="private"/>
+    <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
 
     <aura:handler name="change" value="{!v.uploadMessage}" action="{!c.handleUpload}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>
     <aura:handler name="change" value="{!v.filesSelected}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.templates}" action="{!c.setNextButtonState}"/>
-    <aura:handler name="change" value="{!v.emailSubject}" action="{!c.setNextButtonState}"/>
+    <aura:handler name="change" value="{!v.envelope.emailSubject}" action="{!c.setNextButtonState}"/>
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.setNextButtonState}"/>
 
     <div class="{!'slds-scope' + if(v.visualforce, ' ds-visualforce', ' ds-quick-action-modal')}">
@@ -218,21 +210,16 @@
                                         <div class="ds-recipients__recipient slds-m-top_small slds-is-relative">
                                             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                                                 <div class="slds-col">
+                                                    <!-- TODO: enable search object selection (Contact, User, Lead, etc.) -->
+                                                    <!-- TODO: remove event registration for child component. We don't handle these here anyway -->
                                                     <c:Recipient
-                                                            recipientId="{!recipient.id}"
-                                                            recipientType="{!recipient.type}"
-                                                            authenticationValue="{!recipient.authentication.accessCode}"
-                                                            message="{!recipient.note}"
-                                                            language="{!recipient.emailSettings.language}"
-                                                            emailSubject="{!recipient.emailSettings.subject}"
-                                                            emailBody="{!recipient.emailSettings.message}"
+                                                            recipient="{!recipient}"
+                                                            emailLocalizations="{!v.emailLocalizations}"
+                                                            recordType="contact"
                                                             onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                             onEditPrivateMessage="{!c.handleEditPrivateMessage}"
                                                             onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                                            index="{!recipientIndex}"
-                                                            name="{#recipient.name}"
-                                                            recordType="{!v.recordType}"
-                                                            enabledLanguages="{!v.enabledLanguages}"/>
+                                                    />
                                                 </div>
                                                 <div class="slds-col slds-no-flex">
                                                     <lightning:buttonIcon iconName="utility:close" variant="container"
@@ -270,20 +257,13 @@
                                 <aura:iteration items="{!template.recipients}" var="recipient" indexVar="index">
                                     <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
                                         <c:Recipient
-                                                recipientId="{!recipient.id}"
-                                                role="{!recipient.role.name}"
-                                                authenticationValue="{!recipient.authentication.accessCode}"
-                                                message="{!recipient.note}"
-                                                language="{!recipient.emailSettings.language}"
-                                                emailSubject="{!recipient.emailSettings.subject}"
-                                                emailBody="{!recipient.emailSettings.message}"
+                                                recipient="{!recipient}"
+                                                emailLocalizations="{!v.emailLocalizations}"
+                                                recordType="contact"
                                                 onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                 onEditPrivateMessage="{!c.handleEditPrivateMessage}"
                                                 onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                                templateId="{!template.id}"
-                                                index="{!index}"
-                                                recordType="{!v.recordType}"
-                                                enabledLanguages="{!v.enabledLanguages}"/>
+                                        />
                                     </div>
                                 </aura:iteration>
                             </div>
@@ -300,26 +280,25 @@
                                             content="{!$Label.c.EmailHelpText}"/>
                     </h3>
                     <div class="slds-form_stacked">
-                        <aura:if isTrue="{!not(empty(v.enabledLanguages))}">
-                            <lightning:select class="slds-form-element" aura:id="language-input"
+                        <aura:if isTrue="{!v.isEmailLocalizationEnabled}">
+                            <lightning:select class="slds-form-element" aura:id="email-language"
                                               name="{!$Label.c.Language}"
-                                              label="{!$Label.c.Language}">
-                                <aura:iteration items="{!v.enabledLanguages}" var="enabledLanguage" indexVar="elIndex">
+                                              label="{!$Label.c.Language}" onchange="{!c.onEmailLanguageChange}">
+                                <aura:iteration items="{!v.emailLocalizations}" var="el" indexVar="elIndex">
                                     <aura:if
-                                            isTrue="{!if(if(empty(language), and(elIndex == 1)), or(language == enabledLanguage.language))}">
-                                        <option value="{!enabledLanguage.language}"
-                                                selected="selected">{!enabledLanguage.label}</option>
+                                            isTrue="{!if(or(if(and(empty(v.selectedLanguage), elIndex == 1)), v.selectedLanguage == el.language))}">
+                                        <option value="{!el.language}" selected="selected">{!el.label}</option>
                                         <aura:set attribute="else">
-                                            <option value="{!enabledLanguage.language}">{!enabledLanguage.label}</option>
+                                            <option value="{!el.language}">{!el.label}</option>
                                         </aura:set>
                                     </aura:if>
                                 </aura:iteration>
                             </lightning:select>
                         </aura:if>
                         <lightning:input class="slds-form-element" aura:id="envelope-subject-input"
-                                         value="{!v.emailSubject}" name="Subject" label="{!$Label.c.Subject}"
+                                         value="{!v.envelope.emailSubject}" name="Subject" label="{!$Label.c.Subject}"
                                          required="true"/>
-                        <lightning:textarea class="slds-form-element" value="{!v.emailMessage}"
+                        <lightning:textarea class="slds-form-element" value="{!v.envelope.emailMessage}"
                                             name="{!$Label.c.Message}" label="{!$Label.c.Message}"/>
                     </div>
 
@@ -350,24 +329,31 @@
                         </p>
                         <h4 class="slds-text-heading_label slds-m-top_medium slds-m-bottom_x-small">{!$Label.c.Expiration}</h4>
                         <lightning:input type="checkbox" name="envelope-expires"
-                                         label="{!$Label.c.EnvelopeExpires}" checked="{!v.expires}"/>
-                        <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.expires, ' slds-text-color_weak', '')}">
+                                         label="{!$Label.c.EnvelopeExpires}"
+                                         checked="{!v.envelope.notifications.expires}"/>
+                        <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.envelope.notifications.expires, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="days-before-request-expires"
-                                             label="{!$Label.c.DaysBeforeExpires}" value="{!v.expireAfterDays}"
-                                             min="0" disabled="{!not(v.expires)}" onblur="{!c.handleExpiresOn}"/>
+                                             label="{!$Label.c.DaysBeforeExpires}"
+                                             value="{!v.envelope.notifications.expireAfterDays}"
+                                             min="0" disabled="{!not(v.envelope.notifications.expires)}"
+                                             onblur="{!c.handleExpiresOn}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBeforeExpires}</span>
                         </p>
-                        <p class="slds-m-vertical_x-small slds-p-left_large">
-                            <em class="slds-text-color_weak">
-                                <aura:unescapedHtml value="{!format($Label.c.EnvelopeExpiresOn_1, v.expiresOn)}"/>
-                            </em>
-                        </p>
-                        <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.expires, ' slds-text-color_weak', '')}">
+                        <aura:if
+                                isTrue="{!and(v.envelope.notifications.expires, v.envelope.notifications.expireAfterDays > 0)}">
+                            <p class="slds-m-vertical_x-small slds-p-left_large">
+                                <em class="slds-text-color_weak">
+                                    <aura:unescapedHtml value="{!format($Label.c.EnvelopeExpiresOn_1, v.expiresOn)}"/>
+                                </em>
+                            </p>
+                        </aura:if>
+                        <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.envelope.notifications.expires, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="days-before-warn"
-                                             label="{!$Label.c.DaysBeforeExpiresWarn}" value="{!v.expireWarnDays}"
-                                             min="0" disabled="{!not(v.expires)}"/>
+                                             label="{!$Label.c.DaysBeforeExpiresWarn}"
+                                             value="{!v.envelope.notifications.expireWarnDays}"
+                                             min="0" disabled="{!not(v.envelope.notifications.expires)}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBeforeExpiresWarn}</span>
                         </p>
                     </aura:if>

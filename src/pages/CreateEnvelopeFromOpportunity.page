@@ -19,8 +19,7 @@
           visualforce: true,
           recordId: '{!JSENCODE(source.id)}',
           lcHost: '{!JSENCODE(visualforceHost)}',
-          namespace: namespace,
-          recordType: '{!JSENCODE(source.typeName)}'
+          namespace: namespace
         }, 'lightning', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });

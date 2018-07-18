@@ -1,4 +1,16 @@
 ({
+  initialize: function (component, event, helper) {
+    var emailLocalizations = component.get('v.emailLocalizations');
+    component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(emailLocalizations) && emailLocalizations.length > 0);
+    var recipient = component.get('v.recipient');
+    if (!!recipient) {
+      component.set('v.recipientName', recipient.name);
+      if (!!recipient.source) {
+        component.set('v.recipientSourceId', recipient.source.id);
+      }
+    }
+  },
+
   handleEditAccessAuthentication: function (component, event, helper) {
     //component.getEvent('onEditAccessAuthentication').fire();
     component.find('access-authentication-modal').set('v.showModal', true);
@@ -30,6 +42,11 @@
   },
 
   handleRecipientIdChange: function (component, event, helper) {
+    var recipient = component.get('v.recipient');
+    recipient.name = component.get('v.recipientName');
+    recipient.source = {
+      id: component.get('v.recipientSourceId')
+    };
     component.getEvent('recipientIdChange').fire();
   },
 
@@ -43,5 +60,22 @@
 
   closeCustomEmailMessageModal: function (component, event, helper) {
     component.find('custom-email-message-modal').set('v.showModal', false);
+  },
+
+  onEmailLanguageChange: function(component, event, helper) {
+    var newSelectedLanguage = component.find('email-language').get('v.value');
+    var currentSelectedLanguage = component.get('v.selectedLanguage');
+    if (newSelectedLanguage !== currentSelectedLanguage) {
+      var emailLocalizations = component.get('v.emailLocalizations');
+      for (var i = 0; i < emailLocalizations.length; i++) {
+        var el = emailLocalizations[i];
+        if (newSelectedLanguage === el.language) {
+          component.find('email-subject').set('v.value', el.subject);
+          component.find('email-message').set('v.value', el.message);
+          break;
+        }
+      }
+      component.set('v.selectedLanguage', newSelectedLanguage);
+    }
   }
 });

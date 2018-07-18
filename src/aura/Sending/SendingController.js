@@ -11,15 +11,7 @@
   },
 
   handleExpiresOn: function (component, event, helper) {
-    var expirationDate = new Date();
-    var expireAfterDays = component.get('v.expireAfterDays');
-    if ($A.util.isEmpty(expireAfterDays)) {
-      expireAfterDays = 120;
-      component.set('v.expireAfterDays', expireAfterDays);
-    }
-    expirationDate = expirationDate.setDate(expirationDate.getDate() + parseInt(expireAfterDays, 10));
-
-    component.set('v.expiresOn', expirationDate);
+    helper.setExpiry(component, component.get('v.envelope.notifications.expireAfterDays'));
   },
 
   navigateToTagging: function (component, event, helper) {
@@ -59,16 +51,16 @@
 
     var envelopeParams = {
       templateIds: templateIds,
-      emailSubject: component.get('v.emailSubject'),
-      emailMessage: component.get('v.emailMessage'),
-      language: component.get('v.language'),
+      emailSubject: component.get('v.envelope.emailSubject'),
+      emailMessage: component.get('v.envelope.emailMessage'),
+      language: component.get('v.language'), // TODO: Determine whether we need envelope.language
       notifications: {
-        remind: component.get('v.remind'),
-        remindAfterDays: component.get('v.remindAfterDays'),
-        remindFrequencyDays: component.get('v.remindFrequencyDays'),
-        expires: component.get('v.expires'),
-        expireAfterDays: component.get('v.expireAfterDays'),
-        expireWarnDays: component.get('v.expireWarnDays'),
+        remind: component.get('v.envelope.notifications.remind'),
+        remindAfterDays: component.get('v.envelope.notifications.remindAfterDays'),
+        remindFrequencyDays: component.get('v.envelope.notifications.remindFrequencyDays'),
+        expires: component.get('v.envelope.notifications.expires'),
+        expireAfterDays: component.get('v.envelope.notifications.expireAfterDays'),
+        expireWarnDays: component.get('v.envelope.notifications.expireWarnDays'),
       }
     };
 
