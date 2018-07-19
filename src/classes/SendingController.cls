@@ -52,7 +52,6 @@ public with sharing class SendingController extends Controller {
 		params.put(QueryString.PARAM_SOURCE_ID, sourceId);
 		params.put(QueryString.PARAM_ENVELOPE_ID, envelopeId);
 		params.put(QueryString.PARAM_DOCUSIGN_ACTION, 'tag');
-		System.debug('Return URL: ' + new Url(Salesforce.baseUrl, pg.getUrl()).toExternalForm());
 		return new Url(Salesforce.baseUrl, pg.getUrl());
 	}
 

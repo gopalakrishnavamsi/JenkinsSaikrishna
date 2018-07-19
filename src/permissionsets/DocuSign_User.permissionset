@@ -257,6 +257,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Recipient__c.RoleValue__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Recipient__c.Type__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

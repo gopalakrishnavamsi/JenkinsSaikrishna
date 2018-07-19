@@ -26,6 +26,10 @@
 		<name>Role__c</name>
 	</fields>
 	<fields>
+		<label>Role Value</label>
+		<name>RoleValue__c</name>
+	</fields>
+	<fields>
 		<label>Type</label>
 		<name>Type__c</name>
 		<picklistValues>

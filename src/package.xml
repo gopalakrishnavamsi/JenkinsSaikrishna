@@ -545,6 +545,7 @@
         <members>Recipient__c.Sequence__c</members>
         <members>Recipient__c.RoutingOrder__c</members>
         <members>Recipient__c.Role__c</members>
+        <members>Recipient__c.RoleValue__c</members>
         <members>Recipient__c.Email__c</members>
         <members>Recipient__c.SigningGroupId__c</members>
         <members>Recipient__c.SigningGroupName__c</members>

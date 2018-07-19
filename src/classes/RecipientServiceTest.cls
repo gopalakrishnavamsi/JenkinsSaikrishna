@@ -71,6 +71,7 @@ private class RecipientServiceTest {
 		r1.EmailSubject__c = 's1';
 		r1.EmailMessage__c = 'm1';
 		r1.Role__c = 'r1';
+		r1.RoleValue__c = 1;
 		r1.SigningGroupId__c = 1111;
 		r1.SigningGroupName__c = 'sg1';
 		r1.SmsPhoneNumber__c = '5555551111';
@@ -81,6 +82,7 @@ private class RecipientServiceTest {
 		r2.EmailSubject__c = 's2';
 		r2.EmailMessage__c = 'm2';
 		r2.Role__c = 'r2';
+		r2.RoleValue__c = 2;
 		r2.IdCheckRequired__c = true;
 		r2.SmsPhoneNumber__c = '5555552222';
 		r2.Type__c = Recipient.TYPE_IN_PERSON_SIGNER;
@@ -102,6 +104,7 @@ private class RecipientServiceTest {
 		System.assertEquals(r1.RoutingOrder__c, result[0].routingOrder);
 		System.assertNotEquals(null, result[0].role);
 		System.assertEquals(r1.Role__c, result[0].role.name);
+		System.assertEquals(Integer.valueOf(r1.RoleValue__c), result[0].role.value);
 		System.assertEquals(r1.Name, result[0].name);
 		System.assertEquals(r1.Email__c, result[0].email);
 		System.assertNotEquals(null, result[0].signingGroup);
@@ -129,6 +132,7 @@ private class RecipientServiceTest {
 		System.assertEquals(r2.RoutingOrder__c, result[1].routingOrder);
 		System.assertNotEquals(null, result[1].role);
 		System.assertEquals(r2.Role__c, result[1].role.name);
+		System.assertEquals(Integer.valueOf(r2.RoleValue__c), result[1].role.value);
 		System.assertEquals(r2.Name, result[1].name);
 		System.assertEquals(r2.Email__c, result[1].email);
 		System.assertEquals(null, result[1].signingGroup);
@@ -155,7 +159,8 @@ private class RecipientServiceTest {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5555551111', 'r1', new Entity(UserInfo.getUserId()))
 				.withAuthentication(new Recipient.Authentication('1234', true, new List<String> { '55555511111' }));
-			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'r2', new Entity(UserInfo.getOrganizationId()));
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'r2', new Entity(UserInfo.getOrganizationId()))
+				.withRole(new Recipient.Role('r2', 2));
 
 			Test.startTest();
 			Recipient__c result1 = RecipientService.DB.convert(r1, e.Id, 1);
@@ -171,6 +176,7 @@ private class RecipientServiceTest {
 			System.assertEquals(true, result1.IdCheckRequired__c);
 			System.assertEquals(r1.authentication.smsPhoneNumbers[0], result1.SmsPhoneNumber__c);
 			System.assertEquals(r1.role.name, result1.Role__c);
+			System.assertEquals(r1.role.value, result1.RoleValue__c);
 			System.assertEquals(r1.source.id, result1.SourceId__c);
 			System.assertEquals(Recipient.TYPE_SIGNER, result1.Type__c);
 			System.assertEquals(false, result1.SignNow__c);
@@ -184,6 +190,7 @@ private class RecipientServiceTest {
 			System.assertEquals(false, result2.IdCheckRequired__c);
 			System.assertEquals(null, result2.SmsPhoneNumber__c);
 			System.assertEquals(r2.role.name, result2.Role__c);
+			System.assertEquals(r2.role.value, result2.RoleValue__c);
 			System.assertEquals(r2.source.id, result2.SourceId__c);
 			System.assertEquals(Recipient.TYPE_SIGNER, result2.Type__c);
 			System.assertEquals(false, result2.SignNow__c);

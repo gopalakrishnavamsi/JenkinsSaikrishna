@@ -129,9 +129,10 @@ public with sharing class EnvelopeService {
 				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
-				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'AccessCode__c',
-				'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c', 'EmailMessage__c',
-				'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
+				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
+				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
+				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
+				'SigningGroupName__c', 'SourceId__c'
 			});
 
 			List<Envelope__c> dses = [
@@ -169,6 +170,7 @@ public with sharing class EnvelopeService {
 						RoutingOrder__c,
 						Type__c,
 						Role__c,
+						RoleValue__c,
 						AccessCode__c,
 						IdCheckRequired__c,
 						SmsPhoneNumber__c,
