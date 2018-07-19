@@ -2,6 +2,10 @@
 	Centralized logic to deal with query string parameters.
 */
 public virtual class QueryString {
+
+	public static final String PARAM_SOURCE_ID = 'sId';
+	public static final String PARAM_ENVELOPE_ID = 'eId';
+	public static final String PARAM_DOCUSIGN_ACTION = 'dsAction';
 	public static final QueryString empty = new QueryString(new Map<String, String>());
 
 	private final Map<String, String> qs;

@@ -1,0 +1,61 @@
+public with sharing class ReturnController {
+
+	public Id sourceId { get; private set; }
+	public String pathPrefix {
+		get {
+			return Site.getPathPrefix();
+		}
+	}
+	@TestVisible
+	private final Id envelopeId;
+	public enum DocuSignAction {
+		Unknown, Tag, Sign
+	}
+	@TestVisible
+	private final DocuSignAction action;
+	@TestVisible
+	private final String event;
+	public String errorMessage { get; private set; }
+	public Boolean success {
+		get {
+			return String.isBlank(errorMessage);
+		}
+	}
+
+	public ReturnController() {
+		this(QueryString.fromCurrentPage());
+	}
+
+	public ReturnController(final QueryString parameters) {
+		this(parameters.getId(QueryString.PARAM_SOURCE_ID),
+			parameters.getId(QueryString.PARAM_ENVELOPE_ID),
+			parseDocuSignAction(parameters.get(QueryString.PARAM_DOCUSIGN_ACTION)),
+			parameters.get('event'));
+	}
+
+	public ReturnController(final Id sourceId, final Id envelopeId, final DocuSignAction action, final String event) {
+		this.sourceId = sourceId;
+		this.envelopeId = envelopeId;
+		this.action = action;
+		this.event = event;
+	}
+
+	@TestVisible
+	private static DocuSignAction parseDocuSignAction(final String s) {
+		DocuSignAction result = DocuSignAction.Unknown;
+		if (s == 'tag') {
+			result = DocuSignAction.Tag;
+		} else if (s == 'sign') {
+			result = DocuSignAction.Sign;
+		}
+		return result;
+	}
+
+	public PageReference onReturn() {
+		if (this.event == 'cancel' && this.envelopeId != null) {
+			EnvelopeService.deleteEnvelope(this.envelopeId);
+		}
+		// TODO: Handle other events
+		return new PageReference('/' + (this.sourceId == null ? '' : this.sourceId));
+	}
+}

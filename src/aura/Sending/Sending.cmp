@@ -3,29 +3,27 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:attribute name="recordId" type="Id"/>
-    <aura:attribute name="envelope" type="Envelope"/>
     <aura:attribute name="visualforce" type="Boolean"/>
-    <aura:attribute name="showAdvancedOptions" type="Boolean"/>
-    <aura:attribute name="actionHeight" type="String"/>
-    <aura:attribute name="documents" type="Document[]"/>
-    <aura:attribute name="availableTemplates" type="Template[]"/>
-    <aura:attribute name="templates" type="Template[]"/>
-    <aura:attribute name="recipients" type="Recipient[]"/>
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="mode" type="String"/>
-    <aura:attribute name="showToast" type="Boolean"/>
-    <aura:attribute name="loading" type="Boolean"/>
-    <aura:attribute name="taggingUrl" type="String"/>
-    <aura:attribute name="filesSelected" type="Boolean" default="{!false}"/>
-    <aura:attribute name="selectedFileTitles" type="String"/>
-    <aura:attribute name="currentEditSelection" type="Object"/>
-    <aura:attribute name="disableNext" type="Boolean" default="{!true}"/>
-    <aura:attribute name="uploadMessage" type="String"/>
     <aura:attribute name="lcHost" type="String"/>
     <aura:attribute name="namespace" type="String"/>
-    <aura:attribute name="selectedRecipients" type="Map"/>
-    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
 
+    <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="selectedFileTitles" type="String" access="private"/>
+    <aura:attribute name="disableNext" type="Boolean" default="{!true}" access="private"/>
+    <aura:attribute name="uploadMessage" type="String" access="private"/>
+    <aura:attribute name="message" type="String" access="private"/>
+    <aura:attribute name="mode" type="String" access="private"/>
+    <aura:attribute name="showToast" type="Boolean" access="private"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="showAdvancedOptions" type="Boolean" access="private"/>
+    <aura:attribute name="envelope" type="Envelope"/>
+    <aura:attribute name="documents" type="Document[]" access="private"/>
+    <aura:attribute name="availableTemplates" type="Template[]" access="private"/>
+    <aura:attribute name="templates" type="Template[]" access="private"/>
+    <aura:attribute name="availableRecipients" type="Recipient[]" access="private"/>
+    <aura:attribute name="recipients" type="Recipient[]"/>
+    <aura:attribute name="defaultRoles" type="Recipient.Role[]" access="private"/>
+    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
     <aura:attribute name="expiresOn" type="Date" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
@@ -337,7 +335,7 @@
                                              label="{!$Label.c.DaysBeforeExpires}"
                                              value="{!v.envelope.notifications.expireAfterDays}"
                                              min="0" disabled="{!not(v.envelope.notifications.expires)}"
-                                             onblur="{!c.handleExpiresOn}"/>
+                                             onblur="{!c.setExpirationDate}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBeforeExpires}</span>
                         </p>
                         <aura:if
@@ -361,10 +359,7 @@
                 <!-- /Additional Settings -->
 
                 <!-- Loading State -->
-                <aura:if isTrue="{!v.loading}">
-                    <lightning:spinner class="{!if(v.visualforce, 'ds-spinner_visualforce')}" size="large"
-                                       alternativeText="{!$Label.c.Loading}"/>
-                </aura:if>
+                <c:Loading loading="{!v.loading}" visualforce="{!v.visualforce}"/>
                 <!-- /Loading State -->
             </div>
         </div>
@@ -402,7 +397,7 @@
                 <div class="slds-col slds-no-flex">
                     <lightning:button variant="brand" disabled="{!or(v.disableNext, v.loading)}"
                                       label="{!if(v.activeStep == 2, $Label.c.ContinueAndTag, $Label.c.Next)}"
-                                      onclick="{!if(v.activeStep == 2, c.navigateToTagging, c.goNext)}"/>
+                                      onclick="{!if(v.activeStep == 2, c.continueAndTag, c.goNext)}"/>
                 </div>
             </div>
         </div>

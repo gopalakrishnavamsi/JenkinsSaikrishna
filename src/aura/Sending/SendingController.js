@@ -10,140 +10,24 @@
     }
   },
 
-  handleExpiresOn: function (component, event, helper) {
-    helper.setExpiry(component, component.get('v.envelope.notifications.expireAfterDays'));
+  setExpirationDate: function (component, event, helper) {
+    var expireAfterDays = component.get('v.envelope.notifications.expireAfterDays');
+    if (!$A.util.isUndefinedOrNull(expireAfterDays)) {
+      component.set('v.expiresOn', helper.getExpirationDate(expireAfterDays));
+    }
   },
 
-  navigateToTagging: function (component, event, helper) {
+  continueAndTag: function (component, event, helper) {
     component.set('v.loading', true);
-
     if (component.get('v.showToast')) {
       component.set('v.showToast', false);
     }
-    var getEmptyEnvelope = component.get('c.getEmptyEnvelope');
-    var sendEnvelope = component.get('c.sendEnvelope');
-    var getTaggingUrl = component.get('c.getTaggingUrl');
-    var recipientSettings = component.get('v.recipients');
-    var templates = component.get('v.templates');
-    var templateIds = [];
-    var documents = [];
-    recipientSettings.forEach(function (recipient, index) {
-      if ($A.util.isEmpty(recipient.id)) {
-        recipientSettings.splice(index, 1);
-      }
-    });
 
-    templates.forEach(function (template) {
-      template.recipients.forEach(function (recipient) {
-        templateIds.push(template.id.value);
-        if (recipient.id) {
-          recipient.templateId = template.id.value;
-          recipientSettings.push(recipient);
-        }
-      });
-    });
+    var envelope = component.get('v.envelope');
+    envelope.documents = helper.getSelectedDocuments(component.get('v.templates'), component.get('v.documents'));
+    envelope.recipients = helper.getSelectedRecipients(component.get('v.recipients'), component.get('v.defaultRoles'));
 
-    component.get('v.documents').forEach(function (document) {
-      if (document.checked) {
-        documents.push(document);
-      }
-    });
-
-    var envelopeParams = {
-      templateIds: templateIds,
-      emailSubject: component.get('v.envelope.emailSubject'),
-      emailMessage: component.get('v.envelope.emailMessage'),
-      language: component.get('v.language'), // TODO: Determine whether we need envelope.language
-      notifications: {
-        remind: component.get('v.envelope.notifications.remind'),
-        remindAfterDays: component.get('v.envelope.notifications.remindAfterDays'),
-        remindFrequencyDays: component.get('v.envelope.notifications.remindFrequencyDays'),
-        expires: component.get('v.envelope.notifications.expires'),
-        expireAfterDays: component.get('v.envelope.notifications.expireAfterDays'),
-        expireWarnDays: component.get('v.envelope.notifications.expireWarnDays'),
-      }
-    };
-
-    getEmptyEnvelope.setParams({
-      recordId: component.get('v.recordId'),
-      recipientData: JSON.stringify(recipientSettings),
-      documentData: JSON.stringify(documents),
-      envelopeData: JSON.stringify(envelopeParams)
-    });
-
-    getEmptyEnvelope.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === "SUCCESS") {
-        var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-        if ($A.util.isEmpty(errMsg)) {
-          var envelope = JSON.parse(response.getReturnValue()).results.envelope;
-
-          sendEnvelope.setParams({
-            envelopeId: envelope
-          });
-          sendEnvelope.setCallback(this, function (response) {
-            var status = response.getState();
-            if (status === "SUCCESS") {
-              var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-              if ($A.util.isEmpty(errMsg)) {
-                var newEnvelope = JSON.parse(response.getReturnValue()).results.envelope;
-
-                getTaggingUrl.setParams({
-                  envelopeId: newEnvelope,
-                  returnUrl: window.location.origin + '/' + component.get('v.recordId')
-                });
-                getTaggingUrl.setCallback(this, function (response) {
-                  var status = response.getState();
-                  if (status === "SUCCESS") {
-                    var errMsg = JSON.parse(response.getReturnValue()).errMsg;
-                    if ($A.util.isEmpty(errMsg)) {
-                      var taggingUrl = JSON.parse(response.getReturnValue()).results.taggingUrl;
-                      helper.navigateToDocuSign(component, event, taggingUrl);
-                    } else {
-                      component.set('v.loading', false);
-                      component.set('v.message', errMsg);
-                      component.set('v.mode', 'error');
-                      component.set('v.showToast', true);
-                    }
-                  } else {
-                    var errMsg = response.getError()[0].message;
-                    component.set('v.loading', false);
-                    component.set('v.message', errMsg);
-                    component.set('v.mode', 'error');
-                    component.set('v.showToast', true);
-                  }
-                });
-                $A.enqueueAction(getTaggingUrl);
-              } else {
-                component.set('v.loading', false);
-                component.set('v.message', errMsg);
-                component.set('v.mode', 'error');
-                component.set('v.showToast', true);
-              }
-            } else {
-              var errMsg = response.getError()[0].message;
-              component.set('v.loading', false);
-              component.set('v.message', errMsg);
-              component.set('v.mode', 'error');
-              component.set('v.showToast', true);
-            }
-          });
-          $A.enqueueAction(sendEnvelope);
-        } else {
-          component.set('v.loading', false);
-          component.set('v.message', errMsg);
-          component.set('v.mode', 'error');
-          component.set('v.showToast', true);
-        }
-      } else {
-        var errMsg = response.getError()[0].message;
-        component.set('v.loading', false);
-        component.set('v.message', errMsg);
-        component.set('v.mode', 'error');
-        component.set('v.showToast', true);
-      }
-    });
-    $A.enqueueAction(getEmptyEnvelope);
+    helper.tagEnvelope(component, helper, envelope);
   },
 
   addTemplate: function (component, event, helper) {
@@ -184,8 +68,11 @@
     templates.splice(targetIndex, 1);
 
     if ($A.util.isEmpty(templates)) {
-      helper.resetNotificationSettings(component, event, helper);
-      component.set('v.emailMessage', null);
+      var envelope = component.get('v.envelope');
+      envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
+      // TODO: Necessary to null out email subject and message?
+      // envelope.emailSubject = null;
+      // envelope.emailMessage = null;
       helper.handleFilesChange(component, event, helper);
     }
     component.set('v.templates', templates);
@@ -209,6 +96,7 @@
   },
 
   cancel: function (component, event, helper) {
+    component.set('v.loading', true);
     var envelopeId = component.get('v.envelope.id');
     if (envelopeId) {
       var deleteEnvelope = component.get('c.deleteEnvelope');
@@ -216,17 +104,20 @@
         envelopeId: envelopeId
       });
       deleteEnvelope.setCallback(this, function (response) {
-        if (response.getState() !== 'SUCCESS') {
+        if (response.getState() === 'SUCCESS') {
+          var sourceId = component.get('v.recordId');
+          if (sourceId) {
+            _navigateToSObject(sourceId);
+          }
+        } else {
           helper.setError(component, _getErrorMessage(response));
+          component.set('v.loading', false);
         }
       });
       $A.enqueueAction(deleteEnvelope);
     }
 
-    var sourceId = component.get('v.recordId');
-    if (sourceId) {
-      _navigateToSObject(sourceId);
-    }
+
   },
 
   goBack: function (component, event, helper) {

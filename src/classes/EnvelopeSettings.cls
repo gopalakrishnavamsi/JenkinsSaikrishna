@@ -85,8 +85,7 @@ public with sharing class EnvelopeSettings {
 		this.errorMessage = errorMessage;
 	}
 
-	@TestVisible
-	private static List<Recipient.Role> getDefaultRoles() {
+	public static List<Recipient.Role> getDefaultRoles() {
 		if (DEFAULT_ROLES == null) {
 			DEFAULT_ROLES = new List<Recipient.Role>();
 			for (RoleSettings__c s : RoleSettings__c.getAll().values()) {

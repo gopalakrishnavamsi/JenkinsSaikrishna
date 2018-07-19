@@ -21,6 +21,8 @@ public with sharing class SendingController extends Controller {
 		@AuraEnabled
 		public List<Recipient> recipients { get; private set; }
 		@AuraEnabled
+		public List<Recipient.Role> defaultRoles { get; private set; }
+		@AuraEnabled
 		public List<Recipient.EmailSettings> emailLocalizations { get; private set; }
 
 		private DraftEnvelope(
@@ -29,6 +31,7 @@ public with sharing class SendingController extends Controller {
 			final List<Template> templates,
 			final List<Document> documents,
 			final List<Recipient> recipients,
+			final List<Recipient.Role> defaultRoles,
 			final List<Recipient.EmailSettings> emailLocalizations) {
 
 			this.accountFeatures = accountFeatures;
@@ -36,8 +39,21 @@ public with sharing class SendingController extends Controller {
 			this.templates = templates;
 			this.documents = documents;
 			this.recipients = recipients;
+			this.defaultRoles = defaultRoles;
 			this.emailLocalizations = emailLocalizations;
 		}
+	}
+
+	@TestVisible
+	private static Url getReturnUrl(final Id sourceId, final Id envelopeId) {
+		PageReference pg = Page.ReturnFromDocuSign;
+		pg.setRedirect(true);
+		Map<String, String> params = pg.getParameters();
+		params.put(QueryString.PARAM_SOURCE_ID, sourceId);
+		params.put(QueryString.PARAM_ENVELOPE_ID, envelopeId);
+		params.put(QueryString.PARAM_DOCUSIGN_ACTION, 'tag');
+		System.debug('Return URL: ' + new Url(Salesforce.baseUrl, pg.getUrl()).toExternalForm());
+		return new Url(Salesforce.baseUrl, pg.getUrl());
 	}
 
 	@AuraEnabled
@@ -55,6 +71,7 @@ public with sharing class SendingController extends Controller {
 				templates,
 				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
 				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
+				EnvelopeSettings.getDefaultRoles(),
 				Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettings()
 					: new List<Recipient.EmailSettings>());
 		} catch (Exception ex) {
@@ -74,9 +91,10 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Envelope updateEnvelope(final Envelope envelope) {
+	public static Envelope updateEnvelope(final String envelopeJson) {
 		try {
-			return EnvelopeService.updateEnvelope(envelope);
+			// HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
+			return EnvelopeService.updateEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class));
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to update envelope');
 			throw new AuraHandledException(ex.getMessage());
@@ -84,9 +102,9 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Envelope sendEnvelope(final Envelope envelope) {
+	public static Envelope sendEnvelope(final String envelopeJson) {
 		try {
-			return EnvelopeService.sendEnvelope(envelope, false, true);
+			return EnvelopeService.sendEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class), false, true);
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to send envelope');
 			throw new AuraHandledException(ex.getMessage());
@@ -94,9 +112,22 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static String getTaggerUrl(final String dsEnvelopeId, final String returnUrl) {
+	public static String getTaggerUrl(final String envelopeJson) {
+		Envelope envelope = (Envelope)JSON.deserialize(envelopeJson, Envelope.class);
+		if (envelope == null
+			|| envelope.id == null
+			|| envelope.source == null
+			|| envelope.source.id == null
+			|| envelope.docuSignId == null) {
+
+			throw new AuraHandledException(Label.InvalidEnvelope);
+		}
+
 		try {
-			return EnvelopeService.getSenderViewUrl(UUID.fromString(dsEnvelopeId), new Url(returnUrl)).toExternalForm();
+			return EnvelopeService.getSenderViewUrl(
+				envelope.docuSignId,
+				getReturnUrl(envelope.source.id, envelope.id))
+				.toExternalForm();
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to get tagger URL');
 			throw new AuraHandledException(ex.getMessage());

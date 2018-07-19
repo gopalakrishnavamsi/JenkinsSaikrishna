@@ -34,11 +34,7 @@ public with sharing class Entity {
 	 * The name of the Salesforce object type.
 	 */
 	@AuraEnabled
-	public String typeName {
-		get {
-			return String.valueOf(this.type);
-		}
-	}
+	public String typeName { get; private set; }
 	/**
 	 * The localized Salesforce object label.
 	 */
@@ -80,6 +76,7 @@ public with sharing class Entity {
 		if (id != null) {
 			this.id = id;
 			this.type = id.getSobjectType();
+			this.typeName = String.valueOf(this.type);
 			this.label = this.type.getDescribe().getLabel();
 			this.isValid = true;
 		} else {
@@ -166,7 +163,7 @@ public with sharing class Entity {
 	 * @return <code>true</code> if the entity is valid, <code>false</code> otherwise.
 	 */
 	public static Boolean isValid(final Entity entity) {
-		return entity != null && entity.isValid;
+		return entity != null && entity.isValid == true;
 	}
 
 	/**

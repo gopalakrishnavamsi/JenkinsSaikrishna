@@ -439,7 +439,6 @@ public class Recipient implements Comparable {
 		 * Read-only property describing whether this role has a valid value. If <code>true</code> (> 0),
 		 * the role is mapped to automatic anchor tags.
 		 */
-		@AuraEnabled
 		public Boolean hasValue {
 			get {
 				return this.value > 0;

@@ -120,6 +120,8 @@
         <members>Controller</members>
         <members>SendingController</members>
         <members>SendingControllerTest</members>
+        <members>ReturnController</members>
+        <members>ReturnControllerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -722,6 +724,7 @@
         <members>SetupSplash</members>
         <members>FileUploader</members>
         <members>CreateEnvelopeFromOpportunity</members>
+        <members>ReturnFromDocuSign</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -772,6 +775,7 @@
         <members>Sending</members>
         <members>FileUploader</members>
         <members>Recipient</members>
+        <members>Loading</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

@@ -1,0 +1,1 @@
+<apex:page controller="ReturnController" action="{!onReturn}" showHeader="false" sideBar="false"/>

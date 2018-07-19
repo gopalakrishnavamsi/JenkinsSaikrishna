@@ -90,7 +90,6 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope is sent.
 	 */
-	@AuraEnabled
 	public Boolean isSent {
 		get {
 			return this.sent != null && this.sent <= Datetime.now();
@@ -99,7 +98,6 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains documents.
 	 */
-	@AuraEnabled
 	public Boolean hasDocuments {
 		get {
 			return Collection.isNotEmpty(this.documents);
@@ -108,7 +106,6 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains DocuSign templates.
 	 */
-	@AuraEnabled
 	public Boolean hasTemplates {
 		get {
 			if (this.documents != null) {
@@ -124,7 +121,6 @@ public class Envelope {
 	/**
 	 * Read-only property indicating whether the envelope contains recipients.
 	 */
-	@AuraEnabled
 	public Boolean hasRecipients {
 		get {
 			return Collection.isNotEmpty(this.recipients);

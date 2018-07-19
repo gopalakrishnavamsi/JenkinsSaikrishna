@@ -14,34 +14,37 @@
     });
     createDraftEnvelope.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
-        var draftEnvelope = response.getReturnValue();
+        var result = response.getReturnValue();
+        ;
         // Add front-end properties to documents
-        if (!$A.util.isEmpty(draftEnvelope.documents)) {
-          draftEnvelope.documents.forEach(function (d) {
+        if (!$A.util.isEmpty(result.documents)) {
+          result.documents.forEach(function (d) {
             helper.addDocumentProperties(d, false);
           });
         }
-        if (!$A.util.isEmpty(draftEnvelope.recipients)) {
-          draftEnvelope.recipients.forEach(function (r) {
+        if (!$A.util.isEmpty(result.recipients)) {
+          result.recipients.forEach(function (r) {
             r = helper.addRecipientProperties(r, false);
             r.role = {}; // TODO: Roles only apply to templates for now.
           });
         }
-        if (!$A.util.isEmpty(draftEnvelope.templates)) {
-          draftEnvelope.templates.forEach(function (template) {
+        if (!$A.util.isEmpty(result.templates)) {
+          result.templates.forEach(function (template) {
             template.selected = false;
             if (!$A.util.isEmpty(template.recipients)) {
               template.recipients.forEach(helper.addRecipientProperties);
             }
           });
         }
-        component.set('v.envelope', draftEnvelope.envelope);
-        component.set('v.availableTemplates', draftEnvelope.templates);
-        component.set('v.documents', draftEnvelope.documents);
-        component.set('v.selectedRecipients', draftEnvelope.recipients);
-        component.set('v.emailLocalizations', draftEnvelope.emailLocalizations);
-        component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(draftEnvelope.emailLocalizations) && draftEnvelope.emailLocalizations.length > 0)
-        helper.setExpiry(component, draftEnvelope.envelope.notifications.expireAfterDays);
+        result.envelope.notifications = helper.setExpiration(result.envelope.notifications, result.envelope.notifications.expireAfterDays, result.envelope.notifications.expireWarnDays);
+        component.set('v.expiresOn', helper.getExpirationDate(result.envelope.notifications.expireAfterDays));
+        component.set('v.envelope', result.envelope);
+        component.set('v.availableTemplates', result.templates);
+        component.set('v.documents', result.documents);
+        component.set('v.availableRecipients', result.recipients);
+        component.set('v.defaultRoles', result.defaultRoles);
+        component.set('v.emailLocalizations', result.emailLocalizations);
+        component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(result.emailLocalizations));
         component.set('v.loading', false);
       } else {
         helper.setError(component, _getErrorMessage(response));
@@ -50,16 +53,38 @@
     $A.enqueueAction(createDraftEnvelope);
   },
 
-  // TODO: Validate expiry assumptions. Does NDSE force expiration after 120 days?
-  setExpiry: function (component, expireAfterDays) {
-    var expirationDate = new Date();
-    if ($A.util.isEmpty(expireAfterDays)) {
-      expireAfterDays = 120;
-      component.set('v.envelope.notifications.expires', true);
-      component.set('v.envelope.notifications.expireAfterDays', expireAfterDays);
+  setReminders: function (notifications, remindAfterDays, remindFrequencyDays) {
+    if ($A.util.isEmpty(notifications)) {
+      notifications = {};
     }
+
+    notifications.remind = !$A.util.isUndefinedOrNull(remindAfterDays);
+    notifications.remindAfterDays = $A.util.isUndefinedOrNull(remindAfterDays) ? null : parseInt(remindAfterDays, 10);
+    notifications.remindFrequencyDays = $A.util.isUndefinedOrNull(remindFrequencyDays) ? null : parseInt(remindFrequencyDays, 10);
+
+    return notifications;
+  },
+
+  // TODO: Validate expiry assumptions. Does NDSE force expiration after 120 days?
+  setExpiration: function (notifications, expireAfterDays, expireWarnDays) {
+    if ($A.util.isEmpty(notifications)) {
+      notifications = {};
+    }
+
+    notifications.expires = true;
+    notifications.expireAfterDays = $A.util.isUndefinedOrNull(expireAfterDays) ? 120 : parseInt(expireAfterDays, 10);
+    notifications.expireWarnDays = $A.util.isUndefinedOrNull(expireWarnDays) ? null : parseInt(expireWarnDays, 10);
+
+    return notifications;
+  },
+
+  getExpirationDate: function (expireAfterDays) {
+    if ($A.util.isUndefinedOrNull(expireAfterDays)) {
+      return null;
+    }
+    var expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + parseInt(expireAfterDays, 10));
-    component.set('v.expiresOn', expirationDate.toLocaleDateString());
+    return expirationDate.toLocaleDateString();
   },
 
   addDocumentProperties: function (doc, selected) {
@@ -84,7 +109,7 @@
     return recipient;
   },
 
-  navigateToDocuSign: function (component, event, url) {
+  navigateToUrl: function (url) {
     var navEvt = $A.get('e.force:navigateToURL');
     if (!$A.util.isEmpty(navEvt)) {
       navEvt.setParams({
@@ -94,24 +119,12 @@
     }
   },
 
-  navigateBackToRecord: function (component, event, url) {
-    sforce.one.navigateToSObject(component.get('v.recordId'));
-  },
-
   enforceArray: function (results) {
     return Array.isArray(results) ? results : [results];
   },
 
-  resetNotificationSettings: function (component, event, helper) {
-    component.set('v.remind', false);
-    component.set('v.expires', true);
-    component.set('v.expireAfterDays', 120);
-    component.set('v.expireWarnDays', 0);
-    component.set('v.remindAfterDays', 0);
-    component.set('v.remindFrequencyDays', 0);
-    var expirationDate = new Date();
-    expirationDate = expirationDate.setDate(expirationDate.getDate() + component.get('v.expireAfterDays'));
-    component.set('v.expiresOn', expirationDate);
+  resetNotificationSettings: function (notifications, helper) {
+    return helper.setExpiration(helper.setReminders(notifications), 120);
   },
 
   setTemplateSettings: function (component, event, helper, selectedTemplate) {
@@ -129,34 +142,19 @@
 
     availableTemplates.forEach(function (template, index) {
       if (template.id.value === selectedTemplateId) {
+        var envelope = component.get('v.envelope');
         if (template.notifications != null) {
-          component.set('v.remind', template.notifications.remind);
-          component.set('v.expires', template.notifications.expires);
-          component.set('v.expireAfterDays', template.notifications.expireAfterDays);
-          component.set('v.expireWarnDays', template.notifications.expireWarnDays);
-          component.set('v.remindAfterDays', template.notifications.remindAfterDays);
-          component.set('v.remindFrequencyDays', template.notifications.remindAfterDays);
-          var expirationDate = new Date();
-          expirationDate = expirationDate.setDate(expirationDate.getDate() + component.get('v.expireAfterDays'));
-          component.set('v.expiresOn', expirationDate);
+          envelope.notifications = helper.setExpiration(helper.setReminders(envelope.notifications, template.notifications.remindAfterDays, template.notifications.remindFrequencyDays), template.notifications.expireAfterDays, template.notifications.expireWarnDays);
         } else {
-          helper.resetNotificationSettings(component, event, helper);
+          envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
         }
-        component.set('v.emailMessage', template.emailMessage);
-        component.set('v.emailSubject', template.emailSubject);
+        envelope.emailSubject = template.emailSubject;
+        envelope.emailMessage = template.emailMessage;
+        component.set('v.envelope', envelope);
         template.selected = true;
       }
     });
     component.set('v.availableTemplates', availableTemplates);
-  },
-
-  setCurrentEditSelection: function (component, event) {
-    var source = event.getSource();
-    var selection = {
-      index: source.get('v.index')
-    };
-
-    component.set('v.currentEditSelection', selection);
   },
 
   addBlankRecipient: function (component, recipient) {
@@ -165,6 +163,9 @@
     var newRecipient = {
       source: isRecipientDefined ? recipient.source : null,
       name: isRecipientDefined ? recipient.name : null,
+      email: isRecipientDefined ? recipient.email : null,
+      hostName: isRecipientDefined ? recipient.hostName : null,
+      hostEmail: isRecipientDefined ? recipient.hostEmail : null,
       role: {},
       type: 'Signer',
       authentication: {},
@@ -203,30 +204,6 @@
     templates[targetIndex] = selectedTemplate;
     component.set('v.availableTemplates', availableTemplates);
     component.set('v.templates', templates);
-  },
-
-  removeTemplateRecipients: function (component, event, helper, templateIndex) {
-    var targetIndex = $A.util.isEmpty(templateIndex) ? event.getSource().get('v.value') : templateIndex;
-    var templates = component.get('v.templates');
-    var currentRecipients = component.get('v.recipients');
-    var updateRecipients = [];
-    var tempalteIds = [];
-
-    templates.forEach(function (template) {
-      tempalteIds.push(template.id.value);
-    });
-
-    currentRecipients.forEach(function (recipient, index) {
-      if (recipient.template) {
-        if (tempalteIds.includes(recipient.template.id.value)) {
-          updateRecipients.push(recipient);
-        }
-      } else {
-        updateRecipients.push(recipient);
-      }
-    });
-
-    component.set('v.recipients', updateRecipients);
   },
 
   getValidity: function (component) {
@@ -294,11 +271,11 @@
   },
 
   handleFilesChange: function (component, event, helper) {
-    var defaultRecipients = component.get('v.selectedRecipients');
+    var availableRecipients = component.get('v.availableRecipients');
     var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
 
     if (!component.get('v.filesSelected')) {
-      defaultRecipients.forEach(function (recipient) {
+      availableRecipients.forEach(function (recipient) {
         if (!$A.util.isEmpty(recipient)) {
           helper.addBlankRecipient(component, recipient);
         }
@@ -314,5 +291,88 @@
 
     component.set('v.recipients', []);
     component.set('v.filesSelected', false);
+  },
+
+  getSelectedDocuments: function (templates, documents) {
+    var sequence = 1;
+    var docs = [];
+    if (!$A.util.isEmpty(templates)) {
+      templates.forEach(function (t) {
+        if (!!t.selected) {
+          docs.push({
+            sequence: sequence++, type: 'Template', name: t.name, created: t.created, sourceId: t.id.value
+          });
+        }
+      });
+    }
+    if (!$A.util.isEmpty(documents)) {
+      documents.forEach(function (d) {
+        if (!!d.selected) {
+          docs.push({
+            sequence: sequence++,
+            type: d.type,
+            name: d.name,
+            extension: d.extension,
+            size: d.size,
+            created: d.created,
+            sourceId: d.sourceId
+          });
+        }
+      });
+    }
+    return docs;
+  },
+
+  getSelectedRecipients: function (recipients, defaultRoles) {
+    var rs = [];
+
+    if (!$A.util.isEmpty(recipients)) {
+      recipients.forEach(function (r) {
+        if ($A.util.isEmpty(r.role)) {
+          r.role = $A.util.isEmpty(defaultRoles) ? {name: String((Math.random() * 100000) + 1)} : defaultRoles.shift();
+        }
+        rs.push(r);
+      });
+    }
+
+    return rs;
+  },
+
+  tagEnvelope: function (component, helper, envelope) {
+    var updateEnvelope = component.get('c.updateEnvelope');
+    updateEnvelope.setParams({
+      // HACK: Stringify-ing JSON to work around @AuraEnabled method limitations.
+      envelopeJson: JSON.stringify(envelope)
+    });
+    updateEnvelope.setCallback(this, function (r1) {
+      if (r1.getState() !== 'SUCCESS') {
+        helper.setError(component, _getErrorMessage(r1));
+      } else {
+        var sendEnvelope = component.get('c.sendEnvelope');
+        sendEnvelope.setParams({
+          envelopeJson: JSON.stringify(r1.getReturnValue())
+        });
+        sendEnvelope.setCallback(this, function (r2) {
+          if (r2.getState() !== 'SUCCESS') {
+            helper.setError(component, _getErrorMessage(r2));
+          } else {
+            var getTaggerUrl = component.get('c.getTaggerUrl');
+            getTaggerUrl.setParams({
+              envelopeJson: JSON.stringify(r2.getReturnValue())
+            });
+            getTaggerUrl.setCallback(this, function (r3) {
+              if (r3.getState() !== 'SUCCESS') {
+                helper.setError(component, _getErrorMessage(r3));
+              } else {
+                helper.navigateToUrl(r3.getReturnValue());
+              }
+            });
+            $A.enqueueAction(getTaggerUrl);
+          }
+        });
+        $A.enqueueAction(sendEnvelope);
+      }
+    });
+    $A.enqueueAction(updateEnvelope);
   }
 });

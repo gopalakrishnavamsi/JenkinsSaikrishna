@@ -120,6 +120,7 @@ public with sharing class StatusService {
 				)
 				FROM EnvelopeStatus__c
 				WHERE DocuSignId__c IN :dsEnvelopeIds
+				ORDER BY CreatedDate ASC
 			]);
 		}
 
