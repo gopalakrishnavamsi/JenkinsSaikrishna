@@ -60,7 +60,14 @@
       if (template.id.value === templates[targetIndex].id.value) {
         template.selected = false;
         template.recipients.forEach(function (recipient) {
-          recipient.id = null;
+          recipient.sourceId = null;
+          var availableRecipients = component.get('v.availableRecipients');
+          availableRecipients.forEach(function (r) {
+            if (r.templateId === template.id.value) {
+              r.templateId = null;
+            }
+          });
+          component.set('v.availableRecipients', availableRecipients);
         });
       }
     });
@@ -70,9 +77,8 @@
     if ($A.util.isEmpty(templates)) {
       var envelope = component.get('v.envelope');
       envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
-      // TODO: Necessary to null out email subject and message?
-      // envelope.emailSubject = null;
-      // envelope.emailMessage = null;
+      envelope.emailSubject = component.get('v.defaultEmailSubject');
+      envelope.emailMessage = component.get('v.defaultEmailMessage');
       helper.handleFilesChange(component, event, helper);
     }
     component.set('v.templates', templates);
@@ -116,8 +122,6 @@
       });
       $A.enqueueAction(deleteEnvelope);
     }
-
-
   },
 
   goBack: function (component, event, helper) {
@@ -141,7 +145,7 @@
   },
 
   handleActiveStepChange: function (component, event, helper) {
-    component.set('v.disableNext', !helper.getValidity(component));
+    component.set('v.disableNext', !helper.getValidity(component, helper));
 
     if (component.get('v.activeStep') === 1) {
       var documents = component.get('v.documents');
@@ -159,6 +163,6 @@
   },
 
   setNextButtonState: function (component, event, helper) {
-    component.set('v.disableNext', !helper.getValidity(component));
+    component.set('v.disableNext', !helper.getValidity(component, helper));
   }
 });

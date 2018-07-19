@@ -84,7 +84,7 @@ public with sharing class EnvelopeService {
 				DocumentService.convert(e.Documents__r),
 				RecipientService.convert(e.Recipients__r),
 				null, // custom fields not stored in SFDC
-				new Envelope.Notifications(
+				new Notifications(
 					e.Remind__c,
 					Integer.valueOf(e.RemindAfterDays__c),
 					Integer.valueOf(e.RemindFrequencyDays__c),
@@ -126,7 +126,7 @@ public with sharing class EnvelopeService {
 				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
+				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
 				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
@@ -158,7 +158,7 @@ public with sharing class EnvelopeService {
 						Name,
 						Extension__c,
 						Size__c,
-						Created__c,
+						LastModified__c,
 						SourceId__c
 					FROM Documents__r
 					ORDER BY Sequence__c
@@ -345,7 +345,7 @@ public with sharing class EnvelopeService {
 	}
 
 	@TestVisible
-	private static Envelope addNotifications(final Envelope envelope, final Envelope.Notifications notifications) {
+	private static Envelope addNotifications(final Envelope envelope, final Notifications notifications) {
 		if (envelope == null || notifications == null) return envelope;
 
 		return envelope.withNotifications(notifications);
@@ -641,7 +641,11 @@ public with sharing class EnvelopeService {
 
 		Envelope e = replaceUserTags(envelope);
 		Boolean result = DB.updateEnvelopeSent(e.id, e.docuSignId, e.emailSubject, e.emailMessage, sendNow);
-		StatusService.createStatus(new List<Envelope.Status> { e.toEnvelopeStatus() });
+		if (sendNow) {
+			StatusService.createStatus(new List<Envelope.Status> {
+				e.withSent(Datetime.now()).toEnvelopeStatus()
+			});
+		}
 
 		return result;
 	}
@@ -688,7 +692,7 @@ public with sharing class EnvelopeService {
 			null,
 			null,
 			null,
-			new Envelope.Notifications(
+			new Notifications(
 				remindAfterDays >= 0,
 				remindAfterDays >= 0 ? remindAfterDays : null,
 				remindFrequencyDays >= 0 ? remindFrequencyDays : null,

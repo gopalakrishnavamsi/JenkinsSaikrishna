@@ -547,7 +547,7 @@ public with sharing class EnvelopeConfiguration {
 	/**
 	 * Envelope notification settings (RES).
 	 */
-	public Envelope.Notifications notifications { get; private set; }
+	public Notifications notifications { get; private set; }
 	/**
 	 * Recipient email settings (CES, CEM, CEL).
 	 */
@@ -612,7 +612,7 @@ public with sharing class EnvelopeConfiguration {
 		final Entity source,
 		final ClickAction action,
 		final VisibilitySettings visibility,
-		final Envelope.Notifications notifications,
+		final Notifications notifications,
 		final Recipient.EmailSettings email,
 		final DocumentSettings documents,
 		final RecipientSettings recipients) {

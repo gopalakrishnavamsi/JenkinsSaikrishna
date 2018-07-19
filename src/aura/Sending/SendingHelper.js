@@ -39,6 +39,8 @@
         result.envelope.notifications = helper.setExpiration(result.envelope.notifications, result.envelope.notifications.expireAfterDays, result.envelope.notifications.expireWarnDays);
         component.set('v.expiresOn', helper.getExpirationDate(result.envelope.notifications.expireAfterDays));
         component.set('v.envelope', result.envelope);
+        component.set('v.defaultEmailSubject', result.envelope.emailSubject);
+        component.set('v.defaultEmailMessage', result.envelope.emailMessage);
         component.set('v.availableTemplates', result.templates);
         component.set('v.documents', result.documents);
         component.set('v.availableRecipients', result.recipients);
@@ -91,7 +93,7 @@
     if (doc) {
       doc.selected = !!selected;
       doc.formattedSize = !!doc.size ? _formatSize(doc.size) : '';
-      doc.formattedCreated = !!doc.created ? new Date(doc.created).toLocaleString() : '';
+      doc.formattedLastModified = !!doc.lastModified ? new Date(doc.lastModified).toLocaleString() : '';
     }
     return doc;
   },
@@ -127,6 +129,30 @@
     return helper.setExpiration(helper.setReminders(notifications), 120);
   },
 
+  getTemplateRecipients: function (helper, templateId, templateRecipients, availableRecipients) {
+    if ($A.util.isEmpty(availableRecipients) || $A.util.isEmpty(templateRecipients)) {
+      return templateRecipients;
+    }
+
+    var filteredRecipients = availableRecipients.filter(function (r) {
+      return !r.selected && !!r.templateId;
+    });
+
+    var trs = [];
+    if (!$A.util.isEmpty(filteredRecipients)) {
+      for (var i = 0; i < templateRecipients.length; i++) {
+        if (i >= filteredRecipients.length) {
+          trs.push(templateRecipients[i]);
+        } else {
+          trs.push(helper.mergeTemplateRecipient(helper, templateRecipients[i], filteredRecipients[i]));
+          filteredRecipients[i].selected = true;
+          filteredRecipients[i].templateId = templateId;
+        }
+      }
+    }
+    return trs;
+  },
+
   setTemplateSettings: function (component, event, helper, selectedTemplate) {
     var templates = component.get('v.templates');
     var index = event.getSource().get('v.name');
@@ -148,10 +174,14 @@
         } else {
           envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
         }
-        envelope.emailSubject = template.emailSubject;
-        envelope.emailMessage = template.emailMessage;
+        envelope.emailSubject = $A.util.isEmpty(template.emailSubject) ? envelope.emailSubject : template.emailSubject;
+        envelope.emailMessage = $A.util.isEmpty(template.emailMessage) ? envelope.emailMessage : template.emailMessage;
         component.set('v.envelope', envelope);
         template.selected = true;
+        var availableRecipients = component.get('v.availableRecipients');
+        template.recipients = helper.getTemplateRecipients(helper, template.id.value, template.recipients, availableRecipients);
+        component.set('v.availableRecipients', availableRecipients);
+        component.set('v.recipients', component.get('v.recipients').concat(template.recipients))
       }
     });
     component.set('v.availableTemplates', availableTemplates);
@@ -206,7 +236,11 @@
     component.set('v.templates', templates);
   },
 
-  getValidity: function (component) {
+  hasSourceId: function (x) {
+    return !$A.util.isUndefinedOrNull(x) && (!$A.util.isUndefinedOrNull(x.sourceId) || !$A.util.isUndefinedOrNull(x.source) && !$A.util.isUndefinedOrNull(x.source.id));
+  },
+
+  getValidity: function (component, helper) {
     switch (component.get('v.activeStep')) {
       case 0:
         return !!(component.get('v.filesSelected') || !$A.util.isEmpty(component.get('v.templates')));
@@ -216,7 +250,7 @@
           for (var i = 0; i < templates.length; i++) {
             if (!$A.util.isEmpty(templates[i].recipients)) {
               for (var n = 0; n < templates[i].recipients.length; n++) {
-                if (!$A.util.isEmpty(templates[i].recipients[n].id)) {
+                if (helper.hasSourceId(templates[i].recipients[n])) {
                   return true;
                 }
               }
@@ -226,10 +260,8 @@
 
         if (component.get('v.filesSelected')) {
           var recipients = component.get('v.recipients');
-
           for (var i = 0; i < recipients.length; i++) {
-            var recipient = recipients[i];
-            if (!$A.util.isEmpty(recipient.source) && !$A.util.isEmpty(recipient.source.id)) {
+            if (helper.hasSourceId(recipients[i])) {
               return true;
             }
           }
@@ -300,7 +332,13 @@
       templates.forEach(function (t) {
         if (!!t.selected) {
           docs.push({
-            sequence: sequence++, type: 'Template', name: t.name, created: t.created, sourceId: t.id.value
+            sequence: sequence++,
+            type: 'Template',
+            name: t.name,
+            extension: null,
+            size: null,
+            lastModified: t.lastModified,
+            sourceId: t.id.value
           });
         }
       });
@@ -314,7 +352,7 @@
             name: d.name,
             extension: d.extension,
             size: d.size,
-            created: d.created,
+            lastModified: d.lastModified,
             sourceId: d.sourceId
           });
         }
@@ -374,5 +412,45 @@
       }
     });
     $A.enqueueAction(updateEnvelope);
+  },
+
+  valueOrElse: function (value, orElse) {
+    return $A.util.isEmpty(value) ? orElse : value;
+  },
+
+  mergeTemplateRecipient: function (helper, templateRecipient, recipient) {
+    if ($A.util.isUndefinedOrNull(templateRecipient)) return recipient;
+    if ($A.util.isUndefinedOrNull(recipient)) return templateRecipient;
+
+    if ($A.util.isUndefinedOrNull(templateRecipient.authentication)) templateRecipient.authentication = {};
+    if ($A.util.isUndefinedOrNull(recipient.authentication)) recipient.authentication = {};
+    if ($A.util.isUndefinedOrNull(templateRecipient.emailSettings)) templateRecipient.emailSettings = {};
+    if ($A.util.isUndefinedOrNull(recipient.emailSettings)) recipient.emailSettings = {};
+
+    return {
+      type: templateRecipient.type,
+      routingOrder: templateRecipient.routingOrder,
+      role: templateRecipient.role,
+      name: helper.valueOrElse(templateRecipient.name, recipient.name),
+      email: helper.valueOrElse(templateRecipient.email, recipient.email),
+      signingGroup: helper.valueOrElse(templateRecipient.signingGroup, recipient.signingGroup),
+      phone: recipient.phone,
+      authentication: {
+        accessCode: helper.valueOrElse(templateRecipient.authentication.accessCode, recipient.authentication.accessCode),
+        idCheckRequired: helper.valueOrElse(templateRecipient.authentication.idCheckRequired, recipient.authentication.idCheckRequired),
+        smsPhoneNumbers: helper.valueOrElse(templateRecipient.authentication.smsPhoneNumbers, recipient.authentication.smsPhoneNumbers)
+      },
+      note: helper.valueOrElse(templateRecipient.note, recipient.note),
+      emailSettings: {
+        language: helper.valueOrElse(templateRecipient.emailSettings.language, recipient.emailSettings.language),
+        languageLabel: helper.valueOrElse(templateRecipient.emailSettings.languageLabel, recipient.emailSettings.languageLabel),
+        subject: helper.valueOrElse(templateRecipient.emailSettings.subject, recipient.emailSettings.subject),
+        message: helper.valueOrElse(templateRecipient.emailSettings.message, recipient.emailSettings.message)
+      },
+      hostName: helper.valueOrElse(templateRecipient.hostName, recipient.hostName),
+      hostEmail: helper.valueOrElse(templateRecipient.hostEmail, recipient.hostEmail),
+      signNow: helper.valueOrElse(templateRecipient.signNow, recipient.signNow),
+      source: recipient.source
+    };
   }
 });

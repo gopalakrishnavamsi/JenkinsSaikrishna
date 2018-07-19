@@ -48,6 +48,70 @@ public with sharing class DocumentService {
 	}
 
 	/**
+	 * Converts a Salesforce content version (file) into a DocuSign envelope document.
+	 *
+	 * @param contentVersion The content version from which to construct a document. This must have the
+	 * <code>Title</code>, <code>FileExtension</code>, <code>Content</code>, and <code>LastModified</code> fields defined.
+	 *
+	 * @return The DocuSign envelope document representation of the content version.
+	 */
+	public static Document convert(final ContentVersion contentVersion) {
+		if (contentVersion == null) return null;
+
+		return new Document(
+			null,
+			Document.TYPE_FILE,
+			null,
+			contentVersion == null ? null : contentVersion.Title,
+			contentVersion == null ? null : contentVersion.FileExtension,
+			contentVersion == null ? null : contentVersion.ContentSize,
+			contentVersion == null ? null : contentVersion.LastModifiedDate,
+			contentVersion == null ? null : contentVersion.Id);
+	}
+
+	/**
+	 * Converts a Salesforce document into a DocuSign envelope document.
+	 *
+	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
+	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModified</code> fields defined.
+	 *
+	 * @return The DocuSign envelope document representation of the Salesforce document.
+	 */
+	public static Document convert(final Schema.Document doc) {
+		if (doc == null) return null;
+
+		return new Document(
+			null,
+			Document.TYPE_DOCUMENT,
+			null,
+			doc == null ? null : doc.Name,
+			doc == null ? null : doc.Type,
+			doc == null ? null : doc.BodyLength,
+			doc == null ? null : doc.LastModifiedDate,
+			doc == null ? null : doc.Id);
+	}
+
+	/**
+	 * Converts a DocuSign template into a DocuSign envelope document.
+	 *
+	 * @param template The DocuSign template from which to construct a document.
+	 *
+	 * @return The DocuSign envelope document representation of the DocuSign template.
+	 */
+	public static Document convert(final Template template) {
+		if (template == null) return null;
+
+		return new Document(
+			null,
+			Document.TYPE_TEMPLATE,
+			null,
+			template == null ? null : template.name,
+			null,
+			null,
+			template == null ? null : template.lastModified,
+			template == null ? null : String.valueOf(template.id));	}
+
+	/**
 	 * Converts a list of <code>Document__c</code> objects to their domain object form.
 	 * <p>
 	 * <em>This method is intended for DocuSign internal use only.</em>
@@ -116,7 +180,7 @@ public with sharing class DocumentService {
 				doc.Name,
 				String.isNotBlank(doc.Extension__c) ? doc.Extension__c : getFileExtension(doc.Name),
 				Integer.valueOf(doc.Size__c),
-				doc.Created__c,
+				doc.LastModified__c,
 				doc.SourceId__c);
 		}
 
@@ -133,7 +197,7 @@ public with sharing class DocumentService {
 				Extension__c = doc.extension,
 				Size__c = doc.size,
 				SourceId__c = doc.sourceId,
-				Created__c = doc.created);
+				LastModified__c = doc.lastModified);
 		}
 
 		@TestVisible
@@ -154,7 +218,7 @@ public with sharing class DocumentService {
 		@TestVisible
 		private List<Document__c> queryDocumentsInternal(final Id envelopeId) {
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
+				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
 			});
 
 			return [
@@ -166,7 +230,7 @@ public with sharing class DocumentService {
 					Extension__c,
 					Size__c,
 					SourceId__c,
-					Created__c
+					LastModified__c
 				FROM Document__c
 				WHERE Envelope__c = :envelopeId
 				ORDER BY Sequence__c
@@ -179,7 +243,7 @@ public with sharing class DocumentService {
 
 		public List<Document> insertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'Created__c'
+				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
 			});
 
 			List<Document> result = new List<Document>();
@@ -198,10 +262,10 @@ public with sharing class DocumentService {
 
 		public List<Document> upsertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
 			});
 			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c'
+				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
 			});
 
 			List<Document> updatedDocuments = new List<Document>();
@@ -550,7 +614,7 @@ public with sharing class DocumentService {
 		if (templateIds != null) {
 			TemplateAPI client = TemplateAPI.getInstance();
 			for (UUID templateId : templateIds) {
-				templates.add(Document.fromTemplate(client.getTemplate(templateId)));
+				templates.add(convert(client.getTemplate(templateId)));
 			}
 		}
 		return templates;

@@ -26,8 +26,8 @@
 		<name>SourceId__c</name>
 	</fields>
 	<fields>
-		<label>Source Created</label>
-		<name>Created__c</name>
+		<label>Source Last Modified</label>
+		<name>LastModified__c</name>
 	</fields>
 	<fields>
 		<label>Type</label>

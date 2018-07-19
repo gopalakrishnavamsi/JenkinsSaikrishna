@@ -121,20 +121,20 @@ private class EnvelopeAPITest {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 			Schema.Document d1 = TestUtils.createDocument();
-			Document t1 = new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, UUID.randomUUID().toString());
+			Document t1 = new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString());
 
 			Test.startTest();
 			Map<Id, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
-				Document.fromContentVersion(cv1),
-				Document.fromContentVersion(cv2),
-				Document.fromDocument(d1)
+				DocumentService.convert(cv1),
+				DocumentService.convert(cv2),
+				DocumentService.convert(d1)
 			}, false);
 			Map<Id, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
-				Document.fromContentVersion(cv1),
-				Document.fromContentVersion(cv2),
-				Document.fromDocument(d1)
+				DocumentService.convert(cv1),
+				DocumentService.convert(cv2),
+				DocumentService.convert(d1)
 			}, true);
 			Test.stopTest();
 
@@ -161,10 +161,10 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			try {
 				EnvelopeAPI.getDocumentContent(new List<Document> {
-					new Document(null, Document.TYPE_FILE, null, 'UnitTest1.pdf', 'pdf', 1234, UserInfo.getUserId()),
-					Document.fromContentVersion(cv1),
-					new Document(null, Document.TYPE_FILE, null, 'UnitTest2.pdf', 'pdf', 1234, UserInfo.getOrganizationId()),
-					new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, UUID.randomUUID().toString())
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest1.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getUserId()),
+					DocumentService.convert(cv1),
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest2.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getOrganizationId()),
+					new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString())
 				}, false);
 				throw new AssertException('Expected getDocumentContent to fail');
 			} catch (DocuSignException ex) {
@@ -813,8 +813,8 @@ private class EnvelopeAPITest {
 				null,
 				null,
 				new List<Document> {
-					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, UUID.randomUUID().toString()),
-					Document.fromContentVersion(TestUtils.createContentVersion()).withSequence(2)
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
+					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
 				},
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
@@ -827,7 +827,7 @@ private class EnvelopeAPITest {
 					CustomField.newTextField('cf1', '1', true, true),
 					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 				},
-				new Envelope.Notifications(false, 0, 0, false, 0, 0, false),
+				new Notifications(false, 0, 0, false, 0, 0, false),
 				'subject',
 				'body',
 				new Entity(o.Id),
@@ -859,8 +859,8 @@ private class EnvelopeAPITest {
 				null,
 				null,
 				new List<Document> {
-					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, UUID.randomUUID().toString()),
-					Document.fromContentVersion(TestUtils.createContentVersion()).withSequence(2)
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
+					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
 				},
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
@@ -913,7 +913,7 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			List<EnvelopeAPI.CompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
 				new List<Document> {
-					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, UUID.randomUUID().toString()),
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
 					doc
 				},
 				new List<Recipient> {
@@ -967,7 +967,7 @@ private class EnvelopeAPITest {
 						'Recipient Five', 'r5@unit.test', null, null, false)
 				},
 				new List<CustomField>(),
-				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
 				null, null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -991,15 +991,15 @@ private class EnvelopeAPITest {
 			Document__c d3 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 3);
 			Integer sequence = 1;
 			List<Document> docs = new List<Document> {
-				new Document(d1.Id, d1.Type__c, sequence++, d1.Name, d1.Extension__c, Integer.valueOf(d1.Size__c), d1.SourceId__c),
-				new Document(d2.Id, d2.Type__c, sequence++, d2.Name, d2.Extension__c, Integer.valueOf(d2.Size__c), d2.SourceId__c),
-				new Document(d3.Id, d3.Type__c, sequence++, d3.Name, d3.Extension__c, Integer.valueOf(d3.Size__c), d3.SourceId__c)
+				new Document(d1.Id, d1.Type__c, sequence++, d1.Name, d1.Extension__c, Integer.valueOf(d1.Size__c), d1.LastModified__c, d1.SourceId__c),
+				new Document(d2.Id, d2.Type__c, sequence++, d2.Name, d2.Extension__c, Integer.valueOf(d2.Size__c), d2.LastModified__c, d2.SourceId__c),
+				new Document(d3.Id, d3.Type__c, sequence++, d3.Name, d3.Extension__c, Integer.valueOf(d3.Size__c), d3.LastModified__c, d3.SourceId__c)
 			};
 			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
 				docs,
 				new List<Recipient>(),
 				new List<CustomField>(),
-				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
 				null, null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			Test.startTest();
@@ -1057,6 +1057,7 @@ private class EnvelopeAPITest {
 				Envelope__c = e1.Id,
 				Name = 'Unit Test',
 				SourceId__c = UserInfo.getUserId(), // Bad document type
+				LastModified__c = Datetime.now(),
 				Sequence__c = 1,
 				Size__c = 1234,
 				Extension__c = 'pdf',
@@ -1066,7 +1067,7 @@ private class EnvelopeAPITest {
 				new List<Document> { DocumentService.DB.convert(d) },
 				new List<Recipient>(),
 				new List<CustomField>(),
-				new Envelope.Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
 				null, null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 

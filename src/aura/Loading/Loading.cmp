@@ -1,4 +1,4 @@
-<aura:component implements="force:lightningQuickActionWithoutHeader">
+<aura:component>
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="visualforce" type="Boolean"/>
 

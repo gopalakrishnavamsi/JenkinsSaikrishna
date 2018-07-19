@@ -13,7 +13,7 @@ private class EnvelopeServiceTest {
 			new List<CustomField> {
 				CustomField.newTextField('n1', 'v1', true, true)
 			},
-			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
+			new Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
 
 		Test.startTest();
@@ -37,7 +37,7 @@ private class EnvelopeServiceTest {
 			new List<CustomField> {
 				CustomField.newTextField('n1', 'v1', true, true)
 			},
-			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
+			new Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
 
 		Test.startTest();
@@ -62,7 +62,7 @@ private class EnvelopeServiceTest {
 			new List<CustomField> {
 				CustomField.newTextField('n1', 'v1', true, true)
 			},
-			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
+			new Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
 
 		Test.startTest();
@@ -91,7 +91,7 @@ private class EnvelopeServiceTest {
 				CustomField.newListField('n2', null, new List<String> { 'v1', 'v2' }, true, true),
 				CustomField.newListField('n3', 'v1', null, true, true)
 			},
-			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
+			new Notifications(true, 1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
 		String m1 = String.format(Label.RequiredCustomField_1, new List<String> { 'n1' });
 		String m2 = String.format(Label.RequiredCustomField_1, new List<String> { 'n2' });
@@ -123,7 +123,7 @@ private class EnvelopeServiceTest {
 			new List<CustomField> {
 				CustomField.newTextField('n1', 'v1', true, true)
 			},
-			new Envelope.Notifications(true, -1, 1, true, 10, 5, true),
+			new Notifications(true, -1, 1, true, 10, 5, true),
 			'subject', 'message', null, null);
 
 		Test.startTest();
@@ -152,7 +152,7 @@ private class EnvelopeServiceTest {
 			new List<CustomField> {
 				CustomField.newTextField('n1', 'v1', true, true)
 			},
-			new Envelope.Notifications(true, 1, 1, true, 10, 5, true),
+			new Notifications(true, 1, 1, true, 10, 5, true),
 			null,
 			'012345678901234567891023456789012345678901234567891023456789012345678901234567891023456789012345678901234567891023456789'
 				+ '012345678901234567891023456789012345678901234567891023456789012345678901234567891023456789012345678901234567891023456789'
@@ -286,7 +286,7 @@ private class EnvelopeServiceTest {
 	static void test_Database_insertEnvelope() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
-			Envelope e = new Envelope(new Envelope.Notifications(true, 1, 2, true, 3, 4, true), 'subject', 'message',
+			Envelope e = new Envelope(new Notifications(true, 1, 2, true, 3, 4, true), 'subject', 'message',
 				new Entity(a.Id));
 
 			Test.startTest();
@@ -323,7 +323,7 @@ private class EnvelopeServiceTest {
 			ee.Sent__c = null;
 			update ee;
 			Envelope e = EnvelopeService.DB.convert(ee)
-				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true))
+				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true))
 				.withEmail('subject2', 'message2');
 			UUID docuSignId = UUID.randomUUID();
 
@@ -475,7 +475,7 @@ private class EnvelopeServiceTest {
 				.withCustomFields(new List<CustomField> {
 					CustomField.newTextField('n1', 'v1', false, false)
 				});
-			Envelope.Notifications n = new Envelope.Notifications(true, 1, 2, true, 3, 4, true);
+			Notifications n = new Notifications(true, 1, 2, true, 3, 4, true);
 
 			Test.startTest();
 			Envelope result = EnvelopeService.addNotifications(e, n);
@@ -815,7 +815,7 @@ private class EnvelopeServiceTest {
 				new Entity(a.Id),
 				EnvelopeConfiguration.ClickAction.Send,
 				null, // visibility ignored on create envelope
-				new Envelope.Notifications(true, 1, 2, true, 3, 4, true),
+				new Notifications(true, 1, 2, true, 3, 4, true),
 				new Recipient.EmailSettings(
 					Localization.ZH_CN,
 					Localization.getLabel(Localization.ZH_CN),
@@ -988,7 +988,7 @@ private class EnvelopeServiceTest {
 				.withDocuments(new List<Document> { d1, d2 })
 				.withRecipients(new List<Recipient> { r1, r2 })
 				.withEmail('s2', 'm2')
-				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true)));
+				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true)));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1044,7 +1044,7 @@ private class EnvelopeServiceTest {
 				.withDocuments(new List<Document> { d1, d2, d3 })
 				.withRecipients(new List<Recipient> { r1, r2, r3 })
 				.withEmail('s2', 'm2')
-				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true)));
+				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true)));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1112,7 +1112,7 @@ private class EnvelopeServiceTest {
 					RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(ee2.Id))
 				})
 				.withEmail('s2', 'm2')
-				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true));
+				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true));
 			update new List<Envelope__c> { ee1, ee2 };
 
 			Test.startTest();
@@ -1176,7 +1176,7 @@ private class EnvelopeServiceTest {
 					RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(ee1.Id))
 				})
 				.withEmail('s2', 'm2')
-				.withNotifications(new Envelope.Notifications(true, 1, 2, true, 3, 4, true));
+				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true));
 
 			Test.startTest();
 			Envelope result = EnvelopeService.sendEnvelope(e1, true, true);
@@ -1252,6 +1252,13 @@ private class EnvelopeServiceTest {
 					System.assertNotEquals(null, e.Sent__c);
 				}
 			}
+
+			Set<String> dsIds = new Set<String> { String.valueOf(e1.docuSignId), String.valueOf(e2.docuSignId) };
+			List<EnvelopeStatus__c> ess = [SELECT DocuSignId__c, Sent__c FROM EnvelopeStatus__c WHERE DocuSignId__c IN :dsIds];
+			System.assertNotEquals(null, ess);
+			System.assertEquals(1, ess.size());
+			System.assertEquals(String.valueOf(e2.docuSignId), ess[0].DocuSignId__c);
+			System.assertNotEquals(null, ess[0].Sent__c);
 		}
 	}
 

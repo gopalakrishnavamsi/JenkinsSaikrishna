@@ -69,7 +69,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 	private class TemplateId {
 		public String templateId;
 		public String name;
-		public String created;
+		public String lastModified;
 	}
 
 	private static String nullIfBlank(final String s) {
@@ -237,10 +237,10 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public APIReminders reminders;
 		public APIExpirations expirations;
 
-		public Envelope.Notifications toExternalForm() {
+		public Notifications toExternalForm() {
 			Boolean isRemindDefined = this.reminders != null;
 			Boolean isExpireDefined = this.expirations != null;
-			return new Envelope.Notifications(
+			return new Notifications(
 				isRemindDefined ? Boolean.valueOf(this.reminders.reminderEnabled) : false,
 				isRemindDefined ? Integer.valueOf(this.reminders.reminderDelay) : null,
 				isRemindDefined ? Integer.valueOf(this.reminders.reminderFrequency) : null,
@@ -269,7 +269,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				nullIfBlank(this.emailBlurb),
 				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm(),
 				this.envelopeTemplateDefinition == null
-					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.created));
+					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.lastModified));
 		}
 	}
 
@@ -303,7 +303,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		public String emailSubject;
 		public String emailBlurb;
 		public APIRecipients recipients;
-		public String created;
+		public String lastModified;
 
 		public Template toExternalForm() {
 			return new Template(
@@ -314,7 +314,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				nullIfBlank(this.emailSubject),
 				nullIfBlank(this.emailBlurb),
 				this.recipients == null ? new List<Recipient>() : this.recipients.toExternalForm(),
-				StringUtils.parseDatetime(this.created));
+				StringUtils.parseDatetime(this.lastModified));
 		}
 	}
 

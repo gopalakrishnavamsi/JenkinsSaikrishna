@@ -446,7 +446,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String expireAfter;
 		public String expireWarn;
 
-		public Expirations(final Envelope.Notifications o) {
+		public Expirations(final Notifications o) {
 			if (o != null) {
 				this.expireEnabled = String.valueOf(o.expires);
 				this.expireAfter = String.valueOf(o.expireAfterDays);
@@ -460,7 +460,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String reminderDelay;
 		public String reminderFrequency;
 
-		public Reminders(final Envelope.Notifications o) {
+		public Reminders(final Notifications o) {
 			if (o != null) {
 				this.reminderEnabled = String.valueOf(o.remind);
 				this.reminderDelay = String.valueOf(o.remindAfterDays);
@@ -474,7 +474,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public Expirations expirations;
 		public String useAccountDefaults;
 
-		public EnvelopeNotification(final Envelope.Notifications o, final Boolean useAccountDefaults) {
+		public EnvelopeNotification(final Notifications o, final Boolean useAccountDefaults) {
 			this.reminders = new Reminders(o);
 			this.expirations = new Expirations(o);
 			this.useAccountDefaults = String.valueOf(useAccountDefaults);

@@ -105,11 +105,11 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
-		<fullName>Created__c</fullName>
-		<description>Source Created</description>
+		<fullName>LastModified__c</fullName>
+		<description>Source Last Modified</description>
 		<externalId>false</externalId>
-		<inlineHelpText>Source Created</inlineHelpText>
-		<label>Source Created</label>
+		<inlineHelpText>Source Last Modified</inlineHelpText>
+		<label>Source Last Modified</label>
 		<type>DateTime</type>
 		<unique>false</unique>
 	</fields>

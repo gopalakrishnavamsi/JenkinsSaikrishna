@@ -23,7 +23,7 @@
             <aura:if isTrue="{!v.loading}">
                 <!-- Loading State -->
                 <div class="ds-spinner_container slds-is-relative slds-m-bottom_large">
-                    <lightning:spinner size="medium"/>
+                    <lightning:spinner size="medium" alternativeText="{!$Label.c.Loading}"/>
                 </div>
                 <!-- /Loading State -->
 

@@ -17,6 +17,8 @@
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showAdvancedOptions" type="Boolean" access="private"/>
     <aura:attribute name="envelope" type="Envelope"/>
+    <aura:attribute name="defaultEmailSubject" type="String" access="private"/>
+    <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
     <aura:attribute name="documents" type="Document[]" access="private"/>
     <aura:attribute name="availableTemplates" type="Template[]" access="private"/>
     <aura:attribute name="templates" type="Template[]" access="private"/>
@@ -138,7 +140,7 @@
                                             <a href="javascript:void(0);">{!doc.name}</a>
                                         </h3>
                                         <div class="slds-tile__detail slds-truncate">
-                                            {!doc.formattedCreated} • {!doc.formattedSize}
+                                            {!doc.formattedLastModified} • {!doc.formattedSize}
                                             • {!doc.extension}</div>
                                     </div>
                                 </article>

@@ -136,7 +136,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Document__c.Created__c</field>
+        <field>Document__c.LastModified__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

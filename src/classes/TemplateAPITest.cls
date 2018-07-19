@@ -16,7 +16,7 @@ private class TemplateAPITest {
 			System.assertNotEquals(null, t);
 			System.assertEquals(TestUtils.ID1, t.id);
 			System.assertEquals('Unit test', t.name);
-			System.assertNotEquals(null, t.created);
+			System.assertNotEquals(null, t.lastModified);
 			System.assertNotEquals(null, t.customFields);
 			System.assertEquals(3, t.customFields.size());
 			System.assertEquals('textField1', t.customFields[0].name);
@@ -208,22 +208,22 @@ private class TemplateAPITest {
 
 			System.assertEquals(TestUtils.ID1, templates[0].id);
 			System.assertEquals('Template 1', templates[0].name);
-			System.assertNotEquals(null, templates[0].created);
+			System.assertNotEquals(null, templates[0].lastModified);
 			System.assert(Collection.isEmpty(templates[0].customFields));
 
 			System.assertEquals(TestUtils.ID2, templates[1].id);
 			System.assertEquals('Template 2', templates[1].name);
-			System.assertEquals(null, templates[1].created);
+			System.assertNotEquals(null, templates[1].lastModified);
 			System.assert(Collection.isEmpty(templates[1].customFields));
 
 			System.assertEquals(TestUtils.ID3, templates[2].id);
 			System.assertEquals('Template 3', templates[2].name);
-			System.assertEquals(null, templates[2].created);
+			System.assertNotEquals(null, templates[2].lastModified);
 			System.assert(Collection.isEmpty(templates[2].customFields));
 
 			System.assertEquals(TestUtils.ID4, templates[3].id);
 			System.assertEquals('Template 4', templates[3].name);
-			System.assertEquals(null, templates[3].created);
+			System.assertNotEquals(null, templates[3].lastModified);
 			System.assert(Collection.isEmpty(templates[3].customFields));
 		}
 	}

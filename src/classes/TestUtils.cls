@@ -131,7 +131,7 @@ public class TestUtils {
 			VersionData = Blob.valueOf(UUID.randomUUID().toString()));
 		insert cv;
 		return [
-			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, CreatedDate
+			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
 			FROM ContentVersion
 			WHERE Id = :cv.Id
 			LIMIT 1
@@ -328,7 +328,7 @@ public class TestUtils {
 			Body = Blob.valueOf(UUID.randomUUID().toString()),
 			FolderId = folderId);
 		insert d;
-		return [SELECT Name, Type, Body, BodyLength, FolderId, CreatedDate FROM Document WHERE Id = :d.Id LIMIT 1];
+		return [SELECT Name, Type, Body, BodyLength, FolderId, LastModifiedDate FROM Document WHERE Id = :d.Id LIMIT 1];
 	}
 
 	public static ContentWorkspace createContentWorkspace() {

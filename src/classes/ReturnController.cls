@@ -52,8 +52,12 @@ public with sharing class ReturnController {
 	}
 
 	public PageReference onReturn() {
-		if (this.event == 'cancel' && this.envelopeId != null) {
-			EnvelopeService.deleteEnvelope(this.envelopeId);
+		if (this.envelopeId != null) {
+			if (this.event == 'cancel') {
+				EnvelopeService.deleteEnvelope(this.envelopeId);
+			} else if (this.event == 'send') {
+				EnvelopeService.markEnvelopeSent(EnvelopeService.getEnvelope(this.envelopeId), true);
+			}
 		}
 		// TODO: Handle other events
 		return new PageReference('/' + (this.sourceId == null ? '' : this.sourceId));

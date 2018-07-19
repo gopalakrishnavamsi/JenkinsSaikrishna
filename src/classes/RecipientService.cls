@@ -265,7 +265,9 @@ public with sharing class RecipientService {
 		private void verifyRelatedContacts(final EnvelopeConfiguration.RelatedContacts relatedContacts) {
 			if (relatedContacts == null
 				|| Collection.isEmpty(relatedContacts.fieldMap)
-				|| String.isBlank(relatedContacts.relationship)) throw new DocuSignException(Label.InvalidRelatedContact);
+				|| String.isBlank(relatedContacts.relationship)) {
+				throw new DocuSignException(Label.InvalidRelatedContact);
+			}
 		}
 
 		@TestVisible
@@ -297,8 +299,10 @@ public with sharing class RecipientService {
 
 		private Recipient.Authentication getAuthentication(final String accessCode, final String smsPhoneNumber) {
 			Boolean useSms = String.isNotBlank(smsPhoneNumber);
-			if (String.isNotBlank(accessCode) || useSms) return new Recipient.Authentication(accessCode, useSms,
-				useSms ? new List<String> { smsPhoneNumber } : null);
+			if (String.isNotBlank(accessCode) || useSms) {
+				return new Recipient.Authentication(accessCode, useSms,
+					useSms ? new List<String> { smsPhoneNumber } : null);
+			}
 			return null;
 		}
 

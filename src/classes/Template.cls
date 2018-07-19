@@ -18,10 +18,10 @@ public class Template {
 	@AuraEnabled
 	public List<CustomField> customFields { get; private set; }
 	/**
-	 * The reminder and expiration settings for the envelope.
+	 * The reminder and expiration settings for the template.
 	 */
 	@AuraEnabled
-	public Envelope.Notifications notifications { get; private set; }
+	public Notifications notifications { get; private set; }
 	/**
 	 * The subject of the email recipients receive.
 	 */
@@ -38,10 +38,10 @@ public class Template {
 	@AuraEnabled
 	public List<Recipient> recipients { get; private set; }
 	/**
-	 * The date and time when the DocuSign template was created.
+	 * The date and time when the DocuSign template was last modified.
 	 */
 	@AuraEnabled
-	public Datetime created { get; private set; }
+	public Datetime lastModified { get; private set; }
 
 	/**
 	 * Constructs a DocuSign template.
@@ -49,21 +49,21 @@ public class Template {
 	 * @param id The DocuSign template ID.
 	 * @param name The DocuSign template name.
 	 * @param customFields The DocuSign template custom fields.
-	 * @param notifications The reminder and expiration settings for the envelope.
+	 * @param notifications The reminder and expiration settings for the template.
 	 * @param emailSubject The subject of the email recipients receive.
 	 * @param emailMessage The message of the email recipients receive. This is contained within the standard DocuSign email body.
 	 * @param recipients The DocuSign template recipients.
-	 * @param created The date and time when the DocuSign template was created.
+	 * @param lastModified The date and time when the DocuSign template was last modified.
 	 */
 	public Template(
 		final UUID id,
 		final String name,
 		final List<CustomField> customFields,
-		final Envelope.Notifications notifications,
+		final Notifications notifications,
 		final String emailSubject,
 		final String emailMessage,
 		final List<Recipient> recipients,
-		final Datetime created) {
+		final Datetime lastModified) {
 
 		this.id = id;
 		this.name = name;
@@ -72,6 +72,6 @@ public class Template {
 		this.emailSubject = emailSubject;
 		this.emailMessage = emailMessage;
 		this.recipients = recipients;
-		this.created = created;
+		this.lastModified = lastModified;
 	}
 }

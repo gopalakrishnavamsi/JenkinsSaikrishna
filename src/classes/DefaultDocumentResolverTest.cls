@@ -33,7 +33,7 @@ private class DefaultDocumentResolverTest {
 			System.assertEquals(cv1.Title, result[0].name);
 			System.assertEquals(cv1.FileExtension, result[0].extension);
 			System.assertEquals(cv1.ContentSize, result[0].size);
-			System.assertEquals(cv1.CreatedDate, result[0].created);
+			System.assertEquals(cv1.LastModifiedDate, result[0].lastModified);
 			System.assertEquals(cv1.Id, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -42,7 +42,7 @@ private class DefaultDocumentResolverTest {
 			System.assertEquals(cv2.Title, result[1].name);
 			System.assertEquals(cv2.FileExtension, result[1].extension);
 			System.assertEquals(cv2.ContentSize, result[1].size);
-			System.assertEquals(cv2.CreatedDate, result[1].created);
+			System.assertEquals(cv2.LastModifiedDate, result[1].lastModified);
 			System.assertEquals(cv2.Id, result[1].sourceId);
 		}
 	}
@@ -67,7 +67,7 @@ private class DefaultDocumentResolverTest {
 			System.assertEquals(d1.Name, result[0].name);
 			System.assertEquals(d1.Type, result[0].extension);
 			System.assertEquals(d1.BodyLength, result[0].size);
-			System.assertEquals(d1.CreatedDate, result[0].created);
+			System.assertEquals(d1.LastModifiedDate, result[0].lastModified);
 			System.assertEquals(d1.Id, result[0].sourceId);
 
 			System.assertNotEquals(null, result[1]);
@@ -76,7 +76,7 @@ private class DefaultDocumentResolverTest {
 			System.assertEquals(d2.Name, result[1].name);
 			System.assertEquals(d2.Type, result[1].extension);
 			System.assertEquals(d2.BodyLength, result[1].size);
-			System.assertEquals(d2.CreatedDate, result[1].created);
+			System.assertEquals(d2.LastModifiedDate, result[1].lastModified);
 			System.assertEquals(d2.Id, result[1].sourceId);
 		}
 	}
@@ -125,7 +125,7 @@ private class DefaultDocumentResolverTest {
 					System.assertEquals(cv1.Title, d.name);
 					System.assertEquals(cv1.FileExtension, d.extension);
 					System.assertEquals(cv1.ContentSize, d.size);
-					System.assertEquals(cv1.CreatedDate, d.created);
+					System.assertEquals(cv1.LastModifiedDate, d.lastModified);
 					System.assertEquals(cv1.Id, d.sourceId);
 				} else if (d.sourceId == cv2.Id) {
 					foundCV2 = true;
@@ -134,7 +134,7 @@ private class DefaultDocumentResolverTest {
 					System.assertEquals(cv2.Title, d.name);
 					System.assertEquals(cv2.FileExtension, d.extension);
 					System.assertEquals(cv2.ContentSize, d.size);
-					System.assertEquals(cv2.CreatedDate, d.created);
+					System.assertEquals(cv2.LastModifiedDate, d.lastModified);
 					System.assertEquals(cv2.Id, d.sourceId);
 				} else if (d.sourceId == cv3.Id) {
 					foundCV3 = true;
@@ -143,7 +143,7 @@ private class DefaultDocumentResolverTest {
 					System.assertEquals(cv3.Title, d.name);
 					System.assertEquals(cv3.FileExtension, d.extension);
 					System.assertEquals(cv3.ContentSize, d.size);
-					System.assertEquals(cv3.CreatedDate, d.created);
+					System.assertEquals(cv3.LastModifiedDate, d.lastModified);
 					System.assertEquals(cv3.Id, d.sourceId);
 				} else {
 					throw new AssertException('Unexpected document: ' + d);
@@ -364,7 +364,6 @@ private class DefaultDocumentResolverTest {
 				System.assertEquals(cv.Title, d.name);
 				System.assertEquals(cv.FileExtension, d.extension);
 				System.assertEquals(cv.ContentSize, d.size);
-				System.assertEquals(cv.CreatedDate, d.created);
 			}
 			System.assert(lib == null || foundCV1);
 			System.assert(lib == null || foundCV2);

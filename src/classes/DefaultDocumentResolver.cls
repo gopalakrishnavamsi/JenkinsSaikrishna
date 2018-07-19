@@ -15,19 +15,19 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 	private static List<Document> getContentVersions(final Set<Id> contentVersionIds) {
 		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
-			'Id', 'Title', 'FileExtension', 'ContentSize', 'CreatedDate'
+			'Id', 'Title', 'FileExtension', 'ContentSize', 'LastModifiedDate'
 		});
 
 		List<Document> result = new List<Document>();
 		if (!Collection.isEmpty(contentVersionIds)) {
 			for (ContentVersion cv : [
-				SELECT Id, Title, ContentSize, FileExtension, CreatedDate
+				SELECT Id, Title, ContentSize, FileExtension, LastModifiedDate
 				FROM ContentVersion
 				WHERE Id IN :contentVersionIds
 				ORDER BY Id ASC
 			]) {
 				result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize,
-					cv.CreatedDate, cv.Id));
+					cv.LastModifiedDate, cv.Id));
 			}
 		}
 		return result;
@@ -35,19 +35,19 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 	private static List<Document> getDocuments(final Set<Id> documentIds) {
 		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-			'Id', 'Name', 'Type', 'BodyLength', 'CreatedDate'
+			'Id', 'Name', 'Type', 'BodyLength', 'LastModifiedDate'
 		});
 
 		List<Document> result = new List<Document>();
 		if (!Collection.isEmpty(documentIds)) {
 			for (Schema.Document d : [
-				SELECT Id, Name, Type, BodyLength, CreatedDate
+				SELECT Id, Name, Type, BodyLength, LastModifiedDate
 				FROM Document
 				WHERE Id IN :documentIds
 				ORDER BY Id ASC
 			]) {
-				result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.CreatedDate,
-					d.Id));
+				result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength,
+					d.LastModifiedDate, d.Id));
 			}
 		}
 		return result;
@@ -72,7 +72,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		final Boolean getLastUpdatedOnly) {
 
 		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
-			'Id', 'Title', 'FileExtension', 'ContentSize', 'CreatedDate'
+			'Id', 'Title', 'FileExtension', 'ContentSize', 'LastModifiedDate'
 		});
 
 		List<Document> documents = new List<Document>();
@@ -84,7 +84,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 						ContentDocument.LatestPublishedVersion.Title,
 						ContentDocument.LatestPublishedVersion.FileExtension,
 						ContentDocument.LatestPublishedVersion.ContentSize,
-						ContentDocument.LatestPublishedVersion.CreatedDate
+						ContentDocument.LatestPublishedVersion.LastModifiedDate
 					FROM ContentDocumentLink
 					WHERE LinkedEntityId IN :linkedEntityIds
 					AND ContentDocument.PublishStatus != 'U'
@@ -99,7 +99,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 						ContentDocument.LatestPublishedVersion.Title,
 						ContentDocument.LatestPublishedVersion.FileExtension,
 						ContentDocument.LatestPublishedVersion.ContentSize,
-						ContentDocument.LatestPublishedVersion.CreatedDate
+						ContentDocument.LatestPublishedVersion.LastModifiedDate
 					FROM ContentDocumentLink
 					WHERE LinkedEntityId IN :linkedEntityIds
 					AND ContentDocument.PublishStatus != 'U'
@@ -114,7 +114,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 				if (cdl != null && cdl.ContentDocument != null && cdl.ContentDocument.LatestPublishedVersion != null) {
 					ContentVersion cv = cdl.ContentDocument.LatestPublishedVersion;
 					documents.add(new Document(null, Document.TYPE_FILE, sequence++, cv.Title, cv.FileExtension,
-						cv.ContentSize, cv.CreatedDate, cv.Id));
+						cv.ContentSize, cv.LastModifiedDate, cv.Id));
 				}
 			}
 		}
@@ -179,7 +179,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 				LatestPublishedVersion.Title,
 				LatestPublishedVersion.FileExtension,
 				LatestPublishedVersion.ContentSize,
-				LatestPublishedVersion.CreatedDate
+				LatestPublishedVersion.LastModifiedDate
 			FROM ContentDocument
 			WHERE PublishStatus = 'R' AND OwnerId IN :ownerIds
 			ORDER BY LatestPublishedVersion.Title
@@ -187,7 +187,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 			ContentVersion cv = cd.LatestPublishedVersion;
 			if (cv != null) {
 				result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize,
-					cv.CreatedDate, cv.Id));
+					cv.LastModifiedDate, cv.Id));
 			}
 		}
 		return result;
@@ -200,7 +200,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 				LatestPublishedVersion.Title,
 				LatestPublishedVersion.FileExtension,
 				LatestPublishedVersion.ContentSize,
-				LatestPublishedVersion.CreatedDate
+				LatestPublishedVersion.LastModifiedDate
 			FROM ContentDocument
 			WHERE PublishStatus != 'U' AND Id IN (
 				SELECT ContentDocumentId
@@ -212,7 +212,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 			ContentVersion cv = cd.LatestPublishedVersion;
 			if (cv != null) {
 				result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize,
-					cv.CreatedDate, cv.Id));
+					cv.LastModifiedDate, cv.Id));
 			}
 		}
 		return result;
@@ -220,7 +220,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 	private static List<Document> getFolderContentVersions(final Set<Id> folderIds) {
 		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
-			'Id', 'Title', 'FileExtension', 'ContentSize', 'CreatedDate'
+			'Id', 'Title', 'FileExtension', 'ContentSize', 'LastModifiedDate'
 		});
 
 		List<Document> result = new List<Document>();
@@ -232,17 +232,18 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 	}
 
 	private static List<Document> getFolderDocuments(final Set<Id> folderIds) {
-		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> { 'Id', 'Name', 'Type', 'BodyLength' });
+		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
+			'Id', 'Name', 'Type', 'BodyLength', 'LastModifiedDate' });
 
 		List<Document> result = new List<Document>();
 		for (Schema.Document d : [
-			SELECT Id, Name, Type, BodyLength, CreatedDate
+			SELECT Id, Name, Type, BodyLength, LastModifiedDate
 			FROM Document
 			WHERE FolderId IN :folderIds
 			ORDER BY Name
 		]) {
-			result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.CreatedDate,
-				d.Id));
+			result.add(new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength,
+				d.LastModifiedDate, d.Id));
 		}
 		return result;
 	}

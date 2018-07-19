@@ -122,6 +122,7 @@
         <members>SendingControllerTest</members>
         <members>ReturnController</members>
         <members>ReturnControllerTest</members>
+        <members>Notifications</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -534,7 +535,7 @@
         <members>Document__c.Sequence__c</members>
         <members>Document__c.Type__c</members>
         <members>Document__c.SourceId__c</members>
-        <members>Document__c.Created__c</members>
+        <members>Document__c.LastModified__c</members>
         <members>Document__c.Size__c</members>
         <members>Document__c.Extension__c</members>
         <members>EnvelopeLocalization__c.Language__c</members>

@@ -1,7 +1,7 @@
 ({
   initialize: function (component, event, helper) {
     var emailLocalizations = component.get('v.emailLocalizations');
-    component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(emailLocalizations) && emailLocalizations.length > 0);
+    component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(emailLocalizations));
     var recipient = component.get('v.recipient');
     if (!!recipient) {
       component.set('v.recipientName', recipient.name);
