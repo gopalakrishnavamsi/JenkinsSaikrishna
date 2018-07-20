@@ -1,14 +1,11 @@
 ({
   initialize: function (component, event, helper) {
-    var emailLocalizations = component.get('v.emailLocalizations');
-    component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(emailLocalizations));
-    var recipient = component.get('v.recipient');
-    if (!!recipient) {
-      component.set('v.recipientName', recipient.name);
-      if (!!recipient.source) {
-        component.set('v.recipientSourceId', recipient.source.id);
-      }
-    }
+    component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(component.get('v.emailLocalizations')));
+    //
+    // var recipient = component.get('v.recipient');
+    // if (!$A.util.isUndefinedOrNull(recipient) && !$A.util.isUndefinedOrNull(recipient.source) && !$A.util.isEmpty(recipient.source.typeName)) {
+    //   component.set('v.recordType', recipient.source.typeName.toLowerCase());
+    // }
   },
 
   handleEditAccessAuthentication: function (component, event, helper) {
@@ -42,12 +39,9 @@
   },
 
   handleRecipientIdChange: function (component, event, helper) {
-    var recipient = component.get('v.recipient');
-    recipient.name = component.get('v.recipientName');
-    recipient.source = {
-      id: component.get('v.recipientSourceId')
-    };
-    component.getEvent('recipientIdChange').fire();
+    var e = component.getEvent('recipientIdChange');
+    e.setParams({data: component.get('v.recipient')});
+    e.fire();
   },
 
   closeAccessAuthenticationModal: function (component, event, helper) {
@@ -62,7 +56,7 @@
     component.find('custom-email-message-modal').set('v.showModal', false);
   },
 
-  onEmailLanguageChange: function(component, event, helper) {
+  onEmailLanguageChange: function (component, event, helper) {
     var newSelectedLanguage = component.find('email-language').get('v.value');
     var currentSelectedLanguage = component.get('v.selectedLanguage');
     if (newSelectedLanguage !== currentSelectedLanguage) {

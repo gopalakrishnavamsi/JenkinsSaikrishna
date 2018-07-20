@@ -24,7 +24,7 @@
         }
         if (!$A.util.isEmpty(result.recipients)) {
           result.recipients.forEach(function (r) {
-            r = helper.addRecipientProperties(r, false);
+            r = helper.addRecipientProperties(r);
             r.role = {}; // TODO: Roles only apply to templates for now.
           });
         }
@@ -32,7 +32,10 @@
           result.templates.forEach(function (template) {
             template.selected = false;
             if (!$A.util.isEmpty(template.recipients)) {
-              template.recipients.forEach(helper.addRecipientProperties);
+              template.recipients.forEach(function (r) {
+                helper.addRecipientProperties(r);
+                r.templateId = template.id.value;
+              });
             }
           });
         }
@@ -43,7 +46,7 @@
         component.set('v.defaultEmailMessage', result.envelope.emailMessage);
         component.set('v.availableTemplates', result.templates);
         component.set('v.documents', result.documents);
-        component.set('v.availableRecipients', result.recipients);
+        component.set('v.recipients', result.recipients);
         component.set('v.defaultRoles', result.defaultRoles);
         component.set('v.emailLocalizations', result.emailLocalizations);
         component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(result.emailLocalizations));
@@ -90,7 +93,7 @@
   },
 
   addDocumentProperties: function (doc, selected) {
-    if (doc) {
+    if (!!doc) {
       doc.selected = !!selected;
       doc.formattedSize = !!doc.size ? _formatSize(doc.size) : '';
       doc.formattedLastModified = !!doc.lastModified ? new Date(doc.lastModified).toLocaleString() : '';
@@ -98,13 +101,13 @@
     return doc;
   },
 
-  addRecipientProperties: function (recipient, selected) {
+  addRecipientProperties: function (recipient) {
     if (recipient) {
-      recipient.selected = !!selected;
-      if ($A.util.isEmpty(recipient.emailSettings)) {
+      recipient.templateId = null;
+      if ($A.util.isUndefinedOrNull(recipient.emailSettings)) {
         recipient.emailSettings = {};
       }
-      if ($A.util.isEmpty(recipient.authentication)) {
+      if ($A.util.isUndefinedOrNull(recipient.authentication)) {
         recipient.authentication = {};
       }
     }
@@ -127,30 +130,6 @@
 
   resetNotificationSettings: function (notifications, helper) {
     return helper.setExpiration(helper.setReminders(notifications), 120);
-  },
-
-  getTemplateRecipients: function (helper, templateId, templateRecipients, availableRecipients) {
-    if ($A.util.isEmpty(availableRecipients) || $A.util.isEmpty(templateRecipients)) {
-      return templateRecipients;
-    }
-
-    var filteredRecipients = availableRecipients.filter(function (r) {
-      return !r.selected && !!r.templateId;
-    });
-
-    var trs = [];
-    if (!$A.util.isEmpty(filteredRecipients)) {
-      for (var i = 0; i < templateRecipients.length; i++) {
-        if (i >= filteredRecipients.length) {
-          trs.push(templateRecipients[i]);
-        } else {
-          trs.push(helper.mergeTemplateRecipient(helper, templateRecipients[i], filteredRecipients[i]));
-          filteredRecipients[i].selected = true;
-          filteredRecipients[i].templateId = templateId;
-        }
-      }
-    }
-    return trs;
   },
 
   setTemplateSettings: function (component, event, helper, selectedTemplate) {
@@ -178,41 +157,26 @@
         envelope.emailMessage = $A.util.isEmpty(template.emailMessage) ? envelope.emailMessage : template.emailMessage;
         component.set('v.envelope', envelope);
         template.selected = true;
-        var availableRecipients = component.get('v.availableRecipients');
-        template.recipients = helper.getTemplateRecipients(helper, template.id.value, template.recipients, availableRecipients);
-        component.set('v.availableRecipients', availableRecipients);
-        component.set('v.recipients', component.get('v.recipients').concat(template.recipients))
       }
     });
     component.set('v.availableTemplates', availableTemplates);
   },
 
-  addBlankRecipient: function (component, recipient) {
-    var recipients = component.get('v.recipients');
-    var isRecipientDefined = !$A.util.isEmpty(recipient);
-    var newRecipient = {
-      source: isRecipientDefined ? recipient.source : null,
-      name: isRecipientDefined ? recipient.name : null,
-      email: isRecipientDefined ? recipient.email : null,
-      hostName: isRecipientDefined ? recipient.hostName : null,
-      hostEmail: isRecipientDefined ? recipient.hostEmail : null,
+  newRecipient: function (recipient) {
+    // TODO: Override all properties with customizations
+    var isDefined = !$A.util.isUndefinedOrNull(recipient);
+    return {
+      source: isDefined ? recipient.source : {},
+      name: isDefined ? recipient.name : null,
+      email: isDefined ? recipient.email : null,
+      hostName: isDefined ? recipient.hostName : null,
+      hostEmail: isDefined ? recipient.hostEmail : null,
       role: {},
       type: 'Signer',
       authentication: {},
       note: null,
       emailSettings: {}
     };
-    if (isRecipientDefined) {
-      if (!$A.util.isEmpty(recipients[0]) && $A.util.isEmpty(recipients[0].id)) {
-        recipients[0].source = recipient.source;
-        recipients[0].name = recipient.name;
-      } else {
-        recipients.push(newRecipient);
-      }
-    } else {
-      recipients.push(newRecipient);
-    }
-    component.set('v.recipients', recipients);
   },
 
   updateTemplates: function (component, event, helper, index) {
@@ -237,7 +201,19 @@
   },
 
   hasSourceId: function (x) {
-    return !$A.util.isUndefinedOrNull(x) && (!$A.util.isUndefinedOrNull(x.sourceId) || !$A.util.isUndefinedOrNull(x.source) && !$A.util.isUndefinedOrNull(x.source.id));
+    return !$A.util.isUndefinedOrNull(x) && (!$A.util.isEmpty(x.sourceId) || !$A.util.isUndefinedOrNull(x.source) && !$A.util.isEmpty(x.source.id));
+  },
+
+  getSourceId: function (x) {
+    if ($A.util.isUndefinedOrNull(x)) return null;
+
+    var sourceId = null;
+    if (!$A.util.isEmpty(x.sourceId)) {
+      sourceId = x.sourceId;
+    } else if (!$A.util.isUndefinedOrNull(x.source) && !$A.util.isEmpty(x.source.id)) {
+      sourceId = x.source.id;
+    }
+    return sourceId;
   },
 
   getValidity: function (component, helper) {
@@ -245,29 +221,7 @@
       case 0:
         return !!(component.get('v.filesSelected') || !$A.util.isEmpty(component.get('v.templates')));
       case 1:
-        var templates = component.get('v.templates');
-        if (!$A.util.isEmpty(templates)) {
-          for (var i = 0; i < templates.length; i++) {
-            if (!$A.util.isEmpty(templates[i].recipients)) {
-              for (var n = 0; n < templates[i].recipients.length; n++) {
-                if (helper.hasSourceId(templates[i].recipients[n])) {
-                  return true;
-                }
-              }
-            }
-          }
-        }
-
-        if (component.get('v.filesSelected')) {
-          var recipients = component.get('v.recipients');
-          for (var i = 0; i < recipients.length; i++) {
-            if (helper.hasSourceId(recipients[i])) {
-              return true;
-            }
-          }
-        }
-
-        return false;
+        return !$A.util.isEmpty(component.get('v.recipients'));
       case 2:
         return !$A.util.isEmpty(component.find('envelope-subject-input').get('v.value'));
     }
@@ -303,16 +257,7 @@
   },
 
   handleFilesChange: function (component, event, helper) {
-    var availableRecipients = component.get('v.availableRecipients');
     var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
-
-    if (!component.get('v.filesSelected')) {
-      availableRecipients.forEach(function (recipient) {
-        if (!$A.util.isEmpty(recipient)) {
-          helper.addBlankRecipient(component, recipient);
-        }
-      });
-    }
 
     for (var i = 0; i < fileCheckboxes.length; i++) {
       if (fileCheckboxes[i].get('v.checked')) {
@@ -321,28 +266,12 @@
       }
     }
 
-    component.set('v.recipients', []);
     component.set('v.filesSelected', false);
   },
 
-  getSelectedDocuments: function (templates, documents) {
+  getDocumentsForSending: function (documents, templates) {
     var sequence = 1;
     var docs = [];
-    if (!$A.util.isEmpty(templates)) {
-      templates.forEach(function (t) {
-        if (!!t.selected) {
-          docs.push({
-            sequence: sequence++,
-            type: 'Template',
-            name: t.name,
-            extension: null,
-            size: null,
-            lastModified: t.lastModified,
-            sourceId: t.id.value
-          });
-        }
-      });
-    }
     if (!$A.util.isEmpty(documents)) {
       documents.forEach(function (d) {
         if (!!d.selected) {
@@ -358,22 +287,45 @@
         }
       });
     }
+    if (!$A.util.isEmpty(templates)) {
+      templates.forEach(function (t) {
+        if (!!t.selected) {
+          docs.push({
+            sequence: sequence++,
+            type: 'Template',
+            name: t.name,
+            extension: null,
+            size: null,
+            lastModified: t.lastModified,
+            sourceId: t.id.value
+          });
+        }
+      });
+    }
     return docs;
   },
 
-  getSelectedRecipients: function (recipients, defaultRoles) {
+  getRecipientsForSending: function (helper, recipients, hasDocuments, defaultRoles) {
     var rs = [];
-
+    var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
       recipients.forEach(function (r) {
-        if ($A.util.isEmpty(r.role)) {
-          r.role = $A.util.isEmpty(defaultRoles) ? {name: String((Math.random() * 100000) + 1)} : defaultRoles.shift();
+        if (!$A.util.isEmpty(r.templateId) || hasDocuments) {
+          r.sequence = sequence++;
+          r.role = helper.isRoleDefined(r.role) ? r.role : helper.getNextRole(defaultRoles);
+          rs.push(r);
         }
-        rs.push(r);
       });
     }
-
     return rs;
+  },
+
+  isRoleDefined: function (role) {
+    return !$A.util.isUndefinedOrNull(role) && !$A.util.isEmpty(role.name);
+  },
+
+  getNextRole: function (defaultRoles) {
+    return $A.util.isEmpty(defaultRoles) ? null : defaultRoles.shift();
   },
 
   tagEnvelope: function (component, helper, envelope) {
@@ -428,6 +380,8 @@
     if ($A.util.isUndefinedOrNull(recipient.emailSettings)) recipient.emailSettings = {};
 
     return {
+      templateId: templateRecipient.templateId,
+      original: recipient,
       type: templateRecipient.type,
       routingOrder: templateRecipient.routingOrder,
       role: templateRecipient.role,
@@ -452,5 +406,89 @@
       signNow: helper.valueOrElse(templateRecipient.signNow, recipient.signNow),
       source: recipient.source
     };
+  },
+
+  isValidRecipient: function (recipient) {
+    return !$A.util.isUndefinedOrNull(recipient) && ((!$A.util.isEmpty(recipient.name) && !$A.util.isEmpty(recipient.email)) || (!$A.util.isUndefinedOrNull(recipient.signingGroup) && !$A.util.isEmpty(recipient.signingGroup.name))) && ($A.util.isEmpty(recipient.templateId) || (!$A.util.isUndefinedOrNull(recipient.role) && !$A.util.isEmpty(recipient.role.name)));
+  },
+
+  resetRecipients: function (helper, recipients) {
+    var rs = [];
+    if (!$A.util.isEmpty(recipients)) {
+      recipients.forEach(function (r) {
+        if ($A.util.isEmpty(r.templateId)) {
+          rs.push(r);
+        } else if (!$A.util.isUndefinedOrNull(r.original)) {
+          r = r.original;
+          rs.push(r);
+        }
+      });
+    }
+    return rs;
+  },
+
+  getRecipients: function (helper, recipients, templates) {
+    var rs = [];
+    var ri = 0;
+    if (!$A.util.isEmpty(recipients)) {
+      if (!$A.util.isEmpty(templates)) {
+        // Add or merge template recipientsc
+        templates.forEach(function (t) {
+          if (!$A.util.isEmpty(t.recipients)) {
+            t.recipients.forEach(function (tr) {
+              if (ri < recipients.length && !helper.isValidRecipient(tr)) {
+                rs.push(helper.mergeTemplateRecipient(helper, tr, recipients[ri++]));
+              } else {
+                rs.push(tr);
+              }
+            });
+          }
+        });
+      }
+
+      // Add any leftover recipients
+      for (var i = ri; i < recipients.length; i++) {
+        rs.push(recipients[i]);
+      }
+    }
+    return rs;
+  },
+
+  resolveRecipient: function (component, helper, recipient) {
+    if ($A.util.isUndefinedOrNull(recipient) || helper.isValidRecipient(recipient)) return;
+
+    var sourceId = helper.getSourceId(recipient);
+    if ($A.util.isEmpty(sourceId)) return;
+
+    var rr = component.get('c.resolveRecipient');
+    rr.setParams({
+      sourceId: sourceId
+    });
+    rr.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (!$A.util.isUndefinedOrNull(result)) {
+          var updated = false;
+          var rs = component.get('v.recipients');
+          rs.forEach(function (r) {
+            // Update email, phone, full source for new recipient
+            if (helper.getSourceId(r) === sourceId) {
+              r.email = result.email;
+              r.phone = result.phone;
+              r.source = result.source;
+              updated = true;
+            }
+          });
+          // Prevent rebinding if nothing has changed.
+          if (updated) {
+            component.set('v.recipients', rs);
+            component.set('v.disableNext', false);
+          }
+        }
+      } else {
+        helper.setError(component, _getErrorMessage(response));
+      }
+    });
+    $A.enqueueAction(rr);
   }
 });

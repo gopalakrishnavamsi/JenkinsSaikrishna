@@ -11,6 +11,7 @@ private class DefaultRecipientResolverTest {
 		System.assert(rr.canResolveRecipients(Schema.Contact.getSObjectType()));
 		System.assert(rr.canResolveRecipients(Schema.Lead.getSObjectType()));
 		System.assert(rr.canResolveRecipients(Schema.Opportunity.getSObjectType()));
+		System.assert(rr.canResolveRecipients(Schema.User.getSObjectType()));
 		System.assert(!rr.canResolveRecipients(Schema.Envelope__c.getSObjectType()));
 		System.assert(!rr.canResolveRecipients(null));
 		Test.stopTest();
@@ -283,17 +284,56 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
+	static void test_getRecipients_User() {
+		System.runAs(TestUtils.createAdministrator()) {
+			User u1 = TestUtils.createUser();
+			User u2 = TestUtils.createUser();
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			List<Recipient> result = rr.getRecipients(Schema.User.getSObjectType(), new Set<Id> { u1.Id, u2.Id });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			Boolean foundU1 = false, foundU2 = false;
+			for (Recipient r : result) {
+				System.assertNotEquals(null, r);
+				System.assertNotEquals(null, r.source);
+				System.assertEquals(User.getSObjectType(), r.source.type);
+				System.assertEquals(null, r.source.parent);
+				if (r.source.id == u1.Id) {
+					foundU1 = true;
+					System.assertEquals(StringUtils.mkName(u1.FirstName, u1.LastName), r.name);
+					System.assertEquals(u1.Email, r.email);
+					System.assertEquals(u1.Phone, r.phone);
+				} else if (r.source.id == u2.Id) {
+					foundU2 = true;
+					System.assertEquals(StringUtils.mkName(u1.FirstName, u1.LastName), r.name);
+					System.assertEquals(u2.Email, r.email);
+					System.assertEquals(u2.Phone, r.phone);
+				} else {
+					throw new AssertException('Unexpected recipient: ' + r);
+				}
+			}
+			System.assert(foundU1);
+			System.assert(foundU2);
+		}
+	}
+
+	@IsTest
 	static void test_getRecipients_invalid() {
 		System.runAs(TestUtils.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
 			try {
-				rr.getRecipients(Schema.User.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
+				rr.getRecipients(Organization.getSObjectType(), new Set<Id> { UserInfo.getOrganizationId() });
 				throw new AssertException('Expected getRecipients to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> {
-					String.valueOf(Schema.User.getSObjectType())
+					String.valueOf(Organization.getSObjectType())
 				}), ex.getMessage());
 			}
 			Test.stopTest();

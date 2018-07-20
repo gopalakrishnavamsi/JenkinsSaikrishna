@@ -1,4 +1,5 @@
 // TODO: Add envelope configurations, OCO, settings
+// HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
 	private static final LoggerService LOG = LoggerService.getInstance();
@@ -90,10 +91,35 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
+	public static Recipient resolveRecipient(final Id sourceId) {
+		try {
+			Recipient result = null;
+			if (String.isNotBlank(sourceId)) {
+				List<Recipient> rs = RecipientService.getRecipients(sourceId.getSobjectType(), new Set<Id> { sourceId });
+				if (Collection.isNotEmpty(rs)) {
+					result = rs[0];
+				}
+			}
+			return result;
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to resolve recipients');
+			throw new AuraHandledException(ex.getMessage());
+		}
+	}
+
+	@AuraEnabled
 	public static Envelope updateEnvelope(final String envelopeJson) {
 		try {
-			// HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
-			return EnvelopeService.updateEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class));
+			Envelope envelope = (Envelope)JSON.deserialize(envelopeJson, Envelope.class);
+			if (envelope != null && Collection.isNotEmpty(envelope.recipients)) {
+				// Set host for in person signers
+				for (Recipient r : envelope.recipients) {
+					if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
+						r = r.withHost(UserInfo.getName(), UserInfo.getUserEmail());
+					}
+				}
+			}
+			return EnvelopeService.updateEnvelope(envelope);
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to update envelope');
 			throw new AuraHandledException(ex.getMessage());
@@ -139,7 +165,9 @@ public with sharing class SendingController extends Controller {
 			EnvelopeService.deleteEnvelope(envelopeId);
 		} catch (Exception ex) {
 			LOG.exception(ex, 'Failed to delete envelope');
-			throw new AuraHandledException(ex.getMessage());
+			if (!(ex instanceof DocuSignException && ex.getMessage() == Label.EnvelopeNotFound)) {
+				throw new AuraHandledException(ex.getMessage());
+			}
 		}
 	}
 }

@@ -3,15 +3,13 @@
 
     <aura:attribute name="recipient" type="Recipient" required="true"/>
     <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
-    <aura:attribute name="recordType" type="String" default="Contact"/>
 
+    <aura:attribute name="recordType" type="String" default="contact" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="selectedLanguage" type="String" access="private"/>
     <aura:attribute name="iconName" type="String" access="private"/>
-    <aura:attribute name="recipientSourceId" type="Id" access="private"/>
-    <aura:attribute name="recipientName" type="String" access="private"/>
 
-    <aura:handler name="change" value="{!v.recipientSourceId}" action="{!c.handleRecipientIdChange}"/>
+    <aura:handler name="change" value="{!v.recipient.source.id}" action="{!c.handleRecipientIdChange}"/>
 
     <aura:registerEvent name="onEditAccessAuthentication" type="c:strike_evt"/>
     <aura:registerEvent name="onEditPrivateMessage" type="c:strike_evt"/>
@@ -21,14 +19,15 @@
     <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-gutters_xx-small">
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <c:strike_lookup placeholder="{!$Label.c.SearchByName}" object="{!v.recordType}"
-                             iconName="{!'standard:' + v.recordType}" searchField="Name" value="{!v.recipientSourceId}"
-                             subtitleField="Email" valueLabel="{!v.recipientName}"/>
+                             iconName="{!'standard:' + v.recordType}" searchField="Name"
+                             value="{!v.recipient.source.id}"
+                             subtitleField="Email" valueLabel="{!v.recipient.name}"/>
         </div>
 
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
-                    <aura:if isTrue="{!empty(v.recipient.role)}">
+                    <aura:if isTrue="{!empty(v.recipient.templateId)}">
                         <!-- Recipient Type -->
                         <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="Signer">{!$Label.c.Signer}</option>
@@ -149,7 +148,8 @@
                     <lightning:select class="slds-form-element" aura:id="email-language" name="{!$Label.c.Language}"
                                       label="{!$Label.c.Language}" onchange="{!c.onEmailLanguageChange}">
                         <aura:iteration items="{!v.emailLocalizations}" var="el" indexVar="elIndex">
-                            <aura:if isTrue="{!if(or(if(and(empty(v.selectedLanguage), elIndex == 1)), v.selectedLanguage == el.language))}">
+                            <aura:if
+                                    isTrue="{!if(or(if(and(empty(v.selectedLanguage), elIndex == 1)), v.selectedLanguage == el.language))}">
                                 <option value="{!el.language}" selected="selected">{!el.label}</option>
                                 <aura:set attribute="else">
                                     <option value="{!el.language}">{!el.label}</option>

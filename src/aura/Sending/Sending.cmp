@@ -22,7 +22,6 @@
     <aura:attribute name="documents" type="Document[]" access="private"/>
     <aura:attribute name="availableTemplates" type="Template[]" access="private"/>
     <aura:attribute name="templates" type="Template[]" access="private"/>
-    <aura:attribute name="availableRecipients" type="Recipient[]" access="private"/>
     <aura:attribute name="recipients" type="Recipient[]"/>
     <aura:attribute name="defaultRoles" type="Recipient.Role[]" access="private"/>
     <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
@@ -35,7 +34,7 @@
     <aura:handler name="change" value="{!v.filesSelected}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.templates}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.envelope.emailSubject}" action="{!c.setNextButtonState}"/>
-    <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.setNextButtonState}"/>
+    <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
 
     <div class="{!'slds-scope' + if(v.visualforce, ' ds-visualforce', ' ds-quick-action-modal')}">
         <aura:if isTrue="{!v.visualforce}">
@@ -206,7 +205,7 @@
                             <div class="ds-recipients">
                                 <aura:iteration items="{!v.recipients}" var="recipient"
                                                 indexVar="recipientIndex">
-                                    <aura:if isTrue="{!empty(recipient.role)}">
+                                    <aura:if isTrue="{!empty(recipient.templateId)}">
                                         <div class="ds-recipients__recipient slds-m-top_small slds-is-relative">
                                             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                                                 <div class="slds-col">
@@ -215,7 +214,6 @@
                                                     <c:Recipient
                                                             recipient="{!recipient}"
                                                             emailLocalizations="{!v.emailLocalizations}"
-                                                            recordType="contact"
                                                             onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                             onEditPrivateMessage="{!c.handleEditPrivateMessage}"
                                                             onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
@@ -254,17 +252,18 @@
                                         <!-- Empty State -->
                                     </aura:if>
                                 </div>
-                                <aura:iteration items="{!template.recipients}" var="recipient" indexVar="index">
-                                    <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
-                                        <c:Recipient
-                                                recipient="{!recipient}"
-                                                emailLocalizations="{!v.emailLocalizations}"
-                                                recordType="contact"
-                                                onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
-                                                onEditPrivateMessage="{!c.handleEditPrivateMessage}"
-                                                onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                        />
-                                    </div>
+                                <aura:iteration items="{!v.recipients}" var="recipient" indexVar="index">
+                                    <aura:if isTrue="{!recipient.templateId == template.id.value}">
+                                        <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
+                                            <c:Recipient
+                                                    recipient="{!recipient}"
+                                                    emailLocalizations="{!v.emailLocalizations}"
+                                                    onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
+                                                    onEditPrivateMessage="{!c.handleEditPrivateMessage}"
+                                                    onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
+                                            />
+                                        </div>
+                                    </aura:if>
                                 </aura:iteration>
                             </div>
                         </aura:iteration>

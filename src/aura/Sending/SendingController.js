@@ -23,9 +23,14 @@
       component.set('v.showToast', false);
     }
 
+    var documents = component.get('v.documents');
+    var hasDocuments = documents.some(function (d) {
+      return d.selected;
+    });
+    var templates = component.get('v.templates');
     var envelope = component.get('v.envelope');
-    envelope.documents = helper.getSelectedDocuments(component.get('v.templates'), component.get('v.documents'));
-    envelope.recipients = helper.getSelectedRecipients(component.get('v.recipients'), component.get('v.defaultRoles'));
+    envelope.documents = helper.getDocumentsForSending(documents, templates);
+    envelope.recipients = helper.getRecipientsForSending(helper, component.get('v.recipients'), hasDocuments, component.get('v.defaultRoles'));
 
     helper.tagEnvelope(component, helper, envelope);
   },
@@ -51,24 +56,21 @@
     helper.setTemplateSettings(component, event, helper, selectedTemplate);
   },
 
+  setTemplate: function (component, event, helper) {
+    var focusCatcher = component.find('focus-catcher').getElement(); // Avoids base component bug; see .cmp file for more information
+    focusCatcher.focus();
+    focusCatcher.blur();
+    helper.setTemplateSettings(component, event, helper, null);
+  },
+
   removeTemplate: function (component, event, helper) {
     var targetIndex = event.getSource().get('v.value');
     var templates = component.get('v.templates');
     var availableTemplates = component.get('v.availableTemplates');
 
-    availableTemplates.forEach(function (template) {
-      if (template.id.value === templates[targetIndex].id.value) {
-        template.selected = false;
-        template.recipients.forEach(function (recipient) {
-          recipient.sourceId = null;
-          var availableRecipients = component.get('v.availableRecipients');
-          availableRecipients.forEach(function (r) {
-            if (r.templateId === template.id.value) {
-              r.templateId = null;
-            }
-          });
-          component.set('v.availableRecipients', availableRecipients);
-        });
+    availableTemplates.forEach(function (t) {
+      if (t.id.value === templates[targetIndex].id.value) {
+        t.selected = false;
       }
     });
 
@@ -79,26 +81,23 @@
       envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
       envelope.emailSubject = component.get('v.defaultEmailSubject');
       envelope.emailMessage = component.get('v.defaultEmailMessage');
+      component.set('v.envelope', envelope);
       helper.handleFilesChange(component, event, helper);
     }
     component.set('v.templates', templates);
     component.set('v.availableTemplates', availableTemplates);
   },
 
-  removeRecipient: function (component, event, helper) {
-    var targetIndex = event.getSource().get('v.value');
-    var recipientSettings = component.get('v.recipients');
-
-    recipientSettings.splice(targetIndex, 1);
-    component.set('v.recipients', recipientSettings);
+  addRecipient: function (component, event, helper) {
+    var recipients = component.get('v.recipients');
+    recipients.push(helper.newRecipient());
+    component.set('v.recipients', recipients);
   },
 
-  setTemplate: function (component, event, helper) {
-    var focusCatcher = component.find('focus-catcher').getElement(); // Avoids base component bug; see .cmp file for more information
-
-    focusCatcher.focus();
-    focusCatcher.blur();
-    helper.setTemplateSettings(component, event, helper, null);
+  removeRecipient: function (component, event, helper) {
+    var recipients = component.get('v.recipients');
+    recipients.splice(event.getSource().get('v.value'), 1);
+    component.set('v.recipients', recipients);
   },
 
   cancel: function (component, event, helper) {
@@ -136,18 +135,16 @@
     component.set('v.showAdvancedOptions', !component.get('v.showAdvancedOptions'));
   },
 
-  addRecipient: function (component, event, helper) {
-    helper.addBlankRecipient(component);
-  },
-
   handleFileSelected: function (component, event, helper) {
     helper.handleFilesChange(component, event, helper);
   },
 
   handleActiveStepChange: function (component, event, helper) {
     component.set('v.disableNext', !helper.getValidity(component, helper));
-
-    if (component.get('v.activeStep') === 1) {
+    var activeStep = component.get('v.activeStep');
+    if (activeStep === 0) { // Documents
+      component.set('v.recipients', helper.resetRecipients(helper, component.get('v.recipients')));
+    } else if (activeStep === 1) { // Recipients
       var documents = component.get('v.documents');
       var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
       var selectedFileTitles = '';
@@ -159,10 +156,16 @@
       });
       selectedFileTitles = selectedFileTitles.slice(2);
       component.set('v.selectedFileTitles', selectedFileTitles);
+
+      component.set('v.recipients', helper.getRecipients(helper, component.get('v.recipients'), component.get('v.templates')));
     }
   },
 
   setNextButtonState: function (component, event, helper) {
     component.set('v.disableNext', !helper.getValidity(component, helper));
+  },
+
+  handleRecipientChange: function (component, event, helper) {
+    helper.resolveRecipient(component, helper, event.getParam('data'));
   }
 });

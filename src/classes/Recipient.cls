@@ -920,6 +920,20 @@ public class Recipient implements Comparable {
 	}
 
 	/**
+	 * Sets the recipient host name and email for in-person signing.
+	 *
+	 * @param hostName The name of the in-person signing host.
+	 * @param hostEmail The email address of the in-person signing host.
+	 *
+	 * @return The recipient with updated <code>hostName</code> and <code>hostEmail</code>.
+	 */
+	public Recipient withHost(final String hostName, final String hostEmail) {
+		this.hostName = hostName;
+		this.hostEmail = hostEmail;
+		return this;
+	}
+
+	/**
 	 * Recipient search behaviors:
 	 * <ul>
 	 *     <li><code>CompoundMatchBeginning</code>: Match beginning of compound name field: <code>SELECT X FROM Y WHERE Name LIKE 'name%'</code>.</li>

@@ -1090,6 +1090,13 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	public UUID createEnvelope(final Envelope envelope, final Envelope.Options options, final Integer timeout) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
+		System.debug('Envelope:\n\n' + JSON.serialize(new EnvelopeAPI.APIEnvelope(
+			envelope,
+			options != null && options.sendNow,
+			options != null && options.includeDefaultAnchorTabs,
+			options != null && options.fetchDocuments,
+			options != null && options.useAccountNotificationDefaults),
+			true));
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },

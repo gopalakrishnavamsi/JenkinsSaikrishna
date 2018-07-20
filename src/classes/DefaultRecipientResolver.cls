@@ -9,7 +9,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	private static final SObjectType TYPE_USER = User.getSObjectType();
 
 	private static final Set<SObjectType> RESOLVABLE_TYPES = new Set<SObjectType> {
-		TYPE_ACCOUNT, TYPE_CASE, TYPE_CONTACT, TYPE_LEAD, TYPE_OPPORTUNITY
+		TYPE_ACCOUNT, TYPE_CASE, TYPE_CONTACT, TYPE_LEAD, TYPE_OPPORTUNITY, TYPE_USER
 	};
 
 	private static final Set<SObjectType> SEARCHABLE_TYPES = new Set<SObjectType> {
@@ -158,6 +158,28 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return recipients;
 	}
 
+	private static List<Recipient> getUserRecipients(final Set<Id> userIds) {
+		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
+
+		final List<Recipient> recipients = new List<Recipient>();
+		for (User u : [
+			SELECT Id, Name, Email, Phone, MobilePhone
+			FROM User
+			WHERE Id IN :userIds
+		]) {
+			recipients.add(Recipient.fromSource(
+				u.Name,
+				u.Email,
+				String.isBlank(u.Phone) ? u.MobilePhone : u.Phone,
+				null,
+				new Entity(
+					u.Id,
+					u.Name,
+					null)));
+		}
+		return recipients;
+	}
+
 	public List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
@@ -172,6 +194,8 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			result = getLeadRecipients(sObjectIds);
 		} else if (type == TYPE_OPPORTUNITY) {
 			result = getOpportunityRecipients(sObjectIds);
+		} else if (type == TYPE_USER) {
+			result = getUserRecipients(sObjectIds);
 		} else {
 			throw new DocuSignException(String.format(Label.CannotResolveRecipientSource_1,
 				new List<String> { String.valueOf(type) }));
