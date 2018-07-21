@@ -310,9 +310,11 @@
     var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
       recipients.forEach(function (r) {
-        if (!$A.util.isEmpty(r.templateId) || hasDocuments) {
+        if (helper.isValidRecipient(r) && (!$A.util.isEmpty(r.templateId) || hasDocuments)) {
           r.sequence = sequence++;
           r.role = helper.isRoleDefined(r.role) ? r.role : helper.getNextRole(defaultRoles);
+          delete r.templateId;
+          delete r.original;
           rs.push(r);
         }
       });
