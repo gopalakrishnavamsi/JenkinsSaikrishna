@@ -1,0 +1,7 @@
+<apex:page standardController="Opportunity" extensions="SendingController" showHeader="true" sidebar="false"
+           title="{!$Label.DocuSign}">
+    <apex:form>
+        <c:Sending componentNamespace="{!namespace}" sourceId="{!source.id}"
+                   visualforceHost="{!visualforceHost}"/>
+    </apex:form>
+</apex:page>

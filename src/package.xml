@@ -3,7 +3,7 @@
     <fullName>DocuSign for Salesforce Essentials</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
     <postInstallClass>PostInstall</postInstallClass>
-    <setupWeblink>SetupSplash</setupWeblink>
+    <setupWeblink>Setup</setupWeblink>
     <types>
         <members>Application</members>
         <members>ApplicationTest</members>
@@ -458,6 +458,7 @@
         <members>Next</members>
         <members>ContinueAndTag</members>
         <members>NoFilesAttached</members>
+        <members>SendWithDocuSign</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -684,6 +685,10 @@
         <members>User</members>
         <members>Setup__mdt</members>
         <members>Opportunity</members>
+        <members>Account</members>
+        <members>Case</members>
+        <members>Contact</members>
+        <members>Lead</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -698,6 +703,10 @@
         <members>RecipientStatus__c-en_US</members>
         <members>User-en_US</members>
         <members>Opportunity-en_US</members>
+        <members>Account-en_US</members>
+        <members>Case-en_US</members>
+        <members>Contact-en_US</members>
+        <members>Lead-en_US</members>
         <name>CustomObjectTranslation</name>
     </types>
     <types>
@@ -715,6 +724,10 @@
     <types>
         <members>Envelope__c.LearnMore</members>
         <members>Opportunity.SendWithDocuSign</members>
+        <members>Account.SendWithDocuSign</members>
+        <members>Case.SendWithDocuSign</members>
+        <members>Contact.SendWithDocuSign</members>
+        <members>Lead.SendWithDocuSign</members>
         <name>WebLink</name>
     </types>
     <types>
@@ -726,8 +739,12 @@
         <members>Setup</members>
         <members>SetupSplash</members>
         <members>FileUploader</members>
-        <members>CreateEnvelopeFromOpportunity</members>
+        <members>SendFromOpportunity</members>
         <members>ReturnFromDocuSign</members>
+        <members>SendFromAccount</members>
+        <members>SendFromContact</members>
+        <members>SendFromCase</members>
+        <members>SendFromLead</members>
         <name>ApexPage</name>
     </types>
     <types>
@@ -797,8 +814,12 @@
         <name>ContentAsset</name>
     </types>
     <types>
-        <members>SetupSplash</members>
+        <members>Setup</members>
         <name>CustomPageWebLink</name>
+    </types>
+    <types>
+        <members>Sending</members>
+        <name>ApexComponent</name>
     </types>
     <version>43.0</version>
 </Package>

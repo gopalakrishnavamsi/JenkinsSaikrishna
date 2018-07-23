@@ -1,4 +1,4 @@
-<apex:page sidebar="false" showHeader="true" controller="SetupController">
+<apex:page sidebar="false" showHeader="true" controller="SetupController" label="{!$Label.DocuSign}">
     <apex:includeLightning/>
     <apex:slds/>
     <style type="text/css">
@@ -26,27 +26,27 @@
     <div id="setup-assistant"/>
 
     <script type="text/javascript">
-        var component;
+      var component;
 
-        var namespace = '{!JSENCODE(namespace)}';
-        var data = '{!JSEncode(state)}';
-        if (data !== '') {
-            data = JSON.parse(data);
-        } else {
-            data = {};
-        }
+      var namespace = '{!JSENCODE(namespace)}';
+      var data = '{!JSEncode(state)}';
+      if (data !== '') {
+        data = JSON.parse(data);
+      } else {
+        data = {};
+      }
 
-        $Lightning.use(namespace + ':LightningOutApp', function () {
-            $Lightning.createComponent(namespace + ':Setup', {
-                sections: data
-            }, 'setup-assistant', function (cmp) {
-                $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
-            });
+      $Lightning.use(namespace + ':LightningOutApp', function () {
+        $Lightning.createComponent(namespace + ':Setup', {
+          sections: data
+        }, 'setup-assistant', function (cmp) {
+          $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
+      });
 
-        var navigateToURL = function (event) {
-            var url = event.getParam('url');
-            window.open(url, '_blank');
-        }
+      var navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_blank');
+      }
     </script>
 </apex:page>

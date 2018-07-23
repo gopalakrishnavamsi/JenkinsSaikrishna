@@ -1,7 +1,15 @@
-<apex:page standardController="Opportunity" extensions="SendingController" showHeader="true" sidebar="false">
-    <!-- TODO: Move to shared VF component -->
+<apex:component>
+    <apex:attribute name="componentNamespace" description="The organization or managed package namespace" type="String"
+                    required="true"/>
+    <apex:attribute name="sourceId" description="The ID of the initiating Salesforce object" type="Id"
+                    required="true"/>
+    <apex:attribute name="visualforceHost" description="The Visualforce host name for the current organization"
+                    type="String"
+                    required="true"/>
+
     <apex:includeLightning/>
     <apex:slds/>
+
     <style type="text/css">
         html body.sfdcBody {
             margin: 0 -1rem -1rem 0;
@@ -13,11 +21,11 @@
 
     <div id="lightning"></div>
     <script type="text/javascript">
-      var namespace = '{!JSENCODE(namespace)}';
+      var namespace = '{!JSENCODE(componentNamespace)}';
       $Lightning.use(namespace + ':LightningOutApp', function () {
         $Lightning.createComponent(namespace + ':Sending', {
           visualforce: true,
-          recordId: '{!JSENCODE(source.id)}',
+          recordId: '{!JSENCODE(sourceId)}',
           lcHost: '{!JSENCODE(visualforceHost)}',
           namespace: namespace
         }, 'lightning', function (cmp) {
@@ -30,4 +38,4 @@
         window.open(url, '_self');
       }
     </script>
-</apex:page>
+</apex:component>

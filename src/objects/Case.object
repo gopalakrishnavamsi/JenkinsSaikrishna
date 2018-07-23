@@ -8,7 +8,7 @@
 		<linkType>page</linkType>
 		<masterLabel>Send with DocuSign</masterLabel>
 		<openType>noSidebar</openType>
-		<page>SendFromOpportunity</page>
+		<page>SendFromCase</page>
 		<protected>false</protected>
 	</webLinks>
 </CustomObject>

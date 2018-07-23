@@ -13,7 +13,7 @@
     <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
     <aura:attribute name="signedUpForTrial" type="Boolean" access="private"/>
     <aura:attribute name="showLoginSpinner" type="Boolean"/>
-    <aura:attribute name="associatedAccounts" type="AccountService.AccountOption[]"/>
+    <aura:attribute name="associatedAccounts" type="Object[]"/>
     <aura:attribute name="showAccountSelectionModal" type="Boolean"/>
     <aura:attribute name="isTrial" type="Boolean"/>
     <aura:attribute name="trialMessage" type="String"/>

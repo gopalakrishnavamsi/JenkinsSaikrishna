@@ -2232,7 +2232,7 @@
 		<fullName>Upload</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Upload</shortDescription>
 		<value>Upload</value>
 	</labels>
@@ -2240,7 +2240,7 @@
 		<fullName>UploadFile</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Upload file</shortDescription>
 		<value>Upload File</value>
 	</labels>
@@ -2248,7 +2248,7 @@
 		<fullName>UploadSuccessful</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Upload successful</shortDescription>
 		<value>File was uploaded successfully</value>
 	</labels>
@@ -2256,7 +2256,7 @@
 		<fullName>FileSizeLimit</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>File size limit</shortDescription>
 		<value>File size limit is 4MB.</value>
 	</labels>
@@ -2264,7 +2264,7 @@
 		<fullName>FileSizeLimitReached</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>File size limit reached</shortDescription>
 		<value>This file exceeds the maximum size limit</value>
 	</labels>
@@ -2272,7 +2272,7 @@
 		<fullName>SomethingWrong</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Something went wrong</shortDescription>
 		<value>Something went wrong. Please try again.</value>
 	</labels>
@@ -2336,7 +2336,7 @@
 		<fullName>Type</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Type</shortDescription>
 		<value>Type</value>
 	</labels>
@@ -2472,7 +2472,7 @@
 		<fullName>EmailHelpText</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Email help text</shortDescription>
 		<value>Custom Email Messages configured in the previous step will override these settings</value>
 	</labels>
@@ -2480,7 +2480,7 @@
 		<fullName>EmailMessage</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Email Message</shortDescription>
 		<value>Email Message</value>
 	</labels>
@@ -2488,7 +2488,7 @@
 		<fullName>Save</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Save</shortDescription>
 		<value>Save</value>
 	</labels>
@@ -2496,7 +2496,7 @@
 		<fullName>DocuSign</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>DocuSign</shortDescription>
 		<value>DocuSign</value>
 	</labels>
@@ -2504,7 +2504,7 @@
 		<fullName>SendEnvelope</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Send envelope</shortDescription>
 		<value>Send Envelope</value>
 	</labels>
@@ -2512,7 +2512,7 @@
 		<fullName>Files</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Files</shortDescription>
 		<value>Files</value>
 	</labels>
@@ -2520,7 +2520,7 @@
 		<fullName>Select</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Select</shortDescription>
 		<value>Select</value>
 	</labels>
@@ -2528,7 +2528,7 @@
 		<fullName>Show</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Show</shortDescription>
 		<value>Show</value>
 	</labels>
@@ -2536,7 +2536,7 @@
 		<fullName>Hide</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Hide</shortDescription>
 		<value>Hide</value>
 	</labels>
@@ -2544,7 +2544,7 @@
 		<fullName>Reminders</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Reminders</shortDescription>
 		<value>Reminders</value>
 	</labels>
@@ -2552,7 +2552,7 @@
 		<fullName>SendAutomaticReminders</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Send automatic reminders</shortDescription>
 		<value>Send automatic reminders</value>
 	</labels>
@@ -2560,7 +2560,7 @@
 		<fullName>DaysBeforeFirstReminder</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Days before first reminder</shortDescription>
 		<value>days before sending first reminder</value>
 	</labels>
@@ -2568,7 +2568,7 @@
 		<fullName>DaysBetweenReminders</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Days between reminders</shortDescription>
 		<value>days between reminders</value>
 	</labels>
@@ -2576,7 +2576,7 @@
 		<fullName>Expiration</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Expiration</shortDescription>
 		<value>Expiration</value>
 	</labels>
@@ -2584,7 +2584,7 @@
 		<fullName>EnvelopeExpires</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Envelope expires</shortDescription>
 		<value>Envelope expires</value>
 	</labels>
@@ -2592,7 +2592,7 @@
 		<fullName>DaysBeforeExpires</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Days before expires</shortDescription>
 		<value>days until envelope expires</value>
 	</labels>
@@ -2600,7 +2600,7 @@
 		<fullName>EnvelopeExpiresOn_1</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Envelope expires on</shortDescription>
 		<value>(Envelope will expire on {0})</value>
 	</labels>
@@ -2608,7 +2608,7 @@
 		<fullName>DaysBeforeExpiresWarn</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Days before expire warning</shortDescription>
 		<value>days in which to warn signers before expiration</value>
 	</labels>
@@ -2616,7 +2616,7 @@
 		<fullName>Next</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Next</shortDescription>
 		<value>Next</value>
 	</labels>
@@ -2624,7 +2624,7 @@
 		<fullName>ContinueAndTag</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>Continue and Tag</shortDescription>
 		<value>Continue and Tag</value>
 	</labels>
@@ -2632,8 +2632,16 @@
 		<fullName>NoFilesAttached</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
-		<protected>false</protected>
+		<protected>true</protected>
 		<shortDescription>No files attached</shortDescription>
 		<value>No files attached</value>
+	</labels>
+	<labels>
+		<fullName>SendWithDocuSign</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send with DocuSign</shortDescription>
+		<value>Send with DocuSign</value>
 	</labels>
 </CustomLabels>

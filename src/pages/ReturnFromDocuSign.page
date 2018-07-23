@@ -1,1 +1,2 @@
-<apex:page controller="ReturnController" action="{!onReturn}" showHeader="false" sideBar="false"/>
+<apex:page controller="ReturnController"
+           label="{!$Label.DocuSign}" action="{!onReturn}" showHeader="false" sideBar="false"/>

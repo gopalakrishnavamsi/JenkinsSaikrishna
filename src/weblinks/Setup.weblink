@@ -15,5 +15,5 @@
 	<protected>false</protected>
 	<showsLocation>false</showsLocation>
 	<showsStatus>false</showsStatus>
-	<page>SetupSplash</page>
+	<page>Setup</page>
 </CustomPageWebLink>

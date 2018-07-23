@@ -1353,4 +1353,8 @@
 		<label>Show</label>
 		<name>Show</name>
 	</customLabels>
+	<customLabels>
+		<label>Send with DocuSign</label>
+		<name>SendWithDocuSign</name>
+	</customLabels>
 </Translations>

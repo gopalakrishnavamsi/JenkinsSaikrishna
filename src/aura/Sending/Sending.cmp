@@ -16,15 +16,15 @@
     <aura:attribute name="showToast" type="Boolean" access="private"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showAdvancedOptions" type="Boolean" access="private"/>
-    <aura:attribute name="envelope" type="Envelope"/>
+    <aura:attribute name="envelope" type="Object"/>
     <aura:attribute name="defaultEmailSubject" type="String" access="private"/>
     <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
-    <aura:attribute name="documents" type="Document[]" access="private"/>
-    <aura:attribute name="availableTemplates" type="Template[]" access="private"/>
-    <aura:attribute name="templates" type="Template[]" access="private"/>
-    <aura:attribute name="recipients" type="Recipient[]"/>
-    <aura:attribute name="defaultRoles" type="Recipient.Role[]" access="private"/>
-    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
+    <aura:attribute name="documents" type="Object[]" access="private"/>
+    <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
+    <aura:attribute name="templates" type="Object[]" access="private"/>
+    <aura:attribute name="recipients" type="Object[]"/>
+    <aura:attribute name="defaultRoles" type="Object[]" access="private"/>
+    <aura:attribute name="emailLocalizations" type="Object[]"/>
     <aura:attribute name="expiresOn" type="Date" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>

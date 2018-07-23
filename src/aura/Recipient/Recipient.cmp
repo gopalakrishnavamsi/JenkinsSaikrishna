@@ -1,8 +1,8 @@
 <aura:component>
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
-    <aura:attribute name="recipient" type="Recipient" required="true"/>
-    <aura:attribute name="emailLocalizations" type="Recipient.EmailSettings[]"/>
+    <aura:attribute name="recipient" type="Object" required="true"/>
+    <aura:attribute name="emailLocalizations" type="Object[]"/>
 
     <aura:attribute name="recordType" type="String" default="contact" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
