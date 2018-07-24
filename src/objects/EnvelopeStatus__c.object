@@ -3,7 +3,7 @@
 	<allowInChatterGroups>false</allowInChatterGroups>
 	<compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
 	<deploymentStatus>Deployed</deploymentStatus>
-	<description>DocuSign Envelope Status</description>
+	<description>DocuSign Status</description>
 	<enableActivities>true</enableActivities>
 	<enableBulkApi>true</enableBulkApi>
 	<enableEnhancedLookup>false</enableEnhancedLookup>
@@ -140,16 +140,12 @@
 	<listViews>
 		<fullName>All</fullName>
 		<columns>NAME</columns>
-		<columns>SenderName__c</columns>
-		<columns>EmailSubject__c</columns>
-		<columns>Status__c</columns>
+		<columns>DocuSignId__c</columns>
 		<columns>Sent__c</columns>
-		<columns>Completed__c</columns>
-		<columns>LastStatusUpdate__c</columns>
-		<columns>TimeToComplete__c</columns>
+		<columns>Status__c</columns>
 		<columns>SourceId__c</columns>
 		<filterScope>Everything</filterScope>
-		<label>All Envelopes</label>
+		<label>All</label>
 	</listViews>
 	<listViews>
 		<fullName>AllCompleted</fullName>
@@ -168,12 +164,26 @@
 		</filters>
 		<label>All Completed Envelopes</label>
 	</listViews>
+	<listViews>
+		<fullName>AllEnvelopes</fullName>
+		<columns>NAME</columns>
+		<columns>SenderName__c</columns>
+		<columns>EmailSubject__c</columns>
+		<columns>Status__c</columns>
+		<columns>Sent__c</columns>
+		<columns>Completed__c</columns>
+		<columns>LastStatusUpdate__c</columns>
+		<columns>TimeToComplete__c</columns>
+		<columns>SourceId__c</columns>
+		<filterScope>Everything</filterScope>
+		<label>All Envelopes</label>
+	</listViews>
 	<nameField>
 		<displayFormat>DSX-{0000000}</displayFormat>
 		<label>Envelope#</label>
 		<trackHistory>false</trackHistory>
 		<type>AutoNumber</type>
 	</nameField>
-	<pluralLabel>DocuSign Envelope Statuses</pluralLabel>
+	<pluralLabel>DocuSign Status</pluralLabel>
 	<sharingModel>ReadWrite</sharingModel>
 </CustomObject>

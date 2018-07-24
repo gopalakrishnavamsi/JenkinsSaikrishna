@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
-        <application>DocuSign_Setup</application>
-        <visible>true</visible>
-    </applicationVisibilities>
-    <applicationVisibilities>
-        <application>DocuSign_Setup_Classic</application>
-        <visible>true</visible>
-    </applicationVisibilities>
-    <applicationVisibilities>
-        <application>DocuSign_for_Salesforce_Essentials</application>
+        <application>DocuSignForSalesforceEssentials</application>
         <visible>true</visible>
     </applicationVisibilities>
     <description>Provides access to the DocuSign for Salesforce application, pages, and objects and administration

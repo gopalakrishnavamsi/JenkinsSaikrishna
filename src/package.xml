@@ -127,9 +127,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DocuSign_for_Salesforce_Essentials</members>
-        <members>DocuSign_Setup</members>
-        <members>DocuSign_Setup_Classic</members>
+        <members>DocuSignForSalesforceEssentials</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -711,12 +709,15 @@
     </types>
     <types>
         <members>Setup</members>
+        <members>Envelope__c</members>
+        <members>EnvelopeStatus__c</members>
         <name>CustomTab</name>
     </types>
     <types>
         <members>Envelope__c.All</members>
         <members>EnvelopeStatus__c.All</members>
         <members>EnvelopeStatus__c.AllCompleted</members>
+        <members>EnvelopeStatus__c.AllEnvelopes</members>
         <members>User.Active</members>
         <members>User.Inactive</members>
         <name>ListView</name>
@@ -806,11 +807,12 @@
     </types>
     <types>
         <members>DocuSign</members>
-        <members>DocuSign/Classic_App_Logo.png</members>
+        <members>DocuSign/ClassicAppLogo.png</members>
+        <members>DocuSign/AppIcon.png</members>
         <name>Document</name>
     </types>
     <types>
-        <members>CSP_icon_meta1</members>
+        <members>LogoIcon</members>
         <name>ContentAsset</name>
     </types>
     <types>
