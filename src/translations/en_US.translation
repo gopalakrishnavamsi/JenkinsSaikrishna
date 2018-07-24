@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customApplications>
+		<label>DocuSign for Salesforce Essentials</label>
+		<name>DocuSignForSalesforceEssentials</name>
+	</customApplications>
 	<customLabels>
 		<label>Create is unauthorized for {0} fields: {1}</label>
 		<name>CannotCreateFields_2</name>
@@ -1357,4 +1361,20 @@
 		<label>Send with DocuSign</label>
 		<name>SendWithDocuSign</name>
 	</customLabels>
+	<customPageWebLinks>
+		<label>DocuSign Setup</label>
+		<name>Setup</name>
+	</customPageWebLinks>
+	<customTabs>
+		<label>DocuSign Envelopes</label>
+		<name>Envelope__c</name>
+	</customTabs>
+	<customTabs>
+		<label>DocuSign Status</label>
+		<name>EnvelopeStatus__c</name>
+	</customTabs>
+	<customTabs>
+		<label>DocuSign Setup</label>
+		<name>Setup</name>
+	</customTabs>
 </Translations>

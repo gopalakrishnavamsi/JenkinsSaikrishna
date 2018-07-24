@@ -3,7 +3,7 @@
 	<availability>online</availability>
 	<displayType>link</displayType>
 	<linkType>page</linkType>
-	<masterLabel>Setup</masterLabel>
+	<masterLabel>DocuSign Setup</masterLabel>
 	<openType>replace</openType>
 	<page>Setup</page>
 	<protected>false</protected>
