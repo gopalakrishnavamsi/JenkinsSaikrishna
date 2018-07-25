@@ -42,7 +42,7 @@
                 <div class="slds-p-vertical_xx-large slds-text-align_center">
                     <!-- Logo -->
                     <div class="strike-logo-container slds-m-bottom_x-large">
-                        <img src="{!$Resource.logo}"/>
+                        <img src="{!$Resource.Logo}"/>
                     </div>
                     <!-- /Logo -->
                     <!-- Description -->

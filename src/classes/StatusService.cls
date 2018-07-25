@@ -77,13 +77,14 @@ public with sharing class StatusService {
 		public Set<UUID> querySourceEnvelopes(final Set<Id> sourceIds, final Integer maximumRecords) {
 			Permissions.verifyIsQueryable(Envelope__c.getSObjectType(), new List<String> { 'DocuSignId__c' });
 
+			Integer max = maximumRecords == null || maximumRecords <= 0 ? 5 : maximumRecords;
 			Set<UUID> result = new Set<UUID>();
 			for (Envelope__c e : [
 				SELECT DocuSignId__c
 				FROM Envelope__c
 				WHERE SourceId__c IN :sourceIds AND DocuSignId__c != NULL
 				ORDER BY CreatedDate ASC
-				LIMIT :maximumRecords
+				LIMIT :max
 			]) {
 				result.add(UUID.fromString(e.DocuSignId__c));
 			}
