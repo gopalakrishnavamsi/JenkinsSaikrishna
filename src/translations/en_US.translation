@@ -69,9 +69,7 @@
 		<name>InvalidSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that
-			you have responded to all activation emails.
-		</label>
+		<label>Please verify that you have been granted access to DocuSign, your account settings are correct and that you have responded to all activation emails.</label>
 		<name>MustBeActivated</name>
 	</customLabels>
 	<customLabels>

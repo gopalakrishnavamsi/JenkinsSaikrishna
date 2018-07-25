@@ -2,6 +2,11 @@
 private class UIThemeTest {
 
 	@IsTest
+	static void test_currentTheme() {
+		System.assertNotEquals(null, UITheme.currentTheme);
+	}
+
+	@IsTest
 	static void test_Classic_Theme1() {
 		UITheme.setTheme('Theme1');
 

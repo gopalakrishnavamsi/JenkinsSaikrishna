@@ -1,22 +1,10 @@
 public with sharing class SetupController extends Controller {
 
-	private static final LoggerService LOG = LoggerService.getInstance();
-
-	public String namespace {
-		get {
-			return Application.lightningNamespace;
-		}
-	}
 	public String state { get; set; }
 
 	public SetupController() {
-		List<Setup__mdt> setupSettings = [SELECT Label, State__c FROM Setup__mdt WHERE DeveloperName = 'State' LIMIT 1];
-
-		if (setupSettings.size() > 0 && String.isNotBlank(setupSettings[0].State__c)) {
-			state = setupSettings[0].State__c;
-		} else {
-			state = '';
-		}
+		List<Setup__mdt> md = [SELECT State__c FROM Setup__mdt WHERE DeveloperName = 'State' LIMIT 1];
+		this.state = Collection.isNotEmpty(md) && String.isNotBlank(md[0].State__c) ? md[0].State__c : '';
 	}
 
 	@TestVisible
@@ -42,8 +30,7 @@ public with sharing class SetupController extends Controller {
 			return AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
 				String.isBlank(dsUrl) ? null : new Url(dsUrl), dsAccountNumber);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to log into DocuSign.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to log into DocuSign.');
 		}
 	}
 
@@ -52,8 +39,7 @@ public with sharing class SetupController extends Controller {
 		try {
 			return AccountService.getAccount();
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to read DocuSign account.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to read DocuSign account.');
 		}
 	}
 
@@ -62,8 +48,7 @@ public with sharing class SetupController extends Controller {
 		try {
 			AccountService.resetCredentials(resetUsers);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to log out of DocuSign.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to log out of DocuSign.');
 		}
 	}
 
@@ -73,8 +58,7 @@ public with sharing class SetupController extends Controller {
 			Account.Trial trial = AccountService.prepareTrial(email);
 			return AccountService.createTrial(trial.acceptTermsAndConditions());
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to create DocuSign trial.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to create DocuSign trial.');
 		}
 	}
 
@@ -87,8 +71,7 @@ public with sharing class SetupController extends Controller {
 				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
 			});
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to add DocuSign account users.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
 		}
 	}
 
@@ -99,8 +82,7 @@ public with sharing class SetupController extends Controller {
 				new Account.User(sourceId, username)
 			}, true);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to remove DocuSign account users.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to remove DocuSign account users.');
 		}
 	}
 
@@ -109,8 +91,7 @@ public with sharing class SetupController extends Controller {
 		try {
 			return AccountService.getUsers();
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to read DocuSign account users.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to read DocuSign account users.');
 		}
 	}
 
@@ -122,8 +103,7 @@ public with sharing class SetupController extends Controller {
 
 			return [SELECT Id, Email, FirstName, LastName FROM User WHERE Id = :userId LIMIT 1];
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to read user.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to read user.');
 		}
 	}
 
@@ -142,14 +122,13 @@ public with sharing class SetupController extends Controller {
 
 			return deployMetadata(setupMetadata);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to save setup state.');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to save setup state.');
 		}
 	}
 
 	private static Id deployMetadata(final MetaData.CustomMetadata setupMetadata) {
 		Metadata.DeployContainer mdContainer = new Metadata.DeployContainer();
 		mdContainer.addMetadata(setupMetadata);
-		return Metadata.Operations.enqueueDeployment(mdContainer, new MetadataDeployCallback());
+		return Test.isRunningTest() ? null : Metadata.Operations.enqueueDeployment(mdContainer, new MetadataDeployCallback());
 	}
 }

@@ -129,4 +129,11 @@ private class CollectionTest {
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA' }));
 		System.assertEquals('00541000002aMAA', Collection.head(new Set<Id> { '00541000002aMAA', '00541000002aMAB' }));
 	}
+
+	@IsTest
+	static void test_size() {
+		System.assertEquals(0, Collection.size(null));
+		System.assertEquals(0, Collection.size(new List<Object>()));
+		System.assertEquals(2, Collection.size(new List<Integer> { 1, 2 }));
+	}
 }

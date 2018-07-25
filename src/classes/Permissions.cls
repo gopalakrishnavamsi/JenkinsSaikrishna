@@ -200,8 +200,9 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static void verifyIsDocuSignAdministrator(final Id userId) {
-		if (String.isBlank(userId) || !isDocuSignAdministrator(userId))
+		if (String.isBlank(userId) || !isDocuSignAdministrator(userId)) {
 			throw UnauthorizedException.notDocuSignAdministrator();
+		}
 	}
 
 	/**

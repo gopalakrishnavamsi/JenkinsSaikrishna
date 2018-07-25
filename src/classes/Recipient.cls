@@ -924,12 +924,14 @@ public class Recipient implements Comparable {
 	 *
 	 * @param hostName The name of the in-person signing host.
 	 * @param hostEmail The email address of the in-person signing host.
+	 * @param signNow Whether the recipient should sign the envelope immediately.
 	 *
 	 * @return The recipient with updated <code>hostName</code> and <code>hostEmail</code>.
 	 */
-	public Recipient withHost(final String hostName, final String hostEmail) {
+	public Recipient withHost(final String hostName, final String hostEmail, final Boolean signNow) {
 		this.hostName = hostName;
 		this.hostEmail = hostEmail;
+		this.signNow = signNow;
 		return this;
 	}
 

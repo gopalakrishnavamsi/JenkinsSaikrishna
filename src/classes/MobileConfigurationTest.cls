@@ -10,6 +10,7 @@ private class MobileConfigurationTest {
 
 		System.assertNotEquals(null, mc1);
 		System.assert(mc1 === mc2);
+		System.assert(mc1.isValid);
 		System.assertNotEquals(null, mc1.currentDevice);
 		System.assertEquals(Device.OS.Other, mc1.currentDevice.os);
 		System.assertEquals(Device.Type.Other, mc1.currentDevice.type);

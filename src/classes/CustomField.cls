@@ -126,6 +126,7 @@ public class CustomField {
 	 * @return This custom field with the updated <code>value</code> property.
 	 */
 	public CustomField withValue(final String value) {
-		return new CustomField(this.type, this.name, value, this.items, this.required, this.show);
+		this.value = value;
+		return this;
 	}
 }

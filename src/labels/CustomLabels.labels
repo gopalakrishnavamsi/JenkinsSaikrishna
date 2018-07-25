@@ -134,9 +134,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
-		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that
-			you have responded to all activation emails.
-		</value>
+		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that you have responded to all activation emails.</value>
 	</labels>
 	<labels>
 		<fullName>MustBeAdministrator</fullName>

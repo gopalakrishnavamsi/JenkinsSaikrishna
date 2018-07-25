@@ -147,4 +147,10 @@ public class Collection {
 
 		return (Id)s.iterator().next();
 	}
+
+	public static Integer size(final List<Object> l) {
+		if (l == null) return 0;
+
+		return l.size();
+	}
 }

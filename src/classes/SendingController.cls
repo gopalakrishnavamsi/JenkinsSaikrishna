@@ -107,7 +107,7 @@ public with sharing class SendingController extends Controller {
 				// Set host for in person signers
 				for (Recipient r : envelope.recipients) {
 					if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
-						r = r.withHost(UserInfo.getName(), UserInfo.getUserEmail());
+						r = r.withHost(UserInfo.getName(), UserInfo.getUserEmail(), true);
 					}
 				}
 			}

@@ -25,11 +25,6 @@ public class UITheme {
 		}
 	}
 
-	@TestVisible
-	private static void setTheme(final UITheme.Theme t) {
-		currentThemeInternal = t;
-	}
-
 	public static Theme currentTheme {
 		get {
 			return getTheme();

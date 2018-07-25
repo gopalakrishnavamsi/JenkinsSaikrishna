@@ -327,15 +327,6 @@ public class Account {
 		@AuraEnabled
 		public String lastName { get; private set; }
 		/**
-		 * Read-only DocuSign user name based on <code>firstName</code> and <code>lastName<code>.
-		 */
-		@AuraEnabled
-		public String name {
-			get {
-				return StringUtils.mkName(firstName, lastName);
-			}
-		}
-		/**
 		 * The API password for the user. This is never returned through public methods.
 		 */
 		public transient String apiPassword { get; private set; }
@@ -370,15 +361,6 @@ public class Account {
 			get {
 				return this.error != null && this.error != APIError.none;
 			}
-		}
-
-		/**
-		 * Constructs a DocuSign user from a DocuSign user ID.
-		 *
-		 * @param id The DocuSign user ID.
-		 */
-		public User(final UUID id) {
-			this(id, null, null, null, null, null, USER_STATUS_UNKNOWN, false, true, null, APIError.none);
 		}
 
 		/**
@@ -450,18 +432,6 @@ public class Account {
 		 */
 		public User withError(final APIError error) {
 			this.error = error;
-			return this;
-		}
-
-		/**
-		 * Updates a user's <code>sourceId</code> property.
-		 *
-		 * @param sourceId The Salesforce ID of the user.
-		 *
-		 * @return The user with an updated <code>sourceId</code> property.
-		 */
-		public User withSourceId(final Id sourceId) {
-			this.sourceId = sourceId;
 			return this;
 		}
 	}
