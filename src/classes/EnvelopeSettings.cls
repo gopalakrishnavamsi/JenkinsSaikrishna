@@ -1,7 +1,6 @@
 public with sharing class EnvelopeSettings {
 
 	private static EnvelopeSettings self = null;
-	private static List<Recipient.Role> DEFAULT_ROLES = null;
 	public static final String CHATTER_DISABLED = 'Disabled';
 	public static final String CHATTER_ENABLED_DEFAULT_OFF = 'EnabledDefaultOff';
 	public static final String CHATTER_ENABLED_DEFAULT_ON = 'EnabledDefaultOn';
@@ -85,17 +84,6 @@ public with sharing class EnvelopeSettings {
 		this.errorMessage = errorMessage;
 	}
 
-	public static List<Recipient.Role> getDefaultRoles() {
-		if (DEFAULT_ROLES == null) {
-			DEFAULT_ROLES = new List<Recipient.Role>();
-			for (RoleSettings__c s : RoleSettings__c.getAll().values()) {
-				DEFAULT_ROLES.add(new Recipient.Role(s.Name, Integer.valueOf(s.Value__c)));
-			}
-			DEFAULT_ROLES.sort();
-		}
-		return DEFAULT_ROLES;
-	}
-
 	private static Boolean isEnabled(final Boolean adminEnabled, final Boolean overrideEnabled) {
 		if (adminEnabled) { // Must be explicitly disabled in query string to override admin enabled setting
 			return overrideEnabled != false;
@@ -138,6 +126,15 @@ public with sharing class EnvelopeSettings {
 			this.errorMessage);
 	}
 
+	@TestVisible
+	private static List<Recipient.Role> getDefaultRoles() {
+		List<Recipient.Role> result = new List<Recipient.Role>();
+		for (RoleSettings__c s : RoleSettings__c.getAll().values()) {
+			result.add(new Recipient.Role(s.Name, Integer.valueOf(s.Value__c)));
+		}
+		return result;
+	}
+
 	public static EnvelopeSettings getInstance() {
 		if (self == null) {
 			String errorMessage = null;
@@ -157,7 +154,7 @@ public with sharing class EnvelopeSettings {
 					Salesforce.isChatterEnabled ? settings.Chatter__c : CHATTER_DISABLED,
 					ChatterEvents.getInstance(),
 					Localization.getChatterText(),
-					settings == null ? null : EnvelopeSettings.getDefaultRoles(),
+					getDefaultRoles(),
 					errorMessage);
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to get settings');

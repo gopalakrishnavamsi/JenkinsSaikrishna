@@ -2,12 +2,7 @@
 // HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
-	private static final LoggerService LOG = LoggerService.getInstance();
-
-	public Entity source { get; private set; }
-
 	public SendingController(final ApexPages.StandardController c) {
-		this.source = new Entity((Id)c.getId());
 	}
 
 	public class DraftEnvelope {
@@ -60,6 +55,7 @@ public with sharing class SendingController extends Controller {
 	public static DraftEnvelope createDraftEnvelope(final Id sourceId) {
 		try {
 			Set<Id> sourceIds = new Set<Id> { sourceId };
+			EnvelopeSettings es = EnvelopeSettings.getInstance();
 			// TODO: Check account features for templates. Pull on demand.
 			List<Template> templates = TemplateAPI.getInstance().getTemplates();
 			return new DraftEnvelope(
@@ -71,12 +67,10 @@ public with sharing class SendingController extends Controller {
 				templates,
 				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
 				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
-				EnvelopeSettings.getDefaultRoles(),
-				Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettings()
-					: new List<Recipient.EmailSettings>());
+				es.defaultRoles,
+				es.allowRecipientLanguageSelection ? es.emailLocalizations : new List<Recipient.EmailSettings>());
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to get draft envelope');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to get draft envelope');
 		}
 	}
 
@@ -85,8 +79,7 @@ public with sharing class SendingController extends Controller {
 		try {
 			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to get linked documents');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to get linked documents');
 		}
 	}
 
@@ -102,8 +95,7 @@ public with sharing class SendingController extends Controller {
 			}
 			return result;
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to resolve recipients');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to resolve recipients');
 		}
 	}
 
@@ -121,8 +113,7 @@ public with sharing class SendingController extends Controller {
 			}
 			return EnvelopeService.updateEnvelope(envelope);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to update envelope');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to update envelope');
 		}
 	}
 
@@ -131,8 +122,7 @@ public with sharing class SendingController extends Controller {
 		try {
 			return EnvelopeService.sendEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class), false, true);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to send envelope');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to send envelope');
 		}
 	}
 
@@ -145,7 +135,7 @@ public with sharing class SendingController extends Controller {
 			|| envelope.source.id == null
 			|| envelope.docuSignId == null) {
 
-			throw new AuraHandledException(Label.InvalidEnvelope);
+			throw Controller.wrapException(Label.InvalidEnvelope);
 		}
 
 		try {
@@ -154,8 +144,7 @@ public with sharing class SendingController extends Controller {
 				getReturnUrl(envelope.source.id, envelope.id))
 				.toExternalForm();
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to get tagger URL');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to get tagger URL');
 		}
 	}
 
@@ -164,9 +153,8 @@ public with sharing class SendingController extends Controller {
 		try {
 			EnvelopeService.deleteEnvelope(envelopeId);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to delete envelope');
 			if (!(ex instanceof DocuSignException && ex.getMessage() == Label.EnvelopeNotFound)) {
-				throw new AuraHandledException(ex.getMessage());
+				throw Controller.wrapException(ex, 'Failed to delete envelope');
 			}
 		}
 	}

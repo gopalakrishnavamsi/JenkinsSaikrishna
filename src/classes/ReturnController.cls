@@ -15,12 +15,6 @@ public with sharing class ReturnController {
 	private final DocuSignAction action;
 	@TestVisible
 	private final String event;
-	public String errorMessage { get; private set; }
-	public Boolean success {
-		get {
-			return String.isBlank(errorMessage);
-		}
-	}
 
 	public ReturnController() {
 		this(QueryString.fromCurrentPage());
@@ -59,7 +53,7 @@ public with sharing class ReturnController {
 				EnvelopeService.markEnvelopeSent(EnvelopeService.getEnvelope(this.envelopeId), true);
 			}
 		}
-		// TODO: Handle other events
+		// TODO: Handle other events, errors
 		return new PageReference('/' + (this.sourceId == null ? '' : this.sourceId));
 	}
 }

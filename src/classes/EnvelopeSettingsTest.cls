@@ -211,7 +211,45 @@ private class EnvelopeSettingsTest {
 			System.assertEquals('New Role 2', result.defaultRoles[1].name);
 			System.assertEquals(2, result.defaultRoles[1].value);
 			System.assertEquals(null, result.errorMessage);
+		}
+	}
 
+	@IsTest
+	static void test_save_blank_role() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			EnvelopeSettings s = new EnvelopeSettings(
+				true,
+				false,
+				false,
+				true,
+				false,
+				false,
+				null,
+				true,
+				true,
+				EnvelopeSettings.CHATTER_ENABLED_DEFAULT_OFF,
+				null,
+				null,
+				new List<Recipient.Role> {
+					new Recipient.Role(null, 0),
+					new Recipient.Role('', 1),
+					new Recipient.Role('\n', 2),
+					new Recipient.Role('Default Role', 3)
+				},
+				null);
+
+			Test.startTest();
+			EnvelopeSettings result = EnvelopeSettings.save(s);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.defaultRoles);
+			System.assertEquals(1, result.defaultRoles.size());
+			System.assertNotEquals(null, result.defaultRoles[0]);
+			System.assertEquals('Default Role', result.defaultRoles[0].name);
+			System.assertEquals(1, result.defaultRoles[0].value);
 		}
 	}
 }

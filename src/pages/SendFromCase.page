@@ -1,7 +1,7 @@
 <apex:page standardController="Case" extensions="SendingController" showHeader="true" sidebar="false"
            title="{!$Label.DocuSign}">
     <apex:form>
-        <c:Sending componentNamespace="{!namespace}" sourceId="{!source.id}"
+        <c:Sending componentNamespace="{!namespace}" sourceId="{!Id}"
                    visualforceHost="{!visualforceHost}"/>
     </apex:form>
 </apex:page>

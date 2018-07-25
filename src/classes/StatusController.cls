@@ -1,15 +1,11 @@
 public class StatusController extends Controller {
 
-	private static final LoggerService LOG = LoggerService.getInstance();
-
 	@AuraEnabled
-	public static List<Envelope.Status> getStatus(final Id sourceId) {
+	public static List<Envelope.Status> getStatus(final Id sourceId, final Integer recordLimit) {
 		try {
-			// TODO: Return empty list for UnauthorizedException
-			return StatusService.getStatus(new Set<Id> { sourceId }, 5);
+			return StatusService.getStatus(new Set<Id> { sourceId }, recordLimit);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to retrieve status');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to retrieve status');
 		}
 	}
 
@@ -26,8 +22,7 @@ public class StatusController extends Controller {
 				WHERE SobjectType = :(Application.namespacePrefix + 'EnvelopeStatus__c')
 			];
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Failed to retrieve status list views');
-			throw new AuraHandledException(ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to retrieve status list views');
 		}
 	}
 }

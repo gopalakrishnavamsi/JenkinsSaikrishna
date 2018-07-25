@@ -2,7 +2,8 @@
   initialize: function(component, helper) {
     var gs = component.get('c.getStatus');
     gs.setParams({
-      sourceId: component.get('v.recordId')
+      sourceId: component.get('v.recordId'),
+      recordLimit: 5
     });
 
     gs.setCallback(this, function (response) {

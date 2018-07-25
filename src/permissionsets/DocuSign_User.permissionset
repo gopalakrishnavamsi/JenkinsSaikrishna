@@ -592,4 +592,16 @@
 		<object>EnvelopeStatus__c</object>
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
+	<tabSettings>
+		<tab>Setup</tab>
+		<visibility>None</visibility>
+	</tabSettings>
+	<tabSettings>
+		<tab>Envelope__c</tab>
+		<visibility>Available</visibility>
+	</tabSettings>
+	<tabSettings>
+		<tab>EnvelopeStatus__c</tab>
+		<visibility>Available</visibility>
+	</tabSettings>
 </PermissionSet>
