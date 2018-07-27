@@ -8,6 +8,8 @@ public with sharing class Credentials {
 
 	public Environment environment { get; private set; }
 	public UUID accountId { get; private set; }
+	public Long accountNumber { get; private set; }
+	public String email { get; private set; }
 	public String username { get; private set; }
 	public String password { get; private set; }
 	public Boolean useSendOnBehalfOf { get; private set; }
@@ -37,6 +39,8 @@ public with sharing class Credentials {
 	private Credentials(
 		final Environment environment,
 		final UUID accountId,
+		final Long accountNumber,
+		final String email,
 		final String username,
 		final String password,
 		final Boolean useSendOnBehalfOf,
@@ -45,6 +49,8 @@ public with sharing class Credentials {
 
 		this.environment = environment;
 		this.accountId = accountId;
+		this.accountNumber = accountNumber;
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.useSendOnBehalfOf = useSendOnBehalfOf;
@@ -52,12 +58,16 @@ public with sharing class Credentials {
 		this.isDefault = isDefault;
 	}
 
+	public static Boolean isAccountValid() {
+		return getInstance(UserInfo.getUserId(), false).isAccountValid;
+	}
+
 	public static Credentials getInstance() {
 		return getInstance(UserInfo.getUserId(), true);
 	}
 
 	public static Credentials getInstance(final Environment environment, final String username, final String password) {
-		return new Credentials(environment, null, username, password, false, null, false);
+		return new Credentials(environment, null, null, null, username, password, false, null, false);
 	}
 
 	@TestVisible
@@ -88,6 +98,8 @@ public with sharing class Credentials {
 				result = new Credentials(
 					accountCredentials.environment,
 					accountCredentials.accountId,
+					accountCredentials.accountNumber,
+					accountCredentials.email,
 					accountCredentials.username,
 					accountCredentials.password,
 					true,
@@ -97,6 +109,8 @@ public with sharing class Credentials {
 				result = new Credentials(
 					accountCredentials.environment,
 					accountCredentials.accountId,
+					accountCredentials.accountNumber,
+					accountCredentials.email,
 					userCredentials.username,
 					userCredentials.password,
 					false,
@@ -113,14 +127,15 @@ public with sharing class Credentials {
 	public static Credentials save(
 		final Environment environment,
 		final UUID accountId,
+		final Long accountNumber,
+		final String email,
 		final String username,
 		final String password,
 		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf,
-		final Boolean setupComplete) {
+		final Boolean useSendOnBehalfOf) {
 
-		return save(UserInfo.getUserId(), environment, accountId, username, password, canManageAccount,
-			useSendOnBehalfOf, setupComplete);
+		return save(UserInfo.getUserId(), environment, accountId, accountNumber, email, username, password,
+			canManageAccount, useSendOnBehalfOf);
 	}
 
 	@TestVisible
@@ -128,19 +143,21 @@ public with sharing class Credentials {
 		final Id userId,
 		final Environment environment,
 		final UUID accountId,
+		final Long accountNumber,
+		final String email,
 		final String username,
 		final String password,
 		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf,
-		final Boolean setupComplete) {
+		final Boolean useSendOnBehalfOf) {
 
 		Credentials.accountCredentials = DB.updateAccountCredentials(
 			environment,
 			accountId,
+			accountNumber,
+			email,
 			useSendOnBehalfOf ? username : null,
 			useSendOnBehalfOf ? password : null,
-			useSendOnBehalfOf,
-			setupComplete);
+			useSendOnBehalfOf);
 		Credentials.UserCredentials uc = DB.updateUserCredentials(
 			userId,
 			username,
@@ -184,7 +201,7 @@ public with sharing class Credentials {
 				List<User> users = [
 					SELECT Id, Username__c, CanManageAccount__c
 					FROM User
-					WHERE Username__c != null
+					WHERE Username__c != NULL
 					LIMIT 200
 				];
 				if (Collection.isNotEmpty(users)) {
@@ -242,6 +259,8 @@ public with sharing class Credentials {
 	private class AccountCredentials {
 		public final Environment environment;
 		public final UUID accountId;
+		public final Long accountNumber;
+		public final String email;
 		public final String username;
 		public final String password;
 		public final Boolean useSendOnBehalfOf;
@@ -249,12 +268,16 @@ public with sharing class Credentials {
 		public AccountCredentials(
 			final Environment environment,
 			final UUID accountId,
+			final Long accountNumber,
+			final String email,
 			final String username,
 			final String password,
 			final Boolean useSendOnBehalfOf) {
 
-			this.accountId = accountId;
 			this.environment = environment;
+			this.accountId = accountId;
+			this.accountNumber = accountNumber;
+			this.email = email;
 			this.username = username;
 			this.password = password;
 			this.useSendOnBehalfOf = useSendOnBehalfOf;
@@ -283,12 +306,15 @@ public with sharing class Credentials {
 		public AccountCredentials queryAccountCredentials() {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 
-			if (String.isBlank(settings.Environment__c))
-				return new AccountCredentials(Environment.invalid, null, null, null, false);
+			if (String.isBlank(settings.Environment__c)) {
+				return new AccountCredentials(Environment.invalid, null, null, null, null, null, false);
+			}
 
 			return new AccountCredentials(
 				Environment.fromUrl(settings.BaseUrl__c == null ? null : new Url(settings.BaseUrl__c)),
 				UUID.tryParse(settings.AccountId__c),
+				(Long)settings.AccountNumber__c,
+				settings.Email__c,
 				settings.Username__c,
 				settings.Password__c,
 				settings.UseSendOnBehalfOf__c != null && settings.UseSendOnBehalfOf__c);
@@ -302,10 +328,11 @@ public with sharing class Credentials {
 		public AccountCredentials updateAccountCredentials(
 			final Environment environment,
 			final UUID accountId,
+			final Long accountNumber,
+			final String email,
 			final String username,
 			final String password,
-			final Boolean useSendOnBehalfOf,
-			final Boolean setupComplete) {
+			final Boolean useSendOnBehalfOf) {
 
 			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
 			orgSettings.Environment__c = environment == null || environment.environment == null
@@ -313,13 +340,14 @@ public with sharing class Credentials {
 			orgSettings.BaseUrl__c = environment == null || environment.baseUrl == null
 				? null : environment.baseUrl.toExternalForm();
 			orgSettings.AccountId__c = String.valueOf(accountId);
+			orgSettings.AccountNumber__c = accountNumber;
 			orgSettings.UseSendOnBehalfOf__c = useSendOnBehalfOf != null && useSendOnBehalfOf;
+			orgSettings.Email__c = email;
 			orgSettings.Username__c = username;
 			orgSettings.Password__c = password;
-			orgSettings.SetupComplete__c = setupComplete;
 			upsert orgSettings;
 
-			return new AccountCredentials(environment, accountId, username, password, useSendOnBehalfOf);
+			return new AccountCredentials(environment, accountId, accountNumber, email, username, password, useSendOnBehalfOf);
 		}
 
 		public UserCredentials updateUserCredentials(
@@ -378,12 +406,15 @@ public with sharing class Credentials {
 
 		public void deleteAccountCredentials() {
 			AccountSettings__c orgDefaults = AccountSettings__c.getOrgDefaults();
-			orgDefaults.SetupComplete__c = false;
 			orgDefaults.Environment__c = null;
 			orgDefaults.BaseUrl__c = null;
 			orgDefaults.AccountId__c = null;
+			orgDefaults.AccountNumber__c = null;
+			orgDefaults.Email__c = null;
 			orgDefaults.Username__c = null;
 			orgDefaults.Password__c = null;
+			orgDefaults.Features__c = null;
+			orgDefaults.FeaturesLastChecked__c = null;
 			upsert orgDefaults;
 		}
 

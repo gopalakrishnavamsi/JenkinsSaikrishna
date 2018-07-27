@@ -1,32 +1,18 @@
 ({
-  getDocuSignAccount: function (component, event, helper) {
-    var getAccount = component.get('c.getAccount');
-    var accountNumber = component.get('v.section.steps[0].accountNumber');
-    var emailAddress = component.get('v.section.steps[0].emailAddress');
-    component.set('v.accountNumber', accountNumber);
-    component.set('v.emailAddress', emailAddress);
-
-    component.set('v.showLoginSpinner', true);
-    getAccount.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        var account = response.getReturnValue();
-        if (account.isTrial) {
-          component.set('v.trialMessage', account.trialStatus.message);
-          component.set('v.trialIsExpired', account.trialStatus.isExpired);
-        }
-        component.set('v.isTrial', account.isTrial);
-        component.set('v.loggedIn', true);
-        component.set('v.showLoginSpinner', false);
-      } else {
-        helper.setError(component, response);
-      }
+  showToast: function (component, message, mode) {
+    var evt = component.getEvent('toastEvent');
+    evt.setParams({
+      show: true, message: message, mode: mode
     });
-    $A.enqueueAction(getAccount);
+    evt.fire();
   },
 
-  setContinueButtonState: function (component, event, helper) {
-    component.set('v.continueButtonDisabled', !component.get('v.loggedIn'));
+  hideToast: function (component) {
+    var evt = component.getEvent('toastEvent');
+    evt.setParams({
+      show: false
+    });
+    evt.fire();
   },
 
   getInputValidity: function (component, inputAuraId, buttonAuraId) {
@@ -48,18 +34,18 @@
     return isValid;
   },
 
-  login: function (component, event, helper) {
-    component.set('v.showToast', false);
+  login: function (component, helper) {
+    helper.hideToast(component);
+
     if (helper.getInputValidity(component, 'password-input', 'login-button')) {
-      component.set('v.showLoginSpinner', true);
       var loginToDocuSign = component.get('c.login');
-      var accountNumber = component.get('v.accountNumber');
+      var accountNumber = component.get('v.login.accountNumber');
 
       loginToDocuSign.setParams({
-        dsUsername: component.get('v.emailAddress'),
+        dsUsername: component.get('v.login.email'),
         dsPassword: component.get('v.password'),
-        dsEnvironment: component.get('v.environment'),
-        dsUrl: component.get('v.otherUrl'),
+        dsEnvironment: component.get('v.login.environment'),
+        dsUrl: component.get('v.login.otherUrl'),
         dsAccountNumber: $A.util.isEmpty(accountNumber) ? null : accountNumber
       });
 
@@ -68,52 +54,76 @@
         if (status === 'SUCCESS') {
           var result = response.getReturnValue();
           if (result.status === 'SelectAccount' && !$A.util.isEmpty(result.accountOptions)) {
-            component.set('v.associatedAccounts', accountOptions);
+            component.set('v.associatedAccounts', result.accountOptions);
             component.set('v.showAccountSelectionModal', true);
-            component.set('v.showLoginSpinner', false);
           } else {
-            component.set('v.accountNumber', result.accountOptions[0].accountNumber);
-            helper.saveData(component, event, helper);
-            helper.getDocuSignAccount(component, event, helper);
+            component.set('v.login.loggedIn', true);
+            component.set('v.login.accountNumber', result.accountOptions[0].accountNumber);
           }
         } else {
-          helper.setError(component, response);
+          helper.showToast(component, _getErrorMessage(response), 'error');
         }
       });
       $A.enqueueAction(loginToDocuSign);
     }
-
   },
 
-  saveData: function (component, event, helper) {
-    var accountNumber = component.get('v.accountNumber');
-    var emailAddress = component.get('v.emailAddress');
-    var loggedIn = component.get('v.loggedIn');
+  logout: function (component, helper) {
+    helper.hideToast(component);
 
-    component.set('v.section.steps[0].accountNumber', accountNumber);
-    component.set('v.section.steps[0].emailAddress', emailAddress);
-    component.set('v.section.steps[0].loggedIn', loggedIn);
-    if (!loggedIn) {
-      component.set('v.section.steps[0].isComplete', false);
-      component.set('v.section.status', 'notStarted');
-    }
-    //Fire Save event that triggers backend save on SetupAssistant
-    var save = component.getEvent('saveToBackend');
-    save.fire();
-  },
+    var logout = component.get('c.logout');
 
-  setError: function (component, response) {
-    if (component && response) {
-      var errors = response.getError();
-      var errMsg = errors;
-      if (!$A.util.isEmpty(errors)) {
-        errMsg = errors[0].message;
+    logout.setParams({
+      resetUsers: true
+    });
+
+    logout.setCallback(this, function (response) {
+      var status = response.getState();
+      if (status === 'SUCCESS') {
+        var cur = component.get('v.login');
+        component.set('v.login', {
+          isLoggedIn: false,
+          email: cur.email,
+          accountNumber: null,
+          environment: cur.environment,
+          otherUrl: cur.otherUrl,
+          isTrial: false,
+          trialStatus: null
+        });
+        component.set('v.password', null);
+        component.set('v.associatedAccounts', []);
+        setTimeout($A.getCallback(function () {
+          component.find('login-input').focus();
+        }), 1);
+      } else {
+        helper.showToast(component, _getErrorMessage(response), 'error');
       }
-      console.error(errMsg);
-      component.set('v.message', errMsg);
-      component.set('v.mode', 'error');
-      component.set('v.showLoginSpinner', false);
-      component.set('v.showToast', true);
+    });
+    $A.enqueueAction(logout);
+  },
+
+  startTrial: function (component, helper) {
+    helper.hideToast(component);
+
+    if (helper.getInputValidity(component, 'trial-input', 'trial-button')) {
+      var st = component.get('c.startTrial');
+
+      st.setParams({
+        email: component.get('v.login.email')
+      });
+
+      st.setCallback(this, function (response) {
+        var status = response.getState();
+        if (status === 'SUCCESS') {
+          var account = response.getReturnValue();
+          component.set('v.login.isTrial', true);
+          component.set('v.login.accountNumber', account.accountNumber);
+          component.set('v.signedUpForTrial', true);
+        } else {
+          helper.showToast(component, _getErrorMessage(response), 'error');
+        }
+      });
+      $A.enqueueAction(st);
     }
   }
 });

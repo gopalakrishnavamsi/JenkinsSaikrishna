@@ -1,10 +1,58 @@
 public with sharing class SetupController extends Controller {
 
-	public String state { get; set; }
+	public class Login {
 
-	public SetupController() {
-		List<Setup__mdt> md = [SELECT State__c FROM Setup__mdt WHERE DeveloperName = 'State' LIMIT 1];
-		this.state = Collection.isNotEmpty(md) && String.isNotBlank(md[0].State__c) ? md[0].State__c : '';
+		@AuraEnabled
+		public Boolean isLoggedIn { get; private set; }
+		@AuraEnabled
+		public String email { get; private set; }
+		@AuraEnabled
+		public Long accountNumber { get; private set; }
+		@AuraEnabled
+		public String environment { get; private set; }
+		@AuraEnabled
+		public String otherUrl { get; private set; }
+		@AuraEnabled
+		public Boolean isTrial { get; private set; }
+		@AuraEnabled
+		public Account.TrialStatus trialStatus { get; private set; }
+
+		private Login(final Boolean isLoggedIn, final String email, final Long accountNumber, final String environment,
+			final String otherUrl, final Boolean isTrial, final Account.TrialStatus trialStatus) {
+
+			this.isLoggedIn = isLoggedIn;
+			this.email = email;
+			this.accountNumber = accountNumber;
+			this.environment = environment;
+			this.otherUrl = otherUrl;
+			this.isTrial = isTrial;
+			this.trialStatus = trialStatus;
+		}
+	}
+
+	@AuraEnabled
+	public static Login getLogin() {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+
+			Credentials c = null;
+			Boolean isLoggedIn = Credentials.isAccountValid();
+			if (isLoggedIn) {
+				c = Credentials.getInstance();
+			}
+			Account a = isLoggedIn ? AccountService.getAccount() : null;
+
+			return new Login(
+				isLoggedIn,
+				c != null ? c.email : UserInfo.getUserEmail(),
+				c != null ? c.accountNumber : null,
+				c != null ? c.environment.environment.name() : 'Production',
+				c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : null,
+				a != null && a.isTrial,
+				a != null && a.isTrial ? a.trialStatus : null);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get setup state');
+		}
 	}
 
 	@TestVisible
@@ -105,30 +153,5 @@ public with sharing class SetupController extends Controller {
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to read user.');
 		}
-	}
-
-	// TODO: Can we get rid of custom metadata state?
-	@AuraEnabled
-	public static Id saveState(final String state) {
-		try {
-			Metadata.CustomMetadata setupMetadata = new Metadata.CustomMetadata();
-			setupMetadata.fullName = Application.namespacePrefix + 'Setup__mdt.State';
-			setupMetadata.label = 'State';
-
-			Metadata.CustomMetadataValue body = new Metadata.CustomMetadataValue();
-			body.field = Application.namespacePrefix + 'State__c';
-			body.value = state;
-			setupMetadata.values.add(body);
-
-			return deployMetadata(setupMetadata);
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to save setup state.');
-		}
-	}
-
-	private static Id deployMetadata(final MetaData.CustomMetadata setupMetadata) {
-		Metadata.DeployContainer mdContainer = new Metadata.DeployContainer();
-		mdContainer.addMetadata(setupMetadata);
-		return Test.isRunningTest() ? null : Metadata.Operations.enqueueDeployment(mdContainer, new MetadataDeployCallback());
 	}
 }

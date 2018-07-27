@@ -26,20 +26,9 @@
     <div id="setup-assistant"/>
 
     <script type="text/javascript">
-      var component;
-
       var namespace = '{!JSENCODE(namespace)}';
-      var data = '{!JSEncode(state)}';
-      if (data !== '') {
-        data = JSON.parse(data);
-      } else {
-        data = {};
-      }
-
       $Lightning.use(namespace + ':LightningOutApp', function () {
-        $Lightning.createComponent(namespace + ':Setup', {
-          sections: data
-        }, 'setup-assistant', function (cmp) {
+        $Lightning.createComponent(namespace + ':Setup', {}, 'setup-assistant', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });

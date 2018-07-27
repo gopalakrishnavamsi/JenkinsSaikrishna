@@ -12,7 +12,6 @@ private class SetupControllerTest {
 			System.assertEquals(Application.lightningNamespace, result.namespace);
 			System.assertEquals(Salesforce.getLightningHost(), result.lightningHost);
 			System.assertEquals(Salesforce.getVisualforceHost(), result.visualforceHost);
-			System.assertNotEquals(null, result.state);
 		}
 	}
 
@@ -261,17 +260,17 @@ private class SetupControllerTest {
 		}
 	}
 
-	@IsTest
-	static void test_saveState() {
-		// No way to test actual deployment, nor trigger an error here
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
-			Test.startTest();
-			Id result = SetupController.saveState('UNIT TEST');
-			Test.stopTest();
-
-			System.assertEquals(null, result);
-		}
-	}
+//	@IsTest
+//	static void test_saveState() {
+//		// No way to test actual deployment, nor trigger an error here
+//		System.runAs(TestUtils.createDocuSignAdministrator()) {
+//			TestUtils.createAccountConfiguration();
+//
+//			Test.startTest();
+//			Id result = SetupController.saveState('UNIT TEST');
+//			Test.stopTest();
+//
+//			System.assertEquals(null, result);
+//		}
+//	}
 }

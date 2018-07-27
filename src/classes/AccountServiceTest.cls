@@ -104,42 +104,42 @@ private class AccountServiceTest {
 		Date today = Date.today();
 
 		// Expires today
-		Account account1 = new Account(UUID.randomUUID(), 'Unit test 1',
+		Account account1 = new Account(UUID.randomUUID(), 1234L, 'Unit test 1',
 			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 1', today, today),
 			new Account.Billing(today, today),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in 1 day
-		Account account2 = new Account(UUID.randomUUID(), 'Unit test 2',
+		Account account2 = new Account(UUID.randomUUID(), 1234L, 'Unit test 2',
 			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 2', today, today.addDays(1)),
 			new Account.Billing(today, today.addDays(1)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in 2 days
-		Account account3 = new Account(UUID.randomUUID(), 'Unit test 3',
+		Account account3 = new Account(UUID.randomUUID(), 1234L, 'Unit test 3',
 			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 3', today, today.addDays(2)),
 			new Account.Billing(today, today.addDays(2)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expired yesterday
-		Account account4 = new Account(UUID.randomUUID(), 'Unit test 4',
+		Account account4 = new Account(UUID.randomUUID(), 1234L, 'Unit test 4',
 			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 4', today, today.addDays(-1)),
 			new Account.Billing(today, today.addDays(-1)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Expires in > 7 days
-		Account account5 = new Account(UUID.randomUUID(), 'Unit test 5',
+		Account account5 = new Account(UUID.randomUUID(), 1234L, 'Unit test 5',
 			new Account.Plan(Environment.TRIAL_PLAN_ID, 'Plan 5', today, today.addDays(10)),
 			new Account.Billing(today, today.addDays(10)),
 			Account.ConnectPermission.Full,
 			Environment.production);
 
 		// Not trial plan
-		Account account6 = new Account(UUID.randomUUID(), 'Unit test 6',
+		Account account6 = new Account(UUID.randomUUID(), 1234L, 'Unit test 6',
 			new Account.Plan(UUID.randomUUID(), 'Plan 6', today, today.addDays(-1)),
 			new Account.Billing(today, today.addDays(-1)),
 			Account.ConnectPermission.Full,

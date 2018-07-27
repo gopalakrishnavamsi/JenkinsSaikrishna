@@ -1,23 +1,22 @@
-<aura:component controller="SetupController">
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
-    <aura:attribute name="buttonText" type="String" default=""/>
-    <aura:attribute name="data" type="Object[]"/>
+<aura:component>
+    <aura:attribute name="steps" type="Object[]"/>
     <aura:attribute name="progressionStatus" type="String"/>
     <aura:attribute name="completedCounter" type="Integer"/>
-    <aura:attribute name="loggedIn" type="Boolean"/>
-    <aura:handler name="change" value="{!v.loggedIn}" action="{!c.handleAccountExpiration}"/>
-    <aura:attribute name="trialIsExpired" type="Boolean"/>
+    <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="showNextSteps" type="Boolean"/>
 
-    <aura:attribute name="headerText" type="String" default=""/>
+    <aura:attribute name="headerText" type="String" default="" access="private"/>
+    <aura:attribute name="buttonText" type="String" default="" access="private"/>
 
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:handler name="change" value="{!v.progressionStatus}" action="{!c.handleProgressionStatusChange}"/>
+
     <aura:registerEvent name="landingButtonClicked" type="c:NextSectionEvent"/>
     <aura:registerEvent name="rowButtonClicked" type="c:NavigateToSection"/>
 
     <div class="slds-scope">
         <!-- Expired Notification -->
-        <aura:if isTrue="{!v.trialIsExpired}">
+        <aura:if isTrue="{!v.isTrialExpired}">
             <div class="ds-trial-expired-notification slds-scoped-notification slds-media slds-media_center slds-theme_warning slds-theme_alert-texture slds-p-horizontal_xx-large"
                  role="status">
                 <div class="slds-media__figure">
@@ -58,28 +57,28 @@
                     <!-- /Start Button -->
                     <!-- Progress -->
                     <div aura:id="progressCounter"
-                         class="slds-text-body_small slds-p-top_medium slds-text-color_weak slds-hide">{!format($Label.c.LandingProgress_2, v.completedCounter, v.data.length)}</div>
+                         class="slds-text-body_small slds-p-top_medium slds-text-color_weak slds-hide">{!format($Label.c.LandingProgress_2, v.completedCounter, v.steps.length)}</div>
                     <!-- /Progress -->
                 </div>
                 <!-- /Hero -->
                 <div class="strike-task-list">
-                    <aura:iteration items="{!v.data}" var="section" indexVar="index">
+                    <aura:iteration items="{!v.steps}" var="step" indexVar="index">
                         <div class="strike-task-item">
-                            <div class="{!'strike-task-status-icon' + if(v.trialIsExpired, if(index == 0, ' strike-icon-text-warning', ' strike-icon-text-disabled'), if(section.status == 'complete', ' strike-icon-text-success', ' strike-icon-text-disabled'))}">
+                            <div class="{!'strike-task-status-icon' + if(v.isTrialExpired, if(index == 0, ' strike-icon-text-warning', ' strike-icon-text-disabled'), if(step.status == 'complete', ' strike-icon-text-success', ' strike-icon-text-disabled'))}">
                                 <lightning:icon aura:id="rowIcon"
-                                                iconName="{!if(v.trialIsExpired, 'utility:warning', 'utility:like')}"
-                                                size="large" title="{!section.title}"/>
+                                                iconName="{!if(v.isTrialExpired, 'utility:warning', 'utility:like')}"
+                                                size="large" title="{!step.title}"/>
                             </div>
                             <div class="strike-task-info slds-p-horizontal_medium">
-                                <h3 class="slds-text-heading_small">{!section.headerText}</h3>
-                                <div class="slds-text-color_weak slds-text-body_small">{!section.subText}</div>
+                                <h3 class="slds-text-heading_small">{!step.headerText}</h3>
+                                <div class="slds-text-color_weak slds-text-body_small">{!step.subText}</div>
                             </div>
                             <div aura:id="sectionButtonDiv" class="{!'strike-task-action'}">
-                                <lightning:button aura:id="sectionButton" value="{!section.name}"
+                                <lightning:button aura:id="sectionButton" value="{!step.name}"
                                                   class="slds-button slds-button_neutral"
-                                                  label="{!if(section.status == 'complete', $Label.c.Edit, $Label.c.ContinueLabel)}"
+                                                  label="{!if(step.status == 'complete', $Label.c.Edit, $Label.c.ContinueLabel)}"
                                                   onclick="{!c.handleRowButtonClick}"
-                                                  disabled="{!or(section.status == 'notStarted', and(index gt 0, v.trialIsExpired))}"/>
+                                                  disabled="{!or(step.status == 'notStarted', and(index gt 0, v.isTrialExpired))}"/>
                             </div>
                         </div>
                     </aura:iteration>

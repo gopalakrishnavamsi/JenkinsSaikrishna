@@ -229,12 +229,11 @@ public with sharing class AccountService {
 		LoginStatus status = null;
 		if (options.size() == 1) {
 			Environment ae = Environment.fromUrl(validMembership.baseUrl);
-			String envString = ae.Environment.name().toLowerCase();
 			LOG.debug('AccountService.login: account base URL = ' + validMembership.baseUrl.toExternalForm()
 				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
-				+ ', environment = ' + ae.Environment.name().toLowerCase());
-			Credentials.save(ae, validMembership.accountId, String.valueOf(validMembership.userId),
-				validMembership.apiPassword, true, true, true);
+				+ ', environment = ' + ae.environment.name().toLowerCase());
+			Credentials.save(ae, validMembership.accountId, validMembership.accountNumber, username,
+				String.valueOf(validMembership.userId), validMembership.apiPassword, true, true);
 			status = LoginStatus.Success;
 		} else { // more than 1 valid account, just return results
 			status = LoginStatus.SelectAccount;
@@ -245,7 +244,6 @@ public with sharing class AccountService {
 
 	private static AccountSettings__c completeSetup() {
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-		accountSettings.SetupComplete__c = true;
 		accountSettings.Features__c = null;
 		update accountSettings;
 		return accountSettings;
@@ -327,8 +325,8 @@ public with sharing class AccountService {
 		if (!vr.isValid) throw new ValidationException(Label.InvalidTrialAccount, vr);
 
 		Account.Membership result = AccountAPI.getInstance(Environment.production).createTrialAccount(trial);
-		Credentials.save(Environment.fromUrl(result.baseUrl), result.accountId, String.valueOf(result.userId),
-			result.apiPassword, true, true, false);
+		Credentials.save(Environment.fromUrl(result.baseUrl), result.accountId, result.accountNumber, trial.user.email,
+			String.valueOf(result.userId), result.apiPassword, true, true);
 		return result.scrub(); // Don't return sensitive info.
 	}
 

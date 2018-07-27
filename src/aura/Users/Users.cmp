@@ -1,30 +1,29 @@
 <aura:component controller="SetupController">
     <ltng:require scripts="{!$Resource.UtilJS}"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
-    <aura:attribute name="data" type="Object"/>
-    <aura:attribute name="formData" type="Object"/>
-    <aura:attribute name="showAddUserModal" type="Boolean"/>
-    <aura:attribute name="showRemoveUserModal" type="Boolean"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
     <aura:attribute name="tableLoading" type="Boolean"/>
-    <aura:attribute name="showSuccessToast" type="Boolean"/>
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="mode" type="String"/>
-    <aura:attribute name="dsUserSearchTerm" type="String"/>
-    <aura:attribute name="showToast" type="Boolean" default="{!false}"/>
 
-    <aura:attribute name="lookupValue" type="String"/>
+    <aura:attribute name="data" type="Object" access="private"/>
+    <aura:attribute name="formData" type="Object" access="private"/>
+    <aura:attribute name="showAddUserModal" type="Boolean" access="private"/>
+    <aura:attribute name="showRemoveUserModal" type="Boolean" access="private"/>
+    <aura:attribute name="showSuccessToast" type="Boolean" access="private"/>
+    <aura:attribute name="dsUserSearchTerm" type="String" access="private"/>
+
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <aura:attribute name="lookupValue" type="String" access="private"/>
     <aura:handler name="change" value="{!v.lookupValue}" action="{!c.removeLookupErrorState}"/>
 
     <aura:attribute name="docuSignUsers" type="Object[]"/>
     <aura:handler name="change" value="{!v.docuSignUsers}" action="{!c.handleDocuSignUsersChange}"/>
 
-    <aura:attribute name="users" type="Object[]"/>
+    <aura:attribute name="users" type="Object[]" access="private"/>
     <aura:handler name="change" value="{!v.users}" action="{!c.handleUsersChange}"/>
 
     <aura:if isTrue="{!v.tableLoading}">
-        <lightning:spinner class="ds-table-loading-spinner" size="medium" alternativeText="Loading..."/>
+        <lightning:spinner class="ds-table-loading-spinner" size="medium" alternativeText="{!$Label.c.Loading}"/>
     </aura:if>
 
     <div class="slds-scope">
@@ -135,12 +134,6 @@
                                 </div>
                             </aura:if>
                         </div>
-
-                        <!-- Loading State -->
-                        <aura:if isTrue="{!v.modalLoading}">
-                            <lightning:spinner/>
-                        </aura:if>
-                        <!-- /Loading State -->
                     </div>
                 </div>
 

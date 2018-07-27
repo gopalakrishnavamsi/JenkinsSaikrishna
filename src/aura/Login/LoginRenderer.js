@@ -1,9 +1,9 @@
-({  
-    afterRender: function(component, helper) {
-        this.superAfterRender();
-        
-        if (!component.get('v.loggedIn')) {
-            component.find('login-input').focus();
-        }
+({
+  afterRender: function (component, helper) {
+    this.superAfterRender();
+
+    if (!component.get('v.login.isLoggedIn')) {
+      component.find('login-input').focus();
     }
-})
+  }
+});

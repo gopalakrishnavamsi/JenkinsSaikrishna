@@ -50,12 +50,13 @@ private class CredentialsTest {
 	@IsTest
 	static void test_buildAPICredentials() {
 		UUID accountId = UUID.randomUUID();
+		String ae = UUID.randomUUID().toString() + '@unit.test';
 		String au = UUID.randomUUID().toString();
 		String ap = UUID.randomUUID().toString();
 		Credentials.AccountCredentials ac1 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, au, ap, true);
+			Environment.demo, accountId, 1111L, ae, au, ap, true);
 		Credentials.AccountCredentials ac2 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, au, ap, false);
+			Environment.demo, accountId, 1111L, ae, au, ap, false);
 		Credentials.UserCredentials uc = new Credentials.UserCredentials(
 			UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
@@ -80,6 +81,8 @@ private class CredentialsTest {
 		System.assert(result1.isValid);
 		System.assertEquals(Environment.demo, result1.environment);
 		System.assertEquals(accountId, result1.accountId);
+		System.assertEquals(1111L, result1.accountNumber);
+		System.assertEquals(ae, result1.email);
 		System.assertEquals(au, result1.username);
 		System.assertEquals(ap, result1.password);
 		System.assert(result1.useSendOnBehalfOf);
@@ -89,6 +92,8 @@ private class CredentialsTest {
 		System.assert(result2.isValid);
 		System.assertEquals(Environment.demo, result2.environment);
 		System.assertEquals(accountId, result2.accountId);
+		System.assertEquals(1111L, result2.accountNumber);
+		System.assertEquals(ae, result2.email);
 		System.assertEquals(uc.username, result2.username);
 		System.assertEquals(uc.password, result2.password);
 		System.assert(!result2.useSendOnBehalfOf);
@@ -109,7 +114,7 @@ private class CredentialsTest {
 			System.assert(result1.isValid);
 			System.assertNotEquals(null, result1.environment);
 			System.assertNotEquals(null, result1.environment.baseUrl);
-			System.assertEquals(TestUtils.BASE_Url, result1.environment.baseUrl.toExternalForm());
+			System.assertEquals(TestUtils.BASE_URL, result1.environment.baseUrl.toExternalForm());
 			System.assert(result1.useSendOnBehalfOf);
 			System.assertEquals(UserSettings__c.getInstance().Username__c, result1.sendOnBehalfOf);
 
@@ -224,16 +229,37 @@ private class CredentialsTest {
 	}
 
 	@IsTest
+	static void test_isAccountValid_valid() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			System.assert(Credentials.isAccountValid());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_isAccountValid_invalid() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			Test.startTest();
+			System.assert(!Credentials.isAccountValid());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_save_insert_sobo() {
 		UUID accountId = UUID.randomUUID();
+		String email = UUID.randomUUID().toString() + '@unit.test';
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
 		User u = TestUtils.createDocuSignAdministrator();
 
 		System.runAs(u) {
 			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId,
-				username, password, true, true, true);
+			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
+				username, password, true, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -241,9 +267,10 @@ private class CredentialsTest {
 			System.assert(result1.isValid);
 			System.assertEquals(Environment.production, result1.environment);
 			System.assertEquals(accountId, result1.accountId);
+			System.assertEquals(1111L, result1.accountNumber);
+			System.assertEquals(email, result1.email);
 			System.assertEquals(username, result1.username);
 			System.assertEquals(password, result1.password);
-			System.assertEquals(true, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(result1.useSendOnBehalfOf);
 			System.assertEquals(username, result1.sendOnBehalfOf);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
@@ -259,14 +286,15 @@ private class CredentialsTest {
 	@IsTest
 	static void test_save_insert_no_sobo() {
 		UUID accountId = UUID.randomUUID();
+		String email = UUID.randomUUID().toString() + '@unit.test';
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
 		User u = TestUtils.createDocuSignAdministrator();
 
 		System.runAs(u) {
 			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId,
-				username, password, false, false, false);
+			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
+				username, password, false, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -274,9 +302,10 @@ private class CredentialsTest {
 			System.assert(result1.isValid);
 			System.assertEquals(Environment.production, result1.environment);
 			System.assertEquals(accountId, result1.accountId);
+			System.assertEquals(1111L, result1.accountNumber);
+			System.assertEquals(email, result1.email);
 			System.assertEquals(username, result1.username);
 			System.assertEquals(password, result1.password);
-			System.assertEquals(false, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(!result1.useSendOnBehalfOf);
 			System.assertEquals(null, result1.sendOnBehalfOf);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
@@ -292,6 +321,7 @@ private class CredentialsTest {
 	@IsTest
 	static void test_save_update() {
 		UUID accountId = UUID.randomUUID();
+		String email = UUID.randomUUID().toString() + '@unit.test';
 		UUID username = UUID.randomUUID();
 		String password = UUID.randomUUID().toString();
 		User u = TestUtils.createDocuSignAdministrator();
@@ -301,8 +331,8 @@ private class CredentialsTest {
 			Credentials baseline = Credentials.getInstance();
 
 			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId,
-				String.valueOf(username), password, true, false, true);
+			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
+				String.valueOf(username), password, true, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -311,9 +341,10 @@ private class CredentialsTest {
 			System.assert(result1.isValid);
 			System.assertEquals(Environment.production, result1.environment);
 			System.assertEquals(accountId, result1.accountId);
+			System.assertEquals(1111L, result1.accountNumber);
+			System.assertEquals(email, result1.email);
 			System.assertEquals(String.valueOf(username), result1.username);
 			System.assertEquals(password, result1.password);
-			System.assertEquals(true, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assert(!result1.useSendOnBehalfOf);
 			System.assertEquals(null, result1.sendOnBehalfOf);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
@@ -407,12 +438,15 @@ private class CredentialsTest {
 			Credentials.clear(false);
 			Test.stopTest();
 
-			System.assertEquals(false, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
 
 			System.assertEquals(String.valueOf(dsaUsername), UserSettings__c.getInstance(dsa.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
@@ -478,12 +512,15 @@ private class CredentialsTest {
 			Credentials.clear(true);
 			Test.stopTest();
 
-			System.assertEquals(false, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
 
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Username__c);
 			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
@@ -549,10 +586,11 @@ private class CredentialsTest {
 			Credentials.clear(new Set<Id> { dsu1.Id, dsu3.Id });
 			Test.stopTest();
 
-			System.assertEquals(true, AccountSettings__c.getOrgDefaults().SetupComplete__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
 

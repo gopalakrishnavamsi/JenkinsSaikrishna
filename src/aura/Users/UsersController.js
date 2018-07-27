@@ -1,9 +1,4 @@
 ({
-  init: function (component, event, helper) {
-    component.set('v.tableLoading', true);
-    helper.getDocuSignUsers(component, event, helper);
-  },
-
   showAddUserModal: function (component, event, helper) {
     component.set('v.showAddUserModal', true);
     window.setTimeout($A.getCallback(function () {
@@ -32,7 +27,6 @@
   },
 
   removeDocuSignUser: function (component, event, helper) {
-    component.set('v.showToast', false);
     helper.removeUser(component, event, helper);
   },
 
@@ -63,8 +57,6 @@
     });
 
     if (valid) {
-      component.set('v.showToast', false);
-      component.set('v.modalLoading', true);
       helper.createUser(component, event, helper);
     }
   },

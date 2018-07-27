@@ -96,7 +96,6 @@ private class PostInstallTest {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			System.assertNotEquals(null, settings);
 			System.assertNotEquals(null, settings.Id);
-			System.assert(!settings.SetupComplete__c);
 			System.assertEquals(null, settings.Environment__c);
 			System.assertEquals(null, settings.BaseUrl__c);
 			System.assertEquals(null, settings.AccountId__c);
@@ -120,7 +119,6 @@ private class PostInstallTest {
 			String password = UUID.randomUUID().toString();
 			String accountId = UUID.randomUUID().toString();
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.SetupComplete__c = true;
 			settings.Environment__c = 'unit.test';
 			settings.BaseUrl__c = 'https://unit.test';
 			settings.AccountId__c = accountId;
@@ -147,7 +145,6 @@ private class PostInstallTest {
 			settings = AccountSettings__c.getOrgDefaults();
 			System.assertNotEquals(null, settings);
 			System.assertNotEquals(null, settings.Id);
-			System.assert(settings.SetupComplete__c);
 			System.assertEquals('unit.test', settings.Environment__c);
 			System.assertEquals('https://unit.test', settings.BaseUrl__c);
 			System.assertEquals(accountId, settings.AccountId__c);

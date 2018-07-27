@@ -1,41 +1,10 @@
 ({
-  init: function (component, event, helper) {
-    helper.setInitialState(component, event, helper);
-  },
-
-  handleBackClick: function (component, event, helper) {
-    var activeStep = component.get('v.activeStep');
-    if (activeStep > 0) {
-      component.set('v.activeStep', --activeStep);
-      helper.calculateProgressAmount(component, event, helper);
-    }
+  initialize: function (component, event, helper) {
+    helper.setContinueButtonState(component);
   },
 
   handleContinueClick: function (component, event, helper) {
-    var activeStep = component.get('v.activeStep');
-    var data = component.get('v.section');
-    var steps = data.steps;
-    var totalSteps = steps.length;
-    steps[activeStep].isComplete = true;
-
-    if (data.status !== 'complete') {
-      data.status = 'inProgress';
-    }
-    helper.finishSection(component, event, helper);
-    /*if(activeStep < totalSteps){
-        steps[activeStep].isComplete = true;
-        steps[activeStep].loggedIn = true;
-
-        if(data.status != 'complete'){
-            data.status = 'inProgress';
-        }
-        helper.initiateSave(component, event, helper);
-        component.set('v.activeStep', ++activeStep);
-        component.set('v.section', data);
-        helper.calculateProgressAmount(component, event, helper);
-    } else{
-        helper.finishSection(component, event, helper);
-    }*/
+    component.getEvent('finishClicked').fire();
   },
 
   handleExitClick: function (component, event, helper) {
@@ -43,18 +12,15 @@
   },
 
   handleConfirmExitClick: function (component, event, helper) {
-    var navToSection = component.getEvent('exitClicked');
-
     component.set('v.showExitModal', false);
-
+    var navToSection = component.getEvent('exitClicked');
     navToSection.setParams({
-      "section": "Landing"
+      section: 'landing'
     });
     navToSection.fire();
-    return;
   },
 
-  handleSaveEvent: function (component, event, helper) {
-    helper.initiateSave(component, event, helper);
+  handleLoginChange: function (component, event, helper) {
+    helper.setContinueButtonState(component);
   }
 });

@@ -8,6 +8,11 @@ public class Account {
 	@AuraEnabled
 	public UUID id { get; private set; }
 	/**
+	 * The DocuSign account number.
+	 */
+	@AuraEnabled
+	public Long accountNumber { get; private set; }
+	/**
 	 * The DocuSign account name.
 	 */
 	@AuraEnabled
@@ -52,16 +57,18 @@ public class Account {
 	 * Constructs a DocuSign account.
 	 *
 	 * @param id The DocuSign account ID.
+	 * @param accountNumber The DocuSign account number.
 	 * @param name The DocuSign account name.
 	 * @param plan The DocuSign account plan.
 	 * @param billing The DocuSign account billing information.
 	 * @param connect The DocuSign Connect permissions for the account.
 	 * @param environment The DocuSign environment.
 	 */
-	public Account(final UUID id, final String name, final Plan plan, final Billing billing,
+	public Account(final UUID id, final Long accountNumber, final String name, final Plan plan, final Billing billing,
 		final ConnectPermission connect, final Environment environment) {
 
 		this.id = id;
+		this.accountNumber = accountNumber;
 		this.name = name;
 		this.plan = plan;
 		this.billing = billing;

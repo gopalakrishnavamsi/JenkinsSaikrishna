@@ -1,44 +1,73 @@
 ({
-  getData: function (component, event, helper) {
-    var stateData = component.get('v.sections');
-    if ($A.util.isEmpty(stateData) || $A.util.isEmpty(stateData.setupData)) {
-      stateData = {
-        setupData: [{
-          name: "systemConnections",
-          headerText: $A.get('$Label.c.ConnectToDocuSign'),
-          subText: $A.get('$Label.c.ConnectDocuSignToSalesforce'),
-          status: "notStarted",
-          steps: [{
-            stepName: "salesforceToThirdParty",
-            type: "",
-            accountNumber: null,
-            isTrial: false,
-            emailAddress: null,
-            loggedIn: false,
-            isComplete: false
-          }]
-        }, {
-          name: "manageUsers",
-          headerText: $A.get('$Label.c.ManageUsers'),
-          subText: $A.get('$Label.c.ConnectDocuSignUser'),
-          status: "notStarted",
-          steps: [{
-            stepName: "userManagement", type: "Blank", isComplete: false
-          }]
-        }], loggedIn: false
-      };
-    }
-    component.set('v.sections', stateData);
-    component.set('v.loggedIn', stateData.loggedIn);
-    helper.updateProgression(component, stateData);
+  showToast: function (component, message, mode) {
+    component.set('v.message', message);
+    component.set('v.mode', mode);
+    component.set('v.showToast', true);
   },
 
-  goToSection: function (component, event, selectedSection, showNextSteps) {
+  hideToast: function (component) {
+    component.set('v.showToast', false);
+  },
+
+  setLoading: function (component, loading) {
+    component.set('v.loading', loading === true);
+  },
+
+  getState: function (component, event, helper) {
+    helper.setLoading(component, true);
+
+    var getLogin = component.get('c.getLogin');
+
+    getLogin.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        var login = response.getReturnValue();
+        var status = login.isLoggedIn === true ? 'complete' : 'notStarted';
+        component.set('v.login', login);
+        component.set('v.isTrialExpired', login.isTrial && login.trialStatus && login.trialStatus.isExpired);
+        var steps = [{
+          name: 'setupAccount',
+          title: $A.get('$Label.c.ConnectToDocuSign'),
+          headerText: $A.get('$Label.c.ConnectToDocuSign'),
+          subText: $A.get('$Label.c.ConnectDocuSignToSalesforce'),
+          status: status
+        }, {
+          name: 'setupUsers',
+          title: $A.get('$Label.c.ManageUsers'),
+          headerText: $A.get('$Label.c.ManageUsers'),
+          subText: $A.get('$Label.c.ConnectDocuSignUser'),
+          status: status
+        }];
+        component.set('v.steps', steps);
+        helper.updateProgression(component, steps);
+      } else {
+        helper.showToast(component, _getErrorMessage(response), 'error');
+      }
+      helper.setLoading(component, false);
+    });
+    $A.enqueueAction(getLogin);
+  },
+
+  goToStep: function (component, helper, stepName, showNextSteps) {
     // goToSection takes a string containing a section ID as a parameter
     //  and sets the attribute selectedSection to that string, which changes the active
     //   component on the page.
+    component.set('v.currentStep', stepName);
+    if (stepName === 'setupUsers') {
+      helper.setLoading(component, true);
 
-    component.set('v.selectedSection', selectedSection);
+      var getUsers = component.get('c.getUsers');
+
+      getUsers.setCallback(this, function (response) {
+        if (response.getState() === 'SUCCESS') {
+          component.set('v.users', response.getReturnValue());
+        } else {
+          helper.showToast(component, _getErrorMessage(response), 'error');
+        }
+        helper.setLoading(component, false);
+      });
+      $A.enqueueAction(getUsers);
+    }
+
     if (showNextSteps) {
       window.setTimeout($A.getCallback(function () {
         component.set('v.showNextSteps', true);
@@ -46,39 +75,15 @@
     }
   },
 
-  save: function (component, event, helper) {
-    //Saves to the backend, calls helper.updateProgression to set landing text areas
-    var stateData = component.get('v.sections');
-    stateData.loggedIn = component.get('v.loggedIn');
-
-    //resets setupData on logout
-    if (!stateData.loggedIn) {
-      stateData.setupData[1].status = 'notStarted';
-      stateData.setupData[1].steps[0].isComplete = false;
-    }
-    component.set('v.sections', stateData);
-    helper.updateProgression(component, stateData);
-    var action = component.get("c.saveState");
-    action.setParams({
-      'state': JSON.stringify(stateData)
-    });
-    action.setCallback(this, function (res) {
-      var response = res.getReturnValue();
-      console.log('**************** Response: ', response);
-    });
-    $A.enqueueAction(action);
-  },
-
-  updateProgression: function (component, stateData) {
+  updateProgression: function (component, steps) {
     var progressionStatus = "";
     var completedCounter = 0;
     var inProgressFlag = false;
-    var data = stateData.setupData;
 
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].status === 'complete') {
+    for (var i = 0; i < steps.length; i++) {
+      if (steps[i].status === 'complete') {
         completedCounter++;
-      } else if (data[i].status === 'inProgress') {
+      } else if (steps[i].status === 'inProgress') {
         inProgressFlag = true;
       }
     }
@@ -86,7 +91,7 @@
     if (inProgressFlag === true) {
       progressionStatus = 'inProgress';
     } else if (completedCounter > 0) {
-      if (completedCounter === data.length) {
+      if (completedCounter === steps.length) {
         progressionStatus = 'complete';
       } else {
         progressionStatus = 'inProgress';

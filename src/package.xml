@@ -2,7 +2,6 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DocuSign for Salesforce Essentials</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
-    <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink>Setup</setupWeblink>
     <types>
         <members>Application</members>
@@ -467,11 +466,12 @@
         <members>AccountSettings__c.Environment__c</members>
         <members>AccountSettings__c.BaseUrl__c</members>
         <members>AccountSettings__c.AccountId__c</members>
+        <members>AccountSettings__c.AccountNumber__c</members>
         <members>AccountSettings__c.UseSendOnBehalfOf__c</members>
+        <members>AccountSettings__c.Email__c</members>
         <members>AccountSettings__c.Username__c</members>
         <members>AccountSettings__c.Password__c</members>
         <members>AccountSettings__c.Environment__c</members>
-        <members>AccountSettings__c.SetupComplete__c</members>
         <members>AccountSettings__c.Features__c</members>
         <members>AccountSettings__c.FeaturesLastChecked__c</members>
         <members>AccountSettings__c.FeaturesCheckFrequency__c</members>
@@ -597,7 +597,6 @@
         <members>Organization__mdt.DistributorPassword__c</members>
         <members>Organization__mdt.IntegratorKey__c</members>
         <members>Organization__mdt.NotificationEmail__c</members>
-        <members>Setup__mdt.State__c</members>
         <members>CustomRecipient__c.EnvelopeConfiguration__c</members>
         <members>CustomRecipient__c.Type__c</members>
         <members>CustomRecipient__c.AccessCode__c</members>
@@ -669,7 +668,6 @@
         <members>EnvelopeLocalization__c</members>
         <members>Organization__mdt</members>
         <members>Localization__mdt</members>
-        <members>Setup__mdt</members>
         <members>RoleSettings__c</members>
         <members>UserSettings__c</members>
         <members>Envelope__c</members>
@@ -681,7 +679,6 @@
         <members>EnvelopeStatus__c</members>
         <members>RecipientStatus__c</members>
         <members>User</members>
-        <members>Setup__mdt</members>
         <members>Opportunity</members>
         <members>Account</members>
         <members>Case</members>
@@ -787,7 +784,6 @@
         <members>NavigateToSection</members>
         <members>Login</members>
         <members>SetupUsers</members>
-        <members>SaveDataEvent</members>
         <members>ManageUsers</members>
         <members>Users</members>
         <members>Toast</members>
@@ -797,6 +793,7 @@
         <members>FileUploader</members>
         <members>Recipient</members>
         <members>Loading</members>
+        <members>ToastEvent</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

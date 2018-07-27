@@ -1,55 +1,70 @@
 <aura:component controller="SetupController">
-    <aura:attribute name="sections" type="Object"/>
-    <aura:attribute name="loggedIn" type="Boolean"/>
-    <aura:attribute name="progressionStatus" type="String"/>
-    <aura:attribute name="completedCounter" type="Integer"/>
-    <aura:attribute name="selectedSection" type="String" default="Landing"/>
-    <aura:attribute name="trialIsExpired" type="Boolean"/>
-    <aura:attribute name="showNextSteps" type="Boolean" default="{!false}"/>
+    <ltng:require scripts="{!$Resource.UtilJS}"/>
+
+    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+
+    <aura:attribute name="loading" type="Boolean" access="private" default="{!true}"/>
+    <aura:attribute name="login" type="SetupController.Login" access="private"/>
+    <aura:attribute name="steps" type="Object[]" access="private"/>
+    <aura:attribute name="docuSignUsers" type="Object[]" access="private"/>
+    <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
+    <aura:attribute name="isUserStepComplete" type="Boolean" access="private"/>
+    <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
+
+    <aura:attribute name="progressionStatus" type="String" access="private"/>
+    <aura:attribute name="completedCounter" type="Integer" access="private"/>
+    <aura:attribute name="currentStep" type="String" access="private" default="landing"/>
+    <aura:attribute name="showNextSteps" type="Boolean" access="private" default="{!false}"/>
+    <aura:attribute name="message" type="String" access="private"/>
+    <aura:attribute name="mode" type="String" access="private"/>
+    <aura:attribute name="showToast" type="Boolean" access="private"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
+    <aura:handler name="waiting" event="aura:waiting" action="{!c.showLoading}"/>
+    <aura:handler name="doneWaiting" event="aura:doneWaiting" action="{!c.hideLoading}"/>
 
     <div class="slds-scope">
         <div class="slds-grid slds-grid_vertical">
             <!-- Landing -->
-            <div aura:id="landingDiv" class="{!'slds-col' + if(v.selectedSection == 'Landing', '', ' slds-hide')}">
-                <c:SetupWizard data="{!v.sections.setupData}"
+            <div aura:id="landingDiv" class="{!'slds-col' + if(v.currentStep == 'landing', '', ' slds-hide')}">
+                <c:SetupWizard aura:id="landing"
+                               steps="{!v.steps}"
                                progressionStatus="{!v.progressionStatus}"
                                completedCounter="{!v.completedCounter}"
-                               landingButtonClicked="{!c.goToNextSection}"
-                               rowButtonClicked="{!c.handleSectionChange}"
-                               trialIsExpired="{!v.trialIsExpired}"
-                               loggedIn="{!v.loggedIn}"
-                               showNextSteps="{!v.showNextSteps}"/>
+                               isTrialExpired="{!v.isTrialExpired}"
+                               showNextSteps="{!v.showNextSteps}"
+                               landingButtonClicked="{!c.goToNextStep}"
+                               rowButtonClicked="{!c.handleStepChange}"/>
             </div>
             <!--/Landing -->
 
             <!-- Sections -->
-            <aura:if isTrue="{!v.selectedSection == 'systemConnections'}">
-                <div class="{!'slds-col' + if(v.selectedSection == 'systemConnections', '', ' slds-hide')}">
-                    <c:SetupAccount aura:id="systemConnections"
-                                       loggedIn="{!v.loggedIn}"
-                                       exitClicked="{!c.handleSectionChange}"
-                                       finishClicked="{!c.goToNextSection}"
-                                       saveToBackend="{!c.handleSave}"
-                                       selectedSection="{!v.selectedSection}"
-                                       section="{!v.sections.setupData[0]}"
-                                       sections="{!v.sections}"
-                                       trialIsExpired="{!v.trialIsExpired}"/>
+            <aura:if isTrue="{!v.currentStep == 'setupAccount'}">
+                <div class="{!'slds-col' + if(v.currentStep == 'setupAccount', '', ' slds-hide')}">
+                    <c:SetupAccount aura:id="setupAccount"
+                                    login="{!v.login}"
+                                    isTrialExpired="{!v.isTrialExpired}"
+                                    exitClicked="{!c.handleStepChange}"
+                                    finishClicked="{!c.goToNextStep}"/>
                 </div>
             </aura:if>
 
-            <aura:if isTrue="{!v.selectedSection == 'manageUsers'}">
-                <div class="{!'slds-col' + if(v.selectedSection == 'manageUsers', '', ' slds-hide')}">
-                    <c:SetupUsers aura:id="manageUsers"
-                                   exitClicked="{!c.handleSectionChange}"
-                                   finishClicked="{!c.goToNextSection}"
-                                   saveToBackend="{!c.handleSave}"
-                                   section="{!v.sections.setupData[1]}"
-                                   selectedSection="{!v.selectedSection}"/>
+            <aura:if isTrue="{!v.currentStep == 'setupUsers'}">
+                <div class="{!'slds-col' + if(v.currentStep == 'setupUsers', '', ' slds-hide')}">
+                    <c:SetupUsers aura:id="setupUsers"
+                                  docuSignUsers="{!v.docuSignUsers}"
+                                  exitClicked="{!c.handleStepChange}"
+                                  finishClicked="{!c.goToNextStep}"/>
                 </div>
             </aura:if>
             <!--/Sections -->
+            <!-- Toast -->
+            <c:toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
+            <!-- /Toast -->
+            <!-- Loading State -->
+            <c:Loading loading="{!v.loading}" visualforce="{!v.visualforce}"/>
+            <!-- /Loading State -->
         </div>
     </div>
 </aura:component>

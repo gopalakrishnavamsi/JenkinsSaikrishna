@@ -1,10 +1,8 @@
 <aura:component>
-    <aura:attribute name="helpInfo" type="String"/>
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="mode" type="String"/>
-    <aura:attribute name="showToast" type="Boolean" default="{!false}"/>
+    <aura:attribute name="docuSignUsers" type="Object[]"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
     <aura:attribute name="tableLoading" type="Boolean"/>
+    <aura:attribute name="helpInfo" type="String" access="private"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
@@ -31,9 +29,7 @@
 
         <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative ds-users_container">
             <!-- Custom code -->
-            <c:Users message="{!v.message}"
-                     mode="{!v.mode}"
-                     showToast="{!v.showToast}"
+            <c:Users docuSignUsers="{!v.docuSignUsers}"
                      modalLoading="{!v.modalLoading}"
                      tableLoading="{!v.tableLoading}"/>
             <!-- /Custom Code -->

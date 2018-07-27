@@ -53,7 +53,7 @@ public class DocuSignAPITest {
 				} else if (endpoint.contains('/envelopes')) {
 					response.setBody('{"status":"completed","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"signerName":"Signer","signerEmail":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}]}}');
 				} else { // GET account
-					response.setBody('{"currentPlanId": "d1d8e549-4f0f-464a-a474-813b21c659da","planName": "DEVCENTER_DEMO_APRIL2013","planStartDate": "2017-01-05T17:54:37.1800000Z","planEndDate": "2018-01-05T17:54:37.1800000Z","billingPeriodStartDate": "2017-01-05T08:00:00.0000000Z","billingPeriodEndDate": "2017-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent": "4","billingPeriodEnvelopesAllowed": "unlimited","billingPeriodDaysRemaining": "0","canUpgrade": "false","canCancelRenewal": "false","envelopeSendingBlocked": "false","envelopeUnitPrice": "$0.00","suspensionStatus": "","accountName": "DocuSign","connectPermission": "full","docuSignLandingUrl": "http://www.docusign.com/products/sign_up/buy_now.php","distributorCode": "DEVCENTER_DEMO_APRIL2013","accountIdGuid": "67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode": "USD","forgottenPasswordQuestionsCount": "1","paymentMethod": "purchase_order","seatsAllowed": "unlimited","seatsInUse": "1","createdDate": "2017-01-05T17:54:36.7770000Z","isDowngrade": "false","billingProfile": "web","allowTransactionRooms": "false"}');
+					response.setBody('{"externalAccountId":"1234","currentPlanId": "d1d8e549-4f0f-464a-a474-813b21c659da","planName": "DEVCENTER_DEMO_APRIL2013","planStartDate": "2017-01-05T17:54:37.1800000Z","planEndDate": "2018-01-05T17:54:37.1800000Z","billingPeriodStartDate": "2017-01-05T08:00:00.0000000Z","billingPeriodEndDate": "2017-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent": "4","billingPeriodEnvelopesAllowed": "unlimited","billingPeriodDaysRemaining": "0","canUpgrade": "false","canCancelRenewal": "false","envelopeSendingBlocked": "false","envelopeUnitPrice": "$0.00","suspensionStatus": "","accountName": "DocuSign","connectPermission": "full","docuSignLandingUrl": "http://www.docusign.com/products/sign_up/buy_now.php","distributorCode": "DEVCENTER_DEMO_APRIL2013","accountIdGuid": "67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode": "USD","forgottenPasswordQuestionsCount": "1","paymentMethod": "purchase_order","seatsAllowed": "unlimited","seatsInUse": "1","createdDate": "2017-01-05T17:54:36.7770000Z","isDowngrade": "false","billingProfile": "web","allowTransactionRooms": "false"}');
 				}
 			} else if (method == 'POST') {
 				if (endpoint.endsWith('/oauth2/token')) {
@@ -267,6 +267,7 @@ public class DocuSignAPITest {
 		final Credentials creds = new Credentials(
 			Environment.demo,
 			UUID.randomUUID(),
+			1234L,
 			UUID.randomUUID().toString(),
 			UUID.randomUUID().toString(),
 			true,
@@ -321,7 +322,7 @@ public class DocuSignAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals(TestUtils.BASE_Url + 'restapi/v2/accounts/' + accountID + '/', u.toExternalForm());
+			System.assertEquals(TestUtils.BASE_URL + 'restapi/v2/accounts/' + accountID + '/', u.toExternalForm());
 		}
 	}
 
@@ -329,7 +330,7 @@ public class DocuSignAPITest {
 	static void test_getBaseUrl_failure() {
 		Test.startTest();
 		try {
-			new DocuSignAPI(new Credentials(Environment.production, null, null, null, false, null, false))
+			new DocuSignAPI(new Credentials(Environment.production, null, null, null, null, false, null, false))
 				.getBaseUrl();
 			throw new AssertException('Expected getBaseUrl to fail');
 		} catch (DocuSignException ex) {
