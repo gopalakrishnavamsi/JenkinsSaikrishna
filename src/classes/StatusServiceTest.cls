@@ -738,20 +738,32 @@ private class StatusServiceTest {
 			Schema.Account a = TestUtils.createAccount();
 			Lead l = TestUtils.createLead();
 			Envelope__c e1 = TestUtils.createEnvelope(a.Id);
+			e1.Sent__c = Datetime.now().addDays(-5);
 			Envelope__c e2 = TestUtils.createEnvelope(a.Id);
+			e2.Sent__c = Datetime.now().addDays(-2);
 			Envelope__c e3 = TestUtils.createEnvelope(l.Id);
+			e3.Sent__c = Datetime.now().addDays(-3);
 			Envelope__c e4 = TestUtils.createEnvelope(l.Id);
+			e4.Sent__c = Datetime.now().addDays(-4);
+			update new List<Envelope__c> { e1, e2, e3, e4 };
 			Envelope.Status es1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
 			Envelope.Status es2 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e2));
 			Envelope.Status es3 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e3));
 			Envelope.Status es4 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e4));
 
 			Test.startTest();
+			// Pulls last 3 statuses and orders by ascending sent date time. Expecting status for es4, es3, es2.
 			List<Envelope.Status> result = StatusService.getStatus(new Set<Id> { a.Id, l.Id }, 3);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(es4.id, result[0].id);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(es3.id, result[1].id);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(es2.id, result[2].id);
 		}
 	}
 
@@ -882,7 +894,7 @@ private class StatusServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
 			System.assertNotEquals(null, result[0]);
-			System.assertEquals(es1.id, result[0].id);
+			System.assertNotEquals(null, result[0].id);
 			System.assertNotEquals(null, result[1]);
 			System.assertNotEquals(null, result[1].id);
 

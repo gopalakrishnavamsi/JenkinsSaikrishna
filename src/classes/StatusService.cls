@@ -82,8 +82,10 @@ public with sharing class StatusService {
 			for (Envelope__c e : [
 				SELECT DocuSignId__c
 				FROM Envelope__c
-				WHERE SourceId__c IN :sourceIds AND DocuSignId__c != NULL
-				ORDER BY CreatedDate ASC
+				WHERE SourceId__c IN :sourceIds
+				AND DocuSignId__c != NULL
+				AND Sent__c != NULL
+				ORDER BY Sent__c DESC
 				LIMIT :max
 			]) {
 				result.add(UUID.fromString(e.DocuSignId__c));
@@ -121,7 +123,7 @@ public with sharing class StatusService {
 				)
 				FROM EnvelopeStatus__c
 				WHERE DocuSignId__c IN :dsEnvelopeIds
-				ORDER BY CreatedDate ASC
+				ORDER BY Sent__c ASC
 			]);
 		}
 
@@ -372,6 +374,8 @@ public with sharing class StatusService {
 			result.addAll(DB.upsertStatus(toUpdate));
 		}
 
+		// Sort by ascending sent date/time
+		result.sort();
 		return result;
 	}
 

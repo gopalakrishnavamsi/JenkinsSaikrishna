@@ -20,6 +20,7 @@ public class UnauthorizedException extends Exception {
 	 *     set.</li>
 	 *     <li><code>SalesforceAdministrator</code>: Must be a Salesforce administrator.</li>
 	 *     <li><code>EnvelopeOwner</code>: Must be the envelope owner.</li>
+	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
 	 * </ul>
 	 */
 	public enum AccessRequirement {
@@ -27,7 +28,8 @@ public class UnauthorizedException extends Exception {
 		DocuSignUser,
 		DocuSignAdministrator,
 		SalesforceAdministrator,
-		EnvelopeOwner
+		EnvelopeOwner,
+		ConfigureAccount
 	}
 
 	/**
@@ -101,6 +103,18 @@ public class UnauthorizedException extends Exception {
 		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeActivated);
 		ex.userId = UserInfo.getUserId();
 		ex.requirement = AccessRequirement.DocuSignUser;
+		return ex;
+	}
+
+	/**
+	 * Factory method to construct an exception when Salesforce is not connected to DocuSign.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException accountNotConfigured() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.AccountNotConfigured);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.ConfigureAccount;
 		return ex;
 	}
 }

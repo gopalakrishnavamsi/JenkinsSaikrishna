@@ -39,8 +39,7 @@ private class StatusControllerTest {
 				StatusController.getStatus(UserInfo.getUserId(), 1);
 				throw new AssertException('Expected getStatus to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.CannotQueryObject + ' ' + Application.namespacePrefix + 'Envelope__c',
-					ex.getMessage());
+				System.assertEquals(Label.UnauthorizedUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}

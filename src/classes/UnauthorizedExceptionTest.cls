@@ -62,6 +62,18 @@ private class UnauthorizedExceptionTest {
 	}
 
 	@IsTest
+	static void test_accountNotConfigured() {
+		Test.startTest();
+		final UnauthorizedException ex = UnauthorizedException.accountNotConfigured();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.ConfigureAccount, ex.requirement);
+	}
+
+	@IsTest
 	static void test_results() {
 		Test.startTest();
 		UnauthorizedException ex1 = new UnauthorizedException('', null);

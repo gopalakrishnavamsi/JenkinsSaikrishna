@@ -2642,4 +2642,12 @@
 		<shortDescription>Send with DocuSign</shortDescription>
 		<value>Send with DocuSign</value>
 	</labels>
+	<labels>
+		<fullName>UnauthorizedUser</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized user</shortDescription>
+		<value>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant access.</value>
+	</labels>
 </CustomLabels>

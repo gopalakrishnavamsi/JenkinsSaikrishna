@@ -1359,6 +1359,10 @@
 		<label>Send with DocuSign</label>
 		<name>SendWithDocuSign</name>
 	</customLabels>
+	<customLabels>
+		<label>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant access.</label>
+		<name>UnauthorizedUser</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

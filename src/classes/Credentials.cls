@@ -76,9 +76,9 @@ public with sharing class Credentials {
 			if (self == null) {
 				Credentials that = buildAPICredentials(getAccountCredentials(), getUserCredentials(userId));
 				if (validate && !that.isAccountValid) {
-					throw new UnauthorizedException(Label.AccountNotConfigured);
+					throw UnauthorizedException.accountNotConfigured();
 				} else if (validate && !that.isUserValid) {
-					throw new UnauthorizedException(Label.MustBeActivated);
+					throw UnauthorizedException.mayRequireActivation();
 				}
 				self = that;
 			}

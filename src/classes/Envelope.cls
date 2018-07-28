@@ -233,7 +233,7 @@ public class Envelope {
 	/**
 	 * DocuSign envelope status.
 	 */
-	public class Status {
+	public class Status implements Comparable {
 		/**
 		 * The ID of the underlying EnvelopeStatus__c record.
 		 */
@@ -382,6 +382,22 @@ public class Envelope {
 		public Envelope.Status withId(final Id id) {
 			this.id = id;
 			return this;
+		}
+
+		/**
+		 * Used to sort statuses by ascending sent date and time with nulls or non-statuses sorted first.
+		 *
+		 * @param compareTo The object to compare.
+		 *
+		 * @return The comparison value.
+		 */
+		public Integer compareTo(final Object compareTo) {
+			if (compareTo == null || !(compareTo instanceof Status)) return -1;
+
+			Status s = (Status)compareTo;
+			if (this.sent == s.sent) return 0;
+			if (this.sent > s.sent) return 1;
+			return -1;
 		}
 	}
 

@@ -457,6 +457,7 @@
         <members>ContinueAndTag</members>
         <members>NoFilesAttached</members>
         <members>SendWithDocuSign</members>
+        <members>UnauthorizedUser</members>
         <name>CustomLabel</name>
     </types>
     <types>
