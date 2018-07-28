@@ -643,8 +643,9 @@ private class EnvelopeAPITest {
 			TestUtils.createAccountConfiguration();
 			EnvelopeAPI client1 = EnvelopeAPI.getInstance();
 			client1.getBaseUrl();
-			EnvelopeAPI client2 = new EnvelopeAPI(new Credentials(Environment.demo, TestUtils.ID1,
-				UUID.randomUUID().toString(), UUID.randomUUID().toString(), true, UUID.randomUUID().toString(), false));
+			EnvelopeAPI client2 = new EnvelopeAPI(new Credentials(Environment.demo, TestUtils.ID1, 1234L,
+				UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+				true, UUID.randomUUID().toString(), false));
 			APIException ex1, ex2 = null;
 
 			Test.startTest();

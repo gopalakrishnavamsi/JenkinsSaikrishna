@@ -28,6 +28,35 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
+	static void test_getLogin_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			SetupController.LoginInformation result = SetupController.getLogin();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_getLogin_failure() {
+		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+			Test.startTest();
+			try {
+				SetupController.getLogin();
+				throw new AssertException('Expected getLogin to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_login_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
@@ -35,7 +64,7 @@ private class SetupControllerTest {
 			TestUtils.createAccountConfiguration();
 
 			Test.startTest();
-			AccountService.LoginResult result = SetupController.login('u', 'p', 'demo', null, null);
+			SetupController.LoginInformation result = SetupController.login('u', 'p', 'demo', null, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

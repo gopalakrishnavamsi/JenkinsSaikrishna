@@ -268,6 +268,7 @@ public class DocuSignAPITest {
 			Environment.demo,
 			UUID.randomUUID(),
 			1234L,
+			UUID.randomUUID().toString() + '@unit.test',
 			UUID.randomUUID().toString(),
 			UUID.randomUUID().toString(),
 			true,
@@ -330,7 +331,7 @@ public class DocuSignAPITest {
 	static void test_getBaseUrl_failure() {
 		Test.startTest();
 		try {
-			new DocuSignAPI(new Credentials(Environment.production, null, null, null, null, false, null, false))
+			new DocuSignAPI(new Credentials(Environment.production, null, null, null, null, null, false, null, false))
 				.getBaseUrl();
 			throw new AssertException('Expected getBaseUrl to fail');
 		} catch (DocuSignException ex) {

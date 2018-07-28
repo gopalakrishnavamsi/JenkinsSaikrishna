@@ -176,6 +176,7 @@ private class AccountAPITest {
 			AccountAPI client = AccountAPI.getInstance();
 			Account a1 = new Account(
 				UUID.randomUUID(),
+				1234L,
 				'UNIT TEST',
 				new Account.Plan(
 					UUID.randomUUID(),
@@ -207,6 +208,7 @@ private class AccountAPITest {
 			AccountAPI client = AccountAPI.getInstance();
 			Account a1 = new Account(
 				UUID.randomUUID(),
+				1234L,
 				'UNIT TEST',
 				new Account.Plan(
 					UUID.randomUUID(),
@@ -254,6 +256,7 @@ private class AccountAPITest {
 			UUID initialPlanId = UUID.randomUUID();
 			Account a1 = new Account(
 				UUID.randomUUID(),
+				1234L,
 				'UNIT TEST',
 				new Account.Plan(
 					initialPlanId,
@@ -424,7 +427,8 @@ private class AccountAPITest {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				new AccountAPI(new Credentials(Environment.production, UUID.randomUUID(), null, null, false, null, false))
+				new AccountAPI(new Credentials(Environment.production, UUID.randomUUID(), 1234L, null, null, null,
+					false, null, false))
 					.getValidAccounts();
 				throw new AssertException('Expected getValidAccounts to fail');
 			} catch (DocuSignException ex) {
