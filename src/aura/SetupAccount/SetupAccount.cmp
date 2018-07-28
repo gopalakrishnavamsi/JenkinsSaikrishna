@@ -1,5 +1,5 @@
 <aura:component>
-    <aura:attribute name="login" type="SetupController.LoginInformation"/>
+    <aura:attribute name="login" type="Object"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="nextStep" type="String"/>
 

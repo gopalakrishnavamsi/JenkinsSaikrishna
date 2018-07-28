@@ -4,7 +4,7 @@
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
 
     <aura:attribute name="loading" type="Boolean" access="private" default="{!true}"/>
-    <aura:attribute name="login" type="SetupController.LoginInformation" access="private"/>
+    <aura:attribute name="login" type="Object" access="private"/>
     <aura:attribute name="steps" type="Object[]" access="private"/>
     <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
     <aura:attribute name="isUserStepComplete" type="Boolean" access="private"/>

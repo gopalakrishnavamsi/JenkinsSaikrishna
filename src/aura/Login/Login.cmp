@@ -1,6 +1,6 @@
 <aura:component controller="SetupController">
 
-    <aura:attribute name="login" type="SetupController.LoginInformation"/>
+    <aura:attribute name="login" type="Object"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="helpInfo" type="String" access="private"/>
     <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
