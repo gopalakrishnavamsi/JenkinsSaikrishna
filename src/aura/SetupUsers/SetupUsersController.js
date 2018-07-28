@@ -1,8 +1,4 @@
 ({
-  initialize: function (component, event, helper) {
-    helper.setInitialState(component, event, helper);
-  },
-
   handleContinueClick: function (component, event, helper) {
     var finishClicked = component.getEvent('finishClicked');
     finishClicked.setParams({
@@ -24,9 +20,5 @@
       section: "landing"
     });
     navToSection.fire();
-  },
-
-  handleSelectedSectionChange: function (component, event, helper) {
-    helper.setContinueButtonState(component, event, helper);
   }
 });

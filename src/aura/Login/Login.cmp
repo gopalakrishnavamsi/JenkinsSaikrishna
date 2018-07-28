@@ -1,18 +1,18 @@
 <aura:component controller="SetupController">
 
-    <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="login" type="SetupController.LoginInformation"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="helpInfo" type="String" access="private"/>
     <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
     <aura:attribute name="signedUpForTrial" type="Boolean" access="private"/>
-    <aura:attribute name="associatedAccounts" type="Object[]" access="private"/>
     <aura:attribute name="showAccountSelectionModal" type="Boolean" access="private"/>
     <aura:attribute name="password" type="String" access="private"/>
     <aura:attribute name="showLogoutModal" type="Boolean" access="private"/>
     <aura:attribute name="advancedOptionsExpanded" type="Boolean" access="private"/>
-    <aura:attribute name="accountNumber" type="Integer" access="private"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="loginEvent" type="c:LoginEvent"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
@@ -146,10 +146,10 @@
                                                         <option value="Other">{!$Label.c.Other}</option>
                                                     </lightning:select>
                                                     <lightning:input aura:id="ds-other-url"
-                                                                     class="{!'slds-p-top_x-small ' + (v.login.environment == 'other' ? 'slds-show' : 'slds-hide')}"
+                                                                     class="{!'slds-p-top_x-small ' + (v.login.environment == 'Other' ? 'slds-show' : 'slds-hide')}"
                                                                      label="{!$Label.c.OtherUrl}"
                                                                      type="url"
-                                                                     value="{!v.otherUrl}"/>
+                                                                     value="{!v.login.otherUrl}"/>
                                                 </div>
                                             </div>
                                             <div class="slds-m-top_medium slds-text-align_right">
@@ -168,10 +168,10 @@
                     <c:strike_modal showModal="{!v.showAccountSelectionModal}" title="Select Account">
                         <p class="slds-m-bottom_small">{!$Label.c.MultipleAccountsMessage}</p>
                         <lightning:select value="{!v.login.accountNumber}" label="Account Number">
-                            <aura:if isTrue="{!not(empty(v.associatedAccounts))}">
+                            <aura:if isTrue="{!not(empty(v.login.accountOptions))}">
                                 <option value="" disabled="disabled" selected="selected">-- {!$Label.c.SelectLabel} --
                                 </option>
-                                <aura:iteration items="{!v.associatedAccounts}" var="account" indexVar="index">
+                                <aura:iteration items="{!v.login.accountOptions}" var="account" indexVar="index">
                                     <option value="{!account.accountNumber}">{!account.accountNumber}</option>
                                 </aura:iteration>
                             </aura:if>

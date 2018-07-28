@@ -13,6 +13,7 @@
     // Called by Landing button and each Section onComplete
     // Checks for the next section that isn't complete
     // Calls goToStep and passes in the next step. (either Landing or section id)
+    helper.hideToast(component);
     var steps = component.get('v.steps');
     for (var i = 0; i < steps.length; i++) {
       if (steps[i].status !== 'complete') {
@@ -20,7 +21,7 @@
         return;
       }
     }
-    helper.goToStep(component, helper, 'landing', event.getParam('showNextStepsPopup'));
+    helper.goToStep(component, helper, 'landing', component.get('v.shouldShowNextSteps'));
   },
 
   handleToastEvent: function (component, event, helper) {
@@ -32,11 +33,18 @@
     }
   },
 
-  showLoading: function (component, event, helper) {
-    helper.setLoading(component, true);
+  handleLoadingEvent: function (component, event, helper) {
+    var params = event.getParams();
+    helper.setLoading(component, params && params.isLoading === true);
   },
 
-  hideLoading: function (component, event, helper) {
-    helper.setLoading(component, false);
+  handleLoginEvent: function (component, event, helper) {
+    var steps = component.get('v.steps');
+    var isLoggedIn = event.getParams().isLoggedIn;
+    steps[0].status = isLoggedIn ? 'complete' : 'notStarted';
+    steps[1].status = 'notStarted';
+    component.set('v.steps', steps);
+    component.set('v.nextStep', 'setupUsers');
+    component.set('v.shouldShowNextSteps', !isLoggedIn);
   }
 });

@@ -1,5 +1,4 @@
 <aura:component>
-    <aura:attribute name="docuSignUsers" type="Object[]"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
     <aura:attribute name="tableLoading" type="Boolean"/>
     <aura:attribute name="helpInfo" type="String" access="private"/>
@@ -29,8 +28,7 @@
 
         <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative ds-users_container">
             <!-- Custom code -->
-            <c:Users docuSignUsers="{!v.docuSignUsers}"
-                     modalLoading="{!v.modalLoading}"
+            <c:Users modalLoading="{!v.modalLoading}"
                      tableLoading="{!v.tableLoading}"/>
             <!-- /Custom Code -->
         </div>

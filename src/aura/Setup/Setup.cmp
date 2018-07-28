@@ -4,25 +4,24 @@
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
 
     <aura:attribute name="loading" type="Boolean" access="private" default="{!true}"/>
-    <aura:attribute name="login" type="SetupController.Login" access="private"/>
+    <aura:attribute name="login" type="SetupController.LoginInformation" access="private"/>
     <aura:attribute name="steps" type="Object[]" access="private"/>
-    <aura:attribute name="docuSignUsers" type="Object[]" access="private"/>
     <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
     <aura:attribute name="isUserStepComplete" type="Boolean" access="private"/>
     <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
-
     <aura:attribute name="progressionStatus" type="String" access="private"/>
     <aura:attribute name="completedCounter" type="Integer" access="private"/>
     <aura:attribute name="currentStep" type="String" access="private" default="landing"/>
+    <aura:attribute name="shouldShowNextSteps" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="showNextSteps" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="message" type="String" access="private"/>
     <aura:attribute name="mode" type="String" access="private"/>
-    <aura:attribute name="showToast" type="Boolean" access="private"/>
+    <aura:attribute name="nextStep" type="String" access="private"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
-    <aura:handler name="waiting" event="aura:waiting" action="{!c.showLoading}"/>
-    <aura:handler name="doneWaiting" event="aura:doneWaiting" action="{!c.hideLoading}"/>
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
+    <aura:handler name="loginEvent" event="c:LoginEvent" action="{!c.handleLoginEvent}"/>
 
     <div class="slds-scope">
         <div class="slds-grid slds-grid_vertical">
@@ -45,6 +44,7 @@
                     <c:SetupAccount aura:id="setupAccount"
                                     login="{!v.login}"
                                     isTrialExpired="{!v.isTrialExpired}"
+                                    nextStep="{!v.nextStep}"
                                     exitClicked="{!c.handleStepChange}"
                                     finishClicked="{!c.goToNextStep}"/>
                 </div>
@@ -53,14 +53,15 @@
             <aura:if isTrue="{!v.currentStep == 'setupUsers'}">
                 <div class="{!'slds-col' + if(v.currentStep == 'setupUsers', '', ' slds-hide')}">
                     <c:SetupUsers aura:id="setupUsers"
-                                  docuSignUsers="{!v.docuSignUsers}"
+                                  nextStep="{!v.nextStep}"
                                   exitClicked="{!c.handleStepChange}"
                                   finishClicked="{!c.goToNextStep}"/>
                 </div>
             </aura:if>
             <!--/Sections -->
             <!-- Toast -->
-            <c:toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
+            <c:toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!false}"
+                     inVfPage="{!visualforce}"/>
             <!-- /Toast -->
             <!-- Loading State -->
             <c:Loading loading="{!v.loading}" visualforce="{!v.visualforce}"/>

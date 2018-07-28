@@ -1,6 +1,7 @@
 <aura:component>
-    <aura:attribute name="login" type="SetupController.Login"/>
+    <aura:attribute name="login" type="SetupController.LoginInformation"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
+    <aura:attribute name="nextStep" type="String"/>
 
     <aura:attribute name="showExitModal" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="continueButtonDisabled" type="Boolean" default="{!true}" access="private"/>
@@ -33,11 +34,11 @@
                 <div class="slds-col slds-no-flex slds-p-horizontal_small">
                     <lightning:button class="slds-button slds-button_neutral"
                                       label="{!$Label.c.Cancel}"
-                                      onclick="{!c.handleExitClick}"/>
+                                      onclick="{!c.handleConfirmExitClick}"/>
                 </div>
                 <div class="slds-col slds-p-horizontal_small">
                     <lightning:button aura:id="continueButton" class="slds-button slds-button_brand"
-                                      label="{!$Label.c.ContinueLabel}"
+                                      label="{!if(v.nextStep == 'landing', $Label.c.Finish, $Label.c.ContinueLabel)}"
                                       onclick="{!c.handleContinueClick}"
                                       disabled="{!v.continueButtonDisabled}"/>
                 </div>

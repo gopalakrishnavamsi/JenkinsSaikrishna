@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="LoadingEvent">
+    <aura:attribute name="isLoading" type="Boolean" required="true"/>
+</aura:event>

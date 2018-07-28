@@ -1,8 +1,8 @@
 <aura:component controller="SetupController">
     <ltng:require scripts="{!$Resource.UtilJS}"/>
 
-    <aura:attribute name="modalLoading" type="Boolean"/>
     <aura:attribute name="tableLoading" type="Boolean"/>
+    <aura:attribute name="modalLoading" type="Boolean"/>
 
     <aura:attribute name="data" type="Object" access="private"/>
     <aura:attribute name="formData" type="Object" access="private"/>
@@ -12,15 +12,18 @@
     <aura:attribute name="dsUserSearchTerm" type="String" access="private"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <aura:attribute name="lookupValue" type="String" access="private"/>
     <aura:handler name="change" value="{!v.lookupValue}" action="{!c.removeLookupErrorState}"/>
 
-    <aura:attribute name="docuSignUsers" type="Object[]"/>
-    <aura:handler name="change" value="{!v.docuSignUsers}" action="{!c.handleDocuSignUsersChange}"/>
-
-    <aura:attribute name="users" type="Object[]" access="private"/>
+    <aura:attribute name="users" type="Account.User[]" access="private"/>
     <aura:handler name="change" value="{!v.users}" action="{!c.handleUsersChange}"/>
+
+    <aura:attribute name="filteredUsers" type="Account.User[]" access="private"/>
+    <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
     <aura:if isTrue="{!v.tableLoading}">
         <lightning:spinner class="ds-table-loading-spinner" size="medium" alternativeText="{!$Label.c.Loading}"/>
@@ -50,20 +53,20 @@
                     <lightning:input aura:id="searchBy" variant="label-hidden" label="Search By"
                                      value="{!v.dsUserSearchTerm}"
                                      class="slds-show_inline-block" type="search"
-                                     onchange="{!c.handleDocuSignUsersChange}"
+                                     onchange="{!c.handleUsersChange}"
                                      placeholder="{!$Label.c.SearchByName}"/>
                 </div>
             </div>
         </div>
 
-        <aura:if isTrue="{!not(empty(v.data))}">
+        <aura:if isTrue="{!not(empty(v.filteredUsers))}">
             <c:strike_dataGrid aura:id="table" class="ds-user-table" data="{!v.data}" loadMoreAmount="10"
                                scrollable="true"/>
-            <aura:if isTrue="{!if(not(empty(v.docuSignUsers)), and(empty(v.users)))}">
+            <aura:set attribute="else">
                 <p class="slds-text-color_weak slds-text-align_center slds-m-top_medium">
                     <em>{!$Label.c.NoSearchResults}</em>
                 </p>
-            </aura:if>
+            </aura:set>
         </aura:if>
 
         <!-- New User Modal -->
@@ -71,7 +74,7 @@
             <c:strike_modal aura:id="modal"
                             title="{!$Label.c.AddUser}"
                             showModal="{!v.showAddUserModal}"
-                            showClose="{!and(not(v.modalLoading, v.showToast))}"
+                            showClose="{!not(v.modalLoading)}"
                             strike_evt_modalCloseButtonClicked="{!c.cancelAddUser}">
 
                 <div class="slds-p-horizontal_xxx-small slds-p-bottom_x-small slds-is-relative">
@@ -96,7 +99,7 @@
                             <aura:if isTrue="{!v.showAddUserModal}">
                                 <!-- Resets lightning:input error states when closed -->
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.firstName)}"
+                                                value="{!v.formData.user.firstName}"
                                                 type="text"
                                                 label="{!$Label.c.FirstName}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -106,7 +109,7 @@
                                 />
 
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.lastName)}"
+                                                value="{!v.formData.user.lastName}"
                                                 type="text"
                                                 label="{!$Label.c.LastName}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -116,7 +119,7 @@
                                 />
 
                                 <c:strike_input aura:id="input"
-                                                value="{!if(empty(v.formData.user), '', v.formData.user.email)}"
+                                                value="{!v.formData.user.email}"
                                                 type="email"
                                                 label="{!$Label.c.EmailAddress}"
                                                 errorMessage="{!$Label.c.FieldError}"
@@ -127,7 +130,8 @@
 
                                 <div class="slds-form-element slds-col slds-size_1-of-2 slds-grow-none">
                                     <div class="slds-form-element__label">&nbsp;</div>
-                                    <c:strike_input aura:id="canManageAccount" type="checkbox"
+                                    <c:strike_input aura:id="canManageAccount"
+                                                    type="checkbox"
                                                     label="{!$Label.c.CanManage}"
                                                     disabled="{!empty(v.formData.user)}"
                                     />

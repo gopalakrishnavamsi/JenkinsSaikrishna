@@ -1,6 +1,6 @@
 public with sharing class SetupController extends Controller {
 
-	public class Login {
+	public class LoginInformation {
 
 		@AuraEnabled
 		public Boolean isLoggedIn { get; private set; }
@@ -16,9 +16,14 @@ public with sharing class SetupController extends Controller {
 		public Boolean isTrial { get; private set; }
 		@AuraEnabled
 		public Account.TrialStatus trialStatus { get; private set; }
+		@AuraEnabled
+		public AccountService.LoginStatus status { get; private set; }
+		@AuraEnabled
+		public List<AccountService.AccountOption> accountOptions { get; private set; }
 
-		private Login(final Boolean isLoggedIn, final String email, final Long accountNumber, final String environment,
-			final String otherUrl, final Boolean isTrial, final Account.TrialStatus trialStatus) {
+		private LoginInformation(final Boolean isLoggedIn, final String email, final Long accountNumber, final String environment,
+			final String otherUrl, final Boolean isTrial, final Account.TrialStatus trialStatus,
+			final AccountService.LoginStatus status, final List<AccountService.AccountOption> accountOptions) {
 
 			this.isLoggedIn = isLoggedIn;
 			this.email = email;
@@ -27,29 +32,37 @@ public with sharing class SetupController extends Controller {
 			this.otherUrl = otherUrl;
 			this.isTrial = isTrial;
 			this.trialStatus = trialStatus;
+			this.status = status;
+			this.accountOptions = accountOptions;
 		}
 	}
 
+	private static LoginInformation getLogin(final AccountService.LoginResult loginResult) {
+		Credentials c = null;
+		Boolean isLoggedIn = Credentials.isAccountValid();
+		if (isLoggedIn) {
+			c = Credentials.getInstance();
+		}
+		Account a = loginResult == null && isLoggedIn ? AccountService.getAccount() : null;
+
+		return new LoginInformation(
+			isLoggedIn,
+			c != null ? c.email : UserInfo.getUserEmail(),
+			c != null ? c.accountNumber : null,
+			c != null ? c.environment.environment.name() : 'Production',
+			c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : null,
+			a != null && a.isTrial,
+			a != null && a.isTrial ? a.trialStatus : null,
+			loginResult != null ? loginResult.status : null,
+			loginResult != null ? loginResult.accountOptions : null);
+	}
+
 	@AuraEnabled
-	public static Login getLogin() {
+	public static LoginInformation getLogin() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 
-			Credentials c = null;
-			Boolean isLoggedIn = Credentials.isAccountValid();
-			if (isLoggedIn) {
-				c = Credentials.getInstance();
-			}
-			Account a = isLoggedIn ? AccountService.getAccount() : null;
-
-			return new Login(
-				isLoggedIn,
-				c != null ? c.email : UserInfo.getUserEmail(),
-				c != null ? c.accountNumber : null,
-				c != null ? c.environment.environment.name() : 'Production',
-				c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : null,
-				a != null && a.isTrial,
-				a != null && a.isTrial ? a.trialStatus : null);
+			return getLogin(null);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get setup state');
 		}
@@ -71,12 +84,12 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static AccountService.LoginResult login(final String dsUsername, final String dsPassword,
+	public static LoginInformation login(final String dsUsername, final String dsPassword,
 		final String dsEnvironment, final String dsUrl, final Long dsAccountNumber) {
 
 		try {
-			return AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
-				String.isBlank(dsUrl) ? null : new Url(dsUrl), dsAccountNumber);
+			return getLogin(AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
+				String.isBlank(dsUrl) ? null : new Url(dsUrl), dsAccountNumber));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to log into DocuSign.');
 		}
@@ -115,9 +128,10 @@ public with sharing class SetupController extends Controller {
 		final String lastName, final Boolean canManageAccount) {
 
 		try {
-			return AccountService.addUsers(new List<Account.User> {
+			AccountService.addUsers(new List<Account.User> {
 				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
 			});
+			return AccountService.getUsers();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
 		}
@@ -126,9 +140,10 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled
 	public static List<Account.User> removeUser(final Id sourceId, final String username) {
 		try {
-			return AccountService.removeUsers(new List<Account.User> {
+			AccountService.removeUsers(new List<Account.User> {
 				new Account.User(sourceId, username)
 			}, true);
+			return AccountService.getUsers();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to remove DocuSign account users.');
 		}
@@ -143,7 +158,6 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
-	// TODO: Why do we need this method? Remove if possible.
 	@AuraEnabled
 	public static User getUser(final Id userId) {
 		try {

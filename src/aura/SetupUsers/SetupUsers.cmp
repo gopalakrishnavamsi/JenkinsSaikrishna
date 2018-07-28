@@ -1,12 +1,9 @@
 <aura:component>
-
-    <aura:attribute name="docuSignUsers" type="Object[]"/>
+    <aura:attribute name="nextStep" type="String"/>
 
     <aura:attribute name="modalLoading" type="Boolean" access="private"/>
     <aura:attribute name="tableLoading" type="Boolean" default="" access="private"/>
     <aura:attribute name="showExitModal" type="Boolean" access="private"/>
-
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
     <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
     <aura:registerEvent name="finishClicked" type="c:NextSectionEvent"/>
@@ -24,7 +21,7 @@
         <!-- Content -->
         <div class="strike-wizard__body">
             <div class="slds-container_medium slds-container_center slds-p-horizontal_medium">
-                <c:ManageUsers docuSignUsers="{!v.docuSignUsers}"/>
+                <c:ManageUsers/>
             </div>
         </div>
 
@@ -34,12 +31,12 @@
                 <div class="slds-col slds-no-flex slds-p-horizontal_small">
                     <lightning:button class="slds-button slds-button_neutral"
                                       label="{!$Label.c.Cancel}"
-                                      onclick="{!c.handleExitClick}"/>
+                                      onclick="{!c.handleConfirmExitClick}"/>
                 </div>
                 <div class="slds-col slds-p-horizontal_small">
                     <lightning:button aura:id="continueButton"
                                       class="slds-button slds-button_brand"
-                                      label="{!$Label.c.Finish}"
+                                      label="{!if(v.nextStep == 'landing', $Label.c.Finish, $Label.c.ContinueLabel)}"
                                       onclick="{!c.handleContinueClick}"
                                       disabled="{!or(v.modalLoading, v.tableLoading)}"/>
                 </div>

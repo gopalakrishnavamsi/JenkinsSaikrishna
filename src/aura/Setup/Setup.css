@@ -511,7 +511,7 @@
 
 @media (min-width: 48em) {
     .THIS.slds-scope .strike-wizard__header {
-        padding: t(spacingXLarge) 0;
+        padding: t(spacingSmall) 0;
     }
 }
 

@@ -2,11 +2,11 @@
   showToast: function (component, message, mode) {
     component.set('v.message', message);
     component.set('v.mode', mode);
-    component.set('v.showToast', true);
+    component.find('toast').show();
   },
 
   hideToast: function (component) {
-    component.set('v.showToast', false);
+    component.find('toast').close();
   },
 
   setLoading: function (component, loading) {
@@ -23,7 +23,7 @@
         var login = response.getReturnValue();
         var status = login.isLoggedIn === true ? 'complete' : 'notStarted';
         component.set('v.login', login);
-        component.set('v.isTrialExpired', login.isTrial && login.trialStatus && login.trialStatus.isExpired);
+        component.set('v.isTrialExpired', login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
         var steps = [{
           name: 'setupAccount',
           title: $A.get('$Label.c.ConnectToDocuSign'),
@@ -38,6 +38,7 @@
           status: status
         }];
         component.set('v.steps', steps);
+        component.set('v.shouldShowNextSteps', !login.isLoggedIn);
         helper.updateProgression(component, steps);
       } else {
         helper.showToast(component, _getErrorMessage(response), 'error');
@@ -52,23 +53,20 @@
     //  and sets the attribute selectedSection to that string, which changes the active
     //   component on the page.
     component.set('v.currentStep', stepName);
-    if (stepName === 'setupUsers') {
-      helper.setLoading(component, true);
+    var steps = component.get('v.steps');
+    helper.updateProgression(component, steps);
 
-      var getUsers = component.get('c.getUsers');
-
-      getUsers.setCallback(this, function (response) {
-        if (response.getState() === 'SUCCESS') {
-          component.set('v.users', response.getReturnValue());
-        } else {
-          helper.showToast(component, _getErrorMessage(response), 'error');
-        }
-        helper.setLoading(component, false);
-      });
-      $A.enqueueAction(getUsers);
+    if (stepName === 'setupAccount') {
+      component.set('v.nextStep', steps[1].status === 'complete' ? 'landing' : 'setupUsers');
+    } else if (stepName === 'setupUsers') {
+      steps[1].status = 'complete';
+      component.set('v.steps', steps);
+      component.set('v.nextStep', 'landing');
+    } else {
+      component.set('v.nextStep', null);
     }
 
-    if (showNextSteps) {
+    if (showNextSteps === true) {
       window.setTimeout($A.getCallback(function () {
         component.set('v.showNextSteps', true);
       }), 0);

@@ -2,9 +2,7 @@
   showToast: function (component, message, mode) {
     var evt = component.getEvent('toastEvent');
     evt.setParams({
-      show: true,
-      message: message,
-      mode: mode
+      show: true, message: message, mode: mode
     });
     evt.fire();
   },
@@ -15,8 +13,34 @@
     evt.fire();
   },
 
+  setLoading: function (component, isLoading) {
+    component.set('v.modalLoading', isLoading === true);
+    var evt = component.getEvent('loadingEvent');
+    evt.setParam('isLoading', isLoading === true);
+    evt.fire();
+  },
+
+  getUsers: function (component, helper) {
+    helper.hideToast(component);
+    component.set('v.tableLoading', true);
+
+    var getUsers = component.get('c.getUsers');
+
+    getUsers.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        component.set('v.users', response.getReturnValue());
+      } else {
+        helper.showToast(component, _getErrorMessage(response), 'error');
+      }
+      component.set('v.tableLoading', false);
+    });
+
+    $A.enqueueAction(getUsers);
+  },
+
   buildUsersTable: function (component, event, helper) {
-    var docuSignUsers = component.get('v.users');
+    component.set('v.tableLoading', true);
+    var filteredUsers = component.get('v.filteredUsers');
     var userRows = [];
 
     var checkIcon = {
@@ -26,7 +50,7 @@
     };
 
     var currentUserId = $A.get("$SObjectType.CurrentUser.Id");
-    docuSignUsers.forEach(function (user, index) {
+    filteredUsers.forEach(function (user, index) {
       // CurrentUser.Id uses 15-character Id and API returns 18-character version. T.I.S.
       var allowRemove = user.sourceId.indexOf(currentUserId) !== 0;
       userRows.push({
@@ -69,8 +93,10 @@
   },
 
   getUser: function (component, event, helper, userId) {
-    component.set('v.modalLoading', true);
-    var docuSignUsers = component.get('v.docuSignUsers');
+    helper.hideToast(component);
+    helper.setLoading(component, true);
+
+    var users = component.get('v.users');
     var getUser = component.get('c.getUser');
 
     getUser.setParams({
@@ -84,7 +110,7 @@
         if ($A.util.isEmpty(user)) {
           helper.showToast(component, $A.get('$Label.c.UserNotFound'), 'error');
         } else {
-          var userMatches = docuSignUsers.filter(function (u) {
+          var userMatches = users.filter(function (u) {
             return u.sourceId.indexOf(user.Id) === 0;
           });
           if ($A.util.isEmpty(userMatches)) {
@@ -95,41 +121,40 @@
                 email: user.Email, firstName: user.FirstName, lastName: user.LastName, sourceId: user.Id
               }
             });
-            component.set('v.modalLoading', false);
           } else {
             component.set('v.lookupError', true);
             component.find('primaryFooterButton').set('v.disabled', true);
             component.find('lookup').set('v.error', true);
             component.find('lookup').set('v.errorMessage', _format($A.get('$Label.c.AlreadyMember_1'), user.Email));
             component.set('v.formData', {});
-            component.set('v.modalLoading', false);
           }
         }
       } else {
         helper.showToast(component, _getErrorMessage(response), 'error');
       }
+      helper.setLoading(component, false);
     });
     $A.enqueueAction(getUser);
   },
 
-  searchTable: function (component, event, helper) {
-    var searchBy = component.find('searchBy').get('v.value');
-    var users = component.get('v.docuSignUsers');
+  searchTable: function (component, name) {
+    var users = component.get('v.users');
 
-    var updateUsersTable = users.filter(function (user) {
-      return user.name.toUpperCase().match(searchBy.toUpperCase());
+    var filteredUsers = users.filter(function (user) {
+      return user.name.toUpperCase().match(name.toUpperCase());
     });
 
-    if (!$A.util.isEmpty(updateUsersTable)) {
-      component.set('v.users', updateUsersTable);
+    if (!$A.util.isEmpty(filteredUsers)) {
+      component.set('v.filteredUsers', filteredUsers);
     } else {
-      component.set('v.users', []);
+      component.set('v.filteredUsers', []);
     }
   },
 
   createUser: function (component, event, helper) {
     helper.hideToast(component);
-    component.set('v.modalLoading', true);
+    component.set('v.showAddUserModal', false);
+    component.set('v.tableLoading', true);
 
     var addUser = component.get('c.addUser');
     var user = component.get('v.formData.user');
@@ -146,19 +171,18 @@
     addUser.setCallback(this, function (response) {
       var status = response.getState();
       if (status === "SUCCESS") {
-        component.set('v.docuSignUsers', response.getReturnValue());
+        component.set('v.users', response.getReturnValue());
+        component.set('v.lookupValue', null);
+        component.set('v.formData', {});
         helper.showToast(component, _format($A.get('$Label.c.MemberAdded_1'), user.email), 'success');
-        component.set('v.showAddUserModal', false);
-        component.set('v.modalLoading', false);
 
         setTimeout($A.getCallback(function () {
           helper.hideToast(component);
-          component.set('v.lookupValue', null);
-          component.set('v.formData', {});
         }), 3000);
       } else {
         helper.showToast(component, _getErrorMessage(response), 'error');
       }
+      component.set('v.tableLoading', false);
     });
     $A.enqueueAction(addUser);
   },
@@ -166,6 +190,7 @@
   removeUser: function (component, event, helper) {
     helper.hideToast(component);
     component.set('v.showRemoveUserModal', false);
+
     var user = component.get('v.formData.user');
     if ($A.util.isEmpty(user)) {
       helper.setError(component, $A.get('$Label.c.NothingToRemove'));
@@ -181,26 +206,25 @@
         removeFromDocuSign.setCallback(this, function (response) {
           var status = response.getState();
           if (status === "SUCCESS") {
-            component.set('v.docuSignUsers', response.getReturnValue());
+            component.set('v.users', response.getReturnValue());
+            component.set('v.lookupValue', null);
+            component.set('v.formData', {});
             helper.showToast(component, _format($A.get('$Label.c.MemberRemoved_1'), user.email), 'success');
 
             setTimeout($A.getCallback(function () {
               helper.hideToast(component);
-              component.set('v.tableLoading', false);
-              component.set('v.showRemoveUserModal', false);
-              component.set('v.lookupValue', null);
-              component.set('v.formData', {});
             }), 3000);
           } else {
             helper.showToast(component, _getErrorMessage(response), 'error');
           }
+          component.set('v.tableLoading', false);
         });
         $A.enqueueAction(removeFromDocuSign);
       }), 300);
     }
   },
 
-  resetUsersTable: function (component, event, helper) {
-    component.set('v.users', component.get('v.docuSignUsers'));
+  resetUsersTable: function (component) {
+    component.set('v.filteredUsers', component.get('v.users'));
   }
 });

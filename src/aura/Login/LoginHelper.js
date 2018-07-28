@@ -15,6 +15,22 @@
     evt.fire();
   },
 
+  setLoading: function (component, isLoading) {
+    var evt = component.getEvent('loadingEvent');
+    evt.setParams({
+      isLoading: isLoading === true
+    });
+    evt.fire();
+  },
+
+  setLogin: function (component, isLoggedIn) {
+    var evt = component.getEvent('loginEvent');
+    evt.setParams({
+      isLoggedIn: isLoggedIn === true
+    });
+    evt.fire();
+  },
+
   getInputValidity: function (component, inputAuraId, buttonAuraId) {
     var inputs = component.find(inputAuraId, buttonAuraId);
     var isValid = true;
@@ -38,6 +54,7 @@
     helper.hideToast(component);
 
     if (helper.getInputValidity(component, 'password-input', 'login-button')) {
+      helper.setLoading(component, true);
       var loginToDocuSign = component.get('c.login');
       var accountNumber = component.get('v.login.accountNumber');
 
@@ -54,15 +71,15 @@
         if (status === 'SUCCESS') {
           var result = response.getReturnValue();
           if (result.status === 'SelectAccount' && !$A.util.isEmpty(result.accountOptions)) {
-            component.set('v.associatedAccounts', result.accountOptions);
             component.set('v.showAccountSelectionModal', true);
-          } else {
-            component.set('v.login.loggedIn', true);
-            component.set('v.login.accountNumber', result.accountOptions[0].accountNumber);
           }
+          component.set('v.login', result);
+          component.set('v.isTrialExpired', result.isTrial && result.trialStatus && result.trialStatus.isExpired === true);
         } else {
           helper.showToast(component, _getErrorMessage(response), 'error');
         }
+        helper.setLogin(component, true);
+        helper.setLoading(component, false);
       });
       $A.enqueueAction(loginToDocuSign);
     }
@@ -70,6 +87,7 @@
 
   logout: function (component, helper) {
     helper.hideToast(component);
+    helper.setLoading(component, true);
 
     var logout = component.get('c.logout');
 
@@ -98,6 +116,8 @@
       } else {
         helper.showToast(component, _getErrorMessage(response), 'error');
       }
+      helper.setLogin(component, false);
+      helper.setLoading(component, false);
     });
     $A.enqueueAction(logout);
   },
@@ -106,6 +126,7 @@
     helper.hideToast(component);
 
     if (helper.getInputValidity(component, 'trial-input', 'trial-button')) {
+      helper.setLoading(component, true);
       var st = component.get('c.startTrial');
 
       st.setParams({
@@ -122,6 +143,7 @@
         } else {
           helper.showToast(component, _getErrorMessage(response), 'error');
         }
+        helper.setLoading(component, false);
       });
       $A.enqueueAction(st);
     }

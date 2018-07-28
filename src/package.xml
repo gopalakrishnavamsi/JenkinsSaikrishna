@@ -794,6 +794,8 @@
         <members>Recipient</members>
         <members>Loading</members>
         <members>ToastEvent</members>
+        <members>LoadingEvent</members>
+        <members>LoginEvent</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

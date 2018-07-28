@@ -6,7 +6,6 @@
 
 	<aura:method name="close" action="{!c.close}"/>
 	<aura:method name="show" action="{!c.show}"/>
-	<aura:handler name="change" value="{!v.showToast}" action="{!c.toggleToast}"/>
 
 	<div aura:id="toast" class="{!'ds-toast slds-notify_container' + if(v.showToast, ' ds-toast_shown', '') + if(v.inVfPage, ' ds-toast_vf', '')}">
 		<div class="{!'slds-notify slds-notify--toast ' + if(v.mode == 'success', 'slds-theme_success', 'slds-theme_error')}" role="alert">
