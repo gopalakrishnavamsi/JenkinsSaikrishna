@@ -994,7 +994,7 @@
 		<name>AddToDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to this DocuSign integration by adding them to the list
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list
 			below. Each new user will automatically be added to the DocuSign account.
 		</label>
 		<name>AddToDocuSignDetails</name>
@@ -1077,7 +1077,7 @@
 		<name>EnableSalesforceUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to this DocuSign integration.</label>
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>
 		<name>SelectSalesforceUsers</name>
 	</customLabels>
 	<customLabels>

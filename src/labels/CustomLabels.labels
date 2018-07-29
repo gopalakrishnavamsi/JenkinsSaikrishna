@@ -1922,9 +1922,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign details</shortDescription>
-		<value>Select which Salesforce users will have access to this DocuSign integration by adding them to the list
-			below. Each new user will automatically be added to the DocuSign account.
-		</value>
+		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
 	</labels>
 	<labels>
 		<fullName>AddUser</fullName>
@@ -2085,7 +2083,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select Salesforce users</shortDescription>
-		<value>Select which Salesforce users will have access to this DocuSign integration.</value>
+		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
 	</labels>
 	<labels>
 		<fullName>AddDocuSignButtons</fullName>
