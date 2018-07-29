@@ -211,6 +211,7 @@ public with sharing class AccountService {
 		}
 
 		if (Collection.isEmpty(memberships)) {
+			LOG.warn('No valid ' + target.name() + ' accounts for user ' + username);
 			throw new DocuSignException(Label.NoValidAccounts);
 		}
 
@@ -227,7 +228,7 @@ public with sharing class AccountService {
 
 		// 4) Save results if only one account is filtered, or return list for user selection.
 		LoginStatus status = null;
-		if (options.size() == 1) {
+		if (Collection.size(options) == 1) {
 			Environment ae = Environment.fromUrl(validMembership.baseUrl);
 			LOG.debug('AccountService.login: account base URL = ' + validMembership.baseUrl.toExternalForm()
 				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
@@ -268,8 +269,388 @@ public with sharing class AccountService {
 	}
 
 	/**
+	 * Represents a country option.
+ 	 */
+	public class Country {
+		/**
+		 * The ISO-2 country code.
+		 */
+		@AuraEnabled
+		public String code { get; private set; }
+		/**
+		 * The country label.
+		 */
+		@AuraEnabled
+		public String label { get; private set; }
+
+		private Country(final String code, final String label) {
+			this.code = code;
+			this.label = label;
+		}
+	}
+
+	/**
+	 * Marketing opt-in settings for trial account sign-up.
+	 */
+	public class Marketing {
+		/**
+		 * Whether to display the marketing opt-in option during trial account sign-up.
+		 */
+		@AuraEnabled
+		public Boolean showOptIn { get; private set; }
+		/**
+		 * The default marketing opt-in value.
+		 */
+		@AuraEnabled
+		public Boolean defaultOptIn { get; private set; }
+
+		private Marketing(final Boolean showOptIn, final Boolean defaultOptIn) {
+			this.showOptIn = showOptIn;
+			this.defaultOptIn = defaultOptIn;
+		}
+	}
+
+	/**
+	 * Trial account settings for the current user.
+	 * <p>
+	 * <em>Marketing opt-in settings must be honored based on the user-selected country to comply with GDPR and other
+	 * local regulations.</em>
+	 */
+	public class TrialAccount {
+		/**
+		 * The prepared trial account with default options set based on the current Salesforce user record.
+		 * <p>
+		 * <em>The user must be able to select their country before provisioning the trial account. Based on their
+		 * selection, appropriate opt-in settings must be displayed. This selection must be based on the
+		 * <code>account.user.countryCode</code>.</em>
+		 */
+		@AuraEnabled
+		public Account.Trial account { get; private set; }
+		/**
+		 * List of user-selectable countries.
+		 */
+		@AuraEnabled
+		public List<Country> countries { get; private set; }
+		/**
+		 * Map of ISO-2 country codes to marketing opt-in settings. If a country code is not explicitly contained in
+		 * this map, use key <code>DEFAULT</code>.
+		 */
+		@AuraEnabled
+		public Map<String, Marketing> marketing { get; private set; }
+
+		@TestVisible
+		private TrialAccount(final Account.Trial account, final List<Country> countries,
+			final Map<String, Marketing> marketing) {
+
+			this.account = account;
+			this.countries = countries;
+			this.marketing = marketing;
+		}
+	}
+
+	@TestVisible
+	private static List<Country> getCountries() {
+		return new List<Country> {
+			new Country('AF', Label.Afghanistan),
+			new Country('AX', Label.AlandIslands),
+			new Country('AL', Label.Albania),
+			new Country('DZ', Label.Algeria),
+			new Country('AS', Label.AmericanSamoa),
+			new Country('AD', Label.Andorra),
+			new Country('AO', Label.Angola),
+			new Country('AI', Label.Anguilla),
+			new Country('AQ', Label.Antarctica),
+			new Country('AG', Label.AntiguaAndBarbuda),
+			new Country('AR', Label.Argentina),
+			new Country('AM', Label.Armenia),
+			new Country('AW', Label.Aruba),
+			new Country('AU', Label.Australia),
+			new Country('AT', Label.Austria),
+			new Country('AZ', Label.Azerbaijan),
+			new Country('BS', Label.Bahamas),
+			new Country('BH', Label.Bahrain),
+			new Country('BD', Label.Bangladesh),
+			new Country('BB', Label.Barbados),
+			new Country('BY', Label.Belarus),
+			new Country('BE', Label.Belgium),
+			new Country('BZ', Label.Belize),
+			new Country('BJ', Label.Benin),
+			new Country('BM', Label.Bermuda),
+			new Country('BT', Label.Bhutan),
+			new Country('BO', Label.Bolivia),
+			new Country('BA', Label.BosniaAndHerzegovina),
+			new Country('BW', Label.Botswana),
+			new Country('BV', Label.BouvetIsland),
+			new Country('BR', Label.Brazil),
+			new Country('IO', Label.BritishIndiaOceanTerritory),
+			new Country('VG', Label.BritishVirginIslands),
+			new Country('BN', Label.Brunei),
+			new Country('BG', Label.Bulgaria),
+			new Country('BF', Label.BurkinaFaso),
+			new Country('BI', Label.Burundi),
+			new Country('KH', Label.Cambodia),
+			new Country('CM', Label.Cameroon),
+			new Country('CA', Label.Canada),
+			new Country('CV', Label.CapeVerde),
+			new Country('BQ', Label.CaribbeanNetherlands),
+			new Country('KY', Label.CaymanIslands),
+			new Country('CF', Label.CentralAfricanRepublic),
+			new Country('TD', Label.Chad),
+			new Country('CL', Label.Chile),
+			new Country('CN', Label.China),
+			new Country('CX', Label.ChristmasIsland),
+			new Country('CC', Label.CocosKeelingIslands),
+			new Country('CO', Label.Colombia),
+			new Country('KM', Label.Comoros),
+			new Country('CG', Label.CongoBrazzaville),
+			new Country('CD', Label.CongoKinshasa),
+			new Country('CK', Label.CookIslands),
+			new Country('CR', Label.CostaRica),
+			new Country('HR', Label.Croatia),
+			new Country('CU', Label.Cuba),
+			new Country('CW', Label.Curacao),
+			new Country('CY', Label.Cyprus),
+			new Country('CZ', Label.CzechRepublic),
+			new Country('DK', Label.Denmark),
+			new Country('DJ', Label.Djibouti),
+			new Country('DM', Label.Dominica),
+			new Country('DO', Label.DominicanRepublic),
+			new Country('EC', Label.Ecuador),
+			new Country('EG', Label.Egypt),
+			new Country('SV', Label.ElSalvador),
+			new Country('GQ', Label.EquatorialGuinea),
+			new Country('ER', Label.Eritrea),
+			new Country('EE', Label.Estonia),
+			new Country('ET', Label.Ethiopia),
+			new Country('FK', Label.FalklandIslands),
+			new Country('FO', Label.FaroeIslands),
+			new Country('FJ', Label.Fiji),
+			new Country('FI', Label.Finland),
+			new Country('FR', Label.France),
+			new Country('GF', Label.FrenchGuiana),
+			new Country('PF', Label.FrenchPolynesia),
+			new Country('TF', Label.FrenchSouthernTerritories),
+			new Country('GA', Label.Gabon),
+			new Country('GM', Label.Gambia),
+			new Country('GE', Label.Georgia),
+			new Country('DE', Label.Germany),
+			new Country('GH', Label.Ghana),
+			new Country('GI', Label.Gibraltar),
+			new Country('GR', Label.Greece),
+			new Country('GL', Label.Greenland),
+			new Country('GD', Label.Grenada),
+			new Country('GP', Label.Guadeloupe),
+			new Country('GU', Label.Guam),
+			new Country('GT', Label.Guatemala),
+			new Country('GG', Label.Guernsey),
+			new Country('GN', Label.Guinea),
+			new Country('GW', Label.GuineaBissau),
+			new Country('GY', Label.Guyana),
+			new Country('HT', Label.Haiti),
+			new Country('HM', Label.HeardandMcDonaldIslands),
+			new Country('HN', Label.Honduras),
+			new Country('HK', Label.HongKong),
+			new Country('HU', Label.Hungary),
+			new Country('IS', Label.Iceland),
+			new Country('IN', Label.India),
+			new Country('ID', Label.Indonesia),
+			new Country('IR', Label.Iran),
+			new Country('IQ', Label.Iraq),
+			new Country('IE', Label.Ireland),
+			new Country('IM', Label.IsleOfMan),
+			new Country('IL', Label.Israel),
+			new Country('IT', Label.Italy),
+			new Country('CI', Label.IvoryCoast),
+			new Country('JM', Label.Jamaica),
+			new Country('JP', Label.Japan),
+			new Country('JE', Label.Jersey),
+			new Country('JO', Label.Jordan),
+			new Country('KZ', Label.Kazakhstan),
+			new Country('KE', Label.Kenya),
+			new Country('KI', Label.Kiribati),
+			new Country('KW', Label.Kuwait),
+			new Country('KG', Label.Kyrgyzstan),
+			new Country('LA', Label.Laos),
+			new Country('LV', Label.Latvia),
+			new Country('LB', Label.Lebanon),
+			new Country('LS', Label.Lesotho),
+			new Country('LR', Label.Liberia),
+			new Country('LY', Label.Libya),
+			new Country('LI', Label.Liechtenstein),
+			new Country('LT', Label.Lithuania),
+			new Country('LU', Label.Luxembourg),
+			new Country('MO', Label.Macau),
+			new Country('MK', Label.Macedonia),
+			new Country('MG', Label.Madagascar),
+			new Country('MW', Label.Malawi),
+			new Country('MY', Label.Malaysia),
+			new Country('MV', Label.Maldives),
+			new Country('ML', Label.Mali),
+			new Country('MT', Label.Malta),
+			new Country('MH', Label.MarshallIslands),
+			new Country('MQ', Label.Martinique),
+			new Country('MR', Label.Mauritania),
+			new Country('MU', Label.Mauritius),
+			new Country('YT', Label.Mayotte),
+			new Country('MX', Label.Mexico),
+			new Country('FM', Label.Micronesia),
+			new Country('MD', Label.Moldova),
+			new Country('MC', Label.Monaco),
+			new Country('MN', Label.Mongolia),
+			new Country('ME', Label.Montenegro),
+			new Country('MS', Label.Montserrat),
+			new Country('MA', Label.Morocco),
+			new Country('MZ', Label.Mozambique),
+			new Country('MM', Label.Myanmar),
+			new Country('NA', Label.Namibia),
+			new Country('NR', Label.Nauru),
+			new Country('NP', Label.Nepal),
+			new Country('NL', Label.Netherlands),
+			new Country('NC', Label.NewCaledonia),
+			new Country('NZ', Label.NewZealand),
+			new Country('NI', Label.Nicaragua),
+			new Country('NE', Label.Niger),
+			new Country('NG', Label.Nigeria),
+			new Country('NU', Label.Niue),
+			new Country('NF', Label.NorfolkIsland),
+			new Country('KP', Label.NorthKorea),
+			new Country('MP', Label.NorthernMarianaIslands),
+			new Country('NO', Label.Norway),
+			new Country('OM', Label.Oman),
+			new Country('PK', Label.Pakistan),
+			new Country('PW', Label.Palau),
+			new Country('PS', Label.PalestinianTerritory),
+			new Country('PA', Label.Panama),
+			new Country('PG', Label.PapuaNewGuinea),
+			new Country('PY', Label.Paraguay),
+			new Country('PE', Label.Peru),
+			new Country('PH', Label.Philippines),
+			new Country('PN', Label.Pitcairn),
+			new Country('PL', Label.Poland),
+			new Country('PT', Label.Portugal),
+			new Country('PR', Label.PuertoRico),
+			new Country('QA', Label.Qatar),
+			new Country('RE', Label.Reunion),
+			new Country('RO', Label.Romania),
+			new Country('RU', Label.RussianFederation),
+			new Country('RW', Label.Rwanda),
+			new Country('BL', Label.SaintBarthelemy),
+			new Country('SH', Label.SaintHelena),
+			new Country('KN', Label.SaintKittsAndNevis),
+			new Country('LC', Label.SaintLucia),
+			new Country('MF', Label.SaintMartinFrance),
+			new Country('PM', Label.SaintPierreAndMiquelon),
+			new Country('VC', Label.SaintVincentAndTheGrenadines),
+			new Country('WS', Label.Samoa),
+			new Country('SM', Label.SanMarino),
+			new Country('ST', Label.SaoTomeAndPrincipe),
+			new Country('SA', Label.SaudiArabia),
+			new Country('SN', Label.Senegal),
+			new Country('RS', Label.Serbia),
+			new Country('SC', Label.Seychelles),
+			new Country('SL', Label.SierraLeone),
+			new Country('SG', Label.Singapore),
+			new Country('SX', Label.SintMaarten),
+			new Country('SK', Label.Slovakia),
+			new Country('SI', Label.Slovenia),
+			new Country('SB', Label.SolomonIslands),
+			new Country('SO', Label.Somalia),
+			new Country('ZA', Label.SouthAfrica),
+			new Country('GS', Label.SouthGeorgiaAndTheSouthSandwichIslands),
+			new Country('KR', Label.SouthKorea),
+			new Country('SS', Label.SouthSudan),
+			new Country('ES', Label.Spain),
+			new Country('LK', Label.SriLanka),
+			new Country('SD', Label.Sudan),
+			new Country('SR', Label.Suriname),
+			new Country('SJ', Label.SvalbardAndJanMayen),
+			new Country('SZ', Label.Swaziland),
+			new Country('SE', Label.Sweden),
+			new Country('CH', Label.Switzerland),
+			new Country('SY', Label.Syria),
+			new Country('TW', Label.Taiwan),
+			new Country('TJ', Label.Tajikistan),
+			new Country('TZ', Label.Tanzania),
+			new Country('TH', Label.Thailand),
+			new Country('TL', Label.TimorLeste),
+			new Country('TG', Label.Togo),
+			new Country('TK', Label.Tokelau),
+			new Country('TO', Label.Tonga),
+			new Country('TT', Label.TrinidadAndTobago),
+			new Country('TN', Label.Tunisia),
+			new Country('TR', Label.Turkey),
+			new Country('TM', Label.Turkmenistan),
+			new Country('TC', Label.TurksAndCaicoIslands),
+			new Country('TV', Label.Tuvalu),
+			new Country('VI', Label.USVirginIslands),
+			new Country('UG', Label.Uganda),
+			new Country('UA', Label.Ukraine),
+			new Country('AE', Label.UnitedArabEmirates),
+			new Country('GB', Label.UnitedKingdom),
+			new Country('US', Label.UnitedStates),
+			new Country('UM', Label.UnitedStatesMinorOutlyingIslands),
+			new Country('UY', Label.Uruguay),
+			new Country('UZ', Label.Uzbekistan),
+			new Country('VU', Label.Vanuatu),
+			new Country('VA', Label.Vatican),
+			new Country('VE', Label.Venezuela),
+			new Country('VN', Label.Vietnam),
+			new Country('WF', Label.WallisAndFutuna),
+			new Country('EH', Label.WesternSahara),
+			new Country('YE', Label.Yemen),
+			new Country('ZM', Label.Zambia),
+			new Country('ZW', Label.Zimbabwe)
+		};
+	}
+
+	@TestVisible
+	private static Map<String, Marketing> getMarketing() {
+		return new Map<String, Marketing> {
+			'DEFAULT' => new Marketing(true, true),
+			'US' => new Marketing(false, true),
+			'DE' => new Marketing(true, false),
+			'AU' => new Marketing(true, false),
+			'NZ' => new Marketing(true, false),
+			'JP' => new Marketing(true, false),
+			'CN' => new Marketing(true, false),
+			'TW' => new Marketing(true, false),
+			'VN' => new Marketing(true, false),
+			'AT' => new Marketing(true, false),
+			'BE' => new Marketing(true, false),
+			'BG' => new Marketing(true, false),
+			'HR' => new Marketing(true, false),
+			'CY' => new Marketing(true, false),
+			'CZ' => new Marketing(true, false),
+			'DK' => new Marketing(true, false),
+			'EE' => new Marketing(true, false),
+			'FI' => new Marketing(true, false),
+			'FR' => new Marketing(true, false),
+			'GR' => new Marketing(true, false),
+			'HU' => new Marketing(true, false),
+			'IE' => new Marketing(true, false),
+			'IT' => new Marketing(true, false),
+			'LV' => new Marketing(true, false),
+			'LT' => new Marketing(true, false),
+			'LU' => new Marketing(true, false),
+			'MT' => new Marketing(true, false),
+			'NL' => new Marketing(true, false),
+			'PL' => new Marketing(true, false),
+			'PT' => new Marketing(true, false),
+			'RO' => new Marketing(true, false),
+			'SK' => new Marketing(true, false),
+			'SI' => new Marketing(true, false),
+			'ES' => new Marketing(true, false),
+			'SE' => new Marketing(true, false),
+			'GB' => new Marketing(true, false)
+		};
+	}
+
+	/**
 	 * Prepares a DocuSign for Salesforce trial account based on the current Salesforce user. This account is not
 	 * actually created at DocuSign. A subsequent call must be made to AccountService.createTrial to do so.
+	 * <p>
+	 * <em>This must be called prior to creating the trial account to provide the user the option to select their
+	 * country and display appropriate marketing consent and opt-in options.</em>
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
@@ -278,16 +659,18 @@ public with sharing class AccountService {
 	 * @return A DocuSign trial account that may be used in subsequent calls.
 	 * @see AccountService.createTrial for trial account creation details.
 	 */
-	public static Account.Trial prepareTrial(final String email) {
+	public static TrialAccount prepareTrial(final String email) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		User u = DB.queryUser(UserInfo.getUserId());
-		return new Account.Trial(
+		return new TrialAccount(new Account.Trial(
 			UserInfo.getOrganizationName(),
 			new Account.TrialUser(
 				email,
 				UserInfo.getFirstName(),
-				UserInfo.getLastName()),
+				UserInfo.getLastName(),
+				u.Country,
+				false),
 			new Account.Address(
 				u.Street,
 				null,
@@ -295,8 +678,9 @@ public with sharing class AccountService {
 				u.State,
 				u.PostalCode,
 				u.Country,
-				String.isBlank(u.Phone) ? u.MobilePhone : u.Phone),
-			false);
+				String.isBlank(u.Phone) ? u.MobilePhone : u.Phone)),
+			getCountries(),
+			getMarketing());
 	}
 
 	/**
@@ -307,8 +691,9 @@ public with sharing class AccountService {
 	 *     <li>The trial account is non-null</li>
 	 *     <li>The trial email is a valid email address</li>
 	 *     <li>The trial user's name is not blank</li>
+	 *     <li>The trial user's country code is not blank</li>
+	 *     <li>The trial user's marketing opt-in preference is not <code>null</code></li>
 	 *     <li>The trial company is not blank</li>
-	 *     <li>The trial user has agreed to DocuSign's terms and conditions.</li>
 	 * </ul>
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
@@ -336,19 +721,30 @@ public with sharing class AccountService {
 		if (trial == null) {
 			result.add(Label.UndefinedArgument);
 		} else {
-			if (trial.user == null || String.isBlank(trial.user.email)) {
+			if (trial.user == null) {
 				result.add(Label.EmailRequired);
-			} else if (trial.user != null && !StringUtils.isValidEmail(trial.user.email)) {
-				result.add(Label.InvalidEmail);
-			}
-			if (trial.user == null || String.isBlank(trial.user.name)) {
 				result.add(Label.NameRequired);
+				result.add(Label.UserCountryRequired);
+				result.add(Label.MarketingPreferenceRequired);
+			} else {
+				if (String.isBlank(trial.user.email)) {
+					result.add(Label.EmailRequired);
+				}
+				if (!StringUtils.isValidEmail(trial.user.email)) {
+					result.add(Label.InvalidEmail);
+				}
+				if (String.isBlank(trial.user.name)) {
+					result.add(Label.NameRequired);
+				}
+				if (String.isBlank(trial.user.countryCode)) {
+					result.add(Label.UserCountryRequired);
+				}
+				if (trial.user.marketingOptIn == null) {
+					result.add(Label.MarketingPreferenceRequired);
+				}
 			}
 			if (String.isBlank(trial.company)) {
 				result.add(Label.CompanyRequired);
-			}
-			if (!trial.termsAccepted) {
-				result.add(Label.MustAgreeToTCs);
 			}
 		}
 		return result;

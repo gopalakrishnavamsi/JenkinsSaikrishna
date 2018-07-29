@@ -162,7 +162,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String baseUrl;
 
 		public Account.Membership toExternalForm() {
-			final Url aUrl = String.isBlank(baseUrl) ? null : new Url(baseUrl);
 			return new Account.Membership(
 				Long.valueOf(accountId),
 				UUID.fromString(accountIdGuid),
@@ -498,8 +497,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	public List<Account.Membership> getValidAccounts(final Integer timeout) {
-		if (this.baseUrl == null || this.username == null || String.isBlank(this.password))
+		if (this.baseUrl == null || this.username == null || String.isBlank(this.password)) {
 			throw new DocuSignException(Label.AccountNotConfigured);
+		}
 
 		List<Account.Membership> result = new List<Account.Membership>();
 		List<Account.Membership> memberships = this.getAccounts(
@@ -577,6 +577,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String apiPassword;
 		public ErrorDetails errorDetails;
 		public String enableConnectForUser;
+		public String countryCode;
+		public String subscribe;
 
 		public APIUser(final Account.User user) {
 			this.userId = UUID.toString(user.id);
@@ -601,6 +603,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				new Setting('canManageAccount', 'true'),
 				new Setting('canSendEnvelope', 'true')
 			};
+			this.countryCode = user.countryCode;
+			this.subscribe = String.valueOf(user.marketingOptIn);
 		}
 
 		private APIError errorExternalForm() {
@@ -619,7 +623,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 
 		public Account.User toExternalForm(final Id sourceId, final Boolean canManageAccount) {
-
 			Boolean isAdmin = canManageAccount;
 			Boolean isSender = true;
 			if (this.userSettings != null) {

@@ -480,6 +480,19 @@ public class Account {
 				return StringUtils.mkName(firstName, lastName);
 			}
 		}
+		/**
+		 * The two character ISO-2 country code for the user.
+		 */
+		@AuraEnabled
+		public String countryCode { get; private set; }
+		/**
+		 * Whether or not the user has opted-in to marketing communications.
+		 * <p>
+		 * <em>This must be set based on user choice for non-US countries to comply with GDPR and other local
+		 * regulations.</em>
+		 */
+		@AuraEnabled
+		public Boolean marketingOptIn { get; private set; }
 
 		/**
 		 * Constructs a DocuSign trial account user.
@@ -487,11 +500,17 @@ public class Account {
 		 * @param email The user's email.
 		 * @param firstName The user's first name.
 		 * @param lastName The user's last name.
+		 * @param countryCode The two character ISO-2 country code for the user.
+		 * @param marketingOptIn Whether or not the user has opted-in to marketing communications.
 		 */
-		public TrialUser(final String email, final String firstName, final String lastName) {
+		public TrialUser(final String email, final String firstName, final String lastName, final String countryCode,
+			final Boolean marketingOptIn) {
+
 			this.email = email;
 			this.firstName = firstName;
 			this.lastName = lastName;
+			this.countryCode = countryCode;
+			this.marketingOptIn = marketingOptIn;
 		}
 	}
 
@@ -514,11 +533,6 @@ public class Account {
 		 */
 		@AuraEnabled
 		public Address address { get; private set; }
-		/**
-		 * Whether or not DocuSign trial account terms and conditions have been accepted.
-		 */
-		@AuraEnabled
-		public Boolean termsAccepted { get; private set; }
 
 		/**
 		 * Constructs a trial account.
@@ -526,23 +540,11 @@ public class Account {
 		 * @param company The trial account company.
 		 * @param user The trial account user.
 		 * @param address The trial account address.
-		 * @param termsAccepted Whether or not DocuSign trial account terms and conditions have been accepted.
 		 */
-		public Trial(final String company, final TrialUser user, final Address address, final Boolean termsAccepted) {
+		public Trial(final String company, final TrialUser user, final Address address) {
 			this.company = company;
 			this.user = user;
 			this.address = address;
-			this.termsAccepted = termsAccepted;
-		}
-
-		/**
-		 * Accepts DocuSign trial account terms and conditions.
-		 *
-		 * @return The trial account with <code>termsAccepted</code> set to <code>true</code>.
-		 */
-		public Trial acceptTermsAndConditions() {
-			this.termsAccepted = true;
-			return this;
 		}
 	}
 

@@ -85,11 +85,11 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static LoginInformation login(final String dsUsername, final String dsPassword,
-		final String dsEnvironment, final String dsUrl, final Long dsAccountNumber) {
+		final String dsEnvironment, final String dsUrl, final Integer dsAccountNumber) {
 
 		try {
 			return getLogin(AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
-				String.isBlank(dsUrl) ? null : new Url(dsUrl), dsAccountNumber));
+				String.isBlank(dsUrl) ? null : new Url(dsUrl), Integer.valueOf(dsAccountNumber)));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to log into DocuSign.');
 		}
@@ -114,10 +114,18 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Account.Membership startTrial(final String email) {
+	public static AccountService.TrialAccount prepareTrial(final String email) {
 		try {
-			Account.Trial trial = AccountService.prepareTrial(email);
-			return AccountService.createTrial(trial.acceptTermsAndConditions());
+			return AccountService.prepareTrial(email);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to prepare DocuSign trial');
+		}
+	}
+
+	@AuraEnabled
+	public static Account.Membership startTrial(final String trialJson) {
+		try {
+			return AccountService.createTrial((Account.Trial)JSON.deserialize(trialJson, Account.Trial.class));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to create DocuSign trial.');
 		}

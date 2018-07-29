@@ -56,6 +56,7 @@
       if (showingTrialFields) {
         component.find('login-input').focus();
       } else {
+        helper.prepareTrial(component, helper);
         component.find('trial-input').focus();
       }
     }), 1);
@@ -82,5 +83,18 @@
 
   toggleAdvancedOptions: function (component, event, helper) {
     component.set('v.advancedOptionsExpanded', !component.get('v.advancedOptionsExpanded'));
+  },
+
+  handleUserCountryChange: function (component, event, helper) {
+    var marketing = component.get('v.marketing');
+    if (!$A.util.isEmpty(marketing)) {
+      var countryCode = component.get('v.userCountryCode');
+      var countryMarketing = marketing.hasOwnProperty(countryCode) ? marketing[countryCode] : marketing['DEFAULT'];
+      component.set('v.marketingOptInEnabled', countryMarketing.showOptIn === true);
+      var user = component.get('v.trialAccount.user');
+      user.countryCode = countryCode;
+      user.marketingOptIn = countryMarketing.defaultOptIn === true;
+      component.set('v.trialAccount.user', user);
+    }
   }
 });

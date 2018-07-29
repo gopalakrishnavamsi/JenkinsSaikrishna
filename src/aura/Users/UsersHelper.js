@@ -1,23 +1,33 @@
 ({
   showToast: function (component, message, mode) {
     var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: true, message: message, mode: mode
-    });
-    evt.fire();
+    if (!$A.util.isUndefinedOrNull(evt)) {
+      evt.setParams({
+        show: true, message: message, mode: mode
+      });
+      evt.fire();
+    }
   },
 
   hideToast: function (component) {
     var evt = component.getEvent('toastEvent');
-    evt.setParam('show', false);
-    evt.fire();
+    if (!$A.util.isUndefinedOrNull(evt)) {
+      evt.setParams({
+        show: false
+      });
+      evt.fire();
+    }
   },
 
   setLoading: function (component, isLoading) {
     component.set('v.modalLoading', isLoading === true);
     var evt = component.getEvent('loadingEvent');
-    evt.setParam('isLoading', isLoading === true);
-    evt.fire();
+    if (!$A.util.isUndefinedOrNull(evt)) {
+      evt.setParams({
+        isLoading: isLoading === true
+      });
+      evt.fire();
+    }
   },
 
   getUsers: function (component, helper) {

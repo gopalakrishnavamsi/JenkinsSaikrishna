@@ -122,15 +122,44 @@
     $A.enqueueAction(logout);
   },
 
+  prepareTrial: function (component, helper) {
+    helper.hideToast(component);
+    helper.setLoading(component, true);
+
+    var pt = component.get('c.prepareTrial');
+
+    pt.setParams({
+      email: component.get('v.login.email')
+    });
+
+    pt.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        var trialPrep = response.getReturnValue();
+        component.set('v.countries', trialPrep.countries);
+        component.set('v.marketing', trialPrep.marketing);
+        component.set('v.trialAccount', trialPrep.account);
+        component.set('v.userCountryCode', trialPrep.account.user.countryCode);
+      } else {
+        helper.showToast(component, _getErrorMessage(response), 'error');
+      }
+      helper.setLoading(component, false);
+    });
+
+    $A.enqueueAction(pt);
+  },
+
   startTrial: function (component, helper) {
     helper.hideToast(component);
 
     if (helper.getInputValidity(component, 'trial-input', 'trial-button')) {
       helper.setLoading(component, true);
+      var trial = component.get('v.trialAccount');
+      trial.user.email = component.get('v.login.email');
+
       var st = component.get('c.startTrial');
 
       st.setParams({
-        email: component.get('v.login.email')
+        trialJson: JSON.stringify(trial)
       });
 
       st.setCallback(this, function (response) {
@@ -139,6 +168,8 @@
           var account = response.getReturnValue();
           component.set('v.login.isTrial', true);
           component.set('v.login.accountNumber', account.accountNumber);
+          component.set('v.login.environment', 'Production');
+          component.set('v.login.otherUrl', null);
           component.set('v.signedUpForTrial', true);
         } else {
           helper.showToast(component, _getErrorMessage(response), 'error');
