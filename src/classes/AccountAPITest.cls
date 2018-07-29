@@ -865,9 +865,8 @@ private class AccountAPITest {
 		Account.Membership result = AccountAPI.getInstance(Environment.production)
 			.createTrialAccount(new Account.Trial(
 				'UNIT TEST',
-				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-				new Account.Address(null, null, null, null, null, null, null),
-				true));
+				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+				new Account.Address(null, null, null, null, null, null, null)));
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -893,9 +892,8 @@ private class AccountAPITest {
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'UNIT TEST',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex1) {
 				ex = ex1;
@@ -952,15 +950,13 @@ private class AccountAPITest {
 			Test.startTest();
 			Account.Membership a = client.createTrialAccount(new Account.Trial(
 				'no_results',
-				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-				new Account.Address(null, null, null, null, null, null, null),
-				true));
+				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+				new Account.Address(null, null, null, null, null, null, null)));
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'UNIT TEST',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex) {
 				ex1 = ex;
@@ -968,9 +964,8 @@ private class AccountAPITest {
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'no_message',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex) {
 				ex2 = ex;
@@ -978,9 +973,8 @@ private class AccountAPITest {
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'member_email_not_allowed',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex) {
 				ex3 = ex;
@@ -988,9 +982,8 @@ private class AccountAPITest {
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'member_already_exists',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex) {
 				ex4 = ex;
@@ -998,9 +991,8 @@ private class AccountAPITest {
 			try {
 				client.createTrialAccount(new Account.Trial(
 					'member_awaiting_activation',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test'),
-					new Account.Address(null, null, null, null, null, null, null),
-					true));
+					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
+					new Account.Address(null, null, null, null, null, null, null)));
 				throw new AssertException('Expected createTrialAccount to fail');
 			} catch (APIException ex) {
 				ex5 = ex;

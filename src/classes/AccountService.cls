@@ -663,6 +663,7 @@ public with sharing class AccountService {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		User u = DB.queryUser(UserInfo.getUserId());
+		Map<String, Marketing> marketing = getMarketing();
 		return new TrialAccount(new Account.Trial(
 			UserInfo.getOrganizationName(),
 			new Account.TrialUser(
@@ -670,7 +671,7 @@ public with sharing class AccountService {
 				UserInfo.getFirstName(),
 				UserInfo.getLastName(),
 				u.Country,
-				false),
+				marketing.containsKey(u.Country) && marketing.get(u.Country).defaultOptIn),
 			new Account.Address(
 				u.Street,
 				null,
@@ -680,7 +681,7 @@ public with sharing class AccountService {
 				u.Country,
 				String.isBlank(u.Phone) ? u.MobilePhone : u.Phone)),
 			getCountries(),
-			getMarketing());
+			marketing);
 	}
 
 	/**
@@ -729,8 +730,7 @@ public with sharing class AccountService {
 			} else {
 				if (String.isBlank(trial.user.email)) {
 					result.add(Label.EmailRequired);
-				}
-				if (!StringUtils.isValidEmail(trial.user.email)) {
+				} else if (!StringUtils.isValidEmail(trial.user.email)) {
 					result.add(Label.InvalidEmail);
 				}
 				if (String.isBlank(trial.user.name)) {

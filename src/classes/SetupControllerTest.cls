@@ -148,14 +148,42 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
+	static void test_prepareTrial_success() {
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			Test.startTest();
+			AccountService.TrialAccount result = SetupController.prepareTrial('u@unit.test');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_prepareTrial_failure() {
+		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+			Test.startTest();
+			try {
+				SetupController.prepareTrial(null);
+				throw new AssertException('Expected prepareTrial to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_startTrial_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
+			Account.Trial t = new Account.Trial('UNIT TEST', new Account.TrialUser(
+				'u@unit.test', 'UNIT', 'TEST', 'US', true
+			), null);
 
 			Test.startTest();
-			Account.Membership result = SetupController.startTrial('u@unit.test');
+			Account.Membership result = SetupController.startTrial(JSON.serialize(t));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -167,7 +195,7 @@ private class SetupControllerTest {
 		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
 			Test.startTest();
 			try {
-				SetupController.startTrial(null);
+				SetupController.startTrial('{}');
 				throw new AssertException('Expected startTrial to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -182,9 +210,10 @@ private class SetupControllerTest {
 
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
+			User u = TestUtils.createUser();
 
 			Test.startTest();
-			List<Account.User> result = SetupController.addUser(UserInfo.getUserId(), 'u@unit.test', 'Unit', 'Test', false);
+			List<Account.User> result = SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));

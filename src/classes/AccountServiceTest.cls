@@ -242,7 +242,7 @@ private class AccountServiceTest {
 	}
 
 	class NoAccountsMock implements HttpCalloutMock {
-		public HTTPResponse respond(final HTTPRequest request) {
+		public HttpResponse respond(final HttpRequest request) {
 			final HttpResponse response = new HttpResponse();
 			response.setHeader('Content-Type', 'application/json; charset=UTF-8');
 			final String reqUrl = request.getEndpoint();
@@ -272,7 +272,7 @@ private class AccountServiceTest {
 	}
 
 	private class MultipleAccountMock implements HttpCalloutMock {
-		public HTTPResponse respond(final HTTPRequest request) {
+		public HttpResponse respond(final HttpRequest request) {
 			final String endpoint = request.getEndpoint();
 			final HttpResponse response = new HttpResponse();
 			response.setHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -403,12 +403,14 @@ private class AccountServiceTest {
 	@IsTest
 	static void test_validate_Account_Trial() {
 		Account.Trial a1 = null;
-		Account.Trial a2 = new Account.Trial(null, new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, true);
-		Account.Trial a3 = new Account.Trial('Unit Test', null, null, true);
-		Account.Trial a4 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', null, null), null, true);
-		Account.Trial a5 = new Account.Trial('Unit Test', new Account.TrialUser('bad-email', 'Unit', 'Test'), null, true);
-		Account.Trial a6 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, false);
-		Account.Trial a7 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, true);
+		Account.Trial a2 = new Account.Trial(null, new Account.TrialUser('u@unit.test', 'Unit', 'Test', 'US', true), null);
+		Account.Trial a3 = new Account.Trial('Unit Test', null, null);
+		Account.Trial a4 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', null, null, 'US', true), null);
+		Account.Trial a5 = new Account.Trial('Unit Test', new Account.TrialUser('bad-email', 'Unit', 'Test', 'US', true), null);
+		Account.Trial a6 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test', null, true), null);
+		Account.Trial a7 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test', 'US', true), null);
+		Account.Trial a8 = new Account.Trial('Unit Test', new Account.TrialUser(null, 'Unit', 'Test', 'US', true), null);
+		Account.Trial a9 = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test', 'US', null), null);
 
 		Test.startTest();
 		ValidationResult result1 = AccountService.validate(a1);
@@ -418,6 +420,8 @@ private class AccountServiceTest {
 		ValidationResult result5 = AccountService.validate(a5);
 		ValidationResult result6 = AccountService.validate(a6);
 		ValidationResult result7 = AccountService.validate(a7);
+		ValidationResult result8 = AccountService.validate(a8);
+		ValidationResult result9 = AccountService.validate(a9);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -435,9 +439,11 @@ private class AccountServiceTest {
 		System.assertNotEquals(null, result3);
 		System.assert(!result3.isValid);
 		System.assertNotEquals(null, result3.messages);
-		System.assertEquals(2, result3.messages.size());
+		System.assertEquals(4, result3.messages.size());
 		System.assert(result3.messages.contains(Label.EmailRequired));
 		System.assert(result3.messages.contains(Label.NameRequired));
+		System.assert(result3.messages.contains(Label.UserCountryRequired));
+		System.assert(result3.messages.contains(Label.MarketingPreferenceRequired));
 
 		System.assertNotEquals(null, result4);
 		System.assert(!result4.isValid);
@@ -455,10 +461,22 @@ private class AccountServiceTest {
 		System.assert(!result6.isValid);
 		System.assertNotEquals(null, result6.messages);
 		System.assertEquals(1, result6.messages.size());
-		System.assertEquals(Label.MustAgreeToTCs, result6.messages[0]);
+		System.assertEquals(Label.UserCountryRequired, result6.messages[0]);
 
 		System.assertNotEquals(null, result7);
 		System.assert(result7.isValid);
+
+		System.assertNotEquals(null, result8);
+		System.assert(!result8.isValid);
+		System.assertNotEquals(null, result8.messages);
+		System.assertEquals(1, result8.messages.size());
+		System.assertEquals(Label.EmailRequired, result8.messages[0]);
+
+		System.assertNotEquals(null, result9);
+		System.assert(!result9.isValid);
+		System.assertNotEquals(null, result9.messages);
+		System.assertEquals(1, result9.messages.size());
+		System.assertEquals(Label.MarketingPreferenceRequired, result9.messages[0]);
 	}
 
 	@IsTest
@@ -476,7 +494,7 @@ private class AccountServiceTest {
 	}
 
 	@IsTest
-	static void test_prepareTrial() {
+	static void test_prepareTrial_success() {
 		User u = TestUtils.createDocuSignAdministrator();
 		u.Phone = '5555551111';
 		u.MobilePhone = '5555552222';
@@ -484,32 +502,38 @@ private class AccountServiceTest {
 		u.City = 'Anywhere';
 		u.State = 'CA';
 		u.PostalCode = '99999';
-		u.Country = 'United States';
+		u.Country = 'US';
 		update u;
 
 		System.runAs(u) {
 			String email = UUID.randomUUID().toString() + '@unit.test';
 
 			Test.startTest();
-			Account.Trial result = AccountService.prepareTrial(email);
+			AccountService.TrialAccount result = AccountService.prepareTrial(email);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(UserInfo.getOrganizationName(), result.company);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(email, result.user.email);
-			System.assertEquals(u.FirstName, result.user.firstName);
-			System.assertEquals(u.LastName, result.user.lastName);
-			System.assertEquals(StringUtils.mkName(u.FirstName, u.LastName), result.user.name);
-			System.assertNotEquals(null, result.address);
-			System.assertEquals(u.Street, result.address.address1);
-			System.assertEquals(null, result.address.address2);
-			System.assertEquals(u.City, result.address.city);
-			System.assertEquals(u.State, result.address.region);
-			System.assertEquals(u.PostalCode, result.address.postalCode);
-			System.assertEquals(u.Country, result.address.country);
-			System.assertEquals(u.Phone, result.address.phone);
-			System.assert(!result.termsAccepted);
+			System.assert(!Collection.isEmpty(result.countries));
+			System.assert(!Collection.isEmpty(result.marketing));
+			System.assertNotEquals(null, result.account);
+			System.assertEquals(UserInfo.getOrganizationName(), result.account.company);
+			System.assertNotEquals(null, result.account.user);
+			System.assertEquals(email, result.account.user.email);
+			System.assertEquals(u.FirstName, result.account.user.firstName);
+			System.assertEquals(u.LastName, result.account.user.lastName);
+			System.assertEquals(StringUtils.mkName(u.FirstName, u.LastName), result.account.user.name);
+			System.assertEquals(u.Country, result.account.user.countryCode);
+			AccountService.Marketing marketing = result.marketing.get(u.Country);
+			System.assertNotEquals(null, marketing);
+			System.assertEquals(marketing.defaultOptIn, result.account.user.marketingOptIn);
+			System.assertNotEquals(null, result.account.address);
+			System.assertEquals(u.Street, result.account.address.address1);
+			System.assertEquals(null, result.account.address.address2);
+			System.assertEquals(u.City, result.account.address.city);
+			System.assertEquals(u.State, result.account.address.region);
+			System.assertEquals(u.PostalCode, result.account.address.postalCode);
+			System.assertEquals(u.Country, result.account.address.country);
+			System.assertEquals(u.Phone, result.account.address.phone);
 		}
 	}
 
@@ -538,7 +562,10 @@ private class AccountServiceTest {
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
 			}
-			Account.Trial a = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, true);
+			Account.Trial a = new Account.Trial(
+				'Unit Test',
+				new Account.TrialUser('u@unit.test', 'Unit', 'Test', 'US', true),
+				null);
 
 			Test.startTest();
 			Account.Membership result = AccountService.createTrial(a);
@@ -561,14 +588,14 @@ private class AccountServiceTest {
 	@IsTest
 	static void test_createTrial_failure() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			Account.Trial a = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test'), null, false);
+			Account.Trial a = new Account.Trial('Unit Test', new Account.TrialUser('u@unit.test', 'Unit', 'Test', null, false), null);
 
 			Test.startTest();
 			try {
 				AccountService.createTrial(a);
 				throw new AssertException('Expected createTrial to fail');
 			} catch (ValidationException ex) {
-				System.assertEquals(Label.InvalidTrialAccount + '\n' + Label.MustAgreeToTCs, ex.getMessage());
+				System.assertEquals(Label.InvalidTrialAccount + '\n' + Label.UserCountryRequired, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -715,9 +742,9 @@ private class AccountServiceTest {
 	@IsTest
 	static void test_getUsers_success() {
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			User u1 = TestUtils.createDocuSignUser();
-			User u2 = TestUtils.createDocuSignUser();
-			User a1 = TestUtils.createDocuSignAdministrator();
+			TestUtils.createDocuSignUser();
+			TestUtils.createDocuSignUser();
+			TestUtils.createDocuSignAdministrator();
 
 			Test.startTest();
 			List<Account.User> result = AccountService.getUsers();
