@@ -54,6 +54,8 @@ public with sharing class ReturnController {
 			}
 		}
 		// TODO: Handle other events, errors
-		return new PageReference('/' + (this.sourceId == null ? '' : this.sourceId));
+		PageReference pg = new PageReference('/' + (this.sourceId == null ? '' : this.sourceId));
+		pg.setRedirect(true);
+		return pg;
 	}
 }
