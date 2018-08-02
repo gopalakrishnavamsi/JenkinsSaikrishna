@@ -5,7 +5,7 @@
     <aura:attribute name="emailLocalizations" type="Object[]"/>
 
     <aura:attribute name="recordType" type="String" default="contact" access="private"/>
-    <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
+    <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="selectedLanguage" type="String" access="private"/>
     <aura:attribute name="iconName" type="String" access="private"/>
 
@@ -88,8 +88,9 @@
                                     />
                                 </span>
                                 <!-- /Private Message Button -->
-                                <!-- Custom Email Message Button -->
-                                <span class="ds-tooltip_container slds-is-relative">
+                                <aura:if isTrue="{!v.isEmailLocalizationEnabled}">
+                                    <!-- Custom Email Message Button -->
+                                    <span class="ds-tooltip_container slds-is-relative">
                                     <div class="ds-tooltip slds-popover slds-popover_tooltip slds-nubbin_bottom slds-is-absolute"
                                          role="tooltip">
                                         <div class="slds-popover__body">{!$Label.c.CustomEmailMessage}</div>
@@ -104,6 +105,7 @@
                                             class="{!if(or(not(empty(v.recipient.emailSettings.subject)), not(empty(v.recipient.emailSettings.message))), 'ds-button-icon_has-value')}"
                                     />
                                 </span>
+                                </aura:if>
                                 <!-- /Custom Email Message Button -->
                             </div>
                         </div>
