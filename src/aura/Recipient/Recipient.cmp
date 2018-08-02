@@ -88,7 +88,7 @@
                                     />
                                 </span>
                                 <!-- /Private Message Button -->
-                                <aura:if isTrue="{!v.emailLocalizationEnabled}">
+                                <aura:if isTrue="{!v.isEmailLocalizationEnabled}">
                                     <!-- Custom Email Message Button -->
                                     <span class="ds-tooltip_container slds-is-relative">
                                     <div class="ds-tooltip slds-popover slds-popover_tooltip slds-nubbin_bottom slds-is-absolute"
