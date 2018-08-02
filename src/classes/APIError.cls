@@ -67,7 +67,7 @@ global virtual class APIError {
 	 *
 	 * @return The generated hash code.
 	 */
-	override global Integer hashCode() {
+	override public Integer hashCode() {
 		return this.code;
 	}
 
@@ -78,7 +78,7 @@ global virtual class APIError {
 	 *
 	 * @return <code>true</code> if the object equals the API error, <code>false</code> otherwise.
 	 */
-	global Boolean equals(Object obj) {
+	public Boolean equals(Object obj) {
 		if (this === obj) return true;
 
 		if (obj == null || !(obj instanceof APIError)) return false;
@@ -91,7 +91,7 @@ global virtual class APIError {
 	 *
 	 * @return The API error <code>description</code>.
 	 */
-	override global String toString() {
+	override public String toString() {
 		return this.description;
 	}
 }

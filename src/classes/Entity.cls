@@ -93,7 +93,7 @@ global with sharing class Entity {
 	 *
 	 * @return <code>true</code> if <code>obj</code> is an entity and the <code>id</code> properties are equal, <code>false</code> otherwise.
 	 */
-	global Boolean equals(Object obj) {
+	public Boolean equals(Object obj) {
 		if (this === obj) return true;
 		if (obj == null || !(obj instanceof Entity)) return false;
 		Entity other = (Entity)obj;
@@ -105,7 +105,7 @@ global with sharing class Entity {
 	 *
 	 * @return The string representation of the entity.
 	 */
-	override global String toString() {
+	override public String toString() {
 		String result = String.isNotBlank(this.label) ? this.label : '';
 		if (String.isNotBlank(this.name)) {
 			if (this.parent != null && String.isNotBlank(this.parent.name)) {

@@ -84,7 +84,7 @@ global class UUID {
 	 *
 	 * @return The generated hash code.
 	 */
-	override global Integer hashCode() {
+	override public Integer hashCode() {
 		return this.value.hashCode();
 	}
 
@@ -95,7 +95,7 @@ global class UUID {
 	 *
 	 * @return <code>true</code> if the object equals the UUID's value and <code>false</code> otherwise.
 	 */
-	global Boolean equals(Object obj) {
+	public Boolean equals(Object obj) {
 		if (this === obj) return true;
 
 		if (obj == null || !(obj instanceof UUID)) return false;
@@ -108,7 +108,7 @@ global class UUID {
 	 *
 	 * @return The string representation of the UUID with dashes.
 	 */
-	override global String toString() {
+	override public String toString() {
 		return this.value;
 	}
 
