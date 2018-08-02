@@ -1,145 +1,145 @@
 /**
  * Representation of a DocuSign envelope recipient.
  */
-public class Recipient implements Comparable {
+global class Recipient implements Comparable {
 	/**
 	 * Signer (Needs to Sign) recipient type constant.
 	 */
-	public static final String TYPE_SIGNER = 'Signer';
+	global static final String TYPE_SIGNER = 'Signer';
 	/**
 	 * In person signer recipient type constant.
 	 */
-	public static final String TYPE_IN_PERSON_SIGNER = 'InPersonSigner';
+	global static final String TYPE_IN_PERSON_SIGNER = 'InPersonSigner';
 	/**
 	 * Carbon copy (Receives a Copy) recipient type constant.
 	 */
-	public static final String TYPE_CARBON_COPY = 'CarbonCopy';
+	global static final String TYPE_CARBON_COPY = 'CarbonCopy';
 	/**
 	 * Certified delivery (Needs to View) recipient type constant.
 	 */
-	public static final String TYPE_CERTIFIED_DELIVERY = 'CertifiedDelivery';
+	global static final String TYPE_CERTIFIED_DELIVERY = 'CertifiedDelivery';
 	/**
 	 * Agent (Specify Recipients) recipient type constant.
 	 */
-	public static final String TYPE_AGENT = 'Agent';
+	global static final String TYPE_AGENT = 'Agent';
 	/**
 	 * Editor (Allow to Edit) recipient type constant.
 	 */
-	public static final String TYPE_EDITOR = 'Editor';
+	global static final String TYPE_EDITOR = 'Editor';
 	/**
 	 * Intermediary (Update Recipients) recipient type constant.
 	 */
-	public static final String TYPE_INTERMEDIARY = 'Intermediary';
+	global static final String TYPE_INTERMEDIARY = 'Intermediary';
 	/**
 	 * Created status constant.
 	 */
-	public static final String STATUS_CREATED = 'created';
+	global static final String STATUS_CREATED = 'created';
 	/**
 	 * Sent status constant.
 	 */
-	public static final String STATUS_SENT = 'sent';
+	global static final String STATUS_SENT = 'sent';
 	/**
 	 * Delivered status constant.
 	 */
-	public static final String STATUS_DELIVERED = 'delivered';
+	global static final String STATUS_DELIVERED = 'delivered';
 	/**
 	 * Declined status constant.
 	 */
-	public static final String STATUS_DECLINED = 'declined';
+	global static final String STATUS_DECLINED = 'declined';
 	/**
 	 * Completed status constant.
 	 */
-	public static final String STATUS_COMPLETED = 'completed';
+	global static final String STATUS_COMPLETED = 'completed';
 	/**
 	 * Signed status constant.
 	 */
-	public static final String STATUS_SIGNED = 'signed';
+	global static final String STATUS_SIGNED = 'signed';
 
 	/**
 	 * The ID of the associated Recipient__c record.
 	 */
 	@AuraEnabled
-	public Id id { get; private set; }
+	global Id id { get; private set; }
 	/**
 	 * The type of the recipient.
 	 */
 	@AuraEnabled
-	public String type { get; private set; }
+	global String type { get; private set; }
 	/**
 	 * The ordinal sequence of the recipient as displayed on the DocuSign envelope.
 	 */
 	@AuraEnabled
-	public Integer sequence { get; private set; }
+	global Integer sequence { get; private set; }
 	/**
 	 * The routing order of the recipient. This is distinct from <code>sequence</code> and need not be unique across an envelope's recipients.
 	 */
 	@AuraEnabled
-	public Integer routingOrder { get; private set; }
+	global Integer routingOrder { get; private set; }
 	/**
 	 * The role of the recipient. Used to tie the recipient to DocuSign template roles or for use with automatic anchor tags.
 	 */
 	@AuraEnabled
-	public Role role { get; private set; }
+	global Role role { get; private set; }
 	/**
 	 * The name of the recipient.
 	 */
 	@AuraEnabled
-	public String name { get; private set; }
+	global String name { get; private set; }
 	/**
 	 * The email of the recipient.
 	 */
 	@AuraEnabled
-	public String email { get; private set; }
+	global String email { get; private set; }
 	/**
 	 * The DocuSign signing group.
 	 */
 	@AuraEnabled
-	public SigningGroup signingGroup { get; private set; }
+	global SigningGroup signingGroup { get; private set; }
 	/**
 	 * The phone number of the recipient. Can be used for SMS authentication.
 	 */
 	@AuraEnabled
-	public String phone { get; private set; }
+	global String phone { get; private set; }
 	/**
 	 * The recipient authentication options.
 	 */
 	@AuraEnabled
-	public Authentication authentication { get; private set; }
+	global Authentication authentication { get; private set; }
 	/**
 	 * The private note sent to the recipient.
 	 */
 	@AuraEnabled
-	public String note { get; private set; }
+	global String note { get; private set; }
 	/**
 	 * The email settings for the recipient.
 	 */
 	@AuraEnabled
-	public EmailSettings emailSettings { get; private set; }
+	global EmailSettings emailSettings { get; private set; }
 	/**
 	 * The host name of the recipient. Used only for in-person signing.
 	 */
 	@AuraEnabled
-	public String hostName { get; private set; }
+	global String hostName { get; private set; }
 	/**
 	 * The host email of the recipient. Used only for in-person signing.
 	 */
 	@AuraEnabled
-	public String hostEmail { get; private set; }
+	global String hostEmail { get; private set; }
 	/**
 	 * Whether the recipient should sign now. Honored only for in-person signing or when the first signer is the current user.
 	 */
 	@AuraEnabled
-	public Boolean signNow { get; private set; }
+	global Boolean signNow { get; private set; }
 	/**
 	 * The Salesforce source object for the recipient (Contact, Lead, or User).
 	 */
 	@AuraEnabled
-	public Entity source { get; private set; }
+	global Entity source { get; private set; }
 	/**
 	 * Read-only property indicating whether the recipient is a signing group.
 	 */
 	@AuraEnabled
-	public Boolean isSigningGroup {
+	global Boolean isSigningGroup {
 		get {
 			return this.signingGroup != null;
 		}
@@ -148,12 +148,12 @@ public class Recipient implements Comparable {
 	 * Whether this recipient may be modified. Used with DocuSign templates.
 	 */
 	@AuraEnabled
-	public Boolean readOnly { get; private set; }
+	global Boolean readOnly { get; private set; }
 	/**
 	 * Whether this recipient is required. Used with DocuSign templates.
 	 */
 	@AuraEnabled
-	public Boolean required { get; private set; }
+	global Boolean required { get; private set; }
 
 	/**
 	 * Constructs a DocuSign envelope recipient.
@@ -177,7 +177,7 @@ public class Recipient implements Comparable {
 	 * @param readOnly Whether this recipient may be modified. Used with DocuSign templates.
 	 * @param required Whether this recipient is required. Used with DocuSign templates.
 	 */
-	public Recipient(
+	global Recipient(
 		final Id id,
 		final String type,
 		final Integer sequence,
@@ -387,17 +387,17 @@ public class Recipient implements Comparable {
 	/**
 	 * Representation of a DocuSign signing group.
 	 */
-	public class SigningGroup {
+	global class SigningGroup {
 		/**
 		 * The DocuSign signing group ID.
 		 */
 		@AuraEnabled
-		public Integer id { get; private set; }
+		global Integer id { get; private set; }
 		/**
 		 * The DocuSign signing group name.
 		 */
 		@AuraEnabled
-		public String name { get; private set; }
+		global String name { get; private set; }
 
 		/**
 		 * Constructs a DocuSign signing group.
@@ -405,7 +405,7 @@ public class Recipient implements Comparable {
 		 * @param id The DocuSign signing group ID.
 		 * @param name The DocuSign signing group name.
 		 */
-		public SigningGroup(final Integer id, final String name) {
+		global SigningGroup(final Integer id, final String name) {
 			this.id = id;
 			this.name = name;
 		}
@@ -424,17 +424,17 @@ public class Recipient implements Comparable {
 	 * Representation of a DocuSign envelope recipient role used for automatic anchor tags or template role
 	 * matching.
 	 */
-	public class Role implements Comparable {
+	global class Role implements Comparable {
 		/**
 		 * The role name.
 		 */
 		@AuraEnabled
-		public String name { get; private set; }
+		global String name { get; private set; }
 		/**
 		 * The role ordinal used for mapping to automatic anchor tags.
 		 */
 		@AuraEnabled
-		public Integer value { get; private set; }
+		global Integer value { get; private set; }
 		/**
 		 * Read-only property describing whether this role has a valid value. If <code>true</code> (> 0),
 		 * the role is mapped to automatic anchor tags.
@@ -461,7 +461,7 @@ public class Recipient implements Comparable {
 		 * @param name The role name.
 		 * @param value The role ordinal used for mapping to automatic anchor tags.
 		 */
-		public Role(final String name, final Integer value) {
+		global Role(final String name, final Integer value) {
 			this.name = name;
 			this.value = value;
 		}
@@ -486,23 +486,23 @@ public class Recipient implements Comparable {
 	/**
 	 * Representation of DocuSign envelope recipient authentication methods.
 	 */
-	public class Authentication {
+	global class Authentication {
 		/**
 		 * Access code a recipient must enter before opening an envelope.
 		 */
 		@AuraEnabled
-		public String accessCode { get; private set; }
+		global String accessCode { get; private set; }
 		/**
 		 * Whether the recipient's ID should be checked.
 		 */
 		@AuraEnabled
-		public Boolean idCheckRequired { get; private set; }
+		global Boolean idCheckRequired { get; private set; }
 		/**
 		 * A list of phone numbers to which a SMS authentication code may be sent. Currently only one
 		 * phone number is supported.
 		 */
 		@AuraEnabled
-		public List<String> smsPhoneNumbers { get; private set; }
+		global List<String> smsPhoneNumbers { get; private set; }
 
 		/**
 		 * Constructs recipient authentication.
@@ -511,7 +511,7 @@ public class Recipient implements Comparable {
 		 * @param idCheckRequired Whether the recipient's ID should be checked.
 		 * @param smsPhoneNumbers A list of phone numbers to which a SMS authentication code may be sent.
 		 */
-		public Authentication(
+		global Authentication(
 			final String accessCode,
 			final Boolean idCheckRequired,
 			final List<String> smsPhoneNumbers) {
@@ -537,27 +537,27 @@ public class Recipient implements Comparable {
 	/**
 	 * Represents localized DocuSign envelope recipient email settings.
 	 */
-	public class EmailSettings {
+	global class EmailSettings {
 		/**
 		 * The language code for the localized emails (e.g 'en', 'pt_BR').
 		 */
 		@AuraEnabled
-		public String language { get; private set; }
+		global String language { get; private set; }
 		/**
 		 * The localized language label.
 		 */
 		@AuraEnabled
-		public String languageLabel { get; private set; }
+		global String languageLabel { get; private set; }
 		/**
 		 * The localized email subject.
 		 */
 		@AuraEnabled
-		public String subject { get; private set; }
+		global String subject { get; private set; }
 		/**
 		 * The localized email message.
 		 */
 		@AuraEnabled
-		public String message { get; private set; }
+		global String message { get; private set; }
 
 		/**
 		 * Constructs localized DocuSign envelope recipient email settings.
@@ -567,7 +567,7 @@ public class Recipient implements Comparable {
 		 * @param subject The localized email subject.
 		 * @param message The localized email message.
 		 */
-		public EmailSettings(final String language, final String languageLabel, final String subject,
+		global EmailSettings(final String language, final String languageLabel, final String subject,
 			final String message) {
 
 			this.language = language;
@@ -617,67 +617,67 @@ public class Recipient implements Comparable {
 	/**
 	 * DocuSign recipient status.
 	 */
-	public class Status implements Comparable {
+	global class Status implements Comparable {
 		/**
 		 * The ID of the underlying RecipientStatus__c record.
 		 */
 		@AuraEnabled
-		public Id id { get; private set; }
+		global Id id { get; private set; }
 		/**
 		 * The Salesforce source entity.
 		 */
 		@AuraEnabled
-		public Entity source { get; private set; }
+		global Entity source { get; private set; }
 		/**
 		 * The recipient sequence.
 		 */
 		@AuraEnabled
-		public Integer sequence { get; private set; }
+		global Integer sequence { get; private set; }
 		/**
 		 * The DocuSign recipient type.
 		 */
 		@AuraEnabled
-		public String type { get; private set; }
+		global String type { get; private set; }
 		/**
 		 * The current status.
 		 */
 		@AuraEnabled
-		public String status { get; private set; }
+		global String status { get; private set; }
 		/**
 		 * The name of the recipient.
 		 */
 		@AuraEnabled
-		public String name { get; private set; }
+		global String name { get; private set; }
 		/**
 		 * The email address of the recipient.
 		 */
 		@AuraEnabled
-		public String email { get; private set; }
+		global String email { get; private set; }
 		/**
 		 * The routing order of the recipient.
 		 */
 		@AuraEnabled
-		public Integer routingOrder { get; private set; }
+		global Integer routingOrder { get; private set; }
 		/**
 		 * Date and time when the recipient received the envelope.
 		 */
 		@AuraEnabled
-		public Datetime sent { get; private set; }
+		global Datetime sent { get; private set; }
 		/**
 		 * Date and time when the recipient completed signing the envelope.
 		 */
 		@AuraEnabled
-		public Datetime completed { get; private set; }
+		global Datetime completed { get; private set; }
 		/**
 		 * The reason the recipient declined signing the envelope.
 		 */
 		@AuraEnabled
-		public String reason { get; private set; }
+		global String reason { get; private set; }
 		/**
 		 * Date and time when the status was last updated.
 		 */
 		@AuraEnabled
-		public Datetime lastStatusUpdate { get; private set; }
+		global Datetime lastStatusUpdate { get; private set; }
 
 		/**
 		 * Constructs a DocuSign recipient status.
@@ -696,7 +696,7 @@ public class Recipient implements Comparable {
 		 * @param reason The reason the recipient declined signing the envelope.
 		 * @param lastStatusUpdate Date and time when the status was last updated.
 		 */
-		public Status(
+		global Status(
 			final Id id,
 			final Entity source,
 			final String type,
@@ -958,27 +958,27 @@ public class Recipient implements Comparable {
 	/**
 	 * Recipient resend result.
 	 */
-	public class ResendResult {
+	global class ResendResult {
 		/**
 		 * The recipient sequence.
 		 */
 		@AuraEnabled
-		public Integer sequence { get; private set; }
+		global Integer sequence { get; private set; }
 		/**
 		 * The recipient email address.
 		 */
 		@AuraEnabled
-		public String email { get; private set; }
+		global String email { get; private set; }
 		/**
 		 * The recipient routing order.
 		 */
 		@AuraEnabled
-		public Integer routingOrder { get; private set; }
+		global Integer routingOrder { get; private set; }
 		/**
 		 * The error encountered during update, if any.
 		 */
 		@AuraEnabled
-		public APIError error { get; private set; }
+		global APIError error { get; private set; }
 
 		/**
 		 * Constructs a recipient resend result.

@@ -12,7 +12,7 @@
  * // Host the tagging session with the returned URL
  * </pre>
  */
-public with sharing class EnvelopeService {
+global with sharing class EnvelopeService {
 
 	@TestVisible
 	private static final EnvelopeService.Database DB = new EnvelopeService.Database();
@@ -438,7 +438,7 @@ public with sharing class EnvelopeService {
 	 * @return The newly-created envelope.
 	 * @see EnvelopeService.sendEnvelope for details on how to send the created envelope.
 	 */
-	public static Envelope createEnvelope(
+	global static Envelope createEnvelope(
 		final Envelope envelope,
 		final EnvelopeConfiguration envelopeConfiguration,
 		final Boolean addFromSource) {
@@ -510,7 +510,7 @@ public with sharing class EnvelopeService {
 	 *
 	 * @return The envelope matching the ID.
 	 */
-	public static Envelope getEnvelope(final Id envelopeId) {
+	global static Envelope getEnvelope(final Id envelopeId) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		// queryEnvelope verifies ownership
@@ -567,7 +567,7 @@ public with sharing class EnvelopeService {
 	 *
 	 * @return The updated envelope.
 	 */
-	public static Envelope updateEnvelope(final Envelope envelope) {
+	global static Envelope updateEnvelope(final Envelope envelope) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		Permissions.verifyIsOwner(envelope.id);
@@ -598,7 +598,7 @@ public with sharing class EnvelopeService {
 	 * @return The sent envelope.
 	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
 	 */
-	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
+	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		Permissions.verifyIsOwner(envelope.id);
@@ -631,7 +631,7 @@ public with sharing class EnvelopeService {
 	 * @return <code>true</code> if the update was successful, <code>false</code> otherwise.
 	 * @see EnvelopeService.sendEnvelope for more details.
 	 */
-	public static Boolean markEnvelopeSent(
+	global static Boolean markEnvelopeSent(
 		final Envelope envelope,
 		final Boolean sendNow) {
 
@@ -659,7 +659,7 @@ public with sharing class EnvelopeService {
 	 *
 	 * @return The Salesforce source ID of the envelope. This can be used to redirect the user upon deletion.
 	 */
-	public static Id deleteEnvelope(final Id envelopeId) {
+	global static Id deleteEnvelope(final Id envelopeId) {
 		Permissions.verifyIsOwner(envelopeId);
 
 		return DB.deleteEnvelope2(envelopeId);
@@ -675,7 +675,7 @@ public with sharing class EnvelopeService {
 	 *
 	 * @return The empty envelope.
 	 */
-	public static Envelope getEmptyEnvelope(final Entity source) {
+	global static Envelope getEmptyEnvelope(final Entity source) {
 		Permissions.verifyIsDocuSignUser();
 
 		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
@@ -730,7 +730,7 @@ public with sharing class EnvelopeService {
 	 *
 	 * @return The sender view URL.
 	 */
-	public static Url getSenderViewUrl(final UUID docuSignId, final Url returnUrl) {
+	global static Url getSenderViewUrl(final UUID docuSignId, final Url returnUrl) {
 		Permissions.verifyIsOwner(docuSignId);
 
 		return EnvelopeAPI.getInstance().getSenderViewUrl(docuSignId, returnUrl);

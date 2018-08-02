@@ -2,7 +2,7 @@
  * This class is the entry point for DocuSign for Salesforce envelope document management. It provides methods to
  * retrieve Salesforce source documents and add or remove documents from an envelope.
  */
-public with sharing class DocumentService {
+global with sharing class DocumentService {
 
 	@TestVisible
 	private static final DocumentService.Database DB = new DocumentService.Database();
@@ -347,7 +347,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return A list of envelope documents.
 	 */
-	public static List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
+	global static List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
@@ -380,7 +380,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return A list of DocuSign envelope documents.
 	 */
-	public static List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
+	global static List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
 
 		Permissions.verifyIsDocuSignUser();
@@ -412,7 +412,7 @@ public with sharing class DocumentService {
 	 * @return A list of document folders.
 	 * @see DocumentService.getFolderDocuments
 	 */
-	public static Document.Folders getDocumentFolders(final SObjectType type) {
+	global static Document.Folders getDocumentFolders(final SObjectType type) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
@@ -449,7 +449,7 @@ public with sharing class DocumentService {
 	 * @return A list of documents contained within the target folders.
 	 * @see DocumentService.getDocumentFolders
 	 */
-	public static List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
+	global static List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
@@ -473,7 +473,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return A list of documents contained within the envelope.
 	 */
-	public static List<Document> getEnvelopeDocuments(final Id envelopeId) {
+	global static List<Document> getEnvelopeDocuments(final Id envelopeId) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		Permissions.verifyIsOwner(envelopeId);
@@ -491,7 +491,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	public static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
+	global static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documents)) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -510,7 +510,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	public static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
+	global static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documentIds)) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -530,7 +530,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
+	global static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (newSequence == null || newSequence.isEmpty()) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -550,7 +550,7 @@ public with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	public static List<Document> updateEnvelopeDocuments(
+	global static List<Document> updateEnvelopeDocuments(
 		final Id envelopeId,
 		final List<Document> originalDocuments,
 		final List<Document> updatedDocuments) {

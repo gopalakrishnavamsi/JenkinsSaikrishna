@@ -2,7 +2,7 @@
  * This class is the entry point for DocuSign for Salesforce envelope recipient management. It provides methods to
  * retrieve Salesforce source recipients and add or remove recipients from an envelope.
  */
-public with sharing class RecipientService {
+global with sharing class RecipientService {
 
 	@TestVisible
 	private static final RecipientService.Database DB = new RecipientService.Database();
@@ -481,7 +481,7 @@ public with sharing class RecipientService {
 	 *
 	 * @return A list of envelope recipients.
 	 */
-	public static List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
+	global static List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.InvalidType);
@@ -531,7 +531,7 @@ public with sharing class RecipientService {
 	 * @return A list of envelope recipients.
 	 * @see Recipient.SearchBehavior for more details on search options.
 	 */
-	public static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
+	global static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
 		final String lastName) {
 
 		Permissions.verifyIsDocuSignUser();
@@ -868,7 +868,7 @@ public with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	public static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
+	global static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
 		return addEnvelopeRecipients(envelopeId, recipients, null, null);
 	}
 
@@ -916,7 +916,7 @@ public with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	public static List<Recipient> removeEnvelopeRecipients(
+	global static List<Recipient> removeEnvelopeRecipients(
 		final Id envelopeId,
 		final Set<Id> recipientIds) {
 
@@ -939,7 +939,7 @@ public with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	public static List<Recipient> updateEnvelopeRecipients(
+	global static List<Recipient> updateEnvelopeRecipients(
 		final Id envelopeId,
 		final List<Recipient> originalRecipients,
 		final List<Recipient> updatedRecipients) {

@@ -1,42 +1,42 @@
 /**
 	 * A DocuSign envelope's reminder and expiration settings.
 	 */
-public class Notifications {
+global class Notifications {
 	/**
 	 * Whether or not to remind recipients to sign.
 	 */
 	@AuraEnabled
-	public Boolean remind { get; private set; }
+	global Boolean remind { get; private set; }
 	/**
 	 * How many days to wait before sending a reminder.
 	 */
 	@AuraEnabled
-	public Integer remindAfterDays { get; private set; }
+	global Integer remindAfterDays { get; private set; }
 	/**
 	 * How many days between sending reminders.
 	 */
 	@AuraEnabled
-	public Integer remindFrequencyDays { get; private set; }
+	global Integer remindFrequencyDays { get; private set; }
 	/**
 	 * Whether or not the envelope automatically expires (is voided).
 	 */
 	@AuraEnabled
-	public Boolean expires { get; private set; }
+	global Boolean expires { get; private set; }
 	/**
 	 * How many days before the envelope expires.
 	 */
 	@AuraEnabled
-	public Integer expireAfterDays { get; private set; }
+	global Integer expireAfterDays { get; private set; }
 	/**
 	 * How many days prior to expiration to send a warning to recipients.
 	 */
 	@AuraEnabled
-	public Integer expireWarnDays { get; private set; }
+	global Integer expireWarnDays { get; private set; }
 	/**
 	 * Whether or not to update Chatter with envelope and recipient events.
 	 */
 	@AuraEnabled
-	public Boolean updateChatter { get; private set; }
+	global Boolean updateChatter { get; private set; }
 
 	/**
 	 * Constructs an envelope notification settings.
@@ -49,7 +49,7 @@ public class Notifications {
 	 * @param expireWarnDays How many days prior to expiration to send a warning to recipients.
 	 * @param updateChatter Whether or not to update Chatter with envelope and recipient events.
 	 */
-	public Notifications(
+	global Notifications(
 		final Boolean remind,
 		final Integer remindAfterDays,
 		final Integer remindFrequencyDays,

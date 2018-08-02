@@ -1,11 +1,11 @@
 /**
  * Represents an error returned by an API.
  */
-public virtual class APIError {
+global virtual class APIError {
 	/**
 	 * Constant for no error.
 	 */
-	public static final APIError none = new APIError(APIErrorCode.SUCCESS, null);
+	global static final APIError none = new APIError(APIErrorCode.SUCCESS, null);
 	/**
 	 * Constant for a generic error.
 	 */
@@ -15,12 +15,12 @@ public virtual class APIError {
 	 * The error code.
 	 */
 	@AuraEnabled
-	public Integer code { get; private set; }
+	global Integer code { get; private set; }
 	/**
 	 * The error description.
 	 */
 	@AuraEnabled
-	public String description { get; private set; }
+	global String description { get; private set; }
 
 	/**
 	 * Constructs an API error.
@@ -67,7 +67,7 @@ public virtual class APIError {
 	 *
 	 * @return The generated hash code.
 	 */
-	override public Integer hashCode() {
+	override global Integer hashCode() {
 		return this.code;
 	}
 
@@ -78,7 +78,7 @@ public virtual class APIError {
 	 *
 	 * @return <code>true</code> if the object equals the API error, <code>false</code> otherwise.
 	 */
-	public Boolean equals(Object obj) {
+	global Boolean equals(Object obj) {
 		if (this === obj) return true;
 
 		if (obj == null || !(obj instanceof APIError)) return false;
@@ -91,7 +91,7 @@ public virtual class APIError {
 	 *
 	 * @return The API error <code>description</code>.
 	 */
-	override public String toString() {
+	override global String toString() {
 		return this.description;
 	}
 }
