@@ -1399,7 +1399,7 @@ private class EnvelopeServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Test.startTest();
 			try {
-				EnvelopeService.getSenderViewUrl(UUID.fromString(e.DocuSignId__c), null);
+				EnvelopeService.getSenderViewUrl(UUID.parse(e.DocuSignId__c), null);
 				throw new AssertException('Expected getSenderViewUrl to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
@@ -1417,7 +1417,7 @@ private class EnvelopeServiceTest {
 			Envelope__c e = TestUtils.createEnvelope();
 
 			Test.startTest();
-			Url result = EnvelopeService.getSenderViewUrl(UUID.fromString(e.DocuSignId__c),
+			Url result = EnvelopeService.getSenderViewUrl(UUID.parse(e.DocuSignId__c),
 				new Url('https://unit.test/return'));
 			Test.stopTest();
 

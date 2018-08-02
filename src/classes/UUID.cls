@@ -38,7 +38,7 @@ global class UUID {
 	 *
 	 * @return The parsed UUID, assuming the input string is valid.
 	 */
-	global static UUID fromString(final String s) {
+	global static UUID parse(final String s) {
 		if (String.isBlank(s)) throw new StringException(Label.InvalidUUID);
 
 		Matcher m = uuidPattern.matcher(s);
@@ -59,7 +59,7 @@ global class UUID {
 
 		if (String.isNotBlank(s)) {
 			try {
-				result = fromString(s);
+				result = parse(s);
 			} catch (Exception ex) {
 				// Swallow exception
 			}

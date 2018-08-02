@@ -164,9 +164,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public Account.Membership toExternalForm() {
 			return new Account.Membership(
 				Long.valueOf(accountId),
-				UUID.fromString(accountIdGuid),
+				UUID.parse(accountIdGuid),
 				accountName,
-				UUID.fromString(userId),
+				UUID.parse(userId),
 				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
 				String.isBlank(apiPassword) ? '' : apiPassword);
 		}
@@ -234,11 +234,11 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			Date psd = StringUtils.parseDatetime(this.planStartDate).date();
 			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDatetime(this.suspensionDate).date();
 			return new Account(
-				UUID.fromString(this.accountIdGuid),
+				UUID.parse(this.accountIdGuid),
 				String.isBlank(this.externalAccountId) ? null : Long.valueOf(this.externalAccountId),
 				this.accountName,
 				new Account.Plan(
-					UUID.fromString(this.currentPlanId),
+					UUID.parse(this.currentPlanId),
 					this.planName,
 					psd,
 					StringUtils.parseDatetime(this.planEndDate).date()),
@@ -299,7 +299,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			return account;
 		}
 
-		return account.withPlanId(UUID.fromString(billing.billingPlan.planId));
+		return account.withPlanId(UUID.parse(billing.billingPlan.planId));
 	}
 
 	private class ViewResponse {
@@ -346,9 +346,9 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public Account.Membership toExternalForm(final String apiPassword) {
 			return new Account.Membership(
 				Long.valueOf(accountId),
-				UUID.fromString(accountIdGuid),
+				UUID.parse(accountIdGuid),
 				name,
-				UUID.fromString(userId),
+				UUID.parse(userId),
 				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
 				getUserSettings(),
 				apiPassword);
@@ -1002,7 +1002,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 
 		final CustomTab result = (CustomTab)JSON.deserialize(response.body, CustomTab.class);
-		return UUID.fromString(result.customTabId);
+		return UUID.parse(result.customTabId);
 	}
 
 	public Boolean deleteDocumentCustomField(final UUID customTabId) {

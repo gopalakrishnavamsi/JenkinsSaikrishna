@@ -261,7 +261,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 
 		public Template toExternalForm() {
 			return new Template(
-				this.envelopeTemplateDefinition == null ? null : UUID.fromString(envelopeTemplateDefinition.templateId),
+				this.envelopeTemplateDefinition == null ? null : UUID.parse(envelopeTemplateDefinition.templateId),
 				this.envelopeTemplateDefinition == null ? null : nullIfBlank(envelopeTemplateDefinition.name),
 				this.customFields == null ? new List<CustomField>() : this.customFields.toExternalForm(),
 				this.notification == null ? null : this.notification.toExternalForm(),
@@ -307,7 +307,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 
 		public Template toExternalForm() {
 			return new Template(
-				UUID.fromString(this.templateId),
+				UUID.parse(this.templateId),
 				nullIfBlank(this.name),
 				this.customFields == null ? new List<CustomField>() : this.customFields.toExternalForm(),
 				this.notification == null ? null : this.notification.toExternalForm(),

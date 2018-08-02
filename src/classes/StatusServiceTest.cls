@@ -653,10 +653,10 @@ private class StatusServiceTest {
 			Envelope__c e2 = TestUtils.createEnvelope();
 			e2.Sent__c = null; // make invalid
 			update e2;
-			Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.fromString(e1.DocuSignId__c),
+			Envelope.Status es1 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.parse(e1.DocuSignId__c),
 				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e1.Sent__c, null,
 				Datetime.now(), 's1', null, Datetime.now());
-			Envelope.Status es2 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.fromString(e2.DocuSignId__c),
+			Envelope.Status es2 = new Envelope.Status(null, new Entity(UserInfo.getUserId()), UUID.parse(e2.DocuSignId__c),
 				Envelope.STATUS_CREATED, UserInfo.getName(), UserInfo.getUserEmail(), null, e2.Sent__c, null,
 				Datetime.now(), 's2', null, Datetime.now());
 
@@ -809,7 +809,7 @@ private class StatusServiceTest {
 
 			Test.startTest();
 			List<Envelope.Status> result = StatusService.getStatus(new Set<UUID> {
-				UUID.fromString(es1.DocuSignId__c), UUID.fromString(es2.DocuSignId__c), UUID.fromString(es3.DocuSignId__c)
+				UUID.parse(es1.DocuSignId__c), UUID.parse(es2.DocuSignId__c), UUID.parse(es3.DocuSignId__c)
 			});
 			Test.stopTest();
 
@@ -858,7 +858,7 @@ private class StatusServiceTest {
 
 			Test.startTest();
 			List<Envelope.Status> result = StatusService.getStatus(new Set<UUID> {
-				UUID.fromString(es1.DocuSignId__c), UUID.fromString(es2.DocuSignId__c)
+				UUID.parse(es1.DocuSignId__c), UUID.parse(es2.DocuSignId__c)
 			});
 			Test.stopTest();
 
@@ -945,10 +945,10 @@ private class StatusServiceTest {
 	static void test_deleteStatus_success() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
+			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			Envelope__c e2 = TestUtils.createEnvelope();
-			UUID dseId2 = UUID.fromString(e2.DocuSignId__c);
+			UUID dseId2 = UUID.parse(e2.DocuSignId__c);
 			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(dseId2);
 
 			Test.startTest();
@@ -985,7 +985,7 @@ private class StatusServiceTest {
 	static void test_resendEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
+			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			es1.Status__c = Envelope.STATUS_DECLINED;
 			update es1;
@@ -1040,7 +1040,7 @@ private class StatusServiceTest {
 	static void test_resendRecipients_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
+			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			es1.Status__c = Envelope.STATUS_DECLINED;
 			update es1;
@@ -1117,7 +1117,7 @@ private class StatusServiceTest {
 	static void test_voidEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
+			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			es1.Status__c = Envelope.STATUS_COMPLETED;
 			update es1;
@@ -1141,7 +1141,7 @@ private class StatusServiceTest {
 			TestUtils.createAccountConfiguration();
 
 			Envelope__c e1 = TestUtils.createEnvelope();
-			UUID dseId1 = UUID.fromString(e1.DocuSignId__c);
+			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			es1.Status__c = Envelope.STATUS_SENT;
 			update es1;
@@ -1193,7 +1193,7 @@ private class StatusServiceTest {
 
 			Test.startTest();
 			try {
-				StatusService.getCorrectUrl(UUID.fromString(e1.DocuSignId__c), new Url('https://unit.test/return'));
+				StatusService.getCorrectUrl(UUID.parse(e1.DocuSignId__c), new Url('https://unit.test/return'));
 				throw new AssertException('Expected correctEnvelope to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.StatusNotFound_1, new List<String> {
@@ -1208,13 +1208,13 @@ private class StatusServiceTest {
 	static void test_correctEnvelope_invalid_status() {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.fromString(e1.DocuSignId__c));
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 			es1.Status__c = Envelope.STATUS_VOIDED;
 			update es1;
 
 			Test.startTest();
 			try {
-				StatusService.getCorrectUrl(UUID.fromString(e1.DocuSignId__c), new Url('https://unit.test/return'));
+				StatusService.getCorrectUrl(UUID.parse(e1.DocuSignId__c), new Url('https://unit.test/return'));
 				throw new AssertException('Expected correctEnvelope to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.CannotCorrectEnvelope, ex.getMessage());
@@ -1230,12 +1230,12 @@ private class StatusServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c e1 = TestUtils.createEnvelope();
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.fromString(e1.DocuSignId__c));
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 			es1.Status__c = Envelope.STATUS_SENT;
 			update es1;
 
 			Test.startTest();
-			Url result = StatusService.getCorrectUrl(UUID.fromString(e1.DocuSignId__c), new Url('https://unit.test/return'));
+			Url result = StatusService.getCorrectUrl(UUID.parse(e1.DocuSignId__c), new Url('https://unit.test/return'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1263,10 +1263,10 @@ private class StatusServiceTest {
 		System.runAs(TestUtils.createDocuSignUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c e1 = TestUtils.createEnvelope();
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.fromString(e1.DocuSignId__c));
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 
 			Test.startTest();
-			Url result = StatusService.getViewUrl(UUID.fromString(e1.DocuSignId__c), new Url('https://unit.test/return'));
+			Url result = StatusService.getViewUrl(UUID.parse(e1.DocuSignId__c), new Url('https://unit.test/return'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

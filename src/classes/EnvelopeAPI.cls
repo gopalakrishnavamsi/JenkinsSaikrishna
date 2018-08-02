@@ -1043,7 +1043,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			return new Envelope.Status(
 				null, // id
 				null, // source
-				UUID.fromString(this.envelopeId),
+				UUID.parse(this.envelopeId),
 				this.status == null ? null : this.status.toLowerCase(),
 				UserInfo.getName(),
 				UserInfo.getUserEmail(),
@@ -1128,7 +1128,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			}
 			throw new APIException(error);
 		}
-		return UUID.fromString(((EnvelopeResponse)JSON.deserialize(response.body, EnvelopeResponse.class)).envelopeId);
+		return UUID.parse(((EnvelopeResponse)JSON.deserialize(response.body, EnvelopeResponse.class)).envelopeId);
 	}
 
 	private class VoidRequest {

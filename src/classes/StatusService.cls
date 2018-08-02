@@ -31,7 +31,7 @@ global with sharing class StatusService {
 			return new Envelope.Status(
 				es.Id,
 				String.isBlank(es.SourceId__c) ? null : new Entity(es.SourceId__c),
-				UUID.fromString(es.DocuSignId__c),
+				UUID.parse(es.DocuSignId__c),
 				es.Status__c,
 				es.SenderName__c,
 				es.SenderEmail__c,
@@ -88,7 +88,7 @@ global with sharing class StatusService {
 				ORDER BY Sent__c DESC
 				LIMIT :max
 			]) {
-				result.add(UUID.fromString(e.DocuSignId__c));
+				result.add(UUID.parse(e.DocuSignId__c));
 			}
 			return result;
 		}
