@@ -859,6 +859,21 @@ global with sharing class RecipientService {
 	}
 
 	/**
+	 * Retrieves a list of DocuSign envelope recipients.
+	 * <p>
+	 * The caller must be the owner of the envelope.
+	 *
+	 * @param envelopeId The envelope ID.
+	 *
+	 * @return A list of recipients targeted by the envelope.
+	 */
+	global static List<Recipient> getEnvelopeRecipients(final Id envelopeId) {
+		Permissions.verifyIsOwner(envelopeId);
+
+		return DB.queryRecipients(envelopeId, true);
+	}
+
+	/**
 	 * Adds one or more recipients to a DocuSign envelope.
 	 * <p>
 	 * The caller must be the owner of the envelope.
