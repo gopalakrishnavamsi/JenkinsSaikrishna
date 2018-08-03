@@ -74,7 +74,7 @@ public class DocuSignAPITest {
 					response.setBody(request.getBody());
 				} else if (endpoint.endsWith('/accounts')) {
 					response.setBody('{"newAccounts":[{"accountId":"111111","accountIdGuid":"11111111-1111-1111-1111-111111111111","accountName":"UNIT TEST","userId":"22222222-2222-2222-2222-222222222222","apiPassword":"fake-password","baseUrl":"https://unit.test.docusign.net/restapi/v2/111111"}]}');
-				} else if (endpoint.endsWith('/envelopes')) {
+				} else if (endpoint.contains('/envelopes')) {
 					response.setBody('{"envelopeId":"11111111-1111-1111-1111-111111111111"}');
 				}
 			} else if (method == 'PUT') {
