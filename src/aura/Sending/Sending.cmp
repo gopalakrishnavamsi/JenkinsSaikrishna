@@ -310,20 +310,20 @@
                     <aura:if isTrue="{!v.showAdvancedOptions}">
                         <h4 class="slds-text-heading_label slds-m-bottom_x-small slds-p-top_small">{!$Label.c.Reminders}</h4>
                         <lightning:input type="checkbox" name="reminders"
-                                         label="{!$Label.c.SendAutomaticReminders}" checked="{!v.remind}"/>
+                                         label="{!$Label.c.SendAutomaticReminders}" checked="{!v.envelope.notifications.remind}"/>
                         <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.remind, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="remind-after-days"
-                                             label="{!$Label.c.DaysBeforeFirstReminder}" value="{!v.remindAfterDays}"
+                                             label="{!$Label.c.DaysBeforeFirstReminder}" value="{!v.envelope.notifications.remindAfterDays}"
                                              min="0"
-                                             disabled="{!not(v.remind)}"/>
+                                             disabled="{!not(v.envelope.notifications.remind)}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBeforeFirstReminder}</span>
                         </p>
                         <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.remind, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="remind-repeat-interval"
-                                             label="{!$Label.c.DaysBetweenReminders}" value="{!v.remindFrequencyDays}"
-                                             min="0" disabled="{!not(v.remind)}"/>
+                                             label="{!$Label.c.DaysBetweenReminders}" value="{!v.envelope.notifications.remindFrequencyDays}"
+                                             min="0" disabled="{!not(v.envelope.notifications.remind)}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBetweenReminders}</span>
                         </p>
                         <h4 class="slds-text-heading_label slds-m-top_medium slds-m-bottom_x-small">{!$Label.c.Expiration}</h4>
