@@ -2,7 +2,7 @@
  * This class is the entry point for DocuSign for Salesforce envelope and recipient status management. It provides
  * methods to retrieve and take action upon DocuSign for Salesforce statuses.
  */
-public with sharing class StatusService {
+global with sharing class StatusService {
 
 	@TestVisible
 	private static final StatusService.Database DB = new StatusService.Database();
@@ -31,7 +31,7 @@ public with sharing class StatusService {
 			return new Envelope.Status(
 				es.Id,
 				String.isBlank(es.SourceId__c) ? null : new Entity(es.SourceId__c),
-				UUID.fromString(es.DocuSignId__c),
+				UUID.parse(es.DocuSignId__c),
 				es.Status__c,
 				es.SenderName__c,
 				es.SenderEmail__c,
@@ -88,7 +88,7 @@ public with sharing class StatusService {
 				ORDER BY Sent__c DESC
 				LIMIT :max
 			]) {
-				result.add(UUID.fromString(e.DocuSignId__c));
+				result.add(UUID.parse(e.DocuSignId__c));
 			}
 			return result;
 		}
@@ -329,7 +329,7 @@ public with sharing class StatusService {
 	 *
 	 * @return The new envelope statuses.
 	 */
-	public static List<Envelope.Status> createStatus(final List<Envelope.Status> envelopes) {
+	global static List<Envelope.Status> createStatus(final List<Envelope.Status> envelopes) {
 		verifyIsOwner(envelopes);
 
 		ValidationResult vr = validate(envelopes);
@@ -348,7 +348,7 @@ public with sharing class StatusService {
 	 *
 	 * @return A list of envelope statuses.
 	 */
-	public static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
+	global static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
 		Permissions.verifyIsOwner(docuSignIds); // FIXME: This will break layouts.
 
 		List<Envelope.Status> result = new List<Envelope.Status>();
@@ -387,7 +387,7 @@ public with sharing class StatusService {
 	 *
 	 * @return A list of envelope statuses.
 	 */
-	public static List<Envelope.Status> getStatus(final Set<Id> sourceIds, final Integer maximumRecords) {
+	global static List<Envelope.Status> getStatus(final Set<Id> sourceIds, final Integer maximumRecords) {
 		return getStatus(DB.querySourceEnvelopes(sourceIds, maximumRecords));
 	}
 
@@ -400,7 +400,7 @@ public with sharing class StatusService {
 	 *
 	 * @return <code>true</code> if records were deleted, <code>false</code> otherwise.
 	 */
-	public static Boolean deleteStatus(final Set<UUID> docuSignIds) {
+	global static Boolean deleteStatus(final Set<UUID> docuSignIds) {
 		Permissions.verifyIsOwner(docuSignIds);
 
 		return DB.deleteStatus(docuSignIds);
@@ -444,7 +444,7 @@ public with sharing class StatusService {
 	 *
 	 * @return <code>true</code> if the envelope was resent, <code>false</code> otherwise.
 	 */
-	public static Boolean resendEnvelope(final UUID docuSignId) {
+	global static Boolean resendEnvelope(final UUID docuSignId) {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -464,7 +464,7 @@ public with sharing class StatusService {
 	 *
 	 * @return A list of recipient resend results.
 	 */
-	public static List<Recipient.ResendResult> resendRecipients(final UUID docuSignId, final List<Recipient> recipients) {
+	global static List<Recipient.ResendResult> resendRecipients(final UUID docuSignId, final List<Recipient> recipients) {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -484,7 +484,7 @@ public with sharing class StatusService {
 	 *
 	 * @return <code>true</code> if the void operation was successful, <code>false</code> otherwise.
 	 */
-	public static Boolean voidEnvelope(final UUID docuSignId, final String reason) {
+	global static Boolean voidEnvelope(final UUID docuSignId, final String reason) {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -511,7 +511,7 @@ public with sharing class StatusService {
 	 *
 	 * @return The envelope correction URL.
 	 */
-	public static Url getCorrectUrl(final UUID docuSignId, final Url returnUrl) {
+	global static Url getCorrectUrl(final UUID docuSignId, final Url returnUrl) {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -531,7 +531,7 @@ public with sharing class StatusService {
 	 *
 	 * @return The envelope view URL.
 	 */
-	public static Url getViewUrl(final UUID docuSignId, final Url returnUrl) {
+	global static Url getViewUrl(final UUID docuSignId, final Url returnUrl) {
 		// Don't check envelope permissions here. Let DS platform handle this.
 		if (docuSignId == null) throw new DocuSignException(Label.InvalidStatus);
 

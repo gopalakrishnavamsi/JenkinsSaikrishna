@@ -1,7 +1,7 @@
 /**
  * Encapsulates signing-related operations.
  */
-public with sharing class SigningService {
+global with sharing class SigningService {
 
 	@TestVisible
 	private static final SigningService.Database DB = new SigningService.Database();
@@ -66,7 +66,7 @@ public with sharing class SigningService {
 	 *
 	 * @return <code>true</code> if the next recipient should sign now, <code>false</code> otherwise.
 	 */
-	public static Boolean shouldSignNow(final Envelope envelope) {
+	global static Boolean shouldSignNow(final Envelope envelope) {
 		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
 
 		Boolean result = false;
@@ -93,7 +93,7 @@ public with sharing class SigningService {
 	 *
 	 * @return The signing URL.
 	 */
-	public static Url getSigningUrl(final Envelope envelope, final Url returnUrl, final Boolean checkFirstRecipientOnly) {
+	global static Url getSigningUrl(final Envelope envelope, final Url returnUrl, final Boolean checkFirstRecipientOnly) {
 		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
 
 		Url result = null;

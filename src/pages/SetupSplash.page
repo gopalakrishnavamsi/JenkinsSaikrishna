@@ -119,7 +119,7 @@
             </div>
             <!-- /Next Steps -->
             <div class="slds-m-top_large slds-text-align_center">
-                <a href="/lightning/n/Setup" target="_blank"
+                <a href="{!$Page.Setup}" target="_blank"
                    class="slds-button slds-button_brand">{!$Label.ContinueToSetup}</a>
             </div>
         </div>

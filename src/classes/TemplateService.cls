@@ -1,13 +1,13 @@
 /**
  * Primary interface point for DocuSign for Salesforce template management.
  */
-public with sharing class TemplateService {
+global with sharing class TemplateService {
 	/**
 	 * Retrieves all DocuSign templates.
 	 *
 	 * @return A list of DocuSign templates.
 	 */
-	public static List<Template> getTemplates() {
+	global static List<Template> getTemplates() {
 		Permissions.verifyIsDocuSignUser();
 
 		return TemplateAPI.getInstance().getTemplates();
@@ -20,7 +20,7 @@ public with sharing class TemplateService {
 	 *
 	 * @return The DocuSign template.
 	 */
-	public static Template getTemplate(final UUID templateId) {
+	global static Template getTemplate(final UUID templateId) {
 		Permissions.verifyIsDocuSignUser();
 
 		return TemplateAPI.getInstance().getTemplate(templateId);

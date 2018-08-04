@@ -1,11 +1,11 @@
 /**
  * Represents an error returned by an API.
  */
-public virtual class APIError {
+global virtual class APIError {
 	/**
 	 * Constant for no error.
 	 */
-	public static final APIError none = new APIError(APIErrorCode.SUCCESS, null);
+	global static final APIError none = new APIError(APIErrorCode.SUCCESS, null);
 	/**
 	 * Constant for a generic error.
 	 */
@@ -15,12 +15,12 @@ public virtual class APIError {
 	 * The error code.
 	 */
 	@AuraEnabled
-	public Integer code { get; private set; }
+	global Integer code { get; private set; }
 	/**
 	 * The error description.
 	 */
 	@AuraEnabled
-	public String description { get; private set; }
+	global String description { get; private set; }
 
 	/**
 	 * Constructs an API error.

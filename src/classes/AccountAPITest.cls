@@ -97,7 +97,7 @@ private class AccountAPITest {
 			System.assertNotEquals(null, a);
 			System.assertNotEquals(null, a.plan);
 			System.assertNotEquals(null, a.billing);
-			System.assertEquals(UUID.fromString('67db8eaa-8e05-486b-a146-8cb2b93d1aa4'), a.id);
+			System.assertEquals(UUID.parse('67db8eaa-8e05-486b-a146-8cb2b93d1aa4'), a.id);
 			System.assertEquals('DocuSign', a.name);
 			System.assertNotEquals(null, a.plan.id);
 			System.assertEquals('DEVCENTER_DEMO_APRIL2013', a.plan.name);
@@ -476,9 +476,9 @@ private class AccountAPITest {
 		System.assertNotEquals(null, result);
 		System.assertEquals(1, result.size());
 		System.assertEquals(22222222L, result[0].accountNumber);
-		System.assertEquals(UUID.fromString('22222222-2222-2222-2222-222222222222'), result[0].accountId);
+		System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].accountId);
 		System.assertEquals('Account 2 (VALID)', result[0].name);
-		System.assertEquals(UUID.fromString('22222222-2222-2222-2222-222222222222'), result[0].userId);
+		System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].userId);
 		System.assertEquals('fake-password', result[0].apiPassword);
 		System.assertNotEquals(null, result[0].baseUrl);
 		System.assertEquals('https://www.docusign.net/', result[0].baseUrl.toExternalForm());

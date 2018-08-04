@@ -576,6 +576,26 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
+	static void test_Database_queryRelatedContacts_invalid() {
+		System.runAs(TestUtils.createUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			EnvelopeConfiguration.RelatedContacts rc = new EnvelopeConfiguration.RelatedContacts(
+				null,
+				null,
+				null);
+
+			Test.startTest();
+			try {
+				RecipientService.DB.queryRelatedContacts(new Entity(a.Id), rc, null);
+				throw new AssertException('Expected queryRelatedContacts to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidRelatedContact, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_Database_queryRelatedContacts_signing_group() {
 		System.runAs(TestUtils.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
@@ -1320,6 +1340,47 @@ private class RecipientServiceTest {
 			System.assertEquals('subject2', result[1].emailSettings.subject);
 			System.assertEquals('message2: ' + UserInfo.getFirstName() + UserInfo.getLastName() + UserInfo.getUserEmail(),
 				result[1].emailSettings.message);
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeRecipients_unauthorized() {
+		Envelope__c e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = TestUtils.createEnvelope();
+		}
+
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.getEnvelopeRecipients(e.Id);
+				throw new AssertException('Expected getEnvelopeRecipients to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeRecipients_success() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Envelope__c e = TestUtils.createEnvelope();
+			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
+			r1.Sequence__c = 2;
+			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id);
+			r2.Sequence__c = 1;
+			update new List<Recipient__c> { r1, r2 };
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.getEnvelopeRecipients(e.Id);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(r2.Id, result[0].id);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(r1.Id, result[1].id);
 		}
 	}
 

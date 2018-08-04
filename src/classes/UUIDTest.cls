@@ -41,36 +41,36 @@ private class UUIDTest {
 		Boolean r4, r5, r6, r7, r8 = false;
 
 		Test.startTest();
-		u1 = UUID.fromString(s1);
-		u2 = UUID.fromString(s2);
-		u3 = UUID.fromString(s3);
+		u1 = UUID.parse(s1);
+		u2 = UUID.parse(s2);
+		u3 = UUID.parse(s3);
 
 		try {
-			UUID.fromString(s4);
+			UUID.parse(s4);
 		} catch (StringException ex) {
 			if (ex.getMessage().equals(Label.InvalidUUID)) r4 = true;
 		}
 
 		try {
-			UUID.fromString(s5);
+			UUID.parse(s5);
 		} catch (StringException ex) {
 			if (ex.getMessage().equals(Label.InvalidUUID)) r5 = true;
 		}
 
 		try {
-			UUID.fromString(s6);
+			UUID.parse(s6);
 		} catch (StringException ex) {
 			if (ex.getMessage().equals(Label.InvalidUUID)) r6 = true;
 		}
 
 		try {
-			UUID.fromString(s7);
+			UUID.parse(s7);
 		} catch (StringException ex) {
 			if (ex.getMessage().equals(Label.InvalidUUID)) r7 = true;
 		}
 
 		try {
-			UUID.fromString(s8);
+			UUID.parse(s8);
 		} catch (StringException ex) {
 			if (ex.getMessage().equals(Label.InvalidUUID)) r8 = true;
 		}
@@ -88,9 +88,9 @@ private class UUIDTest {
 	}
 
 	static testmethod void test_equality() {
-		UUID u1 = UUID.fromString('01234567-89ab-cdef-0123-456789abcdef');
-		UUID u2 = UUID.fromString('01234567-89ab-cdef-0123-456789abcdef');
-		UUID u3 = UUID.fromString('fedcba98-7654-3210-fedc-ba9876543210');
+		UUID u1 = UUID.parse('01234567-89ab-cdef-0123-456789abcdef');
+		UUID u2 = UUID.parse('01234567-89ab-cdef-0123-456789abcdef');
+		UUID u3 = UUID.parse('fedcba98-7654-3210-fedc-ba9876543210');
 
 		System.assertEquals(u1, u2);
 		System.assertEquals(u1.hashCode(), u2.hashCode());
@@ -103,14 +103,14 @@ private class UUIDTest {
 		System.assertEquals(null, UUID.tryParse(''));
 		System.assertEquals(null, UUID.tryParse('  \n\t'));
 		System.assertEquals(null, UUID.tryParse('not-a-uuid'));
-		System.assertEquals(UUID.fromString('01234567-89ab-CDEF-0123-456789abcdef'),
+		System.assertEquals(UUID.parse('01234567-89ab-CDEF-0123-456789abcdef'),
 			UUID.tryParse('01234567-89ab-cdef-0123-456789ABcdef'));
 	}
 
 	static testmethod void test_toString() {
 		String s = '01234567-89ab-cdef-0123-456789abcdef';
-		UUID u1 = UUID.fromString(s);
-		UUID u2 = UUID.fromString(s.toUpperCase());
+		UUID u1 = UUID.parse(s);
+		UUID u2 = UUID.parse(s.toUpperCase());
 
 		System.assertEquals(u1.toString(), s);
 		System.assertEquals(u1.toString(), u1.toString());

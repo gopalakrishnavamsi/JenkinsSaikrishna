@@ -1,92 +1,92 @@
 /**
  * Representation of a DocuSign envelope.
  */
-public class Envelope {
+global class Envelope {
 	/**
 	 * Created status constant.
 	 */
-	public static final String STATUS_CREATED = 'created';
+	global static final String STATUS_CREATED = 'created';
 	/**
 	 * Sent status constant.
 	 */
-	public static final String STATUS_SENT = 'sent';
+	global static final String STATUS_SENT = 'sent';
 	/**
 	 * Delivered status constant.
 	 */
-	public static final String STATUS_DELIVERED = 'delivered';
+	global static final String STATUS_DELIVERED = 'delivered';
 	/**
 	 * Declined status constant.
 	 */
-	public static final String STATUS_DECLINED = 'declined';
+	global static final String STATUS_DECLINED = 'declined';
 	/**
 	 * Voided status constant.
 	 */
-	public static final String STATUS_VOIDED = 'voided';
+	global static final String STATUS_VOIDED = 'voided';
 	/**
 	 * Completed status constant.
 	 */
-	public static final String STATUS_COMPLETED = 'completed';
+	global static final String STATUS_COMPLETED = 'completed';
 
 	/**
 	 * The ID of the associated Envelope__c record.
 	 */
 	@AuraEnabled
-	public Id id { get; private set; }
+	global Id id { get; private set; }
 	/**
 	 * The name of the envelope.
 	 */
 	@AuraEnabled
-	public String name { get; private set; }
+	global String name { get; private set; }
 	/**
 	 * The DocuSign ID of the envelope, assigned when the envelope is sent or a draft envelope is created.
 	 */
 	@AuraEnabled
-	public UUID docuSignId { get; private set; }
+	global UUID docuSignId { get; private set; }
 	/**
 	 * The ID of the configuration (f.k.a custom button) used to create the envelope.
 	 */
 	@AuraEnabled
-	public Id envelopeConfigurationId { get; private set; }
+	global Id envelopeConfigurationId { get; private set; }
 	/**
 	 * A list of documents contained by the envelope.
 	 */
 	@AuraEnabled
-	public List<Document> documents { get; private set; }
+	global List<Document> documents { get; private set; }
 	/**
 	 * A list of recipients who receive the envelope.
 	 */
 	@AuraEnabled
-	public List<Recipient> recipients { get; private set; }
+	global List<Recipient> recipients { get; private set; }
 	/**
 	 * A list of envelope custom fields. These are not persisted via the Envelope__c object.
 	 */
 	@AuraEnabled
-	public List<CustomField> customFields { get; private set; }
+	global List<CustomField> customFields { get; private set; }
 	/**
 	 * The reminder and expiration settings for the envelope.
 	 */
 	@AuraEnabled
-	public Notifications notifications { get; private set; }
+	global Notifications notifications { get; private set; }
 	/**
 	 * The subject of the email recipients receive.
 	 */
 	@AuraEnabled
-	public String emailSubject { get; private set; }
+	global String emailSubject { get; private set; }
 	/**
 	 * The message of the email recipients receive. This is contained within the standard DocuSign email body.
 	 */
 	@AuraEnabled
-	public String emailMessage { get; private set; }
+	global String emailMessage { get; private set; }
 	/**
 	 * The Salesforce source object for the envelope (e.g. Opportunity or Lead).
 	 */
 	@AuraEnabled
-	public Entity source { get; private set; }
+	global Entity source { get; private set; }
 	/**
 	 * The date and time when the envelope was sent.
 	 */
 	@AuraEnabled
-	public Datetime sent { get; private set; }
+	global Datetime sent { get; private set; }
 	/**
 	 * Read-only property indicating whether the envelope is sent.
 	 */
@@ -143,7 +143,7 @@ public class Envelope {
 	 * @param source The Salesforce source object for the envelope.
 	 * @param sent The date and time when the envelope was sent.
 	 */
-	public Envelope(
+	global Envelope(
 		final Id id,
 		final String name,
 		final UUID docuSignId,
@@ -233,77 +233,77 @@ public class Envelope {
 	/**
 	 * DocuSign envelope status.
 	 */
-	public class Status implements Comparable {
+	global class Status implements Comparable {
 		/**
 		 * The ID of the underlying EnvelopeStatus__c record.
 		 */
 		@AuraEnabled
-		public Id id { get; private set; }
+		global Id id { get; private set; }
 		/**
 		 * The Salesforce source entity.
 		 */
 		@AuraEnabled
-		public Entity source { get; private set; }
+		global Entity source { get; private set; }
 		/**
 		 * The DocuSign envelope ID.
 		 */
 		@AuraEnabled
-		public UUID docuSignId { get; private set; }
+		global UUID docuSignId { get; private set; }
 		/**
 		 * The current status.
 		 */
 		@AuraEnabled
-		public String status { get; private set; }
+		global String status { get; private set; }
 		/**
 		 * The sender name.
 		 */
 		@AuraEnabled
-		public String senderName { get; private set; }
+		global String senderName { get; private set; }
 		/**
 		 * The sender email address.
 		 */
 		@AuraEnabled
-		public String senderEmail { get; private set; }
+		global String senderEmail { get; private set; }
 		/**
 		 * Associated recipient statuses.
 		 */
 		@AuraEnabled
-		public List<Recipient.Status> recipients { get; private set; }
+		global List<Recipient.Status> recipients { get; private set; }
 		/**
 		 * Date and time when the envelope was sent.
 		 */
 		@AuraEnabled
-		public Datetime sent { get; private set; }
+		global Datetime sent { get; private set; }
 		/**
 		 * Date and time when the envelope expires.
 		 */
 		@AuraEnabled
-		public Datetime expires { get; private set; }
+		global Datetime expires { get; private set; }
 		/**
 		 * Date and time when the envelope was completed.
 		 */
 		@AuraEnabled
-		public Datetime completed { get; private set; }
+		global Datetime completed { get; private set; }
 		/**
 		 * The subject of the email message sent.
 		 */
 		@AuraEnabled
-		public String emailSubject { get; private set; }
+		global String emailSubject { get; private set; }
 		/**
 		 * The reason the envelope was declined or voided.
 		 */
 		@AuraEnabled
-		public String reason { get; private set; }
+		global String reason { get; private set; }
 		/**
 		 * Date and time when the status was last updated.
 		 */
 		@AuraEnabled
-		public Datetime lastStatusUpdate { get; private set; }
+		global Datetime lastStatusUpdate { get; private set; }
 		/**
 		 * Whether or not the envelope is in a final state.
 		 */
 		@AuraEnabled
-		public Boolean isFinal {
+		global Boolean isFinal {
 			get {
 				return this.status == STATUS_VOIDED || this.status == STATUS_DECLINED || this.status == STATUS_COMPLETED;
 			}
@@ -326,7 +326,7 @@ public class Envelope {
 		 * @param reason The reason the envelope was declined or voided.
 		 * @param lastStatusUpdate Date and time when the status was last updated.
 		 */
-		public Status(
+		global Status(
 			final Id id,
 			final Entity source,
 			final UUID docuSignId,

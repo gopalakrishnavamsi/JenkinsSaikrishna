@@ -1,7 +1,7 @@
 /**
  * Primary interface point for DocuSign for Salesforce account management.
  */
-public with sharing class AccountService {
+global with sharing class AccountService {
 
 	private static final Database DB = new AccountService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
@@ -758,7 +758,7 @@ public with sharing class AccountService {
 	 *
 	 * @return The DocuSign console URL.
 	 */
-	public static Url getDocuSignUrl() {
+	global static Url getDocuSignUrl() {
 		if (!Permissions.isDocuSignUser()
 			|| String.isBlank(UserSettings__c.getInstance(UserInfo.getUserId()).Username__c)) {
 

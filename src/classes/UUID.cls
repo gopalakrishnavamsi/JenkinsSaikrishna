@@ -1,7 +1,7 @@
 /**
  * Represents a UUID/GUID.
  */
-public class UUID {
+global class UUID {
 
 	private static final Pattern uuidPattern =
 		Pattern.compile('[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
@@ -38,7 +38,7 @@ public class UUID {
 	 *
 	 * @return The parsed UUID, assuming the input string is valid.
 	 */
-	public static UUID fromString(final String s) {
+	global static UUID parse(final String s) {
 		if (String.isBlank(s)) throw new StringException(Label.InvalidUUID);
 
 		Matcher m = uuidPattern.matcher(s);
@@ -54,12 +54,12 @@ public class UUID {
 	 *
 	 * @return The parsed UUID if the input string is valid, or <code>null</code> if the input string is invalid.
 	 */
-	public static UUID tryParse(final String s) {
+	global static UUID tryParse(final String s) {
 		UUID result = null;
 
 		if (String.isNotBlank(s)) {
 			try {
-				result = fromString(s);
+				result = parse(s);
 			} catch (Exception ex) {
 				// Swallow exception
 			}

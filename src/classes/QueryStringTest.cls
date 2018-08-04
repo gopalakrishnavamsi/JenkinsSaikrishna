@@ -357,8 +357,8 @@ private class QueryStringTest {
 
 	@IsTest
 	static void test_getUUID() {
-		final UUID uuid0 = UUID.fromString('00000000-0000-0000-0000-000000000000');
-		final UUID uuid1 = UUID.fromString('11111111-1111-1111-1111-111111111111');
+		final UUID uuid0 = UUID.parse('00000000-0000-0000-0000-000000000000');
+		final UUID uuid1 = UUID.parse('11111111-1111-1111-1111-111111111111');
 		final QueryString qs = new QueryString(params);
 
 		System.assertEquals(uuid0, qs.getUUID('uuid0'));
@@ -436,7 +436,7 @@ private class QueryStringTest {
 	static void test_taggerParameters() {
 		final Id eId = 'a07d0000018Lf9gAAC';
 		final Id sId = 'a0Od000000bk6A0';
-		final UUID envelopeId = UUID.fromString('78e5dfd5-aee7-4ba9-b849-4cd892dfe364');
+		final UUID envelopeId = UUID.parse('78e5dfd5-aee7-4ba9-b849-4cd892dfe364');
 
 		Test.setCurrentPage(new PageReference(Application.namespacePrefix + 'docusign_tagenvelope?eId=' + eId + '&sId='
 			+ sId + '&envelopeId=' + envelopeId + '&nw'));

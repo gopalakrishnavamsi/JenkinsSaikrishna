@@ -2,11 +2,11 @@
 public class TestUtils {
 
 	public static final String BASE_URL = 'https://unit.test.docusign.net/';
-	public static final UUID ID1 = UUID.fromString('11111111-1111-1111-1111-111111111111');
-	public static final UUID ID2 = UUID.fromString('22222222-2222-2222-2222-222222222222');
-	public static final UUID ID3 = UUID.fromString('33333333-3333-3333-3333-333333333333');
-	public static final UUID ID4 = UUID.fromString('44444444-4444-4444-4444-444444444444');
-	public static final UUID ID5 = UUID.fromString('55555555-5555-5555-5555-555555555555');
+	public static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
+	public static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
+	public static final UUID ID3 = UUID.parse('33333333-3333-3333-3333-333333333333');
+	public static final UUID ID4 = UUID.parse('44444444-4444-4444-4444-444444444444');
+	public static final UUID ID5 = UUID.parse('55555555-5555-5555-5555-555555555555');
 
 	private static User administrator = null;
 

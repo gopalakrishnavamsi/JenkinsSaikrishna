@@ -1,7 +1,7 @@
 /**
  * A DocuSign for Salesforce envelope configuration (formerly custom button).
  */
-public with sharing class EnvelopeConfiguration {
+global class EnvelopeConfiguration {
 
 	public static final String DEFAULT_NOTE = 'DEFAULT_NOTE';
 	public static final String KEY_SIGNING_GROUP = 'signinggroup';

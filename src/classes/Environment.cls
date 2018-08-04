@@ -5,7 +5,7 @@ public class Environment {
 
 	// TODO: Use environment-specific trial plan IDs. Support multiple if necessary.
 	@TestVisible
-	private static final UUID TRIAL_PLAN_ID = UUID.fromString([
+	private static final UUID TRIAL_PLAN_ID = UUID.parse([
 		SELECT TrialPlanId__c
 		FROM Organization__mdt
 		WHERE DeveloperName = 'SecureSettings'

@@ -1,47 +1,47 @@
 /**
  * Representation of a DocuSign template.
  */
-public class Template {
+global class Template {
 	/**
 	 * The DocuSign template ID.
 	 */
 	@AuraEnabled
-	public UUID id { get; private set; }
+	global UUID id { get; private set; }
 	/**
 	 * The DocuSign template name.
 	 */
 	@AuraEnabled
-	public String name { get; private set; }
+	global String name { get; private set; }
 	/**
 	 * The DocuSign template custom fields.
 	 */
 	@AuraEnabled
-	public List<CustomField> customFields { get; private set; }
+	global List<CustomField> customFields { get; private set; }
 	/**
 	 * The reminder and expiration settings for the template.
 	 */
 	@AuraEnabled
-	public Notifications notifications { get; private set; }
+	global Notifications notifications { get; private set; }
 	/**
 	 * The subject of the email recipients receive.
 	 */
 	@AuraEnabled
-	public String emailSubject { get; private set; }
+	global String emailSubject { get; private set; }
 	/**
 	 * The message of the email recipients receive. This is contained within the standard DocuSign email body.
 	 */
 	@AuraEnabled
-	public String emailMessage { get; private set; }
+	global String emailMessage { get; private set; }
 	/**
 	 * The DocuSign template recipients.
 	 */
 	@AuraEnabled
-	public List<Recipient> recipients { get; private set; }
+	global List<Recipient> recipients { get; private set; }
 	/**
 	 * The date and time when the DocuSign template was last modified.
 	 */
 	@AuraEnabled
-	public Datetime lastModified { get; private set; }
+	global Datetime lastModified { get; private set; }
 
 	/**
 	 * Constructs a DocuSign template.
@@ -55,7 +55,7 @@ public class Template {
 	 * @param recipients The DocuSign template recipients.
 	 * @param lastModified The date and time when the DocuSign template was last modified.
 	 */
-	public Template(
+	global Template(
 		final UUID id,
 		final String name,
 		final List<CustomField> customFields,

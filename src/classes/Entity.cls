@@ -1,7 +1,7 @@
 /**
  * Represents a Salesforce object.
  */
-public with sharing class Entity {
+global with sharing class Entity {
 
 	private static final List<EntityResolver> RESOLVERS = new List<EntityResolver>();
 
@@ -25,7 +25,7 @@ public with sharing class Entity {
 	 * The Salesforce object ID.
 	 */
 	@AuraEnabled
-	public Id id { get; private set; }
+	global Id id { get; private set; }
 	/**
 	 * The Salesforce object type.
 	 */
@@ -34,34 +34,34 @@ public with sharing class Entity {
 	 * The name of the Salesforce object type.
 	 */
 	@AuraEnabled
-	public String typeName { get; private set; }
+	global String typeName { get; private set; }
 	/**
 	 * The localized Salesforce object label.
 	 */
 	@AuraEnabled
-	public String label { get; private set; }
+	global String label { get; private set; }
 	/**
 	 * The Salesforce object name.
 	 */
 	@AuraEnabled
-	public String name { get; private set; }
+	global String name { get; private set; }
 	/**
 	 * The Salesforce object parent (e.g. Account for Opportunity).
 	 */
 	@AuraEnabled
-	public Entity parent { get; private set; }
+	global Entity parent { get; private set; }
 	/**
 	 * Whether the entity is valid or not. It is considered valid if the ID is defined.
 	 */
 	@AuraEnabled
-	public Boolean isValid { get; private set; }
+	global Boolean isValid { get; private set; }
 
 	/**
 	 * Constructs an entity. This will populate the type and label via SObject describe.
 	 *
 	 * @param id The Salesforce object ID.
 	 */
-	public Entity(final Id id) {
+	global Entity(final Id id) {
 		this(id, null, null);
 	}
 
@@ -72,7 +72,7 @@ public with sharing class Entity {
 	 * @param name The Salesforce object name.
 	 * @param parent The Salesforce object parent.
 	 */
-	public Entity(final Id id, final String name, final Entity parent) {
+	global Entity(final Id id, final String name, final Entity parent) {
 		if (id != null) {
 			this.id = id;
 			this.type = id.getSobjectType();
@@ -173,7 +173,7 @@ public with sharing class Entity {
 	 *
 	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
 	 */
-	public static Entity resolve(final Id id) {
+	global static Entity resolve(final Id id) {
 		if (id == null) throw new DocuSignException(Label.UndefinedId);
 
 		SObjectType type = id.getSobjectType();

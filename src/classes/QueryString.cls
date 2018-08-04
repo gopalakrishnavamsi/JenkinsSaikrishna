@@ -171,7 +171,7 @@ public virtual class QueryString {
 		final String value = getValue(key);
 
 		try {
-			result = UUID.fromString(value);
+			result = UUID.parse(value);
 		} catch (Exception ex) {
 			throw new DocuSignException(Label.InvalidUrlParameter, ex);
 		}
@@ -184,7 +184,7 @@ public virtual class QueryString {
 		final String value = get(key);
 
 		try {
-			result = UUID.fromString(value);
+			result = UUID.parse(value);
 		} catch (Exception ex) {
 		}
 
