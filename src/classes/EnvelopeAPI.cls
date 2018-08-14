@@ -1093,7 +1093,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
-			QueryString.empty,
+			options == null || !options.sendNow ? new QueryString('merge_roles_on_draft', 'true') : QueryString.empty,
 			getCreateHeaders(),
 			JSON.serialize(new EnvelopeAPI.APIEnvelope(
 				envelope,

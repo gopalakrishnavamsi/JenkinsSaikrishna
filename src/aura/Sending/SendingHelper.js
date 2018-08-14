@@ -132,33 +132,32 @@
     return helper.setExpiration(helper.setReminders(notifications), 120);
   },
 
-  setTemplateSettings: function (component, event, helper, selectedTemplate) {
-    var templates = component.get('v.templates');
-    var index = event.getSource().get('v.name');
-
-    if (typeof(index) !== 'undefined') {
-      if (!$A.util.isEmpty(templates[index])) {
-        helper.updateTemplates(component, event, helper, index);
-      }
-    }
-
-    var selectedTemplateId = $A.util.isEmpty(event.getSource().get('v.value')) ? selectedTemplate.id.value : event.getSource().get('v.value');
+  updateTemplate: function (component, helper, templateId) {
     var availableTemplates = component.get('v.availableTemplates');
 
-    availableTemplates.forEach(function (template, index) {
-      if (template.id.value === selectedTemplateId) {
+    availableTemplates.forEach(function (t) {
+      if (t.id.value === templateId) {
         var envelope = component.get('v.envelope');
-        if (template.notifications != null) {
-          envelope.notifications = helper.setExpiration(helper.setReminders(envelope.notifications, template.notifications.remindAfterDays, template.notifications.remindFrequencyDays), template.notifications.expireAfterDays, template.notifications.expireWarnDays);
+        if (t.notifications != null) {
+          envelope.notifications = helper.setExpiration(helper.setReminders(envelope.notifications, t.notifications.remindAfterDays, t.notifications.remindFrequencyDays), t.notifications.expireAfterDays, t.notifications.expireWarnDays);
         } else {
           envelope.notifications = helper.resetNotificationSettings(envelope.notifications, helper);
         }
-        envelope.emailSubject = $A.util.isEmpty(template.emailSubject) ? envelope.emailSubject : template.emailSubject;
-        envelope.emailMessage = $A.util.isEmpty(template.emailMessage) ? envelope.emailMessage : template.emailMessage;
+        t.emailSubject = $A.util.isEmpty(t.emailSubject) ? envelope.emailSubject : t.emailSubject;
+        t.emailMessage = $A.util.isEmpty(t.emailMessage) ? envelope.emailMessage : t.emailMessage;
         component.set('v.envelope', envelope);
-        template.selected = true;
+        t.selected = true;
+        component.set('v.template', t);
+      } else {
+        t.selected = false;
+        t.recipients.forEach(function (tr) {
+          tr.source = {};
+        });
       }
     });
+    if ($A.util.isUndefinedOrNull(templateId)) {
+      component.set('v.template', null);
+    }
     component.set('v.availableTemplates', availableTemplates);
   },
 
@@ -179,31 +178,6 @@
     };
   },
 
-  updateTemplates: function (component, event, helper, index) {
-    var targetIndex = index;
-    var templates = component.get('v.templates');
-    var availableTemplates = component.get('v.availableTemplates');
-    var selectedTemplate;
-
-    availableTemplates.forEach(function (template) {
-      if (templates[targetIndex].id.value === template.id.value) {
-        template.selected = false;
-        template.recipients.forEach(function (tr) {
-          tr.source = {};
-        });
-      } else if (event.getSource().get('v.value') === template.id.value) {
-        selectedTemplate = template;
-      }
-    });
-    templates[targetIndex] = selectedTemplate;
-    component.set('v.availableTemplates', availableTemplates);
-    component.set('v.templates', templates);
-  },
-
-  hasSourceId: function (x) {
-    return !$A.util.isUndefinedOrNull(x) && (!$A.util.isEmpty(x.sourceId) || !$A.util.isUndefinedOrNull(x.source) && !$A.util.isEmpty(x.source.id));
-  },
-
   getSourceId: function (x) {
     if ($A.util.isUndefinedOrNull(x)) return null;
 
@@ -219,7 +193,7 @@
   getValidity: function (component, helper) {
     switch (component.get('v.activeStep')) {
       case 0:
-        return !!(component.get('v.filesSelected') || !$A.util.isEmpty(component.get('v.templates')));
+        return !!(component.get('v.filesSelected') || !$A.util.isUndefinedOrNull(component.get('v.template')));
       case 1:
         return !$A.util.isEmpty(component.get('v.recipients'));
       case 2:
@@ -269,7 +243,7 @@
     component.set('v.filesSelected', false);
   },
 
-  getDocumentsForSending: function (documents, templates) {
+  getDocumentsForSending: function (documents, template) {
     var sequence = 1;
     var docs = [];
     if (!$A.util.isEmpty(documents)) {
@@ -287,19 +261,15 @@
         }
       });
     }
-    if (!$A.util.isEmpty(templates)) {
-      templates.forEach(function (t) {
-        if (!!t.selected) {
-          docs.push({
-            sequence: sequence++,
-            type: 'Template',
-            name: t.name,
-            extension: null,
-            size: null,
-            lastModified: t.lastModified,
-            sourceId: t.id.value
-          });
-        }
+    if (!$A.util.isUndefinedOrNull(template)) {
+      docs.push({
+        sequence: sequence++,
+        type: 'Template',
+        name: template.name,
+        extension: null,
+        size: null,
+        lastModified: template.lastModified,
+        sourceId: template.id.value
       });
     }
     return docs;
@@ -429,21 +399,17 @@
     return rs;
   },
 
-  getRecipients: function (helper, recipients, templates) {
+  getRecipients: function (helper, recipients, template) {
     var rs = [];
     var ri = 0;
     if (!$A.util.isEmpty(recipients)) {
-      if (!$A.util.isEmpty(templates)) {
-        // Add or merge template recipientsc
-        templates.forEach(function (t) {
-          if (!$A.util.isEmpty(t.recipients)) {
-            t.recipients.forEach(function (tr) {
-              if (ri < recipients.length && !helper.isValidRecipient(tr)) {
-                rs.push(helper.mergeTemplateRecipient(helper, tr, recipients[ri++]));
-              } else {
-                rs.push(tr);
-              }
-            });
+      if (!$A.util.isUndefinedOrNull(template) && !$A.util.isEmpty(template.recipients)) {
+        // Add or merge template recipients
+        template.recipients.forEach(function (tr) {
+          if (ri < recipients.length && !helper.isValidRecipient(tr)) {
+            rs.push(helper.mergeTemplateRecipient(helper, tr, recipients[ri++]));
+          } else {
+            rs.push(tr);
           }
         });
       }
