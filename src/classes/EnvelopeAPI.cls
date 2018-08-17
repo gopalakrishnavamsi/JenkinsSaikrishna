@@ -132,6 +132,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String userName { get; private set; }
 		public String recipientId { get; private set; }
 		public String envelopeId { get; private set; }
+		public String clientUserId {get;private set;}
 		public Boolean suppressNavigation { get; private set; }
 
 		public ViewRequest(final UUID envelopeId, final Url returnUrl) {
@@ -167,6 +168,20 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			this.recipientId = String.valueOf(recipientId);
 			this.envelopeId = null;
 			this.suppressNavigation = true;
+		}
+
+		//Embedded Recipient constructor
+		public ViewRequest(final String authenticationMethod,
+			final String clientUserId,
+			final Url returnUrl,
+			final String userName,
+			final String email) {
+
+			this.authenticationMethod = authenticationMethod;
+			this.clientUserId = clientUserId;
+			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
+			this.userName = userName;
+			this.email = email;
 		}
 	}
 
@@ -209,6 +224,28 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
 			JSON.serialize(new ViewRequest('email', email, returnUrl, userName, recipientId)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get recipient view: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+	}
+
+	//Embedded Recipient view request
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String clientUserId,
+		final String email, final String userName) {
+
+		return this.getEmbeddedRecipientViewUrl(envelopeId, returnUrl, clientUserId, email, userName, RestAPI.defaultTimeout);
+	}
+
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String clientUserId,
+		final String email, final String userName, final Integer timeout) {
+
+		final RestAPI.Response response = this.post(
+			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
+			JSON.serialize(new ViewRequest('email', clientUserId, returnUrl, userName, email)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get recipient view: ' + response.error.toString());
@@ -546,6 +583,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String signedDateTime;
 		public String declinedDateTime;
 		public String declinedReason;
+		public String clientUserId;
 
 		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags,
 			final Boolean hasTemplates) {
@@ -583,6 +621,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					// Only add default anchor tags if role is defined and has a valid (> 0) value.
 					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId,
 						String.valueOf(r.role.value));
+				}
+				//setting the clientUserId property for embedded recipients
+				//setting this to the recipient email and not the Salesforce user id since this would require altering input parameters
+				//this will be set only for embedded recipients. If this property is set for other recipients the envelope is not sent
+				if (r.type == Recipient.TYPE_EMBEDDED_SIGNER) {
+					this.clientUserId = r.email;
 				}
 			}
 		}
@@ -651,7 +695,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
 						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
-					} else { // Recipient.TYPE_SIGNER
+					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
 						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					}
 				}

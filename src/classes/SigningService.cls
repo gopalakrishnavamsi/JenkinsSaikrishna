@@ -118,4 +118,28 @@ global with sharing class SigningService {
 		}
 		return result;
 	}
+
+	/**
+	 * Retrieves the signing URL for embedded recipients
+	 * <p>
+	 *
+	 * @param envelopeId  The DocuSign envelope Id in UUID format.
+	 * @param returnUrl Where to redirect after signing.
+	 *
+	 * @return The signing URL.
+	 */
+	global static Url getEmbeddedSigningUrl(final UUID envelopeId, final Url returnUrl) {
+		Url result = null;
+		if (envelopeId != null) {
+			String name = UserInfo.getName();
+			String email = UserInfo.getUserEmail();
+			result = EnvelopeAPI.getInstance().getEmbeddedRecipientViewUrl(
+							envelopeId,
+							returnUrl,
+							email,
+							email,
+							name);
+			}
+		return result;
+	}
 }

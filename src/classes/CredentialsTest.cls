@@ -54,9 +54,9 @@ private class CredentialsTest {
 		String au = UUID.randomUUID().toString();
 		String ap = UUID.randomUUID().toString();
 		Credentials.AccountCredentials ac1 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, true);
+			Environment.demo, accountId, 1111L, ae, au, ap, true, true);
 		Credentials.AccountCredentials ac2 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, false);
+			Environment.demo, accountId, 1111L, ae, au, ap, false, false);
 		Credentials.UserCredentials uc = new Credentials.UserCredentials(
 			UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
@@ -259,7 +259,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, true, true);
+				username, password, true, true, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -294,7 +294,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, false, false);
+				username, password, false, false, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -332,7 +332,7 @@ private class CredentialsTest {
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				String.valueOf(username), password, true, false);
+				String.valueOf(username), password, true, false, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
