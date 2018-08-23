@@ -132,7 +132,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String userName { get; private set; }
 		public String recipientId { get; private set; }
 		public String envelopeId { get; private set; }
-		public String clientUserId {get;private set;}
+		public String clientUserId { get; private set; }
 		public Boolean suppressNavigation { get; private set; }
 
 		public ViewRequest(final UUID envelopeId, final Url returnUrl) {
@@ -626,7 +626,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				//setting this to the Salesforce user id of the recipient
 				//this will be set only for embedded recipients. If this property is set for other recipients the envelope is not sent
 				if (r.type == Recipient.TYPE_EMBEDDED_SIGNER) {
-					this.clientUserId = r.source.Id;
+					this.clientUserId = Entity.isValid(r.source) ? r.source.id : null;
 				}
 			}
 		}
