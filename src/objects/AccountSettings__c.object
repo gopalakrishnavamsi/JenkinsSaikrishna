@@ -55,6 +55,15 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
+		<fullName>UseSystemSender__c</fullName>
+		<defaultValue>true</defaultValue>
+		<externalId>false</externalId>
+		<label>Use System Sender</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
 		<fullName>Email__c</fullName>
 		<externalId>false</externalId>
 		<label>DocuSign Email Address</label>

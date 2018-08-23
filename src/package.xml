@@ -726,6 +726,7 @@
         <members>AccountSettings__c.AccountId__c</members>
         <members>AccountSettings__c.AccountNumber__c</members>
         <members>AccountSettings__c.UseSendOnBehalfOf__c</members>
+        <members>AccountSettings__c.UseSystemSender__c</members>
         <members>AccountSettings__c.Email__c</members>
         <members>AccountSettings__c.Username__c</members>
         <members>AccountSettings__c.Password__c</members>

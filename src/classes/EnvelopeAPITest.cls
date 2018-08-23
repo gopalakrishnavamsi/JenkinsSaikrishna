@@ -262,6 +262,50 @@ private class EnvelopeAPITest {
 		}
 	}
 
+	@IsTest
+	static void test_getEmbeddedRecipientViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createUser()) {
+			TestUtils.createAccountConfiguration();
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getEmbeddedRecipientViewUrl(
+				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName(), 1);
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+			System.assertEquals('https://unit.test/view/recipient', u.toExternalForm());
+		}
+	}
+
+	@IsTest
+	static void test_getEmbeddedRecipientViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createUser()) {
+			TestUtils.createAccountConfiguration();
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getEmbeddedRecipientViewUrl(
+					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName(), 1);
+				throw new AssertException('Expected getEmbeddedRecipientView call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(404, ex.error.code);
+		}
+	}
+
 	private class UnknownRecipientMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();

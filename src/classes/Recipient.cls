@@ -11,6 +11,10 @@ global class Recipient implements Comparable {
 	 */
 	global static final String TYPE_IN_PERSON_SIGNER = 'InPersonSigner';
 	/**
+	 * Embedded signer recipient type constant.
+	 */
+	global static final String TYPE_EMBEDDED_SIGNER = 'EmbeddedSigner';
+	/**
 	 * Carbon copy (Receives a Copy) recipient type constant.
 	 */
 	global static final String TYPE_CARBON_COPY = 'CarbonCopy';
