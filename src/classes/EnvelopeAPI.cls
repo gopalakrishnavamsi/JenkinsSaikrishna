@@ -234,15 +234,16 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	//Embedded Recipient view request
-	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String clientUserId,
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
 		final String email, final String userName) {
 
-		return this.getEmbeddedRecipientViewUrl(envelopeId, returnUrl, clientUserId, email, userName, RestAPI.defaultTimeout);
+		return this.getEmbeddedRecipientViewUrl(envelopeId, returnUrl, email, userName, RestAPI.defaultTimeout);
 	}
 
-	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String clientUserId,
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
 		final String email, final String userName, final Integer timeout) {
 
+		String clientUserId = UserInfo.getUserId();
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
 			JSON.serialize(new ViewRequest('email', clientUserId, returnUrl, userName, email)),

@@ -359,7 +359,7 @@ private class SigningServiceTest {
 	static void test_getEmbeddedSigningUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
@@ -400,7 +400,7 @@ private class SigningServiceTest {
 	static void test_getEmbeddedSigningUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(TestUtils.createUser()) {
 			TestUtils.createAccountConfiguration();
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
