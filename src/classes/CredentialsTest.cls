@@ -211,18 +211,48 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_invalid_sobo() {
+	static void test_getInstance_systemSender() {
+		User u1 = TestUtils.createUser();
+		User u2 = TestUtils.createUser();
+
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
+			System.assertEquals(AccountSettings__c.getOrgDefaults().UseSystemSender__c, true);
 		}
 
 		System.runAs(TestUtils.createUser()) {
+			Credentials result1, result2;
+			Test.startTest();
+				result1 = Credentials.getInstance(u1.Id, true);
+				result2 = Credentials.getInstance(u2.Id, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(result1.isValid);
+
+			System.assertNotEquals(null, result2);
+			System.assert(result2.isValid);
+		}
+	}
+
+	@IsTest
+	static void test_getInstance_invalid_sobo() {
+		User u1 = TestUtils.createUser();
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
+			testSettings.UseSystemSender__c = false;
+			upsert testSettings;
+		}
+
+		System.runAs(u1) {
 			Test.startTest();
 			try {
-				Credentials.getInstance(UserInfo.getUserId(), true);
+				Credentials.getInstance(u1.Id, true);
 				throw new AssertException('Expected getInstance to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
 			}
 			Test.stopTest();
 		}
