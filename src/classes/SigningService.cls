@@ -133,10 +133,11 @@ global with sharing class SigningService {
 		if (envelopeId != null) {
 			String name = UserInfo.getName();
 			String email = UserInfo.getUserEmail();
+			String userId = UserInfo.getUserId();
 			result = EnvelopeAPI.getInstance().getEmbeddedRecipientViewUrl(
 							envelopeId,
 							returnUrl,
-							email,
+							userId,
 							email,
 							name);
 			}

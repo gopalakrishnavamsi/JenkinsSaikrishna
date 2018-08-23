@@ -623,10 +623,10 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 						String.valueOf(r.role.value));
 				}
 				//setting the clientUserId property for embedded recipients
-				//setting this to the recipient email and not the Salesforce user id since this would require altering input parameters
+				//setting this to the Salesforce user id of the recipient
 				//this will be set only for embedded recipients. If this property is set for other recipients the envelope is not sent
 				if (r.type == Recipient.TYPE_EMBEDDED_SIGNER) {
-					this.clientUserId = r.email;
+					this.clientUserId = r.source.Id;
 				}
 			}
 		}
