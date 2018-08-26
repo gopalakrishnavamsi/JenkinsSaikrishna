@@ -2,14 +2,27 @@
 public class DocumentCustomField {
 
 	private static final Map<String, String> TYPES = new Map<String, String> {
-		'approve' => Label.Approve, 'checkbox' => Label.CheckBox, 'company' => Label.Company,
-		'datesigned' => Label.DateSigned, 'emailaddress' => Label.EmailAddress, 'decline' => Label.Decline,
-		'list' => Label.DropDown, 'envelopeid' => Label.EnvelopeId, 'firstname' => Label.FirstName,
-		'formula' => Label.Formula, 'fullname' => Label.FullName, 'title' => Label.Title,
-		'initialhere' => Label.InitialHere, 'initialhereoptional' => Label.InitialHereOptional,
-		'lastname' => Label.LastName, 'note' => Label.Note, 'signhere' => Label.SignHere,
-		'signhereoptional' => Label.SignHereOptional, 'radio' => Label.RadioButton,
-		'signerattachment' => Label.SignerAttachment, 'text' => Label.TextField
+		'approve' => System.Label.Approve,
+		'checkbox' => System.Label.CheckBox,
+		'company' => System.Label.Company,
+		'datesigned' => System.Label.DateSigned,
+		'emailaddress' => System.Label.EmailAddress,
+		'decline' => System.Label.Decline,
+		'list' => System.Label.DropDown,
+		'envelopeid' => System.Label.EnvelopeId,
+		'firstname' => System.Label.FirstName,
+		'formula' => System.Label.Formula,
+		'fullname' => System.Label.FullName,
+		'title' => System.Label.Title,
+		'initialhere' => System.Label.InitialHere,
+		'initialhereoptional' => System.Label.InitialHereOptional,
+		'lastname' => System.Label.LastName,
+		'note' => System.Label.Note,
+		'signhere' => System.Label.SignHere,
+		'signhereoptional' => System.Label.SignHereOptional,
+		'radio' => System.Label.RadioButton,
+		'signerattachment' => System.Label.SignerAttachment,
+		'text' => System.Label.TextField
 	};
 
 	public UUID id { get; private set; }

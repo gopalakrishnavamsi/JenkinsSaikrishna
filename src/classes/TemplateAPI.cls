@@ -144,7 +144,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 				inPersonSigner ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
 				inPersonSigner ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
 				String.isBlank(this.signingGroupId) ? null :
-					new Recipient.SigningGroup(Integer.valueOf(this.signingGroupId), this.signingGroupName),
+					new SigningGroup(Integer.valueOf(this.signingGroupId), this.signingGroupName),
 				null, // phone
 				getAuthentication(),
 				nullIfBlank(this.note),

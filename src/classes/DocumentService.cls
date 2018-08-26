@@ -109,7 +109,8 @@ global with sharing class DocumentService {
 			null,
 			null,
 			template == null ? null : template.lastModified,
-			template == null ? null : String.valueOf(template.id));	}
+			template == null ? null : String.valueOf(template.id));
+	}
 
 	/**
 	 * Converts a list of <code>Document__c</code> objects to their domain object form.

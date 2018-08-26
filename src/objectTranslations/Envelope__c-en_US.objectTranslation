@@ -9,7 +9,6 @@
 		<value>DocuSign Envelopes</value>
 	</caseValues>
 	<fields>
-		<help>DocuSign envelope ID</help>
 		<label>DocuSign envelope ID</label>
 		<name>DocuSignId__c</name>
 	</fields>

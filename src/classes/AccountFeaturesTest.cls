@@ -7,7 +7,8 @@ private class AccountFeaturesTest {
 		| AccountFeatures.FLAG_DATA_FIELD_SIZES
 		| AccountFeatures.FLAG_SIGNING_GROUPS
 		| AccountFeatures.FLAG_SMS_AUTHENTICATION
-		| AccountFeatures.FLAG_TEMPLATES;
+		| AccountFeatures.FLAG_TEMPLATES
+		| AccountFeatures.FLAG_BULK_SENDING;
 
 	@IsTest
 	static void test_getInstance() {
@@ -33,6 +34,7 @@ private class AccountFeaturesTest {
 			System.assert(af1.signingGroups);
 			System.assert(af1.smsAuthentication);
 			System.assert(af1.templates);
+			System.assert(af1.bulkSending);
 		}
 	}
 
@@ -70,6 +72,8 @@ private class AccountFeaturesTest {
 						result.put(AccountFeatures.FLAG_SMS_AUTHENTICATION, accountSetting.value == 'true');
 					} else if (accountSetting.name == 'allowServerTemplates') {
 						result.put(AccountFeatures.FLAG_TEMPLATES, accountSetting.value == 'true');
+					} else if (accountSetting.name == 'allowBulkSend') {
+						result.put(AccountFeatures.FLAG_BULK_SENDING, accountSetting.value == 'true');
 					}
 				}
 			}
@@ -86,6 +90,7 @@ private class AccountFeaturesTest {
 			System.assert(result.get(AccountFeatures.FLAG_SIGNING_GROUPS));
 			System.assert(result.get(AccountFeatures.FLAG_SMS_AUTHENTICATION));
 			System.assert(result.get(AccountFeatures.FLAG_TEMPLATES));
+			System.assert(result.get(AccountFeatures.FLAG_BULK_SENDING));
 		}
 	}
 
@@ -175,5 +180,6 @@ private class AccountFeaturesTest {
 		System.assertNotEquals(AccountFeatures.FLAG_SIGNING_GROUPS, features & AccountFeatures.FLAG_SIGNING_GROUPS);
 		System.assertNotEquals(AccountFeatures.FLAG_SMS_AUTHENTICATION, features & AccountFeatures.FLAG_SMS_AUTHENTICATION);
 		System.assertNotEquals(AccountFeatures.FLAG_TEMPLATES, features & AccountFeatures.FLAG_TEMPLATES);
+		System.assertNotEquals(AccountFeatures.FLAG_BULK_SENDING, features & AccountFeatures.FLAG_BULK_SENDING);
 	}
 }

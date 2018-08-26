@@ -7,6 +7,11 @@ global class UUID {
 		Pattern.compile('[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
 
 	/**
+	 * An empty UUID/GUID: 00000000-0000-0000-0000-000000000000.
+	 */
+	public static final UUID empty = UUID.parse('00000000-0000-0000-0000-000000000000');
+
+	/**
 	 * The string representation of the UUID.
 	 */
 	@AuraEnabled
@@ -76,7 +81,7 @@ global class UUID {
 	 * @return The string representation of the input UUID, or an empty string if the input UUID is null or empty.
 	 */
 	public static String toString(final UUID u) {
-		return isDefined(u) ? u.toString() : '';
+		return isEmpty(u) ? '' : u.toString();
 	}
 
 	/**
@@ -126,9 +131,10 @@ global class UUID {
 	 *
 	 * @param u The input UUID.
 	 *
-	 * @return <code>true</code> if the input UUID is non-null and has a non-empty value, <code>false</code> otherwise.
+	 * @return <code>true</code> if the input UUID is <code>null</code> or has an blank value, <code>false</code>
+	 * otherwise.
 	 */
-	public static Boolean isDefined(final UUID u) {
-		return u != null && String.isNotBlank(u.value);
+	public static Boolean isEmpty(final UUID u) {
+		return u == null || String.isBlank(u.value) || u == UUID.empty;
 	}
 }

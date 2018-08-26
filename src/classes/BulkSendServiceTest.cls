@@ -1,0 +1,878 @@
+@IsTest
+private class BulkSendServiceTest {
+
+	private static Integer randomInteger(final Integer max) {
+		return Integer.valueOf(Math.random() * max);
+	}
+
+	private static BulkList__c createList(final Id sourceId) {
+		BulkList__c bl = new BulkList__c(
+			DocuSignId__c = UUID.randomUUID().toString(),
+			Name = UUID.randomUUID().toString(),
+			SourceId__c = sourceId);
+		insert bl;
+		return bl;
+	}
+
+	private static BulkStatus__c createStatus(final Id sourceId) {
+		BulkStatus__c bs = new BulkStatus__c(
+			DocuSignId__c = UUID.randomUUID().toString(),
+			SourceId__c = sourceId,
+			BatchSize__c = randomInteger(100),
+			QueuedEnvelopes__c = randomInteger(100),
+			SentEnvelopes__c = randomInteger(100),
+			FailedEnvelopes__c = randomInteger(100),
+			Submitted__c = Datetime.now().addDays(-(randomInteger(10))),
+			LastStatusUpdate__c = Datetime.now().addDays(-(randomInteger(10))));
+		insert bs;
+		return bs;
+	}
+
+	@IsTest
+	static void test_Database_convert() {
+		System.runAs(TestUtils.createUser()) {
+			BulkList__c bl1 = createList(TestUtils.createLead().Id);
+			BulkList__c bl2 = createList(TestUtils.createLead().Id);
+			BulkStatus__c bs1 = createStatus(TestUtils.createLead().Id);
+			BulkStatus__c bs2 = createStatus(TestUtils.createLead().Id);
+
+			Test.startTest();
+			List<BulkList__c> result1 = BulkSendService.DB.convert(BulkSendService.DB.convert(new List<BulkList__c> { bl1, bl2 }));
+			List<BulkStatus__c> result2 = BulkSendService.DB.convert(BulkSendService.DB.convert(new List<BulkStatus__c> { bs1, bs2 }));
+			Test.stopTest();
+
+			System.assert(Collection.size(result1) == 2);
+			BulkList__c blr1 = result1[0];
+			System.assertNotEquals(null, blr1);
+			System.assertEquals(bl1.Id, blr1.Id);
+			System.assertEquals(bl1.DocuSignId__c, blr1.DocuSignId__c);
+			System.assertEquals(bl1.Name, blr1.Name);
+			System.assertEquals(bl1.SourceId__c, blr1.SourceId__c);
+			BulkList__c blr2 = result1[1];
+			System.assertNotEquals(null, blr2);
+			System.assertEquals(bl2.Id, blr2.Id);
+			System.assertEquals(bl2.DocuSignId__c, blr2.DocuSignId__c);
+			System.assertEquals(bl2.Name, blr2.Name);
+			System.assertEquals(bl2.SourceId__c, blr2.SourceId__c);
+
+			System.assert(Collection.size(result2) == 2);
+			BulkStatus__c bsr1 = result2[0];
+			System.assertNotEquals(null, bsr1);
+			System.assertEquals(bs1.Id, bsr1.Id);
+			System.assertEquals(bs1.DocuSignId__c, bsr1.DocuSignId__c);
+			System.assertEquals(bs1.SourceId__c, bsr1.SourceId__c);
+			System.assertEquals(bs1.BatchSize__c, bsr1.BatchSize__c);
+			System.assertEquals(bs1.QueuedEnvelopes__c, bsr1.QueuedEnvelopes__c);
+			System.assertEquals(bs1.SentEnvelopes__c, bsr1.SentEnvelopes__c);
+			System.assertEquals(bs1.FailedEnvelopes__c, bsr1.FailedEnvelopes__c);
+			System.assertEquals(bs1.Submitted__c, bsr1.Submitted__c);
+			System.assertEquals(bs1.LastStatusUpdate__c, bsr1.LastStatusUpdate__c);
+			BulkStatus__c bsr2 = result2[1];
+			System.assertNotEquals(null, bsr2);
+			System.assertEquals(bs2.Id, bsr2.Id);
+			System.assertEquals(bs2.DocuSignId__c, bsr2.DocuSignId__c);
+			System.assertEquals(bs2.SourceId__c, bsr2.SourceId__c);
+			System.assertEquals(bs2.BatchSize__c, bsr2.BatchSize__c);
+			System.assertEquals(bs2.QueuedEnvelopes__c, bsr2.QueuedEnvelopes__c);
+			System.assertEquals(bs2.SentEnvelopes__c, bsr2.SentEnvelopes__c);
+			System.assertEquals(bs2.FailedEnvelopes__c, bsr2.FailedEnvelopes__c);
+			System.assertEquals(bs2.Submitted__c, bsr2.Submitted__c);
+			System.assertEquals(bs2.LastStatusUpdate__c, bsr2.LastStatusUpdate__c);
+		}
+	}
+
+	@IsTest
+	static void test_Database_createLists() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl1 = new BulkList(
+				null,
+				UUID.randomUUID(),
+				'list 1',
+				null, // ignored for now
+				new Entity(UserInfo.getUserId()));
+			BulkList bl2 = new BulkList(
+				null,
+				UUID.randomUUID(),
+				'list 2',
+				null, // ignored for now
+				new Entity(UserInfo.getOrganizationId()));
+
+			Test.startTest();
+			List<BulkList> result = BulkSendService.DB.createLists(new List<BulkList> { bl1, bl2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].id);
+			System.assertEquals(bl1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bl1.name, result[0].name);
+			System.assertEquals(bl1.source, result[0].source);
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].id);
+			System.assertEquals(bl2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bl2.name, result[1].name);
+			System.assertEquals(bl2.source, result[1].source);
+		}
+	}
+
+	@IsTest
+	static void test_Database_queryLists() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl1 = BulkSendService.DB.convert(createList(TestUtils.createAccount().Id));
+			BulkList bl2 = BulkSendService.DB.convert(createList(TestUtils.createAccount().Id));
+
+			Test.startTest();
+			List<BulkList> result = BulkSendService.DB.queryLists(new Set<Id> { bl1.id, bl2.id });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(bl1.id, result[0].id);
+			System.assertEquals(bl1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bl1.name, result[0].name);
+			System.assertEquals(bl1.source, result[0].source);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(bl2.id, result[1].id);
+			System.assertEquals(bl2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bl2.name, result[1].name);
+			System.assertEquals(bl2.source, result[1].source);
+		}
+	}
+
+	@IsTest
+	static void test_Database_updateLists() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl1 = new BulkList(
+				createList(TestUtils.createAccount().Id).Id,
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				null,
+				new Entity(TestUtils.createLead().Id));
+			BulkList bl2 = new BulkList(
+				createList(TestUtils.createAccount().Id).Id,
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				null,
+				new Entity(TestUtils.createLead().Id));
+
+			Test.startTest();
+			List<BulkList> result = BulkSendService.DB.updateLists(new List<BulkList> { bl1, bl2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(bl1.id, result[0].id);
+			System.assertEquals(bl1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bl1.name, result[0].name);
+			System.assertEquals(bl1.source, result[0].source);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(bl2.id, result[1].id);
+			System.assertEquals(bl2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bl2.name, result[1].name);
+			System.assertEquals(bl2.source, result[1].source);
+		}
+	}
+
+	@IsTest
+	static void test_Database_deleteLists() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Set<Id> ids = new Set<Id> {
+				createList(null).Id,
+				createList(null).Id
+			};
+
+			Test.startTest();
+			Boolean result = BulkSendService.DB.deleteLists(ids);
+			Test.stopTest();
+
+			System.assert(result);
+			System.assert(Collection.isEmpty([SELECT Id FROM BulkList__c WHERE Id IN :ids]));
+		}
+	}
+
+	@IsTest
+	static void test_Database_createStatus() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList.Status bs1 = new BulkList.Status(
+				null,
+				UUID.randomUUID(),
+				new Entity(TestUtils.createLead().Id),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				null,
+				Datetime.now().addDays(-(randomInteger(10))),
+				Datetime.now().addDays(-(randomInteger(10))));
+			BulkList.Status bs2 = new BulkList.Status(
+				null,
+				UUID.randomUUID(),
+				new Entity(TestUtils.createLead().Id),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				null,
+				Datetime.now().addDays(-(randomInteger(10))),
+				Datetime.now().addDays(-(randomInteger(10))));
+
+			Test.startTest();
+			List<BulkList.Status> result = BulkSendService.DB.createStatus(new List<BulkList.Status> { bs1, bs2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].id);
+			System.assertEquals(bs1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bs1.source, result[0].source);
+			System.assertEquals(bs1.batchSize, result[0].batchSize);
+			System.assertEquals(bs1.queuedEnvelopes, result[0].queuedEnvelopes);
+			System.assertEquals(bs1.sentEnvelopes, result[0].sentEnvelopes);
+			System.assertEquals(bs1.failedEnvelopes, result[0].failedEnvelopes);
+			System.assertEquals(bs1.submitted, result[0].submitted);
+			System.assertEquals(bs1.lastStatusUpdate, result[0].lastStatusUpdate);
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].id);
+			System.assertEquals(bs2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bs2.source, result[1].source);
+			System.assertEquals(bs2.batchSize, result[1].batchSize);
+			System.assertEquals(bs2.queuedEnvelopes, result[1].queuedEnvelopes);
+			System.assertEquals(bs2.sentEnvelopes, result[1].sentEnvelopes);
+			System.assertEquals(bs2.failedEnvelopes, result[1].failedEnvelopes);
+			System.assertEquals(bs2.submitted, result[1].submitted);
+			System.assertEquals(bs2.lastStatusUpdate, result[1].lastStatusUpdate);
+		}
+	}
+
+	@IsTest
+	static void test_Database_queryStatus() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList.Status bs1 = BulkSendService.DB.convert(createStatus(TestUtils.createLead().Id));
+			BulkList.Status bs2 = BulkSendService.DB.convert(createStatus(TestUtils.createLead().Id));
+
+			Test.startTest();
+			List<BulkList.Status> result = BulkSendService.DB.queryStatus(new Set<Id> { bs1.Id, bs2.Id });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(bs1.id, result[0].id);
+			System.assertEquals(bs1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bs1.source, result[0].source);
+			System.assertEquals(bs1.batchSize, result[0].batchSize);
+			System.assertEquals(bs1.queuedEnvelopes, result[0].queuedEnvelopes);
+			System.assertEquals(bs1.sentEnvelopes, result[0].sentEnvelopes);
+			System.assertEquals(bs1.failedEnvelopes, result[0].failedEnvelopes);
+			System.assertEquals(bs1.submitted, result[0].submitted);
+			System.assertEquals(bs1.lastStatusUpdate, result[0].lastStatusUpdate);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(bs2.id, result[1].id);
+			System.assertEquals(bs2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bs2.source, result[1].source);
+			System.assertEquals(bs2.batchSize, result[1].batchSize);
+			System.assertEquals(bs2.queuedEnvelopes, result[1].queuedEnvelopes);
+			System.assertEquals(bs2.sentEnvelopes, result[1].sentEnvelopes);
+			System.assertEquals(bs2.failedEnvelopes, result[1].failedEnvelopes);
+			System.assertEquals(bs2.submitted, result[1].submitted);
+			System.assertEquals(bs2.lastStatusUpdate, result[1].lastStatusUpdate);
+		}
+	}
+
+	@IsTest
+	static void test_Database_updateStatus() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList.Status bs1 = new BulkList.Status(
+				createStatus(null).Id,
+				UUID.randomUUID(),
+				new Entity(TestUtils.createLead().Id),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				null,
+				Datetime.now().addDays(-(randomInteger(10))),
+				Datetime.now().addDays(-(randomInteger(10))));
+			BulkList.Status bs2 = new BulkList.Status(
+				createStatus(null).Id,
+				UUID.randomUUID(),
+				new Entity(TestUtils.createLead().Id),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				randomInteger(100),
+				null,
+				Datetime.now().addDays(-(randomInteger(10))),
+				Datetime.now().addDays(-(randomInteger(10))));
+
+			Test.startTest();
+			List<BulkList.Status> result = BulkSendService.DB.updateStatus(new List<BulkList.Status> { bs1, bs2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(bs1.id, result[0].id);
+			System.assertEquals(bs1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bs1.source, result[0].source);
+			System.assertEquals(bs1.batchSize, result[0].batchSize);
+			System.assertEquals(bs1.queuedEnvelopes, result[0].queuedEnvelopes);
+			System.assertEquals(bs1.sentEnvelopes, result[0].sentEnvelopes);
+			System.assertEquals(bs1.failedEnvelopes, result[0].failedEnvelopes);
+			System.assertEquals(bs1.submitted, result[0].submitted);
+			System.assertEquals(bs1.lastStatusUpdate, result[0].lastStatusUpdate);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(bs2.id, result[1].id);
+			System.assertEquals(bs2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bs2.source, result[1].source);
+			System.assertEquals(bs2.batchSize, result[1].batchSize);
+			System.assertEquals(bs2.queuedEnvelopes, result[1].queuedEnvelopes);
+			System.assertEquals(bs2.sentEnvelopes, result[1].sentEnvelopes);
+			System.assertEquals(bs2.failedEnvelopes, result[1].failedEnvelopes);
+			System.assertEquals(bs2.submitted, result[1].submitted);
+			System.assertEquals(bs2.lastStatusUpdate, result[1].lastStatusUpdate);
+		}
+	}
+
+	@IsTest
+	static void test_createLists_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.createLists(new List<BulkList> {
+					new BulkList(
+						null,
+						null,
+						'list 1',
+						null, // ignored for now
+						new Entity(UserInfo.getUserId()))
+				});
+				throw new AssertException('Expected createLists to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createLists_empty() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.createLists(new List<BulkList>());
+				throw new AssertException('Expected createLists to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedBulkList, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createLists_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				BulkSendService.createLists(new List<BulkList> {
+					new BulkList(
+						null,
+						null,
+						'list 1',
+						null, // ignored for now
+						new Entity(UserInfo.getUserId()))
+				});
+				throw new AssertException('Expected createLists to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createLists_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkList bl1 = new BulkList(
+				null,
+				null,
+				'list 1',
+				null, // ignored for now
+				new Entity(UserInfo.getUserId()));
+			BulkList bl2 = new BulkList(
+				null,
+				null,
+				'list 2',
+				null, // ignored for now
+				new Entity(UserInfo.getOrganizationId()));
+
+			Test.startTest();
+			List<BulkList> result = BulkSendService.createLists(new List<BulkList> { bl1, bl2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].id);
+			System.assertNotEquals(null, result[0].docuSignId);
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].id);
+			System.assertNotEquals(null, result[1].docuSignId);
+		}
+	}
+
+	@IsTest
+	static void test_updateLists_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.updateLists(new List<BulkList> {
+					new BulkList(
+						null,
+						null,
+						'list 1',
+						null, // ignored for now
+						new Entity(UserInfo.getUserId()))
+				});
+				throw new AssertException('Expected updateLists to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateLists_empty() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.updateLists(new List<BulkList>());
+				throw new AssertException('Expected updateLists to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedBulkList, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateLists_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Test.startTest();
+			try {
+				BulkSendService.updateLists(new List<BulkList> {
+					new BulkList(
+						null,
+						UUID.randomUUID(),
+						'list 1',
+						null, // ignored for now
+						new Entity(UserInfo.getUserId()))
+				});
+				throw new AssertException('Expected updateLists to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateLists_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkList bl1 = new BulkList(
+				createList(null).Id,
+				UUID.randomUUID(),
+				'list 1',
+				null, // ignored for now
+				new Entity(UserInfo.getUserId()));
+			BulkList bl2 = new BulkList(
+				createList(null).Id,
+				UUID.randomUUID(),
+				'list 2',
+				null, // ignored for now
+				new Entity(UserInfo.getOrganizationId()));
+
+			Test.startTest();
+			List<BulkList> result = BulkSendService.updateLists(new List<BulkList> { bl1, bl2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(bl1.id, result[0].id);
+			System.assertEquals(bl1.docuSignId, result[0].docuSignId);
+			System.assertEquals(bl1.source, result[0].source);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(bl2.id, result[1].id);
+			System.assertEquals(bl2.docuSignId, result[1].docuSignId);
+			System.assertEquals(bl2.source, result[1].source);
+		}
+	}
+
+	@IsTest
+	static void test_deleteLists_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.deleteLists(new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected deleteLists to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteLists_empty() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.deleteLists(new Set<Id>());
+				throw new AssertException('Expected deleteLists to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedId, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteLists_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkList__c bl1 = createList(null);
+			BulkList__c bl2 = createList(null);
+
+			Test.startTest();
+			try {
+				BulkSendService.deleteLists(new Set<Id> { bl1.Id, bl2.Id });
+				throw new AssertException('Expected deleteLists to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteLists_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Set<Id> ids = new Set<Id> { createList(null).Id, createList(null).Id };
+
+			Test.startTest();
+			Boolean result1 = BulkSendService.deleteLists(ids);
+			Boolean result2 = BulkSendService.deleteLists(ids);
+			Test.stopTest();
+
+			System.assert(result1);
+			System.assert(!result2);
+			System.assert(Collection.isEmpty([SELECT Id FROM BulkList__c WHERE Id IN :ids]));
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.createDraftEnvelope(null);
+				throw new AssertException('Expected createDraftEnvelope to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_invalid() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.createDraftEnvelope(null);
+				throw new AssertException('Expected createDraftEnvelope to fail');
+			} catch (ValidationException ex) {
+				System.assert(ex.getMessage().startsWith(Label.InvalidEnvelope));
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e = EnvelopeService.DB.convert(e1)
+				.withDocuments(DocumentService.convert(new List<Document__c> { TestUtils.createEnvelopeDocument(e1.Id) }))
+				.withRecipients(RecipientService.convert(new List<Recipient__c> { TestUtils.createEnvelopeRecipient(e1.Id) }));
+
+			Test.startTest();
+			try {
+				BulkSendService.createDraftEnvelope(e);
+				throw new AssertException('Expected createDraftEnvelope to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			Envelope e = EnvelopeService.getEmptyEnvelope(null)
+				.withDocuments(new List<Document> {
+					DocumentService.convert(TestUtils.createContentVersion())
+				})
+				.withRecipients(new List<Recipient> {
+					Recipient.newBulkRecipient(null, null, null)
+				});
+
+			Test.startTest();
+			Envelope result = BulkSendService.createDraftEnvelope(e);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.docuSignId);
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_unauthorized() {
+		Envelope e;
+		System.runAs(TestUtils.createDocuSignUser()) {
+			e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+		}
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl = BulkSendService.DB.convert(createList(null));
+
+			Test.startTest();
+			try {
+				BulkSendService.sendEnvelope(bl, e);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_invalid_argument() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl = BulkSendService.DB.convert(createList(null));
+			Envelope e = EnvelopeService.getEmptyEnvelope(null);
+
+			Test.startTest();
+			try {
+				BulkSendService.sendEnvelope(null, e);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedBulkList, ex.getMessage());
+			}
+			try {
+				BulkSendService.sendEnvelope(bl, null);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedEnvelope, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_invalid_envelope() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			BulkList bl = BulkSendService.DB.convert(createList(null));
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+
+			Test.startTest();
+			try {
+				BulkSendService.sendEnvelope(bl, e);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (ValidationException ex) {
+				System.assert(ex.getMessage().startsWith(Label.InvalidEnvelope));
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkList bl = BulkSendService.DB.convert(createList(null));
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e = EnvelopeService.DB.convert(e1)
+				.withDocuments(DocumentService.convert(new List<Document__c> { TestUtils.createEnvelopeDocument(e1.Id) }))
+				.withRecipients(RecipientService.convert(new List<Recipient__c> { TestUtils.createEnvelopeRecipient(e1.Id) }));
+
+			Test.startTest();
+			try {
+				BulkSendService.sendEnvelope(bl, e);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkList bl = BulkSendService.DB.convert(createList(null));
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e = EnvelopeService.DB.convert(e1)
+				.withDocuments(new List<Document> {
+					DocumentService.convert(TestUtils.createContentVersion())
+				})
+				.withRecipients(new List<Recipient> {
+					Recipient.newBulkRecipient(null, null, null)
+				});
+
+			Test.startTest();
+			BulkList.Result result = BulkSendService.sendEnvelope(bl, e);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.bulkStatusId);
+			System.assertNotEquals(null, result.batchId);
+			System.assertEquals(1, Collection.size([SELECT Id FROM BulkStatus__c WHERE Id = :result.bulkStatusId]));
+
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_unauthorized() {
+		System.runAs(TestUtils.createUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.getStatus(new Set<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected getStatus to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_invalid() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkSendService.getStatus(new Set<Id>());
+				throw new AssertException('Expected getStatus to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedId, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_api_error() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkStatus__c bs = createStatus(null);
+			bs.LastStatusUpdate__c = Datetime.now().addDays(-1);
+			update bs;
+
+			Test.startTest();
+			try {
+				BulkSendService.getStatus(new Set<Id> { bs.Id });
+				throw new AssertException('Expected getStatus to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_success_cached() {
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkStatus__c bs1 = createStatus(null);
+			bs1.LastStatusUpdate__c = Datetime.now();
+			BulkStatus__c bs2 = createStatus(null);
+			bs2.LastStatusUpdate__c = Datetime.now();
+			update new List<BulkStatus__c> { bs1, bs2 };
+
+			Test.startTest();
+			List<BulkList.Status> result = BulkSendService.getStatus(new Set<Id> { bs1.Id, bs2.Id });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_success_not_cached() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createDocuSignUser()) {
+			TestUtils.createAccountConfiguration();
+
+			BulkStatus__c bs1 = createStatus(null);
+			bs1.LastStatusUpdate__c = Datetime.now().addDays(-1);
+			BulkStatus__c bs2 = createStatus(null);
+			bs2.LastStatusUpdate__c = Datetime.now().addDays(-1);
+			update new List<BulkStatus__c> { bs1 };
+
+			Test.startTest();
+			List<BulkList.Status> result = BulkSendService.getStatus(new Set<Id> { bs1.Id, bs2.Id });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
+}

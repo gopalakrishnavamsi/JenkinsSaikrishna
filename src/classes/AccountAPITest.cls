@@ -586,7 +586,7 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/console', u.toExternalForm());
+			System.assertEquals(DocuSignAPITest.CONSOLE_VIEW_URL, u.toExternalForm());
 		}
 	}
 

@@ -385,39 +385,39 @@ global class Recipient implements Comparable {
 	}
 
 	/**
-	 * Representation of a DocuSign signing group.
+	 * Factory method to create a bulk recipient placeholder. Currently a single signer recipient is supported with
+	 * both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
+	 *
+	 * @param role The recipient role. This may be overridden in a bulk send list.
+	 * @param authentication Optional recipient authentication methods. This may be overridden in a bulk send list.
+	 * @param note Optional private note for the recipient. This may be overridden in a bulk send list.
+	 *
+	 * @return The new DocuSign bulk envelope placeholder recipient.
 	 */
-	global class SigningGroup {
-		/**
-		 * The DocuSign signing group ID.
-		 */
-		@AuraEnabled
-		global Integer id { get; private set; }
-		/**
-		 * The DocuSign signing group name.
-		 */
-		@AuraEnabled
-		global String name { get; private set; }
+	public static Recipient newBulkRecipient(
+		final Role role,
+		final Authentication authentication,
+		final String note) {
 
-		/**
-		 * Constructs a DocuSign signing group.
-		 *
-		 * @param id The DocuSign signing group ID.
-		 * @param name The DocuSign signing group name.
-		 */
-		global SigningGroup(final Integer id, final String name) {
-			this.id = id;
-			this.name = name;
-		}
-
-		/**
-		 * Creates a deep copy of the DocuSign signing group.
-		 *
-		 * @return A copy of the DocuSign signing group.
-		 */
-		public SigningGroup copy() {
-			return new SigningGroup(this.id, this.name);
-		}
+		return new Recipient(
+			null,
+			TYPE_SIGNER,
+			1,
+			1,
+			role,
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString() + '@place.holder',
+			null,
+			null,
+			authentication,
+			note,
+			null,
+			null,
+			null,
+			false,
+			null,
+			false,
+			false);
 	}
 
 	/**

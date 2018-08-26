@@ -2382,6 +2382,18 @@
 		<label>I agree to receive marketing communications and promotional offers from DocuSign.</label>
 		<name>MarketingOptIn</name>
 	</customLabels>
+	<customLabels>
+		<label>Bulk list is undefined.</label>
+		<name>UndefinedBulkList</name>
+	</customLabels>
+	<customLabels>
+		<label>Bulk list not found.</label>
+		<name>BulkListNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>No users defined.</label>
+		<name>UndefinedUsers</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

@@ -124,6 +124,11 @@
         <members>ReturnController</members>
         <members>ReturnControllerTest</members>
         <members>Notifications</members>
+        <members>BulkSendAPI</members>
+        <members>BulkSendAPITest</members>
+        <members>BulkSendService</members>
+        <members>BulkSendServiceTest</members>
+        <members>BulkList</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -714,6 +719,9 @@
         <members>SelectAccount</members>
         <members>Country</members>
         <members>MarketingOptIn</members>
+        <members>UndefinedBulkList</members>
+        <members>BulkListNotFound</members>
+        <members>UndefinedUsers</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -902,6 +910,16 @@
         <members>RecipientStatus__c.RoutingOrder__c</members>
         <members>User.Username__c</members>
         <members>User.CanManageAccount__c</members>
+        <members>BulkList__c.DocuSignId__c</members>
+        <members>BulkList__c.SourceId__c</members>
+        <members>BulkStatus__c.DocuSignId__c</members>
+        <members>BulkStatus__c.SourceId__c</members>
+        <members>BulkStatus__c.BatchSize__c</members>
+        <members>BulkStatus__c.QueuedEnvelopes__c</members>
+        <members>BulkStatus__c.SentEnvelopes__c</members>
+        <members>BulkStatus__c.FailedEnvelopes__c</members>
+        <members>BulkStatus__c.Submitted__c</members>
+        <members>BulkStatus__c.LastStatusUpdate__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -942,6 +960,8 @@
         <members>Case</members>
         <members>Contact</members>
         <members>Lead</members>
+        <members>BulkList__c</members>
+        <members>BulkStatus__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -960,6 +980,8 @@
         <members>Case-en_US</members>
         <members>Contact-en_US</members>
         <members>Lead-en_US</members>
+        <members>BulkList__c-en_US</members>
+        <members>BulkStatus__c-en_US</members>
         <name>CustomObjectTranslation</name>
     </types>
     <types>

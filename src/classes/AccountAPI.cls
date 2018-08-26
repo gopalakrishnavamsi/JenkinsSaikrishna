@@ -683,7 +683,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	public List<Account.User> addUsers(final List<Account.User> users, final Integer timeout) {
-		if (users == null || users.isEmpty()) throw new DocuSignException('No users to add.');
+		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
 
 		final RestAPI.Response response = this.post(
 			'users',
@@ -732,7 +732,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	public List<Account.User> removeUsers(final List<Account.User> users, final Integer timeout) {
-		if (users == null || users.isEmpty()) throw new DocuSignException('No users to remove.');
+		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
 
 		final RestAPI.Response response = this.del(
 			'users',
@@ -982,7 +982,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		final CustomTab apiCF = new CustomTab(customTab);
 
 		RestAPI.Response response;
-		if (!UUID.isDefined(customTab.id)) {
+		if (UUID.isEmpty(customTab.id)) {
 			// Create new custom field
 			response = this.post(
 				'tab_definitions',

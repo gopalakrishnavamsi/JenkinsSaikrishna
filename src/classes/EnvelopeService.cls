@@ -21,8 +21,7 @@ global with sharing class EnvelopeService {
 	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static final LoggerService LOG = LoggerService.getInstance();
 
-	@TestVisible
-	private static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
+	public static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
 		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
 
 		ValidationResult result = new ValidationResult();
@@ -324,8 +323,17 @@ global with sharing class EnvelopeService {
 				StringUtils.replaceUserTags(envelope.emailMessage));
 	}
 
-	@TestVisible
-	private static Envelope saveEnvelope(final Envelope envelope, final EnvelopeConfiguration envelopeConfiguration) {
+	/**
+	 * Saves a DocuSign envelope record.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.
+	 *
+	 * @param envelope The DocuSign envelope.
+	 * @param envelopeConfiguration Optional envelope configuration.
+	 *
+	 * @return The saved DocuSign envelope.
+	 */
+	public static Envelope saveEnvelope(final Envelope envelope, final EnvelopeConfiguration envelopeConfiguration) {
 		// Custom fields are not stored in our custom object, so must load and merge them later.
 		Envelope result = DB.insertEnvelope(replaceUserTags(envelope));
 
@@ -391,7 +399,7 @@ global with sharing class EnvelopeService {
 		final Envelope envelope,
 		final Entity source,
 		final List<EnvelopeConfiguration.RelatedContacts> relatedContacts,
-		final Map<String, Recipient.SigningGroup> signingGroups) {
+		final Map<String, SigningGroup> signingGroups) {
 
 		if (envelope == null || source == null || relatedContacts == null) return envelope;
 
@@ -416,7 +424,7 @@ global with sharing class EnvelopeService {
 	private static Envelope addCustomRecipients(
 		final Envelope envelope,
 		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
-		final Map<String, Recipient.SigningGroup> signingGroups,
+		final Map<String, SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
 		if (envelope == null || customRecipients == null) return envelope;
@@ -480,7 +488,7 @@ global with sharing class EnvelopeService {
 
 			if (envelopeConfiguration.hasRecipients) {
 				// Recipient-level customization
-				Map<String, Recipient.SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
+				Map<String, SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
 					envelopeConfiguration.source, envelopeConfiguration.recipients);
 				result = addRelatedContacts(result, envelopeConfiguration.source,
 					envelopeConfiguration.recipients.relatedContacts, signingGroups);

@@ -114,7 +114,7 @@ global with sharing class RecipientService {
 				r.Name,
 				r.Email__c,
 				r.SigningGroupId__c != null || String.isNotBlank(r.SigningGroupName__c)
-					? new Recipient.SigningGroup(Integer.valueOf(r.SigningGroupId__c), r.SigningGroupName__c) : null,
+					? new SigningGroup(Integer.valueOf(r.SigningGroupId__c), r.SigningGroupName__c) : null,
 				r.SmsPhoneNumber__c,
 				new Recipient.Authentication(
 					r.AccessCode__c,
@@ -309,7 +309,7 @@ global with sharing class RecipientService {
 		public List<Recipient> queryRelatedContacts(
 			final Entity source,
 			final EnvelopeConfiguration.RelatedContacts relatedContacts,
-			final Map<String, Recipient.SigningGroup> signingGroups) {
+			final Map<String, SigningGroup> signingGroups) {
 
 			verifySource(source);
 			verifyRelatedContacts(relatedContacts);
@@ -559,8 +559,13 @@ global with sharing class RecipientService {
 		}
 	}
 
-	@TestVisible
-	private static List<Recipient.Role> getDefaultRoles() {
+	/**
+	 * Retrieves a list of default recipient roles. These map to automatic anchor tags. For example, role 1 will map to
+	 * <code>\s1\<code>, <code>\d1\</code>, etc.
+	 *
+	 * @return A list of default recipient roles.
+	 */
+	global static List<Recipient.Role> getDefaultRoles() {
 		if (DEFAULT_ROLES == null) {
 			DEFAULT_ROLES = new List<Recipient.Role>();
 			for (RoleSettings__c s : RoleSettings__c.getAll().values()) {
@@ -996,7 +1001,7 @@ global with sharing class RecipientService {
 	public static List<Recipient> resolveRelatedContacts(
 		final Entity source,
 		final EnvelopeConfiguration.RelatedContacts relatedContacts,
-		final Map<String, Recipient.SigningGroup> signingGroups) {
+		final Map<String, SigningGroup> signingGroups) {
 
 		Permissions.verifyIsDocuSignUser();
 
@@ -1048,7 +1053,7 @@ global with sharing class RecipientService {
 	 */
 	public static List<Recipient> resolveCustomRecipients(
 		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
-		final Map<String, Recipient.SigningGroup> signingGroups,
+		final Map<String, SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
 		Permissions.verifyIsDocuSignUser();
@@ -1096,13 +1101,13 @@ global with sharing class RecipientService {
 	 *
 	 * @return A mapping of DocuSign signing group name to signing groups.
 	 */
-	public static Map<String, Recipient.SigningGroup> resolveSigningGroups(
+	public static Map<String, SigningGroup> resolveSigningGroups(
 		final Entity source,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
 		Permissions.verifyIsDocuSignUser();
 
-		Map<String, Recipient.SigningGroup> resolvedSigningGroups = new Map<String, Recipient.SigningGroup>();
+		Map<String, SigningGroup> resolvedSigningGroups = new Map<String, SigningGroup>();
 		if (recipientSettings != null) {
 			Set<String> targetSigningGroups = getSigningGroups(source, recipientSettings);
 			if (Collection.isNotEmpty(targetSigningGroups)) {
@@ -1112,7 +1117,7 @@ global with sharing class RecipientService {
 						if (String.isNotBlank(sg.name)) {
 							String key = sg.name.toLowerCase();
 							if (targetSigningGroups.contains(key)) {
-								resolvedSigningGroups.put(key, sg.toRecipientSigningGroup());
+								resolvedSigningGroups.put(key, sg);
 							}
 						}
 					}

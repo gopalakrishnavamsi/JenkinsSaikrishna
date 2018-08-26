@@ -663,7 +663,7 @@ private class EnvelopeServiceTest {
 			Test.startTest();
 			Envelope result = EnvelopeService.addRelatedContacts(e, new Entity(a1.Id),
 				new List<EnvelopeConfiguration.RelatedContacts> { rc1, rc1 },
-				new Map<String, Recipient.SigningGroup>());
+				new Map<String, SigningGroup>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -712,8 +712,8 @@ private class EnvelopeServiceTest {
 				new EnvelopeConfiguration.CustomRecipient(null, null, null, Recipient.TYPE_SIGNER,
 					'r3', 3, '3333', '5553333', 'n3', null, 'sg3', false, null)
 			};
-			Map<String, Recipient.SigningGroup> sgs = new Map<String, Recipient.SigningGroup> {
-				'sg3' => new Recipient.SigningGroup(3333, 'sg3')
+			Map<String, SigningGroup> sgs = new Map<String, SigningGroup> {
+				'sg3' => new SigningGroup(3333, 'sg3')
 			};
 			Recipient.EmailSettings es = new Recipient.EmailSettings(
 				Localization.NL,

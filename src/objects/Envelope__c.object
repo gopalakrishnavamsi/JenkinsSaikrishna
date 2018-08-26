@@ -59,15 +59,13 @@
 	<enableStreamingApi>true</enableStreamingApi>
 	<fields>
 		<fullName>DocuSignId__c</fullName>
-		<description>DocuSign ID</description>
-		<externalId>false</externalId>
-		<inlineHelpText>DocuSign ID</inlineHelpText>
-		<label>DocuSign ID</label>
-		<length>40</length>
+		<externalId>true</externalId>
+		<label>DocuSign Envelope ID</label>
+		<length>36</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>
 		<type>Text</type>
-		<unique>false</unique>
+		<unique>true</unique>
 	</fields>
 	<fields>
 		<fullName>EnvelopeConfiguration__c</fullName>

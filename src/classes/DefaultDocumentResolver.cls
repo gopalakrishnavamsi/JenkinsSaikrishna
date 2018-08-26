@@ -233,7 +233,8 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 	private static List<Document> getFolderDocuments(final Set<Id> folderIds) {
 		Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-			'Id', 'Name', 'Type', 'BodyLength', 'LastModifiedDate' });
+			'Id', 'Name', 'Type', 'BodyLength', 'LastModifiedDate'
+		});
 
 		List<Document> result = new List<Document>();
 		for (Schema.Document d : [

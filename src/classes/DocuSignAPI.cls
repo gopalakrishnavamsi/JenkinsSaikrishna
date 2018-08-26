@@ -32,6 +32,7 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 	@TestVisible
 	protected transient final Environment environment;
 	private final UUID accountId;
+	private final String apiVersion;
 
 	// Serialization object for legacyAuthHeader
 	@TestVisible
@@ -62,10 +63,19 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 
 	@TestVisible
 	protected DocuSignAPI(final Credentials apiCredentials) {
+		this(apiCredentials, 'v2');
+	}
+
+	@TestVisible
+	protected DocuSignAPI(final Credentials apiCredentials, final String apiVersion) {
 		super();
 
-		if (apiCredentials == null || apiCredentials.environment == null || apiCredentials.environment.baseUrl == null)
+		if (apiCredentials == null
+			|| apiCredentials.environment == null
+			|| apiCredentials.environment.baseUrl == null) {
+
 			throw new DocuSignException(Label.AccountNotConfigured);
+		}
 
 		this.environment = apiCredentials.environment;
 		this.baseUrl = apiCredentials.environment.baseUrl;
@@ -80,6 +90,7 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 			'X-DocuSign-Authentication' => this.legacyAuthHeader
 		};
 		this.accountId = apiCredentials.accountId;
+		this.apiVersion = String.isBlank(apiVersion) ? 'v2' : apiVersion;
 	}
 
 	public static DocuSignAPI getInstance() {
@@ -95,7 +106,7 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 			if (this.accountId == null) {
 				throw new DocuSignException(Label.AccountNotConfigured);
 			}
-			accountBaseUrl = new Url(this.baseUrl, '/restapi/v2/accounts/' + this.accountId + '/');
+			accountBaseUrl = new Url(this.baseUrl, '/restapi/' + this.apiVersion + '/accounts/' + this.accountId + '/');
 		}
 		return accountBaseUrl;
 	}
@@ -129,7 +140,9 @@ public with sharing virtual class DocuSignAPI extends RestAPI {
 		return super.put(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
-	protected virtual RestAPI.Response put(final List<Object> path, final QueryString queryString, final String body, final Integer timeout) {
+	protected virtual RestAPI.Response put(final List<Object> path, final QueryString queryString, final String body,
+		final Integer timeout) {
+
 		return super.put(getBaseUrl(), path, queryString, getDefaultHeaders(), body, timeout);
 	}
 
