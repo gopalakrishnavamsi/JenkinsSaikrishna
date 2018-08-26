@@ -354,4 +354,86 @@ private class SigningServiceTest {
 			System.assert(!dser.SignNow__c);
 		}
 	}
+
+	@IsTest
+	static void test_getEmbeddedSigningUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+
+		System.runAs(TestUtils.createUser()) {
+			TestUtils.createAccountConfiguration();
+			Envelope__c dse = TestUtils.createEnvelope();
+			List<Recipient__c> dsers = new List<Recipient__c> {
+				new Recipient__c(
+					Envelope__c = dse.Id,
+					Sequence__c = 1,
+					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
+					Name = 'Unit Test1',
+					Email__c = 'r1@unit.test',
+					RoutingOrder__c = 1,
+					Role__c = 'Signer 1',
+					SignNow__c = false)
+			};
+			insert dsers;
+
+			List<Recipient> rs = RecipientService.convert(dsers);
+			System.assertNotEquals(null, rs);
+			System.assertEquals(1, rs.size());
+
+			Url returnUrl = new Url('https://unit.test/return');
+			Url resultUrl;
+
+			Test.startTest();
+			try {
+				resultUrl = SigningService.getEmbeddedSigningUrl(UUID.parse(dse.DocuSignId__c), returnUrl);
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex);
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.NOT_FOUND, ex.error.code);
+			}
+			Test.stopTest();
+
+			System.assertEquals('https://unit.test/view/recipient', resultUrl.toExternalForm());
+		}
+	}
+
+	@IsTest
+	static void test_getEmbeddedSigningUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+
+		System.runAs(TestUtils.createUser()) {
+			TestUtils.createAccountConfiguration();
+			Envelope__c dse = TestUtils.createEnvelope();
+			List<Recipient__c> dsers = new List<Recipient__c> {
+				new Recipient__c(
+					Envelope__c = dse.Id,
+					Sequence__c = 1,
+					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
+					Name = 'Unit Test1',
+					Email__c = 'r1@unit.test',
+					RoutingOrder__c = 1,
+					Role__c = 'Signer 1',
+					SignNow__c = false)
+			};
+			insert dsers;
+
+			List<Recipient> rs = RecipientService.convert(dsers);
+			System.assertNotEquals(null, rs);
+			System.assertEquals(1, rs.size());
+
+			Url returnUrl = new Url('https://unit.test/return');
+			Url resultUrl;
+
+			Test.startTest();
+			try {
+				resultUrl = SigningService.getEmbeddedSigningUrl(UUID.parse(dse.DocuSignId__c), returnUrl);
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex);
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.NOT_FOUND, ex.error.code);
+			}
+			Test.stopTest();
+
+			System.assertEquals(null, resultUrl);
+		}
+	}
 }

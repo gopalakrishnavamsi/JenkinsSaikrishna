@@ -94,7 +94,7 @@ public with sharing class Credentials {
 
 		Credentials result = null;
 		if (accountCredentials != null && userCredentials != null) {
-			if (accountCredentials.useSendOnBehalfOf) {
+			if (accountCredentials.useSendOnBehalfOf && userCredentials.username != null) {
 				result = new Credentials(
 					accountCredentials.environment,
 					accountCredentials.accountId,
@@ -104,6 +104,17 @@ public with sharing class Credentials {
 					accountCredentials.password,
 					true,
 					userCredentials.username,
+					true);
+			} else if (accountCredentials.useSystemSender && userCredentials.username == null) {
+				result = new Credentials(
+					accountCredentials.environment,
+					accountCredentials.accountId,
+					accountCredentials.accountNumber,
+					accountCredentials.email,
+					accountCredentials.username,
+					accountCredentials.password,
+					false,
+					null,
 					true);
 			} else {
 				result = new Credentials(
@@ -132,10 +143,11 @@ public with sharing class Credentials {
 		final String username,
 		final String password,
 		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf) {
+		final Boolean useSendOnBehalfOf,
+		final Boolean useSystemSender) {
 
 		return save(UserInfo.getUserId(), environment, accountId, accountNumber, email, username, password,
-			canManageAccount, useSendOnBehalfOf);
+			canManageAccount, useSendOnBehalfOf, useSystemSender);
 	}
 
 	@TestVisible
@@ -148,7 +160,8 @@ public with sharing class Credentials {
 		final String username,
 		final String password,
 		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf) {
+		final Boolean useSendOnBehalfOf,
+		final Boolean useSystemSender) {
 
 		Credentials.accountCredentials = DB.updateAccountCredentials(
 			environment,
@@ -157,7 +170,8 @@ public with sharing class Credentials {
 			email,
 			useSendOnBehalfOf ? username : null,
 			useSendOnBehalfOf ? password : null,
-			useSendOnBehalfOf);
+			useSendOnBehalfOf,
+			useSystemSender);
 		Credentials.UserCredentials uc = DB.updateUserCredentials(
 			userId,
 			username,
@@ -264,6 +278,7 @@ public with sharing class Credentials {
 		public final String username;
 		public final String password;
 		public final Boolean useSendOnBehalfOf;
+		public final Boolean useSystemSender;
 
 		public AccountCredentials(
 			final Environment environment,
@@ -272,7 +287,8 @@ public with sharing class Credentials {
 			final String email,
 			final String username,
 			final String password,
-			final Boolean useSendOnBehalfOf) {
+			final Boolean useSendOnBehalfOf,
+			final Boolean useSystemSender) {
 
 			this.environment = environment;
 			this.accountId = accountId;
@@ -281,6 +297,7 @@ public with sharing class Credentials {
 			this.username = username;
 			this.password = password;
 			this.useSendOnBehalfOf = useSendOnBehalfOf;
+			this.useSystemSender = useSystemSender;
 		}
 	}
 
@@ -307,7 +324,7 @@ public with sharing class Credentials {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 
 			if (String.isBlank(settings.Environment__c)) {
-				return new AccountCredentials(Environment.invalid, null, null, null, null, null, false);
+				return new AccountCredentials(Environment.invalid, null, null, null, null, null, false, false);
 			}
 
 			return new AccountCredentials(
@@ -317,7 +334,8 @@ public with sharing class Credentials {
 				settings.Email__c,
 				settings.Username__c,
 				settings.Password__c,
-				settings.UseSendOnBehalfOf__c != null && settings.UseSendOnBehalfOf__c);
+				settings.UseSendOnBehalfOf__c != null && settings.UseSendOnBehalfOf__c,
+				settings.UseSystemSender__c);
 		}
 
 		public UserCredentials queryUserCredentials(final Id userId) {
@@ -332,7 +350,8 @@ public with sharing class Credentials {
 			final String email,
 			final String username,
 			final String password,
-			final Boolean useSendOnBehalfOf) {
+			final Boolean useSendOnBehalfOf,
+			final Boolean useSystemSender) {
 
 			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
 			orgSettings.Environment__c = environment == null || environment.environment == null
@@ -341,13 +360,14 @@ public with sharing class Credentials {
 				? null : environment.baseUrl.toExternalForm();
 			orgSettings.AccountId__c = String.valueOf(accountId);
 			orgSettings.AccountNumber__c = accountNumber;
-			orgSettings.UseSendOnBehalfOf__c = useSendOnBehalfOf != null && useSendOnBehalfOf;
 			orgSettings.Email__c = email;
 			orgSettings.Username__c = username;
 			orgSettings.Password__c = password;
+			orgSettings.UseSendOnBehalfOf__c = useSendOnBehalfOf != null && useSendOnBehalfOf;
+			orgSettings.UseSystemSender__c = useSystemSender != null && useSystemSender;
 			upsert orgSettings;
 
-			return new AccountCredentials(environment, accountId, accountNumber, email, username, password, useSendOnBehalfOf);
+			return new AccountCredentials(environment, accountId, accountNumber, email, username, password, useSendOnBehalfOf, useSystemSender);
 		}
 
 		public UserCredentials updateUserCredentials(

@@ -54,9 +54,9 @@ private class CredentialsTest {
 		String au = UUID.randomUUID().toString();
 		String ap = UUID.randomUUID().toString();
 		Credentials.AccountCredentials ac1 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, true);
+			Environment.demo, accountId, 1111L, ae, au, ap, true, true);
 		Credentials.AccountCredentials ac2 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, false);
+			Environment.demo, accountId, 1111L, ae, au, ap, false, false);
 		Credentials.UserCredentials uc = new Credentials.UserCredentials(
 			UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
@@ -211,18 +211,48 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_invalid_sobo() {
+	static void test_getInstance_systemSender() {
+		User u1 = TestUtils.createUser();
+		User u2 = TestUtils.createUser();
+
 		System.runAs(TestUtils.createDocuSignAdministrator()) {
 			TestUtils.createAccountConfiguration();
+			System.assertEquals(AccountSettings__c.getOrgDefaults().UseSystemSender__c, true);
 		}
 
 		System.runAs(TestUtils.createUser()) {
+			Credentials result1, result2;
+			Test.startTest();
+				result1 = Credentials.getInstance(u1.Id, true);
+				result2 = Credentials.getInstance(u2.Id, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(result1.isValid);
+
+			System.assertNotEquals(null, result2);
+			System.assert(result2.isValid);
+		}
+	}
+
+	@IsTest
+	static void test_getInstance_invalid_sobo() {
+		User u1 = TestUtils.createUser();
+
+		System.runAs(TestUtils.createDocuSignAdministrator()) {
+			TestUtils.createAccountConfiguration();
+			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
+			testSettings.UseSystemSender__c = false;
+			upsert testSettings;
+		}
+
+		System.runAs(u1) {
 			Test.startTest();
 			try {
-				Credentials.getInstance(UserInfo.getUserId(), true);
+				Credentials.getInstance(u1.Id, true);
 				throw new AssertException('Expected getInstance to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -259,7 +289,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, true, true);
+				username, password, true, true, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -294,7 +324,7 @@ private class CredentialsTest {
 		System.runAs(u) {
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, false, false);
+				username, password, false, false, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -332,7 +362,7 @@ private class CredentialsTest {
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				String.valueOf(username), password, true, false);
+				String.valueOf(username), password, true, false, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 

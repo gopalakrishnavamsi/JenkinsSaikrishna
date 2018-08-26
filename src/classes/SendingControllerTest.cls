@@ -79,7 +79,7 @@ private class SendingControllerTest {
 				SendingController.createDraftEnvelope(c.Id);
 				throw new AssertException('Expected createDraftEnvelope to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}
