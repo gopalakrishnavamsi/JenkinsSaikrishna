@@ -242,7 +242,7 @@ global class EnvelopeConfiguration {
 		 *
 		 * @return The DocuSign envelope recipient.
 		 */
-		public Recipient toRecipient(final Map<String, Recipient.SigningGroup> signingGroups) {
+		public Recipient toRecipient(final Map<String, SigningGroup> signingGroups) {
 			Recipient result = null;
 			if (this.isSigningGroup) {
 				result = Recipient.fromSigningGroup(

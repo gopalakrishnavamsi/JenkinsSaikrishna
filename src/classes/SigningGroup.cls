@@ -1,15 +1,17 @@
 /**
  * A DocuSign signing group.
  */
-public class SigningGroup {
+global class SigningGroup {
 	/**
 	 * The DocuSign signing group ID.
 	 */
-	public Integer id { get; private set; }
+	@AuraEnabled
+	global Integer id { get; private set; }
 	/**
 	 * The DocuSign signing group name.
 	 */
-	public String name { get; private set; }
+	@AuraEnabled
+	global String name { get; private set; }
 	/**
 	 * The DocuSign signing group members.
 	 */
@@ -19,6 +21,16 @@ public class SigningGroup {
 	 * or more members.
 	 */
 	public Boolean isValid { get; private set; }
+
+	/**
+	 * Constructs a DocuSign signing group.
+	 *
+	 * @param id The DocuSign signing group ID.
+	 * @param name The DocuSign signing group name.
+	 */
+	global SigningGroup(final Integer id, final String name) {
+		this(id, name, null);
+	}
 
 	/**
 	 * Constructs a DocuSign signing group.
@@ -60,11 +72,11 @@ public class SigningGroup {
 	}
 
 	/**
-	 * Converts the signing group to a recipient signing group.
+	 * Creates a deep copy of the DocuSign signing group.
 	 *
-	 * @return The recipient signing group.
+	 * @return A copy of the DocuSign signing group.
 	 */
-	public Recipient.SigningGroup toRecipientSigningGroup() {
-		return new Recipient.SigningGroup(this.id, this.name);
+	public SigningGroup copy() {
+		return new SigningGroup(this.id, this.name, this.members);
 	}
 }

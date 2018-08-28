@@ -4443,4 +4443,28 @@
 		<shortDescription>Marketing opt-in</shortDescription>
 		<value>I agree to receive marketing communications and promotional offers from DocuSign.</value>
 	</labels>
+	<labels>
+		<fullName>UndefinedBulkList</fullName>
+		<categories>Errors,BulkSend</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined bulk list</shortDescription>
+		<value>Bulk list is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>BulkListNotFound</fullName>
+		<categories>Errors,BulkSend</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Bulk list not found</shortDescription>
+		<value>Bulk list not found.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedUsers</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined user list</shortDescription>
+		<value>No users defined.</value>
+	</labels>
 </CustomLabels>

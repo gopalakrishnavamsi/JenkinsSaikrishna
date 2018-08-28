@@ -348,7 +348,8 @@ global with sharing class StatusService {
 	 *
 	 * @return A list of envelope statuses.
 	 */
-	global static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
+	@TestVisible
+	private static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
 		Permissions.verifyIsOwner(docuSignIds); // FIXME: This will break layouts.
 
 		List<Envelope.Status> result = new List<Envelope.Status>();

@@ -19,7 +19,7 @@ public with sharing class Application {
 		'envelope__c', 'document__c', 'recipient__c',
 		'status__c', 'recipientstatus__c', 'envelopelocalization__c',
 		'accountsettings__c', 'usersettings__c', 'chattersettings__c', 'envelopesettings__c',
-		'organization__mdt', 'localization__mdt'
+		'organization__mdt', 'localization__mdt', 'bulklist__c', 'bulkstatus__c'
 	};
 
 	static {

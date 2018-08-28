@@ -28,7 +28,7 @@ private class RecipientServiceTest {
 		// Valid
 		Recipient r3 = Recipient.fromSource('R2', 'r1@unit.test', '5555555555', 'r2', null);
 		// Signing group
-		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new Recipient.SigningGroup(1234, 'SG4'), null, 'n4');
+		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new SigningGroup(1234, 'SG4'), null, 'n4');
 
 		Test.startTest();
 		System.assert(!RecipientService.validate((List<Recipient>)null, false).isValid);
@@ -50,7 +50,7 @@ private class RecipientServiceTest {
 		// Valid
 		Recipient r3 = Recipient.fromSource('R2', 'r1@unit.test', '5555555555', 'r2', null);
 		// Signing group
-		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new Recipient.SigningGroup(1234, 'SG4'), null, 'n4');
+		Recipient r4 = Recipient.fromSigningGroup(4, new Recipient.Role('r4', 4), new SigningGroup(1234, 'SG4'), null, 'n4');
 
 		Test.startTest();
 		System.assert(!RecipientService.validate((List<Recipient>)null, true).isValid);
@@ -619,13 +619,13 @@ private class RecipientServiceTest {
 				'Contacts',
 				null); // parseErrors
 			// Valid - has all mappings
-			Map<String, Recipient.SigningGroup> sgs1 = new Map<String, Recipient.SigningGroup> {
-				c1.Name => new Recipient.SigningGroup(1111, c1.Name),
-				c2.Name => new Recipient.SigningGroup(2222, c2.Name)
+			Map<String, SigningGroup> sgs1 = new Map<String, SigningGroup> {
+				c1.Name => new SigningGroup(1111, c1.Name),
+				c2.Name => new SigningGroup(2222, c2.Name)
 			};
 			// Invalid - missing mapping for c2
-			Map<String, Recipient.SigningGroup> sgs2 = new Map<String, Recipient.SigningGroup> {
-				c1.Name => new Recipient.SigningGroup(1111, c1.Name)
+			Map<String, SigningGroup> sgs2 = new Map<String, SigningGroup> {
+				c1.Name => new SigningGroup(1111, c1.Name)
 			};
 
 			Test.startTest();
@@ -686,7 +686,7 @@ private class RecipientServiceTest {
 				null); // parseErrors
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -733,7 +733,7 @@ private class RecipientServiceTest {
 				null); // parseErrors
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1556,7 +1556,7 @@ private class RecipientServiceTest {
 				null); // parseErrors
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.resolveRelatedContacts(new Entity(a1.Id), rc1, new Map<String, Recipient.SigningGroup>());
+			List<Recipient> result = RecipientService.resolveRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1650,8 +1650,8 @@ private class RecipientServiceTest {
 				new EnvelopeConfiguration.CustomRecipient(null, null, null, Recipient.TYPE_SIGNER,
 					'r3', 3, '3333', '5553333', 'n3', null, 'sg3', false, null)
 			};
-			Map<String, Recipient.SigningGroup> sgs = new Map<String, Recipient.SigningGroup> {
-				'sg3' => new Recipient.SigningGroup(3333, 'sg3')
+			Map<String, SigningGroup> sgs = new Map<String, SigningGroup> {
+				'sg3' => new SigningGroup(3333, 'sg3')
 			};
 			Recipient.EmailSettings es = new Recipient.EmailSettings(
 				Localization.NL,
@@ -1769,7 +1769,7 @@ private class RecipientServiceTest {
 				false, 0, true, 1, null, null, null, null);
 
 			Test.startTest();
-			Map<String, Recipient.SigningGroup> result = RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
+			Map<String, SigningGroup> result = RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
