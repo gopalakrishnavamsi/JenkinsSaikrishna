@@ -32,7 +32,7 @@ private class ReturnControllerTest {
 
 	@IsTest
 	static void test_onReturn_cancel() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c e = TestUtils.createEnvelope(a.Id);
 			ReturnController rc = new ReturnController(a.Id, e.Id, ReturnController.DocuSignAction.Tag, 'cancel');
@@ -49,7 +49,7 @@ private class ReturnControllerTest {
 
 	@IsTest
 	static void test_onReturn_send() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c e = TestUtils.createEnvelope(a.Id);
 			ReturnController rc = new ReturnController(a.Id, e.Id, ReturnController.DocuSignAction.Tag, 'send');

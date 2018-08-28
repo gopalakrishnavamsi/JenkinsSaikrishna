@@ -303,9 +303,7 @@ public with sharing class Localization {
 			FROM Localization__mdt
 			WHERE DeveloperName = :language
 		];
-		if (Collection.isEmpty(mds)) {
-			throw new DocuSignException(Label.UnrecognizedLanguageCode);
-		}
+		if (Collection.isEmpty(mds)) throw new DocuSignException(Label.UnrecognizedLanguageCode);
 
 		Localization__mdt md = mds[0];
 		return new ChatterText(

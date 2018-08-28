@@ -3,10 +3,9 @@ private class TemplateAPITest {
 
 	@IsTest
 	static void test_getTemplate_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			final TemplateAPI client = TemplateAPI.getInstance();
 
 			Test.startTest();
@@ -14,8 +13,8 @@ private class TemplateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, t);
-			System.assertEquals(TestUtils.ID1, t.id);
-			System.assertEquals('Unit test', t.name);
+			System.assertNotEquals(null, t.id);
+			System.assertNotEquals(null, t.name);
 			System.assertNotEquals(null, t.lastModified);
 			System.assertNotEquals(null, t.customFields);
 			System.assertEquals(3, t.customFields.size());
@@ -23,9 +22,9 @@ private class TemplateAPITest {
 			System.assertEquals('textValue1', t.customFields[0].value);
 			System.assert(!t.customFields[0].required);
 			System.assert(t.customFields[0].show);
-			System.assertEquals('listField2', t.customFields[2].name);
-			System.assertEquals('listValue2', t.customFields[2].value);
-			System.assertEquals(new List<String> { 'listField2Item1', 'listField2Item2', 'listField2Item3' }, t.customFields[2].items);
+			System.assertEquals('listField1', t.customFields[2].name);
+			System.assertEquals('listField1Value2', t.customFields[2].value);
+			System.assertEquals(new List<String> { 'listField1Value1', 'listField1Value2', 'listField1Value3' }, t.customFields[2].items);
 			System.assert(t.customFields[2].required);
 			System.assert(t.customFields[2].show);
 			System.assertNotEquals(null, t.notifications);
@@ -36,8 +35,8 @@ private class TemplateAPITest {
 			System.assertEquals(11, t.notifications.expireAfterDays);
 			System.assertEquals(6, t.notifications.expireWarnDays);
 			System.assertEquals(EnvelopeSettings__c.getOrgDefaults().Chatter__c.endsWith('On'), t.notifications.updateChatter);
-			System.assertEquals('Unit test subject', t.emailSubject);
-			System.assertEquals('Unit test message', t.emailMessage);
+			System.assertNotEquals(null, t.emailSubject);
+			System.assertNotEquals(null, t.emailMessage);
 			System.assertNotEquals(null, t.recipients);
 			System.assertEquals(7, t.recipients.size());
 			Integer sequence = 1;
@@ -150,7 +149,7 @@ private class TemplateAPITest {
 					System.assertNotEquals(null, r.role);
 					System.assertEquals('SIGNER', r.role.name);
 					System.assertNotEquals(null, r.signingGroup);
-					System.assertEquals(11512, r.signingGroup.id);
+					System.assertNotEquals(null, r.signingGroup.id);
 					System.assertEquals('SG1', r.signingGroup.name);
 					System.assertEquals(null, r.authentication);
 					System.assertEquals(null, r.note);
@@ -170,10 +169,9 @@ private class TemplateAPITest {
 
 	@IsTest
 	static void test_getTemplate_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			final TemplateAPI client = TemplateAPI.getInstance();
 			APIException ex;
 
@@ -187,16 +185,16 @@ private class TemplateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(404, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getTemplates_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			final TemplateAPI client = TemplateAPI.getInstance();
 
 			Test.startTest();
@@ -204,36 +202,30 @@ private class TemplateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, templates);
-			System.assertEquals(4, templates.size());
+			System.assertEquals(3, templates.size());
 
-			System.assertEquals(TestUtils.ID1, templates[0].id);
-			System.assertEquals('Template 1', templates[0].name);
+			System.assertNotEquals(null, templates[0].id);
+			System.assertNotEquals(null, templates[0].name);
 			System.assertNotEquals(null, templates[0].lastModified);
 			System.assert(Collection.isEmpty(templates[0].customFields));
 
-			System.assertEquals(TestUtils.ID2, templates[1].id);
-			System.assertEquals('Template 2', templates[1].name);
+			System.assertNotEquals(null, templates[1].id);
+			System.assertNotEquals(null, templates[1].name);
 			System.assertNotEquals(null, templates[1].lastModified);
 			System.assert(Collection.isEmpty(templates[1].customFields));
 
-			System.assertEquals(TestUtils.ID3, templates[2].id);
-			System.assertEquals('Template 3', templates[2].name);
+			System.assertNotEquals(null, templates[2].id);
+			System.assertNotEquals(null, templates[2].name);
 			System.assertNotEquals(null, templates[2].lastModified);
 			System.assert(Collection.isEmpty(templates[2].customFields));
-
-			System.assertEquals(TestUtils.ID4, templates[3].id);
-			System.assertEquals('Template 4', templates[3].name);
-			System.assertNotEquals(null, templates[3].lastModified);
-			System.assert(Collection.isEmpty(templates[3].customFields));
 		}
 	}
 
 	@IsTest
 	static void test_getTemplates_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			final TemplateAPI client = TemplateAPI.getInstance();
 			APIException ex = null;
 
@@ -247,7 +239,8 @@ private class TemplateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 }

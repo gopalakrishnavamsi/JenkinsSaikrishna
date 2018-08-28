@@ -188,4 +188,15 @@ public class StringUtils {
 			.replace('_TILDE_', '~')
 			.replace('\\n', '\n');
 	}
+
+	/**
+	 * Standard ISO 8601 date and time formatting in GMT time zone.
+	 *
+	 * @param dt The date and time to format.
+	 *
+	 * @return The formatted date and time.
+	 */
+	public static String formatDatetime(final Datetime dt) {
+		return dt == null ? null : dt.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
+	}
 }

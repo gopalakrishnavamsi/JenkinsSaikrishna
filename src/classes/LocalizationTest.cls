@@ -18,7 +18,7 @@ private class LocalizationTest {
 	@IsTest
 	static void test_email_settings() {
 		List<Recipient.EmailSettings> localizationSettings;
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			localizationSettings = Localization.getEmailSettings();
 			// By default localization settings should only contain english as a language setting
@@ -143,8 +143,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_save_Recipient_EmailSettings_success() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			insert new List<EnvelopeLocalization__c> {
 				new EnvelopeLocalization__c(
 					Name = Localization.getLabel('de'),
@@ -198,7 +197,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_save_Recipient_EmailSettings_unauthorized() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ab', '', '', '') });
@@ -212,7 +211,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_save_Recipient_EmailSettings_error() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
 				Localization.save((List<Recipient.EmailSettings>)null);
@@ -232,30 +231,31 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_getCurrentLanguage() {
-		TestUtils.createAccountConfiguration();
-		User u1 = getUser('es_MX');
-		User u2 = getUser('FR');
-		User u3 = getUser('da');
-		insert new List<User> { u1, u2, u3 };
+		System.runAs(UserMock.createAdministrator()) {
+			User u1 = getUser('es_MX');
+			User u2 = getUser('FR');
+			User u3 = getUser('da');
+			insert new List<User> { u1, u2, u3 };
 
-		Test.startTest();
-		System.runAs(u1) {
-			System.assertEquals('es', Localization.getCurrentLanguage());
-		}
+			Test.startTest();
+			System.runAs(u1) {
+				System.assertEquals('es', Localization.getCurrentLanguage());
+			}
 
-		System.runAs(u2) {
-			System.assertEquals('fr', Localization.getCurrentLanguage());
-		}
+			System.runAs(u2) {
+				System.assertEquals('fr', Localization.getCurrentLanguage());
+			}
 
-		System.runAs(u3) {
-			System.assertEquals('da', Localization.getCurrentLanguage());
+			System.runAs(u3) {
+				System.assertEquals('da', Localization.getCurrentLanguage());
+			}
+			Test.stopTest();
 		}
-		Test.stopTest();
 	}
 
 	@IsTest
 	static void test_isEmailLocalizationEnabled_disabled() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			final Boolean result = Localization.isEmailLocalizationEnabled();
 			Test.stopTest();
@@ -266,12 +266,11 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_isEmailLocalizationEnabled_enabled() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('ru', 'Russian', 'test subject ru', 'm') });
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			System.assert(Localization.isEmailLocalizationEnabled());
 			Test.stopTest();
@@ -280,36 +279,37 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_getEmailSettingsForCurrentLanguage() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Localization.save(new List<Recipient.EmailSettings> { new Recipient.EmailSettings('it', 'Italian', 'subject-italian', 'message-italian') });
 		}
 
-		User u1 = getUser('en_US');
-		User u2 = getUser('IT');
-		User u3 = getUser('fi');
-		insert new List<User> { u1, u2, u3 };
-		Recipient.EmailSettings es1, es2;
+		System.runAs(UserMock.createAdministrator()) {
+			User u1 = getUser('en_US');
+			User u2 = getUser('IT');
+			User u3 = getUser('fi');
+			insert new List<User> { u1, u2, u3 };
+			Recipient.EmailSettings es1, es2;
 
-		Test.startTest();
-		System.runAs(u1) {
-			Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
-			System.assertNotEquals(null, result);
-			System.assertEquals('en', result.language);
+			Test.startTest();
+			System.runAs(u1) {
+				Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
+				System.assertNotEquals(null, result);
+				System.assertEquals('en', result.language);
+			}
+			System.runAs(u2) {
+				Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
+				System.assertNotEquals(null, result);
+				System.assertEquals('it', result.language);
+				System.assertEquals('subject-italian', result.subject);
+				System.assertEquals('message-italian', result.message);
+			}
+			System.runAs(u3) {
+				Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
+				System.assertNotEquals(null, result);
+				System.assertEquals(Localization.DEFAULT_LANGUAGE, result.language);
+			}
+			Test.stopTest();
 		}
-		System.runAs(u2) {
-			Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
-			System.assertNotEquals(null, result);
-			System.assertEquals('it', result.language);
-			System.assertEquals('subject-italian', result.subject);
-			System.assertEquals('message-italian', result.message);
-		}
-		System.runAs(u3) {
-			Recipient.EmailSettings result = Localization.getEmailSettingsForCurrentLanguage();
-			System.assertNotEquals(null, result);
-			System.assertEquals(Localization.DEFAULT_LANGUAGE, result.language);
-		}
-		Test.stopTest();
 	}
 
 	@IsTest
@@ -329,9 +329,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_getChatterText() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			System.assertNotEquals(null, Localization.getChatterText());
 			Test.stopTest();
@@ -340,9 +338,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_save_ChatterText() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Localization.ChatterText text = new Localization.ChatterText(
 				'a',
 				'b',
@@ -398,9 +394,7 @@ private class LocalizationTest {
 
 	@IsTest
 	static void test_getChatterSettings() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			final List<Localization.ChatterSettings> cs = Localization.getChatterSettings();
 			Test.stopTest();

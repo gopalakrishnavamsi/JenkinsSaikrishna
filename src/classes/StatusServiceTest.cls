@@ -46,7 +46,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_convert_EnvelopeStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(TestUtils.createEnvelope());
 			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(TestUtils.createEnvelope());
 
@@ -89,7 +89,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_convert_RecipientStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
 			RecipientStatus__c rs1 = TestUtils.createRecipientStatus(es1.Id, TestUtils.createEnvelopeRecipient(e1.Id));
@@ -136,7 +136,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_querySourceEnvelopes() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Lead l = TestUtils.createLead();
 			UUID e1Id = UUID.randomUUID();
@@ -167,7 +167,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_queryStatus_by_envelope_id() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			UUID e1Id = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1Id);
 			RecipientStatus__c es1rs1 = TestUtils.createRecipientStatus(es1.Id, 1);
@@ -279,7 +279,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_insertStatus_null_docuSignId() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Datetime now = Datetime.now();
 			Envelope.Status es = new Envelope.Status(null, null, null,
 				Envelope.STATUS_COMPLETED, 'e1', 'e1@unit.test', new List<Recipient.Status>(),
@@ -297,7 +297,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_insertStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Datetime now = Datetime.now();
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact a1c1 = TestUtils.createContact(a1.Id);
@@ -425,7 +425,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_upsertStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Datetime now = Datetime.now();
 			Envelope.Status e1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus());
 			Recipient.Status e1r1 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.Id, 1));
@@ -546,7 +546,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_deleteStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Datetime now = Datetime.now();
 			UUID e1Id = UUID.randomUUID();
 			EnvelopeStatus__c e1 = TestUtils.createEnvelopeStatus(e1Id);
@@ -575,7 +575,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_Database_updateStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId1 = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 			UUID dseId2 = UUID.randomUUID();
@@ -608,11 +608,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_createStatus_unauthorized() {
 		Envelope e1, e2;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
 			Test.startTest();
@@ -628,7 +628,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_createStatus_no_envelopes() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				StatusService.createStatus(null);
@@ -648,7 +648,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_createStatus_invalid_envelopes() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			e2.Sent__c = null; // make invalid
@@ -673,7 +673,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_createStatus_valid() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id));
 			Recipient e1r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id));
@@ -713,11 +713,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_getStatus_unauthorized() {
 		Envelope e1, e2;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
 			Test.startTest();
@@ -733,8 +733,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_getStatus_by_source_id() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Lead l = TestUtils.createLead();
 			Envelope__c e1 = TestUtils.createEnvelope(a.Id);
@@ -769,8 +768,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_getStatus_no_update() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Envelope.Status es1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
@@ -791,8 +789,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_getStatus_no_update_final_status() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Envelope__c e3 = TestUtils.createEnvelope();
@@ -846,8 +843,7 @@ private class StatusServiceTest {
 	static void test_getStatus_with_update() {
 		Test.setMock(HttpCalloutMock.class, new EnvelopeStatusMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
@@ -877,8 +873,7 @@ private class StatusServiceTest {
 	static void test_getStatus_not_exists() {
 		Test.setMock(HttpCalloutMock.class, new EnvelopeStatusMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Envelope.Status es1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
@@ -906,11 +901,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_deleteStatus_unauthorized() {
 		Envelope e1, e2;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
 			Test.startTest();
@@ -926,7 +921,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_deleteStatus_not_found() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId1 = UUID.randomUUID();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
 
@@ -943,7 +938,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_deleteStatus_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -965,11 +960,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_resendEnvelope_unauthorized() {
 		Envelope e1;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				StatusService.resendEnvelope(e1.docuSignId);
@@ -983,7 +978,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_resendEnvelope_invalid_status() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -1003,10 +998,9 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_resendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId = UUID.randomUUID();
 			Envelope__c e = TestUtils.createEnvelope(dseId);
 			EnvelopeStatus__c es = TestUtils.createEnvelopeStatus(e);
@@ -1020,11 +1014,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_resendRecipients_unauthorized() {
 		Envelope e1;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				StatusService.resendRecipients(e1.docuSignId, null);
@@ -1038,7 +1032,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_resendRecipients_invalid_status() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -1058,10 +1052,9 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_resendRecipients_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId = UUID.randomUUID();
 			Envelope__c e = TestUtils.createEnvelope(dseId);
 			EnvelopeStatus__c es = TestUtils.createEnvelopeStatus(e);
@@ -1079,11 +1072,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_voidEnvelope_unauthorized() {
 		Envelope e1;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				StatusService.voidEnvelope(e1.docuSignId, 'reason');
@@ -1097,7 +1090,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_voidEnvelope_not_found() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
 			Test.startTest();
@@ -1115,7 +1108,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_voidEnvelope_invalid_status() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -1135,11 +1128,9 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_voidEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
@@ -1170,11 +1161,11 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_correctEnvelope_unauthorized() {
 		Envelope e1;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				StatusService.getCorrectUrl(e1.docuSignId, new Url('https://unit.test/return'));
@@ -1188,7 +1179,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_correctEnvelope_not_found() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 
 			Test.startTest();
@@ -1206,7 +1197,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_correctEnvelope_invalid_status() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 			es1.Status__c = Envelope.STATUS_VOIDED;
@@ -1225,10 +1216,9 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_correctEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 			es1.Status__c = Envelope.STATUS_SENT;
@@ -1244,7 +1234,7 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_viewEnvelope_invalid() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				StatusService.getViewUrl(null, new Url('https://unit.test/return'));
@@ -1258,10 +1248,9 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_viewEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 

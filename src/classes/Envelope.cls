@@ -408,9 +408,7 @@ global class Envelope {
 	 * @return The envelope status corresponding to the envelope.
 	 */
 	public Envelope.Status toEnvelopeStatus() {
-		if (!this.isSent || this.docuSignId == null) {
-			throw new DocuSignException(Label.EnvelopesMustBeSent);
-		}
+		if (!this.isSent || this.docuSignId == null) throw new DocuSignException(Label.EnvelopesMustBeSent);
 
 		List<Recipient.Status> rss = new List<Recipient.Status>();
 		if (this.hasRecipients) {

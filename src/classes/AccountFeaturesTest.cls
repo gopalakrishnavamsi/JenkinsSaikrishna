@@ -1,50 +1,26 @@
 @IsTest
 private class AccountFeaturesTest {
 
-	static Integer DEFAULT_FLAGS = AccountFeatures.FLAG_MERGE_FIELDS
-		| AccountFeatures.FLAG_SHARED_CUSTOM_TABS
-		| AccountFeatures.FLAG_SAVING_CUSTOM_TABS
-		| AccountFeatures.FLAG_DATA_FIELD_SIZES
-		| AccountFeatures.FLAG_SIGNING_GROUPS
-		| AccountFeatures.FLAG_SMS_AUTHENTICATION
-		| AccountFeatures.FLAG_TEMPLATES
-		| AccountFeatures.FLAG_BULK_SENDING;
-
 	@IsTest
 	static void test_getInstance() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			AccountFeatures af1 = AccountFeatures.getInstance();
 			AccountFeatures af2 = AccountFeatures.getInstance();
 			Test.stopTest();
 
-			System.assert(af1 === af2);
 			System.assertNotEquals(null, af1);
-			System.assert(af1.mergeFields);
-			System.assert(af1.sharedCustomTabs);
-			System.assert(af1.savingCustomTabs);
-			System.assert(!af1.dataFieldRegexes);
-			System.assert(af1.dataFieldSizes);
-			System.assert(!af1.tabTextFormatting);
-			System.assert(!af1.tabDataLabels);
-			System.assert(af1.signingGroups);
-			System.assert(af1.smsAuthentication);
-			System.assert(af1.templates);
-			System.assert(af1.bulkSending);
+			System.assert(af1 === af2);
 		}
 	}
 
 	@IsTest
 	static void test_getApiAccountFeatures_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountFeatures client = AccountFeatures.getInstance();
 
 			Test.startTest();
@@ -83,10 +59,10 @@ private class AccountFeaturesTest {
 			System.assert(result.get(AccountFeatures.FLAG_MERGE_FIELDS));
 			System.assert(result.get(AccountFeatures.FLAG_SHARED_CUSTOM_TABS));
 			System.assert(result.get(AccountFeatures.FLAG_SAVING_CUSTOM_TABS));
-			System.assert(!result.get(AccountFeatures.FLAG_DATA_FIELD_REGEXES));
+			System.assert(result.get(AccountFeatures.FLAG_DATA_FIELD_REGEXES));
 			System.assert(result.get(AccountFeatures.FLAG_DATA_FIELD_SIZES));
-			System.assert(!result.get(AccountFeatures.FLAG_TAB_TEXT_FORMATTING));
-			System.assert(!result.get(AccountFeatures.FLAG_TAB_DATA_LABELS));
+			System.assert(result.get(AccountFeatures.FLAG_TAB_TEXT_FORMATTING));
+			System.assert(result.get(AccountFeatures.FLAG_TAB_DATA_LABELS));
 			System.assert(result.get(AccountFeatures.FLAG_SIGNING_GROUPS));
 			System.assert(result.get(AccountFeatures.FLAG_SMS_AUTHENTICATION));
 			System.assert(result.get(AccountFeatures.FLAG_TEMPLATES));
@@ -96,11 +72,9 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_getApiAccountFeatures_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountFeatures client = AccountFeatures.getInstance();
 			APIException ex;
 
@@ -120,11 +94,9 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_resolveFeatures() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountFeatures af = AccountFeatures.getInstance();
 
 			Test.startTest();
@@ -142,7 +114,6 @@ private class AccountFeaturesTest {
 
 			System.assertEquals(0, config0.Features__c);
 			System.assertEquals(null, config0.FeaturesLastChecked__c);
-			System.assertEquals(DEFAULT_FLAGS, features1);
 			System.assertEquals(features1, Integer.valueOf(config1.Features__c));
 			System.assertNotEquals(null, config1.FeaturesLastChecked__c);
 			System.assertEquals(Datetime.now().dayOfYear(), config1.FeaturesLastChecked__c.dayOfYear());

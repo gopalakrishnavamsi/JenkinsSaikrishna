@@ -644,8 +644,8 @@ public with sharing class Permissions {
 
 		String objectName = String.valueOf(type);
 		DescribeSObjectResult objectDescribe = type.getDescribe();
-		if (objectDescribe == null)
-			return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound), new List<FlsResult>());
+		if (objectDescribe == null) return new FlsResults(requestedAccess, false,
+			new FlsResult(objectName, FlsStatus.NotFound), new List<FlsResult>());
 
 		return getFlsResults(requestedAccess, objectName, objectDescribe, fieldNames,
 			Collection.isNotEmpty(fieldNames) ? objectDescribe.fields.getMap() : null);

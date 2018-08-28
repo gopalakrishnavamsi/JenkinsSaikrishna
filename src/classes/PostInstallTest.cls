@@ -3,7 +3,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_generateEmail() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			PostInstallResults pir = new PostInstallResults();
 			pir.endStepFailure('STEP1', new DocuSignException('FAILURE1'));
 			pir.endStepSuccess('STEP2');
@@ -25,7 +25,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_notify() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			PostInstallResults pir = new PostInstallResults();
 			pir.endStepFailure('STEP1', new DocuSignException('FAILURE1'));
 			pir.endStepSuccess('STEP2');
@@ -44,7 +44,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_assignDocuSignAdministratorPermissionSet() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 
 			Test.startTest();
 			PostInstallResults result1 = PostInstall.assignDocuSignAdministratorPermissionSet(UserInfo.getUserId());
@@ -79,7 +79,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeAccountSettings_new() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeAccountSettings();
 			Test.stopTest();
@@ -115,7 +115,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeAccountSettings_upgrade() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			String password = UUID.randomUUID().toString();
 			String accountId = UUID.randomUUID().toString();
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
@@ -164,7 +164,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeSettings_envelope_new() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeSettings(
 				Label.InitializeEnvelopeSettings, EnvelopeSettings__c.getOrgDefaults());
@@ -183,7 +183,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeSettings_envelope_upgrade() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			insert EnvelopeSettings__c.getOrgDefaults();
 
 			Test.startTest();
@@ -204,7 +204,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeSettings_Chatter_new() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.initializeSettings(
 				Label.InitializeChatterSettings, ChatterSettings__c.getOrgDefaults());
@@ -223,7 +223,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_initializeSettings_Chatter_upgrade() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			insert ChatterSettings__c.getOrgDefaults();
 
 			Test.startTest();
@@ -244,7 +244,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_createDefaultRecipientRoles_new() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			PostInstallResults result = PostInstall.createDefaultRecipientRoles();
 			Test.stopTest();
@@ -279,7 +279,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_createDefaultRecipientRoles_upgrade() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role A', Value__c = 1),
 				new RoleSettings__c(Name = 'Role B', Value__c = 2)
@@ -315,7 +315,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_shouldExecute() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			// Always returns true
 			System.assert(new PostInstall().shouldExecute(null, null, null, false, false));
@@ -325,7 +325,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_execute() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			PostInstallResults result = new PostInstall().execute(UserInfo.getOrganizationId(), UserInfo.getUserId(),
 				new Version(6, 9), false, true);
@@ -340,7 +340,7 @@ private class PostInstallTest {
 
 	@IsTest
 	static void test_install() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 
 			Test.startTest();
 			Test.testInstall(new PostInstall(), Application.version);

@@ -129,6 +129,12 @@
         <members>BulkSendService</members>
         <members>BulkSendServiceTest</members>
         <members>BulkList</members>
+        <members>ESignatureAPIMock</members>
+        <members>MockResource</members>
+        <members>MockRequest</members>
+        <members>MockResponse</members>
+        <members>AccountSoapAPIMock</members>
+        <members>UserMock</members>
         <name>ApexClass</name>
     </types>
     <types>

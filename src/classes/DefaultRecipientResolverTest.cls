@@ -32,7 +32,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Account() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -87,7 +87,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Case() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -135,7 +135,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Contact() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(null);
@@ -179,7 +179,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Lead() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead l1 = TestUtils.createLead();
 			Lead l2 = TestUtils.createLead();
@@ -219,7 +219,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Opportunity() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -285,9 +285,9 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_User() {
-		System.runAs(TestUtils.createAdministrator()) {
-			User u1 = TestUtils.createUser();
-			User u2 = TestUtils.createUser();
+		System.runAs(UserMock.createAdministrator()) {
+			User u1 = UserMock.createUser();
+			User u2 = UserMock.createUser();
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -324,7 +324,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -343,7 +343,7 @@ private class DefaultRecipientResolverTest {
 	// TODO: Determine if there's a way to test this with encrypted (probabilistic and deterministic) and unencrypted fields.
 	@IsTest
 	static void test_searchRecipients_Contact() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = new Contact(FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111', AccountId = a1.Id);
 			Contact c2 = new Contact(FirstName = 'ABCD', LastName = 'EFGH', Email = 'c2@unit.test', Phone = '5555552222');
@@ -367,7 +367,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_Lead() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead c1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
 			Lead c2 = new Lead(Company = 'Unit Test 2', FirstName = 'ABCD', LastName = 'EFGH', Email = 'c2@unit.test', Phone = '5555552222');
@@ -383,7 +383,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_User() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -395,7 +395,7 @@ private class DefaultRecipientResolverTest {
 	// DFS-4571
 	@IsTest
 	static void test_search_with_apostrophe() {
-		System.runAs(TestUtils.createAdministrator()) {
+		System.runAs(UserMock.createAdministrator()) {
 			Contact c = new Contact(FirstName = 'Amy', LastName = 'O\'Hare');
 			insert c;
 
@@ -434,7 +434,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();

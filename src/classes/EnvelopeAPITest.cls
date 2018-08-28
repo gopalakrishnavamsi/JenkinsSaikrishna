@@ -1,9 +1,15 @@
 @IsTest
 private class EnvelopeAPITest {
 
+	private static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
+	private static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
+	private static final UUID ID3 = UUID.parse('33333333-3333-3333-3333-333333333333');
+	private static final UUID ID4 = UUID.parse('44444444-4444-4444-4444-444444444444');
+	private static final UUID ID5 = UUID.parse('55555555-5555-5555-5555-555555555555');
+
 	@IsTest
 	static void test_bad_resolver() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.DocumentResolvers__c = 'bad_resolver';
 			upsert s;
@@ -21,8 +27,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getError() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			HttpResponse r1 = new HttpResponse();
 			r1.setStatusCode(200);
@@ -85,9 +90,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_buildCustomFields() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			CustomField cf1 = CustomField.newTextField('n1', 'v1', true, false);
 			CustomField cf2 = CustomField.newTextField('n2', 'v2', false, true);
 			CustomField cf3 = CustomField.newListField('n3', 'v3', new List<String> { 'v1', 'v2', 'v3' }, true, true);
@@ -116,8 +119,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getDocumentContent_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 			Schema.Document d1 = TestUtils.createDocument();
@@ -154,8 +156,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getDocumentContent_error() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 
 			Test.startTest();
@@ -178,10 +179,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getSenderViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -189,16 +189,14 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/sender', u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getSenderViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
@@ -214,16 +212,15 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(400, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getRecipientViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -232,16 +229,14 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/recipient', u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getRecipientViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
@@ -258,41 +253,38 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(404, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getEmbeddedRecipientViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
 			Url u = client.getEmbeddedRecipientViewUrl(
-				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName(), 1);
+				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName());
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/recipient', u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getEmbeddedRecipientViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
 			try {
 				client.getEmbeddedRecipientViewUrl(
-					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName(), 1);
+					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName());
 				throw new AssertException('Expected getEmbeddedRecipientView call to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -302,7 +294,7 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(404, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -321,9 +313,7 @@ private class EnvelopeAPITest {
 	static void test_getRecipientViewUrl_unknown_recipient() {
 		Test.setMock(HttpCalloutMock.class, new UnknownRecipientMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
@@ -353,9 +343,7 @@ private class EnvelopeAPITest {
 	static void test_getRecipientViewUrl_invalid_sequence() {
 		Test.setMock(HttpCalloutMock.class, new InvalidSequenceMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
@@ -372,10 +360,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getConsoleViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -383,16 +370,14 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/console', u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getConsoleViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
@@ -408,16 +393,15 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(422, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getCorrectViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -425,16 +409,14 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals('https://unit.test/view/correct', u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getCorrectViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
@@ -450,7 +432,7 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(400, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -461,13 +443,13 @@ private class EnvelopeAPITest {
 			response.setStatus('BAD_REQUEST');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 			String endpoint = request.getEndpoint();
-			if (endpoint.contains(TestUtils.ID1.toString())) {
+			if (endpoint.contains(ID1.toString())) {
 				response.setBody('{"errorCode":"INVALID_ENVELOPE_STATE","message":"Only envelopes in the \'Sent\' or \'Delivered\' states may be corrected."}');
-			} else if (endpoint.contains(TestUtils.ID2.toString())) {
+			} else if (endpoint.contains(ID2.toString())) {
 				response.setBody('{"errorCode":"ENVELOPE_LOCKED","message":"The envelope is locked."}');
-			} else if (endpoint.contains(TestUtils.ID3.toString())) {
+			} else if (endpoint.contains(ID3.toString())) {
 				response.setBody('{"errorCode":"USER_NOT_SENDER","message":"This user is not the sender of the envelope."}');
-			} else if (endpoint.contains(TestUtils.ID4.toString())) {
+			} else if (endpoint.contains(ID4.toString())) {
 				response.setBody('{"errorCode":"ENVELOPE_NOT_FOUND","message":"The envelope specified either does not exist or you have no rights to it"}');
 			} else {
 				response.setBody('{"errorCode":"RANDOM_ERROR","message":"Random error"}');
@@ -480,39 +462,38 @@ private class EnvelopeAPITest {
 	static void test_getCorrectViewUrl_error() {
 		Test.setMock(HttpCalloutMock.class, new CorrectViewErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			Url returnUrl = new Url('https://unit.test/return');
 			APIException ex1, ex2, ex3, ex4, ex5;
 
 			Test.startTest();
 			try {
-				client.getCorrectViewUrl(TestUtils.ID1, returnUrl);
+				client.getCorrectViewUrl(ID1, returnUrl);
 				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex1 = ex;
 			}
 			try {
-				client.getCorrectViewUrl(TestUtils.ID2, returnUrl);
+				client.getCorrectViewUrl(ID2, returnUrl);
 				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex2 = ex;
 			}
 			try {
-				client.getCorrectViewUrl(TestUtils.ID3, returnUrl);
+				client.getCorrectViewUrl(ID3, returnUrl);
 				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex3 = ex;
 			}
 			try {
-				client.getCorrectViewUrl(TestUtils.ID4, returnUrl);
+				client.getCorrectViewUrl(ID4, returnUrl);
 				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex4 = ex;
 			}
 			try {
-				client.getCorrectViewUrl(TestUtils.ID5, returnUrl);
+				client.getCorrectViewUrl(ID5, returnUrl);
 				throw new AssertException('Expected getCorrectViewUrl to fail');
 			} catch (APIException ex) {
 				ex5 = ex;
@@ -543,10 +524,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_resendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -557,10 +537,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_resendEnvelope_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex = null;
 
@@ -575,25 +554,49 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(415, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_resendRecipients_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			List<Recipient.ResendResult> result = EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
 				Recipient.fromSource('n', 'r@unit.test', null, null, null)
 			});
 			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assertEquals(6, result.size());
+			System.assertEquals(1, Collection.size(result));
+		}
+	}
+
+	private class ResendRecipientsPartialSuccessMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"recipientUpdateResults": [{"recipientId": "1","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "2","errorDetails": {"errorCode": "UNIT_TEST","message": "Unit test error 1"}},{"recipientId": "3","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "4","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "5","errorDetails": {"errorCode": "UNKNOWN_ENVELOPE_RECIPIENT","message": "Recipient not found"}},{"recipientId": "6","errorDetails": {"errorCode": "SUCCESS","message": null}}]}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_resendRecipients_success_partial() {
+		Test.setMock(HttpCalloutMock.class, new ResendRecipientsPartialSuccessMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<Recipient.ResendResult> result = EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+				Recipient.fromSource('n', 'r@unit.test', null, null, null)
+			});
+			Test.stopTest();
+
+			System.assertEquals(6, Collection.size(result));
 			Integer sequence = 1;
 			for (Recipient.ResendResult rr : result) {
 				System.assertNotEquals(null, rr);
@@ -615,11 +618,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_resendRecipients_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
@@ -627,9 +628,8 @@ private class EnvelopeAPITest {
 				});
 				throw new AssertException('Expected resendRecipients to fail');
 			} catch (APIException ex) {
-				System.assertNotEquals(null, ex);
 				System.assertNotEquals(null, ex.error);
-				System.assertEquals(415, ex.error.code);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
 			Test.stopTest();
 		}
@@ -637,10 +637,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getSigningGroups_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -653,75 +652,96 @@ private class EnvelopeAPITest {
 			System.assertEquals(3, signingGroups1.size());
 			System.assert(signingGroups1 === signingGroups2); // Check reference equality
 
-			System.assertEquals(1L, signingGroups1[0].id);
+			System.assertNotEquals(null, signingGroups1[0].id);
 			System.assertEquals('SG1', signingGroups1[0].name);
 			System.assert(signingGroups1[0].isValid);
 			System.assertNotEquals(null, signingGroups1[0].members);
 			System.assertEquals(2, signingGroups1[0].members.size());
-			System.assertEquals('sg1.u1', signingGroups1[0].members[0].username);
-			System.assertEquals('sg1.u1@unit.test', signingGroups1[0].members[0].email);
-			System.assertEquals('sg1.u2', signingGroups1[0].members[1].username);
-			System.assertEquals('sg1.u2@unit.test', signingGroups1[0].members[1].email);
+			System.assertNotEquals(null, signingGroups1[0].members[0].username);
+			System.assertNotEquals(null, signingGroups1[0].members[0].email);
+			System.assertNotEquals(null, signingGroups1[0].members[1].username);
+			System.assertNotEquals(null, signingGroups1[0].members[1].email);
 
-			System.assertEquals(2L, signingGroups1[1].id);
+			System.assertNotEquals(null, signingGroups1[1].id);
 			System.assertEquals('SG2', signingGroups1[1].name);
 			System.assert(!signingGroups1[1].isValid);
 			System.assertNotEquals(null, signingGroups1[1].members);
 			System.assertEquals(0, signingGroups1[1].members.size());
 
-			System.assertEquals(3L, signingGroups1[2].id);
+			System.assertNotEquals(null, signingGroups1[2].id);
 			System.assertEquals('SG3', signingGroups1[2].name);
 			System.assert(signingGroups1[2].isValid);
 			System.assertNotEquals(null, signingGroups1[2].members);
 			System.assertEquals(1, signingGroups1[2].members.size());
-			System.assertEquals('sg3.u1', signingGroups1[2].members[0].username);
-			System.assertEquals('sg3.u1@unit.test', signingGroups1[2].members[0].email);
+			System.assertNotEquals(null, signingGroups1[2].members[0].username);
+			System.assertNotEquals(null, signingGroups1[2].members[0].email);
+		}
+	}
+
+	private class SigningGroupsUnauthorizedMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"ACCOUNT_LACKS_PERMISSIONS","message":"Signing groups are unauthorized for this account"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getSigningGroups_unauthorized() {
+		Test.setMock(HttpCalloutMock.class, new SigningGroupsUnauthorizedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getSigningGroups();
+				throw new AssertException('Expected getSigningGroups to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
+				System.assertEquals(Label.SigningGroupsProhibited, ex.getMessage());
+			}
+			// Empty result is cached as the answer from DS will never change
+			List<SigningGroup> result = EnvelopeAPI.getInstance().getSigningGroups();
+			Test.stopTest();
+
+			System.assert(Collection.isEmpty(result));
 		}
 	}
 
 	@IsTest
 	static void test_getSigningGroups_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-			EnvelopeAPI client1 = EnvelopeAPI.getInstance();
-			client1.getBaseUrl();
-			EnvelopeAPI client2 = new EnvelopeAPI(new Credentials(Environment.demo, TestUtils.ID1, 1234L,
-				UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID().toString(), UUID.randomUUID().toString(),
-				true, UUID.randomUUID().toString(), false));
-			APIException ex1, ex2 = null;
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
-				client1.getSigningGroups();
+				EnvelopeAPI.getInstance().getSigningGroups();
 				throw new AssertException('Expected getSigningGroups to fail');
-			} catch (APIException ex3) {
-				ex1 = ex3;
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
-
+			// Result is not cached for non-auth-related errors
 			try {
-				client2.getSigningGroups();
+				EnvelopeAPI.getInstance().getSigningGroups();
 				throw new AssertException('Expected getSigningGroups to fail');
-			} catch (APIException ex4) {
-				ex2 = ex4;
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
 			Test.stopTest();
-
-			System.assertNotEquals(null, ex1);
-			System.assertEquals('just stop', ex1.getMessage());
-
-			System.assertNotEquals(null, ex2);
-			System.assertEquals(Label.SigningGroupsProhibited, ex2.getMessage());
 		}
 	}
 
 	@IsTest
 	static void test_updateInPersonSigner_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -732,10 +752,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_updateInPersonSigner_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex;
 
@@ -750,16 +769,15 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
-			System.assertEquals(400, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_voidEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -770,10 +788,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_voidEnvelope_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex1;
 
@@ -788,7 +805,7 @@ private class EnvelopeAPITest {
 
 			System.assertNotEquals(null, ex1);
 			System.assertNotEquals(null, ex1.error);
-			System.assertEquals(400, ex1.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex1.error.code);
 		}
 	}
 
@@ -798,7 +815,7 @@ private class EnvelopeAPITest {
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-			if (request.getEndpoint().contains(TestUtils.ID1.toString())) {
+			if (request.getEndpoint().contains(ID1.toString())) {
 				response.setBody('{"errorCode":"USER_NOT_SENDER","message":"This user is not the sender of the envelope."}');
 			} else {
 				response.setBody('{"errorCode":"GENERIC_ERROR","message":"Some error"}');
@@ -811,20 +828,19 @@ private class EnvelopeAPITest {
 	static void test_voidEnvelope_errors() {
 		Test.setMock(HttpCalloutMock.class, new VoidEnvelopeErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			APIException ex1, ex2;
 
 			Test.startTest();
 			try {
-				client.voidEnvelope(TestUtils.ID1, 'Just because');
+				client.voidEnvelope(ID1, 'Just because');
 				throw new AssertException('Expected voidEnvelope to fail');
 			} catch (APIException ex) {
 				ex1 = ex;
 			}
 			try {
-				client.voidEnvelope(TestUtils.ID2, 'Just because');
+				client.voidEnvelope(ID2, 'Just because');
 				throw new AssertException('Expected voidEnvelope to fail');
 			} catch (APIException ex) {
 				ex2 = ex;
@@ -843,10 +859,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_createEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			TestUtils.createEnvelopeLocalization(Localization.DE);
@@ -883,16 +898,15 @@ private class EnvelopeAPITest {
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.id1, result);
+			System.assertNotEquals(null, result);
 		}
 	}
 
 	@IsTest
 	static void test_createEnvelope_success_with_Recipient_EmailSettings() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			TestUtils.createEnvelopeLocalization(Localization.DE);
@@ -937,14 +951,13 @@ private class EnvelopeAPITest {
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.id1, result);
+			System.assertNotEquals(null, result);
 		}
 	}
 
 	@IsTest
 	static void test_buildCompositeTemplates_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Envelope__c e1 = TestUtils.createEnvelope();
@@ -991,10 +1004,9 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_createEnvelope_recipient_types() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d = TestUtils.createEnvelopeDocument(e1.Id);
 			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
@@ -1020,16 +1032,15 @@ private class EnvelopeAPITest {
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.id1, result);
+			System.assertNotEquals(null, result);
 		}
 	}
 
 	@IsTest
 	static void test_createEnvelope_document_types() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createDocument(UserInfo.getUserId()), 1);
 			Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 2);
@@ -1051,16 +1062,15 @@ private class EnvelopeAPITest {
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.id1, result);
+			System.assertNotEquals(null, result);
 		}
 	}
 
 	@IsTest
 	static void test_createEnvelope_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1070,7 +1080,7 @@ private class EnvelopeAPITest {
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
-				System.assertEquals(400, ex.error.code);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
 			Test.stopTest();
 		}
@@ -1078,8 +1088,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_createEnvelope_null_envelope() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
@@ -1095,8 +1104,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_createEnvelope_fetch_invalid_document() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d = new Document__c(
 				Envelope__c = e1.Id,
@@ -1143,8 +1151,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_21_cfr_part_11() {
 		Test.setMock(HttpCalloutMock.class, new CfrErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1175,8 +1182,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_user_not_activated() {
 		Test.setMock(HttpCalloutMock.class, new UserNotActivatedErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1207,8 +1213,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_trial_expired() {
 		Test.setMock(HttpCalloutMock.class, new TrialExpiredErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1239,8 +1244,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_account_permissions() {
 		Test.setMock(HttpCalloutMock.class, new AccountPermissionErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1271,8 +1275,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_user_permissions() {
 		Test.setMock(HttpCalloutMock.class, new UserPermissionErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1303,8 +1306,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_invalid_document() {
 		Test.setMock(HttpCalloutMock.class, new InvalidDocumentErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1335,8 +1337,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_invalid_signing_group() {
 		Test.setMock(HttpCalloutMock.class, new InvalidSigningGroupErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1367,8 +1368,7 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_error_invalid_recipient() {
 		Test.setMock(HttpCalloutMock.class, new InvalidRecipientErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
@@ -1386,24 +1386,23 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_getRecipientCustomFields() {
-		TestUtils.createAccountConfiguration();
-		Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null, false);
-		Entity e = Entity.resolve(UserInfo.getUserId());
+		System.runAs(UserMock.createDocuSignUser()) {
+			Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null, false);
+			Entity e = Entity.resolve(UserInfo.getUserId());
 
-		Test.startTest();
-		System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(null));
-		System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(r));
-		System.assertEquals(new List<String> { '##SFUser:' + UserInfo.getUserId() }, EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
-		Test.stopTest();
+			Test.startTest();
+			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(null));
+			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(r));
+			System.assertEquals(new List<String> { '##SFUser:' + UserInfo.getUserId() }, EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
+			Test.stopTest();
+		}
 	}
 
 	@IsTest
 	static void test_getEnvelopeStatus_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
@@ -1431,9 +1430,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_created() {
 		Test.setMock(HttpCalloutMock.class, new StatusCreatedMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
 			Test.stopTest();
@@ -1483,9 +1480,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_sent() {
 		Test.setMock(HttpCalloutMock.class, new StatusSentMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
 			Test.stopTest();
@@ -1539,9 +1534,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_completed() {
 		Test.setMock(HttpCalloutMock.class, new StatusCompletedMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
 			Test.stopTest();
@@ -1588,9 +1581,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_declined() {
 		Test.setMock(HttpCalloutMock.class, new StatusDeclinedMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
 			Test.stopTest();
@@ -1649,9 +1640,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_voided() {
 		Test.setMock(HttpCalloutMock.class, new StatusVoidedMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
 			Test.stopTest();
@@ -1709,9 +1698,7 @@ private class EnvelopeAPITest {
 	static void test_getEnvelopeStatus_without_recipients() {
 		Test.setMock(HttpCalloutMock.class, new StatusSentNoRecipientsMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), false);
 			Test.stopTest();
@@ -1729,8 +1716,10 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_APIRecipient_anchor_tag_conversion() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, null, null).withRole(new Recipient.Role('DefaultRole1', 1));
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, null, null)
+				.withType(Recipient.TYPE_EMBEDDED_SIGNER, true)
+				.withRole(new Recipient.Role('DefaultRole1', 1));
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, 'TemplateRole', null);
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', null, null, null);
 
@@ -1757,7 +1746,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_APIRecipient_template_conversion() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'TemplateRole', null).withRoutingOrder(1);
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, null, null).withRoutingOrder(2);
 

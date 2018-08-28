@@ -10,7 +10,7 @@ private class PermissionsTest {
 		String orgType = null;
 		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
 		if (Collection.isNotEmpty(orgs)) {
-			orgType = orgs[0].organizationType;
+			orgType = orgs[0].OrganizationType;
 		}
 		System.assertEquals((orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition'),
 			Permissions.IS_FLS_SUPPORTED);
@@ -167,7 +167,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResult_authorized() {
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator();
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
@@ -204,7 +204,7 @@ private class PermissionsTest {
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
-		System.runAs(TestUtils.createRestrictedUser()) {
+		System.runAs(UserMock.createRestrictedUser()) {
 			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
 			r1 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, FIELD_NAME, dfr);
 			r2 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, FIELD_NAME, dfr);
@@ -234,7 +234,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResults_authorized() {
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9;
 
 		Test.startTest();
@@ -275,7 +275,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResults_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9, r10;
 
 		Test.startTest();
@@ -319,7 +319,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isCreateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -337,7 +337,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isCreateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -355,7 +355,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsCreateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -379,7 +379,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsCreateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -407,7 +407,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isDeletable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -425,7 +425,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isDeletable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -443,7 +443,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsDeletable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -468,7 +468,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsDeletable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -494,7 +494,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isQueryable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -512,8 +512,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isQueryable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignUser();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -533,7 +533,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsQueryable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -557,8 +557,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsQueryable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignUser();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -586,7 +586,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isUpdateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -604,7 +604,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isUpdateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -622,7 +622,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsUpdateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -646,8 +646,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsUpdateable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignAdministrator();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignAdministrator();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -675,7 +675,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isFilterable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -698,7 +698,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsFilterable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -727,7 +727,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isUnencrypted_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -750,7 +750,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsUnencrypted_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -807,7 +807,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_assignDocuSignUserPermissionSet() {
-		final User testUser = TestUtils.createUser();
+		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
@@ -823,7 +823,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_assignDocuSignAdministratorPermissionSet() {
-		final User testUser = TestUtils.createUser();
+		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
@@ -839,9 +839,9 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_removeDocuSignPermissionSets() {
-		User dsUser = TestUtils.createDocuSignUser();
-		User dsAdmin = TestUtils.createDocuSignAdministrator();
-		User nonDocuSignUser = TestUtils.createUser();
+		User dsUser = UserMock.createDocuSignUser(false);
+		User dsAdmin = UserMock.createDocuSignAdministrator(false);
+		User nonDocuSignUser = UserMock.createUser();
 
 		System.assert(Permissions.isDocuSignUser(dsUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(dsUser.Id));
@@ -863,12 +863,13 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
 	}
 
-	static testmethod void test_isDocuSignUser() {
+	@IsTest
+	static void test_isDocuSignUser() {
 		// Create 3 users: 1) no DocuSign permission set, 2) user DocuSign permission set, 3) admin DocuSign permission set
 		// Verify only users #2 and #3 are DocuSign users
-		final User nonDocuSignUser = TestUtils.createUser();
-		final User dsUser = TestUtils.createDocuSignUser();
-		final User dsAdmin = TestUtils.createDocuSignAdministrator();
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
 
 		Test.startTest();
 		System.assert(!Permissions.isDocuSignUser(null));
@@ -909,12 +910,13 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testmethod void testIsDocuSignAdministrator() {
+	@IsTest
+	static void testIsDocuSignAdministrator() {
 		// Create 3 users: 1) no DocuSign permission set, 2) user DocuSign permission set, 3) admin DocuSign permission set
 		// Verify only user #3 is admin
-		final User nonDocuSignUser = TestUtils.createUser();
-		final User dsUser = TestUtils.createUser();
-		final User dsAdmin = TestUtils.createUser();
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsUser = UserMock.createUser();
+		final User dsAdmin = UserMock.createUser();
 
 		Test.startTest();
 		// Assign permission sets.
@@ -971,9 +973,9 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isOwner() {
-		System.runAs(TestUtils.createAdministrator()) {
-			final User u1 = TestUtils.createDocuSignUser();
-			final User u2 = TestUtils.createDocuSignUser();
+		System.runAs(UserMock.createAdministrator()) {
+			final User u1 = UserMock.createDocuSignUser(false);
+			final User u2 = UserMock.createDocuSignUser(false);
 			final UUID dsEnvelopeId = UUID.randomUUID();
 			final Envelope__c envelope = TestUtils.createEnvelope();
 			envelope.OwnerId = u1.Id;
@@ -1009,8 +1011,8 @@ private class PermissionsTest {
 				System.assert(Permissions.isOwner(new Set<UUID> { dsEnvelopeId }));
 				Permissions.verifyIsOwner(envelope.Id);
 				Permissions.verifyIsOwner(new Set<Id> { envelope.Id });
-				Permissions.verifyISOwner(dsEnvelopeId);
-				Permissions.verifyISOwner(new Set<UUID> { dsEnvelopeId });
+				Permissions.verifyIsOwner(dsEnvelopeId);
+				Permissions.verifyIsOwner(new Set<UUID> { dsEnvelopeId });
 			}
 			System.runAs(u2) {
 				System.assert(!Permissions.isOwner(envelope.Id));

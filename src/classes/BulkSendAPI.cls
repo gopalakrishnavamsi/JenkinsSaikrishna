@@ -15,6 +15,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for bulk sending lists
+	@TestVisible
 	private class APIBulkList {
 		public String listId;
 		public String name;
@@ -34,6 +35,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIEnvelope {
 		public String emailSubject;
 		public String emailBlurb;
@@ -60,6 +62,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APICustomField {
 		public String name;
 		public String value;
@@ -72,6 +75,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIRecipient {
 		public String recipientId;
 		public String email;
@@ -103,6 +107,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APISmsAuthentication {
 		public List<String> senderProvidedNumbers;
 
@@ -165,6 +170,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for bulk envelope sending
+	@TestVisible
 	private class APIBulkSendRequest {
 		private final String envelopeOrTemplateId;
 
@@ -173,6 +179,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIBulkSendResponse {
 		public String batchId;
 		public List<String> validationErrors;
@@ -222,6 +229,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for bulk job status
+	@TestVisible
 	private class APIBatchStatusDetail {
 		public String envelopeId;
 		public String bulkStatus;
@@ -233,6 +241,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIBatchStatus {
 		public String batchSize;
 		public String batchId;
