@@ -117,7 +117,7 @@ private class SalesforceTest {
 
 	@IsTest
 	static void test_isSObjectId() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c = TestUtils.createContact(a.Id);
 			Opportunity o = TestUtils.createOpportunity(a.Id);

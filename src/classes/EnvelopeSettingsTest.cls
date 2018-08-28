@@ -3,9 +3,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_getInstance() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			EnvelopeSettings ec1 = EnvelopeSettings.getInstance();
 			EnvelopeSettings ec2 = EnvelopeSettings.getInstance();
@@ -22,7 +20,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_getInstance_error() {
-		System.runAs(TestUtils.createRestrictedUser()) {
+		System.runAs(UserMock.createRestrictedUser()) {
 			Test.startTest();
 			EnvelopeSettings result = EnvelopeSettings.getInstance();
 			Test.stopTest();
@@ -35,8 +33,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_mergeWith() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
 			s.HideTagButton__c = true;
 			s.HideSendButton__c = false;
@@ -75,8 +72,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_getOptions() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
 			settings.AddAnchorTags__c = true;
 			settings.FetchDocuments__c = false;
@@ -140,9 +136,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_save() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			EnvelopeSettings s = new EnvelopeSettings(
 				true,
 				false,
@@ -216,9 +210,7 @@ private class EnvelopeSettingsTest {
 
 	@IsTest
 	static void test_save_blank_role() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			EnvelopeSettings s = new EnvelopeSettings(
 				true,
 				false,

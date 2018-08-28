@@ -18,6 +18,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for templates
+	@TestVisible
 	private class ListCustomField {
 		public String name;
 		public String required;
@@ -31,6 +32,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TextCustomField {
 		public String name;
 		public String required;
@@ -43,6 +45,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class CustomFields {
 		public List<TextCustomField> textCustomFields;
 		public List<ListCustomField> listCustomFields;
@@ -66,6 +69,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TemplateId {
 		public String templateId;
 		public String name;
@@ -76,10 +80,12 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		return String.isBlank(s) ? null : s;
 	}
 
+	@TestVisible
 	private class APIPhoneAuthentication {
 		public List<String> senderProvidedNumbers;
 	}
 
+	@TestVisible
 	private class APIEmailSettings {
 		public String emailSubject;
 		public String emailBody;
@@ -94,6 +100,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIRecipient {
 		public String name;
 		public String email;
@@ -158,6 +165,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIRecipients {
 		public List<APIRecipient> agents;
 		public List<APIRecipient> carbonCopies;
@@ -221,18 +229,21 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIReminders {
 		public String reminderEnabled;
 		public String reminderDelay;
 		public String reminderFrequency;
 	}
 
+	@TestVisible
 	private class APIExpirations {
 		public String expireEnabled;
 		public String expireAfter;
 		public String expireWarn;
 	}
 
+	@TestVisible
 	private class APINotification {
 		public APIReminders reminders;
 		public APIExpirations expirations;
@@ -251,6 +262,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APITemplate {
 		public TemplateId envelopeTemplateDefinition;
 		public CustomFields customFields;
@@ -295,6 +307,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		return template;
 	}
 
+	@TestVisible
 	private class APITemplateListResult {
 		public String templateId;
 		public String name;
@@ -318,6 +331,7 @@ public with sharing class TemplateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class Templates {
 		public String resultSetSize;
 		public String startPosition;

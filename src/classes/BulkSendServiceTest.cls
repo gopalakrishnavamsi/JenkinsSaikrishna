@@ -1,10 +1,6 @@
 @IsTest
 private class BulkSendServiceTest {
-
-	private static Integer randomInteger(final Integer max) {
-		return Integer.valueOf(Math.random() * max);
-	}
-
+	
 	private static BulkList__c createList(final Id sourceId) {
 		BulkList__c bl = new BulkList__c(
 			DocuSignId__c = UUID.randomUUID().toString(),
@@ -18,19 +14,19 @@ private class BulkSendServiceTest {
 		BulkStatus__c bs = new BulkStatus__c(
 			DocuSignId__c = UUID.randomUUID().toString(),
 			SourceId__c = sourceId,
-			BatchSize__c = randomInteger(100),
-			QueuedEnvelopes__c = randomInteger(100),
-			SentEnvelopes__c = randomInteger(100),
-			FailedEnvelopes__c = randomInteger(100),
-			Submitted__c = Datetime.now().addDays(-(randomInteger(10))),
-			LastStatusUpdate__c = Datetime.now().addDays(-(randomInteger(10))));
+			BatchSize__c = TestUtils.randomInteger(100),
+			QueuedEnvelopes__c = TestUtils.randomInteger(100),
+			SentEnvelopes__c = TestUtils.randomInteger(100),
+			FailedEnvelopes__c = TestUtils.randomInteger(100),
+			Submitted__c = Datetime.now().addDays(-(TestUtils.randomInteger(10))),
+			LastStatusUpdate__c = Datetime.now().addDays(-(TestUtils.randomInteger(10))));
 		insert bs;
 		return bs;
 	}
 
 	@IsTest
 	static void test_Database_convert() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			BulkList__c bl1 = createList(TestUtils.createLead().Id);
 			BulkList__c bl2 = createList(TestUtils.createLead().Id);
 			BulkStatus__c bs1 = createStatus(TestUtils.createLead().Id);
@@ -83,7 +79,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_createLists() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl1 = new BulkList(
 				null,
 				UUID.randomUUID(),
@@ -117,7 +113,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_queryLists() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl1 = BulkSendService.DB.convert(createList(TestUtils.createAccount().Id));
 			BulkList bl2 = BulkSendService.DB.convert(createList(TestUtils.createAccount().Id));
 
@@ -141,7 +137,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_updateLists() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl1 = new BulkList(
 				createList(TestUtils.createAccount().Id).Id,
 				UUID.randomUUID(),
@@ -175,7 +171,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_deleteLists() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Set<Id> ids = new Set<Id> {
 				createList(null).Id,
 				createList(null).Id
@@ -192,29 +188,29 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_createStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList.Status bs1 = new BulkList.Status(
 				null,
 				UUID.randomUUID(),
 				new Entity(TestUtils.createLead().Id),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
 				null,
-				Datetime.now().addDays(-(randomInteger(10))),
-				Datetime.now().addDays(-(randomInteger(10))));
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))),
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))));
 			BulkList.Status bs2 = new BulkList.Status(
 				null,
 				UUID.randomUUID(),
 				new Entity(TestUtils.createLead().Id),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
 				null,
-				Datetime.now().addDays(-(randomInteger(10))),
-				Datetime.now().addDays(-(randomInteger(10))));
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))),
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))));
 
 			Test.startTest();
 			List<BulkList.Status> result = BulkSendService.DB.createStatus(new List<BulkList.Status> { bs1, bs2 });
@@ -246,7 +242,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_queryStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList.Status bs1 = BulkSendService.DB.convert(createStatus(TestUtils.createLead().Id));
 			BulkList.Status bs2 = BulkSendService.DB.convert(createStatus(TestUtils.createLead().Id));
 
@@ -280,29 +276,29 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_Database_updateStatus() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList.Status bs1 = new BulkList.Status(
 				createStatus(null).Id,
 				UUID.randomUUID(),
 				new Entity(TestUtils.createLead().Id),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
 				null,
-				Datetime.now().addDays(-(randomInteger(10))),
-				Datetime.now().addDays(-(randomInteger(10))));
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))),
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))));
 			BulkList.Status bs2 = new BulkList.Status(
 				createStatus(null).Id,
 				UUID.randomUUID(),
 				new Entity(TestUtils.createLead().Id),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
-				randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
+				TestUtils.randomInteger(100),
 				null,
-				Datetime.now().addDays(-(randomInteger(10))),
-				Datetime.now().addDays(-(randomInteger(10))));
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))),
+				Datetime.now().addDays(-(TestUtils.randomInteger(10))));
 
 			Test.startTest();
 			List<BulkList.Status> result = BulkSendService.DB.updateStatus(new List<BulkList.Status> { bs1, bs2 });
@@ -334,7 +330,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createLists_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.createLists(new List<BulkList> {
@@ -355,7 +351,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createLists_empty() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				BulkSendService.createLists(new List<BulkList>());
@@ -369,11 +365,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createLists_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.createLists(new List<BulkList> {
@@ -395,11 +389,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createLists_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl1 = new BulkList(
 				null,
 				null,
@@ -429,7 +421,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_updateLists_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.updateLists(new List<BulkList> {
@@ -450,7 +442,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_updateLists_empty() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				BulkSendService.updateLists(new List<BulkList>());
@@ -464,11 +456,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_updateLists_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.updateLists(new List<BulkList> {
@@ -490,11 +480,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_updateLists_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl1 = new BulkList(
 				createList(null).Id,
 				UUID.randomUUID(),
@@ -526,7 +514,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_deleteLists_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.deleteLists(new Set<Id> { UserInfo.getUserId() });
@@ -540,7 +528,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_deleteLists_empty() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				BulkSendService.deleteLists(new Set<Id>());
@@ -554,11 +542,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_deleteLists_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList__c bl1 = createList(null);
 			BulkList__c bl2 = createList(null);
 
@@ -576,11 +562,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_deleteLists_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Set<Id> ids = new Set<Id> { createList(null).Id, createList(null).Id };
 
 			Test.startTest();
@@ -596,7 +580,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.createDraftEnvelope(null);
@@ -610,7 +594,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_invalid() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				BulkSendService.createDraftEnvelope(null);
@@ -624,11 +608,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope e = EnvelopeService.DB.convert(e1)
 				.withDocuments(DocumentService.convert(new List<Document__c> { TestUtils.createEnvelopeDocument(e1.Id) }))
@@ -648,11 +630,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.getEmptyEnvelope(null)
 				.withDocuments(new List<Document> {
 					DocumentService.convert(TestUtils.createContentVersion())
@@ -673,11 +653,11 @@ private class BulkSendServiceTest {
 	@IsTest
 	static void test_sendEnvelope_unauthorized() {
 		Envelope e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 
 			Test.startTest();
@@ -693,7 +673,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_sendEnvelope_invalid_argument() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 			Envelope e = EnvelopeService.getEmptyEnvelope(null);
 
@@ -716,7 +696,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_sendEnvelope_invalid_envelope() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 
@@ -733,11 +713,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_sendEnvelope_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope e = EnvelopeService.DB.convert(e1)
@@ -758,11 +736,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_sendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope e = EnvelopeService.DB.convert(e1)
@@ -787,7 +763,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_getStatus_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				BulkSendService.getStatus(new Set<Id> { UserInfo.getUserId() });
@@ -801,7 +777,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_getStatus_invalid() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				BulkSendService.getStatus(new Set<Id>());
@@ -815,11 +791,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_getStatus_api_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkStatus__c bs = createStatus(null);
 			bs.LastStatusUpdate__c = Datetime.now().addDays(-1);
 			update bs;
@@ -838,9 +812,7 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_getStatus_success_cached() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkStatus__c bs1 = createStatus(null);
 			bs1.LastStatusUpdate__c = Datetime.now();
 			BulkStatus__c bs2 = createStatus(null);
@@ -857,11 +829,9 @@ private class BulkSendServiceTest {
 
 	@IsTest
 	static void test_getStatus_success_not_cached() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkStatus__c bs1 = createStatus(null);
 			bs1.LastStatusUpdate__c = Datetime.now().addDays(-1);
 			BulkStatus__c bs2 = createStatus(null);

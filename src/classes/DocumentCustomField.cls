@@ -40,11 +40,6 @@ public class DocumentCustomField {
 	public Datetime lastModified { get; private set; }
 	public String lastModifiedFormatted { get; private set; }
 
-	public DocumentCustomField(final String type) {
-		this(null, null, type, null, new List<String>(), null, new Options(),
-			new Formatting(), new Validation(), null, null, Datetime.now());
-	}
-
 	public DocumentCustomField(final UUID id, final String label, final String type, final MergeField mergeField,
 		final List<String> items, final String initialValue, final Options options,
 		final Formatting formatting, final Validation validation, final String tooltip, final String autoPlaceText,

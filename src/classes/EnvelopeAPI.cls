@@ -56,6 +56,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return e;
 	}
 
+	@TestVisible
 	private class SigningGroupMember {
 		public String userName;
 		public String email;
@@ -65,6 +66,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APISigningGroup {
 		public String signingGroupId;
 		public String groupName;
@@ -81,6 +83,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class SigningGroups {
 		public List<APISigningGroup> groups;
 
@@ -322,6 +325,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for resendRecipients
+	@TestVisible
 	private class ResendResult {
 		public DocuSignAPI.ErrorDetails errorDetails;
 		public String recipientId;
@@ -335,6 +339,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class ResendResults {
 		public List<ResendResult> recipientUpdateResults;
 
@@ -432,6 +437,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for update in-person signer
+	@TestVisible
 	private class InPersonSigners {
 		public List<InPersonSigner> inPersonSigners { get; private set; }
 
@@ -440,16 +446,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class InPersonSigner {
 		public String hostName;
 		public String hostEmail;
-		public String signerName;
 		public String signerEmail;
-		public String roleName;
 		public String recipientId;
-		public String routingOrder;
-		public String status;
-		public ErrorDetails errorDetails;
 
 		public InPersonSigner(final String signerEmail) {
 			this.recipientId = '1';
@@ -479,6 +481,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for createEnvelope
+	@TestVisible
 	private class Expirations {
 		public String expireEnabled;
 		public String expireAfter;
@@ -493,6 +496,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class Reminders {
 		public String reminderEnabled;
 		public String reminderDelay;
@@ -507,6 +511,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class EnvelopeNotification {
 		public Reminders reminders;
 		public Expirations expirations;
@@ -519,6 +524,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIDocument {
 		public String documentId;
 		public String name;
@@ -537,6 +543,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class SmsAuthentication {
 		public List<String> senderProvidedNumbers;
 
@@ -545,6 +552,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class RecipientNotification {
 		public String supportedLanguage;
 		public String emailSubject;
@@ -1021,6 +1029,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return result;
 	}
 
+	@TestVisible
 	private class APIEnvelope {
 		public String envelopeId;
 		public String status;
@@ -1176,6 +1185,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return UUID.parse(((EnvelopeResponse)JSON.deserialize(response.body, EnvelopeResponse.class)).envelopeId);
 	}
 
+	@TestVisible
 	private class VoidRequest {
 		public String status;
 		public String voidedReason;

@@ -199,8 +199,7 @@ global class BulkList {
 		@AuraEnabled
 		global Boolean isFinal {
 			get {
-				return this.queuedEnvelopes == 0
-					&& (this.sentEnvelopes + this.failedEnvelopes) == this.batchSize;
+				return this.queuedEnvelopes == 0 && (this.sentEnvelopes + this.failedEnvelopes) == this.batchSize;
 			}
 		}
 

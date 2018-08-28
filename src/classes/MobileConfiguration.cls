@@ -58,13 +58,7 @@ public with sharing class MobileConfiguration {
 	public static MobileConfiguration getInstance(final String userAgent) {
 		if (self == null) {
 			String errorMessage = null;
-			Boolean isMobileTaggerEnabled = false;
-			try {
-				isMobileTaggerEnabled = EnvelopeSettings__c.getInstance().UseMobileTagger__c;
-			} catch (Exception ex) {
-				LoggerService.getInstance().exception(ex, 'Failed to get configuration');
-				errorMessage = ex.getMessage();
-			}
+			Boolean isMobileTaggerEnabled = EnvelopeSettings__c.getInstance().UseMobileTagger__c == true;
 			self = new MobileConfiguration(
 				Device.fromUserAgent(userAgent),
 				isMobileTaggerEnabled,

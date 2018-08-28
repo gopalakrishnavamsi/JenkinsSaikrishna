@@ -106,18 +106,18 @@ private class QueryStringTest {
 
 	@IsTest
 	static void test_fromString() {
-		System.assertEquals(QueryString.empty, QueryString.fromString(null));
-		System.assertEquals(QueryString.empty, QueryString.fromString(''));
-		System.assertEquals(QueryString.empty, QueryString.fromString('\t\n'));
+		System.assertEquals(QueryString.empty, QueryString.parse(null));
+		System.assertEquals(QueryString.empty, QueryString.parse(''));
+		System.assertEquals(QueryString.empty, QueryString.parse('\t\n'));
 		final QueryString qs1 = new QueryString(new Map<String, String> {
 			'key1' => 'value1'
 		});
-		System.assertEquals(qs1, QueryString.fromString(qs1.toString()));
+		System.assertEquals(qs1, QueryString.parse(qs1.toString()));
 		final QueryString qs2 = new QueryString(new Map<String, String> {
 			'key1' => 'value1',
 			'key2' => 'value2'
 		});
-		System.assertEquals(qs2, QueryString.fromString(qs2.toString()));
+		System.assertEquals(qs2, QueryString.parse(qs2.toString()));
 	}
 
 	@IsTest

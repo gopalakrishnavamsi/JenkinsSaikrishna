@@ -4,7 +4,7 @@ private class CredentialsTest {
 	@IsTest
 	static void test_getAccountCredentials() {
 		UUID accountId = UUID.randomUUID();
-		TestUtils.createAccountConfiguration(accountId, accountId.toString());
+		UserMock.createAccountConfiguration(accountId, accountId.toString());
 
 		Test.startTest();
 		Credentials.AccountCredentials result1 = Credentials.getAccountCredentials();
@@ -20,8 +20,8 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getUserCredentials() {
-		User u1 = TestUtils.createUser();
-		User u2 = TestUtils.createUser();
+		User u1 = UserMock.createUser();
+		User u2 = UserMock.createUser();
 
 		Test.startTest();
 		Credentials.UserCredentials result1 = Credentials.getUserCredentials(u1.Id);
@@ -102,8 +102,8 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_default() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 
 			Test.startTest();
 			Credentials result1 = Credentials.getInstance();
@@ -114,7 +114,6 @@ private class CredentialsTest {
 			System.assert(result1.isValid);
 			System.assertNotEquals(null, result1.environment);
 			System.assertNotEquals(null, result1.environment.baseUrl);
-			System.assertEquals(TestUtils.BASE_URL, result1.environment.baseUrl.toExternalForm());
 			System.assert(result1.useSendOnBehalfOf);
 			System.assertEquals(UserSettings__c.getInstance().Username__c, result1.sendOnBehalfOf);
 
@@ -166,11 +165,11 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_user() {
-		User u1 = TestUtils.createDocuSignUser();
-		User u2 = TestUtils.createDocuSignUser();
+		User u1 = UserMock.createDocuSignUser(false);
+		User u2 = UserMock.createDocuSignUser(false);
 
 		System.runAs(u1) {
-			TestUtils.createAccountConfiguration();
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 
 			Test.startTest();
 			Credentials result1 = Credentials.getInstance(u1.Id, true);
@@ -198,7 +197,7 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_error() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				Credentials.getInstance(UserInfo.getUserId(), true);
@@ -212,15 +211,15 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_systemSender() {
-		User u1 = TestUtils.createUser();
-		User u2 = TestUtils.createUser();
+		User u1 = UserMock.createUser();
+		User u2 = UserMock.createUser();
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 			System.assertEquals(AccountSettings__c.getOrgDefaults().UseSystemSender__c, true);
 		}
 
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Credentials result1, result2;
 			Test.startTest();
 				result1 = Credentials.getInstance(u1.Id, true);
@@ -237,10 +236,10 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_invalid_sobo() {
-		User u1 = TestUtils.createUser();
+		User u1 = UserMock.createUser();
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
 			testSettings.UseSystemSender__c = false;
 			upsert testSettings;
@@ -260,8 +259,8 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_isAccountValid_valid() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 
 			Test.startTest();
 			System.assert(Credentials.isAccountValid());
@@ -271,7 +270,7 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_isAccountValid_invalid() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			System.assert(!Credentials.isAccountValid());
 			Test.stopTest();
@@ -284,7 +283,7 @@ private class CredentialsTest {
 		String email = UUID.randomUUID().toString() + '@unit.test';
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
 			Test.startTest();
@@ -319,7 +318,7 @@ private class CredentialsTest {
 		String email = UUID.randomUUID().toString() + '@unit.test';
 		String username = UUID.randomUUID().toString();
 		String password = UUID.randomUUID().toString();
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
 			Test.startTest();
@@ -354,10 +353,10 @@ private class CredentialsTest {
 		String email = UUID.randomUUID().toString() + '@unit.test';
 		UUID username = UUID.randomUUID();
 		String password = UUID.randomUUID().toString();
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
-			TestUtils.createAccountConfiguration();
+			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 			Credentials baseline = Credentials.getInstance();
 
 			Test.startTest();
@@ -391,16 +390,16 @@ private class CredentialsTest {
 	static void test_addUsers() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		UUID dsaUsername = UUID.randomUUID();
-		User dsa = TestUtils.createDocuSignAdministrator();
+		User dsa = UserMock.createDocuSignAdministrator(false);
 		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = TestUtils.createUser();
+		User dsu1 = UserMock.createUser();
 		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = TestUtils.createUser();
+		User dsu2 = UserMock.createUser();
 		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = TestUtils.createUser();
+		User dsu3 = UserMock.createUser();
 
 		System.runAs(dsa) {
-			TestUtils.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
 
 			Test.startTest();
 			Credentials.addUsers(new Map<Id, Credentials.UserCredentials> {
@@ -438,16 +437,16 @@ private class CredentialsTest {
 	static void test_clear_account() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);
+		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
 		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = TestUtils.createDocuSignUser(dsu1Username);
+		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
 		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = TestUtils.createDocuSignUser(dsu2Username);
+		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
 		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = TestUtils.createDocuSignUser(dsu3Username);
+		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
 
 		System.runAs(dsa) {
-			TestUtils.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
@@ -512,16 +511,16 @@ private class CredentialsTest {
 	static void test_clear_all() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);
+		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
 		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = TestUtils.createDocuSignUser(dsu1Username);
+		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
 		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = TestUtils.createDocuSignUser(dsu2Username);
+		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
 		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = TestUtils.createDocuSignUser(dsu3Username);
+		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
 
 		System.runAs(dsa) {
-			TestUtils.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
@@ -586,16 +585,16 @@ private class CredentialsTest {
 	static void test_clear_users() {
 		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
 		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = TestUtils.createDocuSignAdministrator(dsaUsername);
+		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
 		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = TestUtils.createDocuSignUser(dsu1Username);
+		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
 		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = TestUtils.createDocuSignUser(dsu2Username);
+		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
 		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = TestUtils.createDocuSignUser(dsu3Username);
+		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
 
 		System.runAs(dsa) {
-			TestUtils.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);

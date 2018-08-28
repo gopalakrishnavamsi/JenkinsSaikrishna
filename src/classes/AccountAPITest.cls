@@ -1,10 +1,12 @@
 @IsTest
 private class AccountAPITest {
 
+	private static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
+	private static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
+
 	@IsTest
 	static void test_getError() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			HttpResponse r1 = new HttpResponse();
 			r1.setStatusCode(200);
@@ -81,10 +83,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -97,24 +98,23 @@ private class AccountAPITest {
 			System.assertNotEquals(null, a);
 			System.assertNotEquals(null, a.plan);
 			System.assertNotEquals(null, a.billing);
-			System.assertEquals(UUID.parse('67db8eaa-8e05-486b-a146-8cb2b93d1aa4'), a.id);
-			System.assertEquals('DocuSign', a.name);
+			System.assertEquals(UUID.parse(AccountSettings__c.getInstance().AccountId__c), a.id);
+			System.assertNotEquals(null, a.name);
 			System.assertNotEquals(null, a.plan.id);
-			System.assertEquals('DEVCENTER_DEMO_APRIL2013', a.plan.name);
-			System.assertEquals(Date.newInstance(2017, 1, 5), a.plan.startDate);
-			System.assertEquals(Date.newInstance(2018, 1, 5), a.plan.endDate);
-			System.assertEquals(Date.newInstance(2017, 1, 5), a.billing.startDate);
-			System.assertEquals(Date.newInstance(2017, 2, 5), a.billing.endDate);
+			System.assertNotEquals(null, a.plan.name);
+			System.assertNotEquals(null, a.plan.startDate);
+			System.assertNotEquals(null, a.plan.endDate);
+			System.assertNotEquals(null, a.billing.startDate);
+			System.assertNotEquals(null, a.billing.endDate);
 			System.assertEquals(Account.ConnectPermission.Full, a.connect);
 		}
 	}
 
 	@IsTest
 	static void test_getAccount_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -128,8 +128,7 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
-			System.assertEquals('don\'t do that', ex.error.description);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -152,9 +151,7 @@ private class AccountAPITest {
 	static void test_getAccount_trial_expired() {
 		Test.setMock(HttpCalloutMock.class, new TrialExpiredMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Account result = AccountAPI.getInstance().getAccount();
 			Test.stopTest();
@@ -169,10 +166,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_addPlanId_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			Account a1 = new Account(
 				UUID.randomUUID(),
@@ -201,10 +197,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_addPlanId_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			Account a1 = new Account(
 				UUID.randomUUID(),
@@ -231,7 +226,7 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -250,8 +245,7 @@ private class AccountAPITest {
 	static void test_addPlanId_error() {
 		Test.setMock(HttpCalloutMock.class, new AddPlanIdErrorMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			UUID initialPlanId = UUID.randomUUID();
 			Account a1 = new Account(
@@ -282,20 +276,15 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getUserSettings_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			Url baseUrl = new Url('https://unit.test/');
-			Account.Membership ua1 = new Account.Membership(1L, UUID.randomUUID(), 'Account 1', TestUtils.ID1, baseUrl, new Map<String, String>());
-			Account.Membership ua2 = new Account.Membership(2L, UUID.randomUUID(), 'Account 2', TestUtils.ID2, baseUrl, new Map<String, String>());
-			Account.Membership ua3 = new Account.Membership(3L, UUID.randomUUID(), 'Account 3', TestUtils.ID3, baseUrl, new Map<String, String>());
+			Account.Membership ua1 = new Account.Membership(1L, UUID.randomUUID(), 'Account 1', ID1, baseUrl, new Map<String, String>());
 
 			Test.startTest();
-			ua1 = ua1.withSettings(client.getUserSettings(baseUrl, 1111L, TestUtils.ID1, 30000));
-			ua2 = ua2.withSettings(client.getUserSettings(baseUrl, 2222L, TestUtils.ID2, 30000));
-			ua3 = ua3.withSettings(client.getUserSettings(baseUrl, 3333L, TestUtils.ID3, 30000));
+			ua1 = ua1.withSettings(client.getUserSettings(baseUrl, TestUtils.randomInteger(1000000), UUID.randomUUID(), 30000));
 			Test.stopTest();
 
 			System.assertNotEquals(null, ua1);
@@ -303,42 +292,23 @@ private class AccountAPITest {
 			System.assertEquals(4, ua1.settings.size());
 			System.assert(ua1.getFlag('canManageAccount'));
 			System.assert(ua1.getFlag('canSendEnvelope'));
-			System.assert(!ua1.getFlag('apiAccountWideAccess'));
-			System.assert(!ua1.getFlag('allowSendOnBehalfOf'));
-			System.assert(!client.isValidAccount(ua1));
-
-			System.assertNotEquals(null, ua2);
-			System.assertNotEquals(null, ua2.settings);
-			System.assertEquals(4, ua2.settings.size());
-			System.assert(ua2.getFlag('canManageAccount'));
-			System.assert(ua2.getFlag('canSendEnvelope'));
-			System.assert(ua2.getFlag('apiAccountWideAccess'));
-			System.assert(ua2.getFlag('allowSendOnBehalfOf'));
-			System.assert(client.isValidAccount(ua2));
-
-			System.assertNotEquals(null, ua3);
-			System.assertNotEquals(null, ua3.settings);
-			System.assertEquals(0, ua3.settings.size());
-			System.assert(!ua3.getFlag('canManageAccount'));
-			System.assert(!ua3.getFlag('canSendEnvelope'));
-			System.assert(!ua3.getFlag('apiAccountWideAccess'));
-			System.assert(!ua3.getFlag('allowSendOnBehalfOf'));
-			System.assert(!client.isValidAccount(ua3));
+			System.assert(ua1.getFlag('apiAccountWideAccess'));
+			System.assert(ua1.getFlag('allowSendOnBehalfOf'));
+			System.assert(client.isValidAccount(ua1));
 		}
 	}
 
 	@IsTest
 	static void test_getUserSettings_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
 			Test.startTest();
 			try {
-				client.getUserSettings(new Url('https://unit.test/'), 1111L, TestUtils.ID1, 30000);
+				client.getUserSettings(new Url('https://unit.test/'), 1111L, ID1, 30000);
 				throw new AssertException('Expected getUserSettings to fail');
 			} catch (APIException ex2) {
 				ex = ex2;
@@ -346,34 +316,33 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getAccountCredentials_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
-			Account.Credentials a = client.getAccountCredentials(TestUtils.ID2);
+			Account.Credentials a = client.getAccountCredentials(
+				UUID.parse(AccountSettings__c.getInstance().AccountId__c));
 			Test.stopTest();
 
 			System.assertNotEquals(null, a);
-			System.assertEquals(22222222L, a.accountNumber);
-			System.assertEquals('fake-password', a.apiPassword);
+			System.assertNotEquals(null, a.accountNumber);
+			System.assertNotEquals(null, a.apiPassword);
 		}
 	}
 
 	@IsTest
 	static void test_getAccountCredentials_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex;
 
@@ -387,7 +356,8 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals('dunno', ex.getMessage());
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -406,9 +376,9 @@ private class AccountAPITest {
 	static void test_getAccountCredentials_no_accounts() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			UUID accountId = UUID.randomUUID();
-			TestUtils.createAccountConfiguration(accountId, accountId.toString() + '@unit.test');
+			UserMock.createAccountConfiguration(accountId, accountId.toString() + '@unit.test');
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -424,7 +394,7 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getValidAccounts_no_credentials() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
 				new AccountAPI(new Credentials(Environment.production, UUID.randomUUID(), 1234L, null, null, null,
@@ -441,15 +411,17 @@ private class AccountAPITest {
 	@IsTest
 	static void test_getValidAccounts_none() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
-		TestUtils.createAccountConfiguration();
-		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		Test.startTest();
-		List<Account.Membership> result = client.getValidAccounts();
-		Test.stopTest();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		System.assertNotEquals(null, result);
-		System.assert(result.isEmpty());
+			Test.startTest();
+			List<Account.Membership> result = client.getValidAccounts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isEmpty());
+		}
 	}
 
 	class LoginInformationSingleValidAccountMock implements HttpCalloutMock {
@@ -466,24 +438,26 @@ private class AccountAPITest {
 	@IsTest
 	static void test_getValidAccounts_single_valid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleValidAccountMock());
-		TestUtils.createAccountConfiguration();
-		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		Test.startTest();
-		List<Account.Membership> result = client.getValidAccounts();
-		Test.stopTest();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		System.assertNotEquals(null, result);
-		System.assertEquals(1, result.size());
-		System.assertEquals(22222222L, result[0].accountNumber);
-		System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].accountId);
-		System.assertEquals('Account 2 (VALID)', result[0].name);
-		System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].userId);
-		System.assertEquals('fake-password', result[0].apiPassword);
-		System.assertNotEquals(null, result[0].baseUrl);
-		System.assertEquals('https://www.docusign.net/', result[0].baseUrl.toExternalForm());
-		System.assertNotEquals(null, result[0].settings);
-		System.assertEquals(6, result[0].settings.size());
+			Test.startTest();
+			List<Account.Membership> result = client.getValidAccounts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
+			System.assertEquals(22222222L, result[0].accountNumber);
+			System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].accountId);
+			System.assertEquals('Account 2 (VALID)', result[0].name);
+			System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].userId);
+			System.assertEquals('fake-password', result[0].apiPassword);
+			System.assertNotEquals(null, result[0].baseUrl);
+			System.assertEquals('https://www.docusign.net/', result[0].baseUrl.toExternalForm());
+			System.assertNotEquals(null, result[0].settings);
+			System.assertEquals(6, result[0].settings.size());
+		}
 	}
 
 	class LoginInformationSingleInvalidAccountMock implements HttpCalloutMock {
@@ -500,15 +474,17 @@ private class AccountAPITest {
 	@IsTest
 	static void test_getValidAccounts_single_invalid() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleInvalidAccountMock());
-		TestUtils.createAccountConfiguration();
-		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		Test.startTest();
-		List<Account.Membership> result = client.getValidAccounts();
-		Test.stopTest();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		System.assertNotEquals(null, result);
-		System.assert(result.isEmpty());
+			Test.startTest();
+			List<Account.Membership> result = client.getValidAccounts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isEmpty());
+		}
 	}
 
 	class LoginInformationMultipleValidAccountMock implements HttpCalloutMock {
@@ -521,14 +497,14 @@ private class AccountAPITest {
 
 			if (endpoint.contains('/login_information')) {
 				response.setBody('{"loginAccounts": [{"name": "Account 1 (INVALID)","accountId": "11111111","accountIdGuid": "11111111-1111-1111-1111-111111111111","baseUrl": "https://www.docusign.net/restapi/v2/accounts/11111111","isDefault": "true","userName": "Account 1 User (INVALID)","userId": "11111111-1111-1111-1111-111111111111","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "true"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "false"},{"name": "apiAccountWideAccess","value": "false"},{"name": "allowRecipientLanguageSelection","value": "true"}]},{"name": "Account 2 (VALID)","accountId": "22222222","accountIdGuid": "22222222-2222-2222-2222-222222222222","baseUrl": "https://www.docusign.net/restapi/v2/accounts/22222222","isDefault": "false","userName": "Account 2 User (VALID)","userId": "22222222-2222-2222-2222-222222222222","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "false"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowRecipientLanguageSelection","value": "true"}]},{"name": "Account 3 (VALID)","accountId": "33333333","accountIdGuid": "33333333-3333-3333-3333-333333333333","baseUrl": "https://www.docusign.net/restapi/v2/accounts/33333333","isDefault": "false","userName": "Account 3 User (VALID)","userId": "33333333-3333-3333-3333-333333333333","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "false"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowRecipientLanguageSelection","value": "true"}]}],"apiPassword": "fake-password"}');
-			} else if (endpoint.contains(TestUtils.ID1.toString())) {
-				// TestUtils.ID1 = invalid
+			} else if (endpoint.contains(ID1.toString())) {
+				// ID1 = invalid
 				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
-			} else if (endpoint.contains(TestUtils.ID2.toString())) {
-				// TestUtils.ID2 = invalid
+			} else if (endpoint.contains(ID2.toString())) {
+				// ID2 = invalid
 				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
 			} else {
-				// TestUtils.ID3 = valid
+				// ID3 = valid
 				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
 			}
 
@@ -539,15 +515,17 @@ private class AccountAPITest {
 	@IsTest
 	static void test_getValidAccounts_multiple() {
 		Test.setMock(HttpCalloutMock.class, new LoginInformationMultipleValidAccountMock());
-		TestUtils.createAccountConfiguration();
-		AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		Test.startTest();
-		List<Account.Membership> result = client.getValidAccounts();
-		Test.stopTest();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-		System.assertNotEquals(null, result);
-		System.assertEquals(2, result.size());
+			Test.startTest();
+			List<Account.Membership> result = client.getValidAccounts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+		}
 	}
 
 	@IsTest
@@ -575,10 +553,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getConsoleViewUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -586,16 +563,14 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, u);
-			System.assertEquals(DocuSignAPITest.CONSOLE_VIEW_URL, u.toExternalForm());
 		}
 	}
 
 	@IsTest
 	static void test_getConsoleViewUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -610,28 +585,27 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(new APIError(422, 'FAILURE'), ex.error);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_addUsers_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			String u1Email = 'user1@unit.test';
 			String u2Email = 'user2@unit.test';
-			User u1 = TestUtils.createUser(UserInfo.getProfileId(), u1Email, null, false);
-			User u2 = TestUtils.createUser(UserInfo.getProfileId(), u2Email, null, true);
+			User u1 = UserMock.createUser(UserInfo.getProfileId(), u1Email, null, false);
+			User u2 = UserMock.createUser(UserInfo.getProfileId(), u2Email, null, true);
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> users = client.addUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', u1Email, 'User', 'One', 'pw1',
+				new Account.User(null, 'user1', u1Email, 'User', 'One', 'pw1',
 					Account.USER_STATUS_ACTIVE, u1.CanManageAccount__c, true, u1.Id, null),
-				new Account.User(TestUtils.ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
+				new Account.User(null, 'user2', u2Email, 'User', 'Two', 'pw2',
 					Account.USER_STATUS_PENDING_ACTIVATION, u2.CanManageAccount__c, true, u2.Id, null)
 			});
 			Test.stopTest();
@@ -641,25 +615,25 @@ private class AccountAPITest {
 
 			System.assertNotEquals(null, users[0]);
 			System.assert(!users[0].hasError);
-			System.assertEquals(TestUtils.ID1, users[0].id);
+			System.assertNotEquals(null, users[0].id);
 			System.assertEquals('user1', users[0].username);
 			System.assertEquals(u1Email, users[0].email);
 			System.assertEquals('User', users[0].firstName);
 			System.assertEquals('One', users[0].lastName);
-			System.assertEquals('pw1', users[0].apiPassword);
+			System.assertNotEquals(null, users[0].apiPassword);
 			System.assertEquals(u1.Id, users[0].sourceId);
-			System.assertEquals(Account.USER_STATUS_ACTIVE, users[0].status);
+			System.assertEquals(Account.USER_STATUS_PENDING_ACTIVATION, users[0].status);
 			System.assert(!users[0].canManageAccount);
 			System.assert(users[0].canSendEnvelope);
 
 			System.assertNotEquals(null, users[1]);
 			System.assert(!users[1].hasError);
-			System.assertEquals(TestUtils.ID2, users[1].id);
+			System.assertNotEquals(null, users[1].id);
 			System.assertEquals('user2', users[1].username);
 			System.assertEquals(u2Email, users[1].email);
 			System.assertEquals('User', users[1].firstName);
 			System.assertEquals('Two', users[1].lastName);
-			System.assertEquals('pw2', users[1].apiPassword);
+			System.assertNotEquals(null, users[1].apiPassword);
 			System.assertEquals(u2.Id, users[1].sourceId);
 			System.assertEquals(Account.USER_STATUS_PENDING_ACTIVATION, users[1].status);
 			System.assert(users[1].canManageAccount);
@@ -682,13 +656,12 @@ private class AccountAPITest {
 	static void test_addUsers_user_already_exists() {
 		Test.setMock(HttpCalloutMock.class, new UserAlreadyExistsMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
+				new Account.User(ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
@@ -718,13 +691,12 @@ private class AccountAPITest {
 	static void test_addUsers_other_error() {
 		Test.setMock(HttpCalloutMock.class, new UserOtherErrorMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> newUsers = client.addUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
+				new Account.User(ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
@@ -741,10 +713,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_addUsers_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -761,23 +732,24 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_removeUsers_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
+			UUID id1 = UUID.randomUUID(), id2 = UUID.randomUUID();
 
 			Test.startTest();
 			List<Account.User> users = client.removeUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
+				new Account.User(id1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.USER_STATUS_ACTIVE, true, true, UserInfo.getUserId(), null),
-				new Account.User(TestUtils.ID2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
+				new Account.User(id2, 'user2', 'user2@test.com', 'User', 'Two', 'fake-password',
 					Account.USER_STATUS_PENDING_ACTIVATION, false, true, null, null)
 			});
 			Test.stopTest();
@@ -786,21 +758,20 @@ private class AccountAPITest {
 			System.assertEquals(2, users.size());
 
 			System.assertNotEquals(null, users[0]);
-			System.assertEquals(TestUtils.ID1, users[0].id);
+			System.assertEquals(id1, users[0].id);
 			System.assert(!users[0].hasError);
 
 			System.assertNotEquals(null, users[1]);
-			System.assertEquals(TestUtils.ID2, users[1].id);
+			System.assertEquals(id2, users[1].id);
 			System.assert(!users[1].hasError);
 		}
 	}
 
 	@IsTest
 	static void test_removeUsers_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -817,7 +788,8 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
@@ -836,13 +808,12 @@ private class AccountAPITest {
 	static void test_removeUsers_not_found() {
 		Test.setMock(HttpCalloutMock.class, new UnknownUserMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
 			List<Account.User> users = client.removeUsers(new List<Account.User> {
-				new Account.User(TestUtils.ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
+				new Account.User(ID1, 'user1', 'user1@test.com', 'User', 'One', 'fake-password',
 					Account.USER_STATUS_ACTIVE, true, true, null, null)
 			});
 			Test.stopTest();
@@ -859,7 +830,7 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_createTrialAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		Test.startTest();
 		Account.Membership result = AccountAPI.getInstance(Environment.production)
@@ -870,21 +841,19 @@ private class AccountAPITest {
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
-		System.assertEquals(111111L, result.accountNumber);
-		System.assertEquals(TestUtils.ID1, result.accountId);
+		System.assertNotEquals(null, result.accountNumber);
+		System.assertNotEquals(null, result.accountId);
 		System.assertEquals('UNIT TEST', result.name);
-		System.assertEquals(TestUtils.ID2, result.userId);
-		System.assertEquals('fake-password', result.apiPassword);
+		System.assertNotEquals(null, result.userId);
+		System.assertNotEquals(null, result.apiPassword);
 		System.assertNotEquals(null, result.baseUrl);
-		System.assertEquals('https://unit.test.docusign.net/', result.baseUrl.toExternalForm());
 	}
 
 	@IsTest
 	static void test_createTrialAccount_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -901,7 +870,6 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals('don\'t do that', ex.getMessage());
 		}
 	}
 
@@ -942,8 +910,7 @@ private class AccountAPITest {
 	static void test_createTrialAccount_errors() {
 		Test.setMock(HttpCalloutMock.class, new CreateAccountErrorMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex1, ex2, ex3, ex4, ex5;
 
@@ -1020,10 +987,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getCustomFields_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -1043,7 +1009,7 @@ private class AccountAPITest {
 			System.assert(!cfs[2].isText);
 			System.assert(cfs[2].isList);
 			System.assertEquals('listField2', cfs[2].name);
-			System.assertEquals('listValue2', cfs[2].value);
+			System.assertEquals('listField2Item2', cfs[2].value);
 			System.assertEquals(new List<String> { 'listField2Item1', 'listField2Item2', 'listField2Item3' }, cfs[2].items);
 			System.assert(cfs[2].required);
 			System.assert(cfs[2].show);
@@ -1052,10 +1018,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_getCustomFields_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex;
 
@@ -1069,16 +1034,16 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(422, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_getDocumentCustomFields_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -1089,7 +1054,7 @@ private class AccountAPITest {
 			System.assertEquals(3, customTabs.size());
 
 			System.assertNotEquals(null, customTabs[0]);
-			System.assertEquals(TestUtils.ID1, customTabs[0].id);
+			System.assertNotEquals(null, customTabs[0].id);
 			System.assertEquals('Field 1', customTabs[0].label);
 			System.assertEquals('text', customTabs[0].type);
 			System.assertEquals(null, customTabs[0].mergeField);
@@ -1119,10 +1084,10 @@ private class AccountAPITest {
 			System.assertEquals('', customTabs[0].validation.errorMessage);
 			System.assertEquals('Field 1 name', customTabs[0].tooltip);
 			System.assertEquals('Field 1 anchor', customTabs[0].autoPlaceText);
-			System.assertEquals(Datetime.newInstanceGmt(2017, 3, 13, 11, 43, 33), customTabs[0].lastModified);
+			System.assertNotEquals(null, customTabs[0].lastModified);
 
 			System.assertNotEquals(null, customTabs[1]);
-			System.assertEquals(TestUtils.ID2, customTabs[1].id);
+			System.assertNotEquals(null, customTabs[1].id);
 			System.assertEquals('Field 2', customTabs[1].label);
 			System.assertEquals('email', customTabs[1].type);
 			System.assertNotEquals(null, customTabs[1].mergeField);
@@ -1153,10 +1118,10 @@ private class AccountAPITest {
 			System.assertEquals('You fail', customTabs[1].validation.errorMessage);
 			System.assertEquals('Field 2 name', customTabs[1].tooltip);
 			System.assertEquals('', customTabs[1].autoPlaceText);
-			System.assertEquals(null, customTabs[1].lastModified);
+			System.assertNotEquals(null, customTabs[1].lastModified);
 
 			System.assertNotEquals(null, customTabs[2]);
-			System.assertEquals(TestUtils.ID3, customTabs[2].id);
+			System.assertNotEquals(null, customTabs[2].id);
 			System.assertEquals('Field 3', customTabs[2].label);
 			System.assertEquals('something', customTabs[2].type);
 			System.assertNotEquals(null, customTabs[2].mergeField);
@@ -1186,16 +1151,15 @@ private class AccountAPITest {
 			System.assertEquals('', customTabs[2].validation.regularExpression);
 			System.assertEquals('', customTabs[2].validation.errorMessage);
 			System.assertEquals('Field 3 name', customTabs[2].tooltip);
-			System.assertEquals(null, customTabs[2].lastModified);
+			System.assertNotEquals(null, customTabs[2].lastModified);
 		}
 	}
 
 	@IsTest
 	static void test_getDocumentCustomFields_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -1209,16 +1173,16 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_saveDocumentCustomField_success_create() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -1237,21 +1201,21 @@ private class AccountAPITest {
 				null));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.ID1, u);
+			System.assertNotEquals(null, u);
 		}
 	}
 
 	@IsTest
 	static void test_saveDocumentCustomField_success_update() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
+			UUID id = UUID.randomUUID();
 
 			Test.startTest();
 			UUID u = client.saveDocumentCustomField(new DocumentCustomField(
-				TestUtils.ID2,
+				id,
 				'',
 				'text',
 				new DocumentCustomField.MergeField(
@@ -1268,16 +1232,15 @@ private class AccountAPITest {
 				null));
 			Test.stopTest();
 
-			System.assertEquals(TestUtils.ID2, u);
+			System.assertEquals(id, u);
 		}
 	}
 
 	@IsTest
 	static void test_saveDocumentCustomField_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -1303,16 +1266,16 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 
 	@IsTest
 	static void test_deleteDocumentCustomField_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 
 			Test.startTest();
@@ -1325,10 +1288,9 @@ private class AccountAPITest {
 
 	@IsTest
 	static void test_deleteDocumentCustomField_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountAPI client = AccountAPI.getInstance();
 			APIException ex = null;
 
@@ -1342,7 +1304,8 @@ private class AccountAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, ex);
-			System.assertEquals(400, ex.error.code);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 		}
 	}
 }

@@ -14,8 +14,7 @@ private class DefaultEntityResolverTest {
 
 	@IsTest
 	static void test_resolve_Account() {
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
@@ -33,8 +32,7 @@ private class DefaultEntityResolverTest {
 
 	@IsTest
 	static void test_resolve_Opportunity() {
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Opportunity o = TestUtils.createOpportunity();
 
 			Test.startTest();
@@ -52,8 +50,7 @@ private class DefaultEntityResolverTest {
 
 	@IsTest
 	static void test_resolve_Contact() {
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Contact c = TestUtils.createContact();
 
 			Test.startTest();
@@ -71,8 +68,7 @@ private class DefaultEntityResolverTest {
 
 	@IsTest
 	static void test_resolve_Case() {
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Case c = TestUtils.createCase();
 
 			Test.startTest();
@@ -90,9 +86,8 @@ private class DefaultEntityResolverTest {
 
 	@IsTest
 	static void test_resolve_other() {
-		System.runAs(TestUtils.createAdministrator()) {
-			TestUtils.createAccountConfiguration();
-			User u = TestUtils.createUser();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
 			Schema.Account a = TestUtils.createAccount();
 			Lead l = TestUtils.createLead();
 

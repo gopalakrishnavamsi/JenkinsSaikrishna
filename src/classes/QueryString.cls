@@ -37,7 +37,7 @@ public virtual class QueryString {
 		return new QueryString(ApexPages.currentPage().getParameters());
 	}
 
-	public static QueryString fromString(final String s) {
+	public static QueryString parse(final String s) {
 		if (String.isBlank(s)) return QueryString.empty;
 
 		final Map<String, String> qs = new Map<String, String>();

@@ -67,6 +67,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for createAccount
+	@TestVisible
 	private class Address {
 		private final String address1;
 		private final String address2;
@@ -89,6 +90,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class Referral {
 		private final String referralCode;
 		private final String referrerName;
@@ -101,6 +103,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class Plan {
 		private final String planId;
 
@@ -109,15 +112,16 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TrialAccount {
-		private final String accountName;
-		private final APIUser initialUser;
-		private final String distributorCode;
-		private final String distributorPassword;
-		private final Address addressInformation;
-		private final Referral referralInformation;
-		private final Plan planInformation;
-		private final List<Setting> accountSettings;
+		public final String accountName;
+		public final APIUser initialUser;
+		public final String distributorCode;
+		public final String distributorPassword;
+		public final Address addressInformation;
+		public final Referral referralInformation;
+		public final Plan planInformation;
+		public final List<Setting> accountSettings;
 
 		public TrialAccount(final Account.Trial a, final UUID planId) {
 			if (a != null) {
@@ -143,6 +147,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TrialAccounts {
 		public List<TrialAccount> newAccountRequests;
 
@@ -153,6 +158,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TrialAccountResult {
 		public String accountId;
 		public String accountIdGuid;
@@ -172,6 +178,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TrialAccountResults {
 		public List<TrialAccountResult> newAccounts;
 
@@ -216,6 +223,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for getAccount
+	@TestVisible
 	private class APIAccount {
 		public String currentPlanId;
 		public String planName;
@@ -274,10 +282,12 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// Serialization object for account billing plan
+	@TestVisible
 	private class PlanId {
 		public String planId;
 	}
 
+	@TestVisible
 	private class BillingPlans {
 		public PlanId billingPlan;
 	}
@@ -302,6 +312,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return account.withPlanId(UUID.parse(billing.billingPlan.planId));
 	}
 
+	@TestVisible
 	private class ViewResponse {
 		public String url;
 	}
@@ -323,6 +334,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
 	}
 
+	@TestVisible
 	private class Setting {
 		public String name;
 		public String value;
@@ -334,6 +346,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// getAccounts serialization objects
+	@TestVisible
 	private class LoginAccount {
 		public String accountId;
 		public String accountIdGuid;
@@ -367,6 +380,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class LoginInformation {
 		public String apiPassword;
 		public List<LoginAccount> loginAccounts;
@@ -405,6 +419,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class UserSettings {
 		public List<Setting> userSettings;
 
@@ -566,6 +581,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return null;
 	}
 
+	@TestVisible
 	private class APIUser {
 		public String userId;
 		public String email;
@@ -649,6 +665,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class NewUsers {
 		public List<AccountAPI.APIUser> newUsers;
 
@@ -698,6 +715,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for removeUsers
+	@TestVisible
 	private class RemoveUsers {
 		public List<AccountAPI.APIUser> users;
 
@@ -747,6 +765,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for custom fields
+	@TestVisible
 	private class ListCustomField {
 		public String name;
 		public String required;
@@ -760,6 +779,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class TextCustomField {
 		public String name;
 		public String required;
@@ -772,6 +792,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class CustomFields {
 		public List<TextCustomField> textCustomFields;
 		public List<ListCustomField> listCustomFields;
@@ -814,6 +835,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return accountCustomFields;
 	}
 
+	@TestVisible
 	private class MergeField {
 		public String configurationType;
 		public String path;
@@ -837,6 +859,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class CustomTab {
 		public String customTabId;
 		public String tabLabel;
@@ -942,6 +965,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class CustomTabs {
 		public List<CustomTab> tabs;
 

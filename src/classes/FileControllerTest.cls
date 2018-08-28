@@ -32,7 +32,7 @@ private class FileControllerTest {
 
 	@IsTest
 	static void test_uploadFile_success() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			ContentVersion cv = new ContentVersion(
 				Title = UUID.randomUUID().toString(),
@@ -67,7 +67,7 @@ private class FileControllerTest {
 
 	@IsTest
 	static void test_uploadFile_error() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			FileController fc = new FileController();
 			PageReference pg = Page.FileUploader;
 			Test.setCurrentPage(pg);
@@ -84,7 +84,7 @@ private class FileControllerTest {
 
 	@IsTest
 	static void test_uploadFile_file_size_limit_reached() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			FileController fc = new FileController();
 			PageReference pg = Page.FileUploader;
 			Test.setCurrentPage(pg);

@@ -3,9 +3,7 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_getInstance() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			BulkSendAPI result1 = BulkSendAPI.getInstance();
 			BulkSendAPI result2 = BulkSendAPI.getInstance();
@@ -20,11 +18,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_createList_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = new BulkList(
 				UserInfo.getUserId(),
 				null, // null DocuSign ID before API creation
@@ -46,11 +42,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_createList_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = new BulkList(
 				UserInfo.getUserId(),
 				null, // null DocuSign ID before API creation
@@ -75,11 +69,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_updateList_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = new BulkList(
 				UserInfo.getUserId(),
 				UUID.randomUUID(),
@@ -107,11 +99,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_updateList_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = new BulkList(
 				UserInfo.getUserId(),
 				UUID.randomUUID(),
@@ -136,11 +126,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_deleteList_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Boolean result = BulkSendAPI.getInstance().deleteList(UUID.randomUUID());
 			Test.stopTest();
@@ -151,11 +139,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_deleteList_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				BulkSendAPI.getInstance().deleteList(null);
@@ -170,11 +156,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_sendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			BulkList.Result result = BulkSendAPI.getInstance().sendEnvelope(UUID.randomUUID(), UUID.randomUUID());
 			Test.stopTest();
@@ -186,11 +170,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_sendEnvelope_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				BulkSendAPI.getInstance().sendEnvelope(UUID.randomUUID(), UUID.randomUUID());
@@ -219,9 +201,7 @@ private class BulkSendAPITest {
 	static void test_sendEnvelope_error() {
 		Test.setMock(HttpCalloutMock.class, new SendErrorMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			BulkList.Result result = BulkSendAPI.getInstance().sendEnvelope(UUID.randomUUID(), UUID.randomUUID());
 			Test.stopTest();
@@ -250,11 +230,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_getStatus_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			BulkList.Status result = BulkSendAPI.getInstance().getStatus(UUID.randomUUID());
 			Test.stopTest();
@@ -266,11 +244,9 @@ private class BulkSendAPITest {
 
 	@IsTest
 	static void test_getStatus_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				BulkSendAPI.getInstance().getStatus(UUID.randomUUID());

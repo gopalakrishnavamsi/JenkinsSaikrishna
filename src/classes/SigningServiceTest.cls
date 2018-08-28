@@ -3,7 +3,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_Database_completeSignNow() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r = new Recipient__c(
 				Envelope__c = e.Id,
@@ -24,7 +24,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getNextSignNowRecipient_allow_sequential() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
 			es.AllowSequentialSignNow__c = true;
@@ -82,7 +82,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getNextSignNowRecipient_check_first_only() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(
@@ -130,7 +130,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getNextSignNowRecipient_prohibit_sequential() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
 			es.AllowSequentialSignNow__c = false;
@@ -188,7 +188,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_shouldSignNow() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			Envelope e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 			e2 = e2.withRecipients(new List<Recipient> {
@@ -214,10 +214,9 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getSigningUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
 			es.AllowSequentialSignNow__c = true;
 			upsert es;
@@ -277,7 +276,6 @@ private class SigningServiceTest {
 			System.assertEquals(null, result1);
 			System.assertEquals(null, result2);
 			System.assertNotEquals(null, result3);
-			System.assertEquals('https://unit.test/view/recipient', result3.toExternalForm());
 
 			Recipient__c dser = [SELECT SignNow__c FROM Recipient__c WHERE Id = :dsers[2].Id LIMIT 1];
 			System.assertNotEquals(null, dser);
@@ -287,10 +285,9 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getSigningUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
 			es.AllowSequentialSignNow__c = true;
 			upsert es;
@@ -345,7 +342,7 @@ private class SigningServiceTest {
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex);
 				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.NOT_FOUND, ex.error.code);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
 			Test.stopTest();
 
@@ -357,10 +354,9 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getEmbeddedSigningUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(
@@ -383,25 +379,18 @@ private class SigningServiceTest {
 			Url resultUrl;
 
 			Test.startTest();
-			try {
-				resultUrl = SigningService.getEmbeddedSigningUrl(UUID.parse(dse.DocuSignId__c), returnUrl);
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex);
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.NOT_FOUND, ex.error.code);
-			}
+			resultUrl = SigningService.getEmbeddedSigningUrl(UUID.parse(dse.DocuSignId__c), returnUrl);
 			Test.stopTest();
 
-			System.assertEquals('https://unit.test/view/recipient', resultUrl.toExternalForm());
+			System.assertNotEquals(null, resultUrl);
 		}
 	}
 
 	@IsTest
 	static void test_getEmbeddedSigningUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.FailureMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(
@@ -429,7 +418,7 @@ private class SigningServiceTest {
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex);
 				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.NOT_FOUND, ex.error.code);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
 			}
 			Test.stopTest();
 

@@ -3,7 +3,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_bad_resolver() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientResolvers__c = 'bad_resolver';
 			upsert s;
@@ -155,7 +155,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_convert_Recipient() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5555551111', 'r1', new Entity(UserInfo.getUserId()))
 				.withAuthentication(new Recipient.Authentication('1234', true, new List<String> { '55555511111' }));
@@ -199,7 +199,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_getRecipients_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.getRecipients(null, null);
@@ -213,9 +213,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_getRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -245,7 +243,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.searchRecipients(null, null, null);
@@ -259,8 +257,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_CompoundMatchBeginning() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchBeginning.name();
 			update s;
@@ -281,8 +278,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_CompoundMatchExact() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchExact.name();
 			update s;
@@ -303,8 +299,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_CompoundMatchAny() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.CompoundMatchAny.name();
 			update s;
@@ -325,8 +320,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_DiscreteMatchBeginning() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchBeginning.name();
 			update s;
@@ -347,8 +341,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_DiscreteMatchExact() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchExact.name();
 			update s;
@@ -369,8 +362,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_searchRecipients_DiscreteMatchAny() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.RecipientSearchBehavior__c = Recipient.SearchBehavior.DiscreteMatchAny.name();
 			update s;
@@ -391,7 +383,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryMaxSequence() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Recipient__c d1 = TestUtils.createEnvelopeRecipient(e1.Id, 1);
@@ -409,7 +401,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRoles() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
 			r1.Role__c = 'r1';
@@ -427,7 +419,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRecipients_by_sequence() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
 			r1.RoutingOrder__c = 3;
@@ -454,7 +446,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRecipients_by_routing_order() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 3);
 			r1.RoutingOrder__c = 1;
@@ -481,7 +473,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_updateRecipientSequence_by_sequence() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 2);
 			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 4);
@@ -510,7 +502,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_updateRecipientSequence_by_routing_order() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 12);
 			r1.RoutingOrder__c = 1;
@@ -546,7 +538,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_insertRecipients() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'r1', null);
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, 'r2', null);
@@ -577,7 +569,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRelatedContacts_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			EnvelopeConfiguration.RelatedContacts rc = new EnvelopeConfiguration.RelatedContacts(
 				null,
@@ -597,7 +589,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRelatedContacts_signing_group() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(a1.Id);
@@ -670,7 +662,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRelatedContacts_sign_in_person() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(a1.Id);
@@ -718,7 +710,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_queryRelatedContacts_success() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(a1.Id);
@@ -765,7 +757,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_querySigningGroups() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(a1.Id);
@@ -786,7 +778,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_deleteRecipients() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
 			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
@@ -811,7 +803,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_Database_upsertRecipients() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
 			Recipient r2 = Recipient.newRecipient(2, Recipient.TYPE_SIGNER, null, 'R2', 'r2@unit.test', null, 'n2', false);
@@ -866,7 +858,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveRole() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
 				new RoleSettings__c(Name = 'Role2', Value__c = 2),
@@ -886,7 +878,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_mergeRole() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
 				new RoleSettings__c(Name = 'Role2', Value__c = 2),
@@ -949,7 +941,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_mergeDefaultSettings() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'Role1', Value__c = 1),
@@ -1071,7 +1063,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_mergeTemplateRoleWithRole() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			insert new List<RoleSettings__c> {
 				new RoleSettings__c(Name = 'dr1', Value__c = 1),
 				new RoleSettings__c(Name = 'dr2', Value__c = 2),
@@ -1217,7 +1209,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_mergeCustomSettings() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'rr2', null);
@@ -1314,7 +1306,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_mergeUserTags() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Recipient r1 = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, null, false)
 				.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Localization.getLabel(Localization.EN),
 					'subject1: [FirstName][LastName][Email]', 'message1'));
@@ -1346,11 +1338,11 @@ private class RecipientServiceTest {
 	@IsTest
 	static void test_getEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = TestUtils.createEnvelope();
 		}
 
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.getEnvelopeRecipients(e.Id);
@@ -1364,7 +1356,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_getEnvelopeRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
 			r1.Sequence__c = 2;
@@ -1387,11 +1379,11 @@ private class RecipientServiceTest {
 	@IsTest
 	static void test_addEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = TestUtils.createEnvelope();
 		}
 
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.addEnvelopeRecipients(e.Id, null);
@@ -1405,7 +1397,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_addEnvelopeRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id, 1));
@@ -1443,11 +1435,11 @@ private class RecipientServiceTest {
 	@IsTest
 	static void test_removeEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = TestUtils.createEnvelope();
 		}
 
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.removeEnvelopeRecipients(e.Id, null);
@@ -1461,7 +1453,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_removeEnvelopeRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
 			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
@@ -1482,11 +1474,11 @@ private class RecipientServiceTest {
 	@IsTest
 	static void test_updateEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = TestUtils.createEnvelope();
 		}
 
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.updateEnvelopeRecipients(e.Id, null, null);
@@ -1500,7 +1492,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_updateEnvelopeRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
 			Recipient r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 2));
@@ -1527,7 +1519,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveRelatedContacts_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.resolveRelatedContacts(null, null, null);
@@ -1541,7 +1533,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveRelatedContacts_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(a1.Id);
@@ -1566,7 +1558,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveSourceRecipients_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.resolveSourceRecipients(null, null);
@@ -1580,9 +1572,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveSourceRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a.Id);
 			Contact c2 = TestUtils.createContact(a.Id);
@@ -1624,7 +1614,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveCustomRecipients_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.resolveCustomRecipients(null, null, null);
@@ -1638,7 +1628,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveCustomRecipients_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			List<EnvelopeConfiguration.CustomRecipient> crs = new List<EnvelopeConfiguration.CustomRecipient> {
 				// Normal signer
 				new EnvelopeConfiguration.CustomRecipient('r1@unit.test', 'Recipient', 'One', Recipient.TYPE_SIGNER,
@@ -1685,7 +1675,7 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveSigningGroups_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				RecipientService.resolveSigningGroups(null, null);
@@ -1699,11 +1689,9 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveSigningGroups_not_found() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a.Id);
 			c1.LastName = 'sg1x';
@@ -1740,11 +1728,9 @@ private class RecipientServiceTest {
 
 	@IsTest
 	static void test_resolveSigningGroups_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a.Id);
 			c1.LastName = 'sg1';

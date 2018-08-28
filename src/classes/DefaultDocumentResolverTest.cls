@@ -15,7 +15,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocuments_ContentVersion() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
@@ -49,7 +49,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocuments_Document() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Document d1 = TestUtils.createDocument();
 			Schema.Document d2 = TestUtils.createDocument();
@@ -83,7 +83,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocuments_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
@@ -99,7 +99,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getLinkedDocuments_ContentVersion_all() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
 			Opportunity o1 = TestUtils.createOpportunity(a1.Id);
@@ -155,7 +155,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getLinkedDocuments_ContentVersion_last_updated_only() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
 			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
@@ -175,7 +175,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getLinkedDocuments_Document() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a = TestUtils.createAccount();
 
@@ -201,7 +201,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentContent_ContentVersion() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
@@ -219,7 +219,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentContent_Document() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Document d1 = TestUtils.createDocument();
 			Schema.Document d2 = TestUtils.createDocument();
@@ -237,7 +237,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentContent_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
@@ -253,7 +253,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentFolders_ContentVersion() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			ContentWorkspace cw1 = TestUtils.createContentWorkspace();
 			ContentWorkspace cw2 = TestUtils.createContentWorkspace();
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
@@ -282,7 +282,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentFolders_Document() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
@@ -297,7 +297,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getDocumentFolders_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
@@ -316,10 +316,10 @@ private class DefaultDocumentResolverTest {
 		// Cannot create and link doc to workspace in one go, so try using existing one. Otherwise skip test.
 		ContentWorkspace lib = TestUtils.getFirstAvailableContentWorkspace();
 		ContentVersion cv1, cv2;
-		ContentWorkSpaceDoc libDoc1, libDoc2;
+		ContentWorkspaceDoc libDoc1, libDoc2;
 
 		if (lib != null) {
-			System.runAs(TestUtils.createAdministrator()) {
+			System.runAs(UserMock.createAdministrator()) {
 				cv1 = TestUtils.createContentVersion();
 				cv2 = TestUtils.createContentVersion();
 				libDoc1 = TestUtils.createContentWorkspaceDoc(lib.Id, cv1.ContentDocumentId);
@@ -327,7 +327,7 @@ private class DefaultDocumentResolverTest {
 			}
 		}
 
-		System.runAs(TestUtils.createAdministrator()) {
+		System.runAs(UserMock.createAdministrator()) {
 			ContentVersion cv3 = TestUtils.createContentVersion();
 			ContentVersion cv4 = TestUtils.createContentVersion();
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
@@ -372,9 +372,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getFolderDocuments_Document() {
-		System.runAs(TestUtils.createUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Schema.Document d1 = TestUtils.createDocument();
 			Schema.Document d2 = TestUtils.createDocument();
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
@@ -390,7 +388,7 @@ private class DefaultDocumentResolverTest {
 
 	@IsTest
 	static void test_getFolderDocuments_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();

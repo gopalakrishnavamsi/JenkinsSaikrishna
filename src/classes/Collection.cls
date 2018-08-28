@@ -148,6 +148,20 @@ public class Collection {
 		return (Id)s.iterator().next();
 	}
 
+	public static Object last(final List<Object> l) {
+		Integer size = size(l);
+		if (size <= 0) return null;
+
+		return l[size - 1];
+	}
+
+	public static Object get(final List<Object> l, final Integer i) {
+		Integer size = size(l);
+		if (size <= 0 || i < 0 || i >= size) return null;
+
+		return l[i];
+	}
+
 	public static Integer size(final List<Object> l) {
 		if (l == null) return 0;
 
