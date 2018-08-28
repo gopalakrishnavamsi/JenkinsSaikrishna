@@ -95,8 +95,7 @@
                         class="{!'ds-next-steps-notification slds-notification' + if(v.showNextSteps, ' ds-next-steps-notification_shown', '')}"
                         role="dialog">
                     <div class="slds-notification__body" id="dialog-body-id-6">
-                        <div class="slds-notification__target slds-media slds-p-around_medium"
-                             href="javascript:void(0);">
+                        <div class="slds-notification__target slds-media slds-p-around_medium">
                             <span class="slds-media__figure slds-icon_container slds-icon-custom-custom95">
                                 <lightning:icon iconName="utility:layout" size="medium" variant="inverse"
                                                 class="slds-p-around_x-small"/>
