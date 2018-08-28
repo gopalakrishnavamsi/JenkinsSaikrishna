@@ -15,7 +15,6 @@
     createDraftEnvelope.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
-        ;
         // Add front-end properties to documents
         if (!$A.util.isEmpty(result.documents)) {
           result.documents.forEach(function (d) {
@@ -423,8 +422,6 @@
   },
 
   resolveRecipient: function (component, helper, recipient) {
-    if ($A.util.isUndefinedOrNull(recipient) || helper.isValidRecipient(recipient)) return;
-
     var sourceId = helper.getSourceId(recipient);
     if ($A.util.isEmpty(sourceId)) return;
 
@@ -439,8 +436,9 @@
           var updated = false;
           var rs = component.get('v.recipients');
           rs.forEach(function (r) {
-            // Update email, phone, full source for new recipient
+            // Update name, email, phone, full source for new recipient
             if (helper.getSourceId(r) === sourceId) {
+              r.name = result.name;
               r.email = result.email;
               r.phone = result.phone;
               r.source = result.source;

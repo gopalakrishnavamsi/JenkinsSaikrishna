@@ -213,6 +213,7 @@
                                                     <!-- TODO: remove event registration for child component. We don't handle these here anyway -->
                                                     <c:Recipient
                                                             recipient="{!recipient}"
+                                                            sourceId="{#recipient.source.id}"
                                                             emailLocalizations="{!v.emailLocalizations}"
                                                             onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                             onEditPrivateMessage="{!c.handleEditPrivateMessage}"
