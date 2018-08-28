@@ -1,5 +1,5 @@
 ({
-  initialize: function(component, event, helper) {
+  initialize: function (component, event, helper) {
     helper.getState(component, event, helper);
   },
 
@@ -45,6 +45,6 @@
     steps[1].status = 'notStarted';
     component.set('v.steps', steps);
     component.set('v.nextStep', 'setupUsers');
-    component.set('v.shouldShowNextSteps', !isLoggedIn);
+    if (!isLoggedIn) component.set('v.shouldShowNextSteps', true);
   }
 });
