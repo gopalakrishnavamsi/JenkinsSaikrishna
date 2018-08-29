@@ -21,20 +21,20 @@
 global class ESignatureAPIMock implements HttpCalloutMock {
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
-		'accounts' => Application.namespacePrefix + 'ESignatureAPIMock.AccountsMock',
-		'billing_plan' => Application.namespacePrefix + 'ESignatureAPIMock.BillingPlanMock',
-		'bulk_envelopes' => Application.namespacePrefix + 'ESignatureAPIMock.BulkEnvelopesMock',
-		'bulk_send_lists' => Application.namespacePrefix + 'ESignatureAPIMock.BulkSendListsMock',
-		'custom_fields' => Application.namespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
-		'envelopes' => Application.namespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
-		'login_information' => Application.namespacePrefix + 'ESignatureAPIMock.LoginInformationMock',
-		'service_information' => Application.namespacePrefix + 'ESignatureAPIMock.ServiceInformationMock',
-		'settings' => Application.namespacePrefix + 'ESignatureAPIMock.SettingsMock',
-		'signing_groups' => Application.namespacePrefix + 'ESignatureAPIMock.SigningGroupsMock',
-		'tab_definitions' => Application.namespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
-		'templates' => Application.namespacePrefix + 'ESignatureAPIMock.TemplatesMock',
-		'users' => Application.namespacePrefix + 'ESignatureAPIMock.UsersMock',
-		'views' => Application.namespacePrefix + 'ESignatureAPIMock.ViewsMock'
+		'accounts' => Application.classNamespacePrefix + 'ESignatureAPIMock.AccountsMock',
+		'billing_plan' => Application.classNamespacePrefix + 'ESignatureAPIMock.BillingPlanMock',
+		'bulk_envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkEnvelopesMock',
+		'bulk_send_lists' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkSendListsMock',
+		'custom_fields' => Application.classNamespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
+		'envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
+		'login_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.LoginInformationMock',
+		'service_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.ServiceInformationMock',
+		'settings' => Application.classNamespacePrefix + 'ESignatureAPIMock.SettingsMock',
+		'signing_groups' => Application.classNamespacePrefix + 'ESignatureAPIMock.SigningGroupsMock',
+		'tab_definitions' => Application.classNamespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
+		'templates' => Application.classNamespacePrefix + 'ESignatureAPIMock.TemplatesMock',
+		'users' => Application.classNamespacePrefix + 'ESignatureAPIMock.UsersMock',
+		'views' => Application.classNamespacePrefix + 'ESignatureAPIMock.ViewsMock'
 	};
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
