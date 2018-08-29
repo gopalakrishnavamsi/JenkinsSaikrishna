@@ -2,6 +2,7 @@
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
     <aura:attribute name="recipient" type="Object" required="true"/>
+    <aura:attribute name="sourceId" type="Id" required="true"/>
     <aura:attribute name="emailLocalizations" type="Object[]"/>
 
     <aura:attribute name="recordType" type="String" default="contact" access="private"/>
@@ -9,7 +10,7 @@
     <aura:attribute name="selectedLanguage" type="String" access="private"/>
     <aura:attribute name="iconName" type="String" access="private"/>
 
-    <aura:handler name="change" value="{!v.recipient.source.id}" action="{!c.handleRecipientIdChange}"/>
+    <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>
 
     <aura:registerEvent name="onEditAccessAuthentication" type="c:strike_evt"/>
     <aura:registerEvent name="onEditPrivateMessage" type="c:strike_evt"/>
@@ -20,10 +21,9 @@
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <c:strike_lookup placeholder="{!$Label.c.SearchByName}" object="{!v.recordType}"
                              iconName="{!'standard:' + v.recordType}" searchField="Name"
-                             value="{!v.recipient.source.id}"
-                             subtitleField="Email" valueLabel="{!v.recipient.name}"/>
+                             value="{!v.sourceId}"
+                             subtitleField="Email" valueLabel="{#v.recipient.name}"/>
         </div>
-
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
@@ -160,13 +160,16 @@
                         </aura:iteration>
                     </lightning:select>
                 </aura:if>
-                <lightning:input class="slds-form-element" aura:id="email-subject" name="{!$Label.c.CustomEmailSubject}"
+                <lightning:input class="slds-form-element" aura:id="email-subject"
+                                 name="{!$Label.c.CustomEmailSubject}"
                                  value="{!v.recipient.emailSettings.subject}" label="{!$Label.c.Subject}"/>
-                <lightning:textarea class="slds-form-element" aura:id="email-body" name="{!$Label.c.CustomEmailMessage}"
+                <lightning:textarea class="slds-form-element" aura:id="email-body"
+                                    name="{!$Label.c.CustomEmailMessage}"
                                     value="{!v.recipient.emailSettings.message}" label="{!$Label.c.Message}"/>
             </div>
             <aura:set attribute="footerButtons">
-                <lightning:button label="{!$Label.c.Done}" variant="brand" onclick="{!c.closeCustomEmailMessageModal}"/>
+                <lightning:button label="{!$Label.c.Done}" variant="brand"
+                                  onclick="{!c.closeCustomEmailMessageModal}"/>
             </aura:set>
         </c:strike_modal>
         <!-- /Custom Email Message Modal -->
