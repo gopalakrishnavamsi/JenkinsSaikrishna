@@ -177,7 +177,7 @@
 	<fields>
 		<fullName>RecipientResolvers__c</fullName>
 		<externalId>false</externalId>
-		<label>Entity Resolvers</label>
+		<label>Recipient Resolvers</label>
 		<length>255</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>
