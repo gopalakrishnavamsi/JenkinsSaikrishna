@@ -256,6 +256,7 @@
                                     <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
                                         <c:Recipient
                                                 recipient="{!recipient}"
+                                                sourceId="{#recipient.source.id}"
                                                 emailLocalizations="{!v.emailLocalizations}"
                                                 onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                 onEditPrivateMessage="{!c.handleEditPrivateMessage}"

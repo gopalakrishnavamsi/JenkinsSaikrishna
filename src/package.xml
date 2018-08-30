@@ -325,7 +325,7 @@
         <members>HasDeclined_2</members>
         <members>HasCompleted_2</members>
         <members>HasSigned_2</members>
-		<members>WillNotReceive_2</members>
+        <members>WillNotReceive_2</members>
         <members>ViewAll</members>
         <members>ConnectToDocuSign</members>
         <members>ConnectDocuSignToSalesforce</members>
