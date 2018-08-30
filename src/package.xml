@@ -311,6 +311,7 @@
         <members>Declined</members>
         <members>Voided</members>
         <members>Signed</members>
+		<members>Canceled</members>
         <members>SentAnEnvelope_2</members>
         <members>LastStatusUpdate</members>
         <members>Status</members>
@@ -320,10 +321,11 @@
         <members>ShowLess</members>
         <members>IsQueued_2</members>
         <members>WillReceive_2</members>
-        <members>NoAction_2</members>
-        <members>HasDeclined_2</members>
         <members>HasViewed_2</members>
+        <members>HasDeclined_2</members>
+        <members>HasCompleted_2</members>
         <members>HasSigned_2</members>
+		<members>WillNotReceive_2</members>
         <members>ViewAll</members>
         <members>ConnectToDocuSign</members>
         <members>ConnectDocuSignToSalesforce</members>

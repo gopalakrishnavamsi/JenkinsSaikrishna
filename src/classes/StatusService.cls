@@ -8,8 +8,14 @@ global with sharing class StatusService {
 	private static final StatusService.Database DB = new StatusService.Database();
 	private static final Long STATUS_POLL_INTERVAL_MS = 900000; // 15 min * 60 sec * 1000 ms
 	private static final Set<String> COMPLETED_STATUSES = new Set<String> {
-		Envelope.STATUS_VOIDED, Envelope.STATUS_DECLINED, Envelope.STATUS_COMPLETED
+		Envelope.STATUS_VOIDED, Envelope.STATUS_DECLINED, Envelope.STATUS_COMPLETED,
+		Recipient.STATUS_SIGNED, Recipient.STATUS_DECLINED, Recipient.STATUS_CANCELED, Recipient.STATUS_COMPLETED
 	};
+	private static final SObjectType TYPE_ENVELOPE_STATUS = EnvelopeStatus__c.getSObjectType();
+	private static final SObjectType TYPE_RECIPIENT_STATUS = RecipientStatus__c.getSObjectType();
+	private static final SObjectType TYPE_ENVELOPE = Envelope__c.getSObjectType();
+	private static final SObjectType TYPE_DOCUMENT = Document__c.getSObjectType();
+	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 
 	private class Database {
 
@@ -75,7 +81,7 @@ global with sharing class StatusService {
 		}
 
 		public Set<UUID> querySourceEnvelopes(final Set<Id> sourceIds, final Integer maximumRecords) {
-			Permissions.verifyIsQueryable(Envelope__c.getSObjectType(), new List<String> { 'DocuSignId__c' });
+			Permissions.verifyIsQueryable(TYPE_ENVELOPE, new List<String> { 'DocuSignId__c' });
 
 			Integer max = maximumRecords == null || maximumRecords <= 0 ? 5 : maximumRecords;
 			Set<UUID> result = new Set<UUID>();
@@ -94,11 +100,11 @@ global with sharing class StatusService {
 		}
 
 		public List<Envelope.Status> queryStatus(final Set<UUID> docuSignIds) {
-			Permissions.verifyIsQueryable(EnvelopeStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(TYPE_ENVELOPE_STATUS, new List<String> {
 				'Id', 'SourceId__c', 'DocuSignId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c',
 				'EmailSubject__c', 'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
-			Permissions.verifyIsQueryable(RecipientStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(TYPE_RECIPIENT_STATUS, new List<String> {
 				'Id', 'EnvelopeStatus__c', 'SourceId__c', 'Type__c', 'Sequence__c', 'Status__c',
 				'RoutingOrder__c', 'Name', 'Email__c', 'Sent__c', 'Completed__c', 'Reason__c',
 				'LastStatusUpdate__c'
@@ -128,11 +134,11 @@ global with sharing class StatusService {
 		}
 
 		public List<Envelope.Status> insertStatus(final List<Envelope.Status> envelopes) {
-			Permissions.verifyIsCreateable(EnvelopeStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsCreateable(TYPE_ENVELOPE_STATUS, new List<String> {
 				'DocuSignId__c', 'SourceId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c', 'EmailSubject__c',
 				'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
-			Permissions.verifyIsCreateable(RecipientStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsCreateable(TYPE_RECIPIENT_STATUS, new List<String> {
 				'EnvelopeStatus__c', 'SourceId__c', 'Sequence__c', 'Type__c', 'Status__c', 'RoutingOrder__c', 'Name',
 				'Email__c', 'Sent__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
@@ -183,18 +189,22 @@ global with sharing class StatusService {
 					}
 				}
 			}
-			insert rss;
+			upsert rss;
 
 			return queryStatus(esMap.keySet());
 		}
 
 		public List<Envelope.Status> upsertStatus(final List<Envelope.Status> envelopes) {
-			Permissions.verifyIsUpdateable(EnvelopeStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsCreateable(TYPE_ENVELOPE_STATUS, new List<String> {
 				'DocuSignId__c', 'SourceId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c', 'EmailSubject__c',
 				'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
-			Permissions.verifyIsDeletable(RecipientStatus__c.getSObjectType());
-			Permissions.verifyIsCreateable(RecipientStatus__c.getSObjectType(), new List<String> {
+			Permissions.verifyIsUpdateable(TYPE_ENVELOPE_STATUS, new List<String> {
+				'DocuSignId__c', 'SourceId__c', 'Status__c', 'SenderName__c', 'SenderEmail__c', 'EmailSubject__c',
+				'Sent__c', 'Expires__c', 'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
+			});
+			Permissions.verifyIsDeletable(TYPE_RECIPIENT_STATUS);
+			Permissions.verifyIsCreateable(TYPE_RECIPIENT_STATUS, new List<String> {
 				'SourceId__c', 'Sequence__c', 'Type__c', 'Status__c', 'RoutingOrder__c', 'Name', 'Email__c', 'Sent__c',
 				'Completed__c', 'Reason__c', 'LastStatusUpdate__c'
 			});
@@ -256,9 +266,14 @@ global with sharing class StatusService {
 			return queryStatus(esMap.keySet());
 		}
 
-		public Boolean deleteStatus(final Set<UUID> docuSignIds) {
-			Permissions.verifyIsDeletable(EnvelopeStatus__c.getSObjectType());
-			Permissions.verifyIsDeletable(RecipientStatus__c.getSObjectType());
+		public Boolean deleteStatus(final Set<UUID> docuSignIds, final Boolean deleteEnvelopes) {
+			Permissions.verifyIsDeletable(TYPE_ENVELOPE_STATUS);
+			Permissions.verifyIsDeletable(TYPE_RECIPIENT_STATUS);
+			if (deleteEnvelopes) {
+				Permissions.verifyIsDeletable(TYPE_ENVELOPE);
+				Permissions.verifyIsDeletable(TYPE_DOCUMENT);
+				Permissions.verifyIsDeletable(TYPE_RECIPIENT);
+			}
 
 			Set<String> dsIds = new Set<String>();
 			for (UUID u : docuSignIds) {
@@ -269,34 +284,63 @@ global with sharing class StatusService {
 			if (Collection.isNotEmpty(dsIds)) {
 				// Cascading delete for RecipientStatus__c detail records.
 				delete [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c IN :dsIds];
+				if (deleteEnvelopes) {
+					// Cascading delete on child Document__c and Recipient__c records
+					delete [SELECT Id FROM Envelope__c WHERE DocuSignId__c IN :dsIds];
+				}
 				result = true;
 			}
 			return result;
 		}
 
 		public Boolean updateStatus(final Set<UUID> docuSignIds, final String status, final String reason) {
+			Permissions.verifyIsUpdateable(TYPE_ENVELOPE_STATUS, new List<String> {
+				'Status__c', 'Reason__c', 'Completed__c', 'LastStatusUpdate__c'
+			});
+			Permissions.verifyIsUpdateable(TYPE_RECIPIENT_STATUS, new List<String> {
+				'Status__c', 'Completed__c', 'LastStatusUpdate__c'
+			});
+
 			Set<String> dsIds = new Set<String>();
 			for (UUID u : docuSignIds) {
 				if (u != null) dsIds.add(String.valueOf(u));
 			}
 
-			List<EnvelopeStatus__c> ess = [
+			Set<Id> esIds = new Set<Id>();
+			List<EnvelopeStatus__c> ess = new List<EnvelopeStatus__c>();
+			for (EnvelopeStatus__c es : [
 				SELECT
 					Id, Status__c, Reason__c, Completed__c, LastStatusUpdate__c
 				FROM EnvelopeStatus__c
 				WHERE DocuSignId__c IN :dsIds
-			];
-
-			for (EnvelopeStatus__c es : ess) {
+			]) {
+				esIds.add(es.Id);
+				ess.add(es);
 				es.Status__c = status;
 				es.Reason__c = reason;
 				if (COMPLETED_STATUSES.contains(status)) es.Completed__c = Datetime.now();
 				es.LastStatusUpdate__c = Datetime.now();
 			}
 
+			List<RecipientStatus__c> rss = new List<RecipientStatus__c>();
+			for (RecipientStatus__c rs : [
+				SELECT
+					Id, Status__c, Completed__c, LastStatusUpdate__c
+				FROM RecipientStatus__c
+				WHERE EnvelopeStatus__c IN :esIds
+			]) {
+				if (!COMPLETED_STATUSES.contains(rs.Status__c)) {
+					rs.Status__c = Recipient.STATUS_CANCELED;
+					rs.Completed__c = Datetime.now();
+					rs.LastStatusUpdate__c = Datetime.now();
+					rss.add(rs);
+				}
+			}
+
+			update rss;
 			update ess;
 
-			return Collection.isNotEmpty(ess);
+			return Collection.isNotEmpty(esIds);
 		}
 	}
 
@@ -315,6 +359,32 @@ global with sharing class StatusService {
 			}
 		}
 
+		return result;
+	}
+
+	@TestVisible
+	private static Envelope.Status prepareUpsert(final Envelope.Status envelope) {
+		if (envelope == null) return null;
+
+		// Ensure the recipient statuses are accurate when an envelope is in a final state
+		if (envelope.isFinal && envelope.recipients != null) {
+			for (Recipient.Status r : envelope.recipients) {
+				if (!r.isFinal) {
+					r = r.cancel();
+				}
+			}
+		}
+
+		return envelope;
+	}
+
+	private static List<Envelope.Status> prepareUpsert(final List<Envelope.Status> envelopes) {
+		if (envelopes == null) return null;
+
+		List<Envelope.Status> result = new List<Envelope.Status>();
+		for (Envelope.Status e : envelopes) {
+			result.add(prepareUpsert(e));
+		}
 		return result;
 	}
 
@@ -342,6 +412,8 @@ global with sharing class StatusService {
 	 * Retrieves envelope statuses. This will perform a callout to DocuSign for each status that has not been refreshed
 	 * within the last 15 minutes.
 	 * <p>
+	 * Any orphaned DocuSign envelope records will also be deleted.
+	 * <p>
 	 * The caller must be the owner of the envelopes.
 	 *
 	 * @param docuSignIds The DocuSign envelope IDs.
@@ -354,6 +426,7 @@ global with sharing class StatusService {
 
 		List<Envelope.Status> result = new List<Envelope.Status>();
 		List<Envelope.Status> toUpdate = new List<Envelope.Status>();
+		Set<UUID> toDelete = new Set<UUID>();
 		EnvelopeAPI api = EnvelopeAPI.getInstance();
 		Long now = Datetime.now().getTime();
 		Set<UUID> idsFound = new Set<UUID>();
@@ -361,18 +434,34 @@ global with sharing class StatusService {
 			idsFound.add(es.docuSignId);
 			Long elapsedMs = es.lastStatusUpdate == null ? STATUS_POLL_INTERVAL_MS : now - es.lastStatusUpdate.getTime();
 			if (!es.isFinal && elapsedMs >= STATUS_POLL_INTERVAL_MS) {
-				toUpdate.add(api.getEnvelopeStatus(es.docuSignId, true).withId(es.id));
+				try {
+					toUpdate.add(api.getEnvelopeStatus(es.docuSignId, true).mergeWith(es));
+				} catch (APIException ex) {
+					if (ex.error != APIError.notFound) throw ex;
+					// Envelope no longer exists in DocuSign, so delete.
+					toDelete.add(es.docuSignId);
+				}
 			} else {
 				result.add(es);
 			}
 		}
 
 		for (UUID id : Collection.difference(docuSignIds, idsFound)) {
-			toUpdate.add(api.getEnvelopeStatus(id, true));
+			try {
+				toUpdate.add(api.getEnvelopeStatus(id, true));
+			} catch (APIException ex) {
+				if (ex.error != APIError.notFound) throw ex;
+				// Envelope no longer exists in DocuSign, so delete.
+				toDelete.add(id);
+			}
 		}
 
 		if (Collection.isNotEmpty(toUpdate)) {
-			result.addAll(DB.upsertStatus(toUpdate));
+			result.addAll(DB.upsertStatus(prepareUpsert(toUpdate)));
+		}
+
+		if (Collection.isNotEmpty(toDelete)) {
+			DB.deleteStatus(toDelete, true);
 		}
 
 		// Sort by ascending sent date/time
@@ -393,18 +482,19 @@ global with sharing class StatusService {
 	}
 
 	/**
-	 * Deletes envelope statuses.
+	 * Deletes envelope statuses and related envelope records.
 	 * <p>
 	 * The caller must be the owner of the envelopes.
 	 *
 	 * @param docuSignIds The DocuSign envelope IDs.
+	 * @param deleteEnvelopes Whether to also delete associated envelope records.
 	 *
 	 * @return <code>true</code> if records were deleted, <code>false</code> otherwise.
 	 */
-	global static Boolean deleteStatus(final Set<UUID> docuSignIds) {
+	public static Boolean deleteStatus(final Set<UUID> docuSignIds, final Boolean deleteEnvelopes) {
 		Permissions.verifyIsOwner(docuSignIds);
 
-		return DB.deleteStatus(docuSignIds);
+		return DB.deleteStatus(docuSignIds, deleteEnvelopes);
 	}
 
 	@TestVisible

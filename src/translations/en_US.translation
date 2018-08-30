@@ -709,6 +709,10 @@
 		<name>Signed</name>
 	</customLabels>
 	<customLabels>
+		<label>Canceled</label>
+		<name>Canceled</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</label>
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
@@ -745,20 +749,24 @@
 		<name>WillReceive_2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</label>
-		<name>NoAction_2</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</label>
+		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</label>
 		<name>HasDeclined_2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</label>
-		<name>HasViewed_2</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</label>
+		<name>HasCompleted_2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</label>
 		<name>HasSigned_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will not receive the envelope</label>
+		<name>WillNotReceive_2</name>
 	</customLabels>
 	<customLabels>
 		<label>View All</label>

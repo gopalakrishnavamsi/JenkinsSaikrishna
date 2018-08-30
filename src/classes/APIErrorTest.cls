@@ -1,4 +1,4 @@
-@IsTest(isParallel = true)
+@IsTest(IsParallel = true)
 private class APIErrorTest {
 
 	@IsTest
@@ -16,6 +16,7 @@ private class APIErrorTest {
 		final APIError e4 = new APIError(APIErrorCode.BAD_REQUEST, 'Unauthorized');
 		final APIError e5 = new APIError(APIErrorCode.SUCCESS, '  ');
 		final APIError e6 = new APIError(APIErrorCode.FAILURE, null);
+		final APIError e7 = new APIError(APIErrorCode.NOT_FOUND, null);
 
 		System.assertEquals(e1, e1);
 		System.assertEquals(e1, e2);
@@ -28,6 +29,7 @@ private class APIErrorTest {
 		System.assertEquals(APIError.none, e5);
 		System.assertEquals(APIError.none.hashCode(), e5.hashCode());
 		System.assertEquals(APIError.generic, e6);
+		System.assertEquals(APIError.notFound, e7);
 	}
 
 	@IsTest
@@ -69,7 +71,5 @@ private class APIErrorTest {
 		System.assertEquals('UNSUPPORTED', APIError.fromException(mdEx).description);
 		System.assertEquals(APIErrorCode.FAILURE, APIError.fromException(sEx).code);
 		System.assertEquals('STRING', APIError.fromException(sEx).description);
-
-		//System.assertEquals(APIErrorCode.BAD_REQUEST, API)
 	}
 }

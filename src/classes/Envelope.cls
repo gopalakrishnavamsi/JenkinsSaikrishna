@@ -302,8 +302,7 @@ global class Envelope {
 		/**
 		 * Whether or not the envelope is in a final state.
 		 */
-		@AuraEnabled
-		global Boolean isFinal {
+		public Boolean isFinal {
 			get {
 				return this.status == STATUS_VOIDED || this.status == STATUS_DECLINED || this.status == STATUS_COMPLETED;
 			}
@@ -373,14 +372,27 @@ global class Envelope {
 		}
 
 		/**
-		 * Sets an envelope status's <code>id</property>.
-		 *
-		 * @param id The new envelope status ID.
-		 *
-		 * @return The envelope status with updated <code>id</code>.
-		 */
-		public Envelope.Status withId(final Id id) {
-			this.id = id;
+	 	 * Sets this envelope and recipient status ID and Salesforce source from another status.
+	 	 *
+	 	 * @param other The status from which to merge data.
+	 	 *
+	 	 * @return The merged envelope status.
+	 	 */
+		public Envelope.Status mergeWith(final Envelope.Status other) {
+			if (other != null) {
+				this.id = other.id;
+				this.source = other.source;
+				if (this.recipients != null && other.recipients != null) {
+					Map<Integer, Recipient.Status> rs = new Map<Integer, Recipient.Status>();
+					for (Recipient.Status r : other.recipients) {
+						rs.put(r.sequence, r);
+					}
+
+					for (Recipient.Status r : this.recipients) {
+						r.mergeWith(rs.get(r.sequence));
+					}
+				}
+			}
 			return this;
 		}
 

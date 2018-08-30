@@ -1364,6 +1364,14 @@
 		<value>Signed</value>
 	</labels>
 	<labels>
+		<fullName>Canceled</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Canceled</shortDescription>
+		<value>Canceled</value>
+	</labels>
+	<labels>
 		<fullName>SentAnEnvelope_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
@@ -1436,12 +1444,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will receive the envelope soon</value>
 	</labels>
 	<labels>
-		<fullName>NoAction_2</fullName>
+		<fullName>HasViewed_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>No action</shortDescription>
-		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
 	</labels>
 	<labels>
 		<fullName>HasDeclined_2</fullName>
@@ -1452,12 +1460,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</value>
 	</labels>
 	<labels>
-		<fullName>HasViewed_2</fullName>
+		<fullName>HasCompleted_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Has viewed</shortDescription>
-		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
+		<shortDescription>Has completed</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</value>
 	</labels>
 	<labels>
 		<fullName>HasSigned_2</fullName>
@@ -1466,6 +1474,14 @@
 		<protected>true</protected>
 		<shortDescription>Has signed</shortDescription>
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</value>
+	</labels>
+	<labels>
+		<fullName>WillNotReceive_2</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Will not receive</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will not receive envelope</value>
 	</labels>
 	<labels>
 		<fullName>ViewAll</fullName>

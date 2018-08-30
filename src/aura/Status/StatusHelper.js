@@ -107,6 +107,9 @@
       case 'completed':
         result = $A.get('$Label.c.Completed');
         break;
+      case 'canceled':
+        result = $A.get('$Label.c.Canceled');
+        break;
       default:
         break;
     }
