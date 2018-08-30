@@ -58,6 +58,10 @@ global class Recipient implements Comparable {
 	 * Signed status constant.
 	 */
 	global static final String STATUS_SIGNED = 'signed';
+	/**
+	 * Canceled status constant.
+	 */
+	global static final String STATUS_CANCELED = 'canceled';
 
 	/**
 	 * The ID of the associated Recipient__c record.
@@ -682,6 +686,17 @@ global class Recipient implements Comparable {
 		 */
 		@AuraEnabled
 		global Datetime lastStatusUpdate { get; private set; }
+		/**
+		 * Whether or not the recipient is in a final state.
+		 */
+		public Boolean isFinal {
+			get {
+				return this.status == STATUS_SIGNED
+					|| this.status == STATUS_DECLINED
+					|| this.status == STATUS_COMPLETED
+					|| this.status == STATUS_CANCELED;
+			}
+		}
 
 		/**
 		 * Constructs a DocuSign recipient status.
@@ -726,6 +741,35 @@ global class Recipient implements Comparable {
 			this.completed = completed;
 			this.reason = reason;
 			this.lastStatusUpdate = lastStatusUpdate;
+		}
+
+		/**
+		 * Cancels a recipient. This sets the status to <code>canceled</code> and <code>completed</code> and
+		 * <code>lastStatusUpdate</code> to now. This is a final state for the recipient.
+		 *
+		 * @return The canceled recipient status.
+		 */
+		public Recipient.Status cancel() {
+			this.status = STATUS_CANCELED;
+			this.completed = Datetime.now();
+			this.lastStatusUpdate = Datetime.now();
+			return this;
+		}
+
+		/**
+		 * Merges this recipient status with another. The <code>id</code> and <code>source</code> properties are
+		 * copied from <code>other</code> if non-null.
+		 *
+		 * @param other The recipient status from which to merge data.
+		 *
+		 * @return The merged recipient status.
+		 */
+		public Recipient.Status mergeWith(final Recipient.Status other) {
+			if (other != null) {
+				this.id = other.id;
+				this.source = other.source;
+			}
+			return this;
 		}
 
 		/**

@@ -10,6 +10,10 @@ global virtual class APIError {
 	 * Constant for a generic error.
 	 */
 	public static final APIError generic = new APIError(APIErrorCode.FAILURE, null);
+	/**
+	 * Constant for a not found error.
+	 */
+	public static final APIError notFound = new APIError(APIErrorCode.NOT_FOUND, null);
 
 	/**
 	 * The error code.
