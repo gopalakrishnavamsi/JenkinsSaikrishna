@@ -19,14 +19,13 @@
  * myList = dfsle.BulkSendService.createLists(new List&lt;BulkList&gt; { myBulkList })[0];
  *
  * // Create a draft envelope with at least one dummy recipient.
- * dfsle.Envelope myEnvelope = dfsle.EnvelopeService.createEnvelope(
- * 	dfsle.EnvelopeService.getEmptyEnvelope(new dfsle.Entity(mySalesforceSourceId) // Salesforce source entity
+ * dfsle.Envelope myEnvelope = dfsle.EnvelopeService.getEmptyEnvelope(
+ * 		new dfsle.Entity(mySalesforceSourceId) // Salesforce source entity
  * 		.withDocuments(...) // Get documents from Salesforce
- * 		.withRecipients(new List&lt;dfsle.Recipient&gt;> { new dfsle.Recipient(...) }));
- * myEnvelope = dfsle.BulkSendService.createDraftEnvelope(myEnvelope);
+ * 		.withRecipients(new List&lt;dfsle.Recipient&gt;> { new dfsle.Recipient(...) });
  *
  * // Send the envelope to your bulk send list.
- * dfsle.BulkList.Result myResult = dfsle.BulkSendService.sendEnvelope(myList, myEnvelope);
+ * dfsle.BulkList.Result myResult = dfsle.BulkSendService.sendEnvelope(myList.id, myEnvelope);
  *
  * // Check for and resolve any errors in the result.
  * if (myResult.errors.isEmpty()) {
@@ -174,6 +173,29 @@ global with sharing class BulkSendService {
 			]);
 		}
 
+		public List<BulkList> queryLists(final String name, final Integer maximumRecords) {
+			Permissions.verifyIsQueryable(BULK_LIST_TYPE, new List<String> { 'Name', 'DocuSignId__c', 'SourceId__c' });
+
+			Integer l = maximumRecords > 0 ? maximumRecords : 100;
+			if (String.isNotBlank(name)) {
+				String n = name + '%';
+				return convert([
+					SELECT Name, DocuSignId__c, SourceId__c
+					FROM BulkList__c
+					WHERE Name LIKE :n
+					ORDER BY Name ASC
+					LIMIT :l
+				]);
+			} else {
+				return convert([
+					SELECT Name, DocuSignId__c, SourceId__c
+					FROM BulkList__c
+					ORDER BY Name ASC
+					LIMIT :l
+				]);
+			}
+		}
+
 		public List<BulkList> updateLists(final List<BulkList> bulkLists) {
 			Permissions.verifyIsUpdateable(BULK_LIST_TYPE, new List<String> { 'Name', 'DocuSignId__c', 'SourceId__c' });
 
@@ -267,6 +289,20 @@ global with sharing class BulkSendService {
 	}
 
 	/**
+	 * Searches for bulk send lists partially matching a name.
+	 *
+	 * @param name The beginning part of the name to match.
+	 * @param maximumRecords The maximum number of records to retrieve.
+	 *
+	 * @return Bulk send lists matching the search criteria.
+	 */
+	global static List<BulkList> searchLists(final String name, final Integer maximumRecords) {
+		Permissions.verifyIsDocuSignUser();
+
+		return DB.queryLists(name, maximumRecords);
+	}
+
+	/**
 	 * Updates one or more bulk send lists in Salesforce and DocuSign. Currently bulk envelope copies are restricted to
 	 * exactly one recipient each.
 	 *
@@ -315,17 +351,22 @@ global with sharing class BulkSendService {
 	}
 
 	/**
-	 * Creates a draft envelope in Salesforce and DocuSign suitable for bulk sending. Currently, the envelope is limited
-	 * to exactly one bulk recipient.
+	 * Creates a bulk envelope draft in DocuSign and Salesforce. Currently, the envelope is limited to exactly one bulk
+	 * recipient.
+	 * <p>
+	 * This method must be called in a transaction distinct from <code>dfsle.BulkSendService.sendEnvelope</code> as it
+	 * performs a DML operation after a web service callout.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param envelope The envelope to create.
+	 * @param envelope The bulk envelope.
 	 *
-	 * @return The newly-created draft envelope.
+	 * @return The newly-created bulk envelope.
 	 */
 	global static Envelope createDraftEnvelope(final Envelope envelope) {
 		Permissions.verifyIsDocuSignUser();
 
-		ValidationResult vr = EnvelopeService.validate(envelope, false);
+		ValidationResult vr = EnvelopeService.validate(envelope, true);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
 		UUID docuSignId = EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
@@ -334,30 +375,49 @@ global with sharing class BulkSendService {
 	}
 
 	/**
-	 * Sends a draft envelope to a bulk send list.
+	 * Sends a draft envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce if not
+	 * already created via the <code>dfsle.BulkSendService.createDraftEnvelope</code> method.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param bulkList The bulk send list.
-	 * @param draftEnvelope The draft envelope.
+	 * @param bulkListId The bulk send list Salesforce ID.
+	 * @param envelope The draft envelope.
 	 *
 	 * @return The result of the bulk send operation.
 	 */
-	global static BulkList.Result sendEnvelope(final BulkList bulkList, final Envelope draftEnvelope) {
-		if (bulkList == null) throw new DocuSignException(Label.UndefinedBulkList);
-		if (draftEnvelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
+	global static BulkList.Result sendEnvelope(final Id bulkListId, final Envelope envelope) {
+		Boolean dsEnvelopeCreated = envelope != null && !UUID.isEmpty(envelope.docuSignId);
+		Boolean sfdcEnvelopeCreated = envelope != null && envelope.id != null;
+		if (sfdcEnvelopeCreated) {
+			Permissions.verifyIsOwner(envelope.id);
+		} else {
+			Permissions.verifyIsDocuSignUser();
+		}
 
-		Permissions.verifyIsOwner(draftEnvelope.id);
+		if (bulkListId == null) throw new DocuSignException(Label.UndefinedBulkList);
 
-		ValidationResult vr = EnvelopeService.validate(draftEnvelope, true);
+		ValidationResult vr = EnvelopeService.validate(envelope, true);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
+		List<BulkList> bls = DB.queryLists(new Set<Id> { bulkListId });
+		if (Collection.size(bls) != 1) throw new DocuSignException(Label.BulkListNotFound);
+
+		UUID docuSignId = dsEnvelopeCreated
+			? envelope.docuSignId
+			: EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
+
 		BulkSendAPI api = BulkSendAPI.getInstance();
-		BulkList.Result result = api.sendEnvelope(bulkList.docuSignId, draftEnvelope.docuSignId);
+		BulkList.Result result = api.sendEnvelope(bls[0].docuSignId, docuSignId);
 		if (result.success) {
 			List<BulkList.Status> status = DB.createStatus(new List<BulkList.Status> {
-				api.getStatus(result.batchId).withSource(draftEnvelope.source)
+				api.getStatus(result.batchId).withSource(envelope.source)
 			});
 			if (Collection.isNotEmpty(status)) {
 				result = result.withBulkStatusId(status[0].id);
+			}
+			// TODO: Create envelope and status records for each bulk copy?
+			if (!sfdcEnvelopeCreated) {
+				EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId), null);
 			}
 		}
 

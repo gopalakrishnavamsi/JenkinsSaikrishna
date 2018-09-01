@@ -393,17 +393,15 @@ global class Recipient implements Comparable {
 	}
 
 	/**
-	 * Factory method to create a bulk recipient placeholder. Currently a single signer recipient is supported with
-	 * both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
+	 * Factory method to create a bulk recipient placeholder for a bulk envelope draft. Currently a single signer
+	 * recipient is supported with both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
 	 *
-	 * @param role The recipient role. This may be overridden in a bulk send list.
-	 * @param authentication Optional recipient authentication methods. This may be overridden in a bulk send list.
-	 * @param note Optional private note for the recipient. This may be overridden in a bulk send list.
+	 * @param authentication Optional recipient authentication methods. This may be overridden in a bulk envelope copy.
+	 * @param note Optional private note for the recipient. This may be overridden in a bulk envelope copy.
 	 *
 	 * @return The new DocuSign bulk envelope placeholder recipient.
 	 */
-	public static Recipient newBulkRecipient(
-		final Role role,
+	global static Recipient newBulkRecipientPlaceholder(
 		final Authentication authentication,
 		final String note) {
 
@@ -412,7 +410,7 @@ global class Recipient implements Comparable {
 			TYPE_SIGNER,
 			1,
 			1,
-			role,
+			null,
 			UUID.randomUUID().toString(),
 			UUID.randomUUID().toString() + '@place.holder',
 			null,
@@ -424,6 +422,46 @@ global class Recipient implements Comparable {
 			null,
 			false,
 			null,
+			false,
+			false);
+	}
+
+	/**
+	 * Factory method to create a bulk recipient suitable for bulk envelope copies. Currently a single signer recipient
+	 * is supported with both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
+	 *
+	 * @param name The recipient name.
+	 * @param email The recipient email.
+	 * @param source The Salesforce source object.
+	 * @param authentication Optional recipient authentication methods.
+	 * @param note Optional private note for the recipient.
+	 *
+	 * @return The new DocuSign bulk envelope copy recipient.
+	 */
+	global static Recipient newBulkRecipient(
+		final String name,
+		final String email,
+		final Entity source,
+		final Authentication authentication,
+		final String note) {
+
+		return new Recipient(
+			null,
+			TYPE_SIGNER,
+			1,
+			1,
+			null,
+			name,
+			email,
+			null,
+			null,
+			authentication,
+			note,
+			null,
+			null,
+			null,
+			false,
+			source,
 			false,
 			false);
 	}
