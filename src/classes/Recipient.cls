@@ -396,15 +396,9 @@ global class Recipient implements Comparable {
 	 * Factory method to create a bulk recipient placeholder for a bulk envelope draft. Currently a single signer
 	 * recipient is supported with both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
 	 *
-	 * @param authentication Optional recipient authentication methods. This may be overridden in a bulk envelope copy.
-	 * @param note Optional private note for the recipient. This may be overridden in a bulk envelope copy.
-	 *
 	 * @return The new DocuSign bulk envelope placeholder recipient.
 	 */
-	global static Recipient newBulkRecipientPlaceholder(
-		final Authentication authentication,
-		final String note) {
-
+	global static Recipient newBulkRecipientPlaceholder() {
 		return new Recipient(
 			null,
 			TYPE_SIGNER,
@@ -415,8 +409,8 @@ global class Recipient implements Comparable {
 			UUID.randomUUID().toString() + '@place.holder',
 			null,
 			null,
-			authentication,
-			note,
+			null,
+			null,
 			null,
 			null,
 			null,
@@ -433,17 +427,13 @@ global class Recipient implements Comparable {
 	 * @param name The recipient name.
 	 * @param email The recipient email.
 	 * @param source The Salesforce source object.
-	 * @param authentication Optional recipient authentication methods.
-	 * @param note Optional private note for the recipient.
 	 *
 	 * @return The new DocuSign bulk envelope copy recipient.
 	 */
 	global static Recipient newBulkRecipient(
 		final String name,
 		final String email,
-		final Entity source,
-		final Authentication authentication,
-		final String note) {
+		final Entity source) {
 
 		return new Recipient(
 			null,
@@ -455,8 +445,8 @@ global class Recipient implements Comparable {
 			email,
 			null,
 			null,
-			authentication,
-			note,
+			null,
+			null,
 			null,
 			null,
 			null,
@@ -952,7 +942,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>emailSettings</code>.
 	 */
-	public Recipient withEmailSettings(final EmailSettings emailSettings) {
+	global Recipient withEmailSettings(final EmailSettings emailSettings) {
 		this.emailSettings = emailSettings;
 		return this;
 	}
@@ -976,7 +966,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>note</code>.
 	 */
-	public Recipient withNote(final String note) {
+	global Recipient withNote(final String note) {
 		this.note = note;
 		return this;
 	}
@@ -988,7 +978,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>authentication</code>.
 	 */
-	public Recipient withAuthentication(final Authentication authentication) {
+	global Recipient withAuthentication(final Authentication authentication) {
 		this.authentication = authentication;
 		return this;
 	}

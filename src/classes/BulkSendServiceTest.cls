@@ -466,15 +466,15 @@ private class BulkSendServiceTest {
 				new List<Envelope> {
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					}),
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					}),
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					})
 				},
 				new Entity(UserInfo.getUserId()));
@@ -485,15 +485,15 @@ private class BulkSendServiceTest {
 				new List<Envelope> {
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					}),
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					}),
 					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
 						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null, null, null)
+							UUID.randomUUID().toString() + '@unit.test', null)
 					})
 				},
 				new Entity(UserInfo.getOrganizationId()));
@@ -774,7 +774,7 @@ private class BulkSendServiceTest {
 					DocumentService.convert(TestUtils.createContentVersion())
 				})
 				.withRecipients(new List<Recipient> {
-					Recipient.newBulkRecipientPlaceholder(null, null)
+					Recipient.newBulkRecipientPlaceholder()
 				});
 
 			Test.startTest();
@@ -882,7 +882,7 @@ private class BulkSendServiceTest {
 					DocumentService.convert(TestUtils.createContentVersion())
 				})
 				.withRecipients(new List<Recipient> {
-					Recipient.newBulkRecipientPlaceholder(null, null)
+					Recipient.newBulkRecipientPlaceholder()
 				});
 
 			Test.startTest();
@@ -908,7 +908,7 @@ private class BulkSendServiceTest {
 					DocumentService.convert(TestUtils.createContentVersion())
 				})
 				.withRecipients(new List<Recipient> {
-					Recipient.newBulkRecipientPlaceholder(null, null)
+					Recipient.newBulkRecipientPlaceholder()
 				});
 
 			Test.startTest();
