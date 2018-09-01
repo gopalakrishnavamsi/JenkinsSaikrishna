@@ -56,7 +56,7 @@ global class BulkList {
 	 * @param copies Copies of the DocuSign envelope to be sent.
 	 * @param source The Salesforce object from which the list was generated.
 	 */
-	global BulkList(
+	public BulkList(
 		final Id id,
 		final UUID docuSignId,
 		final String name,
@@ -80,6 +80,22 @@ global class BulkList {
 	public BulkList withDocuSignId(final UUID docuSignId) {
 		this.docuSignId = docuSignId;
 		return this;
+	}
+
+	/**
+	 * Creates a new bulk send list.
+	 *
+	 * @param name Required name of the bulk send list.
+	 * @param copies The bulk envelope copies. At least one is required.
+	 * @param source Optional Salesforce source object for the list (e.g. CollaborationGroup.Id).
+	 *
+	 * @return The new bulk send list.
+	 */
+	global static BulkList newList(final String name, final List<Envelope> copies, final Entity source) {
+		if (String.isBlank(name)) throw new DocuSignException(Label.NameRequired);
+		if (Collection.isEmpty(copies)) throw new DocuSignException(Label.AtLeastOneEnvelopeIsRequired);
+
+		return new BulkList(null, null, name, copies, source);
 	}
 
 	/**

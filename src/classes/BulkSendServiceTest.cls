@@ -80,18 +80,24 @@ private class BulkSendServiceTest {
 	@IsTest
 	static void test_Database_createLists() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			BulkList bl1 = new BulkList(
-				null,
-				UUID.randomUUID(),
-				'list 1',
-				null, // ignored for now
+			BulkList bl1 = BulkList.newList(
+				UUID.randomUUID().toString(),
+				new List<Envelope> {
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null))
+				},
 				new Entity(UserInfo.getUserId()));
-			BulkList bl2 = new BulkList(
-				null,
-				UUID.randomUUID(),
-				'list 2',
-				null, // ignored for now
-				new Entity(UserInfo.getOrganizationId()));
+			BulkList bl2 = BulkList.newList(
+				UUID.randomUUID().toString(),
+				new List<Envelope> {
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null))
+				},
+				new Entity(UserInfo.getUserId()));
 
 			Test.startTest();
 			List<BulkList> result = BulkSendService.DB.createLists(new List<BulkList> { bl1, bl2 });
@@ -205,18 +211,8 @@ private class BulkSendServiceTest {
 	@IsTest
 	static void test_Database_updateLists() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			BulkList bl1 = new BulkList(
-				createList(TestUtils.createAccount().Id).Id,
-				UUID.randomUUID(),
-				UUID.randomUUID().toString(),
-				null,
-				new Entity(TestUtils.createLead().Id));
-			BulkList bl2 = new BulkList(
-				createList(TestUtils.createAccount().Id).Id,
-				UUID.randomUUID(),
-				UUID.randomUUID().toString(),
-				null,
-				new Entity(TestUtils.createLead().Id));
+			BulkList bl1 = BulkSendService.DB.convert(createList(TestUtils.createLead().Id));
+			BulkList bl2 = BulkSendService.DB.convert(createList(TestUtils.createLead().Id));
 
 			Test.startTest();
 			List<BulkList> result = BulkSendService.DB.updateLists(new List<BulkList> { bl1, bl2 });
@@ -401,11 +397,14 @@ private class BulkSendServiceTest {
 			Test.startTest();
 			try {
 				BulkSendService.createLists(new List<BulkList> {
-					new BulkList(
-						null,
-						null,
-						'list 1',
-						null, // ignored for now
+					BulkList.newList(
+						UUID.randomUUID().toString(),
+						new List<Envelope> {
+							Envelope.newBulkCopy(Recipient.newBulkRecipient(
+								UUID.randomUUID().toString(),
+								UUID.randomUUID().toString() + '@unit.test',
+								null))
+						},
 						new Entity(UserInfo.getUserId()))
 				});
 				throw new AssertException('Expected createLists to fail');
@@ -438,11 +437,14 @@ private class BulkSendServiceTest {
 			Test.startTest();
 			try {
 				BulkSendService.createLists(new List<BulkList> {
-					new BulkList(
-						null,
-						null,
-						'list 1',
-						null, // ignored for now
+					BulkList.newList(
+						UUID.randomUUID().toString(),
+						new List<Envelope> {
+							Envelope.newBulkCopy(Recipient.newBulkRecipient(
+								UUID.randomUUID().toString(),
+								UUID.randomUUID().toString() + '@unit.test',
+								null))
+						},
 						new Entity(UserInfo.getUserId()))
 				});
 				throw new AssertException('Expected createLists to fail');
@@ -459,42 +461,22 @@ private class BulkSendServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignUser()) {
-			BulkList bl1 = new BulkList(
-				null,
-				null,
-				'list 1',
+			BulkList bl1 = BulkList.newList(
+				UUID.randomUUID().toString(),
 				new List<Envelope> {
-					Envelope.newBulkCopy(Recipient.newBulkRecipient(
-						UUID.randomUUID().toString(),
-						UUID.randomUUID().toString() + '@unit.test',
-						null)),
-					Envelope.newBulkCopy(Recipient.newBulkRecipient(
-						UUID.randomUUID().toString(),
-						UUID.randomUUID().toString() + '@unit.test',
-						null)),
 					Envelope.newBulkCopy(Recipient.newBulkRecipient(
 						UUID.randomUUID().toString(),
 						UUID.randomUUID().toString() + '@unit.test',
 						null))
 				},
 				new Entity(UserInfo.getUserId()));
-			BulkList bl2 = new BulkList(
-				null,
-				null,
-				'list 2',
+			BulkList bl2 = BulkList.newList(
+				UUID.randomUUID().toString(),
 				new List<Envelope> {
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					}),
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					}),
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					})
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null))
 				},
 				new Entity(UserInfo.getOrganizationId()));
 
@@ -561,11 +543,14 @@ private class BulkSendServiceTest {
 			Test.startTest();
 			try {
 				BulkSendService.updateLists(new List<BulkList> {
-					new BulkList(
-						null,
-						null,
-						'list 1',
-						null, // ignored for now
+					BulkList.newList(
+						UUID.randomUUID().toString(),
+						new List<Envelope> {
+							Envelope.newBulkCopy(Recipient.newBulkRecipient(
+								UUID.randomUUID().toString(),
+								UUID.randomUUID().toString() + '@unit.test',
+								null))
+						},
 						new Entity(UserInfo.getUserId()))
 				});
 				throw new AssertException('Expected updateLists to fail');
@@ -598,11 +583,14 @@ private class BulkSendServiceTest {
 			Test.startTest();
 			try {
 				BulkSendService.updateLists(new List<BulkList> {
-					new BulkList(
-						null,
-						UUID.randomUUID(),
-						'list 1',
-						null, // ignored for now
+					BulkList.newList(
+						UUID.randomUUID().toString(),
+						new List<Envelope> {
+							Envelope.newBulkCopy(Recipient.newBulkRecipient(
+								UUID.randomUUID().toString(),
+								UUID.randomUUID().toString() + '@unit.test',
+								null))
+						},
 						new Entity(UserInfo.getUserId()))
 				});
 				throw new AssertException('Expected updateLists to fail');
