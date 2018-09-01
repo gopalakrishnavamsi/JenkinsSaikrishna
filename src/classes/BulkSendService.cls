@@ -19,16 +19,15 @@
  * myList = dfsle.BulkSendService.createLists(new List&lt;BulkList&gt; { myBulkList })[0];
  *
  * // Create a draft envelope with at least one dummy recipient.
- * dfsle.Envelope myEnvelope = dfsle.EnvelopeService.getEmptyEnvelope(
- * 		new dfsle.Entity(mySalesforceSourceId) // Salesforce source entity
- * 		.withDocuments(...) // Get documents from Salesforce
- * 		.withRecipients(new List&lt;dfsle.Recipient&gt;> { new dfsle.Recipient(...) });
+ * dfsle.Envelope myEnvelope = dfsle.BulkSendService.getDraftEnvelope(
+ * 		new List<dfsle.Document> {...}, // Documents
+ * 		new dfsle.Entity(mySalesforceSourceId)); // Salesforce source entity
  *
  * // Send the envelope to your bulk send list.
  * dfsle.BulkList.Result myResult = dfsle.BulkSendService.sendEnvelope(myList.id, myEnvelope);
  *
  * // Check for and resolve any errors in the result.
- * if (myResult.errors.isEmpty()) {
+ * if (myResult.success) {
  * 	// Get batch job status (will only call DocuSign API at most once per minute)
  * 	dfsle.BulkList.Status myStatus = dfsle.BulkSendService.getStatus(new Set&lt;Id&gt; { myResult.bulkStatusId });
  * }
@@ -351,32 +350,31 @@ global with sharing class BulkSendService {
 	}
 
 	/**
-	 * Creates a bulk envelope draft in DocuSign and Salesforce. Currently, the envelope is limited to exactly one bulk
-	 * recipient.
-	 * <p>
-	 * This method must be called in a transaction distinct from <code>dfsle.BulkSendService.sendEnvelope</code> as it
-	 * performs a DML operation after a web service callout.
+	 * Gets a new bulk draft envelope instance with a single bulk recipient placeholder and default email and
+	 * notification settings. This may be further customized via the <code>Envelope.withEmail</code> or
+	 * <code>Envelope.withNotifications</code> methods.
 	 * <p>
 	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param envelope The bulk envelope.
+	 * @param documents List of envelope documents. At least one document is required.
+	 * @param source Optional Salesforce source object for the envelope.
 	 *
-	 * @return The newly-created bulk envelope.
+	 * @return A new bulk envelope instance.
 	 */
-	global static Envelope createDraftEnvelope(final Envelope envelope) {
+	global static Envelope getDraftEnvelope(final List<Document> documents, final Entity source) {
 		Permissions.verifyIsDocuSignUser();
 
-		ValidationResult vr = EnvelopeService.validate(envelope, true);
-		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
+		if (Collection.isEmpty(documents)) throw new DocuSignException(Label.AtLeastOneDocumentIsRequired);
 
-		UUID docuSignId = EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
-
-		return EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId), null);
+		return EnvelopeService.getEmptyEnvelope(source)
+			.withDocuments(documents)
+			.withRecipients(new List<Recipient> {
+				Recipient.newBulkRecipientPlaceholder()
+			});
 	}
 
 	/**
-	 * Sends a draft envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce if not
-	 * already created via the <code>dfsle.BulkSendService.createDraftEnvelope</code> method.
+	 * Sends a draft envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce.
 	 * <p>
 	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *

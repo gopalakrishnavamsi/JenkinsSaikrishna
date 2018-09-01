@@ -398,7 +398,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The new DocuSign bulk envelope placeholder recipient.
 	 */
-	global static Recipient newBulkRecipientPlaceholder() {
+	public static Recipient newBulkRecipientPlaceholder() {
 		return new Recipient(
 			null,
 			TYPE_SIGNER,

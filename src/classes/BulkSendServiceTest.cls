@@ -464,18 +464,18 @@ private class BulkSendServiceTest {
 				null,
 				'list 1',
 				new List<Envelope> {
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					}),
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					}),
-					EnvelopeService.getEmptyEnvelope(null).withRecipients(new List<Recipient> {
-						Recipient.newBulkRecipient(UUID.randomUUID().toString(),
-							UUID.randomUUID().toString() + '@unit.test', null)
-					})
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null)),
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null)),
+					Envelope.newBulkCopy(Recipient.newBulkRecipient(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						null))
 				},
 				new Entity(UserInfo.getUserId()));
 			BulkList bl2 = new BulkList(
@@ -715,12 +715,12 @@ private class BulkSendServiceTest {
 	}
 
 	@IsTest
-	static void test_createDraftEnvelope_unauthorized() {
+	static void test_getDraftEnvelope_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				BulkSendService.createDraftEnvelope(null);
-				throw new AssertException('Expected createDraftEnvelope to fail');
+				BulkSendService.getDraftEnvelope(null, null);
+				throw new AssertException('Expected getDraftEnvelope to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
@@ -729,60 +729,33 @@ private class BulkSendServiceTest {
 	}
 
 	@IsTest
-	static void test_createDraftEnvelope_invalid() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				BulkSendService.createDraftEnvelope(null);
-				throw new AssertException('Expected createDraftEnvelope to fail');
-			} catch (ValidationException ex) {
-				System.assert(ex.getMessage().startsWith(Label.InvalidEnvelope));
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_createDraftEnvelope_api_error() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
+	static void test_getDraftEnvelope_no_documents() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope__c e1 = TestUtils.createEnvelope();
-			Envelope e = EnvelopeService.DB.convert(e1)
-				.withDocuments(DocumentService.convert(new List<Document__c> { TestUtils.createEnvelopeDocument(e1.Id) }))
-				.withRecipients(RecipientService.convert(new List<Recipient__c> { TestUtils.createEnvelopeRecipient(e1.Id) }));
-
 			Test.startTest();
 			try {
-				BulkSendService.createDraftEnvelope(e);
-				throw new AssertException('Expected createDraftEnvelope to fail');
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+				BulkSendService.getDraftEnvelope(null, null);
+				throw new AssertException('Expected getDraftEnvelope to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.AtLeastOneDocumentIsRequired, ex.getMessage());
 			}
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
-	static void test_createDraftEnvelope_success() {
+	static void test_getDraftEnvelope_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope e = EnvelopeService.getEmptyEnvelope(null)
-				.withDocuments(new List<Document> {
-					DocumentService.convert(TestUtils.createContentVersion())
-				})
-				.withRecipients(new List<Recipient> {
-					Recipient.newBulkRecipientPlaceholder()
-				});
+			Document d = DocumentService.convert(TestUtils.createContentVersion());
 
 			Test.startTest();
-			Envelope result = BulkSendService.createDraftEnvelope(e);
+			Envelope result = BulkSendService.getDraftEnvelope(new List<Document> { d }, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.docuSignId);
+			System.assertEquals(1, Collection.size(result.documents));
+			System.assertEquals(1, Collection.size(result.recipients));
 		}
 	}
 
@@ -903,13 +876,11 @@ private class BulkSendServiceTest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
-			Envelope e = EnvelopeService.getEmptyEnvelope(null)
-				.withDocuments(new List<Document> {
+			Envelope e = BulkSendService.getDraftEnvelope(
+				new List<Document> {
 					DocumentService.convert(TestUtils.createContentVersion())
-				})
-				.withRecipients(new List<Recipient> {
-					Recipient.newBulkRecipientPlaceholder()
-				});
+				},
+				null);
 
 			Test.startTest();
 			BulkList.Result result = BulkSendService.sendEnvelope(bl.id, e);

@@ -544,7 +544,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>documents</code> property.
 	 */
-	public Envelope withDocuments(final List<Document> documents) {
+	global Envelope withDocuments(final List<Document> documents) {
 		this.documents = documents;
 		return this;
 	}
@@ -569,7 +569,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>recipients</code> property.
 	 */
-	public Envelope withRecipients(final List<Recipient> recipients) {
+	global Envelope withRecipients(final List<Recipient> recipients) {
 		this.recipients = recipients;
 		return this;
 	}
@@ -593,7 +593,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>notifications</code> property.
 	 */
-	public Envelope withNotifications(final Notifications notifications) {
+	global Envelope withNotifications(final Notifications notifications) {
 		this.notifications = notifications;
 		return this;
 	}
@@ -606,7 +606,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>emailSubject</code> and <code>emailMessage</code> properties.
 	 */
-	public Envelope withEmail(final String emailSubject, final String emailMessage) {
+	global Envelope withEmail(final String emailSubject, final String emailMessage) {
 		this.emailSubject = emailSubject;
 		this.emailMessage = emailMessage;
 		return this;
@@ -622,5 +622,16 @@ global class Envelope {
 	public Envelope withSent(final Datetime sent) {
 		this.sent = sent;
 		return this;
+	}
+
+	/**
+	 * Creates an empty bulk copy of an envelope with the specified recipient.
+	 *
+	 * @return A bulk envelope copy with a single recipient.
+	 */
+	global static Envelope newBulkCopy(final Recipient recipient) {
+		if (recipient == null) throw new DocuSignException(Label.AtLeastOneRecipientIsRequired);
+
+		return new Envelope(null, null, null, null).withRecipients(new List<Recipient> { recipient });
 	}
 }
