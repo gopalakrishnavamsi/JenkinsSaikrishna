@@ -334,6 +334,15 @@ public class Account {
 		@AuraEnabled
 		public String lastName { get; private set; }
 		/**
+		 * Read-only DocuSign user name based on <code>firstName</code> and <code>lastName<code>.
+		 */
+		@AuraEnabled
+		public String name {
+			get {
+				return StringUtils.mkName(firstName, lastName);
+			}
+		}
+		/**
 		 * The API password for the user. This is never returned through public methods.
 		 */
 		public transient String apiPassword { get; private set; }
