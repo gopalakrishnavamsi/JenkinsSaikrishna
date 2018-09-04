@@ -1,13 +1,13 @@
-/**Primary interface point for DocuSign for Salesforce envelope management.
- *  A basic flow would be:
+/**
+ * Primary interface point for DocuSign for Salesforce envelope management.
+ * <p>
+ * A basic flow would be:
  * <pre>
  * // Get an empty envelope definition to begin.
  * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
- * // Create envelope and add source documents and recipients
- * e = EnvelopeService.createEnvelope(e, null, true);
- * // Create the envelope in draft state
- * e = EnvelopeService.sendEnvelope(e, false, true);
- * // Get tagger URL
+ * // Send envelope and add source documents and recipients
+ * e = EnvelopeService.sendEnvelope(e, false);
+ * // Get tagger URL (this must be in a future method or separate transaction to avoid a CalloutException)
  * Url u = EnvelopeService.getSenderViewUrl(e.docuSignId, new Url('https://my.return.url'));
  * // Host the tagging session with the returned URL
  * </pre>
@@ -592,10 +592,27 @@ global with sharing class EnvelopeService {
 	}
 
 	/**
-	 * Sends an envelope to DocuSign. The envelope must have been previously created via
-	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>.
+	 * Sends an envelope to DocuSign. This will also create the envelope record in Salesforce if necessary.
 	 * <p>
-	 * The caller must be the owner of the envelope.
+	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
+	 * <code>DocuSign User</code> permission set.
+	 *
+	 * @param envelope The envelope to send.
+	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
+	 *
+	 * @return The sent envelope.
+	 */
+	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow) {
+		return sendEnvelope(envelope, sendNow, true);
+	}
+
+	/**
+	 * Sends an envelope to DocuSign. The envelope may have been previously created via
+	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>, or this method will
+	 * create the requisite Salesforce records.
+	 * <p>
+	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
+	 * <code>DocuSign User</code> permission set.
 	 *
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
@@ -606,10 +623,15 @@ global with sharing class EnvelopeService {
 	 * @return The sent envelope.
 	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
 	 */
-	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
+	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
-		Permissions.verifyIsOwner(envelope.id);
+		Boolean sfdcEnvelopeCreated = envelope != null && envelope.id != null;
+		if (sfdcEnvelopeCreated) {
+			Permissions.verifyIsOwner(envelope.id);
+		} else {
+			Permissions.verifyIsDocuSignUser();
+		}
 
 		ValidationResult vr = validate(envelope, sendNow);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
@@ -620,7 +642,14 @@ global with sharing class EnvelopeService {
 		if (sendNow) result = result.withSent(Datetime.now());
 		// Can update in some workflows, but not in others due to subsequent callouts (e.g. mobile)
 		if (updateNow) {
-			result = DB.updateEnvelope2(result, sendNow);
+			if (sfdcEnvelopeCreated) {
+				result = DB.updateEnvelope2(result, sendNow);
+			} else {
+				result = DB.insertEnvelope(result);
+				result = result
+					.withDocuments(DocumentService.addEnvelopeDocuments(result.id, result.documents))
+					.withRecipients(RecipientService.addEnvelopeRecipients(result.id, result.recipients));
+			}
 			if (sendNow) StatusService.createStatus(new List<Envelope.Status> { result.toEnvelopeStatus() });
 		}
 
@@ -639,7 +668,7 @@ global with sharing class EnvelopeService {
 	 * @return <code>true</code> if the update was successful, <code>false</code> otherwise.
 	 * @see EnvelopeService.sendEnvelope for more details.
 	 */
-	global static Boolean markEnvelopeSent(
+	public static Boolean markEnvelopeSent(
 		final Envelope envelope,
 		final Boolean sendNow) {
 
