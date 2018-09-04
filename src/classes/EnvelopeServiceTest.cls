@@ -1069,7 +1069,7 @@ private class EnvelopeServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				EnvelopeService.sendEnvelope(EnvelopeService.DB.convert(e), true, true);
+				EnvelopeService.sendEnvelope(EnvelopeService.DB.convert(e), true);
 				throw new AssertException('Expected sendEnvelope to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
@@ -1197,6 +1197,58 @@ private class EnvelopeServiceTest {
 			List<EnvelopeStatus__c> statuses = [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c = :result.docusignId.toString()];
 			System.assertNotEquals(null, statuses);
 			System.assertEquals(1, statuses.size());
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_with_create_unauthorized() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				EnvelopeService.sendEnvelope(EnvelopeService.getEmptyEnvelope(null), true);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelope_with_create() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Lead l = TestUtils.createLead();
+			Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(l.Id))
+				.withDocuments(new List<Document> {
+					DocumentService.convert(TestUtils.createContentVersion(l.Id))
+				})
+				.withRecipients(new List<Recipient> {
+					Recipient.fromSource(l.Name, l.Email, l.Phone, null, new Entity(l.Id))
+				})
+				.withCustomFields(new List<CustomField> {
+					CustomField.newTextField('n1', 'v1', true, true)
+				});
+
+			Test.startTest();
+			Envelope result = EnvelopeService.sendEnvelope(e, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.id);
+			System.assert(!UUID.isEmpty(result.docuSignId));
+			System.assertEquals(1, Collection.size(result.documents));
+			System.assertEquals(1, Collection.size(result.recipients));
+			System.assertEquals(1, Collection.size(result.customFields));
+
+			List<Envelope__c> es = [SELECT DocuSignId__c, Sent__c FROM Envelope__c WHERE Id = :result.id];
+			System.assertEquals(1, Collection.size(es));
+			System.assertNotEquals(null, es[0]);
+			System.assertNotEquals(null, es[0].DocuSignId__c);
+			System.assertNotEquals(null, es[0].Sent__c);
+			System.assertEquals(1, Collection.size([SELECT Id FROM Document__c WHERE Envelope__c = :result.id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM Recipient__c WHERE Envelope__c = :result.id]));
 		}
 	}
 

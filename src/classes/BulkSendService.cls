@@ -376,7 +376,8 @@ global with sharing class BulkSendService {
 	/**
 	 * Sends a draft envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce.
 	 * <p>
-	 * Callers must be assigned the <code>DocuSign User</code> permission set.
+	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
+	 * <code>DocuSign User</code> permission set.
 	 *
 	 * @param bulkListId The bulk send list Salesforce ID.
 	 * @param envelope The draft envelope.
