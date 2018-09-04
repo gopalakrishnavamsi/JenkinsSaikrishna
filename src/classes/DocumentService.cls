@@ -51,7 +51,8 @@ global with sharing class DocumentService {
 	 * Converts a Salesforce content version (file) into a DocuSign envelope document.
 	 *
 	 * @param contentVersion The content version from which to construct a document. This must have the
-	 * <code>Title</code>, <code>FileExtension</code>, <code>Content</code>, and <code>LastModified</code> fields defined.
+	 * <code>Title</code>, <code>FileExtension</code>, <code>ContentSize</code>, and <code>LastModifiedDate</code>
+	 * fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the content version.
 	 */
@@ -73,7 +74,7 @@ global with sharing class DocumentService {
 	 * Converts a Salesforce document into a DocuSign envelope document.
 	 *
 	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
-	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModified</code> fields defined.
+	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModifiedDate</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the Salesforce document.
 	 */
