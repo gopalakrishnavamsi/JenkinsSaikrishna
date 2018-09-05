@@ -439,7 +439,8 @@ global with sharing class EnvelopeService {
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param envelope The envelope to create.
-	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope.
+	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope. This is
+	 * currently a placeholder argument, i.e. always pass <code>null</code>.
 	 * @param addFromSource Load source documents and recipients if <code>envelopeConfiguration</code> is
 	 * <code>null</code>.
 	 *

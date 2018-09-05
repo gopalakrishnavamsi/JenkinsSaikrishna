@@ -20,7 +20,7 @@
  *
  * // Create a draft envelope with at least one dummy recipient.
  * dfsle.Envelope myEnvelope = dfsle.BulkSendService.getDraftEnvelope(
- * 		new List<dfsle.Document> {...}, // Documents
+ * 		new List&lt;dfsle.Document&gt; { ... }, // Documents
  * 		new dfsle.Entity(mySalesforceSourceId)); // Salesforce source entity
  *
  * // Send the envelope to your bulk send list.
@@ -28,8 +28,8 @@
  *
  * // Check for and resolve any errors in the result.
  * if (myResult.success) {
- * 	// Get batch job status (will only call DocuSign API at most once per minute)
- * 	dfsle.BulkList.Status myStatus = dfsle.BulkSendService.getStatus(new Set&lt;Id&gt; { myResult.bulkStatusId });
+ * 		// Get batch job status (will only call DocuSign API at most once per minute)
+ * 		dfsle.BulkList.Status myStatus = dfsle.BulkSendService.getStatus(new Set&lt;Id&gt; { myResult.bulkStatusId });
  * }
  * </pre>
  */
@@ -266,8 +266,10 @@ global with sharing class BulkSendService {
 
 	/**
 	 * Creates one or more bulk send lists in Salesforce and DocuSign. The lists must have at least one member. Each
-	 * list may be used for multiple envelopes. Currently bulk envelope copies are restricted to exactly one recipient
-	 * each.
+	 * list may be reused to send multiple envelopes. Currently bulk envelope copies are restricted to exactly one
+	 * recipient each.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param bulkLists The bulk send lists to create.
 	 *
@@ -289,6 +291,8 @@ global with sharing class BulkSendService {
 
 	/**
 	 * Searches for bulk send lists partially matching a name.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param name The beginning part of the name to match.
 	 * @param maximumRecords The maximum number of records to retrieve.
@@ -304,6 +308,11 @@ global with sharing class BulkSendService {
 	/**
 	 * Updates one or more bulk send lists in Salesforce and DocuSign. Currently bulk envelope copies are restricted to
 	 * exactly one recipient each.
+	 * <p>
+	 * This method should be called any time the source Salesforce group membership changes to ensure the lists are
+	 * synchronized.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param bulkLists The bulk send lists to update.
 	 *
@@ -325,6 +334,8 @@ global with sharing class BulkSendService {
 
 	/**
 	 * Deletes one or more bulk send lists in Salesforce and DocuSign.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param bulkListIds The IDs of the lists to delete.
 	 *
@@ -374,7 +385,7 @@ global with sharing class BulkSendService {
 	}
 
 	/**
-	 * Sends a draft envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce.
+	 * Sends an envelope to a bulk send list. The envelope will be created in DocuSign and Salesforce.
 	 * <p>
 	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
 	 * <code>DocuSign User</code> permission set.
@@ -425,6 +436,8 @@ global with sharing class BulkSendService {
 
 	/**
 	 * Retrieves status for one or more bulk send jobs.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param bulkStatusIds The list of status IDs.
 	 *
