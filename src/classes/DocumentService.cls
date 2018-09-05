@@ -345,11 +345,11 @@ global with sharing class DocumentService {
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
-	 * @param documentIds The Salesforce object IDs.
+	 * @param sObjectIds The Salesforce object IDs.
 	 *
 	 * @return A list of envelope documents.
 	 */
-	global static List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
+	global static List<Document> getDocuments(final SObjectType type, final Set<Id> sObjectIds) {
 		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
@@ -357,7 +357,7 @@ global with sharing class DocumentService {
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
 			if (dr.canResolveDocuments(type)) {
-				result = dr.getDocuments(type, documentIds);
+				result = dr.getDocuments(type, sObjectIds);
 				break;
 			}
 		}
@@ -369,7 +369,10 @@ global with sharing class DocumentService {
 	 * <p>
 	 * For example, to pull in all of an Opportunity's Notes and Attachments related list:
 	 * <pre>
-	 * List<Document> docs = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { opp.Id }, false);
+	 * List<Document> docs = DocumentService.getLinkedDocuments(
+	 * 		ContentVersion.getSObjectType(),
+	 * 		new Set<Id> { myOpportunity.Id },
+	 * 		false);
 	 * </pre>
 	 * <p>
 	 * By default, only <code>ContentVersion</code> types are supported. More types may be supported via plugins.
@@ -532,7 +535,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
+	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (newSequence == null || newSequence.isEmpty()) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -552,7 +555,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> updateEnvelopeDocuments(
+	public static List<Document> updateEnvelopeDocuments(
 		final Id envelopeId,
 		final List<Document> originalDocuments,
 		final List<Document> updatedDocuments) {

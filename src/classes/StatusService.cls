@@ -390,7 +390,7 @@ global with sharing class StatusService {
 
 	/**
 	 * Creates envelope status records from a list of sent envelopes. This will fail if any of the envelopes already
-	 * have a status record associated with it.
+	 * has a status record associated with it.
 	 * <p>
 	 * The caller must be the owner of the envelopes.
 	 *
@@ -412,7 +412,8 @@ global with sharing class StatusService {
 	 * Retrieves envelope statuses. This will perform a callout to DocuSign for each status that has not been refreshed
 	 * within the last 15 minutes.
 	 * <p>
-	 * Any orphaned DocuSign envelope records will also be deleted.
+	 * Any orphaned DocuSign envelope records will also be deleted. This will occur if the envelope exists as a
+	 * Salesforce record, but not in DocuSign.
 	 * <p>
 	 * The caller must be the owner of the envelopes.
 	 *
@@ -482,7 +483,7 @@ global with sharing class StatusService {
 	}
 
 	/**
-	 * Deletes envelope statuses and related envelope records.
+	 * Deletes envelope status and related envelope records.
 	 * <p>
 	 * The caller must be the owner of the envelopes.
 	 *
@@ -527,7 +528,7 @@ global with sharing class StatusService {
 	}
 
 	/**
-	 * Resends a DocuSign envelope to the current recipients in the routing order.
+	 * Resends a DocuSign envelope to pending recipients in the routing order.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
@@ -545,7 +546,7 @@ global with sharing class StatusService {
 	}
 
 	/**
-	 * Resends a DocuSign envelope to the selected recipients. This method may be partially successful, so check the
+	 * Resends a DocuSign envelope to the specified recipients. This method may be partially successful, so check the
 	 * returned results for errors.
 	 * <p>
 	 * The caller must be the owner of the envelope.
