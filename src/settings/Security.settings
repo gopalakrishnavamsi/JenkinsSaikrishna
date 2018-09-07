@@ -45,5 +45,9 @@
 			<end>52.28.168.105</end>
 			<start>52.28.168.105</start>
 		</ipRanges>
+		<ipRanges>
+			<end>64.207.219.254</end>
+			<start>64.207.216.1</start>
+		</ipRanges>
 	</networkAccess>
 </SecuritySettings>
