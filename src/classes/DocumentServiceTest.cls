@@ -246,9 +246,8 @@ private class DocumentServiceTest {
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.LastModifiedDate, d.Id);
-			String tId = UUID.randomUUID().toString();
-			Datetime tCreated = Datetime.now();
-			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tCreated, tId);
+			UUID tId = UUID.randomUUID();
+			Document d3 = Document.fromTemplate(tId, 'template1');
 
 			Test.startTest();
 			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
@@ -274,8 +273,8 @@ private class DocumentServiceTest {
 			System.assertEquals('template1', result[1].name);
 			System.assertEquals(null, result[1].extension);
 			System.assertEquals(null, result[1].size);
-			System.assertEquals(tCreated, result[1].lastModified);
-			System.assertEquals(tId, result[1].sourceId);
+			System.assertEquals(null, result[1].lastModified);
+			System.assertEquals(String.valueOf(tId), result[1].sourceId);
 		}
 	}
 

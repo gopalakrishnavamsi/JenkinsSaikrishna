@@ -359,15 +359,7 @@ private class SigningServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 1,
-					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
-					Name = 'Unit Test1',
-					Email__c = 'r1@unit.test',
-					RoutingOrder__c = 1,
-					Role__c = 'Signer 1',
-					SignNow__c = false)
+				RecipientService.DB.convert(Recipient.newEmbeddedSigner(), dse.Id, 1)
 			};
 			insert dsers;
 
@@ -393,15 +385,7 @@ private class SigningServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 1,
-					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
-					Name = 'Unit Test1',
-					Email__c = 'r1@unit.test',
-					RoutingOrder__c = 1,
-					Role__c = 'Signer 1',
-					SignNow__c = false)
+				RecipientService.DB.convert(Recipient.newEmbeddedSigner(), dse.Id, 1)
 			};
 			insert dsers;
 
