@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
 	<customApplications>
-		<label>DocuSign for Salesforce Essentials</label>
-		<name>DocuSignForSalesforceEssentials</name>
+		<label>DocuSign for Salesforce - Core</label>
+		<name>DocuSignForSalesforceCore</name>
 	</customApplications>
 	<customLabels>
 		<label>Create is unauthorized for {0} fields: {1}</label>
@@ -133,7 +133,7 @@
 		<name>AssignAdminPermissionSet</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign for Salesforce Essentials post-install script results from {0}</label>
+		<label>DocuSign for Salesforce - Core post-install script results from {0}</label>
 		<name>PostInstallEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
@@ -797,7 +797,7 @@
 		<name>CompleteConnection</name>
 	</customLabels>
 	<customLabels>
-		<label>Complete the sections below to set up DocuSign for Salesforce Essentials.</label>
+		<label>Complete the sections below to set up DocuSign for Salesforce - Core.</label>
 		<name>CompleteSetup</name>
 	</customLabels>
 	<customLabels>
@@ -1006,7 +1006,7 @@
 		<name>AddToDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce - Core by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
 		<name>AddToDocuSignDetails</name>
 	</customLabels>
 	<customLabels>
@@ -1087,7 +1087,7 @@
 		<name>EnableSalesforceUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce - Core.</label>
 		<name>SelectSalesforceUsers</name>
 	</customLabels>
 	<customLabels>

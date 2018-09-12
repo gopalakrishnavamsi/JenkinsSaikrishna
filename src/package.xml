@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>DocuSign for Salesforce Essentials</fullName>
+    <fullName>DocuSign for Salesforce - Core</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
     <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink>Setup</setupWeblink>
@@ -143,7 +143,7 @@
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DocuSignForSalesforceEssentials</members>
+        <members>DocuSignForSalesforceCore</members>
         <name>CustomApplication</name>
     </types>
     <types>
