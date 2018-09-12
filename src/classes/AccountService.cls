@@ -201,6 +201,8 @@ global with sharing class AccountService {
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
 
+		if (String.isBlank(username) || String.isBlank(password)) throw new UnauthorizedException(Label.InvalidUsernameOrPassword);
+
 		// 2) Get valid DocuSign accounts.
 		List<Account.Membership> memberships;
 		try {

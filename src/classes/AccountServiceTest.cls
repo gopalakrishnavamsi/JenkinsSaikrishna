@@ -191,6 +191,26 @@ private class AccountServiceTest {
 	}
 
 	@IsTest
+	static void test_login_undefined_username_password() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				AccountService.login(null, UUID.randomUUID().toString(), Environment.Target.Production, null, null);
+				throw new AssertException('Expected login to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidUsernameOrPassword, ex.getMessage());
+			}
+			try {
+				AccountService.login('u@unit.test', null, Environment.Target.Production, null, null);
+				throw new AssertException('Expected login to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidUsernameOrPassword, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_login_error() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
