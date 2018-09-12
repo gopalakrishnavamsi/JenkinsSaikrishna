@@ -210,6 +210,25 @@ private class CredentialsTest {
 	}
 
 	@IsTest
+	static void test_getInstance_invalid_user() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.UseSendOnBehalfOf__c = true;
+			s.UseSystemSender__c = false;
+			update s;
+
+			Test.startTest();
+			try {
+				Credentials.getInstance(UserMock.createUser().Id, true);
+				throw new AssertException('Expected getInstance to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getInstance_systemSender() {
 		User u1 = UserMock.createUser();
 		User u2 = UserMock.createUser();
@@ -222,8 +241,8 @@ private class CredentialsTest {
 		System.runAs(UserMock.createUser()) {
 			Credentials result1, result2;
 			Test.startTest();
-				result1 = Credentials.getInstance(u1.Id, true);
-				result2 = Credentials.getInstance(u2.Id, true);
+			result1 = Credentials.getInstance(u1.Id, true);
+			result2 = Credentials.getInstance(u2.Id, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -241,6 +260,7 @@ private class CredentialsTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
+			testSettings.UseSendOnBehalfOf__c = true;
 			testSettings.UseSystemSender__c = false;
 			upsert testSettings;
 		}
@@ -251,7 +271,7 @@ private class CredentialsTest {
 				Credentials.getInstance(u1.Id, true);
 				throw new AssertException('Expected getInstance to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
+				System.assertEquals(Label.MustBeActivated, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -286,9 +306,13 @@ private class CredentialsTest {
 		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.UseSendOnBehalfOf__c = true;
+			insert s;
+
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, true, true, true);
+				username, password, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -321,9 +345,13 @@ private class CredentialsTest {
 		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.UseSendOnBehalfOf__c = false;
+			insert s;
+
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, false, false, false);
+				username, password, false);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
@@ -358,10 +386,14 @@ private class CredentialsTest {
 		System.runAs(u) {
 			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
 			Credentials baseline = Credentials.getInstance();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.UseSendOnBehalfOf__c = false;
+			s.UseSystemSender__c = true;
+			update s;
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				String.valueOf(username), password, true, false, true);
+				String.valueOf(username), password, true);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 

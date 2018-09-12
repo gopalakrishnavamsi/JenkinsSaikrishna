@@ -90,6 +90,10 @@ public with sharing class SetupController extends Controller {
 		try {
 			return getLogin(AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
 				String.isBlank(dsUrl) ? null : new Url(dsUrl), Integer.valueOf(dsAccountNumber)));
+		} catch (UnauthorizedException ex) {
+			AuraHandledException ex2 = new AuraHandledException(ex.getMessage());
+			ex2.setMessage(ex.getMessage());
+			throw ex2;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to log into DocuSign.');
 		}

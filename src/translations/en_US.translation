@@ -907,7 +907,7 @@
 		<name>NextSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope
+		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign
 			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
 			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
 			objects: Accounts, Contacts, Opportunities, Cases, and Leads.

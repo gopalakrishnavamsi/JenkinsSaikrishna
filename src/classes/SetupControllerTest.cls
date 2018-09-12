@@ -54,6 +54,34 @@ private class SetupControllerTest {
 		}
 	}
 
+	private class InvalidUsernamePasswordMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(401);
+			response.setStatus('UNAUTHORIZED');
+			response.setHeader('Content-Type', 'application/json');
+			response.setBody('{"errorCode": "USER_AUTHENTICATION_FAILED","message": "One or both of Username and Password are invalid."}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_login_invalid_username_password() {
+		Test.setMock(HttpCalloutMock.class, new InvalidUsernamePasswordMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				SetupController.login('u', 'p', 'demo', null, null);
+				throw new AssertException('Expected login to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.InvalidUsernameOrPassword, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	@IsTest
 	static void test_login_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
