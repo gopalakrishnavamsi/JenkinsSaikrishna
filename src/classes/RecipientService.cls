@@ -473,8 +473,6 @@ global with sharing class RecipientService {
 	 * <p>
 	 * By default, the Salesforce <code>Account</code>, <code>Case</code>, <code>Contact</code>, <code>Lead</code>,
 	 * and <code>Opportunity</code> types are supported. More types may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param sObjectIds The Salesforce object IDs.
@@ -482,8 +480,6 @@ global with sharing class RecipientService {
 	 * @return A list of envelope recipients.
 	 */
 	global static List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
-		Permissions.verifyIsDocuSignUser();
-
 		if (type == null) throw new DocuSignException(Label.InvalidType);
 
 		List<Recipient> result = null;
@@ -521,8 +517,6 @@ global with sharing class RecipientService {
 	 * <p>
 	 * Search behavior is defined and stored in account settings. See <code>Recipient.SearchBehavior</code> and
 	 * <code>AccountService.Settings</code> for more details.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param firstName The first name to match.
@@ -533,8 +527,6 @@ global with sharing class RecipientService {
 	 */
 	global static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
 		final String lastName) {
-
-		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
@@ -872,7 +864,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return A list of recipients targeted by the envelope.
 	 */
-	global static List<Recipient> getEnvelopeRecipients(final Id envelopeId) {
+	public static List<Recipient> getEnvelopeRecipients(final Id envelopeId) {
 		Permissions.verifyIsOwner(envelopeId);
 
 		return DB.queryRecipients(envelopeId, true);
@@ -888,7 +880,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
+	public static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
 		return addEnvelopeRecipients(envelopeId, recipients, null, null);
 	}
 
@@ -936,7 +928,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> removeEnvelopeRecipients(
+	public static List<Recipient> removeEnvelopeRecipients(
 		final Id envelopeId,
 		final Set<Id> recipientIds) {
 
@@ -959,7 +951,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> updateEnvelopeRecipients(
+	public static List<Recipient> updateEnvelopeRecipients(
 		final Id envelopeId,
 		final List<Recipient> originalRecipients,
 		final List<Recipient> updatedRecipients) {

@@ -161,6 +161,14 @@
 		<value>You must have DocuSign user permissions to perform this operation.</value>
 	</labels>
 	<labels>
+		<fullName>MustBeDocuSignSender</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Sender</shortDescription>
+		<value>You must have DocuSign sender permissions to perform this operation.</value>
+	</labels>
+	<labels>
 		<fullName>NotEnvelopeOwner</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>

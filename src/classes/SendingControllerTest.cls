@@ -67,11 +67,9 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_createDraftEnvelope_error() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-		UserMock.createDocuSignAdministrator();
+		Case c = TestUtils.createCase();
 
-		System.runAs(UserMock.createUser()) { // Unauthorized
-			Case c = TestUtils.createCase();
-
+		System.runAs(UserMock.createDocuSignSender()) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.createDraftEnvelope(c.Id);
@@ -95,20 +93,6 @@ private class SendingControllerTest {
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
-		}
-	}
-
-	@IsTest
-	static void test_getLinkedDocuments_error() {
-		System.runAs(UserMock.createUser()) { // Unauthorized
-			Test.startTest();
-			try {
-				SendingController.getLinkedDocuments(UserInfo.getUserId());
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -152,20 +136,6 @@ private class SendingControllerTest {
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.source);
 			System.assertEquals(l.Id, result.source.id);
-		}
-	}
-
-	@IsTest
-	static void test_resolveRecipient_error() {
-		System.runAs(UserMock.createUser()) { // Unauthorized
-			Test.startTest();
-			try {
-				SendingController.resolveRecipient(UserInfo.getUserId());
-				throw new AssertException('Expected resolveRecipient to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 

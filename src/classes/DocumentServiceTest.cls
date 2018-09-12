@@ -459,20 +459,6 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocuments(null, null);
-				throw new AssertException('Expected getDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getDocuments_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -492,20 +478,6 @@ private class DocumentServiceTest {
 			System.assertNotEquals(null, result[1]);
 			System.assertEquals(null, result[1].id);
 			System.assertEquals(Document.TYPE_FILE, result[1].type);
-		}
-	}
-
-	@IsTest
-	static void test_getLinkedDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getLinkedDocuments(null, null, false);
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -537,20 +509,6 @@ private class DocumentServiceTest {
 			System.assertNotEquals(null, result[2]);
 			System.assertEquals(null, result[2].id);
 			System.assertEquals(Document.TYPE_FILE, result[2].type);
-		}
-	}
-
-	@IsTest
-	static void test_getDocumentFolders_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocumentFolders(null);
-				throw new AssertException('Expected getDocumentFolders to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -634,20 +592,6 @@ private class DocumentServiceTest {
 			}
 			System.assert(foundD1);
 			System.assert(foundD2);
-		}
-	}
-
-	@IsTest
-	static void test_getFolderDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getFolderDocuments(null, null);
-				throw new AssertException('Expected getFolderDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 

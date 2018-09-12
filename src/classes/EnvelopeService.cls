@@ -596,7 +596,7 @@ global with sharing class EnvelopeService {
 	 * Sends an envelope to DocuSign. This will also create the envelope record in Salesforce if necessary.
 	 * <p>
 	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
-	 * <code>DocuSign User</code> permission set.
+	 * <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
@@ -613,7 +613,7 @@ global with sharing class EnvelopeService {
 	 * create the requisite Salesforce records.
 	 * <p>
 	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
-	 * <code>DocuSign User</code> permission set.
+	 * <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
@@ -631,7 +631,7 @@ global with sharing class EnvelopeService {
 		if (sfdcEnvelopeCreated) {
 			Permissions.verifyIsOwner(envelope.id);
 		} else {
-			Permissions.verifyIsDocuSignUser();
+			Permissions.verifyIsDocuSignSender();
 		}
 
 		ValidationResult vr = validate(envelope, sendNow);
@@ -707,14 +707,14 @@ global with sharing class EnvelopeService {
 	 * Gets an empty envelope definition that can be subsequently completed, created, and sent. This envelope will
 	 * be populated with appropriate defaults based on the current account settings and localizations.
 	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * The caller must be assigned the <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param source The originating Salesforce entity for the envelope.
 	 *
 	 * @return The empty envelope.
 	 */
 	global static Envelope getEmptyEnvelope(final Entity source) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignSender();
 
 		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
 		Integer remindAfterDays = Integer.valueOf(settings.RemindAfterDays__c);

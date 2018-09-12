@@ -85,6 +85,10 @@
 		<name>MustBeDocuSignUser</name>
 	</customLabels>
 	<customLabels>
+		<label>You must have DocuSign sender permissions to perform this operation</label>
+		<name>MustBeDocuSignSender</name>
+	</customLabels>
+	<customLabels>
 		<label>Not the owner of the envelope</label>
 		<name>NotEnvelopeOwner</name>
 	</customLabels>
