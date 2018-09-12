@@ -580,8 +580,8 @@ global class Envelope {
 		if (recipients != null) {
 			Integer sequence = 1;
 			for (Recipient r : recipients) {
-				this.recipients.add(r.withSequence(sequence).withRoutingOrder(sequence));
-				sequence++;
+				if (r.routingOrder == null) r = r.withRoutingOrder(sequence);
+				this.recipients.add(r.withSequence(sequence++));
 			}
 		}
 		return this;
