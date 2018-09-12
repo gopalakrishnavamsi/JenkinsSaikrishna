@@ -545,7 +545,13 @@ global class Envelope {
 	 * @return This envelope with the updated <code>documents</code> property.
 	 */
 	global Envelope withDocuments(final List<Document> documents) {
-		this.documents = documents;
+		this.documents = new List<Document>();
+		if (documents != null) {
+			Integer sequence = 1;
+			for (Document d : documents) {
+				this.documents.add(d.withSequence(sequence++));
+			}
+		}
 		return this;
 	}
 
@@ -570,7 +576,14 @@ global class Envelope {
 	 * @return This envelope with the updated <code>recipients</code> property.
 	 */
 	global Envelope withRecipients(final List<Recipient> recipients) {
-		this.recipients = recipients;
+		this.recipients = new List<Recipient>();
+		if (recipients != null) {
+			Integer sequence = 1;
+			for (Recipient r : recipients) {
+				this.recipients.add(r.withSequence(sequence).withRoutingOrder(sequence));
+				sequence++;
+			}
+		}
 		return this;
 	}
 
