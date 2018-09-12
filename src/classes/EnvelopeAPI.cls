@@ -804,10 +804,10 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				new AnchorTag(documentId, recipientId, roleValue, 'FullName', 'n', false, null)
 			};
 			this.companyTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Company', 'co', false, null)
+				new AnchorTag(documentId, recipientId, roleValue, 'Company', 'co', true, null)
 			};
 			this.titleTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Title', 't', false, null)
+				new AnchorTag(documentId, recipientId, roleValue, 'Title', 't', true, null)
 			};
 			this.dateSignedTabs = new List<AnchorTag> {
 				new AnchorTag(documentId, recipientId, roleValue, 'DateSigned', 'd', false, null)
