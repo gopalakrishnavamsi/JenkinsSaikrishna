@@ -2238,14 +2238,6 @@
 		<value>User not found</value>
 	</labels>
 	<labels>
-		<fullName>Disabled</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Disabled</shortDescription>
-		<value>Disabled</value>
-	</labels>
-	<labels>
 		<fullName>Upload</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
@@ -4490,5 +4482,45 @@
 		<protected>true</protected>
 		<shortDescription>Undefined user list</shortDescription>
 		<value>No users defined.</value>
+	</labels>
+	<labels>
+		<fullName>UseSystemSender</fullName>
+		<categories>Settings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Use system sender</shortDescription>
+		<value>Use system sender</value>
+	</labels>
+	<labels>
+		<fullName>UseSystemSenderHelp</fullName>
+		<categories>Help,Settings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Use system sender help</shortDescription>
+		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</value>
+	</labels>
+	<labels>
+		<fullName>Enabled</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Enabled</shortDescription>
+		<value>Enabled</value>
+	</labels>
+	<labels>
+		<fullName>Disabled</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Disabled</shortDescription>
+		<value>Disabled</value>
+	</labels>
+	<labels>
+		<fullName>SettingsSaved</fullName>
+		<categories>Settings</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Settings saved</shortDescription>
+		<value>Successfully saved settings.</value>
 	</labels>
 </CustomLabels>

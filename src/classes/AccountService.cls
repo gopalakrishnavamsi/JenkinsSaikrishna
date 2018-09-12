@@ -769,124 +769,16 @@ global with sharing class AccountService {
 	}
 
 	/**
-	 * DocuSign for Salesforce account-level settings.
-	 */
-	public class Settings {
-		/**
-		 * Envelope-related settings.
-		 */
-		public EnvelopeSettings envelope { get; private set; }
-		/**
-		 * Default recipient email localizations. Can be modified and saved at the account level.
-		 */
-		public List<Recipient.EmailSettings> defaultEmailLocalizations { get; private set; }
-		/**
-		 * Default Chatter event localizations. Can be modified and saved at the account level.
-		 */
-		public List<Localization.ChatterSettings> defaultChatterLocalizations { get; private set; }
-		/**
-		 * Apex callout timeout. The default is 90 seconds.
-		 */
-		public Integer calloutTimeout { get; private set; }
-		/**
-		 * Salesforce entity resolvers. May be extended to resolve Salesforce objects unknown to DocuSign for Salesforce.
-		 */
-		public List<String> entityResolvers { get; private set; }
-		/**
-		 * DocuSign envelope document resolvers. May be extended to resolve Salesforce document types unknown to
-		 * DocuSign for Salesforce.
-		 */
-		public List<String> documentResolvers { get; private set; }
-		/**
-		 * DocuSign envelope recipient resolvers. May be extended to resolve Salesforce recipient types unknown to
-		 * DocuSign for Salesforce.
-		 */
-		public List<String> recipientResolvers { get; private set; }
-		/**
-		 * How to perform recipient searches. The ideal method is depended upon the subscriber org (number of contacts,
-		 * platform encryption). The default search behavior is <code>DiscreteMatchBeginning</code> which allows partial
-		 * matches on the beginning of first and last names. This is an efficient option for most subscriber orgs
-		 * and can support deterministic platform encryption of these fields.
-		 *
-		 * @see Recipient.SearchBehavior for more details on search options.
-		 */
-		public Recipient.SearchBehavior recipientSearchBehavior { get; private set; }
-
-		/**
-		 * Constructs account-level settings.
-		 *
-		 * @param envelope Envelope-related settings.
-		 * @param defaultEmailLocalizations Default recipient email localizations.
-		 * @param defaultChatterLocalizations Default Chatter status update localizations.
-		 * @param calloutTimeout Apex callout timeout.
-		 * @param entityResolvers Entity resolvers.
-		 * @param documentResolvers Document resolvers.
-		 * @param recipientResolvers Recipient resolvers.
-		 * @param recipientSearchBehavior Recipient search behavior.
-		 */
-		public Settings(
-			final EnvelopeSettings envelope,
-			final List<Recipient.EmailSettings> defaultEmailLocalizations,
-			final List<Localization.ChatterSettings> defaultChatterLocalizations,
-			final Integer calloutTimeout,
-			final List<String> entityResolvers,
-			final List<String> documentResolvers,
-			final List<String> recipientResolvers,
-			final Recipient.SearchBehavior recipientSearchBehavior) {
-
-			this.envelope = envelope;
-			this.defaultEmailLocalizations = defaultEmailLocalizations;
-			this.defaultChatterLocalizations = defaultChatterLocalizations;
-			this.calloutTimeout = calloutTimeout;
-			this.entityResolvers = entityResolvers;
-			this.documentResolvers = documentResolvers;
-			this.recipientResolvers = recipientResolvers;
-			this.recipientSearchBehavior = recipientSearchBehavior;
-		}
-	}
-
-	@TestVisible
-	private static Recipient.SearchBehavior stringToSearchBehavior(final String s) {
-		Recipient.SearchBehavior result = Recipient.SearchBehavior.DiscreteMatchBeginning;
-		if (String.isNotBlank(s)) {
-			String s2 = s.trim();
-			if (s2 == 'CompoundMatchBeginning') {
-				result = Recipient.SearchBehavior.CompoundMatchBeginning;
-			} else if (s2 == 'CompoundMatchExact') {
-				result = Recipient.SearchBehavior.CompoundMatchExact;
-			} else if (s2 == 'CompoundMatchAny') {
-				result = Recipient.SearchBehavior.CompoundMatchAny;
-			} else if (s2 == 'DiscreteMatchAny') {
-				result = Recipient.SearchBehavior.DiscreteMatchAny;
-			} else if (s2 == 'DiscreteMatchExact') {
-				result = Recipient.SearchBehavior.DiscreteMatchExact;
-			} else {
-				result = Recipient.SearchBehavior.DiscreteMatchBeginning;
-			}
-		}
-		return result;
-	}
-
-	/**
 	 * Retrieves DocuSign for Salesforce account settings.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @return The account settings.
 	 */
-	public static Settings getSettings() {
+	public static AccountSettings getSettings() {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-		return new Settings(
-			EnvelopeSettings.getInstance(),
-			Localization.getDefaultEmailSettings(),
-			Localization.getChatterSettings(),
-			Integer.valueOf(accountSettings.CalloutTimeout__c),
-			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
-			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
-			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
-			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
+		return AccountSettings.getInstance();
 	}
 
 	/**
@@ -898,29 +790,12 @@ global with sharing class AccountService {
 	 *
 	 * @return The updated settings.
 	 */
-	public static Settings saveSettings(final Settings settings) {
+	public static AccountSettings saveSettings(final AccountSettings settings) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		if (settings == null) throw new DocuSignException(Label.UndefinedArgument);
 
-		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-		accountSettings.CalloutTimeout__c = settings.calloutTimeout;
-		accountSettings.EntityResolvers__c = Collection.mkString(settings.entityResolvers, ',');
-		accountSettings.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');
-		accountSettings.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
-		accountSettings.RecipientSearchBehavior__c = settings.recipientSearchBehavior == null
-			? Recipient.SearchBehavior.DiscreteMatchBeginning.name() : settings.recipientSearchBehavior.name();
-		upsert accountSettings;
-
-		return new Settings(
-			EnvelopeSettings.save(settings.envelope),
-			Localization.getDefaultEmailSettings(),
-			Localization.getChatterSettings(),
-			Integer.valueOf(accountSettings.CalloutTimeout__c),
-			String.isBlank(accountSettings.EntityResolvers__c) ? new List<String>() : accountSettings.EntityResolvers__c.split(','),
-			String.isBlank(accountSettings.DocumentResolvers__c) ? new List<String>() : accountSettings.DocumentResolvers__c.split(','),
-			String.isBlank(accountSettings.RecipientResolvers__c) ? new List<String>() : accountSettings.RecipientResolvers__c.split(','),
-			stringToSearchBehavior(accountSettings.RecipientSearchBehavior__c));
+		return AccountSettings.save(settings);
 	}
 
 	/**

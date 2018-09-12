@@ -89,6 +89,11 @@
 
             <c:Support/>
 
+            <div class="slds-box slds-theme_default">
+                <a href="javascript:void(0);"
+                   onclick="{!c.onClickSettings}">{!$Label.c.AdvancedOptions}</a>
+            </div>
+
             <!-- Next Steps Notification -->
             <div class="ds-next-steps-notification_container slds-notification-container">
                 <section

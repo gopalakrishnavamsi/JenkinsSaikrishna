@@ -632,21 +632,6 @@ private class AccountServiceTest {
 	}
 
 	@IsTest
-	static void test_stringToSearchBehavior() {
-		Test.startTest();
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(null));
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(''));
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior('\t'));
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchBeginning, AccountService.stringToSearchBehavior(' discretematchbeginning'));
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchAny, AccountService.stringToSearchBehavior('DISCRETEMATCHANY\n'));
-		System.assertEquals(Recipient.SearchBehavior.DiscreteMatchExact, AccountService.stringToSearchBehavior('DiscreteMatchExact'));
-		System.assertEquals(Recipient.SearchBehavior.CompoundMatchExact, AccountService.stringToSearchBehavior('CompoundMatchExact'));
-		System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning, AccountService.stringToSearchBehavior('CompoundMatchBeginning'));
-		System.assertEquals(Recipient.SearchBehavior.CompoundMatchAny, AccountService.stringToSearchBehavior('CompoundMatchAny'));
-		Test.stopTest();
-	}
-
-	@IsTest
 	static void test_getSettings_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -664,18 +649,10 @@ private class AccountServiceTest {
 	static void test_getSettings_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountService.Settings result = AccountService.getSettings();
+			AccountSettings result = AccountService.getSettings();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.envelope);
-			System.assertNotEquals(null, result.defaultEmailLocalizations);
-			System.assertNotEquals(null, result.defaultChatterLocalizations);
-			System.assertNotEquals(null, result.calloutTimeout);
-			System.assertNotEquals(null, result.entityResolvers);
-			System.assertNotEquals(null, result.documentResolvers);
-			System.assertNotEquals(null, result.recipientResolvers);
-			System.assertNotEquals(null, result.recipientSearchBehavior);
 		}
 	}
 
@@ -696,29 +673,26 @@ private class AccountServiceTest {
 	@IsTest
 	static void test_saveSettings_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountService.Settings s = new AccountService.Settings(
-				EnvelopeSettings.getInstance(),
-				null,
-				null,
+			AccountSettings s = new AccountSettings(
+				false,
 				12345,
 				new List<String> { 'er1', 'er2' },
 				new List<String> { 'dr1', 'dr2' },
 				new List<String> { 'rr1', 'rr2' },
-				Recipient.SearchBehavior.CompoundMatchBeginning);
+				'CompoundMatchBeginning');
 
 			Test.startTest();
-			AccountService.Settings result = AccountService.saveSettings(s);
+			AccountSettings result = AccountService.saveSettings(s);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(!(result === s));
-			System.assertNotEquals(null, result.defaultEmailLocalizations);
-			System.assertNotEquals(null, result.defaultChatterLocalizations);
+			System.assert(!result.useSystemSender);
 			System.assertEquals(12345, result.calloutTimeout);
 			System.assertEquals(new List<String> { 'er1', 'er2' }, result.entityResolvers);
 			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
 			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
-			System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning, result.recipientSearchBehavior);
+			System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning.name(), result.recipientSearchBehavior);
 		}
 	}
 

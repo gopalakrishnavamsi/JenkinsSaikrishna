@@ -136,6 +136,10 @@
         <members>AccountSoapAPIMock</members>
         <members>UserMock</members>
         <members>CodeExampleTest</members>
+        <members>SettingsController</members>
+        <members>SettingsControllerTest</members>
+        <members>AccountSettings</members>
+        <members>AccountSettingsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -419,7 +423,6 @@
         <members>Active</members>
         <members>Closed</members>
         <members>UserNotFound</members>
-        <members>Disabled</members>
         <members>Upload</members>
         <members>UploadFile</members>
         <members>UploadSuccessful</members>
@@ -732,6 +735,11 @@
         <members>UndefinedBulkList</members>
         <members>BulkListNotFound</members>
         <members>UndefinedUsers</members>
+        <members>UseSystemSender</members>
+        <members>UseSystemSenderHelp</members>
+        <members>Enabled</members>
+        <members>Disabled</members>
+        <members>SettingsSaved</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -1088,6 +1096,7 @@
         <members>ToastEvent</members>
         <members>LoadingEvent</members>
         <members>LoginEvent</members>
+        <members>Settings</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

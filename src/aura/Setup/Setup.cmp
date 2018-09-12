@@ -58,9 +58,16 @@
                                   finishClicked="{!c.goToNextStep}"/>
                 </div>
             </aura:if>
+
+            <aura:if isTrue="{!v.currentStep == 'settings'}">
+                <div class="{!'slds-col' + if(v.currentStep == 'settings', '', ' slds-hide')}">
+                    <c:Settings aura:id="settings"
+                                exitClicked="{!c.handleStepChange}"/>
+                </div>
+            </aura:if>
             <!--/Sections -->
             <!-- Toast -->
-            <c:toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!false}"
+            <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!false}"
                      inVfPage="{!visualforce}"/>
             <!-- /Toast -->
             <!-- Loading State -->
