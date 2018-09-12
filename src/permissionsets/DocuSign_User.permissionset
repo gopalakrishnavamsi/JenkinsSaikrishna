@@ -660,10 +660,34 @@
 		<object>BulkStatus__c</object>
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
-	<tabSettings>
-		<tab>Setup</tab>
-		<visibility>None</visibility>
-	</tabSettings>
+	<pageAccesses>
+		<apexPage>FileUploader</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>ReturnFromDocuSign</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>SendFromAccount</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>SendFromCase</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>SendFromContact</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>SendFromLead</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>SendFromOpportunity</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 	<tabSettings>
 		<tab>Envelope__c</tab>
 		<visibility>Available</visibility>
