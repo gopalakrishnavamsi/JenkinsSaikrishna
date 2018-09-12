@@ -70,21 +70,31 @@ public with sharing class Credentials {
 		return new Credentials(environment, null, null, null, username, password, false, null, false);
 	}
 
+	private static void validate(final Credentials c) {
+		if (c == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		if (!c.isAccountValid) {
+			throw UnauthorizedException.accountNotConfigured();
+		} else if (!c.isUserValid) {
+			throw UnauthorizedException.mayRequireActivation();
+		}
+	}
+
 	@TestVisible
 	private static Credentials getInstance(final Id userId, final Boolean validate) {
+		Credentials result = null;
 		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls
 			if (self == null) {
-				Credentials that = buildAPICredentials(getAccountCredentials(), getUserCredentials(userId));
-				if (validate && !that.isAccountValid) {
-					throw UnauthorizedException.accountNotConfigured();
-				} else if (validate && !that.isUserValid) {
-					throw UnauthorizedException.mayRequireActivation();
-				}
-				self = that;
+				result = buildAPICredentials(getAccountCredentials(), getUserCredentials(userId));
+				if (validate) validate(result);
+				self = result;
 			}
-			return self;
+			result = self;
+		} else {
+			result = buildAPICredentials(getAccountCredentials(), getUserCredentials(userId));
+			if (validate) validate(result);
 		}
-		return buildAPICredentials(getAccountCredentials(), getUserCredentials(userId));
+		return result;
 	}
 
 	@TestVisible
@@ -94,18 +104,31 @@ public with sharing class Credentials {
 
 		Credentials result = null;
 		if (accountCredentials != null && userCredentials != null) {
-			if (accountCredentials.useSendOnBehalfOf && userCredentials.username != null) {
-				result = new Credentials(
-					accountCredentials.environment,
-					accountCredentials.accountId,
-					accountCredentials.accountNumber,
-					accountCredentials.email,
-					accountCredentials.username,
-					accountCredentials.password,
-					true,
-					userCredentials.username,
-					true);
-			} else if (accountCredentials.useSystemSender && userCredentials.username == null) {
+			if (String.isNotBlank(userCredentials.username)) { // Valid user either with or without SOBO
+				if (accountCredentials.useSendOnBehalfOf) {
+					result = new Credentials(
+						accountCredentials.environment,
+						accountCredentials.accountId,
+						accountCredentials.accountNumber,
+						accountCredentials.email,
+						accountCredentials.username,
+						accountCredentials.password,
+						true,
+						userCredentials.username,
+						true);
+				} else {
+					result = new Credentials(
+						accountCredentials.environment,
+						accountCredentials.accountId,
+						accountCredentials.accountNumber,
+						accountCredentials.email,
+						userCredentials.username,
+						userCredentials.password,
+						false,
+						null,
+						true);
+				}
+			} else if (accountCredentials.useSystemSender) { // Use account credentials and no SOBO
 				result = new Credentials(
 					accountCredentials.environment,
 					accountCredentials.accountId,
@@ -116,15 +139,15 @@ public with sharing class Credentials {
 					false,
 					null,
 					true);
-			} else {
+			} else { // Invalid user
 				result = new Credentials(
 					accountCredentials.environment,
 					accountCredentials.accountId,
 					accountCredentials.accountNumber,
 					accountCredentials.email,
-					userCredentials.username,
-					userCredentials.password,
-					false,
+					accountCredentials.username,
+					accountCredentials.password,
+					true,
 					null,
 					true);
 			}
@@ -142,12 +165,10 @@ public with sharing class Credentials {
 		final String email,
 		final String username,
 		final String password,
-		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf,
-		final Boolean useSystemSender) {
+		final Boolean canManageAccount) {
 
 		return save(UserInfo.getUserId(), environment, accountId, accountNumber, email, username, password,
-			canManageAccount, useSendOnBehalfOf, useSystemSender);
+			canManageAccount);
 	}
 
 	@TestVisible
@@ -159,23 +180,20 @@ public with sharing class Credentials {
 		final String email,
 		final String username,
 		final String password,
-		final Boolean canManageAccount,
-		final Boolean useSendOnBehalfOf,
-		final Boolean useSystemSender) {
+		final Boolean canManageAccount) {
 
+		Boolean useSOBO = getUseSendOnBehalfOf(AccountSettings__c.getOrgDefaults());
 		Credentials.accountCredentials = DB.updateAccountCredentials(
 			environment,
 			accountId,
 			accountNumber,
 			email,
-			useSendOnBehalfOf ? username : null,
-			useSendOnBehalfOf ? password : null,
-			useSendOnBehalfOf,
-			useSystemSender);
+			useSOBO ? username : null,
+			useSOBO ? password : null);
 		Credentials.UserCredentials uc = DB.updateUserCredentials(
 			userId,
 			username,
-			useSendOnBehalfOf ? null : password,
+			useSOBO ? null : password,
 			canManageAccount);
 		Credentials.userCredentials.put(userId, uc);
 		self = buildAPICredentials(Credentials.accountCredentials, uc);
@@ -317,12 +335,19 @@ public with sharing class Credentials {
 		}
 	}
 
+	private static Boolean getUseSendOnBehalfOf(final AccountSettings__c settings) {
+		return settings == null || settings.Id == null || settings.UseSendOnBehalfOf__c == null || settings.UseSendOnBehalfOf__c;
+	}
+
+	private static Boolean getUseSystemSender(final AccountSettings__c settings) {
+		return settings != null && settings.Id != null && settings.UseSystemSender__c != null && settings.UseSystemSender__c;
+	}
+
 	@TestVisible
 	private with sharing class Database {
 
 		public AccountCredentials queryAccountCredentials() {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-
 			if (String.isBlank(settings.Environment__c)) {
 				return new AccountCredentials(Environment.invalid, null, null, null, null, null, false, false);
 			}
@@ -334,8 +359,8 @@ public with sharing class Credentials {
 				settings.Email__c,
 				settings.Username__c,
 				settings.Password__c,
-				settings.UseSendOnBehalfOf__c != null && settings.UseSendOnBehalfOf__c,
-				settings.UseSystemSender__c);
+				getUseSendOnBehalfOf(settings),
+				getUseSystemSender(settings));
 		}
 
 		public UserCredentials queryUserCredentials(final Id userId) {
@@ -349,9 +374,7 @@ public with sharing class Credentials {
 			final Long accountNumber,
 			final String email,
 			final String username,
-			final String password,
-			final Boolean useSendOnBehalfOf,
-			final Boolean useSystemSender) {
+			final String password) {
 
 			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
 			orgSettings.Environment__c = environment == null || environment.environment == null
@@ -363,11 +386,18 @@ public with sharing class Credentials {
 			orgSettings.Email__c = email;
 			orgSettings.Username__c = username;
 			orgSettings.Password__c = password;
-			orgSettings.UseSendOnBehalfOf__c = useSendOnBehalfOf != null && useSendOnBehalfOf;
-			orgSettings.UseSystemSender__c = useSystemSender != null && useSystemSender;
 			upsert orgSettings;
+			orgSettings = AccountSettings__c.getOrgDefaults();
 
-			return new AccountCredentials(environment, accountId, accountNumber, email, username, password, useSendOnBehalfOf, useSystemSender);
+			return new AccountCredentials(
+				environment,
+				accountId,
+				accountNumber,
+				email,
+				username,
+				password,
+				getUseSendOnBehalfOf(orgSettings),
+				getUseSystemSender(orgSettings));
 		}
 
 		public UserCredentials updateUserCredentials(

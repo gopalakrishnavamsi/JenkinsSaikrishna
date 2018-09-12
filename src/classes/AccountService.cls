@@ -234,7 +234,7 @@ global with sharing class AccountService {
 				+ ', parsed base = ' + ae.baseUrl.toExternalForm()
 				+ ', environment = ' + ae.environment.name().toLowerCase());
 			Credentials.save(ae, validMembership.accountId, validMembership.accountNumber, username,
-				String.valueOf(validMembership.userId), validMembership.apiPassword, true, true, true);
+				String.valueOf(validMembership.userId), validMembership.apiPassword, true);
 			status = LoginStatus.Success;
 		} else { // more than 1 valid account, just return results
 			status = LoginStatus.SelectAccount;
@@ -712,7 +712,7 @@ global with sharing class AccountService {
 
 		Account.Membership result = AccountAPI.getInstance(Environment.production).createTrialAccount(trial);
 		Credentials.save(Environment.fromUrl(result.baseUrl), result.accountId, result.accountNumber, trial.user.email,
-			String.valueOf(result.userId), result.apiPassword, true, true, true);
+			String.valueOf(result.userId), result.apiPassword, true);
 		return result.scrub(); // Don't return sensitive info.
 	}
 
