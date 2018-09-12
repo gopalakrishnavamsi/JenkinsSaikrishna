@@ -56,7 +56,7 @@
 	</fields>
 	<fields>
 		<fullName>UseSystemSender__c</fullName>
-		<defaultValue>true</defaultValue>
+		<defaultValue>false</defaultValue>
 		<externalId>false</externalId>
 		<label>Use System Sender</label>
 		<trackTrending>false</trackTrending>

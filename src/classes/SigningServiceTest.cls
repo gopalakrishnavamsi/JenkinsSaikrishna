@@ -353,21 +353,27 @@ private class SigningServiceTest {
 	}
 
 	@IsTest
+	static void test_getEmbeddedSigningUrl_unauthorized() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				SigningService.getEmbeddedSigningUrl(null, null);
+				throw new AssertException('Expected getEmbeddedSigningUrl to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getEmbeddedSigningUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignSender()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 1,
-					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
-					Name = 'Unit Test1',
-					Email__c = 'r1@unit.test',
-					RoutingOrder__c = 1,
-					Role__c = 'Signer 1',
-					SignNow__c = false)
+				RecipientService.DB.convert(Recipient.newEmbeddedSigner(), dse.Id, 1)
 			};
 			insert dsers;
 
@@ -390,18 +396,10 @@ private class SigningServiceTest {
 	static void test_getEmbeddedSigningUrl_failure() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignSender()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 1,
-					Type__c = Recipient.TYPE_EMBEDDED_SIGNER,
-					Name = 'Unit Test1',
-					Email__c = 'r1@unit.test',
-					RoutingOrder__c = 1,
-					Role__c = 'Signer 1',
-					SignNow__c = false)
+				RecipientService.DB.convert(Recipient.newEmbeddedSigner(), dse.Id, 1)
 			};
 			insert dsers;
 

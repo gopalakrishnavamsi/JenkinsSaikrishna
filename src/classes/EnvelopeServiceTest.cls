@@ -1082,7 +1082,7 @@ private class EnvelopeServiceTest {
 	static void test_sendEnvelope_update_later() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignSender()) {
 			Envelope__c ee1 = TestUtils.createEnvelope();
 			ee1.DocuSignId__c = null;
 			ee1.Sent__c = null;
@@ -1154,7 +1154,7 @@ private class EnvelopeServiceTest {
 	static void test_sendEnvelope_update_now() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignSender()) {
 			Envelope__c ee1 = TestUtils.createEnvelope();
 			ee1.DocuSignId__c = null;
 			update ee1;
@@ -1205,10 +1205,10 @@ private class EnvelopeServiceTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				EnvelopeService.sendEnvelope(EnvelopeService.getEmptyEnvelope(null), true);
+				EnvelopeService.sendEnvelope(new Envelope(null, null, null, null), true);
 				throw new AssertException('Expected sendEnvelope to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -1218,7 +1218,7 @@ private class EnvelopeServiceTest {
 	static void test_sendEnvelope_with_create() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignSender()) {
 			Lead l = TestUtils.createLead();
 			Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(l.Id))
 				.withDocuments(new List<Document> {
@@ -1350,7 +1350,7 @@ private class EnvelopeServiceTest {
 				EnvelopeService.getEmptyEnvelope(null);
 				throw new AssertException('Expected getEmptyEnvelope to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -1358,7 +1358,7 @@ private class EnvelopeServiceTest {
 
 	@IsTest
 	static void test_getEmptyEnvelope_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignSender(false)) {
 			EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
 			s.RemindAfterDays__c = 1;
 			s.RemindFrequencyDays__c = 2;

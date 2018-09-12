@@ -85,6 +85,10 @@
 		<name>MustBeDocuSignUser</name>
 	</customLabels>
 	<customLabels>
+		<label>You must have DocuSign sender permissions to perform this operation</label>
+		<name>MustBeDocuSignSender</name>
+	</customLabels>
+	<customLabels>
 		<label>Not the owner of the envelope</label>
 		<name>NotEnvelopeOwner</name>
 	</customLabels>
@@ -1149,10 +1153,6 @@
 	<customLabels>
 		<label>User not found</label>
 		<name>UserNotFound</name>
-	</customLabels>
-	<customLabels>
-		<label>Disabled</label>
-		<name>Disabled</name>
 	</customLabels>
 	<customLabels>
 		<label>Upload</label>
@@ -2401,6 +2401,26 @@
 	<customLabels>
 		<label>No users defined.</label>
 		<name>UndefinedUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Use system sender</label>
+		<name>UseSystemSender</name>
+	</customLabels>
+	<customLabels>
+		<label>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</label>
+		<name>UseSystemSenderHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Enabled</label>
+		<name>Enabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Disabled</label>
+		<name>Disabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully saved settings.</label>
+		<name>SettingsSaved</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -15,6 +15,7 @@ public class UnauthorizedException extends Exception {
 	 * Access requirements:
 	 * <ul>
 	 *     <li><code>Unspecified</code>: Not specified.</li>
+	 *     <li><code>DocuSignSender</code>: Must be assigned the <code>DocuSign Sender</code> permission set.</li>
 	 *     <li><code>DocuSignUser</code>: Must be assigned the <code>DocuSign User</code> permission set.</li>
 	 *     <li><code>DocuSignAdministrator</code>: Must be assigned the <code>DocuSign Administrator</code> permission
 	 *     set.</li>
@@ -27,6 +28,7 @@ public class UnauthorizedException extends Exception {
 		Unspecified,
 		DocuSignUser,
 		DocuSignAdministrator,
+		DocuSignSender,
 		SalesforceAdministrator,
 		EnvelopeOwner,
 		ConfigureAccount
@@ -91,6 +93,19 @@ public class UnauthorizedException extends Exception {
 		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignUser);
 		ex.userId = UserInfo.getUserId();
 		ex.requirement = AccessRequirement.DocuSignUser;
+		return ex;
+	}
+
+	/**
+	 * Factory method to construct an exception when the user is not assigned the <code>DocuSign Sender</code>
+	 * permission set.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException notDocuSignSender() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignSender);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.DocuSignSender;
 		return ex;
 	}
 

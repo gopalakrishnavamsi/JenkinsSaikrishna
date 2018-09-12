@@ -246,9 +246,8 @@ private class DocumentServiceTest {
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.LastModifiedDate, d.Id);
-			String tId = UUID.randomUUID().toString();
-			Datetime tCreated = Datetime.now();
-			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tCreated, tId);
+			UUID tId = UUID.randomUUID();
+			Document d3 = Document.fromTemplate(tId, 'template1');
 
 			Test.startTest();
 			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
@@ -274,8 +273,8 @@ private class DocumentServiceTest {
 			System.assertEquals('template1', result[1].name);
 			System.assertEquals(null, result[1].extension);
 			System.assertEquals(null, result[1].size);
-			System.assertEquals(tCreated, result[1].lastModified);
-			System.assertEquals(tId, result[1].sourceId);
+			System.assertEquals(null, result[1].lastModified);
+			System.assertEquals(String.valueOf(tId), result[1].sourceId);
 		}
 	}
 
@@ -460,20 +459,6 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocuments(null, null);
-				throw new AssertException('Expected getDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getDocuments_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -493,20 +478,6 @@ private class DocumentServiceTest {
 			System.assertNotEquals(null, result[1]);
 			System.assertEquals(null, result[1].id);
 			System.assertEquals(Document.TYPE_FILE, result[1].type);
-		}
-	}
-
-	@IsTest
-	static void test_getLinkedDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getLinkedDocuments(null, null, false);
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -538,20 +509,6 @@ private class DocumentServiceTest {
 			System.assertNotEquals(null, result[2]);
 			System.assertEquals(null, result[2].id);
 			System.assertEquals(Document.TYPE_FILE, result[2].type);
-		}
-	}
-
-	@IsTest
-	static void test_getDocumentFolders_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocumentFolders(null);
-				throw new AssertException('Expected getDocumentFolders to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -635,20 +592,6 @@ private class DocumentServiceTest {
 			}
 			System.assert(foundD1);
 			System.assert(foundD2);
-		}
-	}
-
-	@IsTest
-	static void test_getFolderDocuments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getFolderDocuments(null, null);
-				throw new AssertException('Expected getFolderDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 

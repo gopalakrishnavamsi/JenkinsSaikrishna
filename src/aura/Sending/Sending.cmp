@@ -405,7 +405,7 @@
             </div>
         </div>
         <!-- Toast -->
-        <c:toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
+        <c:Toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
         <!-- /Toast -->
     </div>
 </aura:component>

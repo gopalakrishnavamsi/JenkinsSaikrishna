@@ -4,6 +4,7 @@
 public with sharing class Localization {
 
 	private static final SObjectType TYPE_ENVELOPE_LOCALIZATION = EnvelopeLocalization__c.getSObjectType();
+	private static Boolean isEmailEnabled;
 
 	public class ChatterText {
 		public String envelopeSent { get; private set; }
@@ -120,11 +121,11 @@ public with sharing class Localization {
 		} else {
 			DEFAULT_LANGUAGE = EN;
 		}
+
+		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c] > 1;
 	}
 
 	private static final Map<String, Recipient.EmailSettings> EMAIL_SETTINGS = new Map<String, Recipient.EmailSettings>();
-	private static Boolean accessChecked = false;
-	private static Boolean hasAccess = false;
 	private static Boolean isDirty = true;
 
 	@TestVisible
@@ -172,6 +173,7 @@ public with sharing class Localization {
 					md.EmailMessage__c));
 			}
 			isDirty = false;
+			isEmailEnabled = EMAIL_SETTINGS.size() > 1;
 		}
 		return EMAIL_SETTINGS;
 	}
@@ -181,8 +183,7 @@ public with sharing class Localization {
 	}
 
 	public static Boolean isEmailLocalizationEnabled() {
-		// If only one language is configured, localization is considered disabled.
-		return getEmailSettingsMap().size() > 1;
+		return isEmailEnabled;
 	}
 
 	public static String getCurrentLanguage() {

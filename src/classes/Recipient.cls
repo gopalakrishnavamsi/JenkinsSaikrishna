@@ -322,7 +322,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient based on the Salesforce source entity.
 	 */
-	public static Recipient fromSource(final String name, final String email, final String phone, final String role,
+	global static Recipient fromSource(final String name, final String email, final String phone, final String role,
 		final Entity source) {
 
 		return new Recipient(
@@ -452,6 +452,34 @@ global class Recipient implements Comparable {
 			null,
 			false,
 			source,
+			false,
+			false);
+	}
+
+	/**
+	 * Creates an embedded signer recipient for the current user. This recipient is expected to sign an envelope
+	 * immediately, and will not receive an email requesting signature.
+	 *
+	 * @return The newly-created embedded signer.
+	 */
+	global static Recipient newEmbeddedSigner() {
+		return new Recipient(
+			null,
+			TYPE_EMBEDDED_SIGNER,
+			1,
+			1,
+			new Role('Signer 1', 1),
+			UserInfo.getName(),
+			UserInfo.getUserEmail(),
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			true,
+			new Entity(UserInfo.getUserId()),
 			false,
 			false);
 	}
@@ -954,7 +982,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>role</code>.
 	 */
-	public Recipient withRole(final Role role) {
+	global Recipient withRole(final Role role) {
 		this.role = role;
 		return this;
 	}

@@ -198,20 +198,6 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.getRecipients(null, null);
-				throw new AssertException('Expected getRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getRecipients_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
@@ -238,20 +224,6 @@ private class RecipientServiceTest {
 			System.assertEquals(Recipient.TYPE_SIGNER, result[1].type);
 			System.assertNotEquals(null, result[1].source);
 			System.assertEquals(Contact.getSObjectType(), result[1].source.type);
-		}
-	}
-
-	@IsTest
-	static void test_searchRecipients_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.searchRecipients(null, null, null);
-				throw new AssertException('Expected searchRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 

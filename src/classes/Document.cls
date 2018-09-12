@@ -184,4 +184,24 @@ global class Document {
 		this.sequence = sequence;
 		return this;
 	}
+
+	/**
+	 * Creates a DocuSign envelope document from a DocuSign template.
+	 *
+	 * @param docuSignId The DocuSign template ID.
+	 * @param name The DocuSign template name.
+	 *
+	 * @return The newly-created DocuSign envelope document.
+	 */
+	global static Document fromTemplate(final UUID docuSignId, final String name) {
+		return new Document(
+			null,
+			TYPE_TEMPLATE,
+			null,
+			name,
+			null,
+			null,
+			null,
+			String.valueOf(docuSignId));
+	}
 }

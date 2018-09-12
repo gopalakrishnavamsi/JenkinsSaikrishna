@@ -28,6 +28,11 @@
     var params = event.getParams();
     if (params && params.show === true) {
       helper.showToast(component, params.message, params.mode);
+      if (params.mode === 'success') {
+        setTimeout($A.getCallback(function () {
+          helper.hideToast(component);
+        }), 3000);
+      }
     } else {
       helper.hideToast(component);
     }

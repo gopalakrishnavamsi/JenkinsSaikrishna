@@ -1,4 +1,4 @@
-@IsTest(isParallel = true)
+@IsTest(IsParallel = true)
 private class UnauthorizedExceptionTest {
 
 	@IsTest
@@ -23,6 +23,18 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 		System.assertEquals(UserInfo.getUserId(), ex.userId);
 		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
+	}
+
+	@IsTest
+	static void test_notDocuSignSender() {
+		Test.startTest();
+		final UnauthorizedException ex = UnauthorizedException.notDocuSignSender();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignSender, ex.requirement);
 	}
 
 	@IsTest

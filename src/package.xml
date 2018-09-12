@@ -135,6 +135,11 @@
         <members>MockResponse</members>
         <members>AccountSoapAPIMock</members>
         <members>UserMock</members>
+        <members>CodeExampleTest</members>
+        <members>SettingsController</members>
+        <members>SettingsControllerTest</members>
+        <members>AccountSettings</members>
+        <members>AccountSettingsTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -166,6 +171,7 @@
         <members>MustBeAdministrator</members>
         <members>MustBeDocuSignAdministrator</members>
         <members>MustBeDocuSignUser</members>
+        <members>MustBeDocuSignSender</members>
         <members>NotEnvelopeOwner</members>
         <members>UndefinedId</members>
         <members>UndefinedType</members>
@@ -311,7 +317,7 @@
         <members>Declined</members>
         <members>Voided</members>
         <members>Signed</members>
-		<members>Canceled</members>
+        <members>Canceled</members>
         <members>SentAnEnvelope_2</members>
         <members>LastStatusUpdate</members>
         <members>Status</members>
@@ -417,7 +423,6 @@
         <members>Active</members>
         <members>Closed</members>
         <members>UserNotFound</members>
-        <members>Disabled</members>
         <members>Upload</members>
         <members>UploadFile</members>
         <members>UploadSuccessful</members>
@@ -730,6 +735,11 @@
         <members>UndefinedBulkList</members>
         <members>BulkListNotFound</members>
         <members>UndefinedUsers</members>
+        <members>UseSystemSender</members>
+        <members>UseSystemSenderHelp</members>
+        <members>Enabled</members>
+        <members>Disabled</members>
+        <members>SettingsSaved</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -1020,6 +1030,7 @@
     <types>
         <members>DocuSign_Administrator</members>
         <members>DocuSign_User</members>
+        <members>DocuSign_Sender</members>
         <name>PermissionSet</name>
     </types>
     <types>
@@ -1085,6 +1096,7 @@
         <members>ToastEvent</members>
         <members>LoadingEvent</members>
         <members>LoginEvent</members>
+        <members>Settings</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
