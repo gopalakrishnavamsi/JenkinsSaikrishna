@@ -297,8 +297,8 @@ private class EnvelopeServiceTest {
 			System.assertNotEquals(null, result.id);
 			System.assertEquals(e.docuSignId, result.docuSignId);
 			System.assertEquals(e.envelopeConfigurationId, result.envelopeConfigurationId);
-			System.assertEquals(null, result.documents);
-			System.assertEquals(null, result.recipients);
+			System.assertEquals(0, Collection.size(result.documents));
+			System.assertEquals(0, Collection.size(result.recipients));
 			System.assertNotEquals(null, result.notifications);
 			System.assertEquals(e.notifications.remind, result.notifications.remind);
 			System.assertEquals(e.notifications.remindAfterDays, result.notifications.remindAfterDays);
