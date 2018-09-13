@@ -54,6 +54,11 @@ private class EnvelopeAPITest {
 			r5.setStatus('BAD_REQUEST');
 			r5.setHeader('Content-Type', 'application/json');
 			r5.setBody('{"errorCode":"UNKNOWN_ENVELOPE_RECIPIENT","message":"Unknown envelope recipient"}');
+			HttpResponse r6 = new HttpResponse();
+			r6.setStatusCode(400);
+			r6.setStatus('BAD_REQUEST');
+			r6.setHeader('Content-Type', 'application/json');
+			r6.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"This user lacks sufficient permissions to access this resource."}');
 
 			Test.startTest();
 			APIError e1 = client.getError(r1);
@@ -61,6 +66,7 @@ private class EnvelopeAPITest {
 			APIError e3 = client.getError(r3);
 			APIError e4 = client.getError(r4);
 			APIError e5 = client.getError(r5);
+			APIError e6 = client.getError(r6);
 			Test.stopTest();
 
 			System.assertEquals(APIError.none, e1);
@@ -85,6 +91,11 @@ private class EnvelopeAPITest {
 			System.assert(!(e5 instanceof DocuSignAPI.Error));
 			System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, e5.code);
 			System.assertEquals(Label.UnknownEnvelopeRecipient, e5.description);
+
+			System.assertNotEquals(null, e6);
+			System.assert(!(e6 instanceof DocuSignAPI.Error));
+			System.assertEquals(APIErrorCode.UNAUTHORIZED, e6.code);
+			System.assertEquals(Label.UserNotAuthorizedForEnvelope, e6.description);
 		}
 	}
 
@@ -1285,7 +1296,7 @@ private class EnvelopeAPITest {
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
+				System.assertEquals(APIErrorCode.UNAUTHORIZED, ex.error.code);
 			}
 			Test.stopTest();
 		}

@@ -2422,6 +2422,10 @@
 		<label>Successfully saved settings.</label>
 		<name>SettingsSaved</name>
 	</customLabels>
+	<customLabels>
+		<label>You are not authorized to access the envelope.</label>
+		<name>UserNotAuthorizedForEnvelope</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
