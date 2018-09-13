@@ -284,6 +284,39 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
+	static void test_getRecipients_Opportunity_no_access() {
+		// Expect only one contact (c2Id) belonging to account to be shared with default settings
+		// This may break if sharing settings are customized, so skip if OWS contact setting is not ControlledByParent.
+		if ([SELECT DefaultContactAccess FROM Organization LIMIT 1].DefaultContactAccess == 'ControlledByParent') {
+			Id oId, aId, c1Id, c2Id, c3Id;
+
+			System.runAs(UserMock.createUser()) {
+				aId = TestUtils.createAccount().Id;
+				c1Id = TestUtils.createContact(null).Id;
+				c2Id = TestUtils.createContact(aId).Id;
+				c3Id = TestUtils.createContact(null).Id;
+				oId = TestUtils.createOpportunity(aId).Id;
+				TestUtils.createOpportunityContactRole(oId, c1Id);
+				TestUtils.createOpportunityContactRole(oId, c2Id);
+				TestUtils.createOpportunityContactRole(oId, c3Id);
+			}
+
+			System.runAs(UserMock.createUser()) {
+				Test.startTest();
+				List<Recipient> result = new DefaultRecipientResolver().getRecipients(
+					Opportunity.getSObjectType(),
+					new Set<Id> { oId });
+				Test.stopTest();
+
+				System.assertEquals(1, Collection.size(result));
+				System.assertNotEquals(null, result[0]);
+				System.assertNotEquals(null, result[0].source);
+				System.assertEquals(c2Id, result[0].source.id);
+			}
+		}
+	}
+
+	@IsTest
 	static void test_getRecipients_User() {
 		System.runAs(UserMock.createAdministrator()) {
 			User u1 = UserMock.createUser();
