@@ -78,8 +78,8 @@
 
           // SEND FILE UPLOADED MESSAGE
           sendToLightningComponent({
-            'state': 'uploadFinished', 'message': '{!message}', 'messageType': '{!messageType}', 'receipt': {
-              Id: '{!contentDocumentId}', Title: '{!contentDocumentTitle}'
+            'state': 'uploadFinished', 'message': '{!JSENCODE(message)}', 'messageType': '{!JSENCODE(messageType)}', 'receipt': {
+              Id: '{!JSENCODE(contentDocumentId)}', Title: '{!JSENCODE(contentDocumentTitle)}'
             }, 'index': '{!JSENCODE($CurrentPage.Parameters.index)}'
           });
         </script>
