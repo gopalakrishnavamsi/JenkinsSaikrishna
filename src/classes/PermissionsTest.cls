@@ -691,10 +691,10 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	@IsTest
-	static void test_isFilterable_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_isFilterable_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_verifyIsFilterable_authorized() {
@@ -720,10 +720,10 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	@IsTest
-	static void test_verifyIsFilterable_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_verifyIsFilterable_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_isUnencrypted_authorized() {
@@ -743,10 +743,10 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	@IsTest
-	static void test_isUnencrypted_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_isUnencrypted_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_verifyIsUnencrypted_authorized() {
@@ -772,10 +772,10 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	@IsTest
-	static void test_verifyIsUnencrypted_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_verifyIsUnencrypted_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_getDocuSignAdministratorPermissionSetId() {
