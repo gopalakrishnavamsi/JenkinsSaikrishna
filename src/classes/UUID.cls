@@ -22,11 +22,12 @@ global class UUID {
 	}
 
 	/**
-	 * Generates a cryptographically-random UUID.
+	 * Generates a cryptographically-random UUID. Useful for generating secrets or unit testing methods requiring a UUID
+	 * argument.
 	 *
 	 * @return The generated UUID.
 	 */
-	public static UUID randomUUID() {
+	global static UUID randomUUID() {
 		String s = EncodingUtil.convertToHex(Crypto.generateAesKey(128));
 		return new UUID(
 			s.substring(0, 8) + '-'

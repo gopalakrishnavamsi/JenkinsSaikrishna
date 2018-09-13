@@ -1,5 +1,34 @@
+/**
+ * Utility methods to support unit testing.
+ */
 @IsTest
-public class TestUtils {
+global class TestUtils {
+
+	/**
+	 * Sets an HTTP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign REST API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>HttpCalloutMock</code> interface.
+	 *
+	 * @return The HTTP callout mock.
+	 */
+	global static HttpCalloutMock setMock(final HttpCalloutMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
+
+	/**
+	 * Sets an SOAP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign SOAP API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>WebServiceMock</code> interface.
+	 *
+	 * @return The SOAP callout mock.
+	 */
+	global static WebServiceMock setMock(final WebServiceMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
 
 	public static Integer randomInteger(final Integer maxValue) {
 		return Integer.valueOf(Math.random() * maxValue);

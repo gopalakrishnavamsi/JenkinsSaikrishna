@@ -1,11 +1,11 @@
 /**
  * The result of a validation.
  */
-public class ValidationResult {
+global class ValidationResult {
 	/**
 	 * Validation error messages.
 	 */
-	public List<String> messages { get; private set; }
+	global List<String> messages { get; private set; }
 	/**
 	 * Read-only property indicating whether the validation was successful.
 	 */
