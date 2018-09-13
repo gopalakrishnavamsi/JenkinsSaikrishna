@@ -140,7 +140,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		Permissions.verifyIsQueryable(TYPE_CONTENT_WORKSPACE, new List<String> { 'Id', 'Name' });
 
 		List<Document.Folder> folders = new List<Document.Folder>();
-		for (ContentWorkspace f : [SELECT Id, Name FROM ContentWorkspace ORDER BY Name]) {
+		for (ContentWorkspace f : [SELECT Id, Name FROM ContentWorkspace ORDER BY Name LIMIT 1000]) {
 			folders.add(new Document.Folder(f.Id, f.Name));
 		}
 		return folders;
@@ -150,7 +150,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		Permissions.verifyIsQueryable(TYPE_FOLDER, new List<String> { 'Id', 'Name' });
 
 		List<Document.Folder> folders = new List<Document.Folder>();
-		for (Folder f : [SELECT Id, Name FROM Folder ORDER BY Name]) {
+		for (Folder f : [SELECT Id, Name FROM Folder ORDER BY Name LIMIT 1000]) {
 			if (String.isNotBlank(f.Name)) folders.add(new Document.Folder(f.Id, f.Name));
 		}
 		return folders;
