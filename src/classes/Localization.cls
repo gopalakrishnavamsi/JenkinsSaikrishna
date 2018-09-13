@@ -116,13 +116,8 @@ public with sharing class Localization {
 		};
 
 		String language = getCurrentLanguage();
-		if (LANGUAGE_TO_LABEL.containsKey(language)) {
-			DEFAULT_LANGUAGE = language;
-		} else {
-			DEFAULT_LANGUAGE = EN;
-		}
-
-		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c] > 1;
+		DEFAULT_LANGUAGE = LANGUAGE_TO_LABEL.containsKey(language) ? language : EN;
+		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c WHERE Name != NULL] > 1;
 	}
 
 	private static final Map<String, Recipient.EmailSettings> EMAIL_SETTINGS = new Map<String, Recipient.EmailSettings>();
@@ -222,6 +217,7 @@ public with sharing class Localization {
 		for (EnvelopeLocalization__c el : [
 			SELECT Name, Language__c, EmailSubject__c, EmailMessage__c
 			FROM EnvelopeLocalization__c
+			LIMIT 1000
 		]) {
 			current.put(el.Language__c, el);
 		}
@@ -259,7 +255,11 @@ public with sharing class Localization {
 
 	public static List<Recipient.EmailSettings> getDefaultEmailSettings() {
 		List<Recipient.EmailSettings> result = new List<Recipient.EmailSettings>();
-		for (Localization__mdt l : [SELECT DeveloperName, EmailSubject__c, EmailMessage__c FROM Localization__mdt]) {
+		for (Localization__mdt l : [
+			SELECT DeveloperName, EmailSubject__c, EmailMessage__c
+			FROM Localization__mdt
+			LIMIT 1000
+		]) {
 			result.add(new Recipient.EmailSettings(
 				l.DeveloperName,
 				LANGUAGE_TO_LABEL.get(l.DeveloperName),
