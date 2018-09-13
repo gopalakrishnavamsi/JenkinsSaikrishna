@@ -166,8 +166,9 @@ private class PostInstallTest {
 	static void test_initializeSettings_envelope_new() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(
-				Label.InitializeEnvelopeSettings, EnvelopeSettings__c.getOrgDefaults());
+			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
+				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults()
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -187,8 +188,9 @@ private class PostInstallTest {
 			insert EnvelopeSettings__c.getOrgDefaults();
 
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(
-				Label.InitializeEnvelopeSettings, EnvelopeSettings__c.getOrgDefaults());
+			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
+				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults()
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -206,8 +208,9 @@ private class PostInstallTest {
 	static void test_initializeSettings_Chatter_new() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(
-				Label.InitializeChatterSettings, ChatterSettings__c.getOrgDefaults());
+			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
+				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -227,8 +230,9 @@ private class PostInstallTest {
 			insert ChatterSettings__c.getOrgDefaults();
 
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(
-				Label.InitializeChatterSettings, ChatterSettings__c.getOrgDefaults());
+			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
+				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -239,6 +243,31 @@ private class PostInstallTest {
 			System.assertNotEquals(null, steps[0]);
 			System.assertEquals(Label.InitializeChatterSettings, steps[0].name);
 			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
+		}
+	}
+
+	@IsTest
+	static void test_initializeSettings_bulk() {
+		System.runAs(UserMock.createUser()) {
+			insert ChatterSettings__c.getOrgDefaults();
+
+			Test.startTest();
+			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
+				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults(),
+				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			List<PostInstallResults.Step> steps = result.getSteps();
+			System.assertEquals(2, Collection.size(steps));
+			System.assertNotEquals(null, steps[0]);
+			System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
+			System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
+			System.assertNotEquals(null, steps[1]);
+			System.assertEquals(Label.InitializeChatterSettings, steps[1].name);
+			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[1].status);
 		}
 	}
 

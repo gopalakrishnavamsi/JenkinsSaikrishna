@@ -134,17 +134,22 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static PostInstallResults initializeSettings(final String stepName, final SObject settings) {
+	private static PostInstallResults initializeSettings(final Map<String, SObject> settingsMap) {
 		PostInstallResults result = new PostInstallResults();
-		if (settings.Id == null) {
-			try {
-				insert settings;
-				result.endStepSuccess(stepName);
-			} catch (Exception ex) {
-				result.endStepFailure(stepName, ex);
+		if (Collection.isNotEmpty(settingsMap)) {
+			for (String stepName : settingsMap.keySet()) {
+				SObject settings = settingsMap.get(stepName);
+				if (settings.Id == null) {
+					try {
+						insert settings;
+						result.endStepSuccess(stepName);
+					} catch (Exception ex) {
+						result.endStepFailure(stepName, ex);
+					}
+				} else {
+					result.skipStep(stepName, Label.AlreadyComplete);
+				}
 			}
-		} else {
-			result.skipStep(stepName, Label.AlreadyComplete);
 		}
 		return result;
 	}
@@ -241,8 +246,10 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 
 		results.addResults(assignDocuSignAdministratorPermissionSet(installerId));
 		results.addResults(initializeAccountSettings());
-		results.addResults(initializeSettings(Label.InitializeEnvelopeSettings, EnvelopeSettings__c.getOrgDefaults()));
-		results.addResults(initializeSettings(Label.InitializeChatterSettings, ChatterSettings__c.getOrgDefaults()));
+		results.addResults(initializeSettings(new Map<String, SObject> {
+			Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults(),
+			Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
+		}));
 		results.addResults(createDefaultRecipientRoles());
 
 		return results;
