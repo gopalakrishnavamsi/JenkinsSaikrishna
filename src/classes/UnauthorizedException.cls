@@ -1,15 +1,15 @@
 /**
  * The exception thrown when unauthorized access is detected.
  */
-public class UnauthorizedException extends Exception {
+global class UnauthorizedException extends Exception {
 	/**
 	 * The ID of the unauthorized user.
 	 */
-	public Id userId { get; private set; }
+	global Id userId { get; private set; }
 	/**
 	 * The access requirement.
 	 */
-	public AccessRequirement requirement { get; private set; }
+	global AccessRequirement requirement { get; private set; }
 
 	/**
 	 * Access requirements:
@@ -24,7 +24,7 @@ public class UnauthorizedException extends Exception {
 	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
 	 * </ul>
 	 */
-	public enum AccessRequirement {
+	global enum AccessRequirement {
 		Unspecified,
 		DocuSignUser,
 		DocuSignAdministrator,

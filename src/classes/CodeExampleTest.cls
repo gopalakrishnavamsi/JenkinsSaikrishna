@@ -163,4 +163,20 @@ private class CodeExampleTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_unit_testing() {
+		// Set the HTTP callout test mock to the DocuSign eSignature REST API mock.
+		TestUtils.setMock(new ESignatureAPIMock());
+
+		// Do something that requires DocuSign Sender permissions
+		System.runAs(UserMock.createDocuSignSender()) { // or createDocuSignUser, or createDocuSignAdministrator
+			Test.startTest();
+			Url myUrl = SigningService.getEmbeddedSigningUrl(
+				UUID.randomUUID(), // Random envelope ID for testing
+				new Url('https://my.return.url')); // The return URL
+			System.assertNotEquals(null, myUrl, 'Expected returned URL to be non-null');
+			Test.stopTest();
+		}
+	}
 }
