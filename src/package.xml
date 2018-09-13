@@ -740,6 +740,7 @@
         <members>Enabled</members>
         <members>Disabled</members>
         <members>SettingsSaved</members>
+        <members>UserNotAuthorizedForEnvelope</members>
         <name>CustomLabel</name>
     </types>
     <types>

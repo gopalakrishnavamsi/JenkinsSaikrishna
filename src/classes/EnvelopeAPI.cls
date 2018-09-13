@@ -4,6 +4,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	private static final String ACCOUNT_LACKS_PERMISSIONS = 'ACCOUNT_LACKS_PERMISSIONS';
 	private static final String RECIPIENT_NOT_IN_SEQUENCE = 'RECIPIENT_NOT_IN_SEQUENCE';
 	private static final String UNKNOWN_ENVELOPE_RECIPIENT = 'UNKNOWN_ENVELOPE_RECIPIENT';
+	private static final String USER_LACKS_PERMISSIONS = 'USER_LACKS_PERMISSIONS';
 	private static final List<DocumentResolver> DOCUMENT_RESOLVERS = new List<DocumentResolver>();
 
 	static {
@@ -51,6 +52,8 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				e = new APIError(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, Label.InvalidRecipientSequence);
 			} else if (dse.docuSignCode == UNKNOWN_ENVELOPE_RECIPIENT) {
 				e = new APIError(APIErrorCode.UNKNOWN_RECIPIENT, Label.UnknownEnvelopeRecipient);
+			} else if (dse.docuSignCode == USER_LACKS_PERMISSIONS) {
+				e = new APIError(APIErrorCode.UNAUTHORIZED, Label.UserNotAuthorizedForEnvelope);
 			}
 		}
 		return e;

@@ -414,8 +414,6 @@ global with sharing class StatusService {
 	 * <p>
 	 * Any orphaned DocuSign envelope records will also be deleted. This will occur if the envelope exists as a
 	 * Salesforce record, but not in DocuSign.
-	 * <p>
-	 * The caller must be the owner of the envelopes.
 	 *
 	 * @param docuSignIds The DocuSign envelope IDs.
 	 *
@@ -423,8 +421,6 @@ global with sharing class StatusService {
 	 */
 	@TestVisible
 	private static List<Envelope.Status> getStatus(final Set<UUID> docuSignIds) {
-		Permissions.verifyIsOwner(docuSignIds); // FIXME: This will break layouts.
-
 		List<Envelope.Status> result = new List<Envelope.Status>();
 		List<Envelope.Status> toUpdate = new List<Envelope.Status>();
 		Set<UUID> toDelete = new Set<UUID>();
@@ -438,9 +434,15 @@ global with sharing class StatusService {
 				try {
 					toUpdate.add(api.getEnvelopeStatus(es.docuSignId, true).mergeWith(es));
 				} catch (APIException ex) {
-					if (ex.error != APIError.notFound) throw ex;
-					// Envelope no longer exists in DocuSign, so delete.
-					toDelete.add(es.docuSignId);
+					if (ex.error == APIError.notFound) {
+						// Envelope no longer exists in DocuSign, so delete.
+						toDelete.add(es.docuSignId);
+					} else if (ex.error == APIError.unauthorized) {
+						// Skip updates of envelopes the user cannot access in DocuSign
+						result.add(es);
+					} else {
+						throw ex;
+					}
 				}
 			} else {
 				result.add(es);

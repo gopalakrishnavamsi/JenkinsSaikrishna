@@ -902,29 +902,6 @@ private class StatusServiceTest {
 	}
 
 	@IsTest
-	static void test_getStatus_unauthorized() {
-		Envelope e1, e2;
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
-		}
-
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
-
-			Test.startTest();
-			try {
-				StatusService.getStatus(new Set<UUID> {
-					e1.docuSignId, e2.docuSignId
-				});
-				throw new AssertException('Expected createStatus to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getStatus_by_source_id() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
@@ -946,7 +923,7 @@ private class StatusServiceTest {
 			Envelope.Status es4 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e4));
 
 			Test.startTest();
-// Pulls last 3 statuses and orders by ascending sent date time. Expecting status for es4, es3, es2.
+			// Pulls last 3 statuses and orders by ascending sent date time. Expecting status for es4, es3, es2.
 			List<Envelope.Status> result = StatusService.getStatus(new Set<Id> {
 				a.Id, l.Id
 			}, 3);
@@ -983,6 +960,110 @@ private class StatusServiceTest {
 			System.assertEquals(es1.id, result[0].id);
 			System.assertNotEquals(null, result[1]);
 			System.assertEquals(es2.id, result[1].id);
+		}
+	}
+
+	private class StatusErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"UNIT_TEST","message":"Unit test error."}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_error() {
+		Test.setMock(HttpCalloutMock.class, new StatusErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope(ID1);
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
+			es1.Sent__c = Datetime.now().addDays(-3);
+			es1.LastStatusUpdate__c = null;
+			TestUtils.createRecipientStatus(es1.Id, 1);
+			TestUtils.createRecipientStatus(es1.Id, 2);
+			update es1;
+
+			Test.startTest();
+			try {
+				StatusService.getStatus(new Set<UUID> { ID1 });
+				throw new AssertException('Expected getStatus to fail');
+			} catch (APIException ex) {
+				System.assertEquals('Unit test error.', ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class StatusUnauthorizedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			String path = new Url(request.getEndpoint()).getPath();
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (path.endsWith(ID1.toString())) {
+				response.setStatusCode(200);
+				response.setStatus('OK');
+				response.setBody('{"status":"voided","emailSubject":"Please DocuSign: word.pdf","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-08-30T01:00:47.0000000Z","lastModifiedDateTime":"2018-08-30T01:02:20.1170000Z","initialSentDateTime":"2018-08-30T01:00:54.1170000Z","sentDateTime":"2018-08-30T01:01:33.8470000Z","voidedDateTime":"2018-08-30T01:02:20.1170000Z","voidedReason":"Testing void status","statusChangedDateTime":"2018-08-30T01:02:20.1170000Z","recipients":{"signers":[{"name":"e1s1","email":"e1s1@unit.test","recipientId":"1","routingOrder":"1","status":"completed","signedDateTime":"2018-08-30T01:01:32.2530000Z","deliveredDateTime":"2018-08-30T01:01:17.0800000Z"},{"name":"e1s2","email":"e1s2@unit.test","recipientId":"2","routingOrder":"2","status":"sent"}],"agents":[],"editors":[],"intermediaries":[],"carbonCopies":[],"certifiedDeliveries":[],"inPersonSigners":[],"seals":[],"recipientCount":"2","currentRoutingOrder":"2"}}');
+			} else if (path.endsWith(ID2.toString()) || path.endsWith(ID4.toString())) {
+				response.setStatusCode(400);
+				response.setStatus('BAD_REQUEST');
+				response.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"This user lacks sufficient permissions to access this resource."}');
+			} else { // ID3
+				response.setStatusCode(200);
+				response.setStatus('OK');
+				response.setBody('{"status":"completed","emailSubject":"Please DocuSign: word.pdf","envelopeId":"33333333-3333-3333-3333-333333333333","createdDateTime":"2018-08-30T01:00:47.0000000Z","lastModifiedDateTime":"2018-08-30T01:02:20.1170000Z","initialSentDateTime":"2018-08-30T01:00:54.1170000Z","sentDateTime":"2018-08-30T01:01:33.8470000Z","completedDateTime":"2018-08-30T01:02:20.1170000Z","statusChangedDateTime":"2018-08-30T01:02:20.1170000Z","recipients":{"signers":[{"name":"e3s1","email":"e3s1@unit.test","recipientId":"1","routingOrder":"1","status":"completed","signedDateTime":"2018-08-30T01:01:32.2530000Z","deliveredDateTime":"2018-08-30T01:01:17.0800000Z"}],"agents":[],"editors":[],"intermediaries":[],"carbonCopies":[],"certifiedDeliveries":[],"inPersonSigners":[],"seals":[],"recipientCount":"2","currentRoutingOrder":"2"}}');
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getStatus_unauthorized() {
+		Test.setMock(HttpCalloutMock.class, new StatusUnauthorizedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope(ID1);
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(e1);
+			es1.Sent__c = Datetime.now().addDays(-3);
+			es1.LastStatusUpdate__c = null;
+			TestUtils.createRecipientStatus(es1.Id, 1);
+			TestUtils.createRecipientStatus(es1.Id, 2);
+
+			Envelope__c e2 = TestUtils.createEnvelope(ID2);
+			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(e2);
+			es2.Sent__c = Datetime.now().addDays(-2);
+			es2.LastStatusUpdate__c = null;
+			TestUtils.createRecipientStatus(es2.Id, 1);
+
+			Envelope__c e3 = TestUtils.createEnvelope(ID3);
+			EnvelopeStatus__c es3 = TestUtils.createEnvelopeStatus(e3);
+			es3.Sent__c = Datetime.now().addDays(-1);
+			es3.LastStatusUpdate__c = null;
+			TestUtils.createRecipientStatus(es3.Id, 1);
+
+			update new List<EnvelopeStatus__c> { es1, es2, es3 };
+
+			Test.startTest();
+			// ID2 - unauthorized in DS API. Ignore and move on.
+			List<Envelope.Status> result = StatusService.getStatus(new Set<UUID> { ID1, ID2, ID3 });
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+
+			System.assertEquals(1, Collection.size([SELECT Id FROM EnvelopeStatus__c WHERE Id = :es1.Id]));
+			System.assertEquals(2, Collection.size([SELECT Id FROM RecipientStatus__c WHERE EnvelopeStatus__c = :es1.Id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM Envelope__c WHERE Id = :e1.Id]));
+
+			System.assertEquals(1, Collection.size([SELECT Id FROM EnvelopeStatus__c WHERE Id = :es2.Id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM RecipientStatus__c WHERE EnvelopeStatus__c = :es2.Id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM Envelope__c WHERE Id = :e2.Id]));
+
+			System.assertEquals(1, Collection.size([SELECT Id FROM EnvelopeStatus__c WHERE Id = :es3.Id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM RecipientStatus__c WHERE EnvelopeStatus__c = :es3.Id]));
+			System.assertEquals(1, Collection.size([SELECT Id FROM Envelope__c WHERE Id = :e3.Id]));
 		}
 	}
 

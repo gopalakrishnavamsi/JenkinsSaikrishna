@@ -4523,4 +4523,12 @@
 		<shortDescription>Settings saved</shortDescription>
 		<value>Successfully saved settings.</value>
 	</labels>
+	<labels>
+		<fullName>UserNotAuthorizedForEnvelope</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>User not authorized for envelope</shortDescription>
+		<value>You are not authorized to access the envelope.</value>
+	</labels>
 </CustomLabels>
