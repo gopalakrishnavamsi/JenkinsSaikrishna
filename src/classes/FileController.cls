@@ -12,7 +12,7 @@ public with sharing class FileController extends Controller {
 	}
 
 	@AuraEnabled
-	public Static String getVisualForceHost() {
+	public static String getVisualForceHost() {
 		return Salesforce.getVisualforceHost();
 	}
 
