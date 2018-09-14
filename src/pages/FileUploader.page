@@ -23,10 +23,6 @@
         }
       }
 
-      sendToLightningComponent({
-        'state': 'LOADED', 'origin': targetOrigin
-      });
-
       // FUNCTION TO CLICK UPLOAD FUNCTION
       function clickUploadFile() {
         showSpinner();
