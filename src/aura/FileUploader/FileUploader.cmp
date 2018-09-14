@@ -1,4 +1,4 @@
-<aura:component implements="force:hasRecordId" access="global">
+<aura:component implements="force:hasRecordId" access="global" controller="FileController">
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:attribute name="frameSrc" type="String"/>
     <aura:attribute name="frameWidth" type="String" default="124"/>

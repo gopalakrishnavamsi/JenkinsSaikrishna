@@ -117,7 +117,7 @@ public with sharing class Localization {
 
 		String language = getCurrentLanguage();
 		DEFAULT_LANGUAGE = LANGUAGE_TO_LABEL.containsKey(language) ? language : EN;
-		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c WHERE Name != NULL] > 1;
+		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c WHERE Name != NULL LIMIT 100] > 1;
 	}
 
 	private static final Map<String, Recipient.EmailSettings> EMAIL_SETTINGS = new Map<String, Recipient.EmailSettings>();
