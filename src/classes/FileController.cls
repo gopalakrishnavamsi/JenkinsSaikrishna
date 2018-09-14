@@ -11,6 +11,11 @@ public with sharing class FileController extends Controller {
 		this.uploadFinished = false;
 	}
 
+	@AuraEnabled
+	public Static String getVisualForceHost() {
+		return Salesforce.getVisualforceHost();
+	}
+
 	// Use getter so we can make contentVersion transient
 	public ContentVersion getContentVersion() {
 		contentVersion = new ContentVersion();

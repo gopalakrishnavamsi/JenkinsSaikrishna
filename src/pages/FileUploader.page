@@ -24,7 +24,7 @@
       }
 
       sendToLightningComponent({
-        'state': 'LOADED', 'vfHost': "{!LEFT($CurrentPage.URL, FIND('/', $CurrentPage.URL,9))}"
+        'state': 'LOADED', 'origin': targetOrigin
       });
 
       // FUNCTION TO CLICK UPLOAD FUNCTION
@@ -76,9 +76,10 @@
           theBlock.style.border = 'none';
           theBlock.style.display = 'none';
 
+
           // SEND FILE UPLOADED MESSAGE
           sendToLightningComponent({
-            'state': 'uploadFinished', 'message': '{!JSENCODE(message)}', 'messageType': '{!JSENCODE(messageType)}', 'receipt': {
+            'origin': targetOrigin, 'state': 'uploadFinished', 'message': '{!JSENCODE(message)}', 'messageType': '{!JSENCODE(messageType)}', 'receipt': {
               Id: '{!JSENCODE(contentDocumentId)}', Title: '{!JSENCODE(contentDocumentTitle)}'
             }, 'index': '{!JSENCODE($CurrentPage.Parameters.index)}'
           });

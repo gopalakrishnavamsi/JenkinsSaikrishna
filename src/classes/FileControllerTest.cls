@@ -99,4 +99,12 @@ private class FileControllerTest {
 			System.assertEquals(Label.FileSizeLimit, fc.message);
 		}
 	}
+
+	@IsTest
+	static void test_getVisualforceHost(){
+		System.runAs(UserMock.createUser()) {
+			String testVisualForceHost = FileController.getVisualForceHost();
+			System.assert(String.isNotBlank(testVisualForceHost));
+		}
+	}
 }
