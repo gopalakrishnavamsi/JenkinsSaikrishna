@@ -689,6 +689,10 @@
 		<enabled>true</enabled>
 	</pageAccesses>
 	<tabSettings>
+		<tab>Setup</tab>
+		<visibility>None</visibility>
+	</tabSettings>
+	<tabSettings>
 		<tab>Envelope__c</tab>
 		<visibility>Available</visibility>
 	</tabSettings>
