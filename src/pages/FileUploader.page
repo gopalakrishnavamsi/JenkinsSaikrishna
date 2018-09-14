@@ -75,7 +75,7 @@
 
           // SEND FILE UPLOADED MESSAGE
           sendToLightningComponent({
-            'origin': targetOrigin, 'state': 'uploadFinished', 'message': '{!JSENCODE(message)}', 'messageType': '{!JSENCODE(messageType)}', 'receipt': {
+            'state': 'uploadFinished', 'message': '{!JSENCODE(message)}', 'messageType': '{!JSENCODE(messageType)}', 'receipt': {
               Id: '{!JSENCODE(contentDocumentId)}', Title: '{!JSENCODE(contentDocumentTitle)}'
             }, 'index': '{!JSENCODE($CurrentPage.Parameters.index)}'
           });
