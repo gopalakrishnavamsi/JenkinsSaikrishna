@@ -8,7 +8,7 @@
 
     //Add message listener
     window.addEventListener("message", $A.getCallback(function (event) {
-      var origin = JSON.parse(JSON.stringify(event.data.origin));
+      var origin = JSON.parse(JSON.stringify(event.origin));
       //check the origin to prevent malicious event capturing
       if (origin != component.get('v.vfHost')) {
           return;
