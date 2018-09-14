@@ -13,7 +13,7 @@
       if (origin != component.get('v.vfHost')) {
           return;
       }
-      //if origin as component attribute match then proceed
+      //if origin and component attribute set by helper to visualforce domain match then proceed
       else {
         var state = JSON.parse(JSON.stringify(event.data.state));
         if (state === 'uploadFinished') {
