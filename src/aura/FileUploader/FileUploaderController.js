@@ -20,11 +20,15 @@
             var messageType = JSON.parse(JSON.stringify(event.data.messageType));
             var message = JSON.parse(JSON.stringify(event.data.message));
                  if (messageType === 'SUCCESS') {
-                  component.set('v.message', message);
-
-                } else if (messageType === 'ERROR') {
+                    component.set('v.message', message);
+                }
+                else if (messageType === 'ERROR') {
                   component.set('v.message', message);
                 }
+        }
+        else if (state === 'LOADED'){
+            var message = JSON.parse(JSON.stringify(event.data.message));
+            component.set('v.message', message);
         }
       }
     }));

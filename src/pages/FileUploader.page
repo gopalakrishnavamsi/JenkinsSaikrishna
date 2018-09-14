@@ -23,6 +23,12 @@
         }
       }
 
+      sendToLightningComponent({
+          'state': 'LOADED',
+          'message': '{!JSENCODE($Label.UploadFile)}'
+          });
+
+
       // FUNCTION TO CLICK UPLOAD FUNCTION
       function clickUploadFile() {
         showSpinner();
