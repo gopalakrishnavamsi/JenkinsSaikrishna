@@ -1,13 +1,6 @@
 ({
   initialize: function (component, event, helper) {
-    helper.createEnvelope(component, helper, component.get('v.recordId'));
-  },
-
-  handleUpload: function (component, event, helper) {
-    var labels = component.labels;
-    if (component.get('v.uploadMessage') === $A.get('$Label.c.UploadSuccessful')) {
-      helper.handleUploadFinished(component, event, helper);
-    }
+    helper.createEnvelope(component, component.get('v.recordId'));
   },
 
   setExpirationDate: function (component, event, helper) {
@@ -29,26 +22,25 @@
     });
     var envelope = component.get('v.envelope');
     envelope.documents = helper.getDocumentsForSending(documents, component.get('v.template'));
-    envelope.recipients = helper.getRecipientsForSending(helper, component.get('v.recipients'), hasDocuments, component.get('v.defaultRoles'));
+    envelope.recipients = helper.getRecipientsForSending(component.get('v.recipients'), hasDocuments, component.get('v.defaultRoles'));
 
-    helper.tagEnvelope(component, helper, envelope);
+    helper.tagEnvelope(component, envelope);
   },
 
   addTemplate: function (component, event, helper) {
     var firstTemplate = component.get('v.availableTemplates')[0];
-    helper.updateTemplate(component, helper, $A.util.isUndefinedOrNull(firstTemplate) ? null : firstTemplate.id.value);
+    helper.updateTemplate(component, $A.util.isUndefinedOrNull(firstTemplate) ? null : firstTemplate.id.value);
   },
 
   setTemplate: function (component, event, helper) {
     var focusCatcher = component.find('focus-catcher').getElement(); // Avoids base component bug; see .cmp file for more information
     focusCatcher.focus();
     focusCatcher.blur();
-    helper.updateTemplate(component, helper, event.getSource().get('v.value'));
+    helper.updateTemplate(component, event.getSource().get('v.value'));
   },
 
   removeTemplate: function (component, event, helper) {
-    helper.updateTemplate(component, helper, null);
-    // helper.handleFilesChange(component, event, helper);
+    helper.updateTemplate(component, null);
   },
 
   addRecipient: function (component, event, helper) {
@@ -64,26 +56,7 @@
   },
 
   cancel: function (component, event, helper) {
-    component.set('v.loading', true);
-    var envelopeId = component.get('v.envelope.id');
-    if (envelopeId) {
-      var deleteEnvelope = component.get('c.deleteEnvelope');
-      deleteEnvelope.setParams({
-        envelopeId: envelopeId
-      });
-      deleteEnvelope.setCallback(this, function (response) {
-        if (response.getState() === 'SUCCESS') {
-          var sourceId = component.get('v.recordId');
-          if (sourceId) {
-            _navigateToSObject(sourceId);
-          }
-        } else {
-          helper.setError(component, _getErrorMessage(response));
-          component.set('v.loading', false);
-        }
-      });
-      $A.enqueueAction(deleteEnvelope);
-    }
+    helper.deleteEnvelope(component);
   },
 
   goBack: function (component, event, helper) {
@@ -99,14 +72,14 @@
   },
 
   handleFileSelected: function (component, event, helper) {
-    helper.handleFilesChange(component, event, helper);
+    helper.handleFilesChange(component);
   },
 
   handleActiveStepChange: function (component, event, helper) {
-    component.set('v.disableNext', !helper.getValidity(component, helper));
+    component.set('v.disableNext', !helper.getValidity(component));
     var activeStep = component.get('v.activeStep');
     if (activeStep === 0) { // Documents
-      component.set('v.recipients', helper.resetRecipients(helper, component.get('v.recipients')));
+      component.set('v.recipients', helper.resetRecipients(component.get('v.recipients')));
     } else if (activeStep === 1) { // Recipients
       var documents = component.get('v.documents');
       var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
@@ -119,15 +92,42 @@
       });
       selectedFileTitles = selectedFileTitles.slice(2);
       component.set('v.selectedFileTitles', selectedFileTitles);
-      component.set('v.recipients', helper.getRecipients(helper, component.get('v.recipients'), component.get('v.template')));
+      component.set('v.recipients', helper.getRecipients(component.get('v.recipients'), component.get('v.template')));
     }
   },
 
   setNextButtonState: function (component, event, helper) {
-    component.set('v.disableNext', !helper.getValidity(component, helper));
+    component.set('v.disableNext', !helper.getValidity(component));
   },
 
   handleRecipientChange: function (component, event, helper) {
-    helper.resolveRecipient(component, helper, event.getParam('data'));
+    helper.resolveRecipient(component, event.getParam('data'));
+  },
+
+  onToast: function (component, event, helper) {
+    var params = event.getParams();
+    if (params && params.show === true) {
+      helper.showToast(component, params.message, params.mode);
+      if (params.mode === 'success') {
+        setTimeout($A.getCallback(function () {
+          helper.hideToast(component);
+        }), 3000);
+      }
+    } else {
+      helper.hideToast(component);
+    }
+  },
+
+  onLoading: function (component, event, helper) {
+    var params = event.getParams();
+    helper.setLoading(component, params && params.isLoading === true);
+  },
+
+  onUploadComplete: function (component, event, helper) {
+    var params = event.getParams();
+    if (params.success === true) {
+      // Reload files
+      helper.handleUploadFinished(component);
+    }
   }
 });
