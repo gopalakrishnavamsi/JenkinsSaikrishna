@@ -10,7 +10,6 @@
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="selectedFileTitles" type="String" access="private"/>
     <aura:attribute name="disableNext" type="Boolean" default="{!true}" access="private"/>
-    <aura:attribute name="uploadMessage" type="String" access="private"/>
     <aura:attribute name="message" type="String" access="private"/>
     <aura:attribute name="mode" type="String" access="private"/>
     <aura:attribute name="showToast" type="Boolean" access="private"/>
@@ -29,7 +28,10 @@
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
 
-    <aura:handler name="change" value="{!v.uploadMessage}" action="{!c.handleUpload}"/>
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.onToast}"/>
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.onLoading}"/>
+    <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
+
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>
     <aura:handler name="change" value="{!v.filesSelected}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.template}" action="{!c.setNextButtonState}"/>
@@ -71,9 +73,7 @@
                     <h3 class="slds-text-heading_medium slds-m-bottom_x-small">{!$Label.c.Files}</h3>
                     <div class="slds-m-bottom_small">
                         <c:FileUploader recordId="{!v.recordId}"
-                                        message="{!v.uploadMessage}"
-                                        lcHost="{!v.lcHost}"
-                                        namespace="{!v.namespace}"/>
+                                        visualforce="{!v.visualforce}"/>
                     </div>
 
                     <!-- Files List -->

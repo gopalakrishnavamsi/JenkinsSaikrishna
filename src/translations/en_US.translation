@@ -1155,28 +1155,8 @@
 		<name>UserNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Upload</label>
-		<name>Upload</name>
-	</customLabels>
-	<customLabels>
-		<label>Upload File</label>
-		<name>UploadFile</name>
-	</customLabels>
-	<customLabels>
-		<label>File was uploaded successfully</label>
-		<name>UploadSuccessful</name>
-	</customLabels>
-	<customLabels>
-		<label>File size limit is 4MB.</label>
-		<name>FileSizeLimit</name>
-	</customLabels>
-	<customLabels>
-		<label>This file exceeds the maximum size limit</label>
-		<name>FileSizeLimitReached</name>
-	</customLabels>
-	<customLabels>
-		<label>Something went wrong. Please try again.</label>
-		<name>SomethingWrong</name>
+		<label>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</label>
+		<name>FileSizeLimitReached_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Needs to Sign</label>

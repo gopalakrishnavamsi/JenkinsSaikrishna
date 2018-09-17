@@ -663,10 +663,6 @@
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
     <pageAccesses>
-        <apexPage>FileUploader</apexPage>
-        <enabled>true</enabled>
-    </pageAccesses>
-    <pageAccesses>
         <apexPage>ReturnFromDocuSign</apexPage>
         <enabled>true</enabled>
     </pageAccesses>

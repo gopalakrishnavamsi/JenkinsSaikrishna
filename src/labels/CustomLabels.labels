@@ -2238,52 +2238,12 @@
 		<value>User not found</value>
 	</labels>
 	<labels>
-		<fullName>Upload</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload</shortDescription>
-		<value>Upload</value>
-	</labels>
-	<labels>
-		<fullName>UploadFile</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload file</shortDescription>
-		<value>Upload File</value>
-	</labels>
-	<labels>
-		<fullName>UploadSuccessful</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload successful</shortDescription>
-		<value>File was uploaded successfully</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimit</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>File size limit</shortDescription>
-		<value>File size limit is 4MB.</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimitReached</fullName>
+		<fullName>FileSizeLimitReached_2</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>File size limit reached</shortDescription>
-		<value>This file exceeds the maximum size limit</value>
-	</labels>
-	<labels>
-		<fullName>SomethingWrong</fullName>
-		<categories>General</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Something went wrong</shortDescription>
-		<value>Something went wrong. Please try again.</value>
+		<value>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</value>
 	</labels>
 	<labels>
 		<fullName>Signer</fullName>

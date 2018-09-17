@@ -140,6 +140,8 @@
         <members>SettingsControllerTest</members>
         <members>AccountSettings</members>
         <members>AccountSettingsTest</members>
+        <members>FileService</members>
+        <members>FileServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -423,12 +425,7 @@
         <members>Active</members>
         <members>Closed</members>
         <members>UserNotFound</members>
-        <members>Upload</members>
-        <members>UploadFile</members>
-        <members>UploadSuccessful</members>
-        <members>FileSizeLimit</members>
-        <members>FileSizeLimitReached</members>
-        <members>SomethingWrong</members>
+        <members>FileSizeLimitReached_2</members>
         <members>Signer</members>
         <members>InPersonSigner</members>
         <members>CarbonCopy</members>
@@ -1037,7 +1034,6 @@
     <types>
         <members>Setup</members>
         <members>SetupSplash</members>
-        <members>FileUploader</members>
         <members>SendFromOpportunity</members>
         <members>ReturnFromDocuSign</members>
         <members>SendFromAccount</members>
@@ -1098,6 +1094,7 @@
         <members>LoadingEvent</members>
         <members>LoginEvent</members>
         <members>Settings</members>
+        <members>FileEvent</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
