@@ -60,7 +60,7 @@ public with sharing class FileService {
 			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> { 'VersionData' });
 
 			ContentVersion cv = [
-				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
+				SELECT VersionData
 				FROM ContentVersion
 				WHERE Id = :contentVersionId
 				LIMIT 1
@@ -68,7 +68,12 @@ public with sharing class FileService {
 			cv.VersionData = EncodingUtil.base64Decode(EncodingUtil.base64Encode(cv.VersionData) + base64Data);
 			update cv;
 
-			return cv;
+			return [
+				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
+				FROM ContentVersion
+				WHERE Id = :contentVersionId
+				LIMIT 1
+			];
 		}
 	}
 

@@ -25,8 +25,8 @@
     }
   },
 
-  MAX_FILE_SIZE: 4500000, //Max file size 4.5 MB
-  CHUNK_SIZE: 750000,      //Chunk Max size 750Kb
+  MAX_FILE_SIZE: 4718592, // 4.5 MB
+  CHUNK_SIZE: 768000, // 750 KB
   BASE_64_PREFIX: 'base64,',
 
   uploadFile: function (component, file) {

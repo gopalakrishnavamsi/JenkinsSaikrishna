@@ -72,7 +72,8 @@ global class TestUtils {
 		ContentVersion cv = new ContentVersion(
 			Title = id.toString(),
 			PathOnClient = id.toString() + '.pdf',
-			VersionData = Blob.valueOf(UUID.randomUUID().toString()));
+			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
+			IsMajorVersion = false);
 		insert cv;
 		return [
 			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
