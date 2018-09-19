@@ -22,13 +22,13 @@ global class UserMock {
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   Test.setMock(HttpCalloutMock.class, new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
 	 *   System.runAs(dfsle.UserMock.createDocuSignAdministrator()) {
 	 *     // Call service method requiring the DocuSign Administrator permission set.
 	 *   }
 	 * }
 	 * </pre>
-	 * @return
+	 * @return A user with the DocuSign Administrator permission set.
 	 */
 	global static User createDocuSignAdministrator() {
 		return createDocuSignAdministrator(true);
@@ -74,13 +74,13 @@ global class UserMock {
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   Test.setMock(HttpCalloutMock.class, new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
 	 *   System.runAs(dfsle.UserMock.createDocuSignUser()) {
 	 *     // Call service method requiring the DocuSign User permission set.
 	 *   }
 	 * }
 	 * </pre>
-	 * @return
+	 * @return A user with the DocuSign User permission set.
 	 */
 	global static User createDocuSignUser() {
 		return createDocuSignUser(true);
@@ -116,7 +116,7 @@ global class UserMock {
 	}
 
 	/**
-	 * Creates a user and assigns the <code>DocuSign Sender<code> permission set for unit tests. This may be used for
+	 * Creates a user and assigns the <code>DocuSign Sender</code> permission set for unit tests. This may be used for
 	 * DocuSign for Salesforce methods that create, send, or sign envelopes.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
@@ -126,13 +126,13 @@ global class UserMock {
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   Test.setMock(HttpCalloutMock.class, new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
 	 *   System.runAs(dfsle.UserMock.createDocuSignSender()) {
 	 *     // Call service method requiring the DocuSign Sender permission set.
 	 *   }
 	 * }
 	 * </pre>
-	 * @return
+	 * @return A user with the DocuSign Sender permission set.
 	 */
 	global static User createDocuSignSender() {
 		return createDocuSignSender(true);
