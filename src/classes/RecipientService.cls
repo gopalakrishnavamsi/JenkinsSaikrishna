@@ -553,7 +553,7 @@ global with sharing class RecipientService {
 
 	/**
 	 * Retrieves a list of default recipient roles. These map to automatic anchor tags. For example, role 1 will map to
-	 * <code>\s1\<code>, <code>\d1\</code>, etc.
+	 * <code>\s1\</code>, <code>\d1\</code>, etc.
 	 *
 	 * @return A list of default recipient roles.
 	 */
