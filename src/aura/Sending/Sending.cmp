@@ -345,7 +345,7 @@
                                 isTrue="{!and(v.envelope.notifications.expires, v.envelope.notifications.expireAfterDays > 0)}">
                             <p class="slds-m-vertical_x-small slds-p-left_large">
                                 <em class="slds-text-color_weak">
-                                    <aura:unescapedHtml value="{!format($Label.c.EnvelopeExpiresOn_1, v.expiresOn)}"/>
+                                    <lightning:formattedRichText value="{!format($Label.c.EnvelopeExpiresOn_1, v.expiresOn)}"/>
                                 </em>
                             </p>
                         </aura:if>

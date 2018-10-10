@@ -19,7 +19,7 @@
                         <lightning:icon iconName="utility:info" size="small" variant="inverse"/>
                     </span>
                     <div class="slds-notify__content">
-                        <ui:outputRichText class="slds-text-longform" value="{!v.helpInfo}"/>
+                        <lightning:formattedRichText class="slds-text-longform" value="{!v.helpInfo}"/>
                     </div>
                 </div>
             </div>

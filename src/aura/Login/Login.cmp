@@ -36,7 +36,7 @@
                         <lightning:icon iconName="utility:info" size="small" variant="inverse"/>
                     </span>
                     <div class="slds-notify__content">
-                        <ui:outputRichText class="slds-text-longform" value="{!v.helpInfo}"/>
+                        <lightning:formattedRichText class="slds-text-longform" value="{!v.helpInfo}"/>
                     </div>
                 </div>
             </div>
@@ -138,11 +138,9 @@
                                                         <em class="slds-text-color_weak">
                                                             <aura:if
                                                                     isTrue="{!v.userCountryCode == 'US'}">
-                                                                <aura:unescapedHtml
-                                                                        value="{!$Label.c.USConsentMessage}"/>
+                                                                <lightning:formattedRichText value="{!$Label.c.USConsentMessage}"/>
                                                                 <aura:set attribute="else">
-                                                                    <aura:unescapedHtml
-                                                                            value="{!$Label.c.NonUSConsentMessage}"/>
+                                                                    <lightning:formattedRichText value="{!$Label.c.NonUSConsentMessage}"/>
                                                                 </aura:set>
                                                             </aura:if>
                                                         </em>
