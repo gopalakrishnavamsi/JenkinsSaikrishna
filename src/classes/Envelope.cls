@@ -594,7 +594,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>customFields</code> property.
 	 */
-	public Envelope withCustomFields(final List<CustomField> customFields) {
+	global Envelope withCustomFields(final List<CustomField> customFields) {
 		this.customFields = customFields;
 		return this;
 	}
