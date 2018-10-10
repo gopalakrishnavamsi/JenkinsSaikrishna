@@ -315,44 +315,32 @@
 
   tagEnvelope: function (component, envelope) {
     var self = this;
-    var updateEnvelope = component.get('c.updateEnvelope');
-    updateEnvelope.setParams({
+    var sendEnvelope = component.get('c.sendEnvelope');
+    sendEnvelope.setParams({
       // HACK: Stringify-ing JSON to work around @AuraEnabled method limitations.
       envelopeJson: JSON.stringify(envelope)
     });
-    updateEnvelope.setCallback(this, function (r1) {
+    sendEnvelope.setCallback(this, function (r1) {
       if (r1.getState() !== 'SUCCESS') {
         self.showToast(component, _getErrorMessage(r1), 'error');
         self.setLoading(component, false);
       } else {
-        var sendEnvelope = component.get('c.sendEnvelope');
-        sendEnvelope.setParams({
+        var getTaggerUrl = component.get('c.getTaggerUrl');
+        getTaggerUrl.setParams({
           envelopeJson: JSON.stringify(r1.getReturnValue())
         });
-        sendEnvelope.setCallback(this, function (r2) {
+        getTaggerUrl.setCallback(this, function (r2) {
           if (r2.getState() !== 'SUCCESS') {
             self.showToast(component, _getErrorMessage(r2), 'error');
             self.setLoading(component, false);
           } else {
-            var getTaggerUrl = component.get('c.getTaggerUrl');
-            getTaggerUrl.setParams({
-              envelopeJson: JSON.stringify(r2.getReturnValue())
-            });
-            getTaggerUrl.setCallback(this, function (r3) {
-              if (r3.getState() !== 'SUCCESS') {
-                self.showToast(component, _getErrorMessage(r3), 'error');
-                self.setLoading(component, false);
-              } else {
-                self.navigateToUrl(r3.getReturnValue());
-              }
-            });
-            $A.enqueueAction(getTaggerUrl);
+            self.navigateToUrl(r2.getReturnValue());
           }
         });
-        $A.enqueueAction(sendEnvelope);
+        $A.enqueueAction(getTaggerUrl);
       }
     });
-    $A.enqueueAction(updateEnvelope);
+    $A.enqueueAction(sendEnvelope);
   },
 
   valueOrElse: function (value, orElse) {
@@ -474,33 +462,9 @@
         }
       } else {
         self.showToast(component, _getErrorMessage(response), 'error');
-        self.setLoading(component, false);
       }
+      self.setLoading(component, false);
     });
     $A.enqueueAction(rr);
-  },
-
-  deleteEnvelope: function (component) {
-    var self = this;
-    self.setLoading(component, true);
-    var envelopeId = component.get('v.envelope.id');
-    if (envelopeId) {
-      var deleteEnvelope = component.get('c.deleteEnvelope');
-      deleteEnvelope.setParams({
-        envelopeId: envelopeId
-      });
-      deleteEnvelope.setCallback(this, function (response) {
-        if (response.getState() === 'SUCCESS') {
-          var sourceId = component.get('v.recordId');
-          if (sourceId) {
-            _navigateToSObject(sourceId);
-          }
-        } else {
-          self.showToast(component, _getErrorMessage(response), 'error');
-          self.setLoading(component, false);
-        }
-      });
-      $A.enqueueAction(deleteEnvelope);
-    }
   }
 });

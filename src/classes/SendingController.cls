@@ -54,16 +54,15 @@ public with sharing class SendingController extends Controller {
 	@AuraEnabled
 	public static DraftEnvelope createDraftEnvelope(final Id sourceId) {
 		try {
+			Permissions.verifyIsDocuSignUser();
+
 			Set<Id> sourceIds = new Set<Id> { sourceId };
 			EnvelopeSettings es = EnvelopeSettings.getInstance();
 			// TODO: Check account features for templates. Pull on demand.
 			List<Template> templates = TemplateAPI.getInstance().getTemplates();
 			return new DraftEnvelope(
 				AccountFeatures.getInstance(),
-				EnvelopeService.createEnvelope(
-					EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
-					null, // envelope configuration
-					false),
+				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
 				templates,
 				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
 				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),

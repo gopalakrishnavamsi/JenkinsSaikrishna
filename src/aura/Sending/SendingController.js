@@ -56,7 +56,7 @@
   },
 
   cancel: function (component, event, helper) {
-    helper.deleteEnvelope(component);
+    _navigateToSObject(component.get('v.recordId'));
   },
 
   goBack: function (component, event, helper) {
