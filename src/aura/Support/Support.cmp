@@ -12,10 +12,10 @@
             <div class="slds-grid slds-wrap slds-gutters_small">
                 <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-3 slds-large-size_3-of-4">
                     <p class="slds-m-bottom_small">
-                        <aura:unescapedHtml value="{!$Label.c.SupportInfo}"/>
+                        <lightning:formattedRichText value="{!$Label.c.SupportInfo}"/>
                     </p>
                     <p class="slds-m-bottom_small">
-                        <aura:unescapedHtml value="{!$Label.c.SupportPrep}"/>
+                        <lightning:formattedRichText value="{!$Label.c.SupportPrep}"/>
                     </p>
                     <a href="https://support.docusign.com/en/contactSupport" target="_blank"
                        class="slds-button slds-button_neutral">{!$Label.c.ContactSupport}</a>

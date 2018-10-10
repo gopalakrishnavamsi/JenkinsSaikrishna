@@ -1,10 +1,9 @@
-<!-- TODO: Handle non-default namespace: resources -->
 <aura:component controller="StatusController" implements="flexipage:availableForRecordHome,force:hasRecordId"
                 access="global">
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
-    <aura:attribute name="envelopes" type="List"/>
-    <aura:attribute name="loading" type="Boolean"/>
-    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="envelopes" type="List" access="private"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="errorMessage" type="String" access="private"/>
 
     <lightning:card variant="base">
         <div class="slds-card__header slds-grid">
@@ -98,7 +97,7 @@
                                                             </div>
                                                         </div>
                                                         <p class="slds-m-horizontal_xx-small">
-                                                            <aura:unescapedHtml
+                                                            <lightning:formattedRichText
                                                                     value="{!format($Label.c.SentAnEnvelope_2, envelope.senderEmail, envelope.senderName)}"/>
                                                         </p>
                                                         <!-- Envelope Details -->
@@ -260,37 +259,37 @@
                                                                                             <p>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Created}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.IsQueued_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Sent}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.WillReceive_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Delivered}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.HasViewed_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Declined}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.HasDeclined_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Completed}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.HasCompleted_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Signed}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.HasSigned_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                                 <aura:if
                                                                                                         isTrue="{!recipient.status == $Label.c.Canceled}">
-                                                                                                    <aura:unescapedHtml
+                                                                                                    <lightning:formattedRichText
                                                                                                             value="{!format($Label.c.WillNotReceive_2, recipient.email, recipient.name)}"/>
                                                                                                 </aura:if>
                                                                                             </p>

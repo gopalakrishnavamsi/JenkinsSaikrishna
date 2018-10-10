@@ -23,7 +23,7 @@
                     <lightning:icon iconName="utility:warning" size="small"/>
                 </div>
                 <div class="slds-media__body">
-                    <aura:unescapedHtml value="{!$Label.c.TrialAccountExpired}"/>
+                    <lightning:formattedRichText value="{!$Label.c.TrialAccountExpired}"/>
                 </div>
                 <div class="slds-media__figure">
                     <a href="https://www.docusign.com/solutions/salesforce" target="_blank"
@@ -108,10 +108,10 @@
                             <div class="slds-media__body slds-p-left_xx-small">
                                 <h2 class="slds-text-heading_medium slds-m-bottom--xx-small">{!$Label.c.NextSteps}</h2>
                                 <p class="slds-m-top_x-small">
-                                    <aura:unescapedHtml value="{!$Label.c.HelpSection1}"/>
+                                    <lightning:formattedRichText value="{!$Label.c.HelpSection1}"/>
                                 </p>
                                 <p class="slds-m-top_x-small">
-                                    <aura:unescapedHtml value="{!$Label.c.HelpSection2}"/>
+                                    <lightning:formattedRichText value="{!$Label.c.HelpSection2}"/>
                                 </p>
                             </div>
                         </div>
