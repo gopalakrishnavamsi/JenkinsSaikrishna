@@ -17,7 +17,7 @@ public with sharing class SetupController extends Controller {
 		@AuraEnabled
 		public Account.TrialStatus trialStatus { get; private set; }
 		@AuraEnabled
-		public AccountService.LoginStatus status { get; private set; }
+		public String status { get; private set; }
 		@AuraEnabled
 		public List<AccountService.AccountOption> accountOptions { get; private set; }
 
@@ -32,12 +32,17 @@ public with sharing class SetupController extends Controller {
 			this.otherUrl = otherUrl;
 			this.isTrial = isTrial;
 			this.trialStatus = trialStatus;
-			this.status = status;
+			this.status = status == null ? AccountService.LoginStatus.Failure.name() : status.name();
 			this.accountOptions = accountOptions;
 		}
 	}
 
-	private static LoginInformation getLogin(final AccountService.LoginResult loginResult) {
+	private static LoginInformation getLogin(
+		final String dsUsername,
+		final String dsEnvironment,
+		final String dsUrl,
+		final AccountService.LoginResult loginResult) {
+
 		Credentials c = null;
 		Boolean isLoggedIn = Credentials.isAccountValid();
 		if (isLoggedIn) {
@@ -47,10 +52,10 @@ public with sharing class SetupController extends Controller {
 
 		return new LoginInformation(
 			isLoggedIn,
-			c != null ? c.email : UserInfo.getUserEmail(),
+			c != null ? c.email : dsUsername,
 			c != null ? c.accountNumber : null,
-			c != null ? c.environment.environment.name() : 'Production',
-			c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : null,
+			c != null ? c.environment.environment.name() : dsEnvironment,
+			c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : dsUrl,
 			a != null && a.isTrial,
 			a != null && a.isTrial ? a.trialStatus : null,
 			loginResult != null ? loginResult.status : null,
@@ -62,7 +67,7 @@ public with sharing class SetupController extends Controller {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 
-			return getLogin(null);
+			return getLogin(UserInfo.getUserEmail(), 'Production', null, null);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get setup state');
 		}
@@ -84,12 +89,24 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static LoginInformation login(final String dsUsername, final String dsPassword,
-		final String dsEnvironment, final String dsUrl, final Integer dsAccountNumber) {
+	public static LoginInformation login(
+		final String dsUsername,
+		final String dsPassword,
+		final String dsEnvironment,
+		final String dsUrl,
+		final Integer dsAccountNumber) {
 
 		try {
-			return getLogin(AccountService.login(dsUsername, dsPassword, getTarget(dsEnvironment),
-				String.isBlank(dsUrl) ? null : new Url(dsUrl), Integer.valueOf(dsAccountNumber)));
+			return getLogin(
+				dsUsername,
+				dsEnvironment,
+				dsUrl,
+				AccountService.login(
+					dsUsername,
+					dsPassword,
+					getTarget(dsEnvironment),
+					String.isBlank(dsUrl) ? null : new Url(dsUrl),
+					Integer.valueOf(dsAccountNumber)));
 		} catch (UnauthorizedException ex) {
 			AuraHandledException ex2 = new AuraHandledException(ex.getMessage());
 			ex2.setMessage(ex.getMessage());

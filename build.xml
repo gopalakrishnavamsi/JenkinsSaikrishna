@@ -47,7 +47,7 @@
 	</target>
 
 	<target name="test">
-		<sf:deploy username="${test.username}" password="${test.password}" serverurl="${test.url}"
+		<sf:deploy username="${test.username}" password="${test.password}${test.securityToken}" serverurl="${test.url}"
 				   deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
 	</target>
 

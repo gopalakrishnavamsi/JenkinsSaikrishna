@@ -1,5 +1,5 @@
 @IsTest
-private class AccountServiceTest {
+public class AccountServiceTest {
 
 	private static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
 	private static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
@@ -18,7 +18,7 @@ private class AccountServiceTest {
 		}
 	}
 
-	private class ExpiredAccountMock implements HttpCalloutMock {
+	public class ExpiredAccountMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
@@ -49,7 +49,7 @@ private class AccountServiceTest {
 		}
 	}
 
-	private class TrialAccountMock implements HttpCalloutMock {
+	public class TrialAccountMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
@@ -296,7 +296,7 @@ private class AccountServiceTest {
 		}
 	}
 
-	private class MultipleAccountMock implements HttpCalloutMock {
+	public class MultipleAccountMock implements HttpCalloutMock {
 		public HttpResponse respond(final HttpRequest request) {
 			final String endpoint = request.getEndpoint();
 			final HttpResponse response = new HttpResponse();
