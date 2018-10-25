@@ -136,7 +136,7 @@
                                     </div>
                                     <div class="slds-media__body">
                                         <h3 class="slds-tile__title slds-truncate" title="{!doc.name}">
-                                            <a href="javascript:void(0);">{!doc.name}</a>
+                                            {!doc.name}
                                         </h3>
                                         <div class="slds-tile__detail slds-truncate">
                                             {!doc.formattedLastModified} • {!doc.formattedSize}
