@@ -72,13 +72,11 @@ global with sharing class AccountService {
 		/**
 		 * The status of the login attempt.
 		 */
-		@AuraEnabled
 		public LoginStatus status { get; private set; }
 		/**
 		 * Valid DocuSign accounts from which to choose. Populated if the <code>status</code> is
 		 * <code>SelectAccount</code>.
 		 */
-		@AuraEnabled
 		public List<AccountOption> accountOptions { get; private set; }
 
 		/**

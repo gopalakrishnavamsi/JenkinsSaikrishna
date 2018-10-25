@@ -101,7 +101,7 @@ public class Account {
 	}
 
 	/**
-	 * Represention of the status of a DocuSign trial account.
+	 * Representation of the status of a DocuSign trial account.
 	 */
 	public class TrialStatus {
 		/**

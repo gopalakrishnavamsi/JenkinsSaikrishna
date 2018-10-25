@@ -19,7 +19,7 @@
 
   selectAccount: function (component, event, helper) {
     component.set('v.showAccountSelectionModal', false);
-    helper.login(component, event, helper);
+    helper.login(component, helper);
   },
 
   cancelSelectAccount: function (component, event, helperz) {

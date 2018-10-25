@@ -92,7 +92,26 @@ private class SetupControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(AccountService.LoginStatus.Success, result.status);
+			System.assertEquals(AccountService.LoginStatus.Success.name(), result.status);
+		}
+	}
+
+	@IsTest
+	static void test_login_multiple_accounts() {
+		Test.setMock(HttpCalloutMock.class, new AccountServiceTest.MultipleAccountMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			SetupController.LoginInformation result = SetupController.login('u', 'p', 'other',
+				'https://unit.test.docusign.net', null);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals('u', result.email);
+			System.assertEquals('other', result.environment);
+			System.assertEquals('https://unit.test.docusign.net', result.otherUrl);
+			System.assertEquals(AccountService.LoginStatus.SelectAccount.name(), result.status);
+			System.assert(Collection.isNotEmpty(result.accountOptions));
 		}
 	}
 
