@@ -51,6 +51,11 @@
 				   deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
 	</target>
 
+	<target name="testCi">
+		<sf:deploy username="${testci.username}" password="${testci.password}" serverurl="${test.url}"
+				   deployRoot="/src" checkOnly="true" testLevel="RunLocalTests"/>
+	</target>
+
 	<target name="pushprod">
 		<setProdPackageXml/>
 		<sf:deploy username="${prod.username}" password="${prod.password}${prod.securityToken}" serverurl="${prod.url}"
