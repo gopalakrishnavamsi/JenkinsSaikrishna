@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- DocuSign Account Number --></help>
+    <label><!-- DocuSign Account Number --></label>
+    <name>AccountNumber__c</name>
+</CustomFieldTranslation>

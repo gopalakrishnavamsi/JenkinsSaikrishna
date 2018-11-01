@@ -1,3 +1,0 @@
-<aura:event type="COMPONENT" description="LoginEvent">
-    <aura:attribute name="isLoggedIn" type="Boolean" required="true"/>
-</aura:event>
