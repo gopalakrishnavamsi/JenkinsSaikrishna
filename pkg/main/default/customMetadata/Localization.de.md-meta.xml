@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>de</label>
+    <protected>true</protected>
+    <values>
+        <field>ChatterEnvelopeCompleted__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign signiert und abgeschlossen. Verstrichene Zeit: [TimeFromSent]</value>
+    </values>
+    <values>
+        <field>ChatterEnvelopeDeclined__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign abgelehnt.</value>
+    </values>
+    <values>
+        <field>ChatterEnvelopeDelivered__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde allen Empfängern bei DocuSign zugestellt.</value>
+    </values>
+    <values>
+        <field>ChatterEnvelopeSent__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde zur Signatur bei DocuSign versendet.</value>
+    </values>
+    <values>
+        <field>ChatterEnvelopeVoided__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign storniert.</value>
+    </values>
+    <values>
+        <field>ChatterRecipientCompleted__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign von [Recipient] abgeschlossen.</value>
+    </values>
+    <values>
+        <field>ChatterRecipientDeclined__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign von [Recipient] abgelehnt.</value>
+    </values>
+    <values>
+        <field>ChatterRecipientDelivered__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign von [Recipient] gelesen.</value>
+    </values>
+    <values>
+        <field>ChatterRecipientSent__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign an [Recipient] gesendet.</value>
+    </values>
+    <values>
+        <field>ChatterRecipientSigned__c</field>
+        <value xsi:type="xsd:string">Umschlag für [SourceType] &quot;[SourceName]&quot; wurde bei DocuSign von [Recipient] signiert. Verstrichene Zeit: [TimeFromSent]</value>
+    </values>
+    <values>
+        <field>EmailMessage__c</field>
+        <value xsi:type="xsd:string">Ich schicke Ihnen diese Anfrage für Ihre elektronische Unterschrift, bitte bewerten und elektronisch über den Link unten anmelden.</value>
+    </values>
+    <values>
+        <field>EmailSubject__c</field>
+        <value xsi:type="xsd:string">Dokumente für Ihre DocuSign Unterschrift</value>
+    </values>
+</CustomMetadata>

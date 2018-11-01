@@ -1,5 +1,0 @@
-<aura:event type="COMPONENT" description="ToastEvent">
-    <aura:attribute name="show" type="Boolean" required="true"/>
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="mode" type="String"/>
-</aura:event>

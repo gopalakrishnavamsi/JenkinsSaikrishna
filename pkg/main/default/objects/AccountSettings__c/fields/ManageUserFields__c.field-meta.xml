@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ManageUserFields__c</fullName>
+    <defaultValue>&quot;name,alias,username,email,DSProSFUsername__c,userroleid,managerid&quot;</defaultValue>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Manage User Fields</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

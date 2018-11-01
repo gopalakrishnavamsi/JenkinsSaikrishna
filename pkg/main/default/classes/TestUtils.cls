@@ -1,0 +1,356 @@
+/**
+ * Utility methods to support unit testing.
+ */
+@IsTest
+global class TestUtils {
+
+	/**
+	 * Sets an HTTP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign REST API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>HttpCalloutMock</code> interface.
+	 *
+	 * @return The HTTP callout mock.
+	 */
+	global static HttpCalloutMock setMock(final HttpCalloutMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
+
+	/**
+	 * Sets an SOAP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign SOAP API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>WebServiceMock</code> interface.
+	 *
+	 * @return The SOAP callout mock.
+	 */
+	global static WebServiceMock setMock(final WebServiceMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
+
+	public static Integer randomInteger(final Integer maxValue) {
+		return Integer.valueOf(Math.random() * maxValue);
+	}
+
+	public static String randomString(final Integer length) {
+		final String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+		String result = '';
+		while (result.length() < length) {
+			Integer i = Math.mod(Math.abs(Crypto.getRandomInteger()), chars.length());
+			result += chars.substring(i, i + 1);
+		}
+		return result;
+	}
+
+	public static Envelope__c createEnvelope() {
+		return createEnvelope(null, UUID.randomUUID());
+	}
+
+	public static Envelope__c createEnvelope(final Id sourceId) {
+		return createEnvelope(sourceId, UUID.randomUUID());
+	}
+
+	public static Envelope__c createEnvelope(final UUID docuSignId) {
+		return createEnvelope(null, docuSignId);
+	}
+
+	public static Envelope__c createEnvelope(final Id sourceId, final UUID docuSignId) {
+		Envelope__c e = new Envelope__c(
+			SourceId__c = sourceId,
+			DocuSignId__c = String.valueOf(docuSignId),
+			EmailSubject__c = 'Subject',
+			EmailMessage__c = 'Message',
+			Sent__c = docuSignId == null ? null : Datetime.now());
+		insert e;
+		return e;
+	}
+
+	public static ContentVersion createContentVersion() {
+		UUID id = UUID.randomUUID();
+		ContentVersion cv = new ContentVersion(
+			Title = id.toString(),
+			PathOnClient = id.toString() + '.pdf',
+			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
+			IsMajorVersion = false);
+		insert cv;
+		return [
+			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
+			FROM ContentVersion
+			WHERE Id = :cv.Id
+			LIMIT 1
+		];
+	}
+
+	public static ContentVersion createContentVersion(final Id sourceId) {
+		ContentVersion cv = createContentVersion();
+		createContentDocumentLink(sourceId, cv);
+		return cv;
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId) {
+		return createEnvelopeDocument(envelopeId, createContentVersion(), 1);
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId, final Integer sequence) {
+		return createEnvelopeDocument(envelopeId, createContentVersion(), sequence);
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId, final String type, final Id id, final String name, final Integer sequence) {
+		Document__c ed = new Document__c(
+			Envelope__c = envelopeId,
+			Name = name,
+			SourceId__c = id,
+			Sequence__c = sequence,
+			Size__c = 1234,
+			Extension__c = 'pdf',
+			Type__c = type);
+		insert ed;
+		return ed;
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId, final ContentVersion file, final Integer sequence) {
+		return createEnvelopeDocument(envelopeId, file, Document.TYPE_FILE, sequence);
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId, final ContentVersion file, final String type, final Integer sequence) {
+		Document__c ed = new Document__c(
+			Envelope__c = envelopeId,
+			Name = file.Title,
+			SourceId__c = file.Id,
+			Sequence__c = sequence,
+			Size__c = file.ContentSize,
+			Extension__c = file.FileExtension,
+			Type__c = type);
+		insert ed;
+		return ed;
+	}
+
+	public static Document__c createEnvelopeDocument(final Id envelopeId, final Schema.Document doc, final Integer sequence) {
+		Document__c ed = new Document__c(
+			Envelope__c = envelopeId,
+			Name = doc.Name,
+			SourceId__c = doc.Id,
+			Sequence__c = sequence,
+			Size__c = 1234,
+			Extension__c = 'pdf',
+			Type__c = Document.TYPE_DOCUMENT);
+		insert ed;
+		return ed;
+	}
+
+	public static Recipient__c createEnvelopeRecipient(final Id envelopeId) {
+		return createEnvelopeRecipient(envelopeId, 1);
+	}
+
+	public static Recipient__c createEnvelopeRecipient(final Id envelopeId, final Integer sequence) {
+		Recipient__c r = new Recipient__c(
+			Envelope__c = envelopeId,
+			Type__c = Recipient.TYPE_SIGNER,
+			Sequence__c = sequence,
+			RoutingOrder__c = sequence,
+			Role__c = 'rr' + sequence,
+			Name = UUID.randomUUID().toString(),
+			Email__c = UUID.randomUUID().toString() + '@unit.test');
+		insert r;
+		return r;
+	}
+
+	public static Schema.Account createAccount() {
+		Schema.Account a = new Schema.Account(Name = 'UNIT TEST');
+		insert a;
+		return a;
+	}
+
+	public static Opportunity createOpportunity() {
+		return createOpportunity(createAccount().Id);
+	}
+
+	public static Opportunity createOpportunity(final Id accountId) {
+		Opportunity o = new Opportunity(
+			AccountId = accountId,
+			Name = 'UNIT TEST',
+			CloseDate = Date.today(),
+			StageName = 'Negotiation/Review');
+		insert o;
+		return o;
+	}
+
+	public static OpportunityContactRole createOpportunityContactRole(final Id opportunityId, final Id contactId) {
+		OpportunityContactRole ocr = new OpportunityContactRole(
+			OpportunityId = opportunityId,
+			ContactId = contactId,
+			Role = UUID.randomUUID().toString());
+		insert ocr;
+		return ocr;
+	}
+
+	public static Case createCase() {
+		Schema.Account a = createAccount();
+		return createCase(a.Id, createContact(a.Id).Id);
+	}
+
+	public static Case createCase(final Id accountId, final Id contactId) {
+		Case c = new Case(AccountId = accountId, ContactId = contactId);
+		insert c;
+		c = [SELECT Id, CaseNumber, Account.Id, Account.Name, Contact.Id, Contact.Name FROM Case WHERE Id = :c.Id];
+		return c;
+	}
+
+	public static Contact createContact() {
+		return createContact(createAccount().Id);
+	}
+
+	public static Contact createContact(final Id accountId) {
+		Contact c = new Contact(
+			AccountId = accountId,
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString(),
+			Email = UUID.randomUUID().toString() + '@unit.test',
+			Phone = '5555555555');
+		insert c;
+		return [SELECT AccountId, Name, FirstName, LastName, Email, Phone FROM Contact WHERE Id = :c.Id LIMIT 1];
+	}
+
+	public static Lead createLead() {
+		Lead l = new Lead(
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString(),
+			Company = 'Acme Corp.',
+			Email = UUID.randomUUID().toString() + '@unit.test',
+			Phone = '5555555555');
+		insert l;
+		return [SELECT Company, Name, FirstName, LastName, Email, Phone FROM Lead WHERE Id = :l.Id LIMIT 1];
+	}
+
+	public static Schema.Document createDocument() {
+		return createDocument(UserInfo.getUserId());
+	}
+
+	public static Schema.Document createDocument(final Id folderId) {
+		Schema.Document d = new Schema.Document(
+			Name = UUID.randomUUID().toString() + '.pdf',
+			Body = Blob.valueOf(UUID.randomUUID().toString()),
+			FolderId = folderId);
+		insert d;
+		return [SELECT Name, Type, Body, BodyLength, FolderId, LastModifiedDate FROM Document WHERE Id = :d.Id LIMIT 1];
+	}
+
+	public static ContentWorkspace createContentWorkspace() {
+		ContentWorkspace cw = new ContentWorkspace(Name = UUID.randomUUID().toString());
+		insert cw;
+		return cw;
+	}
+
+	public static ContentWorkspace getFirstAvailableContentWorkspace() {
+		List<ContentWorkspace> cws = [SELECT Id, Name FROM ContentWorkspace ORDER BY Name LIMIT 1];
+		if (Collection.isNotEmpty(cws)) {
+			return cws[0];
+		}
+		return null;
+	}
+
+	public static ContentWorkspaceDoc createContentWorkspaceDoc(final Id contentWorkspaceId, final Id contentDocumentId) {
+		ContentWorkspaceDoc cwd = new ContentWorkspaceDoc(
+			ContentWorkspaceId = contentWorkspaceId,
+			ContentDocumentId = contentDocumentId);
+		insert cwd;
+		return cwd;
+	}
+
+	public static ContentDocumentLink createContentDocumentLink(final Id linkedEntityId) {
+		return createContentDocumentLink(linkedEntityId, createContentVersion());
+	}
+
+	public static ContentDocumentLink createContentDocumentLink(final Id linkedEntityId, final ContentVersion contentVersion) {
+		ContentDocumentLink cdl = new ContentDocumentLink(
+			ContentDocumentId = contentVersion.ContentDocumentId,
+			LinkedEntityId = linkedEntityId,
+			ShareType = 'I');
+		insert cdl;
+		return cdl;
+	}
+
+	public static EnvelopeLocalization__c createEnvelopeLocalization(final String language) {
+		return createEnvelopeLocalization(new Recipient.EmailSettings(language, Localization.getLabel(language),
+			language + ' subject', language + ' message'));
+	}
+
+	public static EnvelopeLocalization__c createEnvelopeLocalization(final Recipient.EmailSettings loc) {
+		EnvelopeLocalization__c el = new EnvelopeLocalization__c(
+			Name = loc.languageLabel,
+			Language__c = loc.language,
+			EmailSubject__c = loc.subject,
+			EmailMessage__c = loc.message);
+		insert el;
+		return el;
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus() {
+		return createEnvelopeStatus(UUID.randomUUID());
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus(final UUID dseId) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			DocuSignId__c = String.valueOf(dseId),
+			Status__c = Envelope.STATUS_CREATED,
+			EmailSubject__c = 'Unit test subject',
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus(final Id sourceId) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			DocuSignId__c = UUID.randomUUID().toString(),
+			SourceId__c = sourceId,
+			Status__c = Envelope.STATUS_CREATED,
+			EmailSubject__c = 'Unit test subject',
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
+	public static EnvelopeStatus__c createEnvelopeStatus(final Envelope__c e) {
+		EnvelopeStatus__c es = new EnvelopeStatus__c(
+			SourceId__c = e.SourceId__c,
+			DocuSignId__c = e.DocuSignId__c,
+			Status__c = e.Sent__c == null ? Envelope.STATUS_CREATED : Envelope.STATUS_SENT,
+			Sent__c = e.Sent__c,
+			EmailSubject__c = e.EmailSubject__c,
+			LastStatusUpdate__c = Datetime.now());
+		insert es;
+		return es;
+	}
+
+	public static RecipientStatus__c createRecipientStatus(final Id esId, final Integer sequence) {
+		RecipientStatus__c rs = new RecipientStatus__c(
+			EnvelopeStatus__c = esId,
+			SourceId__c = UserInfo.getUserId(),
+			Type__c = Recipient.TYPE_SIGNER,
+			Sequence__c = sequence,
+			Status__c = Recipient.STATUS_CREATED,
+			Name = 'Unit Test',
+			Email__c = 'r@unit.test',
+			RoutingOrder__c = sequence,
+			LastStatusUpdate__c = Datetime.now());
+		insert rs;
+		return rs;
+	}
+
+	public static RecipientStatus__c createRecipientStatus(final Id esId, final Recipient__c r) {
+		RecipientStatus__c rs = new RecipientStatus__c(
+			EnvelopeStatus__c = esId,
+			SourceId__c = r.SourceId__c,
+			Type__c = r.Type__c,
+			Sequence__c = r.Sequence__c,
+			Status__c = Recipient.STATUS_CREATED,
+			Name = r.Name,
+			Email__c = r.Email__c,
+			RoutingOrder__c = r.RoutingOrder__c,
+			LastStatusUpdate__c = Datetime.now());
+		insert rs;
+		return rs;
+	}
+}

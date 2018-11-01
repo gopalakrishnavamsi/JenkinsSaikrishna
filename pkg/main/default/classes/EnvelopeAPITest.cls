@@ -1,0 +1,1788 @@
+@IsTest
+private class EnvelopeAPITest {
+
+	private static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
+	private static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
+	private static final UUID ID3 = UUID.parse('33333333-3333-3333-3333-333333333333');
+	private static final UUID ID4 = UUID.parse('44444444-4444-4444-4444-444444444444');
+	private static final UUID ID5 = UUID.parse('55555555-5555-5555-5555-555555555555');
+
+	@IsTest
+	static void test_bad_resolver() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.DocumentResolvers__c = 'bad_resolver';
+			upsert s;
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance();
+				throw new AssertException('Expected getInstance to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.InvalidDocumentResolver_1, new List<String> { 'bad_resolver' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getError() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			HttpResponse r1 = new HttpResponse();
+			r1.setStatusCode(200);
+			r1.setStatus('OK');
+			r1.setHeader('Content-Type', 'application/json');
+			r1.setBody('{"some":"value"}');
+			HttpResponse r2 = new HttpResponse();
+			r2.setStatusCode(400);
+			r2.setStatus('BAD_REQUEST');
+			r2.setHeader('Content-Type', 'application/json');
+			r2.setBody('{"errorCode":"SOME_ERROR","message":"Some error"}');
+			HttpResponse r3 = new HttpResponse();
+			r3.setStatusCode(400);
+			r3.setStatus('BAD_REQUEST');
+			r3.setHeader('Content-Type', 'application/json');
+			r3.setBody('{"errorCode":"ACCOUNT_LACKS_PERMISSIONS","message":"Account lacks permissions"}');
+			HttpResponse r4 = new HttpResponse();
+			r4.setStatusCode(400);
+			r4.setStatus('BAD_REQUEST');
+			r4.setHeader('Content-Type', 'application/json');
+			r4.setBody('{"errorCode":"RECIPIENT_NOT_IN_SEQUENCE","message":"Recipient not in sequence"}');
+			HttpResponse r5 = new HttpResponse();
+			r5.setStatusCode(400);
+			r5.setStatus('BAD_REQUEST');
+			r5.setHeader('Content-Type', 'application/json');
+			r5.setBody('{"errorCode":"UNKNOWN_ENVELOPE_RECIPIENT","message":"Unknown envelope recipient"}');
+			HttpResponse r6 = new HttpResponse();
+			r6.setStatusCode(400);
+			r6.setStatus('BAD_REQUEST');
+			r6.setHeader('Content-Type', 'application/json');
+			r6.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"This user lacks sufficient permissions to access this resource."}');
+
+			Test.startTest();
+			APIError e1 = client.getError(r1);
+			APIError e2 = client.getError(r2);
+			APIError e3 = client.getError(r3);
+			APIError e4 = client.getError(r4);
+			APIError e5 = client.getError(r5);
+			APIError e6 = client.getError(r6);
+			Test.stopTest();
+
+			System.assertEquals(APIError.none, e1);
+
+			System.assertNotEquals(null, e2);
+			System.assert(e2 instanceof DocuSignAPI.Error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, e2.code);
+			System.assertEquals('Some error', e2.description);
+			System.assertEquals('SOME_ERROR', ((DocuSignAPI.Error)e2).docuSignCode);
+
+			System.assertNotEquals(null, e3);
+			System.assert(!(e3 instanceof DocuSignAPI.Error));
+			System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, e3.code);
+			System.assertEquals('Account lacks permissions', e3.description);
+
+			System.assertNotEquals(null, e4);
+			System.assert(!(e4 instanceof DocuSignAPI.Error));
+			System.assertEquals(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, e4.code);
+			System.assertEquals(Label.InvalidRecipientSequence, e4.description);
+
+			System.assertNotEquals(null, e5);
+			System.assert(!(e5 instanceof DocuSignAPI.Error));
+			System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, e5.code);
+			System.assertEquals(Label.UnknownEnvelopeRecipient, e5.description);
+
+			System.assertNotEquals(null, e6);
+			System.assert(!(e6 instanceof DocuSignAPI.Error));
+			System.assertEquals(APIErrorCode.UNAUTHORIZED, e6.code);
+			System.assertEquals(Label.UserNotAuthorizedForEnvelope, e6.description);
+		}
+	}
+
+	@IsTest
+	static void test_buildCustomFields() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			CustomField cf1 = CustomField.newTextField('n1', 'v1', true, false);
+			CustomField cf2 = CustomField.newTextField('n2', 'v2', false, true);
+			CustomField cf3 = CustomField.newListField('n3', 'v3', new List<String> { 'v1', 'v2', 'v3' }, true, true);
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+
+			Test.startTest();
+			EnvelopeAPI.CustomFields result = EnvelopeAPI.buildCustomFields(new List<CustomField> { cf1, cf2, cf3 },
+				Entity.resolve(o.Id));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+
+			System.assertNotEquals(null, result.textCustomFields);
+			System.assertEquals(9, result.textCustomFields.size());
+
+			System.assertNotEquals(null, result.listCustomFields);
+			System.assertEquals(1, result.listCustomFields.size());
+			System.assertEquals('n3', result.listCustomFields[0].name);
+			System.assertEquals('v3', result.listCustomFields[0].value);
+			System.assertEquals(new List<String> { 'v1', 'v2', 'v3' }, result.listCustomFields[0].listItems);
+			System.assertEquals('true', result.listCustomFields[0].required);
+			System.assertEquals('true', result.listCustomFields[0].show);
+		}
+	}
+
+	@IsTest
+	static void test_getDocumentContent_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+			Schema.Document d1 = TestUtils.createDocument();
+			Document t1 = new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString());
+
+			Test.startTest();
+			Map<Id, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
+				t1,
+				DocumentService.convert(cv1),
+				DocumentService.convert(cv2),
+				DocumentService.convert(d1)
+			}, false);
+			Map<Id, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
+				t1,
+				DocumentService.convert(cv1),
+				DocumentService.convert(cv2),
+				DocumentService.convert(d1)
+			}, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(3, result1.size());
+			System.assertEquals(cv1.VersionData.toString(), result1.get(cv1.Id).toString());
+			System.assertEquals(cv2.VersionData.toString(), result1.get(cv2.Id).toString());
+			System.assertEquals(d1.Body.toString(), result1.get(d1.Id).toString());
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals(3, result2.size());
+			System.assertEquals(cv1.Id, result2.get(cv1.Id).toString());
+			System.assertEquals(cv2.Id, result2.get(cv2.Id).toString());
+			System.assertEquals(d1.Id, result2.get(d1.Id).toString());
+		}
+	}
+
+	@IsTest
+	static void test_getDocumentContent_error() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			ContentVersion cv1 = TestUtils.createContentVersion();
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getDocumentContent(new List<Document> {
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest1.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getUserId()),
+					DocumentService.convert(cv1),
+					new Document(null, Document.TYPE_FILE, null, 'UnitTest2.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getOrganizationId()),
+					new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString())
+				}, false);
+				throw new AssertException('Expected getDocumentContent to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotReadDocumentContent_1, new List<String> {
+					'UnitTest1.pdf (' + UserInfo.getUserId() + '), UnitTest2.pdf (' + UserInfo.getOrganizationId() + ')'
+				}), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getSenderViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getSenderViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+		}
+	}
+
+	@IsTest
+	static void test_getSenderViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getSenderViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'));
+				throw new AssertException('Expected getSenderViewUrl call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_getRecipientViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getRecipientViewUrl(
+				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+		}
+	}
+
+	@IsTest
+	static void test_getRecipientViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getRecipientViewUrl(
+					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', 'a@b.c', 1);
+				throw new AssertException('Expected getRecipientView call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_getEmbeddedRecipientViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getEmbeddedRecipientViewUrl(
+				UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName());
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+		}
+	}
+
+	@IsTest
+	static void test_getEmbeddedRecipientViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getEmbeddedRecipientViewUrl(
+					UUID.randomUUID(), new Url('https://unit.test.return/'), 'a@b.c', UserInfo.getName());
+				throw new AssertException('Expected getEmbeddedRecipientView call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	private class UnknownRecipientMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"UNKNOWN_ENVELOPE_RECIPIENT","message":"whatever"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getRecipientViewUrl_unknown_recipient() {
+		Test.setMock(HttpCalloutMock.class, new UnknownRecipientMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
+					'a@b.c', 'a@b.c', 1);
+				throw new AssertException('Expected getRecipientView call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, ex.error.code);
+				System.assertEquals(Label.UnknownEnvelopeRecipient, ex.error.description);
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class InvalidSequenceMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"RECIPIENT_NOT_IN_SEQUENCE","message":"whatever"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getRecipientViewUrl_invalid_sequence() {
+		Test.setMock(HttpCalloutMock.class, new InvalidSequenceMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getRecipientViewUrl(UUID.randomUUID(), new Url('https://unit.test.return/'),
+					'a@b.c', 'a@b.c', 1);
+				throw new AssertException('Expected getRecipientView call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, ex.error.code);
+				System.assertEquals(Label.InvalidRecipientSequence, ex.error.description);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getConsoleViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getConsoleViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+		}
+	}
+
+	@IsTest
+	static void test_getConsoleViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getConsoleViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
+				throw new AssertException('Expected getConsoleView call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_getCorrectViewUrl_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			Url u = client.getCorrectViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, u);
+		}
+	}
+
+	@IsTest
+	static void test_getCorrectViewUrl_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getCorrectViewUrl(UUID.randomUUID(), new Url('https://unit.test/return'));
+				throw new AssertException('Expected getCorrectView call to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	private class CorrectViewErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			String endpoint = request.getEndpoint();
+			if (endpoint.contains(ID1.toString())) {
+				response.setBody('{"errorCode":"INVALID_ENVELOPE_STATE","message":"Only envelopes in the \'Sent\' or \'Delivered\' states may be corrected."}');
+			} else if (endpoint.contains(ID2.toString())) {
+				response.setBody('{"errorCode":"ENVELOPE_LOCKED","message":"The envelope is locked."}');
+			} else if (endpoint.contains(ID3.toString())) {
+				response.setBody('{"errorCode":"USER_NOT_SENDER","message":"This user is not the sender of the envelope."}');
+			} else if (endpoint.contains(ID4.toString())) {
+				response.setBody('{"errorCode":"ENVELOPE_NOT_FOUND","message":"The envelope specified either does not exist or you have no rights to it"}');
+			} else {
+				response.setBody('{"errorCode":"RANDOM_ERROR","message":"Random error"}');
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getCorrectViewUrl_error() {
+		Test.setMock(HttpCalloutMock.class, new CorrectViewErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			Url returnUrl = new Url('https://unit.test/return');
+			APIException ex1, ex2, ex3, ex4, ex5;
+
+			Test.startTest();
+			try {
+				client.getCorrectViewUrl(ID1, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
+			} catch (APIException ex) {
+				ex1 = ex;
+			}
+			try {
+				client.getCorrectViewUrl(ID2, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
+			} catch (APIException ex) {
+				ex2 = ex;
+			}
+			try {
+				client.getCorrectViewUrl(ID3, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
+			} catch (APIException ex) {
+				ex3 = ex;
+			}
+			try {
+				client.getCorrectViewUrl(ID4, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
+			} catch (APIException ex) {
+				ex4 = ex;
+			}
+			try {
+				client.getCorrectViewUrl(ID5, returnUrl);
+				throw new AssertException('Expected getCorrectViewUrl to fail');
+			} catch (APIException ex) {
+				ex5 = ex;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex1);
+			System.assertNotEquals(null, ex1.error);
+			System.assertEquals(Label.InvalidCorrectionState, ex1.error.description);
+
+			System.assertNotEquals(null, ex2);
+			System.assertNotEquals(null, ex2.error);
+			System.assertEquals(Label.EnvelopeLockedCorrectionInProgress, ex2.error.description);
+
+			System.assertNotEquals(null, ex3);
+			System.assertNotEquals(null, ex3.error);
+			System.assertEquals(Label.NotEnvelopeOwner, ex3.error.description);
+
+			System.assertNotEquals(null, ex4);
+			System.assertNotEquals(null, ex4.error);
+			System.assertEquals(Label.EnvelopeNotFoundOrUnauthorized, ex4.error.description);
+
+			System.assertNotEquals(null, ex5);
+			System.assertNotEquals(null, ex5.error);
+			System.assertEquals('Random error', ex5.error.description);
+		}
+	}
+
+	@IsTest
+	static void test_resendEnvelope_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			System.assert(client.resendEnvelope(UUID.randomUUID()));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resendEnvelope_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.resendEnvelope(UUID.randomUUID());
+				throw new AssertException('Expected resendEnvelope to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_resendRecipients_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<Recipient.ResendResult> result = EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+				Recipient.fromSource('n', 'r@unit.test', null, null, null)
+			});
+			Test.stopTest();
+
+			System.assertEquals(1, Collection.size(result));
+		}
+	}
+
+	private class ResendRecipientsPartialSuccessMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"recipientUpdateResults": [{"recipientId": "1","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "2","errorDetails": {"errorCode": "UNIT_TEST","message": "Unit test error 1"}},{"recipientId": "3","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "4","errorDetails": {"errorCode": "SUCCESS","message": null}},{"recipientId": "5","errorDetails": {"errorCode": "UNKNOWN_ENVELOPE_RECIPIENT","message": "Recipient not found"}},{"recipientId": "6","errorDetails": {"errorCode": "SUCCESS","message": null}}]}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_resendRecipients_success_partial() {
+		Test.setMock(HttpCalloutMock.class, new ResendRecipientsPartialSuccessMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<Recipient.ResendResult> result = EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+				Recipient.fromSource('n', 'r@unit.test', null, null, null)
+			});
+			Test.stopTest();
+
+			System.assertEquals(6, Collection.size(result));
+			Integer sequence = 1;
+			for (Recipient.ResendResult rr : result) {
+				System.assertNotEquals(null, rr);
+				System.assertEquals(sequence, rr.sequence);
+				System.assertNotEquals(null, rr.error);
+				if (sequence == 2) {
+					System.assertEquals(APIErrorCode.BAD_REQUEST, rr.error.code);
+					System.assertEquals('Unit test error 1', rr.error.description);
+				} else if (sequence == 5) {
+					System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, rr.error.code);
+					System.assertEquals(Label.UnknownEnvelopeRecipient, rr.error.description);
+				} else {
+					System.assertEquals(APIError.none, rr.error);
+				}
+				sequence++;
+			}
+		}
+	}
+
+	@IsTest
+	static void test_resendRecipients_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().resendRecipients(UUID.randomUUID(), new List<Recipient> {
+					Recipient.fromSource('n', 'r@unit.test', null, null, null)
+				});
+				throw new AssertException('Expected resendRecipients to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getSigningGroups_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<SigningGroup> signingGroups1 = client.getSigningGroups();
+			// Call again to get cached version
+			List<SigningGroup> signingGroups2 = client.getSigningGroups();
+			Test.stopTest();
+
+			System.assertNotEquals(null, signingGroups1);
+			System.assertEquals(3, signingGroups1.size());
+			System.assert(signingGroups1 === signingGroups2); // Check reference equality
+
+			System.assertNotEquals(null, signingGroups1[0].id);
+			System.assertEquals('SG1', signingGroups1[0].name);
+			System.assert(signingGroups1[0].isValid);
+			System.assertNotEquals(null, signingGroups1[0].members);
+			System.assertEquals(2, signingGroups1[0].members.size());
+			System.assertNotEquals(null, signingGroups1[0].members[0].username);
+			System.assertNotEquals(null, signingGroups1[0].members[0].email);
+			System.assertNotEquals(null, signingGroups1[0].members[1].username);
+			System.assertNotEquals(null, signingGroups1[0].members[1].email);
+
+			System.assertNotEquals(null, signingGroups1[1].id);
+			System.assertEquals('SG2', signingGroups1[1].name);
+			System.assert(!signingGroups1[1].isValid);
+			System.assertNotEquals(null, signingGroups1[1].members);
+			System.assertEquals(0, signingGroups1[1].members.size());
+
+			System.assertNotEquals(null, signingGroups1[2].id);
+			System.assertEquals('SG3', signingGroups1[2].name);
+			System.assert(signingGroups1[2].isValid);
+			System.assertNotEquals(null, signingGroups1[2].members);
+			System.assertEquals(1, signingGroups1[2].members.size());
+			System.assertNotEquals(null, signingGroups1[2].members[0].username);
+			System.assertNotEquals(null, signingGroups1[2].members[0].email);
+		}
+	}
+
+	private class SigningGroupsUnauthorizedMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"ACCOUNT_LACKS_PERMISSIONS","message":"Signing groups are unauthorized for this account"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getSigningGroups_unauthorized() {
+		Test.setMock(HttpCalloutMock.class, new SigningGroupsUnauthorizedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getSigningGroups();
+				throw new AssertException('Expected getSigningGroups to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
+				System.assertEquals(Label.SigningGroupsProhibited, ex.getMessage());
+			}
+			// Empty result is cached as the answer from DS will never change
+			List<SigningGroup> result = EnvelopeAPI.getInstance().getSigningGroups();
+			Test.stopTest();
+
+			System.assert(Collection.isEmpty(result));
+		}
+	}
+
+	@IsTest
+	static void test_getSigningGroups_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getSigningGroups();
+				throw new AssertException('Expected getSigningGroups to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			// Result is not cached for non-auth-related errors
+			try {
+				EnvelopeAPI.getInstance().getSigningGroups();
+				throw new AssertException('Expected getSigningGroups to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateInPersonSigner_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			System.assert(client.updateInPersonSigner(UUID.randomUUID(), 'unit@test.com'));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateInPersonSigner_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex;
+
+			Test.startTest();
+			try {
+				client.updateInPersonSigner(UUID.randomUUID(), 'unit@test.com');
+				throw new AssertException('Expected updateInPersonSigner to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_voidEnvelope_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			System.assert(client.voidEnvelope(UUID.randomUUID(), 'Just because'));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_voidEnvelope_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex1;
+
+			Test.startTest();
+			try {
+				client.voidEnvelope(UUID.randomUUID(), 'Just because');
+				throw new AssertException('Expected voidEnvelope to fail');
+			} catch (APIException ex) {
+				ex1 = ex;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex1);
+			System.assertNotEquals(null, ex1.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex1.error.code);
+		}
+	}
+
+	private class VoidEnvelopeErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (request.getEndpoint().contains(ID1.toString())) {
+				response.setBody('{"errorCode":"USER_NOT_SENDER","message":"This user is not the sender of the envelope."}');
+			} else {
+				response.setBody('{"errorCode":"GENERIC_ERROR","message":"Some error"}');
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_voidEnvelope_errors() {
+		Test.setMock(HttpCalloutMock.class, new VoidEnvelopeErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex1, ex2;
+
+			Test.startTest();
+			try {
+				client.voidEnvelope(ID1, 'Just because');
+				throw new AssertException('Expected voidEnvelope to fail');
+			} catch (APIException ex) {
+				ex1 = ex;
+			}
+			try {
+				client.voidEnvelope(ID2, 'Just because');
+				throw new AssertException('Expected voidEnvelope to fail');
+			} catch (APIException ex) {
+				ex2 = ex;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex1);
+			System.assertNotEquals(null, ex1.error);
+			System.assertEquals(Label.NotEnvelopeOwner, ex1.error.description);
+
+			System.assertNotEquals(null, ex2);
+			System.assertNotEquals(null, ex2.error);
+			System.assertEquals('Some error', ex2.error.description);
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+			TestUtils.createEnvelopeLocalization(Localization.DE);
+
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e2 = new Envelope(
+				e1.Id,
+				e1.Name,
+				null,
+				null,
+				new List<Document> {
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
+					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
+				},
+				new List<Recipient> {
+					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
+						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
+							new List<String> { '5555555555' }), 'note1', true).withSequence(1),
+					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2), 'Recipient Two',
+						'r2@unit.test', null, 'note2', false).withSequence(2)
+				},
+				new List<CustomField> {
+					CustomField.newTextField('cf1', '1', true, true),
+					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+				},
+				new Notifications(false, 0, 0, false, 0, 0, false),
+				'subject',
+				'body',
+				new Entity(o.Id),
+				null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_success_with_Recipient_EmailSettings() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+			TestUtils.createEnvelopeLocalization(Localization.DE);
+
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Envelope e2 = new Envelope(
+				e1.Id,
+				e1.Name,
+				null,
+				null,
+				new List<Document> {
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
+					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
+				},
+				new List<Recipient> {
+					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
+						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
+							new List<String> { '5555555555' }), 'note1', true).withSequence(1).withEmailSettings(new Recipient.EmailSettings(
+						Localization.KO,
+						Localization.getLabel(Localization.KO),
+						'ko subject',
+						'ko message')),
+					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2), 'Recipient Two',
+						'r2@unit.test', null, 'note2', false).withSequence(2).withEmailSettings(new Recipient.EmailSettings(
+						Localization.NL,
+						Localization.getLabel(Localization.NL),
+						'nl subject',
+						'nl message'))
+				},
+				new List<CustomField> {
+					CustomField.newTextField('cf1', '1', true, true),
+					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+				},
+				null,
+				'subject',
+				'body',
+				new Entity(o.Id),
+				null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_buildCompositeTemplates_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Document doc = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e1.Id));
+			List<CustomField> cfs = new List<CustomField> {
+				CustomField.newTextField('cf1', '1', true, true),
+				CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
+			};
+			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
+
+			Test.startTest();
+			List<EnvelopeAPI.CompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
+				new List<Document> {
+					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
+					doc
+				},
+				new List<Recipient> {
+					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
+						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
+							new List<String> { '5555555555' }), 'note1', true),
+					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2),
+						'Recipient Two', 'r2@unit.test', null, 'note2', false)
+				},
+				true,
+				content,
+				cfs,
+				new Entity(o.Id));
+			Test.stopTest();
+
+			System.assertEquals(2, compositeTemplatesList.size());
+			System.assertEquals(1, compositeTemplatesList[0].serverTemplates.size());
+			System.assertEquals(1, compositeTemplatesList[1].inlineTemplates.size());
+			System.assertEquals('', compositeTemplatesList[1].inlineTemplates[0].recipients.signers[0].routingOrder);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.listCustomFields);
+			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.textCustomFields);
+			System.assertEquals(1, compositeTemplatesList[0].inlineTemplates[0].customFields.listCustomFields.size());
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields);
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields.listCustomFields);
+			System.assertNotEquals(null, compositeTemplatesList[1].inlineTemplates[0].customFields.textCustomFields);
+			System.assertEquals(1, compositeTemplatesList[1].inlineTemplates[0].customFields.listCustomFields.size());
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_recipient_types() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Document__c d = TestUtils.createEnvelopeDocument(e1.Id);
+			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
+				new List<Document>(),
+				new List<Recipient> {
+					Recipient.newRecipient(1, Recipient.TYPE_AGENT, new Recipient.Role('Signer 1', 1),
+						'Recipient One', 'r1@unit.test', null, null, false),
+					Recipient.newRecipient(2, Recipient.TYPE_CARBON_COPY, new Recipient.Role('Signer 2', 2),
+						'Recipient Two', 'r2@unit.test', null, null, false),
+					Recipient.newRecipient(3, Recipient.TYPE_CERTIFIED_DELIVERY, new Recipient.Role('Signer 3', 3),
+						'Recipient Three', 'r3@unit.test', null, null, false),
+					Recipient.newRecipient(4, Recipient.TYPE_EDITOR, new Recipient.Role('Signer 4', 4),
+						'Recipient Four', 'r4@unit.test', null, null, false),
+					Recipient.newRecipient(5, Recipient.TYPE_INTERMEDIARY, new Recipient.Role('Signer 5', 5),
+						'Recipient Five', 'r5@unit.test', null, null, false)
+				},
+				new List<CustomField>(),
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				null, null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_document_types() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createDocument(UserInfo.getUserId()), 1);
+			Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 2);
+			Document__c d3 = TestUtils.createEnvelopeDocument(e1.Id, TestUtils.createContentVersion(), 3);
+			Integer sequence = 1;
+			List<Document> docs = new List<Document> {
+				new Document(d1.Id, d1.Type__c, sequence++, d1.Name, d1.Extension__c, Integer.valueOf(d1.Size__c), d1.LastModified__c, d1.SourceId__c),
+				new Document(d2.Id, d2.Type__c, sequence++, d2.Name, d2.Extension__c, Integer.valueOf(d2.Size__c), d2.LastModified__c, d2.SourceId__c),
+				new Document(d3.Id, d3.Type__c, sequence++, d3.Name, d3.Extension__c, Integer.valueOf(d3.Size__c), d3.LastModified__c, d3.SourceId__c)
+			};
+			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
+				docs,
+				new List<Recipient>(),
+				new List<CustomField>(),
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				null, null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			Test.startTest();
+			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(true, true, true, true));
+				throw new AssertException('Expected createEnvelope to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_null_envelope() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(null, new Envelope.Options(true, true, true, true));
+				throw new AssertException('Expected createEnvelope to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedEnvelope, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_fetch_invalid_document() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			Document__c d = new Document__c(
+				Envelope__c = e1.Id,
+				Name = 'Unit Test',
+				SourceId__c = UserInfo.getUserId(), // Bad document type
+				LastModified__c = Datetime.now(),
+				Sequence__c = 1,
+				Size__c = 1234,
+				Extension__c = 'pdf',
+				Type__c = Document.TYPE_FILE);
+			insert d;
+			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
+				new List<Document> { DocumentService.DB.convert(d) },
+				new List<Recipient>(),
+				new List<CustomField>(),
+				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				null, null);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
+				throw new AssertException('Expected createEnvelope to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotReadDocumentContent_1,
+					new List<String> { d.Name + ' (' + d.SourceId__c + ')' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	class CfrErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"CFR_ERROR","message":"Signers that are required to meet 21 CFR part 11"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_21_cfr_part_11() {
+		Test.setMock(HttpCalloutMock.class, new CfrErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.FAILED_TO_MEET_21_CFR_PART_11, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class UserNotActivatedErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"USER_NOT_ACTIVATED","message":"Account settings indicate the recipient must be an active DocuSign user"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_user_not_activated() {
+		Test.setMock(HttpCalloutMock.class, new UserNotActivatedErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.USER_NOT_ACTIVATED, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class TrialExpiredErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"TRIAL_ACCOUNT_EXPIRED","message":"trialexpired"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_trial_expired() {
+		Test.setMock(HttpCalloutMock.class, new TrialExpiredErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.TRIAL_ACCOUNT_EXPIRED, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class AccountPermissionErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"ACCOUNT_LACKS_PERMISSIONS","message":"account lacks sufficient permissions"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_account_permissions() {
+		Test.setMock(HttpCalloutMock.class, new AccountPermissionErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class UserPermissionErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"user lacks sufficient permissions"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_user_permissions() {
+		Test.setMock(HttpCalloutMock.class, new UserPermissionErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.UNAUTHORIZED, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class InvalidDocumentErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"INVALID_DOCUMENT","message":"unable to convert this document"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_invalid_document() {
+		Test.setMock(HttpCalloutMock.class, new InvalidDocumentErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.INVALID_DOCUMENT, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class InvalidSigningGroupErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"INVALID_SIGNING_GROUP","message":"Group has no members"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_invalid_signing_group() {
+		Test.setMock(HttpCalloutMock.class, new InvalidSigningGroupErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.INVALID_SIGNING_GROUP, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	class InvalidRecipientErrorMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"INVALID_RECIPIENT","message":"user name for the recipient is invalid"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createEnvelope_error_invalid_recipient() {
+		Test.setMock(HttpCalloutMock.class, new InvalidRecipientErrorMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				throw new AssertException('Expected createEnvelope call to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.INVALID_RECIPIENT, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRecipientCustomFields() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Recipient r = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'UNIT TEST', 'r@unit.test', null, null, false);
+			Entity e = Entity.resolve(UserInfo.getUserId());
+
+			Test.startTest();
+			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(null));
+			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(r));
+			System.assertEquals(new List<String> { '##SFUser:' + UserInfo.getUserId() }, EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+				throw new AssertException('Expected getEnvelopeStatus to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class StatusCreatedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"created","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","notification":{"reminders":{"reminderEnabled":"true","reminderDelay":"2","reminderFrequency":"1"},"expirations":{"expireEnabled":"true","expireAfter":"10","expireWarn":"5"}},"recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"created"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_created() {
+		Test.setMock(HttpCalloutMock.class, new StatusCreatedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_CREATED, result.status);
+			System.assertEquals(UserInfo.getName(), result.senderName);
+			System.assertEquals(UserInfo.getUserEmail(), result.senderEmail);
+			System.assertEquals(null, result.sent);
+			System.assertEquals(null, result.expires);
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+				System.assertEquals(i, rs.sequence);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertEquals(null, rs.sent);
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusSentMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"sent","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","notification":{"reminders":{"reminderEnabled":"true","reminderDelay":"2","reminderFrequency":"1"},"expirations":{"expireEnabled":"true","expireAfter":"10","expireWarn":"5"}},"recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"delivered","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_sent() {
+		Test.setMock(HttpCalloutMock.class, new StatusSentMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_SENT, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.expires);
+			System.assertEquals(10, Date.valueOf(result.sent).daysBetween(Date.valueOf(result.expires)));
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				if (i == 1) {
+					System.assertEquals(Recipient.STATUS_DELIVERED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+				} else {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+				}
+				i++;
+			}
+		}
+	}
+
+	private class StatusCompletedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"completed","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}]}}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_completed() {
+		Test.setMock(HttpCalloutMock.class, new StatusCompletedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_COMPLETED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				System.assertEquals(Recipient.STATUS_COMPLETED, rs.status);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.sent);
+				System.assertNotEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusDeclinedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"declined","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","declinedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"completed","signedDateTime":"2018-04-18T22:06:05.0430000Z","deliveredDateTime":"2018-04-18T22:05:57.9470000Z"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"declined","deliveredDateTime":"2018-04-18T22:05:57.9470000Z","declinedDateTime":"2018-04-18T22:05:57.9470000Z","declinedReason":"declined to sign"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_declined() {
+		Test.setMock(HttpCalloutMock.class, new StatusDeclinedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_DECLINED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				if (i == 7) {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+					System.assertEquals(null, rs.completed);
+					System.assertEquals(null, rs.reason);
+				} else if (i == 6) {
+					System.assertEquals(Recipient.STATUS_DECLINED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+					System.assertNotEquals(null, rs.completed);
+					System.assertEquals('declined to sign', rs.reason);
+				} else {
+					System.assertEquals(Recipient.STATUS_COMPLETED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+					System.assertNotEquals(null, rs.completed);
+					System.assertEquals(null, rs.reason);
+				}
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusVoidedMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"status":"voided","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","completedDateTime":"2018-04-18T22:06:22.5730000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z","voidedDateTime":"2018-04-19T01:01:01.10000000Z","voidedReason":"voided envelope","recipients":{"signers":[{"name":"Signer","email":"signer@unit.test","recipientId":"1","recipientIdGuid":"11111111-1111-1111-1111-111111111111","userId":"11111111-1111-1111-1111-111111111111","routingOrder":"1","status":"delivered","deliveredDateTime":"2018-04-18T22:06:06.2770000Z"}],"agents":[{"name":"Agent","email":"agent@unit.test","recipientId":"2","recipientIdGuid":"22222222-2222-2222-2222-222222222222","userId":"22222222-2222-2222-2222-222222222222","routingOrder":"2","status":"created"}],"editors":[{"name":"Editor","email":"editor@unit.test","recipientId":"3","recipientIdGuid":"33333333-3333-3333-3333-333333333333","userId":"33333333-3333-3333-3333-333333333333","routingOrder":"3","status":"created"}],"intermediaries":[{"name":"Intermediary","email":"intermediary@unit.test","recipientId":"4","recipientIdGuid":"44444444-4444-4444-4444-444444444444","userId":"44444444-4444-4444-4444-444444444444","routingOrder":"4","status":"created"}],"carbonCopies":[{"name":"Carbon Copy","email":"carbon.copy@unit.test","recipientId":"5","recipientIdGuid":"55555555-5555-5555-5555-555555555555","userId":"55555555-5555-5555-5555-555555555555","routingOrder":"5","status":"created"}],"certifiedDeliveries":[{"name":"Certified Delivery","email":"carbon.copy.1@unit.test","recipientId":"6","recipientIdGuid":"66666666-6666-6666-6666-666666666666","userId":"66666666-6666-6666-6666-666666666666","routingOrder":"6","status":"created"}],"inPersonSigners":[{"hostName":"Host","hostEmail":"host@unit.test","signerName":"In Person Signer","signerEmail":"in.person.signer@unit.test","recipientId":"7","recipientIdGuid":"77777777-7777-7777-7777-777777777777","userId":"77777777-7777-7777-7777-777777777777","routingOrder":"7","status":"created"}]}}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_voided() {
+		Test.setMock(HttpCalloutMock.class, new StatusVoidedMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_VOIDED, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertNotEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals('voided envelope', result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(7, result.recipients.size());
+			Integer i = 1;
+			for (Recipient.Status rs : result.recipients) {
+				System.assertNotEquals(null, rs);
+				System.assertEquals(i, rs.sequence);
+				if (i == 1) {
+					System.assertEquals(Recipient.STATUS_DELIVERED, rs.status);
+					System.assertNotEquals(null, rs.sent);
+				} else {
+					System.assertEquals(Recipient.STATUS_CREATED, rs.status);
+					System.assertEquals(null, rs.sent);
+				}
+				System.assertEquals(null, rs.completed);
+				System.assertEquals(null, rs.reason);
+				System.assertNotEquals(null, rs.type);
+				System.assertNotEquals(null, rs.name);
+				System.assertNotEquals(null, rs.email);
+				System.assertEquals(i, rs.routingOrder);
+				System.assertNotEquals(null, rs.lastStatusUpdate);
+				i++;
+			}
+		}
+	}
+
+	private class StatusSentNoRecipientsMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			String endpoint = request.getEndpoint();
+			if (endpoint.contains('include=recipients')) {
+				response.setStatusCode(400);
+				response.setStatus('BAD_REQUEST');
+			} else {
+				response.setStatusCode(200);
+				response.setStatus('OK');
+				response.setHeader('Content-Type', 'application/json; charset=utf-8');
+				response.setBody('{"status":"sent","emailSubject":"Unit test subject","emailBlurb":"Unit test message","envelopeId":"11111111-1111-1111-1111-111111111111","createdDateTime":"2018-04-18T22:05:43.7670000Z","lastModifiedDateTime":"2018-04-18T22:05:51.0800000Z","deliveredDateTime":"2018-04-18T22:06:15.1370000Z","initialSentDateTime":"2018-04-18T22:05:51.6100000Z","sentDateTime":"2018-04-18T22:06:06.2770000Z","statusChangedDateTime":"2018-04-18T22:06:22.5730000Z"}');
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeStatus_without_recipients() {
+		Test.setMock(HttpCalloutMock.class, new StatusSentNoRecipientsMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Envelope.Status result = EnvelopeAPI.getInstance().getEnvelopeStatus(UUID.randomUUID(), false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Envelope.STATUS_SENT, result.status);
+			System.assertNotEquals(null, result.sent);
+			System.assertEquals(null, result.completed);
+			System.assertEquals('Unit test subject', result.emailSubject);
+			System.assertEquals(null, result.reason);
+			System.assertNotEquals(null, result.lastStatusUpdate);
+			System.assert(Collection.isEmpty(result.recipients));
+		}
+	}
+
+	@IsTest
+	static void test_APIRecipient_anchor_tag_conversion() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, null, null)
+				.withType(Recipient.TYPE_EMBEDDED_SIGNER, true)
+				.withRole(new Recipient.Role('DefaultRole1', 1));
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, 'TemplateRole', null);
+			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', null, null, null);
+
+			Test.startTest();
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no auto anchor tags
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r1, '1', true, false); // with auto anchor tags, with role value
+			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r2, '1', true, false); // with auto anchor tags, with no role value
+			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r3, '1', true, false); // with auto anchor tags, with null role
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(null, result1.tabs);
+
+			System.assertNotEquals(null, result2);
+			System.assertNotEquals(null, result2.tabs);
+
+			System.assertNotEquals(null, result3);
+			System.assertEquals(null, result3.tabs);
+
+			System.assertNotEquals(null, result4);
+			System.assertEquals(null, result4.tabs);
+		}
+	}
+
+	@IsTest
+	static void test_APIRecipient_template_conversion() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', null, 'TemplateRole', null).withRoutingOrder(1);
+			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, null, null).withRoutingOrder(2);
+
+			Test.startTest();
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no template, has role
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r2, '1', false, false); // no template, no role
+			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r1, '1', false, true); // has template, has role
+			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r2, '1', false, true); // has template, no role
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals('TemplateRole', result1.roleName);
+			System.assertEquals('1', result1.routingOrder);
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals('', result2.roleName);
+			System.assertEquals('2', result2.routingOrder);
+
+			System.assertNotEquals(null, result3);
+			System.assertEquals('TemplateRole', result3.roleName);
+			System.assertEquals('', result3.routingOrder);
+
+			System.assertNotEquals(null, result4);
+			System.assertEquals('', result4.roleName);
+			System.assertEquals('', result4.routingOrder);
+		}
+	}
+}
