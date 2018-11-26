@@ -1,6 +1,7 @@
 {
   "orgName": "DFS-Core Tester",
   "edition": "Professional",
+  "features": ["AuthorApex"],
   "settings": {
     "orgPreferenceSettings": {
       "translation": true
