@@ -129,7 +129,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Add to DocuSign details</shortDescription>
-        <value>Select which Salesforce users will have access to DocuSign for Salesforce - Core by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
+        <value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
     </labels>
     <labels>
         <fullName>AddUser</fullName>
@@ -847,7 +847,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Complete section below</shortDescription>
-        <value>Complete the sections below to set up DocuSign for Salesforce - Core.</value>
+        <value>Complete the sections below to set up DocuSign for Salesforce Essentials.</value>
     </labels>
     <labels>
         <fullName>Completed</fullName>
@@ -3087,7 +3087,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Post-install email subject</shortDescription>
-        <value>DocuSign for Salesforce - Core post-install script results from {0}</value>
+        <value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
     </labels>
     <labels>
         <fullName>PrivateMessage</fullName>
@@ -3422,7 +3422,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Select Salesforce users</shortDescription>
-        <value>Select which Salesforce users will have access to DocuSign for Salesforce - Core.</value>
+        <value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
     </labels>
     <labels>
         <fullName>SelectUser</fullName>

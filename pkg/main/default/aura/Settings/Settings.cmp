@@ -1,4 +1,4 @@
-<aura:component description="DocuSign for Salesforce Core - Settings" controller="SettingsController">
+<aura:component description="DocuSign for Salesforce Essentials - Settings" controller="SettingsController">
 
     <aura:attribute name="settings" type="Object" access="private"/>
     <aura:attribute name="showExitModal" type="Boolean" access="private" default="false"/>
