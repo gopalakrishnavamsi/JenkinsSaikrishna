@@ -59,7 +59,14 @@ public with sharing class SendingController extends Controller {
 			Set<Id> sourceIds = new Set<Id> { sourceId };
 			EnvelopeSettings es = EnvelopeSettings.getInstance();
 			// TODO: Check account features for templates. Pull on demand.
-			List<Template> templates = TemplateAPI.getInstance().getTemplates();
+			List<Template> templates;
+			try {
+				templates = TemplateAPI.getInstance().getTemplates();
+			} catch (APIException ex) {
+				// TODO: Handle only USER_LACKS_PERMISSIONS error here. Cache response.
+				LoggerService.getInstance().warn('User does not have access to DocuSign templates');
+				templates = new List<Template>();
+			}
 			return new DraftEnvelope(
 				AccountFeatures.getInstance(),
 				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),

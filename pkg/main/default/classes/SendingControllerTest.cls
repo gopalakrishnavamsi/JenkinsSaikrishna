@@ -81,6 +81,32 @@ private class SendingControllerTest {
 		}
 	}
 
+	private class UnauthorizedTemplateMock implements HttpCalloutMock {
+		public HttpResponse respond(HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setHeader('Content-Type', 'application/json');
+			response.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"This user lacks sufficient permissions to access this resource."}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_templates_unauthorized() {
+		Test.setMock(HttpCalloutMock.class, new UnauthorizedTemplateMock());
+
+		System.runAs(UserMock.createDocuSignUser()) { // Unauthorized
+			Lead l = TestUtils.createLead();
+
+			Test.startTest();
+			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.templates);
+		}
+	}
+
 	@IsTest
 	static void test_getLinkedDocuments_success() {
 		System.runAs(UserMock.createDocuSignUser()) {

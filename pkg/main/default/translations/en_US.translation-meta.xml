@@ -1531,12 +1531,7 @@
         <name>NoSearchResults</name>
     </customLabels>
     <customLabels>
-        <label>
-			There is an issue with your DocuSign account settings. The following permissions must all be enabled:
-			&#39;Manage Account&#39;, &#39;Send Envelopes&#39;, &#39;Send on Behalf Of&#39;, and
-			&#39;API Account Wide Access&#39;. To update these settings, log in to DocuSign, select Preferences,
-			then select Permissions.
-		</label>
+        <label>Your account must be updated by one of our customer service reps. Please call us at 1-800-379-9973.</label>
         <name>NoValidAccounts</name>
     </customLabels>
     <customLabels>
