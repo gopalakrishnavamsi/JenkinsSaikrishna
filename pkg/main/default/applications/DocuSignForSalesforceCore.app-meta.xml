@@ -11,7 +11,7 @@
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
-    <label>DocuSign for Salesforce - Core</label>
+    <label>DocuSign for Salesforce Essentials</label>
     <navType>Standard</navType>
     <tabs>Setup</tabs>
     <tabs>Envelope__c</tabs>

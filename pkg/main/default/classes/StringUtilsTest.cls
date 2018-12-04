@@ -102,6 +102,31 @@ private class StringUtilsTest {
 	}
 
 	@IsTest
+	static void test_parseDate() {
+		System.assertEquals(
+			Date.newInstance(2017, 6, 17),
+			StringUtils.parseDate('2017-06-17T10:59:34.823Z'));
+		System.assertEquals(
+			null,
+			StringUtils.parseDate(null));
+		System.assertEquals(
+			null,
+			StringUtils.parseDate(''));
+		try {
+			StringUtils.parseDate('Garbage');
+			throw new AssertException('Expected exception to be thrown for invalid input');
+		} catch (JSONException ex) {
+			// OK
+		}
+		try {
+			StringUtils.parseDate('1234567890');
+			throw new AssertException('Expected exception to be thrown for invalid input');
+		} catch (JSONException ex) {
+			// OK
+		}
+	}
+
+	@IsTest
 	static void test_isValidEmail() {
 		String email1 = 'abc.EFG@gmail.com';
 		System.assertEquals(true, StringUtils.isValidEmail(email1));

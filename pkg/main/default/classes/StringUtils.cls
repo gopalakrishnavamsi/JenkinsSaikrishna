@@ -130,6 +130,18 @@ public class StringUtils {
 	}
 
 	/**
+	 * Parses an ISO 8601 formatted string as <code>Date</code>.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The <code>Date</code> representation for a valid input string, <code>null</code> otherwise.
+	 */
+	public static Date parseDate(final String s) {
+		Datetime dt = parseDatetime(s);
+		return dt == null ? null : dt.date();
+	}
+
+	/**
 	 * Merges first and last names into one name, allowing for one or the other to be blank and trimming the output.
 	 *
 	 * @param firstName The first name.

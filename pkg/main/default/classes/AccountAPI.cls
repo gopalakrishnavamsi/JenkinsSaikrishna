@@ -239,8 +239,8 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String suspensionDate;
 
 		public Account toExternalForm(final Environment env) {
-			Date psd = StringUtils.parseDatetime(this.planStartDate).date();
-			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDatetime(this.suspensionDate).date();
+			Date psd = StringUtils.parseDate(this.planStartDate);
+			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDate(this.suspensionDate);
 			return new Account(
 				UUID.parse(this.accountIdGuid),
 				String.isBlank(this.externalAccountId) ? null : Long.valueOf(this.externalAccountId),
@@ -249,10 +249,10 @@ public with sharing class AccountAPI extends DocuSignAPI {
 					UUID.parse(this.currentPlanId),
 					this.planName,
 					psd,
-					StringUtils.parseDatetime(this.planEndDate).date()),
+					StringUtils.parseDate(this.planEndDate)),
 				new Account.Billing(
-					sd == null ? StringUtils.parseDatetime(this.billingPeriodStartDate).date() : psd,
-					sd == null ? StringUtils.parseDatetime(this.billingPeriodEndDate).date() : sd),
+					sd == null ? StringUtils.parseDate(this.billingPeriodStartDate) : psd,
+					sd == null ? StringUtils.parseDate(this.billingPeriodEndDate) : sd),
 				stringToConnectPermission(this.connectPermission),
 				env);
 		}

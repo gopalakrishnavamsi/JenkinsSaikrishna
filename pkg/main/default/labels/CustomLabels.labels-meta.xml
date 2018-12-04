@@ -129,7 +129,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Add to DocuSign details</shortDescription>
-        <value>Select which Salesforce users will have access to DocuSign for Salesforce - Core by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
+        <value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
     </labels>
     <labels>
         <fullName>AddUser</fullName>
@@ -847,7 +847,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Complete section below</shortDescription>
-        <value>Complete the sections below to set up DocuSign for Salesforce - Core.</value>
+        <value>Complete the sections below to set up DocuSign for Salesforce Essentials.</value>
     </labels>
     <labels>
         <fullName>Completed</fullName>
@@ -2845,9 +2845,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>No Valid Accounts</shortDescription>
-        <value>There is an issue with your DocuSign account settings. The following permissions must all be enabled: &#39;Manage
-			Account&#39;, &#39;Send Envelopes&#39;, &#39;Send on Behalf Of&#39;, and &#39;API Account Wide Access&#39;.
-			To update these settings, log in to DocuSign, select Preferences, then select Permissions.</value>
+        <value>Your account must be updated by one of our customer service reps. Please call us at 1-800-379-9973.</value>
     </labels>
     <labels>
         <fullName>NonUSConsentMessage</fullName>
@@ -3087,7 +3085,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Post-install email subject</shortDescription>
-        <value>DocuSign for Salesforce - Core post-install script results from {0}</value>
+        <value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
     </labels>
     <labels>
         <fullName>PrivateMessage</fullName>
@@ -3422,7 +3420,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Select Salesforce users</shortDescription>
-        <value>Select which Salesforce users will have access to DocuSign for Salesforce - Core.</value>
+        <value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
     </labels>
     <labels>
         <fullName>SelectUser</fullName>
