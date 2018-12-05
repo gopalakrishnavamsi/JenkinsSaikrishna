@@ -271,6 +271,38 @@ private class SetupControllerTest {
 		}
 	}
 
+	class UserFailureMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(201);
+			response.setStatus('CREATED');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+			response.setBody('{"newUsers": [{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","errorDetails":{"errorCode":"MAX_MEMBERS_EXCEEDED","message":"The maximum number of members for the account has been exceeded."}}]}');
+
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_addUser_api_failure() {
+		Test.setMock(HttpCalloutMock.class, new UserFailureMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
+			DocuSignAPI.Error e = new DocuSignAPI.Error(400, 'MAX_MEMBERS_EXCEEDED', 'The maximum number of members for the account has been exceeded.');
+
+			Test.startTest();
+			try {
+				SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
+				throw new AssertException('Expected addUser to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(String.format('[{0}] {1}', new List<String> { e.docuSignCode, e.description }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	@IsTest
 	static void test_removeUser_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());

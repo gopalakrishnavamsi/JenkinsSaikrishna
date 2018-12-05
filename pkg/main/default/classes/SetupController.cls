@@ -157,9 +157,12 @@ public with sharing class SetupController extends Controller {
 		final String lastName, final Boolean canManageAccount) {
 
 		try {
-			AccountService.addUsers(new List<Account.User> {
+			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
 				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
 			});
+			if (Collection.isNotEmpty(users) && users[0].hasError) {
+				throw new APIException(users[0].error);
+			}
 			return AccountService.getUsers();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
