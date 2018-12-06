@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    stages {
+        stage('User Input Validation') {
+            steps { 
+
+                echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
+                sh "ls -ltra ${WORKSPACE}"
+            }
+        }
+        stage('Example') {
+            environment { 
+                JWT_KEY_FILE = credentials('SFDXKEY')
+                CONSUMER_KEY = "3MVG9KsVczVNcM8w3ZdTIbqFX4cNQeorT3s6ZwWHo5NuCqsOI5wCR339dOStkqv__xVKXzPO.YuLluWe5jnxz"
+                HUB_USERNAME = "richj1232003@yahoo.com"
+            }
+            steps {
+                sh 'printenv'
+                echo "JWT_KEY_FILE key is ${env.JWT_KEY_FILE}"
+                echo "CONSUMER_KEY key is ${env.CONSUMER_KEY}"
+                echo "HUB_USERNAME is ${env.HUB_USERNAME}"
+                sh 'which sfdx'
+                sh "echo Run Auth"
+                sh "sfdx force:auth:jwt:grant --clientid ${env.CONSUMER_KEY} --username ${env.HUB_USERNAME} --jwtkeyfile ${env.JWT_KEY_FILE} --setdefaultdevhubusername"
+
+                sh "echo List Org2"
+                sh 'sfdx force:org:list'
+
+                echo "Create a Scratch Org"
+                sh "sfdx force:org:create -f ${WORKSPACE}/etc/test.json -s -a dfsle-scratch-org --durationdays 1"
+
+                echo "Push code to org"
+                sh "sfdx force:source:push -u dfsle-scratch-org"
+
+                echo "Assign a Permission Set"
+                sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u dfsle-scratch-org"
+
+                echo "Run tests"
+                sh "sfdx force:apex:test:run -c -r human -w 5"
+
+            }
+        }
+    }   
+   
+}
