@@ -27,7 +27,7 @@ pipeline {
                 sh 'sfdx force:org:list'
 
                 echo "Create a Scratch Org"
-                sh "sfdx force:org:create -f ${WORKSPACE}/etc/test.json -s -a dfsle-scratch-org --durationdays 1"
+                sh "sfdx force:org:create -f ${WORKSPACE}/etc/test.json -s -a scratchorg --durationdays 1"
 
                 echo "Push code to org"
                 sh "sfdx force:source:push -u dfsle-scratch-org"
