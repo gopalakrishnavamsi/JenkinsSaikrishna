@@ -27,13 +27,13 @@ pipeline {
                 sh 'sfdx force:org:list'
 
                 echo "Create a Scratch Org"
-                sh "cd ${WORKSPACE}/etc ; sfdx force:org:create -f etc/test.json -s -a scratchorg --durationdays 1"
+                sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -s -a scratchorg --durationdays 1"
 
                 echo "Push code to org"
-                sh "sfdx force:source:push -u dfsle-scratch-org"
+                sh "sfdx force:source:push -u scratchorg"
 
                 echo "Assign a Permission Set"
-                sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u dfsle-scratch-org"
+                sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u scratchorg"
 
                 echo "Run tests"
                 sh "sfdx force:apex:test:run -c -r human -w 5"
