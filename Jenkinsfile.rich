@@ -11,7 +11,7 @@ pipeline {
         stage('Example') {
             environment {
                 JWT_KEY_FILE = credentials('SFDXKEY')
-                CONSUMER_KEY = "3MVG9KI2HHAq33Rw3LCniYZzeHeyGkNFnZB7ojjSkIX2zYqdxhGkD9bbIrvre4c6VHlqrD8us7Kr6YrJSDnlI"
+                CONSUMER_KEY = "3MVG9KI2HHAq33Rw3LCniYZzeHaw97glTin2IrtLWjge2h6oLeoGlZSJqTdLjlwWr6NAtiRb2bPpKtf1ntr.e"
                 HUB_USERNAME = "dfsdev@devhub.com"
             }
             steps {
