@@ -1,7 +1,11 @@
 <aura:component controller="SetupController">
 
-    <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="login" type="Object" required="true"/>
+    <aura:attribute name="isLoggedIn" type="Boolean"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
+    <aura:attribute name="beginOAuth" type="Object" required="true"/>
+
+    <aura:attribute name="selectedAccountNumber" type="Long" access="private"/>
     <aura:attribute name="helpInfo" type="String" access="private"/>
     <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
     <aura:attribute name="signedUpForTrial" type="Boolean" access="private"/>
@@ -11,21 +15,21 @@
     <aura:attribute name="marketing" type="Object" access="private"/>
     <aura:attribute name="marketingOptInEnabled" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="showAccountSelectionModal" type="Boolean" access="private"/>
-    <aura:attribute name="password" type="String" access="private"/>
     <aura:attribute name="showLogoutModal" type="Boolean" access="private"/>
     <aura:attribute name="advancedOptionsExpanded" type="Boolean" access="private"/>
+    <aura:attribute name="environment" type="String" access="private" default="Production"/>
+    <aura:attribute name="otherUrl" type="String" access="private" default=""/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:registerEvent name="loginEvent" type="c:LoginEvent"/>
+    <aura:registerEvent name="oauthEvent" type="c:OAuthEvent"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:handler name="change" value="{!v.userCountryCode}" action="{!c.handleUserCountryChange}"/>
+    <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
 
     <div class="slds-scope">
-        <!--<h3 class="strike-wizard__step-title">Log into DocuSign</h3> -->
-        <!-- <p class="strike-wizard__step-description">Enter your credentials for an existing account, or sign up for a free trial</p>-->
-
         <!-- Help Info -->
         <aura:if isTrue="{!not(empty(v.helpInfo))}">
             <div class="slds-m-bottom_large">
@@ -44,7 +48,7 @@
         <!-- /Help Info -->
 
         <div class="ds-login-box slds-box slds-theme_default slds-is-relative">
-            <aura:if isTrue="{!v.login.isLoggedIn}">
+            <aura:if isTrue="{!v.isLoggedIn}">
                 <!-- Logged In State -->
                 <div>
                     <div class="{!'slds-notify slds-notify_alert slds-theme_alert-texture' + if(and(v.login.isTrial, v.isTrialExpired), ' slds-theme_warning', ' slds-theme_success')}"
@@ -52,9 +56,9 @@
                         <lightning:icon size="x-small" iconName="utility:user" variant="inverse"
                                         class="slds-m-right_x-small"/>
                         <aura:if isTrue="{!and(v.login.isTrial, v.isTrialExpired)}">
-                            <h2>{!format($Label.c.TrialExpired_2, v.login.email, v.login.accountNumber)}</h2>
+                            <h2>{!format($Label.c.TrialExpired_2, v.login.email, v.selectedAccountNumber)}</h2>
                             <aura:set attribute="else">
-                                <h2>{!format($Label.c.LoggedInAs_2, v.login.email, v.login.accountNumber)}</h2>
+                                <h2>{!format($Label.c.LoggedInAs_2, v.login.email, v.selectedAccountNumber)}</h2>
                             </aura:set>
                         </aura:if>
                     </div>
@@ -157,15 +161,6 @@
 
                                         <aura:set attribute="else">
                                             <!-- Log In Fields -->
-                                            <h4 class="slds-text-align_center slds-text-heading_small slds-m-bottom_small">{!$Label.c.PleaseLogIn}</h4>
-                                            <lightning:input aura:id="login-input" type="email"
-                                                             label="{!$Label.c.EmailAddress}"
-                                                             value="{!v.login.email}"/>
-                                            <div class="ds-no-focus" onkeyup="{!c.handlePasswordKeyup}" tabindex="-1">
-                                                <lightning:input aura:id="password-input" type="password"
-                                                                 label="{!$Label.c.Password}" value="{!v.password}"
-                                                                 class="slds-p-top_x-small"/>
-                                            </div>
                                             <div class="{! 'slds-section' + (v.advancedOptionsExpanded ? ' slds-is-open' : '')}">
                                                 <button aria-controls="advanced-options"
                                                         aria-expanded="{!v.advancedOptionsExpanded}"
@@ -180,17 +175,17 @@
                                                 <div id="advanced-options" class="slds-section__content">
                                                     <lightning:select aura:id="ds-environment"
                                                                       label="{!$Label.c.Environment}"
-                                                                      value="{!v.login.environment}">
+                                                                      value="{!v.environment}">
                                                         <option value="Production"
                                                                 selected="selected">{!$Label.c.Production}</option>
                                                         <option value="Demo">{!$Label.c.Demo}</option>
                                                         <option value="Other">{!$Label.c.Other}</option>
                                                     </lightning:select>
                                                     <lightning:input aura:id="ds-other-url"
-                                                                     class="{!'slds-p-top_x-small ' + (v.login.environment == 'Other' ? 'slds-show' : 'slds-hide')}"
+                                                                     class="{!'slds-p-top_x-small ' + (v.environment == 'Other' ? 'slds-show' : 'slds-hide')}"
                                                                      label="{!$Label.c.OtherUrl}"
                                                                      type="url"
-                                                                     value="{!v.login.otherUrl}"/>
+                                                                     value="{!v.otherUrl}"/>
                                                 </div>
                                             </div>
                                             <div class="slds-m-top_medium slds-text-align_right">
@@ -208,12 +203,12 @@
                     <!-- Account Selection Modal -->
                     <c:strike_modal showModal="{!v.showAccountSelectionModal}" title="{!$Label.c.SelectAccount}">
                         <p class="slds-m-bottom_small">{!$Label.c.MultipleAccountsMessage}</p>
-                        <lightning:select value="{!v.login.accountNumber}" label="{!$Label.c.Account}">
-                            <aura:if isTrue="{!not(empty(v.login.accountOptions))}">
+                        <lightning:select value="{!v.selectedAccountNumber}" label="{!$Label.c.Account}">
+                            <aura:if isTrue="{!not(empty(v.login.accounts))}">
                                 <option value="" disabled="disabled" selected="selected">-- {!$Label.c.SelectLabel} --
                                 </option>
-                                <aura:iteration items="{!v.login.accountOptions}" var="account" indexVar="index">
-                                    <option value="{!account.accountNumber}">{!account.display}</option>
+                                <aura:iteration items="{!v.login.accounts}" var="account" indexVar="index">
+                                    <option value="{!account.id}">{!account.display}</option>
                                 </aura:iteration>
                             </aura:if>
                         </lightning:select>
@@ -231,7 +226,7 @@
             </aura:if>
         </div>
 
-        <aura:if isTrue="{!and(not(v.signedUpForTrial), not(v.login.isLoggedIn))}">
+        <aura:if isTrue="{!and(not(v.signedUpForTrial), not(v.isLoggedIn))}">
             <div class="slds-m-vertical_large slds-text-align_center">
                 <a href="javascript:void(0)" onclick="{!c.swapLogInState}">
                     <aura:if isTrue="{!v.showTrialFields}">

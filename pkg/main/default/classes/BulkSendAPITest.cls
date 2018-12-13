@@ -185,8 +185,8 @@ private class BulkSendAPITest {
 		}
 	}
 
-	private class SendErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class SendErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
@@ -210,17 +210,17 @@ private class BulkSendAPITest {
 			System.assert(!result.success);
 			System.assertEquals(null, result.batchId);
 			System.assert(Collection.size(result.errors) == 3);
-			DocuSignAPI.Error e = (DocuSignAPI.Error)result.errors[0];
+			ESignatureAPI.Error e = (ESignatureAPI.Error)result.errors[0];
 			System.assertNotEquals(null, e);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, e.code);
 			System.assertEquals('ERROR_1', e.docuSignCode);
 			System.assertEquals('Error 1 detail', e.description);
-			e = (DocuSignAPI.Error)result.errors[1];
+			e = (ESignatureAPI.Error)result.errors[1];
 			System.assertNotEquals(null, e);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, e.code);
 			System.assertEquals('ERROR_2', e.docuSignCode);
 			System.assertEquals('Error 2 detail', e.description);
-			e = (DocuSignAPI.Error)result.errors[2];
+			e = (ESignatureAPI.Error)result.errors[2];
 			System.assertNotEquals(null, e);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, e.code);
 			System.assertEquals('ERROR_3', e.docuSignCode);

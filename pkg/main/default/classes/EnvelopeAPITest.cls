@@ -72,28 +72,28 @@ private class EnvelopeAPITest {
 			System.assertEquals(APIError.none, e1);
 
 			System.assertNotEquals(null, e2);
-			System.assert(e2 instanceof DocuSignAPI.Error);
+			System.assert(e2 instanceof ESignatureAPI.Error);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, e2.code);
 			System.assertEquals('Some error', e2.description);
-			System.assertEquals('SOME_ERROR', ((DocuSignAPI.Error)e2).docuSignCode);
+			System.assertEquals('SOME_ERROR', ((ESignatureAPI.Error)e2).docuSignCode);
 
 			System.assertNotEquals(null, e3);
-			System.assert(!(e3 instanceof DocuSignAPI.Error));
+			System.assert(!(e3 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, e3.code);
 			System.assertEquals('Account lacks permissions', e3.description);
 
 			System.assertNotEquals(null, e4);
-			System.assert(!(e4 instanceof DocuSignAPI.Error));
+			System.assert(!(e4 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, e4.code);
 			System.assertEquals(Label.InvalidRecipientSequence, e4.description);
 
 			System.assertNotEquals(null, e5);
-			System.assert(!(e5 instanceof DocuSignAPI.Error));
+			System.assert(!(e5 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.UNKNOWN_RECIPIENT, e5.code);
 			System.assertEquals(Label.UnknownEnvelopeRecipient, e5.description);
 
 			System.assertNotEquals(null, e6);
-			System.assert(!(e6 instanceof DocuSignAPI.Error));
+			System.assert(!(e6 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.UNAUTHORIZED, e6.code);
 			System.assertEquals(Label.UserNotAuthorizedForEnvelope, e6.description);
 		}
@@ -309,8 +309,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class UnknownRecipientMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class UnknownRecipientMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -339,8 +339,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class InvalidSequenceMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class InvalidSequenceMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -447,8 +447,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class CorrectViewErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class CorrectViewErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -584,9 +584,9 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class ResendRecipientsPartialSuccessMock implements HttpCalloutMock {
+	private class ResendRecipientsPartialSuccessMock extends OAuthTokenMock {
 
-		public HttpResponse respond(final HttpRequest request) {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -689,9 +689,9 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class SigningGroupsUnauthorizedMock implements HttpCalloutMock {
+	private class SigningGroupsUnauthorizedMock extends OAuthTokenMock {
 
-		public HttpResponse respond(final HttpRequest request) {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -820,8 +820,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class VoidEnvelopeErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class VoidEnvelopeErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -892,7 +892,9 @@ private class EnvelopeAPITest {
 						'Host One', 'h1@unit.test', new Recipient.Authentication('1234', true,
 							new List<String> { '5555555555' }), 'note1', true).withSequence(1),
 					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2), 'Recipient Two',
-						'r2@unit.test', null, 'note2', false).withSequence(2)
+						'r2@unit.test', null, 'note2', false)
+						.withSequence(2)
+						.withEmailSettings(new Recipient.EmailSettings('DE', Label.German, 'DE subject', 'DE message'))
 				},
 				new List<CustomField> {
 					CustomField.newTextField('cf1', '1', true, true),
@@ -904,6 +906,7 @@ private class EnvelopeAPITest {
 				new Entity(o.Id),
 				null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			System.debug('IS LOCALIZATION ENABLED? ' + Localization.isEmailLocalizationEnabled());
 
 			Test.startTest();
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
@@ -1115,6 +1118,7 @@ private class EnvelopeAPITest {
 
 	@IsTest
 	static void test_createEnvelope_fetch_invalid_document() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d = new Document__c(
@@ -1147,8 +1151,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class CfrErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class CfrErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1178,8 +1182,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class UserNotActivatedErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class UserNotActivatedErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1209,8 +1213,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class TrialExpiredErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class TrialExpiredErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1240,8 +1244,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class AccountPermissionErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class AccountPermissionErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1271,8 +1275,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class UserPermissionErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class UserPermissionErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1302,8 +1306,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class InvalidDocumentErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class InvalidDocumentErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1333,8 +1337,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class InvalidSigningGroupErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class InvalidSigningGroupErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1364,8 +1368,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	class InvalidRecipientErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	class InvalidRecipientErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
@@ -1426,8 +1430,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusCreatedMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusCreatedMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -1476,8 +1480,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusSentMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusSentMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -1530,8 +1534,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusCompletedMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusCompletedMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -1577,8 +1581,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusDeclinedMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusDeclinedMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -1636,8 +1640,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusVoidedMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusVoidedMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -1688,8 +1692,8 @@ private class EnvelopeAPITest {
 		}
 	}
 
-	private class StatusSentNoRecipientsMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class StatusSentNoRecipientsMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			String endpoint = request.getEndpoint();
 			if (endpoint.contains('include=recipients')) {

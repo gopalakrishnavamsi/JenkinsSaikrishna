@@ -1,122 +1,74 @@
 public with sharing class SetupController extends Controller {
 
-	public class LoginInformation {
-
-		@AuraEnabled
-		public Boolean isLoggedIn { get; private set; }
-		@AuraEnabled
-		public String email { get; private set; }
-		@AuraEnabled
-		public Long accountNumber { get; private set; }
-		@AuraEnabled
-		public String environment { get; private set; }
-		@AuraEnabled
-		public String otherUrl { get; private set; }
-		@AuraEnabled
-		public Boolean isTrial { get; private set; }
-		@AuraEnabled
-		public Account.TrialStatus trialStatus { get; private set; }
-		@AuraEnabled
-		public String status { get; private set; }
-		@AuraEnabled
-		public List<AccountService.AccountOption> accountOptions { get; private set; }
-
-		private LoginInformation(final Boolean isLoggedIn, final String email, final Long accountNumber, final String environment,
-			final String otherUrl, final Boolean isTrial, final Account.TrialStatus trialStatus,
-			final AccountService.LoginStatus status, final List<AccountService.AccountOption> accountOptions) {
-
-			this.isLoggedIn = isLoggedIn;
-			this.email = email;
-			this.accountNumber = accountNumber;
-			this.environment = environment;
-			this.otherUrl = otherUrl;
-			this.isTrial = isTrial;
-			this.trialStatus = trialStatus;
-			this.status = status == null ? AccountService.LoginStatus.Failure.name() : status.name();
-			this.accountOptions = accountOptions;
-		}
-	}
-
-	private static LoginInformation getLogin(
-		final String dsUsername,
-		final String dsEnvironment,
-		final String dsUrl,
-		final AccountService.LoginResult loginResult) {
-
-		Credentials c = null;
-		Boolean isLoggedIn = Credentials.isAccountValid();
-		if (isLoggedIn) {
-			c = Credentials.getInstance();
-		}
-		Account a = loginResult == null && isLoggedIn ? AccountService.getAccount() : null;
-
-		return new LoginInformation(
-			isLoggedIn,
-			c != null ? c.email : dsUsername,
-			c != null ? c.accountNumber : null,
-			c != null ? c.environment.environment.name() : dsEnvironment,
-			c != null && c.environment.baseUrl != null ? c.environment.baseUrl.toExternalForm() : dsUrl,
-			a != null && a.isTrial,
-			a != null && a.isTrial ? a.trialStatus : null,
-			loginResult != null ? loginResult.status : null,
-			loginResult != null ? loginResult.accountOptions : null);
-	}
-
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static LoginInformation getLogin() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 
-			return getLogin(UserInfo.getUserEmail(), 'Production', null, null);
+			if (Credentials.isAccountValid()) {
+				Credentials c = Credentials.getInstance();
+				// TODO: Handle trial accounts
+				return new LoginInformation(
+					c.userId,
+					null,
+					c.email,
+					new List<LoginInformation.Account> {
+						new LoginInformation.Account(
+							c.accountId,
+							c.accountNumber,
+							c.accountName,
+							c.eSignatureBaseUrl == null ? null : c.eSignatureBaseUrl.toExternalForm(),
+							true)
+					});
+			} else {
+				return new LoginInformation(
+					null,
+					UserInfo.getName(),
+					UserInfo.getUserEmail(),
+					null);
+			}
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get setup state');
+			throw Controller.wrapException(ex, 'Failed to get login status.');
 		}
 	}
 
-	@TestVisible
-	private static Environment.Target getTarget(final String s) {
-		Environment.Target result = Environment.Target.Other;
-		if (String.isBlank(s)) {
-			result = Environment.Target.Invalid;
-		} else if (s == 'prod' || s == 'production') {
-			result = Environment.Target.Production;
-		} else if (s == 'demo') {
-			result = Environment.Target.Demo;
-		} else if (s == 'stage') {
-			result = Environment.Target.Stage;
-		}
-		return result;
+	@RemoteAction
+	public static String beginOAuth(
+		final String environment,
+		final String otherUrl) {
+
+		return AuthService.getLoginUrl(
+			DocuSign.parseEnvironment(environment),
+			String.isBlank(otherUrl) ? null : new Url(otherUrl)).toExternalForm();
+	}
+
+	@RemoteAction
+	public static LoginInformation completeOAuth(
+		final String authorizationCode,
+		final String state) {
+
+		return AuthService.redeemCode(authorizationCode, state);
 	}
 
 	@AuraEnabled
-	public static LoginInformation login(
-		final String dsUsername,
-		final String dsPassword,
-		final String dsEnvironment,
-		final String dsUrl,
-		final Integer dsAccountNumber) {
+	public static LoginInformation selectAccount(
+		final String environment,
+		final String otherUrl,
+		final String userId,
+		final Long selectedAccountNumber) {
 
 		try {
-			return getLogin(
-				dsUsername,
-				dsEnvironment,
-				dsUrl,
-				AccountService.login(
-					dsUsername,
-					dsPassword,
-					getTarget(dsEnvironment),
-					String.isBlank(dsUrl) ? null : new Url(dsUrl),
-					Integer.valueOf(dsAccountNumber)));
-		} catch (UnauthorizedException ex) {
-			AuraHandledException ex2 = new AuraHandledException(ex.getMessage());
-			ex2.setMessage(ex.getMessage());
-			throw ex2;
+			return AuthService.selectAccount(
+				DocuSign.parseEnvironment(environment),
+				String.isBlank(otherUrl) ? null : new Url(otherUrl),
+				UUID.parse(userId),
+				selectedAccountNumber);
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to log into DocuSign.');
+			throw Controller.wrapException(ex, 'Failed to select account');
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static Account getAccount() {
 		try {
 			return AccountService.getAccount();
@@ -126,29 +78,16 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static void logout(final Boolean resetUsers) {
+	public static LoginInformation logout(final Boolean resetUsers) {
 		try {
-			AccountService.resetCredentials(resetUsers);
+			AuthService.resetCredentials(resetUsers);
+			return new LoginInformation(
+				null,
+				UserInfo.getName(),
+				UserInfo.getUserEmail(),
+				new List<LoginInformation.Account>());
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to log out of DocuSign.');
-		}
-	}
-
-	@AuraEnabled
-	public static AccountService.TrialAccount prepareTrial(final String email) {
-		try {
-			return AccountService.prepareTrial(email);
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to prepare DocuSign trial');
-		}
-	}
-
-	@AuraEnabled
-	public static Account.Membership startTrial(final String trialJson) {
-		try {
-			return AccountService.createTrial((Account.Trial)JSON.deserialize(trialJson, Account.Trial.class));
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to create DocuSign trial.');
 		}
 	}
 
@@ -181,7 +120,7 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static List<Account.User> getUsers() {
 		try {
 			return AccountService.getUsers();
@@ -190,7 +129,7 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static User getUser(final Id userId) {
 		try {
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> { 'Id', 'Email', 'FirstName', 'LastName' });

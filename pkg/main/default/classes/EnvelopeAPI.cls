@@ -1,4 +1,4 @@
-public with sharing class EnvelopeAPI extends DocuSignAPI {
+public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	private static EnvelopeAPI self = null;
 	private static final String ACCOUNT_LACKS_PERMISSIONS = 'ACCOUNT_LACKS_PERMISSIONS';
@@ -44,8 +44,8 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 
 	private static APIError getError(final APIError error) {
 		APIError e = error;
-		if (error != APIError.none && error instanceof DocuSignAPI.Error) {
-			DocuSignAPI.Error dse = (DocuSignAPI.Error)error;
+		if (error != APIError.none && error instanceof ESignatureAPI.Error) {
+			ESignatureAPI.Error dse = (ESignatureAPI.Error)error;
 			if (dse.docuSignCode == ACCOUNT_LACKS_PERMISSIONS) {
 				e = new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, dse.description);
 			} else if (dse.docuSignCode == RECIPIENT_NOT_IN_SEQUENCE) {
@@ -330,7 +330,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	// Serialization objects for resendRecipients
 	@TestVisible
 	private class ResendResult {
-		public DocuSignAPI.ErrorDetails errorDetails;
+		public ESignatureAPI.ErrorDetails errorDetails;
 		public String recipientId;
 
 		public Recipient.ResendResult toExternalForm(final Recipient r) {
@@ -1017,7 +1017,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			}
 
 			List<String> missingContent = new List<String>();
-			for (Document d : Documents) {
+			for (Document d : documents) {
 				if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId) && result.get(d.sourceId) == null) {
 					missingContent.add(String.format('{0} ({1})', new List<String> { d.name, d.sourceId }));
 				}

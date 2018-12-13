@@ -97,16 +97,16 @@ private class PostInstallTest {
 			System.assertNotEquals(null, settings);
 			System.assertNotEquals(null, settings.Id);
 			System.assertEquals(null, settings.Environment__c);
-			System.assertEquals(null, settings.BaseUrl__c);
+			System.assertEquals(null, settings.AccountBaseUrl__c);
+			System.assertEquals(null, settings.ESignatureBaseUrl__c);
 			System.assertEquals(null, settings.AccountId__c);
-			System.assert(settings.UseSendOnBehalfOf__c);
-			System.assertEquals(null, settings.Username__c);
-			System.assertEquals(null, settings.Password__c);
+			System.assertEquals(null, settings.Email__c);
+			System.assertEquals(null, settings.SystemSenderId__c);
 			System.assertEquals(0, settings.Features__c);
 			System.assertEquals(null, settings.FeaturesLastChecked__c);
 			System.assertEquals(60, settings.FeaturesCheckFrequency__c);
 			System.assertEquals(60000, settings.CalloutTimeout__c);
-			System.assertEquals('name,alias,username,email,DSProSFUsername__c,userroleid,managerid', settings.ManageUserFields__c);
+			System.assertNotEquals(null, settings.EncryptionKey__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultEntityResolver', settings.EntityResolvers__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultDocumentResolver', settings.DocumentResolvers__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultRecipientResolver', settings.RecipientResolvers__c);
@@ -116,17 +116,21 @@ private class PostInstallTest {
 	@IsTest
 	static void test_initializeAccountSettings_upgrade() {
 		System.runAs(UserMock.createUser()) {
-			String password = UUID.randomUUID().toString();
-			String accountId = UUID.randomUUID().toString();
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.Environment__c = 'unit.test';
-			settings.BaseUrl__c = 'https://unit.test';
-			settings.AccountId__c = accountId;
-			settings.Username__c = 'u@unit.test';
-			settings.Password__c = password;
+			settings.AccountBaseUrl__c = 'https://account.unit.test';
+			settings.ESignatureBaseUrl__c = 'https://esign.unit.test';
+			settings.AccountId__c = UUID.randomUUID().toString();
+			settings.Email__c = 'u@unit.test';
+			settings.SystemSenderId__c = UUID.randomUUID().toString();
+			settings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
 			settings.EntityResolvers__c = 'Resolver1,Resolver2';
 			settings.DocumentResolvers__c = 'Resolver1,Resolver2';
 			settings.RecipientResolvers__c = 'Resolver1,Resolver2';
+			settings.Features__c = 1234;
+			settings.FeaturesLastChecked__c = Datetime.now();
+			settings.FeaturesCheckFrequency__c = 60;
+			settings.CalloutTimeout__c = 9999;
 			insert settings;
 
 			Test.startTest();
@@ -142,23 +146,20 @@ private class PostInstallTest {
 			System.assertEquals(Label.InitializeAccountSettings, steps[0].name);
 			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
 
-			settings = AccountSettings__c.getOrgDefaults();
-			System.assertNotEquals(null, settings);
-			System.assertNotEquals(null, settings.Id);
-			System.assertEquals('unit.test', settings.Environment__c);
-			System.assertEquals('https://unit.test', settings.BaseUrl__c);
-			System.assertEquals(accountId, settings.AccountId__c);
-			System.assert(settings.UseSendOnBehalfOf__c);
-			System.assertEquals('u@unit.test', settings.Username__c);
-			System.assertEquals(password, settings.Password__c);
-			System.assertEquals(0, settings.Features__c);
-			System.assertEquals(null, settings.FeaturesLastChecked__c);
-			System.assertEquals(60, settings.FeaturesCheckFrequency__c);
-			System.assertEquals(60000, settings.CalloutTimeout__c);
-			System.assertEquals('name,alias,username,email,DSProSFUsername__c,userroleid,managerid', settings.ManageUserFields__c);
-			System.assertEquals('Resolver1,Resolver2', settings.EntityResolvers__c);
-			System.assertEquals('Resolver1,Resolver2', settings.DocumentResolvers__c);
-			System.assertEquals('Resolver1,Resolver2', settings.RecipientResolvers__c);
+			AccountSettings__c s2 = AccountSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, s2);
+			System.assertNotEquals(null, s2.Id);
+			System.assertEquals(settings.Environment__c, s2.Environment__c);
+			System.assertEquals(settings.AccountBaseUrl__c, s2.AccountBaseUrl__c);
+			System.assertEquals(settings.ESignatureBaseUrl__c, s2.ESignatureBaseUrl__c);
+			System.assertEquals(settings.AccountId__c, s2.AccountId__c);
+			System.assertEquals(settings.Email__c, s2.Email__c);
+			System.assertEquals(settings.SystemSenderId__c, s2.SystemSenderId__c);
+			System.assertEquals(settings.CalloutTimeout__c, s2.CalloutTimeout__c);
+			System.assertEquals(settings.EncryptionKey__c, s2.EncryptionKey__c);
+			System.assertEquals(settings.EntityResolvers__c, s2.EntityResolvers__c);
+			System.assertEquals(settings.DocumentResolvers__c, s2.DocumentResolvers__c);
+			System.assertEquals(settings.RecipientResolvers__c, s2.RecipientResolvers__c);
 		}
 	}
 
@@ -376,7 +377,11 @@ private class PostInstallTest {
 			Test.stopTest();
 
 			AccountSettings__c s1 = AccountSettings__c.getOrgDefaults();
-			System.assertNotEquals(null, s1.ManageUserFields__c);
+			System.assertNotEquals(null, s1);
+			System.assertNotEquals(null, s1.Id);
+			System.assertNotEquals(null, s1.DocumentResolvers__c);
+			System.assertNotEquals(null, s1.EntityResolvers__c);
+			System.assertNotEquals(null, s1.RecipientResolvers__c);
 			System.assert(Permissions.isDocuSignAdministrator());
 		}
 	}

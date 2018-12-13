@@ -1,6 +1,6 @@
 public with sharing class SettingsController extends Controller {
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static AccountSettings getSettings() {
 		try {
 			return AccountService.getSettings();

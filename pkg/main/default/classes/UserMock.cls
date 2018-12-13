@@ -35,28 +35,18 @@ global class UserMock {
 	}
 
 	public static User createDocuSignAdministrator(final Boolean createAccountSettings) {
-		String username = UUID.randomUUID().toString();
-		User u = createDocuSignAdministrator(username, null);
+		User u = createDocuSignAdministrator(UUID.randomUUID());
 		if (createAccountSettings) {
 			System.runAs(u) {
-				createAccountConfiguration(UUID.randomUUID(), username);
+				createAccountConfiguration(UUID.randomUUID());
 			}
 		}
 		return u;
 	}
 
-	public static User createDocuSignAdministrator(final String dsUsername) {
-		return createDocuSignAdministrator(dsUsername, null);
-	}
-
-	public static User createDocuSignAdministrator(final String dsUsername, final String dsPassword) {
-		User u = createUser(getSystemAdministratorProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername, true);
-		if (String.isNotBlank(dsUsername)) {
-			UserSettings__c us = UserSettings__c.getInstance(u.Id);
-			us.Username__c = dsUsername;
-			us.Password__c = dsPassword;
-			upsert us;
-		}
+	public static User createDocuSignAdministrator(final UUID dsUserId) {
+		User u = createUser(getSystemAdministratorProfileId(),
+			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, true);
 		System.runAs(getAdministrator()) {
 			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
 		}
@@ -87,28 +77,18 @@ global class UserMock {
 	}
 
 	public static User createDocuSignUser(final Boolean createAccountSettings) {
-		String username = UUID.randomUUID().toString();
-		User u = createDocuSignUser(username, null);
+		User u = createDocuSignUser(UUID.randomUUID());
 		if (createAccountSettings) {
 			System.runAs(u) {
-				createAccountConfiguration(UUID.randomUUID(), username);
+				createAccountConfiguration(UUID.randomUUID());
 			}
 		}
 		return u;
 	}
 
-	public static User createDocuSignUser(final String dsUsername) {
-		return createDocuSignUser(dsUsername, null);
-	}
-
-	public static User createDocuSignUser(final String dsUsername, final String dsPassword) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername, false);
-		if (String.isNotBlank(dsUsername)) {
-			UserSettings__c us = UserSettings__c.getInstance(u.Id);
-			us.Username__c = dsUsername;
-			us.Password__c = dsPassword;
-			upsert us;
-		}
+	public static User createDocuSignUser(final UUID dsUserId) {
+		User u = createUser(getStandardUserProfileId(),
+			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, false);
 		System.runAs(getAdministrator()) {
 			Permissions.assignDocuSignUserPermissionSet(new Set<Id> { u.Id });
 		}
@@ -139,11 +119,10 @@ global class UserMock {
 	}
 
 	public static User createDocuSignSender(final Boolean createAccountSettings) {
-		String username = UUID.randomUUID().toString();
 		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
 		if (createAccountSettings) {
 			System.runAs(u) {
-				createAccountConfiguration(UUID.randomUUID(), username);
+				createAccountConfiguration(UUID.randomUUID());
 			}
 		}
 		System.runAs(getAdministrator()) {
@@ -192,7 +171,7 @@ global class UserMock {
 		return createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
 	}
 
-	public static User createUser(final Id profileId, final String email, final String dsUsername,
+	public static User createUser(final Id profileId, final String email, final UUID dsUserId,
 		final Boolean canManageAccount) {
 
 		User u = new User(
@@ -207,31 +186,39 @@ global class UserMock {
 			EmailEncodingKey = 'ISO-8859-1',
 			ProfileId = profileId,
 			LanguageLocaleKey = 'en_US',
-			Username__c = dsUsername,
+			Username__c = String.valueOf(dsUserId),
 			CanManageAccount__c = canManageAccount);
 		insert u;
+
+		if (UUID.isNotEmpty(dsUserId)) {
+			UserSettings__c s = UserSettings__c.getInstance(u.Id);
+			s.AccessToken0__c = UUID.randomUUID().toShortString();
+			s.AccessTokenExpires__c = Datetime.now().addHours(1);
+			insert s;
+		}
+
 		return u;
 	}
 
-	public static UUID createAccountConfiguration(final UUID accountId, final String username) {
+	public static UUID createAccountConfiguration(final UUID accountId) {
 		// Tried to use AccountSettings__c.Id == null as per Salesforce documentation, but it is non-null for some
 		// reason by the time it gets here.
 		if (createdAccountConfiguration) throw new AssertException('DocuSign account is already configured.');
 
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		accountSettings.Environment__c = 'other';
-		accountSettings.BaseUrl__c = 'https://unit.test.docusign.net/';
+		accountSettings.AccountBaseUrl__c = 'https://account.test.docusign.net/';
+		accountSettings.ESignatureBaseUrl__c = 'https://esign.test.docusign.net/';
 		accountSettings.AccountId__c = String.valueOf(accountId);
-		accountSettings.AccountNumber__c = 1234;
-		accountSettings.Email__c = username;
-		accountSettings.Username__c = username;
-		accountSettings.Password__c = UUID.randomUUID().toShortString();
-		accountSettings.UseSendOnBehalfOf__c = true;
+		accountSettings.AccountNumber__c = TestUtils.randomInteger(1000000);
+		accountSettings.AccountName__c = TestUtils.randomString(20);
+		accountSettings.Email__c = (accountId == null ? UUID.randomUUID().toString() : accountId.toString()) + '@unit.test';
 		accountSettings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 		accountSettings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 		accountSettings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
 		accountSettings.CanUseSalesforceApi__c = true;
-		accountSettings.UseSystemSender__c = true;
+		accountSettings.SystemSenderId__c = UUID.randomUUID().toString();
+		accountSettings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
 		insert accountSettings;
 
 		insert EnvelopeSettings__c.getOrgDefaults();

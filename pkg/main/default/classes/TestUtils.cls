@@ -97,19 +97,6 @@ global class TestUtils {
 		return createEnvelopeDocument(envelopeId, createContentVersion(), sequence);
 	}
 
-	public static Document__c createEnvelopeDocument(final Id envelopeId, final String type, final Id id, final String name, final Integer sequence) {
-		Document__c ed = new Document__c(
-			Envelope__c = envelopeId,
-			Name = name,
-			SourceId__c = id,
-			Sequence__c = sequence,
-			Size__c = 1234,
-			Extension__c = 'pdf',
-			Type__c = type);
-		insert ed;
-		return ed;
-	}
-
 	public static Document__c createEnvelopeDocument(final Id envelopeId, final ContentVersion file, final Integer sequence) {
 		return createEnvelopeDocument(envelopeId, file, Document.TYPE_FILE, sequence);
 	}
@@ -284,6 +271,7 @@ global class TestUtils {
 			EmailSubject__c = loc.subject,
 			EmailMessage__c = loc.message);
 		insert el;
+		Localization.isEmailEnabled = true;
 		return el;
 	}
 
@@ -294,17 +282,6 @@ global class TestUtils {
 	public static EnvelopeStatus__c createEnvelopeStatus(final UUID dseId) {
 		EnvelopeStatus__c es = new EnvelopeStatus__c(
 			DocuSignId__c = String.valueOf(dseId),
-			Status__c = Envelope.STATUS_CREATED,
-			EmailSubject__c = 'Unit test subject',
-			LastStatusUpdate__c = Datetime.now());
-		insert es;
-		return es;
-	}
-
-	public static EnvelopeStatus__c createEnvelopeStatus(final Id sourceId) {
-		EnvelopeStatus__c es = new EnvelopeStatus__c(
-			DocuSignId__c = UUID.randomUUID().toString(),
-			SourceId__c = sourceId,
 			Status__c = Envelope.STATUS_CREATED,
 			EmailSubject__c = 'Unit test subject',
 			LastStatusUpdate__c = Datetime.now());
@@ -352,5 +329,26 @@ global class TestUtils {
 			LastStatusUpdate__c = Datetime.now());
 		insert rs;
 		return rs;
+	}
+
+	public static String generateKey() {
+		String key = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EncryptionKey__c = key;
+		upsert s;
+		return key;
+	}
+
+	private static String generateNonce() {
+		String nonce = UUID.randomUUID().toShortString();
+		UserSettings__c s = UserSettings__c.getInstance();
+		s.Nonce__c = nonce;
+		upsert s;
+		return nonce;
+	}
+
+	public static String generateState() {
+		generateKey();
+		return SecureUtils.encrypt(generateNonce() + '|https://unit.test.docusign.net/');
 	}
 }

@@ -154,4 +154,16 @@ private class CollectionTest {
 		System.assertEquals(0, Collection.size(new List<Object>()));
 		System.assertEquals(2, Collection.size(new List<Integer> { 1, 2 }));
 	}
+
+	@IsTest
+	static void test_slice() {
+		System.assertEquals(new List<Integer>(), Collection.slice((List<Integer>)null, 2));
+		System.assertEquals(new List<Integer>(), Collection.slice(new List<Integer>(), 2));
+		List<String> l = new List<String> { '0', '1', '2' };
+		System.assertEquals(new List<String> { '0', '1', '2' }, Collection.slice(l, -1));
+		System.assertEquals(new List<String> { '0', '1', '2' }, Collection.slice(l, 0));
+		System.assertEquals(new List<String> { '1', '2' }, Collection.slice(l, 1));
+		System.assertEquals(new List<String>(), Collection.slice(l, 3));
+
+	}
 }

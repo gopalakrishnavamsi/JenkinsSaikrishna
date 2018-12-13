@@ -467,6 +467,9 @@ global with sharing class StatusService {
 			DB.deleteStatus(toDelete, true);
 		}
 
+		// Commit changes to access token
+		Credentials.save();
+
 		// Sort by ascending sent date/time
 		result.sort();
 		return result;
@@ -544,7 +547,11 @@ global with sharing class StatusService {
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
 		if (!isValidStatus(ess)) throw new DocuSignException(Label.CannotResendEnvelope);
 
-		return EnvelopeAPI.getInstance().resendEnvelope(docuSignId);
+		try {
+			return EnvelopeAPI.getInstance().resendEnvelope(docuSignId);
+		} finally {
+			Credentials.save();
+		}
 	}
 
 	/**
@@ -564,7 +571,11 @@ global with sharing class StatusService {
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
 		if (!isValidStatus(ess)) throw new DocuSignException(Label.CannotResendEnvelope);
 
-		return EnvelopeAPI.getInstance().resendRecipients(docuSignId, recipients);
+		try {
+			return EnvelopeAPI.getInstance().resendRecipients(docuSignId, recipients);
+		} finally {
+			Credentials.save();
+		}
 	}
 
 	/**
@@ -582,17 +593,22 @@ global with sharing class StatusService {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
-		if (Collection.isEmpty(ess)) throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
-			String.valueOf(docuSignId)
-		}));
+		if (Collection.isEmpty(ess)) {
+			throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
+				String.valueOf(docuSignId)
+			}));
+		}
 		if (!isValidStatus(ess)) throw new DocuSignException(Label.CannotVoidEnvelope);
 
-		Boolean result = EnvelopeAPI.getInstance().voidEnvelope(docuSignId, reason);
-		if (result) {
-			result &= DB.updateStatus(new Set<UUID> { docuSignId }, Envelope.STATUS_VOIDED, reason);
+		try {
+			Boolean result = EnvelopeAPI.getInstance().voidEnvelope(docuSignId, reason);
+			if (result) {
+				result &= DB.updateStatus(new Set<UUID> { docuSignId }, Envelope.STATUS_VOIDED, reason);
+			}
+			return result;
+		} finally {
+			Credentials.save();
 		}
-
-		return result;
 	}
 
 	/**
@@ -609,12 +625,18 @@ global with sharing class StatusService {
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
-		if (Collection.isEmpty(ess)) throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
-			String.valueOf(docuSignId)
-		}));
+		if (Collection.isEmpty(ess)) {
+			throw new DocuSignException(String.format(Label.StatusNotFound_1, new List<String> {
+				String.valueOf(docuSignId)
+			}));
+		}
 		if (!isValidStatus(ess)) throw new DocuSignException(Label.CannotCorrectEnvelope);
 
-		return EnvelopeAPI.getInstance().getCorrectViewUrl(docuSignId, returnUrl);
+		try {
+			return EnvelopeAPI.getInstance().getCorrectViewUrl(docuSignId, returnUrl);
+		} finally {
+			Credentials.save();
+		}
 	}
 
 	/**
@@ -629,6 +651,10 @@ global with sharing class StatusService {
 		// Don't check envelope permissions here. Let DS platform handle this.
 		if (docuSignId == null) throw new DocuSignException(Label.InvalidStatus);
 
-		return EnvelopeAPI.getInstance().getConsoleViewUrl(docuSignId, returnUrl);
+		try {
+			return EnvelopeAPI.getInstance().getConsoleViewUrl(docuSignId, returnUrl);
+		} finally {
+			Credentials.save();
+		}
 	}
 }

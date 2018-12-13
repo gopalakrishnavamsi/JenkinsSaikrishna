@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <label><!-- Hide Remind and Expire --></label>
-    <name>HideRemindExpire__c</name>
-</CustomFieldTranslation>

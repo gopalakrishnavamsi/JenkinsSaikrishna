@@ -280,10 +280,14 @@ global with sharing class BulkSendService {
 
 		if (Collection.isEmpty(bulkLists)) throw new DocuSignException(Label.UndefinedBulkList);
 
-		BulkSendAPI api = BulkSendAPI.getInstance();
 		List<BulkList> result = new List<BulkList>();
-		for (BulkList bl : bulkLists) {
-			result.add(api.createList(bl));
+		BulkSendAPI api = BulkSendAPI.getInstance();
+		try {
+			for (BulkList bl : bulkLists) {
+				result.add(api.createList(bl));
+			}
+		} finally {
+			Credentials.save();
 		}
 
 		return DB.createLists(result);
@@ -325,8 +329,12 @@ global with sharing class BulkSendService {
 
 		BulkSendAPI api = BulkSendAPI.getInstance();
 		List<BulkList> result = new List<BulkList>();
-		for (BulkList bl : bulkLists) {
-			result.add(api.updateList(bl));
+		try {
+			for (BulkList bl : bulkLists) {
+				result.add(api.updateList(bl));
+			}
+		} finally {
+			Credentials.save();
 		}
 
 		return DB.updateLists(result);
@@ -347,12 +355,16 @@ global with sharing class BulkSendService {
 
 		if (Collection.isEmpty(bulkListIds)) throw new DocuSignException(Label.UndefinedId);
 
-		BulkSendAPI api = BulkSendAPI.getInstance();
 		List<BulkList> bls = DB.queryLists(bulkListIds);
 		Boolean result = Collection.isNotEmpty(bls);
 		if (result) {
-			for (BulkList bl : bls) {
-				if (bl.docuSignId != null) result &= api.deleteList(bl.docuSignId);
+			BulkSendAPI api = BulkSendAPI.getInstance();
+			try {
+				for (BulkList bl : bls) {
+					if (bl.docuSignId != null) result &= api.deleteList(bl.docuSignId);
+				}
+			} finally {
+				Credentials.save();
 			}
 			result &= DB.deleteLists(bulkListIds);
 		}
@@ -412,26 +424,30 @@ global with sharing class BulkSendService {
 		List<BulkList> bls = DB.queryLists(new Set<Id> { bulkListId });
 		if (Collection.size(bls) != 1) throw new DocuSignException(Label.BulkListNotFound);
 
-		UUID docuSignId = dsEnvelopeCreated
-			? envelope.docuSignId
-			: EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
+		try {
+			UUID docuSignId = dsEnvelopeCreated
+				? envelope.docuSignId
+				: EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
 
-		BulkSendAPI api = BulkSendAPI.getInstance();
-		BulkList.Result result = api.sendEnvelope(bls[0].docuSignId, docuSignId);
-		if (result.success) {
-			List<BulkList.Status> status = DB.createStatus(new List<BulkList.Status> {
-				api.getStatus(result.batchId).withSource(envelope.source)
-			});
-			if (Collection.isNotEmpty(status)) {
-				result = result.withBulkStatusId(status[0].id);
+			BulkSendAPI api = BulkSendAPI.getInstance();
+			BulkList.Result result = api.sendEnvelope(bls[0].docuSignId, docuSignId);
+			if (result.success) {
+				List<BulkList.Status> status = DB.createStatus(new List<BulkList.Status> {
+					api.getStatus(result.batchId).withSource(envelope.source)
+				});
+				if (Collection.isNotEmpty(status)) {
+					result = result.withBulkStatusId(status[0].id);
+				}
+				// TODO: Create envelope and status records for each bulk copy?
+				if (!sfdcEnvelopeCreated) {
+					EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId), null);
+				}
 			}
-			// TODO: Create envelope and status records for each bulk copy?
-			if (!sfdcEnvelopeCreated) {
-				EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId), null);
-			}
+
+			return result;
+		} finally {
+			Credentials.save();
 		}
-
-		return result;
 	}
 
 	/**
@@ -451,14 +467,18 @@ global with sharing class BulkSendService {
 		List<BulkList.Status> result = new List<BulkList.Status>();
 		List<BulkList.Status> toUpdate = new List<BulkList.Status>();
 		BulkSendAPI api = BulkSendAPI.getInstance();
-		Long now = Datetime.now().getTime();
-		for (BulkList.Status bs : DB.queryStatus(bulkStatusIds)) {
-			Long elapsedMs = bs.lastStatusUpdate == null ? STATUS_POLL_INTERVAL_MS : now - bs.lastStatusUpdate.getTime();
-			if (!bs.isFinal && elapsedMs >= STATUS_POLL_INTERVAL_MS) {
-				toUpdate.add(api.getStatus(bs.docuSignId).withId(bs.id).withSource(bs.source));
-			} else {
-				result.add(bs);
+		try {
+			Long now = Datetime.now().getTime();
+			for (BulkList.Status bs : DB.queryStatus(bulkStatusIds)) {
+				Long elapsedMs = bs.lastStatusUpdate == null ? STATUS_POLL_INTERVAL_MS : now - bs.lastStatusUpdate.getTime();
+				if (!bs.isFinal && elapsedMs >= STATUS_POLL_INTERVAL_MS) {
+					toUpdate.add(api.getStatus(bs.docuSignId).withId(bs.id).withSource(bs.source));
+				} else {
+					result.add(bs);
+				}
 			}
+		} finally {
+			Credentials.save();
 		}
 
 		if (Collection.isNotEmpty(toUpdate)) {

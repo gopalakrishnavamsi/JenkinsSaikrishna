@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="OAuthEvent">
+    <aura:attribute name="response" type="Object" required="true"/>
+    <aura:attribute name="loginInformation" type="Object" required="true"/>
+</aura:event>

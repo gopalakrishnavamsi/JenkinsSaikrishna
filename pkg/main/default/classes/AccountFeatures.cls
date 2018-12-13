@@ -1,7 +1,7 @@
 /**
  * Available DocuSign account features.
  */
-public with sharing class AccountFeatures extends DocuSignAPI {
+public with sharing class AccountFeatures extends ESignatureAPI {
 	@TestVisible
 	private static final Integer FLAG_MERGE_FIELDS = 1;
 	@TestVisible

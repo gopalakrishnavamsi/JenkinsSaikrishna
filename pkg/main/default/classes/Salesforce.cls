@@ -10,8 +10,10 @@ public with sharing class Salesforce {
 	private static final Boolean CAN_USE_API;
 	private static final Url BASE_URL;
 	private static final String INSTANCE_NAME;
+	private static final String NAMESPACE_PREFIX;
+	private static final Boolean IS_SANDBOX;
+	private static final String ORG_TYPE;
 	public static final Double API_VERSION = 44.0;
-	public static final String MAGIC_PARAMETER = 'isdtp';
 
 	public static Url baseUrl {
 		get {
@@ -21,6 +23,21 @@ public with sharing class Salesforce {
 	public static String instanceName {
 		get {
 			return INSTANCE_NAME;
+		}
+	}
+	public static Boolean isSandbox {
+		get {
+			return IS_SANDBOX;
+		}
+	}
+	public static String namespace {
+		get {
+			return NAMESPACE_PREFIX;
+		}
+	}
+	public static String edition {
+		get {
+			return ORG_TYPE;
 		}
 	}
 	public static Boolean isChatterEnabled {
@@ -62,7 +79,11 @@ public with sharing class Salesforce {
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
 		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getSalesforceBaseUrl();
-		INSTANCE_NAME = [SELECT InstanceName FROM Organization LIMIT 1].InstanceName;
+		Organization org = [SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix FROM Organization LIMIT 1];
+		INSTANCE_NAME = org.InstanceName;
+		IS_SANDBOX = org.IsSandbox;
+		ORG_TYPE = org.OrganizationType;
+		NAMESPACE_PREFIX = org.NamespacePrefix;
 		GLOBAL_DESCRIBE = Schema.getGlobalDescribe();
 		ARE_CONTRACTS_ENABLED = GLOBAL_DESCRIBE.containsKey('Contract');
 		ARE_QUOTES_ENABLED = GLOBAL_DESCRIBE.containsKey('QuoteDocument');
@@ -74,20 +95,6 @@ public with sharing class Salesforce {
 	}
 
 	public class MetadataApiNotSupportedException extends Exception {
-	}
-
-	public enum Environment {
-		Production, Sandbox
-	}
-
-	public class Configuration {
-		public String host { get; private set; }   // this is a host name got from HTTP headers
-		public String baseUrl { get; private set; } // this is a host name in https://XXX.salesforce.com format
-
-		public Configuration(final String host, final String baseUrl) {
-			this.host = host;
-			this.baseUrl = baseUrl;
-		}
 	}
 
 	public class MergeObject implements Comparable {

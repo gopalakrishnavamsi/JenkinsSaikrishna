@@ -918,6 +918,13 @@ public class MetadataAPI {
 			service.timeout_x = Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c);
 			service.AllOrNoneHeader = new MetadataAPI.AllOrNoneHeader_element();
 			service.AllOrNoneHeader.allOrNone = true;
+			service.CallOptions = new MetadataAPI.CallOptions_element();
+			service.CallOptions.client = [
+				SELECT SoapClientId__c
+				FROM Organization__mdt
+				WHERE DeveloperName = 'SecureSettings'
+				LIMIT 1
+			].SoapClientId__c;
 		}
 		return service;
 	}

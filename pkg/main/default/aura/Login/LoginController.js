@@ -1,25 +1,29 @@
 ({
   initialize: function (component, event, helper) {
     component.set('v.helpInfo', '');
-    var env = component.get('v.login.environment');
+    var env = component.get('v.environment');
     component.set('v.advancedOptionsExpanded', !$A.util.isEmpty(env) && env !== 'Production');
+    var login = component.get('v.login');
+    if (!$A.util.isUndefinedOrNull(login) && !$A.util.isEmpty(login.accounts)) {
+      component.set('v.selectedAccountNumber', login.accounts[0].accountNumber);
+    }
   },
 
   loginToDocuSign: function (component, event, helper) {
-    helper.login(component, helper);
+    helper.beginOAuth(component);
   },
 
   logoutOfDocuSign: function (component, event, helper) {
     component.set('v.showLogoutModal', false);
 
     setTimeout($A.getCallback(function () { // Wait for modal to hide
-      helper.logout(component, helper);
+      helper.logout(component);
     }), 300);
   },
 
   selectAccount: function (component, event, helper) {
     component.set('v.showAccountSelectionModal', false);
-    helper.login(component, helper);
+    helper.selectAccount(component);
   },
 
   cancelSelectAccount: function (component, event, helperz) {
@@ -27,7 +31,7 @@
   },
 
   getStarted: function (component, event, helper) {
-    helper.startTrial(component, helper);
+    helper.startTrial(component);
   },
 
   showLogoutModal: function (component, event, helper) {
@@ -39,14 +43,6 @@
     component.set('v.showLogoutModal', false);
   },
 
-  handlePasswordKeyup: function (component, event, helper) {
-    var key = event.which || event.keyCode || 0;
-
-    if (key === 13) {
-      helper.login(component, event, helper);
-    }
-  },
-
   swapLogInState: function (component, event, helper) {
     var showingTrialFields = component.get('v.showTrialFields');
 
@@ -56,7 +52,7 @@
       if (showingTrialFields) {
         component.find('login-input').focus();
       } else {
-        helper.prepareTrial(component, helper);
+        helper.prepareTrial(component);
         component.find('trial-input').focus();
       }
     }), 1);
@@ -96,5 +92,9 @@
       user.marketingOptIn = countryMarketing.defaultOptIn === true;
       component.set('v.trialAccount.user', user);
     }
+  },
+
+  handleOAuthEvent: function (component, event, helper) {
+    helper.endOAuth(component, event.getParam('response'), event.getParam('loginInformation'));
   }
 });

@@ -601,9 +601,13 @@ global with sharing class DocumentService {
 
 		List<Document> templates = new List<Document>();
 		if (templateIds != null) {
-			TemplateAPI client = TemplateAPI.getInstance();
-			for (UUID templateId : templateIds) {
-				templates.add(convert(client.getTemplate(templateId)));
+			TemplateAPI api = TemplateAPI.getInstance();
+			try {
+				for (UUID templateId : templateIds) {
+					templates.add(convert(api.getTemplate(templateId)));
+				}
+			} finally {
+				Credentials.save();
 			}
 		}
 		return templates;

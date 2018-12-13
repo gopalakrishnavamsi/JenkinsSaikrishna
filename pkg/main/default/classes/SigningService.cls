@@ -115,6 +115,7 @@ global with sharing class SigningService {
 						name,
 						snr.sequence);
 				} finally {
+					Credentials.save();
 					// Mark sign now as false in DB so we don't get stuck in a loop with a bad signer.
 					DB.completeSignNow(snr.withSignNow(false).id);
 				}
@@ -144,11 +145,15 @@ global with sharing class SigningService {
 		if (envelopeId != null) {
 			String name = UserInfo.getName();
 			String email = UserInfo.getUserEmail();
-			result = EnvelopeAPI.getInstance().getEmbeddedRecipientViewUrl(
-				envelopeId,
-				returnUrl,
-				email,
-				name);
+			try {
+				result = EnvelopeAPI.getInstance().getEmbeddedRecipientViewUrl(
+					envelopeId,
+					returnUrl,
+					email,
+					name);
+			} finally {
+				Credentials.save();
+			}
 		}
 		return result;
 	}

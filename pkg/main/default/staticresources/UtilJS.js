@@ -66,3 +66,13 @@ window._navigateToSObject = (function (id, pathPrefix) {
     window.location.href = (!!pathPrefix) ? pathPrefix + '/' + id : '/' + id;
   }
 });
+
+window._unescapeHtml = (function (s) {
+  if (!s) {
+    return '';
+  }
+  return s.replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+});

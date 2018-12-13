@@ -167,4 +167,12 @@ public class Collection {
 
 		return l.size();
 	}
+
+	public static List<Object> slice(final List<Object> l, final Integer s) {
+		List<Object> result = new List<Object>();
+		for (Integer i = s >= 0 ? s : 0; i < size(l); i++) {
+			result.add(l[i]);
+		}
+		return result;
+	}
 }

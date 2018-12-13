@@ -4,7 +4,6 @@
 public with sharing class Application {
 
 	private static final String PACKAGE_NAMESPACE = 'dfsle';
-	private static final String ORG_NAMESPACE;
 	private static final String ORG_NAMESPACE_PREFIX;
 	private static final String ORG_CLASS_NAMESPACE_PREFIX;
 	private static final String NAMESPACE_PREFIX = 'dfsle__';
@@ -13,7 +12,6 @@ public with sharing class Application {
 	private static final Version PACKAGE_VERSION;
 	private static final String APPLICATION_NAME;
 	private static final String USER_AGENT;
-	public static final String INTEGRATOR_KEY;
 	private static final Set<String> APPLICATION_OBJECTS = new Set<String> {
 		'envelopeconfiguration__c', 'customparametermap__c', 'customrecipient__c',
 		'envelope__c', 'document__c', 'recipient__c',
@@ -31,9 +29,8 @@ public with sharing class Application {
 			// Not managed
 		}
 		IS_MANAGED_PACKAGE = result != null;
-		ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
-		ORG_NAMESPACE_PREFIX = String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE + '__' : '';
-		ORG_CLASS_NAMESPACE_PREFIX = String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE + '.' : '';
+		ORG_NAMESPACE_PREFIX = String.isNotBlank(Salesforce.namespace) ? Salesforce.namespace + '__' : '';
+		ORG_CLASS_NAMESPACE_PREFIX = String.isNotBlank(Salesforce.namespace) ? Salesforce.namespace + '.' : '';
 
 		// Don't call System.requestVersion outside managed package. It will throw an un-catchable ProcedureException.
 		// Don't use versions < 1. They make SFDC unhappy.
@@ -42,12 +39,6 @@ public with sharing class Application {
 		USER_AGENT = String.format('DFS-LE/{0} ({1}) SFDC-Callout/{2}', new List<String> {
 			String.valueOf(PACKAGE_VERSION), UserInfo.getOrganizationId(), String.valueOf(Salesforce.API_VERSION)
 		});
-		INTEGRATOR_KEY = [
-			SELECT IntegratorKey__c
-			FROM Organization__mdt
-			WHERE DeveloperName = 'SecureSettings'
-			LIMIT 1
-		].IntegratorKey__c;
 	}
 
 	public static Boolean isManaged {
@@ -88,7 +79,7 @@ public with sharing class Application {
 
 	public static String lightningNamespace {
 		get {
-			return IS_MANAGED_PACKAGE ? PACKAGE_NAMESPACE : (String.isNotBlank(ORG_NAMESPACE) ? ORG_NAMESPACE : 'c');
+			return IS_MANAGED_PACKAGE ? PACKAGE_NAMESPACE : (String.isNotBlank(Salesforce.namespace) ? Salesforce.namespace : 'c');
 		}
 	}
 
