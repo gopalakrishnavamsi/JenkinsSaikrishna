@@ -28,7 +28,7 @@ pipeline {
 
                 echo "Create a Scratch Org"
                 // sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -s -a scratchorg --durationdays 1"
-                sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -a scratchorg"
+                sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -a scratchorg --setdefaultusername"
 
                 echo "Push code to org"
                 sh "sfdx force:source:push -u scratchorg"
