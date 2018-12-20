@@ -37,7 +37,9 @@ pipeline {
                 sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u scratchorg"
 
                 echo "Run tests"
-                sh "sfdx force:apex:test:run -c -r human -w 5"
+                sh "mkdir -p ${WORKSPACE}/richtest"
+                sh "sfdx force:apex:test:run -c -r human -w 5 --outputdir ${WORKSPACE}/richtest"
+                sh "ls -ltra ${WORKSPACE}/richtest"
 
             }
         }
