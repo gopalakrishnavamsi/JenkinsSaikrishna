@@ -8,7 +8,7 @@ pipeline {
                 sh "ls -ltra ${WORKSPACE}"
             }
         }
-        stage('Example') {
+        stage('SFDX Auth') {
             environment {
                 JWT_KEY_FILE = credentials('SFDXKEY')
                 CONSUMER_KEY = "3MVG9KI2HHAq33Rw3LCniYZzeHaw97glTin2IrtLWjge2h6oLeoGlZSJqTdLjlwWr6NAtiRb2bPpKtf1ntr.e"
@@ -25,22 +25,33 @@ pipeline {
 
                 sh "echo List Org2"
                 sh 'sfdx force:org:list'
-
+            }
+        }
+        stage('Create SFDX Scratch Org') {
+            steps {
                 echo "Create a Scratch Org"
                 // sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -s -a scratchorg --durationdays 1"
                 sh "cd ${WORKSPACE} ; sfdx force:org:create -f etc/test.json -a scratchorg --setdefaultusername"
-
+            }
+        }
+        stage('Push Code to SFDX Org') {
+            steps {
                 echo "Push code to org"
                 sh "sfdx force:source:push -u scratchorg"
-
+            }
+        }
+        stage('Assign Permission Set') {
+            steps {
                 echo "Assign a Permission Set"
                 sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u scratchorg"
-
+            }
+        }
+        stage('Run Apex Test') {
+            steps {
                 echo "Run tests"
                 sh "mkdir -p ${WORKSPACE}/richtest"
                 sh "sfdx force:apex:test:run -c -r human -w 5 --outputdir ${WORKSPACE}/richtest"
                 sh "ls -ltra ${WORKSPACE}/richtest"
-
             }
         }
     }
