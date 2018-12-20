@@ -47,7 +47,7 @@ pipeline {
     post {
         always {
                 echo "Junit test"
-                junit keepLongStdio: true, testResults: '${WORKSPACE}/richtes/*-junit.xml'
+                junit keepLongStdio: true, testResults: 'richtest/*-junit.xml'
 
                 echo "SFDX URL - for debugging"
                 sh "sfdx force:org:open --urlonly"
