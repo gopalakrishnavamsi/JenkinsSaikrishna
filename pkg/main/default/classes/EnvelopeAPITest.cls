@@ -906,7 +906,6 @@ private class EnvelopeAPITest {
 				new Entity(o.Id),
 				null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
-			System.debug('IS LOCALIZATION ENABLED? ' + Localization.isEmailLocalizationEnabled());
 
 			Test.startTest();
 			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));

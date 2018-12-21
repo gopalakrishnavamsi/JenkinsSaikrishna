@@ -117,7 +117,7 @@ public virtual class RestAPI {
 		}
 
 		if (headers != null) {
-			for (String type : headers.KeySet()) {
+			for (String type : headers.keySet()) {
 				request.setHeader(type, headers.get(type));
 			}
 		}

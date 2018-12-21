@@ -2,6 +2,9 @@
 // HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
+	public SendingController() {
+	}
+
 	public SendingController(final ApexPages.StandardController c) {
 	}
 

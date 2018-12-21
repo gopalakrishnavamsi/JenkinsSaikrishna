@@ -62,6 +62,10 @@ public class Collection {
 		return isNotEmpty(c) && c.containsKey(key);
 	}
 
+	public static Set<String> keys(final Map<String, Object> c) {
+		return c == null ? new Set<String>() : c.keySet();
+	}
+
 	// Ugh, these should be standard Set methods...
 	public static Set<Id> union(final Set<Id> left, final Set<Id> right) {
 		Set<Id> result = new Set<Id>();
@@ -174,5 +178,9 @@ public class Collection {
 			result.add(l[i]);
 		}
 		return result;
+	}
+
+	public static Integer indexOf(final List<Object> l, final Object o) {
+		return isEmpty(l) ? -1 : l.indexOf(o);
 	}
 }

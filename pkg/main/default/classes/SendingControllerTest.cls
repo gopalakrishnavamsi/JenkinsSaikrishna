@@ -7,13 +7,15 @@ private class SendingControllerTest {
 			SObject a = TestUtils.createAccount();
 
 			Test.startTest();
-			SendingController result = new SendingController(new ApexPages.StandardController(a));
+			SendingController result1 = new SendingController();
+			SendingController result2 = new SendingController(new ApexPages.StandardController(a));
 			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assertEquals(Application.lightningNamespace, result.namespace);
-			System.assertEquals(Salesforce.getLightningHost(), result.lightningHost);
-			System.assertEquals(Salesforce.getVisualforceHost(), result.visualforceHost);
+			System.assertNotEquals(null, result1);
+			System.assertNotEquals(null, result2);
+			System.assertEquals(Application.lightningNamespace, result1.namespace);
+			System.assertEquals(Salesforce.getLightningHost(), result1.lightningHost);
+			System.assertEquals(Salesforce.getVisualforceHost(), result1.visualforceHost);
 		}
 	}
 
