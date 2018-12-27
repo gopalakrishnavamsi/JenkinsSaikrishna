@@ -43,14 +43,22 @@ pipeline {
 
             }
         }
+        stage('Run SonarQube') {
+            steps {
+
+                echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
+                sh "cd ${WORKSPACE} ; export PATH=$PATH:/root/temp/sonar-scanner-3.2.0.1227-linux/bin ; sonar-scanner -Dsonar.projectKey=sfdxmacos -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login=337f8717bb8cfc08ee35ca6f732c7d5d8a05e39f -Dsonar.apex.coverage.reportPath=${WORKSPACE}/richtest"
+            }
+        }        
     }
     post {
         always {
                 echo "Junit test"
-                //junit keepLongStdio: true, testResults: 'richtest/*-junit.xml'
-junit 'richtest/*-junit.xml'
+                junit keepLongStdio: true, testResults: 'richtest/*-junit.xml'
+
                 echo "SFDX URL - for debugging"
                 sh "sfdx force:org:open --urlonly"
+
         }
     }        
 
