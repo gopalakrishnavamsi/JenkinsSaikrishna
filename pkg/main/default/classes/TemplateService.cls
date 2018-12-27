@@ -10,7 +10,11 @@ global with sharing class TemplateService {
 	global static List<Template> getTemplates() {
 		Permissions.verifyIsDocuSignUser();
 
-		return TemplateAPI.getInstance().getTemplates();
+		try {
+			return TemplateAPI.getInstance().getTemplates();
+		} finally {
+			Credentials.save();
+		}
 	}
 
 	/**
@@ -23,6 +27,10 @@ global with sharing class TemplateService {
 	global static Template getTemplate(final UUID templateId) {
 		Permissions.verifyIsDocuSignUser();
 
-		return TemplateAPI.getInstance().getTemplate(templateId);
+		try {
+			return TemplateAPI.getInstance().getTemplate(templateId);
+		} finally {
+			Credentials.save();
+		}
 	}
 }

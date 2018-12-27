@@ -476,8 +476,6 @@ global with sharing class EnvelopeService {
 			if (envelopeConfiguration.id != null) result.withEnvelopeConfigurationId(envelopeConfiguration.id);
 
 			if (envelopeConfiguration.documents != null) {
-				Integer docSequence = 1;
-
 				// Document-level customization
 				result = addFiles(result, envelopeConfiguration.documents.fileIds);
 				result = addTemplates(result, envelopeConfiguration.documents.templateIds);
@@ -638,8 +636,12 @@ global with sharing class EnvelopeService {
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
 		Envelope result = replaceUserTags(envelope);
-		UUID docuSignId = EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow));
-		result = result.withDocuSignId(docuSignId);
+		try {
+			result = result.withDocuSignId(
+				EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow)));
+		} finally {
+			if (updateNow) Credentials.save();
+		}
 		if (sendNow) result = result.withSent(Datetime.now());
 		// Can update in some workflows, but not in others due to subsequent callouts (e.g. mobile)
 		if (updateNow) {
@@ -771,6 +773,10 @@ global with sharing class EnvelopeService {
 	global static Url getSenderViewUrl(final UUID docuSignId, final Url returnUrl) {
 		Permissions.verifyIsOwner(docuSignId);
 
-		return EnvelopeAPI.getInstance().getSenderViewUrl(docuSignId, returnUrl);
+		try {
+			return EnvelopeAPI.getInstance().getSenderViewUrl(docuSignId, returnUrl);
+		} finally {
+			Credentials.save();
+		}
 	}
 }

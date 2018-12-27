@@ -1,4 +1,4 @@
-public with sharing class TemplateAPI extends DocuSignAPI {
+public with sharing class TemplateAPI extends ESignatureAPI {
 
 	private static TemplateAPI self = null;
 	private final Map<UUID, Template> templateMap;

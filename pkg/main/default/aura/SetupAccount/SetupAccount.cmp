@@ -1,7 +1,9 @@
 <aura:component>
     <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="isLoggedIn" type="Boolean"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="nextStep" type="String"/>
+    <aura:attribute name="beginOAuth" type="Object" required="true"/>
 
     <aura:attribute name="showExitModal" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="continueButtonDisabled" type="Boolean" default="{!true}" access="private"/>
@@ -10,14 +12,15 @@
     <aura:registerEvent name="finishClicked" type="c:NextSectionEvent"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
-    <aura:handler name="change" value="{!v.login.isLoggedIn}" action="{!c.handleLoginChange}"/>
+    <aura:handler name="change" value="{!v.isLoggedIn}" action="{!c.handleLoginChange}"/>
     <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
                   action="{!c.handleConfirmExitClick}"/>
 
     <!-- Header -->
     <div class="slds-scope strike-wizard">
         <header class="strike-wizard__header slds-is-relative">
-            <h2 class="strike-wizard__title slds-text-heading_large slds-align_absolute-center slds-m-bottom_none">{!$Label.c.ConnectToDocuSign}</h2>
+            <h2 class="strike-wizard__title slds-text-heading_large slds-align_absolute-center slds-m-bottom_none">
+                {!$Label.c.ConnectToDocuSign}</h2>
         </header>
         <!-- Header -->
         <!-- Content -->
@@ -25,7 +28,9 @@
             <div class="slds-container_small slds-container_center slds-p-horizontal_medium">
                 <c:Login aura:id="salesforceToThirdParty"
                          login="{!v.login}"
-                         isTrialExpired="{!v.isTrialExpired}"/>
+                         isLoggedIn="{!v.isLoggedIn}"
+                         isTrialExpired="{!v.isTrialExpired}"
+                         beginOAuth="{!v.beginOAuth}"/>
             </div>
         </div>
         <!-- Content -->

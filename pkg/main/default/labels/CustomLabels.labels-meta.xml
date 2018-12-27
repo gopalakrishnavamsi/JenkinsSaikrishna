@@ -4440,4 +4440,67 @@
         <shortDescription>Zimbabwe</shortDescription>
         <value>Zimbabwe</value>
     </labels>
+    <labels>
+        <fullName>AccountDisplay_2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Account display format</shortDescription>
+        <value>{0} ({1})</value>
+    </labels>
+    <labels>
+        <fullName>AccessTokenTooLong_2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Access token too long</shortDescription>
+        <value>OAuth access token is too long ({0} > {1}).</value>
+    </labels>
+    <labels>
+        <fullName>PostInstall2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Post-install version 2</shortDescription>
+        <value>DocuSign post-install script version 2</value>
+    </labels>
+	<labels>
+		<fullName>InvalidAuthState</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid authorization state</shortDescription>
+		<value>Invalid authorization state.</value>
+	</labels>
+    <labels>
+        <fullName>ConsentRequired</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Consent required</shortDescription>
+        <value>You have not granted or have revoked your consent to be impersonated by DocuSign for Salesforce.</value>
+    </labels>
+    <labels>
+        <fullName>InvalidGrant</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid grant</shortDescription>
+        <value>One or more of the authorization claims is invalid.</value>
+    </labels>
+    <labels>
+        <fullName>AccountNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Account not found</shortDescription>
+        <value>Account not found.</value>
+    </labels>
+    <labels>
+        <fullName>InvalidAccount</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid account</shortDescription>
+        <value>DocuSign account is invalid.</value>
+    </labels>
+    <labels>
+        <fullName>KeyNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Encryption key not found</shortDescription>
+        <value>Encryption key not found.</value>
+    </labels>
 </CustomLabels>

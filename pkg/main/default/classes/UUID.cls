@@ -138,4 +138,16 @@ global class UUID {
 	public static Boolean isEmpty(final UUID u) {
 		return u == null || String.isBlank(u.value) || u == UUID.empty;
 	}
+
+	/**
+	 * Tests whether a UUID is not null and has a non-empty value.
+	 *
+	 * @param u The input UUID.
+	 *
+	 * @return <code>true</code> if the input UUID is not <code>null</code> and has an non-blank value,
+	 * <code>false</code> otherwise.
+	 */
+	public static Boolean isNotEmpty(final UUID u) {
+		return !isEmpty(u);
+	}
 }

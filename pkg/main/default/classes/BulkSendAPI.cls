@@ -1,4 +1,4 @@
-public with sharing class BulkSendAPI extends DocuSignAPI {
+public with sharing class BulkSendAPI extends ESignatureAPI {
 
 	private static BulkSendAPI self = null;
 
@@ -200,7 +200,7 @@ public with sharing class BulkSendAPI extends DocuSignAPI {
 			Integer eds = Collection.size(this.validationErrorDetails);
 			for (Integer i = 0; i < this.validationErrors.size(); i++) {
 				String errorCode = this.validationErrors[i];
-				result.add(new DocuSignAPI.Error(
+				result.add(new ESignatureAPI.Error(
 					APIErrorCode.BAD_REQUEST,
 					errorCode,
 					i < eds ? this.validationErrorDetails[i] : errorCode));

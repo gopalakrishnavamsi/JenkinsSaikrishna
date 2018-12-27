@@ -18,16 +18,16 @@
  * </pre>
  */
 @IsTest
-global class ESignatureAPIMock implements HttpCalloutMock {
+global class ESignatureAPIMock extends OAuthTokenMock {
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
+		'oauth' => Application.classNamespacePrefix + 'ESignatureAPIMock.OAuthMock',
 		'accounts' => Application.classNamespacePrefix + 'ESignatureAPIMock.AccountsMock',
 		'billing_plan' => Application.classNamespacePrefix + 'ESignatureAPIMock.BillingPlanMock',
 		'bulk_envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkEnvelopesMock',
 		'bulk_send_lists' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkSendListsMock',
 		'custom_fields' => Application.classNamespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
 		'envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
-		'login_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.LoginInformationMock',
 		'service_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.ServiceInformationMock',
 		'settings' => Application.classNamespacePrefix + 'ESignatureAPIMock.SettingsMock',
 		'signing_groups' => Application.classNamespacePrefix + 'ESignatureAPIMock.SigningGroupsMock',
@@ -57,18 +57,29 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 	 * @param success Whether the requests should be successful.
 	 */
 	global ESignatureAPIMock(final Boolean success) {
+		super(!success);
 		this.success = success;
 	}
 
 	private MockRequest parseRequest(final HttpRequest request) {
 		Url u = new Url(request.getEndpoint());
-		if (u.getPath().startsWith('/service_information')) { // special case for ping requests
+		String p = u.getPath();
+		if (p.startsWith('/service_information')) { // special case for ping requests
 			return new MockRequest(
 				request.getMethod(),
 				null,
 				null,
 				'service_information',
 				new List<String>(),
+				QueryString.parse(u.getQuery()),
+				request.getBody());
+		} else if (p.startsWith('/oauth')) { // auth-related request
+			return new MockRequest(
+				request.getMethod(),
+				null,
+				null,
+				'oauth',
+				Collection.slice(p.split('/'), 2),
 				QueryString.parse(u.getQuery()),
 				request.getBody());
 		}
@@ -101,6 +112,32 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 		return EncodingUtil.base64Encode(Blob.valueOf(TestUtils.randomString(32)));
 	}
 
+	public class OAuthMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			String op = (String)Collection.head(request.path);
+			if (request.method == 'GET') {
+				if (op == 'userinfo') {
+					Credentials c = Credentials.isAccountValid() ? Credentials.getInstance() : null;
+					AuthService.APIAccount a = new AuthService.APIAccount();
+					a.account_id = c == null ?  UUID.randomUUID().toString() : c.accountId.toString();
+					a.friendly_id = c == null ? String.valueOf(TestUtils.randomInteger(1000000)) : String.valueOf(c.accountNumber);
+					a.is_default = true;
+					a.account_name = c == null ? TestUtils.randomString(10) : c.accountName;
+					a.base_uri = c == null ? 'https://unit.test.docusign.net/' : c.eSignatureBaseUrl.toExternalForm();
+					AuthService.APIUser u = new AuthService.APIUser();
+					u.sub = c == null || UUID.isEmpty(c.userId) ? UUID.randomUUID().toString() : c.userId.toString();
+					u.name = UserInfo.getName();
+					u.email = c == null ? UserInfo.getUserEmail() : c.email;
+					u.accounts = new List<AuthService.APIAccount> { a };
+					response = MockResponse.ok(u);
+				}
+			}
+			return response;
+		}
+	}
+
 	public class AccountsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -118,33 +155,11 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 				a.accountIdGuid = UUID.isEmpty(request.accountId)
 					? UUID.randomUUID().toString()
 					: request.accountId.toString();
-				a.externalAccountId = s.AccountNumber__c == null
-					? String.valueOf(TestUtils.randomInteger(1000000))
-					: String.valueOf(s.AccountNumber__c);
+				a.externalAccountId = String.valueOf(TestUtils.randomInteger(1000000));
 				a.connectPermission = 'full';
 				a.suspensionStatus = null;
 				a.suspensionDate = null;
 				response = MockResponse.ok(a);
-			} else if (request.method == 'POST') {
-				AccountAPI.TrialAccounts tas = (AccountAPI.TrialAccounts)JSON.deserialize(
-					request.body, AccountAPI.TrialAccounts.class);
-				List<AccountAPI.TrialAccountResult> newAccounts = new List<AccountAPI.TrialAccountResult>();
-				if (tas != null && Collection.isNotEmpty(tas.newAccountRequests)) {
-					for (AccountAPI.TrialAccount ta : tas.newAccountRequests) {
-						AccountAPI.TrialAccountResult a = new AccountAPI.TrialAccountResult();
-						a.accountId = String.valueOf(TestUtils.randomInteger(1000000));
-						a.accountIdGuid = UUID.randomUUID().toString();
-						a.accountName = ta.accountName;
-						a.userId = UUID.randomUUID().toString();
-						a.apiPassword = randomPassword();
-						a.baseUrl = 'https://unit.test.docusign.net/restapi/' + request.apiVersion + '/accounts/'
-							+ a.accountId;
-						newAccounts.add(a);
-					}
-				}
-				AccountAPI.TrialAccountResults tar = new AccountAPI.TrialAccountResults();
-				tar.newAccounts = newAccounts;
-				response = MockResponse.created(tar);
 			}
 			return response;
 		}
@@ -429,38 +444,6 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 				} else { // void envelope
 					response = MockResponse.ok(null);
 				}
-			}
-			return response;
-		}
-	}
-
-	public class LoginInformationMock implements MockResource {
-
-		public MockResponse respond(final MockRequest request) {
-			MockResponse response = null;
-			if (request.method == 'GET') {
-				AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-				String aid = s.AccountId__c;
-				String an = String.valueOf(s.AccountNumber__c);
-				UserSettings__c us = UserSettings__c.getInstance();
-				String uid = us.Username__c;
-				AccountAPI.LoginAccount la = new AccountAPI.LoginAccount();
-				la.accountId = an == null ? String.valueOf(TestUtils.randomInteger(10000000)) : an;
-				la.accountIdGuid = aid == null ? String.valueOf(UUID.randomUUID()) : aid;
-				la.name = String.valueOf(UUID.randomUUID());
-				la.userId = uid == null ? String.valueOf(UUID.randomUUID()) : uid;
-				la.baseUrl = 'https://unit.test.docusign.net/restapi/' + request.apiVersion + '/accounts/'
-					+ la.accountId;
-				la.loginUserSettings = new List<AccountAPI.Setting> {
-					new AccountAPI.Setting('canManageAccount', 'true'),
-					new AccountAPI.Setting('canSendEnvelope', 'true'),
-					new AccountAPI.Setting('apiAccountWideAccess', 'true'),
-					new AccountAPI.Setting('allowSendOnBehalfOf', 'true')
-				};
-				AccountAPI.LoginInformation li = new AccountAPI.LoginInformation();
-				li.apiPassword = randomPassword();
-				li.loginAccounts = new List<AccountAPI.LoginAccount> { la };
-				response = MockResponse.ok(li);
 			}
 			return response;
 		}
@@ -851,16 +834,7 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
-			if (request.method == 'GET' && Collection.last(request.path) == 'settings') {
-				AccountAPI.UserSettings us = new AccountAPI.UserSettings();
-				us.userSettings = new List<AccountAPI.Setting> {
-					new AccountAPI.Setting('canManageAccount', 'true'),
-					new AccountAPI.Setting('canSendEnvelope', 'true'),
-					new AccountAPI.Setting('apiAccountWideAccess', 'true'),
-					new AccountAPI.Setting('allowSendOnBehalfOf', 'true')
-				};
-				response = MockResponse.ok(us);
-			} else if (request.method == 'POST') {
+			if (request.method == 'POST') {
 				AccountAPI.NewUsers nu = (AccountAPI.NewUsers)JSON.deserialize(request.body, AccountAPI.NewUsers.class);
 				if (nu != null && nu.newUsers != null) {
 					for (AccountAPI.APIUser u : nu.newUsers) {
@@ -906,11 +880,18 @@ global class ESignatureAPIMock implements HttpCalloutMock {
 	}
 
 	private MockResponse getError(final String resource) {
-		if (resource == 'service_information') throw new CalloutException('test');
-		return MockResponse.badRequest('{"errorCode":"MOCK_ERROR","message":"Mock error"}');
+		switch on resource {
+			when 'service_information' {
+				throw new CalloutException('test');
+			} when 'oauth' {
+				return MockResponse.badRequest('{"error":"mock_error","error_message":"Mock error"}');
+			} when else {
+				return MockResponse.badRequest('{"errorCode":"MOCK_ERROR","message":"Mock error"}');
+			}
+		}
 	}
 
-	public HttpResponse respond(final HttpRequest request) {
+	override public HttpResponse getResponse(final HttpRequest request) {
 		MockRequest req = parseRequest(request);
 		MockResponse resp = this.success
 			? getMock(req.resource).respond(req)

@@ -4,7 +4,7 @@ public class MockRequest {
 	public String apiVersion { get; private set; }
 	public UUID accountId { get; private set; }
 	public String resource { get; private set; }
-	public List<String> path { get; private set; }
+	public List<Object> path { get; private set; }
 	public QueryString parameters { get; private set; }
 	public String body { get; private set; }
 
@@ -13,7 +13,7 @@ public class MockRequest {
 		final String apiVersion,
 		final UUID accountId,
 		final String resource,
-		final List<String> path,
+		final List<Object> path,
 		final QueryString parameters,
 		final String body) {
 

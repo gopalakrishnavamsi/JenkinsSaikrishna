@@ -2389,6 +2389,42 @@
         <label>Zimbabwe</label>
         <name>Zimbabwe</name>
     </customLabels>
+    <customLabels>
+        <label>{0} ({1})</label>
+        <name>AccountDisplay_2</name>
+    </customLabels>
+    <customLabels>
+        <label>OAuth access token is too long ({0} > {1}).</label>
+        <name>AccessTokenTooLong_2</name>
+    </customLabels>
+    <customLabels>
+        <label>DocuSign post-install script version 2</label>
+        <name>PostInstall2</name>
+    </customLabels>
+    <customLabels>
+        <label>Invalid authorization state.</label>
+        <name>InvalidAuthState</name>
+    </customLabels>
+    <customLabels>
+        <label>You have not granted or have revoked your consent to be impersonated by DocuSign for Salesforce.</label>
+        <name>ConsentRequired</name>
+    </customLabels>
+    <customLabels>
+        <label>One or more of the authorization claims is invalid.</label>
+        <name>InvalidGrant</name>
+    </customLabels>
+	<customLabels>
+		<label>Account not found.</label>
+		<name>AccountNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign account is invalid.</label>
+		<name>InvalidAccount</name>
+	</customLabels>
+    <customLabels>
+        <label>Encryption key not found.</label>
+        <name>KeyNotFound</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

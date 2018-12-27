@@ -1,6 +1,7 @@
 {
   "orgName": "DFS-Core Developer",
   "edition": "Developer",
+  "hasSampleData": true,
   "settings": {
     "orgPreferenceSettings": {
       "translation": true

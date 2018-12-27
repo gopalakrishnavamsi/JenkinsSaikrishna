@@ -4,7 +4,7 @@ private class CredentialsTest {
 	@IsTest
 	static void test_getAccountCredentials() {
 		UUID accountId = UUID.randomUUID();
-		UserMock.createAccountConfiguration(accountId, accountId.toString());
+		UserMock.createAccountConfiguration(accountId);
 
 		Test.startTest();
 		Credentials.AccountCredentials result1 = Credentials.getAccountCredentials();
@@ -13,7 +13,6 @@ private class CredentialsTest {
 
 		System.assertNotEquals(null, result1);
 		System.assertEquals(accountId, result1.accountId);
-		System.assertEquals(accountId.toString(), result1.username);
 
 		System.assert(result2 === result1);
 	}
@@ -30,19 +29,14 @@ private class CredentialsTest {
 		Credentials.UserCredentials result4 = Credentials.getUserCredentials(u2.Id);
 		Test.stopTest();
 
-		UserSettings__c s1 = UserSettings__c.getInstance(u1.Id);
-		UserSettings__c s2 = UserSettings__c.getInstance(u2.Id);
-
 		System.assertNotEquals(null, result1);
-		System.assertEquals(s1.Username__c, result1.username);
-		System.assertEquals(s1.Password__c, result1.password);
+		System.assertEquals(u1.Username__c, String.valueOf(result1.userId));
 
 		System.assert(result2 === result1);
 
 		System.assert(result3 !== result1);
 		System.assertNotEquals(null, result3);
-		System.assertEquals(s2.Username__c, result3.username);
-		System.assertEquals(s2.Password__c, result3.password);
+		System.assertEquals(u2.Username__c, String.valueOf(result3.userId));
 
 		System.assert(result4 === result3);
 	}
@@ -51,24 +45,22 @@ private class CredentialsTest {
 	static void test_buildAPICredentials() {
 		UUID accountId = UUID.randomUUID();
 		String ae = UUID.randomUUID().toString() + '@unit.test';
-		String au = UUID.randomUUID().toString();
-		String ap = UUID.randomUUID().toString();
+		Url aUrl = new Url('https://account.test.docusign.com/');
+		Url eUrl = new Url('https://esign.test.docusign.net/');
 		Credentials.AccountCredentials ac1 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, true, true);
+			DocuSign.Environment.Demo, aUrl, eUrl, accountId, 1111L, 'Account 1', ae, null);
+		UUID ssId = UUID.randomUUID();
 		Credentials.AccountCredentials ac2 = new Credentials.AccountCredentials(
-			Environment.demo, accountId, 1111L, ae, au, ap, false, false);
+			DocuSign.Environment.Demo, aUrl, eUrl, accountId, 2222L, 'Account 2', ae, ssId);
 		Credentials.UserCredentials uc = new Credentials.UserCredentials(
-			UUID.randomUUID().toString(), UUID.randomUUID().toString());
+			UUID.randomUUID(), true, new Credentials.AccessToken(UUID.randomUUID().toString(), Datetime.now().addHours(1)));
 
 		Test.startTest();
 		Credentials result1 = Credentials.buildAPICredentials(ac1, uc);
 		Credentials result2 = Credentials.buildAPICredentials(ac2, uc);
-		try {
-			Credentials.buildAPICredentials(ac1, null);
-			throw new AssertException('Expected buildAPICredentials to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.ConfigurationError, ex.getMessage());
-		}
+		// System sender tests
+		Credentials result3 = Credentials.buildAPICredentials(ac1, null);
+		Credentials result4 = Credentials.buildAPICredentials(ac2, null);
 		try {
 			Credentials.buildAPICredentials(null, uc);
 			throw new AssertException('Expected buildAPICredentials to fail');
@@ -79,31 +71,48 @@ private class CredentialsTest {
 
 		System.assertNotEquals(null, result1);
 		System.assert(result1.isValid);
-		System.assertEquals(Environment.demo, result1.environment);
+		System.assertEquals(DocuSign.Environment.Demo, result1.environment);
+		System.assertNotEquals(null, result1.accountBaseUrl);
+		System.assertEquals(aUrl.toExternalForm(), result1.accountBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result1.eSignatureBaseUrl);
+		System.assertEquals(eUrl.toExternalForm(), result1.eSignatureBaseUrl.toExternalForm());
 		System.assertEquals(accountId, result1.accountId);
 		System.assertEquals(1111L, result1.accountNumber);
+		System.assertEquals('Account 1', result1.accountName);
 		System.assertEquals(ae, result1.email);
-		System.assertEquals(au, result1.username);
-		System.assertEquals(ap, result1.password);
-		System.assert(result1.useSendOnBehalfOf);
-		System.assertEquals(uc.username, result1.sendOnBehalfOf);
+		System.assertEquals(uc.userId, result1.userId);
+		System.assertNotEquals(null, result1.token);
+		System.assertEquals(uc.token.token, result1.token.token);
+		System.assertEquals(uc.token.expires, result1.token.expires);
 
 		System.assertNotEquals(null, result2);
 		System.assert(result2.isValid);
-		System.assertEquals(Environment.demo, result2.environment);
+		System.assertEquals(DocuSign.Environment.Demo, result2.environment);
+		System.assertNotEquals(null, result2.accountBaseUrl);
+		System.assertEquals(aUrl.toExternalForm(), result2.accountBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result2.eSignatureBaseUrl);
+		System.assertEquals(eUrl.toExternalForm(), result2.eSignatureBaseUrl.toExternalForm());
 		System.assertEquals(accountId, result2.accountId);
-		System.assertEquals(1111L, result2.accountNumber);
+		System.assertEquals(2222L, result2.accountNumber);
+		System.assertEquals('Account 2', result2.accountName);
 		System.assertEquals(ae, result2.email);
-		System.assertEquals(uc.username, result2.username);
-		System.assertEquals(uc.password, result2.password);
-		System.assert(!result2.useSendOnBehalfOf);
-		System.assertEquals(null, result2.sendOnBehalfOf);
+		System.assertEquals(uc.userId, result2.userId);
+		System.assertNotEquals(null, result2.token);
+		System.assertEquals(uc.token.token, result2.token.token);
+		System.assertEquals(uc.token.expires, result2.token.expires);
+
+		System.assertNotEquals(null, result3);
+		System.assert(!result3.isValid); // No user or system sender
+
+		System.assertNotEquals(null, result4);
+		System.assert(result4.isValid);
+		System.assertEquals(ssId, result4.userId);
 	}
 
 	@IsTest
 	static void test_getInstance_default() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
 			Credentials result1 = Credentials.getInstance();
@@ -112,55 +121,8 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertNotEquals(null, result1.environment);
-			System.assertNotEquals(null, result1.environment.baseUrl);
-			System.assert(result1.useSendOnBehalfOf);
-			System.assertEquals(UserSettings__c.getInstance().Username__c, result1.sendOnBehalfOf);
-
 			System.assert(result2 === result1);
 		}
-	}
-
-	@IsTest
-	static void test_getInstance_custom() {
-		String username = UUID.randomUUID().toString();
-		String password = UUID.randomUUID().toString();
-
-		Test.startTest();
-		Credentials result1 = Credentials.getInstance(Environment.production, username, password);
-		Credentials result2 = Credentials.getInstance(Environment.production, username, password);
-		Credentials result3 = Credentials.getInstance(null, username, password);
-		Credentials result4 = Credentials.getInstance(Environment.invalid, username, password);
-		Credentials result5 = Credentials.getInstance(Environment.demo, '', password);
-		Credentials result6 = Credentials.getInstance(Environment.demo, username, '    ');
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isValid);
-		System.assertEquals(Environment.production, result1.environment);
-		System.assertEquals(username, result1.username);
-		System.assertEquals(password, result1.password);
-		System.assert(!result1.useSendOnBehalfOf);
-
-		System.assertNotEquals(null, result2);
-		System.assert(result2 !== result1);
-		System.assert(result2.isValid);
-		System.assertEquals(Environment.production, result2.environment);
-		System.assertEquals(username, result2.username);
-		System.assertEquals(password, result2.password);
-		System.assert(!result2.useSendOnBehalfOf);
-
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isValid);
-
-		System.assertNotEquals(null, result4);
-		System.assert(!result4.isValid);
-
-		System.assertNotEquals(null, result5);
-		System.assert(!result5.isValid);
-
-		System.assertNotEquals(null, result6);
-		System.assert(!result6.isValid);
 	}
 
 	@IsTest
@@ -169,7 +131,7 @@ private class CredentialsTest {
 		User u2 = UserMock.createDocuSignUser(false);
 
 		System.runAs(u1) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
 			Credentials result1 = Credentials.getInstance(u1.Id, true);
@@ -213,8 +175,7 @@ private class CredentialsTest {
 	static void test_getInstance_invalid_user() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.UseSendOnBehalfOf__c = true;
-			s.UseSystemSender__c = false;
+			s.SystemSenderId__c = null;
 			update s;
 
 			Test.startTest();
@@ -229,20 +190,16 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_systemSender() {
+	static void test_getInstance_system_sender() {
 		User u1 = UserMock.createUser();
 		User u2 = UserMock.createUser();
 
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
-			System.assertEquals(AccountSettings__c.getOrgDefaults().UseSystemSender__c, true);
-		}
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().SystemSenderId__c);
 
-		System.runAs(UserMock.createUser()) {
-			Credentials result1, result2;
 			Test.startTest();
-			result1 = Credentials.getInstance(u1.Id, true);
-			result2 = Credentials.getInstance(u2.Id, true);
+			Credentials result1 = Credentials.getInstance(u1.Id, true);
+			Credentials result2 = Credentials.getInstance(u2.Id, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -254,33 +211,27 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_invalid_sobo() {
-		User u1 = UserMock.createUser();
+	static void test_getToken() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			UserSettings__c s = UserSettings__c.getInstance();
+			s.AccessToken0__c = 'unit.test';
+			s.AccessTokenExpires__c = Datetime.now().addHours(1);
+			upsert s;
 
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
-			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
-			testSettings.UseSendOnBehalfOf__c = true;
-			testSettings.UseSystemSender__c = false;
-			upsert testSettings;
-		}
-
-		System.runAs(u1) {
 			Test.startTest();
-			try {
-				Credentials.getInstance(u1.Id, true);
-				throw new AssertException('Expected getInstance to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeActivated, ex.getMessage());
-			}
+			Credentials.AccessToken result = Credentials.getToken();
 			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isValid);
+			System.assertEquals('unit.test', result.token);
 		}
 	}
 
 	@IsTest
 	static void test_isAccountValid_valid() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
 			System.assert(Credentials.isAccountValid());
@@ -298,78 +249,49 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_save_insert_sobo() {
+	static void test_save_insert() {
 		UUID accountId = UUID.randomUUID();
 		String email = UUID.randomUUID().toString() + '@unit.test';
-		String username = UUID.randomUUID().toString();
-		String password = UUID.randomUUID().toString();
+		UUID userId = UUID.randomUUID();
 		User u = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(u) {
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.UseSendOnBehalfOf__c = true;
-			insert s;
+			String token = 'test';
+			Datetime expires = Datetime.now().addHours(1);
 
 			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, true);
+			Credentials result1 = Credentials.save(
+				DocuSign.Environment.Production,
+				new Url('https://account.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				accountId,
+				1111L,
+				accountId.toString(),
+				email,
+				userId,
+				true,
+				new Credentials.AccessToken(token, expires));
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertEquals(Environment.production, result1.environment);
+			System.assertEquals(DocuSign.Environment.Production, result1.environment);
+			System.assertNotEquals(null, result1.accountBaseUrl);
+			System.assertEquals('https://account.test.docusign.net/', result1.accountBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.eSignatureBaseUrl);
+			System.assertEquals('https://esign.test.docusign.net/', result1.eSignatureBaseUrl.toExternalForm());
 			System.assertEquals(accountId, result1.accountId);
 			System.assertEquals(1111L, result1.accountNumber);
+			System.assertEquals(accountId.toString(), result1.accountName);
 			System.assertEquals(email, result1.email);
-			System.assertEquals(username, result1.username);
-			System.assertEquals(password, result1.password);
-			System.assert(result1.useSendOnBehalfOf);
-			System.assertEquals(username, result1.sendOnBehalfOf);
+			System.assertEquals(userId, result1.userId);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
-			System.assertEquals(username, uu.Username__c);
+			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
-			System.assertEquals(username, UserSettings__c.getInstance().Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance().Password__c);
-
-			System.assert(result2 === result1);
-		}
-	}
-
-	@IsTest
-	static void test_save_insert_no_sobo() {
-		UUID accountId = UUID.randomUUID();
-		String email = UUID.randomUUID().toString() + '@unit.test';
-		String username = UUID.randomUUID().toString();
-		String password = UUID.randomUUID().toString();
-		User u = UserMock.createDocuSignAdministrator(false);
-
-		System.runAs(u) {
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.UseSendOnBehalfOf__c = false;
-			insert s;
-
-			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				username, password, false);
-			Credentials result2 = Credentials.getInstance();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assert(result1.isValid);
-			System.assertEquals(Environment.production, result1.environment);
-			System.assertEquals(accountId, result1.accountId);
-			System.assertEquals(1111L, result1.accountNumber);
-			System.assertEquals(email, result1.email);
-			System.assertEquals(username, result1.username);
-			System.assertEquals(password, result1.password);
-			System.assert(!result1.useSendOnBehalfOf);
-			System.assertEquals(null, result1.sendOnBehalfOf);
-			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
-			System.assertEquals(username, uu.Username__c);
-			System.assert(!uu.CanManageAccount__c);
-			System.assertEquals(username, UserSettings__c.getInstance().Username__c);
-			System.assertEquals(password, UserSettings__c.getInstance().Password__c);
+			UserSettings__c s = UserSettings__c.getInstance();
+			System.assertEquals(token, s.AccessToken0__c);
+			System.assertEquals(expires, s.AccessTokenExpires__c);
 
 			System.assert(result2 === result1);
 		}
@@ -379,40 +301,49 @@ private class CredentialsTest {
 	static void test_save_update() {
 		UUID accountId = UUID.randomUUID();
 		String email = UUID.randomUUID().toString() + '@unit.test';
-		UUID username = UUID.randomUUID();
-		String password = UUID.randomUUID().toString();
-		User u = UserMock.createDocuSignAdministrator(false);
+		UUID userId = UUID.randomUUID();
 
-		System.runAs(u) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), UUID.randomUUID().toString());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 			Credentials baseline = Credentials.getInstance();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.UseSendOnBehalfOf__c = false;
-			s.UseSystemSender__c = true;
+			s.SystemSenderId__c = userId.toString();
 			update s;
 
 			Test.startTest();
-			Credentials result1 = Credentials.save(Environment.production, accountId, 1111L, email,
-				String.valueOf(username), password, true);
+			Credentials result1 = Credentials.save(
+				DocuSign.Environment.Production,
+				new Url('https://account1.test.docusign.net/'),
+				new Url('https://esign1.test.docusign.net/'),
+				accountId,
+				2222L,
+				accountId.toString(),
+				email,
+				userId,
+				true,
+				null);
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
 			System.assert(result1 !== baseline);
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertEquals(Environment.production, result1.environment);
+			System.assertEquals(DocuSign.Environment.Production, result1.environment);
+			System.assertNotEquals(null, result1.accountBaseUrl);
+			System.assertEquals('https://account1.test.docusign.net/', result1.accountBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.eSignatureBaseUrl);
+			System.assertEquals('https://esign1.test.docusign.net/', result1.eSignatureBaseUrl.toExternalForm());
 			System.assertEquals(accountId, result1.accountId);
-			System.assertEquals(1111L, result1.accountNumber);
+			System.assertEquals(2222L, result1.accountNumber);
+			System.assertEquals(accountId.toString(), result1.accountName);
 			System.assertEquals(email, result1.email);
-			System.assertEquals(String.valueOf(username), result1.username);
-			System.assertEquals(password, result1.password);
-			System.assert(!result1.useSendOnBehalfOf);
-			System.assertEquals(null, result1.sendOnBehalfOf);
-			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
-			System.assertEquals(String.valueOf(username), uu.Username__c);
+			System.assertEquals(userId, result1.userId);
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
-			System.assertEquals(String.valueOf(username), UserSettings__c.getInstance().Username__c);
-			System.assertEquals(password, UserSettings__c.getInstance().Password__c);
+			UserSettings__c us = UserSettings__c.getInstance();
+			System.assertEquals(null, us.AccessToken0__c);
+			System.assertEquals(null, us.AccessTokenExpires__c);
 
 			System.assert(result2 === result1);
 		}
@@ -420,39 +351,31 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_addUsers() {
-		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
-		UUID dsaUsername = UUID.randomUUID();
-		User dsa = UserMock.createDocuSignAdministrator(false);
-		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = UserMock.createUser();
-		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = UserMock.createUser();
-		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = UserMock.createUser();
+		User dsu1 = UserMock.createUser(),
+			dsu2 = UserMock.createUser(),
+			dsu3 = UserMock.createUser();
+		UUID userId1 = UUID.randomUUID(),
+			userId2 = UUID.randomUUID();
 
-		System.runAs(dsa) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
 			Credentials.addUsers(new Map<Id, Credentials.UserCredentials> {
-				dsu1.Id => new Credentials.UserCredentials(dsu1Username, 'password1', false),
-				dsu2.Id => new Credentials.UserCredentials(dsu2Username, 'password2', true),
+				dsu1.Id => new Credentials.UserCredentials(userId1, false, null),
+				dsu2.Id => new Credentials.UserCredentials(userId2, true, null),
 				dsu3.Id => null
 			});
 			Test.stopTest();
 
-			System.assertEquals(dsu1Username, UserSettings__c.getInstance(dsu1.Id).Username__c);
-			System.assertEquals('password1', UserSettings__c.getInstance(dsu1.Id).Password__c);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
-			System.assertEquals(dsu1Username, uu.Username__c);
+			System.assertEquals(userId1.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignAdministrator(dsu1.Id));
 			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
-			System.assertEquals(dsu2Username, UserSettings__c.getInstance(dsu2.Id).Username__c);
-			System.assertEquals('password2', UserSettings__c.getInstance(dsu2.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
-			System.assertEquals(dsu2Username, uu.Username__c);
+			System.assertEquals(userId2.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsu2.Id));
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
@@ -467,73 +390,61 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_clear_account() {
-		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
-		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
-		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
-		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
-		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
+		UUID adminId = UUID.randomUUID(),
+			userId1 = UUID.randomUUID(),
+			userId2 = UUID.randomUUID(),
+			userId3 = UUID.randomUUID();
+		User dsa = UserMock.createDocuSignAdministrator(adminId);
+		User dsu1 = UserMock.createDocuSignUser(userId1);
+		User dsu2 = UserMock.createDocuSignUser(userId2);
+		User dsu3 = UserMock.createDocuSignUser(userId3);
 
 		System.runAs(dsa) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu1Username), result.sendOnBehalfOf);
+			System.assertEquals(userId1, result.userId);
 
 			result = Credentials.getInstance(dsu2.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu2Username), result.sendOnBehalfOf);
+			System.assertEquals(userId2, result.userId);
 
 			result = Credentials.getInstance(dsu3.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu3Username), result.sendOnBehalfOf);
+			System.assertEquals(userId3, result.userId);
 
 			Test.startTest();
 			Credentials.clear(false);
 			Test.stopTest();
 
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
 
-			System.assertEquals(String.valueOf(dsaUsername), UserSettings__c.getInstance(dsa.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
-			System.assertEquals(String.valueOf(dsaUsername), uu.Username__c);
+			System.assertEquals(adminId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
-			System.assertEquals(String.valueOf(dsu1Username), UserSettings__c.getInstance(dsu1.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
-			System.assertEquals(String.valueOf(dsu1Username), uu.Username__c);
+			System.assertEquals(userId1.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
-			System.assertEquals(String.valueOf(dsu2Username), UserSettings__c.getInstance(dsu2.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
-			System.assertEquals(String.valueOf(dsu2Username), uu.Username__c);
+			System.assertEquals(userId2.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
-			System.assertEquals(String.valueOf(dsu3Username), UserSettings__c.getInstance(dsu3.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
-			System.assertEquals(String.valueOf(dsu3Username), uu.Username__c);
+			System.assertEquals(userId3.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu3.Id));
 		}
@@ -541,71 +452,59 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_clear_all() {
-		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
-		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
-		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
-		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
-		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
+		UUID adminId = UUID.randomUUID(),
+			userId1 = UUID.randomUUID(),
+			userId2 = UUID.randomUUID(),
+			userId3 = UUID.randomUUID();
+		User dsa = UserMock.createDocuSignAdministrator(adminId);
+		User dsu1 = UserMock.createDocuSignUser(userId1);
+		User dsu2 = UserMock.createDocuSignUser(userId2);
+		User dsu3 = UserMock.createDocuSignUser(userId3);
 
 		System.runAs(dsa) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu1Username), result.sendOnBehalfOf);
+			System.assertEquals(userId1, result.userId);
 
 			result = Credentials.getInstance(dsu2.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu2Username), result.sendOnBehalfOf);
+			System.assertEquals(userId2, result.userId);
 
 			result = Credentials.getInstance(dsu3.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu3Username), result.sendOnBehalfOf);
+			System.assertEquals(userId3, result.userId);
 
 			Test.startTest();
 			Credentials.clear(true);
 			Test.stopTest();
 
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu2.Id));
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
@@ -615,73 +514,215 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_clear_users() {
-		String accountUsername = UUID.randomUUID().toString() + '@unit.test';
-		String dsaUsername = UUID.randomUUID().toString();
-		User dsa = UserMock.createDocuSignAdministrator(dsaUsername);
-		String dsu1Username = UUID.randomUUID().toString();
-		User dsu1 = UserMock.createDocuSignUser(dsu1Username);
-		String dsu2Username = UUID.randomUUID().toString();
-		User dsu2 = UserMock.createDocuSignUser(dsu2Username);
-		String dsu3Username = UUID.randomUUID().toString();
-		User dsu3 = UserMock.createDocuSignUser(dsu3Username);
+		UUID adminId = UUID.randomUUID(),
+			userId1 = UUID.randomUUID(),
+			userId2 = UUID.randomUUID(),
+			userId3 = UUID.randomUUID();
+		User dsa = UserMock.createDocuSignAdministrator(adminId);
+		User dsu1 = UserMock.createDocuSignUser(userId1);
+		User dsu2 = UserMock.createDocuSignUser(userId2);
+		User dsu3 = UserMock.createDocuSignUser(userId3);
 
 		System.runAs(dsa) {
-			UserMock.createAccountConfiguration(UUID.randomUUID(), accountUsername);
+			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu1Username), result.sendOnBehalfOf);
 
 			result = Credentials.getInstance(dsu2.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu2Username), result.sendOnBehalfOf);
 
 			result = Credentials.getInstance(dsu3.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(accountUsername, result.username);
-			System.assertEquals(String.valueOf(dsu3Username), result.sendOnBehalfOf);
 
 			Test.startTest();
 			Credentials.clear(new Set<Id> { dsu1.Id, dsu3.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().BaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Username__c);
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Password__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
 
-			System.assertNotEquals(null, UserSettings__c.getInstance(dsa.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsa.Id).Password__c);
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertNotEquals(null, uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu1.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
-			System.assertNotEquals(null, UserSettings__c.getInstance(dsu2.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu2.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertNotEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
-			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Username__c);
-			System.assertEquals(null, UserSettings__c.getInstance(dsu3.Id).Password__c);
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
 			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
+		}
+	}
+
+	@IsTest
+	static void test_AccessToken() {
+		Credentials.AccessToken tok1 = new Credentials.AccessToken('tok1', Datetime.now().addHours(1));
+		Credentials.AccessToken tok2 = new Credentials.AccessToken('tok2', Datetime.now().addHours(-1));
+		Credentials.AccessToken tok3 = new Credentials.AccessToken('  ', Datetime.now().addHours(1));
+
+		System.assert(!tok1.isExpired);
+		System.assert(tok1.isValid);
+		System.assert(tok2.isExpired);
+		System.assert(!tok2.isValid);
+		System.assert(!tok3.isExpired);
+		System.assert(!tok3.isValid);
+	}
+
+	@IsTest
+	static void test_setToken() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			UserSettings__c s = UserSettings__c.getInstance();
+			s.AccessToken0__c = null;
+			s.AccessTokenExpires__c = null;
+			update s;
+
+			Credentials baseline = Credentials.getInstance();
+			System.assertNotEquals(null, baseline);
+			System.assertEquals(null, baseline.token);
+
+			String token = UUID.randomUUID().toString();
+			Datetime exp = Datetime.now().addHours(1);
+
+			Test.startTest();
+			Credentials result = Credentials.setToken(new Credentials.AccessToken(token, exp));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.token);
+			System.assertEquals(token, result.token.token);
+			System.assertEquals(exp, result.token.expires);
+			System.assert(result === baseline);
+		}
+	}
+
+	@IsTest
+	static void test_save_token_valid() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			UserSettings__c s = UserSettings__c.getInstance();
+			s.AccessToken0__c = null;
+			s.AccessTokenExpires__c = null;
+			update s;
+
+			String token = UUID.randomUUID().toString();
+			Datetime exp = Datetime.now().addHours(1);
+			Credentials baseline = Credentials.setToken(new Credentials.AccessToken(token, exp));
+			System.assertNotEquals(null, baseline);
+			System.assertNotEquals(null, baseline.token);
+
+			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			System.assertNotEquals(null, uc);
+			System.assertEquals(null, uc.token);
+
+			Test.startTest();
+			Credentials result1 = Credentials.save();
+			Credentials.UserCredentials result2 = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(result1 !== baseline);
+			System.assertNotEquals(null, result1.token);
+			System.assertEquals(token, result1.token.token);
+			System.assertEquals(exp, result1.token.expires);
+
+			System.assertNotEquals(null, result2);
+			System.assertNotEquals(null, result2.token);
+			System.assertEquals(token, result2.token.token);
+			System.assertEquals(exp, result2.token.expires);
+		}
+	}
+
+	@IsTest
+	static void test_save_token_invalid() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			UserSettings__c s = UserSettings__c.getInstance();
+			s.AccessToken0__c = null;
+			s.AccessTokenExpires__c = null;
+			update s;
+
+			String token = UUID.randomUUID().toString();
+			Datetime exp = Datetime.now().addHours(-1);
+			Credentials baseline = Credentials.setToken(new Credentials.AccessToken(token, exp));
+			System.assertNotEquals(null, baseline);
+			System.assertNotEquals(null, baseline.token);
+
+			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			System.assertNotEquals(null, uc);
+			System.assertEquals(null, uc.token);
+
+			Test.startTest();
+			Credentials result1 = Credentials.save();
+			Credentials.UserCredentials result2 = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(result1 !== baseline);
+			System.assertNotEquals(null, result1.token);
+			System.assertEquals(token, result1.token.token);
+			System.assertEquals(exp, result1.token.expires);
+
+			System.assertNotEquals(null, result2);
+			System.assertEquals(null, result2.token);
+		}
+	}
+
+	@IsTest
+	static void test_save_token_too_long() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			UserSettings__c s = UserSettings__c.getInstance();
+			s.AccessToken0__c = null;
+			s.AccessTokenExpires__c = null;
+			update s;
+
+			Integer len = Credentials.MAX_TOKEN_LENGTH + 1;
+			String token = TestUtils.randomString(len);
+			Datetime exp = Datetime.now().addHours(1);
+			Credentials baseline = Credentials.setToken(new Credentials.AccessToken(token, exp));
+			System.assertNotEquals(null, baseline);
+			System.assertNotEquals(null, baseline.token);
+
+			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			System.assertNotEquals(null, uc);
+			System.assertEquals(null, uc.token);
+
+			Test.startTest();
+			try {
+				Credentials.save();
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.AccessTokenTooLong_2, new List<String> {
+					String.valueOf(len),
+					String.valueOf(Credentials.MAX_TOKEN_LENGTH)
+				}), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_save_new_user() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Credentials result = Credentials.save();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.userId);
+			System.assertEquals(null, result.token);
 		}
 	}
 }

@@ -4,6 +4,7 @@
 public with sharing class Localization {
 
 	private static final SObjectType TYPE_ENVELOPE_LOCALIZATION = EnvelopeLocalization__c.getSObjectType();
+	@TestVisible
 	private static Boolean isEmailEnabled;
 
 	public class ChatterText {

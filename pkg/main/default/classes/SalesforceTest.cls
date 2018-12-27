@@ -26,6 +26,11 @@ private class SalesforceTest {
 	}
 
 	@IsTest
+	static void test_isSandbox() {
+		System.assertEquals([SELECT IsSandbox FROM Organization LIMIT 1].IsSandbox, Salesforce.isSandbox);
+	}
+
+	@IsTest
 	static void test_isCpqEnabled() {
 		System.assertEquals(Schema.getGlobalDescribe().containsKey('SBQQ__QuoteDocument__c'), Salesforce.isCpqEnabled);
 	}
@@ -62,11 +67,6 @@ private class SalesforceTest {
 		insert s;
 
 		System.assert(Salesforce.canUseApi);
-	}
-
-	@IsTest
-	static void test_Configuration() {
-		System.assertNotEquals(null, new Salesforce.Configuration('host', 'https://unit.test'));
 	}
 
 	@IsTest

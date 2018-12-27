@@ -1,28 +1,17 @@
-public with sharing class AccountAPI extends DocuSignAPI {
+public with sharing class AccountAPI extends ESignatureAPI {
 
 	private static AccountAPI self = null;
 	private static final String SUCCESS = 'SUCCESS';
 	private static final String USER_ALREADY_EXISTS_IN_ACCOUNT = 'USER_ALREADY_EXISTS_IN_ACCOUNT';
 	private static final String USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST_IN_SYSTEM';
 	private static final String INVALID_USERID = 'INVALID_USERID';
-
-	private static Organization__mdt secureSettings = null;
 	private static List<CustomField> accountCustomFields = null;
 
-	private final String username;
-	private final String password;
 	private Account account = null;
-	private final Url apiBaseUrl;
 
 	@TestVisible
 	private AccountAPI(final Credentials apiCredentials) {
 		super(apiCredentials);
-
-		this.apiBaseUrl = new Url(this.baseUrl, '/restapi/v2/');
-		if (apiCredentials != null) {
-			this.username = apiCredentials.username;
-			this.password = apiCredentials.password;
-		}
 	}
 
 	public static AccountAPI getInstance() {
@@ -32,31 +21,11 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		return self;
 	}
 
-	public static AccountAPI getInstance(final Environment environment) {
-		return getInstance(environment, null, null);
-	}
-
-	public static AccountAPI getInstance(final Environment environment, final String username, final String password) {
-		return new AccountAPI(Credentials.getInstance(environment, username, password));
-	}
-
-	private static Organization__mdt getSecureSettings() {
-		if (secureSettings == null) {
-			secureSettings = [
-				SELECT DistributorCode__c, DistributorPassword__c
-				FROM Organization__mdt
-				WHERE DeveloperName = 'SecureSettings'
-				LIMIT 1
-			];
-		}
-		return secureSettings;
-	}
-
 	@TestVisible
 	override protected APIError getError(final HttpResponse response) {
 		APIError e = super.getError(response);
-		if (e != APIError.none && e instanceof DocuSignAPI.Error) {
-			DocuSignAPI.Error dse = (DocuSignAPI.Error)e;
+		if (e != APIError.none && e instanceof ESignatureAPI.Error) {
+			ESignatureAPI.Error dse = (ESignatureAPI.Error)e;
 			if (dse.docuSignCode == USER_ALREADY_EXISTS_IN_ACCOUNT) {
 				e = new APIError(APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT, dse.description);
 			} else if (dse.docuSignCode == USER_DOES_NOT_EXIST || dse.docuSignCode == INVALID_USERID) {
@@ -64,162 +33,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			}
 		}
 		return e;
-	}
-
-	// Serialization objects for createAccount
-	@TestVisible
-	private class Address {
-		private final String address1;
-		private final String address2;
-		private final String city;
-		private final String state;
-		private final String postalCode;
-		private final String phone;
-		private final String country;
-
-		public Address(final Account.Address a) {
-			if (a != null) {
-				this.address1 = a.address1;
-				this.address2 = a.address2;
-				this.city = a.city;
-				this.state = a.region;
-				this.postalCode = a.postalCode;
-				this.phone = a.phone;
-				this.country = a.country;
-			}
-		}
-	}
-
-	@TestVisible
-	private class Referral {
-		private final String referralCode;
-		private final String referrerName;
-		private final String promoCode;
-
-		public Referral(final String referralCode, final String referrerName, final String promoCode) {
-			this.referralCode = referralCode;
-			this.referrerName = referrerName;
-			this.promoCode = promoCode;
-		}
-	}
-
-	@TestVisible
-	private class Plan {
-		private final String planId;
-
-		public Plan(final UUID planId) {
-			this.planId = UUID.toString(planId);
-		}
-	}
-
-	@TestVisible
-	private class TrialAccount {
-		public final String accountName;
-		public final APIUser initialUser;
-		public final String distributorCode;
-		public final String distributorPassword;
-		public final Address addressInformation;
-		public final Referral referralInformation;
-		public final Plan planInformation;
-		public final List<Setting> accountSettings;
-
-		public TrialAccount(final Account.Trial a, final UUID planId) {
-			if (a != null) {
-				this.accountName = a.company;
-				this.initialUser = new APIUser(a.user);
-				this.initialUser.enableConnectForUser = 'true';
-				this.initialUser.userSettings = new List<Setting> {
-					new Setting('allowSendOnBehalfOf', 'true'),
-					new Setting('apiAccountWideAccess', 'true')
-				};
-				this.addressInformation = new Address(a.address);
-			}
-			// Invariant properties
-			Organization__mdt ss = getSecureSettings();
-			this.distributorCode = ss.DistributorCode__c;
-			this.distributorPassword = ss.DistributorPassword__c;
-			this.referralInformation = new Referral('DocuSignforSalesforce', 'AppExchange', 'DSFS_IPR');
-			this.planInformation = new Plan(planId);
-			this.accountSettings = new List<Setting> {
-				new Setting('envelopeIntegrationAllowed', 'full'),
-				new Setting('envelopeIntegrationEnabled', 'true')
-			};
-		}
-	}
-
-	@TestVisible
-	private class TrialAccounts {
-		public List<TrialAccount> newAccountRequests;
-
-		public TrialAccounts(final Account.Trial a, final UUID planId) {
-			this.newAccountRequests = new List<TrialAccount> {
-				new TrialAccount(a, planId)
-			};
-		}
-	}
-
-	@TestVisible
-	private class TrialAccountResult {
-		public String accountId;
-		public String accountIdGuid;
-		public String accountName;
-		public String userId;
-		public String apiPassword;
-		public String baseUrl;
-
-		public Account.Membership toExternalForm() {
-			return new Account.Membership(
-				Long.valueOf(accountId),
-				UUID.parse(accountIdGuid),
-				accountName,
-				UUID.parse(userId),
-				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
-				String.isBlank(apiPassword) ? '' : apiPassword);
-		}
-	}
-
-	@TestVisible
-	private class TrialAccountResults {
-		public List<TrialAccountResult> newAccounts;
-
-		public Account.Membership toExternalForm() {
-			Account.Membership account = null;
-			if (newAccounts != null && newAccounts.size() == 1) {
-				return newAccounts[0].toExternalForm();
-			}
-			return account;
-		}
-	}
-
-	public Account.Membership createTrialAccount(final Account.Trial account) {
-		return this.createTrialAccount(account, RestAPI.defaultTimeout);
-	}
-
-	public Account.Membership createTrialAccount(final Account.Trial account, final Integer timeout) {
-		final RestAPI.Response response = super.post(
-			this.apiBaseUrl,
-			new List<Object> { 'accounts' },
-			QueryString.empty,
-			this.getDefaultHeaders(),
-			JSON.serialize(new TrialAccounts(account, this.environment.trialPlanId)),
-			timeout);
-		if (response.hasError) {
-			this.log.error('Failed to create account: ' + response.error);
-			// TODO: Refactor this to rely on error codes instead of fragile messages.
-			String errorMsg = response.error.description;
-			if (String.isBlank(errorMsg)) {
-				errorMsg = Label.AccountProvisioningFailed;
-			} else if (errorMsg.indexOf('Member Email Not Allowed') > -1) {
-				errorMsg = Label.UsernameNotAllowed;
-			} else if (errorMsg.indexOf('Member Email And User Name Already Exists') > -1) {
-				errorMsg = Label.AccountAlreadyExists;
-			} else if (errorMsg.indexOf('Member Email And User Name Awaiting Activation') > -1) {
-				errorMsg = Label.ActivationRequired;
-			}
-			throw new APIException(errorMsg);
-		}
-
-		return ((TrialAccountResults)JSON.deserialize(response.body, TrialAccountResults.class)).toExternalForm();
 	}
 
 	// Serialization objects for getAccount
@@ -238,7 +51,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		public String suspensionStatus;
 		public String suspensionDate;
 
-		public Account toExternalForm(final Environment env) {
+		public Account toExternalForm() {
 			Date psd = StringUtils.parseDate(this.planStartDate);
 			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDate(this.suspensionDate);
 			return new Account(
@@ -253,8 +66,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				new Account.Billing(
 					sd == null ? StringUtils.parseDate(this.billingPeriodStartDate) : psd,
 					sd == null ? StringUtils.parseDate(this.billingPeriodEndDate) : sd),
-				stringToConnectPermission(this.connectPermission),
-				env);
+				stringToConnectPermission(this.connectPermission));
 		}
 	}
 
@@ -273,7 +85,7 @@ public with sharing class AccountAPI extends DocuSignAPI {
 			}
 
 			this.account = ((AccountAPI.APIAccount)JSON.deserialize(response.body, AccountAPI.APIAccount.class))
-				.toExternalForm(this.environment);
+				.toExternalForm();
 			if (this.account != null) {
 				this.account = this.addPlanId(account, timeout);
 			}
@@ -345,69 +157,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		}
 	}
 
-	// getAccounts serialization objects
-	@TestVisible
-	private class LoginAccount {
-		public String accountId;
-		public String accountIdGuid;
-		public String name;
-		public String userId;
-		public String baseUrl;
-		public List<Setting> loginUserSettings;
-		private Map<String, String> userSettings;
-
-		public Account.Membership toExternalForm(final String apiPassword) {
-			return new Account.Membership(
-				Long.valueOf(accountId),
-				UUID.parse(accountIdGuid),
-				name,
-				UUID.parse(userId),
-				new Url('https://' + (new Url(baseUrl).getAuthority().toLowerCase()) + '/'),
-				getUserSettings(),
-				apiPassword);
-		}
-
-		public Map<String, String> getUserSettings() {
-			if (userSettings == null) {
-				userSettings = new Map<String, String>();
-				if (loginUserSettings != null) {
-					for (Setting s : loginUserSettings) {
-						userSettings.put(s.name, s.value);
-					}
-				}
-			}
-			return userSettings;
-		}
-	}
-
-	@TestVisible
-	private class LoginInformation {
-		public String apiPassword;
-		public List<LoginAccount> loginAccounts;
-
-		public List<Account.Membership> toExternalForm() {
-			List<Account.Membership> result = new List<Account.Membership>();
-			if (loginAccounts != null) {
-				for (LoginAccount la : loginAccounts) {
-					result.add(la.toExternalForm(apiPassword));
-				}
-			}
-			return result;
-		}
-	}
-
-	private class LegacyCredentials {
-		private String Username;
-		private String Password;
-		private String IntegratorKey;
-
-		public LegacyCredentials(final String username, final String password) {
-			this.IntegratorKey = Application.INTEGRATOR_KEY;
-			this.Username = username;
-			this.Password = password;
-		}
-	}
-
 	@TestVisible
 	private static Account.ConnectPermission stringToConnectPermission(final String s) {
 		if (s == 'full') {
@@ -417,138 +166,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 		} else {
 			return Account.ConnectPermission.None;
 		}
-	}
-
-	@TestVisible
-	private class UserSettings {
-		public List<Setting> userSettings;
-
-		public Map<String, String> toExternalForm() {
-			final Map<String, String> settings = new Map<String, String>();
-			if (userSettings != null) {
-				for (Setting s : userSettings) {
-					settings.put(s.name, s.value);
-				}
-			}
-			return settings;
-		}
-	}
-
-	@TestVisible
-	private Map<String, String> getUserSettings(final Url baseUrl, final Long accountId, final UUID userId, final Integer timeout) {
-		final RestAPI.Response response = super.get(
-			baseUrl,
-			new List<Object> { 'restapi', 'v2', 'accounts', accountId, 'users', userId, 'settings' },
-			QueryString.empty,
-			this.getDefaultHeaders(),
-			timeout);
-		if (response.hasError) {
-			this.log.error('Failed to read user settings: ' + response.error.toString());
-			throw new APIException(response.error);
-		}
-
-		final AccountAPI.UserSettings userSettings = (AccountAPI.UserSettings)JSON.deserialize(response.body, AccountAPI.UserSettings.class);
-		return userSettings == null ? new Map<String, String>() : userSettings.toExternalForm();
-	}
-
-	@TestVisible
-	private Boolean isValidAccount(final Account.Membership account) {
-		Boolean isValid = false;
-		if (account != null) {
-			isValid = account.getFlag('canManageAccount')
-				&& account.getFlag('canSendEnvelope')
-				&& account.getFlag('apiAccountWideAccess')
-				&& account.getFlag('allowSendOnBehalfOf');
-		}
-		return isValid;
-	}
-
-	@TestVisible
-	private List<Account.Membership> getAccounts(final String authHeader, final Integer timeout) {
-		RestAPI.Response response = get(
-			this.apiBaseUrl,
-			new List<Object> { 'login_information' },
-			new QueryString(new Map<String, String> {
-				'api_password' => 'true',
-				'include_account_id_guid' => 'true',
-				'login_settings' => 'all'
-			}),
-			new Map<String, String> {
-				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
-				'X-DocuSign-Authentication' => authHeader
-			},
-			timeout);
-		if (response.hasError) {
-			this.log.error('GET login_information failed: ' + response.error);
-			throw new APIException(response.error);
-		}
-		return ((LoginInformation)JSON.deserialize(response.body, LoginInformation.class)).toExternalForm();
-	}
-
-	public Account.Credentials getAccountCredentials(final UUID accountId) {
-		return this.getAccountCredentials(accountId, RestAPI.defaultTimeout);
-	}
-
-	public Account.Credentials getAccountCredentials(final UUID accountId, final Integer timeout) {
-		Long accountNumber = null;
-		String apiPassword = null;
-
-		List<Account.Membership> memberships = this.getAccounts(this.legacyAuthHeader, timeout);
-		if (Collection.isNotEmpty(memberships)) {
-			apiPassword = memberships[0].apiPassword;
-			for (Account.Membership m : memberships) {
-				if (m.accountId == accountId) {
-					accountNumber = m.accountNumber;
-					break;
-				}
-			}
-		}
-		return new Account.Credentials(accountNumber, accountId, apiPassword);
-	}
-
-	public List<Account.Membership> getValidAccounts() {
-		return getValidAccounts(RestAPI.defaultTimeout);
-	}
-
-	public List<Account.Membership> getValidAccounts(final Integer timeout) {
-		if (this.baseUrl == null || this.username == null || String.isBlank(this.password)) {
-			throw new DocuSignException(Label.AccountNotConfigured);
-		}
-
-		List<Account.Membership> result = new List<Account.Membership>();
-		List<Account.Membership> memberships = this.getAccounts(
-			JSON.serialize(new LegacyCredentials(this.username, this.password)),
-			timeout);
-		if (Collection.isNotEmpty(memberships)) {
-			if (memberships.size() == 1) {
-				// Only one account returned. No need to call secondary API to get user settings.
-				if (isValidAccount(memberships[0])) {
-					result.add(memberships[0]);
-				}
-			} else {
-				// DFS-3626: Work around API issue with user settings
-				for (Account.Membership ua : memberships) {
-					Account.Membership us = ua
-						.withSettings(getUserSettings(ua.baseUrl, ua.accountNumber, ua.userId, timeout));
-					if (isValidAccount(us)) {
-						result.add(us);
-					} else {
-						log.info(String.format(
-							'Invalid account ({0}) for DFS:\n\tManage account = {1}\n\tSend Envelopes = {2}'
-								+ '\n\tSOBO = {3}\n\tAPI = {4}',
-							new List<String> {
-								String.valueOf(us.accountId),
-								us.settings.get('canManageAccount'),
-								us.settings.get('canSendEnvelope'),
-								us.settings.get('allowSendOnBehalfOf'),
-								us.settings.get('apiAccountWideAccess')
-							}));
-					}
-				}
-			}
-		}
-		return result;
 	}
 
 	// Serialization objects for getUser
@@ -608,19 +225,6 @@ public with sharing class AccountAPI extends DocuSignAPI {
 				new Setting('canSendEnvelope', String.valueOf(user.canSendEnvelope))
 			};
 			this.userStatus = userStatusToString(user.status);
-		}
-
-		public APIUser(final Account.TrialUser user) {
-			this.email = user.email;
-			this.firstName = user.firstName;
-			this.lastName = user.lastName;
-			this.userName = user.email;
-			this.userSettings = new List<Setting> {
-				new Setting('canManageAccount', 'true'),
-				new Setting('canSendEnvelope', 'true')
-			};
-			this.countryCode = user.countryCode;
-			this.subscribe = String.valueOf(user.marketingOptIn);
 		}
 
 		private APIError errorExternalForm() {

@@ -2,7 +2,6 @@
 private class AccountAPITest {
 
 	private static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
-	private static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
 
 	@IsTest
 	static void test_getError() {
@@ -45,23 +44,23 @@ private class AccountAPITest {
 			System.assertEquals(APIError.none, e1);
 
 			System.assertNotEquals(null, e2);
-			System.assert(e2 instanceof DocuSignAPI.Error);
+			System.assert(e2 instanceof ESignatureAPI.Error);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, e2.code);
 			System.assertEquals('Some error', e2.description);
-			System.assertEquals('SOME_ERROR', ((DocuSignAPI.Error)e2).docuSignCode);
+			System.assertEquals('SOME_ERROR', ((ESignatureAPI.Error)e2).docuSignCode);
 
 			System.assertNotEquals(null, e3);
-			System.assert(!(e3 instanceof DocuSignAPI.Error));
+			System.assert(!(e3 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT, e3.code);
 			System.assertEquals('User already exists in account', e3.description);
 
 			System.assertNotEquals(null, e4);
-			System.assert(!(e4 instanceof DocuSignAPI.Error));
+			System.assert(!(e4 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.UNKNOWN_USER, e4.code);
 			System.assertEquals('User does not exist', e4.description);
 
 			System.assertNotEquals(null, e5);
-			System.assert(!(e5 instanceof DocuSignAPI.Error));
+			System.assert(!(e5 instanceof ESignatureAPI.Error));
 			System.assertEquals(APIErrorCode.UNKNOWN_USER, e5.code);
 			System.assertEquals('Invalid user ID', e5.description);
 		}
@@ -132,16 +131,16 @@ private class AccountAPITest {
 		}
 	}
 
-	private class TrialExpiredMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
+	private class TrialExpiredMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 			if (request.getEndpoint().endsWith('/billing_plan')) {
-				response.setBody('{"billingPlan": {"planId": "' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
+				response.setBody('{"billingPlan": {"planId": "' + String.valueOf(DocuSign.TRIAL_PLAN_ID) + '","planName": "DocuSign for Salesforce 30 Day Expire","paymentCycle": "annually","paymentMethod": "free_trial","perSeatPrice": "$0.00","otherDiscountPercent": "0.00","supportIncidentFee": "$0.00","supportPlanFee": "$0.00","includedSeats": "1","enableSupport": "false","currencyCode": "USD","planClassification": "partner","seatDiscounts": [{"beginSeatCount": "0","endSeatCount": "0","discountPercent": "0.00"}]},"successorPlans": [],"billingAddress": {"phone": "+1 5105555555","firstName": "Unit","lastName": "Test","email": "unit@test.com"},"billingAddressIsCreditCardAddress": "true"}');
 			} else { // GET account
-				response.setBody('{"currentPlanId":"' + String.valueOf(Environment.TRIAL_PLAN_ID) + '","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2030-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2030-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"freetrialexpired","suspensionDate":"2017-02-05T17:54:37.1800000Z","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
+				response.setBody('{"currentPlanId":"' + String.valueOf(DocuSign.TRIAL_PLAN_ID) + '","planName":"TRIAL_30_DAY","planStartDate":"2017-01-05T17:54:37.1800000Z","planEndDate":"2018-01-05T17:54:37.1800000Z","billingPeriodStartDate":"2030-01-05T08:00:00.0000000Z","billingPeriodEndDate":"2030-02-05T08:00:00.0000000Z","billingPeriodEnvelopesSent":"4","billingPeriodEnvelopesAllowed":"unlimited","billingPeriodDaysRemaining":"0","canUpgrade":"false","canCancelRenewal":"false","envelopeSendingBlocked":"false","envelopeUnitPrice":"$0.00","suspensionStatus":"freetrialexpired","suspensionDate":"2017-02-05T17:54:37.1800000Z","accountName":"DocuSign","connectPermission":"full","docuSignLandingUrl":"http://www.docusign.com/products/sign_up/buy_now.php","distributorCode":"DEVCENTER_DEMO_APRIL2013","accountIdGuid":"67db8eaa-8e05-486b-a146-8cb2b93d1aa4","currencyCode":"USD","forgottenPasswordQuestionsCount":"1","paymentMethod":"purchase_order","seatsAllowed":"unlimited","seatsInUse":"1","createdDate":"2017-01-05T17:54:36.7770000Z","isDowngrade":"false","billingProfile":"web","allowTransactionRooms":"false"}');
 			}
 			return response;
 		}
@@ -182,8 +181,7 @@ private class AccountAPITest {
 				new Account.Billing(
 					Date.newInstance(7, 1, 2017),
 					Date.newInstance(8, 1, 2017)),
-				Account.ConnectPermission.Full,
-				Environment.production);
+				Account.ConnectPermission.Full);
 
 			Test.startTest();
 			Account a2 = client.addPlanId(a1, 30000);
@@ -213,8 +211,7 @@ private class AccountAPITest {
 				new Account.Billing(
 					Date.newInstance(7, 1, 2017),
 					Date.newInstance(8, 1, 2017)),
-				Account.ConnectPermission.Full,
-				Environment.production);
+				Account.ConnectPermission.Full);
 			APIException ex;
 
 			Test.startTest();
@@ -230,8 +227,8 @@ private class AccountAPITest {
 		}
 	}
 
-	class AddPlanIdErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
+	private class AddPlanIdErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -260,8 +257,7 @@ private class AccountAPITest {
 				new Account.Billing(
 					Date.newInstance(7, 1, 2017),
 					Date.newInstance(8, 1, 2017)),
-				Account.ConnectPermission.Full,
-				Environment.production);
+				Account.ConnectPermission.Full);
 
 			Test.startTest();
 			Account a2 = client.addPlanId(a1, 30000);
@@ -271,260 +267,6 @@ private class AccountAPITest {
 			System.assert(a1 === a2); // Same reference
 			System.assertNotEquals(null, a2.plan);
 			System.assertEquals(initialPlanId, a2.plan.id);
-		}
-	}
-
-	@IsTest
-	static void test_getUserSettings_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-			Url baseUrl = new Url('https://unit.test/');
-			Account.Membership ua1 = new Account.Membership(1L, UUID.randomUUID(), 'Account 1', ID1, baseUrl, new Map<String, String>());
-
-			Test.startTest();
-			ua1 = ua1.withSettings(client.getUserSettings(baseUrl, TestUtils.randomInteger(1000000), UUID.randomUUID(), 30000));
-			Test.stopTest();
-
-			System.assertNotEquals(null, ua1);
-			System.assertNotEquals(null, ua1.settings);
-			System.assertEquals(4, ua1.settings.size());
-			System.assert(ua1.getFlag('canManageAccount'));
-			System.assert(ua1.getFlag('canSendEnvelope'));
-			System.assert(ua1.getFlag('apiAccountWideAccess'));
-			System.assert(ua1.getFlag('allowSendOnBehalfOf'));
-			System.assert(client.isValidAccount(ua1));
-		}
-	}
-
-	@IsTest
-	static void test_getUserSettings_failure() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-			APIException ex = null;
-
-			Test.startTest();
-			try {
-				client.getUserSettings(new Url('https://unit.test/'), 1111L, ID1, 30000);
-				throw new AssertException('Expected getUserSettings to fail');
-			} catch (APIException ex2) {
-				ex = ex2;
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, ex);
-			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
-		}
-	}
-
-	@IsTest
-	static void test_getAccountCredentials_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-
-			Test.startTest();
-			Account.Credentials a = client.getAccountCredentials(
-				UUID.parse(AccountSettings__c.getInstance().AccountId__c));
-			Test.stopTest();
-
-			System.assertNotEquals(null, a);
-			System.assertNotEquals(null, a.accountNumber);
-			System.assertNotEquals(null, a.apiPassword);
-		}
-	}
-
-	@IsTest
-	static void test_getAccountCredentials_failure() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-			APIException ex;
-
-			Test.startTest();
-			try {
-				client.getAccountCredentials(UUID.randomUUID());
-				throw new AssertException('Expected getAccountCredentials to fail');
-			} catch (APIException ex2) {
-				ex = ex2;
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, ex);
-			System.assertNotEquals(null, ex.error);
-			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
-		}
-	}
-
-	class LoginInformationNoAccountsMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json');
-			response.setBody('{"apiPassword":"fake-password","loginAccounts":null}');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_getAccountCredentials_no_accounts() {
-		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			UUID accountId = UUID.randomUUID();
-			UserMock.createAccountConfiguration(accountId, accountId.toString() + '@unit.test');
-			AccountAPI client = AccountAPI.getInstance();
-
-			Test.startTest();
-			Account.Credentials a = client.getAccountCredentials(accountId);
-			Test.stopTest();
-
-			System.assertNotEquals(null, a);
-			System.assertEquals(null, a.accountNumber);
-			System.assertEquals(accountId, a.accountId);
-			System.assertEquals(null, a.apiPassword);
-		}
-	}
-
-	@IsTest
-	static void test_getValidAccounts_no_credentials() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				new AccountAPI(new Credentials(Environment.production, UUID.randomUUID(), 1234L, null, null, null,
-					false, null, false))
-					.getValidAccounts();
-				throw new AssertException('Expected getValidAccounts to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getValidAccounts_none() {
-		Test.setMock(HttpCalloutMock.class, new LoginInformationNoAccountsMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-
-			Test.startTest();
-			List<Account.Membership> result = client.getValidAccounts();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(result.isEmpty());
-		}
-	}
-
-	class LoginInformationSingleValidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json');
-			response.setBody('{"loginAccounts": [{"name": "Account 2 (VALID)","accountId": "22222222","accountIdGuid": "22222222-2222-2222-2222-222222222222","baseUrl": "https://www.docusign.net/restapi/v2/accounts/22222222","isDefault": "false","userName": "Account 2 User (VALID)","userId": "22222222-2222-2222-2222-222222222222","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "false"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowRecipientLanguageSelection","value": "true"}]}],"apiPassword": "fake-password"}');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_getValidAccounts_single_valid() {
-		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleValidAccountMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-
-			Test.startTest();
-			List<Account.Membership> result = client.getValidAccounts();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-			System.assertEquals(22222222L, result[0].accountNumber);
-			System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].accountId);
-			System.assertEquals('Account 2 (VALID)', result[0].name);
-			System.assertEquals(UUID.parse('22222222-2222-2222-2222-222222222222'), result[0].userId);
-			System.assertEquals('fake-password', result[0].apiPassword);
-			System.assertNotEquals(null, result[0].baseUrl);
-			System.assertEquals('https://www.docusign.net/', result[0].baseUrl.toExternalForm());
-			System.assertNotEquals(null, result[0].settings);
-			System.assertEquals(6, result[0].settings.size());
-		}
-	}
-
-	class LoginInformationSingleInvalidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json');
-			response.setBody('{"loginAccounts": [{"name": "Account 1 (INVALID)","accountId": "11111111","accountIdGuid": "11111111-1111-1111-1111-111111111111","baseUrl": "https://www.docusign.net/restapi/v2/accounts/11111111","isDefault": "true","userName": "Account 1 User (INVALID)","userId": "11111111-1111-1111-1111-111111111111","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "true"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "false"},{"name": "apiAccountWideAccess","value": "false"},{"name": "allowRecipientLanguageSelection","value": "true"}]}],"apiPassword": "fake-password"}');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_getValidAccounts_single_invalid() {
-		Test.setMock(HttpCalloutMock.class, new LoginInformationSingleInvalidAccountMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-
-			Test.startTest();
-			List<Account.Membership> result = client.getValidAccounts();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(result.isEmpty());
-		}
-	}
-
-	class LoginInformationMultipleValidAccountMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			String endpoint = request.getEndpoint();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json');
-
-			if (endpoint.contains('/login_information')) {
-				response.setBody('{"loginAccounts": [{"name": "Account 1 (INVALID)","accountId": "11111111","accountIdGuid": "11111111-1111-1111-1111-111111111111","baseUrl": "https://www.docusign.net/restapi/v2/accounts/11111111","isDefault": "true","userName": "Account 1 User (INVALID)","userId": "11111111-1111-1111-1111-111111111111","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "true"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "false"},{"name": "apiAccountWideAccess","value": "false"},{"name": "allowRecipientLanguageSelection","value": "true"}]},{"name": "Account 2 (VALID)","accountId": "22222222","accountIdGuid": "22222222-2222-2222-2222-222222222222","baseUrl": "https://www.docusign.net/restapi/v2/accounts/22222222","isDefault": "false","userName": "Account 2 User (VALID)","userId": "22222222-2222-2222-2222-222222222222","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "false"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowRecipientLanguageSelection","value": "true"}]},{"name": "Account 3 (VALID)","accountId": "33333333","accountIdGuid": "33333333-3333-3333-3333-333333333333","baseUrl": "https://www.docusign.net/restapi/v2/accounts/33333333","isDefault": "false","userName": "Account 3 User (VALID)","userId": "33333333-3333-3333-3333-333333333333","email": "user@example.com","siteDescription": "","loginAccountSettings": [{"name": "usesAPI","value": "false"}],"loginUserSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendAPIRequests","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowRecipientLanguageSelection","value": "true"}]}],"apiPassword": "fake-password"}');
-			} else if (endpoint.contains(ID1.toString())) {
-				// ID1 = invalid
-				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "false"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
-			} else if (endpoint.contains(ID2.toString())) {
-				// ID2 = invalid
-				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
-			} else {
-				// ID3 = valid
-				response.setBody('{"userSettings": [{"name": "canManageAccount","value": "true"},{"name": "canSendEnvelope","value": "true"},{"name": "apiAccountWideAccess","value": "true"},{"name": "allowSendOnBehalfOf","value": "true"}]}');
-			}
-
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_getValidAccounts_multiple() {
-		Test.setMock(HttpCalloutMock.class, new LoginInformationMultipleValidAccountMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			AccountAPI client = AccountAPI.getInstance(Environment.demo, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-
-			Test.startTest();
-			List<Account.Membership> result = client.getValidAccounts();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
 		}
 	}
 
@@ -641,8 +383,8 @@ private class AccountAPITest {
 		}
 	}
 
-	private class UserAlreadyExistsMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
+	private class UserAlreadyExistsMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -676,8 +418,8 @@ private class AccountAPITest {
 		}
 	}
 
-	private class UserOtherErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
+	private class UserOtherErrorMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -793,8 +535,8 @@ private class AccountAPITest {
 		}
 	}
 
-	private class UnknownUserMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
+	private class UnknownUserMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -825,163 +567,6 @@ private class AccountAPITest {
 			System.assert(users[0].hasError);
 			System.assertEquals(APIErrorCode.UNKNOWN_USER, users[0].error.code);
 			System.assertEquals('Invalid UserId.', users[0].error.description);
-		}
-	}
-
-	@IsTest
-	static void test_createTrialAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		Test.startTest();
-		Account.Membership result = AccountAPI.getInstance(Environment.production)
-			.createTrialAccount(new Account.Trial(
-				'UNIT TEST',
-				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-				new Account.Address(null, null, null, null, null, null, null)));
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assertNotEquals(null, result.accountNumber);
-		System.assertNotEquals(null, result.accountId);
-		System.assertEquals('UNIT TEST', result.name);
-		System.assertNotEquals(null, result.userId);
-		System.assertNotEquals(null, result.apiPassword);
-		System.assertNotEquals(null, result.baseUrl);
-	}
-
-	@IsTest
-	static void test_createTrialAccount_failure() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-			APIException ex = null;
-
-			Test.startTest();
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'UNIT TEST',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex1) {
-				ex = ex1;
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, ex);
-		}
-	}
-
-	class CreateAccountErrorMock implements HttpCalloutMock {
-		public HttpResponse respond(HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			String reqBody = request.getBody();
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-
-			if (reqBody.contains('no_results')) {
-				response.setStatusCode(200);
-				response.setStatus('OK');
-				response.setBody('{"newAccounts":[]}');
-			} else {
-				response.setStatusCode(400);
-				response.setStatus('BAD_REQUEST');
-
-				String errorMessage = 'FAIL';
-
-				if (reqBody.contains('no_message')) {
-					errorMessage = '';
-				} else if (reqBody.contains('member_email_not_allowed')) {
-					errorMessage = 'Member Email Not Allowed';
-				} else if (reqBody.contains('member_already_exists')) {
-					errorMessage = 'Member Email And User Name Already Exists';
-				} else if (reqBody.contains('member_awaiting_activation')) {
-					errorMessage = 'Member Email And User Name Awaiting Activation';
-				}
-
-				response.setBody('{"errorCode":"BAD_REQUEST","message":"' + errorMessage + '"}');
-
-			}
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_createTrialAccount_errors() {
-		Test.setMock(HttpCalloutMock.class, new CreateAccountErrorMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountAPI client = AccountAPI.getInstance();
-			APIException ex1, ex2, ex3, ex4, ex5;
-
-			Test.startTest();
-			Account.Membership a = client.createTrialAccount(new Account.Trial(
-				'no_results',
-				new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-				new Account.Address(null, null, null, null, null, null, null)));
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'UNIT TEST',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex) {
-				ex1 = ex;
-			}
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'no_message',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex) {
-				ex2 = ex;
-			}
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'member_email_not_allowed',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex) {
-				ex3 = ex;
-			}
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'member_already_exists',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex) {
-				ex4 = ex;
-			}
-			try {
-				client.createTrialAccount(new Account.Trial(
-					'member_awaiting_activation',
-					new Account.TrialUser(UUID.randomUUID().toString() + '@unit.test', 'Unit', 'Test', 'US', true),
-					new Account.Address(null, null, null, null, null, null, null)));
-				throw new AssertException('Expected createTrialAccount to fail');
-			} catch (APIException ex) {
-				ex5 = ex;
-			}
-			Test.stopTest();
-
-			System.assertEquals(null, a);
-
-			System.assertNotEquals(null, ex1);
-			System.assertEquals('FAIL', ex1.getMessage());
-
-			System.assertNotEquals(null, ex2);
-			System.assertEquals(Label.AccountProvisioningFailed, ex2.getMessage());
-
-			System.assertNotEquals(null, ex3);
-			System.assertEquals(Label.UsernameNotAllowed, ex3.getMessage());
-
-			System.assertNotEquals(null, ex4);
-			System.assertEquals(Label.AccountAlreadyExists, ex4.getMessage());
-
-			System.assertNotEquals(null, ex5);
-			System.assertEquals(Label.ActivationRequired, ex5.getMessage());
 		}
 	}
 
@@ -1092,7 +677,7 @@ private class AccountAPITest {
 			System.assertEquals('email', customTabs[1].type);
 			System.assertNotEquals(null, customTabs[1].mergeField);
 			System.assertEquals('Opportunity.Id', customTabs[1].mergeField.path);
-			System.assert(!customTabs[1].mergeField.writeback);
+			System.assert(!customTabs[1].mergeField.writeBack);
 			System.assert(!customTabs[1].mergeField.editable);
 			System.assertEquals(new List<String>(), customTabs[1].items);
 			System.assertEquals('Field 2 value', customTabs[1].initialValue);
@@ -1126,7 +711,7 @@ private class AccountAPITest {
 			System.assertEquals('something', customTabs[2].type);
 			System.assertNotEquals(null, customTabs[2].mergeField);
 			System.assertEquals('Account.Name', customTabs[2].mergeField.path);
-			System.assert(customTabs[2].mergeField.writeback);
+			System.assert(customTabs[2].mergeField.writeBack);
 			System.assert(customTabs[2].mergeField.editable);
 			System.assertEquals(new List<String>(), customTabs[2].items);
 			System.assertEquals('', customTabs[2].initialValue);

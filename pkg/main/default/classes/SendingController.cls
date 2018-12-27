@@ -66,6 +66,8 @@ public with sharing class SendingController extends Controller {
 				// TODO: Handle only USER_LACKS_PERMISSIONS error here. Cache response.
 				LoggerService.getInstance().warn('User does not have access to DocuSign templates');
 				templates = new List<Template>();
+			} finally {
+				Credentials.save();
 			}
 			return new DraftEnvelope(
 				AccountFeatures.getInstance(),
@@ -80,7 +82,7 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
 			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
@@ -89,7 +91,7 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static Recipient resolveRecipient(final Id sourceId) {
 		try {
 			Recipient result = null;

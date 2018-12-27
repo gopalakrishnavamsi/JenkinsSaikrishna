@@ -23,12 +23,7 @@ public with sharing class Permissions {
 	private static final Map<Id, Boolean> dsSenders = new Map<Id, Boolean>();
 
 	static {
-		String orgType = null;
-		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
-		if (Collection.isNotEmpty(orgs)) {
-			orgType = orgs[0].OrganizationType;
-		}
-		IS_FLS_SUPPORTED = (orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition');
+		IS_FLS_SUPPORTED = (Salesforce.edition == 'Developer Edition' || Salesforce.edition == 'Enterprise Edition' || Salesforce.edition == 'Unlimited Edition');
 	}
 
 	@TestVisible

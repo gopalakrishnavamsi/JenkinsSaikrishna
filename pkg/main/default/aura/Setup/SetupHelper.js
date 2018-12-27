@@ -21,9 +21,13 @@
     getLogin.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var login = response.getReturnValue();
-        var status = login.isLoggedIn === true ? 'complete' : 'notStarted';
+        var isLoggedIn = login && login.status === 'Success';
+        var status = isLoggedIn ? 'complete' : 'notStarted';
         component.set('v.login', login);
-        component.set('v.isTrialExpired', login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
+        component.set('v.isLoggedIn', isLoggedIn);
+        component.set('v.login.selectedAccountNumber', !isLoggedIn || $A.util.isUndefinedOrNull(login) || $A.util.isEmpty(login.accounts) ? null : login.accounts[0].accountNumber);
+        // TODO: Fix trials
+        component.set('v.isTrialExpired', false);//login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
         var steps = [{
           name: 'setupAccount',
           title: $A.get('$Label.c.ConnectToDocuSign'),

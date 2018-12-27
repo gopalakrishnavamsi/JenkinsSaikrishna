@@ -414,9 +414,7 @@ private class SigningServiceTest {
 			try {
 				resultUrl = SigningService.getEmbeddedSigningUrl(UUID.parse(dse.DocuSignId__c), returnUrl);
 			} catch (APIException ex) {
-				System.assertNotEquals(null, ex);
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+				System.assertEquals(APIError.unauthorized, ex.error);
 			}
 			Test.stopTest();
 

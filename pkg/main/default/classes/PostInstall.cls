@@ -160,6 +160,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 		if (settings.Id == null) {
 			try {
+				settings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
 				settings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 				settings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 				settings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
@@ -251,6 +252,9 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 			Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
 		}));
 		results.addResults(createDefaultRecipientRoles());
+
+		results.addResults(executeScript(Label.PostInstall2, new PostInstall2(), organizationId, installerId,
+			previousVersion, isPush, isUpgrade));
 
 		return results;
 	}

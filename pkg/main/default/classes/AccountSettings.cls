@@ -5,12 +5,6 @@ public with sharing class AccountSettings {
 
 	private static AccountSettings self = null;
 	private static final Integer DEFAULT_CALLOUT_TIMEOUT = 60000;
-
-	/**
-	 * Whether to use the logged-in DocuSign administrator for senders who are not members of the DocuSign account.
-	 */
-	@AuraEnabled
-	public Boolean useSystemSender { get; private set; }
 	/**
 	 * Apex callout timeout. The default is 90 seconds.
 	 */
@@ -45,14 +39,12 @@ public with sharing class AccountSettings {
 	public String recipientSearchBehavior { get; private set; }
 
 	public AccountSettings(
-		final Boolean useSystemSender,
 		final Integer calloutTimeout,
 		final List<String> entityResolvers,
 		final List<String> documentResolvers,
 		final List<String> recipientResolvers,
 		final String recipientSearchBehavior) {
 
-		this.useSystemSender = useSystemSender;
 		this.calloutTimeout = calloutTimeout;
 		this.entityResolvers = entityResolvers;
 		this.documentResolvers = documentResolvers;
@@ -64,7 +56,6 @@ public with sharing class AccountSettings {
 		if (self == null) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			self = new AccountSettings(
-				s.UseSystemSender__c == true,
 				Integer.valueOf(s.CalloutTimeout__c),
 				String.isBlank(s.EntityResolvers__c) ? new List<String>() : s.EntityResolvers__c.split(','),
 				String.isBlank(s.DocumentResolvers__c) ? new List<String>() : s.DocumentResolvers__c.split(','),
@@ -79,7 +70,6 @@ public with sharing class AccountSettings {
 		if (settings == null) throw new DocuSignException(Label.UndefinedArgument);
 
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-		s.UseSystemSender__c = settings.useSystemSender == true;
 		s.CalloutTimeout__c = settings.calloutTimeout == null ? DEFAULT_CALLOUT_TIMEOUT : settings.calloutTimeout;
 		s.EntityResolvers__c = Collection.mkString(settings.entityResolvers, ',');
 		s.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');

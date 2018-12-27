@@ -1103,7 +1103,12 @@ global with sharing class RecipientService {
 		if (recipientSettings != null) {
 			Set<String> targetSigningGroups = getSigningGroups(source, recipientSettings);
 			if (Collection.isNotEmpty(targetSigningGroups)) {
-				List<SigningGroup> sgs = EnvelopeAPI.getInstance().getSigningGroups();
+				List<SigningGroup> sgs;
+				try {
+					sgs = EnvelopeAPI.getInstance().getSigningGroups();
+				} finally {
+					Credentials.save();
+				}
 				if (sgs != null) {
 					for (SigningGroup sg : sgs) {
 						if (String.isNotBlank(sg.name)) {

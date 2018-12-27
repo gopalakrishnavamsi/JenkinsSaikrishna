@@ -1,6 +1,6 @@
 public class StatusController extends Controller {
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static List<Envelope.Status> getStatus(final Id sourceId, final Integer recordLimit) {
 		try {
 			return StatusService.getStatus(new Set<Id> { sourceId }, Integer.valueOf(recordLimit));
@@ -9,7 +9,7 @@ public class StatusController extends Controller {
 		}
 	}
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable = true)
 	public static List<ListView> getStatusListViews() {
 		try {
 			Permissions.verifyIsQueryable(ListView.getSObjectType(), new List<String> {

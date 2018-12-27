@@ -2,19 +2,23 @@ public with sharing class Credentials {
 
 	@TestVisible
 	private static Credentials self;
+	@TestVisible
 	private static final Credentials.Database DB = new Credentials.Database();
 	private static AccountCredentials accountCredentials = null;
 	private static final Map<Id, UserCredentials> userCredentials = new Map<Id, UserCredentials>();
+	@TestVisible
+	private static final Integer MAX_TOKEN_LENGTH = 1530;
 
-	public Environment environment { get; private set; }
+	private Boolean isDirty = false;
+	public DocuSign.Environment environment { get; private set; }
+	public Url accountBaseUrl { get; private set; }
+	public Url eSignatureBaseUrl { get; private set; }
 	public UUID accountId { get; private set; }
 	public Long accountNumber { get; private set; }
+	public String accountName { get; private set; }
 	public String email { get; private set; }
-	public String username { get; private set; }
-	public String password { get; private set; }
-	public Boolean useSendOnBehalfOf { get; private set; }
-	public String sendOnBehalfOf { get; private set; }
-	private final Boolean isDefault;
+	public UUID userId { get; private set; }
+	public AccessToken token { get; private set; }
 	public Boolean isValid {
 		get {
 			return this.isAccountValid && this.isUserValid;
@@ -22,40 +26,44 @@ public with sharing class Credentials {
 	}
 	public Boolean isAccountValid {
 		get {
-			return this.environment != null
-				&& this.environment.isValid
-				&& (this.accountId != null || !this.isDefault)
-				&& String.isNotBlank(this.username)
-				&& String.isNotBlank(this.password);
+			return DocuSign.isValidUrl(this.accountBaseUrl)
+				&& DocuSign.isValidUrl(this.eSignatureBaseUrl)
+				&& UUID.isNotEmpty(this.accountId);
 		}
 	}
 	public Boolean isUserValid {
 		get {
-			return (!this.useSendOnBehalfOf || String.isNotBlank(this.sendOnBehalfOf));
+			return UUID.isNotEmpty(this.userId);
+		}
+	}
+	public Boolean isTokenValid {
+		get {
+			return this.token != null
+				&& this.token.isValid;
 		}
 	}
 
 	@TestVisible
 	private Credentials(
-		final Environment environment,
+		final DocuSign.Environment environment,
+		final Url accountBaseUrl,
+		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final Long accountNumber,
+		final String accountName,
 		final String email,
-		final String username,
-		final String password,
-		final Boolean useSendOnBehalfOf,
-		final String sendOnBehalfOf,
-		final Boolean isDefault) {
+		final UUID userId,
+		final AccessToken token) {
 
 		this.environment = environment;
+		this.accountBaseUrl = accountBaseUrl;
+		this.eSignatureBaseUrl = eSignatureBaseUrl;
 		this.accountId = accountId;
 		this.accountNumber = accountNumber;
+		this.accountName = accountName;
 		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.useSendOnBehalfOf = useSendOnBehalfOf;
-		this.sendOnBehalfOf = sendOnBehalfOf;
-		this.isDefault = isDefault;
+		this.userId = userId;
+		this.token = token;
 	}
 
 	public static Boolean isAccountValid() {
@@ -64,10 +72,6 @@ public with sharing class Credentials {
 
 	public static Credentials getInstance() {
 		return getInstance(UserInfo.getUserId(), true);
-	}
-
-	public static Credentials getInstance(final Environment environment, final String username, final String password) {
-		return new Credentials(environment, null, null, null, username, password, false, null, false);
 	}
 
 	private static void validate(final Credentials c) {
@@ -103,54 +107,18 @@ public with sharing class Credentials {
 		final UserCredentials userCredentials) {
 
 		Credentials result = null;
-		if (accountCredentials != null && userCredentials != null) {
-			if (String.isNotBlank(userCredentials.username)) { // Valid user either with or without SOBO
-				if (accountCredentials.useSendOnBehalfOf) {
-					result = new Credentials(
-						accountCredentials.environment,
-						accountCredentials.accountId,
-						accountCredentials.accountNumber,
-						accountCredentials.email,
-						accountCredentials.username,
-						accountCredentials.password,
-						true,
-						userCredentials.username,
-						true);
-				} else {
-					result = new Credentials(
-						accountCredentials.environment,
-						accountCredentials.accountId,
-						accountCredentials.accountNumber,
-						accountCredentials.email,
-						userCredentials.username,
-						userCredentials.password,
-						false,
-						null,
-						true);
-				}
-			} else if (accountCredentials.useSystemSender) { // Use account credentials and no SOBO
-				result = new Credentials(
-					accountCredentials.environment,
-					accountCredentials.accountId,
-					accountCredentials.accountNumber,
-					accountCredentials.email,
-					accountCredentials.username,
-					accountCredentials.password,
-					false,
-					null,
-					true);
-			} else { // Invalid user
-				result = new Credentials(
-					accountCredentials.environment,
-					accountCredentials.accountId,
-					accountCredentials.accountNumber,
-					accountCredentials.email,
-					accountCredentials.username,
-					accountCredentials.password,
-					true,
-					null,
-					true);
-			}
+		if (accountCredentials != null) {
+			Boolean hasUser = userCredentials != null && UUID.isNotEmpty(userCredentials.userId);
+			result = new Credentials(
+				accountCredentials.environment,
+				accountCredentials.accountBaseUrl,
+				accountCredentials.eSignatureBaseUrl,
+				accountCredentials.accountId,
+				accountCredentials.accountNumber,
+				accountCredentials.accountName,
+				accountCredentials.email,
+				hasUser ? userCredentials.userId : accountCredentials.systemSenderId,
+				hasUser ? userCredentials.token : null);
 		} else {
 			LoggerService.getInstance().error('Account and/or user configuration is null.');
 			throw new DocuSignException(Label.ConfigurationError);
@@ -158,45 +126,110 @@ public with sharing class Credentials {
 		return result;
 	}
 
+	public static AccessToken getToken() {
+		return getToken(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static AccessToken getToken(final Id userId) {
+		return DB.readToken(userId);
+	}
+
 	public static Credentials save(
-		final Environment environment,
+		final DocuSign.Environment environment,
+		final Url accountBaseUrl,
+		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final Long accountNumber,
+		final String accountName,
 		final String email,
-		final String username,
-		final String password,
-		final Boolean canManageAccount) {
+		final UUID userId,
+		final Boolean canManageAccount,
+		final AccessToken token) {
 
-		return save(UserInfo.getUserId(), environment, accountId, accountNumber, email, username, password,
-			canManageAccount);
+		return save(
+			UserInfo.getUserId(),
+			environment,
+			accountBaseUrl,
+			eSignatureBaseUrl,
+			accountId,
+			accountNumber,
+			accountName,
+			email,
+			userId,
+			canManageAccount,
+			token);
 	}
 
 	@TestVisible
 	private static Credentials save(
-		final Id userId,
-		final Environment environment,
+		final Id id,
+		final DocuSign.Environment environment,
+		final Url accountBaseUrl,
+		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final Long accountNumber,
+		final String accountName,
 		final String email,
-		final String username,
-		final String password,
-		final Boolean canManageAccount) {
+		final UUID userId,
+		final Boolean canManageAccount,
+		final AccessToken token) {
 
-		Boolean useSOBO = getUseSendOnBehalfOf(AccountSettings__c.getOrgDefaults());
 		Credentials.accountCredentials = DB.updateAccountCredentials(
 			environment,
+			accountBaseUrl,
+			eSignatureBaseUrl,
 			accountId,
 			accountNumber,
-			email,
-			useSOBO ? username : null,
-			useSOBO ? password : null);
+			accountName,
+			email);
 		Credentials.UserCredentials uc = DB.updateUserCredentials(
+			id,
 			userId,
-			username,
-			useSOBO ? null : password,
-			canManageAccount);
-		Credentials.userCredentials.put(userId, uc);
+			canManageAccount,
+			token);
+		Credentials.userCredentials.put(id, uc);
 		self = buildAPICredentials(Credentials.accountCredentials, uc);
+		return self;
+	}
+
+	public static Credentials setToken(final Credentials.AccessToken token) {
+		Credentials c = self;
+		if (c == null) {
+			c = getInstance();
+		}
+		c.token = token;
+		c.isDirty = true;
+		return c;
+	}
+
+	/**
+	 * Saves updated user credentials (e.g. access token) to protected settings. Invoke this after all callouts are
+	 * complete to avoid <code>CalloutException</code>s.
+	 *
+	 * @return The updated credentials.
+	 */
+	public static Credentials save() {
+		return save(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Credentials save(final Id userId) {
+		UserCredentials uc = null;
+		if (self != null) {
+			uc = new UserCredentials(
+				self.userId,
+				false,
+				self.isDirty ? DB.updateToken(userId, self.token) : self.token);
+			self.isDirty = false;
+		} else {
+			uc = new UserCredentials(
+				UUID.tryParse([SELECT Username__c FROM User WHERE Id = :userId LIMIT 1].Username__c),
+				false,
+				null);
+		}
+		Credentials.userCredentials.put(userId, uc);
+		self = buildAPICredentials(getAccountCredentials(), uc);
 		return self;
 	}
 
@@ -239,6 +272,7 @@ public with sharing class Credentials {
 				if (Collection.isNotEmpty(users)) {
 					DB.deleteUserCredentials(users);
 					for (User u : users) {
+						// Don't remove permission set from current user.
 						if (u.Id != UserInfo.getUserId()) userIds.add(u.Id);
 					}
 				} else {
@@ -289,58 +323,73 @@ public with sharing class Credentials {
 
 	@TestVisible
 	private class AccountCredentials {
-		public final Environment environment;
+		public final DocuSign.Environment environment;
+		public final Url accountBaseUrl;
+		public final Url eSignatureBaseUrl;
 		public final UUID accountId;
 		public final Long accountNumber;
+		public final String accountName;
 		public final String email;
-		public final String username;
-		public final String password;
-		public final Boolean useSendOnBehalfOf;
-		public final Boolean useSystemSender;
+		public final UUID systemSenderId;
 
 		public AccountCredentials(
-			final Environment environment,
+			final DocuSign.Environment environment,
+			final Url accountBaseUrl,
+			final Url eSignatureBaseUrl,
 			final UUID accountId,
 			final Long accountNumber,
+			final String accountName,
 			final String email,
-			final String username,
-			final String password,
-			final Boolean useSendOnBehalfOf,
-			final Boolean useSystemSender) {
+			final UUID systemSenderId) {
 
 			this.environment = environment;
+			this.accountBaseUrl = accountBaseUrl;
+			this.eSignatureBaseUrl = eSignatureBaseUrl;
 			this.accountId = accountId;
 			this.accountNumber = accountNumber;
+			this.accountName = accountName;
 			this.email = email;
-			this.username = username;
-			this.password = password;
-			this.useSendOnBehalfOf = useSendOnBehalfOf;
-			this.useSystemSender = useSystemSender;
+			this.systemSenderId = systemSenderId;
+		}
+	}
+
+	public class AccessToken {
+		public String token { get; private set; }
+		public Datetime expires { get; private set; }
+		public Boolean isExpired {
+			get {
+				return expires == null || expires < Datetime.now();
+			}
+		}
+		public Boolean isValid {
+			get {
+				return String.isNotBlank(this.token) && !this.isExpired;
+			}
+		}
+
+		public AccessToken(
+			final String token,
+			final Datetime expires) {
+
+			this.token = token;
+			this.expires = expires;
 		}
 	}
 
 	public class UserCredentials {
-		public String username { get; private set; }
-		public String password { get; private set; }
+		public UUID userId { get; private set; }
 		public Boolean canManageAccount { get; private set; }
+		public AccessToken token { get; private set; }
 
-		public UserCredentials(final String username, final String password) {
-			this(username, password, false);
-		}
+		public UserCredentials(
+			final UUID userId,
+			final Boolean canManageAccount,
+			final AccessToken token) {
 
-		public UserCredentials(final String username, final String password, final Boolean canManageAccount) {
-			this.username = username;
-			this.password = password;
+			this.userId = userId;
 			this.canManageAccount = canManageAccount;
+			this.token = token;
 		}
-	}
-
-	private static Boolean getUseSendOnBehalfOf(final AccountSettings__c settings) {
-		return settings == null || settings.Id == null || settings.UseSendOnBehalfOf__c == null || settings.UseSendOnBehalfOf__c;
-	}
-
-	private static Boolean getUseSystemSender(final AccountSettings__c settings) {
-		return settings != null && settings.Id != null && settings.UseSystemSender__c != null && settings.UseSystemSender__c;
 	}
 
 	@TestVisible
@@ -349,80 +398,80 @@ public with sharing class Credentials {
 		public AccountCredentials queryAccountCredentials() {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			if (String.isBlank(settings.Environment__c)) {
-				return new AccountCredentials(Environment.invalid, null, null, null, null, null, false, false);
+				return new AccountCredentials(DocuSign.Environment.Invalid, null, null, null, null, null, null, null);
 			}
 
 			return new AccountCredentials(
-				Environment.fromUrl(settings.BaseUrl__c == null ? null : new Url(settings.BaseUrl__c)),
+				DocuSign.parseEnvironment(settings.Environment__c),
+				settings.AccountBaseUrl__c == null ? null : new Url(settings.AccountBaseUrl__c),
+				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c),
 				UUID.tryParse(settings.AccountId__c),
 				(Long)settings.AccountNumber__c,
+				settings.AccountName__c,
 				settings.Email__c,
-				settings.Username__c,
-				settings.Password__c,
-				getUseSendOnBehalfOf(settings),
-				getUseSystemSender(settings));
+				UUID.tryParse(settings.SystemSenderId__c));
 		}
 
 		public UserCredentials queryUserCredentials(final Id userId) {
-			UserSettings__c settings = UserSettings__c.getInstance(userId);
-			return new UserCredentials(settings.Username__c, settings.Password__c);
+			List<User> users = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :userId LIMIT 1];
+			User u = Collection.isEmpty(users) ? null : users[0];
+			return new UserCredentials(
+				u == null ? null : UUID.tryParse(u.Username__c),
+				u != null && u.CanManageAccount__c == true,
+				u == null ? null : readToken(userId));
 		}
 
 		public AccountCredentials updateAccountCredentials(
-			final Environment environment,
+			final DocuSign.Environment environment,
+			final Url accountBaseUrl,
+			final Url eSignatureBaseUrl,
 			final UUID accountId,
 			final Long accountNumber,
-			final String email,
-			final String username,
-			final String password) {
+			final String accountName,
+			final String email) {
 
 			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
-			orgSettings.Environment__c = environment == null || environment.environment == null
-				? null : environment.environment.name().toLowerCase();
-			orgSettings.BaseUrl__c = environment == null || environment.baseUrl == null
-				? null : environment.baseUrl.toExternalForm();
+			orgSettings.Environment__c = environment == null ? null : environment.name().toLowerCase();
+			orgSettings.AccountBaseUrl__c = accountBaseUrl == null ? null : accountBaseUrl.toExternalForm();
+			orgSettings.ESignatureBaseUrl__c = eSignatureBaseUrl == null ? null : eSignatureBaseUrl.toExternalForm();
 			orgSettings.AccountId__c = String.valueOf(accountId);
 			orgSettings.AccountNumber__c = accountNumber;
+			orgSettings.AccountName__c = accountName;
 			orgSettings.Email__c = email;
-			orgSettings.Username__c = username;
-			orgSettings.Password__c = password;
+			orgSettings.Features__c = null;
+			orgSettings.FeaturesLastChecked__c = null;
 			upsert orgSettings;
 			orgSettings = AccountSettings__c.getOrgDefaults();
 
 			return new AccountCredentials(
 				environment,
+				accountBaseUrl,
+				eSignatureBaseUrl,
 				accountId,
 				accountNumber,
+				accountName,
 				email,
-				username,
-				password,
-				getUseSendOnBehalfOf(orgSettings),
-				getUseSystemSender(orgSettings));
+				UUID.tryParse(orgSettings.SystemSenderId__c));
 		}
 
 		public UserCredentials updateUserCredentials(
-			final Id userId,
-			final String username,
-			final String password,
-			final Boolean canManageAccount) {
+			final Id id,
+			final UUID userId,
+			final Boolean canManageAccount,
+			final AccessToken token) {
 
 			Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
 				'Username__c', 'CanManageAccount__c'
 			});
 
-			List<User> users = [SELECT Id, Username__c FROM User WHERE Id = :userId LIMIT 1];
+			List<User> users = [SELECT Id, Username__c FROM User WHERE Id = :id LIMIT 1];
 			if (Collection.isNotEmpty(users)) {
-				users[0].Username__c = username;
+				users[0].Username__c = String.valueOf(userId);
 				users[0].CanManageAccount__c = canManageAccount;
 				update users[0];
 			}
 
-			UserSettings__c userSettings = UserSettings__c.getInstance(userId);
-			userSettings.Username__c = username;
-			userSettings.Password__c = password;
-			upsert userSettings;
-
-			return new UserCredentials(username, password, canManageAccount);
+			return new UserCredentials(userId, canManageAccount, updateToken(id, token));
 		}
 
 		public void updateUserCredentials(final Map<Id, UserCredentials> credentials) {
@@ -432,65 +481,104 @@ public with sharing class Credentials {
 				});
 
 				List<User> users = [SELECT Id, Username__c FROM User WHERE Id IN :credentials.keySet()];
-				List<UserSettings__c> settings = new List<UserSettings__c>();
 				for (User u : users) {
 					UserCredentials uc = credentials.get(u.Id);
-					UserSettings__c us = UserSettings__c.getInstance(u.Id);
 					if (uc == null) {
 						u.Username__c = null;
 						u.CanManageAccount__c = false;
-						us.Username__c = null;
-						us.Password__c = null;
 					} else {
-						u.Username__c = uc.username;
+						u.Username__c = String.valueOf(uc.userId);
 						u.CanManageAccount__c = uc.canManageAccount;
-						us.Username__c = uc.username;
-						us.Password__c = uc.password;
 					}
-					settings.add(us);
 				}
 				update users;
-				upsert settings;
 			}
 		}
 
 		public void deleteAccountCredentials() {
-			AccountSettings__c orgDefaults = AccountSettings__c.getOrgDefaults();
-			orgDefaults.Environment__c = null;
-			orgDefaults.BaseUrl__c = null;
-			orgDefaults.AccountId__c = null;
-			orgDefaults.AccountNumber__c = null;
-			orgDefaults.Email__c = null;
-			orgDefaults.Username__c = null;
-			orgDefaults.Password__c = null;
-			orgDefaults.Features__c = null;
-			orgDefaults.FeaturesLastChecked__c = null;
-			upsert orgDefaults;
+			AccountSettings__c orgSettings = AccountSettings__c.getOrgDefaults();
+			orgSettings.Environment__c = null;
+			orgSettings.AccountBaseUrl__c = null;
+			orgSettings.ESignatureBaseUrl__c = null;
+			orgSettings.AccountId__c = null;
+			orgSettings.AccountNumber__c = null;
+			orgSettings.AccountName__c = null;
+			orgSettings.Email__c = null;
+			orgSettings.SystemSenderId__c = null;
+			orgSettings.Features__c = null;
+			orgSettings.FeaturesLastChecked__c = null;
+			upsert orgSettings;
 		}
 
 		public void deleteUserCredentials(final List<User> users) {
 			if (Collection.isNotEmpty(users)) {
-				Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> { 'Username__c' });
+				Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
+					'Username__c', 'CanManageAccount__c'
+				});
 
-				List<User> toRemove = new List<User>();
 				List<UserSettings__c> settings = new List<UserSettings__c>();
-
 				for (User u : users) {
-					if (String.isNotBlank(u.Username__c)) {
-						u.Username__c = null;
-						u.CanManageAccount__c = false;
-						toRemove.add(u);
-					}
-
-					UserSettings__c s = UserSettings__c.getInstance(u.Id);
-					s.Username__c = null;
-					s.Password__c = null;
-					settings.add(s);
+					u.Username__c = null;
+					u.CanManageAccount__c = false;
+					UserSettings__c us = UserSettings__c.getInstance(u.Id);
+					if (us.Id != null) settings.add(us);
 				}
-
-				update toRemove;
-				upsert settings;
+				delete settings;
+				update users;
 			}
+		}
+
+		public AccessToken updateToken(
+			final Id userId,
+			final AccessToken token) {
+
+			if (userId == null) return token;
+
+			UserSettings__c us = UserSettings__c.getInstance(userId);
+			us.AccessToken0__c = null;
+			us.AccessToken1__c = null;
+			us.AccessToken2__c = null;
+			us.AccessToken3__c = null;
+			us.AccessToken4__c = null;
+			us.AccessToken5__c = null;
+			us.AccessTokenExpires__c = null;
+
+			if (token != null && token.isValid) {
+				Integer len = token.token.length();
+				if (len > MAX_TOKEN_LENGTH) {
+					throw new DocuSignException(String.format(Label.AccessTokenTooLong_2, new List<String> {
+						String.valueOf(len),
+						String.valueOf(MAX_TOKEN_LENGTH)
+					}));
+				}
+				us.AccessToken0__c = token.token.mid(0, 255);
+				us.AccessToken1__c = token.token.mid(255, 255);
+				us.AccessToken2__c = token.token.mid(510, 255);
+				us.AccessToken3__c = token.token.mid(765, 255);
+				us.AccessToken4__c = token.token.mid(1020, 255);
+				us.AccessToken5__c = token.token.mid(1275, 255);
+				us.AccessTokenExpires__c = token.expires;
+			}
+
+			upsert us;
+
+			return token;
+		}
+
+		private AccessToken readToken(
+			final Id userId) {
+
+			AccessToken result = null;
+			UserSettings__c us = UserSettings__c.getInstance(userId);
+			if (us.AccessTokenExpires__c > Datetime.now()) {
+				result = new AccessToken(
+					String.join(new List<String> {
+						us.AccessToken0__c, us.AccessToken1__c, us.AccessToken2__c,
+						us.AccessToken3__c, us.AccessToken4__c, us.AccessToken5__c
+					}, ''),
+					us.AccessTokenExpires__c);
+			}
+			return result;
 		}
 	}
 }

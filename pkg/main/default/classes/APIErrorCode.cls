@@ -28,4 +28,6 @@ public class APIErrorCode {
 	public static final Integer INVALID_DOCUMENT = 1015;
 	public static final Integer INVALID_SIGNING_GROUP = 1015;
 	public static final Integer INVALID_RECIPIENT = 1016;
+	public static final Integer CONSENT_REQUIRED = 1017;
+	public static final Integer INVALID_GRANT = 1018;
 }

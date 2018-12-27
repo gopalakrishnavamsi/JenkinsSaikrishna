@@ -1,0 +1,162 @@
+public class DocuSign {
+
+	// TODO: Use environment-specific trial plan IDs. Support multiple if necessary.
+	public static final UUID TRIAL_PLAN_ID = UUID.parse([
+		SELECT TrialPlanId__c
+		FROM Organization__mdt
+		WHERE DeveloperName = 'SecureSettings'
+		LIMIT 1
+	].TrialPlanId__c);
+
+	/**
+	 * Possible DocuSign environment targets:
+	 * <ul>
+	 *     <li><code>Invalid</code>: Invalid DocuSign environment</li>
+	 *     <li><code>Stage</code>: DocuSign Stage environment</li>
+	 *     <li><code>Demo</code>: DocuSign Demo environment</li>
+	 *     <li><code>Production</code>: DocuSign Production environment</li>
+	 *     <li><code>Other</code>: Other DocuSign environment. A valid DocuSign base URL must be supplied.</li>
+	 * </ul>
+	 */
+	public enum Environment {
+		Invalid, Stage, Demo, Production, Other
+	}
+
+	private static final Map<Environment, Url> environmentToAuthBaseUrl = new Map<Environment, Url> {
+		Environment.Stage => new Url('https://account-s.docusign.com/'),
+		Environment.Demo => new Url('https://account-d.docusign.com/'),
+		Environment.Production => new Url('https://account.docusign.com/')
+	};
+	private static final Map<String, Environment> hostToEnvironment = new Map<String, Environment> {
+		'account-s.docusign.com' => Environment.Stage,
+		'account-d.docusign.com' => Environment.Demo,
+		'account.docusign.com' => Environment.Production
+	};
+	private static final List<String> domainWhitelist = new List<String> {
+		'.docusign.com',
+		'.docusign.net',
+		'.docusignhq.com'
+	};
+
+	/**
+ 	 * Verifies that a DocuSign host is valid. The host must be whitelisted.
+ 	 *
+ 	 * @param host The host to validate.
+ 	 *
+ 	 * @return <code>True<code> if the host is a valid DocuSign host, <code>false</code> otherwise.
+ 	 */
+	public static Boolean isValidHost(final String host) {
+		Boolean result = false;
+
+		if (String.isNotBlank(host)) {
+			String h = host.trim().toLowerCase();
+
+			for (String domain : domainWhitelist) {
+				if (h.endsWith(domain)) {
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
+ 	 * Verifies that a DocuSign URL is valid. It must use HTTPS and the host must be whitelisted.
+ 	 *
+ 	 * @param url The URL to validate.
+ 	 *
+ 	 * @return <code>True<code> if the URL is a valid DocuSign base URL, <code>false</code> otherwise.
+ 	 */
+	public static Boolean isValidUrl(final Url url) {
+		return url != null
+			&& url.getProtocol().equalsIgnoreCase('https')
+			&& isValidHost(url.getHost());
+	}
+
+	/**
+	 * Retrieves the DocuSign base authorization URL.
+	 *
+	 * @param environment The target environment.
+	 *
+	 * @return The base authorization URL if one is mapped to <code>environment</code>, <code>null</code> otherwise.
+	 */
+	public static Url getAuthBaseUrl(final Environment environment) {
+		Url result = null;
+		if (environment != null) {
+			result = environmentToAuthBaseUrl.get(environment);
+		}
+		return result;
+	}
+
+	/**
+	 * Retrieves the DocuSign environment for a given host.
+	 *
+	 * @param host The target host.
+	 *
+	 * @return The DocuSign environment if one is mapped to <code>host</code>, <code>Environment.Invalid</code> for
+	 * invalid DocuSign hosts, or <code>Environment.Other</code> for any other valid DocuSign host.
+	 */
+	public static Environment getEnvironment(final String host) {
+		Environment result = Environment.Invalid;
+		if (isValidHost(host)) {
+			result = hostToEnvironment.get(host);
+			if (result == null) {
+				result = Environment.Other;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Retrieves the DocuSign environment for a given URL.
+	 *
+	 * @param url The target url.
+	 *
+	 * @return The DocuSign environment if one is mapped to <code>url</code>, <code>Environment.Invalid</code> for
+	 * invalid DocuSign url, or <code>Environment.Other</code> for any other valid DocuSign url.
+	 */
+	public static Environment getEnvironment(final Url url) {
+		return getEnvironment(url == null ? (String)null : url.getHost());
+	}
+
+	/**
+	 * Parses a DocuSign environment from a string.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The parsed DocuSign environment.
+	 */
+	public static Environment parseEnvironment(final String s) {
+		if (String.isBlank(s)) return Environment.Invalid;
+
+		switch on s.toLowerCase() {
+			when 'prod', 'production' {
+				return Environment.Production;
+			} when 'demo' {
+				return Environment.Demo;
+			} when 'stage' {
+				return Environment.Stage;
+			} when 'other' {
+				return Environment.Other;
+			} when else {
+				return Environment.Invalid;
+			}
+		}
+	}
+
+	/**
+	 * Checks whether a given DocuSign environment is valid.
+	 *
+	 * @param env The environment to test.
+	 * @param otherUrl The URL to test if the environment is undefined or <code>Other</code>.
+	 *
+	 * @return <code>True</code> if the environment is valid, <code>false</code> otherwise.
+	 */
+	public static Boolean isValidEnvironment(final Environment env, final Url otherUrl) {
+		if (otherUrl != null) return isValidUrl(otherUrl);
+
+		return (env != null && env != Environment.Invalid && env != Environment.Other);
+	}
+}
