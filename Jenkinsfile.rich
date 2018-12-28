@@ -38,7 +38,9 @@ pipeline {
 
                 echo "Run tests"
                 sh "mkdir -p ${WORKSPACE}/richtest"
+                sh "mkdir -p ${WORKSPACE}/sonartest"
                 sh "sfdx force:apex:test:run -c -r human -w 5 --outputdir ${WORKSPACE}/richtest"
+                sh "sfdx force:apex:test:run -c -d ${WORKSPACE}/sonartest -r json --wait 4"
                 sh "ls -ltra ${WORKSPACE}/richtest"
 
             }
@@ -53,7 +55,7 @@ echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
         always {
 
                         echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
-                sh "cd ${WORKSPACE} ; export PATH=$PATH:/root/temp/sonar-scanner-3.2.0.1227-linux/bin ; sonar-scanner -Dsonar.projectKey=sfdxmacos -Dsonar.sources=. -Dsonar.host.url=http://10.0.0.208:9000 -Dsonar.login=337f8717bb8cfc08ee35ca6f732c7d5d8a05e39f -Dsonar.apex.coverage.reportPath=${WORKSPACE}/richtest"
+                sh "cd ${WORKSPACE} ; export PATH=$PATH:/root/temp/sonar-scanner-3.2.0.1227-linux/bin ; sonar-scanner -Dsonar.projectKey=sfdxmacos -Dsonar.sources=. -Dsonar.host.url=http://10.0.0.208:9000 -Dsonar.login=337f8717bb8cfc08ee35ca6f732c7d5d8a05e39f -Dsonar.apex.coverage.reportPath=${WORKSPACE}/sonartest"
 
                 echo "Junit test"
                 junit keepLongStdio: true, testResults: 'richtest/*-junit.xml'
