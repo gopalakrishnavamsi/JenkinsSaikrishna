@@ -41,7 +41,7 @@ pipeline {
                 sh "mkdir -p ${WORKSPACE}/sonartest"
                 //sh "sfdx force:apex:test:run -c -r human -w 5 --outputdir ${WORKSPACE}/richtest"
                 echo "RUN JSON TEST OUT"
-                sh "sfdx force:apex:test:run -c -d ${WORKSPACE}/sonartest -r json --wait 4"
+                sh "sfdx force:apex:test:run -c -d ${WORKSPACE}/sonartest -r json --wait 5"
                                echo "RUN JSON TEST OUT"
 
                 sh "ls -ltra ${WORKSPACE}/richtest"
