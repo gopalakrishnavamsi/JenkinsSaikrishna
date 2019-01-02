@@ -2425,6 +2425,27 @@
         <label>Encryption key not found.</label>
         <name>KeyNotFound</name>
     </customLabels>
+    <customLabels>
+        <label>A button with this label already exists. Please choose a different label.</label>
+        <name>DuplicateButton</name>
+    </customLabels>
+    <customLabels>
+        <label>Failed to update one or more metadata items:
+        {0}</label>
+        <name>UpdateMetadataFailure_1</name>
+    </customLabels>
+    <customLabels>
+        <label>Send with DocuSign</label>
+        <name>SendWithDocuSign</name>
+    </customLabels>
+    <customLabels>
+        <label>One or more layouts not found.</label>
+        <name>LayoutsNotFound</name>
+    </customLabels>
+    <customLabels>
+        <label>One or more layouts does not match the supplied source type.</label>
+        <name>InvalidLayout</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

@@ -151,6 +151,34 @@ private class SalesforceTest {
 	}
 
 	@IsTest
+	static void test_getSObjectType() {
+		Test.startTest();
+		try {
+			Salesforce.getSObjectType(null);
+			throw new AssertException('Expected getSObjectType to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidType, ex.getMessage());
+		}
+		try {
+			Salesforce.getSObjectType('  ');
+			throw new AssertException('Expected getSObjectType to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidType, ex.getMessage());
+		}
+		try {
+			Salesforce.getSObjectType(UUID.randomUUID().toString());
+			throw new AssertException('Expected getSObjectType to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidType, ex.getMessage());
+		}
+		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getSObjectType('Account'));
+		System.assertEquals(Lead.getSObjectType(), Salesforce.getSObjectType('lead'));
+		System.assertEquals(Contact.getSObjectType(), Salesforce.getSObjectType('CONTACT'));
+		System.assertEquals(Envelope__c.getSObjectType(), Salesforce.getSObjectType('Envelope__c'));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getLightningHost() {
 		String host = Url.getSalesforceBaseUrl().getHost();
 		host = host.substring(0, host.indexOf('.')).remove('--c').remove('--' + Application.packageNamespace)

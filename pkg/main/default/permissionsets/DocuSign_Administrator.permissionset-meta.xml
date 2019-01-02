@@ -693,6 +693,10 @@
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
     <pageAccesses>
+        <apexPage>CompleteOAuth</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>ReturnFromDocuSign</apexPage>
         <enabled>true</enabled>
     </pageAccesses>

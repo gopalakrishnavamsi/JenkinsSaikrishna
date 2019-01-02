@@ -28,42 +28,23 @@
 * This is a dummy test class to obtain 100% coverage for the generated WSDL2Apex code, it is not a funcitonal test class
 *   You should follow the usual practices to cover your other code, as shown in the MetadataCreateJobTest.cls
 **/
-@isTest(isParallel = true)
-private class MetadataAPITest {
-
-	/**
-	* Dummy Metadata API web service mock class (see MetadataCreateJobTest.cls for a better example)
-	**/
-	private class WebServiceMockImpl implements WebServiceMock {
-		public void doInvoke(
-			final Object stub, final Object request, final Map<String, Object> response,
-			final String endpoint, final String soapAction, final String requestName,
-			final String responseNS, final String responseName, final String responseType) {
-			if (request instanceof MetadataAPI.listMetadata_element) {
-				response.put('response_x', new MetadataAPI.listMetadataResponse_element());
-			} else if (request instanceof MetadataAPI.updateMetadata_element) {
-				response.put('response_x', new MetadataAPI.updateMetadataResponse_element());
-			} else if (request instanceof MetadataAPI.readMetadata_element) {
-				response.put('response_x', new MetadataAPI.readLayoutResponse_element());
-			} else if (request instanceof MetadataAPI.createMetadata_element) {
-				response.put('response_x', new MetadataAPI.createMetadataResponse_element());
-			} else if (request instanceof MetadataAPI.deleteMetadata_element) {
-				response.put('response_x', new MetadataAPI.deleteMetadataResponse_element());
-			}
-		}
-	}
+@IsTest(IsParallel = true)
+public class MetadataAPITest {
 
 	@IsTest
 	static void coverGeneratedCodeCRUDOperations() {
 		// Null Web Service mock implementation
-		System.Test.setMock(WebServiceMock.class, new WebServiceMockImpl());
+		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock());
 		// Only required to workaround a current code coverage bug in the platform
 		MetadataAPI mdService = new MetadataAPI();
 		// Invoke operations
-		MetadataAPI.MetadataPort metaDataPort = MetadataAPI.getInstance();
+		MetadataAPI.Client metaDataPort = MetadataAPI.getInstance();
 
 		Test.startTest();
-		metaDataPort.readMetadata('a', new String[] { 'a' });
+		metaDataPort.readMetadata('Layout', new String[] { 'a' });
+		metaDataPort.readMetadata('QuickAction', new String[] { 'b' });
+		metaDataPort.readMetadata('WebLink', new String[] { 'c' });
+		metaDataPort.readMetadata('SecuritySettings', new String[] { 'd' });
 		Test.stopTest();
 
 		System.assert(true);
@@ -72,11 +53,11 @@ private class MetadataAPITest {
 	@IsTest
 	static void coverGeneratedCodeFileBasedOperations1() {
 		// Null Web Service mock implementation
-		System.Test.setMock(WebServiceMock.class, new WebServiceMockImpl());
+		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock());
 		// Only required to workaround a current code coverage bug in the platform
 		MetadataAPI mdService = new MetadataAPI();
 		// Invoke operations
-		MetadataAPI.MetadataPort metaDataPort = MetadataAPI.getInstance();
+		MetadataAPI.Client metaDataPort = MetadataAPI.getInstance();
 
 		Test.startTest();
 		metaDataPort.createMetadata(null);
@@ -93,6 +74,7 @@ private class MetadataAPITest {
 		// Reference types
 		Test.startTest();
 		new MetadataAPI();
+		new MetadataAPI.RemoteSiteSetting();
 		new MetadataAPI.listMetadataResponse_element();
 		new MetadataAPI.PrimaryTabComponents();
 		new MetadataAPI.LogInfo();
@@ -148,6 +130,12 @@ private class MetadataAPITest {
 		new MetadataAPI.WebLink();
 		new MetadataAPI.ReadWebLinkResult().getRecords();
 		new MetadataAPI.readWebLinkResponse_element().getResult();
+		new MetadataAPI.QuickAction();
+		new MetadataAPI.FieldOverride();
+		new MetadataAPI.QuickActionLayout();
+		new MetadataAPI.QuickActionLayoutColumn();
+		new MetadataAPI.QuickActionLayoutItem();
+		new MetadataAPI.QuickActionSendEmailOptions();
 		Test.stopTest();
 
 		System.assert(true);

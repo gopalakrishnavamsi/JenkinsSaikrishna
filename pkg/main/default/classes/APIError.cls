@@ -18,6 +18,10 @@ global virtual class APIError {
 	 * Constant for an unauthorized error.
 	 */
 	public static final APIError unauthorized = new APIError(APIErrorCode.UNAUTHORIZED, null);
+	/**
+	 * Constant for an unauthorized error.
+	 */
+	public static final APIError badRequest = new APIError(APIErrorCode.BAD_REQUEST, null);
 
 	/**
 	 * The error code.

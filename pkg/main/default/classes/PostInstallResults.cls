@@ -131,18 +131,6 @@ public class PostInstallResults {
 	}
 
 	/**
-	 * Begins a post-install step.
-	 *
-	 * @param name The name of the post-install step.
-	 *
-	 * @return The current post-install results.
-	 */
-	public PostInstallResults beginStep(final String name) {
-		stepMap.put(name, new Step(++this.count, name, StepStatus.STARTED, null));
-		return this;
-	}
-
-	/**
 	 * Skips a post-install step.
 	 *
 	 * @param name The name of the post-install step.
@@ -163,11 +151,9 @@ public class PostInstallResults {
 	 * @return The current post-install results.
 	 */
 	public PostInstallResults endStepSuccess(final String name) {
-		if (stepMap.containsKey(name)) {
-			stepMap.put(name, stepMap.get(name).complete(true, null));
-		} else {
-			stepMap.put(name, new Step(++this.count, name, StepStatus.SUCCESS, null));
-		}
+		stepMap.put(name, stepMap.containsKey(name)
+			? stepMap.get(name).complete(true, null)
+			: new Step(++this.count, name, StepStatus.SUCCESS, null));
 		return this;
 	}
 
@@ -180,11 +166,9 @@ public class PostInstallResults {
 	 * @return The current post-install results.
 	 */
 	public PostInstallResults endStepSuccess(final String name, final Object context) {
-		if (stepMap.containsKey(name)) {
-			stepMap.put(name, stepMap.get(name).complete(true, context));
-		} else {
-			stepMap.put(name, new Step(++this.count, name, StepStatus.SUCCESS, context));
-		}
+		stepMap.put(name, stepMap.containsKey(name)
+			? stepMap.get(name).complete(true, context)
+			: new Step(++this.count, name, StepStatus.SUCCESS, context));
 		return this;
 	}
 
@@ -197,11 +181,9 @@ public class PostInstallResults {
 	 * @return The current post-install results.
 	 */
 	public PostInstallResults endStepFailure(final String name, final Exception ex) {
-		if (stepMap.containsKey(name)) {
-			stepMap.put(name, stepMap.get(name).complete(false, ex));
-		} else {
-			stepMap.put(name, new Step(++this.count, name, StepStatus.FAILURE, ex));
-		}
+		stepMap.put(name, stepMap.containsKey(name)
+			? stepMap.get(name).complete(false, ex)
+			: new Step(++this.count, name, StepStatus.FAILURE, ex));
 		this.success = false;
 		return this;
 	}
@@ -239,35 +221,6 @@ public class PostInstallResults {
 			this.success &= results.success;
 		}
 		return this;
-	}
-
-	/**
-	 * Gets all post-install step failure messages.
-	 *
-	 * @return The post-install failure messages.
-	 */
-	public List<String> getFailureMessages() {
-		List<String> messages = new List<String>();
-		for (Step s : getSteps()) {
-			if (s.status == StepStatus.FAILURE) {
-				String message = '';
-				if (String.isNotBlank(s.name)) {
-					message += s.name + '\n';
-				}
-				if (s.context instanceof Exception) {
-					Exception ex = (Exception)s.context;
-					message += String.format('{0}: {1}\n{2}', new List<String> {
-						ex.getTypeName(),
-						ex.getMessage(),
-						ex.getStackTraceString()
-					});
-				} else {
-					message += String.valueOf(s.context);
-				}
-				messages.add(message);
-			}
-		}
-		return messages;
 	}
 
 	/**

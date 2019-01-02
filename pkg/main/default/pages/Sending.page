@@ -1,0 +1,7 @@
+<apex:page id="Sending" controller="SendingController" showHeader="true" sidebar="false"
+           title="{!$Label.SendWithDocuSign}">
+    <apex:form>
+        <c:Sending componentNamespace="{!namespace}" sourceId="{!JSENCODE($CurrentPage.parameters.sId)}"
+                   visualforceHost="{!visualforceHost}"/>
+    </apex:form>
+</apex:page>

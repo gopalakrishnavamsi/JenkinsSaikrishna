@@ -98,8 +98,11 @@ public with sharing class Salesforce {
 	}
 
 	public class MergeObject implements Comparable {
+		@AuraEnabled
 		public String name { get; private set; }
+		@AuraEnabled
 		public String label { get; private set; }
+		@AuraEnabled
 		public Boolean isUpdateable { get; private set; }
 
 		public MergeObject(final String name, final String label, final Boolean isUpdateable) {
@@ -117,12 +120,19 @@ public with sharing class Salesforce {
 	}
 
 	public class MergeField implements Comparable {
+		@AuraEnabled
 		public Integer level { get; private set; }
+		@AuraEnabled
 		public String type { get; private set; }
+		@AuraEnabled
 		public String name { get; private set; }
+		@AuraEnabled
 		public String label { get; private set; }
+		@AuraEnabled
 		public String reference { get; private set; }
+		@AuraEnabled
 		public List<String> picklistValues { get; private set; }
+		@AuraEnabled
 		public Boolean isUpdateable { get; private set; }
 
 		public MergeField(final Integer level, final String type, final String name, final String label,
@@ -177,6 +187,15 @@ public with sharing class Salesforce {
 				}
 			}
 		}
+		return result;
+	}
+
+	public static SObjectType getSObjectType(final String typeName) {
+		if (String.isBlank(typeName)) throw new DocuSignException(Label.InvalidType);
+
+		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
+		if (result == null) throw new DocuSignException(Label.InvalidType);
+
 		return result;
 	}
 

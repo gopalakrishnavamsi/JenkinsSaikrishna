@@ -1,4 +1,4 @@
-@IsTest(isParallel = true)
+@IsTest(IsParallel = true)
 private class CollectionTest {
 
 	@IsTest
@@ -56,6 +56,17 @@ private class CollectionTest {
 		System.assert(!Collection.containsKey(new Map<String, Object> { '1' => 1, 'key' => 2 }, null));
 		System.assert(!Collection.containsKey(new Map<String, Object> { '1' => 1, 'key' => 2 }, ''));
 		System.assert(!Collection.containsKey(new Map<String, Object> { '1' => 1, 'key' => 2 }, ' \t'));
+	}
+
+	@IsTest
+	static void test_keys() {
+		System.assertNotEquals(null, Collection.keys(null));
+		System.assertEquals(new Set<String>(), Collection.keys(null));
+		System.assertEquals(new Set<String>(), Collection.keys(new Map<String, Object>()));
+		System.assertEquals(new Set<String> { 'a', 'b' }, Collection.keys(new Map<String, Integer> {
+			'a' => 1,
+			'b' => 2
+		}));
 	}
 
 	@IsTest
@@ -164,6 +175,16 @@ private class CollectionTest {
 		System.assertEquals(new List<String> { '0', '1', '2' }, Collection.slice(l, 0));
 		System.assertEquals(new List<String> { '1', '2' }, Collection.slice(l, 1));
 		System.assertEquals(new List<String>(), Collection.slice(l, 3));
+
+	}
+
+	@IsTest
+	static void test_indexOf() {
+		System.assertEquals(-1, Collection.indexOf(null, null));
+		System.assertEquals(-1, Collection.indexOf(new List<Object>(), null));
+		System.assertEquals(-1, Collection.indexOf(new List<Object>(), 'something'));
+		System.assertEquals(-1, Collection.indexOf(new List<Integer> { 1, 2, 3 }, 'four'));
+		System.assertEquals(1, Collection.indexOf(new List<Integer> { 1, 2, 3 }, 2));
 
 	}
 }

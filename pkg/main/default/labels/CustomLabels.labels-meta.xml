@@ -4503,4 +4503,40 @@
         <shortDescription>Encryption key not found</shortDescription>
         <value>Encryption key not found.</value>
     </labels>
+    <labels>
+        <fullName>DuplicateButton</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Duplicate button</shortDescription>
+        <value>A button with this label already exists. Please choose a different label.</value>
+    </labels>
+    <labels>
+        <fullName>UpdateMetadataFailure_1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Update metadata failure</shortDescription>
+        <value>Failed to update one or more metadata items:
+            {0}</value>
+    </labels>
+    <labels>
+        <fullName>SendWithDocuSign</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Send with DocuSign</shortDescription>
+        <value>Send with DocuSign</value>
+    </labels>
+    <labels>
+        <fullName>LayoutsNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Layouts not found</shortDescription>
+        <value>One or more layouts not found.</value>
+    </labels>
+    <labels>
+        <fullName>InvalidLayout</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid layout</shortDescription>
+        <value>One or more layouts does not match the supplied source type.</value>
+    </labels>
 </CustomLabels>

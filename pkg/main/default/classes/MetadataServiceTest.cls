@@ -1,0 +1,737 @@
+@IsTest
+private class MetadataServiceTest {
+
+	@IsTest
+	static void test_getCommonObjects_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getCommonObjects();
+				throw new AssertException('Expected getCommonObjects to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getCommonObjects_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(Collection.isNotEmpty(MetadataService.getCommonObjects()));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAllObjects_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getAllObjects();
+				throw new AssertException('Expected getAllObjects to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAllObjects_success() {
+		Test.setMock(HttpCalloutMock.class, new SalesforceAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(Collection.isNotEmpty(MetadataService.getAllObjects()));
+			Test.stopTest();
+		}
+	}
+
+	private class FailureMock implements WebServiceMock {
+
+		public void doInvoke(
+			final Object stub,
+			final Object request,
+			final Map<String, Object> response,
+			final String endpoint,
+			final String soapAction,
+			final String requestName,
+			final String responseNS,
+			final String responseName,
+			final String responseType) {
+
+			if (request instanceof MetadataAPI.createMetadata_element
+				|| request instanceof MetadataAPI.updateMetadata_element) {
+
+				List<MetadataAPI.SaveResult> result = new List<MetadataAPI.SaveResult>();
+				for (MetadataAPI.Metadata md : ((MetadataAPI.createMetadata_element)request).metadata) {
+					MetadataAPI.SaveResult r = new MetadataAPI.SaveResult();
+					r.success = false;
+					MetadataAPI.Error e = new MetadataAPI.Error();
+					e.statusCode = 'UNIT_TEST';
+					e.message = 'Test failure';
+					r.errors = new List<MetadataAPI.Error> { e };
+					result.add(r);
+				}
+				MetadataAPI.createMetadataResponse_element resp = new MetadataAPI.createMetadataResponse_element();
+				resp.result = result;
+				response.put('response_x', resp);
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getErrorMessage() {
+		MetadataAPI.SaveResult result = null;
+		System.assertEquals(Label.SalesforceApiErrorUnexpectedResponse, MetadataService.getErrorMessage(result));
+		result = new MetadataAPI.SaveResult();
+		System.assertEquals(Label.SalesforceApiErrorUnexpectedResponse, MetadataService.getErrorMessage(result));
+		MetadataAPI.Error e1 = new MetadataAPI.Error();
+		e1.message = 'test1';
+		MetadataAPI.Error e2 = new MetadataAPI.Error();
+		e2.message = 'test2';
+		MetadataAPI.Error e3 = new MetadataAPI.Error();
+		e3.message = 'test3';
+		result.errors = new List<MetadataAPI.Error> { e1, e2, e3 };
+		System.assertEquals('test1\ntest2\ntest3', MetadataService.getErrorMessage(result));
+
+		MetadataAPI.Error e4 = new MetadataAPI.Error();
+		e4.statusCode = 'DUPLICATE_VALUE';
+		MetadataAPI.SaveResult r4 = new MetadataAPI.SaveResult();
+		r4.success = false;
+		r4.errors = new List<MetadataAPI.Error> { e4 };
+		System.assertEquals(Label.DuplicateButton, MetadataService.getErrorMessage(r4));
+
+		MetadataAPI.Error e5 = new MetadataAPI.Error();
+		e5.statusCode = 'DUPLICATE_DEVELOPER_NAME';
+		MetadataAPI.SaveResult r5 = new MetadataAPI.SaveResult();
+		r5.success = false;
+		r5.errors = new List<MetadataAPI.Error> { e5 };
+		System.assertEquals(Label.DuplicateButton, MetadataService.getErrorMessage(r5));
+	}
+
+	@IsTest
+	static void test_validateResults() {
+		MetadataAPI.SaveResult r1 = new MetadataAPI.SaveResult();
+		r1.success = true;
+		MetadataAPI.Error e1 = new MetadataAPI.Error();
+		e1.statusCode = 'CODE_1';
+		e1.message = 'msg1';
+		MetadataAPI.Error e2 = new MetadataAPI.Error();
+		e2.statusCode = 'DUPLICATE_VALUE';
+		e2.message = 'msg2';
+		MetadataAPI.Error e3 = new MetadataAPI.Error();
+		e3.statusCode = 'CODE_3';
+		e3.message = 'msg3';
+		MetadataAPI.SaveResult r2 = new MetadataAPI.SaveResult();
+		r2.success = false;
+		r2.errors = new List<MetadataAPI.Error> { e1, e2, e3 };
+		List<String> errors = new List<String> {
+			e1.message,
+			Label.DuplicateButton,
+			e3.message
+		};
+		String msg = String.format(Label.UpdateMetadataFailure_1, new List<String> {
+			Collection.mkString(errors, '\n')
+		});
+
+		Test.startTest();
+		try {
+			MetadataService.validateResults(new List<MetadataAPI.SaveResult> { r1, r2 });
+			throw new AssertException('Expected validateResults to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(msg, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_createRemoteSite_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.createRemoteSite(null, null, null);
+				throw new AssertException('Expected createRemoteSite to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createRemoteSite_invalid_arguments() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				MetadataService.createRemoteSite(null, null, new Url('https://example.com/'));
+				throw new AssertException('Expected createRemoteSite to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				MetadataService.createRemoteSite('  ', null, new Url('https://example.com/'));
+				throw new AssertException('Expected createRemoteSite to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				MetadataService.createRemoteSite('test', null, null);
+				throw new AssertException('Expected createRemoteSite to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createRemoteSite_error() {
+		Test.setMock(WebServiceMock.class, new FailureMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				MetadataService.createRemoteSite('test1', 'desc', new Url('https://unit.test/'));
+				throw new AssertException('Expected createRemoteSite to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
+					ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createRemoteSite_success() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			String name = MetadataService.createRemoteSite('test1', 'desc', new Url('https://unit.test/'));
+			Test.stopTest();
+
+			System.assertEquals('test1', name);
+		}
+	}
+
+	@IsTest
+	static void test_getLayouts_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getLayouts(null);
+				throw new AssertException('Expected getLayouts to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getLayouts_invalid_arguments() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getLayouts(null);
+				throw new AssertException('Expected getLayouts to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getLayouts_success() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<Layout> result = MetadataService.getLayouts(Contact.getSObjectType());
+			Test.stopTest();
+
+			System.assertEquals(1, Collection.size(result));
+		}
+	}
+
+	@IsTest
+	static void test_buildInputs() {
+		System.assertEquals('[]', MetadataService.buildInputs(null, null));
+		System.assertEquals('[sId = Lead.Id]', MetadataService.buildInputs(Lead.getSObjectType(), null));
+		System.assertEquals('[sId = 1234]', MetadataService.buildInputs(Lead.getSObjectType(),
+			new Map<String, String> { 'sId' => '1234' }));
+		System.assertEquals('[sId = Lead.Id, p1 = abc]', MetadataService.buildInputs(Lead.getSObjectType(),
+			new Map<String, String> { 'p1' => 'abc' }));
+	}
+
+	@IsTest
+	static void test_createWebLink_invalid_arguments() {
+		try {
+			MetadataService.createWebLink(null, null, null, null, null);
+			throw new AssertException('Expected createWebLink to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_createWebLink_success() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+
+		String fullName = UUID.randomUUID().toString();
+		String buttonLabel = UUID.randomUUID().toString();
+		Map<String, String> params = new Map<String, String> {
+			'a' => UUID.randomUUID().toString(),
+			'b' => UUID.randomUUID().toString(),
+			'c' => UUID.randomUUID().toString()
+		};
+
+		Test.startTest();
+		MetadataAPI.WebLink result = MetadataService.createWebLink(
+			Lead.SObjectType,
+			fullName,
+			buttonLabel,
+			Page.ReturnFromDocuSign,
+			params);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(fullName, result.fullName);
+		System.assertEquals(buttonLabel, result.masterLabel);
+		System.assert(String.isNotBlank(result.url));
+		System.assert(result.url.contains(new Url(Url.getSalesforceBaseUrl(), Page.ReturnFromDocuSign.getUrl()).getPath()));
+		System.assert(result.url.contains('sId = Lead.Id'));
+		System.assert(result.url.contains('a = ' + params.get('a')));
+		System.assert(result.url.contains('b = ' + params.get('b')));
+		System.assert(result.url.contains('c = ' + params.get('c')));
+	}
+
+	@IsTest
+	static void test_createWebLink_failure() {
+		Test.setMock(WebServiceMock.class, new FailureMock());
+
+		Test.startTest();
+		try {
+			MetadataService.createWebLink(
+				Lead.SObjectType,
+				'a',
+				'b',
+				Page.ReturnFromDocuSign,
+				null);
+			throw new AssertException('Expected createWebLink to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
+				ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_createQuickAction_invalid_arguments() {
+		try {
+			MetadataService.createQuickAction(Lead.getSObjectType(), 'a', 'b', null, null, null, null);
+			throw new AssertException('Expected createQuickAction to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_createQuickAction_success() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+
+		String fullName = UUID.randomUUID().toString();
+		String buttonLabel = UUID.randomUUID().toString();
+		String auraBundleFullName = UUID.randomUUID().toString();
+		Integer height = TestUtils.randomInteger(1000);
+		Integer width = TestUtils.randomInteger(1000);
+		String icon = UUID.randomUUID().toString();
+
+		Test.startTest();
+		MetadataAPI.QuickAction result = MetadataService.createQuickAction(
+			Lead.SObjectType,
+			fullName,
+			buttonLabel,
+			auraBundleFullName,
+			height,
+			width,
+			icon);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(fullName, result.fullName);
+		System.assertEquals(buttonLabel, result.label);
+		System.assertEquals(auraBundleFullName, result.lightningComponent);
+		System.assertEquals(height, result.height);
+		System.assertEquals(width, result.width);
+		System.assertEquals(icon, result.icon);
+	}
+
+	@IsTest
+	static void test_createQuickAction_failure() {
+		Test.setMock(WebServiceMock.class, new FailureMock());
+
+		Test.startTest();
+		try {
+			MetadataService.createQuickAction(
+				Lead.SObjectType,
+				'a',
+				'b',
+				'c',
+				100,
+				200,
+				'd');
+			throw new AssertException('Expected createQuickAction to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
+				ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_readLayouts_type_mismatch() {
+		Layout l1 = new Layout(Opportunity.getSObjectType(), UserInfo.getUserId(), 'ns', 'n');
+
+		Test.startTest();
+		try {
+			MetadataService.readLayouts(Lead.getSObjectType(), new List<Layout> { l1 });
+			throw new AssertException('Expected readLayouts to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidLayout, ex.getMessage());
+		}
+		try {
+			MetadataService.readLayouts(Opportunity.getSObjectType(), new List<Layout> { l1, null });
+			throw new AssertException('Expected readLayouts to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidLayout, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	private class LayoutNotFoundMock implements WebServiceMock {
+
+		private final WebServiceMock baseMock;
+
+		public LayoutNotFoundMock() {
+			baseMock = new MetadataAPIMock();
+		}
+
+		public void doInvoke(
+			final Object stub,
+			final Object request,
+			final Map<String, Object> response,
+			final String endpoint,
+			final String soapAction,
+			final String requestName,
+			final String responseNS,
+			final String responseName,
+			final String responseType) {
+
+			Boolean responded = false;
+			if (request instanceof MetadataAPI.readMetadata_element) {
+				MetadataAPI.readMetadata_element req = (MetadataAPI.readMetadata_element)request;
+				if (req.type_x == 'Layout') {
+					MetadataAPI.ReadLayoutResult result = new MetadataAPI.ReadLayoutResult();
+					result.records = new List<MetadataAPI.Layout>();
+					MetadataAPI.readLayoutResponse_element resp = new MetadataAPI.readLayoutResponse_element();
+					resp.result = result;
+					response.put('response_x', resp);
+					responded = true;
+				}
+			}
+
+			if (!responded) {
+				baseMock.doInvoke(stub, request, response, endpoint, soapAction, requestName, responseNS, responseName,
+					responseType);
+			}
+		}
+	}
+
+	@IsTest
+	static void test_readLayouts_not_found() {
+		Test.setMock(WebServiceMock.class, new LayoutNotFoundMock());
+
+		Layout l1 = new Layout(Opportunity.getSObjectType(), UserInfo.getUserId(), 'ns', 'n');
+
+		Test.startTest();
+		try {
+			MetadataService.readLayouts(Opportunity.getSObjectType(), new List<Layout> { l1 });
+			throw new AssertException('Expected readLayouts to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.LayoutsNotFound, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_readLayouts_success() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		Layout l1 = new Layout(Opportunity.getSObjectType(), UserInfo.getUserId(), 'ns', 'n');
+
+		Test.startTest();
+		List<MetadataAPI.Layout> result = MetadataService.readLayouts(Opportunity.getSObjectType(), new List<Layout> { l1 });
+		Test.stopTest();
+
+		System.assertEquals(1, Collection.size(result));
+	}
+
+	@IsTest
+	static void test_addClassicButton() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		String webLinkApiName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
+		l1.fullName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l2 = new MetadataAPI.Layout();
+		l2.fullName = UUID.randomUUID().toString();
+		l2.customButtons = new List<String> { UUID.randomUUID().toString(), webLinkApiName };
+		MetadataAPI.Layout l3 = new MetadataAPI.Layout();
+		l3.fullName = UUID.randomUUID().toString();
+		l3.customButtons = new List<String> { UUID.randomUUID().toString() };
+
+		Test.startTest();
+		System.assert(MetadataService.addClassicButton(webLinkApiName, new List<MetadataAPI.Layout> { l1, l2, l3 }));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_addLightningButton() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		String webLinkApiName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
+		l1.fullName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l2 = new MetadataAPI.Layout();
+		l2.fullName = UUID.randomUUID().toString();
+		MetadataAPI.PlatformActionListItem a1 = new MetadataAPI.PlatformActionListItem();
+		a1.actionName = UUID.randomUUID().toString();
+		MetadataAPI.PlatformActionListItem a2 = new MetadataAPI.PlatformActionListItem();
+		a2.actionName = webLinkApiName;
+		l2.platformActionList = new MetadataAPI.PlatformActionList();
+		l2.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { a1, a2 };
+		MetadataAPI.Layout l3 = new MetadataAPI.Layout();
+		l3.fullName = UUID.randomUUID().toString();
+		l3.platformActionList = new MetadataAPI.PlatformActionList();
+		l3.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { a1 };
+
+		Test.startTest();
+		System.assert(MetadataService.addLightningButton(webLinkApiName, new List<MetadataAPI.Layout> { l1, l2, l3 }));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_addSendButton_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.addSendButton(null, null, null);
+				throw new AssertException('Expected addSendButton to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addSendButton_invalid_arguments() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				MetadataService.addSendButton(null, null, null);
+				throw new AssertException('Expected addSendButton to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class WebLinkNotFoundMock implements WebServiceMock {
+
+		private final WebServiceMock baseMock;
+
+		public WebLinkNotFoundMock() {
+			baseMock = new MetadataAPIMock();
+		}
+
+		public void doInvoke(
+			final Object stub,
+			final Object request,
+			final Map<String, Object> response,
+			final String endpoint,
+			final String soapAction,
+			final String requestName,
+			final String responseNS,
+			final String responseName,
+			final String responseType) {
+
+			Boolean responded = false;
+			if (request instanceof MetadataAPI.readMetadata_element) {
+				MetadataAPI.readMetadata_element req = (MetadataAPI.readMetadata_element)request;
+				if (req.type_x == 'WebLink') {
+					MetadataAPI.ReadWebLinkResult result = new MetadataAPI.ReadWebLinkResult();
+					result.records = new List<MetadataAPI.WebLink>();
+					MetadataAPI.readWebLinkResponse_element resp = new MetadataAPI.readWebLinkResponse_element();
+					resp.result = result;
+					response.put('response_x', resp);
+					responded = true;
+				}
+			}
+
+			if (!responded) {
+				baseMock.doInvoke(stub, request, response, endpoint, soapAction, requestName, responseNS, responseName,
+					responseType);
+			}
+		}
+	}
+
+	@IsTest
+	static void test_addSendButton_create() {
+		Test.setMock(WebServiceMock.class, new WebLinkNotFoundMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(MetadataService.addSendButton(
+				Lead.getSObjectType(),
+				UITheme.Theme.Other,
+				new List<Layout> {
+					new Layout(Lead.getSObjectType(), null, 'ns1', 'n1'),
+					new Layout(Lead.getSObjectType(), null, 'ns2', 'n2')
+				}));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addSendButton_classic() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(MetadataService.addSendButton(
+				Lead.getSObjectType(),
+				UITheme.Theme.Classic,
+				new List<Layout> {
+					new Layout(Lead.getSObjectType(), null, 'ns1', 'n1'),
+					new Layout(Lead.getSObjectType(), null, 'ns2', 'n2')
+				}));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addSendButton_lightning() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(MetadataService.addSendButton(
+				Lead.getSObjectType(),
+				UITheme.Theme.Lightning,
+				new List<Layout> {
+					new Layout(Lead.getSObjectType(), null, 'ns1', 'n1'),
+					new Layout(Lead.getSObjectType(), null, 'ns2', 'n2')
+				}));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeClassicButton() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		String webLinkApiName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
+		l1.fullName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l2 = new MetadataAPI.Layout();
+		l2.fullName = UUID.randomUUID().toString();
+		l2.customButtons = new List<String> { UUID.randomUUID().toString(), webLinkApiName };
+		MetadataAPI.Layout l3 = new MetadataAPI.Layout();
+		l3.fullName = UUID.randomUUID().toString();
+		l3.customButtons = new List<String> { UUID.randomUUID().toString() };
+
+		Test.startTest();
+		System.assert(MetadataService.removeClassicButton(webLinkApiName, new List<MetadataAPI.Layout> { l1, l2, l3 }));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_removeLightningButton() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		String webLinkApiName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
+		l1.fullName = UUID.randomUUID().toString();
+		MetadataAPI.Layout l2 = new MetadataAPI.Layout();
+		l2.fullName = UUID.randomUUID().toString();
+		MetadataAPI.PlatformActionListItem a1 = new MetadataAPI.PlatformActionListItem();
+		a1.actionName = UUID.randomUUID().toString();
+		MetadataAPI.PlatformActionListItem a2 = new MetadataAPI.PlatformActionListItem();
+		a2.actionName = webLinkApiName;
+		l2.platformActionList = new MetadataAPI.PlatformActionList();
+		l2.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { a1, a2 };
+		MetadataAPI.Layout l3 = new MetadataAPI.Layout();
+		l3.fullName = UUID.randomUUID().toString();
+		l3.platformActionList = new MetadataAPI.PlatformActionList();
+		l3.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { a1 };
+
+		Test.startTest();
+		System.assert(MetadataService.removeLightningButton(webLinkApiName, new List<MetadataAPI.Layout> { l1, l2, l3 }));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_removeSendButton_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.removeSendButton(null, null, null);
+				throw new AssertException('Expected removeSendButton to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeSendButton_invalid_arguments() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				MetadataService.removeSendButton(null, null, null);
+				throw new AssertException('Expected removeSendButton to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeSendButton_classic() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(MetadataService.removeSendButton(
+				Lead.getSObjectType(),
+				UITheme.Theme.Classic,
+				new List<Layout> {
+					new Layout(Lead.getSObjectType(), null, 'ns1', 'n1'),
+					new Layout(Lead.getSObjectType(), null, 'ns2', 'n2')
+				}));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeSendButton_lightning() {
+		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(MetadataService.removeSendButton(
+				Lead.getSObjectType(),
+				UITheme.Theme.Lightning,
+				new List<Layout> {
+					new Layout(Lead.getSObjectType(), null, 'ns1', 'n1'),
+					new Layout(Lead.getSObjectType(), null, 'ns2', 'n2')
+				}));
+			Test.stopTest();
+		}
+	}
+}
