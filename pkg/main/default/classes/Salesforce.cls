@@ -97,64 +97,6 @@ public with sharing class Salesforce {
 	public class MetadataApiNotSupportedException extends Exception {
 	}
 
-	public class MergeObject implements Comparable {
-		@AuraEnabled
-		public String name { get; private set; }
-		@AuraEnabled
-		public String label { get; private set; }
-		@AuraEnabled
-		public Boolean isUpdateable { get; private set; }
-
-		public MergeObject(final String name, final String label, final Boolean isUpdateable) {
-			this.name = name;
-			this.label = label;
-			this.isUpdateable = isUpdateable;
-		}
-
-		public Integer compareTo(final Object compareTo) {
-			MergeObject other = (MergeObject)compareTo;
-			if (this.label == other.label) return 0;
-			if (this.label > other.label) return 1;
-			return -1;
-		}
-	}
-
-	public class MergeField implements Comparable {
-		@AuraEnabled
-		public Integer level { get; private set; }
-		@AuraEnabled
-		public String type { get; private set; }
-		@AuraEnabled
-		public String name { get; private set; }
-		@AuraEnabled
-		public String label { get; private set; }
-		@AuraEnabled
-		public String reference { get; private set; }
-		@AuraEnabled
-		public List<String> picklistValues { get; private set; }
-		@AuraEnabled
-		public Boolean isUpdateable { get; private set; }
-
-		public MergeField(final Integer level, final String type, final String name, final String label,
-			final String reference, final List<String> picklistValues, final Boolean isUpdateable) {
-
-			this.level = level;
-			this.type = type;
-			this.name = name;
-			this.label = label;
-			this.reference = reference;
-			this.picklistValues = picklistValues == null ? new List<String>() : picklistValues;
-			this.isUpdateable = isUpdateable;
-		}
-
-		public Integer compareTo(final Object compareTo) {
-			MergeField other = (MergeField)compareTo;
-			if (this.label == other.label) return 0;
-			if (this.label > other.label) return 1;
-			return -1;
-		}
-	}
-
 	@TestVisible
 	private static Boolean isSObjectId(final String sObjectName, final Id sObjectId) {
 		if (String.isBlank(sObjectId)) return false;
@@ -196,6 +138,27 @@ public with sharing class Salesforce {
 		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
 		if (result == null) throw new DocuSignException(Label.InvalidType);
 
+		return result;
+	}
+
+	/**
+ 	 * Retrieves the name field for a Salesforce object type.
+ 	 *
+ 	 * @param type The Salesforce object type.
+ 	 *
+ 	 * @return The name field for the given object type.
+ 	 */
+	public static String getNameField(final SObjectType type) {
+		String result = null;
+		if (type != null) {
+			for (SObjectField field : type.getDescribe().fields.getMap().values()) {
+				DescribeFieldResult fieldDesc = field.getDescribe();
+				if (fieldDesc.isNameField()) {
+					result = fieldDesc.getName();
+					break;
+				}
+			}
+		}
 		return result;
 	}
 

@@ -17,10 +17,9 @@ private class MetadataControllerTest {
 
 	@IsTest
 	static void test_getSalesforceObjects_success() {
-		Test.setMock(HttpCalloutMock.class, new SalesforceAPIMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			MetadataController.SalesforceObjects result = MetadataController.getSalesforceObjects();
+			MetadataController.MergeObjects result = MetadataController.getSalesforceObjects();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

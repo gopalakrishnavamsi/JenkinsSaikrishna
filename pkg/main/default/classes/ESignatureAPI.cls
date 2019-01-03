@@ -13,6 +13,8 @@
  * 		log complete requests or responses as they may contain the above.
  * 	7) Avoid creating new callouts. First check if the information required is already returned by an existing API call.
  */
+// TODO: Rename ESignatureAPI to something more general.
+// TODO: Handle other base URLs.
 public with sharing virtual class ESignatureAPI extends RestAPI {
 
 	private static ESignatureAPI self = null;

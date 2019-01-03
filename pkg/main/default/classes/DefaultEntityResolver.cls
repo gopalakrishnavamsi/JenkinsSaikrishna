@@ -68,12 +68,16 @@ public with sharing class DefaultEntityResolver implements EntityResolver {
 					parent = c.Account == null ? null : new Entity(c.Account.Id, c.Account.Name, null);
 				}
 			} else {
-				Permissions.verifyIsQueryable(type, new List<String> { 'Id', 'Name' });
+				String nameField = Salesforce.getNameField(type);
+				Permissions.verifyIsQueryable(type, new List<String> { 'Id', nameField });
 
-				List<SObject> objs = System.Database.query('SELECT Id, Name FROM ' + String.escapeSingleQuotes(type.getDescribe().getName())
-					+ ' WHERE Id = :id LIMIT 1');
+				List<SObject> objs = System.Database.query(String.format(
+					'SELECT Id, {0} FROM {1} WHERE Id = :id LIMIT 1', new List<String> {
+						nameField,
+						String.valueOf(type)
+					}));
 				if (Collection.isNotEmpty(objs)) {
-					name = (String)objs[0].get('Name');
+					name = (String)objs[0].get(nameField);
 				}
 			}
 

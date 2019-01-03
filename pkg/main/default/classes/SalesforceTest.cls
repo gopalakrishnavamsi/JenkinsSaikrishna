@@ -70,52 +70,6 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_MergeObject() {
-		Salesforce.MergeObject mo1 = new Salesforce.MergeObject('A', null, true);
-		Salesforce.MergeObject mo2 = new Salesforce.MergeObject('B', '', true);
-		Salesforce.MergeObject mo3 = new Salesforce.MergeObject('C', ' ', true);
-		Salesforce.MergeObject mo4 = new Salesforce.MergeObject('A', 'Object A', true);
-		Salesforce.MergeObject mo5 = new Salesforce.MergeObject('A', 'Object A', true);
-		Salesforce.MergeObject mo6 = new Salesforce.MergeObject('B', 'Object B', true);
-		Salesforce.MergeObject mo7 = new Salesforce.MergeObject('C', 'Object C', true);
-		List<Salesforce.MergeObject> mos1 = new List<Salesforce.MergeObject> {
-			mo1, mo2, mo3, mo4, mo5, mo6, mo7
-		};
-		List<Salesforce.MergeObject> mos2 = new List<Salesforce.MergeObject> {
-			mo3, mo4, mo1, mo7, mo6, mo2, mo5
-		};
-
-		Test.startTest();
-		mos2.sort();
-		Test.stopTest();
-
-		System.assertEquals(mos1, mos2);
-	}
-
-	@IsTest
-	static void test_MergeField() {
-		Salesforce.MergeField mf1 = new Salesforce.MergeField(1, 'A', 'A', null, null, null, false);
-		Salesforce.MergeField mf2 = new Salesforce.MergeField(1, 'B', 'B', '', null, null, false);
-		Salesforce.MergeField mf3 = new Salesforce.MergeField(1, 'C', 'C', ' ', null, null, false);
-		Salesforce.MergeField mf4 = new Salesforce.MergeField(1, 'A', 'A', 'Field A', null, null, false);
-		Salesforce.MergeField mf5 = new Salesforce.MergeField(1, 'A', 'A', 'Field A', null, null, false);
-		Salesforce.MergeField mf6 = new Salesforce.MergeField(1, 'B', 'B', 'Field B', null, null, false);
-		Salesforce.MergeField mf7 = new Salesforce.MergeField(1, 'C', 'C', 'Field C', null, null, false);
-		List<Salesforce.MergeField> mfs1 = new List<Salesforce.MergeField> {
-			mf1, mf2, mf3, mf4, mf5, mf6, mf7
-		};
-		List<Salesforce.MergeField> mfs2 = new List<Salesforce.MergeField> {
-			mf3, mf4, mf1, mf7, mf6, mf2, mf5
-		};
-
-		Test.startTest();
-		mfs2.sort();
-		Test.stopTest();
-
-		System.assertEquals(mfs1, mfs2);
-	}
-
-	@IsTest
 	static void test_isSObjectId() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
@@ -176,6 +130,13 @@ private class SalesforceTest {
 		System.assertEquals(Contact.getSObjectType(), Salesforce.getSObjectType('CONTACT'));
 		System.assertEquals(Envelope__c.getSObjectType(), Salesforce.getSObjectType('Envelope__c'));
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getNameField() {
+		System.assertEquals(null, Salesforce.getNameField(null));
+		System.assertEquals('Name', Salesforce.getNameField(Opportunity.getSObjectType()));
+		System.assertEquals('CaseNumber', Salesforce.getNameField(Case.getSObjectType()));
 	}
 
 	@IsTest

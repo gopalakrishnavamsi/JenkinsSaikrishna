@@ -1,12 +1,12 @@
 public with sharing class MetadataController {
 
-	public class SalesforceObjects {
-		public List<Salesforce.MergeObject> common { get; private set; }
-		public List<Salesforce.MergeObject> all { get; private set; }
+	public class MergeObjects {
+		public List<MergeObject> common { get; private set; }
+		public List<MergeObject> all { get; private set; }
 
-		private SalesforceObjects(
-			final List<Salesforce.MergeObject> common,
-			final List<Salesforce.MergeObject> all) {
+		private MergeObjects(
+			final List<MergeObject> common,
+			final List<MergeObject> all) {
 
 			this.common = common;
 			this.all = all;
@@ -14,11 +14,11 @@ public with sharing class MetadataController {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static SalesforceObjects getSalesforceObjects() {
+	public static MergeObjects getSalesforceObjects() {
 		try {
-			return new SalesforceObjects(
+			return new MergeObjects(
 				MetadataService.getCommonObjects(),
-				MetadataService.getAllObjects());
+				MetadataService.getObjects());
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve Salesforce objects');
 		}

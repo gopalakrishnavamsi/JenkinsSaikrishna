@@ -9,15 +9,15 @@ public with sharing class MetadataService {
 	 *
 	 * @return The Salesforce objects.
 	 */
-	public static List<Salesforce.MergeObject> getCommonObjects() {
+	public static List<MergeObject> getCommonObjects() {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		return new List<Salesforce.MergeObject> {
-			new Salesforce.MergeObject('Account', Schema.Account.getSObjectType().getDescribe().getLabel(), false),
-			new Salesforce.MergeObject('Case', Case.getSObjectType().getDescribe().getLabel(), false),
-			new Salesforce.MergeObject('Contact', Contact.getSObjectType().getDescribe().getLabel(), false),
-			new Salesforce.MergeObject('Lead', Lead.getSObjectType().getDescribe().getLabel(), false),
-			new Salesforce.MergeObject('Opportunity', Opportunity.getSObjectType().getDescribe().getLabel(), false)
+		return new List<MergeObject> {
+			MergeObject.forType(Schema.Account.getSObjectType()),
+			MergeObject.forType(Schema.Case.getSObjectType()),
+			MergeObject.forType(Schema.Contact.getSObjectType()),
+			MergeObject.forType(Schema.Lead.getSObjectType()),
+			MergeObject.forType(Schema.Opportunity.getSObjectType())
 		};
 	}
 
@@ -28,11 +28,48 @@ public with sharing class MetadataService {
 	 *
 	 * @return The Salesforce objects.
 	 */
-	public static List<Salesforce.MergeObject> getAllObjects() {
+	public static List<MergeObject> getObjects() {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		List<Salesforce.MergeObject> result = SalesforceAPI.getInstance().getMergeObjects();
-		if (result != null) result.sort();
+		List<MergeObject> result = new List<MergeObject>();
+		for (Schema.SObjectType type : Schema.getGlobalDescribe().values()) {
+			if (MergeObject.isValid(type)) {
+				result.add(MergeObject.forType(type));
+			}
+		}
+		result.sort();
+		return result;
+	}
+
+	private static List<MergeField> getChildRelationships(final DescribeSObjectResult type) {
+		List<MergeField> result = new List<MergeField>();
+		for (Schema.ChildRelationship cr : type.getChildRelationships()) {
+			if (MergeField.isValid(cr)) result.add(MergeField.forChildRelationship(cr));
+		}
+		return result;
+	}
+
+	private static List<MergeField> getFields(final DescribeSObjectResult type) {
+		List<MergeField> result = new List<MergeField>();
+		if (MergeObject.isValid(type)) {
+			for (SObjectField f : type.fields.getMap().values()) {
+				DescribeFieldResult field = f.getDescribe();
+				if (MergeField.isValid(field)) result.add(MergeField.forField(field));
+			}
+		}
+		return result;
+	}
+
+	public static List<MergeField> getFields(final SObjectType type) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		DescribeSObjectResult typeDesc = type.getDescribe();
+		List<MergeField> result = getFields(typeDesc);
+		result.addAll(getChildRelationships(typeDesc));
+		result.sort();
+
 		return result;
 	}
 
