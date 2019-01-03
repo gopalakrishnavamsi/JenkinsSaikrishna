@@ -37,12 +37,16 @@ pipeline {
                 sh "sfdx force:user:permset:assign -n DocuSign_Administrator -u scratchorg"
 
                 echo "Run tests"
+
+                sh "sfdx force:apex:test:run -c -r human -w 5"
+
                 sh "mkdir -p ${WORKSPACE}/richtest"
                 sh "mkdir -p ${WORKSPACE}/sonartest"
                 //sh "sfdx force:apex:test:run -c -r human -w 5 --outputdir ${WORKSPACE}/richtest"
+
                 echo "RUN JSON TEST OUT"
-                sh "sfdx force:apex:test:run -c -d ${WORKSPACE}/sonartest -r json --wait 5"
-                               echo "RUN JSON TEST OUT"
+               // sh "sfdx force:apex:test:run -c -d ${WORKSPACE}/sonartest -r json --wait 5"
+                               //echo "RUN JSON TEST OUT"
 
                 sh "ls -ltra ${WORKSPACE}/richtest"
 
@@ -52,7 +56,7 @@ pipeline {
             steps {
 echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
             }
-        }        
+        }
     }
     post {
         always {
@@ -67,7 +71,7 @@ echo "***DEBUG*** WORKSPACE is ${WORKSPACE}"
                 sh "sfdx force:org:open --urlonly"
 
         }
-    }        
+    }
 
 
 }
