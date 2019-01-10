@@ -351,4 +351,41 @@ global class TestUtils {
 		generateKey();
 		return SecureUtils.encrypt(generateNonce() + '|https://unit.test.docusign.net/');
 	}
+
+	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {
+		GenTemplate__c t = new GenTemplate__c(
+			Name = randomString(10),
+			HasPreviewedDocuments__c = false,
+			IsSample__c = false,
+			ObjectMappings__c = '{}', // TODO: Use realistic data.
+			SignerMappings__c = '{}', // TODO: Use realistic data.
+			SourceObject__c = String.valueOf(sourceType),
+			StepsCompleted__c = 1,
+			UseAllTemplates__c = true,
+			UseCurrentRecord__c = true);
+		insert t;
+		return t;
+	}
+
+	public static ContentVersion createGenFile(final Id templateId) {
+		String title = randomString(10);
+		ContentVersion cv = new ContentVersion(
+			Title = title,
+			PathOnClient = title + '.docx',
+			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
+			IsMajorVersion = false,
+			GeneratedFileFormat__c = 'Word',
+			GeneratedFileName__c = title,
+			GeneratedFileSuffix__c = 'name');
+		insert cv;
+		cv = [
+			SELECT Id, ContentDocumentId, Title, ContentSize, FileExtension,
+				GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+			FROM ContentVersion
+			WHERE Id = :cv.Id
+			LIMIT 1
+		];
+		createContentDocumentLink(templateId, cv);
+		return cv;
+	}
 }

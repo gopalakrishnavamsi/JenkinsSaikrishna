@@ -103,7 +103,7 @@ global virtual class APIError {
 	 *
 	 * @return The API error <code>description</code>.
 	 */
-	override public String toString() {
+	override public virtual String toString() {
 		return this.description;
 	}
 }

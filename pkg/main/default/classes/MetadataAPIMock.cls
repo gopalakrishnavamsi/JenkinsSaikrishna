@@ -132,4 +132,8 @@ public class MetadataAPIMock implements WebServiceMock {
 			response.put('response_x', new MetadataAPI.deleteMetadataResponse_element());
 		}
 	}
+
+	public static MetadataAPIMock success() {
+		return (MetadataAPIMock)TestUtils.setMock(new MetadataAPIMock());
+	}
 }

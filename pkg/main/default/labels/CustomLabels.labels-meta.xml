@@ -4539,4 +4539,74 @@
         <shortDescription>Invalid layout</shortDescription>
         <value>One or more layouts does not match the supplied source type.</value>
     </labels>
+    <labels>
+        <fullName>FailedToCloneGenTemplate_1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Failed to clone Gen template</shortDescription>
+        <value>Failed to clone template {0}.</value>
+    </labels>
+    <labels>
+        <fullName>GenTemplateNotFound</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Gen template not found</shortDescription>
+        <value>Template not found.</value>
+    </labels>
+    <labels>
+        <fullName>GenTemplateCopyName_2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Gen template copy</shortDescription>
+        <value>{0} (copy {1})</value>
+    </labels>
+    <labels>
+        <fullName>Untitled</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Untitled</shortDescription>
+        <value>Untitled</value>
+    </labels>
+    <labels>
+        <fullName>MaxObjectDepthExceeded</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Max object depth exceeded</shortDescription>
+        <value>The maximum object depth has been exceeded.</value>
+    </labels>
+    <labels>
+        <fullName>Queued</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Queued</shortDescription>
+        <value>Queued</value>
+    </labels>
+    <labels>
+        <fullName>Failure</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Failure</shortDescription>
+        <value>Failure</value>
+    </labels>
+	<labels>
+		<fullName>Success</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Success</shortDescription>
+		<value>Success</value>
+	</labels>
+	<labels>
+		<fullName>GenApiError_3</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Gen API error</shortDescription>
+		<value>[{0}] {1}\nReference ID: {2}</value>
+	</labels>
+    <labels>
+        <fullName>InvalidGenQuery</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid Gen query</shortDescription>
+        <value>Query is invalid.</value>
+    </labels>
 </CustomLabels>

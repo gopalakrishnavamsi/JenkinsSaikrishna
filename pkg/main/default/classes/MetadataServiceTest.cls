@@ -25,12 +25,12 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_getAllObjects_unauthorized() {
+	static void test_getObjects_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.getAllObjects();
-				throw new AssertException('Expected getAllObjects to fail');
+				MetadataService.getObjects();
+				throw new AssertException('Expected getObjects to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -39,12 +39,36 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_getAllObjects_success() {
-		Test.setMock(HttpCalloutMock.class, new SalesforceAPIMock());
+	static void test_getObjects_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			System.assert(Collection.isNotEmpty(MetadataService.getAllObjects()));
+			System.assert(Collection.isNotEmpty(MetadataService.getObjects()));
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getFields_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getFields((SObjectType)null);
+				throw new AssertException('Expected getFields to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getFields_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType());
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+			// TODO: Verify merge fields. Difficult as we cannot control the schema entirely.
 		}
 	}
 

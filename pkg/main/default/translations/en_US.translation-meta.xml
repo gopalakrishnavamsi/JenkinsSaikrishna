@@ -2446,6 +2446,46 @@
         <label>One or more layouts does not match the supplied source type.</label>
         <name>InvalidLayout</name>
     </customLabels>
+	<customLabels>
+		<label>Failed to clone template {0}.</label>
+		<name>FailedToCloneGenTemplate_1</name>
+	</customLabels>
+    <customLabels>
+        <label>Template not found.</label>
+        <name>GenTemplateNotFound</name>
+    </customLabels>
+    <customLabels>
+        <label>{0} (copy {1})</label>
+        <name>GenTemplateCopyName_2</name>
+    </customLabels>
+    <customLabels>
+        <label>Untitled</label>
+        <name>Untitled</name>
+    </customLabels>
+    <customLabels>
+        <label>The maximum object depth has been exceeded.</label>
+        <name>MaxObjectDepthExceeded</name>
+    </customLabels>
+    <customLabels>
+        <label>Queued</label>
+        <name>Queued</name>
+    </customLabels>
+    <customLabels>
+        <label>Failure</label>
+        <name>Failure</name>
+    </customLabels>
+    <customLabels>
+        <label>Success</label>
+        <name>Success</name>
+    </customLabels>
+    <customLabels>
+        <label>[{0}] {1}\nReference ID: {2}</label>
+        <name>GenApiError_3</name>
+    </customLabels>
+    <customLabels>
+        <label>Query is invalid.</label>
+        <name>InvalidGenQuery</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

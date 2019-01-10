@@ -10,7 +10,7 @@
  * Example:
  * <pre>
  * static testMethod void myTest() {
- *   Test.setMock(HttpCalloutMock.class, new dfsle.ESignatureAPIMock());
+ *   dfsle.ESignatureAPIMock().success();
  *   System.runAs(dfsle.UserMock.createDocuSignUser()) {
  *     // Call DocuSign for Salesforce service methods
  *   }
@@ -908,5 +908,25 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 		response.setBody(resp.body);
 
 		return response;
+	}
+
+	/**
+	 * Factory constructor for the DocuSign eSignature REST API with success responses. This also sets the test mock
+	 * via <code>Test.setMock</code>.
+	 *
+	 * @return The success API test mock.
+	 */
+	global static ESignatureAPIMock success() {
+		return (ESignatureAPIMock)TestUtils.setMock(new ESignatureAPIMock(true));
+	}
+
+	/**
+	 * Factory constructor for the DocuSign eSignature REST API with failure responses. This also sets the test mock
+	 * via <code>Test.setMock</code>.
+	 *
+	 * @return The failure API test mock.
+	 */
+	global static ESignatureAPIMock failure() {
+		return (ESignatureAPIMock)TestUtils.setMock(new ESignatureAPIMock(false));
 	}
 }
