@@ -2486,6 +2486,14 @@
         <label>Query is invalid.</label>
         <name>InvalidGenQuery</name>
     </customLabels>
+    <customLabels>
+        <label>DocuSign Account Service</label>
+        <name>AccountServiceDescription</name>
+    </customLabels>
+	<customLabels>
+		<label>DocuSign ESignature Service</label>
+		<name>ESignatureServiceDescription</name>
+	</customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

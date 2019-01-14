@@ -25,7 +25,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 				[
 					SELECT NotificationEmail__c
 					FROM Organization__mdt
-					WHERE DeveloperName = 'SecureSettings'
+					WHERE DeveloperName = 'Default'
 					LIMIT 1
 				].NotificationEmail__c
 			};

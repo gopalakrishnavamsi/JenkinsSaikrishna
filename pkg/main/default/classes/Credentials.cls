@@ -147,6 +147,14 @@ public with sharing class Credentials {
 		final Boolean canManageAccount,
 		final AccessToken token) {
 
+		// Create necessary remote sites
+		MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
+			MetadataService.newRemoteSite(
+				environment,
+				'eSignature',
+				Label.ESignatureServiceDescription,
+				eSignatureBaseUrl)
+		});
 		return save(
 			UserInfo.getUserId(),
 			environment,
@@ -394,6 +402,8 @@ public with sharing class Credentials {
 
 	@TestVisible
 	private with sharing class Database {
+
+
 
 		public AccountCredentials queryAccountCredentials() {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();

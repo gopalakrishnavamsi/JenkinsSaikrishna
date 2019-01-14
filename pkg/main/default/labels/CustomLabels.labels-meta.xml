@@ -4609,4 +4609,18 @@
         <shortDescription>Invalid Gen query</shortDescription>
         <value>Query is invalid.</value>
     </labels>
+    <labels>
+        <fullName>AccountServiceDescription</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSign Account Service</shortDescription>
+        <value>DocuSign Account Service</value>
+    </labels>
+    <labels>
+        <fullName>ESignatureServiceDescription</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSign ESignature Service</shortDescription>
+        <value>DocuSign ESignature Service</value>
+    </labels>
 </CustomLabels>

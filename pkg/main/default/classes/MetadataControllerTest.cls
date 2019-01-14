@@ -44,7 +44,7 @@ private class MetadataControllerTest {
 
 	@IsTest
 	static void test_getLayouts_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			List<Layout> result = MetadataController.getLayouts('Contact');
@@ -70,7 +70,7 @@ private class MetadataControllerTest {
 
 	@IsTest
 	static void test_addSendButton_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			List<Layout> layouts = new List<Layout> {
 				new Layout(Schema.Account.getSObjectType(), null, 'ns', 'n')
@@ -100,7 +100,7 @@ private class MetadataControllerTest {
 
 	@IsTest
 	static void test_removeSendButton_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			List<Layout> layouts = new List<Layout> {
 				new Layout(Schema.Account.getSObjectType(), null, 'ns', 'n')

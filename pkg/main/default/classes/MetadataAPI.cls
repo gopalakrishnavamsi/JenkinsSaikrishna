@@ -582,6 +582,30 @@ public class MetadataAPI {
 		private String[] apex_schema_type_info = new String[] { 'http://soap.sforce.com/2006/04/metadata', 'true', 'false' };
 		private String[] field_order_type_info = new String[] { 'result' };
 	}
+	public class ReadRemoteSiteSettingResult implements IReadResult {
+		public MetadataAPI.RemoteSiteSetting[] records;
+		public MetadataAPI.Metadata[] getRecords() {
+			List<MetadataAPI.RemoteSiteSetting> rss = new List<MetadataAPI.RemoteSiteSetting>();
+			if (Collection.isNotEmpty(records)) {
+				for (MetadataAPI.RemoteSiteSetting rs : records) {
+					if (String.isNotBlank(rs.fullName)) rss.add(rs);
+				}
+			}
+			return rss;
+		}
+		private String[] records_type_info = new String[] { 'records', 'http://soap.sforce.com/2006/04/metadata', null, '0', '-1', 'false' };
+		private String[] apex_schema_type_info = new String[] { 'http://soap.sforce.com/2006/04/metadata', 'true', 'false' };
+		private String[] field_order_type_info = new String[] { 'records' };
+	}
+	public class readRemoteSiteSettingResponse_element implements IReadResponseElement {
+		public MetadataAPI.ReadRemoteSiteSettingResult result;
+		public IReadResult getResult() {
+			return result;
+		}
+		private String[] result_type_info = new String[] { 'result', 'http://soap.sforce.com/2006/04/metadata', null, '1', '1', 'false' };
+		private String[] apex_schema_type_info = new String[] { 'http://soap.sforce.com/2006/04/metadata', 'true', 'false' };
+		private String[] field_order_type_info = new String[] { 'result' };
+	}
 	public class ReadSecuritySettingsResult implements IReadResult {
 		public MetadataAPI.SecuritySettings[] records;
 		public MetadataAPI.Metadata[] getRecords() {
@@ -1067,7 +1091,7 @@ public class MetadataAPI {
 			client.CallOptions.client = [
 				SELECT SoapClientId__c
 				FROM Organization__mdt
-				WHERE DeveloperName = 'SecureSettings'
+				WHERE DeveloperName = 'Default'
 				LIMIT 1
 			].SoapClientId__c;
 		}

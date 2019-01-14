@@ -150,7 +150,8 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_completeOAuth_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		ESignatureAPIMock.success();
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
 
@@ -179,7 +180,8 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_selectAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		ESignatureAPIMock.success();
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			String userId = [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Username__c;
 			Long accountNumber = (Long)AccountSettings__c.getOrgDefaults().AccountNumber__c;
@@ -195,8 +197,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
+		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Account result = SetupController.getAccount();

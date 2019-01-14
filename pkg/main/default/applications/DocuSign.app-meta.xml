@@ -6,16 +6,17 @@
         <logoVersion>1</logoVersion>
         <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
     </brand>
-    <defaultLandingTab>Setup</defaultLandingTab>
-    <description>Configure DocuSign and manage envelope records</description>
+    <defaultLandingTab>dfsle__Setup</defaultLandingTab>
+    <description>Configure DocuSign Gen and eSignature</description>
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
-    <label>DocuSign for Salesforce Essentials</label>
+    <label>DocuSign</label>
     <navType>Standard</navType>
-    <tabs>Setup</tabs>
-    <tabs>Envelope__c</tabs>
-    <tabs>EnvelopeStatus__c</tabs>
+    <tabs>dfsle__Setup</tabs>
+    <tabs>dfsle__GenTemplate__c</tabs>
+    <tabs>dfsle__Envelope__c</tabs>
+    <tabs>dfsle__EnvelopeStatus__c</tabs>
     <tabs>standard-Account</tabs>
     <tabs>standard-Case</tabs>
     <tabs>standard-Contact</tabs>

@@ -120,13 +120,17 @@ public with sharing class AuthService {
 			})));
 		}
 
-		public Credentials.AccessToken exchangeCode(final String authorizationCode) {
+		public Credentials.AccessToken exchangeCode(
+			final String authorizationCode,
+			final String clientId,
+			final String clientSecret) {
+
 			Response response = super.post(
 				this.baseUrl,
 				new List<Object> { 'oauth', 'token' },
 				QueryString.empty,
 				new Map<String, String> {
-					'Authorization' => this.getBasicAuthHeader(CLIENT_ID, CLIENT_SECRET),
+					'Authorization' => this.getBasicAuthHeader(clientId, clientSecret),
 					'Content-Type' => 'application/x-www-form-urlencoded'
 				},
 				'grant_type=authorization_code&code=' + authorizationCode,
@@ -175,31 +179,20 @@ public with sharing class AuthService {
 		}
 	}
 
-	@TestVisible
-	private static final String CLIENT_ID;
-	private static final String CLIENT_SECRET;
-	@TestVisible
-	private static final Blob SIGNING_KEY;
 	private static final LoggerService LOG = LoggerService.getInstance();
 	@TestVisible
 	private static final String JWT_HEADER;
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
+	private static Map<DocuSign.Environment, ClientCredentials> clientCredentials
+		= new Map<DocuSign.Environment, ClientCredentials>();
+	private static DocuSign.Environment currentEnvironment;
 
 	static {
 		JWT_HEADER = base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, String> {
 			'typ' => 'JWT',
 			'alg' => 'RS256'
 		})));
-		Organization__mdt ss = [
-			SELECT ClientId__c, ClientSecret__c, RsaPrivateKey__c
-			FROM Organization__mdt
-			WHERE DeveloperName = 'SecureSettings'
-			LIMIT 1
-		];
-		CLIENT_ID = ss.ClientId__c;
-		CLIENT_SECRET = ss.ClientSecret__c;
-		SIGNING_KEY = EncodingUtil.base64Decode(ss.RsaPrivateKey__c);
 	}
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
@@ -212,11 +205,13 @@ public with sharing class AuthService {
 	@TestVisible
 	private static String generateJwt(
 		final String host,
-		final UUID userId) {
+		final UUID userId,
+		final String clientId,
+		final Blob jwtSigningKey) {
 
 		// TODO: Add admin, Gen, Package B, SCM scopes
 		String payload = base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, Object> {
-			'iss' => CLIENT_ID,
+			'iss' => clientId,
 			'sub' => String.valueOf(userId),
 			'iat' => Datetime.now().getTime() / 1000,
 			'exp' => Datetime.now().addHours(1).getTime() / 1000,
@@ -225,24 +220,39 @@ public with sharing class AuthService {
 		})));
 
 		String signature = base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(JWT_HEADER + '.' + payload),
-			SIGNING_KEY));
+			jwtSigningKey));
 
 		return JWT_HEADER + '.' + payload + '.' + signature;
 	}
 
+	@TestVisible
+	private static DocuSign.Environment getCurrentEnvironment() {
+		if (currentEnvironment == null) {
+			currentEnvironment = DocuSign.parseEnvironment(AccountSettings__c.getOrgDefaults().Environment__c);
+		}
+		return currentEnvironment;
+	}
+
 	public static String getAccessToken() {
-		return getAccessToken(Credentials.getInstance());
+		ClientCredentials ccs = getClientCredentials(getCurrentEnvironment(), null);
+		return getAccessToken(Credentials.getInstance(), ccs.clientId, ccs.jwtSigningKey);
 	}
 
 	@TestVisible
-	private static String getAccessToken(final Credentials creds) {
+	private static String getAccessToken(
+		final Credentials creds,
+		final String clientId,
+		final Blob jwtSigningKey) {
+
 		if (creds == null || !creds.isValid) throw new DocuSignException(Label.AccountNotConfigured);
 
 		if (creds.isTokenValid) return creds.token.token;
 
 		Credentials.AccessToken token = getAuthAPI(creds.accountBaseUrl).exchangeJwt(generateJwt(
 			creds.accountBaseUrl.getHost(),
-			creds.userId));
+			creds.userId,
+			clientId,
+			jwtSigningKey));
 
 		Credentials.setToken(token);
 		return token.token;
@@ -263,25 +273,88 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
-	private static Url getAuthBaseUrl(
-		final DocuSign.Environment environment,
-		final Url otherUrl) {
-
-		if (!DocuSign.isValidEnvironment(environment, otherUrl)) {
-			LOG.error('Invalid DocuSign environment: ' + (environment == null ? 'null' : environment.name()) + ' => '
-				+ (otherUrl == null ? 'null' : otherUrl.toExternalForm()));
-			throw new DocuSignException(Label.InvalidEnvironment);
-		}
-		return otherUrl == null ? DocuSign.getAuthBaseUrl(environment) : otherUrl;
-	}
-
-	@TestVisible
 	private static String generateNonce() {
 		String nonce = UUID.randomUUID().toShortString();
 		UserSettings__c settings = UserSettings__c.getInstance();
 		settings.Nonce__c = nonce;
 		upsert settings;
 		return nonce;
+	}
+
+	@TestVisible
+	private class ClientCredentials {
+
+		public DocuSign.Environment environment { get; private set; }
+		public Url baseUrl { get; private set; }
+		public String clientId { get; private set; }
+		public String clientSecret { get; private set; }
+		public Blob jwtSigningKey { get; private set; }
+
+		public ClientCredentials(
+			final DocuSign.Environment environment,
+			final Url baseUrl,
+			final String clientId,
+			final String clientSecret,
+			final Blob jwtSigningKey) {
+
+			this.environment = environment;
+			this.baseUrl = baseUrl;
+			this.clientId = clientId;
+			this.clientSecret = clientSecret;
+			this.jwtSigningKey = jwtSigningKey;
+		}
+	}
+
+	@TestVisible
+	private static ClientCredentials convert(
+		final DocuSign.Environment environment,
+		final Environment__mdt metadata,
+		final Url otherUrl) {
+
+		if (environment == null) throw new DocuSignException(Label.InvalidEnvironment);
+
+		return new ClientCredentials(
+			environment,
+			environment == DocuSign.Environment.Other && otherUrl != null
+				? otherUrl : new Url(metadata.AccountBaseUrl__c),
+			metadata.ClientId__c,
+			metadata.ClientSecret__c,
+			EncodingUtil.base64Decode(metadata.JwtSigningKey__c));
+	}
+
+	@TestVisible
+	private static String getQueryEnvironment(final DocuSign.Environment environment) {
+		if (environment != null
+			&& environment != DocuSign.Environment.Invalid
+			&& environment != DocuSign.Environment.Other) {
+
+			return environment.name();
+		}
+		return 'Production';
+	}
+
+	@TestVisible
+	private static ClientCredentials getClientCredentials(
+		final DocuSign.Environment environment,
+		final Url otherUrl) {
+
+		// Default to prod environment
+		DocuSign.Environment env = DocuSign.isValidEnvironment(environment, otherUrl)
+			? environment : DocuSign.Environment.Production;
+		ClientCredentials result = clientCredentials.get(env);
+		if (result == null) {
+			result = convert(
+				env,
+				(Environment__mdt)Collection.head([
+					SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+					FROM Environment__mdt
+					WHERE DeveloperName = :getQueryEnvironment(env)
+					LIMIT 1
+				]),
+				otherUrl);
+			clientCredentials.put(env, result);
+		}
+		return result;
 	}
 
 	/**
@@ -301,29 +374,35 @@ public with sharing class AuthService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		// 1) Parse valid DocuSign environment.
-		Url baseUrl = getAuthBaseUrl(environment, otherUrl);
+		if (!DocuSign.isValidEnvironment(environment, otherUrl)) throw new DocuSignException(Label.InvalidEnvironment);
+
+		// 1) Retrieve client credentials.
+		ClientCredentials cc = getClientCredentials(environment, otherUrl);
 
 		// 2) Build login URL
-		PageReference pg = new PageReference(new Url(baseUrl, '/oauth/auth').toExternalForm());
+		PageReference pg = new PageReference(new Url(cc.baseUrl, '/oauth/auth').toExternalForm());
 		pg.getParameters().putAll(new Map<String, String> {
 			'response_type' => 'code',
 			'scope' => 'signature impersonation',
-			'client_id' => CLIENT_ID,
+			'client_id' => cc.clientId,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
-			'state' => encodeState(generateNonce(), baseUrl)
+			'state' => encodeState(generateNonce(), cc.environment, cc.baseUrl)
 		});
 		return new Url(pg.getUrl());
 	}
 
 	@TestVisible
-	private static String encodeState(final String nonce, final Url baseUrl) {
-		return SecureUtils.encrypt(nonce + '|' + baseUrl.toExternalForm());
+	private static String encodeState(
+		final String nonce,
+		final DocuSign.Environment environment,
+		final Url baseUrl) {
+
+		return SecureUtils.encrypt(nonce + '|' + environment.name() + '|' + baseUrl.toExternalForm());
 	}
 
 	@TestVisible
-	private static Url decodeState(final String state, final String nonce) {
+	private static ClientCredentials decodeState(final String state, final String nonce) {
 		// 1) Verify state is non-blank.
 		if (String.isBlank(state)) {
 			LOG.error('OAuth state is blank');
@@ -339,9 +418,9 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 3) Verify 2 state tokens
+		// 3) Verify 3 state tokens
 		List<String> toks = decrypted.split('\\|');
-		if (Collection.size(toks) != 2) {
+		if (Collection.size(toks) != 3) {
 			LOG.error('Unexpected state: ' + decrypted);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
@@ -352,22 +431,29 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 5) Verify URL format
-		Url baseUrl;
-		try {
-			baseUrl = new Url(toks[1]);
-		} catch (Exception ex) {
-			LOG.exception(ex, 'Invalid base URL: ' + toks[1]);
+		// 5) Verify DocuSign environment
+		DocuSign.Environment environment = DocuSign.parseEnvironment(toks[1]);
+		if (environment == null || environment == DocuSign.Environment.Invalid) {
+			LOG.error('Invalid DocuSign environment: ' + toks[1]);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 6) Verify whitelisted DocuSign URL
+		// 6) Verify URL format
+		Url baseUrl;
+		try {
+			baseUrl = new Url(toks[2]);
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Invalid base URL: ' + toks[2]);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 7) Verify whitelisted DocuSign URL
 		if (!DocuSign.isValidUrl(baseUrl)) {
 			LOG.error('Invalid DocuSign base URL: ' + baseUrl.toExternalForm());
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		return baseUrl;
+		return getClientCredentials(environment, baseUrl);
 	}
 
 	/**
@@ -396,17 +482,26 @@ public with sharing class AuthService {
 		Credentials.AccessToken accessToken;
 		UserSettings__c s = UserSettings__c.getInstance();
 		try {
-			// 1) Parse URL from state
-			Url baseUrl = decodeState(state, s.Nonce__c);
+			// 1) Parse state and retrieve client credentials
+			ClientCredentials cc = decodeState(state, s.Nonce__c);
+
+			// 2) Create Account Server remote site
+			MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
+				MetadataService.newRemoteSite(
+					cc.environment,
+					'Auth',
+					Label.AccountServiceDescription,
+					cc.baseUrl)
+			});
 
 			// 2) Get accounts associated with login
-			AuthService.AuthAPI client = getAuthAPI(baseUrl);
-			accessToken = client.exchangeCode(authorizationCode);
+			AuthService.AuthAPI client = getAuthAPI(cc.baseUrl);
+			accessToken = client.exchangeCode(authorizationCode, cc.clientId, cc.clientSecret);
 			LoginInformation result = client.getLoginInformation(accessToken.token);
 			if (result == null || result.status == LoginInformation.LoginStatus.Failure.name()) {
 				LOG.warn('No valid accounts for user '
 					+ (result == null ? 'UNKNOWN' : result.email + '. Login URL = '
-					+ baseUrl.toExternalForm()));
+					+ cc.baseUrl.toExternalForm()));
 				throw new DocuSignException(Label.NoValidAccounts);
 			}
 
@@ -414,8 +509,8 @@ public with sharing class AuthService {
 			if (result.status == LoginInformation.LoginStatus.Success.name()) {
 				LoginInformation.Account a = result.accounts[0];
 				Credentials.save(
-					DocuSign.getEnvironment(baseUrl),
-					baseUrl,
+					cc.environment,
+					cc.baseUrl,
 					new Url(a.baseUrl),
 					a.id,
 					a.accountNumber,
@@ -443,23 +538,32 @@ public with sharing class AuthService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Url baseUrl = getAuthBaseUrl(environment, otherUrl);
+		if (!DocuSign.isValidEnvironment(environment, otherUrl)) {
+			LOG.error('Invalid DocuSign environment: ' + (environment == null ? 'null' : environment.name()) + ' => '
+				+ (otherUrl == null ? 'null' : otherUrl.toExternalForm()));
+			throw new DocuSignException(Label.InvalidEnvironment);
+		}
 
 		if (selectedAccountNumber == null || selectedAccountNumber <= 0L) {
 			throw new DocuSignException(Label.InvalidAccount);
 		}
 
-		AuthAPI client = getAuthAPI(baseUrl);
+		ClientCredentials cc = getClientCredentials(environment, otherUrl);
 		Credentials.AccessToken token = Credentials.getToken();
 		if (token == null) {
-			token = client.exchangeJwt(generateJwt(baseUrl.getHost(), userId));
+			token = getAuthAPI(cc.baseUrl)
+				.exchangeJwt(generateJwt(
+					cc.baseUrl.getHost(),
+					userId,
+					cc.clientId,
+					cc.jwtSigningKey));
 		}
 
-		LoginInformation result = getAuthAPI(baseUrl).getLoginInformation(token.token);
+		LoginInformation result = getAuthAPI(cc.baseUrl).getLoginInformation(token.token);
 		if (result == null || result.status == LoginInformation.LoginStatus.Failure.name()) {
 			LOG.warn('No valid accounts for user '
 				+ (result == null ? 'UNKNOWN' : result.email + '. Login URL = '
-				+ baseUrl.toExternalForm()));
+				+ cc.baseUrl.toExternalForm()));
 			throw new DocuSignException(Label.NoValidAccounts);
 		}
 		LoginInformation.Account selected = null;
@@ -476,7 +580,7 @@ public with sharing class AuthService {
 
 		Credentials.save(
 			environment,
-			baseUrl,
+			cc.baseUrl,
 			new Url(selected.baseUrl),
 			selected.id,
 			selected.accountNumber,
