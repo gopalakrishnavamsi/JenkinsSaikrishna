@@ -269,12 +269,56 @@ public with sharing class AuthService {
 			return result;
 		}
 
+		@TestVisible
+		private List<Url> setInstanceRedirectUris(
+			final String clientId,
+			final List<Url> redirectUris,
+			final String accessToken) {
+
+			List<Url> result = new List<Url>();
+			if (redirectUris == null) return result;
+
+			List<String> uris = new List<String>();
+			for (Url u : redirectUris) {
+				if (u != null) uris.add(u.toExternalForm());
+			}
+
+			RestAPI.Response response = this.post(
+				this.baseUrl,
+				new List<Object> { 'v1', 'applications', clientId },
+				QueryString.empty,
+				new Map<String, String> {
+					'Authorization' => 'Bearer ' + accessToken,
+					'Content-Type' => 'application/json; charset=utf-8'
+				},
+				JSON.serialize(new Map<String, Object> {
+					'name' => 'DocuSign for Salesforce',
+					'redirect_uris' => uris
+				}),
+				AUTH_TIMEOUT);
+			if (response.hasError) {
+				this.log.error('Failed to set instance redirect uris: ' + response.error);
+				throw new APIException(response.error);
+			}
+
+			Object rus = ((Map<String, Object>)JSON.deserializeUntyped(response.body)).get('redirect_uris');
+			if (rus != null && rus instanceof List<Object>) {
+				for (Object o : (List<Object>)rus) {
+					String ru = String.valueOf(o);
+					if (String.isNotBlank(ru)) result.add(new Url(ru));
+				}
+			}
+			return result;
+		}
+
 		public Credentials.ClientCredentials getInstanceCredentials(
 			final String rootClientId,
 			final UUID accountId,
+			final List<Url> redirectUris,
 			final String accessToken) {
 
 			String clientId = this.getInstanceClientId(rootClientId, accountId, accessToken);
+			this.setInstanceRedirectUris(clientId, redirectUris, accessToken);
 			return new Credentials.ClientCredentials(
 				clientId,
 				this.getInstanceClientSecret(clientId, accessToken),
@@ -768,6 +812,13 @@ public with sharing class AuthService {
 			.getInstanceCredentials(
 				rootClientId,
 				account.id,
+				product == null ? new List<Url> {
+					Salesforce.baseUrl
+				} : new List<Url> {
+					Salesforce.baseUrl,
+					product.inviteRedirectUrl,
+					product.inviteCallbackUrl
+				},
 				token.token);
 
 		DB.updateProduct(product);

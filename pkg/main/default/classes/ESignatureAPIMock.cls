@@ -21,7 +21,6 @@
 global class ESignatureAPIMock extends OAuthTokenMock {
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
-		'oauth' => Application.classNamespacePrefix + 'ESignatureAPIMock.OAuthMock',
 		'accounts' => Application.classNamespacePrefix + 'ESignatureAPIMock.AccountsMock',
 		'billing_plan' => Application.classNamespacePrefix + 'ESignatureAPIMock.BillingPlanMock',
 		'bulk_envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkEnvelopesMock',
@@ -73,15 +72,6 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 				new List<String>(),
 				QueryString.parse(u.getQuery()),
 				request.getBody());
-		} else if (p.startsWith('/oauth')) { // auth-related request
-			return new MockRequest(
-				request.getMethod(),
-				null,
-				null,
-				'oauth',
-				Collection.slice(p.split('/'), 2),
-				QueryString.parse(u.getQuery()),
-				request.getBody());
 		}
 
 		Matcher m = BASE_PATH_PATTERN.matcher(u.getPath());
@@ -110,32 +100,6 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 
 	private static String randomPassword() {
 		return EncodingUtil.base64Encode(Blob.valueOf(TestUtils.randomString(32)));
-	}
-
-	public class OAuthMock implements MockResource {
-
-		public MockResponse respond(final MockRequest request) {
-			MockResponse response = null;
-			String op = (String)Collection.head(request.path);
-			if (request.method == 'GET') {
-				if (op == 'userinfo') {
-					Credentials c = Credentials.isAccountValid() ? Credentials.getInstance() : null;
-					AuthService.APIAccount a = new AuthService.APIAccount();
-					a.account_id = c == null ? UUID.randomUUID().toString() : c.account.id.toString();
-					a.friendly_id = c == null ? String.valueOf(TestUtils.randomInteger(1000000)) : String.valueOf(c.account.accountNumber);
-					a.is_default = true;
-					a.account_name = c == null ? TestUtils.randomString(10) : c.account.name;
-					a.base_uri = c == null ? 'https://unit.test.docusign.net/' : c.environment.eSignatureBaseUrl.toExternalForm();
-					AuthService.APIUser u = new AuthService.APIUser();
-					u.sub = c == null || UUID.isEmpty(c.user.id) ? UUID.randomUUID().toString() : c.user.id.toString();
-					u.name = UserInfo.getName();
-					u.email = c == null ? UserInfo.getUserEmail() : c.account.email;
-					u.accounts = new List<AuthService.APIAccount> { a };
-					response = MockResponse.ok(u);
-				}
-			}
-			return response;
-		}
 	}
 
 	public class AccountsMock implements MockResource {

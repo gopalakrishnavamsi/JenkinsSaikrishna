@@ -1,7 +1,8 @@
 @IsTest
 public class DocuSignAPIMock extends OAuthTokenMock {
 
-	private AuthAPIMock authMock;
+	private OAuthMock oauthMock;
+	private ApplicationAPIMock applicationMock;
 	private ESignatureAPIMock eSignatureMock;
 	private ProvisioningAPIMock provisioningMock;
 	private GenAPIMock genMock;
@@ -20,11 +21,18 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return (DocuSignAPIMock)TestUtils.setMock(new DocuSignAPIMock(false));
 	}
 
-	private AuthAPIMock getAuthAPIMock() {
-		if (this.authMock == null) {
-			this.authMock = new AuthAPIMock(this.success);
+	private OAuthMock getOAuthMock() {
+		if (this.oauthMock == null) {
+			this.oauthMock = new OAuthMock(this.success);
 		}
-		return this.authMock;
+		return this.oauthMock;
+	}
+
+	private ApplicationAPIMock getApplicationAPIMock() {
+		if (this.applicationMock == null) {
+			this.applicationMock = new ApplicationAPIMock(this.success);
+		}
+		return this.applicationMock;
 	}
 
 	private ESignatureAPIMock getESignatureMock() {
@@ -50,13 +58,15 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 
 	override public HttpResponse getResponse(final HttpRequest request) {
 		String path = new Url(request.getEndpoint()).getPath();
-		if (path.startsWith('/v1/applications')) {
-			return getAuthAPIMock().getResponse(request);
+		if (path.startsWith('/oauth')) {
+			return this.getOAuthMock().getResponse(request);
+		} else if (path.startsWith('/v1/applications')) {
+			return this.getApplicationAPIMock().getResponse(request);
 		} else if (path.startsWith('/subscription')) {
-			return getProvisioningMock().getResponse(request);
+			return this.getProvisioningMock().getResponse(request);
 		} else if (path.startsWith('/gen')) {
-			return getGenMock().getResponse(request);
+			return this.getGenMock().getResponse(request);
 		}
-		return getESignatureMock().getResponse(request);
+		return this.getESignatureMock().getResponse(request);
 	}
 }

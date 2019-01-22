@@ -492,7 +492,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_exchangeJwt_error() {
-		AuthAPIMock.failure();
+		ApplicationAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
@@ -589,7 +589,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstanceClientId_failure() {
-		AuthAPIMock.failure();
+		ApplicationAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -604,7 +604,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstanceClientId_success() {
-		AuthAPIMock.success();
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			String result = getAuthClient().getInstanceClientId(UUID.randomUUID().toString(), UUID.randomUUID(), 'test');
@@ -616,7 +616,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstanceClientSecret_failure() {
-		AuthAPIMock.failure();
+		ApplicationAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -631,7 +631,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstanceClientSecret_success() {
-		AuthAPIMock.success();
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			String result = getAuthClient().getInstanceClientSecret(UUID.randomUUID().toString(), 'test');
@@ -643,7 +643,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstancePrivateKey_failure() {
-		AuthAPIMock.failure();
+		ApplicationAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
@@ -658,7 +658,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_AuthAPI_getInstancePrivateKey_success() {
-		AuthAPIMock.success();
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Blob result = getAuthClient().getInstancePrivateKey(UUID.randomUUID().toString(), 'test');
@@ -669,13 +669,51 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_AuthAPI_setInstanceRedirectUris_failure() {
+		ApplicationAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				getAuthClient().setInstanceRedirectUris(UUID.randomUUID().toString(), new List<Url>(), 'test');
+				throw new AssertException('Expected AuthAPI.setInstanceRedirectUris to fail');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.unauthorized, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_AuthAPI_setInstanceRedirectUris_success() {
+		ApplicationAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			List<Url> redirectUris = new List<Url> {
+				new Url('https://redirect1.unit.test'),
+				new Url('https://redirect2.unit.test')
+			};
+
+			Test.startTest();
+			List<Url> result = getAuthClient().setInstanceRedirectUris(UUID.randomUUID().toString(), redirectUris, 'test');
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertEquals(redirectUris[0].toExternalForm(), result[0].toExternalForm());
+			System.assertEquals(redirectUris[1].toExternalForm(), result[1].toExternalForm());
+		}
+	}
+
+	@IsTest
 	static void test_AuthAPI_getInstanceCredentials() {
-		AuthAPIMock.success();
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Credentials.ClientCredentials result = getAuthClient().getInstanceCredentials(
 				UUID.randomUUID().toString(),
 				UUID.randomUUID(),
+				new List<Url> {
+					new Url('https://invite.callback.test.springcm.com/'),
+					new Url('https://invite.redirect.test.springcm.com/')
+				},
 				'test');
 			Test.stopTest();
 
@@ -1328,6 +1366,39 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_save_esign_only() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Credentials result = AuthService.save(
+				DocuSign.Environment.Stage,
+				new Url('https://account.test.docusign.net'),
+				new Url('https://provisioning.test.docusign.net'),
+				UUID.randomUUID().toString(),
+				new LoginInformation(
+					UUID.randomUUID(),
+					UUID.randomUUID().toString(),
+					UUID.randomUUID().toString(),
+					null),
+				new LoginInformation.Account(
+					UUID.randomUUID(),
+					TestUtils.randomInteger(100000),
+					UUID.randomUUID().toString(),
+					'https://esign.test.docusign.net',
+					true),
+				null,
+				new Credentials.AccessToken(
+					'test',
+					Datetime.now().addHours(1)));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isValid);
+		}
+	}
+
+	@IsTest
 	static void test_redeemCode_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -1344,7 +1415,7 @@ private class AuthServiceTest {
 	@IsTest
 	static void test_redeemCode_api_error() {
 		MetadataAPIMock.success();
-		ESignatureAPIMock.failure();
+		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
 
