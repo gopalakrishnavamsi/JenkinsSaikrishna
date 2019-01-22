@@ -50,28 +50,6 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_system_sender() {
-		System.runAs(UserMock.createDocuSignSender()) {
-			UUID systemSenderId = UUID.randomUUID();
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.SystemSenderId__c = String.valueOf(systemSenderId);
-			update s;
-
-			Test.startTest();
-			Credentials result = Credentials.getInstance();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(result.isValid);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(systemSenderId, result.user.id);
-			System.assertEquals(UserInfo.getName(), result.user.name);
-			System.assertEquals(UserInfo.getUserEmail(), result.user.email);
-			System.assert(!result.user.canManageAccount);
-		}
-	}
-
-	@IsTest
 	static void test_getInstance_error() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -109,7 +87,8 @@ private class CredentialsTest {
 		User u2 = UserMock.createUser();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().SystemSenderId__c);
+			UUID ssId = UUID.tryParse(AccountSettings__c.getOrgDefaults().SystemSenderId__c);
+			System.assertNotEquals(null, ssId);
 
 			Test.startTest();
 			Credentials result1 = Credentials.getInstance(u1.Id, true);
@@ -118,9 +97,13 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
+			System.assertNotEquals(null, result1.user);
+			System.assertEquals(ssId, result1.user.id);
 
 			System.assertNotEquals(null, result2);
 			System.assert(result2.isValid);
+			System.assertNotEquals(null, result2.user);
+			System.assertEquals(ssId, result2.user.id);
 		}
 	}
 

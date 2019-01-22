@@ -40,7 +40,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
@@ -68,7 +68,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_error() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		DocuSignAPIMock.success();
 		Case c = TestUtils.createCase();
 
 		System.runAs(UserMock.createDocuSignSender()) { // Unauthorized
@@ -208,7 +208,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_sendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope())
@@ -248,7 +248,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_getTaggerUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope(UserInfo.getUserId()));

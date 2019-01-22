@@ -3,7 +3,7 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_getInstance_success() {
-		ESignatureAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			AccountFeatures af1 = AccountFeatures.getInstance();
@@ -43,7 +43,7 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_SettingsAPI_getSettings_success() {
-		ESignatureAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Integer result = new AccountFeatures.SettingsAPI(
@@ -69,7 +69,7 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_SettingsAPI_getSettings_failure() {
-		ESignatureAPIMock.failure();
+		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -87,8 +87,7 @@ private class AccountFeaturesTest {
 
 	@IsTest
 	static void test_resolveFeatures() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			// Baseline config

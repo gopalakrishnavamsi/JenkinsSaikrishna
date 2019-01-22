@@ -173,7 +173,7 @@ public with sharing class AccountFeatures {
 			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
 
 			Credentials c = Credentials.getInstance();
-			resolvedFeatures = new SettingsAPI(c.eSignatureBaseUrl, c.accountId).getSettings();
+			resolvedFeatures = new SettingsAPI(c.environment.eSignatureBaseUrl, c.account.id).getSettings();
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.Features__c = resolvedFeatures;
 			settings.FeaturesLastChecked__c = Datetime.now();
