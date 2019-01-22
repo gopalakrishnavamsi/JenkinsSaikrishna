@@ -121,15 +121,15 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 				if (op == 'userinfo') {
 					Credentials c = Credentials.isAccountValid() ? Credentials.getInstance() : null;
 					AuthService.APIAccount a = new AuthService.APIAccount();
-					a.account_id = c == null ?  UUID.randomUUID().toString() : c.accountId.toString();
-					a.friendly_id = c == null ? String.valueOf(TestUtils.randomInteger(1000000)) : String.valueOf(c.accountNumber);
+					a.account_id = c == null ? UUID.randomUUID().toString() : c.account.id.toString();
+					a.friendly_id = c == null ? String.valueOf(TestUtils.randomInteger(1000000)) : String.valueOf(c.account.accountNumber);
 					a.is_default = true;
-					a.account_name = c == null ? TestUtils.randomString(10) : c.accountName;
-					a.base_uri = c == null ? 'https://unit.test.docusign.net/' : c.eSignatureBaseUrl.toExternalForm();
+					a.account_name = c == null ? TestUtils.randomString(10) : c.account.name;
+					a.base_uri = c == null ? 'https://unit.test.docusign.net/' : c.environment.eSignatureBaseUrl.toExternalForm();
 					AuthService.APIUser u = new AuthService.APIUser();
-					u.sub = c == null || UUID.isEmpty(c.userId) ? UUID.randomUUID().toString() : c.userId.toString();
+					u.sub = c == null || UUID.isEmpty(c.user.id) ? UUID.randomUUID().toString() : c.user.id.toString();
 					u.name = UserInfo.getName();
-					u.email = c == null ? UserInfo.getUserEmail() : c.email;
+					u.email = c == null ? UserInfo.getUserEmail() : c.account.email;
 					u.accounts = new List<AuthService.APIAccount> { a };
 					response = MockResponse.ok(u);
 				}
@@ -465,44 +465,21 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				AccountFeatures.ApiAccountFeature af1 = new AccountFeatures.ApiAccountFeature();
-				af1.name = 'allowMergeFields';
-				af1.value = 'true';
-				AccountFeatures.ApiAccountFeature af2 = new AccountFeatures.ApiAccountFeature();
-				af2.name = 'sharedCustomTabsEnabled';
-				af2.value = 'true';
-				AccountFeatures.ApiAccountFeature af3 = new AccountFeatures.ApiAccountFeature();
-				af3.name = 'savingCustomTabsEnabled';
-				af3.value = 'true';
-				AccountFeatures.ApiAccountFeature af4 = new AccountFeatures.ApiAccountFeature();
-				af4.name = 'dataFieldRegexEnabled';
-				af4.value = 'true';
-				AccountFeatures.ApiAccountFeature af5 = new AccountFeatures.ApiAccountFeature();
-				af5.name = 'dataFieldSizeEnabled';
-				af5.value = 'true';
-				AccountFeatures.ApiAccountFeature af6 = new AccountFeatures.ApiAccountFeature();
-				af6.name = 'tabTextFormattingEnabled';
-				af6.value = 'true';
-				AccountFeatures.ApiAccountFeature af7 = new AccountFeatures.ApiAccountFeature();
-				af7.name = 'allowSigningGroups';
-				af7.value = 'true';
-				AccountFeatures.ApiAccountFeature af8 = new AccountFeatures.ApiAccountFeature();
-				af8.name = 'tabDataLabelEnabled';
-				af8.value = 'true';
-				AccountFeatures.ApiAccountFeature af9 = new AccountFeatures.ApiAccountFeature();
-				af9.name = 'enableSMSAuthentication';
-				af9.value = 'true';
-				AccountFeatures.ApiAccountFeature af10 = new AccountFeatures.ApiAccountFeature();
-				af10.name = 'allowServerTemplates';
-				af10.value = 'true';
-				AccountFeatures.ApiAccountFeature af11 = new AccountFeatures.ApiAccountFeature();
-				af11.name = 'allowBulkSend';
-				af11.value = 'true';
-				AccountFeatures.ApiAccountFeatures afs = new AccountFeatures.ApiAccountFeatures();
-				afs.accountSettings = new List<AccountFeatures.ApiAccountFeature> {
-					af1, af2, af3, af4, af5, af6, af7, af8, af9, af10, af11
-				};
-				response = MockResponse.ok(afs);
+				response = MockResponse.ok(new Map<String, Object> {
+					'accountSettings' => new List<AccountAPI.Setting> {
+						new AccountAPI.Setting('allowMergeFields', 'true'),
+						new AccountAPI.Setting('sharedCustomTabsEnabled', 'true'),
+						new AccountAPI.Setting('savingCustomTabsEnabled', 'true'),
+						new AccountAPI.Setting('dataFieldRegexEnabled', 'true'),
+						new AccountAPI.Setting('dataFieldSizeEnabled', 'true'),
+						new AccountAPI.Setting('tabTextFormattingEnabled', 'true'),
+						new AccountAPI.Setting('allowSigningGroups', 'true'),
+						new AccountAPI.Setting('tabDataLabelEnabled', 'true'),
+						new AccountAPI.Setting('enableSMSAuthentication', 'true'),
+						new AccountAPI.Setting('allowServerTemplates', 'true'),
+						new AccountAPI.Setting('allowBulkSend', 'true')
+					}
+				});
 			}
 			return response;
 		}
@@ -916,7 +893,7 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 	 *
 	 * @return The success API test mock.
 	 */
-	global static ESignatureAPIMock success() {
+	public static ESignatureAPIMock success() {
 		return (ESignatureAPIMock)TestUtils.setMock(new ESignatureAPIMock(true));
 	}
 
@@ -926,7 +903,7 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 	 *
 	 * @return The failure API test mock.
 	 */
-	global static ESignatureAPIMock failure() {
+	public static ESignatureAPIMock failure() {
 		return (ESignatureAPIMock)TestUtils.setMock(new ESignatureAPIMock(false));
 	}
 }

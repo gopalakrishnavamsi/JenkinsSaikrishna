@@ -97,7 +97,7 @@ private class AccountAPITest {
 			System.assertNotEquals(null, a);
 			System.assertNotEquals(null, a.plan);
 			System.assertNotEquals(null, a.billing);
-			System.assertEquals(UUID.parse(AccountSettings__c.getInstance().AccountId__c), a.id);
+			System.assertEquals(UUID.parse(AccountSettings__c.getOrgDefaults().AccountId__c), a.id);
 			System.assertNotEquals(null, a.name);
 			System.assertNotEquals(null, a.plan.id);
 			System.assertNotEquals(null, a.plan.name);

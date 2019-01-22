@@ -2,14 +2,17 @@ public with sharing class BulkSendAPI extends ESignatureAPI {
 
 	private static BulkSendAPI self = null;
 
-	@TestVisible
-	private BulkSendAPI(final Credentials apiCredentials) {
-		super(apiCredentials, 'v2.1');
+	private BulkSendAPI(
+		final Url baseUrl,
+		final UUID accountId) {
+
+		super(baseUrl, 'v2.1', accountId);
 	}
 
 	public static BulkSendAPI getInstance() {
 		if (self == null) {
-			self = new BulkSendAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new BulkSendAPI(c.environment.eSignatureBaseUrl, c.account.id);
 		}
 		return self;
 	}

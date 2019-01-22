@@ -2,114 +2,6 @@
 private class CredentialsTest {
 
 	@IsTest
-	static void test_getAccountCredentials() {
-		UUID accountId = UUID.randomUUID();
-		UserMock.createAccountConfiguration(accountId);
-
-		Test.startTest();
-		Credentials.AccountCredentials result1 = Credentials.getAccountCredentials();
-		Credentials.AccountCredentials result2 = Credentials.getAccountCredentials();
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assertEquals(accountId, result1.accountId);
-
-		System.assert(result2 === result1);
-	}
-
-	@IsTest
-	static void test_getUserCredentials() {
-		User u1 = UserMock.createUser();
-		User u2 = UserMock.createUser();
-
-		Test.startTest();
-		Credentials.UserCredentials result1 = Credentials.getUserCredentials(u1.Id);
-		Credentials.UserCredentials result2 = Credentials.getUserCredentials(u1.Id);
-		Credentials.UserCredentials result3 = Credentials.getUserCredentials(u2.Id);
-		Credentials.UserCredentials result4 = Credentials.getUserCredentials(u2.Id);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assertEquals(u1.Username__c, String.valueOf(result1.userId));
-
-		System.assert(result2 === result1);
-
-		System.assert(result3 !== result1);
-		System.assertNotEquals(null, result3);
-		System.assertEquals(u2.Username__c, String.valueOf(result3.userId));
-
-		System.assert(result4 === result3);
-	}
-
-	@IsTest
-	static void test_buildAPICredentials() {
-		UUID accountId = UUID.randomUUID();
-		String ae = UUID.randomUUID().toString() + '@unit.test';
-		Url aUrl = new Url('https://account.test.docusign.com/');
-		Url eUrl = new Url('https://esign.test.docusign.net/');
-		Credentials.AccountCredentials ac1 = new Credentials.AccountCredentials(
-			DocuSign.Environment.Demo, aUrl, eUrl, accountId, 1111L, 'Account 1', ae, null);
-		UUID ssId = UUID.randomUUID();
-		Credentials.AccountCredentials ac2 = new Credentials.AccountCredentials(
-			DocuSign.Environment.Demo, aUrl, eUrl, accountId, 2222L, 'Account 2', ae, ssId);
-		Credentials.UserCredentials uc = new Credentials.UserCredentials(
-			UUID.randomUUID(), true, new Credentials.AccessToken(UUID.randomUUID().toString(), Datetime.now().addHours(1)));
-
-		Test.startTest();
-		Credentials result1 = Credentials.buildAPICredentials(ac1, uc);
-		Credentials result2 = Credentials.buildAPICredentials(ac2, uc);
-		// System sender tests
-		Credentials result3 = Credentials.buildAPICredentials(ac1, null);
-		Credentials result4 = Credentials.buildAPICredentials(ac2, null);
-		try {
-			Credentials.buildAPICredentials(null, uc);
-			throw new AssertException('Expected buildAPICredentials to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.ConfigurationError, ex.getMessage());
-		}
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isValid);
-		System.assertEquals(DocuSign.Environment.Demo, result1.environment);
-		System.assertNotEquals(null, result1.accountBaseUrl);
-		System.assertEquals(aUrl.toExternalForm(), result1.accountBaseUrl.toExternalForm());
-		System.assertNotEquals(null, result1.eSignatureBaseUrl);
-		System.assertEquals(eUrl.toExternalForm(), result1.eSignatureBaseUrl.toExternalForm());
-		System.assertEquals(accountId, result1.accountId);
-		System.assertEquals(1111L, result1.accountNumber);
-		System.assertEquals('Account 1', result1.accountName);
-		System.assertEquals(ae, result1.email);
-		System.assertEquals(uc.userId, result1.userId);
-		System.assertNotEquals(null, result1.token);
-		System.assertEquals(uc.token.token, result1.token.token);
-		System.assertEquals(uc.token.expires, result1.token.expires);
-
-		System.assertNotEquals(null, result2);
-		System.assert(result2.isValid);
-		System.assertEquals(DocuSign.Environment.Demo, result2.environment);
-		System.assertNotEquals(null, result2.accountBaseUrl);
-		System.assertEquals(aUrl.toExternalForm(), result2.accountBaseUrl.toExternalForm());
-		System.assertNotEquals(null, result2.eSignatureBaseUrl);
-		System.assertEquals(eUrl.toExternalForm(), result2.eSignatureBaseUrl.toExternalForm());
-		System.assertEquals(accountId, result2.accountId);
-		System.assertEquals(2222L, result2.accountNumber);
-		System.assertEquals('Account 2', result2.accountName);
-		System.assertEquals(ae, result2.email);
-		System.assertEquals(uc.userId, result2.userId);
-		System.assertNotEquals(null, result2.token);
-		System.assertEquals(uc.token.token, result2.token.token);
-		System.assertEquals(uc.token.expires, result2.token.expires);
-
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isValid); // No user or system sender
-
-		System.assertNotEquals(null, result4);
-		System.assert(result4.isValid);
-		System.assertEquals(ssId, result4.userId);
-	}
-
-	@IsTest
 	static void test_getInstance_default() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
@@ -154,6 +46,28 @@ private class CredentialsTest {
 			System.assertNotEquals(null, result4);
 			System.assert(result4.isValid);
 			System.assert(result4 !== result3);
+		}
+	}
+
+	@IsTest
+	static void test_getInstance_system_sender() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			UUID systemSenderId = UUID.randomUUID();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.SystemSenderId__c = String.valueOf(systemSenderId);
+			update s;
+
+			Test.startTest();
+			Credentials result = Credentials.getInstance();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isValid);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(systemSenderId, result.user.id);
+			System.assertEquals(UserInfo.getName(), result.user.name);
+			System.assertEquals(UserInfo.getUserEmail(), result.user.email);
+			System.assert(!result.user.canManageAccount);
 		}
 	}
 
@@ -220,7 +134,10 @@ private class CredentialsTest {
 			s.AccessTokenExpires__c = Datetime.now().addHours(1);
 			upsert s;
 
-			System.assert(Credentials.getInstance().isTokenValid);
+			Credentials c = Credentials.getInstance();
+			System.assertNotEquals(null, c);
+			System.assertNotEquals(null, c.token);
+			System.assert(c.token.isValid);
 
 			Test.startTest();
 			Credentials.AccessToken result = Credentials.getToken();
@@ -261,37 +178,73 @@ private class CredentialsTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String token = 'test';
 			Datetime expires = Datetime.now().addHours(1);
+			String clientId = UUID.randomUUID().toString();
+			String clientSecret = UUID.randomUUID().toString();
+			String pvk = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(
-				DocuSign.Environment.Production,
-				new Url('https://account.test.docusign.net/'),
-				new Url('https://esign.test.docusign.net/'),
-				accountId,
-				1111L,
-				accountId.toString(),
-				email,
-				userId,
-				true,
+				new Credentials.Environment(
+					DocuSign.Environment.Production,
+					new Url('https://account.test.docusign.net/'),
+					new Url('https://api.test.docusign.net/'),
+					new Url('https://esign.test.docusign.net/'),
+					new Url('https://auth.test.springcm.com/'),
+					new Url('https://api.test.springcm.com/')),
+				new Credentials.ClientCredentials(
+					clientId,
+					clientSecret,
+					EncodingUtil.base64Decode(pvk)),
+				new Credentials.AccountCredentials(
+					accountId,
+					1111L,
+					accountId.toString(),
+					email,
+					null),
+				new Credentials.UserCredentials(
+					userId,
+					userId.toString(),
+					email,
+					true),
 				new Credentials.AccessToken(token, expires));
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertEquals(DocuSign.Environment.Production, result1.environment);
-			System.assertNotEquals(null, result1.accountBaseUrl);
-			System.assertEquals('https://account.test.docusign.net/', result1.accountBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.eSignatureBaseUrl);
-			System.assertEquals('https://esign.test.docusign.net/', result1.eSignatureBaseUrl.toExternalForm());
-			System.assertEquals(accountId, result1.accountId);
-			System.assertEquals(1111L, result1.accountNumber);
-			System.assertEquals(accountId.toString(), result1.accountName);
-			System.assertEquals(email, result1.email);
-			System.assertEquals(userId, result1.userId);
-			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+
+			System.assertNotEquals(null, result1.environment);
+			System.assertEquals(DocuSign.Environment.Production, result1.environment.environment);
+			System.assertNotEquals(null, result1.environment.accountBaseUrl);
+			System.assertEquals('https://account.test.docusign.net/', result1.environment.accountBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.provisioningBaseUrl);
+			System.assertEquals('https://api.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
+			System.assertEquals('https://esign.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
+			System.assertEquals('https://auth.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
+			System.assertEquals('https://api.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+
+			System.assertNotEquals(null, result1.client);
+			System.assertEquals(clientId, result1.client.id);
+			System.assertEquals(clientSecret, result1.client.secret);
+			System.assertEquals(pvk, EncodingUtil.base64Encode(result1.client.privateKey));
+
+			System.assertNotEquals(null, result1.account);
+			System.assertEquals(accountId, result1.account.id);
+			System.assertEquals(1111L, result1.account.accountNumber);
+			System.assertEquals(accountId.toString(), result1.account.name);
+			System.assertEquals(email, result1.account.email);
+			System.assertEquals(null, result1.account.systemSenderId);
+
+			System.assertNotEquals(null, result1.user);
+			System.assertEquals(userId, result1.user.id);
+			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
+			System.assertEquals(uu.Name, result1.user.name);
+			System.assertEquals(uu.Email, result1.user.email);
 			UserSettings__c s = UserSettings__c.getInstance();
 			System.assertEquals(token, s.AccessToken0__c);
 			System.assertEquals(expires, s.AccessTokenExpires__c);
@@ -312,41 +265,80 @@ private class CredentialsTest {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.SystemSenderId__c = userId.toString();
 			update s;
+			String token = 'test';
+			Datetime expires = Datetime.now().addHours(1);
+			String clientId = UUID.randomUUID().toString();
+			String clientSecret = UUID.randomUUID().toString();
+			String pvk = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
 
 			Test.startTest();
 			Credentials result1 = Credentials.save(
-				DocuSign.Environment.Production,
-				new Url('https://account1.test.docusign.net/'),
-				new Url('https://esign1.test.docusign.net/'),
-				accountId,
-				2222L,
-				accountId.toString(),
-				email,
-				userId,
-				true,
-				null);
+				new Credentials.Environment(
+					DocuSign.Environment.Production,
+					new Url('https://account1.test.docusign.net/'),
+					new Url('https://api1.test.docusign.net/'),
+					new Url('https://esign1.test.docusign.net/'),
+					new Url('https://auth1.test.springcm.com/'),
+					new Url('https://api1.test.springcm.com/')),
+				new Credentials.ClientCredentials(
+					clientId,
+					clientSecret,
+					EncodingUtil.base64Decode(pvk)),
+				new Credentials.AccountCredentials(
+					accountId,
+					2222L,
+					accountId.toString(),
+					email,
+					null),
+				new Credentials.UserCredentials(
+					userId,
+					userId.toString(),
+					email,
+					true),
+				new Credentials.AccessToken(token, expires));
 			Credentials result2 = Credentials.getInstance();
 			Test.stopTest();
 
-			System.assert(result1 !== baseline);
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
-			System.assertEquals(DocuSign.Environment.Production, result1.environment);
-			System.assertNotEquals(null, result1.accountBaseUrl);
-			System.assertEquals('https://account1.test.docusign.net/', result1.accountBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.eSignatureBaseUrl);
-			System.assertEquals('https://esign1.test.docusign.net/', result1.eSignatureBaseUrl.toExternalForm());
-			System.assertEquals(accountId, result1.accountId);
-			System.assertEquals(2222L, result1.accountNumber);
-			System.assertEquals(accountId.toString(), result1.accountName);
-			System.assertEquals(email, result1.email);
-			System.assertEquals(userId, result1.userId);
-			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			System.assert(result1 !== baseline);
+
+			System.assertNotEquals(null, result1.environment);
+			System.assertEquals(DocuSign.Environment.Production, result1.environment.environment);
+			System.assertNotEquals(null, result1.environment.accountBaseUrl);
+			System.assertEquals('https://account1.test.docusign.net/', result1.environment.accountBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.provisioningBaseUrl);
+			System.assertEquals('https://api1.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
+			System.assertEquals('https://esign1.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
+			System.assertEquals('https://auth1.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
+			System.assertEquals('https://api1.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+
+			System.assertNotEquals(null, result1.client);
+			System.assertEquals(clientId, result1.client.id);
+			System.assertEquals(clientSecret, result1.client.secret);
+			System.assertEquals(pvk, EncodingUtil.base64Encode(result1.client.privateKey));
+
+			System.assertNotEquals(null, result1.account);
+			System.assertEquals(accountId, result1.account.id);
+			System.assertEquals(2222L, result1.account.accountNumber);
+			System.assertEquals(accountId.toString(), result1.account.name);
+			System.assertEquals(email, result1.account.email);
+			System.assertEquals(null, result1.account.systemSenderId);
+
+			System.assertNotEquals(null, result1.user);
+			System.assertEquals(userId, result1.user.id);
+			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
+			System.assertEquals(uu.Name, result1.user.name);
+			System.assertEquals(uu.Email, result1.user.email);
+
 			UserSettings__c us = UserSettings__c.getInstance();
-			System.assertEquals(null, us.AccessToken0__c);
-			System.assertEquals(null, us.AccessTokenExpires__c);
+			System.assertEquals(token, us.AccessToken0__c);
+			System.assertEquals(expires, us.AccessTokenExpires__c);
 
 			System.assert(result2 === result1);
 		}
@@ -364,12 +356,15 @@ private class CredentialsTest {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
-			Credentials.addUsers(new Map<Id, Credentials.UserCredentials> {
-				dsu1.Id => new Credentials.UserCredentials(userId1, false, null),
-				dsu2.Id => new Credentials.UserCredentials(userId2, true, null),
+			Map<Id, Credentials.UserCredentials> result = Credentials.addUsers(new Map<Id, Credentials.UserCredentials> {
+				dsu1.Id => new Credentials.UserCredentials(userId1, 'u1', 'u1@unit.test', false),
+				dsu2.Id => new Credentials.UserCredentials(userId2, 'u2', 'u2@unit.test', true),
 				dsu3.Id => null
 			});
 			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(userId1.toString(), uu.Username__c);
@@ -407,15 +402,18 @@ private class CredentialsTest {
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId1, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId1, result.user.id);
 
 			result = Credentials.getInstance(dsu2.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId2, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId2, result.user.id);
 
 			result = Credentials.getInstance(dsu3.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId3, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId3, result.user.id);
 
 			Test.startTest();
 			Credentials.clear(false);
@@ -423,13 +421,20 @@ private class CredentialsTest {
 
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteCallbackUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteRedirectUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
+
+			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(adminId.toString(), uu.Username__c);
@@ -469,15 +474,18 @@ private class CredentialsTest {
 
 			Credentials result = Credentials.getInstance(dsu1.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId1, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId1, result.user.id);
 
 			result = Credentials.getInstance(dsu2.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId2, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId2, result.user.id);
 
 			result = Credentials.getInstance(dsu3.Id, false);
 			System.assertNotEquals(null, result);
-			System.assertEquals(userId3, result.userId);
+			System.assertNotEquals(null, result.user);
+			System.assertEquals(userId3, result.user.id);
 
 			Test.startTest();
 			Credentials.clear(true);
@@ -485,13 +493,20 @@ private class CredentialsTest {
 
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteCallbackUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteRedirectUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Features__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().FeaturesLastChecked__c);
+
+			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
@@ -544,7 +559,10 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
@@ -578,11 +596,8 @@ private class CredentialsTest {
 		Credentials.AccessToken tok2 = new Credentials.AccessToken('tok2', Datetime.now().addHours(-1));
 		Credentials.AccessToken tok3 = new Credentials.AccessToken('  ', Datetime.now().addHours(1));
 
-		System.assert(!tok1.isExpired);
 		System.assert(tok1.isValid);
-		System.assert(tok2.isExpired);
 		System.assert(!tok2.isValid);
-		System.assert(!tok3.isExpired);
 		System.assert(!tok3.isValid);
 	}
 
@@ -596,7 +611,7 @@ private class CredentialsTest {
 
 			Credentials baseline = Credentials.getInstance();
 			System.assertNotEquals(null, baseline);
-			System.assertEquals(null, baseline.token);
+			System.assert(!baseline.isTokenValid);
 
 			String token = UUID.randomUUID().toString();
 			Datetime exp = Datetime.now().addHours(1);
@@ -627,25 +642,23 @@ private class CredentialsTest {
 			System.assertNotEquals(null, baseline);
 			System.assertNotEquals(null, baseline.token);
 
-			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Credentials.AccessToken uc = Credentials.DB.getToken(UserSettings__c.getInstance(UserInfo.getUserId()));
 			System.assertNotEquals(null, uc);
-			System.assertEquals(null, uc.token);
+			System.assert(!uc.isValid);
 
 			Test.startTest();
 			Credentials result1 = Credentials.save();
-			Credentials.UserCredentials result2 = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Credentials.AccessToken result2 = Credentials.DB.getToken(UserSettings__c.getInstance(UserInfo.getUserId()));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
-			System.assert(result1 !== baseline);
 			System.assertNotEquals(null, result1.token);
 			System.assertEquals(token, result1.token.token);
 			System.assertEquals(exp, result1.token.expires);
 
 			System.assertNotEquals(null, result2);
-			System.assertNotEquals(null, result2.token);
-			System.assertEquals(token, result2.token.token);
-			System.assertEquals(exp, result2.token.expires);
+			System.assertEquals(token, result2.token);
+			System.assertEquals(exp, result2.expires);
 		}
 	}
 
@@ -663,23 +676,23 @@ private class CredentialsTest {
 			System.assertNotEquals(null, baseline);
 			System.assertNotEquals(null, baseline.token);
 
-			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Credentials.AccessToken uc = Credentials.DB.queryToken(UserInfo.getUserId());
 			System.assertNotEquals(null, uc);
 			System.assertEquals(null, uc.token);
 
 			Test.startTest();
 			Credentials result1 = Credentials.save();
-			Credentials.UserCredentials result2 = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Credentials.AccessToken result2 = Credentials.DB.queryToken(UserInfo.getUserId());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
-			System.assert(result1 !== baseline);
 			System.assertNotEquals(null, result1.token);
 			System.assertEquals(token, result1.token.token);
 			System.assertEquals(exp, result1.token.expires);
 
 			System.assertNotEquals(null, result2);
 			System.assertEquals(null, result2.token);
+			System.assertEquals(null, result2.expires);
 		}
 	}
 
@@ -698,7 +711,7 @@ private class CredentialsTest {
 			System.assertNotEquals(null, baseline);
 			System.assertNotEquals(null, baseline.token);
 
-			Credentials.UserCredentials uc = Credentials.DB.queryUserCredentials(UserInfo.getUserId());
+			Credentials.AccessToken uc = Credentials.DB.queryToken(UserInfo.getUserId());
 			System.assertNotEquals(null, uc);
 			System.assertEquals(null, uc.token);
 
@@ -717,15 +730,34 @@ private class CredentialsTest {
 	}
 
 	@IsTest
-	static void test_save_new_user() {
+	static void test_save_private_key_too_long() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			Credentials result = Credentials.save();
-			Test.stopTest();
+			Credentials baseline = Credentials.getInstance();
+			System.assertNotEquals(null, baseline);
+			System.assertNotEquals(null, baseline.client);
+			System.assertNotEquals(null, baseline.client.privateKey);
+			Blob pvk = Blob.valueOf(TestUtils.randomString(Credentials.MAX_KEY_LENGTH + 1));
+			Integer len = EncodingUtil.base64Encode(pvk).length();
 
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.userId);
-			System.assertEquals(null, result.token);
+			Test.startTest();
+			try {
+				Credentials.save(
+					baseline.environment,
+					new Credentials.ClientCredentials(
+						baseline.client.id,
+						baseline.client.secret,
+						pvk),
+					baseline.account,
+					baseline.user,
+					baseline.token);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.KeyTooLong_2, new List<String> {
+					String.valueOf(len),
+					String.valueOf(Credentials.MAX_KEY_LENGTH)
+				}), ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }

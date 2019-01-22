@@ -9,14 +9,17 @@ public with sharing class AccountAPI extends ESignatureAPI {
 
 	private Account account = null;
 
-	@TestVisible
-	private AccountAPI(final Credentials apiCredentials) {
-		super(apiCredentials);
+	private AccountAPI(
+		final Url baseUrl,
+		final UUID accountId) {
+
+		super(baseUrl, 'v2', accountId);
 	}
 
 	public static AccountAPI getInstance() {
 		if (self == null) {
-			self = new AccountAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new AccountAPI(c.environment.eSignatureBaseUrl, c.account.id);
 		}
 		return self;
 	}

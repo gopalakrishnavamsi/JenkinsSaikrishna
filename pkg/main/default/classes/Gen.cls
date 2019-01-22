@@ -152,4 +152,39 @@ public class Gen {
 		return isValidQuery(q)
 			&& String.isNotBlank(q.relationship);
 	}
+
+	public class Product {
+
+		public String status { get; private set; }
+		public Boolean isTrial { get; private set; }
+		public Datetime trialExpires { get; private set; }
+		public Url authBaseUrl { get; private set; }
+		public Url apiBaseUrl { get; private set; }
+		public Url inviteCallbackUrl { get; private set; }
+		public Url inviteRedirectUrl { get; private set; }
+		public String inviteEmailSubject { get; private set; }
+		public String inviteEmailBody { get; private set; }
+
+		public Product(
+			final String status,
+			final Boolean isTrial,
+			final Datetime trialExpires,
+			final Url authBaseUrl,
+			final Url apiBaseUrl,
+			final Url inviteCallbackUrl,
+			final Url inviteRedirectUrl,
+			final String inviteEmailSubject,
+			final String inviteEmailBody) {
+
+			this.status = status;
+			this.isTrial = isTrial;
+			this.trialExpires = trialExpires;
+			this.authBaseUrl = authBaseUrl;
+			this.apiBaseUrl = apiBaseUrl;
+			this.inviteCallbackUrl = inviteCallbackUrl;
+			this.inviteRedirectUrl = inviteRedirectUrl;
+			this.inviteEmailSubject = inviteEmailSubject;
+			this.inviteEmailBody = inviteEmailBody;
+		}
+	}
 }

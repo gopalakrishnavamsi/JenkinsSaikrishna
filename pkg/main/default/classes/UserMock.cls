@@ -209,6 +209,25 @@ global class UserMock {
 		accountSettings.Environment__c = 'other';
 		accountSettings.AccountBaseUrl__c = 'https://account.test.docusign.net/';
 		accountSettings.ESignatureBaseUrl__c = 'https://esign.test.docusign.net/';
+		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
+		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
+		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/';
+		accountSettings.InviteCallbackUrl__c = 'https://invite.test.springcm.com/provisioning/v1/callbacks/UserInvited';
+		accountSettings.InviteRedirectUrl__c = 'https://www.docusign.com/';
+		accountSettings.ClientId__c = UUID.randomUUID().toString();
+		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
+		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);
+		accountSettings.PrivateKey1__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(255, 255);
+		accountSettings.PrivateKey2__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(510, 255);
+		accountSettings.PrivateKey3__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(765, 255);
+		accountSettings.PrivateKey4__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(1020, 255);
+		accountSettings.PrivateKey5__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(1275, 255);
+		accountSettings.PrivateKey6__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(1530, 255);
+		accountSettings.PrivateKey7__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(1785, 255);
+		accountSettings.PrivateKey8__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(2040, 255);
+		accountSettings.PrivateKey9__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(2295, 255);
+		accountSettings.PrivateKey10__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(2550, 255);
+		accountSettings.PrivateKey11__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(2805, 255);
 		accountSettings.AccountId__c = String.valueOf(accountId);
 		accountSettings.AccountNumber__c = TestUtils.randomInteger(1000000);
 		accountSettings.AccountName__c = TestUtils.randomString(20);
@@ -237,6 +256,11 @@ global class UserMock {
 			Language__c = 'en',
 			EmailSubject__c = 'Please sign this document',
 			EmailMessage__c = 'This email contains a document');
+
+		insert new Configuration__c(
+			Name = 'Gen',
+			InviteEmailSubject__c = 'Invite email subject',
+			InviteEmailBody__c = 'Invite email body');
 
 		createdAccountConfiguration = true;
 

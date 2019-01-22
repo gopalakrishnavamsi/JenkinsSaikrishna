@@ -3,6 +3,7 @@
 	<fullName>AccountBaseUrl__c</fullName>
 	<deprecated>false</deprecated>
 	<externalId>false</externalId>
+	<fieldManageability>DeveloperControlled</fieldManageability>
 	<label>DocuSign Account API Base URL</label>
 	<length>255</length>
 	<required>false</required>

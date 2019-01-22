@@ -162,8 +162,9 @@ global with sharing class AccountService {
 			} else {
 				creds.put(u.sourceId, new Credentials.UserCredentials(
 					u.id,
-					u.canManageAccount,
-					null));
+					u.name,
+					u.email,
+					u.canManageAccount));
 				result.add(u.withError(null));
 			}
 		}
