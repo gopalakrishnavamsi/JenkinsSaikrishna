@@ -1,16 +1,27 @@
-pipeline {
-    //agent { label 'jenkins-slave-mono-1' }
-    agent any
-    stages {
-        stage('Install SFDX') {
-            steps { 
+library 'docusign-common'
 
-                echo 'Installing SFDX'
-                echo "${WORKSPACE}"
-                sh "${WORKSPACE}/etc/scripts/installsfdx.sh"
+def defaultSalesforceArgs = [
+  jwtKeyFileCredsId: 'salesforce-jwt-key-file',
+  consumerKeyCredsId: 'salesforce-consumer-key',
+  hubUsername: 'dfsdev@devhub.com',
+  orgDefFilePath: 'etc/test.json',
+  scratchOrgName: 'scratchorg',
+  adminUsername: 'DocuSign_Administrator'
+]
 
-            }
-        }
-    } 
+def defaultPostBuildTestTasks = [
+  'Test': [
+    outputDir: 'tests',
+    outputPath: 'tests/*-junit.xml',
+    reporter: 'xunit',
+    reportFormat: 'junit'
+  ]
+]
 
-}
+salesforcePipeline(
+  appName: 'salesforce-core',
+  postBuildTestTasks: defaultPostBuildTestTasks,
+  salesforceArgs: defaultSalesforceArgs,
+  doSonarQube: true,
+  skipSherlockCi: true
+)
