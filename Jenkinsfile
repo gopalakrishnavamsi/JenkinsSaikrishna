@@ -10,7 +10,7 @@ def defaultSalesforceArgs = [
 ]
 
 def defaultPostBuildTests = [
-  'Test': [
+  'Unit Test': [
     outputDir: 'tests',
     outputPath: 'tests/*-junit.xml',
     reporter: 'xunit',
