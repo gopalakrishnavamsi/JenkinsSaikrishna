@@ -72,39 +72,6 @@ private class MetadataServiceTest {
 		}
 	}
 
-	private class FailureMock implements WebServiceMock {
-
-		public void doInvoke(
-			final Object stub,
-			final Object request,
-			final Map<String, Object> response,
-			final String endpoint,
-			final String soapAction,
-			final String requestName,
-			final String responseNS,
-			final String responseName,
-			final String responseType) {
-
-			if (request instanceof MetadataAPI.createMetadata_element
-				|| request instanceof MetadataAPI.updateMetadata_element) {
-
-				List<MetadataAPI.SaveResult> result = new List<MetadataAPI.SaveResult>();
-				for (MetadataAPI.Metadata md : ((MetadataAPI.createMetadata_element)request).metadata) {
-					MetadataAPI.SaveResult r = new MetadataAPI.SaveResult();
-					r.success = false;
-					MetadataAPI.Error e = new MetadataAPI.Error();
-					e.statusCode = 'UNIT_TEST';
-					e.message = 'Test failure';
-					r.errors = new List<MetadataAPI.Error> { e };
-					result.add(r);
-				}
-				MetadataAPI.createMetadataResponse_element resp = new MetadataAPI.createMetadataResponse_element();
-				resp.result = result;
-				response.put('response_x', resp);
-			}
-		}
-	}
-
 	@IsTest
 	static void test_getErrorMessage() {
 		MetadataAPI.SaveResult result = null;
@@ -171,12 +138,81 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_createRemoteSite_unauthorized() {
+	static void test_newRemoteSite_undefined_argument() {
+		try {
+			MetadataService.newRemoteSite(null, 'Type', 'Description', new Url('https://unit.test.docusign.net'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Demo, null, 'Description', new Url('https://unit.test.docusign.net'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Demo, '  ', 'Description', new Url('https://unit.test.docusign.net'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Demo, 'Type', 'Description', null);
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_newRemoteSite_invalid_environment() {
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Invalid, 'Type', 'Description', new Url('https://unit.test.docusign.net'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Production, 'Type', 'Description', new Url('https://example.com'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type', 'Description', new Url('https://example.com'));
+			throw new AssertException('Expected newRemoteSite to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_newRemoteSite_success() {
+		MetadataService.RemoteSite result = MetadataService.newRemoteSite(DocuSign.Environment.Production, 'Type', 'Description', new Url('https://unit.test.docusign.com'));
+		System.assertNotEquals(null, result);
+		System.assertEquals('Production_Type', result.name);
+		System.assertEquals(Application.namespacePrefix + 'Production_Type', result.fullName);
+		System.assertEquals('Description', result.description);
+		System.assertNotEquals(null, result.url);
+		System.assertEquals('https://unit.test.docusign.com', result.url.toExternalForm());
+
+		result = MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type', 'Description', new Url('https://unit.test.docusign.com'));
+		System.assertNotEquals(null, result);
+		System.assertEquals('unit_Type', result.name);
+		System.assertEquals(Application.namespacePrefix + 'unit_Type', result.fullName);
+		System.assertEquals('Description', result.description);
+		System.assertNotEquals(null, result.url);
+		System.assertEquals('https://unit.test.docusign.com', result.url.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createRemoteSites_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.createRemoteSite(null, null, null);
-				throw new AssertException('Expected createRemoteSite to fail');
+				MetadataService.createRemoteSites(null);
+				throw new AssertException('Expected createRemoteSites to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -185,24 +221,18 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_createRemoteSite_invalid_arguments() {
+	static void test_createRemoteSites_invalid_arguments() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				MetadataService.createRemoteSite(null, null, new Url('https://example.com/'));
-				throw new AssertException('Expected createRemoteSite to fail');
+				MetadataService.createRemoteSites(null);
+				throw new AssertException('Expected createRemoteSites to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.createRemoteSite('  ', null, new Url('https://example.com/'));
-				throw new AssertException('Expected createRemoteSite to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
-			}
-			try {
-				MetadataService.createRemoteSite('test', null, null);
-				throw new AssertException('Expected createRemoteSite to fail');
+				MetadataService.createRemoteSites(new List<MetadataService.RemoteSite>());
+				throw new AssertException('Expected createRemoteSites to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
@@ -211,13 +241,15 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_createRemoteSite_error() {
-		Test.setMock(WebServiceMock.class, new FailureMock());
+	static void test_createRemoteSites_error() {
+		MetadataAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			MetadataService.RemoteSite rs = MetadataService.newRemoteSite(DocuSign.Environment.Demo, 'test', 'rs1 desc', new Url('https://rs1.docusign.com'));
+
 			Test.startTest();
 			try {
-				MetadataService.createRemoteSite('test1', 'desc', new Url('https://unit.test/'));
-				throw new AssertException('Expected createRemoteSite to fail');
+				MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> { rs });
+				throw new AssertException('Expected createRemoteSites to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
 					ex.getMessage());
@@ -226,15 +258,75 @@ private class MetadataServiceTest {
 		}
 	}
 
+	private class RemoteSiteNotFoundMock implements WebServiceMock {
+
+		private final WebServiceMock baseMock;
+		private final Set<String> foundNames = new Set<String>();
+
+		public RemoteSiteNotFoundMock() {
+			this.baseMock = new MetadataAPIMock(true);
+		}
+
+		public void doInvoke(
+			final Object stub,
+			final Object request,
+			final Map<String, Object> response,
+			final String endpoint,
+			final String soapAction,
+			final String requestName,
+			final String responseNS,
+			final String responseName,
+			final String responseType) {
+
+			if (request instanceof MetadataAPI.readMetadata_element
+				&& ((MetadataAPI.readMetadata_element)request).type_x == 'RemoteSiteSetting') {
+
+				MetadataAPI.ReadRemoteSiteSettingResult result = new MetadataAPI.ReadRemoteSiteSettingResult();
+				result.records = new List<MetadataAPI.RemoteSiteSetting>();
+				// "Find" the names for subsequent requests
+				for (String fullName : ((MetadataAPI.readMetadata_element)request).fullNames) {
+					if (foundNames.contains(fullName)) {
+						MetadataAPI.RemoteSiteSetting rs = new MetadataAPI.RemoteSiteSetting();
+						rs.fullName = fullName;
+						rs.description = 'desc';
+						rs.url = 'https://unit.test';
+						rs.isActive = true;
+						rs.disableProtocolSecurity = false;
+						result.records.add(rs);
+					} else {
+						foundNames.add(fullName);
+					}
+				}
+				MetadataAPI.readRemoteSiteSettingResponse_element resp = new MetadataAPI.readRemoteSiteSettingResponse_element();
+				resp.result = result;
+				response.put('response_x', resp);
+			} else {
+				baseMock.doInvoke(stub, request, response, endpoint, soapAction, requestName, responseNS, responseName,
+					responseType);
+			}
+		}
+	}
+
 	@IsTest
-	static void test_createRemoteSite_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+	static void test_createRemoteSites_success() {
+		Test.setMock(WebServiceMock.class, new RemoteSiteNotFoundMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			MetadataService.RemoteSite rs1 = MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type1',
+				'RS1 desc', new Url('https://rs1.docusign.com'));
+			MetadataService.RemoteSite rs2 = MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type1',
+				'RS2 desc', new Url('https://rs2.docusign.com'));
+			MetadataService.RemoteSite rs3 = MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type2',
+				'RS3 desc', new Url('https://rs3.docusign.com'));
+
 			Test.startTest();
-			String name = MetadataService.createRemoteSite('test1', 'desc', new Url('https://unit.test/'));
+			List<String> result1 = MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> { rs1 });
+			List<String> result2 = MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> { rs1 });
+			List<String> result3 = MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> { rs1, rs2, rs3 });
 			Test.stopTest();
 
-			System.assertEquals('test1', name);
+			System.assertEquals(new List<String> { rs1.name }, result1);
+			System.assertEquals(new List<String>(), result2);
+			System.assertEquals(new List<String> { rs2.name, rs3.name }, result3);
 		}
 	}
 
@@ -268,7 +360,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_getLayouts_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			List<Layout> result = MetadataService.getLayouts(Contact.getSObjectType());
@@ -300,7 +392,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_createWebLink_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 
 		String fullName = UUID.randomUUID().toString();
 		String buttonLabel = UUID.randomUUID().toString();
@@ -332,8 +424,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_createWebLink_failure() {
-		Test.setMock(WebServiceMock.class, new FailureMock());
-
+		MetadataAPIMock.failure();
 		Test.startTest();
 		try {
 			MetadataService.createWebLink(
@@ -362,7 +453,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_createQuickAction_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 
 		String fullName = UUID.randomUUID().toString();
 		String buttonLabel = UUID.randomUUID().toString();
@@ -393,8 +484,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_createQuickAction_failure() {
-		Test.setMock(WebServiceMock.class, new FailureMock());
-
+		MetadataAPIMock.failure();
 		Test.startTest();
 		try {
 			MetadataService.createQuickAction(
@@ -438,7 +528,7 @@ private class MetadataServiceTest {
 		private final WebServiceMock baseMock;
 
 		public LayoutNotFoundMock() {
-			baseMock = new MetadataAPIMock();
+			baseMock = new MetadataAPIMock(true);
 		}
 
 		public void doInvoke(
@@ -490,7 +580,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_readLayouts_success() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		Layout l1 = new Layout(Opportunity.getSObjectType(), UserInfo.getUserId(), 'ns', 'n');
 
 		Test.startTest();
@@ -502,7 +592,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_addClassicButton() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		String webLinkApiName = UUID.randomUUID().toString();
 		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
 		l1.fullName = UUID.randomUUID().toString();
@@ -520,7 +610,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_addLightningButton() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		String webLinkApiName = UUID.randomUUID().toString();
 		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
 		l1.fullName = UUID.randomUUID().toString();
@@ -575,7 +665,7 @@ private class MetadataServiceTest {
 		private final WebServiceMock baseMock;
 
 		public WebLinkNotFoundMock() {
-			baseMock = new MetadataAPIMock();
+			baseMock = new MetadataAPIMock(true);
 		}
 
 		public void doInvoke(
@@ -627,7 +717,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_addSendButton_classic() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			System.assert(MetadataService.addSendButton(
@@ -643,7 +733,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_addSendButton_lightning() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			System.assert(MetadataService.addSendButton(
@@ -659,7 +749,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_removeClassicButton() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		String webLinkApiName = UUID.randomUUID().toString();
 		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
 		l1.fullName = UUID.randomUUID().toString();
@@ -677,7 +767,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_removeLightningButton() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		String webLinkApiName = UUID.randomUUID().toString();
 		MetadataAPI.Layout l1 = new MetadataAPI.Layout();
 		l1.fullName = UUID.randomUUID().toString();
@@ -729,7 +819,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_removeSendButton_classic() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			System.assert(MetadataService.removeSendButton(
@@ -745,7 +835,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_removeSendButton_lightning() {
-		Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			System.assert(MetadataService.removeSendButton(

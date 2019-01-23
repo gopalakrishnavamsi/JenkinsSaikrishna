@@ -212,11 +212,15 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getToken() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			UserSettings__c s = UserSettings__c.getInstance();
-			s.AccessToken0__c = 'unit.test';
+			s.AccessToken0__c = 'unit.';
+			s.AccessToken1__c = 'test.';
+			s.AccessToken2__c = 'token';
 			s.AccessTokenExpires__c = Datetime.now().addHours(1);
 			upsert s;
+
+			System.assert(Credentials.getInstance().isTokenValid);
 
 			Test.startTest();
 			Credentials.AccessToken result = Credentials.getToken();
@@ -224,7 +228,7 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
-			System.assertEquals('unit.test', result.token);
+			System.assertEquals('unit.test.token', result.token);
 		}
 	}
 
@@ -253,9 +257,8 @@ private class CredentialsTest {
 		UUID accountId = UUID.randomUUID();
 		String email = UUID.randomUUID().toString() + '@unit.test';
 		UUID userId = UUID.randomUUID();
-		User u = UserMock.createDocuSignAdministrator(false);
-
-		System.runAs(u) {
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String token = 'test';
 			Datetime expires = Datetime.now().addHours(1);
 
@@ -286,7 +289,7 @@ private class CredentialsTest {
 			System.assertEquals(accountId.toString(), result1.accountName);
 			System.assertEquals(email, result1.email);
 			System.assertEquals(userId, result1.userId);
-			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :u.Id LIMIT 1];
+			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			UserSettings__c s = UserSettings__c.getInstance();
@@ -302,7 +305,7 @@ private class CredentialsTest {
 		UUID accountId = UUID.randomUUID();
 		String email = UUID.randomUUID().toString() + '@unit.test';
 		UUID userId = UUID.randomUUID();
-
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
 			Credentials baseline = Credentials.getInstance();

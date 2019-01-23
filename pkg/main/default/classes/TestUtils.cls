@@ -26,7 +26,7 @@ global class TestUtils {
 	 * @return The SOAP callout mock.
 	 */
 	global static WebServiceMock setMock(final WebServiceMock mock) {
-		Test.setMock(HttpCalloutMock.class, mock);
+		Test.setMock(WebServiceMock.class, mock);
 		return mock;
 	}
 
@@ -349,7 +349,7 @@ global class TestUtils {
 
 	public static String generateState() {
 		generateKey();
-		return SecureUtils.encrypt(generateNonce() + '|https://unit.test.docusign.net/');
+		return SecureUtils.encrypt(generateNonce() + '|Other|https://unit.test.docusign.net/');
 	}
 
 	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {

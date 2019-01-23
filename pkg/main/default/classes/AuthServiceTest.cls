@@ -99,13 +99,300 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_getClientCredentials_undefined() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(null, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Production, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Production,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Production'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_Invalid() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.Invalid, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Production, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Production,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Production'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_Production() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.Production, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Production, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Production,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Production'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_Other() {
+		Url otherUrl = new Url('https://other.docusignhq.com');
+
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.Other, otherUrl);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Other, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Other,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Production'
+			LIMIT 1
+		],
+			otherUrl);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_Demo() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.Demo, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Demo, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Demo,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Demo'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_Stage() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.Stage, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.Stage, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.Stage,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Stage'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_QA() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.QA, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.QA, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.QA,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'QA'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_HQTEST0() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.HQTEST0, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.HQTEST0, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.HQTEST0,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'HQTEST0'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_HQTEST1() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.HQTEST1, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.HQTEST1, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.HQTEST1,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'HQTEST1'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_HQTEST2() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.HQTEST2, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.HQTEST2, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.HQTEST2,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'HQTEST2'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getClientCredentials_HQTEST3() {
+		Test.startTest();
+		AuthService.ClientCredentials result = AuthService.getClientCredentials(DocuSign.Environment.HQTEST3, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(DocuSign.Environment.HQTEST3, result.environment);
+		System.assertNotEquals(null, result.baseUrl);
+		AuthService.ClientCredentials ccs = AuthService.convert(
+			DocuSign.Environment.HQTEST3,
+		[
+			SELECT AccountBaseUrl__c, ClientId__c, ClientSecret__c, JwtSigningKey__c
+			FROM Environment__mdt
+			WHERE DeveloperName = 'HQTEST3'
+			LIMIT 1
+		],
+			null);
+		System.assertEquals(ccs.baseUrl.toExternalForm(), result.baseUrl.toExternalForm());
+		System.assertEquals(ccs.clientId, result.clientId);
+		System.assertEquals(ccs.clientSecret, result.clientSecret);
+		System.assertEquals(ccs.jwtSigningKey, result.jwtSigningKey);
+	}
+
+	@IsTest
+	static void test_getCurrentEnvironment() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			DocuSign.Environment result1 = AuthService.getCurrentEnvironment();
+			DocuSign.Environment result2 = AuthService.getCurrentEnvironment();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertNotEquals(DocuSign.Environment.Invalid, result1);
+			System.assert(result1 === result2);
+		}
+	}
+
+	@IsTest
 	static void test_generateJwt() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			String aud = 'unit.test.docusign.com';
 			String sub = [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Username__c;
+			String iss = UUID.randomUUID().toString();
+			Blob jwtSigningKey = EncodingUtil.base64Decode([
+				SELECT JwtSigningKey__c
+				FROM Environment__mdt
+				WHERE DeveloperName = 'Stage'
+				LIMIT 1
+			].JwtSigningKey__c);
 
 			Test.startTest();
-			String result = AuthService.generateJwt(aud, UUID.parse(sub));
+			String result = AuthService.generateJwt(aud, UUID.parse(sub), iss, jwtSigningKey);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -116,7 +403,7 @@ private class AuthServiceTest {
 			System.assertEquals(AuthService.JWT_HEADER, toks[0]);
 
 			Map<String, Object> payload = (Map<String, Object>)JSON.deserializeUntyped(EncodingUtil.base64Decode(toks[1]).toString());
-			System.assertEquals(AuthService.CLIENT_ID, (String)payload.get('iss'));
+			System.assertEquals(iss, (String)payload.get('iss'));
 			System.assertEquals(sub, (String)payload.get('sub'));
 			System.assertNotEquals(null, (Long)payload.get('iat'));
 			System.assertNotEquals(null, (Long)payload.get('exp'));
@@ -124,7 +411,7 @@ private class AuthServiceTest {
 			System.assertEquals('signature impersonation', (String)payload.get('scope'));
 
 			String signature = AuthService.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(toks[0] + '.' + toks[1]),
-				AuthService.SIGNING_KEY));
+				jwtSigningKey));
 			System.assertEquals(signature, toks[2]);
 		}
 	}
@@ -163,7 +450,7 @@ private class AuthServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			Credentials.AccessToken result = getAuthClient().exchangeCode('1234');
+			Credentials.AccessToken result = getAuthClient().exchangeCode('1234', null, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -187,7 +474,7 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				getAuthClient().exchangeCode('1234');
+				getAuthClient().exchangeCode('1234', UUID.randomUUID().toString(), UUID.randomUUID().toString());
 				throw new AssertException('Expected AuthAPI.exchangeCode to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -285,44 +572,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getAuthBaseUrl_invalid_environment() {
-		try {
-			AuthService.getAuthBaseUrl(null, null);
-			throw new AssertException('Expected getAuthBaseUrl to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-		}
-		try {
-			AuthService.getAuthBaseUrl(DocuSign.Environment.Invalid, null);
-			throw new AssertException('Expected getAuthBaseUrl to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-		}
-		try {
-			AuthService.getAuthBaseUrl(DocuSign.Environment.Other, new Url('http://insecure.docusign.com'));
-			throw new AssertException('Expected getAuthBaseUrl to fail');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-		}
-	}
-
-	@IsTest
-	static void test_getAuthBaseUrl_success() {
-		Url result = AuthService.getAuthBaseUrl(DocuSign.Environment.Production, null);
-		System.assertNotEquals(null, result);
-
-		result = AuthService.getAuthBaseUrl(DocuSign.Environment.Demo, null);
-		System.assertNotEquals(null, result);
-
-		result = AuthService.getAuthBaseUrl(DocuSign.Environment.Stage, null);
-		System.assertNotEquals(null, result);
-
-		result = AuthService.getAuthBaseUrl(DocuSign.Environment.Other, new Url('https://other.docusign.com'));
-		System.assertNotEquals(null, result);
-		System.assertEquals('https://other.docusign.com', result.toExternalForm());
-	}
-
-	@IsTest
 	static void test_generateNonce() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
@@ -352,7 +601,34 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_getLoginUrl_invalid_environment() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				AuthService.getLoginUrl(null, null);
+				throw new AssertException('Expected getLoginUrl to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.getLoginUrl(DocuSign.Environment.Other, null);
+				throw new AssertException('Expected getLoginUrl to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.getLoginUrl(DocuSign.Environment.Other, new Url('https://evil-docusign.net/'));
+				throw new AssertException('Expected getLoginUrl to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getLoginUrl_success() {
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			TestUtils.generateKey();
 
@@ -367,7 +643,12 @@ private class AuthServiceTest {
 			System.assertNotEquals(QueryString.empty, params);
 			System.assertEquals('code', params.get('response_type'));
 			System.assertEquals('signature impersonation', params.get('scope'));
-			System.assertEquals(AuthService.CLIENT_ID, params.get('client_id'));
+			System.assertEquals([
+				SELECT ClientId__c
+				FROM Environment__mdt
+				WHERE DeveloperName = 'Stage'
+				LIMIT 1
+			].ClientId__c, params.get('client_id'));
 			System.assertEquals('https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth', params.get('redirect_uri'));
 			System.assert(String.isNotBlank(params.get('state')));
@@ -381,11 +662,11 @@ private class AuthServiceTest {
 		Url url = new Url('https://unit.test/');
 
 		Test.startTest();
-		String state = AuthService.encodeState(nonce, url);
+		String state = AuthService.encodeState(nonce, DocuSign.Environment.Stage, url);
 		Test.stopTest();
 
 		System.assert(String.isNotBlank(state));
-		System.assertEquals(nonce + '|' + url.toExternalForm(), SecureUtils.decrypt(state));
+		System.assertEquals(nonce + '|Stage|' + url.toExternalForm(), SecureUtils.decrypt(state));
 	}
 
 	@IsTest
@@ -449,7 +730,7 @@ private class AuthServiceTest {
 	static void test_decodeState_invalid_nonce() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String state = SecureUtils.encrypt('test|https://unit.test');
+			String state = SecureUtils.encrypt('test|Demo|https://unit.test');
 
 			Test.startTest();
 			try {
@@ -463,10 +744,27 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_decodeState_invalid_environment() {
+		System.runAs(UserMock.createUser()) {
+			TestUtils.generateKey();
+			String state = SecureUtils.encrypt('test|Bad|https://unit.test');
+
+			Test.startTest();
+			try {
+				AuthService.decodeState(state, 'test');
+				throw new AssertException('Expected decodeState to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_decodeState_invalid_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String state = SecureUtils.encrypt('test|test');
+			String state = SecureUtils.encrypt('test|Demo|test');
 
 			Test.startTest();
 			try {
@@ -483,7 +781,7 @@ private class AuthServiceTest {
 	static void test_decodeState_non_whitelist_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String state = SecureUtils.encrypt('test|https://evil-docusign.net/oauth/token');
+			String state = SecureUtils.encrypt('test|Production|https://evil-docusign.net/oauth/token');
 
 			Test.startTest();
 			try {
@@ -500,15 +798,20 @@ private class AuthServiceTest {
 	static void test_decodeState_valid() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String url = 'https://account.docusign.net/oauth/token';
-			String state = SecureUtils.encrypt('test|' + url);
+			String url = 'https://other.docusign.net/oauth/token';
+			String state = SecureUtils.encrypt('test|Other|' + url);
 
 			Test.startTest();
-			Url result = AuthService.decodeState(state, 'test');
+			AuthService.ClientCredentials result = AuthService.decodeState(state, 'test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(url, result.toExternalForm());
+			System.assertEquals(DocuSign.Environment.Other, result.environment);
+			System.assertNotEquals(null, result.baseUrl);
+			System.assertEquals(url, result.baseUrl.toExternalForm());
+			System.assert(String.isNotBlank(result.clientId));
+			System.assert(String.isNotBlank(result.clientSecret));
+			System.assertNotEquals(null, result.jwtSigningKey);
 		}
 	}
 
@@ -528,7 +831,8 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_redeemCode_api_error() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+		MetadataAPIMock.success();
+		ESignatureAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
 
@@ -556,6 +860,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_redeemCode_no_accounts() {
+		MetadataAPIMock.success();
 		Test.setMock(HttpCalloutMock.class, new NoAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
@@ -583,6 +888,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_redeemCode_multiple_accounts() {
+		MetadataAPIMock.success();
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
@@ -609,7 +915,8 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_redeemCode_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		ESignatureAPIMock.success();
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
 
@@ -642,6 +949,20 @@ private class AuthServiceTest {
 				throw new AssertException('Expected selectAccount to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_selectAccount_invalid_environment() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				AuthService.selectAccount(DocuSign.Environment.Other, null, UUID.randomUUID(), 1234L);
+				throw new AssertException('Expected selectAccount to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -714,6 +1035,7 @@ private class AuthServiceTest {
 	@IsTest
 	static void test_selectAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountsMock());
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			LoginInformation result = AuthService.selectAccount(DocuSign.Environment.Demo, null, UUID.randomUUID(), 22222L);

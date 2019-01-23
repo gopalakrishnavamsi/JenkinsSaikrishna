@@ -91,7 +91,8 @@ public with sharing class MetadataService {
 	}
 
 	@TestVisible
-	private static void validateResults(final List<MetadataAPI.SaveResult> results) {
+	private static List<String> validateResults(final List<MetadataAPI.SaveResult> results) {
+		List<String> fullNames = new List<String>();
 		List<String> errors = new List<String>();
 		for (MetadataAPI.SaveResult result : results) {
 			if (!result.success) {
@@ -99,6 +100,7 @@ public with sharing class MetadataService {
 				LoggerService.getInstance().error('Error saving metadata: ' + msg);
 				errors.add(msg);
 			}
+			fullNames.add(result.fullName);
 		}
 
 		if (Collection.isNotEmpty(errors)) {
@@ -106,39 +108,126 @@ public with sharing class MetadataService {
 				Collection.mkString(errors, '\n')
 			}));
 		}
+
+		return fullNames;
 	}
 
 	/**
-	 * Adds a Remote Site to this Salesforce organization.
+	 * A Salesforce remote site.
+	 */
+	public class RemoteSite {
+		/**
+		 * The unique name of the remote site.
+ 		 */
+		public String name { get; private set; }
+		/**
+		 * The full name of the remote site.
+		 */
+		public String fullName { get; private set; }
+		/**
+		 * Optional description of the remote site.
+		 */
+		public String description { get; private set; }
+		/**
+		 * The remote site URL.
+		 */
+		public Url url { get; private set; }
+
+		private RemoteSite(
+			final String name,
+			final String description,
+			final Url url) {
+
+			this.name = name;
+			this.fullName = Application.namespacePrefix + name;
+			this.description = description;
+			this.url = url;
+		}
+	}
+
+	/**
+	 * Constructs a Remote Site.
+	 *
+	 * @param environment The DocuSign environment.
+	 * @param type The type of the Remote Site.
+	 * @param description Optional description of the Remote Site.
+	 * @param url The Remote Site URL.
+	 */
+	public static RemoteSite newRemoteSite(
+		final DocuSign.Environment environment,
+		final String type,
+		final String description,
+		final Url url) {
+
+		if (environment == null || String.isBlank(type) || url == null) {
+			throw new DocuSignException(Label.UndefinedArgument);
+		}
+
+		if (environment == DocuSign.Environment.Invalid || !DocuSign.isValidUrl(url)) {
+			throw new DocuSignException(Label.InvalidEnvironment);
+		}
+
+		return new RemoteSite(
+			String.format('{0}_{1}', new List<String> {
+				environment == DocuSign.Environment.Other ? url.getHost().substringBefore('.') : environment.name(),
+				type
+			}),
+			description,
+			url);
+	}
+
+	private static MetadataAPI.RemoteSiteSetting convert(final RemoteSite rs) {
+		if (rs == null || String.isBlank(rs.name) || rs.url == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		MetadataAPI.RemoteSiteSetting result = new MetadataAPI.RemoteSiteSetting();
+		result.fullName = rs.name;
+		result.description = rs.description;
+		result.url = rs.url.toExternalForm();
+		result.isActive = true;
+		result.disableProtocolSecurity = false;
+		return result;
+	}
+
+	private static List<MetadataAPI.RemoteSiteSetting> filterNewSites(final List<RemoteSite> remoteSites) {
+		if (Collection.isEmpty(remoteSites)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Map<String, MetadataAPI.RemoteSiteSetting> result = new Map<String, MetadataAPI.RemoteSiteSetting>();
+		List<String> names = new List<String>();
+		for (RemoteSite rs : remoteSites) {
+			String fullName = rs.fullName;
+			result.put(fullName, convert(rs));
+			names.add(fullName);
+		}
+
+		for (MetadataAPI.Metadata md : MetadataAPI.getInstance().readMetadata('RemoteSiteSetting', names)) {
+			result.remove(((MetadataAPI.RemoteSiteSetting)md).fullName);
+		}
+
+		return result.values();
+	}
+
+	/**
+	 * Adds one or more Remote Sites to this Salesforce organization. Existing sites are ignored.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param name The unique name of the Remote Site.
-	 * @param description Optional description of the Remote Site.
-	 * @param url The Remote Site URL.
+	 * @param remoteSites The Remote Sites to create.
 	 *
-	 * @return The API name of the newly-created Remote Site.
+	 * @return The API names of the newly-created Remote Sites without namespaces.
 	 */
-	public static String createRemoteSite(final String name, final String description, final Url url) {
+	public static List<String> createRemoteSites(final List<RemoteSite> remoteSites) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (String.isBlank(name) || url == null) throw new DocuSignException(Label.UndefinedArgument);
+		if (Collection.isEmpty(remoteSites)) throw new DocuSignException(Label.UndefinedArgument);
 
-		MetadataAPI.RemoteSiteSetting remoteSite = new MetadataAPI.RemoteSiteSetting();
-		remoteSite.fullName = name;
-		remoteSite.description = description;
-		remoteSite.isActive = true;
-		remoteSite.disableProtocolSecurity = false;
-		remoteSite.url = url.toExternalForm();
+		List<String> result = new List<String>();
+		List<MetadataAPI.RemoteSiteSetting> rss = filterNewSites(remoteSites);
+		if (Collection.isNotEmpty(rss)) {
+			List<MetadataAPI.SaveResult> results = MetadataAPI.getInstance().createMetadata(rss);
+			result = validateResults(results);
+		}
 
-		List<MetadataAPI.SaveResult> results = MetadataAPI.getInstance().createMetadata(
-			new List<MetadataAPI.Metadata> { remoteSite });
-		validateResults(results);
-
-		MetadataAPI.SaveResult result = (MetadataAPI.SaveResult)Collection.head(results);
-		if (result == null) throw new DocuSignException(Label.SalesforceApiErrorUnexpectedResponse);
-
-		return result.fullName;
+		return result;
 	}
 
 	private static Layout convertLayout(

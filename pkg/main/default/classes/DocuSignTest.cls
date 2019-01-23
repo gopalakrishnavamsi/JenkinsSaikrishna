@@ -5,8 +5,8 @@ private class DocuSignTest {
 	static void test_trialPlanId() {
 		System.assertEquals(UUID.parse([
 			SELECT TrialPlanId__c
-			FROM Organization__mdt
-			WHERE DeveloperName = 'SecureSettings'
+			FROM Environment__mdt
+			WHERE DeveloperName = 'Production'
 			LIMIT 1
 		].TrialPlanId__c), DocuSign.TRIAL_PLAN_ID);
 	}
@@ -44,16 +44,6 @@ private class DocuSignTest {
 	}
 
 	@IsTest
-	static void test_getAuthBaseUrl() {
-		System.assertEquals(null, DocuSign.getAuthBaseUrl(null));
-		System.assertEquals(null, DocuSign.getAuthBaseUrl(DocuSign.Environment.Other));
-		System.assertEquals(null, DocuSign.getAuthBaseUrl(DocuSign.Environment.Invalid));
-		System.assertNotEquals(null, DocuSign.getAuthBaseUrl(DocuSign.Environment.Stage));
-		System.assertNotEquals(null, DocuSign.getAuthBaseUrl(DocuSign.Environment.Demo));
-		System.assertNotEquals(null, DocuSign.getAuthBaseUrl(DocuSign.Environment.Production));
-	}
-
-	@IsTest
 	static void test_getEnvironment_host() {
 		System.assertEquals(DocuSign.Environment.Invalid, DocuSign.getEnvironment((String)null));
 		System.assertEquals(DocuSign.Environment.Invalid, DocuSign.getEnvironment(''));
@@ -63,6 +53,10 @@ private class DocuSignTest {
 		System.assertEquals(DocuSign.Environment.Production, DocuSign.getEnvironment('account.docusign.com'));
 		System.assertEquals(DocuSign.Environment.Demo, DocuSign.getEnvironment('account-d.docusign.com'));
 		System.assertEquals(DocuSign.Environment.Stage, DocuSign.getEnvironment('account-s.docusign.com'));
+		System.assertEquals(DocuSign.Environment.HQTEST0, DocuSign.getEnvironment('account-hqtest0.dev.docusign.net'));
+		System.assertEquals(DocuSign.Environment.HQTEST1, DocuSign.getEnvironment('account-hqtest1.dev.docusign.net'));
+		System.assertEquals(DocuSign.Environment.HQTEST2, DocuSign.getEnvironment('account-hqtest2.dev.docusign.net'));
+		System.assertEquals(DocuSign.Environment.HQTEST3, DocuSign.getEnvironment('account-hqtest3.dev.docusign.net'));
 		System.assertEquals(DocuSign.Environment.Other, DocuSign.getEnvironment('other.docusignhq.com'));
 	}
 
@@ -75,6 +69,10 @@ private class DocuSignTest {
 		System.assertEquals(DocuSign.Environment.Production, DocuSign.getEnvironment(new Url('https://account.docusign.com/oauth/token')));
 		System.assertEquals(DocuSign.Environment.Demo, DocuSign.getEnvironment(new Url('https://account-d.docusign.com')));
 		System.assertEquals(DocuSign.Environment.Stage, DocuSign.getEnvironment(new Url('https://account-s.docusign.com')));
+		System.assertEquals(DocuSign.Environment.HQTEST0, DocuSign.getEnvironment(new Url('https://account-hqtest0.dev.docusign.net/')));
+		System.assertEquals(DocuSign.Environment.HQTEST1, DocuSign.getEnvironment(new Url('https://account-hqtest1.dev.docusign.net/')));
+		System.assertEquals(DocuSign.Environment.HQTEST2, DocuSign.getEnvironment(new Url('https://account-hqtest2.dev.docusign.net/')));
+		System.assertEquals(DocuSign.Environment.HQTEST3, DocuSign.getEnvironment(new Url('https://account-hqtest3.dev.docusign.net/')));
 		System.assertEquals(DocuSign.Environment.Other, DocuSign.getEnvironment(new Url('https://account-x.docusign.com')));
 	}
 
@@ -89,6 +87,11 @@ private class DocuSignTest {
 		System.assertEquals(DocuSign.Environment.Production, DocuSign.parseEnvironment('Production'));
 		System.assertEquals(DocuSign.Environment.Demo, DocuSign.parseEnvironment('demo'));
 		System.assertEquals(DocuSign.Environment.Stage, DocuSign.parseEnvironment('stage'));
+		System.assertEquals(DocuSign.Environment.QA, DocuSign.parseEnvironment('qA'));
+		System.assertEquals(DocuSign.Environment.HQTEST0, DocuSign.parseEnvironment('hqtest0'));
+		System.assertEquals(DocuSign.Environment.HQTEST1, DocuSign.parseEnvironment('hqtest1'));
+		System.assertEquals(DocuSign.Environment.HQTEST2, DocuSign.parseEnvironment('hqtest2'));
+		System.assertEquals(DocuSign.Environment.HQTEST3, DocuSign.parseEnvironment('hqtest3'));
 		System.assertEquals(DocuSign.Environment.Other, DocuSign.parseEnvironment('other'));
 
 	}
@@ -104,5 +107,10 @@ private class DocuSignTest {
 		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.Production, null));
 		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.Demo, null));
 		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.Stage, null));
+		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.QA, null));
+		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.HQTEST0, null));
+		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.HQTEST1, null));
+		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.HQTEST2, null));
+		System.assert(DocuSign.isValidEnvironment(DocuSign.Environment.HQTEST3, null));
 	}
 }

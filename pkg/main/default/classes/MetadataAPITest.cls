@@ -34,7 +34,7 @@ public class MetadataAPITest {
 	@IsTest
 	static void coverGeneratedCodeCRUDOperations() {
 		// Null Web Service mock implementation
-		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock(true));
 		// Only required to workaround a current code coverage bug in the platform
 		MetadataAPI mdService = new MetadataAPI();
 		// Invoke operations
@@ -45,6 +45,7 @@ public class MetadataAPITest {
 		metaDataPort.readMetadata('QuickAction', new String[] { 'b' });
 		metaDataPort.readMetadata('WebLink', new String[] { 'c' });
 		metaDataPort.readMetadata('SecuritySettings', new String[] { 'd' });
+		metaDataPort.readMetadata('RemoteSiteSetting', new String[] { 'e' });
 		Test.stopTest();
 
 		System.assert(true);
@@ -53,7 +54,7 @@ public class MetadataAPITest {
 	@IsTest
 	static void coverGeneratedCodeFileBasedOperations1() {
 		// Null Web Service mock implementation
-		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock());
+		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock(true));
 		// Only required to workaround a current code coverage bug in the platform
 		MetadataAPI mdService = new MetadataAPI();
 		// Invoke operations
@@ -113,6 +114,8 @@ public class MetadataAPITest {
 		new MetadataAPI.readMetadata_element();
 		new MetadataAPI.ReadLayoutResult().getRecords();
 		new MetadataAPI.readLayoutResponse_element();
+		new MetadataAPI.ReadRemoteSiteSettingResult().getRecords();
+		new MetadataAPI.readRemoteSiteSettingResponse_element();
 		new MetadataAPI.ReadSecuritySettingsResult().getRecords();
 		new MetadataAPI.readSecuritySettingsResponse_element().getResult();
 		new MetadataAPI.FeedLayoutFilter();
