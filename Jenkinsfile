@@ -9,7 +9,7 @@ def defaultSalesforceArgs = [
   adminUsername: 'DocuSign_Administrator'
 ]
 
-def defaultPostBuildTestTasks = [
+def defaultPostBuildTests = [
   'Test': [
     outputDir: 'tests',
     outputPath: 'tests/*-junit.xml',
@@ -20,7 +20,7 @@ def defaultPostBuildTestTasks = [
 
 salesforcePipeline(
   appName: 'salesforce-core',
-  postBuildTestTasks: defaultPostBuildTestTasks,
+  postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: true,
   skipSherlockCi: true
