@@ -1,6 +1,6 @@
 {
   "orgName": "DFS-Core Tester",
-  "edition": "Enterprise",
+  "edition": "Developer",
   "features": ["AuthorApex", "API", "ForceComPlatform"],
   "settings": {
     "orgPreferenceSettings": {
