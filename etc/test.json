@@ -2,7 +2,6 @@
   "orgName": "DFS-Core Tester",
   "edition": "Enterprise",
   "features": ["AuthorApex", "API", "ForceComPlatform"],
-  "enabled": ["S1DesktopEnabled"],
   "settings": {
     "orgPreferenceSettings": {
       "translation": true
