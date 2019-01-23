@@ -1,7 +1,7 @@
 {
   "orgName": "DFS-Core Tester",
-  "edition": "Professional",
-  "features": ["AuthorApex"],
+  "edition": "Developer",
+  "features": ["AuthorApex", "API", "ForceComPlatform"],
   "settings": {
     "orgPreferenceSettings": {
       "translation": true
