@@ -22,11 +22,5 @@ salesforcePipeline(
   appName: 'salesforce-core',
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
-  doSonarQube: true,
-  firstStageInitTask: {
-    sh """#!/bin/bash -l
-      ls -l pkg/main/default/translations/en_US.translation-meta.xml
-      cat pkg/main/default/translations/en_US.translation-meta.xml
-      """.stripIndent()
-  }
+  doSonarQube: true
 )
