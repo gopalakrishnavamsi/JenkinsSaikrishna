@@ -25,3 +25,4 @@ salesforcePipeline(
   doSonarQube: true,
   skipSherlockCi: true
 )
+
