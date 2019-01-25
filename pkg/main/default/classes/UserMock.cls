@@ -187,7 +187,10 @@ global class UserMock {
 			ProfileId = profileId,
 			LanguageLocaleKey = 'en_US',
 			Username__c = String.valueOf(dsUserId),
-			CanManageAccount__c = canManageAccount);
+			CanManageAccount__c = canManageAccount,
+			InviteId__c = dsUserId == null ? null : UUID.randomUUID().toString(),
+			InviteDate__c = dsUserId == null ? null : Date.today().addDays(-10),
+			Status__c = dsUserId == null ? null : 'active');
 		insert u;
 
 		if (UUID.isNotEmpty(dsUserId)) {
@@ -197,7 +200,13 @@ global class UserMock {
 			insert s;
 		}
 
-		return u;
+		return [
+			SELECT Id, FirstName, LastName, Name, Email, Profile.Name, Phone, MobilePhone,
+				CanManageAccount__c, InviteId__c, InviteDate__c, Status__c, Username__c
+			FROM User
+			WHERE Id = :u.Id
+			LIMIT 1
+		];
 	}
 
 	public static UUID createAccountConfiguration(final UUID accountId) {
@@ -238,6 +247,8 @@ global class UserMock {
 		accountSettings.CanUseSalesforceApi__c = true;
 		accountSettings.SystemSenderId__c = UUID.randomUUID().toString();
 		accountSettings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
+		accountSettings.AdministratorProfileId__c = TestUtils.randomInteger(1000000);
+		accountSettings.SenderProfileId__c = TestUtils.randomInteger(1000000);
 		insert accountSettings;
 
 		insert EnvelopeSettings__c.getOrgDefaults();

@@ -4651,4 +4651,25 @@
         <shortDescription>DocuSign Gen Service</shortDescription>
         <value>DocuSign Gen Service</value>
     </labels>
+    <labels>
+        <fullName>UserInviteFailed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User invite failed</shortDescription>
+        <value>User invite failed.</value>
+    </labels>
+    <labels>
+        <fullName>UserAlreadyInvited</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User already invited</shortDescription>
+        <value>The user has already been invited to the DocuSign account.</value>
+    </labels>
+    <labels>
+        <fullName>UserInviteRevoked</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User invite revoked</shortDescription>
+        <value>Invite Revoked</value>
+    </labels>
 </CustomLabels>

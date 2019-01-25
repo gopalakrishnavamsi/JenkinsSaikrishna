@@ -96,7 +96,18 @@ public with sharing class SetupController extends Controller {
 
 		try {
 			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
-				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
+				new Account.User(
+					null,
+					sourceId,
+					email,
+					firstName,
+					lastName,
+					null,
+					null,
+					null,
+					canManageAccount,
+					null,
+					APIError.none)
 			});
 			if (Collection.isNotEmpty(users) && users[0].hasError) {
 				throw new APIException(users[0].error);
@@ -111,7 +122,9 @@ public with sharing class SetupController extends Controller {
 	public static List<Account.User> removeUser(final Id sourceId, final String username) {
 		try {
 			AccountService.removeUsers(new List<Account.User> {
-				new Account.User(sourceId, username)
+				new Account.User(
+					UUID.tryParse(username),
+					sourceId)
 			}, true);
 			return AccountService.getUsers();
 		} catch (Exception ex) {

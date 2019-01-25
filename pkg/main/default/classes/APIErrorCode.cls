@@ -30,4 +30,7 @@ public class APIErrorCode {
 	public static final Integer INVALID_RECIPIENT = 1016;
 	public static final Integer CONSENT_REQUIRED = 1017;
 	public static final Integer INVALID_GRANT = 1018;
+	public static final Integer USER_INVITE_ALREADY_EXISTS = 1019;
+	public static final Integer USER_INVITE_NOT_FOUND = 1020;
+	public static final Integer USER_INVITE_INVALID_STATUS = 1021;
 }

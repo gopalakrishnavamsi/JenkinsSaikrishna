@@ -336,8 +336,8 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
+				new Account.User(u1.Id, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
 			});
 			Test.stopTest();
 
@@ -370,8 +370,8 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
+				new Account.User(u1.Id, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
 			});
 			Test.stopTest();
 
@@ -407,10 +407,8 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.addUsers(new List<Account.User> {
-				new Account.User(null, 'user1', u1Email, 'User', 'One', 'pw1',
-					Account.USER_STATUS_ACTIVE, true, true, u1.Id, null),
-				new Account.User(null, 'user2', u2Email, 'User', 'Two', 'pw2',
-					Account.USER_STATUS_PENDING_ACTIVATION, false, true, u2.Id, null)
+				new Account.User(u1.Id, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
 			});
 			Test.stopTest();
 
@@ -439,8 +437,8 @@ public class AccountServiceTest {
 			Test.startTest();
 			try {
 				AccountService.removeUsers(new List<Account.User> {
-					new Account.User(u1.Id, 'u1', 'u1@unit.test', 'User', 'One', true),
-					new Account.User(UserInfo.getUserId(), 'u2', 'u2@unit.test', 'User', 'Two', false)
+					new Account.User(u1.Id, 'u1@unit.test', 'User', 'One', true),
+					new Account.User(UserInfo.getUserId(), 'u2@unit.test', 'User', 'Two', false)
 				}, true);
 				throw new AssertException('Expected removeUsers to fail');
 			} catch (DocuSignException ex) {
@@ -469,8 +467,8 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
+				new Account.User(u1.Id, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
 			}, true);
 			Test.stopTest();
 
@@ -514,8 +512,8 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, u2Email, 'User', 'Two', false)
+				new Account.User(u1.Id, u1Email, 'User', 'One', true),
+				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
 			}, true);
 			Test.stopTest();
 
@@ -562,10 +560,30 @@ public class AccountServiceTest {
 
 			Test.startTest();
 			List<Account.User> result = AccountService.removeUsers(new List<Account.User> {
-				new Account.User(ID1, 'user1', u1Email, 'User', 'One', 'pw1',
-					Account.USER_STATUS_ACTIVE, true, true, u1.Id, null),
-				new Account.User(ID2, 'user2', u2Email, 'User', 'Two', 'pw2',
-					Account.USER_STATUS_PENDING_ACTIVATION, false, true, u2.Id, null)
+				new Account.User(
+					ID1,
+					u1.Id,
+					u1Email,
+					'User',
+					'One',
+					Account.USER_STATUS_ACTIVE,
+					null,
+					null,
+					true,
+					null,
+					null),
+				new Account.User(
+					ID2,
+					u2.Id,
+					u2Email,
+					'User',
+					'Two',
+					Account.USER_STATUS_PENDING,
+					null,
+					null,
+					false,
+					null,
+					null)
 			}, true);
 			Test.stopTest();
 

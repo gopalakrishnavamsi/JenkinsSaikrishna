@@ -553,6 +553,8 @@ public with sharing class Credentials {
 			settings.SystemSenderId__c = null;
 			settings.Features__c = null;
 			settings.FeaturesLastChecked__c = null;
+			settings.AdministratorProfileId__c = null;
+			settings.SenderProfileId__c = null;
 			upsert settings;
 			return settings;
 		}

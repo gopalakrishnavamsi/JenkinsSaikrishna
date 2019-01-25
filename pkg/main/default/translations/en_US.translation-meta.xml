@@ -2510,6 +2510,18 @@
         <label>DocuSign Gen Service</label>
         <name>GenServiceDescription</name>
     </customLabels>
+    <customLabels>
+        <label>User invite failed.</label>
+        <name>UserInviteFailed</name>
+    </customLabels>
+    <customLabels>
+        <label>The user has already been invited to the DocuSign account.</label>
+        <name>UserAlreadyInvited</name>
+    </customLabels>
+    <customLabels>
+        <label>Invite Revoked</label>
+        <name>UserInviteRevoked</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

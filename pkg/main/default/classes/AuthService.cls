@@ -327,6 +327,82 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
+	private class APIPermissionProfile {
+		public String permissionProfileId;
+		public String permissionProfileName;
+	}
+
+	@TestVisible
+	private class APIPermissionProfiles {
+		public List<APIPermissionProfile> permissionProfiles;
+
+		public PermissionProfileIds toExternalForm() {
+			Long adminId = null, senderId = null;
+			for (APIPermissionProfile pp : this.permissionProfiles == null
+				? new List<APIPermissionProfile>() : this.permissionProfiles) {
+
+				if (pp == null) continue;
+				// TODO: Determine if this breaks for non-English users.
+				if (pp.permissionProfileName == 'Account Administrator') {
+					adminId = Long.valueOf(pp.permissionProfileId);
+				} else if (pp.permissionProfileName == 'DocuSign Sender') {
+					senderId = Long.valueOf(pp.permissionProfileId);
+				}
+			}
+			return new PermissionProfileIds(adminId, senderId);
+		}
+	}
+
+	@TestVisible
+	private class PermissionProfileIds {
+		public Long administratorId { get; private set; }
+		public Long senderId { get; private set; }
+
+		public PermissionProfileIds(
+			final Long administratorId,
+			final Long senderId) {
+
+			this.administratorId = administratorId;
+			this.senderId = senderId;
+		}
+	}
+
+	@TestVisible
+	private class AccountAPI extends DocuSignAPI {
+
+		private final String accessToken;
+
+		public AccountAPI(
+			final Url baseUrl,
+			final UUID accountId,
+			final String accessToken) {
+
+			super(new Url(baseUrl, '/restapi/v2/accounts/' + accountId + '/'));
+
+			this.accessToken = accessToken;
+		}
+
+		public PermissionProfileIds getPermissionProfileIds() {
+			RestAPI.Response response = this.get(
+				this.getBaseUrl(),
+				new List<Object> { 'permission_profiles' },
+				QueryString.empty,
+				new Map<String, String> {
+					'Authorization' => 'Bearer ' + this.accessToken,
+					'Accept' => 'application/json'
+				},
+				AUTH_TIMEOUT);
+			if (response.hasError) {
+				this.log.error('Failed to read DocuSign permission profile IDs: ' + response.error);
+				throw new APIException(response.error);
+			}
+
+			return ((APIPermissionProfiles)JSON.deserialize(response.body, APIPermissionProfiles.class))
+				.toExternalForm();
+		}
+	}
+
+	@TestVisible
 	private static final AuthService.Database DB = new AuthService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
 	@TestVisible
@@ -383,21 +459,28 @@ public with sharing class AuthService {
 			return config;
 		}
 
-		public Gen.Product updateProduct(final Gen.Product product) {
-			if (product == null) return null;
+		public AccountSettings__c updateSettings(
+			final PermissionProfileIds permissionProfileIds,
+			final Gen.Product product) {
 
-			updateConfiguration(
-				product.inviteEmailSubject,
-				product.inviteEmailBody);
+			if (product != null) {
+				updateConfiguration(
+					product.inviteEmailSubject,
+					product.inviteEmailBody);
+			}
 
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.InviteCallbackUrl__c = product.inviteCallbackUrl == null
+			settings.AdministratorProfileId__c = permissionProfileIds == null
+				? null : permissionProfileIds.administratorId;
+			settings.SenderProfileId__c = permissionProfileIds == null
+				? null : permissionProfileIds.senderId;
+			settings.InviteCallbackUrl__c = product == null || product.inviteCallbackUrl == null
 				? null : product.inviteCallbackUrl.toExternalForm();
-			settings.InviteRedirectUrl__c = product.inviteRedirectUrl == null
+			settings.InviteRedirectUrl__c = product == null || product.inviteRedirectUrl == null
 				? null : product.inviteRedirectUrl.toExternalForm();
 			upsert settings;
 
-			return product;
+			return settings;
 		}
 	}
 
@@ -821,7 +904,9 @@ public with sharing class AuthService {
 				},
 				token.token);
 
-		DB.updateProduct(product);
+		DB.updateSettings(
+			new AuthService.AccountAPI(eSignatureBaseUrl, account.id, token.token).getPermissionProfileIds(),
+			product);
 
 		return Credentials.save(
 			new Credentials.Environment(

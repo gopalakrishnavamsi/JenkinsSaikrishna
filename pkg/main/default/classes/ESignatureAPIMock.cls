@@ -27,6 +27,7 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 		'bulk_send_lists' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkSendListsMock',
 		'custom_fields' => Application.classNamespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
 		'envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
+		'permission_profiles' => Application.classNamespacePrefix + 'ESignatureAPIMock.PermissionProfilesMock',
 		'service_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.ServiceInformationMock',
 		'settings' => Application.classNamespacePrefix + 'ESignatureAPIMock.SettingsMock',
 		'signing_groups' => Application.classNamespacePrefix + 'ESignatureAPIMock.SigningGroupsMock',
@@ -413,6 +414,25 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 		}
 	}
 
+	public class PermissionProfilesMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'GET') {
+				AuthService.APIPermissionProfile adminProfile = new AuthService.APIPermissionProfile();
+				adminProfile.permissionProfileId = '1111';
+				adminProfile.permissionProfileName = 'Account Administrator';
+				AuthService.APIPermissionProfile senderProfile = new AuthService.APIPermissionProfile();
+				senderProfile.permissionProfileId = '2222';
+				senderProfile.permissionProfileName = 'DocuSign Sender';
+				AuthService.APIPermissionProfiles pps = new AuthService.APIPermissionProfiles();
+				pps.permissionProfiles = new List<AuthService.APIPermissionProfile> { adminProfile, senderProfile };
+				response = MockResponse.ok(pps);
+			}
+			return response;
+		}
+	}
+
 	public class ServiceInformationMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -780,7 +800,7 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 				if (nu != null && nu.newUsers != null) {
 					for (AccountAPI.APIUser u : nu.newUsers) {
 						u.userId = UUID.randomUUID().toString();
-						u.userStatus = 'ActivationSent';
+						u.userStatus = 'Pending';
 						u.apiPassword = randomPassword();
 					}
 				}

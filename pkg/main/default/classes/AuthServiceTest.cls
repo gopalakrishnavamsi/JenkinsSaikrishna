@@ -18,8 +18,9 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_database_updateProduct() {
+	static void test_database_updateSettings() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AuthService.PermissionProfileIds ppIds = new AuthService.PermissionProfileIds(1111L, 2222L);
 			Gen.Product p = new Gen.Product(
 				'active',
 				false,
@@ -32,12 +33,10 @@ private class AuthServiceTest {
 				'email body');
 
 			Test.startTest();
-			Gen.Product result1 = AuthService.DB.updateProduct(p);
-			Gen.Product result2 = AuthService.DB.updateProduct(p);
+			AccountSettings__c result = AuthService.DB.updateSettings(ppIds, p);
 			Test.stopTest();
 
-			System.assertNotEquals(null, result1);
-			System.assertNotEquals(null, result2);
+			System.assertNotEquals(null, result);
 			List<Configuration__c> cs = [
 				SELECT InviteEmailSubject__c, InviteEmailBody__c
 				FROM Configuration__c
@@ -48,6 +47,8 @@ private class AuthServiceTest {
 			System.assertEquals(cs[0].InviteEmailSubject__c, p.inviteEmailSubject);
 			System.assertEquals(cs[0].InviteEmailBody__c, p.inviteEmailBody);
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			System.assertEquals(ppIds.administratorId, (Long)s.AdministratorProfileId__c);
+			System.assertEquals(ppIds.senderId, (Long)s.SenderProfileId__c);
 			System.assertEquals(p.inviteCallbackUrl.toExternalForm(), s.InviteCallbackUrl__c);
 			System.assertEquals(p.inviteRedirectUrl.toExternalForm(), s.InviteRedirectUrl__c);
 		}
@@ -719,6 +720,43 @@ private class AuthServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.isValid);
+		}
+	}
+
+	@IsTest
+	static void test_AccountAPI_getPermissionProfileIds_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				new AuthService.AccountAPI(
+					new Url('https://esign.test.docusign.net'),
+					UUID.randomUUID(),
+					'test')
+					.getPermissionProfileIds();
+				throw new AssertException('Expected AccountAPI.getPermissionProfileIds to fail');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_AccountAPI_getPermissionProfileIds_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			AuthService.PermissionProfileIds result = new AuthService.AccountAPI(
+				new Url('https://esign.test.docusign.net'),
+				UUID.randomUUID(),
+				'test')
+				.getPermissionProfileIds();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1111L, result.administratorId);
+			System.assertEquals(2222L, result.senderId);
 		}
 	}
 
