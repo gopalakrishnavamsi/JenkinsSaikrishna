@@ -24,3 +24,4 @@ salesforcePipeline(
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: true
 )
+
