@@ -22,7 +22,6 @@ salesforcePipeline(
   appName: 'salesforce-core',
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
-  doSonarQube: true,
-  skipSherlockCi: true
+  doSonarQube: true
 )
 
