@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
     <customApplications>
-        <label>DocuSign for Salesforce Essentials</label>
+        <label>DocuSign</label>
         <name>DocuSign</name>
     </customApplications>
     <customLabels>
@@ -2398,6 +2398,10 @@
         <name>AccessTokenTooLong_2</name>
     </customLabels>
     <customLabels>
+        <label>RSA key is too long ({0} > {1}).</label>
+        <name>KeyTooLong_2</name>
+    </customLabels>
+    <customLabels>
         <label>DocuSign post-install script version 2</label>
         <name>PostInstall2</name>
     </customLabels>
@@ -2479,8 +2483,9 @@
         <name>Success</name>
     </customLabels>
     <customLabels>
-        <label>[{0}] {1}\nReference ID: {2}</label>
-        <name>GenApiError_3</name>
+        <label>[{0}] {1}
+            Reference ID: {2}</label>
+        <name>ApiError_3</name>
     </customLabels>
     <customLabels>
         <label>Query is invalid.</label>
@@ -2490,10 +2495,34 @@
         <label>DocuSign Account Service</label>
         <name>AccountServiceDescription</name>
     </customLabels>
+    <customLabels>
+        <label>DocuSign Provisioning Service</label>
+        <name>ProvisioningServiceDescription</name>
+    </customLabels>
 	<customLabels>
 		<label>DocuSign ESignature Service</label>
 		<name>ESignatureServiceDescription</name>
 	</customLabels>
+    <customLabels>
+        <label>DocuSign Auth Service</label>
+        <name>ScmAuthServiceDescription</name>
+    </customLabels>
+    <customLabels>
+        <label>DocuSign Gen Service</label>
+        <name>GenServiceDescription</name>
+    </customLabels>
+    <customLabels>
+        <label>User invite failed.</label>
+        <name>UserInviteFailed</name>
+    </customLabels>
+    <customLabels>
+        <label>The user has already been invited to the DocuSign account.</label>
+        <name>UserAlreadyInvited</name>
+    </customLabels>
+    <customLabels>
+        <label>Invite Revoked</label>
+        <name>UserInviteRevoked</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

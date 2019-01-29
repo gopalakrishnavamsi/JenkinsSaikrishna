@@ -218,25 +218,17 @@ public class Account {
 	}
 
 	/**
-	 * Unknown user status.
-	 */
-	public static final String USER_STATUS_UNKNOWN = Label.Unknown;
-	/**
 	 * User must respond to activation email.
 	 */
-	public static final String USER_STATUS_PENDING_ACTIVATION = Label.PendingActivation;
+	public static final String USER_STATUS_PENDING = 'Pending';
 	/**
 	 * User is an active member of the account.
 	 */
-	public static final String USER_STATUS_ACTIVE = Label.Active;
+	public static final String USER_STATUS_ACTIVE = 'Active';
 	/**
-	 * The user account membership has been closed.
+	 * The user account membership has been closed or an invite has been revoked.
 	 */
-	public static final String USER_STATUS_CLOSED = Label.Closed;
-	/**
-	 * The user account membership has been disabled.
-	 */
-	public static final String USER_STATUS_DISABLED = Label.Disabled;
+	public static final String USER_STATUS_INACTIVE = 'Inactive';
 
 	/**
 	 * Representation of a DocuSign account user or member.
@@ -248,10 +240,10 @@ public class Account {
 		@AuraEnabled
 		public UUID id { get; private set; }
 		/**
-		 * The DocuSign username.
+		 * The Salesforce ID of the user.
 		 */
 		@AuraEnabled
-		public String username { get; private set; }
+		public Id sourceId { get; private set; }
 		/**
 		 * The DocuSign user email.
 		 */
@@ -277,27 +269,30 @@ public class Account {
 			}
 		}
 		/**
-		 * The API password for the user. This is never returned through public methods.
-		 */
-		public transient String apiPassword { get; private set; }
-		/**
 		 * The user status.
 		 */
+		@AuraEnabled
 		public String status { get; private set; }
+		/**
+		 * The DocuSign user invite ID.
+		 */
+		@AuraEnabled
+		public UUID inviteId { get; private set; }
+		/**
+		 * The DocuSign user invite date.
+		 */
+		@AuraEnabled
+		public Date inviteDate { get; private set; }
 		/**
 		 * Whether or not the user is a DocuSign account administrator.
 		 */
 		@AuraEnabled
 		public Boolean canManageAccount { get; private set; }
 		/**
-		 * Whether or not the user can send DocuSign envelopes.
-		 */
-		public Boolean canSendEnvelope { get; private set; }
-		/**
-		 * The Salesforce ID of the user.
+		 * The user's Salesforce profile.
 		 */
 		@AuraEnabled
-		public Id sourceId { get; private set; }
+		public String profile { get; private set; }
 		/**
 		 * The error returned by the API for bulk add or remove account member operations.
 		 */
@@ -316,60 +311,95 @@ public class Account {
 		/**
 		 * Constructs a DocuSign user from a source ID and username.
 		 *
-		 * @param sourceId The ID of the Salesforce User.
-		 * @param username The DocuSign username.
+		 * @param id The DocuSign user ID.
+		 * @param sourceId The Salesforce user ID.
 		 */
-		public User(final Id sourceId, final String username) {
-			this(UUID.tryParse(username), username, null, null, null, null, USER_STATUS_UNKNOWN, false, false, sourceId,
+		public User(
+			final UUID id,
+			final Id sourceId) {
+
+			this(
+				id,
+				sourceId,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				false,
+				null,
 				APIError.none);
 		}
 
 		/**
 		 * Constructs a DocuSign user.
 		 *
-		 * @param sourceId The Salesforce User ID.
-		 * @param username The username.
+		 * @param sourceId The salesforce user ID.
 		 * @param email The user's email.
 		 * @param firstName The user's first name.
 		 * @param lastName The user's last name.
 		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
 		 */
-		public User(final Id sourceId, final String username, final String email, final String firstName,
-			final String lastName, final Boolean canManageAccount) {
+		public User(
+			final Id sourceId,
+			final String email,
+			final String firstName,
+			final String lastName,
+			final Boolean canManageAccount) {
 
-			this(null, username, email, firstName, lastName, null, USER_STATUS_UNKNOWN, canManageAccount,
-				true, sourceId, APIError.none);
+			this(
+				null,
+				sourceId,
+				email,
+				firstName,
+				lastName,
+				null,
+				null,
+				null,
+				canManageAccount,
+				null,
+				null);
 		}
 
 		/**
 		 * Constructs a DocuSign user.
 		 *
 		 * @param id The DocuSign user ID.
-		 * @param username The username.
+		 * @param sourceId The Salesforce ID of the user.
 		 * @param email The user's email.
 		 * @param firstName The user's first name.
 		 * @param lastName The user's last name.
-		 * @param apiPassword The user's API password.
 		 * @param status The user's status.
+		 * @param inviteId The DocuSign user invite ID.
+		 * @param inviteDate The DocuSign user invite date.
 		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
-		 * @param canSendEnvelope Whether or not the user can send DocuSign envelopes.
-		 * @param sourceId The Salesforce ID of the user.
+		 * @param profile The user's Salesforce profile name.
 		 * @param error The error returned by the API for bulk add or remove account member operations.
 		 */
-		public User(final UUID id, final String username, final String email, final String firstName, final String lastName,
-			final String apiPassword, final String status, final Boolean canManageAccount,
-			final Boolean canSendEnvelope, final Id sourceId, final APIError error) {
+		public User(
+			final UUID id,
+			final Id sourceId,
+			final String email,
+			final String firstName,
+			final String lastName,
+			final String status,
+			final UUID inviteId,
+			final Date inviteDate,
+			final Boolean canManageAccount,
+			final String profile,
+			final APIError error) {
 
 			this.id = id;
-			this.username = username;
+			this.sourceId = sourceId;
 			this.email = email;
 			this.firstName = firstName;
 			this.lastName = lastName;
-			this.apiPassword = apiPassword;
 			this.status = status;
+			this.inviteId = inviteId;
+			this.inviteDate = inviteDate;
 			this.canManageAccount = canManageAccount;
-			this.canSendEnvelope = canSendEnvelope;
-			this.sourceId = sourceId;
+			this.profile = profile;
 			this.error = error == null ? APIError.none : error;
 		}
 
@@ -382,6 +412,26 @@ public class Account {
 		 */
 		public User withError(final APIError error) {
 			this.error = error;
+			return this;
+		}
+
+		/**
+		 * Updates a user's <code>status</code>, <code>inviteId</code>, and <code>inviteDate</code> properties.
+		 *
+		 * @param status The DocuSign user status.
+		 * @param inviteId The DocuSign invite ID.
+		 * @param inviteDate The DocuSign invite date.
+		 *
+		 * @return The user with updated invite properties.
+		 */
+		public User withInvite(
+			final String status,
+			final UUID inviteId,
+			final Date inviteDate) {
+
+			this.status = status;
+			this.inviteId = inviteId;
+			this.inviteDate = inviteDate;
 			return this;
 		}
 	}

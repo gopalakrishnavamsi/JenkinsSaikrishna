@@ -98,6 +98,7 @@ private class PostInstallTest {
 			System.assertNotEquals(null, settings.Id);
 			System.assertEquals(null, settings.Environment__c);
 			System.assertEquals(null, settings.AccountBaseUrl__c);
+			System.assertEquals(null, settings.ProvisioningBaseUrl__c);
 			System.assertEquals(null, settings.ESignatureBaseUrl__c);
 			System.assertEquals(null, settings.AccountId__c);
 			System.assertEquals(null, settings.Email__c);
@@ -119,6 +120,7 @@ private class PostInstallTest {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.Environment__c = 'unit.test';
 			settings.AccountBaseUrl__c = 'https://account.unit.test';
+			settings.ProvisioningBaseUrl__c = 'https://api.unit.test';
 			settings.ESignatureBaseUrl__c = 'https://esign.unit.test';
 			settings.AccountId__c = UUID.randomUUID().toString();
 			settings.Email__c = 'u@unit.test';
@@ -151,6 +153,7 @@ private class PostInstallTest {
 			System.assertNotEquals(null, s2.Id);
 			System.assertEquals(settings.Environment__c, s2.Environment__c);
 			System.assertEquals(settings.AccountBaseUrl__c, s2.AccountBaseUrl__c);
+			System.assertEquals(settings.ProvisioningBaseUrl__c, s2.ProvisioningBaseUrl__c);
 			System.assertEquals(settings.ESignatureBaseUrl__c, s2.ESignatureBaseUrl__c);
 			System.assertEquals(settings.AccountId__c, s2.AccountId__c);
 			System.assertEquals(settings.Email__c, s2.Email__c);

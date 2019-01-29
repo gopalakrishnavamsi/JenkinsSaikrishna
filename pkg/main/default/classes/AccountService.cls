@@ -3,6 +3,7 @@
  */
 global with sharing class AccountService {
 
+	@TestVisible
 	private static final Database DB = new AccountService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
 	private static Account currentAccount;
@@ -13,31 +14,44 @@ global with sharing class AccountService {
 			if (u == null) return null;
 
 			return new Account.User(
+				UUID.tryParse(u.Username__c),
 				u.Id,
-				u.Username__c,
 				u.Email,
 				u.FirstName,
 				u.LastName,
-				u.CanManageAccount__c);
+				u.Status__c,
+				UUID.tryParse(u.InviteId__c),
+				u.InviteDate__c,
+				u.CanManageAccount__c,
+				u.Profile.Name,
+				APIError.none);
 		}
 
 		public List<Account.User> queryUsers() {
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
-				'Id', 'Email', 'FirstName', 'LastName', 'Username__c', 'CanManageAccount__c'
+				'Id', 'Email', 'FirstName', 'LastName',
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'CanManageAccount__c',
+				Application.namespacePrefix + 'InviteId__c',
+				Application.namespacePrefix + 'InviteDate__c'
 			});
+			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> { 'Name' });
 
 			List<Account.User> result = new List<Account.User>();
 			for (User u : [
-				SELECT Id, Email, FirstName, LastName, Username__c, CanManageAccount__c
+				SELECT Id, Email, FirstName, LastName, Profile.Name,
+					Username__c, Status__c, CanManageAccount__c, InviteId__c, InviteDate__c
 				FROM User
 				WHERE Username__c != NULL
+				LIMIT 1000
 			]) {
 				result.add(convert(u));
 			}
 			return result;
 		}
 	}
-
+	
 	/**
 	 * Retrieves information for the current DocuSign account. This includes DocuSign trial status if the current
 	 * account is a trial account.
@@ -162,8 +176,9 @@ global with sharing class AccountService {
 			} else {
 				creds.put(u.sourceId, new Credentials.UserCredentials(
 					u.id,
-					u.canManageAccount,
-					null));
+					u.name,
+					u.email,
+					u.canManageAccount));
 				result.add(u.withError(null));
 			}
 		}
@@ -208,8 +223,7 @@ global with sharing class AccountService {
 			for (Account.User u : users) {
 				if (u.sourceId == currentUserId
 					|| (String.isNotBlank(currentDSUsername)
-					&& (String.valueOf(u.id) == currentDSUsername
-					|| u.username == currentDSUsername))) {
+					&& String.valueOf(u.id) == currentDSUsername)) {
 
 					throw new DocuSignException(Label.CannotRemoveSelf);
 				}

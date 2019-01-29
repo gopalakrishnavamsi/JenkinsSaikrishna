@@ -939,7 +939,7 @@ public class MetadataAPI {
 		private String[] field_order_type_info = new String[] { 'allOrNone' };
 	}
 	public class Client {
-		public String endpoint_x = Url.getSalesforceBaseUrl().toExternalForm() + '/services/Soap/m/' + Salesforce.API_VERSION;
+		public String endpoint_x = Url.getOrgDomainUrl().toExternalForm() + '/services/Soap/m/' + Salesforce.API_VERSION;
 		public Map<String, String> inputHttpHeaders_x;
 		public Map<String, String> outputHttpHeaders_x;
 		public String clientCertName_x;

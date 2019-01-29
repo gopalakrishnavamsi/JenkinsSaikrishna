@@ -87,7 +87,7 @@ public virtual class RestAPI {
 		// Build request Url
 		String spec = '';
 		Boolean prependSlash = false;
-		for (Object p : path) {
+		for (Object p : (path == null ? new List<Object>() : path)) {
 			final String s = String.valueOf(p);
 			if (String.isNotBlank(s)) {
 				if (prependSlash) { // Ensure the first path part is not absolute as it will overwrite the path portion of baseUrl.

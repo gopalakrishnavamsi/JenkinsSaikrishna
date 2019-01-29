@@ -3,16 +3,19 @@ public with sharing class TemplateAPI extends ESignatureAPI {
 	private static TemplateAPI self = null;
 	private final Map<UUID, Template> templateMap;
 
-	@TestVisible
-	private TemplateAPI(final Credentials apiCredentials) {
-		super(apiCredentials);
+	private TemplateAPI(
+		final Url baseUrl,
+		final UUID accountId) {
+
+		super(baseUrl, 'v2', accountId);
 
 		this.templateMap = new Map<UUID, Template>();
 	}
 
 	public static TemplateAPI getInstance() {
 		if (self == null) {
-			self = new TemplateAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new TemplateAPI(c.environment.eSignatureBaseUrl, c.account.id);
 		}
 		return self;
 	}

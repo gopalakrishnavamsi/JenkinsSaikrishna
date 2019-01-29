@@ -332,7 +332,7 @@ public with sharing class MetadataService {
 		webLink.openType = 'replace';
 		webLink.protected_x = false;
 		webLink.url = String.format('\'{\'!URLFOR(\'\'{0}\'\', null, {1})\'}\'', new List<String> {
-			new Url(Url.getSalesforceBaseUrl(), page.getUrl()).getPath(),
+			new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
 			buildInputs(type, parameters)
 		});
 

@@ -26,6 +26,7 @@ private class DocuSignTest {
 		System.assert(DocuSign.isValidHost('stage.docusign.net'));
 		System.assert(DocuSign.isValidHost('other.docusignhq.com'));
 		System.assert(DocuSign.isValidHost('api-hqtest3.dev.docusign.net'));
+		System.assert(DocuSign.isValidHost('something.springcm.com'));
 		System.assert(!DocuSign.isValidHost(null));
 		System.assert(!DocuSign.isValidHost(''));
 		System.assert(!DocuSign.isValidHost(' '));
@@ -33,6 +34,7 @@ private class DocuSignTest {
 		System.assert(!DocuSign.isValidHost('evil-docusign.net'));
 		System.assert(!DocuSign.isValidHost('evil-docusign.com'));
 		System.assert(!DocuSign.isValidHost('evil-docusignhq.com'));
+		System.assert(!DocuSign.isValidHost('evil-springcm.com'));
 	}
 
 	@IsTest

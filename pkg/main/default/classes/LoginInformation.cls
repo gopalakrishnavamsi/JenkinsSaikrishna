@@ -80,10 +80,10 @@ public class LoginInformation {
 		@AuraEnabled
 		public String name { get; private set; }
 		/**
-		 * The DocuSign API base URL string.
+		 * The DocuSign ESignature API base URL string.
 		 */
 		@AuraEnabled
-		public String baseUrl { get; private set; }
+		public String eSignatureBaseUrl { get; private set; }
 		/**
 		 * Whether this is the default DocuSign account linked to the user.
 		 */
@@ -105,13 +105,13 @@ public class LoginInformation {
 			final UUID id,
 			final Long accountNumber,
 			final String name,
-			final String baseUrl,
+			final String eSignatureBaseUrl,
 			final Boolean isDefault) {
 
 			this.id = id;
 			this.accountNumber = accountNumber;
 			this.name = name;
-			this.baseUrl = baseUrl;
+			this.eSignatureBaseUrl = eSignatureBaseUrl;
 			this.isDefault = isDefault;
 		}
 	}

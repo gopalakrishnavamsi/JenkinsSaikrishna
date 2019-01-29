@@ -9,15 +9,16 @@ public with sharing class SetupController extends Controller {
 				Credentials c = Credentials.getInstance();
 				// TODO: Handle trial accounts
 				return new LoginInformation(
-					c.userId,
-					null,
-					c.email,
+					c.user.id,
+					c.user.name,
+					c.account.email,
 					new List<LoginInformation.Account> {
 						new LoginInformation.Account(
-							c.accountId,
-							c.accountNumber,
-							c.accountName,
-							c.eSignatureBaseUrl == null ? null : c.eSignatureBaseUrl.toExternalForm(),
+							c.account.id,
+							c.account.accountNumber,
+							c.account.name,
+							c.environment.eSignatureBaseUrl == null
+								? null : c.environment.eSignatureBaseUrl.toExternalForm(),
 							true)
 					});
 			} else {
@@ -54,14 +55,12 @@ public with sharing class SetupController extends Controller {
 	public static LoginInformation selectAccount(
 		final String environment,
 		final String otherUrl,
-		final String userId,
 		final Long selectedAccountNumber) {
 
 		try {
 			return AuthService.selectAccount(
 				DocuSign.parseEnvironment(environment),
 				String.isBlank(otherUrl) ? null : new Url(otherUrl),
-				UUID.parse(userId),
 				selectedAccountNumber);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to select account');
@@ -97,7 +96,18 @@ public with sharing class SetupController extends Controller {
 
 		try {
 			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
-				new Account.User(sourceId, email, email, firstName, lastName, canManageAccount)
+				new Account.User(
+					null,
+					sourceId,
+					email,
+					firstName,
+					lastName,
+					null,
+					null,
+					null,
+					canManageAccount,
+					null,
+					APIError.none)
 			});
 			if (Collection.isNotEmpty(users) && users[0].hasError) {
 				throw new APIException(users[0].error);
@@ -112,7 +122,9 @@ public with sharing class SetupController extends Controller {
 	public static List<Account.User> removeUser(final Id sourceId, final String username) {
 		try {
 			AccountService.removeUsers(new List<Account.User> {
-				new Account.User(sourceId, username)
+				new Account.User(
+					UUID.tryParse(username),
+					sourceId)
 			}, true);
 			return AccountService.getUsers();
 		} catch (Exception ex) {

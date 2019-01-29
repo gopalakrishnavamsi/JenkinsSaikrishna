@@ -13,9 +13,7 @@
  * 		log complete requests or responses as they may contain the above.
  * 	7) Avoid creating new callouts. First check if the information required is already returned by an existing API call.
  */
-// TODO: Rename ESignatureAPI to something more general.
-// TODO: Handle other base URLs.
-public with sharing virtual class ESignatureAPI extends RestAPI {
+public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 
 	private static ESignatureAPI self = null;
 	private static final String SUCCESS = 'SUCCESS';
@@ -25,53 +23,27 @@ public with sharing virtual class ESignatureAPI extends RestAPI {
 	private static final String PARTNER_AUTHENTICATION_FAILED = 'PARTNER_AUTHENTICATION_FAILED';
 
 	@TestVisible
-	private transient Map<String, String> defaultHeaders;
-	@TestVisible
-	private transient final Url baseUrl;
-	@TestVisible
-	private final UUID userId;
+	protected ESignatureAPI(
+		final Url baseUrl,
+		final String apiVersion,
+		final UUID accountId) {
 
-	@TestVisible
-	protected ESignatureAPI(final Credentials apiCredentials) {
-		this(apiCredentials, 'v2');
-	}
+		super(baseUrl == null ? null : new Url(baseUrl,
+			String.format('/restapi/{0}/accounts/{1}/',
+				new List<String> {
+					String.isBlank(apiVersion) ? 'v2' : apiVersion,
+					String.valueOf(accountId)
+				})));
 
-	@TestVisible
-	protected ESignatureAPI(final Credentials apiCredentials, final String apiVersion) {
-		super();
-
-		if (apiCredentials == null || !apiCredentials.isValid) throw new DocuSignException(Label.AccountNotConfigured);
-
-		this.baseUrl = new Url(apiCredentials.eSignatureBaseUrl, String.format('/restapi/{0}/accounts/{1}/',
-			new List<String> {
-				String.isBlank(apiVersion) ? 'v2' : apiVersion,
-				String.valueOf(apiCredentials.accountId)
-			}));
-		this.userId = apiCredentials.userId;
+		if (baseUrl == null || UUID.isEmpty(accountId)) throw UnauthorizedException.accountNotConfigured();
 	}
 
 	public static ESignatureAPI getInstance() {
 		if (self == null) {
-			self = new ESignatureAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new ESignatureAPI(c.environment.eSignatureBaseUrl, 'v2', c.account.id);
 		}
 		return self;
-	}
-
-	@TestVisible
-	protected virtual Url getBaseUrl() {
-		return this.baseUrl;
-	}
-
-	@TestVisible
-	protected virtual Map<String, String> getDefaultHeaders() {
-		if (this.defaultHeaders == null) {
-			this.defaultHeaders = new Map<String, String> {
-				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
-				'Authorization' => 'Bearer ' + AuthService.getAccessToken()
-			};
-		}
-		return this.defaultHeaders;
 	}
 
 	protected virtual RestAPI.Response get(final List<Object> path, final QueryString queryString, final Integer timeout) {
@@ -169,7 +141,7 @@ public with sharing virtual class ESignatureAPI extends RestAPI {
 		Boolean result = false;
 		try {
 			super.get(
-				baseUrl,
+				this.getBaseUrl(),
 				new List<Object> { 'service_information' },
 				QueryString.empty,
 				new Map<String, String>(),

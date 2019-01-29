@@ -94,7 +94,6 @@
     sa.setParams({
       environment: component.get('v.environment'),
       otherUrl: component.get('v.otherUrl'),
-      userId: component.get('v.login.id.value'),
       selectedAccountNumber: component.get('v.selectedAccountNumber')
     });
     sa.setCallback(this, function (response) {

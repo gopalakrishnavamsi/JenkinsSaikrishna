@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>JwtSigningKey__c</fullName>
+	<fullName>PrivateKey0__c</fullName>
 	<deprecated>false</deprecated>
 	<externalId>false</externalId>
-	<fieldManageability>DeveloperControlled</fieldManageability>
-	<label>JWT signing key</label>
-	<length>32768</length>
+	<label>RSA private key part 1</label>
+	<length>255</length>
 	<required>false</required>
-	<type>LongTextArea</type>
+	<trackTrending>false</trackTrending>
+	<type>Text</type>
 	<unique>false</unique>
-	<visibleLines>3</visibleLines>
 </CustomField>
+

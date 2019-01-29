@@ -4455,6 +4455,13 @@
         <value>OAuth access token is too long ({0} > {1}).</value>
     </labels>
     <labels>
+        <fullName>KeyTooLong_2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>RSA key too long</shortDescription>
+        <value>RSA key is too long ({0} > {1}).</value>
+    </labels>
+    <labels>
         <fullName>PostInstall2</fullName>
         <language>en_US</language>
         <protected>true</protected>
@@ -4596,11 +4603,12 @@
 		<value>Success</value>
 	</labels>
 	<labels>
-		<fullName>GenApiError_3</fullName>
+		<fullName>ApiError_3</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Gen API error</shortDescription>
-		<value>[{0}] {1}\nReference ID: {2}</value>
+		<value>[{0}] {1}
+            Reference ID: {2}</value>
 	</labels>
     <labels>
         <fullName>InvalidGenQuery</fullName>
@@ -4617,10 +4625,52 @@
         <value>DocuSign Account Service</value>
     </labels>
     <labels>
+        <fullName>ProvisioningServiceDescription</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSign Provisioning Service</shortDescription>
+        <value>DocuSign Provisioning Service</value>
+    </labels>
+    <labels>
         <fullName>ESignatureServiceDescription</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>DocuSign ESignature Service</shortDescription>
         <value>DocuSign ESignature Service</value>
+    </labels>
+    <labels>
+        <fullName>ScmAuthServiceDescription</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSign Auth Service</shortDescription>
+        <value>DocuSign Auth Service</value>
+    </labels>
+    <labels>
+        <fullName>GenServiceDescription</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSign Gen Service</shortDescription>
+        <value>DocuSign Gen Service</value>
+    </labels>
+    <labels>
+        <fullName>UserInviteFailed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User invite failed</shortDescription>
+        <value>User invite failed.</value>
+    </labels>
+    <labels>
+        <fullName>UserAlreadyInvited</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User already invited</shortDescription>
+        <value>The user has already been invited to the DocuSign account.</value>
+    </labels>
+    <labels>
+        <fullName>UserInviteRevoked</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>User invite revoked</shortDescription>
+        <value>Invite Revoked</value>
     </labels>
 </CustomLabels>

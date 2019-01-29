@@ -25,14 +25,17 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	private List<SigningGroup> sgs = null;
 
-	@TestVisible
-	private EnvelopeAPI(final Credentials apiCredentials) {
-		super(apiCredentials);
+	private EnvelopeAPI(
+		final Url baseUrl,
+		final UUID accountId) {
+
+		super(baseUrl, 'v2', accountId);
 	}
 
 	public static EnvelopeAPI getInstance() {
 		if (self == null) {
-			self = new EnvelopeAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new EnvelopeAPI(c.environment.eSignatureBaseUrl, c.account.id);
 		}
 		return self;
 	}

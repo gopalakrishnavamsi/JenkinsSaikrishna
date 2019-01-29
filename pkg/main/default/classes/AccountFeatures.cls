@@ -1,7 +1,7 @@
 /**
  * Available DocuSign account features.
  */
-public with sharing class AccountFeatures extends ESignatureAPI {
+public with sharing class AccountFeatures {
 	@TestVisible
 	private static final Integer FLAG_MERGE_FIELDS = 1;
 	@TestVisible
@@ -27,8 +27,6 @@ public with sharing class AccountFeatures extends ESignatureAPI {
 
 	private static AccountFeatures self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 1440; // 1 hour
-
-	private transient final Integer features;
 
 	/**
 	 * Whether merge fields are enabled on the DocuSign account.
@@ -86,63 +84,34 @@ public with sharing class AccountFeatures extends ESignatureAPI {
 	@AuraEnabled
 	public Boolean bulkSending { get; private set; }
 
-	@TestVisible
-	private AccountFeatures(final Credentials apiCredentials) {
-		super(apiCredentials);
-
-		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-		this.features = resolveFeatures(
-			Integer.valueOf(settings.Features__c),
-			settings.FeaturesLastChecked__c,
-			Integer.valueOf(settings.FeaturesCheckFrequency__c));
-		this.mergeFields = (this.features & FLAG_MERGE_FIELDS) == FLAG_MERGE_FIELDS;
-		this.sharedCustomTabs = (this.features & FLAG_SHARED_CUSTOM_TABS) == FLAG_SHARED_CUSTOM_TABS;
-		this.savingCustomTabs = (this.features & FLAG_SAVING_CUSTOM_TABS) == FLAG_SAVING_CUSTOM_TABS;
-		this.dataFieldRegexes = (this.features & FLAG_DATA_FIELD_REGEXES) == FLAG_DATA_FIELD_REGEXES;
-		this.dataFieldSizes = (this.features & FLAG_DATA_FIELD_SIZES) == FLAG_DATA_FIELD_SIZES;
-		this.tabDataLabels = (this.features & FLAG_TAB_DATA_LABELS) == FLAG_TAB_DATA_LABELS;
-		this.tabTextFormatting = (this.features & FLAG_TAB_TEXT_FORMATTING) == FLAG_TAB_TEXT_FORMATTING;
-		this.signingGroups = (this.features & FLAG_SIGNING_GROUPS) == FLAG_SIGNING_GROUPS;
-		this.smsAuthentication = (this.features & FLAG_SMS_AUTHENTICATION) == FLAG_SMS_AUTHENTICATION;
-		this.templates = (this.features & FLAG_TEMPLATES) == FLAG_TEMPLATES;
-		this.bulkSending = (this.features & FLAG_BULK_SENDING) == FLAG_BULK_SENDING;
+	private AccountFeatures(final Integer features) {
+		this.mergeFields = (features & FLAG_MERGE_FIELDS) == FLAG_MERGE_FIELDS;
+		this.sharedCustomTabs = (features & FLAG_SHARED_CUSTOM_TABS) == FLAG_SHARED_CUSTOM_TABS;
+		this.savingCustomTabs = (features & FLAG_SAVING_CUSTOM_TABS) == FLAG_SAVING_CUSTOM_TABS;
+		this.dataFieldRegexes = (features & FLAG_DATA_FIELD_REGEXES) == FLAG_DATA_FIELD_REGEXES;
+		this.dataFieldSizes = (features & FLAG_DATA_FIELD_SIZES) == FLAG_DATA_FIELD_SIZES;
+		this.tabDataLabels = (features & FLAG_TAB_DATA_LABELS) == FLAG_TAB_DATA_LABELS;
+		this.tabTextFormatting = (features & FLAG_TAB_TEXT_FORMATTING) == FLAG_TAB_TEXT_FORMATTING;
+		this.signingGroups = (features & FLAG_SIGNING_GROUPS) == FLAG_SIGNING_GROUPS;
+		this.smsAuthentication = (features & FLAG_SMS_AUTHENTICATION) == FLAG_SMS_AUTHENTICATION;
+		this.templates = (features & FLAG_TEMPLATES) == FLAG_TEMPLATES;
+		this.bulkSending = (features & FLAG_BULK_SENDING) == FLAG_BULK_SENDING;
 	}
 
-	@TestVisible
-	private Integer resolveFeatures(
-		final Integer configuredFeatures,
-		final Datetime lastChecked,
-		final Integer checkFrequencyMinutes) {
-
-		Integer resolvedFeatures = 0;
-		if (configuredFeatures == null
-			|| lastChecked == null
-			|| checkFrequencyMinutes == null
-			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
-
-			try {
-				resolvedFeatures = getFlags(getApiAccountFeatures());
-				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-				settings.Features__c = resolvedFeatures;
-				settings.FeaturesLastChecked__c = Datetime.now();
-				settings.FeaturesCheckFrequency__c = checkFrequencyMinutes == null
-					? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
-				upsert settings;
-			} catch (Exception ex) {
-				this.log.exception(ex, 'Failed to get account features');
-			}
-		} else {
-			resolvedFeatures = configuredFeatures;
-		}
-
-		return resolvedFeatures;
+	// Serialization objects for getSettings
+	private class ApiAccountSetting {
+		public String name;
+		public String value;
 	}
 
-	@TestVisible
-	private static Integer getFlags(final ApiAccountFeatures accountFeatures) {
-		Integer result = 0;
-		if (accountFeatures != null && accountFeatures.accountSettings != null) {
-			for (ApiAccountFeature accountSetting : accountFeatures.accountSettings) {
+	private class ApiAccountSettings {
+		public List<ApiAccountSetting> accountSettings;
+
+		public Integer toExternalForm() {
+			if (Collection.isEmpty(this.accountSettings)) return 0;
+
+			Integer result = 0;
+			for (ApiAccountSetting accountSetting : this.accountSettings) {
 				if (accountSetting.name == 'allowMergeFields' && accountSetting.value == 'true') {
 					result |= FLAG_MERGE_FIELDS;
 				} else if (accountSetting.name == 'sharedCustomTabsEnabled' && accountSetting.value == 'true') {
@@ -167,30 +136,55 @@ public with sharing class AccountFeatures extends ESignatureAPI {
 					result |= FLAG_BULK_SENDING;
 				}
 			}
+			return result;
 		}
-		return result;
-	}
-
-	// Serialization objects for getFeatures
-	@TestVisible
-	private class ApiAccountFeature {
-		public String name;
-		public String value;
 	}
 
 	@TestVisible
-	private class ApiAccountFeatures {
-		public List<ApiAccountFeature> accountSettings;
-	}
+	private class SettingsAPI extends ESignatureAPI {
 
-	@TestVisible
-	private ApiAccountFeatures getApiAccountFeatures() {
-		final RestAPI.Response response = this.get('settings', RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to get account settings: ' + response.error.toString());
-			throw new APIException(response.error);
+		public SettingsAPI(
+			final Url baseUrl,
+			final UUID accountId) {
+
+			super(baseUrl, 'v2', accountId);
 		}
-		return (ApiAccountFeatures)JSON.deserialize(response.body, ApiAccountFeatures.class);
+
+		public Integer getSettings() {
+			final RestAPI.Response response = this.get('settings', RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get account settings: ' + response.error.toString());
+				throw new APIException(response.error);
+			}
+			return ((ApiAccountSettings)JSON.deserialize(response.body, ApiAccountSettings.class)).toExternalForm();
+		}
+	}
+
+	@TestVisible
+	private static Integer resolveFeatures(
+		final Integer configuredFeatures,
+		final Datetime lastChecked,
+		final Integer checkFrequencyMinutes) {
+
+		Integer resolvedFeatures = 0;
+		if (configuredFeatures == null
+			|| lastChecked == null
+			|| checkFrequencyMinutes == null
+			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
+
+			Credentials c = Credentials.getInstance();
+			resolvedFeatures = new SettingsAPI(c.environment.eSignatureBaseUrl, c.account.id).getSettings();
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			settings.Features__c = resolvedFeatures;
+			settings.FeaturesLastChecked__c = Datetime.now();
+			settings.FeaturesCheckFrequency__c = checkFrequencyMinutes == null
+				? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
+			upsert settings;
+		} else {
+			resolvedFeatures = configuredFeatures;
+		}
+
+		return resolvedFeatures;
 	}
 
 	/**
@@ -200,7 +194,17 @@ public with sharing class AccountFeatures extends ESignatureAPI {
 	 */
 	public static AccountFeatures getInstance() {
 		if (self == null) {
-			self = new AccountFeatures(Credentials.getInstance());
+			Integer features = 0;
+			try {
+				AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+				features = resolveFeatures(
+					Integer.valueOf(s.Features__c),
+					s.FeaturesLastChecked__c,
+					Integer.valueOf(s.FeaturesCheckFrequency__c));
+			} catch (Exception ex) {
+				LoggerService.getInstance().exception(ex, 'Failed to get account features');
+			}
+			self = new AccountFeatures(features);
 		}
 		return self;
 	}

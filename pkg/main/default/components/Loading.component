@@ -1,0 +1,16 @@
+<apex:component id="Loading" controller="Controller" layout="none">
+    <apex:attribute name="loading"
+                    description="Whether to show the loading animation (default true)"
+                    type="Boolean"
+                    required="false"
+                    default="true"/>
+    <apex:includeLightning/>
+    <div id="loading-spinner"></div>
+    <script>
+      $Lightning.use('{!namespace}:LightningOutApp', function () {
+        $Lightning.createComponent('{!namespace}:Loading', {
+          loading: {!loading}, visualforce: true
+        }, 'loading-spinner');
+      });
+    </script>
+</apex:component>

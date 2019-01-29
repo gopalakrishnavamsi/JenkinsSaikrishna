@@ -78,7 +78,7 @@ public with sharing class Salesforce {
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
-		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getSalesforceBaseUrl();
+		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
 		Organization org = [SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix FROM Organization LIMIT 1];
 		INSTANCE_NAME = org.InstanceName;
 		IS_SANDBOX = org.IsSandbox;

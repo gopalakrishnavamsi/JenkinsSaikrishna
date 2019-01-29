@@ -16,7 +16,7 @@ private class SalesforceTest {
 	static void test_baseUrl() {
 		String siteBaseUrl = Site.getBaseUrl();
 		System.assertNotEquals(null, Salesforce.baseUrl);
-		System.assertEquals(String.isNotBlank(siteBaseUrl) ? siteBaseUrl : Url.getSalesforceBaseUrl().toExternalForm(),
+		System.assertEquals(String.isNotBlank(siteBaseUrl) ? siteBaseUrl : Url.getOrgDomainUrl().toExternalForm(),
 			Salesforce.baseUrl.toExternalForm());
 	}
 
@@ -141,7 +141,7 @@ private class SalesforceTest {
 
 	@IsTest
 	static void test_getLightningHost() {
-		String host = Url.getSalesforceBaseUrl().getHost();
+		String host = Url.getOrgDomainUrl().getHost();
 		host = host.substring(0, host.indexOf('.')).remove('--c').remove('--' + Application.packageNamespace)
 			+ '.lightning.force.com';
 
@@ -153,7 +153,7 @@ private class SalesforceTest {
 	@IsTest
 	static void test_getVisualforceHost() {
 		Test.startTest();
-		System.assertEquals(Url.getSalesforceBaseUrl().getHost().substringBefore('.') + '.visualforce.com',
+		System.assertEquals(Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com',
 			Salesforce.getVisualforceHost());
 		Test.stopTest();
 	}

@@ -69,7 +69,6 @@ private class ESignatureAPITest {
 
 			System.assertNotEquals(null, c);
 			System.assertNotEquals(null, c.baseUrl);
-			System.assertNotEquals(null, c.userId);
 			System.assertEquals(Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c), RestAPI.defaultTimeout);
 		}
 	}
@@ -78,7 +77,13 @@ private class ESignatureAPITest {
 	static void test_constructor_failure() {
 		Test.startTest();
 		try {
-			new ESignatureAPI(Credentials.getInstance());
+			new ESignatureAPI(null, 'v2', UUID.randomUUID());
+			throw new AssertException('Expected DocuSignAPI constructor to throw exception when an account is not configured');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
+		}
+		try {
+			new ESignatureAPI(new Url('https://test.docusign.com'), 'v2', null);
 			throw new AssertException('Expected DocuSignAPI constructor to throw exception when an account is not configured');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.AccountNotConfigured, ex.getMessage());

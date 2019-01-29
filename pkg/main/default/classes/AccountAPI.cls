@@ -9,14 +9,17 @@ public with sharing class AccountAPI extends ESignatureAPI {
 
 	private Account account = null;
 
-	@TestVisible
-	private AccountAPI(final Credentials apiCredentials) {
-		super(apiCredentials);
+	private AccountAPI(
+		final Url baseUrl,
+		final UUID accountId) {
+
+		super(baseUrl, 'v2', accountId);
 	}
 
 	public static AccountAPI getInstance() {
 		if (self == null) {
-			self = new AccountAPI(Credentials.getInstance());
+			Credentials c = Credentials.getInstance();
+			self = new AccountAPI(c.environment.eSignatureBaseUrl, c.account.id);
 		}
 		return self;
 	}
@@ -168,36 +171,6 @@ public with sharing class AccountAPI extends ESignatureAPI {
 		}
 	}
 
-	// Serialization objects for getUser
-	@TestVisible
-	private static String stringToUserStatus(final String s) {
-		if (s == 'Active') {
-			return Account.USER_STATUS_ACTIVE;
-		} else if (s == 'Closed') {
-			return Account.USER_STATUS_CLOSED;
-		} else if (s == 'ActivationSent' || s == 'ActivationRequired') {
-			return Account.USER_STATUS_PENDING_ACTIVATION;
-		} else if (s == 'Disabled') {
-			return Account.USER_STATUS_DISABLED;
-		} else {
-			return Account.USER_STATUS_UNKNOWN;
-		}
-	}
-
-	@TestVisible
-	private static String userStatusToString(final String status) {
-		if (status == Account.USER_STATUS_PENDING_ACTIVATION) {
-			return 'activationSent';
-		} else if (status == Account.USER_STATUS_ACTIVE) {
-			return 'active';
-		} else if (status == Account.USER_STATUS_CLOSED) {
-			return 'closed';
-		} else if (status == Account.USER_STATUS_DISABLED) {
-			return 'disabled';
-		}
-		return null;
-	}
-
 	@TestVisible
 	private class APIUser {
 		public String userId;
@@ -214,17 +187,16 @@ public with sharing class AccountAPI extends ESignatureAPI {
 		public String subscribe;
 
 		public APIUser(final Account.User user) {
-			this.userId = UUID.toString(user.id);
+			this.userId = String.valueOf(user.id);
 			this.email = user.email;
 			this.firstName = user.firstName;
 			this.lastName = user.lastName;
-			this.userName = user.username;
-			this.apiPassword = user.apiPassword;
+			this.userName = String.valueOf(user.id);
 			this.userSettings = new List<Setting> {
 				new Setting('canManageAccount', String.valueOf(user.canManageAccount)),
-				new Setting('canSendEnvelope', String.valueOf(user.canSendEnvelope))
+				new Setting('canSendEnvelope', 'true')
 			};
-			this.userStatus = userStatusToString(user.status);
+			this.userStatus = user.status;
 		}
 
 		private APIError errorExternalForm() {
@@ -244,27 +216,25 @@ public with sharing class AccountAPI extends ESignatureAPI {
 
 		public Account.User toExternalForm(final Id sourceId, final Boolean canManageAccount) {
 			Boolean isAdmin = canManageAccount;
-			Boolean isSender = true;
 			if (this.userSettings != null) {
 				for (Setting s : this.userSettings) {
 					if (s.name == 'canManageAccount') {
 						isAdmin = StringUtils.parseBoolean(s.value);
-					} else if (s.name == 'canSendEnvelope') {
-						isSender = StringUtils.parseBoolean(s.value);
+						break;
 					}
 				}
 			}
 			return new Account.User(
 				UUID.tryParse(this.userId),
-				this.userName,
+				sourceId,
 				this.email,
 				this.firstName,
 				this.lastName,
-				this.apiPassword,
-				stringToUserStatus(this.userStatus),
+				this.userStatus,
+				null,
+				null,
 				isAdmin,
-				isSender,
-				sourceId,
+				null,
 				errorExternalForm());
 		}
 	}

@@ -1,15 +1,14 @@
-public with sharing class GenAPI extends ESignatureAPI {
+public with sharing class GenAPI extends DocuSignAPI {
 
 	private static GenAPI self = null;
 
-	@TestVisible
-	private GenAPI(final Credentials apiCredentials) {
-		super(apiCredentials); // TODO: Gen API requires a SCM base URL.
+	private GenAPI(final Url baseUrl){
+		super(new Url(baseUrl, 'gen'));
 	}
 
 	public static GenAPI getInstance() {
 		if (self == null) {
-			self = new GenAPI(Credentials.getInstance());
+			self = new GenAPI(Credentials.getInstance().environment.scmApiBaseUrl);
 		}
 		return self;
 	}
@@ -28,7 +27,7 @@ public with sharing class GenAPI extends ESignatureAPI {
 		}
 
 		override public String toString() {
-			return String.format(Label.GenApiError_3, new List<String> {
+			return String.format(Label.ApiError_3, new List<String> {
 				String.valueOf(this.code),
 				this.description,
 				String.valueOf(this.referenceId)
@@ -82,8 +81,11 @@ public with sharing class GenAPI extends ESignatureAPI {
 		final String fileName,
 		final Integer timeout) {
 
-		RestAPI.Response response = this.post(
-			'gen',
+		RestAPI.Response response = post(
+			getBaseUrl(),
+			null,
+			QueryString.empty,
+			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'TemplateSfContentVersionId' => fileId,
 				'DataXml' => xmlPayload,
@@ -114,11 +116,12 @@ public with sharing class GenAPI extends ESignatureAPI {
 		final UUID jobId,
 		final Integer timeout) {
 
-		RestAPI.Response response = this.get(
+		RestAPI.Response response = get(
+			getBaseUrl(),
 			new List<Object> { 'gen', jobId },
 			QueryString.empty,
-			timeout
-		);
+			getDefaultHeaders(),
+			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to retrieve document generation job status: ' + response.error);
 			throw new APIException(response.error);

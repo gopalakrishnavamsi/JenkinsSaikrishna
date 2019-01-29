@@ -25,14 +25,14 @@ private class SetupControllerTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals('Success', result.status);
 			Credentials c = Credentials.getInstance();
-			System.assertEquals(c.userId, result.id);
-			System.assertEquals(null, result.name);
-			System.assertEquals(c.email, result.email);
+			System.assertEquals(c.user.id, result.id);
+			System.assertEquals(c.user.name, result.name);
+			System.assertEquals(c.account.email, result.email);
 			System.assertEquals(1, Collection.size(result.accounts));
-			System.assertEquals(c.accountId, result.accounts[0].id);
-			System.assertEquals(c.accountNumber, result.accounts[0].accountNumber);
-			System.assertEquals(c.accountName, result.accounts[0].name);
-			System.assertEquals(c.eSignatureBaseUrl.toExternalForm(), result.accounts[0].baseUrl);
+			System.assertEquals(c.account.id, result.accounts[0].id);
+			System.assertEquals(c.account.accountNumber, result.accounts[0].accountNumber);
+			System.assertEquals(c.account.name, result.accounts[0].name);
+			System.assertEquals(c.environment.eSignatureBaseUrl.toExternalForm(), result.accounts[0].eSignatureBaseUrl);
 			System.assert(result.accounts[0].isDefault);
 		}
 	}
@@ -150,7 +150,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_completeOAuth_success() {
-		ESignatureAPIMock.success();
+		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState();
@@ -169,7 +169,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				SetupController.selectAccount(null, null, UUID.randomUUID().toString(), null);
+				SetupController.selectAccount(null, null, null);
 				throw new AssertException('Expected selectAccount to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -180,14 +180,13 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_selectAccount_success() {
-		ESignatureAPIMock.success();
+		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			String userId = [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Username__c;
 			Long accountNumber = (Long)AccountSettings__c.getOrgDefaults().AccountNumber__c;
 
 			Test.startTest();
-			LoginInformation result = SetupController.selectAccount('prod', null, userId, accountNumber);
+			LoginInformation result = SetupController.selectAccount('prod', null, accountNumber);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -197,7 +196,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getAccount_success() {
-		ESignatureAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Account result = SetupController.getAccount();
@@ -271,8 +270,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_addUser_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
 
@@ -332,8 +330,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_removeUser_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createDocuSignUser(false);
 

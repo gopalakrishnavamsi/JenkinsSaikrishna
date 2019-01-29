@@ -394,8 +394,7 @@ private class SigningServiceTest {
 
 	@IsTest
 	static void test_getEmbeddedSigningUrl_failure() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
+		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignSender()) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {

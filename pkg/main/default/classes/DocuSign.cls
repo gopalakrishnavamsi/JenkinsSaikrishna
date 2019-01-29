@@ -1,5 +1,6 @@
 public class DocuSign {
 
+	public static final String PRODUCT_GEN = 'gen';
 	public static final UUID TRIAL_PLAN_ID = UUID.parse([
 		SELECT TrialPlanId__c
 		FROM Environment__mdt
@@ -29,7 +30,8 @@ public class DocuSign {
 	private static final List<String> domainWhitelist = new List<String> {
 		'.docusign.com',
 		'.docusign.net',
-		'.docusignhq.com'
+		'.docusignhq.com',
+		'.springcm.com'
 	};
 
 	/**
