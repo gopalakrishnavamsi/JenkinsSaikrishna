@@ -25,6 +25,7 @@ public virtual with sharing class Controller {
 		return ex;
 	}
 
+	@TestVisible
 	private static String getErrorMessage(final Exception ex) {
 		String message = null;
 		if (ex instanceof UnauthorizedException) {
