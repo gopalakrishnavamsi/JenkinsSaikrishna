@@ -1,4 +1,4 @@
-public abstract with sharing class Controller {
+public virtual with sharing class Controller {
 
 	public String namespace {
 		get {

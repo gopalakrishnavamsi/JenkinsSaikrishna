@@ -70,7 +70,7 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 				e = new ProvisioningAPI.Error(
 					statusCode,
 					UUID.tryParse((String)error.get('reference_id')),
-					(String)error.get('error_description'));
+					(String)error.get('error_description')); // OR error_description?
 				this.log.warn('Provisioning API error: ' + e);
 			} catch (Exception ex) {
 				this.log.exception(ex, 'Failed to parse provisioning API error. Response body:\n' + body);

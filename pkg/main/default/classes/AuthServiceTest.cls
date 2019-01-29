@@ -890,7 +890,7 @@ private class AuthServiceTest {
 			QueryString params = QueryString.parse(result.getQuery());
 			System.assertNotEquals(QueryString.empty, params);
 			System.assertEquals('code', params.get('response_type'));
-			System.assertEquals('signature impersonation', params.get('scope'));
+			System.assertEquals(AuthService.SCOPE_ADMIN, params.get('scope'));
 			System.assertEquals([
 				SELECT ClientId__c
 				FROM Environment__mdt

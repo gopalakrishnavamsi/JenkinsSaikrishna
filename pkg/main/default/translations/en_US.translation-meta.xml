@@ -2483,7 +2483,8 @@
         <name>Success</name>
     </customLabels>
     <customLabels>
-        <label>[{0}] {1}\nReference ID: {2}</label>
+        <label>[{0}] {1}
+            Reference ID: {2}</label>
         <name>ApiError_3</name>
     </customLabels>
     <customLabels>

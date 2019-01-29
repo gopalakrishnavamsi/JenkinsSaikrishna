@@ -677,7 +677,7 @@ public with sharing class AuthService {
 		PageReference pg = new PageReference(new Url(rc.accountBaseUrl, '/oauth/auth').toExternalForm());
 		pg.getParameters().putAll(new Map<String, String> {
 			'response_type' => 'code',
-			'scope' => 'signature impersonation', // TODO: Add scopes
+			'scope' => SCOPE_ADMIN,
 			'client_id' => rc.clientId,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
@@ -966,7 +966,12 @@ public with sharing class AuthService {
 					rc.environment,
 					'Account',
 					Label.AccountServiceDescription,
-					rc.accountBaseUrl)
+					rc.accountBaseUrl),
+				MetadataService.newRemoteSite(
+					rc.environment,
+					'Provisioning',
+					Label.AccountServiceDescription,
+					rc.provisioningBaseUrl)
 			});
 
 			// 2) Get accounts associated with login

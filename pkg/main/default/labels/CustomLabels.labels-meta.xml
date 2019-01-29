@@ -4607,7 +4607,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Gen API error</shortDescription>
-		<value>[{0}] {1}\nReference ID: {2}</value>
+		<value>[{0}] {1}
+            Reference ID: {2}</value>
 	</labels>
     <labels>
         <fullName>InvalidGenQuery</fullName>

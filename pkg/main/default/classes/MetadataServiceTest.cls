@@ -415,7 +415,7 @@ private class MetadataServiceTest {
 		System.assertEquals(fullName, result.fullName);
 		System.assertEquals(buttonLabel, result.masterLabel);
 		System.assert(String.isNotBlank(result.url));
-		System.assert(result.url.contains(new Url(Url.getSalesforceBaseUrl(), Page.ReturnFromDocuSign.getUrl()).getPath()));
+		System.assert(result.url.contains(new Url(Url.getOrgDomainUrl(), Page.ReturnFromDocuSign.getUrl()).getPath()));
 		System.assert(result.url.contains('sId = Lead.Id'));
 		System.assert(result.url.contains('a = ' + params.get('a')));
 		System.assert(result.url.contains('b = ' + params.get('b')));

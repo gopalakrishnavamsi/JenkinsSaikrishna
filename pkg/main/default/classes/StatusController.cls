@@ -1,6 +1,6 @@
 public class StatusController extends Controller {
 
-	@AuraEnabled(Cacheable = true)
+	@AuraEnabled
 	public static List<Envelope.Status> getStatus(final Id sourceId, final Integer recordLimit) {
 		try {
 			return StatusService.getStatus(new Set<Id> { sourceId }, Integer.valueOf(recordLimit));
