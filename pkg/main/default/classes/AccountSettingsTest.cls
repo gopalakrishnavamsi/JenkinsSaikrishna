@@ -14,12 +14,14 @@ private class AccountSettingsTest {
 
 	@IsTest
 	static void test_save() {
+		UUID ssId = UUID.randomUUID();
 		AccountSettings s = new AccountSettings(
 			12345,
 			new List<String> { 'er1', 'er2' },
 			new List<String> { 'dr1', 'dr2' },
 			new List<String> { 'rr1', 'rr2' },
-			'CompoundMatchBeginning');
+			'CompoundMatchBeginning',
+			ssId);
 
 		Test.startTest();
 		AccountSettings result1 = AccountSettings.getInstance();
@@ -36,5 +38,6 @@ private class AccountSettingsTest {
 		System.assertEquals(new List<String> { 'dr1', 'dr2' }, result3.documentResolvers);
 		System.assertEquals(new List<String> { 'rr1', 'rr2' }, result3.recipientResolvers);
 		System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning.name(), result3.recipientSearchBehavior);
+		System.assertEquals(ssId, result3.systemSenderId);
 	}
 }

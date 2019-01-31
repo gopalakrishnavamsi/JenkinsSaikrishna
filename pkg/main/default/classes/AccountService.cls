@@ -50,8 +50,31 @@ global with sharing class AccountService {
 			}
 			return result;
 		}
+
+		public List<SystemSender> queryAvailableSystemSenders() {
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+				'Id', 'Name', 'Email', Application.namespacePrefix + 'Username__c'
+			});
+
+			List<SystemSender> result = new List<SystemSender>();
+			for (User u : [
+				SELECT Name, Email, Username__c
+				FROM User
+				WHERE Username__c != NULL
+				AND IsActive = TRUE
+				AND CanManageAccount__c = TRUE
+				ORDER BY Name ASC
+				LIMIT 1000
+			]) {
+				result.add(new SystemSender(
+					UUID.parse(u.Username__c),
+					u.Name,
+					u.Email));
+			}
+			return result;
+		}
 	}
-	
+
 	/**
 	 * Retrieves information for the current DocuSign account. This includes DocuSign trial status if the current
 	 * account is a trial account.
@@ -288,5 +311,41 @@ global with sharing class AccountService {
 			null,
 			false,
 			false);
+	}
+
+	/**
+	 * A DocuSign for Salesforce system sender, i.e. the sender to use when a Salesforce user is not a member of the
+	 * DocuSign account.
+	 */
+	public class SystemSender {
+		/**
+		 * The DocuSign user ID.
+		 */
+		@AuraEnabled
+		public UUID id { get; private set; }
+		@AuraEnabled
+		public String display { get; private set; }
+
+		private SystemSender(
+			final UUID id,
+			final String name,
+			final String email) {
+
+			this.id = id;
+			this.display = String.format(Label.AccountDisplay_2, new List<String> { name, email });
+		}
+	}
+
+	/**
+	 * Retrieves a list of users that may be used as the DocuSign for Salesforce system sender.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return
+	 */
+	public static List<SystemSender> getAvailableSystemSenders() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return DB.queryAvailableSystemSenders();
 	}
 }

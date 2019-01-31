@@ -37,19 +37,26 @@ public with sharing class AccountSettings {
 	 */
 	@AuraEnabled
 	public String recipientSearchBehavior { get; private set; }
+	/**
+	 * The default sender when a user is not a member of the DocuSign account.
+	 */
+	@AuraEnabled
+	public UUID systemSenderId { get; private set; }
 
 	public AccountSettings(
 		final Integer calloutTimeout,
 		final List<String> entityResolvers,
 		final List<String> documentResolvers,
 		final List<String> recipientResolvers,
-		final String recipientSearchBehavior) {
+		final String recipientSearchBehavior,
+		final UUID systemSenderId) {
 
 		this.calloutTimeout = calloutTimeout;
 		this.entityResolvers = entityResolvers;
 		this.documentResolvers = documentResolvers;
 		this.recipientResolvers = recipientResolvers;
 		this.recipientSearchBehavior = recipientSearchBehavior;
+		this.systemSenderId = systemSenderId;
 	}
 
 	public static AccountSettings getInstance() {
@@ -60,8 +67,8 @@ public with sharing class AccountSettings {
 				String.isBlank(s.EntityResolvers__c) ? new List<String>() : s.EntityResolvers__c.split(','),
 				String.isBlank(s.DocumentResolvers__c) ? new List<String>() : s.DocumentResolvers__c.split(','),
 				String.isBlank(s.RecipientResolvers__c) ? new List<String>() : s.RecipientResolvers__c.split(','),
-				s.RecipientSearchBehavior__c
-			);
+				s.RecipientSearchBehavior__c,
+				UUID.tryParse(s.SystemSenderId__c));
 		}
 		return self;
 	}
@@ -75,6 +82,7 @@ public with sharing class AccountSettings {
 		s.DocumentResolvers__c = Collection.mkString(settings.documentResolvers, ',');
 		s.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
 		s.RecipientSearchBehavior__c = settings.recipientSearchBehavior;
+		s.SystemSenderId__c = String.valueOf(settings.systemSenderId);
 		upsert s;
 
 		self = null;

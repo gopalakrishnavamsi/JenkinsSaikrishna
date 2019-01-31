@@ -4673,4 +4673,11 @@
         <shortDescription>User invite revoked</shortDescription>
         <value>Invite Revoked</value>
     </labels>
+    <labels>
+        <fullName>SystemSender</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>System senders</shortDescription>
+        <value>System sender</value>
+    </labels>
 </CustomLabels>

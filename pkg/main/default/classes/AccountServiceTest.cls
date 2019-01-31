@@ -239,12 +239,14 @@ public class AccountServiceTest {
 	@IsTest
 	static void test_saveSettings_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
+			UUID ssId = UUID.randomUUID();
 			AccountSettings s = new AccountSettings(
 				12345,
 				new List<String> { 'er1', 'er2' },
 				new List<String> { 'dr1', 'dr2' },
 				new List<String> { 'rr1', 'rr2' },
-				'CompoundMatchBeginning');
+				'CompoundMatchBeginning',
+				ssId);
 
 			Test.startTest();
 			AccountSettings result = AccountService.saveSettings(s);
@@ -257,6 +259,7 @@ public class AccountServiceTest {
 			System.assertEquals(new List<String> { 'dr1', 'dr2' }, result.documentResolvers);
 			System.assertEquals(new List<String> { 'rr1', 'rr2' }, result.recipientResolvers);
 			System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning.name(), result.recipientSearchBehavior);
+			System.assertEquals(ssId, result.systemSenderId);
 		}
 	}
 
@@ -610,7 +613,7 @@ public class AccountServiceTest {
 
 	@IsTest
 	static void test_executePostInstallScripts_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				AccountService.executePostInstallScripts();
@@ -631,6 +634,62 @@ public class AccountServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.success);
+		}
+	}
+
+	@IsTest
+	static void test_getAvailableSystemSenders_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				AccountService.getAvailableSystemSenders();
+				throw new AssertException('Expected getAvailableSystemSenders to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAvailableSystemSenders_success() {
+		User dsa1 = UserMock.createDocuSignAdministrator(false);
+		User dsa2 = UserMock.createDocuSignAdministrator(false);
+		User dsa3 = UserMock.createDocuSignAdministrator(false);
+		User dsu1 = UserMock.createDocuSignUser(false);
+		User dsu2 = UserMock.createDocuSignUser(false);
+		System.runAs(dsa1) {
+			dsa2.IsActive = false;
+			update dsa2;
+			// dsa1, dsa3 are the only eligible system senders outside of any DS admins configured outside of this unit
+			// test. dsa2 is not active and should not be returned, and dsu1 and dsu2 are not admins and therefore
+			// ineligible system senders.
+			Set<String> invalidUsernames = new Set<String> { dsa2.Username__c, dsu1.Username__c, dsu2.Username__c };
+
+			Test.startTest();
+			List<AccountService.SystemSender> result = AccountService.getAvailableSystemSenders();
+			Test.stopTest();
+
+			System.assert(Collection.size(result) >= 2);
+			Boolean foundDSA1 = false, foundDSA3 = false;
+			for (AccountService.SystemSender ss : result) {
+				String username = String.valueOf(ss.id);
+				if (username == dsa1.Username__c) {
+					foundDSA1 = true;
+					System.assertEquals(
+						String.format(Label.AccountDisplay_2, new List<String> { dsa1.Name, dsa1.Email }),
+						ss.display);
+				} else if (username == dsa3.Username__c) {
+					foundDSA3 = true;
+					System.assertEquals(
+						String.format(Label.AccountDisplay_2, new List<String> { dsa3.Name, dsa3.Email }),
+						ss.display);
+				} else if (invalidUsernames.contains(username)) {
+					throw new AssertException('Unexpected system sender: ' + ss);
+				}
+			}
+			System.assert(foundDSA1);
+			System.assert(foundDSA3);
 		}
 	}
 }
