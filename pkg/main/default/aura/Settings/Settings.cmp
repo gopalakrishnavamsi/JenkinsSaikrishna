@@ -2,6 +2,8 @@
 
     <aura:attribute name="settings" type="Object" access="private"/>
     <aura:attribute name="showExitModal" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="availableSystemSenders" type="Object" access="private"/>
+    <aura:attribute name="systemSenderId" type="String" access="private"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
@@ -20,21 +22,20 @@
         <!-- Header -->
         <div class="strike-wizard__body">
             <div class="slds-container_medium slds-container_center slds-p-horizontal_medium">
-                <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative ds-users_container">
-                    <label for="useSystemSender" class="slds-checkbox--toggle slds-grid slds-grid_vertical-align-start">
-                <span class="slds-form-element__label slds-m-right--none">
-                    {!$Label.c.UseSystemSender}
-                </span>
-                        <lightning:helptext content="{!$Label.c.UseSystemSenderHelp}"
-                                            class="slds-m-horizontal_x-small"/>
-                        <lightning:input type="toggle"
-                                         name="useSystemSender"
-                                         label="{!$Label.c.UseSystemSender}"
-                                         checked="{!v.settings.useSystemSender}"
-                                         variant="label-hidden"
-                                         messageToggleActive="{!$Label.c.Enabled}"
-                                         messageToggleInactive="{!$Label.c.Disabled}"/>
-                    </label>
+                <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
+                    <label for="system-sender" class="slds-form-element__label">{!$Label.c.SystemSender}</label>
+                    <lightning:helptext content="{!$Label.c.UseSystemSenderHelp}"/>
+                    <lightning:select aura:id="system-sender"
+                                      label="{!$Label.c.SystemSender}"
+                                      variant="label-hidden"
+                                      value="{!v.systemSenderId}">
+                        <option value=""
+                                selected="{!if(empty(v.systemSenderId), 'selected', '')}">{!$Label.c.None}</option>
+                        <aura:iteration items="{!v.availableSystemSenders}" var="ss">
+                            <option value="{!ss.id.value}"
+                                    selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">{!ss.display}</option>
+                        </aura:iteration>
+                    </lightning:select>
                 </div>
             </div>
         </div>

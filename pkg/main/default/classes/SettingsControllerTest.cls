@@ -19,10 +19,12 @@ private class SettingsControllerTest {
 	static void test_getSettings_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			AccountSettings result = SettingsController.getSettings();
+			SettingsController.Settings result = SettingsController.getSettings();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.account);
+			System.assertNotEquals(null, result.availableSystemSenders);
 		}
 	}
 

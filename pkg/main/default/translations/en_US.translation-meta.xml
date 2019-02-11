@@ -2523,6 +2523,10 @@
         <label>Invite Revoked</label>
         <name>UserInviteRevoked</name>
     </customLabels>
+    <customLabels>
+        <label>System sender</label>
+        <name>SystemSender</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

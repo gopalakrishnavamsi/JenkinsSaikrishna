@@ -25,37 +25,57 @@
     }
   },
 
-  getSettings: function (component, helper) {
-    helper.setLoading(component, true);
+  useSystemSender: function(accountSettings) {
+    return !$A.util.isUndefinedOrNull(accountSettings)
+      && !$A.util.isUndefinedOrNull(accountSettings.systemSenderId)
+      && !$A.util.isEmpty(accountSettings.systemSenderId.value);
+  },
+
+  getSettings: function (component) {
+    this.setLoading(component, true);
     var gs = component.get('c.getSettings');
     gs.setCallback(this, function (response) {
       var status = response.getState();
       if (status === 'SUCCESS') {
-        component.set('v.settings', response.getReturnValue());
+        var s = response.getReturnValue();
+        component.set('v.settings', s.account);
+        component.set('v.availableSystemSenders', s.availableSystemSenders);
+        if (this.useSystemSender(s.account)) {
+          component.set('v.systemSenderId', s.account.systemSenderId.value);
+        } else {
+          component.set('v.systemSenderId', null);
+        }
       } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
+        this.showToast(component, _getErrorMessage(response), 'error');
       }
-      helper.setLoading(component, false);
+      this.setLoading(component, false);
     });
     $A.enqueueAction(gs);
   },
 
-  saveSettings: function (component, helper) {
-    helper.setLoading(component, true);
+  saveSettings: function (component) {
+    this.setLoading(component, true);
     var ss = component.get('c.saveSettings');
+    var s = component.get('v.settings');
+    var ssId = component.get('v.systemSenderId');
+    if (!$A.util.isEmpty(ssId)) {
+      s.systemSenderId = {value: ssId};
+    } else {
+      s.systemSenderId = null;
+    }
     ss.setParams({
-      settingsJson: JSON.stringify(component.get('v.settings'))
+      settingsJson: JSON.stringify(s)
     });
     ss.setCallback(this, function (response) {
       var status = response.getState();
       if (status === 'SUCCESS') {
         component.set('v.settings', response.getReturnValue());
-        helper.exit(component);
-        helper.showToast(component, $A.get('$Label.c.SettingsSaved'), 'success');
+        this.exit(component);
+        this.showToast(component, $A.get('$Label.c.SettingsSaved'), 'success');
       } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
+        this.showToast(component, _getErrorMessage(response), 'error');
       }
-      helper.setLoading(component, false);
+      this.setLoading(component, false);
     });
     $A.enqueueAction(ss);
   },
