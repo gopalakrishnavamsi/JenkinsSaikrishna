@@ -71,7 +71,7 @@
             <!--/Sections -->
             <!-- Toast -->
             <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!false}"
-                     inVfPage="{!visualforce}"/>
+                     visualforce="{!v.visualforce}"/>
             <!-- /Toast -->
             <!-- Loading State -->
             <c:Loading loading="{!v.loading}" visualforce="{!v.visualforce}"/>

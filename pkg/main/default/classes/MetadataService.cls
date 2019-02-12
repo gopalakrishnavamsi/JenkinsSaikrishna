@@ -2,6 +2,10 @@
  * Salesforce metadata-related operations.
  */
 public with sharing class MetadataService {
+
+	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
+		= new Map<SObjectType, MetadataAPI.WebLink>();
+
 	/**
 	 * Returns a list of common, supported Salesforce object types.
 	 * <p>
@@ -230,17 +234,122 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static Layout convertLayout(
+	private static String getLayoutName(final String fullName) {
+		// Metadata API returns incorrect fullName and no display name :-(
+		return String.isBlank(fullName) ? null : fullName.substringAfter('-');
+	}
+
+	private static List<MetadataAPI.FileProperties> listLayouts(
 		final SObjectType type,
-		final MetadataAPI.FileProperties props) {
+		final MetadataAPI.Client client) {
 
-		if (props == null) return null;
+		List<MetadataAPI.FileProperties> result = new List<MetadataAPI.FileProperties>();
+		if (type == null || client == null) return result;
 
+		MetadataAPI.ListMetadataQuery query = new MetadataAPI.ListMetadataQuery();
+		query.type_x = 'Layout';
+		List<MetadataAPI.FileProperties> fps = client.listMetadata(
+			new List<MetadataAPI.ListMetadataQuery> { query },
+			Salesforce.API_VERSION);
+
+		if (Collection.isNotEmpty(fps)) {
+			String t = String.valueOf(type);
+			for (MetadataAPI.FileProperties fp : fps) {
+				if (fp.fullName.startsWith(t)) result.add(fp);
+			}
+		}
+		return result;
+	}
+
+	private static Map<String, MetadataAPI.FileProperties> getLayoutFullNames(
+		final SObjectType type,
+		final List<MetadataAPI.FileProperties> props) {
+
+		Map<String, MetadataAPI.FileProperties> result = new Map<String, MetadataAPI.FileProperties>();
+		if (type == null || Collection.isEmpty(props)) return result;
+
+		for (MetadataAPI.FileProperties fp : props) {
+			result.put(Layout.getFullName(
+				type,
+				fp.namespacePrefix,
+				getLayoutName(fp.fullName)),
+				fp);
+		}
+		return result;
+	}
+
+	private static String getActionType(final String apiName) {
+		// TODO: Handle Gen buttons?
+		return apiName == Layout.ACTION_NAME_SEND ? Layout.ACTION_TYPE_SEND : Layout.ACTION_TYPE_OTHER;
+	}
+
+	private static List<Layout.Action> getClassicActions(final MetadataAPI.Layout mdLayout) {
+		List<Layout.Action> result = new List<Layout.Action>();
+		if (mdLayout != null
+			&& Collection.isNotEmpty(mdLayout.customButtons)) {
+
+			for (String apiName : mdLayout.customButtons) {
+				result.add(new Layout.Action(
+					getActionType(apiName),
+					apiName,
+					false));
+			}
+		}
+		return result;
+	}
+
+	private static List<Layout.Action> getLightningActions(final MetadataAPI.Layout mdLayout) {
+		List<Layout.Action> result = new List<Layout.Action>();
+		if (mdLayout != null
+			&& mdLayout.platformActionList != null
+			&& Collection.isNotEmpty(mdLayout.platformActionList.platformActionListItems)) {
+
+			for (MetadataAPI.PlatformActionListItem pali : mdLayout.platformActionList.platformActionListItems) {
+				result.add(new Layout.Action(
+					getActionType(pali.actionName),
+					pali.actionName,
+					true));
+			}
+		}
+		return result;
+	}
+
+	private static Layout convert(
+		final SObjectType type,
+		final MetadataAPI.FileProperties props,
+		final MetadataAPI.Layout layout) {
+
+		if (type == null || props == null || layout == null) return null;
+
+		List<Layout.Action> actions = getClassicActions(layout);
+		actions.addAll(getLightningActions(layout));
 		return new Layout(
 			type,
 			props.id,
 			props.namespacePrefix,
-			props.fullName.substringAfter('-')); // Metadata API returns incorrect fullName and no display name :-(
+			getLayoutName(props.fullName),
+			actions);
+	}
+
+	private static List<Layout> readLayouts(
+		final SObjectType type,
+		final MetadataAPI.Client client,
+		final Map<String, MetadataAPI.FileProperties> fullNames) {
+
+		List<Layout> result = new List<Layout>();
+		if (type == null || client == null || Collection.isEmpty(fullNames)) return result;
+
+		List<MetadataAPI.Layout> layouts = (List<MetadataAPI.Layout>)client.readMetadata(
+			'Layout',
+			new List<String>(fullNames.keySet()));
+		for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
+			result.add(convert(
+				type,
+				fullNames.get(layout.fullName),
+				layout));
+		}
+		result.sort();
+		return result;
 	}
 
 	/**
@@ -257,23 +366,13 @@ public with sharing class MetadataService {
 
 		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
 
-		MetadataAPI.ListMetadataQuery query = new MetadataAPI.ListMetadataQuery();
-		query.type_x = 'Layout';
-
-		List<MetadataAPI.FileProperties> fps = MetadataAPI.getInstance().listMetadata(
-			new List<MetadataAPI.ListMetadataQuery> { query },
-			Salesforce.API_VERSION);
-		List<Layout> result = new List<Layout>();
-		if (Collection.isNotEmpty(fps)) {
-			String t = String.valueOf(type);
-			for (MetadataAPI.FileProperties fp : fps) {
-				if (fp.fullName.startsWith(t)) result.add(convertLayout(type, fp));
-			}
-		}
-		return result;
+		MetadataAPI.Client client = MetadataAPI.getInstance();
+		List<MetadataAPI.FileProperties> props = listLayouts(type, client);
+		Map<String, MetadataAPI.FileProperties> fullNames = getLayoutFullNames(type, props);
+		return readLayouts(type, client, fullNames);
 	}
 
-	private static String getButtonFullName(
+	private static String getActionFullName(
 		final SObjectType type,
 		final String apiName) {
 
@@ -313,17 +412,17 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink createWebLink(
 		final SObjectType type,
-		final String fullName,
+		final String apiName,
 		final String buttonLabel,
 		final PageReference page,
 		final Map<String, String> parameters) {
 
-		if (type == null || String.isBlank(fullName) || String.isBlank(buttonLabel) || page == null) {
+		if (type == null || String.isBlank(apiName) || String.isBlank(buttonLabel) || page == null) {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 
 		MetadataAPI.WebLink webLink = new MetadataAPI.WebLink();
-		webLink.fullName = fullName;
+		webLink.fullName = getActionFullName(type, apiName);
 		webLink.availability = 'online';
 		webLink.displayType = 'button';
 		webLink.encodingKey = 'UTF-8';
@@ -342,253 +441,165 @@ public with sharing class MetadataService {
 	}
 
 	@TestVisible
-	private static MetadataAPI.QuickAction createQuickAction(
-		final SObjectType type,
-		final String fullName,
-		final String buttonLabel,
-		final String auraBundleFullName,
-		final Integer height,
-		final Integer width,
-		final String icon) {
+	private static Map<String, MetadataAPI.Layout> readLayouts(final List<String> layoutFullNames) {
+		Map<String, MetadataAPI.Layout> result = new Map<String, MetadataAPI.Layout>();
+		if (Collection.isEmpty(layoutFullNames)) return result;
 
-		if (type == null
-			|| String.isBlank(fullName)
-			|| String.isBlank(buttonLabel)
-			|| String.isBlank(auraBundleFullName)) {
-
-			throw new DocuSignException(Label.UndefinedArgument);
-		}
-
-		MetadataAPI.QuickAction quickAction = new MetadataAPI.QuickAction();
-		quickAction.fullName = fullName;
-		quickAction.height = height;
-		quickAction.label = buttonLabel;
-		quickAction.lightningComponent = auraBundleFullName;
-		quickAction.isProtected = false;
-		quickAction.optionsCreateFeedItem = false;
-		quickAction.type_x = 'LightningComponent';
-		quickAction.width = width;
-		quickAction.icon = icon;
-
-		validateResults(MetadataAPI.getInstance().createMetadata(new List<MetadataAPI.Metadata> { quickAction }));
-
-		return quickAction;
-	}
-
-	@TestVisible
-	private static List<MetadataAPI.Layout> readLayouts(
-		final SObjectType type,
-		final List<Layout> layouts) {
-
-		List<String> layoutFullNames = new List<String>();
-		for (Layout l : layouts) {
-			if (l == null || l.type != type) throw new DocuSignException(Label.InvalidLayout);
-			layoutFullNames.add(l.fullName);
-		}
-
-		List<MetadataAPI.Layout> result = (List<MetadataAPI.Layout>)MetadataAPI.getInstance().readMetadata(
+		List<MetadataAPI.Layout> mdLayouts = (List<MetadataAPI.Layout>)MetadataAPI.getInstance().readMetadata(
 			'Layout', layoutFullNames);
-		if (Collection.isEmpty(result) || result.size() != layouts.size()) {
+		if (Collection.isEmpty(mdLayouts) || mdLayouts.size() != layoutFullNames.size()) {
 			throw new DocuSignException(Label.LayoutsNotFound);
+		}
+
+		for (MetadataAPI.Layout l : mdLayouts) {
+			result.put(l.fullName, l);
 		}
 
 		return result;
 	}
 
 	@TestVisible
-	private static Boolean addClassicButton(
-		final String webLinkApiName,
-		final List<MetadataAPI.Layout> layouts) {
+	private static List<String> getCustomButtons(
+		final Boolean shouldHaveAction,
+		final String actionName,
+		final List<String> customButtons) {
 
-		List<MetadataAPI.Metadata> modifiedLayouts = new List<MetadataAPI.Metadata>();
-		for (MetadataAPI.Layout layout : layouts) {
-			if (Collection.isEmpty(layout.customButtons)) {
-				layout.customButtons = new List<String> { webLinkApiName };
-				modifiedLayouts.add(layout);
-			} else if (!layout.customButtons.contains(webLinkApiName)) {
-				layout.customButtons.add(0, webLinkApiName);
-				modifiedLayouts.add(layout);
+		List<String> result = new List<String>();
+		if (shouldHaveAction) {
+			result.add(actionName);
+		}
+
+		if (customButtons != null) {
+			for (String cb : customButtons) {
+				if (cb != actionName) {
+					result.add(cb);
+				}
 			}
 		}
 
-		if (Collection.isNotEmpty(modifiedLayouts)) {
-			validateResults(MetadataAPI.getInstance().updateMetadata(modifiedLayouts));
-		}
-
-		return true;
+		return result;
 	}
 
 	@TestVisible
-	private static Boolean addLightningButton(
-		final String webLinkApiName,
-		final List<MetadataAPI.Layout> layouts) {
+	private static List<MetadataAPI.PlatformActionListItem> getPlatformActionListItems(
+		final Boolean shouldHaveAction,
+		final String actionName,
+		final List<MetadataAPI.PlatformActionListItem> platformActionListItems) {
 
-		List<MetadataAPI.Metadata> modifiedLayouts = new List<MetadataAPI.Metadata>();
-		for (MetadataAPI.Layout layout : layouts) {
-			if (layout.platformActionList == null) {
-				layout.platformActionList = new MetadataAPI.PlatformActionList();
-				layout.platformActionList.actionListContext = 'Record';
-			}
+		Integer sortOrder = 0;
+		List<MetadataAPI.PlatformActionListItem> result = new List<MetadataAPI.PlatformActionListItem>();
+		if (shouldHaveAction) {
+			MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+			pali.sortOrder = sortOrder++;
+			pali.actionName = actionName;
+			pali.actionType = 'CustomButton';
+			result.add(pali);
+		}
 
-			if (layout.platformActionList.platformActionListItems == null) {
-				layout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem>();
-			}
-
-			Boolean hasAction = false;
-			for (MetadataAPI.PlatformActionListItem ai : layout.platformActionList.platformActionListItems) {
-				if (ai.actionName == webLinkApiName) {
-					hasAction = true;
-					break;
+		if (platformActionListItems != null) {
+			for (MetadataAPI.PlatformActionListItem pali : platformActionListItems) {
+				if (pali != null && pali.actionName != actionName) {
+					pali.sortOrder = sortOrder++;
+					result.add(pali);
 				}
 			}
+		}
 
-			if (!hasAction) {
-				MetadataAPI.PlatformActionListItem actionItem = new MetadataAPI.PlatformActionListItem();
-				actionItem.actionName = webLinkApiName;
-				actionItem.actionType = 'CustomButton';
-				actionItem.sortOrder = 0;
-				layout.platformActionList.platformActionListItems.add(actionItem);
-				modifiedLayouts.add(layout);
+		return result;
+	}
+
+	@TestVisible
+	private static MetadataAPI.Layout mergeLayout(
+		final Layout newLayout,
+		final MetadataAPI.Layout currentLayout) {
+
+		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
+
+		if (currentLayout.platformActionList == null) {
+			currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+			currentLayout.platformActionList.actionListContext = 'Record';
+		}
+
+		Boolean hasClassicAction = false, hasLightningAction = false;
+		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
+			if (a.type == Layout.ACTION_TYPE_SEND) {
+				if (a.isLightning) {
+					hasLightningAction = true;
+				} else {
+					hasClassicAction = true;
+				}
 			}
 		}
 
-		if (Collection.isNotEmpty(modifiedLayouts)) {
-			validateResults(MetadataAPI.getInstance().updateMetadata(modifiedLayouts));
-		}
+		currentLayout.customButtons = getCustomButtons(
+			hasClassicAction,
+			Layout.ACTION_NAME_SEND,
+			currentLayout.customButtons);
+		currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
+			hasLightningAction,
+			Layout.ACTION_NAME_SEND,
+			currentLayout.platformActionList.platformActionListItems);
 
-		return true;
+		return currentLayout;
 	}
 
-	/**
-	 * Adds the Send with DocuSign button to one or more layouts.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
-	 *
-	 * @param type Salesforce object type.
-	 * @param theme Salesforce UI theme.
-	 * @param layouts One or more layouts to add the button.
-	 *
-	 * @return <code>True</code> if the add operation was successful.
-	 */
-	public static Boolean addSendButton(
+	@TestVisible
+	private static MetadataAPI.WebLink getWebLink(
 		final SObjectType type,
-		final UITheme.Theme theme,
-		final List<Layout> layouts) {
+		final String actionName) {
 
-		Permissions.verifyIsDocuSignAdministrator();
-
-		if (type == null || theme == null || Collection.isEmpty(layouts)) {
-			throw new DocuSignException(Label.UndefinedArgument);
-		}
-
-		List<MetadataAPI.Layout> mdLayouts = readLayouts(type, layouts);
-		String apiName = Application.namespacePrefix + 'Send';
-		String fullName = getButtonFullName(type, apiName);
+		if (type == null || String.isBlank(actionName)) return null;
 
 		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
-			'WebLink', new List<String> { fullName }));
+			'WebLink', new List<String> { getActionFullName(type, actionName) }));
 		if (webLink == null) {
 			webLink = createWebLink(
 				type,
-				fullName,
+				actionName,
 				Label.SendWithDocuSign,
 				Page.Sending,
 				null);
 		}
-
-		if (theme == UITheme.Theme.Classic) {
-			addClassicButton(apiName, mdLayouts);
-		} else { // Lightning
-			addLightningButton(apiName, mdLayouts);
-		}
-
-		return true;
+		return webLink;
 	}
 
 	@TestVisible
-	private static Boolean removeClassicButton(
-		final String webLinkApiName,
-		final List<MetadataAPI.Layout> layouts) {
+	private static MetadataAPI.WebLink getSendAction(final SObjectType type) {
+		if (type == null) return null;
 
-		List<MetadataAPI.Metadata> modifiedLayouts = new List<MetadataAPI.Metadata>();
-		for (MetadataAPI.Layout layout : layouts) {
-			Integer index = Collection.indexOf(layout.customButtons, webLinkApiName);
-			if (index >= 0) {
-				layout.customButtons.remove(index);
-				modifiedLayouts.add(layout);
-			}
+		MetadataAPI.WebLink result = SEND_ACTIONS.get(type);
+		if (result == null) {
+			result = getWebLink(type, Layout.ACTION_NAME_SEND);
+			SEND_ACTIONS.put(type, result);
 		}
-
-		if (Collection.isNotEmpty(modifiedLayouts)) {
-			validateResults(MetadataAPI.getInstance().updateMetadata(modifiedLayouts));
-		}
-
-		return true;
+		return result;
 	}
 
-	@TestVisible
-	private static Boolean removeLightningButton(
-		final String webLinkApiName,
-		final List<MetadataAPI.Layout> layouts) {
-
-		List<MetadataAPI.Metadata> modifiedLayouts = new List<MetadataAPI.Metadata>();
-		for (MetadataAPI.Layout layout : layouts) {
-			if (layout.platformActionList == null || layout.platformActionList.platformActionListItems == null) {
-				continue;
-			}
-
-			Integer index = -1;
-			for (Integer i = 0; i < Collection.size(layout.platformActionList.platformActionListItems); i++) {
-				if (layout.platformActionList.platformActionListItems[i].actionName == webLinkApiName) {
-					index = i;
-					break;
-				}
-			}
-
-			if (index >= 0) {
-				layout.platformActionList.platformActionListItems.remove(index);
-				modifiedLayouts.add(layout);
-			}
-		}
-
-		if (Collection.isNotEmpty(modifiedLayouts)) {
-			validateResults(MetadataAPI.getInstance().updateMetadata(modifiedLayouts));
-		}
-
-		return true;
-	}
-
-	/**
-	 * Removes the Send with DocuSign button from one or more layouts.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
-	 *
-	 * @param type Salesforce object type.
-	 * @param theme Salesforce UI theme.
-	 * @param layouts One or more layouts from which to remove the button.
-	 *
-	 * @return <code>True</code> if the remove operation was successful.
-	 */
-	public static Boolean removeSendButton(
+	public static List<Layout> updateLayouts(
 		final SObjectType type,
-		final UITheme.Theme theme,
 		final List<Layout> layouts) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (type == null || theme == null || Collection.isEmpty(layouts)) {
-			throw new DocuSignException(Label.UndefinedArgument);
+		if (type == null || Collection.isEmpty(layouts)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Map<String, Layout> ls = new Map<String, Layout>();
+		for (Layout l : layouts) {
+			if (l == null) throw new DocuSignException(Label.InvalidLayout);
+			ls.put(l.fullName, l);
+			if (l.hasSendAction()) {
+				getSendAction(type);
+			}
 		}
 
-		List<MetadataAPI.Layout> mdLayouts = readLayouts(type, layouts);
-		String apiName = Application.namespacePrefix + 'Send';
-
-		if (theme == UITheme.Theme.Classic) {
-			removeClassicButton(apiName, mdLayouts);
-		} else { // Lightning
-			removeLightningButton(apiName, mdLayouts);
+		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
+		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
+		for (String fullName : mdLayouts.keySet()) {
+			toUpdate.add(mergeLayout(ls.get(fullName), mdLayouts.get(fullName)));
 		}
 
-		return true;
+		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));
+
+		return layouts;
 	}
 }

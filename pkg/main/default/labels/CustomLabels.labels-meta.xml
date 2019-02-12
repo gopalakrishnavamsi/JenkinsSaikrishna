@@ -4680,4 +4680,74 @@
         <shortDescription>System senders</shortDescription>
         <value>System sender</value>
     </labels>
+    <labels>
+        <fullName>ClassicButton</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Classic Button</shortDescription>
+        <value>Classic Sending</value>
+    </labels>
+    <labels>
+        <fullName>LightningAndMobileAction</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Lightning and Mobile Action</shortDescription>
+        <value>Lightning and Mobile Sending</value>
+    </labels>
+    <labels>
+        <fullName>SalesforceObject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Salesforce Object</shortDescription>
+        <value>Salesforce Object</value>
+    </labels>
+    <labels>
+        <fullName>SelectSalesforceObject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select Salesforce object</shortDescription>
+        <value>-- Select a Salesforce object --</value>
+    </labels>
+    <labels>
+        <fullName>Publish</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Publish</shortDescription>
+        <value>Publish</value>
+    </labels>
+    <labels>
+        <fullName>ModifyLayouts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Modify Layouts</shortDescription>
+        <value>Modify Layouts</value>
+    </labels>
+    <labels>
+        <fullName>Layout</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Layout</shortDescription>
+        <value>Layout</value>
+    </labels>
+    <labels>
+        <fullName>SuccessfullyModifiedLayouts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Successfully modified layouts.</shortDescription>
+        <value>Successfully modified layouts.</value>
+    </labels>
+    <labels>
+        <fullName>CommonObjects</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Common Objects</shortDescription>
+        <value>Commonly Used Objects</value>
+    </labels>
+    <labels>
+        <fullName>AllObjects</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>All Objects</shortDescription>
+        <value>All Objects</value>
+    </labels>
 </CustomLabels>

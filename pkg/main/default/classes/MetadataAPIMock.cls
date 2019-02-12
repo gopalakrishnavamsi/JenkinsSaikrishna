@@ -72,9 +72,20 @@ public class MetadataAPIMock implements WebServiceMock {
 						for (String fn : req.fullNames) {
 							MetadataAPI.Layout record = new MetadataAPI.Layout();
 							record.fullName = fn;
-							record.customButtons = new List<String>();
+							record.customButtons = new List<String> {
+								Application.namespacePrefix + 'Send',
+								Application.namespacePrefix + 'Gen'
+							};
 							MetadataAPI.PlatformActionList pal = new MetadataAPI.PlatformActionList();
-							pal.platformActionListItems = new List<MetadataAPI.PlatformActionListItem>();
+							MetadataAPI.PlatformActionListItem pali1 = new MetadataAPI.PlatformActionListItem();
+							pali1.actionName = Application.namespacePrefix + 'Send';
+							pali1.actionType = 'CustomButton';
+							pali1.sortOrder = 0;
+							MetadataAPI.PlatformActionListItem pali2 = new MetadataAPI.PlatformActionListItem();
+							pali2.actionName = Application.namespacePrefix + 'Gen';
+							pali2.actionType = 'CustomButton';
+							pali2.sortOrder = 1;
+							pal.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali1, pali2 };
 							record.platformActionList = pal;
 							records.add(record);
 						}

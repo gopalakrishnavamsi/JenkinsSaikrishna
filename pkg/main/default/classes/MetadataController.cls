@@ -1,22 +1,29 @@
-public with sharing class MetadataController {
+public with sharing class MetadataController extends Controller {
 
-	public class MergeObjects {
-		public List<MergeObject> common { get; private set; }
-		public List<MergeObject> all { get; private set; }
+	public class Configuration {
+		@AuraEnabled
+		public String sendActionName { get; private set; }
+		@AuraEnabled
+		public List<MergeObject> commonObjects { get; private set; }
+		@AuraEnabled
+		public List<MergeObject> allObjects { get; private set; }
 
-		private MergeObjects(
-			final List<MergeObject> common,
-			final List<MergeObject> all) {
+		private Configuration(
+			final String sendActionName,
+			final List<MergeObject> commonObjects,
+			final List<MergeObject> allObjects) {
 
-			this.common = common;
-			this.all = all;
+			this.sendActionName = sendActionName;
+			this.commonObjects = commonObjects;
+			this.allObjects = allObjects;
 		}
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static MergeObjects getSalesforceObjects() {
+	public static Configuration getConfiguration() {
 		try {
-			return new MergeObjects(
+			return new Configuration(
+				Layout.ACTION_NAME_SEND,
 				MetadataService.getCommonObjects(),
 				MetadataService.getObjects());
 		} catch (Exception ex) {
@@ -33,54 +40,17 @@ public with sharing class MetadataController {
 		}
 	}
 
-	// Fix layouts with proper SObjectType (not serializable)
-	private static List<Layout> deserializeLayouts(
-		final SObjectType type,
-		final String layoutsJson) {
-
-		List<Layout> result = new List<Layout>();
-		if (String.isNotBlank(layoutsJson)) {
-			List<Layout> layouts = (List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class);
-			if (Collection.isNotEmpty(layouts)) {
-				for (Layout l : layouts) {
-					result.add(new Layout(type, l.id, l.namespace, l.name));
-				}
-			}
-		}
-		return result;
-	}
-
 	@AuraEnabled
-	public static Boolean addSendButton(
+	public static List<Layout> updateLayouts(
 		final String sObjectType,
-		final Boolean isLightning,
 		final String layoutsJson) {
 
 		try {
-			SObjectType type = Salesforce.getSObjectType(sObjectType);
-			return MetadataService.addSendButton(
-				type,
-				isLightning ? UITheme.Theme.Lightning : UITheme.Theme.Classic,
-				deserializeLayouts(type, layoutsJson));
+			return MetadataService.updateLayouts(
+				Salesforce.getSObjectType(sObjectType),
+				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class));
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to add send button');
-		}
-	}
-
-	@AuraEnabled
-	public static Boolean removeSendButton(
-		final String sObjectType,
-		final Boolean isLightning,
-		final String layoutsJson) {
-
-		try {
-			SObjectType type = Salesforce.getSObjectType(sObjectType);
-			return MetadataService.removeSendButton(
-				type,
-				isLightning ? UITheme.Theme.Lightning : UITheme.Theme.Classic,
-				deserializeLayouts(type, layoutsJson));
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to remove send button');
+			throw Controller.wrapException(ex, 'Failed to update layouts');
 		}
 	}
 }

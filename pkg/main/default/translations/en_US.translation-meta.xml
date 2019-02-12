@@ -2527,6 +2527,46 @@
         <label>System sender</label>
         <name>SystemSender</name>
     </customLabels>
+    <customLabels>
+        <label>Classic Sending</label>
+        <name>ClassicButton</name>
+    </customLabels>
+    <customLabels>
+        <label>Lightning and Mobile Sending</label>
+        <name>LightningAndMobileAction</name>
+    </customLabels>
+    <customLabels>
+        <label>Salesforce Object</label>
+        <name>SalesforceObject</name>
+    </customLabels>
+    <customLabels>
+        <label>-- Select a Salesforce object --</label>
+        <name>SelectSalesforceObject</name>
+    </customLabels>
+    <customLabels>
+        <label>Publish</label>
+        <name>Publish</name>
+    </customLabels>
+    <customLabels>
+        <label>Modify Layouts</label>
+        <name>ModifyLayouts</name>
+    </customLabels>
+	<customLabels>
+		<label>Layout</label>
+		<name>Layout</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully modified layouts.</label>
+		<name>SuccessfullyModifiedLayouts</name>
+	</customLabels>
+    <customLabels>
+        <label>Commonly Used Objects</label>
+        <name>CommonObjects</name>
+    </customLabels>
+    <customLabels>
+        <label>All Objects</label>
+        <name>AllObjects</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

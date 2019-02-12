@@ -1,0 +1,113 @@
+<aura:component controller="MetadataController">
+
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
+
+    <aura:attribute name="nextStep" type="String"/>
+    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
+    <aura:attribute name="showExitModal" type="Boolean" access="private"/>
+    <aura:attribute name="sendActionName" type="String" access="private"/>
+    <aura:attribute name="commonObjects" type="Object[]" access="private"/>
+    <aura:attribute name="allObjects" type="Object[]" access="private"/>
+    <aura:attribute name="sObjectType" type="String" access="private"/>
+    <aura:attribute name="layouts" type="Object[]" access="private"/>
+    <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
+
+    <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
+    <aura:registerEvent name="finishClicked" type="c:NextSectionEvent"/>
+
+    <aura:handler name="strike_evt_modalPrimaryButtonClicked"
+                  event="c:strike_evt"
+                  action="{!c.onConfirmCancel}"/>
+
+    <c:CommonUI aura:id="common-ui" visualforce="{!v.visualforce}"/>
+
+    <div class="slds-scope strike-wizard">
+        <!-- BEGIN HEADER -->
+        <header class="strike-wizard__header slds-is-relative">
+            <h2 class="strike-wizard__title slds-text-heading_large slds-align_absolute-center slds-m-bottom_none">
+                {!$Label.c.ModifyLayouts}</h2>
+        </header>
+        <!-- END HEADER -->
+
+        <!-- BEGIN CONTENT -->
+        <lightning:select label="{!$Label.c.SalesforceObject}"
+                          class="slds-text-heading--label slds-m-around--small slds-m-bottom--medium"
+                          value="{!v.sObjectType}"
+                          onchange="{!c.onChangeObject}">
+            <option value="" selected="selected">{!$Label.c.SelectSalesforceObject}</option>
+            <optgroup label="{!$Label.c.CommonObjects}">
+                <aura:iteration items="{!v.commonObjects}"
+                                var="sObject">
+                    <option value="{!sObject.name}">{!sObject.label}</option>
+                </aura:iteration>
+            </optgroup>
+            <optgroup label="{!$Label.c.AllObjects}">
+                <aura:iteration items="{!v.allObjects}"
+                                var="sObject">
+                    <option value="{!sObject.name}">{!sObject.label}</option>
+                </aura:iteration>
+            </optgroup>
+        </lightning:select>
+
+        <aura:if isTrue="{!not(empty(v.layouts))}">
+            <div class="slds-grid slds-gutters slds-m-around--small slds-m-bottom--medium">
+                <div class="slds-col slds-size--2-of-4 slds-text-heading--label">
+                    {!$Label.c.Layout}
+                </div>
+                <div class="slds-col slds-size--1-of-4 slds-text-heading--label">
+                    {!$Label.c.LightningAndMobileAction}
+                </div>
+                <div class="slds-col slds-size--1-of-4 slds-text-heading--label">
+                    {!$Label.c.ClassicButton}
+                </div>
+            </div>
+        </aura:if>
+
+        <aura:iteration items="{!v.layouts}" var="layout" indexVar="i">
+            <div class="slds-grid slds-gutters slds-m-around--small">
+                <div class="slds-col slds-size--2-of-4">
+                    {!layout.name}
+                </div>
+                <div class="slds-col slds-size--1-of-4">
+                    <lightning:input type="checkbox"
+                                     variant="label-hidden"
+                                     name="{!'action-lightning-' + i}"
+                                     label=""
+                                     onchange="{!c.makeDirty}"
+                                     checked="{!layout.hasSendLightning}"/>
+                </div>
+                <div class="slds-col slds-size--1-of-4">
+                    <lightning:input type="checkbox"
+                                     variant="label-hidden"
+                                     name="{!'action-classic-' + i}"
+                                     label=""
+                                     onchange="{!c.makeDirty}"
+                                     checked="{!layout.hasSendClassic}"/>
+                </div>
+            </div>
+        </aura:iteration>
+
+        <div class="slds-grid slds-m-around--small">
+            <div class="slds-col">
+                <lightning:button label="{!$Label.c.Publish}"
+                                  disabled="{!not(v.isDirty)}"
+                                  class="slds-m-top_xx-small"
+                                  onclick="{!c.publishActions}"/>
+            </div>
+        </div>
+        <!-- END CONTENT -->
+
+        <!-- Exit Modal -->
+        <c:strike_modal title="{!$Label.c.SectionModalTitle}"
+                        primaryButtonLabel="{!$Label.c.Yes}"
+                        secondaryButtonLabel="{!$Label.c.No}"
+                        showHeader="true"
+                        showFooter="true"
+                        showModal="{!v.showExitModal}">
+            <p class="slds-text-align_center">{!$Label.c.SectionModalWarning}</p>
+        </c:strike_modal>
+        <!-- /Exit Modal -->
+    </div>
+</aura:component>

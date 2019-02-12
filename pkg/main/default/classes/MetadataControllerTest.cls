@@ -2,12 +2,12 @@
 private class MetadataControllerTest {
 
 	@IsTest
-	static void test_getSalesforceObjects_failure() {
+	static void test_getConfiguration_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataController.getSalesforceObjects();
-				throw new AssertException('Expected getSalesforceObjects to fail');
+				MetadataController.getConfiguration();
+				throw new AssertException('Expected getConfiguration to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -16,15 +16,16 @@ private class MetadataControllerTest {
 	}
 
 	@IsTest
-	static void test_getSalesforceObjects_success() {
+	static void test_getConfiguration_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			MetadataController.MergeObjects result = MetadataController.getSalesforceObjects();
+			MetadataController.Configuration result = MetadataController.getConfiguration();
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assert(Collection.isNotEmpty(result.common));
-			System.assert(Collection.isNotEmpty(result.all));
+			System.assertEquals(Layout.ACTION_NAME_SEND, result.sendActionName);
+			System.assert(Collection.isNotEmpty(result.commonObjects));
+			System.assert(Collection.isNotEmpty(result.allObjects));
 		}
 	}
 
@@ -55,12 +56,12 @@ private class MetadataControllerTest {
 	}
 
 	@IsTest
-	static void test_addSendButton_failure() {
+	static void test_updateLayouts_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataController.addSendButton('Account', false, '[]');
-				throw new AssertException('Expected addSendButton to fail');
+				MetadataController.updateLayouts('Contact', '[]');
+				throw new AssertException('Expected updateLayouts to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -69,48 +70,47 @@ private class MetadataControllerTest {
 	}
 
 	@IsTest
-	static void test_addSendButton_success() {
+	static void test_updateLayouts_success() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			List<Layout> layouts = new List<Layout> {
-				new Layout(Schema.Account.getSObjectType(), null, 'ns', 'n')
+				new Layout(
+					Contact.getSObjectType(),
+					UserInfo.getOrganizationId(),
+					'ns',
+					'n1',
+					new List<Layout.Action> {
+						new Layout.Action(
+							Layout.ACTION_TYPE_SEND,
+							Layout.ACTION_NAME_SEND,
+							true),
+						new Layout.Action(
+							Layout.ACTION_TYPE_SEND,
+							Layout.ACTION_NAME_SEND,
+							false)
+					}),
+				new Layout(
+					Contact.getSObjectType(),
+					UserInfo.getOrganizationId(),
+					'ns',
+					'n2',
+					new List<Layout.Action> {
+						new Layout.Action(
+							Layout.ACTION_TYPE_SEND,
+							Layout.ACTION_NAME_SEND,
+							true),
+						new Layout.Action(
+							Layout.ACTION_TYPE_SEND,
+							Layout.ACTION_NAME_SEND,
+							false)
+					})
 			};
 
 			Test.startTest();
-			Boolean result = MetadataController.addSendButton('Account', true, JSON.serialize(layouts));
+			List<Layout> result = MetadataController.updateLayouts('Contact', JSON.serialize(layouts));
 			Test.stopTest();
 
-			System.assert(result);
-		}
-	}
-
-	@IsTest
-	static void test_removeSendButton_failure() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				MetadataController.removeSendButton('Account', false, '[]');
-				throw new AssertException('Expected removeSendButton to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_removeSendButton_success() {
-		MetadataAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			List<Layout> layouts = new List<Layout> {
-				new Layout(Schema.Account.getSObjectType(), null, 'ns', 'n')
-			};
-
-			Test.startTest();
-			Boolean result = MetadataController.removeSendButton('Account', true, JSON.serialize(layouts));
-			Test.stopTest();
-
-			System.assert(result);
+			System.assertEquals(2, Collection.size(result));
 		}
 	}
 }
