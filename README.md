@@ -29,3 +29,9 @@ When uploading the managed package, you must set the post-install splash page. F
 1. Click "Upload".
 
 ![Package Upload](./img/package_upload.png)
+
+## DX Notes
+To clean up any leftover orgs/configs in your local mac
+- Go to .sfdx folder in your home directory and clean up the .json files associated with the particular org causing the issue. No CLI command with DX yet to do the cleanup.
+
+
