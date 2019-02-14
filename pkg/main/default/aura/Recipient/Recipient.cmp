@@ -31,7 +31,6 @@
                         <!-- Recipient Type -->
                         <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="Signer">{!$Label.c.Signer}</option>
-                            <option value="InPersonSigner">{!$Label.c.InPersonSigner}</option>
                             <option value="CarbonCopy">{!$Label.c.CarbonCopy}</option>
                             <option value="CertifiedDelivery">{!$Label.c.CertifiedDelivery}</option>
                             <option value="Agent">{!$Label.c.Agent}</option>
