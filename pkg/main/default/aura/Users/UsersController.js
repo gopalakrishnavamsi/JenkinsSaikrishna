@@ -1,5 +1,6 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
+    component.set('v.uiHelper', new UIHelper(component));
     helper.getUsers(component, helper);
   },
 
@@ -75,7 +76,7 @@
       lookup.set('v.error', false);
       if (component.get('v.showAddUserModal') && lookup.get('v.value')) {
         var userId = lookup.get('v.value');
-        helper.getUser(component, event, helper, userId);
+        helper.getUser(component, userId);
       } else {
         component.find('primaryFooterButton').set('v.disabled', false);
       }

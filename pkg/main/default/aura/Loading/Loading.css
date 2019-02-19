@@ -1,0 +1,8 @@
+.THIS {
+    position: relative;
+}
+
+.THIS .ds-spinner_visualforce {
+    position: fixed;
+    z-index: 10;
+}

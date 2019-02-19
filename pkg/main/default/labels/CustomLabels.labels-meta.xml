@@ -4750,4 +4750,18 @@
         <shortDescription>All Objects</shortDescription>
         <value>All Objects</value>
     </labels>
+    <labels>
+        <fullName>AddToLayouts</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add to Layouts</shortDescription>
+        <value>Add DocuSign buttons and status to your Salesforce layouts</value>
+    </labels>
+    <labels>
+        <fullName>NoLayoutsForSelectedObject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>No layouts for selected object</shortDescription>
+        <value>No layouts are associated with the selected object</value>
+    </labels>
 </CustomLabels>

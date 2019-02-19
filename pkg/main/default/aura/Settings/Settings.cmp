@@ -1,5 +1,8 @@
 <aura:component description="DocuSign for Salesforce Essentials - Settings" controller="SettingsController">
 
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
+
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="settings" type="Object" access="private"/>
     <aura:attribute name="showExitModal" type="Boolean" access="private" default="false"/>
     <aura:attribute name="availableSystemSenders" type="Object" access="private"/>
@@ -9,7 +12,6 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt" action="{!c.onConfirmCancel}"/>
 
     <div class="slds-scope strike-wizard">

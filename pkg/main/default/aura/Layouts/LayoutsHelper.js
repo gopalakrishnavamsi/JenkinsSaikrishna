@@ -1,10 +1,6 @@
 ({
-  uiHelper: function (component) {
-    return component.get('v.uiHelper');
-  },
-
   getConfiguration: function (component) {
-    this.uiHelper(component).invokeAction(component.get('c.getConfiguration'), null, function (configuration) {
+    this.invokeAction(component, component.get('c.getConfiguration'), null, function (configuration) {
       component.set('v.sendActionName', configuration.sendActionName);
       component.set('v.commonObjects', configuration.commonObjects);
       component.set('v.allObjects', configuration.allObjects);
@@ -46,7 +42,7 @@
 
   getLayouts: function (component) {
     var self = this;
-    self.uiHelper(component).invokeAction(component.get('c.getLayouts'), {sObjectType: component.get('v.sObjectType')}, function (layouts) {
+    this.invokeAction(component, component.get('c.getLayouts'), {sObjectType: component.get('v.sObjectType')}, function (layouts) {
       component.set('v.layouts', self.processLayouts(layouts));
       component.set('v.isDirty', false);
     });
@@ -79,14 +75,13 @@
 
   updateLayouts: function (component) {
     var self = this;
-    var uiHelper = self.uiHelper(component);
-    uiHelper.invokeAction(component.get('c.updateLayouts'), {
+    this.invokeAction(component, component.get('c.updateLayouts'), {
       sObjectType: component.get('v.sObjectType'),
       layoutsJson: self.getLayoutsJson(component.get('v.layouts'), component.get('v.sendActionName'))
     }, function (layouts) {
       component.set('v.layouts', self.processLayouts(layouts));
       component.set('v.isDirty', false);
-      uiHelper.showToast($A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
+      self.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
     });
   }
 });

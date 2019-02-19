@@ -3,9 +3,6 @@
                     required="true"/>
     <apex:attribute name="sourceId" description="The ID of the initiating Salesforce object" type="Id"
                     required="true"/>
-    <apex:attribute name="visualforceHost" description="The Visualforce host name for the current organization"
-                    type="String"
-                    required="true"/>
 
     <apex:includeLightning />
     <apex:slds />
@@ -25,9 +22,7 @@
       $Lightning.use(namespace + ':LightningOutApp', function () {
         $Lightning.createComponent(namespace + ':Sending', {
           visualforce: true,
-          recordId: '{!JSENCODE(sourceId)}',
-          lcHost: '{!JSENCODE(visualforceHost)}',
-          namespace: namespace
+          recordId: '{!JSENCODE(sourceId)}'
         }, 'lightning', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });

@@ -36,6 +36,7 @@ public class MergeObject implements Comparable {
 		return type != null
 			&& !BLACKLIST.contains(type.getSObjectType())
 			&& type.isAccessible()
+			&& type.isCreateable()
 			&& type.isQueryable();
 	}
 

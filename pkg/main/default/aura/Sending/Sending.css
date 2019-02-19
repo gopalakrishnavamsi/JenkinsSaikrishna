@@ -170,11 +170,6 @@
     margin-top: 0;
 }
 
-.THIS .ds-spinner_visualforce {
-    position: fixed;
-    z-index: 10;
-}
-
 .THIS .slds-textarea {
     min-height: 116px;
 }

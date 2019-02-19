@@ -1,6 +1,7 @@
-<aura:component>
+<aura:component abstract="true" extensible="true">
     <aura:attribute name="loading" type="Boolean" default="{!true}"/>
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+
     <aura:attribute name="message" type="String" access="private"/>
     <aura:attribute name="mode" type="String" access="private"/>
 
@@ -10,13 +11,17 @@
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.onToast}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.onLoading}"/>
 
-    <c:Toast aura:id="toast"
-             message="{!v.message}"
-             mode="{!v.mode}"
-             showToast="{!false}"
-             visualforce="{!v.visualforce}"/>
+    <div class="slds-scope">
+        <c:Toast aura:id="ds-toast"
+                 message="{!v.message}"
+                 mode="{!v.mode}"
+                 showToast="{!false}"
+                 visualforce="{!v.visualforce}"/>
 
-    <c:Loading aura:id="spinner"
-               loading="{!v.loading}"
-               visualforce="{!v.visualforce}"/>
+        <c:Loading aura:id="ds-loading"
+                   loading="{!v.loading}"
+                   visualforce="{!v.visualforce}"/>
+
+        {!v.body}
+    </div>
 </aura:component>

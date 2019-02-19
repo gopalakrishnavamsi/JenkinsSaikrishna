@@ -1,5 +1,6 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
+    component.set('v.uiHelper', new UIHelper(component));
     component.set('v.helpInfo', '');
     var env = component.get('v.environment');
     component.set('v.advancedOptionsExpanded', !$A.util.isEmpty(env) && env !== 'Production');
@@ -35,7 +36,7 @@
   },
 
   showLogoutModal: function (component, event, helper) {
-    helper.hideToast(component);
+    component.get('v.uiHelper').hideToast();
     component.set('v.showLogoutModal', true);
   },
 

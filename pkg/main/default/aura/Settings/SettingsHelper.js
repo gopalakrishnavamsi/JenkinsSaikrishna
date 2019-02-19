@@ -1,83 +1,36 @@
 ({
-  setLoading: function (component, isLoading) {
-    var evt = component.getEvent('loadingEvent');
-    evt.setParams({
-      isLoading: isLoading === true
-    });
-    evt.fire();
-  },
-
-  showToast: function (component, message, mode) {
-    var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: true, message: message, mode: mode
-    });
-    evt.fire();
-  },
-
-  hideToast: function (component) {
-    var evt = component.getEvent('toastEvent');
-    if (!$A.util.isUndefinedOrNull(evt)) {
-      evt.setParams({
-        show: false
-      });
-      evt.fire();
-    }
-  },
-
-  useSystemSender: function(accountSettings) {
-    return !$A.util.isUndefinedOrNull(accountSettings)
-      && !$A.util.isUndefinedOrNull(accountSettings.systemSenderId)
-      && !$A.util.isEmpty(accountSettings.systemSenderId.value);
+  _useSystemSender: function (accountSettings) {
+    return !$A.util.isUndefinedOrNull(accountSettings) && !$A.util.isUndefinedOrNull(accountSettings.systemSenderId) && !$A.util.isEmpty(accountSettings.systemSenderId.value);
   },
 
   getSettings: function (component) {
-    this.setLoading(component, true);
-    var gs = component.get('c.getSettings');
-    gs.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        var s = response.getReturnValue();
-        component.set('v.settings', s.account);
-        component.set('v.availableSystemSenders', s.availableSystemSenders);
-        if (this.useSystemSender(s.account)) {
-          component.set('v.systemSenderId', s.account.systemSenderId.value);
-        } else {
-          component.set('v.systemSenderId', null);
-        }
+    var self = this;
+    component.get('v.uiHelper').invokeAction(component.get('c.getSettings'), null, function (s) {
+      component.set('v.settings', s.account);
+      component.set('v.availableSystemSenders', s.availableSystemSenders);
+      if (self._useSystemSender(s.account)) {
+        component.set('v.systemSenderId', s.account.systemSenderId.value);
       } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
+        component.set('v.systemSenderId', null);
       }
-      this.setLoading(component, false);
     });
-    $A.enqueueAction(gs);
   },
 
   saveSettings: function (component) {
-    this.setLoading(component, true);
-    var ss = component.get('c.saveSettings');
-    var s = component.get('v.settings');
+    var self = this;
+    var uiHelper = component.get('v.uiHelper');
+    var settings = component.get('v.settings');
     var ssId = component.get('v.systemSenderId');
     if (!$A.util.isEmpty(ssId)) {
-      s.systemSenderId = {value: ssId};
+      settings.systemSenderId = {value: ssId};
     } else {
-      s.systemSenderId = null;
+      settings.systemSenderId = null;
     }
-    ss.setParams({
-      settingsJson: JSON.stringify(s)
+    uiHelper.invokeAction(component.get('c.saveSettings'), {settingsJson: JSON.stringify(settings)}, function (ss) {
+      component.set('v.settings', ss);
+      self.exit(component);
+      uiHelper.showToast($A.get('$Label.c.SettingsSaved'), 'success');
     });
-    ss.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        component.set('v.settings', response.getReturnValue());
-        this.exit(component);
-        this.showToast(component, $A.get('$Label.c.SettingsSaved'), 'success');
-      } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
-      }
-      this.setLoading(component, false);
-    });
-    $A.enqueueAction(ss);
   },
 
   exit: function (component) {

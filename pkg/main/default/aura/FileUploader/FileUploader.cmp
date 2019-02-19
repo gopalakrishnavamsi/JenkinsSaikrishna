@@ -1,6 +1,11 @@
 <aura:component implements="force:hasRecordId" controller="FileController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
+
     <aura:attribute name="visualforce" type="Boolean"/>
+
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>

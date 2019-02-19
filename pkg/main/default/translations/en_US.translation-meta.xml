@@ -2567,6 +2567,14 @@
         <label>All Objects</label>
         <name>AllObjects</name>
     </customLabels>
+    <customLabels>
+        <label>Add DocuSign buttons and status to your Salesforce layouts</label>
+        <name>AddToLayouts</name>
+    </customLabels>
+    <customLabels>
+        <label>No layouts are associated with the selected object</label>
+        <name>NoLayoutsForSelectedObject</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

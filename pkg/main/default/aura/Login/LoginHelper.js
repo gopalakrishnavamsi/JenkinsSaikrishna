@@ -1,28 +1,4 @@
 ({
-  showToast: function (component, message, mode) {
-    var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: true, message: message, mode: mode
-    });
-    evt.fire();
-  },
-
-  hideToast: function (component) {
-    var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: false
-    });
-    evt.fire();
-  },
-
-  setLoading: function (component, isLoading) {
-    var evt = component.getEvent('loadingEvent');
-    evt.setParams({
-      isLoading: isLoading === true
-    });
-    evt.fire();
-  },
-
   setLogin: function (component, isLoggedIn) {
     var evt = component.getEvent('loginEvent');
     evt.setParams({
@@ -37,10 +13,10 @@
 
     inputs = Array.isArray(inputs) ? inputs : [inputs]; // Safety first
 
-    inputs.forEach(function (input, index) {
-      if (typeof(input.focus) !== 'undefined') input.focus(); // Force error states
+    inputs.forEach(function (input) {
+      if (typeof (input.focus) !== 'undefined') input.focus(); // Force error states
 
-      if (typeof(input.get) !== 'undefined' && !input.get('v.validity').valid) {
+      if (typeof (input.get) !== 'undefined' && !input.get('v.validity').valid) {
         isValid = false;
       }
     });
@@ -51,16 +27,15 @@
   },
 
   beginOAuth: function (component) {
-    this.hideToast(component);
-    this.setLoading(component, true);
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
+    uiHelper.setLoading(true);
 
     var beginOAuth = component.get('v.beginOAuth');
-    beginOAuth(component,
-      component.get('v.environment') || 'Production',
-      component.get('v.otherUrl') || null);
+    beginOAuth(component, component.get('v.environment') || 'Production', component.get('v.otherUrl') || null);
   },
 
-  setLoggedIn: function(component, loginInformation) {
+  setLoggedIn: function (component, loginInformation) {
     var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
     var isLoggedIn = hasAccounts && loginInformation.status === 'Success';
     if (loginInformation.status === 'SelectAccount' && hasAccounts) {
@@ -78,109 +53,63 @@
   },
 
   endOAuth: function (component, response, loginInformation) {
+    var uiHelper = component.get('v.uiHelper');
     if (response && response.status && loginInformation) {
       this.setLoggedIn(component, loginInformation);
     } else {
-      this.showToast(component, response.message, 'error');
+      uiHelper.showToast(response.message, 'error');
     }
-    this.setLoading(component, false);
+    uiHelper.setLoading(component, false);
   },
 
   selectAccount: function (component) {
-    this.hideToast(component);
-    this.setLoading(component, true);
-
-    var sa = component.get('c.selectAccount');
-    sa.setParams({
+    var self = this;
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.invokeAction(component.get('c.selectAccount'), {
       environment: component.get('v.environment'),
       otherUrl: component.get('v.otherUrl'),
       selectedAccountNumber: component.get('v.selectedAccountNumber')
+    }, function (loginInformation) {
+      self.setLoggedIn(component, loginInformation);
     });
-    sa.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') {
-        this.setLoggedIn(component, response.getReturnValue());
-      } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
-      }
-      this.setLoading(component, false);
-    });
-    $A.enqueueAction(sa);
   },
 
   logout: function (component) {
-    this.hideToast(component);
-    this.setLoading(component, true);
-
-    var logout = component.get('c.logout');
-    logout.setParams({
-      resetUsers: true
+    var self = this;
+    component.get('v.uiHelper').invokeAction(component.get('c.logout'), {resetUsers: true}, function (loginInformation) {
+      component.set('v.login', loginInformation);
+      component.set('v.isLoggedIn', false);
+      component.set('v.selectedAccountNumber', null);
+      component.set('v.login.isTrial', false);
+      component.set('v.isTrialExpired', false);
+      self.setLogin(component, false);
     });
-    logout.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') {
-        component.set('v.login', response.getReturnValue());
-        component.set('v.isLoggedIn', false);
-        component.set('v.selectedAccountNumber', null);
-        component.set('v.login.isTrial', false);
-        component.set('v.isTrialExpired', false);
-      } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
-      }
-      this.setLogin(component, false);
-      this.setLoading(component, false);
-    });
-    $A.enqueueAction(logout);
   },
 
   prepareTrial: function (component) {
-    this.hideToast(component);
-    this.setLoading(component, true);
-
-    var pt = component.get('c.prepareTrial');
-    pt.setParams({
-      email: component.get('v.login.email')
+    component.get('v.uiHelper').invokeAction(component.get('c.prepareTrial'), {email: component.get('v.login.email')}, function (trialPrep) {
+      component.set('v.countries', trialPrep.countries);
+      component.set('v.marketing', trialPrep.marketing);
+      component.set('v.trialAccount', trialPrep.account);
+      component.set('v.userCountryCode', trialPrep.account.user.countryCode);
     });
-    pt.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') {
-        var trialPrep = response.getReturnValue();
-        component.set('v.countries', trialPrep.countries);
-        component.set('v.marketing', trialPrep.marketing);
-        component.set('v.trialAccount', trialPrep.account);
-        component.set('v.userCountryCode', trialPrep.account.user.countryCode);
-      } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
-      }
-      this.setLoading(component, false);
-    });
-    $A.enqueueAction(pt);
   },
 
   startTrial: function (component) {
-    this.hideToast(component);
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
 
     if (this.getInputValidity(component, 'trial-input', 'trial-button')) {
-      this.setLoading(component, true);
       var trial = component.get('v.trialAccount');
       trial.user.email = component.get('v.login.email');
 
-      var st = component.get('c.startTrial');
-      st.setParams({
-        trialJson: JSON.stringify(trial)
+      uiHelper.invokeAction(component.get('c.startTrial'), {trialJson: JSON.stringify(trial)}, function(account) {
+        component.set('v.login.isTrial', true);
+        component.set('v.selectedAccountNumber', account.accountNumber);
+        component.set('v.environment', 'Production');
+        component.set('v.otherUrl', null);
+        component.set('v.signedUpForTrial', true);
       });
-      st.setCallback(this, function (response) {
-        var status = response.getState();
-        if (status === 'SUCCESS') {
-          var account = response.getReturnValue();
-          component.set('v.login.isTrial', true);
-          component.set('v.selectedAccountNumber', account.accountNumber);
-          component.set('v.environment', 'Production');
-          component.set('v.otherUrl', null);
-          component.set('v.signedUpForTrial', true);
-        } else {
-          this.showToast(component, _getErrorMessage(response), 'error');
-        }
-        this.setLoading(component, false);
-      });
-      $A.enqueueAction(st);
     }
   }
 });

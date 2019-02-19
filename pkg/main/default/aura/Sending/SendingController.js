@@ -1,5 +1,5 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
     helper.createEnvelope(component, component.get('v.recordId'));
   },
 
@@ -11,11 +11,6 @@
   },
 
   continueAndTag: function (component, event, helper) {
-    component.set('v.loading', true);
-    if (component.get('v.showToast')) {
-      component.set('v.showToast', false);
-    }
-
     var documents = component.get('v.documents');
     var hasDocuments = documents.some(function (d) {
       return d.selected;
@@ -56,7 +51,7 @@
   },
 
   cancel: function (component, event, helper) {
-    _navigateToSObject(component.get('v.recordId'));
+    navUtils.navigateToSObject(component.get('v.recordId'));
   },
 
   goBack: function (component, event, helper) {
@@ -102,25 +97,6 @@
 
   handleRecipientChange: function (component, event, helper) {
     helper.resolveRecipient(component, event.getParam('data'));
-  },
-
-  onToast: function (component, event, helper) {
-    var params = event.getParams();
-    if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
-      if (params.mode === 'success') {
-        setTimeout($A.getCallback(function () {
-          helper.hideToast(component);
-        }), 3000);
-      }
-    } else {
-      helper.hideToast(component);
-    }
-  },
-
-  onLoading: function (component, event, helper) {
-    var params = event.getParams();
-    helper.setLoading(component, params && params.isLoading === true);
   },
 
   onUploadComplete: function (component, event, helper) {

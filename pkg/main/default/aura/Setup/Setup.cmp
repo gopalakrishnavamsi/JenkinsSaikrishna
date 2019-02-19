@@ -1,10 +1,8 @@
-<aura:component controller="SetupController">
-    <ltng:require scripts="{!$Resource.UtilJS}"/>
+<aura:component controller="SetupController"
+                extends="c:RootContainer">
 
-    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
 
-    <aura:attribute name="loading" type="Boolean" access="private" default="{!true}"/>
     <aura:attribute name="login" type="Object" access="private"/>
     <aura:attribute name="steps" type="Object[]" access="private"/>
     <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
@@ -19,9 +17,7 @@
     <aura:attribute name="mode" type="String" access="private"/>
     <aura:attribute name="nextStep" type="String" access="private"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
-    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
-    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
     <aura:handler name="loginEvent" event="c:LoginEvent" action="{!c.handleLoginEvent}"/>
 
     <div class="slds-scope">
@@ -62,20 +58,21 @@
                 </div>
             </aura:if>
 
+            <aura:if isTrue="{!v.currentStep == 'setupLayouts'}">
+                <div class="{!'slds-col' + if(v.currentStep == 'setupLayouts', '', ' slds-hide')}">
+                    <c:SetupLayouts aura:id="setupLayouts"
+                                  nextStep="{!v.nextStep}"
+                                  exitClicked="{!c.handleStepChange}"
+                                  finishClicked="{!c.goToNextStep}"/>
+                </div>
+            </aura:if>
+
             <aura:if isTrue="{!v.currentStep == 'settings'}">
                 <div class="{!'slds-col' + if(v.currentStep == 'settings', '', ' slds-hide')}">
                     <c:Settings aura:id="settings"
                                 exitClicked="{!c.handleStepChange}"/>
                 </div>
             </aura:if>
-            <!--/Sections -->
-            <!-- Toast -->
-            <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!false}"
-                     visualforce="{!v.visualforce}"/>
-            <!-- /Toast -->
-            <!-- Loading State -->
-            <c:Loading loading="{!v.loading}" visualforce="{!v.visualforce}"/>
-            <!-- /Loading State -->
         </div>
     </div>
 </aura:component>

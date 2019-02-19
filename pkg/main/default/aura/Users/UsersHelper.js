@@ -1,46 +1,20 @@
 ({
-  showToast: function (component, message, mode) {
-    var evt = component.getEvent('toastEvent');
-    if (!$A.util.isUndefinedOrNull(evt)) {
-      evt.setParams({
-        show: true, message: message, mode: mode
-      });
-      evt.fire();
-    }
-  },
-
-  hideToast: function (component) {
-    var evt = component.getEvent('toastEvent');
-    if (!$A.util.isUndefinedOrNull(evt)) {
-      evt.setParams({
-        show: false
-      });
-      evt.fire();
-    }
-  },
-
   setLoading: function (component, isLoading) {
     component.set('v.modalLoading', isLoading === true);
-    var evt = component.getEvent('loadingEvent');
-    if (!$A.util.isUndefinedOrNull(evt)) {
-      evt.setParams({
-        isLoading: isLoading === true
-      });
-      evt.fire();
-    }
+    component.get('v.uiHelper').setLoading(isLoading === true);
   },
 
-  getUsers: function (component, helper) {
-    helper.hideToast(component);
+  getUsers: function (component) {
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
     component.set('v.tableLoading', true);
 
     var getUsers = component.get('c.getUsers');
-
     getUsers.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         component.set('v.users', response.getReturnValue());
       } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
+        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
       }
       component.set('v.tableLoading', false);
     });
@@ -48,7 +22,7 @@
     $A.enqueueAction(getUsers);
   },
 
-  buildUsersTable: function (component, event, helper) {
+  buildUsersTable: function (component) {
     component.set('v.tableLoading', true);
     var filteredUsers = component.get('v.filteredUsers');
     var userRows = [];
@@ -102,49 +76,37 @@
     component.set('v.formData', {});
   },
 
-  getUser: function (component, event, helper, userId) {
-    helper.hideToast(component);
-    helper.setLoading(component, true);
-
+  getUser: function (component, userId) {
+    var uiHelper = component.get('v.uiHelper');
+    component.set('v.modalLoading', true);
     var users = component.get('v.users');
-    var getUser = component.get('c.getUser');
 
-    getUser.setParams({
-      userId: userId
-    });
-
-    getUser.setCallback(this, function (response) {
-      var status = response.getState();
-      if (status === "SUCCESS") {
-        var user = response.getReturnValue();
-        if ($A.util.isEmpty(user)) {
-          helper.showToast(component, $A.get('$Label.c.UserNotFound'), 'error');
-        } else {
-          var userMatches = users.filter(function (u) {
-            return u.sourceId.indexOf(user.Id) === 0;
-          });
-          if ($A.util.isEmpty(userMatches)) {
-            component.set('v.lookupError', false);
-            component.find('primaryFooterButton').set('v.disabled', false);
-            component.set('v.formData', {
-              user: {
-                email: user.Email, firstName: user.FirstName, lastName: user.LastName, sourceId: user.Id
-              }
-            });
-          } else {
-            component.set('v.lookupError', true);
-            component.find('primaryFooterButton').set('v.disabled', true);
-            component.find('lookup').set('v.error', true);
-            component.find('lookup').set('v.errorMessage', _format($A.get('$Label.c.AlreadyMember_1'), user.Email));
-            component.set('v.formData', {});
-          }
-        }
+    uiHelper.invokeAction(component.get('c.getUser'), {userId: userId}, function (user) {
+      if ($A.util.isEmpty(user)) {
+        helper.showToast(component, $A.get('$Label.c.UserNotFound'), 'error');
       } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
+        var userMatches = users.filter(function (u) {
+          return u.sourceId.indexOf(user.Id) === 0;
+        });
+        if ($A.util.isEmpty(userMatches)) {
+          component.set('v.lookupError', false);
+          component.find('primaryFooterButton').set('v.disabled', false);
+          component.set('v.formData', {
+            user: {
+              email: user.Email, firstName: user.FirstName, lastName: user.LastName, sourceId: user.Id
+            }
+          });
+        } else {
+          component.set('v.lookupError', true);
+          component.find('primaryFooterButton').set('v.disabled', true);
+          component.find('lookup').set('v.error', true);
+          component.find('lookup').set('v.errorMessage', stringUtils.format($A.get('$Label.c.AlreadyMember_1'), user.Email));
+          component.set('v.formData', {});
+        }
       }
-      helper.setLoading(component, false);
+    }, null, function () {
+      component.set('v.modalLoading', false);
     });
-    $A.enqueueAction(getUser);
   },
 
   searchTable: function (component, name) {
@@ -161,8 +123,9 @@
     }
   },
 
-  createUser: function (component, event, helper) {
-    helper.hideToast(component);
+  createUser: function (component) {
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
     component.set('v.showAddUserModal', false);
     component.set('v.tableLoading', true);
 
@@ -184,22 +147,23 @@
         component.set('v.users', response.getReturnValue());
         component.set('v.lookupValue', null);
         component.set('v.formData', {});
-        helper.showToast(component, _format($A.get('$Label.c.MemberAdded_1'), user.email), 'success');
+        uiHelper.showToast(stringUtils.format($A.get('$Label.c.MemberAdded_1'), user.email), 'success');
       } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
+        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
       }
       component.set('v.tableLoading', false);
     });
     $A.enqueueAction(addUser);
   },
 
-  removeUser: function (component, event, helper) {
-    helper.hideToast(component);
+  removeUser: function (component) {
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
     component.set('v.showRemoveUserModal', false);
 
     var user = component.get('v.formData.user');
     if ($A.util.isEmpty(user)) {
-      helper.setError(component, $A.get('$Label.c.NothingToRemove'));
+      uiHelper.showToast($A.get('$Label.c.NothingToRemove'), 'error');
     } else {
       setTimeout($A.getCallback(function () {
         component.set('v.tableLoading', true);
@@ -215,9 +179,9 @@
             component.set('v.users', response.getReturnValue());
             component.set('v.lookupValue', null);
             component.set('v.formData', {});
-            helper.showToast(component, _format($A.get('$Label.c.MemberRemoved_1'), user.email), 'success');
+            uiHelper.showToast(stringUtils.format($A.get('$Label.c.MemberRemoved_1'), user.email), 'success');
           } else {
-            helper.showToast(component, _getErrorMessage(response), 'error');
+            uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
           }
           component.set('v.tableLoading', false);
         });

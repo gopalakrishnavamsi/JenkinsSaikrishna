@@ -39,7 +39,7 @@
                 <div class="slds-col slds-no-flex slds-p-horizontal_small">
                     <lightning:button class="slds-button slds-button_neutral"
                                       label="{!$Label.c.Cancel}"
-                                      onclick="{!c.handleConfirmExitClick}"/>
+                                      onclick="{!c.handleExitClick}"/>
                 </div>
                 <div class="slds-col slds-p-horizontal_small">
                     <lightning:button aura:id="continueButton" class="slds-button slds-button_brand"

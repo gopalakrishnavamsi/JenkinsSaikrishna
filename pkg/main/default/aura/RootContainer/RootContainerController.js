@@ -1,22 +1,25 @@
 ({
   onToast: function (component, event, helper) {
     event.stopPropagation();
+    var toast = component.find('ds-toast');
     var params = event.getParams();
     if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
+      component.set('v.message', params.message);
+      component.set('v.mode', params.mode);
+      toast.show();
       if (params.mode === 'success') {
         setTimeout($A.getCallback(function () {
-          helper.hideToast(component);
+          toast.close();
         }), 3000);
       }
     } else {
-      helper.hideToast(component);
+      toast.close();
     }
   },
 
   onLoading: function (component, event, helper) {
     event.stopPropagation();
     var params = event.getParams();
-    helper.setLoading(component, params && params.isLoading === true);
+    component.set('v.loading', params && params.isLoading === true);
   }
 });

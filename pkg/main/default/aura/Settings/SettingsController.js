@@ -1,6 +1,6 @@
 ({
-  initialize: function (component, event, helper) {
-    helper.hideToast(component);
+  onInitialize: function (component, event, helper) {
+    component.set('v.uiHelper', new UIHelper(component));
     helper.getSettings(component);
   },
 

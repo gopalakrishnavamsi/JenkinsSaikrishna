@@ -1,12 +1,6 @@
-<aura:component controller="MetadataController">
+<aura:component controller="MetadataController"
+                extends="c:RootContainer">
 
-    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
-
-    <aura:attribute name="nextStep" type="String"/>
-    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
-
-    <aura:attribute name="uiHelper" type="Object" access="private"/>
-    <aura:attribute name="showExitModal" type="Boolean" access="private"/>
     <aura:attribute name="sendActionName" type="String" access="private"/>
     <aura:attribute name="commonObjects" type="Object[]" access="private"/>
     <aura:attribute name="allObjects" type="Object[]" access="private"/>
@@ -14,24 +8,12 @@
     <aura:attribute name="layouts" type="Object[]" access="private"/>
     <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
 
-    <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
-    <aura:registerEvent name="finishClicked" type="c:NextSectionEvent"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
-    <aura:handler name="strike_evt_modalPrimaryButtonClicked"
-                  event="c:strike_evt"
-                  action="{!c.onConfirmCancel}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
 
-    <c:CommonUI aura:id="common-ui" visualforce="{!v.visualforce}"/>
-
-    <div class="slds-scope strike-wizard">
-        <!-- BEGIN HEADER -->
-        <header class="strike-wizard__header slds-is-relative">
-            <h2 class="strike-wizard__title slds-text-heading_large slds-align_absolute-center slds-m-bottom_none">
-                {!$Label.c.ModifyLayouts}</h2>
-        </header>
-        <!-- END HEADER -->
-
-        <!-- BEGIN CONTENT -->
+    <div class="slds-scope slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
         <lightning:select label="{!$Label.c.SalesforceObject}"
                           class="slds-text-heading--label slds-m-around--small slds-m-bottom--medium"
                           value="{!v.sObjectType}"
@@ -51,8 +33,8 @@
             </optgroup>
         </lightning:select>
 
-        <aura:if isTrue="{!not(empty(v.layouts))}">
-            <div class="slds-grid slds-gutters slds-m-around--small slds-m-bottom--medium">
+        <div class="slds-grid slds-gutters slds-m-around--small slds-m-bottom--medium">
+            <aura:if isTrue="{!not(empty(v.layouts))}">
                 <div class="slds-col slds-size--2-of-4 slds-text-heading--label">
                     {!$Label.c.Layout}
                 </div>
@@ -62,8 +44,14 @@
                 <div class="slds-col slds-size--1-of-4 slds-text-heading--label">
                     {!$Label.c.ClassicButton}
                 </div>
-            </div>
-        </aura:if>
+
+                <aura:set attribute="else">
+                    <div class="slds-col slds-text-heading--label slds-text-color_weak">
+                        {!$Label.c.NoLayoutsForSelectedObject}
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
 
         <aura:iteration items="{!v.layouts}" var="layout" indexVar="i">
             <div class="slds-grid slds-gutters slds-m-around--small">
@@ -97,17 +85,5 @@
                                   onclick="{!c.publishActions}"/>
             </div>
         </div>
-        <!-- END CONTENT -->
-
-        <!-- Exit Modal -->
-        <c:strike_modal title="{!$Label.c.SectionModalTitle}"
-                        primaryButtonLabel="{!$Label.c.Yes}"
-                        secondaryButtonLabel="{!$Label.c.No}"
-                        showHeader="true"
-                        showFooter="true"
-                        showModal="{!v.showExitModal}">
-            <p class="slds-text-align_center">{!$Label.c.SectionModalWarning}</p>
-        </c:strike_modal>
-        <!-- /Exit Modal -->
     </div>
 </aura:component>
