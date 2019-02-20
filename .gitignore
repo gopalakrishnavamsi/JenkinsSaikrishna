@@ -9,3 +9,5 @@ out/
 ApexDocumentation/
 SfApexDocLog.txt
 SfApexDocs/
+.sfdx/
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<label>Demo</label>
+	<protected>true</protected>
+	<values>
+		<field>AccountBaseUrl__c</field>
+		<value xsi:type="xsd:string">https://account-d.docusign.com/</value>
+	</values>
+	<values>
+		<field>ClientId__c</field>
+		<value xsi:type="xsd:string">5390d6cc-a7f2-4f8e-ad62-1f2f43cca048</value>
+	</values>
+	<values>
+		<field>ClientSecret__c</field>
+		<value xsi:type="xsd:string">7d262e1e-4d83-49c2-879c-08128cfab55d</value>
+	</values>
+	<values>
+		<field>IsVisible__c</field>
+		<value xsi:type="xsd:boolean">true</value>
+	</values>
+	<values>
+		<field>ProvisioningBaseUrl__c</field>
+		<value xsi:type="xsd:string">https://api-d.docusign.net/</value>
+	</values>
+	<values>
+		<field>TrialPlanId__c</field>
+		<value xsi:type="xsd:string">83db741d-13af-470f-8beb-0ad0fba6e4a3</value>
+	</values>
+</CustomMetadata>

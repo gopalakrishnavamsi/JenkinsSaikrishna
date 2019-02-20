@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<label>HQTEST3</label>
+	<protected>true</protected>
+	<!-- TODO: Update with DS HQTEST3 values -->
+	<values>
+		<field>AccountBaseUrl__c</field>
+		<value xsi:type="xsd:string">https://account-hqtest3.dev.docusign.net/</value>
+	</values>
+	<values>
+		<field>ClientId__c</field>
+		<value xsi:type="xsd:string">f595e05d-0b85-4d31-8eaf-c969c19520c2</value>
+	</values>
+	<values>
+		<field>ClientSecret__c</field>
+		<value xsi:type="xsd:string">ea2e00a0-a0a9-47df-851f-60cb43284c03</value>
+	</values>
+	<values>
+		<field>IsVisible__c</field>
+		<value xsi:type="xsd:boolean">false</value>
+	</values>
+	<values>
+		<field>ProvisioningBaseUrl__c</field>
+		<value xsi:type="xsd:string">https://api-hqtest3.dev.docusign.net/</value>
+	</values>
+	<values>
+		<field>TrialPlanId__c</field>
+		<value xsi:type="xsd:string">83db741d-13af-470f-8beb-0ad0fba6e4a3</value>
+	</values>
+</CustomMetadata>

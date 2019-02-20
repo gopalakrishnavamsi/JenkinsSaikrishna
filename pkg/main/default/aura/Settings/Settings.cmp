@@ -1,0 +1,68 @@
+<aura:component description="DocuSign for Salesforce Essentials - Settings" controller="SettingsController">
+
+    <aura:attribute name="settings" type="Object" access="private"/>
+    <aura:attribute name="showExitModal" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="availableSystemSenders" type="Object" access="private"/>
+    <aura:attribute name="systemSenderId" type="String" access="private"/>
+
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="exitClicked" type="c:NavigateToSection"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt" action="{!c.onConfirmCancel}"/>
+
+    <div class="slds-scope strike-wizard">
+        <!-- Header -->
+        <header class="strike-wizard__header slds-is-relative">
+            <h2 class="strike-wizard__title slds-text-heading_large slds-align_absolute-center slds-m-bottom_none">
+                {!$Label.c.AdvancedOptions}
+            </h2>
+        </header>
+        <!-- Header -->
+        <div class="strike-wizard__body">
+            <div class="slds-container_medium slds-container_center slds-p-horizontal_medium">
+                <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
+                    <label for="system-sender" class="slds-form-element__label">{!$Label.c.SystemSender}</label>
+                    <lightning:helptext content="{!$Label.c.UseSystemSenderHelp}"/>
+                    <lightning:select aura:id="system-sender"
+                                      label="{!$Label.c.SystemSender}"
+                                      variant="label-hidden"
+                                      value="{!v.systemSenderId}">
+                        <option value=""
+                                selected="{!if(empty(v.systemSenderId), 'selected', '')}">{!$Label.c.None}</option>
+                        <aura:iteration items="{!v.availableSystemSenders}" var="ss">
+                            <option value="{!ss.id.value}"
+                                    selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">{!ss.display}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </div>
+        </div>
+
+        <footer class="strike-wizard__footer slds-is-relative">
+            <div class="slds-grid slds-grid_pull-padded">
+                <div class="slds-col slds-no-flex slds-p-horizontal_small">
+                    <lightning:button class="slds-button slds-button_neutral"
+                                      label="{!$Label.c.Cancel}"
+                                      onclick="{!c.onCancel}"/>
+                </div>
+                <div class="slds-col slds-p-horizontal_small">
+                    <lightning:button class="slds-button slds-button_brand"
+                                      label="{!$Label.c.Save}"
+                                      onclick="{!c.onSave}"/>
+                </div>
+            </div>
+        </footer>
+        <!-- Exit Modal -->
+        <c:strike_modal title="{!$Label.c.SectionModalTitle}"
+                        primaryButtonLabel="{!$Label.c.Yes}"
+                        secondaryButtonLabel="{!$Label.c.No}"
+                        showHeader="true"
+                        showFooter="true"
+                        showModal="{!v.showExitModal}">
+            <p class="slds-text-align_center">{!$Label.c.SectionModalWarning}</p>
+        </c:strike_modal>
+        <!-- /Exit Modal -->
+    </div>
+</aura:component>

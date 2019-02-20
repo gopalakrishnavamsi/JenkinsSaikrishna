@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="FileEvent">
+    <aura:attribute name="success" type="Boolean" required="true"/>
+    <aura:attribute name="sourceId" type="Id" />
+</aura:event>

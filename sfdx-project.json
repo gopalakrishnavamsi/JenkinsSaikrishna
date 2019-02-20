@@ -1,0 +1,11 @@
+{
+  "packageDirectories": [
+    {
+      "path": "pkg",
+      "default": true
+    }
+  ],
+  "namespace": "dfsle",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "44.0"
+}

@@ -1,0 +1,13 @@
+<aura:component implements="force:hasRecordId" controller="FileController">
+
+    <aura:attribute name="visualforce" type="Boolean"/>
+
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="uploadEvent" type="c:FileEvent"/>
+
+    <div class="slds-scope">
+        <lightning:input aura:id="fileUpload" onchange="{!c.onFileChange}" type="file" name="file"
+                         label="" multiple="false" variant="label-hidden"/>
+    </div>
+</aura:component>

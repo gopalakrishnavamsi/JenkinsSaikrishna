@@ -1,0 +1,2 @@
+<apex:page controller="ReturnController"
+           label="{!$Label.dfsle__docusign}" action="{!onReturn}" showHeader="false" sideBar="false"/>

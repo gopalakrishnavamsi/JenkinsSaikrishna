@@ -1,0 +1,417 @@
+<aura:component controller="StatusController" implements="flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+    <aura:attribute name="envelopes" type="List" access="private"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="errorMessage" type="String" access="private"/>
+
+    <lightning:card variant="base">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <img src="{!$Resource.AppIcon}"
+                         class="slds-icon slds-icon_small"/>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-text-heading_small">{!$Label.c.EnvelopeStatus}</h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body_inner slds-p-bottom_xx-small">
+            <aura:if isTrue="{!v.loading}">
+                <!-- Loading State -->
+                <div class="ds-spinner_container slds-is-relative slds-m-bottom_large">
+                    <lightning:spinner size="medium" alternativeText="{!$Label.c.Loading}"/>
+                </div>
+                <!-- /Loading State -->
+
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!!empty(v.errorMessage)}">
+                        <div class="slds-text-color_error slds-m-vertical_large slds-text-align_center">
+                            <em>{!v.errorMessage}</em>
+                        </div>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!empty(v.envelopes)}">
+                                <!-- Empty State -->
+                                <div class="slds-text-color_weak slds-m-vertical_large slds-text-align_center">
+                                    <em>{!$Label.c.NoEnvelopesSent}</em>
+                                </div>
+                                <!-- /Empty State -->
+
+                                <aura:set attribute="else">
+                                    <div class="slds-timeline">
+                                        <!-- Envelope -->
+                                        <aura:iteration items="{!v.envelopes}" var="envelope" indexVar="envelopeIndex">
+                                            <div aura:id="envelope"
+                                                 class="slds-timeline__item_expandable ds-timeline__item_envelope"
+                                                 data-index="{!envelopeIndex}">
+                                                <div class="slds-media">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:buttonIcon
+                                                                iconName="utility:switch"
+                                                                alternativeText="{!$Label.c.Expand}"
+                                                                class="slds-timeline__details-action-icon slds-button_icon"
+                                                                size="medium"
+                                                                variant="bare"
+                                                                onclick="{!c.toggleEnvelopeDetails}"
+                                                                value="{!envelopeIndex}"/>
+                                                        <lightning:icon iconName="custom:custom105" size="small"
+                                                                        class="slds-timeline__icon"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <div class="slds-grid slds-timeline__trigger slds-gutters_xx-small">
+                                                            <div class="slds-col slds-grow-none ds-envelope-title">
+                                                                <h3 class="slds-truncate"
+                                                                    title="{!envelope.emailSubject}">
+                                                                    <strong>{!envelope.emailSubject}</strong>
+                                                                </h3>
+                                                            </div>
+                                                            <div class="slds-col">
+                                                                <lightning:badge label="{!envelope.status}" class="{!
+                                                                        'ds-status-badge_inline'
+                                                                                + if(envelope.status == $Label.c.Completed, ' slds-theme_success')
+                                                                                + if(envelope.status == $Label.c.Declined, ' slds-theme_error')
+                                                                                + if(envelope.status == $Label.c.Voided, ' slds-theme_error')
+                                                                                + if(envelope.status == $Label.c.Signed, ' slds-theme_alert-texture')
+                                                                        }"/>
+                                                            </div>
+                                                            <div class="slds-col slds-no-flex slds-gutters_small">
+                                                                <div class="slds-timeline__actions slds-timeline__actions_inline">
+                                                                    <p class="slds-timeline__date">
+                                                                        <aura:if
+                                                                                isTrue="{!envelope.sent.daysBetween lt 7}">
+                                                                            <lightning:relativeDateTime
+                                                                                    value="{!envelope.sent.value}"/>
+                                                                            <aura:set attribute="else">
+                                                                                <lightning:formattedDateTime
+                                                                                        value="{!envelope.sent.value}"
+                                                                                        hour="numeric"
+                                                                                        minute="numeric"
+                                                                                        year="numeric"
+                                                                                        month="short"
+                                                                                        day="numeric"/>
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p class="slds-m-horizontal_xx-small">
+                                                            <lightning:formattedRichText
+                                                                    value="{!format($Label.c.SentAnEnvelope_2, envelope.senderEmail, envelope.senderName)}"/>
+                                                        </p>
+                                                        <!-- Envelope Details -->
+                                                        <div class="slds-timeline__item_details">
+                                                            <div class="slds-box slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-bottom_none">
+                                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
+                                                                                <aura:if
+                                                                                        isTrue="{!not(empty(envelope.sent.daysBetween))}">
+                                                                                    <aura:if
+                                                                                            isTrue="{!envelope.sent.daysBetween lt 7}">
+                                                                                        <lightning:relativeDateTime
+                                                                                                value="{!envelope.sent.value}"/>
+                                                                                        <aura:set attribute="else">
+                                                                                            <lightning:formattedDateTime
+                                                                                                    value="{!envelope.sent.value}"
+                                                                                                    hour="numeric"
+                                                                                                    minute="numeric"
+                                                                                                    year="numeric"
+                                                                                                    month="short"
+                                                                                                    day="numeric"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
+                                                                                <aura:if
+                                                                                        isTrue="{!envelope.completed.daysBetween lt 7}">
+                                                                                    <lightning:relativeDateTime
+                                                                                            value="{!envelope.completed.value}"/>
+                                                                                    <aura:set attribute="else">
+                                                                                        <lightning:formattedDateTime
+                                                                                                value="{!envelope.completed.value}"
+                                                                                                hour="numeric"
+                                                                                                minute="numeric"
+                                                                                                year="numeric"
+                                                                                                month="short"
+                                                                                                day="numeric"/>
+                                                                                    </aura:set>
+                                                                                </aura:if>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Status}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none ds-capitalize">{!envelope.status}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Reason}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
+                                                                               title="{!envelope.reason}">{!envelope.reason}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Expires}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
+                                                                                <aura:if
+                                                                                        isTrue="{!envelope.expires.daysBetween lt 7}">
+                                                                                    <lightning:relativeDateTime
+                                                                                            value="{!envelope.expires.value}"/>
+                                                                                    <aura:set attribute="else">
+                                                                                        <lightning:formattedDateTime
+                                                                                                value="{!envelope.expires.value}"
+                                                                                                hour="numeric"
+                                                                                                minute="numeric"
+                                                                                                year="numeric"
+                                                                                                month="short"
+                                                                                                day="numeric"/>
+                                                                                    </aura:set>
+                                                                                </aura:if>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                        <div class="slds-form-element">
+                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
+                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
+                                                                                <aura:if
+                                                                                        isTrue="{!envelope.lastStatusUpdate.daysBetween lt 7}">
+                                                                                    <lightning:relativeDateTime
+                                                                                            value="{!envelope.lastStatusUpdate.value}"/>
+                                                                                    <aura:set attribute="else">
+                                                                                        <lightning:formattedDateTime
+                                                                                                value="{!envelope.lastStatusUpdate.value}"
+                                                                                                hour="numeric"
+                                                                                                minute="numeric"
+                                                                                                year="numeric"
+                                                                                                month="short"
+                                                                                                day="numeric"/>
+                                                                                    </aura:set>
+                                                                                </aura:if>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Activity -->
+                                                            <ul class="slds-timeline slds-p-top_x-small slds-p-bottom_x-small">
+                                                                <!-- Recipients -->
+                                                                <aura:iteration items="{!envelope.recipients}"
+                                                                                var="recipient"
+                                                                                indexVar="recipientIndex">
+                                                                    <li>
+                                                                        <div class="slds-timeline__item">
+                                                                            <span class="slds-assistive-text">{!recipient.status}</span>
+                                                                            <div class="slds-media">
+                                                                                <div class="slds-media__body">
+                                                                                    <div class="{!'slds-media slds-timeline__media' + if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), ' ds-timeline__media_completed', if(or(recipient.status == $Label.c.Declined, recipient.status == $Label.c.Canceled), ' ds-timeline__media_declined', ' ds-timeline__media_incomplete'))}">
+                                                                                        <div class="slds-media__figure slds-timeline__icon">
+                                                                                            <lightning:icon
+                                                                                                    iconName="{!if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), 'standard:task2', if(or(recipient.status == $Label.c.Declined, recipient.status == $Label.c.Canceled), 'action:remove', 'standard:avatar_loading'))}"
+                                                                                                    size="small"/>
+                                                                                        </div>
+                                                                                        <div aura:id="recipient"
+                                                                                             class="slds-media__body ds-recipient"
+                                                                                             data-envelope-index="{!envelopeIndex}"
+                                                                                             data-index="{!recipientIndex}">
+                                                                                            <div class="slds-grid slds-gutters_xx-small">
+                                                                                                <div class="slds-col">
+                                                                                                    <lightning:badge
+                                                                                                            label="{!recipient.status}"
+                                                                                                            class="{!
+                                                                                                                    'slds-show_inline-block slds-m-top_xx-small slds-m-bottom_xx-small'
+                                                                                                                            + if(recipient.status == $Label.c.Signed, ' slds-theme_success')
+                                                                                                                            + if(recipient.status == $Label.c.Completed, ' slds-theme_success')
+                                                                                                                            + if(recipient.status == $Label.c.Declined, ' slds-theme_error')
+                                                                                                                            + if(recipient.status == $Label.c.Canceled, ' slds-theme_error')
+                                                                                                                    }"/>
+                                                                                                </div>
+                                                                                                <div class="slds-col slds-no-flex">
+                                                                                                    <span class="ds-recipient__toggle_more">
+                                                                                                    <a class="slds-show_inline-block slds-m-top_xx-small"
+                                                                                                       href="javascript:void(0);"
+                                                                                                       data-envelope-index="{!envelopeIndex}"
+                                                                                                       data-index="{!recipientIndex}"
+                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowMore}</a>
+                                                                                                    </span>
+                                                                                                    <span class="ds-recipient__toggle_less">
+                                                                                                    <a class="slds-show_inline-block slds-m-top_xx-small"
+                                                                                                       href="javascript:void(0);"
+                                                                                                       data-envelope-index="{!envelopeIndex}"
+                                                                                                       data-index="{!recipientIndex}"
+                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowLess}</a>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <p>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Created}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.IsQueued_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Sent}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.WillReceive_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Delivered}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.HasViewed_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Declined}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.HasDeclined_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Completed}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.HasCompleted_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Signed}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.HasSigned_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                                <aura:if
+                                                                                                        isTrue="{!recipient.status == $Label.c.Canceled}">
+                                                                                                    <lightning:formattedRichText
+                                                                                                            value="{!format($Label.c.WillNotReceive_2, recipient.email, recipient.name)}"/>
+                                                                                                </aura:if>
+                                                                                            </p>
+                                                                                            <!-- Recipient Details -->
+                                                                                            <div class="ds-recipient__details slds-box slds-theme_shade slds-m-top_x-small slds-p-bottom_none">
+                                                                                                <div class="slds-grid slds-gutters slds-wrap">
+                                                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                                                        <div class="slds-form-element">
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
+                                                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
+                                                                                                               title="{!recipient.sent.value}">
+                                                                                                                <aura:if
+                                                                                                                        isTrue="{!not(empty(recipient.sent.daysBetween))}">
+                                                                                                                    <aura:if
+                                                                                                                            isTrue="{!recipient.sent.daysBetween lt 7}">
+                                                                                                                        <lightning:relativeDateTime
+                                                                                                                                value="{!recipient.sent.value}"/>
+                                                                                                                        <aura:set
+                                                                                                                                attribute="else">
+                                                                                                                            <lightning:formattedDateTime
+                                                                                                                                    value="{!recipient.sent.value}"
+                                                                                                                                    hour="numeric"
+                                                                                                                                    minute="numeric"
+                                                                                                                                    year="numeric"
+                                                                                                                                    month="short"
+                                                                                                                                    day="numeric"/>
+                                                                                                                        </aura:set>
+                                                                                                                    </aura:if>
+                                                                                                                </aura:if>
+                                                                                                            </p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                                                        <div class="slds-form-element">
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
+                                                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
+                                                                                                               title="{!recipient.completed}">
+                                                                                                                <aura:if
+                                                                                                                        isTrue="{!recipient.completed.daysBetween lt 7}">
+                                                                                                                    <lightning:relativeDateTime
+                                                                                                                            value="{!recipient.completed.value}"/>
+                                                                                                                    <aura:set
+                                                                                                                            attribute="else">
+                                                                                                                        <lightning:formattedDateTime
+                                                                                                                                value="{!recipient.completed.value}"
+                                                                                                                                hour="numeric"
+                                                                                                                                minute="numeric"
+                                                                                                                                year="numeric"
+                                                                                                                                month="short"
+                                                                                                                                day="numeric"/>
+                                                                                                                    </aura:set>
+                                                                                                                </aura:if>
+                                                                                                            </p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                                                        <div class="slds-form-element">
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Status}</h6>
+                                                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate ds-capitalize"
+                                                                                                               title="{!recipient.status}">{!recipient.status}</p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                                                        <div class="slds-form-element">
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.Reason}</h6>
+                                                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
+                                                                                                               title="{!recipient.reason}">{!recipient.reason}</p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="slds-col slds-size_1-of-2">
+                                                                                                        <div class="slds-form-element">
+                                                                                                            <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
+                                                                                                            <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
+                                                                                                                <aura:if
+                                                                                                                        isTrue="{!recipient.lastStatusUpdate.daysBetween lt 7}">
+                                                                                                                    <lightning:relativeDateTime
+                                                                                                                            value="{!recipient.lastStatusUpdate.value}"/>
+                                                                                                                    <aura:set attribute="else">
+                                                                                                                        <lightning:formattedDateTime
+                                                                                                                                value="{!recipient.lastStatusUpdate.value}"
+                                                                                                                                hour="numeric"
+                                                                                                                                minute="numeric"
+                                                                                                                                year="numeric"
+                                                                                                                                month="short"
+                                                                                                                                day="numeric"/>
+                                                                                                                    </aura:set>
+                                                                                                                </aura:if>
+                                                                                                            </p>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- /Recipient Details -->
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                </aura:iteration>
+                                                                <!-- /Recipients -->
+                                                            </ul>
+                                                            <!-- /Activity -->
+                                                        </div>
+                                                        <!-- /Envelope Details -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </aura:iteration>
+                                        <!-- /Envelope -->
+                                    </div>
+
+                                    <div class="slds-text-align_right slds-m-top_medium">
+                                        <a href="javascript:void(0)"
+                                           onclick="{!c.handleViewAllClick}">{!$Label.c.ViewAll}</a>
+                                    </div>
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </div>
+    </lightning:card>
+</aura:component>
