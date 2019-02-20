@@ -2527,6 +2527,34 @@
         <label>System sender</label>
         <name>SystemSender</name>
     </customLabels>
+    <customLabels>
+        <label>DocuSign Agreements</label>
+        <name>DocuSignAgreements</name>
+    </customLabels>
+    <customLabels>
+        <label>Import</label>
+        <name>ImportButtonLabel</name>
+    </customLabels>
+    <customLabels>
+        <label>No agreements yet.</label>
+        <name>NoAgreements</name>
+    </customLabels>
+    <customLabels>
+        <label>Create an Agreement</label>
+        <name>CreateAgreementsIllustration</name>
+    </customLabels>
+    <customLabels>
+        <label>Delete Agreement</label>
+        <name>DeleteAgreement</name>
+    </customLabels>
+    <customLabels>
+        <label>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</label>
+        <name>DeleteAgreementMessage</name>
+    </customLabels>
+    <customLabels>
+        <label>Delete</label>
+        <name>DeleteButtonLabel</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>

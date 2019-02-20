@@ -1,0 +1,72 @@
+.THIS {
+}
+
+.THIS.spinner{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+
+.THIS .complete{
+    background-color: rgb(4, 132, 75);
+    color:white;
+    font-size:x-small;
+}
+
+.THIS .reviewcancelled{
+    background-color: rgb(194, 57, 52);
+    color:white;
+    font-size:x-small;
+}
+
+.THIS .pendingapproval{
+    background-color: rgb(255, 154, 60);
+    font-size:x-small;
+}
+
+.THIS.strike-wizard {
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.THIS.strike-wizard .strike-wizard__header {
+    flex: 0 0 auto;
+    z-index: 10;
+    padding: .75rem 0;
+    background-color: white;
+    border-bottom: 1px solid rgb(217, 219, 221);
+}
+
+@media (min-width: 48em) {
+    .THIS.strike-wizard .strike-wizard__header {
+        padding: .75rem 0;
+    }
+}
+
+.THIS.strike-wizard .strike-wizard__title {
+    text-align: center;
+    padding: 0 .75rem;
+    font-size: 1.25rem;
+    margin-bottom: .75rem;
+}
+
+@media (min-width: 48em) {
+    .THIS.strike-wizard .strike-wizard__title {
+        font-size: 1.75rem;
+    }
+}
+
+.THIS.strike-wizard__body {
+    flex: 1 1 100vh;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    overflow-y: auto;
+}
+
+@media (min-width: 48em) {
+    .THIS.strike-wizard__body {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+}

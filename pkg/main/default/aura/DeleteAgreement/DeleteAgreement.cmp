@@ -1,0 +1,32 @@
+<aura:component description="DeleteAgreement">
+    <!-- TODO toast message on delete needs to go in Custom Label -->
+    <!-- TODO Add an Agreement attribute the store the details of the agreement which needs to be deleted -->
+
+    <!--attributes -->
+    <aura:attribute name="showModal" type="Boolean" />
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <!--component body -->
+    <c:strike_modal aura:id="deleteAgreementModal"
+                    title="{!$Label.c.DeleteAgreement}"
+                    showModal="{!v.showModal}"
+                    >
+        <!--modal body -->
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col">
+                    <div class="slds-text-body_small slds-text-align--center">
+                        {!$Label.c.DeleteAgreementMessage}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.backButtonClicked}"
+                              label="{!$Label.c.Cancel}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.nextButtonClicked}"
+                              label="{!$Label.c.DeleteButtonLabel}"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>

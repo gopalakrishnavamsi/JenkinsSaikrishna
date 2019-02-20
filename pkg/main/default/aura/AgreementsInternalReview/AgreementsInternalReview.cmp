@@ -1,0 +1,190 @@
+<aura:component description="AgreementsInternalReview">
+    <!-- TODO Pill Label is returning blank when the user selects the lookup record for the first time -->
+
+    <!-- attributes -->
+    <aura:attribute name="recipients" type="Object[]"/>
+    <aura:attribute name="currentStep" type="String"/>
+    <aura:attribute name="showApprovalOrder" type="Boolean"/>
+    <aura:attribute name="draggedId" type="Integer" access="private"/>
+    <aura:attribute name="droppedId" type="Integer" access="private"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="emailsubject" type="String" default="Sam Sales would like to approve a document."/>
+    <aura:attribute name="emailmessage" type="String"
+                    default="Please approve this document at your earliest convenience."/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+
+    <!-- handlers -->
+    <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <!-- events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <c:strike_modal aura:id="internalReviewAgreementsModal"
+                    title="Send for Approval"
+                    showModal="{!v.showModal}">
+        <!--modal body -->
+        <div class="slds-p-horizontal--xx-large">
+            <!-- Select Recipients -->
+            <aura:if isTrue="{!v.currentStep == '1'}">
+                <article class="slds-card">
+                    <div class="slds-text-align_center">
+                        <div class="slds-text-heading_small slds-p-around--x-small">
+                            Select Recipients
+                        </div>
+                        <div class="slds-text-body_small slds-p-bottom_small">
+                            Choose Salesforce users in your organization
+                        </div>
+                    </div>
+                    <div class="slds-card__body_inner slds-p-horizontal--large">
+                        <div class="slds-text-body_small">
+                            <lightning:input type="checkbox" label="Set Approval Order"
+                                             onchange="{!c.setApprovalOrder}"
+                                             aura:id="approvalOrderCheckbox"></lightning:input>
+                        </div>
+                        <div class="slds-text-body_small  slds-p-top--medium">
+                            Add Approvers
+                        </div>
+                        <div>
+                            <div id="instructions" class="slds-assistive-text">
+                                Press space bar to toggle drag drop mode, use arrow keys to move selected
+                                elements.
+                            </div>
+                            <ul aria-describedby="instructions"
+                                aria-label="drag and drop single select listbox" role="listbox">
+                                <aura:iteration items="{!v.recipients}" var="recipient"
+                                                indexVar="recipientIndex">
+
+                                    <li aria-selected="true"
+                                        draggable="true"
+                                        id="{!recipientIndex}"
+                                        role="option"
+                                        ondragstart="{!c.onApproverDrag}"
+                                        ondrop="{!c.onApproverDrop}"
+                                        ondragover="{!c.allowDrop}">
+                                        <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
+                                            <aura:if isTrue="{!v.showApprovalOrder}">
+                                                <li class="slds-m-top_small slds-m-right_x-small">
+                                                                <span aria-hidden="true"
+                                                                      class="slds-text-heading_medium">⋮⋮</span>
+                                                </li>
+                                                <li>
+                                                    <lightning:button
+                                                            class="slds-button slds-m-top_x-small slds-m-right_x-small">
+                                                        {!recipientIndex+1}
+                                                    </lightning:button>
+                                                </li>
+                                            </aura:if>
+                                            <li class="{!if(v.showApprovalOrder, 'slds-size_5-of-7', 'slds-size_6-of-7')}">
+                                                <c:InternalReviewRecipient
+                                                        recipient="{!recipient}"
+                                                        sourceId="{#recipient.source.id}"
+                                                />
+                                            </li>
+                                            <li>
+                                                <lightning:buttonIcon iconName="utility:close"
+                                                                      variant="container"
+                                                                      alternativeText="{!$Label.c.Remove}"
+                                                                      class="slds-button ds-remove slds-m-top_x-small slds-m-right_x-small"
+                                                                      onclick="{!c.removeRecipient}"
+                                                                      value="{!recipientIndex}"/>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                        <div class="slds-p-top--x-small">
+                            <lightning:button class="slds-theme_brand" variant="neutral"
+                                              label="+ Add Approvers" onclick="{!c.addRecipient}"/>
+                        </div>
+
+                    </div>
+                </article>
+            </aura:if>
+            <!-- Personalize Message -->
+            <aura:if isTrue="{!v.currentStep == '2'}">
+                <article class="slds-card">
+                    <div class="slds-text-align_center">
+                        <div class="slds-text-heading_small slds-p-around--x-small">
+                            Personalize Your Message
+                        </div>
+                        <div class="slds-text-body_small slds-p-bottom_small">
+                            Edit the email subject and message your recipient will receive.
+                        </div>
+                    </div>
+                    <div class="slds-card__body_inner slds-p-horizontal--large">
+                        <!-- File Name Details -->
+                        <div class="slds-text-body_small  slds-p-top--x-small">
+                            File Name
+                        </div>
+                        <div>
+                            <ul class="slds-list_horizontal">
+                                <li>
+                                    <lightning:icon iconName="doctype:word" size="small"/>
+                                </li>
+                                <li>
+                                    <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small">
+                                        Snow-Systems-Automation-Software-MSA-11162018.docx
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Recipients -->
+                        <div class="slds-text-body_small slds-p-top_small">
+                            Recipients
+                        </div>
+                        <div>
+                            <ul class="slds-list_horizontal">
+                                <aura:iteration items="{!v.recipients}" var="recipient"
+                                                indexVar="recipientIndex">
+                                    <li>
+                                        <lightning:icon iconName="action:user" size="xx-small"/>
+                                    </li>
+                                    <li>
+                                        <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small slds-p-right--x-small">
+                                            {!recipient.name}
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                        <div class="slds-text-body_small slds-p-top_small">
+                            <lightning:input label="Subject" name="Subject" value="{!v.emailsubject}"/>
+                        </div>
+                        <div class="slds-text-body_small slds-p-top_small">
+                            <lightning:textarea name="Message" label="Message" value="{!v.emailmessage}"/>
+                        </div>
+                    </div>
+                </article>
+            </aura:if>
+        </div>
+        <aura:set attribute="footerButtons">
+            <div class="slds-grid slds-grid_align-spread">
+                <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}">Back
+                </lightning:button>
+                <div class="slds-progress slds-progress_shade">
+                    <ol class="slds-progress__list">
+                        <li class="slds-progress__item">
+                            <button style="{!if(v.currentStep == '1','background:lightgreen;','')}" class="slds-button slds-progress__marker" title="Approvers">
+                                <span class="slds-assistive-text">Step 1 - Completed</span>
+                            </button>
+                        </li>
+                        <li class="slds-progress__item">
+                            <button style="{!if(v.currentStep == '2','background:lightgreen;','')}" class="slds-button slds-progress__marker">
+                                <span class="slds-assistive-text">Step 2 - Active</span>
+                            </button>
+                        </li>
+                    </ol>
+                    <div class="slds-progress-bar slds-progress-bar_x-small" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" role="progressbar">
+                            <span class="slds-progress-bar__value" >
+                            <span class="slds-assistive-text">100%</span>
+                            </span>
+                    </div>
+                </div>
+                <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
+                                  label="{!if(v.currentStep == '1', 'Next', 'Send')}"></lightning:button>
+            </div>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>
