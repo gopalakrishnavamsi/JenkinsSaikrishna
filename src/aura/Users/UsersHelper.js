@@ -185,10 +185,6 @@
         component.set('v.lookupValue', null);
         component.set('v.formData', {});
         helper.showToast(component, _format($A.get('$Label.c.MemberAdded_1'), user.email), 'success');
-
-        setTimeout($A.getCallback(function () {
-          helper.hideToast(component);
-        }), 3000);
       } else {
         helper.showToast(component, _getErrorMessage(response), 'error');
       }
@@ -220,10 +216,6 @@
             component.set('v.lookupValue', null);
             component.set('v.formData', {});
             helper.showToast(component, _format($A.get('$Label.c.MemberRemoved_1'), user.email), 'success');
-
-            setTimeout($A.getCallback(function () {
-              helper.hideToast(component);
-            }), 3000);
           } else {
             helper.showToast(component, _getErrorMessage(response), 'error');
           }

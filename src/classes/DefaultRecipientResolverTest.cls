@@ -32,7 +32,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Account() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -87,7 +87,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Case() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -135,7 +135,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Contact() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
 			Contact c2 = TestUtils.createContact(null);
@@ -179,7 +179,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Lead() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead l1 = TestUtils.createLead();
 			Lead l2 = TestUtils.createLead();
@@ -219,7 +219,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_Opportunity() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -284,10 +284,43 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
+	static void test_getRecipients_Opportunity_no_access() {
+		// Expect only one contact (c2Id) belonging to account to be shared with default settings
+		// This may break if sharing settings are customized, so skip if OWS contact setting is not ControlledByParent.
+		if ([SELECT DefaultContactAccess FROM Organization LIMIT 1].DefaultContactAccess == 'ControlledByParent') {
+			Id oId, aId, c1Id, c2Id, c3Id;
+
+			System.runAs(UserMock.createUser()) {
+				aId = TestUtils.createAccount().Id;
+				c1Id = TestUtils.createContact(null).Id;
+				c2Id = TestUtils.createContact(aId).Id;
+				c3Id = TestUtils.createContact(null).Id;
+				oId = TestUtils.createOpportunity(aId).Id;
+				TestUtils.createOpportunityContactRole(oId, c1Id);
+				TestUtils.createOpportunityContactRole(oId, c2Id);
+				TestUtils.createOpportunityContactRole(oId, c3Id);
+			}
+
+			System.runAs(UserMock.createUser()) {
+				Test.startTest();
+				List<Recipient> result = new DefaultRecipientResolver().getRecipients(
+					Opportunity.getSObjectType(),
+					new Set<Id> { oId });
+				Test.stopTest();
+
+				System.assertEquals(1, Collection.size(result));
+				System.assertNotEquals(null, result[0]);
+				System.assertNotEquals(null, result[0].source);
+				System.assertEquals(c2Id, result[0].source.id);
+			}
+		}
+	}
+
+	@IsTest
 	static void test_getRecipients_User() {
-		System.runAs(TestUtils.createAdministrator()) {
-			User u1 = TestUtils.createUser();
-			User u2 = TestUtils.createUser();
+		System.runAs(UserMock.createAdministrator()) {
+			User u1 = UserMock.createUser();
+			User u2 = UserMock.createUser();
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -324,7 +357,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRecipients_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -343,7 +376,7 @@ private class DefaultRecipientResolverTest {
 	// TODO: Determine if there's a way to test this with encrypted (probabilistic and deterministic) and unencrypted fields.
 	@IsTest
 	static void test_searchRecipients_Contact() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = new Contact(FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111', AccountId = a1.Id);
 			Contact c2 = new Contact(FirstName = 'ABCD', LastName = 'EFGH', Email = 'c2@unit.test', Phone = '5555552222');
@@ -367,7 +400,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_Lead() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Lead c1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
 			Lead c2 = new Lead(Company = 'Unit Test 2', FirstName = 'ABCD', LastName = 'EFGH', Email = 'c2@unit.test', Phone = '5555552222');
@@ -383,7 +416,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_User() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
@@ -395,7 +428,7 @@ private class DefaultRecipientResolverTest {
 	// DFS-4571
 	@IsTest
 	static void test_search_with_apostrophe() {
-		System.runAs(TestUtils.createAdministrator()) {
+		System.runAs(UserMock.createAdministrator()) {
 			Contact c = new Contact(FirstName = 'Amy', LastName = 'O\'Hare');
 			insert c;
 
@@ -434,7 +467,7 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_searchRecipients_invalid() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();

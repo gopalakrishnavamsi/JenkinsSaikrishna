@@ -161,6 +161,14 @@
 		<value>You must have DocuSign user permissions to perform this operation.</value>
 	</labels>
 	<labels>
+		<fullName>MustBeDocuSignSender</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Sender</shortDescription>
+		<value>You must have DocuSign sender permissions to perform this operation.</value>
+	</labels>
+	<labels>
 		<fullName>NotEnvelopeOwner</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
@@ -254,7 +262,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Post-install email subject</shortDescription>
-		<value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
+		<value>DocuSign for Salesforce - Core post-install script results from {0}</value>
 	</labels>
 	<labels>
 		<fullName>PostInstallEmailBody_4</fullName>
@@ -1364,6 +1372,14 @@
 		<value>Signed</value>
 	</labels>
 	<labels>
+		<fullName>Canceled</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Canceled</shortDescription>
+		<value>Canceled</value>
+	</labels>
+	<labels>
 		<fullName>SentAnEnvelope_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
@@ -1436,12 +1452,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will receive the envelope soon</value>
 	</labels>
 	<labels>
-		<fullName>NoAction_2</fullName>
+		<fullName>HasViewed_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>No action</shortDescription>
-		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</value>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
 	</labels>
 	<labels>
 		<fullName>HasDeclined_2</fullName>
@@ -1452,12 +1468,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</value>
 	</labels>
 	<labels>
-		<fullName>HasViewed_2</fullName>
+		<fullName>HasCompleted_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Has viewed</shortDescription>
-		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
+		<shortDescription>Has completed</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</value>
 	</labels>
 	<labels>
 		<fullName>HasSigned_2</fullName>
@@ -1466,6 +1482,14 @@
 		<protected>true</protected>
 		<shortDescription>Has signed</shortDescription>
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</value>
+	</labels>
+	<labels>
+		<fullName>WillNotReceive_2</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Will not receive</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will not receive envelope</value>
 	</labels>
 	<labels>
 		<fullName>ViewAll</fullName>
@@ -1521,7 +1545,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Complete section below</shortDescription>
-		<value>Complete the sections below to set up DocuSign for Salesforce Essentials.</value>
+		<value>Complete the sections below to set up DocuSign for Salesforce - Core.</value>
 	</labels>
 	<labels>
 		<fullName>GetStarted</fullName>
@@ -1735,7 +1759,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Help section 1</shortDescription>
-		<value>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope
+		<value>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign
 			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
 			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
 			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
@@ -1922,7 +1946,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign details</shortDescription>
-		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
+		<value>Select which Salesforce users will have access to DocuSign for Salesforce - Core by adding them to the list below. Each new user will automatically be added to the DocuSign account.</value>
 	</labels>
 	<labels>
 		<fullName>AddUser</fullName>
@@ -2083,7 +2107,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select Salesforce users</shortDescription>
-		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
+		<value>Select which Salesforce users will have access to DocuSign for Salesforce - Core.</value>
 	</labels>
 	<labels>
 		<fullName>AddDocuSignButtons</fullName>
@@ -2214,60 +2238,12 @@
 		<value>User not found</value>
 	</labels>
 	<labels>
-		<fullName>Disabled</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Disabled</shortDescription>
-		<value>Disabled</value>
-	</labels>
-	<labels>
-		<fullName>Upload</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload</shortDescription>
-		<value>Upload</value>
-	</labels>
-	<labels>
-		<fullName>UploadFile</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload file</shortDescription>
-		<value>Upload File</value>
-	</labels>
-	<labels>
-		<fullName>UploadSuccessful</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload successful</shortDescription>
-		<value>File was uploaded successfully</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimit</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>File size limit</shortDescription>
-		<value>File size limit is 4MB.</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimitReached</fullName>
+		<fullName>FileSizeLimitReached_2</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>File size limit reached</shortDescription>
-		<value>This file exceeds the maximum size limit</value>
-	</labels>
-	<labels>
-		<fullName>SomethingWrong</fullName>
-		<categories>General</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Something went wrong</shortDescription>
-		<value>Something went wrong. Please try again.</value>
+		<value>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</value>
 	</labels>
 	<labels>
 		<fullName>Signer</fullName>
@@ -4442,5 +4418,77 @@
 		<protected>true</protected>
 		<shortDescription>Marketing opt-in</shortDescription>
 		<value>I agree to receive marketing communications and promotional offers from DocuSign.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedBulkList</fullName>
+		<categories>Errors,BulkSend</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined bulk list</shortDescription>
+		<value>Bulk list is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>BulkListNotFound</fullName>
+		<categories>Errors,BulkSend</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Bulk list not found</shortDescription>
+		<value>Bulk list not found.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedUsers</fullName>
+		<categories>Errors,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined user list</shortDescription>
+		<value>No users defined.</value>
+	</labels>
+	<labels>
+		<fullName>UseSystemSender</fullName>
+		<categories>Settings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Use system sender</shortDescription>
+		<value>Use system sender</value>
+	</labels>
+	<labels>
+		<fullName>UseSystemSenderHelp</fullName>
+		<categories>Help,Settings,Account</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Use system sender help</shortDescription>
+		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</value>
+	</labels>
+	<labels>
+		<fullName>Enabled</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Enabled</shortDescription>
+		<value>Enabled</value>
+	</labels>
+	<labels>
+		<fullName>Disabled</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Disabled</shortDescription>
+		<value>Disabled</value>
+	</labels>
+	<labels>
+		<fullName>SettingsSaved</fullName>
+		<categories>Settings</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Settings saved</shortDescription>
+		<value>Successfully saved settings.</value>
+	</labels>
+	<labels>
+		<fullName>UserNotAuthorizedForEnvelope</fullName>
+		<categories>Errors,Envelope</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>User not authorized for envelope</shortDescription>
+		<value>You are not authorized to access the envelope.</value>
 	</labels>
 </CustomLabels>

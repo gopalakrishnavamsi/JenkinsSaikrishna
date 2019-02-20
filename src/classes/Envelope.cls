@@ -302,8 +302,7 @@ global class Envelope {
 		/**
 		 * Whether or not the envelope is in a final state.
 		 */
-		@AuraEnabled
-		global Boolean isFinal {
+		public Boolean isFinal {
 			get {
 				return this.status == STATUS_VOIDED || this.status == STATUS_DECLINED || this.status == STATUS_COMPLETED;
 			}
@@ -373,14 +372,27 @@ global class Envelope {
 		}
 
 		/**
-		 * Sets an envelope status's <code>id</property>.
-		 *
-		 * @param id The new envelope status ID.
-		 *
-		 * @return The envelope status with updated <code>id</code>.
-		 */
-		public Envelope.Status withId(final Id id) {
-			this.id = id;
+	 	 * Sets this envelope and recipient status ID and Salesforce source from another status.
+	 	 *
+	 	 * @param other The status from which to merge data.
+	 	 *
+	 	 * @return The merged envelope status.
+	 	 */
+		public Envelope.Status mergeWith(final Envelope.Status other) {
+			if (other != null) {
+				this.id = other.id;
+				this.source = other.source;
+				if (this.recipients != null && other.recipients != null) {
+					Map<Integer, Recipient.Status> rs = new Map<Integer, Recipient.Status>();
+					for (Recipient.Status r : other.recipients) {
+						rs.put(r.sequence, r);
+					}
+
+					for (Recipient.Status r : this.recipients) {
+						r.mergeWith(rs.get(r.sequence));
+					}
+				}
+			}
 			return this;
 		}
 
@@ -408,9 +420,7 @@ global class Envelope {
 	 * @return The envelope status corresponding to the envelope.
 	 */
 	public Envelope.Status toEnvelopeStatus() {
-		if (!this.isSent || this.docuSignId == null) {
-			throw new DocuSignException(Label.EnvelopesMustBeSent);
-		}
+		if (!this.isSent || this.docuSignId == null) throw new DocuSignException(Label.EnvelopesMustBeSent);
 
 		List<Recipient.Status> rss = new List<Recipient.Status>();
 		if (this.hasRecipients) {
@@ -534,8 +544,14 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>documents</code> property.
 	 */
-	public Envelope withDocuments(final List<Document> documents) {
-		this.documents = documents;
+	global Envelope withDocuments(final List<Document> documents) {
+		this.documents = new List<Document>();
+		if (documents != null) {
+			Integer sequence = 1;
+			for (Document d : documents) {
+				this.documents.add(d.withSequence(sequence++));
+			}
+		}
 		return this;
 	}
 
@@ -559,8 +575,15 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>recipients</code> property.
 	 */
-	public Envelope withRecipients(final List<Recipient> recipients) {
-		this.recipients = recipients;
+	global Envelope withRecipients(final List<Recipient> recipients) {
+		this.recipients = new List<Recipient>();
+		if (recipients != null) {
+			Integer sequence = 1;
+			for (Recipient r : recipients) {
+				if (r.routingOrder == null) r = r.withRoutingOrder(sequence);
+				this.recipients.add(r.withSequence(sequence++));
+			}
+		}
 		return this;
 	}
 
@@ -583,7 +606,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>notifications</code> property.
 	 */
-	public Envelope withNotifications(final Notifications notifications) {
+	global Envelope withNotifications(final Notifications notifications) {
 		this.notifications = notifications;
 		return this;
 	}
@@ -596,7 +619,7 @@ global class Envelope {
 	 *
 	 * @return This envelope with the updated <code>emailSubject</code> and <code>emailMessage</code> properties.
 	 */
-	public Envelope withEmail(final String emailSubject, final String emailMessage) {
+	global Envelope withEmail(final String emailSubject, final String emailMessage) {
 		this.emailSubject = emailSubject;
 		this.emailMessage = emailMessage;
 		return this;
@@ -612,5 +635,16 @@ global class Envelope {
 	public Envelope withSent(final Datetime sent) {
 		this.sent = sent;
 		return this;
+	}
+
+	/**
+	 * Creates an empty bulk copy of an envelope with the specified recipient.
+	 *
+	 * @return A bulk envelope copy with a single recipient.
+	 */
+	global static Envelope newBulkCopy(final Recipient recipient) {
+		if (recipient == null) throw new DocuSignException(Label.AtLeastOneRecipientIsRequired);
+
+		return new Envelope(null, null, null, null).withRecipients(new List<Recipient> { recipient });
 	}
 }

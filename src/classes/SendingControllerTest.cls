@@ -3,8 +3,8 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_constructor() {
-		System.runAs(TestUtils.createUser()) {
-			Schema.Account a = TestUtils.createAccount();
+		System.runAs(UserMock.createUser()) {
+			SObject a = TestUtils.createAccount();
 
 			Test.startTest();
 			SendingController result = new SendingController(new ApexPages.StandardController(a));
@@ -19,7 +19,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_getReturnUrl() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Id sId = UserInfo.getUserId();
 			Id eId = UserInfo.getOrganizationId();
 
@@ -29,7 +29,7 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(Salesforce.baseUrl.getHost(), result.getHost());
-			QueryString params = QueryString.fromString(result.getQuery());
+			QueryString params = QueryString.parse(result.getQuery());
 			System.assertEquals(sId, params.getId(QueryString.PARAM_SOURCE_ID));
 			System.assertEquals(eId, params.getId(QueryString.PARAM_ENVELOPE_ID));
 			System.assertEquals('tag', params.getString(QueryString.PARAM_DOCUSIGN_ACTION));
@@ -38,11 +38,9 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			TestUtils.createContentVersion(l.Id);
 			TestUtils.createContentVersion(l.Id);
@@ -68,18 +66,16 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_createDraftEnvelope_error() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		Case c = TestUtils.createCase();
 
-		System.runAs(TestUtils.createUser()) { // Unauthorized
-			TestUtils.createAccountConfiguration();
-			Case c = TestUtils.createCase();
-
+		System.runAs(UserMock.createDocuSignSender()) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.createDraftEnvelope(c.Id);
 				throw new AssertException('Expected createDraftEnvelope to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeActivated, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -87,8 +83,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_getLinkedDocuments_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Case c = TestUtils.createCase();
 			TestUtils.createContentDocumentLink(c.Id);
 			TestUtils.createContentDocumentLink(c.Id);
@@ -102,24 +97,8 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
-	static void test_getLinkedDocuments_error() {
-		System.runAs(TestUtils.createUser()) { // Unauthorized
-			Test.startTest();
-			try {
-				SendingController.getLinkedDocuments(UserInfo.getUserId());
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_resolveRecipient_user() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Recipient result = SendingController.resolveRecipient(UserInfo.getUserId());
 			Test.stopTest();
@@ -132,8 +111,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_resolveRecipient_contact() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Contact c = TestUtils.createContact();
 
 			Test.startTest();
@@ -148,8 +126,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_resolveRecipient_lead() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 
 			Test.startTest();
@@ -163,23 +140,8 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
-	static void test_resolveRecipient_error() {
-		System.runAs(TestUtils.createUser()) { // Unauthorized
-			Test.startTest();
-			try {
-				SendingController.resolveRecipient(UserInfo.getUserId());
-				throw new AssertException('Expected resolveRecipient to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_updateEnvelope_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope())
 				.withRecipients(new List<Recipient> {
 					Recipient.newInPersonSigner(1, null, 'Recipient One', 'r1@unit.test', null, null, null, null, false)
@@ -200,11 +162,11 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_updateEnvelope_error() {
 		Envelope e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.updateEnvelope(JSON.serialize(e));
@@ -218,10 +180,9 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_sendEnvelope_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope())
 				.withDocuments(new List<Document> {
 					DocumentService.convert(TestUtils.createContentVersion())
@@ -241,11 +202,11 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_sendEnvelope_error() {
 		Envelope e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.sendEnvelope(JSON.serialize(e));
@@ -259,10 +220,9 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_getTaggerUrl_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope(UserInfo.getUserId()));
 
 			Test.startTest();
@@ -276,11 +236,11 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_getTaggerUrl_invalid() {
 		Envelope e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope(null, null));
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.getTaggerUrl(JSON.serialize(e));
@@ -295,11 +255,11 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_getTaggerUrl_error() {
 		Envelope e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope(UserInfo.getUserId()));
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.getTaggerUrl(JSON.serialize(e));
@@ -313,7 +273,7 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_deleteEnvelope_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 
 			Test.startTest();
@@ -327,11 +287,11 @@ private class SendingControllerTest {
 	@IsTest
 	static void test_deleteEnvelope_error() {
 		Envelope__c e;
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = TestUtils.createEnvelope();
 		}
 
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.deleteEnvelope(e.Id);

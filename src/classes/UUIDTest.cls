@@ -1,7 +1,8 @@
 @IsTest(isParallel = true)
 private class UUIDTest {
 
-	static testmethod void test_randomUUID() {
+	@IsTest
+	static void test_randomUUID() {
 		UUID u1, u2, u3;
 
 		Test.startTest();
@@ -25,7 +26,8 @@ private class UUIDTest {
 		System.assertNotEquals(u2.toString(), u3.toString());
 	}
 
-	static testmethod void test_fromString() {
+	@IsTest
+	static void test_fromString() {
 		// Valid canonical UUIDs
 		String s1 = '01234567-89AB-CDEF-0123-456789ABCDEF';
 		String s2 = '01234567-89ab-cdef-0123-456789abcdef';
@@ -87,7 +89,8 @@ private class UUIDTest {
 		System.assert(r8, 'String should be invalid UUID: ' + s8);
 	}
 
-	static testmethod void test_equality() {
+	@IsTest
+	static void test_equality() {
 		UUID u1 = UUID.parse('01234567-89ab-cdef-0123-456789abcdef');
 		UUID u2 = UUID.parse('01234567-89ab-cdef-0123-456789abcdef');
 		UUID u3 = UUID.parse('fedcba98-7654-3210-fedc-ba9876543210');
@@ -98,7 +101,8 @@ private class UUIDTest {
 		System.assertNotEquals(u1.hashCode(), u3.hashCode());
 	}
 
-	static testmethod void test_tryParse() {
+	@IsTest
+	static void test_tryParse() {
 		System.assertEquals(null, UUID.tryParse(null));
 		System.assertEquals(null, UUID.tryParse(''));
 		System.assertEquals(null, UUID.tryParse('  \n\t'));
@@ -107,7 +111,8 @@ private class UUIDTest {
 			UUID.tryParse('01234567-89ab-cdef-0123-456789ABcdef'));
 	}
 
-	static testmethod void test_toString() {
+	@IsTest
+	static void test_toString() {
 		String s = '01234567-89ab-cdef-0123-456789abcdef';
 		UUID u1 = UUID.parse(s);
 		UUID u2 = UUID.parse(s.toUpperCase());
@@ -122,12 +127,13 @@ private class UUIDTest {
 	}
 
 	@IsTest
-	static void test_isDefined() {
-		System.assert(UUID.isDefined(UUID.randomUUID()));
-		System.assert(!UUID.isDefined(null));
-		System.assert(!UUID.isDefined((UUID)JSON.deserialize('{"value":""}', UUID.class)));
-		System.assert(!UUID.isDefined((UUID)JSON.deserialize('{"value":null}', UUID.class)));
-		System.assert(!UUID.isDefined((UUID)JSON.deserialize('{"value":"  "}', UUID.class)));
-		System.assert(UUID.isDefined((UUID)JSON.deserialize('{"value":"11111111-1111-1111-1111-111111111111"}', UUID.class)));
+	static void test_isEmpty() {
+		System.assert(!UUID.isEmpty(UUID.randomUUID()));
+		System.assert(UUID.isEmpty(UUID.empty));
+		System.assert(UUID.isEmpty(null));
+		System.assert(UUID.isEmpty((UUID)JSON.deserialize('{"value":""}', UUID.class)));
+		System.assert(UUID.isEmpty((UUID)JSON.deserialize('{"value":null}', UUID.class)));
+		System.assert(UUID.isEmpty((UUID)JSON.deserialize('{"value":"  "}', UUID.class)));
+		System.assert(!UUID.isEmpty((UUID)JSON.deserialize('{"value":"11111111-1111-1111-1111-111111111111"}', UUID.class)));
 	}
 }

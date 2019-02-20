@@ -4,6 +4,7 @@
 public with sharing class Localization {
 
 	private static final SObjectType TYPE_ENVELOPE_LOCALIZATION = EnvelopeLocalization__c.getSObjectType();
+	private static Boolean isEmailEnabled;
 
 	public class ChatterText {
 		public String envelopeSent { get; private set; }
@@ -115,16 +116,11 @@ public with sharing class Localization {
 		};
 
 		String language = getCurrentLanguage();
-		if (LANGUAGE_TO_LABEL.containsKey(language)) {
-			DEFAULT_LANGUAGE = language;
-		} else {
-			DEFAULT_LANGUAGE = EN;
-		}
+		DEFAULT_LANGUAGE = LANGUAGE_TO_LABEL.containsKey(language) ? language : EN;
+		isEmailEnabled = [SELECT COUNT() FROM EnvelopeLocalization__c WHERE Name != NULL LIMIT 100] > 1;
 	}
 
 	private static final Map<String, Recipient.EmailSettings> EMAIL_SETTINGS = new Map<String, Recipient.EmailSettings>();
-	private static Boolean accessChecked = false;
-	private static Boolean hasAccess = false;
 	private static Boolean isDirty = true;
 
 	@TestVisible
@@ -172,6 +168,7 @@ public with sharing class Localization {
 					md.EmailMessage__c));
 			}
 			isDirty = false;
+			isEmailEnabled = EMAIL_SETTINGS.size() > 1;
 		}
 		return EMAIL_SETTINGS;
 	}
@@ -181,8 +178,7 @@ public with sharing class Localization {
 	}
 
 	public static Boolean isEmailLocalizationEnabled() {
-		// If only one language is configured, localization is considered disabled.
-		return getEmailSettingsMap().size() > 1;
+		return isEmailEnabled;
 	}
 
 	public static String getCurrentLanguage() {
@@ -221,6 +217,7 @@ public with sharing class Localization {
 		for (EnvelopeLocalization__c el : [
 			SELECT Name, Language__c, EmailSubject__c, EmailMessage__c
 			FROM EnvelopeLocalization__c
+			LIMIT 1000
 		]) {
 			current.put(el.Language__c, el);
 		}
@@ -258,7 +255,11 @@ public with sharing class Localization {
 
 	public static List<Recipient.EmailSettings> getDefaultEmailSettings() {
 		List<Recipient.EmailSettings> result = new List<Recipient.EmailSettings>();
-		for (Localization__mdt l : [SELECT DeveloperName, EmailSubject__c, EmailMessage__c FROM Localization__mdt]) {
+		for (Localization__mdt l : [
+			SELECT DeveloperName, EmailSubject__c, EmailMessage__c
+			FROM Localization__mdt
+			LIMIT 1000
+		]) {
 			result.add(new Recipient.EmailSettings(
 				l.DeveloperName,
 				LANGUAGE_TO_LABEL.get(l.DeveloperName),
@@ -303,9 +304,7 @@ public with sharing class Localization {
 			FROM Localization__mdt
 			WHERE DeveloperName = :language
 		];
-		if (Collection.isEmpty(mds)) {
-			throw new DocuSignException(Label.UnrecognizedLanguageCode);
-		}
+		if (Collection.isEmpty(mds)) throw new DocuSignException(Label.UnrecognizedLanguageCode);
 
 		Localization__mdt md = mds[0];
 		return new ChatterText(

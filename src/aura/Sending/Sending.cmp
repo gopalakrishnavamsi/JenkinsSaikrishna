@@ -10,7 +10,6 @@
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="selectedFileTitles" type="String" access="private"/>
     <aura:attribute name="disableNext" type="Boolean" default="{!true}" access="private"/>
-    <aura:attribute name="uploadMessage" type="String" access="private"/>
     <aura:attribute name="message" type="String" access="private"/>
     <aura:attribute name="mode" type="String" access="private"/>
     <aura:attribute name="showToast" type="Boolean" access="private"/>
@@ -21,7 +20,7 @@
     <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
     <aura:attribute name="documents" type="Object[]" access="private"/>
     <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
-    <aura:attribute name="templates" type="Object[]" access="private"/>
+    <aura:attribute name="template" type="Object" access="private"/>
     <aura:attribute name="recipients" type="Object[]"/>
     <aura:attribute name="defaultRoles" type="Object[]" access="private"/>
     <aura:attribute name="emailLocalizations" type="Object[]"/>
@@ -29,10 +28,13 @@
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
 
-    <aura:handler name="change" value="{!v.uploadMessage}" action="{!c.handleUpload}"/>
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.onToast}"/>
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.onLoading}"/>
+    <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
+
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>
     <aura:handler name="change" value="{!v.filesSelected}" action="{!c.setNextButtonState}"/>
-    <aura:handler name="change" value="{!v.templates}" action="{!c.setNextButtonState}"/>
+    <aura:handler name="change" value="{!v.template}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.envelope.emailSubject}" action="{!c.setNextButtonState}"/>
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
 
@@ -71,9 +73,7 @@
                     <h3 class="slds-text-heading_medium slds-m-bottom_x-small">{!$Label.c.Files}</h3>
                     <div class="slds-m-bottom_small">
                         <c:FileUploader recordId="{!v.recordId}"
-                                        message="{!v.uploadMessage}"
-                                        lcHost="{!v.lcHost}"
-                                        namespace="{!v.namespace}"/>
+                                        visualforce="{!v.visualforce}"/>
                     </div>
 
                     <!-- Files List -->
@@ -148,7 +148,7 @@
                         <!-- /Attached Files -->
 
                         <!-- Templates -->
-                        <aura:iteration items="{!v.templates}" var="template" indexVar="index">
+                        <aura:if isTrue="{!not(empty(v.template))}">
                             <li class="slds-item">
                                 <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                                     <div class="slds-col slds-form-element_label slds-m-bottom_none slds-no-flex">
@@ -156,7 +156,7 @@
                                     </div>
                                     <div class="slds-col">
                                         <lightning:select class="ds-no-label slds-p-left_x-small"
-                                                          onchange="{!c.setTemplate}" value="{#template.id.value}"
+                                                          onchange="{!c.setTemplate}" value="{#v.template.id.value}"
                                                           name="{!index}">
                                             <aura:iteration items="{!v.availableTemplates}" var="availableTemplate">
                                                 <option value="{!availableTemplate.id.value}"
@@ -172,7 +172,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </aura:iteration>
+                        </aura:if>
                         <!-- /Templates -->
                     </ul>
 
@@ -180,7 +180,7 @@
                     <aura:if isTrue="{!not(empty(v.availableTemplates))}">
                         <lightning:button label="{!$Label.c.AddTemplate}" class="slds-m-top_small"
                                           iconName="utility:add" onclick="{!c.addTemplate}"
-                                          disabled="{!v.availableTemplates.length == v.templates.length}"/>
+                                          disabled="{!not(empty(v.template))}"/>
                     </aura:if>
                     <!-- /Add Template -->
 
@@ -213,6 +213,7 @@
                                                     <!-- TODO: remove event registration for child component. We don't handle these here anyway -->
                                                     <c:Recipient
                                                             recipient="{!recipient}"
+                                                            sourceId="{#recipient.source.id}"
                                                             emailLocalizations="{!v.emailLocalizations}"
                                                             onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                             onEditPrivateMessage="{!c.handleEditPrivateMessage}"
@@ -235,38 +236,36 @@
                                               onclick="{!c.addRecipient}"/>
                         </div>
                     </aura:if>
-                    <aura:if isTrue="{!not(empty(v.templates))}">
+                    <aura:if isTrue="{!not(empty(v.template))}">
                         <h3 class="{!'slds-text-heading_medium' + if(v.filesSelected, ' slds-m-top_large')}">{!$Label.c.TemplateRoles}</h3>
-
-                        <aura:iteration items="{!v.templates}" var="template">
-                            <div class="ds-template-roles slds-box slds-box_x-small slds-theme_shade slds-m-top_small">
-                                <div class="ds-template-roles__title slds-grid slds-gutters_xx-small">
-                                    <h4 class="slds-col slds-text-heading_label">{!template.name}</h4>
-                                    <aura:if isTrue="{!empty(template.recipients)}">
-                                        <!-- Empty State -->
-                                        <div class="slds-col slds-no-flex slds-text-body_small slds-text-color_weak slds-line-height_reset slds-p-top_xxx-small">
-                                            <lightning:icon iconName="utility:warning" size="xx-small" variant="warning"
-                                                            class="ds-icon-adjustment slds-m-right_xx-small"/>
-                                            <em>{!$Label.c.NoRoles}</em>
-                                        </div>
-                                        <!-- Empty State -->
-                                    </aura:if>
-                                </div>
-                                <aura:iteration items="{!v.recipients}" var="recipient" indexVar="index">
-                                    <aura:if isTrue="{!recipient.templateId == template.id.value}">
-                                        <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
-                                            <c:Recipient
-                                                    recipient="{!recipient}"
-                                                    emailLocalizations="{!v.emailLocalizations}"
-                                                    onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
-                                                    onEditPrivateMessage="{!c.handleEditPrivateMessage}"
-                                                    onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                            />
-                                        </div>
-                                    </aura:if>
-                                </aura:iteration>
+                        <div class="ds-template-roles slds-box slds-box_x-small slds-theme_shade slds-m-top_small">
+                            <div class="ds-template-roles__title slds-grid slds-gutters_xx-small">
+                                <h4 class="slds-col slds-text-heading_label">{!v.template.name}</h4>
+                                <aura:if isTrue="{!empty(v.template.recipients)}">
+                                    <!-- Empty State -->
+                                    <div class="slds-col slds-no-flex slds-text-body_small slds-text-color_weak slds-line-height_reset slds-p-top_xxx-small">
+                                        <lightning:icon iconName="utility:warning" size="xx-small" variant="warning"
+                                                        class="ds-icon-adjustment slds-m-right_xx-small"/>
+                                        <em>{!$Label.c.NoRoles}</em>
+                                    </div>
+                                    <!-- Empty State -->
+                                </aura:if>
                             </div>
-                        </aura:iteration>
+                            <aura:iteration items="{!v.recipients}" var="recipient" indexVar="index">
+                                <aura:if isTrue="{!recipient.templateId == v.template.id.value}">
+                                    <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
+                                        <c:Recipient
+                                                recipient="{!recipient}"
+                                                sourceId="{#recipient.source.id}"
+                                                emailLocalizations="{!v.emailLocalizations}"
+                                                onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
+                                                onEditPrivateMessage="{!c.handleEditPrivateMessage}"
+                                                onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
+                                        />
+                                    </div>
+                                </aura:if>
+                            </aura:iteration>
+                        </div>
                     </aura:if>
                 </div>
                 <!-- /Recipients -->
@@ -310,20 +309,23 @@
                     <aura:if isTrue="{!v.showAdvancedOptions}">
                         <h4 class="slds-text-heading_label slds-m-bottom_x-small slds-p-top_small">{!$Label.c.Reminders}</h4>
                         <lightning:input type="checkbox" name="reminders"
-                                         label="{!$Label.c.SendAutomaticReminders}" checked="{!v.remind}"/>
+                                         label="{!$Label.c.SendAutomaticReminders}"
+                                         checked="{!v.envelope.notifications.remind}"/>
                         <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.remind, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="remind-after-days"
-                                             label="{!$Label.c.DaysBeforeFirstReminder}" value="{!v.remindAfterDays}"
+                                             label="{!$Label.c.DaysBeforeFirstReminder}"
+                                             value="{!v.envelope.notifications.remindAfterDays}"
                                              min="0"
-                                             disabled="{!not(v.remind)}"/>
+                                             disabled="{!not(v.envelope.notifications.remind)}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBeforeFirstReminder}</span>
                         </p>
                         <p class="{!'slds-m-top_x-small slds-p-left_large' + if(v.remind, ' slds-text-color_weak', '')}">
                             <lightning:input class="ds-input_inline slds-m-right_small" variant="label-hidden"
                                              type="number" name="remind-repeat-interval"
-                                             label="{!$Label.c.DaysBetweenReminders}" value="{!v.remindFrequencyDays}"
-                                             min="0" disabled="{!not(v.remind)}"/>
+                                             label="{!$Label.c.DaysBetweenReminders}"
+                                             value="{!v.envelope.notifications.remindFrequencyDays}"
+                                             min="0" disabled="{!not(v.envelope.notifications.remind)}"/>
                             <span class="slds-form-element__label">{!$Label.c.DaysBetweenReminders}</span>
                         </p>
                         <h4 class="slds-text-heading_label slds-m-top_medium slds-m-bottom_x-small">{!$Label.c.Expiration}</h4>
@@ -403,7 +405,7 @@
             </div>
         </div>
         <!-- Toast -->
-        <c:toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
+        <c:Toast message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!true}"/>
         <!-- /Toast -->
     </div>
 </aura:component>

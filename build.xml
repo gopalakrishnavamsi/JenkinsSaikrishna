@@ -1,4 +1,4 @@
-<project name="DocuSign for Salesforce Essentials" basedir="." xmlns:sf="antlib:com.salesforce">
+<project name="DocuSign for Salesforce - Core" basedir="." xmlns:sf="antlib:com.salesforce">
 
 	<available file="my.properties" property="my.properties.exists"/>
 

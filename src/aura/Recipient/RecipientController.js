@@ -39,9 +39,16 @@
   },
 
   handleRecipientIdChange: function (component, event, helper) {
-    var e = component.getEvent('recipientIdChange');
-    e.setParams({data: component.get('v.recipient')});
-    e.fire();
+    var r = component.get('v.recipient');
+    var sId = component.get('v.sourceId');
+    if (r && sId && (!r.source || (r.source.id !== sId))) {
+      var e = component.getEvent('recipientIdChange');
+      r.source = {
+        id: sId
+      };
+      e.setParams({data: r});
+      e.fire();
+    }
   },
 
   closeAccessAuthenticationModal: function (component, event, helper) {

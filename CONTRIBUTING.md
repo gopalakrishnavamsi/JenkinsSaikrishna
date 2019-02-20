@@ -91,10 +91,11 @@ Once the feature is implemented and unit tested, log only exceptional cases usin
 - Validate all output in unit tests. Use copious test assertions. Assert that you are assertively asserting.
 - Do not make assumptions about available org data or namespace. Assume clean state for every test.
 - Do not use `@IsTest(SeeAllData = true)`. Your test does not need to see it and will almost certainly break on other orgs. 
-- If your test performs CRUD operations or requires certain permissions to succeed, create required users via `TestUtils` methods and execute tests in a `System.runAs(user) {}` context.
+- If your test performs CRUD operations or requires certain permissions to succeed, create required users via `UserMock` methods and execute tests in a `System.runAs(user) {}` context.
+- The `UserMock.createDocuSignAdministrator()` and `UserMock.createDocuSignUser()` methods will also create a test DocuSign account configuration by default. You can override this behavior by passing `false` to the overloaded constructor.
 - Test both authorized and unauthorized scenarios.
 - Wrap actual test part of the code with `Test.startTest()` and `Test.stopTest()`. This resets context and governor limits.
 - `Test.stopTest()` also causes asynchronous code (e.g. `@future` methods) to immediately complete, thus making the result of the asynchronous code assertable.
-- Unless you need a very specific callout response, make use of standard test mocks such as `DocuSignAPITest.SuccessMock`.
+- Unless you need a very specific callout response, make use of standard test mocks such as `ESignatureAPIMock`.
 - The `TestUtils` class is your friend. It has methods to easily and safely create all sorts of test data, users with varying access, 
 etc.

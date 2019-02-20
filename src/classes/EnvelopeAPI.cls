@@ -4,6 +4,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	private static final String ACCOUNT_LACKS_PERMISSIONS = 'ACCOUNT_LACKS_PERMISSIONS';
 	private static final String RECIPIENT_NOT_IN_SEQUENCE = 'RECIPIENT_NOT_IN_SEQUENCE';
 	private static final String UNKNOWN_ENVELOPE_RECIPIENT = 'UNKNOWN_ENVELOPE_RECIPIENT';
+	private static final String USER_LACKS_PERMISSIONS = 'USER_LACKS_PERMISSIONS';
 	private static final List<DocumentResolver> DOCUMENT_RESOLVERS = new List<DocumentResolver>();
 
 	static {
@@ -51,11 +52,14 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				e = new APIError(APIErrorCode.INVALID_RECIPIENT_SEQUENCE, Label.InvalidRecipientSequence);
 			} else if (dse.docuSignCode == UNKNOWN_ENVELOPE_RECIPIENT) {
 				e = new APIError(APIErrorCode.UNKNOWN_RECIPIENT, Label.UnknownEnvelopeRecipient);
+			} else if (dse.docuSignCode == USER_LACKS_PERMISSIONS) {
+				e = new APIError(APIErrorCode.UNAUTHORIZED, Label.UserNotAuthorizedForEnvelope);
 			}
 		}
 		return e;
 	}
 
+	@TestVisible
 	private class SigningGroupMember {
 		public String userName;
 		public String email;
@@ -65,6 +69,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APISigningGroup {
 		public String signingGroupId;
 		public String groupName;
@@ -81,6 +86,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class SigningGroups {
 		public List<APISigningGroup> groups;
 
@@ -132,6 +138,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String userName { get; private set; }
 		public String recipientId { get; private set; }
 		public String envelopeId { get; private set; }
+		public String clientUserId { get; private set; }
 		public Boolean suppressNavigation { get; private set; }
 
 		public ViewRequest(final UUID envelopeId, final Url returnUrl) {
@@ -167,6 +174,20 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 			this.recipientId = String.valueOf(recipientId);
 			this.envelopeId = null;
 			this.suppressNavigation = true;
+		}
+
+		//Embedded Recipient constructor
+		public ViewRequest(final String authenticationMethod,
+			final String clientUserId,
+			final Url returnUrl,
+			final String userName,
+			final String email) {
+
+			this.authenticationMethod = authenticationMethod;
+			this.clientUserId = clientUserId;
+			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
+			this.userName = userName;
+			this.email = email;
 		}
 	}
 
@@ -209,6 +230,29 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		final RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
 			JSON.serialize(new ViewRequest('email', email, returnUrl, userName, recipientId)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get recipient view: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+	}
+
+	//Embedded Recipient view request
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
+		final String email, final String userName) {
+
+		return this.getEmbeddedRecipientViewUrl(envelopeId, returnUrl, email, userName, RestAPI.defaultTimeout);
+	}
+
+	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
+		final String email, final String userName, final Integer timeout) {
+
+		String clientUserId = UserInfo.getUserId();
+		final RestAPI.Response response = this.post(
+			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
+			JSON.serialize(new ViewRequest('email', clientUserId, returnUrl, userName, email)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get recipient view: ' + response.error.toString());
@@ -284,6 +328,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for resendRecipients
+	@TestVisible
 	private class ResendResult {
 		public DocuSignAPI.ErrorDetails errorDetails;
 		public String recipientId;
@@ -297,6 +342,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class ResendResults {
 		public List<ResendResult> recipientUpdateResults;
 
@@ -394,6 +440,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for update in-person signer
+	@TestVisible
 	private class InPersonSigners {
 		public List<InPersonSigner> inPersonSigners { get; private set; }
 
@@ -402,16 +449,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class InPersonSigner {
 		public String hostName;
 		public String hostEmail;
-		public String signerName;
 		public String signerEmail;
-		public String roleName;
 		public String recipientId;
-		public String routingOrder;
-		public String status;
-		public ErrorDetails errorDetails;
 
 		public InPersonSigner(final String signerEmail) {
 			this.recipientId = '1';
@@ -441,6 +484,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 	}
 
 	// Serialization objects for createEnvelope
+	@TestVisible
 	private class Expirations {
 		public String expireEnabled;
 		public String expireAfter;
@@ -455,6 +499,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class Reminders {
 		public String reminderEnabled;
 		public String reminderDelay;
@@ -469,6 +514,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class EnvelopeNotification {
 		public Reminders reminders;
 		public Expirations expirations;
@@ -481,6 +527,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class APIDocument {
 		public String documentId;
 		public String name;
@@ -499,6 +546,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class SmsAuthentication {
 		public List<String> senderProvidedNumbers;
 
@@ -507,6 +555,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
 	private class RecipientNotification {
 		public String supportedLanguage;
 		public String emailSubject;
@@ -546,6 +595,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		public String signedDateTime;
 		public String declinedDateTime;
 		public String declinedReason;
+		public String clientUserId;
 
 		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags,
 			final Boolean hasTemplates) {
@@ -583,6 +633,12 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 					// Only add default anchor tags if role is defined and has a valid (> 0) value.
 					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId,
 						String.valueOf(r.role.value));
+				}
+				//setting the clientUserId property for embedded recipients
+				//setting this to the Salesforce user id of the recipient
+				//this will be set only for embedded recipients. If this property is set for other recipients the envelope is not sent
+				if (r.type == Recipient.TYPE_EMBEDDED_SIGNER) {
+					this.clientUserId = Entity.isValid(r.source) ? r.source.id : null;
 				}
 			}
 		}
@@ -651,7 +707,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
 						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
-					} else { // Recipient.TYPE_SIGNER
+					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
 						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
 					}
 				}
@@ -751,10 +807,10 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 				new AnchorTag(documentId, recipientId, roleValue, 'FullName', 'n', false, null)
 			};
 			this.companyTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Company', 'co', false, null)
+				new AnchorTag(documentId, recipientId, roleValue, 'Company', 'co', true, null)
 			};
 			this.titleTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Title', 't', false, null)
+				new AnchorTag(documentId, recipientId, roleValue, 'Title', 't', true, null)
 			};
 			this.dateSignedTabs = new List<AnchorTag> {
 				new AnchorTag(documentId, recipientId, roleValue, 'DateSigned', 'd', false, null)
@@ -976,6 +1032,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return result;
 	}
 
+	@TestVisible
 	private class APIEnvelope {
 		public String envelopeId;
 		public String status;
@@ -1093,7 +1150,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
-			QueryString.empty,
+			options == null || !options.sendNow ? new QueryString('merge_roles_on_draft', 'true') : QueryString.empty,
 			getCreateHeaders(),
 			JSON.serialize(new EnvelopeAPI.APIEnvelope(
 				envelope,
@@ -1131,6 +1188,7 @@ public with sharing class EnvelopeAPI extends DocuSignAPI {
 		return UUID.parse(((EnvelopeResponse)JSON.deserialize(response.body, EnvelopeResponse.class)).envelopeId);
 	}
 
+	@TestVisible
 	private class VoidRequest {
 		public String status;
 		public String voidedReason;

@@ -3,7 +3,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_bad_resolver() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.DocumentResolvers__c = 'bad_resolver';
 			upsert s;
@@ -186,7 +186,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_Database_queryMaxSequence() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
 			Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, 1);
@@ -204,7 +204,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_Database_queryDocuments() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Schema.Account a = TestUtils.createAccount();
 			Envelope__c dse = TestUtils.createEnvelope(a.Id);
 			Document__c dsed1 = TestUtils.createEnvelopeDocument(dse.Id, TestUtils.createDocument(), 1);
@@ -241,14 +241,13 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_Database_insertDocuments() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.LastModifiedDate, d.Id);
-			String tId = UUID.randomUUID().toString();
-			Datetime tCreated = Datetime.now();
-			Document d3 = new Document(null, Document.TYPE_TEMPLATE, null, 'template1', null, null, tCreated, tId);
+			UUID tId = UUID.randomUUID();
+			Document d3 = Document.fromTemplate(tId, 'template1');
 
 			Test.startTest();
 			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
@@ -274,14 +273,14 @@ private class DocumentServiceTest {
 			System.assertEquals('template1', result[1].name);
 			System.assertEquals(null, result[1].extension);
 			System.assertEquals(null, result[1].size);
-			System.assertEquals(tCreated, result[1].lastModified);
-			System.assertEquals(tId, result[1].sourceId);
+			System.assertEquals(null, result[1].lastModified);
+			System.assertEquals(String.valueOf(tId), result[1].sourceId);
 		}
 	}
 
 	@IsTest
 	static void test_Database_upsertDocuments() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 			Document d2 = new Document(
@@ -336,7 +335,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_Database_deleteDocuments() {
-		System.runAs(TestUtils.createDocusignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
 			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
@@ -376,7 +375,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_Database_updateDocumentSequence() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
 			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
@@ -460,24 +459,8 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getDocuments_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocuments(null, null);
-				throw new AssertException('Expected getDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getDocuments_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
@@ -499,24 +482,8 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getLinkedDocuments_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getLinkedDocuments(null, null, false);
-				throw new AssertException('Expected getLinkedDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getLinkedDocuments_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Opportunity o1 = TestUtils.createOpportunity();
 			ContentVersion cv1 = TestUtils.createContentVersion(o1.Id);
@@ -546,24 +513,8 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getDocumentFolders_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getDocumentFolders(null);
-				throw new AssertException('Expected getDocumentFolders to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getDocumentFolders_ContentVersion() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			ContentWorkspace cw1 = TestUtils.createContentWorkspace();
 			ContentWorkspace cw2 = TestUtils.createContentWorkspace();
 			ContentVersion cv1 = TestUtils.createContentVersion();
@@ -608,9 +559,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_getDocumentFolders_Document() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Document d1 = TestUtils.createDocument();
 			Schema.Document d2 = TestUtils.createDocument();
 
@@ -647,24 +596,8 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_getFolderDocuments_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
-			Test.startTest();
-			try {
-				DocumentService.getFolderDocuments(null, null);
-				throw new AssertException('Expected getFolderDocuments to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getFolderDocuments_ContentVersion() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			// Cannot create and link doc to workspace in one go, so try using existing one. Otherwise skip test.
 			ContentWorkspace cw = TestUtils.getFirstAvailableContentWorkspace();
 			if (cw != null) {
@@ -685,9 +618,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_getFolderDocuments_Document() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Document d1 = TestUtils.createDocument();
 			Schema.Document d2 = TestUtils.createDocument();
 
@@ -702,9 +633,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_getEnvelopeDocuments() {
-		User u = TestUtils.createDocuSignUser();
-
-		System.runAs(u) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
@@ -720,9 +649,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_addEnvelopeDocuments() {
-		User u = TestUtils.createDocuSignUser();
-
-		System.runAs(u) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = new Document(null, Document.TYPE_TEMPLATE, 1, 'doc1', null, null, Datetime.now(), UUID.randomUUID().toString());
 			Document d2 = new Document(null, Document.TYPE_FILE, 2, 'doc2', 'pdf', 1234, Datetime.now(), UUID.randomUUID().toString());
@@ -757,9 +684,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_removeEnvelopeDocuments() {
-		User u = TestUtils.createDocuSignUser();
-
-		System.runAs(u) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
 			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
@@ -796,9 +721,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_reorderEnvelopeDocuments() {
-		User u = TestUtils.createDocuSignUser();
-
-		System.runAs(u) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
 			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
@@ -844,9 +767,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_updateEnvelopeDocuments() {
-		User u = TestUtils.createDocuSignUser();
-
-		System.runAs(u) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
 			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 			Document d2 = new Document(
@@ -894,7 +815,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveFiles_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				DocumentService.resolveFiles(null);
@@ -908,9 +829,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveFiles_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
@@ -925,7 +844,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveTemplates_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				DocumentService.resolveTemplates(null);
@@ -939,11 +858,9 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveTemplates_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			List<Document> result = DocumentService.resolveTemplates(new Set<UUID> { UUID.randomUUID(), UUID.randomUUID() });
 			Test.stopTest();
@@ -955,7 +872,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveLinkedFiles_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				DocumentService.resolveLinkedFiles(null, false);
@@ -969,9 +886,7 @@ private class DocumentServiceTest {
 
 	@IsTest
 	static void test_resolveLinkedFiles_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
 			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);

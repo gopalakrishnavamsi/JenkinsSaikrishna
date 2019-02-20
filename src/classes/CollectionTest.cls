@@ -131,6 +131,24 @@ private class CollectionTest {
 	}
 
 	@IsTest
+	static void test_last() {
+		System.assertEquals(null, Collection.last(null));
+		System.assertEquals(null, Collection.last(new List<Object>()));
+		System.assertEquals(1, Collection.last(new List<Integer> { 1 }));
+		System.assertEquals(3, Collection.last(new List<Integer> { 1, 2, 3 }));
+	}
+
+	@IsTest
+	static void test_get() {
+		System.assertEquals(null, Collection.get(null, 0));
+		System.assertEquals(null, Collection.get(new List<Object>(), 0));
+		System.assertEquals(1, Collection.get(new List<Integer> { 1 }, 0));
+		System.assertEquals(3, Collection.get(new List<Integer> { 1, 2, 3 }, 2));
+		System.assertEquals(null, Collection.get(new List<Integer> { 1, 2, 3 }, -1));
+		System.assertEquals(null, Collection.get(new List<Integer> { 1, 2, 3 }, 3));
+	}
+
+	@IsTest
 	static void test_size() {
 		System.assertEquals(0, Collection.size(null));
 		System.assertEquals(0, Collection.size(new List<Object>()));

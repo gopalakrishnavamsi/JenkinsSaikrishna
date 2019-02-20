@@ -1,103 +1,47 @@
+/**
+ * Utility methods to support unit testing.
+ */
 @IsTest
-public class TestUtils {
+global class TestUtils {
 
-	public static final String BASE_URL = 'https://unit.test.docusign.net/';
-	public static final UUID ID1 = UUID.parse('11111111-1111-1111-1111-111111111111');
-	public static final UUID ID2 = UUID.parse('22222222-2222-2222-2222-222222222222');
-	public static final UUID ID3 = UUID.parse('33333333-3333-3333-3333-333333333333');
-	public static final UUID ID4 = UUID.parse('44444444-4444-4444-4444-444444444444');
-	public static final UUID ID5 = UUID.parse('55555555-5555-5555-5555-555555555555');
+	/**
+	 * Sets an HTTP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign REST API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>HttpCalloutMock</code> interface.
+	 *
+	 * @return The HTTP callout mock.
+	 */
+	global static HttpCalloutMock setMock(final HttpCalloutMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
 
-	private static User administrator = null;
+	/**
+	 * Sets an SOAP callout mock for a unit test. This method must be called from external code requiring use of the
+	 * DocuSign SOAP API mocks instead of calling <code>Test.setMock</code> directly.
+	 *
+	 * @param mock An instance of a class implementing the <code>WebServiceMock</code> interface.
+	 *
+	 * @return The SOAP callout mock.
+	 */
+	global static WebServiceMock setMock(final WebServiceMock mock) {
+		Test.setMock(HttpCalloutMock.class, mock);
+		return mock;
+	}
 
-	private static User getAdministrator() {
-		if (administrator == null) {
-			administrator = createUser('System Administrator');
+	public static Integer randomInteger(final Integer maxValue) {
+		return Integer.valueOf(Math.random() * maxValue);
+	}
+
+	public static String randomString(final Integer length) {
+		final String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
+		String result = '';
+		while (result.length() < length) {
+			Integer i = Math.mod(Math.abs(Crypto.getRandomInteger()), chars.length());
+			result += chars.substring(i, i + 1);
 		}
-		return administrator;
-	}
-
-	public static User createDocuSignAdministrator() {
-		return createDocuSignAdministrator(UUID.randomUUID().toString(), null);
-	}
-
-	public static User createDocuSignAdministrator(final String dsUsername) {
-		return createDocuSignAdministrator(dsUsername, null);
-	}
-
-	public static User createDocuSignAdministrator(final String dsUsername, final String dsPassword) {
-		User u = createUser(UserInfo.getProfileId(), UUID.randomUUID().toString() + '@unit.test', dsUsername, true);
-		if (String.isNotBlank(dsUsername)) {
-			UserSettings__c us = UserSettings__c.getInstance(u.Id);
-			us.Username__c = dsUsername;
-			us.Password__c = dsPassword;
-			upsert us;
-		}
-		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
-		}
-		return u;
-	}
-
-	public static User createDocuSignUser() {
-		return createDocusignUser(UUID.randomUUID().toString(), null);
-	}
-
-	public static User createDocuSignUser(final String dsUsername) {
-		return createDocuSignUser(dsUsername, null);
-	}
-
-	public static User createDocuSignUser(final String dsUsername, final String dsPassword) {
-		Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
-		User u = createUser(p.Id, UUID.randomUUID().toString() + '@unit.test', dsUsername, false);
-		if (String.isNotBlank(dsUsername)) {
-			UserSettings__c us = UserSettings__c.getInstance(u.Id);
-			us.Username__c = dsUsername;
-			us.Password__c = dsPassword;
-			upsert us;
-		}
-		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignUserPermissionSet(new Set<Id> { u.Id });
-		}
-		return u;
-	}
-
-	public static User createAdministrator() {
-		return createUser('System Administrator');
-	}
-
-	public static User createRestrictedUser() {
-		return createUser('Chatter Free User');
-	}
-
-	public static User createUser() {
-		return createUser('Standard User');
-	}
-
-	public static User createUser(final String profileName) {
-		return createUser([SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1].Id,
-			UUID.randomUUID().toString() + '@unit.test', null, false);
-	}
-
-	public static User createUser(final Id profileId, final String email, final String dsUsername,
-		final Boolean canManageAccount) {
-
-		User u = new User(
-			Email = email,
-			Phone = '5555555555',
-			FirstName = 'UNIT',
-			LastName = 'TEST',
-			Username = email,
-			Alias = 'test',
-			TimeZoneSidKey = 'America/Los_Angeles',
-			LocaleSidKey = 'en_US',
-			EmailEncodingKey = 'ISO-8859-1',
-			ProfileId = profileId,
-			LanguageLocaleKey = 'en_US',
-			Username__c = dsUsername,
-			CanManageAccount__c = canManageAccount);
-		insert u;
-		return u;
+		return result;
 	}
 
 	public static Envelope__c createEnvelope() {
@@ -128,7 +72,8 @@ public class TestUtils {
 		ContentVersion cv = new ContentVersion(
 			Title = id.toString(),
 			PathOnClient = id.toString() + '.pdf',
-			VersionData = Blob.valueOf(UUID.randomUUID().toString()));
+			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
+			IsMajorVersion = false);
 		insert cv;
 		return [
 			SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate
@@ -277,46 +222,6 @@ public class TestUtils {
 			Phone = '5555555555');
 		insert l;
 		return [SELECT Company, Name, FirstName, LastName, Email, Phone FROM Lead WHERE Id = :l.Id LIMIT 1];
-	}
-
-	public static UUID createAccountConfiguration() {
-		final UUID accountId = UUID.randomUUID();
-		return createAccountConfiguration(accountId, accountId.toString() + '@unit.test');
-	}
-
-	public static UUID createAccountConfiguration(final UUID accountId, final String username) {
-		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-		accountSettings.Environment__c = 'other';
-		accountSettings.BaseUrl__c = BASE_URL;
-		accountSettings.AccountId__c = String.valueOf(accountId);
-		accountSettings.AccountNumber__c = 1234;
-		accountSettings.Email__c = username;
-		accountSettings.Username__c = username;
-		accountSettings.Password__c = UUID.randomUUID().toShortString();
-		accountSettings.UseSendOnBehalfOf__c = true;
-		accountSettings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
-		accountSettings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
-		accountSettings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
-		accountSettings.CanUseSalesforceApi__c = true;
-		insert accountSettings;
-
-		insert EnvelopeSettings__c.getOrgDefaults();
-
-		insert ChatterSettings__c.getOrgDefaults();
-
-		insert new List<RoleSettings__c> {
-			new RoleSettings__c(Name = 'Signer 1', Value__c = 1),
-			new RoleSettings__c(Name = 'Signer 2', Value__c = 2),
-			new RoleSettings__c(Name = 'Signer 3', Value__c = 3),
-			new RoleSettings__c(Name = 'Signer 4', Value__c = 4)
-		};
-
-		insert new EnvelopeLocalization__c(
-			Name = 'English',
-			Language__c = 'en',
-			EmailSubject__c = 'Please sign this document',
-			EmailMessage__c = 'This email contains a document');
-		return accountId;
 	}
 
 	public static Schema.Document createDocument() {

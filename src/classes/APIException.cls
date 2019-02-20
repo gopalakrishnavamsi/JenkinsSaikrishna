@@ -1,6 +1,11 @@
-public class APIException extends Exception {
-
-	public APIError error { get; private set; }
+/**
+ * Exceptions raised by the DocuSign API.
+ */
+global class APIException extends Exception {
+	/**
+	 * The underlying API error that triggered the exception.
+	 */
+	global APIError error { get; private set; }
 
 	public APIException(final APIError error) {
 		if (error == null) {

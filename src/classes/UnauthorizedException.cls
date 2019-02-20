@@ -1,20 +1,21 @@
 /**
  * The exception thrown when unauthorized access is detected.
  */
-public class UnauthorizedException extends Exception {
+global class UnauthorizedException extends Exception {
 	/**
 	 * The ID of the unauthorized user.
 	 */
-	public Id userId { get; private set; }
+	global Id userId { get; private set; }
 	/**
 	 * The access requirement.
 	 */
-	public AccessRequirement requirement { get; private set; }
+	global AccessRequirement requirement { get; private set; }
 
 	/**
 	 * Access requirements:
 	 * <ul>
 	 *     <li><code>Unspecified</code>: Not specified.</li>
+	 *     <li><code>DocuSignSender</code>: Must be assigned the <code>DocuSign Sender</code> permission set.</li>
 	 *     <li><code>DocuSignUser</code>: Must be assigned the <code>DocuSign User</code> permission set.</li>
 	 *     <li><code>DocuSignAdministrator</code>: Must be assigned the <code>DocuSign Administrator</code> permission
 	 *     set.</li>
@@ -23,10 +24,11 @@ public class UnauthorizedException extends Exception {
 	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
 	 * </ul>
 	 */
-	public enum AccessRequirement {
+	global enum AccessRequirement {
 		Unspecified,
 		DocuSignUser,
 		DocuSignAdministrator,
+		DocuSignSender,
 		SalesforceAdministrator,
 		EnvelopeOwner,
 		ConfigureAccount
@@ -91,6 +93,19 @@ public class UnauthorizedException extends Exception {
 		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignUser);
 		ex.userId = UserInfo.getUserId();
 		ex.requirement = AccessRequirement.DocuSignUser;
+		return ex;
+	}
+
+	/**
+	 * Factory method to construct an exception when the user is not assigned the <code>DocuSign Sender</code>
+	 * permission set.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException notDocuSignSender() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignSender);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.DocuSignSender;
 		return ex;
 	}
 

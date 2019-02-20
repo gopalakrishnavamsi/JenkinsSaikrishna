@@ -114,7 +114,7 @@ global with sharing class RecipientService {
 				r.Name,
 				r.Email__c,
 				r.SigningGroupId__c != null || String.isNotBlank(r.SigningGroupName__c)
-					? new Recipient.SigningGroup(Integer.valueOf(r.SigningGroupId__c), r.SigningGroupName__c) : null,
+					? new SigningGroup(Integer.valueOf(r.SigningGroupId__c), r.SigningGroupName__c) : null,
 				r.SmsPhoneNumber__c,
 				new Recipient.Authentication(
 					r.AccessCode__c,
@@ -309,7 +309,7 @@ global with sharing class RecipientService {
 		public List<Recipient> queryRelatedContacts(
 			final Entity source,
 			final EnvelopeConfiguration.RelatedContacts relatedContacts,
-			final Map<String, Recipient.SigningGroup> signingGroups) {
+			final Map<String, SigningGroup> signingGroups) {
 
 			verifySource(source);
 			verifyRelatedContacts(relatedContacts);
@@ -473,8 +473,6 @@ global with sharing class RecipientService {
 	 * <p>
 	 * By default, the Salesforce <code>Account</code>, <code>Case</code>, <code>Contact</code>, <code>Lead</code>,
 	 * and <code>Opportunity</code> types are supported. More types may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param sObjectIds The Salesforce object IDs.
@@ -482,8 +480,6 @@ global with sharing class RecipientService {
 	 * @return A list of envelope recipients.
 	 */
 	global static List<Recipient> getRecipients(final SObjectType type, final Set<Id> sObjectIds) {
-		Permissions.verifyIsDocuSignUser();
-
 		if (type == null) throw new DocuSignException(Label.InvalidType);
 
 		List<Recipient> result = null;
@@ -521,8 +517,6 @@ global with sharing class RecipientService {
 	 * <p>
 	 * Search behavior is defined and stored in account settings. See <code>Recipient.SearchBehavior</code> and
 	 * <code>AccountService.Settings</code> for more details.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param firstName The first name to match.
@@ -533,8 +527,6 @@ global with sharing class RecipientService {
 	 */
 	global static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
 		final String lastName) {
-
-		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
@@ -559,8 +551,13 @@ global with sharing class RecipientService {
 		}
 	}
 
-	@TestVisible
-	private static List<Recipient.Role> getDefaultRoles() {
+	/**
+	 * Retrieves a list of default recipient roles. These map to automatic anchor tags. For example, role 1 will map to
+	 * <code>\s1\</code>, <code>\d1\</code>, etc.
+	 *
+	 * @return A list of default recipient roles.
+	 */
+	global static List<Recipient.Role> getDefaultRoles() {
 		if (DEFAULT_ROLES == null) {
 			DEFAULT_ROLES = new List<Recipient.Role>();
 			for (RoleSettings__c s : RoleSettings__c.getAll().values()) {
@@ -867,7 +864,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return A list of recipients targeted by the envelope.
 	 */
-	global static List<Recipient> getEnvelopeRecipients(final Id envelopeId) {
+	public static List<Recipient> getEnvelopeRecipients(final Id envelopeId) {
 		Permissions.verifyIsOwner(envelopeId);
 
 		return DB.queryRecipients(envelopeId, true);
@@ -883,7 +880,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
+	public static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
 		return addEnvelopeRecipients(envelopeId, recipients, null, null);
 	}
 
@@ -931,7 +928,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> removeEnvelopeRecipients(
+	public static List<Recipient> removeEnvelopeRecipients(
 		final Id envelopeId,
 		final Set<Id> recipientIds) {
 
@@ -954,7 +951,7 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	global static List<Recipient> updateEnvelopeRecipients(
+	public static List<Recipient> updateEnvelopeRecipients(
 		final Id envelopeId,
 		final List<Recipient> originalRecipients,
 		final List<Recipient> updatedRecipients) {
@@ -996,7 +993,7 @@ global with sharing class RecipientService {
 	public static List<Recipient> resolveRelatedContacts(
 		final Entity source,
 		final EnvelopeConfiguration.RelatedContacts relatedContacts,
-		final Map<String, Recipient.SigningGroup> signingGroups) {
+		final Map<String, SigningGroup> signingGroups) {
 
 		Permissions.verifyIsDocuSignUser();
 
@@ -1048,7 +1045,7 @@ global with sharing class RecipientService {
 	 */
 	public static List<Recipient> resolveCustomRecipients(
 		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
-		final Map<String, Recipient.SigningGroup> signingGroups,
+		final Map<String, SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
 		Permissions.verifyIsDocuSignUser();
@@ -1096,13 +1093,13 @@ global with sharing class RecipientService {
 	 *
 	 * @return A mapping of DocuSign signing group name to signing groups.
 	 */
-	public static Map<String, Recipient.SigningGroup> resolveSigningGroups(
+	public static Map<String, SigningGroup> resolveSigningGroups(
 		final Entity source,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
 		Permissions.verifyIsDocuSignUser();
 
-		Map<String, Recipient.SigningGroup> resolvedSigningGroups = new Map<String, Recipient.SigningGroup>();
+		Map<String, SigningGroup> resolvedSigningGroups = new Map<String, SigningGroup>();
 		if (recipientSettings != null) {
 			Set<String> targetSigningGroups = getSigningGroups(source, recipientSettings);
 			if (Collection.isNotEmpty(targetSigningGroups)) {
@@ -1112,7 +1109,7 @@ global with sharing class RecipientService {
 						if (String.isNotBlank(sg.name)) {
 							String key = sg.name.toLowerCase();
 							if (targetSigningGroups.contains(key)) {
-								resolvedSigningGroups.put(key, sg.toRecipientSigningGroup());
+								resolvedSigningGroups.put(key, sg);
 							}
 						}
 					}

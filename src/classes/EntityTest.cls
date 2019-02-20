@@ -3,7 +3,7 @@ private class EntityTest {
 
 	@IsTest
 	static void test_bad_resolver() {
-		System.runAs(TestUtils.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.EntityResolvers__c = 'bad_resolver';
 			upsert s;
@@ -33,7 +33,7 @@ private class EntityTest {
 
 	@IsTest
 	static void test_toString() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Entity e1 = new Entity(o.Id, o.Name, new Entity(a.Id, a.Name, null));
@@ -54,7 +54,7 @@ private class EntityTest {
 
 	@IsTest
 	static void test_copy() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Entity e = new Entity(o.Id, o.Name, new Entity(a.Id, a.Name, null));
@@ -85,10 +85,8 @@ private class EntityTest {
 
 	@IsTest
 	static void test_resolve() {
-		System.runAs(TestUtils.createAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
-			User u = TestUtils.createUser();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
 			Schema.Account a = TestUtils.createAccount();
 			Lead l = TestUtils.createLead();
 

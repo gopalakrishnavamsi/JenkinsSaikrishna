@@ -3,7 +3,7 @@ private class TemplateServiceTest {
 
 	@IsTest
 	static void test_getTemplates_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				TemplateService.getTemplates();
@@ -17,23 +17,20 @@ private class TemplateServiceTest {
 
 	@IsTest
 	static void test_getTemplates_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			List<Template> result = TemplateService.getTemplates();
 			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assertEquals(4, result.size());
+			System.assert(Collection.isNotEmpty(result));
 		}
 	}
 
 	@IsTest
 	static void test_getTemplate_unauthorized() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				TemplateService.getTemplate(UUID.randomUUID());
@@ -47,11 +44,9 @@ private class TemplateServiceTest {
 
 	@IsTest
 	static void test_getTemplate_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Template result = TemplateService.getTemplate(UUID.randomUUID());
 			Test.stopTest();

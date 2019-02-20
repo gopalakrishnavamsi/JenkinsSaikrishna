@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
 	<customApplications>
-		<label>DocuSign for Salesforce Essentials</label>
-		<name>DocuSignForSalesforceEssentials</name>
+		<label>DocuSign for Salesforce - Core</label>
+		<name>DocuSignForSalesforceCore</name>
 	</customApplications>
 	<customLabels>
 		<label>Create is unauthorized for {0} fields: {1}</label>
@@ -85,6 +85,10 @@
 		<name>MustBeDocuSignUser</name>
 	</customLabels>
 	<customLabels>
+		<label>You must have DocuSign sender permissions to perform this operation</label>
+		<name>MustBeDocuSignSender</name>
+	</customLabels>
+	<customLabels>
 		<label>Not the owner of the envelope</label>
 		<name>NotEnvelopeOwner</name>
 	</customLabels>
@@ -129,7 +133,7 @@
 		<name>AssignAdminPermissionSet</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign for Salesforce Essentials post-install script results from {0}</label>
+		<label>DocuSign for Salesforce - Core post-install script results from {0}</label>
 		<name>PostInstallEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
@@ -709,6 +713,10 @@
 		<name>Signed</name>
 	</customLabels>
 	<customLabels>
+		<label>Canceled</label>
+		<name>Canceled</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</label>
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
@@ -745,20 +753,24 @@
 		<name>WillReceive_2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has not taken action</label>
-		<name>NoAction_2</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</label>
+		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has declined to sign</label>
 		<name>HasDeclined_2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</label>
-		<name>HasViewed_2</name>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</label>
+		<name>HasCompleted_2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has signed the envelope</label>
 		<name>HasSigned_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will not receive the envelope</label>
+		<name>WillNotReceive_2</name>
 	</customLabels>
 	<customLabels>
 		<label>View All</label>
@@ -785,7 +797,7 @@
 		<name>CompleteConnection</name>
 	</customLabels>
 	<customLabels>
-		<label>Complete the sections below to set up DocuSign for Salesforce Essentials.</label>
+		<label>Complete the sections below to set up DocuSign for Salesforce - Core.</label>
 		<name>CompleteSetup</name>
 	</customLabels>
 	<customLabels>
@@ -895,7 +907,7 @@
 		<name>NextSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send Envelope
+		<label>Now that you&apos;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign
 			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
 			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
 			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
@@ -994,7 +1006,7 @@
 		<name>AddToDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce - Core by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
 		<name>AddToDocuSignDetails</name>
 	</customLabels>
 	<customLabels>
@@ -1075,7 +1087,7 @@
 		<name>EnableSalesforceUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>
+		<label>Select which Salesforce users will have access to DocuSign for Salesforce - Core.</label>
 		<name>SelectSalesforceUsers</name>
 	</customLabels>
 	<customLabels>
@@ -1143,32 +1155,8 @@
 		<name>UserNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Disabled</label>
-		<name>Disabled</name>
-	</customLabels>
-	<customLabels>
-		<label>Upload</label>
-		<name>Upload</name>
-	</customLabels>
-	<customLabels>
-		<label>Upload File</label>
-		<name>UploadFile</name>
-	</customLabels>
-	<customLabels>
-		<label>File was uploaded successfully</label>
-		<name>UploadSuccessful</name>
-	</customLabels>
-	<customLabels>
-		<label>File size limit is 4MB.</label>
-		<name>FileSizeLimit</name>
-	</customLabels>
-	<customLabels>
-		<label>This file exceeds the maximum size limit</label>
-		<name>FileSizeLimitReached</name>
-	</customLabels>
-	<customLabels>
-		<label>Something went wrong. Please try again.</label>
-		<name>SomethingWrong</name>
+		<label>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</label>
+		<name>FileSizeLimitReached_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Needs to Sign</label>
@@ -2381,6 +2369,42 @@
 	<customLabels>
 		<label>I agree to receive marketing communications and promotional offers from DocuSign.</label>
 		<name>MarketingOptIn</name>
+	</customLabels>
+	<customLabels>
+		<label>Bulk list is undefined.</label>
+		<name>UndefinedBulkList</name>
+	</customLabels>
+	<customLabels>
+		<label>Bulk list not found.</label>
+		<name>BulkListNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>No users defined.</label>
+		<name>UndefinedUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Use system sender</label>
+		<name>UseSystemSender</name>
+	</customLabels>
+	<customLabels>
+		<label>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</label>
+		<name>UseSystemSenderHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Enabled</label>
+		<name>Enabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Disabled</label>
+		<name>Disabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully saved settings.</label>
+		<name>SettingsSaved</name>
+	</customLabels>
+	<customLabels>
+		<label>You are not authorized to access the envelope.</label>
+		<name>UserNotAuthorizedForEnvelope</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -22,6 +22,8 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 	private static final Integer FLAG_SMS_AUTHENTICATION = 256;
 	@TestVisible
 	private static final Integer FLAG_TEMPLATES = 512;
+	@TestVisible
+	private static final Integer FLAG_BULK_SENDING = 1024;
 
 	private static AccountFeatures self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 1440; // 1 hour
@@ -78,6 +80,11 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 	 */
 	@AuraEnabled
 	public Boolean templates { get; private set; }
+	/**
+	 * Whether bulk sending is enabled on the DocuSign account.
+	 */
+	@AuraEnabled
+	public Boolean bulkSending { get; private set; }
 
 	@TestVisible
 	private AccountFeatures(final Credentials apiCredentials) {
@@ -98,6 +105,7 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 		this.signingGroups = (this.features & FLAG_SIGNING_GROUPS) == FLAG_SIGNING_GROUPS;
 		this.smsAuthentication = (this.features & FLAG_SMS_AUTHENTICATION) == FLAG_SMS_AUTHENTICATION;
 		this.templates = (this.features & FLAG_TEMPLATES) == FLAG_TEMPLATES;
+		this.bulkSending = (this.features & FLAG_BULK_SENDING) == FLAG_BULK_SENDING;
 	}
 
 	@TestVisible
@@ -155,6 +163,8 @@ public with sharing class AccountFeatures extends DocuSignAPI {
 					result |= FLAG_SMS_AUTHENTICATION;
 				} else if (accountSetting.name == 'allowServerTemplates' && accountSetting.value == 'true') {
 					result |= FLAG_TEMPLATES;
+				} else if (accountSetting.name == 'allowBulkSend' && accountSetting.value == 'true') {
+					result |= FLAG_BULK_SENDING;
 				}
 			}
 		}

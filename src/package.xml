@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>DocuSign for Salesforce Essentials</fullName>
+    <fullName>DocuSign for Salesforce - Core</fullName>
     <apiAccessLevel>Unrestricted</apiAccessLevel>
     <postInstallClass>PostInstall</postInstallClass>
     <setupWeblink>Setup</setupWeblink>
@@ -124,10 +124,28 @@
         <members>ReturnController</members>
         <members>ReturnControllerTest</members>
         <members>Notifications</members>
+        <members>BulkSendAPI</members>
+        <members>BulkSendAPITest</members>
+        <members>BulkSendService</members>
+        <members>BulkSendServiceTest</members>
+        <members>BulkList</members>
+        <members>ESignatureAPIMock</members>
+        <members>MockResource</members>
+        <members>MockRequest</members>
+        <members>MockResponse</members>
+        <members>AccountSoapAPIMock</members>
+        <members>UserMock</members>
+        <members>CodeExampleTest</members>
+        <members>SettingsController</members>
+        <members>SettingsControllerTest</members>
+        <members>AccountSettings</members>
+        <members>AccountSettingsTest</members>
+        <members>FileService</members>
+        <members>FileServiceTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>DocuSignForSalesforceEssentials</members>
+        <members>DocuSignForSalesforceCore</members>
         <name>CustomApplication</name>
     </types>
     <types>
@@ -155,6 +173,7 @@
         <members>MustBeAdministrator</members>
         <members>MustBeDocuSignAdministrator</members>
         <members>MustBeDocuSignUser</members>
+        <members>MustBeDocuSignSender</members>
         <members>NotEnvelopeOwner</members>
         <members>UndefinedId</members>
         <members>UndefinedType</members>
@@ -300,6 +319,7 @@
         <members>Declined</members>
         <members>Voided</members>
         <members>Signed</members>
+        <members>Canceled</members>
         <members>SentAnEnvelope_2</members>
         <members>LastStatusUpdate</members>
         <members>Status</members>
@@ -309,10 +329,11 @@
         <members>ShowLess</members>
         <members>IsQueued_2</members>
         <members>WillReceive_2</members>
-        <members>NoAction_2</members>
-        <members>HasDeclined_2</members>
         <members>HasViewed_2</members>
+        <members>HasDeclined_2</members>
+        <members>HasCompleted_2</members>
         <members>HasSigned_2</members>
+        <members>WillNotReceive_2</members>
         <members>ViewAll</members>
         <members>ConnectToDocuSign</members>
         <members>ConnectDocuSignToSalesforce</members>
@@ -404,13 +425,7 @@
         <members>Active</members>
         <members>Closed</members>
         <members>UserNotFound</members>
-        <members>Disabled</members>
-        <members>Upload</members>
-        <members>UploadFile</members>
-        <members>UploadSuccessful</members>
-        <members>FileSizeLimit</members>
-        <members>FileSizeLimitReached</members>
-        <members>SomethingWrong</members>
+        <members>FileSizeLimitReached_2</members>
         <members>Signer</members>
         <members>InPersonSigner</members>
         <members>CarbonCopy</members>
@@ -714,6 +729,15 @@
         <members>SelectAccount</members>
         <members>Country</members>
         <members>MarketingOptIn</members>
+        <members>UndefinedBulkList</members>
+        <members>BulkListNotFound</members>
+        <members>UndefinedUsers</members>
+        <members>UseSystemSender</members>
+        <members>UseSystemSenderHelp</members>
+        <members>Enabled</members>
+        <members>Disabled</members>
+        <members>SettingsSaved</members>
+        <members>UserNotAuthorizedForEnvelope</members>
         <name>CustomLabel</name>
     </types>
     <types>
@@ -726,6 +750,7 @@
         <members>AccountSettings__c.AccountId__c</members>
         <members>AccountSettings__c.AccountNumber__c</members>
         <members>AccountSettings__c.UseSendOnBehalfOf__c</members>
+        <members>AccountSettings__c.UseSystemSender__c</members>
         <members>AccountSettings__c.Email__c</members>
         <members>AccountSettings__c.Username__c</members>
         <members>AccountSettings__c.Password__c</members>
@@ -902,6 +927,16 @@
         <members>RecipientStatus__c.RoutingOrder__c</members>
         <members>User.Username__c</members>
         <members>User.CanManageAccount__c</members>
+        <members>BulkList__c.DocuSignId__c</members>
+        <members>BulkList__c.SourceId__c</members>
+        <members>BulkStatus__c.DocuSignId__c</members>
+        <members>BulkStatus__c.SourceId__c</members>
+        <members>BulkStatus__c.BatchSize__c</members>
+        <members>BulkStatus__c.QueuedEnvelopes__c</members>
+        <members>BulkStatus__c.SentEnvelopes__c</members>
+        <members>BulkStatus__c.FailedEnvelopes__c</members>
+        <members>BulkStatus__c.Submitted__c</members>
+        <members>BulkStatus__c.LastStatusUpdate__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -942,6 +977,8 @@
         <members>Case</members>
         <members>Contact</members>
         <members>Lead</members>
+        <members>BulkList__c</members>
+        <members>BulkStatus__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -960,6 +997,8 @@
         <members>Case-en_US</members>
         <members>Contact-en_US</members>
         <members>Lead-en_US</members>
+        <members>BulkList__c-en_US</members>
+        <members>BulkStatus__c-en_US</members>
         <name>CustomObjectTranslation</name>
     </types>
     <types>
@@ -989,12 +1028,12 @@
     <types>
         <members>DocuSign_Administrator</members>
         <members>DocuSign_User</members>
+        <members>DocuSign_Sender</members>
         <name>PermissionSet</name>
     </types>
     <types>
         <members>Setup</members>
         <members>SetupSplash</members>
-        <members>FileUploader</members>
         <members>SendFromOpportunity</members>
         <members>ReturnFromDocuSign</members>
         <members>SendFromAccount</members>
@@ -1054,6 +1093,8 @@
         <members>ToastEvent</members>
         <members>LoadingEvent</members>
         <members>LoginEvent</members>
+        <members>Settings</members>
+        <members>FileEvent</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

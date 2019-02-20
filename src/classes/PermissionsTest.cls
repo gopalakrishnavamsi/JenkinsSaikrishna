@@ -10,7 +10,7 @@ private class PermissionsTest {
 		String orgType = null;
 		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
 		if (Collection.isNotEmpty(orgs)) {
-			orgType = orgs[0].organizationType;
+			orgType = orgs[0].OrganizationType;
 		}
 		System.assertEquals((orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition'),
 			Permissions.IS_FLS_SUPPORTED);
@@ -167,7 +167,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResult_authorized() {
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator();
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
@@ -204,7 +204,7 @@ private class PermissionsTest {
 		Permissions.FlsResult r1, r2, r3, r4, r5, r6, r7;
 
 		Test.startTest();
-		System.runAs(TestUtils.createRestrictedUser()) {
+		System.runAs(UserMock.createRestrictedUser()) {
 			DescribeFieldResult dfr = Permissions.describeField(OBJECT_NAME, FIELD_NAME, OBJECT_TYPE.getDescribe().fields.getMap().get(FIELD_NAME));
 			r1 = Permissions.getFlsResult(Permissions.FlsAccess.Createable, FIELD_NAME, dfr);
 			r2 = Permissions.getFlsResult(Permissions.FlsAccess.Queryable, FIELD_NAME, dfr);
@@ -234,7 +234,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResults_authorized() {
-		User u = TestUtils.createDocuSignAdministrator();
+		User u = UserMock.createDocuSignAdministrator();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9;
 
 		Test.startTest();
@@ -275,7 +275,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getFlsResults_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2, r3, r4, r5, r6, r7, r8, r9, r10;
 
 		Test.startTest();
@@ -319,7 +319,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isCreateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -337,7 +337,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isCreateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -355,7 +355,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsCreateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -379,7 +379,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsCreateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -407,7 +407,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isDeletable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -425,7 +425,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isDeletable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -443,7 +443,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsDeletable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -468,7 +468,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsDeletable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -494,7 +494,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isQueryable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -512,8 +512,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isQueryable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignUser();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -533,7 +533,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsQueryable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -557,8 +557,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsQueryable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignUser();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -586,7 +586,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isUpdateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -604,7 +604,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isUpdateable_unauthorized() {
-		User u = TestUtils.createRestrictedUser();
+		User u = UserMock.createRestrictedUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -622,7 +622,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsUpdateable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -646,8 +646,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyIsUpdateable_unauthorized() {
-		User u1 = TestUtils.createRestrictedUser();
-		User u2 = TestUtils.createDocuSignAdministrator();
+		User u1 = UserMock.createRestrictedUser();
+		User u2 = UserMock.createDocuSignAdministrator();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -675,7 +675,7 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isFilterable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -691,14 +691,14 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	@IsTest
-	static void test_isFilterable_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_isFilterable_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_verifyIsFilterable_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -720,14 +720,14 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	@IsTest
-	static void test_verifyIsFilterable_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_verifyIsFilterable_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_isUnencrypted_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
 
 		Test.startTest();
@@ -743,14 +743,14 @@ private class PermissionsTest {
 		System.assert(r2.isAuthorized);
 	}
 
-	@IsTest
-	static void test_isUnencrypted_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_isUnencrypted_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_verifyIsUnencrypted_authorized() {
-		User u = TestUtils.createDocuSignUser();
+		User u = UserMock.createDocuSignUser();
 		UnauthorizedException ex1, ex2;
 
 		Test.startTest();
@@ -772,10 +772,10 @@ private class PermissionsTest {
 		System.assertEquals(null, ex2);
 	}
 
-	@IsTest
-	static void test_verifyIsUnencrypted_unauthorized() {
-		// No good way to test this. Would need to toggle Shield/PE on standard fields.
-	}
+//	@IsTest
+//	static void test_verifyIsUnencrypted_unauthorized() {
+//		// No good way to test this. Would need to toggle Shield/PE on standard fields.
+//	}
 
 	@IsTest
 	static void test_getDocuSignAdministratorPermissionSetId() {
@@ -806,16 +806,40 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_assignDocuSignUserPermissionSet() {
-		final User testUser = TestUtils.createUser();
+	static void test_assignDocuSignSenderPermissionSet() {
+		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignSender(testUser.Id));
 		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Assign docusign user permission set to user
+		System.assert(Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignDocuSignSenderPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignDocuSignUserPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Assign docusign user permission set to user
 		System.assert(Permissions.assignDocuSignUserPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user havs the permission set before assigning
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignSender(testUser.Id));
 		System.assert(Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Make sure it handles invalid inputs
 		System.assert(!Permissions.assignDocuSignUserPermissionSet(null));
 		Test.stopTest();
@@ -823,14 +847,18 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_assignDocuSignAdministratorPermissionSet() {
-		final User testUser = TestUtils.createUser();
+		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Assign docusign user permission set to user
 		System.assert(Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user havs the permission set before assigning
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignSender(testUser.Id));
+		System.assert(Permissions.isDocuSignUser(testUser.Id));
 		System.assert(Permissions.isDocuSignAdministrator(testUser.Id));
 		// Make sure it handles invalid inputs
 		System.assert(!Permissions.assignDocuSignAdministratorPermissionSet(null));
@@ -839,44 +867,133 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_removeDocuSignPermissionSets() {
-		User dsUser = TestUtils.createDocuSignUser();
-		User dsAdmin = TestUtils.createDocuSignAdministrator();
-		User nonDocuSignUser = TestUtils.createUser();
+		User dsSender = UserMock.createDocuSignSender(false);
+		User dsUser = UserMock.createDocuSignUser(false);
+		User dsAdmin = UserMock.createDocuSignAdministrator(false);
+		User nonDocuSignUser = UserMock.createUser();
 
+		System.assert(Permissions.isDocuSignSender(dsSender.Id));
+		System.assert(!Permissions.isDocuSignUser(dsSender.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsSender.Id));
+		System.assert(Permissions.isDocuSignSender(dsUser.Id));
 		System.assert(Permissions.isDocuSignUser(dsUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(dsUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsAdmin.Id));
 		System.assert(Permissions.isDocuSignUser(dsAdmin.Id));
 		System.assert(Permissions.isDocuSignAdministrator(dsAdmin.Id));
+		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
 
 		Test.startTest();
-		Boolean result = Permissions.removeDocuSignPermissionSets(new Set<Id> { dsUser.Id, dsAdmin.Id, nonDocuSignUser.Id });
+		Boolean result = Permissions.removeDocuSignPermissionSets(new Set<Id> {
+			dsSender.Id, dsUser.Id, dsAdmin.Id, nonDocuSignUser.Id
+		});
 		Test.stopTest();
 
 		System.assert(result);
+		System.assert(!Permissions.isDocuSignSender(dsSender.Id));
+		System.assert(!Permissions.isDocuSignUser(dsSender.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsSender.Id));
+		System.assert(!Permissions.isDocuSignSender(dsUser.Id));
 		System.assert(!Permissions.isDocuSignUser(dsUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(dsUser.Id));
+		System.assert(!Permissions.isDocuSignSender(dsAdmin.Id));
 		System.assert(!Permissions.isDocuSignUser(dsAdmin.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(dsAdmin.Id));
+		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
 	}
 
-	static testmethod void test_isDocuSignUser() {
-		// Create 3 users: 1) no DocuSign permission set, 2) user DocuSign permission set, 3) admin DocuSign permission set
-		// Verify only users #2 and #3 are DocuSign users
-		final User nonDocuSignUser = TestUtils.createUser();
-		final User dsUser = TestUtils.createDocuSignUser();
-		final User dsAdmin = TestUtils.createDocuSignAdministrator();
+	@IsTest
+	static void test_isDocuSignSender() {
+		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
+		// 3) user DocuSign permission set, 4) admin DocuSign permission set
+		// Verify only users #2, #3, and #4 are DocuSign users
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsSender = UserMock.createDocuSignSender(false);
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isDocuSignSender(null));
+		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsSender.Id));
+		System.assert(Permissions.isDocuSignSender(dsUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsAdmin.Id));
+		Permissions.verifyIsDocuSignSender(dsSender.Id);
+		Permissions.verifyIsDocuSignSender(dsUser.Id);
+		Permissions.verifyIsDocuSignSender(dsAdmin.Id);
+		System.runAs(dsSender) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(dsUser) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(dsAdmin) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isDocuSignUser());
+				Permissions.verifyIsDocuSignSender();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsDocuSignSender(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsDocuSignSender(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isDocuSignUser() {
+		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
+		// 3) user DocuSign permission set, 4) admin DocuSign permission set
+		// Verify only users #3 and #4 are DocuSign users
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsSender = UserMock.createDocuSignSender(false);
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
 
 		Test.startTest();
 		System.assert(!Permissions.isDocuSignUser(null));
 		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
+		System.assert(!Permissions.isDocuSignUser(dsSender.Id));
 		System.assert(Permissions.isDocuSignUser(dsUser.Id));
 		System.assert(Permissions.isDocuSignUser(dsAdmin.Id));
+		try {
+			Permissions.verifyIsDocuSignUser(dsSender.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+		}
 		Permissions.verifyIsDocuSignUser(dsUser.Id);
 		Permissions.verifyIsDocuSignUser(dsAdmin.Id);
+		System.runAs(dsSender) {
+			try {
+				System.assert(!Permissions.isDocuSignUser());
+				Permissions.verifyIsDocuSignUser();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+		}
 		System.runAs(dsUser) {
 			System.assert(Permissions.isDocuSignUser());
 			Permissions.verifyIsDocuSignUser();
@@ -909,20 +1026,20 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	static testmethod void testIsDocuSignAdministrator() {
-		// Create 3 users: 1) no DocuSign permission set, 2) user DocuSign permission set, 3) admin DocuSign permission set
-		// Verify only user #3 is admin
-		final User nonDocuSignUser = TestUtils.createUser();
-		final User dsUser = TestUtils.createUser();
-		final User dsAdmin = TestUtils.createUser();
+	@IsTest
+	static void test_isDocuSignAdministrator() {
+		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
+		// 3) user DocuSign permission set, 4) admin DocuSign permission set
+		// Verify only #4 is a DocuSign admin
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsSender = UserMock.createDocuSignSender(false);
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
 
 		Test.startTest();
-		// Assign permission sets.
-		Permissions.assignDocuSignUserPermissionSet(new Set<Id> { dsUser.Id });
-		Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { dsAdmin.Id });
-
 		System.assert(!Permissions.isDocuSignAdministrator(null));
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsSender.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(dsUser.Id));
 		System.assert(Permissions.isDocuSignAdministrator(dsAdmin.Id));
 		Permissions.verifyIsDocuSignAdministrator(dsAdmin.Id);
@@ -940,6 +1057,15 @@ private class PermissionsTest {
 			}
 		}
 		System.runAs(dsUser) {
+			try {
+				System.assert(!Permissions.isDocuSignAdministrator());
+				Permissions.verifyIsDocuSignAdministrator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+		}
+		System.runAs(dsSender) {
 			try {
 				System.assert(!Permissions.isDocuSignAdministrator());
 				Permissions.verifyIsDocuSignAdministrator();
@@ -966,14 +1092,20 @@ private class PermissionsTest {
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 		}
+		try {
+			Permissions.verifyIsDocuSignAdministrator(dsSender.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+		}
 		Test.stopTest();
 	}
 
 	@IsTest
 	static void test_isOwner() {
-		System.runAs(TestUtils.createAdministrator()) {
-			final User u1 = TestUtils.createDocuSignUser();
-			final User u2 = TestUtils.createDocuSignUser();
+		System.runAs(UserMock.createAdministrator()) {
+			final User u1 = UserMock.createDocuSignUser(false);
+			final User u2 = UserMock.createDocuSignUser(false);
 			final UUID dsEnvelopeId = UUID.randomUUID();
 			final Envelope__c envelope = TestUtils.createEnvelope();
 			envelope.OwnerId = u1.Id;
@@ -1009,8 +1141,8 @@ private class PermissionsTest {
 				System.assert(Permissions.isOwner(new Set<UUID> { dsEnvelopeId }));
 				Permissions.verifyIsOwner(envelope.Id);
 				Permissions.verifyIsOwner(new Set<Id> { envelope.Id });
-				Permissions.verifyISOwner(dsEnvelopeId);
-				Permissions.verifyISOwner(new Set<UUID> { dsEnvelopeId });
+				Permissions.verifyIsOwner(dsEnvelopeId);
+				Permissions.verifyIsOwner(new Set<UUID> { dsEnvelopeId });
 			}
 			System.runAs(u2) {
 				System.assert(!Permissions.isOwner(envelope.Id));

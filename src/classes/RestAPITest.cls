@@ -5,7 +5,7 @@ private class RestAPITest {
 		public HttpResponse respond(final HttpRequest request) {
 			final HttpResponse response = new HttpResponse();
 			final Url endpointUrl = new Url(request.getEndpoint());
-			final QueryString qs = QueryString.fromString(endpointUrl.getQuery());
+			final QueryString qs = QueryString.parse(endpointUrl.getQuery());
 
 			// parse out expected status code from port
 			response.setStatusCode(endpointUrl.getPort());

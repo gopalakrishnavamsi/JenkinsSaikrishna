@@ -11,6 +11,10 @@ global class Recipient implements Comparable {
 	 */
 	global static final String TYPE_IN_PERSON_SIGNER = 'InPersonSigner';
 	/**
+	 * Embedded signer recipient type constant.
+	 */
+	global static final String TYPE_EMBEDDED_SIGNER = 'EmbeddedSigner';
+	/**
 	 * Carbon copy (Receives a Copy) recipient type constant.
 	 */
 	global static final String TYPE_CARBON_COPY = 'CarbonCopy';
@@ -54,6 +58,10 @@ global class Recipient implements Comparable {
 	 * Signed status constant.
 	 */
 	global static final String STATUS_SIGNED = 'signed';
+	/**
+	 * Canceled status constant.
+	 */
+	global static final String STATUS_CANCELED = 'canceled';
 
 	/**
 	 * The ID of the associated Recipient__c record.
@@ -314,7 +322,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient based on the Salesforce source entity.
 	 */
-	public static Recipient fromSource(final String name, final String email, final String phone, final String role,
+	global static Recipient fromSource(final String name, final String email, final String phone, final String role,
 		final Entity source) {
 
 		return new Recipient(
@@ -385,39 +393,95 @@ global class Recipient implements Comparable {
 	}
 
 	/**
-	 * Representation of a DocuSign signing group.
+	 * Factory method to create a bulk recipient placeholder for a bulk envelope draft. Currently a single signer
+	 * recipient is supported with both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
+	 *
+	 * @return The new DocuSign bulk envelope placeholder recipient.
 	 */
-	global class SigningGroup {
-		/**
-		 * The DocuSign signing group ID.
-		 */
-		@AuraEnabled
-		global Integer id { get; private set; }
-		/**
-		 * The DocuSign signing group name.
-		 */
-		@AuraEnabled
-		global String name { get; private set; }
+	public static Recipient newBulkRecipientPlaceholder() {
+		return new Recipient(
+			null,
+			TYPE_SIGNER,
+			1,
+			1,
+			null,
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString() + '@place.holder',
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			false,
+			null,
+			false,
+			false);
+	}
 
-		/**
-		 * Constructs a DocuSign signing group.
-		 *
-		 * @param id The DocuSign signing group ID.
-		 * @param name The DocuSign signing group name.
-		 */
-		global SigningGroup(final Integer id, final String name) {
-			this.id = id;
-			this.name = name;
-		}
+	/**
+	 * Factory method to create a bulk recipient suitable for bulk envelope copies. Currently a single signer recipient
+	 * is supported with both <code>routingOrder</code> and <code>sequence</code> set to <code>1</code>.
+	 *
+	 * @param name The recipient name.
+	 * @param email The recipient email.
+	 * @param source The Salesforce source object.
+	 *
+	 * @return The new DocuSign bulk envelope copy recipient.
+	 */
+	global static Recipient newBulkRecipient(
+		final String name,
+		final String email,
+		final Entity source) {
 
-		/**
-		 * Creates a deep copy of the DocuSign signing group.
-		 *
-		 * @return A copy of the DocuSign signing group.
-		 */
-		public SigningGroup copy() {
-			return new SigningGroup(this.id, this.name);
-		}
+		return new Recipient(
+			null,
+			TYPE_SIGNER,
+			1,
+			1,
+			null,
+			name,
+			email,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			false,
+			source,
+			false,
+			false);
+	}
+
+	/**
+	 * Creates an embedded signer recipient for the current user. This recipient is expected to sign an envelope
+	 * immediately, and will not receive an email requesting signature.
+	 *
+	 * @return The newly-created embedded signer.
+	 */
+	global static Recipient newEmbeddedSigner() {
+		return new Recipient(
+			null,
+			TYPE_EMBEDDED_SIGNER,
+			1,
+			1,
+			new Role('Signer 1', 1),
+			UserInfo.getName(),
+			UserInfo.getUserEmail(),
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			true,
+			new Entity(UserInfo.getUserId()),
+			false,
+			false);
 	}
 
 	/**
@@ -678,6 +742,17 @@ global class Recipient implements Comparable {
 		 */
 		@AuraEnabled
 		global Datetime lastStatusUpdate { get; private set; }
+		/**
+		 * Whether or not the recipient is in a final state.
+		 */
+		public Boolean isFinal {
+			get {
+				return this.status == STATUS_SIGNED
+					|| this.status == STATUS_DECLINED
+					|| this.status == STATUS_COMPLETED
+					|| this.status == STATUS_CANCELED;
+			}
+		}
 
 		/**
 		 * Constructs a DocuSign recipient status.
@@ -722,6 +797,35 @@ global class Recipient implements Comparable {
 			this.completed = completed;
 			this.reason = reason;
 			this.lastStatusUpdate = lastStatusUpdate;
+		}
+
+		/**
+		 * Cancels a recipient. This sets the status to <code>canceled</code> and <code>completed</code> and
+		 * <code>lastStatusUpdate</code> to now. This is a final state for the recipient.
+		 *
+		 * @return The canceled recipient status.
+		 */
+		public Recipient.Status cancel() {
+			this.status = STATUS_CANCELED;
+			this.completed = Datetime.now();
+			this.lastStatusUpdate = Datetime.now();
+			return this;
+		}
+
+		/**
+		 * Merges this recipient status with another. The <code>id</code> and <code>source</code> properties are
+		 * copied from <code>other</code> if non-null.
+		 *
+		 * @param other The recipient status from which to merge data.
+		 *
+		 * @return The merged recipient status.
+		 */
+		public Recipient.Status mergeWith(final Recipient.Status other) {
+			if (other != null) {
+				this.id = other.id;
+				this.source = other.source;
+			}
+			return this;
 		}
 
 		/**
@@ -866,7 +970,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>emailSettings</code>.
 	 */
-	public Recipient withEmailSettings(final EmailSettings emailSettings) {
+	global Recipient withEmailSettings(final EmailSettings emailSettings) {
 		this.emailSettings = emailSettings;
 		return this;
 	}
@@ -878,7 +982,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>role</code>.
 	 */
-	public Recipient withRole(final Role role) {
+	global Recipient withRole(final Role role) {
 		this.role = role;
 		return this;
 	}
@@ -890,7 +994,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>note</code>.
 	 */
-	public Recipient withNote(final String note) {
+	global Recipient withNote(final String note) {
 		this.note = note;
 		return this;
 	}
@@ -902,7 +1006,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>authentication</code>.
 	 */
-	public Recipient withAuthentication(final Authentication authentication) {
+	global Recipient withAuthentication(final Authentication authentication) {
 		this.authentication = authentication;
 		return this;
 	}

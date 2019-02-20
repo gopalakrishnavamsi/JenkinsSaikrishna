@@ -3,7 +3,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_constructor() {
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			SetupController result = new SetupController();
 			Test.stopTest();
@@ -29,11 +29,9 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getLogin_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			SetupController.LoginInformation result = SetupController.getLogin();
 			Test.stopTest();
@@ -44,7 +42,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getLogin_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.getLogin();
@@ -56,13 +54,39 @@ private class SetupControllerTest {
 		}
 	}
 
+	private class InvalidUsernamePasswordMock implements HttpCalloutMock {
+
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(401);
+			response.setStatus('UNAUTHORIZED');
+			response.setHeader('Content-Type', 'application/json');
+			response.setBody('{"errorCode": "USER_AUTHENTICATION_FAILED","message": "One or both of Username and Password are invalid."}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_login_invalid_username_password() {
+		Test.setMock(HttpCalloutMock.class, new InvalidUsernamePasswordMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				SetupController.login('u', 'p', 'demo', null, null);
+				throw new AssertException('Expected login to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.InvalidUsernameOrPassword, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 	@IsTest
 	static void test_login_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			SetupController.LoginInformation result = SetupController.login('u', 'p', 'demo', null, null);
 			Test.stopTest();
@@ -74,7 +98,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_login_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.login('u', 'p', 'demo', null, null);
@@ -88,11 +112,9 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getAccount_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			Account result = SetupController.getAccount();
 			Test.stopTest();
@@ -103,7 +125,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getAccount_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.getAccount();
@@ -117,9 +139,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_logout_success() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			SetupController.logout(true);
 			Test.stopTest();
@@ -135,7 +155,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_logout_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.logout(false);
@@ -149,7 +169,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_prepareTrial_success() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			AccountService.TrialAccount result = SetupController.prepareTrial('u@unit.test');
 			Test.stopTest();
@@ -160,7 +180,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_prepareTrial_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.prepareTrial(null);
@@ -174,10 +194,9 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_startTrial_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Account.Trial t = new Account.Trial('UNIT TEST', new Account.TrialUser(
 				'u@unit.test', 'UNIT', 'TEST', 'US', true
 			), null);
@@ -192,7 +211,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_startTrial_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.startTrial('{}');
@@ -206,11 +225,10 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_addUser_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-			User u = TestUtils.createUser();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
 
 			Test.startTest();
 			List<Account.User> result = SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
@@ -222,7 +240,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_addUser_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.addUser(null, null, null, null, false);
@@ -236,11 +254,10 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_removeUser_success() {
-		Test.setMock(HttpCalloutMock.class, new DocuSignAPITest.SuccessMock());
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			User u = TestUtils.createDocuSignUser();
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createDocuSignUser(false);
 
 			Test.startTest();
 			List<Account.User> result = SetupController.removeUser(u.Id, u.Username__c);
@@ -252,7 +269,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_removeUser_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.removeUser(null, null);
@@ -266,9 +283,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getUsers_success() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			List<Account.User> result = SetupController.getUsers();
 			Test.stopTest();
@@ -279,7 +294,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getUsers_failure() {
-		System.runAs(TestUtils.createDocuSignUser()) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.getUsers();
@@ -293,9 +308,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getUser_success() {
-		System.runAs(TestUtils.createDocuSignAdministrator()) {
-			TestUtils.createAccountConfiguration();
-
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			User result = SetupController.getUser(UserInfo.getUserId());
 			Test.stopTest();
@@ -306,7 +319,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getUser_failure() {
-		System.runAs(TestUtils.createRestrictedUser()) { // Unauthorized
+		System.runAs(UserMock.createRestrictedUser()) { // Unauthorized
 			Test.startTest();
 			try {
 				SetupController.getUser(null);
@@ -317,18 +330,4 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-
-//	@IsTest
-//	static void test_saveState() {
-//		// No way to test actual deployment, nor trigger an error here
-//		System.runAs(TestUtils.createDocuSignAdministrator()) {
-//			TestUtils.createAccountConfiguration();
-//
-//			Test.startTest();
-//			Id result = SetupController.saveState('UNIT TEST');
-//			Test.stopTest();
-//
-//			System.assertEquals(null, result);
-//		}
-//	}
 }

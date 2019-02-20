@@ -169,4 +169,13 @@ private class StringUtilsTest {
 		System.assertEquals(null, StringUtils.replaceNoteTags('\t '));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_formatDatetime() {
+		Test.startTest();
+		System.assertEquals(null, StringUtils.formatDatetime(null));
+		Datetime dt = Datetime.now();
+		System.assertEquals(dt.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\''), StringUtils.formatDatetime(dt));
+		Test.stopTest();
+	}
 }

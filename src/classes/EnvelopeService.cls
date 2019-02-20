@@ -1,13 +1,13 @@
-/**Primary interface point for DocuSign for Salesforce envelope management.
- *  A basic flow would be:
+/**
+ * Primary interface point for DocuSign for Salesforce envelope management.
+ * <p>
+ * A basic flow would be:
  * <pre>
  * // Get an empty envelope definition to begin.
  * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
- * // Create envelope and add source documents and recipients
- * e = EnvelopeService.createEnvelope(e, null, true);
- * // Create the envelope in draft state
- * e = EnvelopeService.sendEnvelope(e, false, true);
- * // Get tagger URL
+ * // Send envelope and add source documents and recipients
+ * e = EnvelopeService.sendEnvelope(e, false);
+ * // Get tagger URL (this must be in a future method or separate transaction to avoid a CalloutException)
  * Url u = EnvelopeService.getSenderViewUrl(e.docuSignId, new Url('https://my.return.url'));
  * // Host the tagging session with the returned URL
  * </pre>
@@ -21,8 +21,7 @@ global with sharing class EnvelopeService {
 	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static final LoggerService LOG = LoggerService.getInstance();
 
-	@TestVisible
-	private static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
+	public static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
 		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
 
 		ValidationResult result = new ValidationResult();
@@ -324,8 +323,17 @@ global with sharing class EnvelopeService {
 				StringUtils.replaceUserTags(envelope.emailMessage));
 	}
 
-	@TestVisible
-	private static Envelope saveEnvelope(final Envelope envelope, final EnvelopeConfiguration envelopeConfiguration) {
+	/**
+	 * Saves a DocuSign envelope record.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.
+	 *
+	 * @param envelope The DocuSign envelope.
+	 * @param envelopeConfiguration Optional envelope configuration.
+	 *
+	 * @return The saved DocuSign envelope.
+	 */
+	public static Envelope saveEnvelope(final Envelope envelope, final EnvelopeConfiguration envelopeConfiguration) {
 		// Custom fields are not stored in our custom object, so must load and merge them later.
 		Envelope result = DB.insertEnvelope(replaceUserTags(envelope));
 
@@ -391,7 +399,7 @@ global with sharing class EnvelopeService {
 		final Envelope envelope,
 		final Entity source,
 		final List<EnvelopeConfiguration.RelatedContacts> relatedContacts,
-		final Map<String, Recipient.SigningGroup> signingGroups) {
+		final Map<String, SigningGroup> signingGroups) {
 
 		if (envelope == null || source == null || relatedContacts == null) return envelope;
 
@@ -416,7 +424,7 @@ global with sharing class EnvelopeService {
 	private static Envelope addCustomRecipients(
 		final Envelope envelope,
 		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
-		final Map<String, Recipient.SigningGroup> signingGroups,
+		final Map<String, SigningGroup> signingGroups,
 		final Recipient.EmailSettings defaultEmailSettings) {
 
 		if (envelope == null || customRecipients == null) return envelope;
@@ -431,7 +439,8 @@ global with sharing class EnvelopeService {
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param envelope The envelope to create.
-	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope.
+	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope. This is
+	 * currently a placeholder argument, i.e. always pass <code>null</code>.
 	 * @param addFromSource Load source documents and recipients if <code>envelopeConfiguration</code> is
 	 * <code>null</code>.
 	 *
@@ -480,7 +489,7 @@ global with sharing class EnvelopeService {
 
 			if (envelopeConfiguration.hasRecipients) {
 				// Recipient-level customization
-				Map<String, Recipient.SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
+				Map<String, SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
 					envelopeConfiguration.source, envelopeConfiguration.recipients);
 				result = addRelatedContacts(result, envelopeConfiguration.source,
 					envelopeConfiguration.recipients.relatedContacts, signingGroups);
@@ -584,10 +593,27 @@ global with sharing class EnvelopeService {
 	}
 
 	/**
-	 * Sends an envelope to DocuSign. The envelope must have been previously created via
-	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>.
+	 * Sends an envelope to DocuSign. This will also create the envelope record in Salesforce if necessary.
 	 * <p>
-	 * The caller must be the owner of the envelope.
+	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
+	 * <code>DocuSign Sender</code> permission set.
+	 *
+	 * @param envelope The envelope to send.
+	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
+	 *
+	 * @return The sent envelope.
+	 */
+	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow) {
+		return sendEnvelope(envelope, sendNow, true);
+	}
+
+	/**
+	 * Sends an envelope to DocuSign. The envelope may have been previously created via
+	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>, or this method will
+	 * create the requisite Salesforce records.
+	 * <p>
+	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
+	 * <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
@@ -598,10 +624,15 @@ global with sharing class EnvelopeService {
 	 * @return The sent envelope.
 	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
 	 */
-	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
+	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
-		Permissions.verifyIsOwner(envelope.id);
+		Boolean sfdcEnvelopeCreated = envelope != null && envelope.id != null;
+		if (sfdcEnvelopeCreated) {
+			Permissions.verifyIsOwner(envelope.id);
+		} else {
+			Permissions.verifyIsDocuSignSender();
+		}
 
 		ValidationResult vr = validate(envelope, sendNow);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
@@ -612,7 +643,14 @@ global with sharing class EnvelopeService {
 		if (sendNow) result = result.withSent(Datetime.now());
 		// Can update in some workflows, but not in others due to subsequent callouts (e.g. mobile)
 		if (updateNow) {
-			result = DB.updateEnvelope2(result, sendNow);
+			if (sfdcEnvelopeCreated) {
+				result = DB.updateEnvelope2(result, sendNow);
+			} else {
+				result = DB.insertEnvelope(result);
+				result = result
+					.withDocuments(DocumentService.addEnvelopeDocuments(result.id, result.documents))
+					.withRecipients(RecipientService.addEnvelopeRecipients(result.id, result.recipients));
+			}
 			if (sendNow) StatusService.createStatus(new List<Envelope.Status> { result.toEnvelopeStatus() });
 		}
 
@@ -631,7 +669,7 @@ global with sharing class EnvelopeService {
 	 * @return <code>true</code> if the update was successful, <code>false</code> otherwise.
 	 * @see EnvelopeService.sendEnvelope for more details.
 	 */
-	global static Boolean markEnvelopeSent(
+	public static Boolean markEnvelopeSent(
 		final Envelope envelope,
 		final Boolean sendNow) {
 
@@ -669,14 +707,14 @@ global with sharing class EnvelopeService {
 	 * Gets an empty envelope definition that can be subsequently completed, created, and sent. This envelope will
 	 * be populated with appropriate defaults based on the current account settings and localizations.
 	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 * The caller must be assigned the <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param source The originating Salesforce entity for the envelope.
 	 *
 	 * @return The empty envelope.
 	 */
 	global static Envelope getEmptyEnvelope(final Entity source) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignSender();
 
 		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
 		Integer remindAfterDays = Integer.valueOf(settings.RemindAfterDays__c);

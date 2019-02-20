@@ -12,18 +12,21 @@ public with sharing class Permissions {
 	private static final String DOCUSIGN_ADMINISTRATOR = 'DocuSign_Administrator';
 	@TestVisible
 	private static final String DOCUSIGN_USER = 'DocuSign_User';
+	@TestVisible
+	private static final String DOCUSIGN_SENDER = 'DocuSign_Sender';
 	private static Map<String, Id> permissionSetMap = null;
-	private static Set<Id> permissionSetIds = null;
 	private static Id dsAdministratorPermissionSetId = null;
 	private static Id dsUserPermissionSetId = null;
+	private static Id dsSenderPermissionSetId = null;
 	private static final Map<Id, Boolean> dsAdmins = new Map<Id, Boolean>();
 	private static final Map<Id, Boolean> dsUsers = new Map<Id, Boolean>();
+	private static final Map<Id, Boolean> dsSenders = new Map<Id, Boolean>();
 
 	static {
 		String orgType = null;
 		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
 		if (Collection.isNotEmpty(orgs)) {
-			orgType = orgs[0].organizationType;
+			orgType = orgs[0].OrganizationType;
 		}
 		IS_FLS_SUPPORTED = (orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition');
 	}
@@ -31,7 +34,10 @@ public with sharing class Permissions {
 	@TestVisible
 	private with sharing class Database {
 
-		private Boolean upsertPermissionSetAssignments(final Id permissionSetId, final Set<Id> userIds) {
+		private Boolean upsertPermissionSetAssignments(
+			final Id permissionSetId,
+			final Set<Id> userIds) {
+
 			Permissions.verifyIsCreateable(TYPE_PERMISSION_SET_ASSIGNMENT, new List<String> {
 				'PermissionSetId', 'AssigneeId'
 			});
@@ -57,8 +63,11 @@ public with sharing class Permissions {
 				List<PermissionSetAssignment> ps = [
 					SELECT Id, AssigneeId, PermissionSetId
 					FROM PermissionSetAssignment
-					WHERE (PermissionSetId = :getDocuSignUserPermissionSetId()
-					OR PermissionSetId = :getDocuSignAdministratorPermissionSetId())
+					WHERE PermissionSetId IN :(new Set<Id> {
+						getDocuSignUserPermissionSetId(),
+						getDocuSignAdministratorPermissionSetId(),
+						getDocuSignSenderPermissionSetId()
+					})
 					AND AssigneeId IN :userIds
 				];
 				delete ps;
@@ -67,7 +76,10 @@ public with sharing class Permissions {
 			return result;
 		}
 
-		public List<PermissionSetAssignment> queryPermissionSetAssignments(final Id userId, final Set<Id> permissionSetIds) {
+		public List<PermissionSetAssignment> queryPermissionSetAssignments(
+			final Id userId,
+			final Set<Id> permissionSetIds) {
+
 			return [
 				SELECT Id
 				FROM PermissionSetAssignment
@@ -81,10 +93,9 @@ public with sharing class Permissions {
 			for (PermissionSet p : [
 				SELECT Id, Name
 				FROM PermissionSet
-				WHERE Name = :DOCUSIGN_ADMINISTRATOR
-				OR Name = :DOCUSIGN_USER
+				WHERE Name IN :(new Set<String> { DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER })
 			]) {
-				result.put(p.name, p.Id);
+				result.put(p.Name, p.Id);
 			}
 			return result;
 		}
@@ -133,18 +144,8 @@ public with sharing class Permissions {
 	private static Map<String, Id> getPermissionSetMap() {
 		if (permissionSetMap == null) {
 			permissionSetMap = DB.queryPermissionSetIds();
-			permissionSetIds = new Set<Id>(permissionSetMap.values());
 		}
 		return permissionSetMap;
-	}
-
-	@TestVisible
-	private static Set<Id> getPermissionSetIds() {
-		if (permissionSetIds == null) {
-			permissionSetMap = DB.queryPermissionSetIds();
-			permissionSetIds = new Set<Id>(permissionSetMap.values());
-		}
-		return permissionSetIds;
 	}
 
 	@TestVisible
@@ -161,6 +162,14 @@ public with sharing class Permissions {
 			dsAdministratorPermissionSetId = getPermissionSetMap().get(DOCUSIGN_USER);
 		}
 		return dsAdministratorPermissionSetId;
+	}
+
+	@TestVisible
+	private static Id getDocuSignSenderPermissionSetId() {
+		if (dsSenderPermissionSetId == null) {
+			dsSenderPermissionSetId = getPermissionSetMap().get(DOCUSIGN_SENDER);
+		}
+		return dsSenderPermissionSetId;
 	}
 
 	/**
@@ -182,8 +191,9 @@ public with sharing class Permissions {
 			if (value != null) {
 				result = value;
 			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId,
-					new Set<Id> { getDocuSignAdministratorPermissionSetId() }));
+				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+					getDocuSignAdministratorPermissionSetId()
+				}));
 				dsAdmins.put(userId, result);
 			}
 		}
@@ -224,7 +234,10 @@ public with sharing class Permissions {
 			if (value != null) {
 				result = value;
 			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, getPermissionSetIds()));
+				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+					getDocuSignAdministratorPermissionSetId(),
+					getDocuSignUserPermissionSetId()
+				}));
 				dsUsers.put(userId, result);
 			}
 		}
@@ -245,6 +258,67 @@ public with sharing class Permissions {
 	}
 
 	/**
+	 * Checks whether the current user is assigned the <code>DocuSign Sender</code>,
+	 * <code>DocuSign User</code>, or <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce sender, <code>false</code>
+	 * otherwise.
+	 */
+	public static Boolean isDocuSignSender() {
+		return isDocuSignSender(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isDocuSignSender(final Id userId) {
+		Boolean result = false;
+		if (String.isNotBlank(userId)) {
+			final Boolean value = dsSenders.get(userId);
+			if (value != null) {
+				result = value;
+			} else {
+				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+					getDocuSignAdministratorPermissionSetId(),
+					getDocuSignUserPermissionSetId(),
+					getDocuSignSenderPermissionSetId()
+				}));
+				dsSenders.put(userId, result);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>DocuSign Sender</code>, <code>DocuSign User</code>, or <code>DocuSign Administrator</code> permission set.
+	 */
+	public static void verifyIsDocuSignSender() {
+		verifyIsDocuSignSender(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsDocuSignSender(final Id userId) {
+		if (String.isBlank(userId) || !isDocuSignSender(userId)) throw UnauthorizedException.notDocuSignSender();
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Sender</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignSenderPermissionSet(final Set<Id> userIds) {
+		Boolean result = Collection.isNotEmpty(userIds);
+		if (result) {
+			result &= DB.upsertPermissionSetAssignments(getDocuSignSenderPermissionSetId(), userIds);
+			for (Id userId : userIds) {
+				dsSenders.put(userId, true);
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Assigns the <code>DocuSign User</code> permission set to one or more users.
 	 *
 	 * @param userIds The user IDs.
@@ -256,6 +330,7 @@ public with sharing class Permissions {
 		if (result) {
 			result &= DB.upsertPermissionSetAssignments(getDocuSignUserPermissionSetId(), userIds);
 			for (Id userId : userIds) {
+				dsSenders.put(userId, true);
 				dsUsers.put(userId, true);
 			}
 		}
@@ -274,6 +349,7 @@ public with sharing class Permissions {
 		if (result) {
 			result &= DB.upsertPermissionSetAssignments(getDocuSignAdministratorPermissionSetId(), userIds);
 			for (Id userId : userIds) {
+				dsSenders.put(userId, true);
 				dsUsers.put(userId, true);
 				dsAdmins.put(userId, true);
 			}
@@ -296,6 +372,7 @@ public with sharing class Permissions {
 			for (Id userId : userIds) {
 				dsAdmins.remove(userId);
 				dsUsers.remove(userId);
+				dsSenders.remove(userId);
 			}
 		}
 		return result;
@@ -644,8 +721,7 @@ public with sharing class Permissions {
 
 		String objectName = String.valueOf(type);
 		DescribeSObjectResult objectDescribe = type.getDescribe();
-		if (objectDescribe == null)
-			return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound), new List<FlsResult>());
+		if (objectDescribe == null) return new FlsResults(requestedAccess, false, new FlsResult(objectName, FlsStatus.NotFound), new List<FlsResult>());
 
 		return getFlsResults(requestedAccess, objectName, objectDescribe, fieldNames,
 			Collection.isNotEmpty(fieldNames) ? objectDescribe.fields.getMap() : null);

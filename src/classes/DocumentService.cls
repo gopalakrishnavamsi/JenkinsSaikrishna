@@ -51,7 +51,8 @@ global with sharing class DocumentService {
 	 * Converts a Salesforce content version (file) into a DocuSign envelope document.
 	 *
 	 * @param contentVersion The content version from which to construct a document. This must have the
-	 * <code>Title</code>, <code>FileExtension</code>, <code>Content</code>, and <code>LastModified</code> fields defined.
+	 * <code>Title</code>, <code>FileExtension</code>, <code>ContentSize</code>, and <code>LastModifiedDate</code>
+	 * fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the content version.
 	 */
@@ -73,7 +74,7 @@ global with sharing class DocumentService {
 	 * Converts a Salesforce document into a DocuSign envelope document.
 	 *
 	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
-	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModified</code> fields defined.
+	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModifiedDate</code> fields defined.
 	 *
 	 * @return The DocuSign envelope document representation of the Salesforce document.
 	 */
@@ -109,7 +110,8 @@ global with sharing class DocumentService {
 			null,
 			null,
 			template == null ? null : template.lastModified,
-			template == null ? null : String.valueOf(template.id));	}
+			template == null ? null : String.valueOf(template.id));
+	}
 
 	/**
 	 * Converts a list of <code>Document__c</code> objects to their domain object form.
@@ -339,23 +341,19 @@ global with sharing class DocumentService {
 	 * <p>
 	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
 	 * may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
-	 * @param documentIds The Salesforce object IDs.
+	 * @param sObjectIds The Salesforce object IDs.
 	 *
 	 * @return A list of envelope documents.
 	 */
-	global static List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
-		Permissions.verifyIsDocuSignUser();
-
+	global static List<Document> getDocuments(final SObjectType type, final Set<Id> sObjectIds) {
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
 			if (dr.canResolveDocuments(type)) {
-				result = dr.getDocuments(type, documentIds);
+				result = dr.getDocuments(type, sObjectIds);
 				break;
 			}
 		}
@@ -367,12 +365,13 @@ global with sharing class DocumentService {
 	 * <p>
 	 * For example, to pull in all of an Opportunity's Notes and Attachments related list:
 	 * <pre>
-	 * List<Document> docs = DocumentService.getLinkedDocuments('ContentVersion', new Set<Id> { opp.Id }, false);
+	 * List<Document> docs = DocumentService.getLinkedDocuments(
+	 * 		ContentVersion.getSObjectType(),
+	 * 		new Set<Id> { myOpportunity.Id },
+	 * 		false);
 	 * </pre>
 	 * <p>
 	 * By default, only <code>ContentVersion</code> types are supported. More types may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param linkedEntityIds The Salesforce parent IDs.
@@ -382,8 +381,6 @@ global with sharing class DocumentService {
 	 */
 	global static List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
-
-		Permissions.verifyIsDocuSignUser();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
@@ -404,8 +401,6 @@ global with sharing class DocumentService {
 	 * <p>
 	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
 	 * may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 *
@@ -413,8 +408,6 @@ global with sharing class DocumentService {
 	 * @see DocumentService.getFolderDocuments
 	 */
 	global static Document.Folders getDocumentFolders(final SObjectType type) {
-		Permissions.verifyIsDocuSignUser();
-
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document.Folder> folders = new List<Document.Folder> {
@@ -440,8 +433,6 @@ global with sharing class DocumentService {
 	 * <p>
 	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
 	 * may be supported via plugins.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param folderIds The folder IDs.
@@ -450,8 +441,6 @@ global with sharing class DocumentService {
 	 * @see DocumentService.getDocumentFolders
 	 */
 	global static List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
-		Permissions.verifyIsDocuSignUser();
-
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
@@ -491,7 +480,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
+	public static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documents)) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -510,7 +499,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
+	public static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documentIds)) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -530,7 +519,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
+	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (newSequence == null || newSequence.isEmpty()) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -550,7 +539,7 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	global static List<Document> updateEnvelopeDocuments(
+	public static List<Document> updateEnvelopeDocuments(
 		final Id envelopeId,
 		final List<Document> originalDocuments,
 		final List<Document> updatedDocuments) {

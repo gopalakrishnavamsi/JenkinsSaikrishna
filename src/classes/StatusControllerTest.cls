@@ -15,8 +15,7 @@ private class StatusControllerTest {
 
 	@IsTest
 	static void test_getStatus_success() {
-		System.runAs(TestUtils.createDocuSignUser()) {
-			TestUtils.createAccountConfiguration();
+		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			TestUtils.createEnvelopeStatus(TestUtils.createEnvelope(a.Id));
 			TestUtils.createEnvelopeStatus(TestUtils.createEnvelope(a.Id));
@@ -33,7 +32,7 @@ private class StatusControllerTest {
 
 	@IsTest
 	static void test_getStatus_error() {
-		System.runAs(TestUtils.createUser()) { // Unauthorized
+		System.runAs(UserMock.createUser()) { // Unauthorized
 			Test.startTest();
 			try {
 				StatusController.getStatus(UserInfo.getUserId(), 1);
@@ -47,7 +46,7 @@ private class StatusControllerTest {
 
 	@IsTest
 	static void test_getStatusListViews() { // No way to test error case
-		System.runAs(TestUtils.createUser()) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			List<ListView> result = StatusController.getStatusListViews();
 			Test.stopTest();

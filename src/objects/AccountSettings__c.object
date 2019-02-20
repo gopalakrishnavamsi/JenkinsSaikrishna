@@ -55,6 +55,15 @@
 		<unique>false</unique>
 	</fields>
 	<fields>
+		<fullName>UseSystemSender__c</fullName>
+		<defaultValue>false</defaultValue>
+		<externalId>false</externalId>
+		<label>Use System Sender</label>
+		<trackTrending>false</trackTrending>
+		<type>Checkbox</type>
+		<unique>false</unique>
+	</fields>
+	<fields>
 		<fullName>Email__c</fullName>
 		<externalId>false</externalId>
 		<label>DocuSign Email Address</label>
@@ -168,7 +177,7 @@
 	<fields>
 		<fullName>RecipientResolvers__c</fullName>
 		<externalId>false</externalId>
-		<label>Entity Resolvers</label>
+		<label>Recipient Resolvers</label>
 		<length>255</length>
 		<required>false</required>
 		<trackTrending>false</trackTrending>

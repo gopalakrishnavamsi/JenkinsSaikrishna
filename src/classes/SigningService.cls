@@ -5,7 +5,6 @@ global with sharing class SigningService {
 
 	@TestVisible
 	private static final SigningService.Database DB = new SigningService.Database();
-	private static final LoggerService LOG = LoggerService.getInstance();
 	@TestVisible
 	private static final Set<String> SIGN_NOW_TYPES = new Set<String> {
 		Recipient.TYPE_SIGNER, Recipient.TYPE_IN_PERSON_SIGNER
@@ -58,13 +57,14 @@ global with sharing class SigningService {
 	}
 
 	/**
-	 * Determines whether the next DocuSign envelope recipient should sign now.
+	 * Determines whether the next DocuSign envelope recipient can sign now. Either the signer or host must match the
+	 * current Salesforce user.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
 	 * @param envelope The DocuSign envelope.
 	 *
-	 * @return <code>true</code> if the next recipient should sign now, <code>false</code> otherwise.
+	 * @return <code>true</code> if the next recipient can sign now, <code>false</code> otherwise.
 	 */
 	global static Boolean shouldSignNow(final Envelope envelope) {
 		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
@@ -93,7 +93,11 @@ global with sharing class SigningService {
 	 *
 	 * @return The signing URL.
 	 */
-	global static Url getSigningUrl(final Envelope envelope, final Url returnUrl, final Boolean checkFirstRecipientOnly) {
+	global static Url getSigningUrl(
+		final Envelope envelope,
+		final Url returnUrl,
+		final Boolean checkFirstRecipientOnly) {
+
 		if (envelope != null) Permissions.verifyIsOwner(envelope.id);
 
 		Url result = null;
@@ -115,6 +119,36 @@ global with sharing class SigningService {
 					DB.completeSignNow(snr.withSignNow(false).id);
 				}
 			}
+		}
+		return result;
+	}
+
+	/**
+	 * Retrieves the signing URL for embedded recipients. These recipients do not have to click on an email link
+	 * to initiate the signing process. Instead, the signing process is initiated from within a custom application.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Sender</code> permission set.
+	 *
+	 * @param envelopeId  The DocuSign envelope ID.
+	 * @param returnUrl Where to redirect after signing.
+	 *
+	 * @return The signing URL.
+	 */
+	global static Url getEmbeddedSigningUrl(
+		final UUID envelopeId,
+		final Url returnUrl) {
+
+		Permissions.verifyIsDocuSignSender();
+
+		Url result = null;
+		if (envelopeId != null) {
+			String name = UserInfo.getName();
+			String email = UserInfo.getUserEmail();
+			result = EnvelopeAPI.getInstance().getEmbeddedRecipientViewUrl(
+				envelopeId,
+				returnUrl,
+				email,
+				name);
 		}
 		return result;
 	}
