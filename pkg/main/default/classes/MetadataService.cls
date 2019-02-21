@@ -253,7 +253,7 @@ public with sharing class MetadataService {
 			Salesforce.API_VERSION);
 
 		if (Collection.isNotEmpty(fps)) {
-			String t = String.valueOf(type);
+			String t = type.getDescribe().getLocalName();
 			for (MetadataAPI.FileProperties fp : fps) {
 				if (fp.fullName.startsWith(t)) result.add(fp);
 			}
