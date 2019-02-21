@@ -4,13 +4,13 @@
     <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
-        #setup-assistant {
+        #ds-setup {
             min-height: 100vh;
             background-color: #f7f9fb;
             position: relative;
         }
 
-        .noSidebarCell #setup-assistant {
+        .noSidebarCell #ds-setup {
             min-height: calc(100vh - 120px);
         }
 
@@ -20,12 +20,12 @@
             padding: 0;
         }
 
-        .noSidebarCell #setup-assistant .slds-scope .strike-wizard__footer {
+        .noSidebarCell #ds-setup .slds-scope .strike-wizard__footer {
             position: absolute;
         }
     </style>
 
-    <div id="setup-assistant"></div>
+    <div id="ds-setup"></div>
 
     <script>
       var navigateToURL = function (event) {
@@ -79,10 +79,10 @@
       }
 
       var namespace = '{!JSENCODE(namespace)}';
-      $Lightning.use(namespace + ':LightningOutApp', function () {
+      $Lightning.use(namespace + ':SetupApp', function () {
         $Lightning.createComponent(namespace + ':Setup', {
           beginOAuth: beginOAuth
-        }, 'setup-assistant', function (cmp) {
+        }, 'ds-setup', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });

@@ -22,7 +22,7 @@
         </div>
         <!-- /Content -->
 
-        <footer class="strike-wizard__footer slds-is-relative">
+        <footer class="strike-wizard__footer slds-is-fixed">
             <div class="slds-grid slds-grid_pull-padded">
                 <div class="slds-col slds-no-flex slds-p-horizontal_small">
                     <lightning:button class="slds-button slds-button_neutral"
