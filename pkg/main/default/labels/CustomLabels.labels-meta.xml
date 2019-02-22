@@ -3913,7 +3913,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expired</shortDescription>
-        <value>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade
+        <value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
 			your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3922,7 +3922,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires in One Day</shortDescription>
-        <value>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3931,7 +3931,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires Soon</shortDescription>
-        <value>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3940,7 +3940,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires Today</shortDescription>
-        <value>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>

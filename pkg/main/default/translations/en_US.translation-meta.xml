@@ -2104,25 +2104,25 @@
         <name>Tonga</name>
     </customLabels>
     <customLabels>
-        <label>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade
+        <label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
 			your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
         <name>TrialAccountExpired</name>
     </customLabels>
     <customLabels>
-        <label>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <label>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
         <name>TrialAccountExpiresOneDay</name>
     </customLabels>
     <customLabels>
-        <label>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <label>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
         <name>TrialAccountExpiresSoon_1</name>
     </customLabels>
     <customLabels>
-        <label>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <label>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
         <name>TrialAccountExpiresToday</name>
