@@ -71,7 +71,7 @@
     var navEvt = $A.get('e.force:navigateToURL');
     if (!$A.util.isEmpty(navEvt)) {
       navEvt.setParams({
-        'url': 'https://www.docusign.com/solutions/salesforce'
+        'url': 'https://go.docusign.com/cobranded/salesforce/essentials/'
       });
       navEvt.fire();
     }
