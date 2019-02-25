@@ -87,5 +87,23 @@
                 }
             }
         );
+    },
+
+    createShareLinkComponent: function(component, event, helper) {
+        $A.createComponent(
+            "c:AgreementsShareLink",
+            {
+                "showModal" : true,
+            },
+            function(componentBody) {
+                if(component.isValid()) {
+                    var targetCmp = component.find('shareLinkModal');
+                    var body = targetCmp.get("v.body");
+                    targetCmp.set("v.body", []);
+                    body.push(componentBody);
+                    targetCmp.set("v.body", body);
+                }
+            }
+        );
     }
 })

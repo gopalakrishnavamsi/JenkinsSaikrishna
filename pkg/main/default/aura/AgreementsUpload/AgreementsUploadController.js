@@ -1,4 +1,3 @@
-
 ({
     onInit: function(component, event, helper) {
         var agreementVersions = [{name: "FreshSoftware-Quote.docx", currentVersion: "Current - 1/1/2019"},

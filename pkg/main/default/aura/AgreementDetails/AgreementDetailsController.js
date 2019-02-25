@@ -37,5 +37,9 @@
 
     showRenameModal: function(component, event, helper) {
         helper.createRenameComponent(component, event, helper);
+    },
+
+    showShareLinkModal: function(component, event, helper) {
+        helper.createShareLinkComponent(component, event, helper);
     }
 })
