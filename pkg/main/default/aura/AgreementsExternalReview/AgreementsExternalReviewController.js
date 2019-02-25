@@ -37,10 +37,8 @@
         if (currentStep === '2') {
             //If successful hide the component
             helper.hide(component, event, helper);
-
             //set the current step to 1
             component.set('v.currentStep', '1');
-
             //display toast notification
             helper.showToast(component, 'Your document has been sent for review and copied to the DocuSign Agreements space', 'success')
         }

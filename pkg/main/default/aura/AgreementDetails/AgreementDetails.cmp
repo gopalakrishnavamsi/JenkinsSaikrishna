@@ -5,27 +5,21 @@
     <aura:attribute name="timelineDetails" type="List" access="global"/>
     <aura:attribute name="fileDetails" type="Map" access="global"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
-    <aura:attribute name="showSendForApprovalModal" type="Boolean" access="private"/>
-    <aura:attribute name="showSendForExternalReviewModal" type="Boolean" access="private"/>
-    <aura:attribute name="showDeleteModal" type="Boolean" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
-    <!-- subComponents -->
-    <div aura:id="internalApprovalModal" class="{!if(v.showSendForApprovalModal, '', 'slds-hide')}">
-        <c:AgreementsInternalReview aura:id="internalApprovalModal"
-                                    showModal="{!v.showSendForApprovalModal}"/>
+    <!-- placeholder divs for dynamic component generation -->
+    <div aura:id="internalApprovalModal">
     </div>
 
-    <div aura:id="externalReviewModal" class="{!if(v.showSendForExternalReviewModal, '', 'slds-hide')}">
-        <c:AgreementsExternalReview aura:id="externalReviewModal"
-                                   showModal="{!v.showSendForExternalReviewModal}"/>
+    <div aura:id="externalReviewModal">
     </div>
 
-    <div aura:id="deleteModal" class="{!if(v.showDeleteModal, '', 'slds-hide')}">
-        <c:DeleteAgreement aura:id="deleteModal"
-                           showModal="{!v.showDeleteModal}"/>
+    <div aura:id="deleteModal">
+    </div>
+
+    <div aura:id="uploadModal">
     </div>
 
     <!-- body -->
@@ -63,10 +57,12 @@
                                   menuAlignment="right">
                 <lightning:menuItem label="View Redlines" value="View Redlines"/>
                 <lightning:menuItem label="Download" value="Download"/>
-                <lightning:menuItem label="Upload New Version" value="Upload New Version"/>
+                <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
+                                    onactive="{!c.showUploadModal}" />
+
                 <lightning:menuItem label="Rename" value="Rename"/>
                 <lightning:menuItem label="Delete" value="Delete"
-                                    onactive="{!c.showDeleteModal}"/>
+                                    onactive="{!c.showDeleteModal}" />
             </lightning:buttonMenu>
             <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small"
                                   menuAlignment="right">

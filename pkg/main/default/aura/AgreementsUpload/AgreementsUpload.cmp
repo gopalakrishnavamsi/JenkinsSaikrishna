@@ -1,0 +1,83 @@
+<aura:component description="AgreementsUpload">
+
+    <!-- attributes -->
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="agreementVersions" type="Object[]"/>
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <c:strike_modal aura:id="uploadAgreementsModal"
+                    title="{!$Label.c.UploadNewVersion}"
+                    showModal="{!v.showModal}">
+
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col">
+                    <div class="slds-text-body_small slds-text-align--center">
+                        {!$Label.c.UploadMessage}
+                    </div>
+                </div>
+
+                <div class="slds-col slds-p-top_medium">
+                    <div class="slds-text-body_small">
+                        <table class="slds-table">
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="{!$Label.c.AgreementName}">
+                                        {!$Label.c.AgreementName}
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="{!$Label.c.CurrentVersion}">
+                                        {!$Label.c.CurrentVersion}
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <aura:iteration items="{!v.agreementVersions}" var="agreementVersion">
+                                <tr class="slds-hint-parent">
+                                    <td data-label="{!$Label.c.AgreementName}">
+                                        <div class="slds-media slds-media_small slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <span class="slds-avatar slds-avatar_small">
+                                                    <lightning:icon iconName="doctype:word" size="medium"/>
+                                                </span>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p>{!agreementVersion.name}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="{!$Label.c.CurrentVersion}">
+                                        {!agreementVersion.currentVersion}
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-top_medium">
+                    <div class="uploadWidget">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelButtonClicked}"
+                              label="{!$Label.c.Cancel}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_brand" onclick="{!c.uploadButtonClicked}"
+                              label="{!$Label.c.Upload}"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>
+

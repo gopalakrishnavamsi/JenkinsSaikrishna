@@ -4729,4 +4729,32 @@
         <shortDescription>DeleteButtonLabel</shortDescription>
         <value>Delete</value>
     </labels>
+    <labels>
+        <fullName>UploadNewVersion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>UploadNewVersion</shortDescription>
+        <value>Upload a New Version</value>
+    </labels>
+    <labels>
+        <fullName>UploadMessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>UploadMessage</shortDescription>
+        <value>Uploading a file will create a new version of this document and update the agreement's activity timeline.</value>
+    </labels>
+    <labels>
+        <fullName>AgreementName</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>AgreementName</shortDescription>
+        <value>Agreement Name</value>
+    </labels>
+    <labels>
+        <fullName>CurrentVersion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CurrentVersion</shortDescription>
+        <value>Current Version</value>
+    </labels>
 </CustomLabels>

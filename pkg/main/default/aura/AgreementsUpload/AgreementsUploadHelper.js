@@ -1,5 +1,6 @@
 ({
     close: function(component, event, helper) {
+        console.log('In destroy');
         component.destroy();
     },
 

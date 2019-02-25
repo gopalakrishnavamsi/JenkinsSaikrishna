@@ -22,7 +22,7 @@
         </div>
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
-            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.backButtonClicked}"
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelBut}"
                               label="{!$Label.c.Cancel}">
             </lightning:button>
             <lightning:button class="slds-button slds-button_destructive" onclick="{!c.nextButtonClicked}"

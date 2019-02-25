@@ -20,27 +20,18 @@
     },
 
 	showInternalApprovalModal: function(component, event, helper) {
-	    component.set('v.showSendForApprovalModal', true);
-    },
-
-    closeInternalApprovalModal: function(component, event, helper) {
-        component.set('v.showSendForApprovalModal', false);
+	    helper.createInternalApprovalComponent(component, event, helper);
     },
 
     showExternalReviewModal: function(component, event, helper) {
-        component.set('v.showSendForExternalReviewModal', true);
-    },
-
-    closeExternalReviewModal: function(component, event, helper) {
-        component.set('v.showSendForExternalReviewModal', false);
+        helper.createExternalReviewComponent(component, event, helper);
     },
 
     showDeleteModal: function(component, event, helper) {
-        component.set('v.showDeleteModal', true);
+        helper.createDeleteComponent(component, event, helper);
     },
 
-    closeDeleteModal: function(component, event, helper) {
-        component.set('v.showDeleteModal', false);
+    showUploadModal: function(component, event, helper) {
+        helper.createUploadComponent(component, event, helper);
     }
-
 })

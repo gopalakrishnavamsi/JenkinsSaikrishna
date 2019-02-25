@@ -2555,6 +2555,22 @@
         <label>Delete</label>
         <name>DeleteButtonLabel</name>
     </customLabels>
+    <customLabels>
+        <label>Upload a New Version</label>
+        <name>UploadNewVersion</name>
+    </customLabels>
+    <customLabels>
+        <label>Uploading a file will create a new version of this document and update the agreement's activity timeline.</label>
+        <name>UploadMessage</name>
+    </customLabels>
+    <customLabels>
+        <label>Agreement Name</label>
+        <name>AgreementName</name>
+    </customLabels>
+    <customLabels>
+        <label>Current Version</label>
+        <name>CurrentVersion</name>
+    </customLabels>
     <customPageWebLinks>
         <label>DocuSign Setup</label>
         <name>Setup</name>
