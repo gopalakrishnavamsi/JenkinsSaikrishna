@@ -1,8 +1,14 @@
 module.exports = {
+    parserOptions: {
+    ecmaVersion: 2011,
+    ecmaFeatures: {
+      jsx: true
+    },
+    sourceType: "module"
+  },
   env: {
     browser: true,
     commonjs: true,
-    es6: true,
     node: true,
   },
   extends: 'airbnb-base',
@@ -11,7 +17,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: 2018,
+
   },
   rules: {
   },
