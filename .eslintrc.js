@@ -1,24 +1,14 @@
 module.exports = {
-    parserOptions: {
-    ecmaVersion: 2011,
-    ecmaFeatures: {
-      jsx: true
-    },
-    sourceType: "module"
-  },
   env: {
-    browser: true,
-    commonjs: true,
-    node: true,
+    browser: true
   },
-  extends: 'airbnb-base',
+  extends: 'eslint:recommended',
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
-  },
-  parserOptions: {
+    $A: 'readonly',
+    sforce: 'readonly',
 
   },
   rules: {
+
   },
 };
