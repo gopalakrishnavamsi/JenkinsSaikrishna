@@ -22,6 +22,9 @@
     <div aura:id="uploadModal">
     </div>
 
+    <div aura:id="renameModal">
+    </div>
+
     <!-- body -->
     <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-p-top--small slds-p-bottom--small slds-has-flexi-truncate">
         <div class="slds-col slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-bottom--small">
@@ -60,7 +63,8 @@
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                     onactive="{!c.showUploadModal}" />
 
-                <lightning:menuItem label="Rename" value="Rename"/>
+                <lightning:menuItem label="Rename" value="Rename"
+                                    onactive="{!c.showRenameModal}" />
                 <lightning:menuItem label="Delete" value="Delete"
                                     onactive="{!c.showDeleteModal}" />
             </lightning:buttonMenu>

@@ -33,5 +33,9 @@
 
     showUploadModal: function(component, event, helper) {
         helper.createUploadComponent(component, event, helper);
+    },
+
+    showRenameModal: function(component, event, helper) {
+        helper.createRenameComponent(component, event, helper);
     }
 })

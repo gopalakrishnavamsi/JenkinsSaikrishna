@@ -69,5 +69,23 @@
                 }
             }
         );
+    },
+
+    createRenameComponent: function(component, event, helper) {
+        $A.createComponent(
+            "c:AgreementsRename",
+            {
+                "showModal" : true,
+            },
+            function(componentBody) {
+                if(component.isValid()) {
+                    var targetCmp = component.find('renameModal');
+                    var body = targetCmp.get("v.body");
+                    targetCmp.set("v.body", []);
+                    body.push(componentBody);
+                    targetCmp.set("v.body", body);
+                }
+            }
+        );
     }
 })

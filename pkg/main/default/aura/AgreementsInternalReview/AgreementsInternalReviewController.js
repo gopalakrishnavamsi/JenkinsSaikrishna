@@ -92,7 +92,7 @@
             //set the current step to 1
             component.set('v.currentStep', '1');
             //display toast notification
-            helper.showToast(component, 'Your document has been sent for approval.', 'success')
+            helper.showToast(component, 'Your document has been sent for approval.', 'success');
         }
     }
 })
