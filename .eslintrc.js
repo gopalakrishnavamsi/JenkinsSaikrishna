@@ -1,14 +1,22 @@
 module.exports = {
+  extends: 'eslint:recommended',
   env: {
     browser: true
   },
-  extends: 'eslint:recommended',
+  parserOptions: {
+    ecmaVersion: 5,
+    ecmaFeatures: {
+      impliedStrict: true
+    }
+  },
   globals: {
     $A: 'readonly',
     sforce: 'readonly',
-
+    UIHelper: 'readonly',
+    stringUtils: 'readonly',
+    navUtils: 'readonly'
   },
   rules: {
-
-  },
+    'no-shadow': 'error'
+  }
 };
