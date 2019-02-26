@@ -61,7 +61,6 @@
             -->
             <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
                                   menuAlignment="right">
-                <lightning:menuItem label="View Redlines" value="View Redlines"/>
                 <lightning:menuItem label="Download" value="Download"/>
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                     onactive="{!c.showUploadModal}" />
