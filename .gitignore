@@ -10,4 +10,5 @@ ApexDocumentation/
 SfApexDocLog.txt
 SfApexDocs/
 .sfdx/
-
+node_modules/
+package-lock.json
