@@ -1,7 +1,7 @@
 ({
     resolveRecipient: function (component, recipient) {
         var self = this;
-        self.setLoading(component, true);
+        //self.setLoading(component, true);
         var sourceId = self.getSourceId(recipient);
         if ($A.util.isEmpty(sourceId)) return;
 
@@ -33,7 +33,7 @@
           } else {
             self.showToast(component, _getErrorMessage(response), 'error');
           }
-          self.setLoading(component, false);
+          //self.setLoading(component, false);
         });
         $A.enqueueAction(rr);
     },

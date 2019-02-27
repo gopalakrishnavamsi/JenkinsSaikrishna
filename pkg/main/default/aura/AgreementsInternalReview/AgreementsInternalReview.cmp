@@ -1,5 +1,5 @@
-<aura:component description="AgreementsInternalReview">
-    <!-- TODO Pill Label is returning blank when the user selects the lookup record for the first time -->
+<aura:component description="AgreementsInternalReview"
+                controller="SendingController">
 
     <!-- attributes -->
     <aura:attribute name="recipients" type="Object[]"/>
