@@ -1,2 +1,4 @@
-.THIS {
+.THIS .ds-remove .slds-button__icon {
+    pointer-events: none;
+    fill: t(colorTextError);
 }

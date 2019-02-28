@@ -23,6 +23,7 @@
         component.set('v.recipients', recipients);
     },
     onApproverDrag : function(component, event, helper) {
+        event.dataTransfer.setData('Text', '');
         if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
             component.set('v.draggedId', parseInt(event.currentTarget.id));
             console.log('dragged id '+parseInt(event.currentTarget.id));
