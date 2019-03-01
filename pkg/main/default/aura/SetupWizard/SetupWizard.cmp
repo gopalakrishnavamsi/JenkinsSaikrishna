@@ -110,7 +110,7 @@
                                 <p class="slds-m-top_x-small">
                                     <lightning:formattedRichText value="{!$Label.c.HelpSection1}"/>
                                 </p>
-                                <p class="slds-m-top_x-small">
+                                <p class="slds-m-top_medium">
                                     <lightning:formattedRichText value="{!$Label.c.HelpSection2}"/>
                                 </p>
                             </div>
