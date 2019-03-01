@@ -26,5 +26,9 @@
         } else {
           helper.hideToast(component);
         }
-      }
+    },
+
+    importAgreements: function(component, event, helper) {
+        helper.createImportComponent(component, event, helper);
+    }
 })

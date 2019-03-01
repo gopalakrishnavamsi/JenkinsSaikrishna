@@ -10,10 +10,16 @@
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
     <aura:attribute name="noData" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="visualforce" type="Boolean"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
+
+    <div aura:id="importModal">
+    </div>
 
     <!-- body -->
     <div class="boxBackground slds-box">
@@ -40,7 +46,7 @@
                         </div>
                     </div>
                     <div class="slds-col">
-                        <button class="slds-button slds-button_neutral">{!$Label.c.ImportButtonLabel}</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
                     </div>
                 </div>
             </li>

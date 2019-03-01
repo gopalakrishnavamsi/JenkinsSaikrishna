@@ -34,6 +34,9 @@ License: BSD 3-Clause License
         helper.modalTransitioner(component, params);
     },
     modalTransitioner: function(component, params){
+        if (!component.isValid()) {
+            return;
+        }
         var targetEl = component.find(params.targetEl).getElement();
 
         if (targetEl == null) {
