@@ -48,7 +48,6 @@
       if (!$A.util.isEmpty(navEvt)) {
            navEvt.setParams({
            'url': 'https://go.docusign.com/PARTNERS/SALESFORCE/?TGR=ESSENTIALS-COBRANDED'
-           }
            });
        navEvt.fire();
       }
