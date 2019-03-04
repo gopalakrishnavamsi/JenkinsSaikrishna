@@ -33,22 +33,6 @@ public class AccountServiceTest {
 		}
 	}
 
-	@IsTest
-	static void test_getAccount_expired() {
-		Test.setMock(HttpCalloutMock.class, new ExpiredAccountMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				AccountService.getAccount();
-				throw new AssertException('Expected getAccount to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.TrialAccountExpired, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
 	public class TrialAccountMock extends OAuthTokenMock {
 		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
@@ -118,12 +102,6 @@ public class AccountServiceTest {
 			new Account.Billing(today, today.addDays(2)),
 			Account.ConnectPermission.Full);
 
-		// Expired yesterday
-		Account account4 = new Account(UUID.randomUUID(), 1234L, 'Unit test 4',
-			new Account.Plan(DocuSign.TRIAL_PLAN_ID, 'Plan 4', today, today.addDays(-1)),
-			new Account.Billing(today, today.addDays(-1)),
-			Account.ConnectPermission.Full);
-
 		// Expires in > 7 days
 		Account account5 = new Account(UUID.randomUUID(), 1234L, 'Unit test 5',
 			new Account.Plan(DocuSign.TRIAL_PLAN_ID, 'Plan 5', today, today.addDays(10)),
@@ -140,7 +118,6 @@ public class AccountServiceTest {
 		Account.TrialStatus result1 = AccountService.getTrialStatus(account1); // today
 		Account.TrialStatus result2 = AccountService.getTrialStatus(account2); // 1 day
 		Account.TrialStatus result3 = AccountService.getTrialStatus(account3); // 2 days
-		Account.TrialStatus result4 = AccountService.getTrialStatus(account4); // expired
 		Account.TrialStatus result5 = AccountService.getTrialStatus(account5); // > 7 days
 		Account.TrialStatus result6 = AccountService.getTrialStatus(account6); // not trial
 		Test.stopTest();
@@ -156,10 +133,6 @@ public class AccountServiceTest {
 		System.assertNotEquals(null, result3);
 		System.assert(!result3.isExpired);
 		System.assertEquals(String.format(Label.TrialAccountExpiresSoon_1, new List<String> { '2' }), result3.message);
-
-		System.assertNotEquals(null, result4);
-		System.assert(result4.isExpired);
-		System.assertEquals(Label.TrialAccountExpired, result4.message);
 
 		System.assertNotEquals(null, result5);
 		System.assert(!result5.isExpired);
