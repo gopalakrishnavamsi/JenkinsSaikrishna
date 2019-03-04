@@ -91,9 +91,6 @@ global with sharing class AccountService {
 				Account a = AccountAPI.getInstance().getAccount();
 				if (a.isTrial) {
 					Account.TrialStatus ts = getTrialStatus(a);
-					if (ts.isExpired) {
-						throw new DocuSignException(ts.message);
-					}
 					currentAccount = a.withTrialStatus(ts);
 				} else {
 					currentAccount = a;
