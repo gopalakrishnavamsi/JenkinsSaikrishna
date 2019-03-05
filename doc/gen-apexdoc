@@ -1,4 +1,4 @@
 #!/bin/sh
 
-java -jar SfApexDoc.jar -s ../src/classes -t . -p global -a author.properties -h home.html
+java -jar SfApexDoc.jar -s ../pkg/main/default/classes -t . -p global -a author.properties -h home.html
 #open ./SfApexDocs/index.html

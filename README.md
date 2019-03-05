@@ -13,6 +13,10 @@ Salesforce DX is used to build, test, and deploy this project.
 
 Once you have completed the initial scratch org setup, you can sync any local changes with that org using the `sfdx force:source:push`.
 
+## Installing and running ESLint (pre-requisites : have npm installed)
+To install ESLint in mac run - 'npm install'
+To run linting run - 'npm run lint'
+
 ## Testing Notes
 - Run unit tests with coverage: `sfdx force:apex:test:run -c -r human -w 5`. This will wait 5 minutes for the test run to complete. You can also execute this command asynchronously by omitting `-w #`.
 - Default test scratch orgs should use the configuration located at `etc/test.json`.
@@ -29,3 +33,9 @@ When uploading the managed package, you must set the post-install splash page. F
 1. Click "Upload".
 
 ![Package Upload](./img/package_upload.png)
+
+## DX Notes
+To clean up any leftover orgs/configs in your local mac
+- Go to .sfdx folder in your home directory and clean up the .json files associated with the particular org causing the issue. No CLI command with DX yet to do the cleanup.
+
+

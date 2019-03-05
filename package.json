@@ -1,0 +1,26 @@
+{
+  "name": "SalesforceCore",
+  "version": "1.0.0",
+  "description": "This is the new DocuSign for Salesforce base package. This is a lighter version of DFS that is installable on Salesforce Essentials organizations. This package also contains the Apex Toolkit.",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  },
+  "scripts": {
+    "lint": "eslint ./; exit 0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.docusignhq.com/Integrations/SalesforceCore.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

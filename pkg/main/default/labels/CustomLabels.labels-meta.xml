@@ -1824,7 +1824,8 @@
         <shortDescription>Help section 2</shortDescription>
         <value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
 			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;.</value>
+			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot;
+            target=&quot;_blank&quot;&gt;here&lt;/a&gt;</value>
     </labels>
     <labels>
         <fullName>HelpfulLinks</fullName>
@@ -3913,7 +3914,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expired</shortDescription>
-        <value>Your free trial has ended. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot; target=&quot;_blank&quot;&gt;Upgrade
+        <value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
 			your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3922,7 +3923,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires in One Day</shortDescription>
-        <value>You have one day remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3931,7 +3932,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires Soon</shortDescription>
-        <value>You have {0} days remaining on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>
@@ -3940,7 +3941,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>Trial Account Expires Today</shortDescription>
-        <value>Today is last day on your trial. &lt;a href=&quot;https://www.docusign.com/solutions/salesforce&quot;
+        <value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
 			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
     </labels>
     <labels>

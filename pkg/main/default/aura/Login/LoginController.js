@@ -45,18 +45,13 @@
   },
 
   swapLogInState: function (component, event, helper) {
-    var showingTrialFields = component.get('v.showTrialFields');
-
-    component.set('v.showTrialFields', !showingTrialFields);
-
-    setTimeout($A.getCallback(function () {
-      if (showingTrialFields) {
-        component.find('login-input').focus();
-      } else {
-        helper.prepareTrial(component);
-        component.find('trial-input').focus();
+      var navEvt = $A.get('e.force:navigateToURL');
+      if (!$A.util.isEmpty(navEvt)) {
+           navEvt.setParams({
+           'url': 'https://go.docusign.com/PARTNERS/SALESFORCE/?TGR=ESSENTIALS-COBRANDED'
+           });
+       navEvt.fire();
       }
-    }), 1);
   },
 
   continueToLogIn: function (component) {
@@ -72,7 +67,7 @@
     var navEvt = $A.get('e.force:navigateToURL');
     if (!$A.util.isEmpty(navEvt)) {
       navEvt.setParams({
-        'url': 'https://www.docusign.com/solutions/salesforce'
+        'url': 'https://go.docusign.com/cobranded/salesforce/essentials/'
       });
       navEvt.fire();
     }
