@@ -1,6 +1,15 @@
+/**
+ * String utility functions.
+ * @namespace stringUtils
+ */
 window.stringUtils = (function () {
-
-  var _format = function (s) {
+  /**
+   * Formats a string.
+   * @param s {string} The format string, e.g. 'Example {0} string {1}'.
+   * @param arguments {...*} Replacement arguments.
+   * @returns {string} The formatted string.
+   */
+  var format = function (s) {
     if (s) {
       var outerArguments = arguments;
       return s.replace(/{(\d+)}/g, function () {
@@ -10,7 +19,13 @@ window.stringUtils = (function () {
     return '';
   };
 
-  var _formatSize = function (size, precision) {
+  /**
+   * Formats a byte size. For example, 2048 bytes will be formatted as '2 kB'.
+   * @param size {number} The size in bytes.
+   * @param precision {number} Decimal precision [default 2].
+   * @returns {string} The formatted size string.
+   */
+  var formatSize = function (size, precision) {
     if (!size || typeof size !== 'number' || size < 0) {
       return '0 B';
     }
@@ -23,7 +38,12 @@ window.stringUtils = (function () {
     return parseFloat((size / Math.pow(constant, factor)).toFixed(p)) + ' ' + exponents[factor];
   };
 
-  var _unescapeHtml = function (s) {
+  /**
+   * Unescapes an HTML string, i.e. '&amp;' will be replaced with '&', '&lt;' with '<', and '&gt;' with '>'.
+   * @param s {string} The HTML to unescape.
+   * @returns {string} The unescaped HTML.
+   */
+  var unescapeHtml = function (s) {
     if (!s) {
       return '';
     }
@@ -33,9 +53,9 @@ window.stringUtils = (function () {
       .replace(/&gt;/g, '>');
   };
 
-  return {
-    format: _format,
-    formatSize: _formatSize,
-    unescapeHtml: _unescapeHtml
-  };
+  return Object.freeze({
+    format: format,
+    formatSize: formatSize,
+    unescapeHtml: unescapeHtml
+  });
 }());

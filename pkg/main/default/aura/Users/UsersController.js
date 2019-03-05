@@ -4,15 +4,14 @@
     helper.getUsers(component, helper);
   },
 
-  showAddUserModal: function (component, event, helper) {
+  showAddUserModal: function (component) {
     component.set('v.showAddUserModal', true);
     window.setTimeout($A.getCallback(function () {
       component.find('lookup').focus();
     }), 1);
   },
 
-  cancelAddUser: function (component, event, helper) {
-    var labels = component.labels;
+  cancelAddUser: function (component) {
     component.set('v.showAddUserModal', false);
     component.set('v.lookupValue', null);
     component.find('lookup').set('v.error', false);
@@ -20,14 +19,14 @@
     component.set('v.formData', {});
   },
 
-  showRemoveUser: function (component, event, helper) {
+  showRemoveUser: function (component, event) {
     var index = event.getSource().get('v.value');
     var user = component.find('table').get('v.data').rows[index];
     component.set('v.formData.user', user);
     component.set('v.showRemoveUserModal', true);
   },
 
-  hideRemoveUserModal: function (component, event, helper) {
+  hideRemoveUserModal: function (component) {
     component.set('v.showRemoveUserModal', false);
   },
 
@@ -51,7 +50,7 @@
       lookup.set('v.error', false);
     }
 
-    inputs.forEach(function (input, index) {
+    inputs.forEach(function (input) {
       // Force error states from inputs
       if (input.focus) input.focus();
       if (input.blur) input.blur();

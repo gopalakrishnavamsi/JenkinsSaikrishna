@@ -1,6 +1,13 @@
+/**
+ * Navigation utility methods.
+ * @namespace navUtils
+ */
 window.navUtils = (function () {
-
-  var _isInIFrame = function () {
+  /**
+   * Determines whether this is running in a DocuSign for Salesforce iFrame.
+   * @returns {boolean} True if this is running in our iFrame, false otherwise.
+   */
+  var isInIFrame = function () {
     var inIFrame;
     try {
       // Check to see if we can talk to the parent.
@@ -15,21 +22,26 @@ window.navUtils = (function () {
     return typeof sforce !== 'undefined' && sforce && (!!sforce.one);
   };
 
-  var _isInNewWindow = function () {
-    return (!!window.opener);
-  };
-
-  var _navigateToSObject = function (id, pathPrefix) {
-    if (_isInIFrame()) {
+  /**
+   * Navigates to a Salesforce object.
+   * @param id {string} The ID of the target object.
+   * @param pathPrefix {string} The path prefix, if any.
+   */
+  var navigateToSObject = function (id, pathPrefix) {
+    if (isInIFrame()) {
       window.parent.navUtils.navigateToSObject(id, pathPrefix);
     } else if (_isLightningOrMobile()) {
       sforce.one.navigateToSObject(id);
     } else {
-      window.location.href = (!!pathPrefix) ? pathPrefix + '/' + id : '/' + id;
+      window.location.href = (pathPrefix) ? pathPrefix + '/' + id : '/' + id;
     }
   };
 
-  var _navigateToUrl = function (url) {
+  /**
+   * Fires a URL navigation event.
+   * @param url {string} The URL to navigate to.
+   */
+  var navigateToUrl = function (url) {
     var navEvt = $A.get('e.force:navigateToURL');
     if (!$A.util.isEmpty(navEvt)) {
       navEvt.setParams({
@@ -39,11 +51,9 @@ window.navUtils = (function () {
     }
   };
 
-  return {
-    isInIFrame: _isInIFrame,
-    isLightningOrMobile: _isLightningOrMobile,
-    isInNewWindow: _isInIFrame,
-    navigateToSObject: _navigateToSObject,
-    navigateToUrl: _navigateToUrl
-  };
+  return Object.freeze({
+    isInIFrame: isInIFrame,
+    navigateToSObject: navigateToSObject,
+    navigateToUrl: navigateToUrl
+  });
 }());

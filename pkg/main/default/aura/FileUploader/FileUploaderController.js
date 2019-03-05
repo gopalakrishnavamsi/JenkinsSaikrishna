@@ -1,5 +1,5 @@
 ({
-  onInitialize: function (component, event, helper) {
+  onInitialize: function (component) {
     component.set('v.uiHelper', new UIHelper(component));
   },
 

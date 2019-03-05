@@ -8,7 +8,7 @@
     helper.getLayouts(component);
   },
 
-  makeDirty: function (component, event, helper) {
+  makeDirty: function (component) {
     component.set('v.isDirty', true);
   },
 

@@ -1,5 +1,5 @@
 ({
-  getState: function (component, event, helper) {
+  getState: function (component) {
     var self = this;
     this.invokeAction(component, component.get('c.getLogin'), null, function (login) {
       var isLoggedIn = login && login.status === 'Success';

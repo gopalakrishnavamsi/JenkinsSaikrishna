@@ -1,15 +1,9 @@
 ({
-  initialize: function (component, event, helper) {
+  initialize: function (component) {
     component.set('v.isEmailLocalizationEnabled', !$A.util.isEmpty(component.get('v.emailLocalizations')));
-    //
-    // var recipient = component.get('v.recipient');
-    // if (!$A.util.isUndefinedOrNull(recipient) && !$A.util.isUndefinedOrNull(recipient.source) && !$A.util.isEmpty(recipient.source.typeName)) {
-    //   component.set('v.recordType', recipient.source.typeName.toLowerCase());
-    // }
   },
 
-  handleEditAccessAuthentication: function (component, event, helper) {
-    //component.getEvent('onEditAccessAuthentication').fire();
+  handleEditAccessAuthentication: function (component) {
     component.find('access-authentication-modal').set('v.showModal', true);
 
     setTimeout($A.getCallback(function () {
@@ -17,7 +11,7 @@
     }), 250);
   },
 
-  handleEditPrivateMessage: function (component, event, helper) {
+  handleEditPrivateMessage: function (component) {
     //component.getEvent('onEditPrivateMessage').fire();
     component.find('private-message-modal').set('v.showModal', true);
 
@@ -26,7 +20,7 @@
     }), 250);
   },
 
-  handleEditCustomEmailMessage: function (component, event, helper) {
+  handleEditCustomEmailMessage: function (component) {
     /*component.find('language-input').get('v.value');
     component.find('subject-input').get('v.value');
     component.find('body-input').get('v.value');
@@ -38,7 +32,7 @@
     }), 250);
   },
 
-  handleRecipientIdChange: function (component, event, helper) {
+  handleRecipientIdChange: function (component) {
     var r = component.get('v.recipient');
     var sId = component.get('v.sourceId');
     if (r && sId && (!r.source || (r.source.id !== sId))) {
@@ -51,19 +45,19 @@
     }
   },
 
-  closeAccessAuthenticationModal: function (component, event, helper) {
+  closeAccessAuthenticationModal: function (component) {
     component.find('access-authentication-modal').set('v.showModal', false);
   },
 
-  closePrivateMessageModal: function (component, event, helper) {
+  closePrivateMessageModal: function (component) {
     component.find('private-message-modal').set('v.showModal', false);
   },
 
-  closeCustomEmailMessageModal: function (component, event, helper) {
+  closeCustomEmailMessageModal: function (component) {
     component.find('custom-email-message-modal').set('v.showModal', false);
   },
 
-  onEmailLanguageChange: function (component, event, helper) {
+  onEmailLanguageChange: function (component) {
     var newSelectedLanguage = component.find('email-language').get('v.value');
     var currentSelectedLanguage = component.get('v.selectedLanguage');
     if (newSelectedLanguage !== currentSelectedLanguage) {

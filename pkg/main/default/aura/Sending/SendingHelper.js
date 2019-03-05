@@ -76,10 +76,10 @@
   },
 
   addDocumentProperties: function (doc, selected) {
-    if (!!doc) {
-      doc.selected = !!selected;
-      doc.formattedSize = !!doc.size ? stringUtils.formatSize(doc.size) : '';
-      doc.formattedLastModified = !!doc.lastModified ? new Date(doc.lastModified).toLocaleString() : '';
+    if (doc) {
+      doc.selected = selected === true;
+      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
+      doc.formattedLastModified = doc.lastModified ? new Date(doc.lastModified).toLocaleString() : '';
     }
     return doc;
   },
@@ -215,7 +215,7 @@
     var docs = [];
     if (!$A.util.isEmpty(documents)) {
       documents.forEach(function (d) {
-        if (!!d.selected) {
+        if (d.selected) {
           docs.push({
             sequence: sequence++,
             type: d.type,

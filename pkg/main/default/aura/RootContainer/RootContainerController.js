@@ -1,5 +1,5 @@
 ({
-  onToast: function (component, event, helper) {
+  onToast: function (component, event) {
     event.stopPropagation();
     var toast = component.find('ds-toast');
     var params = event.getParams();
@@ -17,7 +17,7 @@
     }
   },
 
-  onLoading: function (component, event, helper) {
+  onLoading: function (component, event) {
     event.stopPropagation();
     var params = event.getParams();
     component.set('v.loading', params && params.isLoading === true);

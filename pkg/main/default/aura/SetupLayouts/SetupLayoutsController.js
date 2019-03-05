@@ -1,9 +1,9 @@
 ({
-  onCancel: function (component, event, helper) {
+  onCancel: function (component) {
     component.set('v.showExitModal', true);
   },
 
-  onConfirmCancel: function (component, event, helper) {
+  onConfirmCancel: function (component) {
     var navToSection = component.getEvent('exitClicked');
     component.set('v.showExitModal', false);
     navToSection.setParams({
@@ -12,7 +12,7 @@
     navToSection.fire();
   },
 
-  onContinue: function (component, event, helper) {
+  onContinue: function (component) {
     var finishClicked = component.getEvent('finishClicked');
     finishClicked.setParams({
       showNextStepsPopup: true

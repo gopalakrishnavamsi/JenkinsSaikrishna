@@ -1,9 +1,9 @@
 ({
-  close: function (component, event, helper) {
+  close: function (component) {
     component.set('v.showToast', false);
   },
 
-  show: function (component, event, helper) {
+  show: function (component) {
     component.set('v.showToast', true);
   }
 });

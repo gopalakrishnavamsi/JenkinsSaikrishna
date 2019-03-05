@@ -44,7 +44,7 @@
         lastName: user.lastName,
         name: user.name,
         email: user.email,
-        admin: !!user.canManageAccount ? checkIcon : null,
+        admin: user.canManageAccount ? checkIcon : null,
         remove: {
           'type': 'lightning:buttonIcon', 'attributes': {
             'value': index,
@@ -83,7 +83,7 @@
 
     uiHelper.invokeAction(component.get('c.getUser'), {userId: userId}, function (user) {
       if ($A.util.isEmpty(user)) {
-        helper.showToast(component, $A.get('$Label.c.UserNotFound'), 'error');
+        uiHelper.showToast($A.get('$Label.c.UserNotFound'), 'error');
       } else {
         var userMatches = users.filter(function (u) {
           return u.sourceId.indexOf(user.Id) === 0;

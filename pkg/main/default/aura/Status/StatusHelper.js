@@ -64,7 +64,6 @@
       if (!$A.util.isEmpty(errors)) {
         errMsg = errors[0].message;
       }
-      console.error(errMsg);
       component.set('v.errorMessage', errMsg);
     }
   },

@@ -4,7 +4,7 @@
     helper.getSettings(component);
   },
 
-  onCancel: function (component, event, helper) {
+  onCancel: function (component) {
     component.set('v.showExitModal', true);
   },
 

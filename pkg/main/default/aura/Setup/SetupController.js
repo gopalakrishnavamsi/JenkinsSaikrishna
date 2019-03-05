@@ -24,7 +24,7 @@
     helper.goToStep(component, helper, 'landing', component.get('v.shouldShowNextSteps'));
   },
 
-  handleLoginEvent: function (component, event, helper) {
+  handleLoginEvent: function (component, event) {
     var steps = component.get('v.steps');
     var isLoggedIn = event.getParams().isLoggedIn;
     steps[0].status = isLoggedIn ? 'complete' : 'notStarted';
