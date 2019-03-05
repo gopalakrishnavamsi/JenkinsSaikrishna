@@ -44,7 +44,7 @@
     component.set('v.showLogoutModal', false);
   },
 
-  swapLogInState: function (component, event, helper) {
+  swapLogInState: function () {
       var navEvt = $A.get('e.force:navigateToURL');
       if (!$A.util.isEmpty(navEvt)) {
            navEvt.setParams({
