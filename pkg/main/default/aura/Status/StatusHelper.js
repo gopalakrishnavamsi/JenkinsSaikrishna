@@ -13,35 +13,10 @@
         if (!$A.util.isEmpty(envelopes)) {
           envelopes.forEach(function (envelope) {
             envelope.status = helper.getStatusLabel(envelope.status);
-            if (envelope.expires) {
-              envelope.expires = {
-                value: new Date(envelope.expires), daysBetween: helper.getDaysBetween(envelope.expires)
-              };
-            }
-            envelope.sent = {
-              value: new Date(envelope.sent), daysBetween: helper.getDaysBetween(envelope.sent)
-            };
-            envelope.completed = {
-              value: new Date(envelope.completed), daysBetween: helper.getDaysBetween(envelope.completed)
-            };
-            envelope.lastStatusUpdate = {
-              value: new Date(envelope.lastStatusUpdate), daysBetween: helper.getDaysBetween(envelope.lastStatusUpdate)
-            };
             envelope.recipients.forEach(function (recipient) {
               recipient.status = helper.getStatusLabel(recipient.status);
               recipient.completed = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
               recipient.sent = $A.util.isEmpty(recipient.sent) ? null : new Date(recipient.sent).toLocaleString().replace(/,/g, '');
-              if (recipient.sent) {
-                recipient.sent = {
-                  value: new Date(recipient.sent), daysBetween: helper.getDaysBetween(recipient.sent)
-                };
-              }
-
-              if (recipient.completed) {
-                recipient.completed = {
-                  value: new Date(recipient.completed), daysBetween: helper.getDaysBetween(recipient.completed)
-                };
-              }
             });
           });
         } else {
@@ -66,20 +41,6 @@
       }
       component.set('v.errorMessage', errMsg);
     }
-  },
-
-  getDaysBetween: function (date) {
-    if ($A.util.isEmpty(date)) {
-      return null;
-    }
-    var dateTime = (typeof(date.getTime) === 'undefined') ? this.getJavascriptDate(date).getTime() : date.getTime();
-    var today = new Date().getTime();
-    var oneDay = 24 * 60 * 60 * 1000;
-    return Math.floor(Math.abs((today - dateTime) / oneDay));
-  },
-
-  getJavascriptDate: function (date) {
-    return new Date(date);
   },
 
   getStatusLabel: function(status) {

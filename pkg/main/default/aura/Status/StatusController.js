@@ -1,5 +1,5 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
     component.set('v.loading', true);
     helper.initialize(component, helper);
   },
@@ -30,9 +30,7 @@
           var listView = listViews[0]; // TODO: Allow selection or default?
           var navEvent = $A.get('e.force:navigateToList');
           navEvent.setParams({
-            listViewId: listView.Id,
-            listViewName: listView.Name,
-            scope: listView.SobjectType
+            listViewId: listView.Id, listViewName: listView.Name, scope: listView.SobjectType
           });
           navEvent.fire();
         }
