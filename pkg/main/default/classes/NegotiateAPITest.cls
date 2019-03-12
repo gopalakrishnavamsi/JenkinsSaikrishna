@@ -31,7 +31,7 @@ public with sharing class NegotiateAPITest {
                 System.assertNotEquals(null, ex.error);
                 System.assertNotEquals(null, ex.error.code);
                 System.assertNotEquals(null, ex.error.description);
-               // System.assert(ex.error instanceof NegotiateAPI.Error);
+                System.assert(ex.error instanceof NegotiateAPI.Error);
                 System.assert(UUID.isNotEmpty(((NegotiateAPI.Error)ex.error).referenceId));
             }
 

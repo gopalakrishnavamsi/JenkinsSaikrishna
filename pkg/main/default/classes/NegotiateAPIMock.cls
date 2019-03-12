@@ -23,8 +23,9 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
         HttpResponse response = new HttpResponse();
         response.setHeader('Content-Type', 'application/json');
         String method = request.getMethod();
+        String path = request.getEndpoint();
 
-        if (success && method == 'POST') {
+        if (success && method == 'POST' && path.contains('folders')) {
             response.setStatusCode(201);
             response.setStatus('CREATED');
             response.setBody('{"Href":"https://unit.test/folders/' + FOLDER_ID + '"}');

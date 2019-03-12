@@ -1,5 +1,7 @@
 public with sharing class NegotiateAPI extends DocuSignAPI {
     // TODO: move common logic between GEN and Negotiate to parent class
+    public static final String PATH_FOLDER = 'folders';
+
     private static NegotiateAPI self = null;
 
     private NegotiateAPI(final Url baseUrl) {
@@ -8,7 +10,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     public static NegotiateAPI getInstance() {
         if (self == null) {
-            self = new NegotiateAPI(Credentials.getInstance().environment.scmApiBaseUrl); // TODO: as if now using Gen's
+            self = new NegotiateAPI(Credentials.getInstance().environment.scmApiBaseUrl); // TODO: as of now using Gen's
         }
         return self;
     }
@@ -71,11 +73,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
     }
 
+    // Create EOS folder in SpringCM Space
     public String createEOSFolder(String objectName, String objectId, String objectType) {
 
         RestAPI.Response response = post(
                 getBaseUrl(),
-                null,
+                new List<String> {PATH_FOLDER},
                 QueryString.empty,
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object> {
@@ -90,4 +93,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
         return ((String)body.get('Href')).substringAfterLast('/');
     }
+
+    //Get All Agreements from an EOS folder
 }
