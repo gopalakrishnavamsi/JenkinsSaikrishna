@@ -34,11 +34,25 @@ public with sharing class NegotiateAPITest {
                 System.assert(ex.error instanceof NegotiateAPI.Error);
                 System.assert(UUID.isNotEmpty(((NegotiateAPI.Error)ex.error).referenceId));
             }
+            Test.stopTest();
+        }
+    }
 
+    @IsTest
+    static void test_getAgreements_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            List<Agreement> result = NegotiateAPI.getInstance().getAgreements(NegotiateAPIMock.FOLDER_ID);
+            System.debug(result);
             Test.stopTest();
 
+            System.assertNotEquals(null, result);
+            System.assertEquals(1, result.size());
+            System.assertEquals('docusignlogerror7-23-18-1.docx', result.get(0).name);
         }
-
     }
 
 }
