@@ -62,22 +62,33 @@ public class Layout implements Comparable {
 		this.fullName = getFullName(type, namespace, name);
 	}
 
+	/**
+	 * A DocuSign action.
+	 */
 	public class Action {
+		/**
+		 * The type of the DocuSign action: <code>SEND</code> or <code>GEN</code>.
+		 */
 		@AuraEnabled
 		public String type { get; private set; }
+		/**
+		 * The name of the DocuSign action.
+		 */
 		@AuraEnabled
 		public String name { get; private set; }
-		@AuraEnabled
-		public Boolean isLightning { get; private set; }
 
+		/**
+		 * Constructs a DocuSign action.
+		 *
+		 * @param type The type of the DocuSign action: <code>SEND</code> or <code>GEN</code>.
+		 * @param name The name of the DocuSign action.
+		 */
 		public Action(
 			final String type,
-			final String name,
-			final Boolean isLightning) {
+			final String name) {
 
 			this.type = type;
 			this.name = name;
-			this.isLightning = isLightning;
 		}
 	}
 

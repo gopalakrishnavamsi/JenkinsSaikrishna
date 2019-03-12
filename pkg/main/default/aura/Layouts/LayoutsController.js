@@ -8,8 +8,8 @@
     helper.getLayouts(component);
   },
 
-  makeDirty: function (component) {
-    component.set('v.isDirty', true);
+  makeDirty: function (component, event, helper) {
+    component.set('v.isDirty', helper.isDirty(component.get('v.layouts')));
   },
 
   publishActions: function (component, event, helper) {

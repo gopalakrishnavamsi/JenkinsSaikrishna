@@ -2529,12 +2529,8 @@
         <name>SystemSender</name>
     </customLabels>
     <customLabels>
-        <label>Classic Sending</label>
-        <name>ClassicButton</name>
-    </customLabels>
-    <customLabels>
-        <label>Lightning and Mobile Sending</label>
-        <name>LightningAndMobileAction</name>
+        <label>Send with DocuSign Button</label>
+        <name>SendAction</name>
     </customLabels>
     <customLabels>
         <label>Salesforce Object</label>

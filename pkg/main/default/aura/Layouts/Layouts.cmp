@@ -35,16 +35,12 @@
 
         <div class="slds-grid slds-gutters slds-m-around--small slds-m-bottom--medium">
             <aura:if isTrue="{!not(empty(v.layouts))}">
-                <div class="slds-col slds-size--2-of-4 slds-text-heading--label">
+                <div class="slds-col slds-size--2-of-3 slds-text-heading--label">
                     {!$Label.c.Layout}
                 </div>
-                <div class="slds-col slds-size--1-of-4 slds-text-heading--label">
-                    {!$Label.c.LightningAndMobileAction}
+                <div class="slds-col slds-size--1-of-3 slds-text-heading--label">
+                    {!$Label.c.SendAction}
                 </div>
-                <div class="slds-col slds-size--1-of-4 slds-text-heading--label">
-                    {!$Label.c.ClassicButton}
-                </div>
-
                 <aura:set attribute="else">
                     <div class="slds-col slds-text-heading--label slds-text-color_weak">
                         {!$Label.c.NoLayoutsForSelectedObject}
@@ -55,24 +51,16 @@
 
         <aura:iteration items="{!v.layouts}" var="layout" indexVar="i">
             <div class="slds-grid slds-gutters slds-m-around--small">
-                <div class="slds-col slds-size--2-of-4">
+                <div class="slds-col slds-size--2-of-3">
                     {!layout.name}
                 </div>
-                <div class="slds-col slds-size--1-of-4">
+                <div class="slds-col slds-size--1-of-3">
                     <lightning:input type="checkbox"
                                      variant="label-hidden"
-                                     name="{!'action-lightning-' + i}"
+                                     name="{!'action-' + i}"
                                      label=""
                                      onchange="{!c.makeDirty}"
-                                     checked="{!layout.hasSendLightning}"/>
-                </div>
-                <div class="slds-col slds-size--1-of-4">
-                    <lightning:input type="checkbox"
-                                     variant="label-hidden"
-                                     name="{!'action-classic-' + i}"
-                                     label=""
-                                     onchange="{!c.makeDirty}"
-                                     checked="{!layout.hasSendClassic}"/>
+                                     checked="{!layout.hasSendAction}"/>
                 </div>
             </div>
         </aura:iteration>

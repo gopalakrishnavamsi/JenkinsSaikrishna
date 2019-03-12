@@ -82,12 +82,7 @@ private class MetadataControllerTest {
 					new List<Layout.Action> {
 						new Layout.Action(
 							Layout.ACTION_TYPE_SEND,
-							Layout.ACTION_NAME_SEND,
-							true),
-						new Layout.Action(
-							Layout.ACTION_TYPE_SEND,
-							Layout.ACTION_NAME_SEND,
-							false)
+							Layout.ACTION_NAME_SEND)
 					}),
 				new Layout(
 					Contact.getSObjectType(),
@@ -97,12 +92,7 @@ private class MetadataControllerTest {
 					new List<Layout.Action> {
 						new Layout.Action(
 							Layout.ACTION_TYPE_SEND,
-							Layout.ACTION_NAME_SEND,
-							true),
-						new Layout.Action(
-							Layout.ACTION_TYPE_SEND,
-							Layout.ACTION_NAME_SEND,
-							false)
+							Layout.ACTION_NAME_SEND)
 					})
 			};
 

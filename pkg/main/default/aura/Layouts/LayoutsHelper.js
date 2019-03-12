@@ -7,21 +7,23 @@
     });
   },
 
-  getActions: function (layout) {
-    var result = {
-      classic: false, lightning: false
-    };
+  hasSendAction: function (layout) {
     if (!$A.util.isUndefinedOrNull(layout) && !$A.util.isEmpty(layout.actions)) {
       for (var i = 0; i < layout.actions.length; i++) {
         var action = layout.actions[i];
         if (action.type === 'SEND') {
-          if (action.isLightning) {
-            result.lightning = true;
-          } else {
-            result.classic = true;
-          }
+          return true;
         }
       }
+    }
+    return false;
+  },
+
+  copyLayout: function (layout) {
+    var result = null;
+    if (!$A.util.isUndefinedOrNull(layout)) {
+      result = JSON.parse(JSON.stringify(layout));
+      delete result.original;
     }
     return result;
   },
@@ -31,9 +33,9 @@
     if (!$A.util.isEmpty(layouts)) {
       for (var i = 0; i < layouts.length; i++) {
         var layout = layouts[i];
-        var actions = this.getActions(layout);
-        layout.hasSendClassic = actions.classic;
-        layout.hasSendLightning = actions.lightning;
+        delete layout.original;
+        layout.hasSendAction = layout.hasOwnProperty('hasSendAction') ? layout.hasSendAction : this.hasSendAction(layout);
+        layout.original = this.copyLayout(layout);
         result.push(layout);
       }
     }
@@ -48,40 +50,59 @@
     });
   },
 
-  getLayoutsJson: function (layouts, sendActionName) {
+  isDirty: function (layouts) {
+    if (!$A.util.isEmpty(layouts)) {
+      for (var i = 0; i < layouts.length; i++) {
+        if (this.isLayoutDirty(layouts[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  },
+
+  isLayoutDirty: function (layout) {
+    return (!$A.util.isUndefinedOrNull(layout) && !$A.util.isUndefinedOrNull(layout.original) && layout.hasSendAction !== layout.original.hasSendAction);
+  },
+
+  getLayoutsToUpdate: function (layouts, sendActionName) {
     var ls = [];
     if (!$A.util.isEmpty(layouts)) {
       for (var i = 0; i < layouts.length; i++) {
-        var layout = layouts[i];
+        if (!this.isLayoutDirty(layouts[i])) continue;
+        var layout = this.copyLayout(layouts[i]);
         layout.actions = [];
-        if (layout.hasSendClassic) {
+        if (layout.hasSendAction) {
           layout.actions.push({
-            type: 'SEND', name: sendActionName, isLightning: false
-          });
-        }
-        if (layout.hasSendLightning) {
-          layout.actions.push({
-            type: 'SEND', name: sendActionName, isLightning: true
+            type: 'SEND', name: sendActionName
           });
         }
         // TODO: Add other action types
-        delete layout.hasSendClassic;
-        delete layout.hasSendLightning;
+        delete layout.hasSendAction;
+        delete layout.original;
         ls.push(layout);
       }
     }
-    return JSON.stringify(ls);
+    return ls;
+  },
+
+  onUpdateComplete: function (component) {
+    component.set('v.isDirty', false);
+    component.set('v.layouts', this.processLayouts(component.get('v.layouts')));
+    this.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
   },
 
   updateLayouts: function (component) {
     var self = this;
-    this.invokeAction(component, component.get('c.updateLayouts'), {
-      sObjectType: component.get('v.sObjectType'),
-      layoutsJson: self.getLayoutsJson(component.get('v.layouts'), component.get('v.sendActionName'))
-    }, function (layouts) {
-      component.set('v.layouts', self.processLayouts(layouts));
-      component.set('v.isDirty', false);
-      self.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
-    });
+    var layouts = this.getLayoutsToUpdate(component.get('v.layouts'), component.get('v.sendActionName'));
+    if ($A.util.isEmpty(layouts)) {
+      this.onUpdateComplete(component);
+    } else {
+      this.invokeAction(component, component.get('c.updateLayouts'), {
+        sObjectType: component.get('v.sObjectType'), layoutsJson: JSON.stringify(layouts)
+      }, function () {
+        self.onUpdateComplete(component);
+      });
+    }
   }
 });

@@ -283,7 +283,7 @@ public with sharing class MetadataService {
 		return apiName == Layout.ACTION_NAME_SEND ? Layout.ACTION_TYPE_SEND : Layout.ACTION_TYPE_OTHER;
 	}
 
-	private static List<Layout.Action> getClassicActions(final MetadataAPI.Layout mdLayout) {
+	private static List<Layout.Action> getActions(final MetadataAPI.Layout mdLayout) {
 		List<Layout.Action> result = new List<Layout.Action>();
 		if (mdLayout != null
 			&& Collection.isNotEmpty(mdLayout.customButtons)) {
@@ -291,24 +291,7 @@ public with sharing class MetadataService {
 			for (String apiName : mdLayout.customButtons) {
 				result.add(new Layout.Action(
 					getActionType(apiName),
-					apiName,
-					false));
-			}
-		}
-		return result;
-	}
-
-	private static List<Layout.Action> getLightningActions(final MetadataAPI.Layout mdLayout) {
-		List<Layout.Action> result = new List<Layout.Action>();
-		if (mdLayout != null
-			&& mdLayout.platformActionList != null
-			&& Collection.isNotEmpty(mdLayout.platformActionList.platformActionListItems)) {
-
-			for (MetadataAPI.PlatformActionListItem pali : mdLayout.platformActionList.platformActionListItems) {
-				result.add(new Layout.Action(
-					getActionType(pali.actionName),
-					pali.actionName,
-					true));
+					apiName));
 			}
 		}
 		return result;
@@ -321,14 +304,12 @@ public with sharing class MetadataService {
 
 		if (type == null || props == null || layout == null) return null;
 
-		List<Layout.Action> actions = getClassicActions(layout);
-		actions.addAll(getLightningActions(layout));
 		return new Layout(
 			type,
 			props.id,
 			props.namespacePrefix,
 			getLayoutName(props.fullName),
-			actions);
+			getActions(layout));
 	}
 
 	private static List<Layout> readLayouts(
@@ -480,8 +461,45 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	// HACK: Salesforce MD API bug: readMetadata returns some QuickAction names with the type prepended. When calling
+	// updateMetadata with no changes, this will fail as the QuickAction is not found. For custom objects, the prefix
+	// may be garbled, e.g. SomeAction for MyObject__c becomes MyObject__SomeAction. Awesome.
+	@TestVisible
+	private static String fixActionName(
+		final String type,
+		final String actionName) {
+
+		String result = actionName;
+		if (type != null && actionName != null) {
+			result = result.removeStart(type + '-');
+			Integer index = type.indexOf('__c');
+			if (index > 0) {
+				result = result.removeStart(type.substring(0, index + 2));
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Set<String> getPossibleActionNames(
+		final SObjectType type,
+		final String actionName) {
+
+		Set<String> result = new Set<String> { actionName };
+		if (type != null && String.isNotBlank(actionName)) {
+			String t = String.valueOf(type);
+			result.add(t + '-' + actionName);
+			Integer index = t.indexOf('__c');
+			if (index > 0) {
+				result.add(t.substring(0, index + 2) + actionName);
+			}
+		}
+		return result;
+	}
+
 	@TestVisible
 	private static List<MetadataAPI.PlatformActionListItem> getPlatformActionListItems(
+		final SObjectType type,
 		final Boolean shouldHaveAction,
 		final String actionName,
 		final List<MetadataAPI.PlatformActionListItem> platformActionListItems) {
@@ -497,9 +515,11 @@ public with sharing class MetadataService {
 		}
 
 		if (platformActionListItems != null) {
+			Set<String> actionNames = getPossibleActionNames(type, actionName);
 			for (MetadataAPI.PlatformActionListItem pali : platformActionListItems) {
-				if (pali != null && pali.actionName != actionName) {
+				if (pali != null && !actionNames.contains(pali.actionName)) {
 					pali.sortOrder = sortOrder++;
+					pali.actionName = fixActionName(String.valueOf(type), pali.actionName);
 					result.add(pali);
 				}
 			}
@@ -510,36 +530,31 @@ public with sharing class MetadataService {
 
 	@TestVisible
 	private static MetadataAPI.Layout mergeLayout(
+		final SObjectType type,
 		final Layout newLayout,
 		final MetadataAPI.Layout currentLayout) {
 
 		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
 
-		if (currentLayout.platformActionList == null) {
-			currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
-			currentLayout.platformActionList.actionListContext = 'Record';
-		}
-
-		Boolean hasClassicAction = false, hasLightningAction = false;
+		Boolean hasSendAction = false;
 		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
 			if (a.type == Layout.ACTION_TYPE_SEND) {
-				if (a.isLightning) {
-					hasLightningAction = true;
-				} else {
-					hasClassicAction = true;
-				}
+				hasSendAction = true;
+				break;
 			}
 		}
 
 		currentLayout.customButtons = getCustomButtons(
-			hasClassicAction,
+			hasSendAction,
 			Layout.ACTION_NAME_SEND,
 			currentLayout.customButtons);
-		currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
-			hasLightningAction,
-			Layout.ACTION_NAME_SEND,
-			currentLayout.platformActionList.platformActionListItems);
-
+		if (currentLayout.platformActionList != null) {
+			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
+				type,
+				hasSendAction,
+				Layout.ACTION_NAME_SEND,
+				currentLayout.platformActionList.platformActionListItems);
+		}
 		return currentLayout;
 	}
 
@@ -595,7 +610,7 @@ public with sharing class MetadataService {
 		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
 		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
 		for (String fullName : mdLayouts.keySet()) {
-			toUpdate.add(mergeLayout(ls.get(fullName), mdLayouts.get(fullName)));
+			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName)));
 		}
 
 		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));

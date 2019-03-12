@@ -4682,18 +4682,11 @@
         <value>System sender</value>
     </labels>
     <labels>
-        <fullName>ClassicButton</fullName>
+        <fullName>SendAction</fullName>
         <language>en_US</language>
         <protected>true</protected>
-        <shortDescription>Classic Button</shortDescription>
-        <value>Classic Sending</value>
-    </labels>
-    <labels>
-        <fullName>LightningAndMobileAction</fullName>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>Lightning and Mobile Action</shortDescription>
-        <value>Lightning and Mobile Sending</value>
+        <shortDescription>Send Action</shortDescription>
+        <value>Send with DocuSign Button</value>
     </labels>
     <labels>
         <fullName>SalesforceObject</fullName>

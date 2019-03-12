@@ -543,22 +543,26 @@ private class MetadataServiceTest {
 		MetadataAPI.PlatformActionListItem pali3 = new MetadataAPI.PlatformActionListItem();
 		pali3.sortOrder = 2;
 		pali3.actionName = 'button3';
-		pali3.actionType = 'CustomButton';
+		pali3.actionType = 'Opportunity-CustomButton';
 
 		Test.startTest();
 		List<MetadataAPI.PlatformActionListItem> result1 = MetadataService.getPlatformActionListItems(
+			Opportunity.getSObjectType(),
 			true,
 			'button3',
 			new List<MetadataAPI.PlatformActionListItem> { pali1, pali2 });
 		List<MetadataAPI.PlatformActionListItem> result2 = MetadataService.getPlatformActionListItems(
+			Opportunity.getSObjectType(),
 			true,
 			'button3',
 			new List<MetadataAPI.PlatformActionListItem> { pali1, pali2, pali3 });
 		List<MetadataAPI.PlatformActionListItem> result3 = MetadataService.getPlatformActionListItems(
+			Opportunity.getSObjectType(),
 			false,
 			'button3',
 			new List<MetadataAPI.PlatformActionListItem> { pali1, pali2 });
 		List<MetadataAPI.PlatformActionListItem> result4 = MetadataService.getPlatformActionListItems(
+			Opportunity.getSObjectType(),
 			false,
 			'button3',
 			new List<MetadataAPI.PlatformActionListItem> { pali1, pali2, pali3 });
@@ -579,13 +583,13 @@ private class MetadataServiceTest {
 	@IsTest
 	static void test_mergeLayout_not_found() {
 		try {
-			MetadataService.mergeLayout(null, new MetadataAPI.Layout());
+			MetadataService.mergeLayout(null, null, new MetadataAPI.Layout());
 			throw new AssertException('Expected mergeLayout to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.LayoutsNotFound, ex.getMessage());
 		}
 		try {
-			MetadataService.mergeLayout(new Layout(null, null, null, null, null), null);
+			MetadataService.mergeLayout(null, new Layout(null, null, null, null, null), null);
 			throw new AssertException('Expected mergeLayout to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.LayoutsNotFound, ex.getMessage());
@@ -600,8 +604,7 @@ private class MetadataServiceTest {
 			'ns',
 			'n',
 			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, true),
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, false)
+				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND)
 			});
 		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
 		currentLayout.customButtons = new List<String> { Layout.ACTION_NAME_SEND };
@@ -611,7 +614,7 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Lead.getSObjectType(), newLayout, currentLayout);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -623,15 +626,14 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_mergeLayout_add_classic() {
+	static void test_mergeLayout_add_send() {
 		Layout newLayout = new Layout(
 			Contact.getSObjectType(),
 			UserInfo.getUserId(),
 			'ns',
 			'n',
 			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, true),
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, false)
+				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND)
 			});
 		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
 		currentLayout.customButtons = null;
@@ -641,7 +643,7 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -653,41 +655,13 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_mergeLayout_add_lightning() {
+	static void test_mergeLayout_remove_send() {
 		Layout newLayout = new Layout(
 			Contact.getSObjectType(),
 			UserInfo.getUserId(),
 			'ns',
 			'n',
-			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, true),
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, false)
-			});
-		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
-		currentLayout.customButtons = new List<String> { Layout.ACTION_NAME_SEND };
-
-		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(newLayout, currentLayout);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assertEquals(new List<String> { Layout.ACTION_NAME_SEND }, result.customButtons);
-		System.assertNotEquals(null, result.platformActionList);
-		System.assertEquals(1, Collection.size(result.platformActionList.platformActionListItems));
-		System.assertNotEquals(null, result.platformActionList.platformActionListItems[0]);
-		System.assertEquals(Layout.ACTION_NAME_SEND, result.platformActionList.platformActionListItems[0].actionName);
-	}
-
-	@IsTest
-	static void test_mergeLayout_remove_classic() {
-		Layout newLayout = new Layout(
-			Contact.getSObjectType(),
-			UserInfo.getUserId(),
-			'ns',
-			'n',
-			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, true)
-			});
+			null);
 		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
 		currentLayout.customButtons = new List<String> { Layout.ACTION_NAME_SEND };
 		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
@@ -696,40 +670,11 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
 		System.assertEquals(0, Collection.size(result.customButtons));
-		System.assertNotEquals(null, result.platformActionList);
-		System.assertEquals(1, Collection.size(result.platformActionList.platformActionListItems));
-		System.assertNotEquals(null, result.platformActionList.platformActionListItems[0]);
-		System.assertEquals(Layout.ACTION_NAME_SEND, result.platformActionList.platformActionListItems[0].actionName);
-	}
-
-	@IsTest
-	static void test_mergeLayout_remove_lightning() {
-		Layout newLayout = new Layout(
-			Contact.getSObjectType(),
-			UserInfo.getUserId(),
-			'ns',
-			'n',
-			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, false)
-			});
-		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
-		currentLayout.customButtons = new List<String> { Layout.ACTION_NAME_SEND };
-		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
-		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
-		pali.actionName = Layout.ACTION_NAME_SEND;
-		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
-
-		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(newLayout, currentLayout);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assertEquals(new List<String> { Layout.ACTION_NAME_SEND }, result.customButtons);
 		System.assertNotEquals(null, result.platformActionList);
 		System.assertEquals(0, Collection.size(result.platformActionList.platformActionListItems));
 	}
@@ -886,12 +831,7 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND,
-						true),
-					new Layout.Action(
-						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND,
-						false)
+						Layout.ACTION_NAME_SEND)
 				});
 			Layout l2 = new Layout(
 				Contact.getSObjectType(),
@@ -901,12 +841,7 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND,
-						true),
-					new Layout.Action(
-						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND,
-						false)
+						Layout.ACTION_NAME_SEND)
 				});
 
 			Test.startTest();
