@@ -24,7 +24,7 @@
 *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 public class MetadataAPI {
-	private static final String SOAP_M_URI = 'http://soap.sforce.com/2006/04/metadataX';
+	private static final String SOAP_M_URI = 'http://soap.sforce.com/2006/04/metadata';
 	public virtual class Metadata {
 		public String fullName;
 	}

@@ -392,6 +392,9 @@ global class Envelope {
 						r.mergeWith(rs.get(r.sequence));
 					}
 				}
+				if (this.expires == null) {
+					this.expires = other.expires;
+				}
 			}
 			return this;
 		}
