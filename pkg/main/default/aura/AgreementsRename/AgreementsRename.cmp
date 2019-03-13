@@ -1,0 +1,37 @@
+<aura:component description="AgreementsRename">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+
+    <!-- attributes -->
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="agreementDetails" type="Object"/>
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <c:strike_modal aura:id="renameAgreementsModal"
+                    title="Rename Agreement"
+                    showModal="{!v.showModal}">
+
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col">
+                    <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"
+                                     value="{!v.agreementDetails.name}"
+                                     maxlength="255"
+                                     messageWhenValueMissing="This field is required"
+                                     required="true"/>
+                </div>
+            </div>
+        </div>
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelButtonClicked}"
+                              label="{!$Label.c.Cancel}">
+            </lightning:button>
+            <lightning:button disabled="{!if(empty(v.agreementDetails.name), true, false)}" class="slds-button slds-button_brand" onclick="{!c.renameButtonClicked}"
+                              label="Rename"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>

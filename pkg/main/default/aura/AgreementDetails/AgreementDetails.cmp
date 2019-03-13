@@ -1,0 +1,128 @@
+<aura:component description="AgreementDetails">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+
+    <!-- attributes -->
+    <aura:attribute name="showTimeLine" type="boolean"/>
+    <aura:attribute name="timelineDetails" type="List" access="global"/>
+    <aura:attribute name="fileDetails" type="Map" access="global"/>
+    <aura:attribute name="modalLoading" type="Boolean"/>
+
+    <!-- handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <!-- placeholder divs for dynamic component generation -->
+    <div aura:id="internalApprovalModal">
+    </div>
+
+    <div aura:id="externalReviewModal">
+    </div>
+
+    <div aura:id="deleteModal">
+    </div>
+
+    <div aura:id="uploadModal">
+    </div>
+
+    <div aura:id="renameModal">
+    </div>
+
+    <div aura:id="shareLinkModal">
+    </div>
+
+    <!-- body -->
+    <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-p-top--small slds-p-bottom--small slds-has-flexi-truncate">
+        <div class="slds-col slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-bottom--small">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="description of icon when needed">
+                            <lightning:icon iconName="doctype:word" alternativeText="Doc image" size="medium"/>
+                        </span>
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a href="javascript:void(0);">{!v.fileDetails.name}</a>
+                    </h3>
+                    <div class="slds-tile__detail">
+                        <ul class="slds-list_vertical">
+                            <li class="slds-item">{!v.fileDetails.createdDate}</li>
+                            <li class="slds-item slds-p-top_small">
+                                    <span class="{!'slds-badge' + if(v.fileDetails.status == 'REVIEW CANCELLED',' reviewcancelled')
+                                                                + if(v.fileDetails.status == 'PENDING APPROVAL',' pendingapproval')
+                                                                + if(v.fileDetails.status == 'COMPLETED',' complete')}">
+                                        {!v.fileDetails.status}
+                                    </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="slds-col slds-text-align_right slds-medium-size_6-of-12 slds-large-size_6-of-12">
+            <!--
+            <lightning:button label="Complete" class="slds-button slds-button_neutral"/>
+            -->
+            <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
+                                  menuAlignment="right">
+                <lightning:menuItem label="Download" value="Download"/>
+                <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
+                                    onactive="{!c.showUploadModal}" />
+
+                <lightning:menuItem label="Rename" value="Rename"
+                                    onactive="{!c.showRenameModal}" />
+                <lightning:menuItem label="Delete" value="Delete"
+                                    onactive="{!c.showDeleteModal}" />
+            </lightning:buttonMenu>
+            <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small"
+                                  menuAlignment="right">
+                <lightning:menuItem label="Share Link" value="Share Link"
+                                    onactive="{!c.showShareLinkModal}" />
+                <lightning:menuItem label="External Review" value="External Review"
+                                    onactive="{!c.showExternalReviewModal}"/>
+                <lightning:menuItem label="Internal Approval" value="Internal Approval"
+                                    onactive="{!c.showInternalApprovalModal}"/>
+            </lightning:buttonMenu>
+            <div class="slds-p-top_x-small">
+                <lightning:button variant="base" label="Show Activity" aura:id="showActivityButton"
+                                  onclick="{!c.showTimeLine}"/>
+            </div>
+        </div>
+
+        <!-- Activity Time Line -->
+        <aura:if isTrue="{!v.showTimeLine}">
+            <div class="slds-col slds-p-top_medium slds-has-flexi-truncate" style="padding-left: 4rem;">
+                <ul class="slds-timeline">
+                    <aura:iteration items="{!v.timelineDetails}" var="details">
+                        <li>
+                            <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+                                <span class="slds-assistive-text">task</span>
+                                <div class="slds-media">
+                                    <div class="slds-media__figure">
+                                        <button class="slds-button slds-button_icon"
+                                                title="Toggle details for Review proposals for EBC deck with larger team and have marketing review this"
+                                                aria-controls="task-item-expanded" aria-expanded="true">
+                                            <lightning:icon iconName="utility:switch" alternativeText="Utility image"
+                                                            size="x-small" class="slds-timeline__details-action-icon"/>
+                                        </button>
+                                        <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon"
+                                             title="task">
+                                            <lightning:icon iconName="standard:date_time"
+                                                            alternativeText="Utility image" size="x-small"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
+                                                <h3 class="slds-truncate">
+                                                    {!details}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </aura:iteration>
+                </ul>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

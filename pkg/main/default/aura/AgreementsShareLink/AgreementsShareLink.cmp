@@ -1,0 +1,45 @@
+<aura:component description="AgreementsShareLink">
+    <!-- FIXME Copy Functionality pending -->
+    <!-- FIXME Add custom labels -->
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+    <!-- attributes -->
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="linkCopied" type="Boolean" default="false" access="private"/>
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <c:strike_modal aura:id="uploadAgreementsModal"
+                    title="Share Agreement Link"
+                    showModal="{!v.showModal}"
+                    showFooter="false">
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-text-body_small slds-text-align--center">
+                Users with permission to access your DocuSign Agreements can use this link to view, download and
+                edit this agreement.
+            </div>
+            <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top_medium slds-p-bottom_medium">
+                <div class="slds-large-size_3-of-4">
+                    <lightning:input aura:id="copyLinkTextBox" type="text" variant="label-hidden" label="link" value="{!v.agreementDetails.url}" />
+                </div>
+                <div class="slds-large-size_1-of-4">
+                    <lightning:button variant="brand" aura:id="copyLinkButton" label="{!if(v.linkCopied, '', 'Copy Link')}"
+                                      class="{!'shareLinkButton' + if(v.linkCopied, ' shareLinkWidthOnCopy')}"
+                                      onclick="{!c.copyButtonClicked}"
+                                      iconName="{!if(v.linkCopied, 'action:check', '')}" />
+                    <div class="slds-input_height slds-p-top_xx-small">
+                        <aura:if isTrue="{!v.linkCopied}">
+                            <div class="slds-grid slds-grid_align-end slds-text-color_weak shareLinkButtonHelpText">
+                                Link copied!
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:strike_modal>
+
+</aura:component>

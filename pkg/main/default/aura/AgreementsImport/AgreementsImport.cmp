@@ -1,0 +1,174 @@
+<aura:component description="AgreementsImport" controller="AgreementsImportController">
+    <!-- FIXME : Check the resource.Utiljs since it has been refactored -->
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <!-- attributes -->
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="currentStep" type="String"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
+
+    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}" afterScriptsLoaded="{!c.uploadScriptsLoaded}" />
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <c:strike_modal aura:id="importAgreementsModal"
+                    title="{!if(v.currentStep == '1', 'Import Files')
+                            +if(v.currentStep == '2', 'Select a File')
+                            +if(v.currentStep == '3', 'Upload a File')}"
+                    showModal="{!v.showModal}"
+                    showFooter="{!if(v.currentStep == '1', false,true)}">
+
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-grid slds-grid_vertical">
+                <aura:if isTrue="{!v.loading}">
+                    <lightning:spinner alternativeText="Loading" size="medium" class="slds-is-static"/>
+                </aura:if>
+                <aura:if isTrue="{!v.currentStep == '1'}">
+                    <div class="slds-col">
+                        <div class="slds-text-align--center">
+                            Start by choosing a source to import your files from.
+                        </div>
+                    </div>
+                    <div class="slds-col slds-p-top_medium">
+                        <div class="slds-grid slds-gutters_small slds-grid_vertical">
+                            <div class="slds-col">
+                                <a onclick="{!c.navigateToFileSelection}"
+                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
+                                        <span class="slds-icon slds-icon_medium">
+                                            <img src="{!$Resource.import_file}"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body slds-border_left slds-p-around_small">
+                                        <h2 class="slds-truncate visualPickerHeading"
+                                            title="Choose from Salesforce Files">
+                                            Choose from Salesforce Files</h2>
+                                        <p class="slds-m-top_small">Select with one of the files associated with this record.</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                                <a onclick="{!c.navigateToUploadFilesfromPC}"
+                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
+                                        <span class="slds-icon slds-icon_medium">
+                                            <img src="{!$Resource.import_upload}"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body slds-border_left slds-p-around_small">
+                                        <h2 class="slds-truncate visualPickerHeading"
+                                            title="Upload from PC">
+                                            Upload from PC</h2>
+                                        <p class="slds-m-top_small">
+                                            Upload a document directly from computer.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentStep == '2'}">
+                    <div class="slds-col slds-p-horizontal_large">
+                        <div class=" slds-text-align_center">
+                            Choose one of the files available from this Salesforce record.
+                        </div>
+                        <ul class="slds-p-top_small">
+                        <aura:iteration items="{!v.salesforceFiles}" var="file" indexVar="fileIndex">
+                            <li class="slds-item slds-p-vertical_small">
+                                <article class="slds-tile slds-media slds-media_center">
+                                    <div class="slds-media__figure">
+                                        <lightning:input type="radio"  value="{!fileIndex}" label="Select" onchange="{!c.handleFileSelection}" checked="{!file.selected}"/>
+                                    </div>
+                                    <div class="slds-media__figure">
+                                        <!-- File Icon -->
+                                        <lightning:icon iconName="{!
+                                            'doctype:'
+                                            + if(file.extension == 'doc', 'word')
+                                            + if(file.extension == 'docm', 'gdoc')
+                                            + if(file.extension == 'docx', 'word')
+                                            + if(file.extension == 'dot', 'gdoc')
+                                            + if(file.extension == 'dotm', 'gdoc')
+                                            + if(file.extension == 'dotx', 'gdoc')
+                                            + if(file.extension == 'htm', 'html')
+                                            + if(file.extension == 'html', 'html')
+                                            + if(file.extension == 'msg', 'unknown')
+                                            + if(file.extension == 'pdf', 'pdf')
+                                            + if(file.extension == 'rtf', 'gdoc')
+                                            + if(file.extension == 'txt', 'gdoc')
+                                            + if(file.extension == 'wpd', 'gdoc')
+                                            + if(file.extension == 'xps', 'unknown')
+                                            + if(file.extension == 'bmp', 'image')
+                                            + if(file.extension == 'gif', 'image')
+                                            + if(file.extension == 'jpg', 'image')
+                                            + if(file.extension == 'jpeg', 'image')
+                                            + if(file.extension == 'png', 'image')
+                                            + if(file.extension == 'tif', 'image')
+                                            + if(file.extension == 'tiff', 'image')
+                                            + if(file.extension == 'pot', 'slide')
+                                            + if(file.extension == 'potx', 'slide')
+                                            + if(file.extension == 'pps', 'slide')
+                                            + if(file.extension == 'ppt', 'slide')
+                                            + if(file.extension == 'pptm', 'slide')
+                                            + if(file.extension == 'pptx', 'slide')
+                                            + if(file.extension == 'csv', 'gsheet')
+                                            + if(file.extension == 'xls', 'gsheet')
+                                            + if(file.extension == 'xlsm', 'gsheet')
+                                            + if(file.extension == 'xlsx', 'gsheet')
+                                        }"/>
+                                        <!-- /File Icon -->
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h3 class="slds-truncate fileDetails" title="{!file.name}">
+                                            {!file.name}
+                                        </h3>
+                                        <div class="slds-truncate slds-text-color_weak fileDetails">
+                                            {!file.formattedSize} • {!file.extension}</div>
+                                    </div>
+                                </article>
+                            </li>
+                            <div class="fileSpacing"/>
+                        </aura:iteration>
+                        </ul>
+                    </div>
+                </aura:if>
+
+                <div id="upload-wrapper" class="{!'slds-p-around_large' + if(not(v.currentStep == '3'), ' slds-hide','')}">
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <aura:if isTrue="{!v.currentStep == '2'}">
+                <div class="slds-grid slds-grid_align-spread">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}"
+                                      label="Back">
+                    </lightning:button>
+                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.importButtonClicked}"
+                                      label="Import"></lightning:button>
+                </div>
+            </aura:if>
+
+            <aura:if isTrue="{!v.currentStep == '3'}">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <lightning:button class="slds-button slds-button--neutral" onclick="{!c.uploadFileButtonClicked}"
+                                          label="Back">
+                        </lightning:button>
+                        <lightning:button class="slds-button slds-button--brand" onclick="{!c.uploadFileImportButtonClicked}"
+                                          label="Import"></lightning:button>
+                    </div>
+            </aura:if>
+
+        </aura:set>
+    </c:strike_modal>
+
+</aura:component>
