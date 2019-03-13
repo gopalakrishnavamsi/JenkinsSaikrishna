@@ -1,4 +1,5 @@
 <aura:component description="InternalReviewRecipient">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
     <aura:attribute name="recordType" type="String" default="user" access="private"/>

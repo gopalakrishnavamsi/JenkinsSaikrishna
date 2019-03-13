@@ -1,5 +1,6 @@
 <aura:component description="ExternalReviewRecipient">
     <!--TODO When a user search is made and Enter key is pressed without selecting a user from the box lightning error occurs -->
+    <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!--attributes -->
     <aura:attribute name="recipient" type="Object" required="true"/>

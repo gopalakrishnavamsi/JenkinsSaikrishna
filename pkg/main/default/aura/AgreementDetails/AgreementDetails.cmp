@@ -1,4 +1,5 @@
 <aura:component description="AgreementDetails">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!-- attributes -->
     <aura:attribute name="showTimeLine" type="boolean"/>

@@ -1,4 +1,6 @@
 <aura:component description="AgreementsRename">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>

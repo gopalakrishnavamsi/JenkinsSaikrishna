@@ -1,6 +1,6 @@
 <aura:component description="AgreementsExternalReview"
                 controller="SendingController">
-
+    <!-- FIXME : Check hardcoding and replace with labels  -->
     <!-- attributes -->
     <aura:attribute name="recipients" type="Object[]"/>
     <aura:attribute name="currentStep" type="String"/>

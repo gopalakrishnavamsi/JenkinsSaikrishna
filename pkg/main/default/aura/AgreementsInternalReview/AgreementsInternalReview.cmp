@@ -1,5 +1,6 @@
 <aura:component description="AgreementsInternalReview"
                 controller="SendingController">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!-- attributes -->
     <aura:attribute name="recipients" type="Object[]"/>

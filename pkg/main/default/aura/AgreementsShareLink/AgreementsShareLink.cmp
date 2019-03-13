@@ -1,7 +1,7 @@
 <aura:component description="AgreementsShareLink">
     <!-- FIXME Copy Functionality pending -->
     <!-- FIXME Add custom labels -->
-
+    <!-- FIXME : Check hardcoding and replace with labels  -->
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>

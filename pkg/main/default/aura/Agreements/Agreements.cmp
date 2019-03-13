@@ -3,6 +3,7 @@
                 controller="AgreementsController"
                 access="global">
     <!--TODO Implement spinner functionality -->
+    <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!-- attributes -->
     <aura:attribute name="namespace" type="String"/>
