@@ -81,12 +81,14 @@ License: BSD 3-Clause License
 
     <!-- Strike Lookup -->
     <ui:scrollerWrapper aura:id="lookup" class="{!'slds-form-element slds-lookup slds-is-open ' + if(v.error, 'slds-has-error ', '') + if(v.isMobile, 'sl-lookup--mobile ', '') + if(v.openMenu, 'sl-lookup--open ', '') + v.class}">
-        <label class="slds-form-element__label" for="{!'strike-lookup-' + v.idNumber}">
-            <aura:if isTrue="{!v.required}">
-                <abbr class="slds-required" title="required">*</abbr>
-            </aura:if>
-            {!v.label}  
-        </label>
+        <aura:if isTrue="{!not(empty(v.label))}">
+            <label class="slds-form-element__label" for="{!'strike-lookup-' + v.idNumber}">
+                <aura:if isTrue="{!v.required}">
+                    <abbr class="slds-required" title="required">*</abbr>
+                </aura:if>
+                {!v.label}
+            </label>
+        </aura:if>
         <aura:if isTrue="{!not(empty(v.helpText))}">
             <lightning:helptext content="{!v.helpText}" />
         </aura:if>

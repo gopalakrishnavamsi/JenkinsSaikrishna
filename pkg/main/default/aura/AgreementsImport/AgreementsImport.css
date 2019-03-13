@@ -1,0 +1,17 @@
+.THIS .visualPickerHeading{
+    font-size: token(fontSizeTextSmall);
+    color: #006DCC;
+}
+
+.THIS .fileSpacing {
+    border-bottom: 1px solid rgb(217, 219, 221);
+}
+
+.THIS  .slds-radio .slds-form-element__label
+{
+    display: none;
+}
+
+.THIS .fileDetails {
+    font-size: .75rem;
+}

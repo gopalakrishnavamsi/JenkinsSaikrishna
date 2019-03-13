@@ -1,0 +1,22 @@
+<aura:component description="InternalReviewRecipient">
+    <!-- FIXME : Check hardcoding and replace with labels  -->
+    <aura:attribute name="recipient" type="Object" required="true"/>
+    <aura:attribute name="sourceId" type="Id" required="true"/>
+    <aura:attribute name="recordType" type="String" default="user" access="private"/>
+    <aura:attribute name="iconName" type="String" access="private"/>
+
+    <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>
+    <aura:registerEvent name="recipientIdChange" type="c:strike_evt"/>
+
+    <div class="slds-grid">
+        <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
+            <c:strike_lookup placeholder="Search by Name, Email or Organization"
+                             object="{!v.recordType}"
+                             iconName="standard:user"
+                             searchField="Name"
+                             value="{!v.sourceId}"
+                             subtitleField="Email"
+                             valueLabel="{!v.recipient.name}"/>
+        </div>
+    </div>
+</aura:component>

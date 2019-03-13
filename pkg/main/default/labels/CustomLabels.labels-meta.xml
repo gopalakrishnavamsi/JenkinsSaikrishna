@@ -4681,4 +4681,81 @@
         <shortDescription>System senders</shortDescription>
         <value>System sender</value>
     </labels>
+    <labels>
+        <fullName>DocuSignAgreements</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DocuSignAgreements</shortDescription>
+        <value>DocuSign Agreements</value>
+    </labels>
+    <labels>
+        <fullName>ImportButtonLabel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ImportButtonLabel</shortDescription>
+        <value>Import</value>
+    </labels>
+    <labels>
+        <fullName>NoAgreements</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>NoAgreements</shortDescription>
+        <value>No agreements yet.</value>
+    </labels>
+    <labels>
+        <fullName>CreateAgreementsIllustration</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CreateAgreementsIllustration</shortDescription>
+        <value>Create an Agreement</value>
+    </labels>
+    <labels>
+        <fullName>DeleteAgreement</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DeleteAgreement</shortDescription>
+        <value>Delete Agreement</value>
+    </labels>
+    <labels>
+        <fullName>DeleteAgreementMessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DeleteAgreementMessage</shortDescription>
+        <value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</value>
+    </labels>
+    <labels>
+        <fullName>DeleteButtonLabel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DeleteButtonLabel</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>UploadNewVersion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>UploadNewVersion</shortDescription>
+        <value>Upload a New Version</value>
+    </labels>
+    <labels>
+        <fullName>UploadMessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>UploadMessage</shortDescription>
+        <value>Uploading a file will create a new version of this document and update the agreement's activity timeline.</value>
+    </labels>
+    <labels>
+        <fullName>AgreementName</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>AgreementName</shortDescription>
+        <value>Agreement Name</value>
+    </labels>
+    <labels>
+        <fullName>CurrentVersion</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CurrentVersion</shortDescription>
+        <value>Current Version</value>
+    </labels>
 </CustomLabels>
