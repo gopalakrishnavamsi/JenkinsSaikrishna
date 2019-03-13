@@ -26,10 +26,14 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
         String method = request.getMethod();
         String path = request.getEndpoint();
 
-        if (success && method == 'POST' && path.contains('folders')) {
+        if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_FOLDER)) {
             response.setStatusCode(201);
             response.setStatus('CREATED');
             response.setBody('{"Href":"https://unit.test/folders/' + FOLDER_ID + '"}');
+        } else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_EOS_FOLDER)) {
+            response.setStatusCode(201);
+            response.setStatus('CREATED');
+            response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
         } else if (success && method == 'GET') {
             response.setStatusCode(200);
             response.setStatus('OK');

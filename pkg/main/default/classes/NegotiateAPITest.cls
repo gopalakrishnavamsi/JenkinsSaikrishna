@@ -32,9 +32,24 @@ public with sharing class NegotiateAPITest {
                 System.assertNotEquals(null, ex.error.code);
                 System.assertNotEquals(null, ex.error.description);
                 System.assert(ex.error instanceof NegotiateAPI.Error);
-                System.assert(UUID.isNotEmpty(((NegotiateAPI.Error)ex.error).referenceId));
+                System.assert(UUID.isNotEmpty(((NegotiateAPI.Error) ex.error).referenceId));
             }
             Test.stopTest();
+        }
+    }
+
+    @IsTest
+    static void test_createAgreementInEOSFolder_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            String result = NegotiateAPI.getInstance().createAgreementInEOSFolder('0061U0000058I2EQAU',
+                    NegotiateAPIMock.FOLDER_ID, 'negotiate.docx');
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+            System.assertEquals('4682d399-29fe-4085-9e48-126e4ffa0566', result);
         }
     }
 
@@ -46,7 +61,6 @@ public with sharing class NegotiateAPITest {
 
             Test.startTest();
             List<Agreement> result = NegotiateAPI.getInstance().getAgreements(NegotiateAPIMock.FOLDER_ID);
-            System.debug(result);
             Test.stopTest();
 
             System.assertNotEquals(null, result);
