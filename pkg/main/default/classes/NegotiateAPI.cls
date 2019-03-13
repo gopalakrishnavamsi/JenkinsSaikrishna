@@ -132,7 +132,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
-            this.log.error('Failed to create EOS folder: ' + response.error);
+            this.log.error('Failed to create Agreement in EOS folder: ' + response.error);
             throw new APIException(response.error);
         }
 
@@ -173,4 +173,29 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         return agreements;
     }
+
+    // Rename Agreement
+
+    public Boolean renameAgreement(String documentId, String docName) {
+
+        RestAPI.Response response = put(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_DOCUMENTS, documentId
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                JSON.serialize(new Map<String, Object>{
+                        'Name' => docName
+                }),
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to rename Agreement: ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
+        return body.get('Name') == docName;
+    }
+
 }

@@ -69,4 +69,20 @@ public with sharing class NegotiateAPITest {
         }
     }
 
+    @IsTest
+    static void test_renameAgreement_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            Boolean result = NegotiateAPI.getInstance().renameAgreement(NegotiateAPIMock.DOCUMENT_ID, 'docuTestRename.docx');
+            Test.stopTest();
+
+            System.assertNotEquals(null, result);
+            System.assertEquals(true, result);
+
+        }
+    }
+
 }
