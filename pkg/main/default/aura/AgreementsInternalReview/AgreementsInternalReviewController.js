@@ -34,7 +34,6 @@
     onApproverDrop: function (component, event, helper) {
         if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
             component.set('v.droppedId', parseInt(event.currentTarget.id));
-            console.log('dropped id ' + parseInt(event.currentTarget.id));
         }
 
         var draggedId = component.get('v.draggedId');
