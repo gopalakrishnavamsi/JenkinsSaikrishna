@@ -15,7 +15,7 @@
         component.set('v.loading', loading === true);
     },
 
-    getSalesforceFiles: function (component, event, helper) {
+    getSalesforceFiles: function (component) {
         var self = this;
         self.setLoading(component, true);
         var getSalesforceFiles = component.get('c.getLinkedDocuments');
@@ -33,7 +33,7 @@
                 }
                 component.set('v.salesforceFiles', result);
             } else {
-                self.showToast(component, _getErrorMessage(response), 'error');
+                self.showToast(component, self.getErrorMessage(response), 'error');
             }
             self.setLoading(component, false);
             component.set('v.currentStep', '2');
@@ -45,7 +45,7 @@
     addDocumentProperties: function (doc, selected) {
         if (!!doc) {
             doc.selected = !!selected;
-            doc.formattedSize = !!doc.size ? _formatSize(doc.size) : '';
+            doc.formattedSize = !!doc.size ? stringUtils.formatSize(doc.size) : '';
             doc.formattedLastModified = !!doc.lastModified ? new Date(doc.lastModified).toLocaleString() : '';
         }
         return doc;

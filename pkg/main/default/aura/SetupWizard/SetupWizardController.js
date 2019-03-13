@@ -3,14 +3,13 @@
     helper.updateText(component, event);
   },
 
-  handleButtonClick: function (component, event, helper) {
+  handleButtonClick: function (component) {
     //When button is pressed, the event is fired which calls the parent function
     // goToNextSection
-    var nextSectionEvt = component.getEvent('landingButtonClicked');
-    nextSectionEvt.fire();
+    component.getEvent('landingButtonClicked').fire();
   },
 
-  handleRowButtonClick: function (component, event, helper) {
+  handleRowButtonClick: function (component, event) {
     //When button is pressed, the event is fired which calls the parent function
     // navigateToSection
     var section = event.getSource().get('v.value');
@@ -25,11 +24,11 @@
     helper.updateText(component, component.get('v.steps'));
   },
 
-  hideNextSteps: function (component, event, helper) {
+  hideNextSteps: function (component) {
     component.set('v.showNextSteps', false);
   },
 
-  onClickSettings: function(component, event, helper) {
+  onClickSettings: function(component) {
     var navToSection = component.getEvent('rowButtonClicked');
     navToSection.setParams({
       section: 'settings'

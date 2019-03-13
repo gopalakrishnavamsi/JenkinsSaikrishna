@@ -1,10 +1,13 @@
 <aura:component controller="SetupController">
 
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
+
     <aura:attribute name="login" type="Object" required="true"/>
     <aura:attribute name="isLoggedIn" type="Boolean"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
 
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="selectedAccountNumber" type="Long" access="private"/>
     <aura:attribute name="helpInfo" type="String" access="private"/>
     <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
@@ -25,7 +28,6 @@
     <aura:registerEvent name="loginEvent" type="c:LoginEvent"/>
     <aura:registerEvent name="oauthEvent" type="c:OAuthEvent"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:handler name="change" value="{!v.userCountryCode}" action="{!c.handleUserCountryChange}"/>
     <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
 

@@ -3,15 +3,15 @@
     helper.setContinueButtonState(component);
   },
 
-  handleContinueClick: function (component, event, helper) {
+  handleContinueClick: function (component) {
     component.getEvent('finishClicked').fire();
   },
 
-  handleExitClick: function (component, event, helper) {
+  handleExitClick: function (component) {
     component.set('v.showExitModal', true);
   },
 
-  handleConfirmExitClick: function (component, event, helper) {
+  handleConfirmExitClick: function (component) {
     component.set('v.showExitModal', false);
     var navToSection = component.getEvent('exitClicked');
     navToSection.setParams({

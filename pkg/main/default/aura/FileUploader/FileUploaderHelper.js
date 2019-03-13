@@ -1,56 +1,31 @@
 ({
-  setLoading: function (component, isLoading) {
-    var evt = component.getEvent('loadingEvent');
-    evt.setParams({
-      isLoading: isLoading === true
-    });
-    evt.fire();
-  },
-
-  showToast: function (component, message, mode) {
-    var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: true, message: message, mode: mode
-    });
-    evt.fire();
-  },
-
-  hideToast: function (component) {
-    var evt = component.getEvent('toastEvent');
-    if (!$A.util.isUndefinedOrNull(evt)) {
-      evt.setParams({
-        show: false
-      });
-      evt.fire();
-    }
-  },
-
   MAX_FILE_SIZE: 4718592, // 4.5 MB
   CHUNK_SIZE: 768000, // 750 KB
   BASE_64_PREFIX: 'base64,',
 
   uploadFile: function (component, file) {
     var self = this;
-    self.hideToast(component);
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
 
     if (file.size > self.MAX_FILE_SIZE) {
-      var errMsg = _format($A.get('$Label.c.FileSizeLimitReached_2'), _formatSize(self.MAX_FILE_SIZE), _formatSize(file.size));
-      self.showToast(component, errMsg, 'error');
+      var errMsg = stringUtils.format($A.get('$Label.c.FileSizeLimitReached_2'), stringUtils.formatSize(self.MAX_FILE_SIZE), stringUtils.formatSize(file.size));
+      uiHelper.showToast(errMsg, 'error');
       return;
     }
 
-    self.setLoading(component, true);
+    uiHelper.setLoading(true);
 
     var fr = new FileReader();
     fr.onload = $A.getCallback(function () {
       var base64Data = fr.result;
       base64Data = base64Data.substring(base64Data.indexOf(self.BASE_64_PREFIX) + self.BASE_64_PREFIX.length);
-      self._uploadChunk(component, file, base64Data, 0, Math.min(base64Data.length, self.CHUNK_SIZE), null);
+      self._uploadChunk(uiHelper, component, file, base64Data, 0, Math.min(base64Data.length, self.CHUNK_SIZE), null);
     });
     fr.readAsDataURL(file);
   },
 
-  _uploadChunk: function (component, file, base64Data, start, end, contentVersionId) {
+  _uploadChunk: function (uiHelper, component, file, base64Data, start, end, contentVersionId) {
     var self = this;
     var saveChunk = component.get('c.saveChunk');
     saveChunk.setParams({
@@ -72,11 +47,11 @@
             success: true, sourceId: cvId
           });
           evt.fire();
-          this.setLoading(component, false);
+          uiHelper.setLoading(false);
         }
       } else {
-        this.showToast(component, _getErrorMessage(response), 'error');
-        this.setLoading(component, false);
+        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
+        uiHelper.setLoading(false);
       }
     });
     $A.enqueueAction(saveChunk);

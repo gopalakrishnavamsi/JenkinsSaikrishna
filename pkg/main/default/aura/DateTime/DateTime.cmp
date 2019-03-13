@@ -1,0 +1,36 @@
+<aura:component>
+    <aura:attribute name="datetime" type="Datetime" required="true"/>
+    <aura:attribute name="relativeThreshold" type="Integer" required="false" default="7"/>
+    <aura:attribute name="emptyMessage" type="String" required="false" default=""/>
+    <aura:attribute name="emptyMessageClass" type="String" required="false" default="slds-text-color_weak"/>
+    <aura:attribute name="hourFormat" type="String" required="false" default="numeric"/>
+    <aura:attribute name="minuteFormat" type="String" required="false" default="numeric"/>
+    <aura:attribute name="yearFormat" type="String" required="false" default="numeric"/>
+    <aura:attribute name="monthFormat" type="String" required="false" default="short"/>
+    <aura:attribute name="dayFormat" type="String" required="false" default="numeric"/>
+
+    <aura:attribute name="dt" type="Object" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
+
+    <div class="slds-scope">
+        <aura:if isTrue="{!not(empty(v.dt))}">
+            <aura:if isTrue="{!or(v.relativeThreshold lt 0, v.dt.daysBetween lt v.relativeThreshold)}">
+                <lightning:relativeDateTime
+                        value="{!v.dt.value}"/>
+                <aura:set attribute="else">
+                    <lightning:formattedDateTime
+                            value="{!v.dt.value}"
+                            hour="numeric"
+                            minute="numeric"
+                            year="numeric"
+                            month="short"
+                            day="numeric"/>
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <ui:outputText class="{!v.emptyMessageClass}" value="{!v.emptyMessage}"/>
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

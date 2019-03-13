@@ -1,5 +1,6 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component) {
+    component.set('v.uiHelper', new UIHelper(component));
     component.set('v.helpInfo', '');
     var env = component.get('v.environment');
     component.set('v.advancedOptionsExpanded', !$A.util.isEmpty(env) && env !== 'Production');
@@ -26,7 +27,7 @@
     helper.selectAccount(component);
   },
 
-  cancelSelectAccount: function (component, event, helperz) {
+  cancelSelectAccount: function (component) {
     component.set('v.showAccountSelectionModal', false);
   },
 
@@ -34,16 +35,16 @@
     helper.startTrial(component);
   },
 
-  showLogoutModal: function (component, event, helper) {
-    helper.hideToast(component);
+  showLogoutModal: function (component) {
+    component.get('v.uiHelper').hideToast();
     component.set('v.showLogoutModal', true);
   },
 
-  hideLogoutModal: function (component, event, helper) {
+  hideLogoutModal: function (component) {
     component.set('v.showLogoutModal', false);
   },
 
-  swapLogInState: function (component, event, helper) {
+  swapLogInState: function () {
       var navEvt = $A.get('e.force:navigateToURL');
       if (!$A.util.isEmpty(navEvt)) {
            navEvt.setParams({
@@ -53,7 +54,7 @@
       }
   },
 
-  continueToLogIn: function (component, event, helper) {
+  continueToLogIn: function (component) {
     component.set('v.showTrialFields', false);
     component.set('v.signedUpForTrial', false);
 
@@ -62,7 +63,7 @@
     }), 1);
   },
 
-  navigateToUpgrade: function (component, event, helper) {
+  navigateToUpgrade: function () {
     var navEvt = $A.get('e.force:navigateToURL');
     if (!$A.util.isEmpty(navEvt)) {
       navEvt.setParams({
@@ -72,11 +73,11 @@
     }
   },
 
-  toggleAdvancedOptions: function (component, event, helper) {
+  toggleAdvancedOptions: function (component) {
     component.set('v.advancedOptionsExpanded', !component.get('v.advancedOptionsExpanded'));
   },
 
-  handleUserCountryChange: function (component, event, helper) {
+  handleUserCountryChange: function (component) {
     var marketing = component.get('v.marketing');
     if (!$A.util.isEmpty(marketing)) {
       var countryCode = component.get('v.userCountryCode');

@@ -89,5 +89,5 @@
             </aura:if>
         </ul>
     </div>
-    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" inVfPage="{!false}"/>
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"/>
 </aura:component>

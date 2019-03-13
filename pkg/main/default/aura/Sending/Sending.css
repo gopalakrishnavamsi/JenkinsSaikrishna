@@ -1,44 +1,58 @@
-.THIS {
-    position: relative;
+.THIS.slds-scope {
+    height: auto;
+    min-height: 100%;
 }
 
-.THIS.ds-quick-action-modal {
-    margin: -1rem -2rem;
-    height: 600px; /* Configure the action to be 600px as well */
-    max-height: calc(100vh - 96px);
+.THIS.slds-scope .ds-sending {
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.THIS.ds-visualforce {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.THIS.ds-quick-action-modal .ds-modal__header,
-.THIS.ds-quick-action-modal .ds-modal__footer,
-.THIS.ds-visualforce .ds-visualforce__footer {
+.THIS.slds-scope .ds-sending__header {
     flex: 0 0 auto;
+    z-index: 10;
+    padding: t(spacingMedium);
+    background-color: white;
+    border-bottom: 1px solid t(colorBorder);
 }
 
-.THIS.ds-visualforce .ds-visualforce__footer {
-    background-color: #fafaf9;
+@media (min-width: 48em) {
+    .THIS.slds-scope .ds-sending__header {
+        padding: t(spacingSmall);
+    }
+}
+
+.THIS.slds-scope .ds-sending__body {
+    flex: 1 1 100vh;
+    flex-basis: 100vh;
+}
+
+@media (min-width: 48em) {
+    .THIS.slds-scope .ds-sending__body {
+        padding-top: t(spacingXxLarge);
+        padding-bottom: t(spacingXxLarge);
+    }
+}
+
+.THIS.slds-scope .ds-sending__body .slds-box {
+    padding: t(spacingLarge);
+}
+
+.THIS.slds-scope .ds-sending__footer {
+    flex: 0 0 auto;
+    z-index: 10;
+    bottom: 0;
+    width: 100%;
     border-top: 1px solid t(colorBorder);
+    background-color: white;
+    padding: t(spacingLarge);
+    text-align: right;
 }
 
 .THIS.ds-quick-action-modal .ds-modal__content,
 .THIS.ds-visualforce .ds-visualforce__body {
     flex: 1 1 300px;
-}
-
-.THIS.ds-visualforce .ds-visualforce__body {
-    flex-basis: 100vh;
-}
-
-.THIS.ds-visualforce .ds-visualforce__header,
-.THIS.ds-visualforce .ds-visualforce__footer {
-    z-index: 11;
 }
 
 .THIS .ds-no-label .slds-form-element__label,
@@ -168,11 +182,6 @@
 .THIS .ds-template-roles .ds-template-roles__title + .ds-template-roles__role {
     border-top: none;
     margin-top: 0;
-}
-
-.THIS .ds-spinner_visualforce {
-    position: fixed;
-    z-index: 10;
 }
 
 .THIS .slds-textarea {

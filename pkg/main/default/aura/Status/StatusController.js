@@ -1,21 +1,10 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
     component.set('v.loading', true);
     helper.initialize(component, helper);
   },
 
-  handleEnvelopeNameClick: function (component, event, helper) {
-    var recipientId = event.currentTarget.dataset.sender;
-    var navEvt = $A.get('e.force:navigateToSObject');
-    if (!$A.util.isEmpty(navEvt)) {
-      navEvt.setParams({
-        'recordId': recipientId, 'slideDevName': 'detail'
-      });
-      navEvt.fire();
-    }
-  },
-
-  toggleRecipientDetails: function (component, event, helper) {
+  toggleRecipientDetails: function (component, event) {
     var targetEnvelopeIndex = parseInt(event.currentTarget.dataset.envelopeIndex, 10);
     var targetIndex = parseInt(event.currentTarget.dataset.index, 10);
     var recipients = component.find('recipient');
@@ -32,8 +21,8 @@
   },
 
   handleViewAllClick: function (component, event, helper) {
-    var listViews = component.get('c.getStatusListViews');
-    listViews.setCallback(this, function (response) {
+    var getStatusListViews = component.get('c.getStatusListViews');
+    getStatusListViews.setCallback(this, function (response) {
       var state = response.getState();
       if (state === "SUCCESS") {
         var listViews = response.getReturnValue();
@@ -41,9 +30,7 @@
           var listView = listViews[0]; // TODO: Allow selection or default?
           var navEvent = $A.get('e.force:navigateToList');
           navEvent.setParams({
-            listViewId: listView.Id,
-            listViewName: listView.Name,
-            scope: listView.SobjectType
+            listViewId: listView.Id, listViewName: listView.Name, scope: listView.SobjectType
           });
           navEvent.fire();
         }
@@ -51,10 +38,10 @@
         helper.setError(component, response);
       }
     });
-    $A.enqueueAction(listViews);
+    $A.enqueueAction(getStatusListViews);
   },
 
-  toggleEnvelopeDetails: function (component, event, helper) {
+  toggleEnvelopeDetails: function (component, event) {
     var targetIndex = parseInt(event.getSource().get('v.value'), 10);
     var envelopes = component.find('envelope');
 

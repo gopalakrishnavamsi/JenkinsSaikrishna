@@ -1,16 +1,16 @@
-<apex:page sidebar="false" showHeader="true" controller="SetupController" label="{!$Label.dfsle__docusign}">
+<apex:page sidebar="false" showHeader="true" controller="SetupController" title="{!$Label.DocuSign}">
     <apex:includeLightning />
     <apex:slds />
-    <apex:includeScript value="{!$Resource.UtilJS}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
-        #setup-assistant {
+        #ds-setup {
             min-height: 100vh;
             background-color: #f7f9fb;
             position: relative;
         }
 
-        .noSidebarCell #setup-assistant {
+        .noSidebarCell #ds-setup {
             min-height: calc(100vh - 120px);
         }
 
@@ -20,12 +20,12 @@
             padding: 0;
         }
 
-        .noSidebarCell #setup-assistant .slds-scope .strike-wizard__footer {
+        .noSidebarCell #ds-setup .slds-scope .strike-wizard__footer {
             position: absolute;
         }
     </style>
 
-    <div id="setup-assistant"></div>
+    <div id="ds-setup"></div>
 
     <script>
       var navigateToURL = function (event) {
@@ -61,7 +61,7 @@
               var left = (screen.width / 2) - (width / 2);
               var top = (screen.height / 2) - (height / 2);
 
-              var w = window.open(_unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+              var w = window.open(stringUtils.unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
               w.addEventListener('unload', function (e) {
                 var evt = component.getEvent('loadingEvent');
                 evt.setParams({
@@ -79,10 +79,10 @@
       }
 
       var namespace = '{!JSENCODE(namespace)}';
-      $Lightning.use(namespace + ':LightningOutApp', function () {
+      $Lightning.use(namespace + ':SetupApp', function () {
         $Lightning.createComponent(namespace + ':Setup', {
           beginOAuth: beginOAuth
-        }, 'setup-assistant', function (cmp) {
+        }, 'ds-setup', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });

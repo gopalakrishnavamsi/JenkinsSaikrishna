@@ -1,9 +1,12 @@
 <aura:component controller="SetupController">
-    <ltng:require scripts="{!$Resource.UtilJS}"/>
+
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
 
     <aura:attribute name="tableLoading" type="Boolean"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
 
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="data" type="Object" access="private"/>
     <aura:attribute name="formData" type="Object" access="private"/>
     <aura:attribute name="showAddUserModal" type="Boolean" access="private"/>
@@ -22,8 +25,6 @@
 
     <aura:attribute name="filteredUsers" type="Account.User[]" access="private"/>
     <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
-
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
 
     <aura:if isTrue="{!v.tableLoading}">
         <lightning:spinner class="ds-table-loading-spinner" size="medium" alternativeText="{!$Label.c.Loading}"/>

@@ -1,5 +1,5 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
     helper.createEnvelope(component, component.get('v.recordId'));
   },
 
@@ -11,11 +11,6 @@
   },
 
   continueAndTag: function (component, event, helper) {
-    component.set('v.loading', true);
-    if (component.get('v.showToast')) {
-      component.set('v.showToast', false);
-    }
-
     var documents = component.get('v.documents');
     var hasDocuments = documents.some(function (d) {
       return d.selected;
@@ -49,25 +44,25 @@
     component.set('v.recipients', recipients);
   },
 
-  removeRecipient: function (component, event, helper) {
+  removeRecipient: function (component, event) {
     var recipients = component.get('v.recipients');
     recipients.splice(event.getSource().get('v.value'), 1);
     component.set('v.recipients', recipients);
   },
 
-  cancel: function (component, event, helper) {
-    _navigateToSObject(component.get('v.recordId'));
+  cancel: function (component) {
+    navUtils.navigateToSObject(component.get('v.recordId'));
   },
 
-  goBack: function (component, event, helper) {
+  goBack: function (component) {
     component.set('v.activeStep', (component.get('v.activeStep') - 1));
   },
 
-  goNext: function (component, event, helper) {
+  goNext: function (component) {
     component.set('v.activeStep', (component.get('v.activeStep') + 1));
   },
 
-  toggleAdvancedOptions: function (component, event, helper) {
+  toggleAdvancedOptions: function (component) {
     component.set('v.showAdvancedOptions', !component.get('v.showAdvancedOptions'));
   },
 
@@ -85,7 +80,7 @@
       var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
       var selectedFileTitles = '';
 
-      fileCheckboxes.forEach(function (file, index) {
+      fileCheckboxes.forEach(function (file) {
         if (typeof(file) !== 'undefined' && file.get('v.checked')) {
           selectedFileTitles += ', ' + documents[file.get('v.value')].name;
         }
@@ -102,25 +97,6 @@
 
   handleRecipientChange: function (component, event, helper) {
     helper.resolveRecipient(component, event.getParam('data'));
-  },
-
-  onToast: function (component, event, helper) {
-    var params = event.getParams();
-    if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
-      if (params.mode === 'success') {
-        setTimeout($A.getCallback(function () {
-          helper.hideToast(component);
-        }), 3000);
-      }
-    } else {
-      helper.hideToast(component);
-    }
-  },
-
-  onLoading: function (component, event, helper) {
-    var params = event.getParams();
-    helper.setLoading(component, params && params.isLoading === true);
   },
 
   onUploadComplete: function (component, event, helper) {

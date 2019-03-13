@@ -1,9 +1,13 @@
 <aura:component controller="StatusController" implements="flexipage:availableForRecordHome,force:hasRecordId"
                 access="global">
-    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
+
+    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+
     <aura:attribute name="envelopes" type="List" access="private"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="errorMessage" type="String" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
 
     <lightning:card variant="base">
         <div class="slds-card__header slds-grid">
@@ -78,20 +82,7 @@
                                                             <div class="slds-col slds-no-flex slds-gutters_small">
                                                                 <div class="slds-timeline__actions slds-timeline__actions_inline">
                                                                     <p class="slds-timeline__date">
-                                                                        <aura:if
-                                                                                isTrue="{!envelope.sent.daysBetween lt 7}">
-                                                                            <lightning:relativeDateTime
-                                                                                    value="{!envelope.sent.value}"/>
-                                                                            <aura:set attribute="else">
-                                                                                <lightning:formattedDateTime
-                                                                                        value="{!envelope.sent.value}"
-                                                                                        hour="numeric"
-                                                                                        minute="numeric"
-                                                                                        year="numeric"
-                                                                                        month="short"
-                                                                                        day="numeric"/>
-                                                                            </aura:set>
-                                                                        </aura:if>
+                                                                        <c:DateTime datetime="{!envelope.sent}"/>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -102,29 +93,13 @@
                                                         </p>
                                                         <!-- Envelope Details -->
                                                         <div class="slds-timeline__item_details">
-                                                            <div class="slds-box slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-bottom_none">
+                                                            <div class="slds-box slds-theme_shade">
                                                                 <div class="slds-grid slds-gutters slds-wrap">
                                                                     <div class="slds-col slds-size_1-of-2">
                                                                         <div class="slds-form-element">
                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
-                                                                                <aura:if
-                                                                                        isTrue="{!not(empty(envelope.sent.daysBetween))}">
-                                                                                    <aura:if
-                                                                                            isTrue="{!envelope.sent.daysBetween lt 7}">
-                                                                                        <lightning:relativeDateTime
-                                                                                                value="{!envelope.sent.value}"/>
-                                                                                        <aura:set attribute="else">
-                                                                                            <lightning:formattedDateTime
-                                                                                                    value="{!envelope.sent.value}"
-                                                                                                    hour="numeric"
-                                                                                                    minute="numeric"
-                                                                                                    year="numeric"
-                                                                                                    month="short"
-                                                                                                    day="numeric"/>
-                                                                                        </aura:set>
-                                                                                    </aura:if>
-                                                                                </aura:if>
+                                                                                <c:DateTime datetime="{!envelope.sent}"/>
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -132,20 +107,7 @@
                                                                         <div class="slds-form-element">
                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
-                                                                                <aura:if
-                                                                                        isTrue="{!envelope.completed.daysBetween lt 7}">
-                                                                                    <lightning:relativeDateTime
-                                                                                            value="{!envelope.completed.value}"/>
-                                                                                    <aura:set attribute="else">
-                                                                                        <lightning:formattedDateTime
-                                                                                                value="{!envelope.completed.value}"
-                                                                                                hour="numeric"
-                                                                                                minute="numeric"
-                                                                                                year="numeric"
-                                                                                                month="short"
-                                                                                                day="numeric"/>
-                                                                                    </aura:set>
-                                                                                </aura:if>
+                                                                                <c:DateTime datetime="{!envelope.completed}"/>
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -166,20 +128,7 @@
                                                                         <div class="slds-form-element">
                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.Expires}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
-                                                                                <aura:if
-                                                                                        isTrue="{!envelope.expires.daysBetween lt 7}">
-                                                                                    <lightning:relativeDateTime
-                                                                                            value="{!envelope.expires.value}"/>
-                                                                                    <aura:set attribute="else">
-                                                                                        <lightning:formattedDateTime
-                                                                                                value="{!envelope.expires.value}"
-                                                                                                hour="numeric"
-                                                                                                minute="numeric"
-                                                                                                year="numeric"
-                                                                                                month="short"
-                                                                                                day="numeric"/>
-                                                                                    </aura:set>
-                                                                                </aura:if>
+                                                                                <c:DateTime datetime="{!envelope.expires}"/>
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -187,20 +136,7 @@
                                                                         <div class="slds-form-element">
                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
-                                                                                <aura:if
-                                                                                        isTrue="{!envelope.lastStatusUpdate.daysBetween lt 7}">
-                                                                                    <lightning:relativeDateTime
-                                                                                            value="{!envelope.lastStatusUpdate.value}"/>
-                                                                                    <aura:set attribute="else">
-                                                                                        <lightning:formattedDateTime
-                                                                                                value="{!envelope.lastStatusUpdate.value}"
-                                                                                                hour="numeric"
-                                                                                                minute="numeric"
-                                                                                                year="numeric"
-                                                                                                month="short"
-                                                                                                day="numeric"/>
-                                                                                    </aura:set>
-                                                                                </aura:if>
+                                                                                <c:DateTime datetime="{!envelope.lastStatusUpdate}"/>
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -294,31 +230,14 @@
                                                                                                 </aura:if>
                                                                                             </p>
                                                                                             <!-- Recipient Details -->
-                                                                                            <div class="ds-recipient__details slds-box slds-theme_shade slds-m-top_x-small slds-p-bottom_none">
+                                                                                            <div class="ds-recipient__details slds-box slds-theme_shade">
                                                                                                 <div class="slds-grid slds-gutters slds-wrap">
                                                                                                     <div class="slds-col slds-size_1-of-2">
                                                                                                         <div class="slds-form-element">
                                                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.Sent}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                                                title="{!recipient.sent.value}">
-                                                                                                                <aura:if
-                                                                                                                        isTrue="{!not(empty(recipient.sent.daysBetween))}">
-                                                                                                                    <aura:if
-                                                                                                                            isTrue="{!recipient.sent.daysBetween lt 7}">
-                                                                                                                        <lightning:relativeDateTime
-                                                                                                                                value="{!recipient.sent.value}"/>
-                                                                                                                        <aura:set
-                                                                                                                                attribute="else">
-                                                                                                                            <lightning:formattedDateTime
-                                                                                                                                    value="{!recipient.sent.value}"
-                                                                                                                                    hour="numeric"
-                                                                                                                                    minute="numeric"
-                                                                                                                                    year="numeric"
-                                                                                                                                    month="short"
-                                                                                                                                    day="numeric"/>
-                                                                                                                        </aura:set>
-                                                                                                                    </aura:if>
-                                                                                                                </aura:if>
+                                                                                                                <c:DateTime datetime="{!recipient.sent}"/>
                                                                                                             </p>
                                                                                                         </div>
                                                                                                     </div>
@@ -327,21 +246,7 @@
                                                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.Completed}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none slds-truncate"
                                                                                                                title="{!recipient.completed}">
-                                                                                                                <aura:if
-                                                                                                                        isTrue="{!recipient.completed.daysBetween lt 7}">
-                                                                                                                    <lightning:relativeDateTime
-                                                                                                                            value="{!recipient.completed.value}"/>
-                                                                                                                    <aura:set
-                                                                                                                            attribute="else">
-                                                                                                                        <lightning:formattedDateTime
-                                                                                                                                value="{!recipient.completed.value}"
-                                                                                                                                hour="numeric"
-                                                                                                                                minute="numeric"
-                                                                                                                                year="numeric"
-                                                                                                                                month="short"
-                                                                                                                                day="numeric"/>
-                                                                                                                    </aura:set>
-                                                                                                                </aura:if>
+                                                                                                                <c:DateTime datetime="{!recipient.completed}"/>
                                                                                                             </p>
                                                                                                         </div>
                                                                                                     </div>
@@ -363,20 +268,7 @@
                                                                                                         <div class="slds-form-element">
                                                                                                             <h6 class="slds-form-element__label slds-show">{!$Label.c.LastStatusUpdate}</h6>
                                                                                                             <p class="slds-form-element__static slds-text-body_small slds-p-top_none">
-                                                                                                                <aura:if
-                                                                                                                        isTrue="{!recipient.lastStatusUpdate.daysBetween lt 7}">
-                                                                                                                    <lightning:relativeDateTime
-                                                                                                                            value="{!recipient.lastStatusUpdate.value}"/>
-                                                                                                                    <aura:set attribute="else">
-                                                                                                                        <lightning:formattedDateTime
-                                                                                                                                value="{!recipient.lastStatusUpdate.value}"
-                                                                                                                                hour="numeric"
-                                                                                                                                minute="numeric"
-                                                                                                                                year="numeric"
-                                                                                                                                month="short"
-                                                                                                                                day="numeric"/>
-                                                                                                                    </aura:set>
-                                                                                                                </aura:if>
+                                                                                                                <c:DateTime datetime="{!recipient.lastStatusUpdate}"/>
                                                                                                             </p>
                                                                                                         </div>
                                                                                                     </div>
@@ -402,10 +294,12 @@
                                         <!-- /Envelope -->
                                     </div>
 
-                                    <div class="slds-text-align_right slds-m-top_medium">
-                                        <a href="javascript:void(0)"
-                                           onclick="{!c.handleViewAllClick}">{!$Label.c.ViewAll}</a>
-                                    </div>
+                                    <aura:if isTrue="{!not(v.visualforce)}">
+                                        <div class="slds-text-align_right slds-m-top_medium">
+                                            <a href="javascript:void(0)"
+                                               onclick="{!c.handleViewAllClick}">{!$Label.c.ViewAll}</a>
+                                        </div>
+                                    </aura:if>
                                 </aura:set>
                             </aura:if>
                         </aura:set>

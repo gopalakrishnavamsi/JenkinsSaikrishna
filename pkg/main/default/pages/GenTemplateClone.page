@@ -1,7 +1,7 @@
 <apex:page sidebar="false" showHeader="true" standardController="GenTemplate__c"
-           extensions="GenController" title="Clone DocuSign Gen Template">
+           extensions="GenController" title="{!$Label.DocuSign}">
     <apex:slds/>
-    <apex:includeScript value="{!$Resource.UtilJS}"/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
 
     <style type="text/css">
         .bodyDiv {
@@ -46,7 +46,7 @@
     <script>
       Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.GenController.clone}', '{!GenTemplate__c.Id}', function (result, event) {
         if (event && event.status) {
-          _navigateToSObject(result);
+          navUtils.navigateToSObject(result);
         } else {
           document.getElementById('spinner').style.display = 'none';
           document.getElementById('error').style.display = 'block';

@@ -1,55 +1,37 @@
 ({
-  showToast: function (component, message, mode) {
-    component.set('v.message', message);
-    component.set('v.mode', mode);
-    component.find('toast').show();
-  },
-
-  hideToast: function (component) {
-    component.find('toast').close();
-  },
-
-  setLoading: function (component, loading) {
-    component.set('v.loading', loading === true);
-  },
-
-  getState: function (component, event, helper) {
-    helper.setLoading(component, true);
-
-    var getLogin = component.get('c.getLogin');
-
-    getLogin.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') {
-        var login = response.getReturnValue();
-        var isLoggedIn = login && login.status === 'Success';
-        var status = isLoggedIn ? 'complete' : 'notStarted';
-        component.set('v.login', login);
-        component.set('v.isLoggedIn', isLoggedIn);
-        component.set('v.login.selectedAccountNumber', !isLoggedIn || $A.util.isUndefinedOrNull(login) || $A.util.isEmpty(login.accounts) ? null : login.accounts[0].accountNumber);
-        // TODO: Fix trials
-        component.set('v.isTrialExpired', false);//login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
-        var steps = [{
-          name: 'setupAccount',
-          title: $A.get('$Label.c.ConnectToDocuSign'),
-          headerText: $A.get('$Label.c.ConnectToDocuSign'),
-          subText: $A.get('$Label.c.ConnectDocuSignToSalesforce'),
-          status: status
-        }, {
-          name: 'setupUsers',
-          title: $A.get('$Label.c.ManageUsers'),
-          headerText: $A.get('$Label.c.ManageUsers'),
-          subText: $A.get('$Label.c.ConnectDocuSignUser'),
-          status: status
-        }];
-        component.set('v.steps', steps);
-        component.set('v.shouldShowNextSteps', !login.isLoggedIn);
-        helper.updateProgression(component, steps);
-      } else {
-        helper.showToast(component, _getErrorMessage(response), 'error');
-      }
-      helper.setLoading(component, false);
+  getState: function (component) {
+    var self = this;
+    this.invokeAction(component, component.get('c.getLogin'), null, function (login) {
+      var isLoggedIn = login && login.status === 'Success';
+      var status = isLoggedIn ? 'complete' : 'notStarted';
+      component.set('v.login', login);
+      component.set('v.isLoggedIn', isLoggedIn);
+      component.set('v.login.selectedAccountNumber', !isLoggedIn || $A.util.isUndefinedOrNull(login) || $A.util.isEmpty(login.accounts) ? null : login.accounts[0].accountNumber);
+      // TODO: Fix trials
+      component.set('v.isTrialExpired', false);//login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
+      var steps = [{
+        name: 'setupAccount',
+        title: $A.get('$Label.c.ConnectToDocuSign'),
+        headerText: $A.get('$Label.c.ConnectToDocuSign'),
+        subText: $A.get('$Label.c.ConnectDocuSignToSalesforce'),
+        status: status
+      }, {
+        name: 'setupUsers',
+        title: $A.get('$Label.c.ManageUsers'),
+        headerText: $A.get('$Label.c.ManageUsers'),
+        subText: $A.get('$Label.c.ConnectDocuSignUser'),
+        status: status
+      }, {
+        name: 'setupLayouts',
+        title: $A.get('$Label.c.ModifyLayouts'),
+        headerText: $A.get('$Label.c.ModifyLayouts'),
+        subText: $A.get('$Label.c.AddToLayouts'),
+        status: status
+      }];
+      component.set('v.steps', steps);
+      component.set('v.shouldShowNextSteps', !login.isLoggedIn);
+      self.updateProgression(component, steps);
     });
-    $A.enqueueAction(getLogin);
   },
 
   goToStep: function (component, helper, stepName, showNextSteps) {
@@ -65,6 +47,9 @@
     } else if (stepName === 'setupUsers') {
       steps[1].status = 'complete';
       component.set('v.steps', steps);
+      component.set('v.nextStep', steps[2].status === 'complete' ? 'landing' : 'setupLayouts');
+    } else if (stepName === 'setupLayouts') {
+      steps[2].status = 'complete';
       component.set('v.nextStep', 'landing');
     } else {
       component.set('v.nextStep', null);

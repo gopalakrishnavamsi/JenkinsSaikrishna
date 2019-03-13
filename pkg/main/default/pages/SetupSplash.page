@@ -1,4 +1,4 @@
-<apex:page sidebar="false" showHeader="false" label="{!$Label.dfsle__docusign}">
+<apex:page sidebar="false" showHeader="false" title="{!$Label.DocuSign}">
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <apex:includeLightning />
     <apex:slds />

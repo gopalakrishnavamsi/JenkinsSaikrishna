@@ -1,4 +1,4 @@
-<apex:page sidebar="false" showHeader="true" standardController="GenTemplate__c" title="DocuSign Gen Template"
+<apex:page sidebar="false" showHeader="true" standardController="GenTemplate__c" title="{!$Label.DocuSign}"
            extensions="GenController">
     <apex:includeLightning/>
     <apex:slds/>

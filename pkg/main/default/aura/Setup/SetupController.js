@@ -1,5 +1,5 @@
 ({
-  initialize: function (component, event, helper) {
+  onInitialize: function (component, event, helper) {
     helper.getState(component, event, helper);
   },
 
@@ -24,26 +24,7 @@
     helper.goToStep(component, helper, 'landing', component.get('v.shouldShowNextSteps'));
   },
 
-  handleToastEvent: function (component, event, helper) {
-    var params = event.getParams();
-    if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
-      if (params.mode === 'success') {
-        setTimeout($A.getCallback(function () {
-          helper.hideToast(component);
-        }), 3000);
-      }
-    } else {
-      helper.hideToast(component);
-    }
-  },
-
-  handleLoadingEvent: function (component, event, helper) {
-    var params = event.getParams();
-    helper.setLoading(component, params && params.isLoading === true);
-  },
-
-  handleLoginEvent: function (component, event, helper) {
+  handleLoginEvent: function (component, event) {
     var steps = component.get('v.steps');
     var isLoggedIn = event.getParams().isLoggedIn;
     steps[0].status = isLoggedIn ? 'complete' : 'notStarted';

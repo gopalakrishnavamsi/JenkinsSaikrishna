@@ -1,7 +1,7 @@
 <aura:component description="AgreementsImport" controller="AgreementsImportController">
     <!-- FIXME : Check the resource.Utiljs since it has been refactored -->
     <!-- FIXME : Check hardcoding and replace with labels  -->
-    <ltng:require scripts="{!$Resource.UtilJS}"/>
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>

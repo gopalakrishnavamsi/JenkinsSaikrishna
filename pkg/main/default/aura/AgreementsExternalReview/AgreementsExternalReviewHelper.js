@@ -1,4 +1,17 @@
 ({
+    getErrorMessage: function (response) {
+        // TODO: Use uiHelper library.
+        var message = '';
+        if (response) {
+            var errors = response.getError();
+            message = errors;
+            if (Array.isArray(errors) && errors.length > 0) {
+                message = errors[0].message;
+            }
+        }
+        return message;
+    },
+
     resolveRecipient: function (component, recipient) {
         var self = this;
         //self.setLoading(component, true);
@@ -31,7 +44,7 @@
                     }
                 }
             } else {
-                self.showToast(component, _getErrorMessage(response), 'error');
+                self.showToast(component, self.getErrorMessage(response), 'error');
             }
             //self.setLoading(component, false);
         });
@@ -43,7 +56,7 @@
         return {
             name: isDefined ? recipient.name : null,
             email: isDefined ? recipient.email : null,
-            source: isDefined ? recipient.source : {},
+            source: isDefined ? recipient.source : {}
         };
     },
 

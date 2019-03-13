@@ -1,5 +1,5 @@
 ({
-  initialize: function (component, event, helper) {
+  initialize: function (component) {
     component.set('v.helpInfo', '');
   }
 });

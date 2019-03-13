@@ -1,4 +1,4 @@
-<apex:page id="CompleteOAuth" controller="SetupController">
+<apex:page id="CompleteOAuth" controller="SetupController" title="{!$Label.DocuSign}">
     <c:Loading />
     <script>
       function endOAuth(event, result) {

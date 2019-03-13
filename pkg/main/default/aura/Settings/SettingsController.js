@@ -1,10 +1,10 @@
 ({
-  initialize: function (component, event, helper) {
-    helper.hideToast(component);
+  onInitialize: function (component, event, helper) {
+    component.set('v.uiHelper', new UIHelper(component));
     helper.getSettings(component);
   },
 
-  onCancel: function (component, event, helper) {
+  onCancel: function (component) {
     component.set('v.showExitModal', true);
   },
 
