@@ -7,44 +7,44 @@
 
         var rr = component.get('c.resolveRecipient');
         rr.setParams({
-          sourceId: sourceId
+            sourceId: sourceId
         });
         rr.setCallback(this, function (response) {
-          if (response.getState() === 'SUCCESS') {
-            var result = response.getReturnValue();
-            if (!$A.util.isUndefinedOrNull(result)) {
-              var updated = false;
-              var rs = component.get('v.recipients');
-              rs.forEach(function (r) {
-                // Update name, email, phone, full source for new recipient
-                if (self.getSourceId(r) === sourceId) {
-                  r.name = result.name;
-                  r.email = result.email;
-                  r.source = result.source;
-                  updated = true;
+            if (response.getState() === 'SUCCESS') {
+                var result = response.getReturnValue();
+                if (!$A.util.isUndefinedOrNull(result)) {
+                    var updated = false;
+                    var rs = component.get('v.recipients');
+                    rs.forEach(function (r) {
+                        // Update name, email, phone, full source for new recipient
+                        if (self.getSourceId(r) === sourceId) {
+                            r.name = result.name;
+                            r.email = result.email;
+                            r.source = result.source;
+                            updated = true;
+                        }
+                    });
+                    // Prevent rebinding if nothing has changed.
+                    if (updated) {
+                        component.set('v.recipients', rs);
+                        component.set('v.disableNext', false);
+                    }
                 }
-              });
-              // Prevent rebinding if nothing has changed.
-              if (updated) {
-                component.set('v.recipients', rs);
-                component.set('v.disableNext', false);
-              }
+            } else {
+                self.showToast(component, _getErrorMessage(response), 'error');
             }
-          } else {
-            self.showToast(component, _getErrorMessage(response), 'error');
-          }
-          //self.setLoading(component, false);
+            //self.setLoading(component, false);
         });
         $A.enqueueAction(rr);
     },
 
     newRecipient: function (recipient) {
-       var isDefined = !$A.util.isUndefinedOrNull(recipient);
-       return {
-         name: isDefined ? recipient.name : null,
-         email: isDefined ? recipient.email : null,
-         source: isDefined ? recipient.source : {},
-       };
+        var isDefined = !$A.util.isUndefinedOrNull(recipient);
+        return {
+            name: isDefined ? recipient.name : null,
+            email: isDefined ? recipient.email : null,
+            source: isDefined ? recipient.source : {},
+        };
     },
 
     getSourceId: function (x) {
@@ -52,23 +52,23 @@
 
         var sourceId = null;
         if (!$A.util.isEmpty(x.sourceId)) {
-          sourceId = x.sourceId;
+            sourceId = x.sourceId;
         } else if (!$A.util.isUndefinedOrNull(x.source) && !$A.util.isEmpty(x.source.id)) {
-          sourceId = x.source.id;
+            sourceId = x.source.id;
         }
         return sourceId;
     },
-    show: function(component, event, helper){
+    show: function (component, event, helper) {
         component.find('externalReviewAgreementsModal').show();
     },
 
-    hide: function(component, event, helper) {
+    hide: function (component, event, helper) {
         component.find('externalReviewAgreementsModal').hide();
     },
     showToast: function (component, message, mode) {
         var evt = component.getEvent('toastEvent');
         evt.setParams({
-          show: true, message: message, mode: mode
+            show: true, message: message, mode: mode
         });
         evt.fire();
     }

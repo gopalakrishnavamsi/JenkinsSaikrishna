@@ -1,5 +1,5 @@
 ({
-    onInit: function(component, event, helper) {
+    onInit: function (component, event, helper) {
         //initialize recipients
         var recipients = component.get('v.recipients');
         recipients.push(helper.newRecipient());
@@ -10,7 +10,7 @@
     },
 
     handleRecipientChange: function (component, event, helper) {
-            helper.resolveRecipient(component, event.getParam('data'));
+        helper.resolveRecipient(component, event.getParam('data'));
     },
     addRecipient: function (component, event, helper) {
         var recipients = component.get('v.recipients');
@@ -22,55 +22,55 @@
         recipients.splice(event.getSource().get('v.value'), 1);
         component.set('v.recipients', recipients);
     },
-    onApproverDrag : function(component, event, helper) {
+    onApproverDrag: function (component, event, helper) {
         event.dataTransfer.setData('Text', '');
         if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
             component.set('v.draggedId', parseInt(event.currentTarget.id));
-            console.log('dragged id '+parseInt(event.currentTarget.id));
+            console.log('dragged id ' + parseInt(event.currentTarget.id));
         }
     },
-    allowDrop :function(component, event, helper) {
+    allowDrop: function (component, event, helper) {
         event.preventDefault();
     },
-    onApproverDrop : function(component, event, helper) {
+    onApproverDrop: function (component, event, helper) {
         if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
             component.set('v.droppedId', parseInt(event.currentTarget.id));
-            console.log('dropped id '+parseInt(event.currentTarget.id));
+            console.log('dropped id ' + parseInt(event.currentTarget.id));
         }
 
         var draggedId = component.get('v.draggedId');
         var droppedId = component.get('v.droppedId');
         var recipients = component.get('v.recipients');
 
-        if(draggedId !== 'undefined'
+        if (draggedId !== 'undefined'
             && droppedId !== 'undefined'
             && recipients !== 'undefined') {
 
-            if(recipients[droppedId] !== 'undefined'
+            if (recipients[droppedId] !== 'undefined'
                 && recipients[draggedId] !== 'undefined'
                 && recipients[draggedId].name !== 'undefined'
                 && recipients[draggedId].name !== ''
                 && recipients[droppedId].name !== 'undefined'
                 && recipients[droppedId].name !== '') {
-                    var temp = recipients[draggedId];
-                    recipients.splice(draggedId, 1);
-                    recipients.splice(droppedId, 0, temp);
-                    component.set('v.recipients', recipients);
-                }
+                var temp = recipients[draggedId];
+                recipients.splice(draggedId, 1);
+                recipients.splice(droppedId, 0, temp);
+                component.set('v.recipients', recipients);
+            }
         }
         else {
             console.log('Entered else');
         }
     },
 
-    setApprovalOrder: function(component, event, helper) {
+    setApprovalOrder: function (component, event, helper) {
         //set the attribute showApprovalOrder based on Checkbox value
         var isChecked = component.find('approvalOrderCheckbox').get('v.checked');
         component.set('v.showApprovalOrder', isChecked);
     },
 
 
-    backButtonClicked: function(component, event, helper) {
+    backButtonClicked: function (component, event, helper) {
         var currentStep = component.get('v.currentStep');
         //currentStep is Select Recipients
         if (currentStep === '1') {
@@ -81,7 +81,7 @@
             component.set('v.currentStep', '1');
         }
     },
-    nextButtonClicked: function(component, event, helper) {
+    nextButtonClicked: function (component, event, helper) {
         var currentStep = component.get('v.currentStep');
         if (currentStep === '1') {
             //Proceed to the personalize message step

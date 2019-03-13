@@ -1,12 +1,13 @@
 ({
-    createUploadComponent: function(component, event, helper) {
+    createUploadComponent: function (component, event, helper) {
+        //FIXME: create a reusable method for creating the components
         $A.createComponent(
             "c:AgreementsUpload",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('uploadModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);
@@ -17,14 +18,14 @@
         );
     },
 
-    createDeleteComponent: function(component, event, helper) {
+    createDeleteComponent: function (component, event, helper) {
         $A.createComponent(
             "c:DeleteAgreement",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('deleteModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);
@@ -35,14 +36,14 @@
         );
     },
 
-    createInternalApprovalComponent: function(component, event, helper) {
+    createInternalApprovalComponent: function (component, event, helper) {
         $A.createComponent(
             "c:AgreementsInternalReview",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('internalApprovalModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);
@@ -53,14 +54,14 @@
         );
     },
 
-    createExternalReviewComponent: function(component, event, helper) {
+    createExternalReviewComponent: function (component, event, helper) {
         $A.createComponent(
             "c:AgreementsExternalReview",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('externalReviewModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);
@@ -71,14 +72,14 @@
         );
     },
 
-    createRenameComponent: function(component, event, helper) {
+    createRenameComponent: function (component, event, helper) {
         $A.createComponent(
             "c:AgreementsRename",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('renameModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);
@@ -89,14 +90,14 @@
         );
     },
 
-    createShareLinkComponent: function(component, event, helper) {
+    createShareLinkComponent: function (component, event, helper) {
         $A.createComponent(
             "c:AgreementsShareLink",
             {
-                "showModal" : true,
+                "showModal": true,
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('shareLinkModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);

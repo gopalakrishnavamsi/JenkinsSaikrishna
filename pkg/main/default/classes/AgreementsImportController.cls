@@ -1,7 +1,6 @@
-/**
- * Created by Vineet.Puranik on 2/28/2019.
- */
 public with sharing class AgreementsImportController extends Controller {
+	//FIXME : Add Test classes once the class body is locked down
+
 	public AgreementsImportController() {
 	}
 

@@ -1,23 +1,23 @@
 ({
-	showToast: function (component, message, mode) {
+    showToast: function (component, message, mode) {
         component.set('v.message', message);
         component.set('v.mode', mode);
         component.set('v.showToast', true);
     },
 
-	hideToast: function (component) {
+    hideToast: function (component) {
         component.find('toast').close();
     },
 
-    createImportComponent: function(component, event, helper) {
+    createImportComponent: function (component, event, helper) {
         $A.createComponent(
             "c:AgreementsImport",
             {
-                "showModal" : true,
-                "recordId" : component.get('v.recordId')
+                "showModal": true,
+                "recordId": component.get('v.recordId')
             },
-            function(componentBody) {
-                if(component.isValid()) {
+            function (componentBody) {
+                if (component.isValid()) {
                     var targetCmp = component.find('importModal');
                     var body = targetCmp.get("v.body");
                     targetCmp.set("v.body", []);

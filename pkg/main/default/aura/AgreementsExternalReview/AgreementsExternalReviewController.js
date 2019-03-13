@@ -1,5 +1,5 @@
 ({
-    onInit: function(component, event, helper) {
+    onInit: function (component, event, helper) {
         //initialize recipients
         var recipients = component.get('v.recipients');
         recipients.push(helper.newRecipient());
@@ -11,7 +11,7 @@
     handleRecipientChange: function (component, event, helper) {
         helper.resolveRecipient(component, event.getParam('data'));
     },
-    backButtonClicked: function(component, event, helper) {
+    backButtonClicked: function (component, event, helper) {
         var currentStep = component.get('v.currentStep');
 
         //currentStep is Select Recipients
@@ -26,7 +26,7 @@
 
     },
 
-    nextButtonClicked: function(component, event, helper) {
+    nextButtonClicked: function (component, event, helper) {
         var currentStep = component.get('v.currentStep');
 
         if (currentStep === '1') {

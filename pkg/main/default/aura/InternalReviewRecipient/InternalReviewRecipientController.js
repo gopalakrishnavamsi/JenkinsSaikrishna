@@ -5,12 +5,12 @@
         ///raise event
 
         if (r && sId && (!r.source || (r.source.id !== sId))) {
-          var e = component.getEvent('recipientIdChange');
-          r.source = {
-            id: sId
-          };
-          e.setParams({data: r});
-          e.fire();
+            var e = component.getEvent('recipientIdChange');
+            r.source = {
+                id: sId
+            };
+            e.setParams({ data: r });
+            e.fire();
         }
     }
 })

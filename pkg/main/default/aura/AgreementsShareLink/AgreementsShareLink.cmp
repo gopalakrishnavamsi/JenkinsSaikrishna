@@ -1,5 +1,6 @@
 <aura:component description="AgreementsShareLink">
-    <!-- TODO Copy Functionality pending -->
+    <!-- FIXME Copy Functionality pending -->
+    <!-- FIXME Add custom labels -->
 
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
