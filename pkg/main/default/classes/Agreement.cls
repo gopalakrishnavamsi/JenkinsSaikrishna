@@ -2,7 +2,6 @@
  * Representation of a DocuSign Agreement.
  */
 public class Agreement {
-
     /**
 	 * The DocuSign Agreement name.
 	 */
