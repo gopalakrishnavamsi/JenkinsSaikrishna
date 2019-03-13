@@ -466,15 +466,16 @@ public with sharing class MetadataService {
 	// may be garbled, e.g. SomeAction for MyObject__c becomes MyObject__SomeAction. Awesome.
 	@TestVisible
 	private static String fixActionName(
-		final String type,
+		final SObjectType type,
 		final String actionName) {
 
 		String result = actionName;
 		if (type != null && actionName != null) {
-			result = result.removeStart(type + '-');
-			Integer index = type.indexOf('__c');
+			String t = String.valueOf(type);
+			result = result.removeStart(t + '-');
+			Integer index = t.indexOf('__c');
 			if (index > 0) {
-				result = result.removeStart(type.substring(0, index + 2));
+				result = result.removeStart(t.substring(0, index + 2));
 			}
 		}
 		return result;
@@ -485,8 +486,10 @@ public with sharing class MetadataService {
 		final SObjectType type,
 		final String actionName) {
 
+		if (String.isBlank(actionName)) return new Set<String>();
+
 		Set<String> result = new Set<String> { actionName };
-		if (type != null && String.isNotBlank(actionName)) {
+		if (type != null) {
 			String t = String.valueOf(type);
 			result.add(t + '-' + actionName);
 			Integer index = t.indexOf('__c');
@@ -519,7 +522,7 @@ public with sharing class MetadataService {
 			for (MetadataAPI.PlatformActionListItem pali : platformActionListItems) {
 				if (pali != null && !actionNames.contains(pali.actionName)) {
 					pali.sortOrder = sortOrder++;
-					pali.actionName = fixActionName(String.valueOf(type), pali.actionName);
+					pali.actionName = fixActionName(type, pali.actionName);
 					result.add(pali);
 				}
 			}

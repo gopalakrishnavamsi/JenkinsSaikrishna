@@ -853,4 +853,25 @@ private class MetadataServiceTest {
 			System.assertEquals(2, Collection.size(result));
 		}
 	}
+
+	@IsTest
+	static void test_fixActionName() {
+		System.assertEquals(null, MetadataService.fixActionName(null, null));
+		System.assertEquals('test', MetadataService.fixActionName(null, 'test'));
+		System.assertEquals('test', MetadataService.fixActionName(Lead.getSObjectType(), 'test'));
+		System.assertEquals('test', MetadataService.fixActionName(Lead.getSObjectType(), 'Lead-test'));
+		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), 'test'));
+		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), Application.namespacePrefix + 'Envelope__test'));
+	}
+
+	@IsTest
+	static void test_getPossibleActionNames() {
+		System.assertEquals(new Set<String>(), MetadataService.getPossibleActionNames(null, null));
+		System.assertEquals(new Set<String>(), MetadataService.getPossibleActionNames(null, ''));
+		System.assertEquals(new Set<String>(), MetadataService.getPossibleActionNames(null, '\t'));
+		System.assertEquals(new Set<String> { 'test' }, MetadataService.getPossibleActionNames(null, 'test'));
+		System.assertEquals(new Set<String> { 'test', 'Lead-test' }, MetadataService.getPossibleActionNames(Lead.getSObjectType(), 'test'));
+		System.assertEquals(new Set<String> { 'test', Application.namespacePrefix + 'Envelope__c-test', Application.namespacePrefix + 'Envelope__test' },
+			MetadataService.getPossibleActionNames(Envelope__c.getSObjectType(), 'test'));
+	}
 }
