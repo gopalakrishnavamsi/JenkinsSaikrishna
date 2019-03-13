@@ -190,12 +190,33 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
-            this.log.error('Failed to rename Agreement: ' + response.error);
+            this.log.error('Failed to rename Agreement: ' + documentId + ': ' + response.error);
             throw new APIException(response.error);
         }
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
         return body.get('Name') == docName;
+    }
+
+    // Delete Agreement
+
+    public Boolean deleteAgreement(String documentId) {
+
+        RestAPI.Response response = del(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_DOCUMENTS
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                '',
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to delete Agreement - ' + documentId + ': ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        return response.statusCode == 200 ;
     }
 
 }

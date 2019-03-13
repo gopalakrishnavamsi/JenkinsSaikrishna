@@ -85,4 +85,20 @@ public with sharing class NegotiateAPITest {
         }
     }
 
+    @IsTest
+    static void test_deleteAgreement_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            Boolean result = NegotiateAPI.getInstance().deleteAgreement(NegotiateAPIMock.DOCUMENT_ID);
+            Test.stopTest();
+
+            System.assertNotEquals(null, result);
+            System.assertEquals(true, result);
+
+        }
+    }
+
 }
