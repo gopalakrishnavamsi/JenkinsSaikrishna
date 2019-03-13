@@ -10,7 +10,9 @@
 	<div aura:id="toast" class="{!'ds-toast slds-notify_container' + if(v.showToast, ' ds-toast_shown', '') + if(v.inVfPage, ' ds-toast_vf', '')}">
 		<div class="{!'slds-notify slds-notify--toast ' + if(v.mode == 'success', 'slds-theme_success', 'slds-theme_error')}" role="alert">
 			<lightning:icon class="slds-no-flex slds-m-right_small" size="small" iconName="{!if(v.mode == 'success', 'utility:success', 'utility:error')}" variant="inverse"/>
-			<lightning:buttonIcon class="slds-button--icon-inverse slds-notify__close slds-m-left_small" alternativeText="close" iconName="utility:close" size="large" variant="bare" onclick="{!c.close}"/>
+			<aura:if isTrue="{!v.mode == 'error'}">
+				<lightning:buttonIcon class="slds-button--icon-inverse slds-notify__close slds-m-left_small" alternativeText="close" iconName="utility:close" size="large" variant="bare" onclick="{!c.close}"/>
+			</aura:if>
 			<div class="slds-notify__content">
 				<h2 class="slds-text-heading_small slds-m-top_xxx-small">{!v.message}</h2>
 			</div>
