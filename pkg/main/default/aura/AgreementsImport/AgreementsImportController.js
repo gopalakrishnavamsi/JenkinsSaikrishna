@@ -23,7 +23,6 @@
     },
 
     importButtonClicked: function (component, event, helper) {
-        console.log('Import button from Salesforce file');
     },
 
     handleFileSelection: function (component, event, helper) {
@@ -35,7 +34,7 @@
     },
 
     uploadFileImportButtonClicked: function (component, event, helper) {
-        console.log('Import button from Upload file clicked');
+
     },
 
     uploadScriptsLoaded: function (component, event, helper) {

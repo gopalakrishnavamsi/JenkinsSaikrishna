@@ -26,7 +26,6 @@
         event.dataTransfer.setData('Text', '');
         if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
             component.set('v.draggedId', parseInt(event.currentTarget.id));
-            console.log('dragged id ' + parseInt(event.currentTarget.id));
         }
     },
     allowDrop: function (component, event, helper) {
@@ -59,7 +58,6 @@
             }
         }
         else {
-            console.log('Entered else');
         }
     },
 

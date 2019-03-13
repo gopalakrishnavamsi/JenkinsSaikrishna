@@ -8,7 +8,6 @@
                 component.set('v.namespace', response.getReturnValue());
             }
             else if (state === "ERROR") {
-                console.log('Error ' + response.getError());
             }
         });
         $A.enqueueAction(action);

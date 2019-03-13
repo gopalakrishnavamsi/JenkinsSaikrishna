@@ -25,7 +25,6 @@
         getSalesforceFiles.setCallback(this, function (response) {
             if (response.getState() === 'SUCCESS') {
                 var result = response.getReturnValue();
-                console.log('response ' + result);
                 // Add front-end properties to documents
                 if (!$A.util.isEmpty(result)) {
                     result.forEach(function (d) {

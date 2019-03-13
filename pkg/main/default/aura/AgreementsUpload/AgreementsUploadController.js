@@ -6,7 +6,6 @@
     },
 
     cancelButtonClicked: function (component, event, helper) {
-        console.log('Cancel Button clicked');
         helper.close(component, event, helper);
     },
 
