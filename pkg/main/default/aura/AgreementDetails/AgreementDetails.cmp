@@ -3,8 +3,8 @@
 
     <!-- attributes -->
     <aura:attribute name="showTimeLine" type="boolean"/>
-    <aura:attribute name="timelineDetails" type="List" access="global"/>
-    <aura:attribute name="fileDetails" type="Map" access="global"/>
+    <aura:attribute name="timelineDetails" type="List"/>
+    <aura:attribute name="fileDetails" type="Map"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
 
     <!-- handlers -->

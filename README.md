@@ -9,7 +9,7 @@ Salesforce DX is used to build, test, and deploy this project.
 1. [Install and configure Salesforce DX](./doc/sfdx.md).
 1. Create a scratch org for development: `sfdx force:org:create -f ./etc/dev.json -s -a dfsle-scratch-org`. This org will persist for 7 days by default. Customize its alias by changing `dfsle-scratch-org` to the desired value.
 1. Push the source to your scratch org: `sfdx force:source:push`.
-1. Assign the "DocuSign Administrator" permission set: `sfdx force:user:permset:assign -n DocuSign_Administrator -u dfsle-scratch-org`.
+1. Run post-install scripts in your scratch org: `sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org`
 
 Once you have completed the initial scratch org setup, you can sync any local changes with that org using the `sfdx force:source:push`.
 
