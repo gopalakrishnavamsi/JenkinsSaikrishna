@@ -69,7 +69,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         public String objectId;
         public String objectType ;
 
-        EosInfo(String objectName, String objectId, String objectType) {
+        EosInfo(final String objectName, final String objectId, final String objectType) {
             this.name = objectName;
             this.objectId = objectId;
             this.objectType = objectType;
@@ -77,9 +77,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     // Create EOS folder in SpringCM Space
-    public String createEOSFolder(String objectName, String objectId, String objectType) {
+    public String createEOSFolder(final String objectName, final String objectId, final String objectType) {
 
-        RestAPI.Response response = post(
+        final RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
                         PATH_FOLDER
@@ -111,15 +111,15 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     private class APIFolder {
         public String href;
 
-        APIFolder(String href) {
+        APIFolder(final String href) {
             this.href = href;
         }
     }
 
     //Create Agreement in EOS folder
-    public String createAgreementInEOSFolder(String sfContentVersionId, String folderId, String docName) {
+    public String createAgreementInEOSFolder(final String sfContentVersionId, final String folderId, final String docName) {
 
-        RestAPI.Response response = post(
+        final RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
                         PATH_AGREEMENT_IN_EOS_FOLDER
@@ -143,7 +143,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     //Get All Agreements from an EOS folder
-    public List<Agreement> getAgreements(String folderId) {
+    public List<Agreement> getAgreements(final String folderId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
         queryStrings.put('limit', '20');
@@ -154,7 +154,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             offset = +20;
             queryStrings.put('offset', String.valueOf(offset));
 
-            RestAPI.Response response = get(
+            final RestAPI.Response response = get(
                     getBaseUrl(),
                     new List<String>{
                             PATH_FOLDER, folderId, PATH_DOCUMENTS
@@ -177,9 +177,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Rename Agreement
 
-    public Boolean renameAgreement(String documentId, String docName) {
+    public Boolean renameAgreement(final String documentId, final String docName) {
 
-        RestAPI.Response response = put(
+        final RestAPI.Response response = put(
                 getBaseUrl(),
                 new List<String>{
                         PATH_DOCUMENTS, documentId
@@ -201,9 +201,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Delete Agreement
 
-    public Boolean deleteAgreement(String documentId) {
+    public Boolean deleteAgreement(final String documentId) {
 
-        RestAPI.Response response = del(
+        final RestAPI.Response response = del(
                 getBaseUrl(),
                 new List<String>{
                         PATH_DOCUMENTS
@@ -221,7 +221,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     // Get all the versions of the Agreement
-    public List<Agreement> getAgreementVersions (String docId) {
+    public List<Agreement> getAgreementVersions (final String docId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
         queryStrings.put('limit', '20');
@@ -232,7 +232,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             offset = +20;
             queryStrings.put('offset', String.valueOf(offset));
 
-            RestAPI.Response response = get(
+            final RestAPI.Response response = get(
                     getBaseUrl(),
                     new List<String>{
                             PATH_DOCUMENTS, docId, PATH_AGREEMENT_VERSIONS
