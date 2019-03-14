@@ -18,7 +18,7 @@
  * </pre>
  */
 @IsTest
-global class ESignatureAPIMock extends OAuthTokenMock {
+global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
 		'accounts' => Application.classNamespacePrefix + 'ESignatureAPIMock.AccountsMock',
@@ -869,6 +869,10 @@ global class ESignatureAPIMock extends OAuthTokenMock {
 		response.setBody(resp.body);
 
 		return response;
+	}
+
+	override public HttpResponse respond(final HttpRequest request) {
+		return super.respond(request);
 	}
 
 	/**
