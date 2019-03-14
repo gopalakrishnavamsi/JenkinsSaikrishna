@@ -3,6 +3,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     public static final String PATH_FOLDER = 'folders';
     public static final String PATH_DOCUMENTS = 'documents';
     public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
+    public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 
     private static NegotiateAPI self = null;
 
@@ -218,5 +219,40 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         return response.statusCode == 200 ;
     }
+
+    // Get all the versions of the Agreement
+    public List<Agreement> getAgreementVersions (String docId) {
+        List<Agreement> agreements = new List<Agreement>();
+        Map<String, String> queryStrings = new Map<String, String>();
+        queryStrings.put('limit', '20');
+        Long offset = -20;
+        String next = '';
+
+        while (next != null) {
+            offset = +20;
+            queryStrings.put('offset', String.valueOf(offset));
+
+            RestAPI.Response response = get(
+                    getBaseUrl(),
+                    new List<String>{
+                            PATH_DOCUMENTS, docId, PATH_AGREEMENT_VERSIONS
+                    },
+                    QueryString.empty,
+                    getDefaultHeaders(),
+                    RestAPI.defaultTimeout);
+            if (response.hasError) {
+                this.log.error('Failed to get versions of Agreement - ' + docId + ': ' + response.error);
+                throw new APIException(response.error);
+            }
+
+            APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
+            agreements.addAll(result.items);
+            next = result.next;
+        }
+
+        return agreements;
+    }
+
+
 
 }

@@ -101,4 +101,19 @@ public with sharing class NegotiateAPITest {
         }
     }
 
+    @IsTest
+    static void test_getAgreementVersions_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            List<Agreement> result = NegotiateAPI.getInstance().getAgreementVersions(NegotiateAPIMock.DOCUMENT_ID);
+            Test.stopTest();
+
+            System.assertNotEquals(null, result);
+            System.assertEquals(3, result.size());
+            System.assertEquals('newName.docx', result.get(0).name);
+        }
+    }
 }
