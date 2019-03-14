@@ -10,7 +10,7 @@ public abstract class OAuthTokenMock implements HttpCalloutMock {
 		this.bypass = bypass;
 	}
 
-	public HttpResponse respond(final HttpRequest request) {
+	public virtual HttpResponse respond(final HttpRequest request) {
 		if (this.bypass || request == null || request.getMethod() != 'POST' || !request.getEndpoint().contains('/oauth/token')) {
 			return getResponse(request);
 		}
