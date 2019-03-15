@@ -2,8 +2,8 @@
 public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 
     private final Boolean success;
-    public static final String FOLDER_ID = '56322efe-e541-e911-9c1d-3ca82a1e3f41';
-    public static final String DOCUMENT_ID = '382bd222-1536-e911-9c1d-3ca82a1e3f41';
+    public static final UUID FOLDER_ID = UUID.parse('56322efe-e541-e911-9c1d-3ca82a1e3f41');
+    public static final UUID DOCUMENT_ID = UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41');
 
     public NegotiateAPIMock(final Boolean success) {
         this.success = success;

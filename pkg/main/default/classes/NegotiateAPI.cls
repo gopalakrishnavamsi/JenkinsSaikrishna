@@ -77,7 +77,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     // Create EOS folder in SpringCM Space
-    public String createEOSFolder(final String objectName, final String objectId, final String objectType) {
+    public UUID createEOSFolder(final String objectName, final String objectId, final String objectType) {
 
         final RestAPI.Response response = post(
                 getBaseUrl(),
@@ -96,14 +96,30 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
-        return ((String) body.get('Href')).substringAfterLast('/');
+        return UUID.parse(((String) body.get('Href')).substringAfterLast('/'));
     }
 
     @TestVisible
     private class APIAgreements {
 
-        public List<Agreement> items;
+        public List<APIAgreement> items;
         public String next;
+    }
+
+    @TestVisible
+    private class APIAgreement {
+        public String name;
+        public Datetime createdDate;
+        public String status;
+        public String href;
+
+        public Agreement convertAPIAgreement() {
+            return new Agreement(
+                    UUID.parse(this.href.substringAfterLast('/')),
+                    this.name,
+                    this.createdDate,
+                    this.status);
+        }
     }
 
 
@@ -117,7 +133,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     //Create Agreement in EOS folder
-    public String createAgreementInEOSFolder(final String sfContentVersionId, final String folderId, final String docName) {
+    public UUID createAgreementInEOSFolder(final String sfContentVersionId, final UUID folderId, final String docName) {
 
         final RestAPI.Response response = post(
                 getBaseUrl(),
@@ -128,7 +144,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object>{
                         'SfContentVersionId' => sfContentVersionId,
-                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + folderId),
+                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + folderId.toString()),
                         'Name' => docName
                 }),
                 RestAPI.defaultTimeout);
@@ -139,11 +155,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
         // taskId, we can use below taskId to check the status of the uploaded document
-        return ((String) body.get('Href')).substringAfterLast('/');
+        return UUID.parse(((String) body.get('Href')).substringAfterLast('/'));
     }
 
     //Get All Agreements from an EOS folder
-    public List<Agreement> getAgreements(final String folderId) {
+    public List<Agreement> getAgreements(final UUID folderId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
         queryStrings.put('limit', '20');
@@ -157,7 +173,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             final RestAPI.Response response = get(
                     getBaseUrl(),
                     new List<String>{
-                            PATH_FOLDER, folderId, PATH_DOCUMENTS
+                            PATH_FOLDER, folderId.toString(), PATH_DOCUMENTS
                     },
                     QueryString.empty,
                     getDefaultHeaders(),
@@ -168,7 +184,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             }
 
             APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
-            agreements.addAll(result.items);
+            for (APIAgreement a : result.items) {
+                agreements.add(a.convertAPIAgreement());
+            }
             next = result.next;
         }
 
@@ -177,12 +195,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Rename Agreement
 
-    public Boolean renameAgreement(final String documentId, final String docName) {
+    public Boolean renameAgreement(final UUID documentId, final String docName) {
 
         final RestAPI.Response response = put(
                 getBaseUrl(),
                 new List<String>{
-                        PATH_DOCUMENTS, documentId
+                        PATH_DOCUMENTS, documentId.toString()
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -201,12 +219,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Delete Agreement
 
-    public Boolean deleteAgreement(final String documentId) {
+    public Boolean deleteAgreement(final UUID documentId) {
 
         final RestAPI.Response response = del(
                 getBaseUrl(),
                 new List<String>{
-                        PATH_DOCUMENTS
+                        PATH_DOCUMENTS, documentId.toString()
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -221,7 +239,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     // Get all the versions of the Agreement
-    public List<Agreement> getAgreementVersions (final String docId) {
+    public List<Agreement> getAgreementVersions(final UUID docId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
         queryStrings.put('limit', '20');
@@ -235,7 +253,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             final RestAPI.Response response = get(
                     getBaseUrl(),
                     new List<String>{
-                            PATH_DOCUMENTS, docId, PATH_AGREEMENT_VERSIONS
+                            PATH_DOCUMENTS, docId.toString(), PATH_AGREEMENT_VERSIONS
                     },
                     QueryString.empty,
                     getDefaultHeaders(),
@@ -246,13 +264,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             }
 
             APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
-            agreements.addAll(result.items);
+            for (APIAgreement a : result.items) {
+                agreements.add(a.convertAPIAgreement());
+            }
             next = result.next;
         }
 
         return agreements;
     }
-
-
 
 }

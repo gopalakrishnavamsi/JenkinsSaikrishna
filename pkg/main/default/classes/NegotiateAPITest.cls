@@ -8,7 +8,7 @@ public with sharing class NegotiateAPITest {
         System.runAs(UserMock.createDocuSignUser()) {
 
             Test.startTest();
-            String result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', '0061U0000058I2EQAU', 'Opportunity');
+            UUID result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', '0061U0000058I2EQAU', 'Opportunity');
             Test.stopTest();
 
             System.assertNotEquals(null, result);
@@ -45,11 +45,11 @@ public with sharing class NegotiateAPITest {
         System.runAs(UserMock.createDocuSignUser()) {
 
             Test.startTest();
-            String result = NegotiateAPI.getInstance().createAgreementInEOSFolder('0061U0000058I2EQAU',
+            UUID result = NegotiateAPI.getInstance().createAgreementInEOSFolder('0061U0000058I2EQAU',
                     NegotiateAPIMock.FOLDER_ID, 'negotiate.docx');
             Test.stopTest();
             System.assertNotEquals(null, result);
-            System.assertEquals('4682d399-29fe-4085-9e48-126e4ffa0566', result);
+            System.assertEquals(UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566'), result);
         }
     }
 
@@ -66,6 +66,7 @@ public with sharing class NegotiateAPITest {
             System.assertNotEquals(null, result);
             System.assertEquals(1, result.size());
             System.assertEquals('docusignlogerror7-23-18-1.docx', result.get(0).name);
+            System.assertEquals(UUID.parse('ea7ab407-ea41-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
         }
     }
 
@@ -114,6 +115,7 @@ public with sharing class NegotiateAPITest {
             System.assertNotEquals(null, result);
             System.assertEquals(3, result.size());
             System.assertEquals('newName.docx', result.get(0).name);
+            System.assertEquals(UUID.parse('213e9c1a-8f46-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
         }
     }
 }
