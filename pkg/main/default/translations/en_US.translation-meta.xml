@@ -2450,13 +2450,11 @@
 		<name>KeyNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>A button with this label already exists. Please choose a different label.</label>
-		<name>DuplicateButton</name>
+		<label>{0}: ({1}) {2}</label>
+		<name>MetadataError_3</name>
 	</customLabels>
 	<customLabels>
-		<label>Failed to update one or more metadata items:
-			{0}
-		</label>
+		<label>Failed to update one or more metadata items: {0}</label>
 		<name>UpdateMetadataFailure_1</name>
 	</customLabels>
 	<customLabels>
