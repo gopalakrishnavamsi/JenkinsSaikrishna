@@ -4,6 +4,7 @@
     transform: translateY(calc(90px - 1.5rem));
     opacity: 0;
     position: fixed;
+    white-space: pre-wrap;
 }
 
 .THIS.ds-toast.ds-toast_vf {

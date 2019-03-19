@@ -4553,20 +4553,18 @@
 		<value>Encryption key not found.</value>
 	</labels>
 	<labels>
-		<fullName>DuplicateButton</fullName>
+		<fullName>MetadataError_3</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Duplicate button</shortDescription>
-		<value>A button with this label already exists. Please choose a different label.</value>
+		<shortDescription>Metadata error</shortDescription>
+		<value>{0}: ({1}) {2}</value>
 	</labels>
 	<labels>
 		<fullName>UpdateMetadataFailure_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Update metadata failure</shortDescription>
-		<value>Failed to update one or more metadata items:
-			{0}
-		</value>
+		<value>Failed to update one or more metadata items: {0}</value>
 	</labels>
 	<labels>
 		<fullName>SendWithDocuSign</fullName>
