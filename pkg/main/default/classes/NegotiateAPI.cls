@@ -3,6 +3,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     public static final String PATH_FOLDER = 'folders';
     public static final String PATH_DOCUMENTS = 'documents';
     public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
+    public static final String PATH_WORKFLOWS = 'workflows';
 
     private static NegotiateAPI self = null;
 
@@ -74,6 +75,257 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             this.objectType = objectType;
         }
     }
+
+    @TestVisible
+    private class APIExternalReview {
+        
+        public List<APIDocument> documents { get; private set; }
+        public List<APIReviewer> reviewers { get; private set; }
+        public APIEmail email { get; private set; }
+        public Integer expiresInNumberOfDays { get; private set; }
+        
+        public APIExternalReview(final Integer expiresInNumberOfDays,final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
+            this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+            this.reviewers = NegotiateAPI.getAPIReviewers(reviewerIds);
+            this.email = new APIEmail(subject, message);
+            this.expiresInNumberOfDays = expiresInNumberOfDays;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approval', null);
+            //Documents
+            w.writeCharacters(this.documentsToXML());
+            //reviewers
+            w.writeCharacters(this.reviewersToXML());
+            //Email
+            w.writeCharacters(this.email.toXML());   
+            //ExpiresInNumberOfDays param
+            w.writeStartElement(null, 'ExpiresInNumberOfDays', null); 
+            w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
+            w.writeEndElement();
+            //CheckoutDocument param
+            w.writeStartElement(null, 'CheckoutDocument', null); 
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //AssignTasksInOrder
+            w.writeStartElement(null, 'AssignTasksInOrder', null); 
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //End       
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;         
+        }
+
+        private String documentsToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Documents', null);
+            for (APIDocument doc : this.documents) {
+                w.writeCharacters(doc.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;                 
+        }
+
+        private String reviewersToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Reviewers', null);
+            for (APIReviewer entity : this.reviewers) {
+                w.writeCharacters(entity.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;               
+        }
+
+    }
+
+    @TestVisible
+    private class APIApproval {
+        
+        public List<APIDocument> documents { get; private set; }
+        public List<APIApprover> approvers { get; private set; }
+        public APIEmail email { get; private set; }
+        
+        public APIApproval(final List<String> documentsIds, final List<String> approverIds, final String subject, final String message) {
+            this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+            this.approvers = NegotiateAPI.getAPIApprovers(approverIds);
+            this.email = new APIEmail(subject, message);
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approval', null);
+            //Documents
+            w.writeCharacters(this.documentsToXML());
+            //Approvers
+            w.writeCharacters(this.approversToXML());
+            //Email
+            w.writeCharacters(this.email.toXML());   
+            //CheckoutDocument param
+            w.writeStartElement(null, 'CheckoutDocument', null); 
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //AssignTasksInOrder
+            w.writeStartElement(null, 'AssignTasksInOrder', null); 
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //End       
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;         
+        }
+
+        private String documentsToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Documents', null);
+            for (APIDocument doc : this.documents) {
+                w.writeCharacters(doc.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;                 
+        }
+
+        private String approversToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Approvers', null);
+            for (APIApprover entity : this.approvers) {
+                w.writeCharacters(entity.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;               
+        }
+
+    }
+
+    //Todo: uid for now is an email address, this will most likely change in the future.    
+    @TestVisible
+    private class APIApprover {
+        public String uid {get; private set;}
+
+        public APIApprover(final String email) {
+            this.uid = email;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approver', null);
+            w.writeStartElement(null, 'Uid', null);
+            w.writeCharacters(this.uid);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }        
+    }
+
+    //Todo: uid for now is an email address, this will most likely change in the future.
+    @TestVisible
+    private class APIReviewer {
+        public String uid {get; private set;}
+
+        public APIReviewer(final String email) {
+            this.uid = email;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Reviewer', null);
+            w.writeStartElement(null, 'Uid', null);
+            w.writeCharacters(this.uid);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }  
+    }
+
+    private class APIDocument  {
+
+        public String id { get; private set; }
+
+        public APIDocument(final String documentId) {
+            this.id = documentId;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Document', null);
+            w.writeStartElement(null, 'Id', null);
+            w.writeCharacters(this.id);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+    }
+
+    private class APIEmail {
+
+        public String subject { get; private set; }
+        public String message { get; private set; }
+
+        public APIEmail(final String subject, final String message) {
+            this.subject = subject;
+            this.message = message;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Email', null);
+            w.writeStartElement(null, 'Subject', null);
+            w.writeCharacters(this.subject);
+            w.writeEndElement();
+            w.writeStartElement(null, 'Body', null);
+            w.writeCharacters(this.message);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }        
+    }
+
+    private static List<APIDocument> getAPIDocuments(final List<String> documentsIds) {
+        List<APIDocument> documents = new List<APIDocument>();
+        for(String docId : documentsIds) {
+            documents.add(new APIDocument(docId));
+        }
+        return documents;
+    }
+
+    private static List<APIApprover> getAPIApprovers(final List<String> approverIds) {
+        List<APIApprover> approvers = new List<APIApprover>();
+        for (String approver : approverIds) {
+            approvers.add(new APIApprover(approver));
+        }
+        return approvers;
+    } 
+
+    private static List<APIReviewer> getAPIReviewers(final List<String> reviewerIds) {
+        List<APIReviewer> reviewers = new List<APIReviewer>();
+        for (String reviewer : reviewerIds) {
+            reviewers.add(new APIReviewer(reviewer));
+        }
+        return reviewers;
+    }        
 
     // Create EOS folder in SpringCM Space
     public String createEOSFolder(String objectName, String objectId, String objectType) {
@@ -218,5 +470,53 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         return response.statusCode == 200 ;
     }
+
+    //Send for Approval
+
+    public Boolean sendForApproval(final String name, final List<String> documentsIds, final List<String> approverIds, final String subject, final String message) {
+
+        RestAPI.Response response = post(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_WORKFLOWS    
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                JSON.serialize(new Map<String, Object>{
+                        'Name' => name,
+                        'Params' => new APIApproval(documentsIds, approverIds, subject, message).toXML()
+                }),
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to Send for Approval - ' + name + ': ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        return response.statusCode == 201;
+    }
+
+    //Send for External Review
+
+    public Boolean sendForExternalReview(final String name, final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
+
+        RestAPI.Response response = post(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_WORKFLOWS    
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                JSON.serialize(new Map<String, Object>{
+                        'Name' => name,
+                        'Params' => new APIExternalReview(expiresInNumberOfDays, documentsIds, reviewerIds, subject, message).toXML()
+                }),
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to Send for External Review - ' + name + ': ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        return response.statusCode == 201;
+    }    
 
 }

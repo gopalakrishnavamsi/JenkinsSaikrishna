@@ -4,6 +4,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
     private final Boolean success;
     public static final String FOLDER_ID = '56322efe-e541-e911-9c1d-3ca82a1e3f41';
     public static final String DOCUMENT_ID = '382bd222-1536-e911-9c1d-3ca82a1e3f41';
+    public static final String USER_EMAIL = 'TestUser@TestCompany.com';
+    public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
 
     public NegotiateAPIMock(final Boolean success) {
         this.success = success;
@@ -38,6 +40,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
             response.setStatusCode(201);
             response.setStatus('CREATED');
             response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
+        } else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_WORKFLOWS)) {
+            response.setStatusCode(201);
+            response.setStatus('CREATED');
+            response.setBody('{"Href":"https://unit.test/workflow/' + WORKFLOW_ID + '"}');        
         } else if (success && method == 'GET') {
             response.setStatusCode(200);
             response.setStatus('OK');
