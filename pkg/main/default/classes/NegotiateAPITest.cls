@@ -144,7 +144,7 @@ public with sharing class NegotiateAPITest {
             try {            
                NegotiateAPI.getInstance().sendForApproval('test-document 123', new List<String>{ NegotiateAPIMock.DOCUMENT_ID }, new List<String>{ NegotiateAPIMock.USER_EMAIL }, 'Test subject', 'Test message body: hello world');
             } catch (APIException ex) {
-                
+                hasError = true;
             }
             Test.stopTest();
 
