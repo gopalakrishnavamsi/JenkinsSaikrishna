@@ -4,6 +4,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     public static final String PATH_DOCUMENTS = 'documents';
     public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
     public static final String PATH_AGREEMENT_VERSIONS = 'versions';
+    public static final String PATH_WORKFLOWS = 'workflows';
+    public static final Long SCM_OFFSET = 20;
 
     private static NegotiateAPI self = null;
 
@@ -66,18 +68,269 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     private class EosInfo {
 
         public String name ;
-        public String objectId;
+        public Id objectId;
         public String objectType ;
 
-        EosInfo(final String objectName, final String objectId, final String objectType) {
+        EosInfo(final String objectName, final Id objectId, final String objectType) {
             this.name = objectName;
             this.objectId = objectId;
             this.objectType = objectType;
         }
     }
 
+    @TestVisible
+    private class APIExternalReview {
+
+        public List<APIDocument> documents { get; private set; }
+        public List<APIReviewer> reviewers { get; private set; }
+        public APIEmail email { get; private set; }
+        public Integer expiresInNumberOfDays { get; private set; }
+
+        public APIExternalReview(final Integer expiresInNumberOfDays, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
+            this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+            this.reviewers = NegotiateAPI.getAPIReviewers(reviewerIds);
+            this.email = new APIEmail(subject, message);
+            this.expiresInNumberOfDays = expiresInNumberOfDays;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approval', null);
+            //Documents
+            w.writeCharacters(this.documentsToXML());
+            //reviewers
+            w.writeCharacters(this.reviewersToXML());
+            //Email
+            w.writeCharacters(this.email.toXML());
+            //ExpiresInNumberOfDays param
+            w.writeStartElement(null, 'ExpiresInNumberOfDays', null);
+            w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
+            w.writeEndElement();
+            //CheckoutDocument param
+            w.writeStartElement(null, 'CheckoutDocument', null);
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //AssignTasksInOrder
+            w.writeStartElement(null, 'AssignTasksInOrder', null);
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //End       
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+        private String documentsToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Documents', null);
+            for (APIDocument doc : this.documents) {
+                w.writeCharacters(doc.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+        private String reviewersToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Reviewers', null);
+            for (APIReviewer entity : this.reviewers) {
+                w.writeCharacters(entity.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+    }
+
+    @TestVisible
+    private class APIApproval {
+
+        public List<APIDocument> documents { get; private set; }
+        public List<APIApprover> approvers { get; private set; }
+        public APIEmail email { get; private set; }
+
+        public APIApproval(final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
+            this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+            this.approvers = NegotiateAPI.getAPIApprovers(approverIds);
+            this.email = new APIEmail(subject, message);
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approval', null);
+            //Documents
+            w.writeCharacters(this.documentsToXML());
+            //Approvers
+            w.writeCharacters(this.approversToXML());
+            //Email
+            w.writeCharacters(this.email.toXML());
+            //CheckoutDocument param
+            w.writeStartElement(null, 'CheckoutDocument', null);
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //AssignTasksInOrder
+            w.writeStartElement(null, 'AssignTasksInOrder', null);
+            w.writeCharacters('true');
+            w.writeEndElement();
+            //End       
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+        private String documentsToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Documents', null);
+            for (APIDocument doc : this.documents) {
+                w.writeCharacters(doc.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+        private String approversToXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            //Header
+            w.writeStartElement(null, 'Approvers', null);
+            for (APIApprover entity : this.approvers) {
+                w.writeCharacters(entity.toXML());
+            }
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+
+    }
+
+    //Todo: uid for now is an email address, this will most likely change in the future.    
+    @TestVisible
+    private class APIApprover {
+        public String uid { get; private set; }
+
+        public APIApprover(final String email) {
+            this.uid = email;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Approver', null);
+            w.writeStartElement(null, 'Uid', null);
+            w.writeCharacters(this.uid);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+    }
+
+    //Todo: uid for now is an email address, this will most likely change in the future.
+    @TestVisible
+    private class APIReviewer {
+        public String uid { get; private set; }
+
+        public APIReviewer(final String email) {
+            this.uid = email;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Reviewer', null);
+            w.writeStartElement(null, 'Uid', null);
+            w.writeCharacters(this.uid);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+    }
+
+    private class APIDocument {
+
+        public UUID id { get; private set; }
+
+        public APIDocument(final UUID documentId) {
+            this.id = documentId;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Document', null);
+            w.writeStartElement(null, 'Id', null);
+            w.writeCharacters(String.valueOf(this.id));
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+    }
+
+    private class APIEmail {
+
+        public String subject { get; private set; }
+        public String message { get; private set; }
+
+        public APIEmail(final String subject, final String message) {
+            this.subject = subject;
+            this.message = message;
+        }
+
+        public String toXML() {
+            XmlStreamWriter w = new XmlStreamWriter();
+            w.writeStartElement(null, 'Email', null);
+            w.writeStartElement(null, 'Subject', null);
+            w.writeCharacters(this.subject);
+            w.writeEndElement();
+            w.writeStartElement(null, 'Body', null);
+            w.writeCharacters(this.message);
+            w.writeEndElement();
+            w.writeEndElement();
+            String xml = w.getXmlString();
+            w.close();
+            return xml;
+        }
+    }
+
+    private static List<APIDocument> getAPIDocuments(final List<UUID> documentsIds) {
+        List<APIDocument> documents = new List<APIDocument>();
+        for (UUID docId : documentsIds) {
+            documents.add(new APIDocument(docId));
+        }
+        return documents;
+    }
+
+    private static List<APIApprover> getAPIApprovers(final List<String> approverIds) {
+        List<APIApprover> approvers = new List<APIApprover>();
+        for (String approver : approverIds) {
+            approvers.add(new APIApprover(approver));
+        }
+        return approvers;
+    }
+
+    private static List<APIReviewer> getAPIReviewers(final List<String> reviewerIds) {
+        List<APIReviewer> reviewers = new List<APIReviewer>();
+        for (String reviewer : reviewerIds) {
+            reviewers.add(new APIReviewer(reviewer));
+        }
+        return reviewers;
+    }
+
     // Create EOS folder in SpringCM Space
-    public UUID createEOSFolder(final String objectName, final String objectId, final String objectType) {
+    public UUID createEOSFolder(final String objectName, final Id objectId, final String objectType) {
 
         final RestAPI.Response response = post(
                 getBaseUrl(),
@@ -133,7 +386,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     //Create Agreement in EOS folder
-    public UUID createAgreementInEOSFolder(final String sfContentVersionId, final UUID folderId, final String docName) {
+    public UUID createAgreementInEOSFolder(final Id sfContentVersionId, final UUID folderId, final String documentName) {
 
         final RestAPI.Response response = post(
                 getBaseUrl(),
@@ -144,8 +397,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object>{
                         'SfContentVersionId' => sfContentVersionId,
-                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + folderId.toString()),
-                        'Name' => docName
+                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(folderId)),
+                        'Name' => documentName
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
@@ -162,20 +415,20 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     public List<Agreement> getAgreements(final UUID folderId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
-        queryStrings.put('limit', '20');
-        Long offset = -20;
+        queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+        Long offset = -SCM_OFFSET;
         String next = '';
 
         while (next != null) {
-            offset = +20;
+            offset += SCM_OFFSET;
             queryStrings.put('offset', String.valueOf(offset));
 
             final RestAPI.Response response = get(
                     getBaseUrl(),
-                    new List<String>{
-                            PATH_FOLDER, folderId.toString(), PATH_DOCUMENTS
+                    new List<Object>{
+                            PATH_FOLDER, folderId, PATH_DOCUMENTS
                     },
-                    QueryString.empty,
+                    new QueryString(queryStrings),
                     getDefaultHeaders(),
                     RestAPI.defaultTimeout);
             if (response.hasError) {
@@ -185,7 +438,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
             APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
             for (APIAgreement a : result.items) {
-                agreements.add(a.convertAPIAgreement());
+                if (a != null) {
+                    agreements.add(a.convertAPIAgreement());
+                }
             }
             next = result.next;
         }
@@ -195,17 +450,17 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Rename Agreement
 
-    public Boolean renameAgreement(final UUID documentId, final String docName) {
+    public Boolean renameAgreement(final UUID documentId, final String documentName) {
 
         final RestAPI.Response response = put(
                 getBaseUrl(),
-                new List<String>{
-                        PATH_DOCUMENTS, documentId.toString()
+                new List<Object>{
+                        PATH_DOCUMENTS, documentId
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object>{
-                        'Name' => docName
+                        'Name' => documentName
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
@@ -214,7 +469,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
-        return body.get('Name') == docName;
+        return body.get('Name') == documentName;
     }
 
     // Delete Agreement
@@ -223,8 +478,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         final RestAPI.Response response = del(
                 getBaseUrl(),
-                new List<String>{
-                        PATH_DOCUMENTS, documentId.toString()
+                new List<Object>{
+                        PATH_DOCUMENTS, documentId
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -239,27 +494,27 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     }
 
     // Get all the versions of the Agreement
-    public List<Agreement> getAgreementVersions(final UUID docId) {
+    public List<Agreement> getAgreementVersions(final UUID documentId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
-        queryStrings.put('limit', '20');
-        Long offset = -20;
+        queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+        Long offset = -SCM_OFFSET;
         String next = '';
 
         while (next != null) {
-            offset = +20;
+            offset += SCM_OFFSET;
             queryStrings.put('offset', String.valueOf(offset));
 
             final RestAPI.Response response = get(
                     getBaseUrl(),
-                    new List<String>{
-                            PATH_DOCUMENTS, docId.toString(), PATH_AGREEMENT_VERSIONS
+                    new List<Object>{
+                            PATH_DOCUMENTS, documentId, PATH_AGREEMENT_VERSIONS
                     },
-                    QueryString.empty,
+                    new QueryString(queryStrings),
                     getDefaultHeaders(),
                     RestAPI.defaultTimeout);
             if (response.hasError) {
-                this.log.error('Failed to get versions of Agreement - ' + docId + ': ' + response.error);
+                this.log.error('Failed to get versions of Agreement - ' + documentId + ': ' + response.error);
                 throw new APIException(response.error);
             }
 
@@ -271,6 +526,54 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         return agreements;
+    }
+
+    //Send for Approval
+
+    public Boolean sendForApproval(final String name, final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
+
+        RestAPI.Response response = post(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_WORKFLOWS
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                JSON.serialize(new Map<String, Object>{
+                        'Name' => name,
+                        'Params' => new APIApproval(documentsIds, approverIds, subject, message).toXML()
+                }),
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to Send for Approval - ' + name + ': ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        return response.statusCode == 201;
+    }
+
+    //Send for External Review
+
+    public Boolean sendForExternalReview(final String name, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
+
+        RestAPI.Response response = post(
+                getBaseUrl(),
+                new List<String>{
+                        PATH_WORKFLOWS
+                },
+                QueryString.empty,
+                getDefaultHeaders(),
+                JSON.serialize(new Map<String, Object>{
+                        'Name' => name,
+                        'Params' => new APIExternalReview(expiresInNumberOfDays, documentsIds, reviewerIds, subject, message).toXML()
+                }),
+                RestAPI.defaultTimeout);
+        if (response.hasError) {
+            this.log.error('Failed to Send for External Review - ' + name + ': ' + response.error);
+            throw new APIException(response.error);
+        }
+
+        return response.statusCode == 201;
     }
 
 }

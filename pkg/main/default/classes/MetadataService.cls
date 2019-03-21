@@ -85,8 +85,10 @@ public with sharing class MetadataService {
 
 		List<String> messages = new List<String>();
 		for (MetadataAPI.Error e : saveResult.errors) {
-			if (e.statusCode == 'DUPLICATE_VALUE' || e.statusCode == 'DUPLICATE_DEVELOPER_NAME') {
-				messages.add(Label.DuplicateButton);
+			if (String.isNotBlank(saveResult.fullName) && String.isNotBlank(e.statusCode)) {
+				messages.add(String.format(
+					Label.MetadataError_3,
+					new List<String> { saveResult.fullName, e.statusCode, e.message }));
 			} else {
 				messages.add(e.message);
 			}
@@ -109,7 +111,7 @@ public with sharing class MetadataService {
 
 		if (Collection.isNotEmpty(errors)) {
 			throw new DocuSignException(String.format(Label.UpdateMetadataFailure_1, new List<String> {
-				Collection.mkString(errors, '\n')
+				'\n' + Collection.mkString(errors, '\n')
 			}));
 		}
 
@@ -143,7 +145,7 @@ public with sharing class MetadataService {
 			final Url url) {
 
 			this.name = name;
-			this.fullName = Application.namespacePrefix + name;
+			this.fullName = MetadataAPI.NAMESPACE_PREFIX + name;
 			this.description = description;
 			this.url = url;
 		}
@@ -198,9 +200,8 @@ public with sharing class MetadataService {
 		Map<String, MetadataAPI.RemoteSiteSetting> result = new Map<String, MetadataAPI.RemoteSiteSetting>();
 		List<String> names = new List<String>();
 		for (RemoteSite rs : remoteSites) {
-			String fullName = rs.fullName;
-			result.put(fullName, convert(rs));
-			names.add(fullName);
+			result.put(rs.fullName, convert(rs));
+			names.add(rs.fullName);
 		}
 
 		for (MetadataAPI.Metadata md : MetadataAPI.getInstance().readMetadata('RemoteSiteSetting', names)) {

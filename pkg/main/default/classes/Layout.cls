@@ -4,7 +4,7 @@
 public class Layout implements Comparable {
 
 	public static final String ACTION_TYPE_SEND = 'SEND';
-	public static final String ACTION_NAME_SEND = Application.namespacePrefix + 'SendWithDocuSign';
+	public static final String ACTION_NAME_SEND = MetadataAPI.NAMESPACE_PREFIX + 'SendWithDocuSign';
 	public static final String ACTION_TYPE_GEN = 'GEN';
 	public static final String ACTION_TYPE_OTHER = 'OTHER';
 

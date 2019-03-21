@@ -89,17 +89,14 @@ private class MetadataServiceTest {
 
 		MetadataAPI.Error e4 = new MetadataAPI.Error();
 		e4.statusCode = 'DUPLICATE_VALUE';
+		e4.message = 'duplicate value message';
 		MetadataAPI.SaveResult r4 = new MetadataAPI.SaveResult();
 		r4.success = false;
 		r4.errors = new List<MetadataAPI.Error> { e4 };
-		System.assertEquals(Label.DuplicateButton, MetadataService.getErrorMessage(r4));
-
-		MetadataAPI.Error e5 = new MetadataAPI.Error();
-		e5.statusCode = 'DUPLICATE_DEVELOPER_NAME';
-		MetadataAPI.SaveResult r5 = new MetadataAPI.SaveResult();
-		r5.success = false;
-		r5.errors = new List<MetadataAPI.Error> { e5 };
-		System.assertEquals(Label.DuplicateButton, MetadataService.getErrorMessage(r5));
+		r4.fullName = 'test';
+		System.assertEquals(String.format(Label.MetadataError_3, new List<String> {
+			r4.fullName, e4.statusCode, e4.message
+		}), MetadataService.getErrorMessage(r4));
 	}
 
 	@IsTest
@@ -118,13 +115,14 @@ private class MetadataServiceTest {
 		MetadataAPI.SaveResult r2 = new MetadataAPI.SaveResult();
 		r2.success = false;
 		r2.errors = new List<MetadataAPI.Error> { e1, e2, e3 };
+		r2.fullName = 'test';
 		List<String> errors = new List<String> {
-			e1.message,
-			Label.DuplicateButton,
-			e3.message
+			String.format(Label.MetadataError_3, new List<String> { r2.fullName, e1.statusCode, e1.message }),
+			String.format(Label.MetadataError_3, new List<String> { r2.fullName, e2.statusCode, e2.message }),
+			String.format(Label.MetadataError_3, new List<String> { r2.fullName, e3.statusCode, e3.message })
 		};
 		String msg = String.format(Label.UpdateMetadataFailure_1, new List<String> {
-			Collection.mkString(errors, '\n')
+			'\n' + Collection.mkString(errors, '\n')
 		});
 
 		Test.startTest();
@@ -192,7 +190,7 @@ private class MetadataServiceTest {
 		MetadataService.RemoteSite result = MetadataService.newRemoteSite(DocuSign.Environment.Production, 'Type', 'Description', new Url('https://unit.test.docusign.com'));
 		System.assertNotEquals(null, result);
 		System.assertEquals('Production_Type', result.name);
-		System.assertEquals(Application.namespacePrefix + 'Production_Type', result.fullName);
+		System.assertEquals(MetadataAPI.NAMESPACE_PREFIX + 'Production_Type', result.fullName);
 		System.assertEquals('Description', result.description);
 		System.assertNotEquals(null, result.url);
 		System.assertEquals('https://unit.test.docusign.com', result.url.toExternalForm());
@@ -200,7 +198,7 @@ private class MetadataServiceTest {
 		result = MetadataService.newRemoteSite(DocuSign.Environment.Other, 'Type', 'Description', new Url('https://unit.test.docusign.com'));
 		System.assertNotEquals(null, result);
 		System.assertEquals('unit_Type', result.name);
-		System.assertEquals(Application.namespacePrefix + 'unit_Type', result.fullName);
+		System.assertEquals(MetadataAPI.NAMESPACE_PREFIX + 'unit_Type', result.fullName);
 		System.assertEquals('Description', result.description);
 		System.assertNotEquals(null, result.url);
 		System.assertEquals('https://unit.test.docusign.com', result.url.toExternalForm());
@@ -251,8 +249,7 @@ private class MetadataServiceTest {
 				MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> { rs });
 				throw new AssertException('Expected createRemoteSites to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
-					ex.getMessage());
+				System.assert(ex.getMessage().contains('Test failure'));
 			}
 			Test.stopTest();
 		}
@@ -297,7 +294,8 @@ private class MetadataServiceTest {
 						foundNames.add(fullName);
 					}
 				}
-				MetadataAPI.readRemoteSiteSettingResponse_element resp = new MetadataAPI.readRemoteSiteSettingResponse_element();
+				MetadataAPI.readRemoteSiteSettingResponse_element resp =
+					new MetadataAPI.readRemoteSiteSettingResponse_element();
 				resp.result = result;
 				response.put('response_x', resp);
 			} else {
@@ -435,8 +433,7 @@ private class MetadataServiceTest {
 				null);
 			throw new AssertException('Expected createWebLink to fail');
 		} catch (DocuSignException ex) {
-			System.assertEquals(String.format(Label.UpdateMetadataFailure_1, new List<String> { 'Test failure' }),
-				ex.getMessage());
+			System.assert(ex.getMessage().contains('Test failure'));
 		}
 		Test.stopTest();
 	}
@@ -861,7 +858,7 @@ private class MetadataServiceTest {
 		System.assertEquals('test', MetadataService.fixActionName(Lead.getSObjectType(), 'test'));
 		System.assertEquals('test', MetadataService.fixActionName(Lead.getSObjectType(), 'Lead-test'));
 		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), 'test'));
-		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), Application.namespacePrefix + 'Envelope__test'));
+		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), MetadataAPI.NAMESPACE_PREFIX + 'Envelope__test'));
 	}
 
 	@IsTest
@@ -871,7 +868,7 @@ private class MetadataServiceTest {
 		System.assertEquals(new Set<String>(), MetadataService.getPossibleActionNames(null, '\t'));
 		System.assertEquals(new Set<String> { 'test' }, MetadataService.getPossibleActionNames(null, 'test'));
 		System.assertEquals(new Set<String> { 'test', 'Lead-test' }, MetadataService.getPossibleActionNames(Lead.getSObjectType(), 'test'));
-		System.assertEquals(new Set<String> { 'test', Application.namespacePrefix + 'Envelope__c-test', Application.namespacePrefix + 'Envelope__test' },
+		System.assertEquals(new Set<String> { 'test', MetadataAPI.NAMESPACE_PREFIX + 'Envelope__c-test', MetadataAPI.NAMESPACE_PREFIX + 'Envelope__test' },
 			MetadataService.getPossibleActionNames(Envelope__c.getSObjectType(), 'test'));
 	}
 }

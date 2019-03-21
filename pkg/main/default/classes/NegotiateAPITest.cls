@@ -8,7 +8,7 @@ public with sharing class NegotiateAPITest {
         System.runAs(UserMock.createDocuSignUser()) {
 
             Test.startTest();
-            UUID result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', '0061U0000058I2EQAU', 'Opportunity');
+            UUID result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', NegotiateAPIMock.OBJECT_ID, 'Opportunity');
             Test.stopTest();
 
             System.assertNotEquals(null, result);
@@ -25,7 +25,7 @@ public with sharing class NegotiateAPITest {
 
             Test.startTest();
             try {
-                NegotiateAPI.getInstance().createEOSFolder('Edge Installation', '0061U0000058I2EQAU', 'Opportunity');
+                NegotiateAPI.getInstance().createEOSFolder('Edge Installation', NegotiateAPIMock.OBJECT_ID, 'Opportunity');
                 throw new AssertException('Expected createEOSFolder to fail');
             } catch (APIException ex) {
                 System.assertNotEquals(null, ex.error);
@@ -45,7 +45,7 @@ public with sharing class NegotiateAPITest {
         System.runAs(UserMock.createDocuSignUser()) {
 
             Test.startTest();
-            UUID result = NegotiateAPI.getInstance().createAgreementInEOSFolder('0061U0000058I2EQAU',
+            UUID result = NegotiateAPI.getInstance().createAgreementInEOSFolder(NegotiateAPIMock.OBJECT_ID,
                     NegotiateAPIMock.FOLDER_ID, 'negotiate.docx');
             Test.stopTest();
             System.assertNotEquals(null, result);
@@ -104,6 +104,7 @@ public with sharing class NegotiateAPITest {
 
     @IsTest
     static void test_getAgreementVersions_success() {
+
         NegotiateAPIMock.success();
 
         System.runAs(UserMock.createDocuSignUser()) {
@@ -116,6 +117,93 @@ public with sharing class NegotiateAPITest {
             System.assertEquals(3, result.size());
             System.assertEquals('newName.docx', result.get(0).name);
             System.assertEquals(UUID.parse('213e9c1a-8f46-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
+        }
+    }
+
+    @IsTest
+    static void test_sendForApproval_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+            Test.startTest();
+            Boolean result = NegotiateAPI.getInstance().sendForApproval('test-document 123', new List<UUID>{
+                    NegotiateAPIMock.DOCUMENT_ID
+            }, new List<String>{
+                    NegotiateAPIMock.USER_EMAIL
+            }, 'Test subject', 'Test message body: hello world');
+            Test.stopTest();
+
+            System.assertNotEquals(null, result);
+            System.assertEquals(true, result);
+
+        }
+    }
+
+    @IsTest
+    static void test_sendForExternalReview_success() {
+        NegotiateAPIMock.success();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            Boolean result = NegotiateAPI.getInstance().sendForExternalReview('test-document 123', new List<UUID>{
+                    NegotiateAPIMock.DOCUMENT_ID
+            }, new List<String>{
+                    NegotiateAPIMock.USER_EMAIL
+            }, 'Test subject', 'Test message body: hello world', 5);
+            Test.stopTest();
+
+            System.assertNotEquals(null, result);
+            System.assertEquals(true, result);
+
+        }
+    }
+
+    @IsTest
+    static void test_sendForApproval_failure() {
+        NegotiateAPIMock.failure();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            Boolean hasError = false;
+            try {
+                NegotiateAPI.getInstance().sendForApproval('test-document 123', new List<UUID>{
+                        NegotiateAPIMock.DOCUMENT_ID
+                }, new List<String>{
+                        NegotiateAPIMock.USER_EMAIL
+                }, 'Test subject', 'Test message body: hello world');
+            } catch (APIException ex) {
+                hasError = true;
+            }
+            Test.stopTest();
+
+            System.assertEquals(hasError, true);
+
+        }
+    }
+
+    @IsTest
+    static void test_sendForExternalReview_failure() {
+        NegotiateAPIMock.failure();
+
+        System.runAs(UserMock.createDocuSignUser()) {
+
+            Test.startTest();
+            Boolean hasError = false;
+            try {
+                NegotiateAPI.getInstance().sendForExternalReview('test-document 123', new List<UUID>{
+                        NegotiateAPIMock.DOCUMENT_ID
+                }, new List<String>{
+                        NegotiateAPIMock.USER_EMAIL
+                }, 'Test subject', 'Test message body: hello world', 5);
+            } catch (APIException ex) {
+                hasError = true;
+            }
+            Test.stopTest();
+
+            System.assertEquals(hasError, true);
+
         }
     }
 }

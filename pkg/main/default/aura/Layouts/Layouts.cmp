@@ -55,7 +55,7 @@
                     {!layout.name}
                 </div>
                 <div class="slds-col slds-size--1-of-3">
-                    <lightning:input type="checkbox"
+                    <lightning:input type="checkbox-button"
                                      variant="label-hidden"
                                      name="{!'action-' + i}"
                                      label=""
