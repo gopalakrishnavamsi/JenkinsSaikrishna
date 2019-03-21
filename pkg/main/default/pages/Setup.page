@@ -44,7 +44,6 @@
       }
 
       function beginOAuth(component, environment, otherUrl) {
-        debugger;
         try {
           Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.beginOAuth}', environment, otherUrl, function (result, event) {
             if (event && event.status) {
