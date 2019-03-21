@@ -10,10 +10,10 @@
 
     if (file.size > self.MAX_FILE_SIZE) {
       var errMsg = stringUtils.format($A.get('$Label.c.FileSizeLimitReached_2'), stringUtils.formatSize(self.MAX_FILE_SIZE), stringUtils.formatSize(file.size));
-      uiHelper.showToast(errMsg, 'error');
+      uiHelper.showToast(errMsg, uiHelper.ToastMode.ERROR);
       return;
     }
-
+    
     uiHelper.setLoading(true);
 
     var fr = new FileReader();
@@ -40,7 +40,7 @@
         var s = end;
         var e = Math.min(base64Data.length, s + this.CHUNK_SIZE);
         if (s < e) {
-          self._uploadChunk(component, file, base64Data, s, e, cvId);
+          self._uploadChunk(uiHelper, component, file, base64Data, s, e, cvId);
         } else {
           var evt = component.getEvent('uploadEvent');
           evt.setParams({
@@ -50,7 +50,7 @@
           uiHelper.setLoading(false);
         }
       } else {
-        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
+        uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
         uiHelper.setLoading(false);
       }
     });

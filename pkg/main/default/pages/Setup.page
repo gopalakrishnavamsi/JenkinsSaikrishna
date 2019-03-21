@@ -62,7 +62,7 @@
               var top = (screen.height / 2) - (height / 2);
 
               var w = window.open(stringUtils.unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
-              w.addEventListener('unload', function (e) {
+              w.addEventListener('unload', function () {
                 var evt = component.getEvent('loadingEvent');
                 evt.setParams({
                   isLoading: false
@@ -82,7 +82,7 @@
       $Lightning.use(namespace + ':SetupApp', function () {
         $Lightning.createComponent(namespace + ':Setup', {
           beginOAuth: beginOAuth
-        }, 'ds-setup', function (cmp) {
+        }, 'ds-setup', function () {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });

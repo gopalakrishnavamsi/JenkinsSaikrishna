@@ -1,5 +1,5 @@
-<aura:component controller="MetadataController"
-                extends="c:RootContainer">
+<aura:component controller="MetadataController">
+    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <aura:attribute name="sendActionName" type="String" access="private"/>
     <aura:attribute name="commonObjects" type="Object[]" access="private"/>
@@ -7,11 +7,10 @@
     <aura:attribute name="sObjectType" type="String" access="private"/>
     <aura:attribute name="layouts" type="Object[]" access="private"/>
     <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
-
-    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
 
     <div class="slds-scope slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
         <lightning:select label="{!$Label.c.SalesforceObject}"

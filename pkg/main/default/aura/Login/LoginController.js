@@ -1,6 +1,10 @@
 ({
   onInitialize: function (component) {
-    component.set('v.uiHelper', new UIHelper(component));
+    component.set('v.uiHelper', new UIHelper(function () {
+      return component.getEvent('loadingEvent');
+    }, function () {
+      return component.getEvent('toastEvent');
+    }));
     component.set('v.helpInfo', '');
     var env = component.get('v.environment');
     component.set('v.advancedOptionsExpanded', !$A.util.isEmpty(env) && env !== 'Production');
@@ -16,6 +20,7 @@
 
   logoutOfDocuSign: function (component, event, helper) {
     component.set('v.showLogoutModal', false);
+    component.get('v.uiHelper').setLoading(true);
 
     setTimeout($A.getCallback(function () { // Wait for modal to hide
       helper.logout(component);

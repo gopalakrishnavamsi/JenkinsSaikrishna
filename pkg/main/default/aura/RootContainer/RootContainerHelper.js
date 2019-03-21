@@ -1,31 +1,33 @@
 ({
   setLoading: function (component, isLoading) {
-    var event = component.getEvent('loadingEvent');
-    if (event) {
-      event.setParams({
-        isLoading: isLoading === true
-      });
-      event.fire();
+    var dsLoading = component.find('ds-loading') || component.getSuper().find('ds-loading');
+    if (dsLoading) {
+      isLoading === true ? dsLoading.show() : dsLoading.hide();
     }
   },
 
+  _getToast: function (component) {
+    return component.find('ds-toast') || component.getSuper().find('ds-toast');
+  },
+
   showToast: function (component, message, mode) {
-    var event = component.getEvent('toastEvent');
-    if (event) {
-      event.setParams({
-        show: true, message: message, mode: mode
-      });
-      event.fire();
+    var toast = this._getToast(component);
+    if (toast) {
+      component.set('v.message', message);
+      component.set('v.mode', mode);
+      toast.show();
+      if (mode === 'success') {
+        setTimeout($A.getCallback(function () {
+          toast.close();
+        }), 3000);
+      }
     }
   },
 
   hideToast: function (component) {
-    var event = component.getEvent('toastEvent');
-    if (event) {
-      event.setParams({
-        show: false
-      });
-      event.fire();
+    var toast = this._getToast(component);
+    if (toast) {
+      toast.close();
     }
   },
 
@@ -42,6 +44,7 @@
   },
 
   invokeAction: function (component, action, params, onSuccess, onError, onComplete) {
+    var self = this;
     this.hideToast(component);
     this.setLoading(component, true);
     if (action) {
@@ -50,10 +53,10 @@
         if (response.getState() === 'SUCCESS') {
           if (onSuccess) onSuccess(response.getReturnValue());
         } else {
-          this.showToast(component, this.getErrorMessage(response), 'error');
+          self.showToast(component, this.getErrorMessage(response), 'error');
           if (onError) onError(response.getError());
         }
-        this.setLoading(component, false);
+        self.setLoading(component, false);
         if (onComplete) onComplete(response);
       });
       $A.enqueueAction(action);
