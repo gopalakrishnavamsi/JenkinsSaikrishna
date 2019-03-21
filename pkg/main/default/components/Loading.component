@@ -5,12 +5,19 @@
                     required="false"
                     default="true"/>
     <apex:includeLightning/>
-    <div id="loading-spinner"></div>
+    <div id="ds-loading-vf"></div>
     <script>
       $Lightning.use('{!namespace}:LightningOutApp', function () {
         $Lightning.createComponent('{!namespace}:Loading', {
-          loading: {!loading}, visualforce: true
-        }, 'loading-spinner');
+          visualforce: true
+        }, 'ds-loading-vf', function (cmp, status, errorMessage) {
+          if (status === 'SUCCESS') {
+            cmp.show();
+          } else {
+            // TODO: Display error message
+            console.log('ERROR: ' + errorMessage);
+          }
+        });
       });
     </script>
 </apex:component>

@@ -1,35 +1,18 @@
 /**
  *
- * @param eventSource
- * @param loadingEventName
- * @param toastEventName
- * @returns {Readonly<{hideToast: hideToast, invokeAction: invokeAction, setLoading: setLoading, showToast: showToast, ToastMode: {SUCCESS: string, ERROR: string, WARNING: string}, getErrorMessage: (function(*=): string)}>}
+ * @param loadingEvent {function<object>}
+ * @param toastEvent {function<object>}
+ * @returns {Readonly<{hideToast: hideToast, invokeAction: invokeAction, setLoading: setLoading, showToast: showToast, ToastMode: {SUCCESS: string, ERROR: string, WARNING: string}, getErrorMessage: (function(Response): string)}>}
  * @constructor
  */
-window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
-  /**
-   * The event source Lightning component.
-   * @private
-   */
-  var _eventSource = eventSource;
-  /**
-   * The name of the loading event. Defaults to 'loadingEvent'.
-   * @private
-   */
-  var _loadingEventName = loadingEventName ? loadingEventName : 'loadingEvent';
-  /**
-   * The name of the toast event. Defaults to 'toastEvent'.
-   * @private
-   */
-  var _toastEventName = toastEventName ? toastEventName : 'toastEvent';
-
+window.UIHelper = function (loadingEvent, toastEvent) {
   /**
    * Fires a component loading event.
    * @param isLoading {boolean} Whether or not the component is in a loading state.
    */
   var setLoading = function (isLoading) {
-    var event = _eventSource ? _eventSource.getEvent(_loadingEventName) : null;
-    if (event) {
+    var event = loadingEvent();
+    if (event && event.setParams && event.fire) {
       event.setParams({
         isLoading: isLoading === true
       });
@@ -41,20 +24,18 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
    * Enumeration of possible toast notification display modes.
    * @type {{SUCCESS: string, ERROR: string, WARNING: string}}
    */
-  var toastMode = Object.freeze({
-    SUCCESS: 'success',
-    WARNING: 'warning',
-    ERROR: 'error'
+  var ToastMode = Object.freeze({
+    SUCCESS: 'success', WARNING: 'warning', ERROR: 'error'
   });
 
   /**
    * Displays a toast notification.
    * @param message {string} The message to display.
-   * @param mode {_toastMode} The mode of the toast notification.
+   * @param mode {ToastMode} The mode of the toast notification.
    */
   var showToast = function (message, mode) {
-    var event = _eventSource ? _eventSource.getEvent(_toastEventName) : null;
-    if (event) {
+    var event = toastEvent();
+    if (event && event.setParams && event.fire) {
       event.setParams({
         show: true, message: message, mode: mode
       });
@@ -62,9 +43,12 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
     }
   };
 
+  /**
+   * Hides a toast notification.
+   */
   var hideToast = function () {
-    var event = _eventSource ? _eventSource.getEvent(_toastEventName) : null;
-    if (event) {
+    var event = toastEvent();
+    if (event && event.setParams) {
       event.setParams({
         show: false
       });
@@ -82,7 +66,7 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
     if (response) {
       var errors = response.getError();
       message = errors;
-      if (Array.isArray(errors) && errors.length > 0) {
+      if (!$A.util.isEmpty(errors)) {
         message = errors[0].message;
       }
     }
@@ -91,7 +75,7 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
 
   /**
    *
-   * @param action {Action}
+   * @param action {object}
    * @param params {object}
    * @param onSuccess {function}
    * @param onError {function}
@@ -106,7 +90,7 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
         if (response.getState() === 'SUCCESS') {
           if (onSuccess) onSuccess(response.getReturnValue());
         } else {
-          showToast(getErrorMessage(response), 'error');
+          showToast(getErrorMessage(response), ToastMode.ERROR);
           if (onError) onError(response.getError());
         }
         setLoading(false);
@@ -117,7 +101,7 @@ window.UIHelper = function (eventSource, loadingEventName, toastEventName) {
   };
 
   return Object.freeze({
-    ToastMode: toastMode,
+    ToastMode: ToastMode,
     setLoading: setLoading,
     showToast: showToast,
     hideToast: hideToast,

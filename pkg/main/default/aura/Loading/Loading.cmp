@@ -1,9 +1,14 @@
 <aura:component>
-    <aura:attribute name="loading" type="Boolean"/>
-    <aura:attribute name="visualforce" type="Boolean"/>
+    <aura:attribute name="visualforce" type="Boolean" default="false"/>
+    <aura:attribute name="size" type="String" default="large"/>
+    <aura:attribute name="alternativeText" type="String" default="{!$Label.c.Loading}"/>
 
-    <aura:if isTrue="{!v.loading}">
-        <lightning:spinner class="{!if(v.visualforce, 'ds-spinner_visualforce')}" size="large"
-                           alternativeText="{!$Label.c.Loading}"/>
-    </aura:if>
+    <aura:method name="show" action="{!c.onShow}"/>
+    <aura:method name="hide" action="{!c.onHide}"/>
+
+    <lightning:spinner
+            aura:id="ds-spinner"
+            class="{!if(v.visualforce, ' ds-spinner_visualforce', '')}"
+            size="{!v.size}"
+            alternativeText="{!$Label.c.Loading}"/>
 </aura:component>

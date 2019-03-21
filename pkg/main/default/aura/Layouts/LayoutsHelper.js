@@ -1,6 +1,6 @@
 ({
   getConfiguration: function (component) {
-    this.invokeAction(component, component.get('c.getConfiguration'), null, function (configuration) {
+    component.get('v.uiHelper').invokeAction(component.get('c.getConfiguration'), null, function (configuration) {
       component.set('v.sendActionName', configuration.sendActionName);
       component.set('v.commonObjects', configuration.commonObjects);
       component.set('v.allObjects', configuration.allObjects);
@@ -44,7 +44,7 @@
 
   getLayouts: function (component) {
     var self = this;
-    this.invokeAction(component, component.get('c.getLayouts'), {sObjectType: component.get('v.sObjectType')}, function (layouts) {
+    component.get('v.uiHelper').invokeAction(component.get('c.getLayouts'), {sObjectType: component.get('v.sObjectType')}, function (layouts) {
       component.set('v.layouts', self.processLayouts(layouts));
       component.set('v.isDirty', false);
     });
@@ -89,7 +89,8 @@
   onUpdateComplete: function (component) {
     component.set('v.isDirty', false);
     component.set('v.layouts', this.processLayouts(component.get('v.layouts')));
-    this.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.showToast($A.get('$Label.c.SuccessfullyModifiedLayouts'), uiHelper.ToastMode.SUCCESS);
   },
 
   updateLayouts: function (component) {
@@ -98,7 +99,7 @@
     if ($A.util.isEmpty(layouts)) {
       this.onUpdateComplete(component);
     } else {
-      this.invokeAction(component, component.get('c.updateLayouts'), {
+      component.get('v.uiHelper').invokeAction(component.get('c.updateLayouts'), {
         sObjectType: component.get('v.sObjectType'), layoutsJson: JSON.stringify(layouts)
       }, function () {
         self.onUpdateComplete(component);

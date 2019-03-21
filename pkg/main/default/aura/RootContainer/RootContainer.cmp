@@ -1,12 +1,8 @@
 <aura:component abstract="true" extensible="true">
-    <aura:attribute name="loading" type="Boolean" default="{!true}"/>
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
 
     <aura:attribute name="message" type="String" access="private"/>
     <aura:attribute name="mode" type="String" access="private"/>
-
-    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.onToast}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.onLoading}"/>
@@ -19,7 +15,6 @@
                  visualforce="{!v.visualforce}"/>
 
         <c:Loading aura:id="ds-loading"
-                   loading="{!v.loading}"
                    visualforce="{!v.visualforce}"/>
 
         {!v.body}
