@@ -11,6 +11,7 @@ License: BSD 3-Clause License
     <aura:attribute name="label" type="String" required="true" description="String value displayed above the menu used to describe the component"/>
     <aura:attribute name="object" type="String" required="true" description="String value that determines which records to search"/>
     <aura:attribute name="searchField" type="String" required="true" description="String value that determines which field on the object will be displayed and searched against"/>
+    <aura:attribute name="restrictType" type="Boolean" default="true"/>
 
     <aura:attribute name="helpText" type="String" description="String value when hovering over the help box"/>
     <aura:attribute name="class" type="String" description="A CSS class that will be applied to the outer element. This style is in addition to base classes associated with the component"/>

@@ -7,247 +7,261 @@ GitHub: https://github.com/appiphony/Strike-Components
 License: BSD 3-Clause License
 -------------------------------------------------- */
 public with sharing class strike_lookupController {
-    @AuraEnabled
-    public static String getRecentRecords(String jsonString, Boolean useSOSL) {
-        strike_responseData responseData = new strike_responseData();
+	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String> {
+		'contact', 'lead', 'user'
+	};
 
-        try {
-            Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
-            Map<Id, RecentlyViewed> recentlyViewedMap = new Map<Id, RecentlyViewed>([SELECT Id
-                                                                                     FROM RecentlyViewed
-                                                                                     WHERE Type = :((String)jsonMap.get('object'))]);
-            List<Id> idList = new List<Id>(recentlyViewedMap.keySet());
+	private static String safeGetObjectType(final String s) {
+		if (String.isBlank(s) || !VALID_SEARCH_OBJECTS.contains(s.trim().toLowerCase())) {
+			// TODO: Create label for next major release (cannot add label in patch)
+			throw new DocuSignException('Invalid search object: '  + s);
+		}
+		return s.trim();
+	}
 
-            if (idList.size() > 0) {
-                String filter = 'Id IN (\'' + String.join(idList, '\',\'') + '\')';
+	@AuraEnabled
+	public static String getRecentRecords(String jsonString, Boolean useSOSL) {
+		strike_responseData responseData = new strike_responseData();
 
-                if (strike_lookupController.fieldNotEmpty(jsonMap, 'filter')) {
-                    filter += ' AND (' + jsonMap.get('filter') + ')';
-                }
+		try {
+			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+			String type = safeGetObjectType((String)jsonMap.get('object'));
+			Map<Id, RecentlyViewed> recentlyViewedMap = new Map<Id, RecentlyViewed>([
+				SELECT Id
+				FROM RecentlyViewed
+				WHERE Type = :type
+			]);
+			List<Id> idList = new List<Id>(recentlyViewedMap.keySet());
 
-                jsonMap.put('filter', filter);
+			if (idList.size() > 0) {
+				String filter = 'Id IN (\'' + String.join(idList, '\',\'') + '\')';
 
-                responseData.results = strike_lookupController.getData(jsonMap, useSOSL);
-            } else {
-                responseData.results = new Map<String, Object>{
-                    'data' => new List<String>(),
-                    'searchTerm' => ''
-                };
-            }
-        } catch (Exception e) {
-            responseData.addError(e.getMessage());
-        }
+				if (strike_lookupController.fieldNotEmpty(jsonMap, 'filter')) {
+					filter += ' AND (' + jsonMap.get('filter') + ')';
+				}
 
-        return responseData.getJsonString();
-    }
+				jsonMap.put('filter', filter);
 
-    @AuraEnabled
-    public static String getRecordLabel(String jsonString) {
-        strike_responseData responseData = new strike_responseData();
+				responseData.results = strike_lookupController.getData(jsonMap, useSOSL);
+			} else {
+				responseData.results = new Map<String, Object> {
+					'data' => new List<String>(),
+					'searchTerm' => ''
+				};
+			}
+		} catch (Exception e) {
+			responseData.addError(e.getMessage());
+		}
 
-        try {
-            Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+		return responseData.getJsonString();
+	}
 
-            String obj = (String)jsonMap.get('object');
-            String objectLabel = Schema.describeSObjects(new List<String>{obj})[0].getLabel();
+	@AuraEnabled
+	public static String getRecordLabel(String jsonString) {
+		strike_responseData responseData = new strike_responseData();
 
-            responseData.results.put('objectLabel', objectLabel);
-        } catch (Exception e) {
-            responseData.addError(e.getMessage());
-        }
+		try {
+			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
 
-        return responseData.getJsonString();
-    }
+			String obj = safeGetObjectType((String)jsonMap.get('object'));
+			String objectLabel = Schema.describeSObjects(new List<String> { obj })[0].getLabel();
 
-    @AuraEnabled
-    public static String getRecords(String jsonString, Boolean useSOSL) {
-        strike_responseData responseData = new strike_responseData();
+			responseData.results.put('objectLabel', objectLabel);
+		} catch (Exception e) {
+			responseData.addError(e.getMessage());
+		}
 
-        
-        try {
-            Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
-            responseData.results = strike_lookupController.getData(jsonMap, useSOSL);
-        } catch (Exception e) {
-            responseData.addError(e.getMessage());
-        }
+		return responseData.getJsonString();
+	}
 
-        return responseData.getJsonString();
-    }
+	@AuraEnabled
+	public static String getRecords(String jsonString, Boolean useSOSL) {
+		strike_responseData responseData = new strike_responseData();
 
-    private static Map<String, Object> getData(Map<String, Object> jsonMap, Boolean useSOSL) {
-        List<Map<String, Object>> data = new List<Map<String, Object>>();
-        String objType = String.escapeSingleQuotes((String)jsonMap.get('object'));
-        String query = strike_lookupController.getQuery(jsonMap);
-        List<List<SObject>> results = useSOSL ? strike_lookupController.soslQuery(jsonMap) : null;
-        String searchField = String.escapeSingleQuotes((String)jsonMap.get('searchField'));
-        String searchTerm = '';
-        String subtitleFields;
+		try {
+			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+			responseData.results = strike_lookupController.getData(jsonMap, useSOSL);
+		} catch (Exception e) {
+			responseData.addError(e.getMessage());
+		}
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'subtitleFields')) {
-            subtitleFields = String.escapeSingleQuotes((String)jsonMap.get('subtitleFields'));
-        }
+		return responseData.getJsonString();
+	}
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchTerm')) {
-            searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
-        }
+	private static Map<String, Object> getData(Map<String, Object> jsonMap, Boolean useSOSL) {
+		List<Map<String, Object>> data = new List<Map<String, Object>>();
+		String objType = safeGetObjectType((String)jsonMap.get('object'));
+		String query = strike_lookupController.getQuery(jsonMap);
+		List<List<SObject>> results = useSOSL ? strike_lookupController.soslQuery(jsonMap) : null;
+		String searchField = String.escapeSingleQuotes((String)jsonMap.get('searchField'));
+		String searchTerm = '';
+		String subtitleFields;
 
-        if(useSOSL == false) {
-            if (String.isEmpty(subtitleFields)) {
-                for (sObject obj : Database.query(query)) {
-                    data.add(new Map<String, Object>{
-                        'label' => strike_lookupController.getValue(obj, objType, searchField),
-                        'value' => obj.get('Id'),
-                        'objType' => objType
-                    });
-                }
-            } else {
-                for (sObject obj : Database.query(query)) {
-                    data.add(new Map<String, Object>{
-                        'label' => strike_lookupController.getValue(obj, objType, searchField),
-                        'sublabel' => strike_lookupController.getValue(obj, objType, subtitleFields),
-                        'value' => obj.get('Id'),
-                        'objType' => objType
-                    });
-                }
-            }
-        } else {
-            for(List<SObject> objectList : results) {
-                for(SObject obj : objectList) {
-                    String sObjType = obj.Id.getSObjectType().getDescribe().getName();
-                    if(sObjType == objType || sObjType == 'User') {
-                        data.add(new Map<String, Object>{
-                            'label' => strike_lookupController.getValue(obj, sObjType, searchField),
-                            'sublabel' => strike_lookupController.getValue(obj, sObjType, subtitleFields),
-                            'value' => obj.Id,
-                            'objType' => sObjType
-                        });   
-                    }
-                }
-            }
-        }
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'subtitleFields')) {
+			subtitleFields = String.escapeSingleQuotes((String)jsonMap.get('subtitleFields'));
+		}
 
-        return new Map<String, Object>{
-                   'data' => data,
-                   'searchTerm' => searchTerm
-        };
-    }
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchTerm')) {
+			searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
+		}
 
-    private static String getQuery(Map<String, Object> jsonMap) {
-        Set<String> queryFields = new Set<String>{'Id'};
-        List<String> filters = new List<String>();
-        List<String> orders = new List<String>();
+		if (useSOSL == false) {
+			if (String.isEmpty(subtitleFields)) {
+				for (SObject obj : Database.query(query)) {
+					data.add(new Map<String, Object> {
+						'label' => strike_lookupController.getValue(obj, objType, searchField),
+						'value' => obj.get('Id'),
+						'objType' => objType
+					});
+				}
+			} else {
+				for (SObject obj : Database.query(query)) {
+					data.add(new Map<String, Object> {
+						'label' => strike_lookupController.getValue(obj, objType, searchField),
+						'sublabel' => strike_lookupController.getValue(obj, objType, subtitleFields),
+						'value' => obj.get('Id'),
+						'objType' => objType
+					});
+				}
+			}
+		} else {
+			for (List<SObject> objectList : results) {
+				for (SObject obj : objectList) {
+					String sObjType = obj.Id.getSobjectType().getDescribe().getName();
+					if (sObjType == objType || VALID_SEARCH_OBJECTS.contains(sObjType.toLowerCase())) {
+						data.add(new Map<String, Object> {
+							'label' => strike_lookupController.getValue(obj, sObjType, searchField),
+							'sublabel' => strike_lookupController.getValue(obj, sObjType, subtitleFields),
+							'value' => obj.Id,
+							'objType' => sObjType
+						});
+					}
+				}
+			}
+		}
 
-        String query;
-        String obj = String.escapeSingleQuotes((String)jsonMap.get('object'));
-        String subtitleFields;
+		return new Map<String, Object> {
+			'data' => data,
+			'searchTerm' => searchTerm
+		};
+	}
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'subtitleFields')) {
-            subtitleFields = String.escapeSingleQuotes((String)jsonMap.get('subtitleFields'));
-            queryFields.add(subtitleFields);
-        }
+	private static String getQuery(Map<String, Object> jsonMap) {
+		Set<String> queryFields = new Set<String> { 'Id' };
+		List<String> filters = new List<String>();
+		List<String> orders = new List<String>();
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchField')) {
-            queryFields.add(String.escapeSingleQuotes((String)jsonMap.get('searchField')));
+		String query;
+		String obj = safeGetObjectType((String)jsonMap.get('object'));
+		String subtitleFields;
 
-            if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchTerm')) {
-                String searchField = String.escapeSingleQuotes((String)jsonMap.get('searchField'));
-                String searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'subtitleFields')) {
+			subtitleFields = String.escapeSingleQuotes((String)jsonMap.get('subtitleFields'));
+			queryFields.add(subtitleFields);
+		}
 
-                filters.add(searchField + ' LIKE \'%' + searchTerm + '%\'');
-            }
-        }
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchField')) {
+			queryFields.add(String.escapeSingleQuotes((String)jsonMap.get('searchField')));
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'filter')) {
-            filters.add('(' + (String)jsonMap.get('filter') + ')');
-        }
+			if (strike_lookupController.fieldNotEmpty(jsonMap, 'searchTerm')) {
+				String searchField = String.escapeSingleQuotes((String)jsonMap.get('searchField'));
+				String searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'order')) {
-            orders.add(String.escapeSingleQuotes((String)jsonMap.get('order')));
-        }
+				filters.add(searchField + ' LIKE \'%' + searchTerm + '%\'');
+			}
+		}
 
-        query = 'SELECT ' + String.join(new List<String>(queryFields), ', ');
-        query += ' FROM ' + obj;
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'filter')) {
+			filters.add('(' + (String)jsonMap.get('filter') + ')');
+		}
 
-        if (filters.size() > 0) {
-            query += ' WHERE ' + String.join(filters, ' AND ');
-        }
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'order')) {
+			orders.add(String.escapeSingleQuotes((String)jsonMap.get('order')));
+		}
 
-        if (orders.size() > 0) {
-            query += ' ORDER BY ' + String.join(orders, ', ');
-        }
+		query = 'SELECT ' + String.join(new List<String>(queryFields), ', ');
+		query += ' FROM ' + obj;
 
-        if (strike_lookupController.fieldNotEmpty(jsonMap, 'limit')) {
-            query += ' LIMIT ' + String.escapeSingleQuotes((String)jsonMap.get('limit'));
-        }
+		if (filters.size() > 0) {
+			query += ' WHERE ' + String.join(filters, ' AND ');
+		}
 
-        return query;
-    }
+		if (orders.size() > 0) {
+			query += ' ORDER BY ' + String.join(orders, ', ');
+		}
 
-    private static Boolean fieldNotEmpty(Map<String, Object> jsonMap, String field) {
-        return jsonMap.containsKey(field) && !String.isEmpty((String)jsonMap.get(field));
-    }
+		if (strike_lookupController.fieldNotEmpty(jsonMap, 'limit')) {
+			query += ' LIMIT ' + String.escapeSingleQuotes((String)jsonMap.get('limit'));
+		}
 
-    private static List<List<SObject>> soslQuery(Map<String, Object> jsonMap) {
-        String searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
-        List<List<SObject>> searchList = [FIND :searchTerm IN ALL FIELDS RETURNING Contact (Name, Email), Lead(Name, Email), User(Name, Email)];
+		return query;
+	}
 
-        return searchList;
-    }
+	private static Boolean fieldNotEmpty(Map<String, Object> jsonMap, String field) {
+		return jsonMap.containsKey(field) && !String.isEmpty((String)jsonMap.get(field));
+	}
 
-    private static String getValue(SObject obj, String objectType, String field) {
-        List<String> fieldPath = field.split('[.]');
-        Object label = strike_utilities.convertObjectToMap(obj);
-        Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectType).getDescribe().fields.getMap();
+	private static List<List<SObject>> soslQuery(Map<String, Object> jsonMap) {
+		String searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
+		List<List<SObject>> searchList = [FIND :searchTerm IN ALL FIELDS RETURNING Contact (Name, Email), Lead(Name, Email), User(Name, Email)];
 
-        for (String fieldName : fieldPath) {
-            fieldName = fieldName.replaceAll('__r$', '__c');
+		return searchList;
+	}
 
-            label = ((Map<String, Object>)label).get(fieldName);
+	private static String getValue(SObject obj, String objectType, String field) {
+		List<String> fieldPath = field.split('[.]');
+		Object label = strike_utilities.convertObjectToMap(obj);
+		Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectType).getDescribe().fields.getMap();
 
-            if (label == null) {
-                return '';
-            }
+		for (String fieldName : fieldPath) {
+			fieldName = fieldName.replaceAll('__r$', '__c');
 
-            if (fieldMap.containsKey(fieldName + 'Id')) {
-                fieldName = fieldName + 'Id';
-            }
+			label = ((Map<String, Object>)label).get(fieldName);
 
-            Schema.DescribeFieldResult fieldDescribe = fieldMap.get(fieldName).getDescribe();
-            String fieldType = String.valueOf(fieldDescribe.getType()).toUpperCase();
+			if (label == null) {
+				return '';
+			}
 
-            if (fieldType == 'REFERENCE') {
-                fieldMap = Schema.getGlobalDescribe().get(String.valueOf(fieldDescribe.getReferenceTo().get(0))).getDescribe().fields.getMap();
-            } else if (fieldType == 'ADDRESS') {
-                List<String> addressComponents = new List<String>();
-                Map<String, Object> addr = (Map<String, Object>)label;
+			if (fieldMap.containsKey(fieldName + 'Id')) {
+				fieldName = fieldName + 'Id';
+			}
 
-                if (addr.containsKey('street') && addr.get('street') != null) {
-                    addressComponents.add((String)addr.get('street'));
-                }
+			Schema.DescribeFieldResult fieldDescribe = fieldMap.get(fieldName).getDescribe();
+			String fieldType = String.valueOf(fieldDescribe.getType()).toUpperCase();
 
-                if (addr.containsKey('city') && addr.get('city') != null) {
-                    addressComponents.add((String)addr.get('city'));
-                }
+			if (fieldType == 'REFERENCE') {
+				fieldMap = Schema.getGlobalDescribe().get(String.valueOf(fieldDescribe.getReferenceTo().get(0))).getDescribe().fields.getMap();
+			} else if (fieldType == 'ADDRESS') {
+				List<String> addressComponents = new List<String>();
+				Map<String, Object> addr = (Map<String, Object>)label;
 
-                if (addr.containsKey('state') && addr.get('state') != null) {
-                    addressComponents.add((String)addr.get('state'));
-                }
+				if (addr.containsKey('street') && addr.get('street') != null) {
+					addressComponents.add((String)addr.get('street'));
+				}
 
-                if (addr.containsKey('country') && addr.get('country') != null) {
-                    addressComponents.add((String)addr.get('country'));
-                }
+				if (addr.containsKey('city') && addr.get('city') != null) {
+					addressComponents.add((String)addr.get('city'));
+				}
 
-                if (addr.containsKey('postalCode') &&addr.get('postalCode') != null) {
-                    addressComponents.add((String)addr.get('postalCode'));
-                }
+				if (addr.containsKey('state') && addr.get('state') != null) {
+					addressComponents.add((String)addr.get('state'));
+				}
 
-                // change later for user formatting?
-                label = String.join(addressComponents, ', ');
-            }
-        }
+				if (addr.containsKey('country') && addr.get('country') != null) {
+					addressComponents.add((String)addr.get('country'));
+				}
 
-        return String.valueOf(label);
-    }
+				if (addr.containsKey('postalCode') && addr.get('postalCode') != null) {
+					addressComponents.add((String)addr.get('postalCode'));
+				}
+
+				// change later for user formatting?
+				label = String.join(addressComponents, ', ');
+			}
+		}
+
+		return String.valueOf(label);
+	}
 }
 /* --------------------------------------------------
 Copyright 2017 Appiphony, LLC

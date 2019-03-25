@@ -42,7 +42,7 @@ License: BSD 3-Clause License*/
 
         getRecordsAction.setParams({
             jsonString: JSON.stringify(helper.getParams(component, event, helper)),
-            useSOSL: true
+            useSOSL: helper.useSosl(component)
         });
 
         getRecordsAction.setCallback(this, function(res) {
@@ -89,7 +89,7 @@ License: BSD 3-Clause License*/
 
         getRecordsAction.setParams({
             jsonString: JSON.stringify(params),
-            useSOSL: true
+            useSOSL: helper.useSosl(component)
         });
 
         getRecordsAction.setCallback(this, function(res) {
@@ -134,6 +134,9 @@ License: BSD 3-Clause License*/
 
         $A.enqueueAction(getRecordLabelAction);
     },
+    useSosl: function (component) {
+      return component.get('v.restrictType') !== true;
+    },
     getRecordsBySearchTerm: function(component, event, helper) {
         var searchTerm = component.find('lookupInput').getElement().value;
 
@@ -157,8 +160,8 @@ License: BSD 3-Clause License*/
 
             return;
         }
-        component.set('v.openMenu', searchTerm.length > 1 ? true : false);
-        component.set('v.searching', searchTerm.length > 1 ? true : false);
+        component.set('v.openMenu', searchTerm.length > 1);
+        component.set('v.searching', searchTerm.length > 1);
 
         component.set('v.searchTimeout', setTimeout($A.getCallback(function() {
             if (!component.isValid()) {
@@ -172,7 +175,7 @@ License: BSD 3-Clause License*/
 
             getRecordsAction.setParams({
                 jsonString: JSON.stringify(params),
-                useSOSL: true
+                useSOSL: helper.useSosl(component)
             });
 
             getRecordsAction.setCallback(this, function(res) {
