@@ -3,7 +3,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     public static final String PATH_FOLDER = 'folders';
     public static final String PATH_DOCUMENTS = 'documents';
     public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
+    public static final String PATH_AGREEMENT_VERSIONS = 'versions';
     public static final String PATH_WORKFLOWS = 'workflows';
+    public static final Long SCM_OFFSET = 20;
 
     private static NegotiateAPI self = null;
 
@@ -66,10 +68,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     private class EosInfo {
 
         public String name ;
-        public String objectId;
+        public Id objectId;
         public String objectType ;
 
-        EosInfo(String objectName, String objectId, String objectType) {
+        EosInfo(final String objectName, final Id objectId, final String objectType) {
             this.name = objectName;
             this.objectId = objectId;
             this.objectType = objectType;
@@ -78,13 +80,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     @TestVisible
     private class APIExternalReview {
-        
+
         public List<APIDocument> documents { get; private set; }
         public List<APIReviewer> reviewers { get; private set; }
         public APIEmail email { get; private set; }
         public Integer expiresInNumberOfDays { get; private set; }
-        
-        public APIExternalReview(final Integer expiresInNumberOfDays,final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
+
+        public APIExternalReview(final Integer expiresInNumberOfDays, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
             this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
             this.reviewers = NegotiateAPI.getAPIReviewers(reviewerIds);
             this.email = new APIEmail(subject, message);
@@ -99,24 +101,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             //reviewers
             w.writeCharacters(this.reviewersToXML());
             //Email
-            w.writeCharacters(this.email.toXML());   
+            w.writeCharacters(this.email.toXML());
             //ExpiresInNumberOfDays param
-            w.writeStartElement(null, 'ExpiresInNumberOfDays', null); 
+            w.writeStartElement(null, 'ExpiresInNumberOfDays', null);
             w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
             w.writeEndElement();
             //CheckoutDocument param
-            w.writeStartElement(null, 'CheckoutDocument', null); 
+            w.writeStartElement(null, 'CheckoutDocument', null);
             w.writeCharacters('true');
             w.writeEndElement();
             //AssignTasksInOrder
-            w.writeStartElement(null, 'AssignTasksInOrder', null); 
+            w.writeStartElement(null, 'AssignTasksInOrder', null);
             w.writeCharacters('true');
             w.writeEndElement();
             //End       
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;         
+            return xml;
         }
 
         private String documentsToXML() {
@@ -129,7 +131,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;                 
+            return xml;
         }
 
         private String reviewersToXML() {
@@ -142,19 +144,19 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;               
+            return xml;
         }
 
     }
 
     @TestVisible
     private class APIApproval {
-        
+
         public List<APIDocument> documents { get; private set; }
         public List<APIApprover> approvers { get; private set; }
         public APIEmail email { get; private set; }
-        
-        public APIApproval(final List<String> documentsIds, final List<String> approverIds, final String subject, final String message) {
+
+        public APIApproval(final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
             this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
             this.approvers = NegotiateAPI.getAPIApprovers(approverIds);
             this.email = new APIEmail(subject, message);
@@ -168,20 +170,20 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             //Approvers
             w.writeCharacters(this.approversToXML());
             //Email
-            w.writeCharacters(this.email.toXML());   
+            w.writeCharacters(this.email.toXML());
             //CheckoutDocument param
-            w.writeStartElement(null, 'CheckoutDocument', null); 
+            w.writeStartElement(null, 'CheckoutDocument', null);
             w.writeCharacters('true');
             w.writeEndElement();
             //AssignTasksInOrder
-            w.writeStartElement(null, 'AssignTasksInOrder', null); 
+            w.writeStartElement(null, 'AssignTasksInOrder', null);
             w.writeCharacters('true');
             w.writeEndElement();
             //End       
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;         
+            return xml;
         }
 
         private String documentsToXML() {
@@ -194,7 +196,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;                 
+            return xml;
         }
 
         private String approversToXML() {
@@ -207,7 +209,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             w.writeEndElement();
             String xml = w.getXmlString();
             w.close();
-            return xml;               
+            return xml;
         }
 
     }
@@ -215,7 +217,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     //Todo: uid for now is an email address, this will most likely change in the future.    
     @TestVisible
     private class APIApprover {
-        public String uid {get; private set;}
+        public String uid { get; private set; }
 
         public APIApprover(final String email) {
             this.uid = email;
@@ -231,13 +233,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             String xml = w.getXmlString();
             w.close();
             return xml;
-        }        
+        }
     }
 
     //Todo: uid for now is an email address, this will most likely change in the future.
     @TestVisible
     private class APIReviewer {
-        public String uid {get; private set;}
+        public String uid { get; private set; }
 
         public APIReviewer(final String email) {
             this.uid = email;
@@ -253,14 +255,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             String xml = w.getXmlString();
             w.close();
             return xml;
-        }  
+        }
     }
 
-    private class APIDocument  {
+    private class APIDocument {
 
-        public String id { get; private set; }
+        public UUID id { get; private set; }
 
-        public APIDocument(final String documentId) {
+        public APIDocument(final UUID documentId) {
             this.id = documentId;
         }
 
@@ -268,7 +270,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             XmlStreamWriter w = new XmlStreamWriter();
             w.writeStartElement(null, 'Document', null);
             w.writeStartElement(null, 'Id', null);
-            w.writeCharacters(this.id);
+            w.writeCharacters(String.valueOf(this.id));
             w.writeEndElement();
             w.writeEndElement();
             String xml = w.getXmlString();
@@ -300,12 +302,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             String xml = w.getXmlString();
             w.close();
             return xml;
-        }        
+        }
     }
 
-    private static List<APIDocument> getAPIDocuments(final List<String> documentsIds) {
+    private static List<APIDocument> getAPIDocuments(final List<UUID> documentsIds) {
         List<APIDocument> documents = new List<APIDocument>();
-        for(String docId : documentsIds) {
+        for (UUID docId : documentsIds) {
             documents.add(new APIDocument(docId));
         }
         return documents;
@@ -317,7 +319,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             approvers.add(new APIApprover(approver));
         }
         return approvers;
-    } 
+    }
 
     private static List<APIReviewer> getAPIReviewers(final List<String> reviewerIds) {
         List<APIReviewer> reviewers = new List<APIReviewer>();
@@ -325,12 +327,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             reviewers.add(new APIReviewer(reviewer));
         }
         return reviewers;
-    }        
+    }
 
     // Create EOS folder in SpringCM Space
-    public String createEOSFolder(String objectName, String objectId, String objectType) {
+    public UUID createEOSFolder(final String objectName, final Id objectId, final String objectType) {
 
-        RestAPI.Response response = post(
+        final RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
                         PATH_FOLDER
@@ -347,14 +349,30 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
-        return ((String) body.get('Href')).substringAfterLast('/');
+        return UUID.parse(((String) body.get('Href')).substringAfterLast('/'));
     }
 
     @TestVisible
     private class APIAgreements {
 
-        public List<Agreement> items;
+        public List<APIAgreement> items;
         public String next;
+    }
+
+    @TestVisible
+    private class APIAgreement {
+        public String name;
+        public Datetime createdDate;
+        public String status;
+        public String href;
+
+        public Agreement convertAPIAgreement() {
+            return new Agreement(
+                    UUID.parse(this.href.substringAfterLast('/')),
+                    this.name,
+                    this.createdDate,
+                    this.status);
+        }
     }
 
 
@@ -362,15 +380,15 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     private class APIFolder {
         public String href;
 
-        APIFolder(String href) {
+        APIFolder(final String href) {
             this.href = href;
         }
     }
 
     //Create Agreement in EOS folder
-    public String createAgreementInEOSFolder(String sfContentVersionId, String folderId, String docName) {
+    public UUID createAgreementInEOSFolder(final Id sfContentVersionId, final UUID folderId, final String documentName) {
 
-        RestAPI.Response response = post(
+        final RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
                         PATH_AGREEMENT_IN_EOS_FOLDER
@@ -379,8 +397,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object>{
                         'SfContentVersionId' => sfContentVersionId,
-                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + folderId),
-                        'Name' => docName
+                        'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(folderId)),
+                        'Name' => documentName
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
@@ -390,27 +408,27 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
         // taskId, we can use below taskId to check the status of the uploaded document
-        return ((String) body.get('Href')).substringAfterLast('/');
+        return UUID.parse(((String) body.get('Href')).substringAfterLast('/'));
     }
 
     //Get All Agreements from an EOS folder
-    public List<Agreement> getAgreements(String folderId) {
+    public List<Agreement> getAgreements(final UUID folderId) {
         List<Agreement> agreements = new List<Agreement>();
         Map<String, String> queryStrings = new Map<String, String>();
-        queryStrings.put('limit', '20');
-        Long offset = -20;
+        queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+        Long offset = -SCM_OFFSET;
         String next = '';
 
         while (next != null) {
-            offset = +20;
+            offset += SCM_OFFSET;
             queryStrings.put('offset', String.valueOf(offset));
 
-            RestAPI.Response response = get(
+            final RestAPI.Response response = get(
                     getBaseUrl(),
-                    new List<String>{
+                    new List<Object>{
                             PATH_FOLDER, folderId, PATH_DOCUMENTS
                     },
-                    QueryString.empty,
+                    new QueryString(queryStrings),
                     getDefaultHeaders(),
                     RestAPI.defaultTimeout);
             if (response.hasError) {
@@ -419,7 +437,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
             }
 
             APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
-            agreements.addAll(result.items);
+            for (APIAgreement a : result.items) {
+                if (a != null) {
+                    agreements.add(a.convertAPIAgreement());
+                }
+            }
             next = result.next;
         }
 
@@ -428,17 +450,17 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     // Rename Agreement
 
-    public Boolean renameAgreement(String documentId, String docName) {
+    public Boolean renameAgreement(final UUID documentId, final String documentName) {
 
-        RestAPI.Response response = put(
+        final RestAPI.Response response = put(
                 getBaseUrl(),
-                new List<String>{
+                new List<Object>{
                         PATH_DOCUMENTS, documentId
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
                 JSON.serialize(new Map<String, Object>{
-                        'Name' => docName
+                        'Name' => documentName
                 }),
                 RestAPI.defaultTimeout);
         if (response.hasError) {
@@ -447,17 +469,17 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         Map<String, Object> body = (Map<String, Object>) JSON.deserializeUntyped(response.body);
-        return body.get('Name') == docName;
+        return body.get('Name') == documentName;
     }
 
     // Delete Agreement
 
-    public Boolean deleteAgreement(String documentId) {
+    public Boolean deleteAgreement(final UUID documentId) {
 
-        RestAPI.Response response = del(
+        final RestAPI.Response response = del(
                 getBaseUrl(),
-                new List<String>{
-                        PATH_DOCUMENTS
+                new List<Object>{
+                        PATH_DOCUMENTS, documentId
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -471,14 +493,49 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         return response.statusCode == 200 ;
     }
 
+    // Get all the versions of the Agreement
+    public List<Agreement> getAgreementVersions(final UUID documentId) {
+        List<Agreement> agreements = new List<Agreement>();
+        Map<String, String> queryStrings = new Map<String, String>();
+        queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+        Long offset = -SCM_OFFSET;
+        String next = '';
+
+        while (next != null) {
+            offset += SCM_OFFSET;
+            queryStrings.put('offset', String.valueOf(offset));
+
+            final RestAPI.Response response = get(
+                    getBaseUrl(),
+                    new List<Object>{
+                            PATH_DOCUMENTS, documentId, PATH_AGREEMENT_VERSIONS
+                    },
+                    new QueryString(queryStrings),
+                    getDefaultHeaders(),
+                    RestAPI.defaultTimeout);
+            if (response.hasError) {
+                this.log.error('Failed to get versions of Agreement - ' + documentId + ': ' + response.error);
+                throw new APIException(response.error);
+            }
+
+            APIAgreements result = (APIAgreements) JSON.deserialize(response.body, APIAgreements.class);
+            for (APIAgreement a : result.items) {
+                agreements.add(a.convertAPIAgreement());
+            }
+            next = result.next;
+        }
+
+        return agreements;
+    }
+
     //Send for Approval
 
-    public Boolean sendForApproval(final String name, final List<String> documentsIds, final List<String> approverIds, final String subject, final String message) {
+    public Boolean sendForApproval(final String name, final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
 
         RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
-                        PATH_WORKFLOWS    
+                        PATH_WORKFLOWS
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -497,12 +554,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
     //Send for External Review
 
-    public Boolean sendForExternalReview(final String name, final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
+    public Boolean sendForExternalReview(final String name, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
 
         RestAPI.Response response = post(
                 getBaseUrl(),
                 new List<String>{
-                        PATH_WORKFLOWS    
+                        PATH_WORKFLOWS
                 },
                 QueryString.empty,
                 getDefaultHeaders(),
@@ -517,6 +574,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
         }
 
         return response.statusCode == 201;
-    }    
+    }
 
 }
