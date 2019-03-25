@@ -1,47 +1,49 @@
 ({
-    onInit: function (component, event, helper) {
-        component.set('v.currentStep', '1');
-    },
+  onInit: function (component) {
+    component.set('v.currentStep', '1');
+  },
 
-    navigateToFileSelection: function (component, event, helper) {
-        helper.getSalesforceFiles(component, event, helper);
-    },
+  navigateToFileSelection: function (component, event, helper) {
+    helper.getSalesforceFiles(component, event, helper);
+  },
 
-    navigateToUploadFilesfromPC: function (component, event, helper) {
-        component.set('v.currentStep', '3');
-        var options = {
-            "iconPath": $A.get('$Resource.scmwidgetsspritemap'),
-            "apiToken": "124124124124",
-            "apiBaseDomain": "https://apiuploadqana11.springcm.com"
-        };
-        var uploadWidget = new SpringCM.Widgets.Upload(options);
-        uploadWidget.render("#upload-wrapper");
-    },
+  navigateToUploadFilesfromPC: function (component) {
+    component.set('v.currentStep', '3');
+    var options = {
+      "iconPath": $A.get('$Resource.scmwidgetsspritemap'),
+      "apiToken": "124124124124",
+      "apiBaseDomain": "https://apiuploadqana11.springcm.com"
+    };
+    var uploadWidget = new SpringCM.Widgets.Upload(options);
+    uploadWidget.render("#upload-wrapper");
+  },
 
-    backButtonClicked: function (component, event, helper) {
-        component.set('v.currentStep', '1');
-    },
+  backButtonClicked: function (component) {
+    component.set('v.currentStep', '1');
+  },
 
-    importButtonClicked: function (component, event, helper) {
-    },
+  importButtonClicked: function () {
+    // FIXME: Implement or remove.
+  },
 
-    handleFileSelection: function (component, event, helper) {
-    },
+  handleFileSelection: function () {
+    // FIXME: Implement or remove.
+  },
 
-    uploadFileButtonClicked: function (component, event, helper) {
-        component.set('v.currentStep', '1');
-    },
+  uploadFileButtonClicked: function (component) {
+    component.set('v.currentStep', '1');
+  },
 
-    uploadFileImportButtonClicked: function (component, event, helper) {
+  uploadFileImportButtonClicked: function () {
+    // FIXME: Implement or remove.
+  },
 
-    },
+  uploadScriptsLoaded: function () {
+    // FIXME: Implement or remove.
+  },
 
-    uploadScriptsLoaded: function (component, event, helper) {
-
-    },
-
-    cancelButtonClicked: function (component, event, helper) {
-        console.log('Cancel Button clicked');
-        helper.close(component, event, helper);
-    },
-})
+  cancelButtonClicked: function (component, event, helper) {
+    // console.log('Cancel Button clicked');
+    helper.close(component);
+  }
+});
