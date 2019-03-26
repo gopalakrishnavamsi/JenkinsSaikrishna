@@ -14,7 +14,8 @@ module.exports = {
     sforce: 'readonly',
     UIHelper: 'readonly',
     stringUtils: 'readonly',
-    navUtils: 'readonly'
+    navUtils: 'readonly',
+    SpringCM: 'readonly'
   },
   rules: {
     'no-shadow': 'error'
