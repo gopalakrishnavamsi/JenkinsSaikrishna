@@ -58,5 +58,9 @@ Action Type for Rejected workflow
 Action Type for Approval canceled
  */
 	public static final String APPROVAL_CHECKOUT_CANCELED = 'ApprovalCheckoutCanceled';
+	/**
+Action Type for New version uploaded
+ */
+	public static final String DOCUMENT_CHECK_IN = 'DocumentCheckIn';
 
 }
