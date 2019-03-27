@@ -47,10 +47,6 @@ Action Type for Sent for Approval
  */
 	public static final String APPROVAL_CHECKOUT = 'ApprovalCheckout';
 /**
-Action Type for Sent for Approval
- */
-	public static final String APPROVAL_CHECKOUT = 'ApprovalCheckout';
-/**
 Action Type for Approved workflow
  */
 	public static final String WORKFLOW_APPROVED = 'WorkflowApproved';

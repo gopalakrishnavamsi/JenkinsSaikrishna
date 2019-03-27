@@ -222,7 +222,7 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(1, result.size());
-			System.assertEquals('Document Import from Salesforce', result.get(0).action);
+			System.assertEquals(HistoryItemAction.DOCUMENT_IMPORTED_FROM_SALESFORCE, result.get(0).action);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).userEmail);
 			System.assertEquals('Tyler Green', result.get(0).data.actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).data.actor.emailAddress);
@@ -244,7 +244,7 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals('File Name Changed', result.get(0).action);
+			System.assertEquals(HistoryItemAction.DOCUMENT_RENAMED, result.get(0).action);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).userEmail);
 			System.assertEquals('Tyler Green', result.get(0).data.actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).data.actor.emailAddress);
@@ -266,7 +266,7 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals('Checkout (Approval)', result.get(0).action);
+			System.assertEquals(HistoryItemAction.APPROVAL_CHECKOUT, result.get(0).action);
 			System.assertEquals(null, result.get(0).userEmail);
 			System.assertEquals('Tyler Green', result.get(0).data.actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).data.actor.emailAddress);
@@ -292,7 +292,7 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals('External Review Initiated', result.get(0).action);
+			System.assertEquals(HistoryItemAction.EXTERNAL_REVIEW_INITIATED, result.get(0).action);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).userEmail);
 			System.assertEquals('Tyler Green', result.get(0).data.actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).data.actor.emailAddress);
