@@ -31,6 +31,7 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	- GET /documents/{documentId}/versions - Get All versions of an Agreement
 	- PUT /documents/{documentId} - Rename Agreement
 	- DELETE /documents/{documentId} - Delete Agreement
+	- GET /{accountId}/historyItems/{documentId}
  */
 	override public HttpResponse getResponse(final HttpRequest request) {
 		HttpResponse response = new HttpResponse();
