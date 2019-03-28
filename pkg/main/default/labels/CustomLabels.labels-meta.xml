@@ -4862,9 +4862,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadMessage</shortDescription>
-		<value>Uploading a file will create a new version of this document and update the agreement's activity
-			timeline.
-		</value>
+		<value>Uploading a file will create a new version of this document and update the agreement's activity timeline.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementName</fullName>
@@ -4879,5 +4877,12 @@
 		<protected>true</protected>
 		<shortDescription>CurrentVersion</shortDescription>
 		<value>Current Version</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSearchObject_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid search object</shortDescription>
+		<value>Invalid search object: {0}</value>
 	</labels>
 </CustomLabels>

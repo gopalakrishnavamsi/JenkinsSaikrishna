@@ -2,7 +2,7 @@
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
 	<customApplications>
 		<label>DocuSign</label>
-		<name>DocuSign</name>
+		<name>DocuSignForSalesforceCore</name>
 	</customApplications>
 	<customLabels>
 		<label>Access Authentication</label>
@@ -2626,9 +2626,7 @@
 		<name>UploadNewVersion</name>
 	</customLabels>
 	<customLabels>
-		<label>Uploading a file will create a new version of this document and update the agreement's activity
-			timeline.
-		</label>
+		<label>Uploading a file will create a new version of this document and update the agreement's activity timeline.</label>
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
@@ -2638,6 +2636,10 @@
 	<customLabels>
 		<label>Current Version</label>
 		<name>CurrentVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid search object: {0}</label>
+		<name>InvalidSearchObject_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

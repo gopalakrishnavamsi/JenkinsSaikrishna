@@ -1089,7 +1089,7 @@ public class MetadataAPI {
 			client.CallOptions.client = [
 				SELECT SoapClientId__c
 				FROM Organization__mdt
-				WHERE DeveloperName = 'Default'
+				WHERE DeveloperName = 'Current'
 				LIMIT 1
 			].SoapClientId__c;
 		}

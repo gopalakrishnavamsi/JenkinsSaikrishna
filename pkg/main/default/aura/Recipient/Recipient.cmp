@@ -19,8 +19,11 @@
 
     <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-gutters_xx-small">
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
-            <c:strike_lookup placeholder="{!$Label.c.SearchByName}" object="{!v.recordType}"
-                             iconName="{!'standard:' + v.recordType}" searchField="Name"
+            <c:strike_lookup placeholder="{!$Label.c.SearchByName}"
+                             object="{!v.recordType}"
+                             restrictType="false"
+                             iconName="{!'standard:' + v.recordType}"
+                             searchField="Name"
                              value="{!v.sourceId}"
                              subtitleField="Email" valueLabel="{#v.recipient.name}"/>
         </div>
