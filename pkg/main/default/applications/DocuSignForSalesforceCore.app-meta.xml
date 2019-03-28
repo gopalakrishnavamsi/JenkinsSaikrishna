@@ -7,7 +7,7 @@
         <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
     </brand>
     <defaultLandingTab>Setup</defaultLandingTab>
-    <description>Configure DocuSign Gen and eSignature</description>
+    <description>Configure DocuSign Gen, Negotiate, and eSignature</description>
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
