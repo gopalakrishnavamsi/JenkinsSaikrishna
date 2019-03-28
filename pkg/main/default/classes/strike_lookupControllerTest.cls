@@ -6,158 +6,190 @@ Website: http://www.lightningstrike.io
 GitHub: https://github.com/appiphony/Strike-Components
 License: BSD 3-Clause License
 -------------------------------------------------- */
-@isTest
+@IsTest
 private class strike_lookupControllerTest {
-    @isTest static void test_getRecentRecords() {
-        Schema.Account a = new Schema.Account(Name='Test Account');
-        insert a;
-        
-        String jsonString = '{"searchField":"Name", "object": "Account", "filter": "Name = \'Test Account\'"}';
-        String newJsonString = '{"searchField":"Name", "object": "NewObj", "filter": "Name = \'Test Account\'"}';
-        String wrongJsonString = 'oops';
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecentRecords(jsonString, false);
+	@IsTest
+	static void test_getInvalidObject() {
+		String jsonString = '{"searchField":"Name", "object": "OtherObject", "filter": "Name = \'Test Lead\'"}';
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        System.assertEquals(true, response.get('isSuccess'));
+		Test.startTest();
+		String result1 = strike_lookupController.getRecentRecords(jsonString, false);
+		String result2 = strike_lookupController.getRecords(jsonString, false);
+		String result3 = strike_lookupController.getRecordLabel(jsonString);
+		Test.stopTest();
 
-        responseString = strike_lookupController.getRecentRecords(wrongJsonString, false);
+		System.assertEquals(false, ((Map<String, Object>)JSON.deserializeUntyped(result1)).get('isSuccess'));
+		System.assertEquals(false, ((Map<String, Object>)JSON.deserializeUntyped(result2)).get('isSuccess'));
+		System.assertEquals(false, ((Map<String, Object>)JSON.deserializeUntyped(result3)).get('isSuccess'));
+	}
 
-        response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        results = (Map<String, Object>)response.get('results');
-        System.assertEquals(false, response.get('isSuccess'));
+	@IsTest
+	static void test_getRecentRecords() {
+		Lead l = new Lead(
+			FirstName = 'Test',
+			LastName = 'Lead',
+			Company = 'Test Company');
+		insert l;
 
-        responseString = strike_lookupController.getRecentRecords(newJsonString, false);
-        Test.stopTest();
+		String jsonString = '{"searchField":"Name", "object": "Lead", "filter": "Name = \'Test Lead\'"}';
+		String newJsonString = '{"searchField":"Name", "object": "NewObj", "filter": "Name = \'Test Lead\'"}';
+		String wrongJsonString = 'oops';
 
-        response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        results = (Map<String, Object>)response.get('results');
-        System.assertEquals(true, response.get('isSuccess'));
-    }
+		Test.startTest();
+		String responseString = strike_lookupController.getRecentRecords(jsonString, false);
 
-    @isTest static void test_getData() {
-        Schema.Account a = new Schema.Account(Name='Test Account');
-        insert a;
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		System.assertEquals(true, response.get('isSuccess'));
 
-        String jsonString = '{"searchField":"Name", "object": "Account", "filter": "Name = \'Test Account\'", "order": "Name", "limit": "5", "searchTerm": "Test"}';
-        String wrongJsonString = 'oops';
+		responseString = strike_lookupController.getRecentRecords(wrongJsonString, false);
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecords(jsonString, false);
+		response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		results = (Map<String, Object>)response.get('results');
+		System.assertEquals(false, response.get('isSuccess'));
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        List<Object> data =(List<Object>)results.get('data');
+		responseString = strike_lookupController.getRecentRecords(newJsonString, false);
+		Test.stopTest();
 
-        System.assertEquals(1, data.size());
+		response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		System.assertEquals(false, response.get('isSuccess'));
+	}
 
-        Map<String, Object> record = (Map<String, Object>)data.get(0);
+	@IsTest
+	static void test_getData() {
+		Lead l = new Lead(
+			FirstName = 'Test',
+			LastName = 'Lead',
+			Company = 'Test Company');
+		insert l;
 
-        System.assertEquals(a.Id, record.get('value'));
+		String jsonString = '{"searchField":"Name", "object": "Lead", "filter": "Name = \'Test Lead\'", "order": "Name", "limit": "5", "searchTerm": "Test"}';
+		String wrongJsonString = 'oops';
 
-        responseString = strike_lookupController.getRecords(wrongJsonString, false);
-        Test.stopTest();
+		Test.startTest();
+		String responseString = strike_lookupController.getRecords(jsonString, false);
 
-        response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        results = (Map<String, Object>)response.get('results');
-        System.assertEquals(false, response.get('isSuccess'));
-    }
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
 
-    @isTest static void test_getData_subtitleField() {
-        Schema.Account a = new Schema.Account(Name='Test Account');
-        insert a;
+		System.assertEquals(1, data.size());
 
-        String jsonString = '{"searchField":"Name", "subtitleField": "Name", "object": "Account", "filter": "Name = \'Test Account\'", "searchTerm": "Test"}';
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecords(jsonString, false);
-        Test.stopTest();
+		System.assertEquals(l.Id, record.get('value'));
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        List<Object> data =(List<Object>)results.get('data');
+		responseString = strike_lookupController.getRecords(wrongJsonString, false);
+		Test.stopTest();
 
-        System.assertEquals(1, data.size());
+		response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		results = (Map<String, Object>)response.get('results');
+		System.assertEquals(false, response.get('isSuccess'));
+	}
 
-        Map<String, Object> record = (Map<String, Object>)data.get(0);
+	@IsTest
+	static void test_getData_subtitleField() {
+		Lead l = new Lead(
+			FirstName = 'Test',
+			LastName = 'Lead',
+			Company = 'Test Company');
+		insert l;
 
-        System.assertEquals(a.Id, record.get('value'));
-    }
+		String jsonString = '{"searchField":"Name", "subtitleField": "Name", "object": "Lead", "filter": "Name = \'Test Lead\'", "searchTerm": "Test"}';
 
-    @isTest static void test_getData_addressField() {
-        Schema.Account a = new Schema.Account(
-            Name='Test Account',
-            BillingStreet='Test Street',
-            BillingCity='Test City',
-            BillingState='Test State',
-            BillingCountry='Test Country',
-            BillingPostalCode='Test Postal Code');
-        insert a;
+		Test.startTest();
+		String responseString = strike_lookupController.getRecords(jsonString, false);
+		Test.stopTest();
 
-        String jsonString = '{"searchField":"Name", "subtitleField": "BillingAddress", "object": "Account", "filter": "Name = \'Test Account\'", "searchTerm": "Test"}';
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecords(jsonString, false);
-        Test.stopTest();
+		System.assertEquals(1, data.size());
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        List<Object> data =(List<Object>)results.get('data');
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
 
-        System.assertEquals(1, data.size());
+		System.assertEquals(l.Id, record.get('value'));
+	}
 
-        Map<String, Object> record = (Map<String, Object>)data.get(0);
+	@IsTest
+	static void test_getData_addressField() {
+		Lead l = new Lead(
+			FirstName = 'Test',
+			LastName = 'Lead',
+			Company = 'Test Company',
+			Street = 'Test Street',
+			City = 'Test City',
+			State = 'Test State',
+			Country = 'Test Country',
+			PostalCode = 'Test Postal Code');
+		insert l;
 
-        System.assertEquals(a.Id, record.get('value'));
-    }
+		String jsonString = '{"searchField":"Name", "subtitleField": "Address", "object": "Lead", "filter": "Name = \'Test Lead\'", "searchTerm": "Test"}';
 
-    @isTest static void test_getData_reference() {
-        Schema.Account a = new Schema.Account(Name='Test Account');
-        insert a;
+		Test.startTest();
+		String responseString = strike_lookupController.getRecords(jsonString, false);
+		Test.stopTest();
 
-        Contact c = new Contact(
-            LastName='Contact',
-            FirstName='Test',
-            AccountId = a.Id);
-        insert c;
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
 
-        String jsonString = '{"searchField":"FirstName", "subtitleField": "Account.Name", "object": "Contact", "filter": "Name = \'Test Contact\'", "searchTerm": "Test"}';
+		System.assertEquals(1, data.size());
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecords(jsonString, false);
-        Test.stopTest();
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        List<Object> data =(List<Object>)results.get('data');
+		System.assertEquals(l.Id, record.get('value'));
+	}
 
-        System.assertEquals(1, data.size());
+	@IsTest
+	static void test_getData_reference() {
+		Contact c1 = new Contact(FirstName = 'Test', LastName = 'Lead');
+		insert c1;
 
-        Map<String, Object> record = (Map<String, Object>)data.get(0);
+		Contact c = new Contact(
+			FirstName = 'Test',
+			LastName = 'Contact',
+			ReportsTo = c1);
+		insert c;
 
-        System.assertEquals(c.Id, record.get('value'));
-    }
+		String jsonString = '{"searchField":"FirstName", "subtitleField": "ReportsTo.Name", "object": "Contact", "filter": "Name = \'Test Contact\'", "searchTerm": "Test"}';
 
-    @isTest static void test_getRecordLabel() {
-        String jsonString = '{"searchField":"Name", "object": "Account", "filter": "Name = \'Test Account\'"}';
-        String wrongJsonString = 'oops';
+		Test.startTest();
+		String responseString = strike_lookupController.getRecords(jsonString, false);
+		Test.stopTest();
 
-        Test.startTest();
-        String responseString = strike_lookupController.getRecordLabel(jsonString);
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
 
-        Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        Map<string, Object> results = (Map<String, Object>)response.get('results');
-        System.assertEquals(true, response.get('isSuccess'));
+		System.assertEquals(1, data.size());
 
-        responseString = strike_lookupController.getRecordLabel(wrongJsonString);
-        Test.stopTest();
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
 
-        response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
-        results = (Map<String, Object>)response.get('results');
-        System.assertEquals(false, response.get('isSuccess'));
-    }
+		System.assertEquals(c.Id, record.get('value'));
+	}
+
+	@IsTest
+	static void test_getRecordLabel() {
+		String jsonString = '{"searchField":"Name", "object": "Lead", "filter": "Name = \'Test Lead\'"}';
+		String wrongJsonString = 'oops';
+
+		Test.startTest();
+		String responseString = strike_lookupController.getRecordLabel(jsonString);
+
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		System.assertEquals(true, response.get('isSuccess'));
+
+		responseString = strike_lookupController.getRecordLabel(wrongJsonString);
+		Test.stopTest();
+
+		response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		results = (Map<String, Object>)response.get('results');
+		System.assertEquals(false, response.get('isSuccess'));
+	}
 }
 /* --------------------------------------------------
 Copyright 2017 Appiphony, LLC
