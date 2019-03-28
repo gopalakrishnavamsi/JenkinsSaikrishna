@@ -13,8 +13,7 @@ public with sharing class strike_lookupController {
 
 	private static String safeGetObjectType(final String s) {
 		if (String.isBlank(s) || !VALID_SEARCH_OBJECTS.contains(s.trim().toLowerCase())) {
-			// TODO: Create label for next major release (cannot add label in patch)
-			throw new DocuSignException('Invalid search object: '  + s);
+			throw new DocuSignException(String.format(Label.InvalidSearchObject_1, new List<String> { s }));
 		}
 		return s.trim();
 	}
