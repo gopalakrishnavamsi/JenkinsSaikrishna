@@ -81,16 +81,6 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static Boolean checkMultiCurrency() {
-		try {
-			Boolean isMultiCurrencyOrganization = UserInfo.isMultiCurrencyOrganization() ? true : false;
-			return isMultiCurrencyOrganization;
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check multi currency');
-		}
-	}
-
-	@AuraEnabled(Cacheable = true)
 	public static Id getLatestRecordId(final String sObjectType) {
 		try {
 			return (Id)Collection.head(GenService.getRecentRecordIds(Salesforce.getSObjectType(sObjectType), 1));
@@ -105,29 +95,6 @@ public with sharing class GenController extends Controller {
 			return GenService.getMergeData(sourceId, (Gen.Query)JSON.deserialize(queryJson, Gen.Query.class));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get object merge data.');
-		}
-	}
-
-	@AuraEnabled
-	public static Gen.File saveChunk(
-		final Id contentVersionId,
-		final Id linkedEntityId,
-		final String fileName,
-		final String base64Data) {
-
-		try {
-			return GenFileService.saveFile(contentVersionId, linkedEntityId, fileName, base64Data);
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to save file chunk');
-		}
-	}
-
-	@AuraEnabled
-	public static Boolean deleteContentDocument(final Id contentVersionId) {
-		try {
-			return GenFileService.deleteContentDocument(contentVersionId);
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to delete content document');
 		}
 	}
 
@@ -147,15 +114,9 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Gen.Job> getJobStatus(final List<String> jobIds) {
+	public static List<Gen.Job> getJobStatus(final List<UUID> jobIds) {
 		try {
-			List<UUID> jobIdsList = new List<UUID>();
-			if (!Collection.isEmpty(jobIds)) {
-				for (String stringJobId : jobIds) {
-					jobIdsList.add(UUID.parse(stringJobId));
-				}
-			}
-			return GenService.getJobStatus(jobIdsList);
+			return GenService.getJobStatus(jobIds);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get job status.');
 		}

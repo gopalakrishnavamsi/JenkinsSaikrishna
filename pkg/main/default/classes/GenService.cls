@@ -57,8 +57,7 @@ public with sharing class GenService {
 				cv.ContentSize,
 				cv.GeneratedFileFormat__c,
 				cv.GeneratedFileName__c,
-				cv.GeneratedFileSuffix__c,
-				cv.ContentDocumentId);
+				cv.GeneratedFileSuffix__c);
 		}
 
 		@TestVisible
@@ -82,8 +81,8 @@ public with sharing class GenService {
 				template.Id,
 				template.Name,
 				template.SourceObject__c,
-				String.isBlank(objMapJson) ? null : (List<Gen.ObjectMappings>)JSON.deserialize(objMapJson, List<Gen.ObjectMappings>.class),
-				String.isBlank(signMapJson) ? null : (List<Gen.SignerFieldMappings>)JSON.deserialize(signMapJson, List<Gen.SignerFieldMappings>.class),
+				String.isBlank(objMapJson) ? null : (Map<String, Object>)JSON.deserializeUntyped(objMapJson),
+				String.isBlank(signMapJson) ? null : (Map<String, Object>)JSON.deserializeUntyped(signMapJson),
 				template.UseAllTemplates__c == true,
 				template.UseCurrentRecord__c == true,
 				template.HasPreviewedDocuments__c == true,
@@ -95,12 +94,12 @@ public with sharing class GenService {
 		private List<Gen.File> queryGeneratedFiles(final Id templateId) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
 				'Id', 'Title', 'FileExtension', 'ContentSize',
-				'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c', 'ContentDocumentId'
+				'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c'
 			});
 
 			return convert([
 				SELECT Id, Title, ContentSize, FileExtension,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
 				AND IsLatest = TRUE
@@ -184,7 +183,7 @@ public with sharing class GenService {
 			insert cvs;
 			return [
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
 				FROM ContentVersion
 				WHERE Id IN :cvs
 			];
@@ -279,7 +278,7 @@ public with sharing class GenService {
 
 		public List<Gen.File> queryFiles(final List<Id> contentDocumentIds) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
+				'Id', 'Title', 'FileExtension', 'ContentSize',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
 				Application.namespacePrefix + 'GeneratedFileSuffix__c'
@@ -287,7 +286,7 @@ public with sharing class GenService {
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :contentDocumentIds
 				AND IsLatest = TRUE
@@ -369,7 +368,7 @@ public with sharing class GenService {
 
 		public List<Gen.File> queryFiles(final Set<Id> contentVersionIds) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
+				'Id', 'Title', 'FileExtension', 'ContentSize',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
 				Application.namespacePrefix + 'GeneratedFileSuffix__c'
@@ -377,7 +376,7 @@ public with sharing class GenService {
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c,ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
 				FROM ContentVersion
 				WHERE Id IN :contentVersionIds
 			]);
@@ -417,10 +416,6 @@ public with sharing class GenService {
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 
 		return DB.cloneTemplate(templateId);
-	}
-
-	public static Gen.File convertToGenFile(final ContentVersion cv) {
-		return DB.convert(cv);
 	}
 
 	public static Gen.Template createBlankTemplate() {
@@ -532,15 +527,16 @@ public with sharing class GenService {
 					isPreview ? null : source.id, // if we're preview we want to attach the user not a starting record
 					xmlPayload,
 					file.generatedFormat,
-					getOutputFileName(file, source, Datetime.now())).withFile(file));
+					getOutputFileName(file, source, Datetime.now())));
 			} catch (Exception ex) {
 				result.add(new Gen.Job(
 					null,
 					file.id,
 					Label.Failure,
-					ex.getMessage() + ' ' + file.title).withFile(file));
+					ex.getMessage()));
 			}
 		}
+
 		return result;
 	}
 

@@ -70,12 +70,6 @@ License: BSD 3-Clause License*/
     getRecordByValue: function(component, event, helper) {
         var value = component.get('v.value');
 
-        var isDocuSignGenPreview = component.get('v.isDocuSignGenPreview');
-        if (isDocuSignGenPreview) {
-          helper.getRecordByValueGenPreview(component, event, helper);
-          return;
-        }
-
         if (!value) {
             component.set('v.valueLabel', null);
             component.set('v.valueSublabel', null);
@@ -144,11 +138,6 @@ License: BSD 3-Clause License*/
       return component.get('v.restrictType') !== true;
     },
     getRecordsBySearchTerm: function(component, event, helper) {
-        var isDocuSignGenPreview = component.get('v.isDocuSignGenPreview');
-        if (isDocuSignGenPreview) {
-          helper.getRecordsBySearchTermGenPreview(component, event, helper);
-          return;
-        }
         var searchTerm = component.find('lookupInput').getElement().value;
 
         var lastSearchTerm = component.get('v.lastSearchTerm');
@@ -306,113 +295,6 @@ License: BSD 3-Clause License*/
 
             component.set('v.focusIndex', focusIndex);
         }
-    },
-    getRecordsBySearchTermGenPreview: function (component, event, helper) {
-        var searchTerm = component.find('lookupInput').getElement().value;
-
-        var lastSearchTerm = component.get('v.lastSearchTerm');
-        var searchTimeout = component.get('v.searchTimeout');
-        var showRecentRecords = component.get('v.showRecentRecords');
-
-        clearTimeout(searchTimeout);
-
-        if ($A.util.isEmpty(searchTerm)) {
-            if (showRecentRecords) {
-                helper.setRecords(component, event, helper, component.get('v.recentRecords'));
-            } else {
-                helper.setRecords(component, event, helper, []);
-            }
-            return;
-        } else if (searchTerm === lastSearchTerm) {
-            component.set('v.searching', false);
-            helper.openMenu(component, event, helper);
-
-            return;
-        }
-
-        component.set('v.openMenu', true);
-        component.set('v.searching', true);
-        component.set('v.error', false);
-
-        component.set('v.searchTimeout', setTimeout($A.getCallback(function () {
-            if (!component.isValid()) {
-                return;
-            }
-
-            var getRecordsAction = component.get('c.getRecordsGenPreview');
-            var params = helper.getParams(component, event, helper);
-
-            params.searchTerm = component.find('lookupInput').getElement().value;
-
-            getRecordsAction.setParams({
-                jsonString: JSON.stringify(params)
-            });
-
-            getRecordsAction.setCallback(this, function (res) {
-                if (res.getState() === 'SUCCESS') {
-                    var returnValue = JSON.parse(res.getReturnValue());
-
-                    if (returnValue.isSuccess && returnValue.results.searchTerm === component.find('lookupInput').getElement().value) {
-                        var returnedRecords = [];
-
-                        returnValue.results.data.forEach(function (record) {
-                            returnedRecords.push({
-                                label: record.label,
-                                sublabel: record.sublabel,
-                                value: record.value
-                            });
-                        });
-
-                        helper.setRecords(component, event, helper, returnedRecords);
-                    } else if (!returnValue.isSuccess) {
-                        component.set('v.error', true);
-                        component.set('v.errorMessage', returnValue.errMsg);
-                        component.set('v.searching', false);
-                        helper.closeMenu(component);
-                    }
-                } else {
-                    helper.setRecords(component, event, helper, []);
-                }
-            });
-
-            $A.enqueueAction(getRecordsAction);
-        }), 200));
-    },
-    getRecordByValueGenPreview: function (component, event, helper) {
-        var value = component.get('v.value');
-
-        if (!value) {
-            component.set('v.valueLabel', null);
-            component.set('v.valueSublabel', null);
-            helper.checkIfInitialized(component, event, helper);
-
-            return;
-        }
-
-        var getRecordsAction = component.get('c.getRecordsGenPreview');
-        var params = helper.getParams(component, event, helper);
-        params.recordId = value;
-
-        getRecordsAction.setParams({
-            jsonString: JSON.stringify(params)
-        });
-
-        getRecordsAction.setCallback(this, function (res) {
-            if (res.getState() === 'SUCCESS') {
-                var returnValue = JSON.parse(res.getReturnValue());
-
-                if (returnValue.isSuccess) {
-                    returnValue.results.data.forEach(function (record) {
-                        component.set('v.valueLabel', record.label);
-                        component.set('v.valueSublabel', record.sublabel);
-                    });
-                }
-            }
-
-            helper.checkIfInitialized(component, event, helper);
-        });
-
-        $A.enqueueAction(getRecordsAction);
     }
 })
 /*Copyright 2017 Appiphony, LLC
