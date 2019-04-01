@@ -1,0 +1,323 @@
+<aura:component controller="GenController">
+    <!-- attributes -->
+    <aura:attribute name="templateId" type="Id"/>
+    <aura:attribute name="showToast" type="Boolean"/>
+    <aura:attribute name="toastMsg" type="String"/>
+    <aura:attribute name="toastVariant" type="String"/>
+    <aura:attribute name="errMsg" type="String"/>
+    <aura:attribute name="steps" type="String[]" access="private"/>
+    <aura:attribute name="availableObjects" type="String[]" access="private"/>
+    <aura:attribute name="commonObjects" type="String[]" access="private"/>
+    <aura:attribute name="cancel" type="String" default="{!$Label.c.Cancel}"/>
+    <aura:attribute name="exit" type="String" default="{!$Label.c.Exit}"/>
+    <aura:attribute name="showWhatYouWillNeedModal" type="Boolean" access="private"/>
+    <aura:attribute name="updateShowWhatYouWillNeedModal" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="currentStep" type="Integer"/>
+    <aura:attribute name="isClassic" type="Boolean"/>
+    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="labelByApiName" type="Object"/>
+    <aura:attribute name="files" type="Object[]"/>
+    <aura:attribute name="isCompleted" type="Boolean"/>
+    <aura:attribute name="saving" type="Boolean" default="{!false}"/>
+
+    <!-- handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler name="showToast" event="c:strike_evt" action="{!c.showToast}"/>
+    <aura:handler name="publishedButtons" event="c:strike_evt" action="{!c.publishedButtons}"/>
+
+    <aura:if isTrue="{!not(empty(v.errMsg))}">
+        <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
+             role="alert">
+            <lightning:icon iconName="utility:error" variant="inverse" size="small"
+                            class="slds-m-right_small slds-no-flex slds-align-top"/>
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small">{!v.errMsg}</h2>
+            </div>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!empty(v.errMsg)}">
+        <!-- Page Header -->
+        <div class="slds-page-header slds-border_bottom">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-media_center">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="custom:custom67" class="slds-page-header__icon"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <span>{!$Label.c.template_Configuration}</span>
+                                    <h1 class="slds-page-header__title slds-truncate" title="{!v.config.name}">
+                                        <strong>{!v.config.name}</strong>
+                                        <lightning:buttonIcon class="slds-m-left_x-small" iconName="utility:edit"
+                                                              variant="bare" alternativeText="Edit"
+                                                              onclick="{!c.editDetails}"/>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                    <lightning:button label="{!$Label.c.Finish}" variant="brand" onclick="{!c.showExitModal}"/>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <!-- Saving Spinner -->
+        <div class="{!'ds-path__spinner_container' + if(not(v.saving), ' slds-hide')}">
+            <div class="ds-image-spinner slds-spinner_container slds-is-fixed">
+                <div role="status" class="slds-spinner slds-spinner_large">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <img src="{!$Resource.loading}" alt="Loading"/>
+                </div>
+            </div>
+            <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak"></div>
+        </div>
+        <!-- /Saving Spinner -->
+
+        <div class="slds-container slds-container_x-large slds-container_center slds-p-around_x-large">
+            <!-- Path -->
+            <div class="ds-path slds-path slds-card slds-is-expanded slds-p-horizontal_medium slds-p-top_small">
+                <div class="slds-grid slds-path__track ds-path__track slds-is-relative">
+                    <div class="slds-grid slds-path__scroller-container">
+                        <div class="slds-path__scroller" role="application">
+                            <div class="slds-path__scroller_inner">
+                                <ul class="slds-path__nav" role="tablist">
+                                    <aura:iteration items="{!v.steps}" var="step" indexVar="index">
+                                        <li class="{!'slds-path__item' + if(or( index gt (v.config.stepsCompleted + 1), and(step == 'Publish', not(v.config.hasPreviewedDocuments)) ), ' ds-cursor_not-allowed') + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
+                                            role="presentation">
+                                            <a class="slds-path__link" href="javascript:void(0);" role="tab"
+                                               tabindex="-1"
+                                               onclick="{!c.selectStep}" data-step="{!index}">
+                                                <span class="slds-path__stage">
+                                                    <lightning:icon iconName="utility:check" size="x-small"
+                                                                    variant="inverse"/>
+                                                </span>
+                                                <span class="slds-path__title">{!step}</span>
+                                            </a>
+                                        </li>
+                                    </aura:iteration>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-path__content" role="tabpanel">
+                    <div class="slds-path__coach slds-grid slds-p-top_xxx-small">
+                        <div class="slds-path__keys slds-size_3-of-5 slds-m-top_x-small">
+
+                            <aura:if isTrue="{!not(empty(v.config))}">
+
+                                <aura:if isTrue="{!v.currentStep == 0}">
+                                    <c:GenPrimaryObject aura:id="step" config="{!v.config}"
+                                                        availableObjects="{!v.availableObjects}"
+                                                        labelByApiName="{!v.labelByApiName}"
+                                                        commonObjects="{!v.commonObjects}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 1}">
+                                    <c:GenAddFields aura:id="step" config="{!v.config}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 2}">
+                                    <c:GenImportTemplateFiles aura:id="step" config="{!v.config}" files="{!v.files}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 3}">
+                                    <c:GenPreview aura:id="step" config="{!v.config}" files="{!v.files}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!v.currentStep == 4}">
+                                    <c:GenPublish aura:id="step" config="{!v.config}" isClassic="{#v.isClassic}"/>
+                                </aura:if>
+
+                                <div class="slds-grid slds-text-align_right slds-p-top_medium slds-border_top slds-m-top_medium">
+                                    <div class="slds-col slds-no-flex">
+                                        <lightning:buttonGroup>
+                                            <aura:if isTrue="{!v.currentStep gt 0}">
+                                                <lightning:button label="{!$Label.c.Back}" onclick="{!c.previousStep}"/>
+                                            </aura:if>
+                                            <lightning:button label="{!if(v.currentStep == 0, v.cancel, v.exit)}"
+                                                              onclick="{!c.showExitModal}"/>
+                                        </lightning:buttonGroup>
+                                    </div>
+                                    <aura:if isTrue="{!not(v.currentStep == v.steps.length - 1)}">
+                                        <div class="slds-col">
+                                            <lightning:button variant="brand" label="{!$Label.c.Next}"
+                                                              disabled="{!and(v.currentStep == 3, not(v.config.hasPreviewedDocuments))}"
+                                                              onclick="{!c.nextStep}"/>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </aura:if>
+                        </div>
+                        <!-- Guidance -->
+                        <div class="slds-path__guidance slds-size_2-of-5 slds-border_left">
+                            <h2 class="slds-path__coach-title">{!$Label.c.steps_for_success}</h2>
+                            <div class="slds-text-longform slds-path__guidance-content">
+                                <aura:if isTrue="{!v.currentStep == 0}">
+                                    <lightning:formattedRichText
+                                            value="{!$Label.c.starting_Object_Guidance_1 + $Label.c.starting_Object_Guidance_3}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 1}">
+                                    <lightning:formattedRichText
+                                            value="{!$Label.c.merge_Fields_Guidance_1 + $Label.c.merge_Fields_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 2}">
+                                    <lightning:formattedRichText
+                                            value="{!$Label.c.import_Templates_Guidance_1 + $Label.c.import_Templates_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 3}">
+                                    <lightning:formattedRichText
+                                            value="{!$Label.c.preview_Guidance_1 + $Label.c.preview_Guidance_2 + $Label.c.starting_Object_Guidance_3 }"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.currentStep == 4}">
+                                    <lightning:formattedRichText
+                                            value="{!$Label.c.publish_Guidance_1 + $Label.c.publish_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                </aura:if>
+                            </div>
+                        </div>
+                        <!-- Guidance -->
+                    </div>
+                </div>
+            </div>
+            <!-- /Path -->
+        </div>
+
+
+    </aura:if>
+    <!-- What You Will Need Modal -->
+    <c:strike_modal aura:id="whatYouWillNeedModal" title="What you will Need" showModal="{!v.showWhatYouWillNeedModal}"
+                    showHeader="false">
+        <div class="slds-p-horizontal_xx-large slds-p-bottom_x-small">
+            <div class="slds-text-align_center">
+                <div class="slds-text-heading_medium slds-p-around_x-small">
+                    <b>{!$Label.c.what_you_will_need}</b>
+                </div>
+                <div class="slds-text-body_regular slds-p-bottom_x-small">
+                    {!$Label.c.what_you_will_need_info}
+                </div>
+            </div>
+            <ul class="slds-p-top_x-small">
+                <li class="slds-item slds-p-top_x-small">
+                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <lightning:icon iconName="doctype:word" size="medium"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">
+                                    <b>{!$Label.c.what_you_will_need_step1_title}</b>
+                                </div>
+                                <p>
+                                <div class="slds-text-body_regular">
+                                        {!$Label.c.what_you_will_need_step1_info}
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div class="ds-modal-content-spacing"/>
+                <li class="slds-item slds-p-top_x-small">
+                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <img class="slds-is-relative slds-icon" src="{!$Resource.salesforcelogo}"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">
+                                    <b>{!$Label.c.what_you_will_need_step2_title}</b>
+                                </div>
+                                <p>
+                                <div class="slds-text-body_regular">
+                                        {!$Label.c.what_you_will_need_step2_info}
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div class="ds-modal-content-spacing"/>
+                <li class="slds-item slds-p-top_x-small">
+                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <img class="slds-is-relative slds-icon" src="{!$Resource.docusignfields}"/>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-text-heading_small">
+                                    <b>{!$Label.c.what_you_will_need_step3_title}</b>
+                                </div>
+                                <p>
+                                <div class="slds-text-body_regular">
+                                        {!$Label.c.what_you_will_need_step3_info}
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <aura:set attribute="footerButtons">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col">
+                    <lightning:input type="checkbox" label="{!$Label.c.dontshowThisAgain}"
+                                     aura:id="dontShowAgainCheckBox"
+                                     onchange="{!c.updateWhatYouWillNeedModalSettings}">
+                    </lightning:input>
+                </div>
+                <div class="slds-col">
+                    <lightning:button label="{!$Label.c.ContinueLabel}" variant="brand"
+                                      onclick="{!c.closeWhatYouWillNeedModal}"/>
+                </div>
+            </div>
+        </aura:set>
+    </c:strike_modal>
+    <!-- What You Will Need Modal -->
+
+    <!-- Edit Modal -->
+    <c:strike_modal aura:id="edit-modal" title="{!$Label.c.edit_Modal_Title}" primaryButtonLabel="{!$Label.c.Save}"
+                    strike_evt_modalPrimaryButtonClicked="{!c.saveDetails}">
+        <div class="slds-form_stacked">
+            <lightning:input label="{!$Label.c.name}" aura:id="record-name-input" maxlength="80"/>
+        </div>
+    </c:strike_modal>
+    <!-- /Edit Modal -->
+
+    <!-- Cancel Modal -->
+    <c:strike_modal aura:id="exitModal" title="{!$Label.c.cancel_Modal_Title}">
+        <p class="slds-text-align_center">
+            {!$Label.c.cancel_Modal_Message}
+        </p>
+        <aura:set attribute="footerButtons">
+            <lightning:button label="{!$Label.c.dont_Save}" onclick="{!c.goToRecord}"/>
+            <lightning:button label="{!$Label.c.Save}" variant="brand" onclick="{!c.saveAndNavigate}"/>
+        </aura:set>
+    </c:strike_modal>
+    <!-- /Cancel Modal -->
+
+    <!-- Toast -->
+    <div aura:id="copy-toast" class="{!'ds-toast slds-notify_container' + if(v.showToast, ' ds-toast_shown')}">
+        <div class="{!'slds-notify slds-notify_toast slds-theme_' + v.toastVariant}" role="status">
+            <lightning:icon iconName="{!'utility:' + v.toastVariant}" variant="inverse"
+                            class="slds-m-right_small slds-no-flex slds-align-top"
+                            size="small"/>
+            <div class="slds-notify__content">
+                <h3 class="slds-text-heading_small">{!v.toastMsg}</h3>
+            </div>
+
+            <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse"
+                    title="{!$Label.c.Close}"
+                    onclick="{!c.hideToast}">
+                <lightning:buttonIcon class="ds-icon-fix" iconName="utility:close" alternativeText="{!$Label.c.Close}"
+                                      size="large" variant="bare-inverse"/>
+                <span class="slds-assistive-text">{!$Label.c.Close}</span>
+            </button>
+        </div>
+    </div>
+    <!-- /Toast -->
+
+</aura:component>

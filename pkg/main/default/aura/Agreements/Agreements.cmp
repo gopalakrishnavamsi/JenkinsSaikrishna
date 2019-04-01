@@ -4,6 +4,7 @@
                 access="global">
     <!--TODO Implement spinner functionality -->
     <!-- FIXME : Check hardcoding and replace with labels  -->
+    <!-- FIXME : Vf page parameter for toast component   -->
 
     <!-- attributes -->
     <aura:attribute name="namespace" type="String"/>

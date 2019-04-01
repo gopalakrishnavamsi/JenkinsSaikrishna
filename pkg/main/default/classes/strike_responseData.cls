@@ -16,8 +16,13 @@ public with sharing class strike_responseData {
         this.results = new Map<String, Object>();
     }
 
-    public void addError(String errMsg){
+    public void addError(String errMsg) {
         this.errMsg = errMsg;
+        this.isSuccess = false;
+    }
+
+    public void addError(Exception e) {
+        this.errMsg = e.getMessage();
         this.isSuccess = false;
     }
 

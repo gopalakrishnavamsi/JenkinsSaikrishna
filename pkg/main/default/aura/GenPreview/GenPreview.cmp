@@ -1,0 +1,23 @@
+<aura:component>
+    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="files" type="Object[]"/>
+    <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
+
+    <aura:handler name="generatedDocs" event="c:strike_evt" action="{!c.setPreviewedDocs}"/>
+
+    <aura:method name="validate" action="{!c.validate}"/>
+
+    <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+        <strong>{!$Label.c.preview}</strong>
+    </h3>
+    <div class="slds-m-bottom_medium slds-text-longform">
+        <p>{!$Label.c.PreviewTemplatesInfo}</p>
+    </div>
+    <div
+            class="{!'ds-try-template-config_container slds-is-relative' + if(v.showTakingTooLongMessage, ' ds-try-template-config_container-long-gen')}">
+        <c:Generator templateId="{!v.config.Id}" config="{#v.config}" isPreview="{!true}" templateFiles="{#v.files}"
+                     showGenerateButton="{!true}" showTakingTooLongMessage="{!v.showTakingTooLongMessage}">
+            <p class="slds-m-bottom_small">{!$Label.c.test_Your_Template_Msg}</p>
+        </c:Generator>
+    </div>
+</aura:component>

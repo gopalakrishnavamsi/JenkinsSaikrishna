@@ -1,0 +1,53 @@
+<aura:component>
+
+    <aura:attribute name="file" type="Object"/>
+    <aura:attribute name="fileSize" type="String"/>
+    <aura:attribute name="isClassic" type="Boolean" default="{!false}"/>
+    <aura:attribute name="isEdit" type="Boolean" default="{!true}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <div class="slds-box slds-box_small slds-theme_shade slds-text-align_left slds-is-relative">
+        <div class="slds-media slds-media_center">
+            <div class="slds-media__figure">
+                <!-- File Icon -->
+                <lightning:icon size="medium" iconName="{!
+                    'doctype:'
+                    + if(v.file.extension == 'doc', 'gdoc')
+                    + if(v.file.extension == 'docm', 'gdoc')
+                    + if(v.file.extension == 'docx', 'gdoc')
+                    + if(v.file.extension == 'pdf', 'pdf')
+                }"/>
+                <!-- /File Icon -->
+            </div>
+            <div class="slds-media__content slds-has-flexi-truncate">
+                <p class="slds-truncate" title="{!v.file.title}">
+                    <a href="javascript:void(0)" onclick="{!c.previewFile}">{!v.file.title}</a>
+                </p>
+                <p class="slds-text-body__small slds-text-color_weak">{!v.fileSize} &bull; {!v.file.extension}</p>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.isEdit}">
+            <div class="slds-grid slds-gutters_x-small slds-m-top_small">
+                <div class="slds-col">
+                    <lightning:input aura:id='generatedName' required="true" label="{!$Label.c.generated_File_Name}"
+                                     value="{!v.file.generatedName}"/>
+                </div>
+                <div class="slds-col">
+                    <lightning:select label="{!$Label.c.file_Suffix}" value="{!v.file.generatedSuffix}">
+                        <option value="name">{!$Label.c.starting_Object_Name}</option>
+                        <option value="date">{!$Label.c.date}</option>
+                        <option value="name_date">{!$Label.c.starting_Object_Name_And_Date}</option>
+                    </lightning:select>
+                </div>
+                <div class="slds-col">
+                    <lightning:select label="{!$Label.c.file_Format}" value="{!v.file.generatedFormat}">
+                        <option value="Word">{!$Label.c.microsoft_Word}</option>
+                        <option value="Pdf">{!$Label.c.pdf}</option>
+                    </lightning:select>
+                </div>
+            </div>
+        </aura:if>
+    </div>
+
+</aura:component>
