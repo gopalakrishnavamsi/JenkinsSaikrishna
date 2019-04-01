@@ -1,0 +1,55 @@
+<aura:component>
+    <aura:attribute name="fieldMapping" type="Object"/>
+    <aura:attribute name="token" type="String"/>
+    <aura:attribute name="parentIndex" type="Integer"/>
+    <aura:attribute name="index" type="Integer"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <aura:registerEvent name="showToast" type="c:strike_evt"/>
+    <aura:registerEvent name="removeSignerField" type="c:strike_evt"/>
+
+    <aura:method name="setTokenValue" action="{!c.setTokenValue}"/>
+
+    <div class="ds-merge-field__subfield slds-is-relative slds-m-bottom_x-small">
+        <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward" size="x-small"/>
+        <div class="ds-merge-field__subfield-line slds-is-absolute"></div>
+        <div class="slds-grid slds-grid_pull-padded-large slds-is-relative slds-m-top_x-small">
+            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                <lightning:select class="ds-no-label slds-m-left_xx-large" value="{!v.fieldMapping.apiName}"
+                                  onchange="{!c.setTokenValue}">
+                    <option value="s">{!$Label.c.signature}</option>
+                    <option value="i">{!$Label.c.initial}</option>
+                    <option value="oi">{!$Label.c.optional_Initial}</option>
+                    <option value="d">{!$Label.c.date_Signed}</option>
+                    <option value="n">{!$Label.c.name}</option>
+                    <option value="c">{!$Label.c.Company}</option>
+                    <option value="t">{!$Label.c.Title}</option>
+                </lightning:select>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                <div class="slds-grid slds-gutters_xx-small">
+                    <div class="slds-col">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <input type="text" aura:id="token-input" class="ds-readonly slds-input"
+                                       readonly="readonly" value="{!v.token}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <div class="slds-button-group">
+                            <lightning:button label="{!$Label.c.Copy}" variant="neutral" disabled="{!empty(v.token)}"
+                                              onclick="{!c.copyToken}"/>
+                            <lightning:buttonMenu menuAlignment="right" onselect="{!c.removeSignerField}"
+                                                  variant="border-filled">
+                                <lightning:menuItem label="{!$Label.c.Remove}"/>
+                            </lightning:buttonMenu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

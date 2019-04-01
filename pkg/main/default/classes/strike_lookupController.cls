@@ -261,6 +261,75 @@ public with sharing class strike_lookupController {
 
 		return String.valueOf(label);
 	}
+
+	@AuraEnabled
+	public static String getRecordsGenPreview(String jsonString) {
+		strike_responseData responseData = new strike_responseData();
+
+		try {
+			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+
+			responseData.results = strike_lookupController.getGenPreviewData(jsonMap);
+		} catch (Exception e) {
+			responseData.addError(e);
+		}
+
+		return responseData.getJsonString();
+	}
+
+	private static Map<String, Object> getGenPreviewData(Map<String, Object> jsonMap) {
+		List<Map<String, Object>> data = new List<Map<String, Object>>();
+
+		String objType = String.escapeSingleQuotes((String)jsonMap.get('object'));
+		Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objType).getDescribe().fields.getMap();
+		String nameField = '';
+		List<Object> recordIds = (List<Object>)jsonMap.get('recordIds');
+		String recordId = '';
+		String searchTerm = '';
+		String likeSearchTerm = '';
+
+		if (fieldNotEmpty(jsonMap, 'recordId')) {
+			recordId = String.escapeSingleQuotes((String)jsonMap.get('recordId'));
+		}
+
+		if (fieldNotEmpty(jsonMap, 'searchTerm')) {
+			searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
+			likeSearchTerm = '%' + searchTerm + '%';
+		}
+
+		for (Schema.SObjectField field : fieldMap.values()) {
+			Schema.DescribeFieldResult describedField = field.getDescribe();
+
+			if (describedField.isNameField()) {
+				nameField = describedField.getName();
+			}
+		}
+
+		Set<String> fields = new Set<String> { 'Id', nameField };
+
+		String query = 'SELECT ' + String.join(new List<String>(fields), ', ') +
+			' FROM ' + objType;
+
+		if (recordIds != null && !recordIds.isEmpty()) {
+			query += ' WHERE Id IN :recordIds';
+		} else if (String.isNotEmpty(recordId)) {
+			query += ' WHERE Id = :recordId';
+		} else {
+			query += ' WHERE ' + nameField + ' LIKE :likeSearchTerm';
+		}
+
+		for (sObject obj : Database.query(query)) {
+			data.add(new Map<String, Object> {
+				'label' => obj.get(nameField),
+				'value' => obj.get('Id')
+			});
+		}
+
+		return new Map<String, Object> {
+			'data' => data,
+			'searchTerm' => searchTerm
+		};
+	}
 }
 /* --------------------------------------------------
 Copyright 2017 Appiphony, LLC

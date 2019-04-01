@@ -1,0 +1,53 @@
+<aura:component controller="GenController">
+
+    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="files" type="Object[]"/>
+    <aura:attribute name="currentAction" type="String"/>
+
+    <aura:method name="validate" action="{!c.validate}"/>
+
+    <aura:registerEvent name="showToast" type="c:strike_evt"/>
+
+    <!-- Action Spinner -->
+    <div class="{!'ds-path__spinner_container' + if(empty(v.currentAction), ' slds-hide')}">
+        <div class="ds-image-spinner slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_large">
+                <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                <img src="{!$Resource.loading}" alt="Loading"/>
+            </div>
+        </div>
+        <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak">{!v.currentAction}</div>
+    </div>
+    <!-- /Action Spinner -->
+
+    <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+        <strong>{!$Label.c.document_Templates}</strong>
+    </h3>
+
+    <div class="slds-m-bottom_medium slds-text-longform">
+        <p>{!$Label.c.import_Templates_Description}</p>
+    </div>
+
+    <aura:iteration items="{!v.files}" var="file" indexVar="fileIndex">
+        <div class="ds-file-tile slds-is-relative slds-m-bottom_medium">
+            <c:GenFileTile file="{!file}" isClassic="{!true}"/>
+            <aura:if isTrue="{!not(v.config.isSample)}">
+                <lightning:buttonIcon class="ds-file-tile__remove slds-is-absolute" iconName="utility:close"
+                                      variant="border-filled" alternativeText="Remove" value="{!fileIndex}"
+                                      onclick="{!c.removeFile}"/>
+            </aura:if>
+        </div>
+    </aura:iteration>
+
+    <aura:if isTrue="{!not(v.config.isSample)}">
+        <c:GenFileUploader recordId="{!v.config.id}" uploadStart="{!c.uploadStart}" uploadedFile="{!c.uploadedFile}"/>
+    </aura:if>
+
+    <div class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_large">
+        {!$Label.c.bulk_document_creation}
+    </div>
+    <lightning:input type="checkbox" label="{!$Label.c.bulk_document_creation_checkboxinfo}"
+                     aura:id="documentGenerationOptionCheckbox" checked="{!v.config.useAllTemplates}"
+                     disabled="{!if(v.files.length lt 2, true, false)}"/>
+
+</aura:component>

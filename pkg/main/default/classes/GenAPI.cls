@@ -1,14 +1,28 @@
 public with sharing class GenAPI extends DocuSignAPI {
-
 	private static GenAPI self = null;
 
-	private GenAPI(final Url baseUrl){
-		super(new Url(baseUrl, 'gen'));
+	@TestVisible
+	private GenAPI(
+		final Url baseUrl,
+		final String apiVersion,
+		final UUID accountId) {
+
+		super (new Url (baseUrl, String.format('{0}/{1}/',
+			new List<String> {
+				apiVersion,
+				String.valueOf(accountId)
+			})));
 	}
 
 	public static GenAPI getInstance() {
 		if (self == null) {
-			self = new GenAPI(Credentials.getInstance().environment.scmApiBaseUrl);
+			Credentials c = Credentials.getInstance();
+			if (c.environment.scmApiBaseUrl != null && c.account.id != null) {
+				self = new GenAPI(c.environment.scmApiBaseUrl, 'v1', c.account.id);
+			} else {
+				//TODO Check if separate unauthorized exception needs to be created for DocuSign Gen
+				throw UnauthorizedException.accountNotConfigured();
+			}
 		}
 		return self;
 	}
@@ -83,7 +97,7 @@ public with sharing class GenAPI extends DocuSignAPI {
 
 		RestAPI.Response response = post(
 			getBaseUrl(),
-			null,
+			new List<Object> { 'sfdocumentxmlmergetasks' },
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
@@ -118,7 +132,7 @@ public with sharing class GenAPI extends DocuSignAPI {
 
 		RestAPI.Response response = get(
 			getBaseUrl(),
-			new List<Object> { 'gen', jobId },
+			new List<Object> { 'sfdocumentxmlmergetasks', jobId },
 			QueryString.empty,
 			getDefaultHeaders(),
 			timeout);
@@ -135,3 +149,4 @@ public with sharing class GenAPI extends DocuSignAPI {
 			(String)body.get('Message'));
 	}
 }
+

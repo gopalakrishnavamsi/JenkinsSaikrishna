@@ -452,7 +452,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getOutputFileName_name() {
 		System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name');
+		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name', null);
 		System.assertEquals('a', GenService.getOutputFileName(f, null, null));
 		System.assertEquals('a_' + UserInfo.getName(), GenService.getOutputFileName(f,
 			new Entity(UserInfo.getUserId(), UserInfo.getName(), null), null));
@@ -461,7 +461,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getOutputFileName_date() {
 		System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'date');
+		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'date', null);
 		Datetime dt = Datetime.now();
 		System.assertEquals('a_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f, null, dt));
 	}
@@ -469,7 +469,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getOutputFileName_name_date() {
 		System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name_date');
+		Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name_date', null);
 		Datetime dt = Datetime.now();
 		System.assertEquals('a_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f, null, dt));
 		System.assertEquals('a_' + UserInfo.getName() + '_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f,

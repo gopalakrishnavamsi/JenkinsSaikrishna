@@ -15,6 +15,8 @@ public class Gen {
 		public String generatedName { get; private set; }
 		@AuraEnabled
 		public String generatedSuffix { get; private set; }
+		@AuraEnabled
+		public Id contentDocumentId { get; private set; }
 
 		public File(
 			final Id id,
@@ -23,7 +25,8 @@ public class Gen {
 			final Integer size,
 			final String generatedFormat,
 			final String generatedName,
-			final String generatedSuffix) {
+			final String generatedSuffix,
+			final Id contentDocumentId) {
 
 			this.id = id;
 			this.title = title;
@@ -32,6 +35,7 @@ public class Gen {
 			this.generatedFormat = generatedFormat;
 			this.generatedName = generatedName;
 			this.generatedSuffix = generatedSuffix;
+			this.contentDocumentId = contentDocumentId;
 		}
 	}
 
@@ -75,10 +79,10 @@ public class Gen {
 		public String name { get; private set; }
 		@AuraEnabled
 		public String sourceObject { get; private set; }
-		@AuraEnabled // TODO: Deserialize JSON into concrete type
-		public Map<String, Object> objectMappings { get; private set; }
-		@AuraEnabled // TODO: Deserialize JSON into concrete type
-		public Map<String, Object> signerMappings { get; private set; }
+		@AuraEnabled
+		public List<Gen.ObjectMappings> objectMappings { get; private set; }
+		@AuraEnabled
+		public List<Gen.SignerFieldMappings> signerMappings { get; private set; }
 		@AuraEnabled
 		public Boolean useAllTemplates { get; private set; }
 		@AuraEnabled
@@ -96,8 +100,8 @@ public class Gen {
 			final Id id,
 			final String name,
 			final String sourceObject,
-			final Map<String, Object> objectMappings,
-			final Map<String, Object> signerMappings,
+			final List<Gen.ObjectMappings> objectMappings,
+			final List<Gen.SignerFieldMappings> signerMappings,
 			final Boolean useAllTemplates,
 			final Boolean useCurrentRecord,
 			final Boolean hasPreviewedDocuments,
@@ -108,14 +112,146 @@ public class Gen {
 			this.id = id;
 			this.name = name;
 			this.sourceObject = sourceObject;
-			this.objectMappings = objectMappings == null ? new Map<String, Object>() : objectMappings;
-			this.signerMappings = signerMappings == null ? new Map<String, Object>() : signerMappings;
+			this.objectMappings = objectMappings == null ? new List<Gen.ObjectMappings>() : objectMappings;
+			this.signerMappings = signerMappings == null ? new List<Gen.SignerFieldMappings>() : signerMappings;
 			this.useAllTemplates = useAllTemplates;
 			this.useCurrentRecord = useCurrentRecord;
 			this.hasPreviewedDocuments = hasPreviewedDocuments;
 			this.stepsCompleted = stepsCompleted;
 			this.isSample = isSample;
 			this.generated = generated == null ? new List<File>() : generated;
+		}
+	}
+
+	public class SignerFieldMappings {
+		@AuraEnabled
+		public List<Gen.SignerFieldMappingDetails> fieldMappings { get; private set; }
+		public SignerFieldMappings(
+			final List<Gen.SignerFieldMappingDetails> fieldMappings) {
+			this.fieldMappings = fieldMappings == null ? new List<Gen.SignerFieldMappingDetails>() : fieldMappings;
+		}
+	}
+
+	public class SignerFieldMappingDetails {
+		@AuraEnabled
+		public String apiName { get; private set; }
+		public SignerFieldMappingDetails(
+			final String apiName) {
+			this.apiName = apiName;
+		}
+	}
+
+	public class ObjectMappings {
+		@AuraEnabled
+		public String apiName { get; private set; }
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String objLabel { get; private set; }
+		@AuraEnabled
+		public List<Gen.FieldMappings> fieldMappings { get; private set; }
+		@AuraEnabled
+		public String isPrimary { get; private set; }
+
+		public ObjectMappings(
+			final String apiName,
+			final String label,
+			final String objLabel,
+			final List<Gen.FieldMappings> fieldMappings,
+			final String isPrimary) {
+			this.apiName = apiName;
+			this.label = label;
+			this.objLabel = objLabel;
+			this.fieldMappings = fieldMappings == null ? new List<Gen.FieldMappings>() : fieldMappings;
+			this.isPrimary = isPrimary;
+		}
+	}
+
+	public class FieldMappings {
+		@AuraEnabled
+		public String apiName { get; private set; }
+		@AuraEnabled
+		public String dataType { get; private set; }
+		@AuraEnabled
+		public List<Gen.ChildFieldMappings> childFieldMappings { get; private set; }
+		@AuraEnabled
+		public Boolean isConditional { get; private set; }
+		@AuraEnabled
+		public Boolean isChildRelation { get; private set; }
+		@AuraEnabled
+		public String dateFormat { get; private set; }
+		@AuraEnabled
+		public String currencyFormat { get; private set; }
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String matchType { get; private set; }
+		@AuraEnabled
+		public String conditionalValue { get; private set; }
+
+		public FieldMappings(
+			final String apiName,
+			final String dataType,
+			final List<Gen.ChildFieldMappings> childFieldMappings,
+			final Boolean isConditional,
+			final Boolean isChildRelation,
+			final String dateFormat,
+			final String currencyFormat,
+			final String label,
+			final String matchType,
+			final String conditionalValue) {
+			this.apiName = apiName;
+			this.dataType = dataType;
+			this.childFieldMappings = childFieldMappings == null ? new List<Gen.ChildFieldMappings>() : childFieldMappings;
+			this.isConditional = isConditional;
+			this.isChildRelation = isChildRelation;
+			this.dateFormat = dateFormat;
+			this.currencyFormat = currencyFormat;
+			this.label = label;
+			this.matchType = matchType;
+			this.conditionalValue = conditionalValue;
+		}
+	}
+
+	public class ChildFieldMappings {
+		@AuraEnabled
+		public String apiName { get; private set; }
+		@AuraEnabled
+		public String dataType { get; private set; }
+		@AuraEnabled
+		public Boolean isConditional { get; private set; }
+		@AuraEnabled
+		public String dateFormat { get; private set; }
+		@AuraEnabled
+		public String currencyFormat { get; private set; }
+		@AuraEnabled
+		public Boolean isChildRelation { get; private set; }
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String matchType { get; private set; }
+		@AuraEnabled
+		public String conditionalValue { get; private set; }
+
+		public ChildFieldMappings(
+			final String apiName,
+			final String dataType,
+			final Boolean isConditional,
+			final String dateFormat,
+			final String currencyFormat,
+			final Boolean isChildRelation,
+			final String label,
+			final String matchType,
+			final String conditionalValue) {
+			this.apiName = apiName;
+			this.dataType = dataType;
+			this.isConditional = isConditional;
+			this.dateFormat = dateFormat;
+			this.currencyFormat = currencyFormat;
+			this.isChildRelation = isChildRelation;
+			this.label = label;
+			this.matchType = matchType;
+			this.conditionalValue = conditionalValue;
 		}
 	}
 

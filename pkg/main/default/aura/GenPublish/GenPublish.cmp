@@ -1,0 +1,8 @@
+<aura:component description="GenPublish">
+    <!--Attributes -->
+    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="isClassic" type="Boolean"/>
+
+    <aura:method name="validate" action="{!c.validate}"/>
+
+</aura:component>
