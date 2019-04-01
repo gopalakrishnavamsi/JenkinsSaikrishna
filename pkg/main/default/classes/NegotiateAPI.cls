@@ -372,7 +372,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				UUID.parse(this.href.substringAfterLast('/')),
 				this.name,
 				this.createdDate,
-				this.status);
+				AgreementStatus.NEW_AGREEMENT);
 		}
 	}
 
@@ -587,9 +587,46 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APIHistoryItem {
 		public APIData data;
 		public String userEmail;
-		public String action;
+		public AgreementHistoryItem.Action action;
 		public Datetime createdDate;
 
+		public AgreementHistoryItem convertAPIHistoryItem() {
+
+			AgreementHistoryItem.Actor actor = null;
+
+			if(this.data.actor != null) {
+				actor = new AgreementHistoryItem.Actor(
+					this.data.actor.fullName,
+					this.data.actor.emailAddress,
+					'');
+			}
+
+			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
+
+			if (this.data.reviewer != null) {
+				recipients.add(new AgreementHistoryItem.Actor(
+					this.data.reviewer.fullName,
+					this.data.reviewer.emailAddress, ''));
+			}
+
+			if(this.data.approvers != null) {
+				for (ApiActor a : this.data.approvers) {
+					recipients.add(new AgreementHistoryItem.Actor(
+						a.fullName,
+						a.emailAddress, ''));
+				}
+			}
+
+			return new AgreementHistoryItem(
+				this.action,
+				this.userEmail,
+				this.createdDate,
+				this.data.emailSubject,
+				this.data.emailMessage,
+				this.data.documentName,
+				actor,
+				recipients);
+		}
 	}
 
 	@TestVisible
@@ -603,7 +640,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APIData {
 		public String documentName;
 		public Datetime dueDate;
-		public String previewUrl;
 		public String emailSubject;
 		public String emailMessage;
 		public APIActor actor;
@@ -612,8 +648,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 //Get historyItems
-	public List<APIHistoryItem> getHistoryItems(final UUID accountId, final UUID documentId) {
-		List<APIHistoryItem> historyItems = new List<APIHistoryItem>();
+	public List<AgreementHistoryItem> getHistoryItems(final UUID accountId, final UUID documentId) {
+		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
 		Map<String, String> queryStrings = new Map<String, String>();
 		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
 		Long offset = -SCM_OFFSET;
@@ -639,12 +675,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
 			for (APIHistoryItem a : result.items) {
 				if (a != null) {
-					historyItems.add(a);
+					historyItems.add(a.convertAPIHistoryItem());
 				}
 			}
 			next = result.next;
 		}
-
+// catch some errors here
 		return historyItems;
 	}
 }
