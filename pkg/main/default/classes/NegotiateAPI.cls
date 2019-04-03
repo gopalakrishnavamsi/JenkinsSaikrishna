@@ -609,7 +609,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					this.data.reviewer.emailAddress, ''));
 			}
 
-			if(this.data.approvers != null) {
+			if(this.data.approvers != null && !this.data.approvers.isEmpty()) {
 				for (ApiActor a : this.data.approvers) {
 					recipients.add(new AgreementHistoryItem.Actor(
 						a.fullName,
