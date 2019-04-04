@@ -590,46 +590,63 @@ global with sharing class RecipientService {
 		return result;
 	}
 
+	private static Boolean isRoleAvailable(
+		final String roleName,
+		final Set<String> rolesInUse) {
+
+		return String.isNotBlank(roleName)
+			&& (rolesInUse == null
+			|| !rolesInUse.contains(roleName));
+	}
+
 	@TestVisible
-	private static MergeResult mergeRole(final Recipient recipient, final Set<String> rolesInUse) {
+	private static MergeResult mergeRole(
+		final Recipient recipient,
+		final Set<String> rolesInUse) {
+
 		Recipient.Role role = null;
 
-		if (rolesInUse != null
+		if (recipient != null
 			&& recipient.role != null
-			&& String.isNotBlank(recipient.role.name)
-			&& ((recipient.id != null && rolesInUse.contains(recipient.role.name))
-			|| !rolesInUse.contains(recipient.role.name))) {
-
+			&& isRoleAvailable(recipient.role.name, rolesInUse)) {
 			// either already added to envelope with a valid role or not in use
 			role = resolveRole(recipient.role.name);
+		} else if (recipient.role == null || String.isBlank(recipient.role.name)) {
+			// Use next available default role
+			for (Recipient.Role r : getDefaultRoles()) {
+				if (r != null && isRoleAvailable(r.name, rolesInUse)) {
+					role = r;
+					break;
+				}
+			}
 		}
 
 		return new MergeResult(recipient.withRole(role), role != null);
 	}
 
 	@TestVisible
-	private static List<Recipient> mergeDefaultSettings(final Id envelopeId, final List<Recipient> recipients) {
-		if (Collection.isEmpty(recipients)) {
-			LOG.warn('Skipping default settings merge as one or more parameters is undefined');
-			return recipients;
+	private static List<Recipient> mergeDefaultSettings(
+		final List<Recipient> recipients,
+		final Set<String> rolesInUse) {
+
+		if (recipients == null) {
+			LOG.warn('Skipping default settings merge because recipients are null');
+			return new List<Recipient>();
 		}
 
-		Set<String> rolesInUse = DB.queryRoles(envelopeId);
+		Set<String> roles = rolesInUse == null ? new Set<String>() : rolesInUse;
 		List<Recipient> mergedRecipients = new List<Recipient>();
 		for (Recipient r : recipients) {
-			MergeResult mr = mergeRole(r, rolesInUse);
-			if (mr.isMerged && mr.recipient != null && mr.recipient.role != null) {
-				mergedRecipients.add(mr.recipient);
-				if (String.isNotBlank(mr.recipient.role.name)) rolesInUse.add(mr.recipient.role.name);
-			} else {
-				if (mr.recipient == null) throw new DocuSignException(Label.UndefinedRecipient);
+			if (r == null) throw new DocuSignException(Label.UndefinedRecipient);
 
-				// TODO: Throw exception? Currently just ignoring recipients that don't have a role.
+			MergeResult mr = mergeRole(r, roles);
+			roles = markRoleUsed(mr, roles);
+			if (!mr.isMerged || mr.recipient.role == null) {
 				LOG.warn('Did not merge recipient \'' + mr.recipient.id + '\' role \''
 					+ (mr.recipient.role != null ? mr.recipient.role.name : '')
 					+ '\' because there were no available roles left');
-				mergedRecipients.add(mr.recipient);
 			}
+			mergedRecipients.add(mr.recipient);
 		}
 		return mergedRecipients;
 	}
@@ -774,21 +791,20 @@ global with sharing class RecipientService {
 
 	@TestVisible
 	private static List<Recipient> mergeCustomSettings(
-		final Id envelopeId,
 		final List<Recipient> recipients,
+		final Set<String> rolesInUse,
 		final Recipient.EmailSettings emailSettings,
 		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
 
-		if (envelopeId == null
-			|| Collection.isEmpty(recipients)
+		if (Collection.isEmpty(recipients)
 			|| emailSettings == null
 			|| recipientSettings == null) {
 
 			LOG.warn('Skipping custom settings merge as one or more parameters is undefined');
-			return recipients;
+			return recipients == null ? new List<Recipient>() : recipients;
 		}
 
-		Set<String> rolesInUse = DB.queryRoles(envelopeId);
+		Set<String> roles = rolesInUse == null ? new Set<String>() : rolesInUse;
 		Recipient.EmailSettings defaultSettings = Localization.getEmailSettingsForCurrentLanguage();
 		List<Recipient> mergedRecipients = new List<Recipient>();
 		Integer index = 0;
@@ -809,16 +825,16 @@ global with sharing class RecipientService {
 			result = mergeTypeWithRole(result.recipient, role, recipientSettings.roleToRecipientTypes);
 			isTypeMerged = result.isMerged;
 			result = mergeTemplateRoleWithRole(result.recipient, role, recipientSettings.roleToTemplateRoles);
-			rolesInUse = markRoleUsed(result, rolesInUse);
+			roles = markRoleUsed(result, roles);
 			isRoleMerged = result.isMerged;
 
 			// Fallback to RT (??) parameter or next available role
 			if (!isTypeMerged || !isRoleMerged) {
 				result = mergeRoleType(result.recipient, index, recipientSettings.recipientRoleTypes);
-				rolesInUse = markRoleUsed(result, rolesInUse);
+				roles = markRoleUsed(result, roles);
 				if (!isRoleMerged && !result.isMerged) {
-					result = mergeRole(result.recipient, rolesInUse);
-					rolesInUse = markRoleUsed(result, rolesInUse);
+					result = mergeRole(result.recipient, roles);
+					roles = markRoleUsed(result, roles);
 				}
 			}
 
@@ -871,6 +887,28 @@ global with sharing class RecipientService {
 	}
 
 	/**
+	 * Sets custom or default envelope recipient values.
+	 *
+	 * @param recipients The recipients to prepare.
+	 * @param emailSettings Optional custom email settings.
+	 * @param recipientSettings Optional custom recipient settings.
+	 *
+	 * @return The recipients with appropriate custom or default values.
+	 */
+	public static List<Recipient> prepareRecipients(
+		final List<Recipient> recipients,
+		final Recipient.EmailSettings emailSettings,
+		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
+
+		if (Collection.isEmpty(recipients)) throw new DocuSignException(Label.UndefinedRecipient);
+
+		if (emailSettings == null && recipientSettings == null) {
+			return mergeUserTags(mergeDefaultSettings(recipients, new Set<String>()));
+		}
+		return mergeUserTags(mergeCustomSettings(recipients, new Set<String>(), emailSettings, recipientSettings));
+	}
+
+	/**
 	 * Adds one or more recipients to a DocuSign envelope.
 	 * <p>
 	 * The caller must be the owner of the envelope.
@@ -880,42 +918,16 @@ global with sharing class RecipientService {
 	 *
 	 * @return The updated envelope recipients.
 	 */
-	public static List<Recipient> addEnvelopeRecipients(final Id envelopeId, final List<Recipient> recipients) {
-		return addEnvelopeRecipients(envelopeId, recipients, null, null);
-	}
-
-	/**
-	 * Adds one or more recipients to a DocuSign envelope with optional customizations.
-	 * <p>
-	 * The caller must be the owner of the envelope.
-	 * <p>
-	 * <em>This method is intended for DocuSign internal use only.</em>
-	 *
-	 * @param envelopeId The envelope ID.
-	 * @param recipients The recipients to add.
-	 * @param emailSettings Optional localized email.
-	 * @param recipientSettings Optional recipient customizations.
-	 *
-	 * @return The updated envelope recipients.
-	 */
 	public static List<Recipient> addEnvelopeRecipients(
 		final Id envelopeId,
-		final List<Recipient> recipients,
-		final Recipient.EmailSettings emailSettings,
-		final EnvelopeConfiguration.RecipientSettings recipientSettings) {
+		final List<Recipient> recipients) {
 
 		Permissions.verifyIsOwner(envelopeId);
 
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(recipients)) throw new DocuSignException(Label.UndefinedRecipient);
 
-		List<Recipient> result = new List<Recipient>();
-		if (emailSettings == null && recipientSettings == null) {
-			// FIXME: Need to add default role and signer type mappings even when custom buttons are undefined.
-			return DB.insertRecipients(envelopeId, mergeUserTags(mergeDefaultSettings(envelopeId, recipients)));
-		}
-		return DB.insertRecipients(envelopeId, mergeUserTags(mergeCustomSettings(envelopeId, recipients, emailSettings,
-			recipientSettings)));
+		return DB.insertRecipients(envelopeId, recipients);
 	}
 
 	/**
