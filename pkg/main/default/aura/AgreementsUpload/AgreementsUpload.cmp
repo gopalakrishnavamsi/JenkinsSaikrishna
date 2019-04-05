@@ -4,6 +4,7 @@
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementVersions" type="Object[]"/>
+    <aura:attribute name="hasDocument" type="Boolean" default="false"/>
 
     <!-- Events -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
@@ -79,7 +80,8 @@
                               label="{!$Label.c.Cancel}">
             </lightning:button>
             <lightning:button class="slds-button slds-button_brand" onclick="{!c.uploadButtonClicked}"
-                              label="{!$Label.c.Upload}"></lightning:button>
+                              label="{!$Label.c.Upload}" 
+                              disabled="{!!v.hasDocument}"></lightning:button>
         </aura:set>
     </c:strike_modal>
 </aura:component>
