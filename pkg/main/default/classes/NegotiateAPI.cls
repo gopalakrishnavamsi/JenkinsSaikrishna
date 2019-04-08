@@ -372,6 +372,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				UUID.parse(this.href.substringAfterLast('/')),
 				this.name,
 				this.createdDate,
+				this.createdDate,
 				AgreementStatus.NEW_AGREEMENT);
 		}
 	}

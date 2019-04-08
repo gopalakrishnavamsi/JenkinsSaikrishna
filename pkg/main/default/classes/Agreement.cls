@@ -18,6 +18,11 @@ public class Agreement {
 	@AuraEnabled
 	public Datetime createdDate { get; private set; }
 /**
+* Date and time when the Agreement was modified.
+*/
+	@AuraEnabled
+	public Datetime modifiedDate { get; private set; }
+/**
 * Agreement status
 */
 	@AuraEnabled
@@ -32,11 +37,13 @@ public class Agreement {
 		final UUID id,
 		final String name,
 		final Datetime createdDate,
+		final Datetime modifiedDate,
 		final String status) {
 
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
+		setModifiedDate(modifiedDate);
 		setStatus(status);
 		this.historyItems = new List<AgreementHistoryItem>();
 
@@ -63,6 +70,14 @@ public class Agreement {
 			this.historyItems = new List<AgreementHistoryItem>();
 		} else {
 			this.historyItems = historyItems;
+		}
+	}
+
+	public void setModifiedDate(Datetime modifiedDatetime) {
+		if (modifiedDatetime != null) {
+			this.modifiedDate = modifiedDatetime;
+		} else {
+			this.modifiedDate = this.createdDate;
 		}
 	}
 }
