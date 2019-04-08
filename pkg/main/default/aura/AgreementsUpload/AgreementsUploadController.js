@@ -23,6 +23,7 @@
     };
     var uploadWidget = new SpringCM.Widgets.Upload(options);
     uploadWidget.render("#upload-wrapper");
+    helper.setUploadEvent(component);
   }
 
 });
