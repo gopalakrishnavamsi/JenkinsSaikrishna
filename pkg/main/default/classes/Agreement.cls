@@ -74,10 +74,10 @@ public class Agreement {
 	}
 
 	public void setModifiedDate(Datetime modifiedDatetime) {
-		if (modifiedDatetime != null) {
-			this.modifiedDate = modifiedDatetime;
-		} else {
+		if (modifiedDatetime == null) {
 			this.modifiedDate = this.createdDate;
+		} else {
+			this.modifiedDate = modifiedDatetime;
 		}
 	}
 }
