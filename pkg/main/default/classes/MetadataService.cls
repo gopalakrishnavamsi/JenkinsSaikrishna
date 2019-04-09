@@ -1,13 +1,13 @@
 /**
  * Salesforce metadata-related operations.
  */
-	public with sharing class MetadataService {
+public with sharing class MetadataService {
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> {'templateId' , 'title'};
+	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> { 'templateId', 'title' };
 	private static Boolean isChildObj;
 
 	/**
@@ -62,12 +62,10 @@
 		if (MergeObject.isValid(type)) {
 			for (SObjectField f : type.fields.getMap().values()) {
 				DescribeFieldResult field = f.getDescribe();
-				if (MergeField.isValid(field))
-				{
+				if (MergeField.isValid(field)) {
 					if (field.getReferenceTo().isEmpty() || String.isNotBlank(relationShipName)) {
 						result.add(MergeField.forField(field, relationShipName));
-					}
-					else if(!isChildObj) {
+					} else if (!isChildObj) {
 						DescribeSObjectResult parentType = field.getReferenceTo()[0].getDescribe();
 						if (MergeObject.isValid(parentType)) {
 							result.addAll(getFields(parentType, parentType.getName()));
@@ -87,7 +85,7 @@
 		isChildObj = isChild;
 		DescribeSObjectResult typeDesc = type.getDescribe();
 		List<MergeField> result = getFields(typeDesc, null);
-		if(!isChildObj) {
+		if (!isChildObj) {
 			result.addAll(getChildRelationships(typeDesc));
 		}
 		result.sort();
@@ -299,11 +297,9 @@
 	private static String getActionType(final String apiName) {
 		if (apiName == Layout.ACTION_NAME_SEND) {
 			return Layout.ACTION_TYPE_SEND;
-		}
-		else if (apiName.contains(Layout.ACTION_NAME_GEN)) {
+		} else if (apiName.contains(Layout.ACTION_NAME_GEN)) {
 			return Layout.ACTION_TYPE_GEN;
-		}
-		else {
+		} else {
 			return Layout.ACTION_TYPE_OTHER;
 		}
 	}
@@ -405,16 +401,14 @@
 			if (prependComma) {
 				if (PARAMETERS_ADD_QUOTES.contains(k)) {
 					result += String.format(', {0} = \'\'{1}\'\'', new List<String> { k, parameters.get(k) });
-				}
-				else {
+				} else {
 					result += String.format(', {0} = {1}', new List<String> { k, parameters.get(k) });
 				}
 
 			} else {
 				if (PARAMETERS_ADD_QUOTES.contains(k)) {
 					result += String.format('{0} = \'\'{1}\'\'', new List<String> { k, parameters.get(k) });
-				}
-				else {
+				} else {
 					result += String.format('{0} = {1}', new List<String> { k, parameters.get(k) });
 				}
 				prependComma = true;
@@ -628,7 +622,6 @@
 		return currentLayout;
 	}
 
-
 	@TestVisible
 	private static MetadataAPI.WebLink getWebLink(
 		final SObjectType type,
@@ -663,8 +656,8 @@
 		if (webLink == null) {
 			Map <String, String> parametersMap = new Map<String, String>();
 			parametersMap.put('templateId', genTemplateId);
-			parametersMap.put('recordId', type+'.Id');
-			parametersMap.put('recordName', type+'.'+Salesforce.getNameField(type));
+			parametersMap.put('recordId', type + '.Id');
+			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
 			parametersMap.put('title', actionLabel);
 			webLink = createWebLink(
 				type,
