@@ -852,6 +852,44 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
+	static void test_updateGenLayouts_success() {
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Layout l1 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n1',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_GEN,
+						Layout.ACTION_NAME_GEN)
+				});
+			Layout l2 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n2',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_GEN,
+						Layout.ACTION_NAME_GEN)
+				});
+
+			Test.startTest();
+			List<Layout> result = MetadataService.updateLayouts(
+				Contact.getSObjectType(),
+				new List<Layout> { l1, l2 },
+				'testGenButton',
+				'testGenButtonLabel',
+				UserInfo.getUserId());
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
+
+	@IsTest
 	static void test_fixActionName() {
 		System.assertEquals(null, MetadataService.fixActionName(null, null));
 		System.assertEquals('test', MetadataService.fixActionName(null, 'test'));

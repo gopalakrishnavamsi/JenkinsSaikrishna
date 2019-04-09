@@ -734,4 +734,18 @@ private class GenServiceTest {
 			System.assertEquals(cv.GeneratedFileSuffix__c, result[1].file.generatedSuffix);
 		}
 	}
+
+	@IsTest
+	static void test_createGenFile_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			System.assertNotEquals(null, a.Id);
+
+			Test.startTest();
+			ContentVersion testContentVersion = GenService.DB.createGenFile(a.Id, 'Test Title', 'Test Content');
+			Test.stopTest();
+
+			System.assertNotEquals(null, testContentVersion);
+		}
+	}
 }
