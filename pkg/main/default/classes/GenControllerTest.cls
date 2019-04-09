@@ -299,9 +299,9 @@ private class GenControllerTest {
 		GenAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			List<Gen.Job> result = GenController.getJobStatus(new List<UUID> {
-				UUID.randomUUID(),
-				UUID.randomUUID()
+			List<Gen.Job> result = GenController.getJobStatus(new List<String> {
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString()
 			});
 			Test.stopTest();
 

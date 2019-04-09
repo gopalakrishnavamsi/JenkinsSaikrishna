@@ -363,7 +363,7 @@ public with sharing class GenService {
 				q += ', ' + String.join(childQueries, ', ');
 			}
 			q += String.format(' FROM {0} WHERE Id = :sourceId', new List<String> { String.valueOf(type) });
-
+			System.Debug(LoggingLevel.INFO, 'query '+q);
 			return System.Database.query(q);
 		}
 

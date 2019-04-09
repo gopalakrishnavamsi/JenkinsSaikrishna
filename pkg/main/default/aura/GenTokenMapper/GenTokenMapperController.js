@@ -4,7 +4,8 @@
     var objMapping = component.get('v.objMapping');
 
     action.setParams({
-      sObjectType: objMapping.apiName
+      sObjectType: objMapping.apiName,
+      isChild : false
     });
 
     action.setCallback(this, function (response) {
@@ -15,6 +16,7 @@
         var childRelations = [];
         var objectFields = [];
         var allFields = [];
+        allFields.push({'fields': [], 'label': objMapping.label});
         var allFieldsByApiName = {};
 
         returnValue.forEach(function (object) {
@@ -33,10 +35,28 @@
           }
         });
 
-        allFields[0] = {
-          'fields': objectFields,
-          'label': objMapping ? objMapping.label : null
-        };
+        objectFields.forEach(function(object) {
+          var relationShipName;
+          if (object.name.substr(0, object.name.indexOf('.')) !== '') {
+            relationShipName = object.name.substr(0, object.name.indexOf('.'));
+          }
+          else {
+            relationShipName = objMapping.label;
+          }
+          var labelExists = false;
+          allFields.forEach(function(field) {
+            if (field.label === relationShipName) {
+                 field.fields.push(object);
+                 labelExists = true;
+            }
+          });
+          if (!labelExists) {
+            var fields = [];
+            fields.push(object);
+            var allFieldsInstance = {'fields': fields, 'label': relationShipName};
+            allFields.push(allFieldsInstance);
+          }
+        });
 
         allFields.forEach(function (obj) {
           obj.fields.forEach(function (field) {

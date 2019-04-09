@@ -9,7 +9,7 @@
     }
 
     if (fieldMapping.isChildRelation) {
-      token = '<# <TableRow Select="/' + objLabel + '//' + fieldMapping.label + '" /> #>';
+      token = '<# <TableRow Select="/' + objLabel + '//' + fieldMapping.apiName + '" /> #>';
     } else if (fieldMapping.isConditional) {
       if (isChild) {
         token = '<# <Conditional Select="./' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue + '" /> #> YOUR CONTENT HERE <# <EndConditional/> #>';
@@ -44,7 +44,8 @@
     var fieldMapping = component.get('v.fieldMapping');
     var action = component.get('c.getMergeFields');
     action.setParams({
-      sObjectType: fieldMapping.apiName
+      sObjectType: fieldMapping.apiName,
+      isChild: true
     });
 
     action.setCallback(this, function (response) {
@@ -55,7 +56,7 @@
         var allFields = [];
         var allFieldsByApiName = {};
 
-        // Modify logic here to allow mulitple level nesting in the future
+        // Modify logic here to allow multiple level nesting in the future
         results.forEach(function (object) {
           if (!object.hasRelationship) {
             objectFields.push(object);
@@ -119,7 +120,7 @@
     component.set('v.mergeFieldDisplayOptions', mergeFieldDisplayOptions);
   },
 
-  getChildFieldStub: function (component) {
+  getChildFieldStub: function () {
     return {
       'apiName': '',
       'dataType': '',

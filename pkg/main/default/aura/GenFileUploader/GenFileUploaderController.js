@@ -15,8 +15,10 @@
       }
 
       var dataURL = fr.result;
-      var content = dataURL.match(/,(.*)$/)[1];
-
+      var content = null;
+      if (dataURL.match(/,(.*)$/)) {
+        content = dataURL.match(/,(.*)$/)[1];
+      }
       helper.upload(component, file, content, recordId);
     });
 

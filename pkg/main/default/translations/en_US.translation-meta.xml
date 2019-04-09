@@ -2727,7 +2727,7 @@
 		<name>name</name>
 	</customLabels>
 	<customLabels>
-		<label>Template Configuration</label>
+		<label>DocuSign Gen Template</label>
 		<name>template_Configuration</name>
 	</customLabels>
 	<customLabels>
@@ -3097,6 +3097,46 @@
 	<customLabels>
 		<label>Unable to check completion of document generation</label>
 		<name>generator_Completion_Error_Msg</name>
+	</customLabels>
+	<customLabels>
+		<label>Publishing...</label>
+		<name>publishing</name>
+	</customLabels>
+	<customLabels>
+		<label>Create Custom Button</label>
+		<name>publish_customButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>Let users generate documents from this template configuration with a custom button. You can also choose to place the button on specific page layouts for your main data source. If you add a custom button and make changes to this template configuration, you don’t need to add the button again.</label>
+		<name>publish_Msg</name>
+	</customLabels>
+	<customLabels>
+		<label>Button Label</label>
+		<name>button_Label</name>
+	</customLabels>
+	<customLabels>
+		<label>Button Location</label>
+		<name>button_Location</name>
+	</customLabels>
+	<customLabels>
+		<label>Page Layouts</label>
+		<name>page_Layouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Button successfully created!</label>
+		<name>successfully_Published</name>
+	</customLabels>
+	<customLabels>
+		<label>Deploy as a Detail Page Button (Salesforce Classic)</label>
+		<name>deploy_Classic_Msg</name>
+	</customLabels>
+	<customLabels>
+		<label>Deploy as a Quick Action (Lightning Experience)</label>
+		<name>deploy_Lightning_Msg</name>
+	</customLabels>
+	<customLabels>
+		<label>drafts</label>
+		<name>drafts</name>
 	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>

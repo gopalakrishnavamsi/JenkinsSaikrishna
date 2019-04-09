@@ -72,7 +72,7 @@
 
     var newFieldMapping;
     if (fieldData.hasRelationship) {
-      newFieldMapping = {'apiName': fieldData.relatesTo, 'isChildRelation': true, 'label': fieldData.label};
+      newFieldMapping = {'apiName': fieldData.relatesTo, 'isChildRelation': true, 'label': fieldData.name};
     } else {
       newFieldMapping = {
         'apiName': fieldData.name,

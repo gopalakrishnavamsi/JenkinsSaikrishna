@@ -5043,7 +5043,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>template_Configuration</shortDescription>
-		<value>Template Configuration</value>
+		<value>DocuSign Gen Template</value>
 	</labels>
 	<labels>
 		<fullName>Saving</fullName>
@@ -5696,6 +5696,76 @@
 		<protected>true</protected>
 		<shortDescription>generator_Completion_Error_Msg</shortDescription>
 		<value>Unable to check completion of document generation</value>
+	</labels>
+	<labels>
+		<fullName>publishing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>publishing</shortDescription>
+		<value>Publishing...</value>
+	</labels>
+	<labels>
+		<fullName>publish_customButtons</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>publish_customButtons</shortDescription>
+		<value>Create Custom Button</value>
+	</labels>
+	<labels>
+		<fullName>publish_Msg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>publish_Msg</shortDescription>
+		<value>Let users generate documents from this template configuration with a custom button. You can also choose to place the button on specific page layouts for your main data source. If you add a custom button and make changes to this template configuration, you don’t need to add the button again.</value>
+	</labels>
+	<labels>
+		<fullName>button_Label</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>button_Label</shortDescription>
+		<value>Button Label</value>
+	</labels>
+	<labels>
+		<fullName>button_Location</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>button_Location</shortDescription>
+		<value>Button Location</value>
+	</labels>
+	<labels>
+		<fullName>page_Layouts</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>page_Layouts</shortDescription>
+		<value>Page Layouts</value>
+	</labels>
+	<labels>
+		<fullName>successfully_Published</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>successfully_Published</shortDescription>
+		<value>Button successfully created!</value>
+	</labels>
+	<labels>
+		<fullName>deploy_Classic_Msg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>deploy_Classic_Msg</shortDescription>
+		<value>Deploy as a Detail Page Button (Salesforce Classic)</value>
+	</labels>
+	<labels>
+		<fullName>deploy_Lightning_Msg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>deploy_Lightning_Msg</shortDescription>
+		<value>Deploy as a Quick Action (Lightning Experience)</value>
+	</labels>
+	<labels>
+		<fullName>drafts</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>drafts</shortDescription>
+		<value>drafts</value>
 	</labels>
 	<!-- end of new labels for Gen -->
 </CustomLabels>

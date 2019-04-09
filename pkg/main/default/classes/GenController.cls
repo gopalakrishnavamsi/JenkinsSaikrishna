@@ -54,9 +54,9 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static List<MergeField> getMergeFields(final String sObjectType) {
+	public static List<MergeField> getMergeFields(final String sObjectType, final Boolean isChild) {
 		try {
-			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType));
+			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), isChild);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve merge fields.');
 		}

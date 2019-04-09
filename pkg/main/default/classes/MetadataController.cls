@@ -32,6 +32,15 @@ public with sharing class MetadataController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
+	public static String getGenActionName() {
+		try {
+			return Layout.ACTION_NAME_GEN;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to retrieve GenAction Name');
+		}
+	}
+
+	@AuraEnabled(Cacheable = true)
 	public static List<Layout> getLayouts(final String sObjectType) {
 		try {
 			return MetadataService.getLayouts(Salesforce.getSObjectType(sObjectType));
@@ -49,6 +58,26 @@ public with sharing class MetadataController extends Controller {
 			return MetadataService.updateLayouts(
 				Salesforce.getSObjectType(sObjectType),
 				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to update layouts');
+		}
+	}
+
+	@AuraEnabled
+	public static List<Layout> updateLayouts(
+		final String sObjectType,
+		final String layoutsJson,
+		final String genButtonApiName,
+		final String genButtonLabel,
+		final Id genTemplateId) {
+
+		try {
+			return MetadataService.updateLayouts(
+				Salesforce.getSObjectType(sObjectType),
+				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class),
+				genButtonApiName,
+				genButtonLabel,
+				genTemplateId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to update layouts');
 		}
