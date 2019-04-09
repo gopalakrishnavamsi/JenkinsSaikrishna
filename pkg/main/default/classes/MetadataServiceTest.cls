@@ -52,7 +52,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.getFields((SObjectType)null);
+				MetadataService.getFields((SObjectType)null, false);
 				throw new AssertException('Expected getFields to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -64,7 +64,7 @@ private class MetadataServiceTest {
 	static void test_getFields_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType());
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType(), false);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));

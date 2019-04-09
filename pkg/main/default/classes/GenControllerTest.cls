@@ -90,7 +90,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenController.getMergeFields('Opportunity');
+				GenController.getMergeFields('Opportunity', false);
 				throw new AssertException('Expected getMergeFields to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -103,7 +103,7 @@ private class GenControllerTest {
 	static void test_getMergeFields_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			List<MergeField> result = GenController.getMergeFields('Opportunity');
+			List<MergeField> result = GenController.getMergeFields('Opportunity', false);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));

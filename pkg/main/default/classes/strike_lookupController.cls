@@ -8,7 +8,7 @@ License: BSD 3-Clause License
 -------------------------------------------------- */
 public with sharing class strike_lookupController {
 	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String> {
-		'contact', 'lead', 'user'
+		'contact', 'lead', 'user' , 'opportunity', 'account', 'case'
 	};
 
 	private static String safeGetObjectType(final String s) {
@@ -268,7 +268,6 @@ public with sharing class strike_lookupController {
 
 		try {
 			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
-
 			responseData.results = strike_lookupController.getGenPreviewData(jsonMap);
 		} catch (Exception e) {
 			responseData.addError(e);
@@ -279,8 +278,7 @@ public with sharing class strike_lookupController {
 
 	private static Map<String, Object> getGenPreviewData(Map<String, Object> jsonMap) {
 		List<Map<String, Object>> data = new List<Map<String, Object>>();
-
-		String objType = String.escapeSingleQuotes((String)jsonMap.get('object'));
+		String objType = safeGetObjectType((String)jsonMap.get('object'));
 		Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objType).getDescribe().fields.getMap();
 		String nameField = '';
 		List<Object> recordIds = (List<Object>)jsonMap.get('recordIds');
