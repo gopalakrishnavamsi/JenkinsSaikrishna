@@ -20,7 +20,6 @@ public with sharing class GenAPI extends DocuSignAPI {
 			if (c.environment.scmApiBaseUrl != null && c.account.id != null) {
 				self = new GenAPI(c.environment.scmApiBaseUrl, 'v1', c.account.id);
 			} else {
-				//TODO Check if separate unauthorized exception needs to be created for DocuSign Gen
 				throw UnauthorizedException.accountNotConfigured();
 			}
 		}

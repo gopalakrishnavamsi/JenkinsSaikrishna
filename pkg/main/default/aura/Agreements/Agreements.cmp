@@ -2,9 +2,9 @@
                 implements="force:appHostable,flexipage:availableForAllPageTypes, force:lightningQuickActionWithoutHeader,force:hasRecordId"
                 controller="AgreementsController">
     <!--TODO Implement spinner functionality -->
-    <!-- FIXME : Check hardcoding and replace with labels  -->
-    <!-- FIXME : Add global attribute when releasing DocuSign Negotiate  -->
-    <!-- FIXME : Vf page parameter for toast component   -->
+    <!--TODO : Check hardcoding and replace with labels  -->
+    <!--TODO : Add global attribute when releasing DocuSign Negotiate  -->
+    <!--TODO : Vf page parameter for toast component   -->
 
     <!-- attributes -->
     <aura:attribute name="namespace" type="String"/>
