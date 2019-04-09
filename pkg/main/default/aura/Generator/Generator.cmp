@@ -1,5 +1,4 @@
 <aura:component controller="GenController">
-    <!--TODO On removing the preview record make sure search term pulls up the respective sobjects-->
 
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="cvTitleByJobId" type="Object"/>
