@@ -83,8 +83,7 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static Boolean checkMultiCurrency() {
 		try {
-			Boolean isMultiCurrencyOrganization = UserInfo.isMultiCurrencyOrganization() ? true : false;
-			return isMultiCurrencyOrganization;
+			return GenService.checkMultiCurrency();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check multi currency');
 		}
@@ -116,7 +115,7 @@ public with sharing class GenController extends Controller {
 		final String base64Data) {
 
 		try {
-			return GenFileService.saveFile(contentVersionId, linkedEntityId, fileName, base64Data);
+			return GenService.saveFile(contentVersionId, linkedEntityId, fileName, base64Data);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to save file chunk');
 		}
@@ -125,7 +124,7 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static Boolean deleteContentDocument(final Id contentVersionId) {
 		try {
-			return GenFileService.deleteContentDocument(contentVersionId);
+			return GenService.deleteContentDocument(contentVersionId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete content document');
 		}

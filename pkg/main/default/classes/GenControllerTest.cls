@@ -309,4 +309,32 @@ private class GenControllerTest {
 			System.assertNotEquals(null, JSON.serialize(result));
 		}
 	}
+
+	@IsTest
+	static void test_checkMultiCurrency_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Boolean testresult;
+			Test.startTest();
+			testresult = GenController.checkMultiCurrency();
+			Test.stopTest();
+
+			System.assertNotEquals(null, testresult);
+		}
+	}
+
+	@IsTest
+	static void test_checkMultiCurrency_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.checkMultiCurrency();
+				throw new AssertException('Expected checkMultiCurrency to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+
 }
