@@ -21,11 +21,6 @@ public with sharing class strike_responseData {
         this.isSuccess = false;
     }
 
-    public void addError(Exception e) {
-        this.errMsg = e.getMessage();
-        this.isSuccess = false;
-    }
-
     public String getJsonString() {
         return strike_utilities.serializeWithoutNamespace(this);
     }

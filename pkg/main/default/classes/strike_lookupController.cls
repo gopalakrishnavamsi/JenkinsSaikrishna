@@ -270,7 +270,7 @@ public with sharing class strike_lookupController {
 			Map<String, Object> jsonMap = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
 			responseData.results = strike_lookupController.getGenPreviewData(jsonMap);
 		} catch (Exception e) {
-			responseData.addError(e);
+			responseData.addError(e.getMessage());
 		}
 
 		return responseData.getJsonString();
