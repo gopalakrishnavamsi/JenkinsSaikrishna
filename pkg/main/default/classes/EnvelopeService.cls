@@ -333,7 +333,10 @@ global with sharing class EnvelopeService {
 	 *
 	 * @return The saved DocuSign envelope.
 	 */
-	public static Envelope saveEnvelope(final Envelope envelope, final EnvelopeConfiguration envelopeConfiguration) {
+	public static Envelope saveEnvelope(
+		final Envelope envelope,
+		final EnvelopeConfiguration envelopeConfiguration) {
+
 		// Custom fields are not stored in our custom object, so must load and merge them later.
 		Envelope result = DB.insertEnvelope(replaceUserTags(envelope));
 
@@ -344,9 +347,10 @@ global with sharing class EnvelopeService {
 		if (Collection.isNotEmpty(result.recipients)) {
 			result = result.withRecipients(RecipientService.addEnvelopeRecipients(
 				result.id,
-				result.recipients,
-				envelopeConfiguration != null ? envelopeConfiguration.email : null,
-				envelopeConfiguration != null ? envelopeConfiguration.recipients : null));
+				RecipientService.prepareRecipients(
+					result.recipients,
+					envelopeConfiguration != null ? envelopeConfiguration.email : null,
+					envelopeConfiguration != null ? envelopeConfiguration.recipients : null)));
 		}
 
 		return result;
@@ -622,7 +626,11 @@ global with sharing class EnvelopeService {
 	 * @return The sent envelope.
 	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
 	 */
-	public static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow, final Boolean updateNow) {
+	public static Envelope sendEnvelope(
+		final Envelope envelope,
+		final Boolean sendNow,
+		final Boolean updateNow) {
+
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		Boolean sfdcEnvelopeCreated = envelope != null && envelope.id != null;
@@ -635,7 +643,11 @@ global with sharing class EnvelopeService {
 		ValidationResult vr = validate(envelope, sendNow);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
-		Envelope result = replaceUserTags(envelope);
+		Envelope result = replaceUserTags(envelope)
+			.withRecipients(RecipientService.prepareRecipients(
+				envelope.recipients,
+				null,
+				null));
 		try {
 			result = result.withDocuSignId(
 				EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow)));
