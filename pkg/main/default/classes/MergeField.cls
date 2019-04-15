@@ -68,7 +68,7 @@ public class MergeField implements Comparable {
 
 		return new MergeField(
 			field,
-			String.isNotBlank(relationshipName) ? relationshipName+'.'+field.getName() : field.getName(),
+			String.isNotBlank(relationshipName) ? relationshipName + '.' + field.getName() : field.getName(),
 			getType(field),
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),

@@ -6,6 +6,7 @@
       helper.focusFileName(component);
     }
   },
+
   previewFile: function (component) {
     var file = component.get('v.file');
     var isClassic = component.get('v.isClassic');

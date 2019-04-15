@@ -2,9 +2,11 @@
   init: function (component, event, helper) {
     helper.setTokenValue(component);
   },
+
   setTokenValue: function (component, event, helper) {
     helper.setTokenValue(component);
   },
+
   copyToken: function (component) {
     var tokenInput = component.find('token-input');
     tokenInput.getElement().select();
@@ -21,6 +23,7 @@
 
     evt.fire();
   },
+
   removeSignerField: function (component) {
     var evt = component.getEvent('removeSignerField');
     var params = {

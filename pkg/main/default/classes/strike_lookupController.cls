@@ -9,7 +9,7 @@ License: BSD 3-Clause License
 public with sharing class strike_lookupController {
 	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String> {
 		'contact', 'lead', 'user' , 'opportunity', 'account', 'case'
-	};
+	};//FIXME : Support Arbitrary objects
 
 	private static String safeGetObjectType(final String s) {
 		if (String.isBlank(s) || !VALID_SEARCH_OBJECTS.contains(s.trim().toLowerCase())) {

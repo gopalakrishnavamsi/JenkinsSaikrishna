@@ -151,14 +151,14 @@ public class Gen {
 		@AuraEnabled
 		public List<Gen.FieldMappings> fieldMappings { get; private set; }
 		@AuraEnabled
-		public String isPrimary { get; private set; }
+		public Boolean isPrimary { get; private set; }
 
 		public ObjectMappings(
 			final String apiName,
 			final String label,
 			final String objLabel,
 			final List<Gen.FieldMappings> fieldMappings,
-			final String isPrimary) {
+			final Boolean isPrimary) {
 			this.apiName = apiName;
 			this.label = label;
 			this.objLabel = objLabel;

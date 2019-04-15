@@ -437,14 +437,14 @@ public with sharing class MetadataService {
 		webLink.availability = 'online';
 		webLink.displayType = 'button';
 		webLink.encodingKey = 'UTF-8';
-		webLink.linkType = 'url';
-		webLink.masterLabel = buttonLabel;
-		webLink.openType = 'replace';
 		webLink.protected_x = false;
 		webLink.url = String.format('\'{\'!URLFOR(\'\'{0}\'\', null, {1})\'}\'', new List<String> {
 			new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
 			buildInputs(type, parameters)
 		});
+		webLink.linkType = 'url';
+		webLink.masterLabel = buttonLabel;
+		webLink.openType = 'replace';
 
 		validateResults(MetadataAPI.getInstance().createMetadata(new List<MetadataAPI.Metadata> { webLink }));
 

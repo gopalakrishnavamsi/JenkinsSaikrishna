@@ -14,6 +14,7 @@
       component.set('v.config', config);
     }
   },
+
   addObject: function (component, event, helper) {
     var config = component.get('v.config');
     var label = helper.getUniqueLabel(component, 'Account', config.objectMappings.length);
@@ -26,6 +27,7 @@
 
     component.set('v.config', config);
   },
+
   removeObject: function (component, event) {
     var config = component.get('v.config');
     var index = parseInt(event.getSource().get('v.value'), 10);
@@ -33,6 +35,7 @@
     config.objectMappings.splice(index, 1);
     component.set('v.config', config);
   },
+
   selectedPrimary: function (component) {
     var config = component.get('v.config');
     var labelByApiName = component.get('v.labelByApiName');
@@ -47,6 +50,7 @@
 
     component.set('v.config', config);
   },
+
   selectedAdditionalObject: function (component, event, helper) {
     var config = component.get('v.config');
     var labelByApiName = component.get('v.labelByApiName');
@@ -60,6 +64,7 @@
 
     component.set('v.config', config);
   },
+
   checkForDuplicate: function (component, event, helper) {
     var config = component.get('v.config');
     var index = event.getSource().get('v.name');
@@ -68,6 +73,7 @@
     selectedMapping.label = helper.getUniqueLabel(component, selectedMapping.label, index);
     component.set('v.config', config);
   },
+
   validate: function (component) {
     return new Promise($A.getCallback(function (resolve, reject) {
       var config = component.get('v.config');

@@ -127,7 +127,7 @@ public class Layout implements Comparable {
 		Boolean result = false;
 		if (this.actions != null) {
 			for (Action a : this.actions) {
-				if (a.name.contains(ACTION_NAME_GEN)) {
+				if (a.name.startsWith(ACTION_NAME_GEN)) {
 					result = true;
 					break;
 				}

@@ -15,6 +15,7 @@
 
     component.set('v.config', config);
   },
+
   getUniqueLabel: function (component, label, index) {
     var config = component.get('v.config');
     var selectedMapping = config.objectMappings[index];

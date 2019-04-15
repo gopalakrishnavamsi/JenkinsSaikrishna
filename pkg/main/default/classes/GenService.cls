@@ -482,13 +482,6 @@ public with sharing class GenService {
 		}
 
 		public Boolean deleteContentDocument(final Id contentVersionId) {
-			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
-				'ContentDocumentId'
-			});
-			Permissions.verifyIsQueryable(CONTENT_DOCUMENT_TYPE, new List<String> {
-				'Id'
-			});
-
 			Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
 
 			Boolean result = false;
@@ -691,11 +684,9 @@ public with sharing class GenService {
 
 		Permissions.verifyIsDocuSignUser();
 
-		if (contentVersionId == null
-			|| linkedEntityId == null
+		if (linkedEntityId == null
 			|| String.isBlank(title)
 			|| String.isBlank(base64Data)) {
-
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 

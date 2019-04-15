@@ -17,6 +17,7 @@
 
     component.set('v.fileSize', contentSize + unit);
   },
+
   focusFileName: function (component) {
     setTimeout($A.getCallback(function () {
       var fileName = component.find('generatedName');

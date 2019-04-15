@@ -29,7 +29,7 @@
   formatDate: function (component, dateFormat) {
     var date = new Date();
 
-    if (dateFormat == 'default') {
+    if (dateFormat === 'default') {
       component.set('v.formattedDate', $A.localizationService.formatDate(date));
     } else {
       component.set('v.formattedDate', $A.localizationService.formatDate(date, dateFormat));
