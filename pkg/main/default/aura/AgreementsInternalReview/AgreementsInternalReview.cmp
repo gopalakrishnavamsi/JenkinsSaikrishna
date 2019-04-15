@@ -59,7 +59,7 @@
                                         ondragstart="{!c.onApproverDrag}"
                                         ondrop="{!c.onApproverDrop}"
                                         ondragover="{!c.allowDrop}"
-                                        class="addApproversRow">
+                                        >
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
                                             <aura:if isTrue="{!v.showApprovalOrder}">
                                                 <li class="slds-m-top_small slds-m-right_x-small">
