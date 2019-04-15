@@ -8,10 +8,9 @@ public with sharing class NegotiateService {
 		for (Agreement a : agreements) {
 			if (a != null) {
 				List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getInstance().getHistoryItems(accountId, a.id);
-				a.setStatus(calculateStatus(agreementHistoryItems));
-				a.setHistoryItems(agreementHistoryItems);
+				a.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
 				if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
-					a.setModifiedDate(agreementHistoryItems.get(0).historyDate);
+					a.withModifiedDate(agreementHistoryItems.get(0).historyDate);
 				}
 			}
 		}
