@@ -9,7 +9,8 @@ Salesforce DX is used to build, test, and deploy this project.
 1. [Install and configure Salesforce DX](./doc/sfdx.md).
 1. Create a scratch org for development: `sfdx force:org:create -f ./etc/dev.json -s -a dfsle-scratch-org`. This org will persist for 7 days by default. Customize its alias by changing `dfsle-scratch-org` to the desired value.
 1. Push the source to your scratch org: `sfdx force:source:push`.
-1. Run post-install scripts in your scratch org: `sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org`
+1. Run post-install scripts in your scratch org: `sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org`.
+1. To complete OAuth flows, you must create a password for your scratch org user: `sfdx force:user:password:generate -u dfsle-scratch-org`. Note the password returned by this command. If necessary, you can view the generated password later via `sfdx force:user:display -u dfsle-scratch-org`.
 
 Once you have completed the initial scratch org setup, you can sync any local changes with that org using the `sfdx force:source:push`.
 
@@ -20,6 +21,7 @@ To run linting run - 'npm run lint'
 ## Testing Notes
 - Run unit tests with coverage: `sfdx force:apex:test:run -c -r human -w 5`. This will wait 5 minutes for the test run to complete. You can also execute this command asynchronously by omitting `-w #`.
 - Default test scratch orgs should use the configuration located at `etc/test.json`.
+- You will need a password for your scratch org user to complete setup OAuth flows. See *Development Notes* for details.
 
 ## Packaging Notes
 Until Salesforce 2nd Generation packages (2GP) is GA, we will continue manually uploading new package versions on our packaging org.
