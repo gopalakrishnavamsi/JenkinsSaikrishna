@@ -18,6 +18,11 @@ public class Agreement {
 	@AuraEnabled
 	public Datetime createdDate { get; private set; }
 /**
+* Date and time when the Agreement was modified.
+*/
+	@AuraEnabled
+	public Datetime modifiedDate { get; private set; }
+/**
 * Agreement status
 */
 	@AuraEnabled
@@ -32,37 +37,48 @@ public class Agreement {
 		final UUID id,
 		final String name,
 		final Datetime createdDate,
+		final Datetime modifiedDate,
 		final String status) {
 
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
-		setStatus(status);
+		this.modifiedDate = modifiedDate;
+		this.status = status;
 		this.historyItems = new List<AgreementHistoryItem>();
 
 	}
 
-	public void setStatus(String status) {
+	public Agreement withStatus(String status) {
 		try {
 			if (AgreementStatus.isValid(status)) {
 				this.status = status;
 			} else {
 				this.status = AgreementStatus.SYSTEM_ERROR;
 			}
-
 		} catch (Exception ex) {
 
 			this.status = AgreementStatus.SYSTEM_ERROR;
 			LoggerService.getInstance().exception(ex, 'Invalid Agreement status');
-
 		}
+		return this;
 	}
 
-	public void setHistoryItems(List<AgreementHistoryItem> historyItems) {
+	public Agreement withHistoryItems(List<AgreementHistoryItem> historyItems) {
 		if (historyItems == null || historyItems.isEmpty()){
 			this.historyItems = new List<AgreementHistoryItem>();
 		} else {
 			this.historyItems = historyItems;
 		}
+		return this;
+	}
+
+	public Agreement withModifiedDate(Datetime modifiedDatetime) {
+		if (modifiedDatetime == null) {
+			this.modifiedDate = this.createdDate;
+		} else {
+			this.modifiedDate = modifiedDatetime;
+		}
+		return this;
 	}
 }
