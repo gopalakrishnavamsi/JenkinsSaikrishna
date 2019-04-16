@@ -57,7 +57,7 @@
       };
 
       var ns = '{!JSENCODE(namespace)}';
-      $Lightning.use(ns + ':LightningOutApp', function () {
+      $Lightning.use(ns + ':GenTemplateApp', function () {
         $Lightning.createComponent(ns + ':GenTemplate', {
           templateId: '{!GenTemplate__c.Id}', isClassic: '{!$User.UIThemeDisplayed}' === 'Theme3'
         }, 'lightning', function (component, status, errorMessage) {

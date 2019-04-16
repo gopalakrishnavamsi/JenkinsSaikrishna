@@ -63,12 +63,12 @@ public class MergeField implements Comparable {
 		return t == Schema.DisplayType.TEXTAREA && field.isHtmlFormatted() ? 'RICHTEXT' : String.valueOf(t);
 	}
 
-	public static MergeField forField(final DescribeFieldResult field) {
+	public static MergeField forField(final DescribeFieldResult field, final String relationshipName) {
 		if (!isValid(field)) throw new DocuSignException(System.Label.InvalidType);
 
 		return new MergeField(
 			field,
-			field.getName(),
+			String.isNotBlank(relationshipName) ? relationshipName + '.' + field.getName() : field.getName(),
 			getType(field),
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),

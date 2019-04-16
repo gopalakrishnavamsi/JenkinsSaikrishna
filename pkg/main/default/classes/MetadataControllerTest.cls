@@ -60,7 +60,7 @@ private class MetadataControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataController.updateLayouts('Contact', '[]');
+				MetadataController.updateLayouts('Contact', '[]', null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -97,10 +97,35 @@ private class MetadataControllerTest {
 			};
 
 			Test.startTest();
-			List<Layout> result = MetadataController.updateLayouts('Contact', JSON.serialize(layouts));
+			List<Layout> result = MetadataController.updateLayouts('Contact', JSON.serialize(layouts), null);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
+		}
+	}
+
+	@IsTest
+	static void test_getGenActionName_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			String genActionName = MetadataController.getGenActionName();
+			Test.stopTest();
+
+			System.assert(String.isNotBlank(genActionName));
+		}
+	}
+
+	@IsTest
+	static void test_getGenActionName_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataController.getGenActionName();
+				throw new AssertException('Expected getGenActionName to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }

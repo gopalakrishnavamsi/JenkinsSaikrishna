@@ -1,0 +1,87 @@
+<aura:component>
+    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="availableObjects" type="String[]"/>
+    <aura:attribute name="labelByApiName" type="Object"/>
+    <aura:attribute name="commonObjects" type="String[]"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:method name="validate" action="{!c.validate}"/>
+
+    <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+        <strong>{!$Label.c.AddObjects}</strong>
+    </h3>
+    <div class="slds-m-bottom_medium slds-text-longform">
+        <p>{!$Label.c.StartingObjectMsg}</p>
+    </div>
+
+    <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_xx-small">{!$Label.c.MainDataSource}</h3>
+    <lightning:select label="{!$Label.c.MainDataSource}" class="ds-no-label"
+                      value="{!v.config.objectMappings[0].apiName}" onchange="{!c.selectedPrimary}">
+        <optgroup label="{!$Label.c.CommonlyUsedObjects}">
+            <aura:iteration items="{!v.commonObjects}" var="obj">
+                <option value="{!obj.name}">{!obj.label}</option>
+            </aura:iteration>
+        </optgroup>
+        <optgroup label="{!$Label.c.OtherObjects}">
+            <aura:iteration items="{!v.availableObjects}" var="obj">
+                <option value="{!obj.name}">{!obj.label}</option>
+            </aura:iteration>
+        </optgroup>
+    </lightning:select>
+    <!--
+    <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_xx-small">{!$Label.c.other_data_sources}</h3>
+    <div class="ds-repeater-box slds-box slds-box_x-small slds-theme_shade">
+        <aura:if isTrue="{!v.config.Object_Mappings__c.length gt 1}">
+            <div class="slds-grid slds-gutters_xx-small">
+                <div class="slds-col">
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="slds-form-element__label">{!$Label.c.object}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="slds-form-element__label"><abbr class="slds-required">*</abbr>{!$Label.c.label}
+                                <lightning:helptext class="ds-helptext-icon-fix" content="{!$Label.c.starting_Object_Help_Text}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <div class="ds-button-icon-spacer"></div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:iteration items="{!v.config.Object_Mappings__c}" var="obj" start="{!1}" indexVar="index">
+            <div class="slds-grid slds-gutters_xx-small slds-m-bottom_x-small">
+                <div class="slds-col">
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:select name="{!index}" label="{!$Label.c.StartingObject}" value="{!obj.apiName}" onchange="{!c.selectedAdditionalObject}" class="ds-no-label">
+                                <optgroup label="{!$Label.c.CommonlyUsedObjects}">
+                                    <option value="Account">{!$Label.c.account}</option>
+                                    <option value="Case">{!$Label.c.case}</option>
+                                    <option value="Contact">{!$Label.c.contact}</option>
+                                    <option value="Lead">{!$Label.c.lead}</option>
+                                    <option value="Opportunity">{!$Label.c.opportunity}</option>
+                                </optgroup>
+                                <optgroup label="{!$Label.c.OtherObjects}">
+                                    <aura:iteration items="{!v.availableObjects}" var="availableObject">
+                                        <option value="{!availableObject.apiName}">{!availableObject.label}</option>
+                                    </aura:iteration>
+                                </optgroup>
+                            </lightning:select>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:input name="{!index}" label="{!$Label.c.label}" class="ds-no-label" value="{!obj.label}" onblur="{!c.checkForDuplicate}" required="{!true}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <lightning:buttonIcon iconName="utility:close" value="{!index}" alternativeText="Remove" variant="border-filled" onclick="{!c.removeObject}" />
+                </div>
+            </div>
+        </aura:iteration>
+
+        <lightning:button iconName="utility:add" label="{!$Label.c.add}" value="{!groupIndex}" onclick="{!c.addObject}"/>
+    </div>
+    -->
+</aura:component>

@@ -5,6 +5,10 @@ public with sharing class MetadataService {
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
+	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
+		= new Map<SObjectType, MetadataAPI.WebLink>();
+	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> { 'templateId', 'title' };
+	private static Boolean isChildObj;
 
 	/**
 	 * Returns a list of common, supported Salesforce object types.
@@ -53,27 +57,38 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static List<MergeField> getFields(final DescribeSObjectResult type) {
+	private static List<MergeField> getFields(final DescribeSObjectResult type, final String relationShipName) {
 		List<MergeField> result = new List<MergeField>();
 		if (MergeObject.isValid(type)) {
 			for (SObjectField f : type.fields.getMap().values()) {
 				DescribeFieldResult field = f.getDescribe();
-				if (MergeField.isValid(field)) result.add(MergeField.forField(field));
+				if (MergeField.isValid(field)) {
+					if (field.getReferenceTo().isEmpty() || String.isNotBlank(relationShipName)) {
+						result.add(MergeField.forField(field, relationShipName));
+					} else if (!isChildObj) {
+						DescribeSObjectResult parentType = field.getReferenceTo()[0].getDescribe();
+						if (MergeObject.isValid(parentType)) {
+							result.addAll(getFields(parentType, parentType.getName()));
+						}
+					}
+
+				}
 			}
 		}
 		return result;
 	}
 
-	public static List<MergeField> getFields(final SObjectType type) {
+	public static List<MergeField> getFields(final SObjectType type, final Boolean isChild) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
-
+		isChildObj = isChild;
 		DescribeSObjectResult typeDesc = type.getDescribe();
-		List<MergeField> result = getFields(typeDesc);
-		result.addAll(getChildRelationships(typeDesc));
+		List<MergeField> result = getFields(typeDesc, null);
+		if (!isChildObj) {
+			result.addAll(getChildRelationships(typeDesc));
+		}
 		result.sort();
-
 		return result;
 	}
 
@@ -280,8 +295,13 @@ public with sharing class MetadataService {
 	}
 
 	private static String getActionType(final String apiName) {
-		// TODO: Handle Gen buttons?
-		return apiName == Layout.ACTION_NAME_SEND ? Layout.ACTION_TYPE_SEND : Layout.ACTION_TYPE_OTHER;
+		if (apiName == Layout.ACTION_NAME_SEND) {
+			return Layout.ACTION_TYPE_SEND;
+		} else if (apiName.contains(Layout.ACTION_NAME_GEN)) {
+			return Layout.ACTION_TYPE_GEN;
+		} else {
+			return Layout.ACTION_TYPE_OTHER;
+		}
 	}
 
 	private static List<Layout.Action> getActions(final MetadataAPI.Layout mdLayout) {
@@ -379,9 +399,18 @@ public with sharing class MetadataService {
 
 		for (String k : Collection.keys(parameters)) {
 			if (prependComma) {
-				result += String.format(', {0} = {1}', new List<String> { k, parameters.get(k) });
+				if (PARAMETERS_ADD_QUOTES.contains(k)) {
+					result += String.format(', {0} = \'\'{1}\'\'', new List<String> { k, parameters.get(k) });
+				} else {
+					result += String.format(', {0} = {1}', new List<String> { k, parameters.get(k) });
+				}
+
 			} else {
-				result += String.format('{0} = {1}', new List<String> { k, parameters.get(k) });
+				if (PARAMETERS_ADD_QUOTES.contains(k)) {
+					result += String.format('{0} = \'\'{1}\'\'', new List<String> { k, parameters.get(k) });
+				} else {
+					result += String.format('{0} = {1}', new List<String> { k, parameters.get(k) });
+				}
 				prependComma = true;
 			}
 		}
@@ -408,14 +437,14 @@ public with sharing class MetadataService {
 		webLink.availability = 'online';
 		webLink.displayType = 'button';
 		webLink.encodingKey = 'UTF-8';
-		webLink.linkType = 'url';
-		webLink.masterLabel = buttonLabel;
-		webLink.openType = 'replace';
 		webLink.protected_x = false;
 		webLink.url = String.format('\'{\'!URLFOR(\'\'{0}\'\', null, {1})\'}\'', new List<String> {
 			new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
 			buildInputs(type, parameters)
 		});
+		webLink.linkType = 'url';
+		webLink.masterLabel = buttonLabel;
+		webLink.openType = 'replace';
 
 		validateResults(MetadataAPI.getInstance().createMetadata(new List<MetadataAPI.Metadata> { webLink }));
 
@@ -536,27 +565,36 @@ public with sharing class MetadataService {
 	private static MetadataAPI.Layout mergeLayout(
 		final SObjectType type,
 		final Layout newLayout,
-		final MetadataAPI.Layout currentLayout) {
+		final MetadataAPI.Layout currentLayout,
+		final String parameters) {
 
 		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
 
 		Boolean hasSendAction = false;
+		Boolean hasGenAction = false;
+		Gen.LayoutParameters genLayoutParameters;
+		if (String.isNotBlank(parameters)) {
+			genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+		}
 		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
 			if (a.type == Layout.ACTION_TYPE_SEND) {
 				hasSendAction = true;
+				break;
+			} else if (a.type == Layout.ACTION_TYPE_GEN) {
+				hasGenAction = true;
 				break;
 			}
 		}
 
 		currentLayout.customButtons = getCustomButtons(
-			hasSendAction,
-			Layout.ACTION_NAME_SEND,
+			genLayoutParameters != null ? hasGenAction : hasSendAction,
+			genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 			currentLayout.customButtons);
 		if (currentLayout.platformActionList != null) {
 			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
 				type,
-				hasSendAction,
-				Layout.ACTION_NAME_SEND,
+				genLayoutParameters != null ? hasGenAction : hasSendAction,
+				genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 				currentLayout.platformActionList.platformActionListItems);
 		}
 		return currentLayout;
@@ -583,6 +621,33 @@ public with sharing class MetadataService {
 	}
 
 	@TestVisible
+	private static MetadataAPI.WebLink getGenWebLink(
+		final SObjectType type,
+		final String actionName,
+		final String actionLabel,
+		final Id genTemplateId) {
+
+		if (type == null || String.isBlank(actionName)) return null;
+
+		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
+			'WebLink', new List<String> { getActionFullName(type, actionName) }));
+		if (webLink == null) {
+			Map <String, String> parametersMap = new Map<String, String>();
+			parametersMap.put('templateId', genTemplateId);
+			parametersMap.put('recordId', type + '.Id');
+			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
+			parametersMap.put('title', actionLabel);
+			webLink = createWebLink(
+				type,
+				actionName,
+				actionLabel,
+				Page.GenDocumentGenerator,
+				parametersMap);
+		}
+		return webLink;
+	}
+
+	@TestVisible
 	private static MetadataAPI.WebLink getSendAction(final SObjectType type) {
 		if (type == null) return null;
 
@@ -594,9 +659,26 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	@TestVisible
+	private static MetadataAPI.WebLink getGenAction(
+		final SObjectType type,
+		final String parameters) {
+
+		if (type == null) return null;
+
+		MetadataAPI.WebLink result = GEN_ACTIONS.get(type);
+		if (result == null) {
+			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+			result = getGenWebLink(type, genLayoutParameters.genButtonApiName, genLayoutParameters.genButtonLabel, genLayoutParameters.genTemplateId);
+			GEN_ACTIONS.put(type, result);
+		}
+		return result;
+	}
+
 	public static List<Layout> updateLayouts(
 		final SObjectType type,
-		final List<Layout> layouts) {
+		final List<Layout> layouts,
+		final String parameters) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -608,13 +690,15 @@ public with sharing class MetadataService {
 			ls.put(l.fullName, l);
 			if (l.hasSendAction()) {
 				getSendAction(type);
+			} else if (l.hasGenAction()) {
+				getGenAction(type, parameters);
 			}
 		}
 
 		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
 		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
 		for (String fullName : mdLayouts.keySet()) {
-			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName)));
+			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName), parameters));
 		}
 
 		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));

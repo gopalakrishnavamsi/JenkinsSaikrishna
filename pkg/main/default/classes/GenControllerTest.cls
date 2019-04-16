@@ -90,7 +90,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenController.getMergeFields('Opportunity');
+				GenController.getMergeFields('Opportunity', false);
 				throw new AssertException('Expected getMergeFields to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -103,7 +103,7 @@ private class GenControllerTest {
 	static void test_getMergeFields_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			List<MergeField> result = GenController.getMergeFields('Opportunity');
+			List<MergeField> result = GenController.getMergeFields('Opportunity', false);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));
@@ -299,14 +299,105 @@ private class GenControllerTest {
 		GenAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			List<Gen.Job> result = GenController.getJobStatus(new List<UUID> {
-				UUID.randomUUID(),
-				UUID.randomUUID()
+			List<Gen.Job> result = GenController.getJobStatus(new List<String> {
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString()
 			});
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
 			System.assertNotEquals(null, JSON.serialize(result));
+		}
+	}
+
+	@IsTest
+	static void test_checkMultiCurrency_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Boolean testResult;
+			Test.startTest();
+			testResult = GenController.checkMultiCurrency();
+			Test.stopTest();
+
+			System.assertNotEquals(null, testResult);
+		}
+	}
+
+	@IsTest
+	static void test_checkMultiCurrency_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.checkMultiCurrency();
+				throw new AssertException('Expected checkMultiCurrency to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Boolean testResult;
+			ContentVersion testContentVersion = TestUtils.createContentVersion();
+			Test.startTest();
+			testResult = GenController.deleteContentDocument(testContentVersion.Id);
+			Test.stopTest();
+
+			System.assertNotEquals(null, testResult);
+			System.assertEquals(true, testResult);
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_failure() {
+		System.runAs(UserMock.createUser()) {
+			ContentVersion testContentVersion = TestUtils.createContentVersion();
+			Test.startTest();
+			try {
+				GenController.deleteContentDocument(testContentVersion.Id);
+				throw new AssertException('Expected deleteContentDocument to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveChunk_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			System.assertNotEquals(null, a.Id);
+			ContentVersion testContentVersion = TestUtils.createContentVersion(a.Id);
+			System.assertNotEquals(null, testContentVersion.Id);
+			System.assertNotEquals(null, testContentVersion.title);
+
+			Test.startTest();
+			Gen.File testGenFile = GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.title, 'Test');
+			Test.stopTest();
+
+			System.assertNotEquals(null, testGenFile);
+		}
+	}
+
+	@IsTest
+	static void test_saveChunk_failure() {
+		System.runAs(UserMock.createUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			System.assertNotEquals(null, a.Id);
+			ContentVersion testContentVersion = TestUtils.createContentVersion(a.Id);
+			System.assertNotEquals(null, testContentVersion.Id);
+			System.assertNotEquals(null, testContentVersion.title);
+			Test.startTest();
+			try {
+				GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.title, 'Test');
+				throw new AssertException('Expected saveChunk to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }
