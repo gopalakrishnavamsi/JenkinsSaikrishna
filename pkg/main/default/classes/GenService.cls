@@ -2,6 +2,9 @@ public with sharing class GenService {
 
 	@TestVisible
 	private static final GenService.Database DB = new GenService.Database();
+	private static final SObjectType CONTENT_VERSION_TYPE = ContentVersion.getSObjectType();
+	private static final SObjectType CONTENT_DOCUMENT_LINK_TYPE = ContentDocumentLink.getSObjectType();
+	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
 
 	private class Database {
 
@@ -57,7 +60,8 @@ public with sharing class GenService {
 				cv.ContentSize,
 				cv.GeneratedFileFormat__c,
 				cv.GeneratedFileName__c,
-				cv.GeneratedFileSuffix__c);
+				cv.GeneratedFileSuffix__c,
+				cv.ContentDocumentId);
 		}
 
 		@TestVisible
@@ -81,8 +85,8 @@ public with sharing class GenService {
 				template.Id,
 				template.Name,
 				template.SourceObject__c,
-				String.isBlank(objMapJson) ? null : (Map<String, Object>)JSON.deserializeUntyped(objMapJson),
-				String.isBlank(signMapJson) ? null : (Map<String, Object>)JSON.deserializeUntyped(signMapJson),
+				String.isBlank(objMapJson) ? null : (List<Gen.ObjectMappings>)JSON.deserialize(objMapJson, List<Gen.ObjectMappings>.class),
+				String.isBlank(signMapJson) ? null : (List<Gen.SignerFieldMappings>)JSON.deserialize(signMapJson, List<Gen.SignerFieldMappings>.class),
 				template.UseAllTemplates__c == true,
 				template.UseCurrentRecord__c == true,
 				template.HasPreviewedDocuments__c == true,
@@ -94,12 +98,12 @@ public with sharing class GenService {
 		private List<Gen.File> queryGeneratedFiles(final Id templateId) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
 				'Id', 'Title', 'FileExtension', 'ContentSize',
-				'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c'
+				'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c', 'ContentDocumentId'
 			});
 
 			return convert([
 				SELECT Id, Title, ContentSize, FileExtension,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
 				AND IsLatest = TRUE
@@ -183,7 +187,7 @@ public with sharing class GenService {
 			insert cvs;
 			return [
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
 				FROM ContentVersion
 				WHERE Id IN :cvs
 			];
@@ -278,7 +282,7 @@ public with sharing class GenService {
 
 		public List<Gen.File> queryFiles(final List<Id> contentDocumentIds) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-				'Id', 'Title', 'FileExtension', 'ContentSize',
+				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
 				Application.namespacePrefix + 'GeneratedFileSuffix__c'
@@ -286,7 +290,7 @@ public with sharing class GenService {
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c
+					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c, ContentDocumentId
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :contentDocumentIds
 				AND IsLatest = TRUE
@@ -362,13 +366,12 @@ public with sharing class GenService {
 				q += ', ' + String.join(childQueries, ', ');
 			}
 			q += String.format(' FROM {0} WHERE Id = :sourceId', new List<String> { String.valueOf(type) });
-
 			return System.Database.query(q);
 		}
 
 		public List<Gen.File> queryFiles(final Set<Id> contentVersionIds) {
 			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-				'Id', 'Title', 'FileExtension', 'ContentSize',
+				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
 				Application.namespacePrefix + 'GeneratedFileSuffix__c'
@@ -376,7 +379,7 @@ public with sharing class GenService {
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c,ContentDocumentId
 				FROM ContentVersion
 				WHERE Id IN :contentVersionIds
 			]);
@@ -408,6 +411,89 @@ public with sharing class GenService {
 			}
 			return result;
 		}
+
+		public ContentVersion createGenFile(
+			final Id linkedEntityId,
+			final String title,
+			final String base64Data) {
+
+			Permissions.verifyIsCreateable(CONTENT_VERSION_TYPE, new List<String> {
+				'ContentDocumentId', 'Title', 'VersionData', 'IsMajorVersion', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+			});
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
+				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension', 'VersionData', 'ContentSize',
+				'LastModifiedDate', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+			});
+			Permissions.verifyIsCreateable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
+				'ContentDocumentId', 'LinkedEntityId', 'ShareType'
+			});
+
+			ContentVersion cv = new ContentVersion(
+				PathOnClient = title,
+				VersionData = EncodingUtil.base64Decode(base64Data),
+				IsMajorVersion = false,
+				GeneratedFileFormat__c = 'Word',
+				GeneratedFileSuffix__c = 'name');
+			insert cv;
+
+			cv = [
+				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c
+				FROM ContentVersion
+				WHERE Id = :cv.Id
+				LIMIT 1
+			];
+
+			cv.GeneratedFileName__c = cv.Title;
+			update cv;
+
+			insert new ContentDocumentLink(
+				ContentDocumentId = cv.ContentDocumentId,
+				LinkedEntityId = linkedEntityId,
+				ShareType = 'I'); // Types are: V - Viewer, C - Collaborator, and I - Inferred
+
+			return cv;
+		}
+
+		public ContentVersion updateGenFile(
+			final Id contentVersionId,
+			final String base64Data) {
+
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
+				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension', 'VersionData', 'ContentSize',
+				'LastModifiedDate', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+			});
+			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> { 'VersionData' });
+
+			ContentVersion cv = [
+				SELECT VersionData
+				FROM ContentVersion
+				WHERE Id = :contentVersionId
+				LIMIT 1
+			];
+			cv.VersionData = EncodingUtil.base64Decode(EncodingUtil.base64Encode(cv.VersionData) + base64Data);
+			update cv;
+
+			return [
+				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c
+				FROM ContentVersion
+				WHERE Id = :contentVersionId
+				LIMIT 1
+			];
+		}
+
+		public Boolean deleteContentDocument(final Id contentVersionId) {
+			Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
+
+			Boolean result = false;
+			if (contentVersionId != null) {
+				ContentVersion contentVersionInstance = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :contentVersionId];
+				ContentDocument contentDocumentInstance = [SELECT Id FROM ContentDocument WHERE Id = :contentVersionInstance.ContentDocumentId];
+				delete contentDocumentInstance;
+				result = true;
+			}
+			return result;
+		}
+
 	}
 
 	public static Gen.Template clone(final Id templateId) {
@@ -416,6 +502,10 @@ public with sharing class GenService {
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 
 		return DB.cloneTemplate(templateId);
+	}
+
+	public static Gen.File convertToGenFile(final ContentVersion cv) {
+		return DB.convert(cv);
 	}
 
 	public static Gen.Template createBlankTemplate() {
@@ -527,16 +617,15 @@ public with sharing class GenService {
 					isPreview ? null : source.id, // if we're preview we want to attach the user not a starting record
 					xmlPayload,
 					file.generatedFormat,
-					getOutputFileName(file, source, Datetime.now())));
+					getOutputFileName(file, source, Datetime.now())).withFile(file));
 			} catch (Exception ex) {
 				result.add(new Gen.Job(
 					null,
 					file.id,
 					Label.Failure,
-					ex.getMessage()));
+					ex.getMessage() + ' ' + file.title).withFile(file));
 			}
 		}
-
 		return result;
 	}
 
@@ -569,5 +658,62 @@ public with sharing class GenService {
 		}
 
 		return result;
+	}
+
+	public static Boolean checkMultiCurrency() {
+		Permissions.verifyIsDocuSignUser();
+		Boolean isMultiCurrencyOrganization = UserInfo.isMultiCurrencyOrganization() ? true : false;
+		return isMultiCurrencyOrganization;
+	}
+
+	/**
+	 * Saves all or part of a file.
+	 *
+	 * @param contentVersionId The ID of the file record to update. If <code>null</code>, the record will be created.
+	 * @param linkedEntityId The ID of the Salesforce object linked to the file.
+	 * @param title The file name.
+	 * @param base64Data Base64-encoded file bytes. This will be appended to an existing file's data if updating.
+	 *
+	 * @return The created or updated file.
+	 */
+	public static Gen.File saveFile(
+		final Id contentVersionId,
+		final Id linkedEntityId,
+		final String title,
+		final String base64Data) {
+
+		Permissions.verifyIsDocuSignUser();
+
+		if (linkedEntityId == null
+			|| String.isBlank(title)
+			|| String.isBlank(base64Data)) {
+			throw new DocuSignException(Label.UndefinedArgument);
+		}
+
+		Gen.File resultFile = null;
+		ContentVersion result = null;
+
+		if (contentVersionId == null) {
+			result = DB.createGenFile(linkedEntityId, title, base64Data);
+		} else {
+			result = DB.updateGenFile(contentVersionId, base64Data);
+		}
+
+		if (result != null) {
+			resultFile = GenService.convertToGenFile(result);
+		}
+		return resultFile;
+	}
+
+	/**
+	 * Deletes a Salesforce File. The ContentDocument is deleted from Salesforce.
+	 *
+	 * @param contentVersionId The ID of the ContentVersion. This will be used to fetch the ContentDocument to be deleted.
+	 *
+	 * @return Boolean
+	 */
+	public static Boolean deleteContentDocument(final Id contentVersionId) {
+		Permissions.verifyIsDocuSignUser();
+		return DB.deleteContentDocument(contentVersionId);
 	}
 }

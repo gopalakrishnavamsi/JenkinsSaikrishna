@@ -5,6 +5,7 @@ public class Layout implements Comparable {
 
 	public static final String ACTION_TYPE_SEND = 'SEND';
 	public static final String ACTION_NAME_SEND = MetadataAPI.NAMESPACE_PREFIX + 'SendWithDocuSign';
+	public static final String ACTION_NAME_GEN = MetadataAPI.NAMESPACE_PREFIX + Label.Generate;
 	public static final String ACTION_TYPE_GEN = 'GEN';
 	public static final String ACTION_TYPE_OTHER = 'OTHER';
 
@@ -114,6 +115,19 @@ public class Layout implements Comparable {
 		if (this.actions != null) {
 			for (Action a : this.actions) {
 				if (a.name == ACTION_NAME_SEND) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	public Boolean hasGenAction() {
+		Boolean result = false;
+		if (this.actions != null) {
+			for (Action a : this.actions) {
+				if (a.name.startsWith(ACTION_NAME_GEN)) {
 					result = true;
 					break;
 				}

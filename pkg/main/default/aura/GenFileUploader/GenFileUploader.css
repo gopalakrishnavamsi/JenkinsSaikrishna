@@ -1,0 +1,19 @@
+/* Winter18 grid overrides */
+.THIS .slds-col[class*=slds-size_]:not(.slds-no-flex),
+.THIS .slds-col[class*=slds-size--]:not(.slds-no-flex),
+.THIS.slds-col[class*=slds-size_]:not(.slds-no-flex),
+.THIS.slds-col[class*=slds-size--]:not(.slds-no-flex) {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+
+.THIS .ds-file-selector {
+    border: none;
+    height: 32px;
+}
+
+.THIS .ds-too-large .slds-file-selector__dropzone {
+    border-color: t(colorBorderError);
+}

@@ -1,0 +1,113 @@
+<aura:component controller="GenController">
+    <aura:attribute name="allFieldMappings" type="Object[]"
+                    description="All the field mappings in the current object. Used to prevent duplicates"/>
+    <aura:attribute name="parentFieldMapping" type="Object"
+                    description="Only populated if the current field mapping is a child type. This is used to handle removing children"/>
+    <aura:attribute name="fieldMapping" type="Object" description="The current field map we're manipulating"/>
+    <aura:attribute name="allFields" type="Object[]"/>
+    <aura:attribute name="allFieldsByApiName" type="Object"/>
+    <aura:attribute name="childRelations" type="Object[]"/>
+    <aura:attribute name="allChildObjFields" type="Object[]"/>
+    <aura:attribute name="allChildFieldsByApiName" type="Object"/>
+    <aura:attribute name="mergeFieldDisplayOptions" type="Object[]"/>
+
+    <aura:attribute name="isChild" type="Boolean" default="{!false}"/>
+
+    <aura:attribute name="objIndex" type="Integer"/>
+    <aura:attribute name="parentMappingIndex" type="Integer"/>
+    <aura:attribute name="mappingIndex" type="Integer"/>
+    <aura:attribute name="zIndex" type="Integer"/>
+
+    <aura:attribute name="objLabel" type="String"/>
+    <aura:attribute name="token" type="String"/>
+    <aura:attribute name="previousFieldMappingName" type="String"/>
+
+    <aura:handler name="change" value="{!v.fieldMapping.isConditional}" action="{!c.setToken}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <aura:registerEvent name="showToast" type="c:strike_evt"/>
+    <aura:registerEvent name="showOptionsModal" type="c:strike_evt"/>
+    <aura:registerEvent name="removeMapping" type="c:strike_evt"/>
+    <aura:registerEvent name="loadingChild" type="c:strike_evt"/>
+    <aura:registerEvent name="childLoaded" type="c:strike_evt"/>
+
+    <div class="{!'slds-is-relative slds-m-bottom_x-small' + if(v.isChild, ' ds-merge-field__subfield slds-m-top_x-small', ' ds-merge-field')}"
+         style="{!'z-index: ' + v.zIndex}">
+        <aura:if isTrue="{!v.isChild}">
+            <div class="ds-merge-field__subfield-line slds-is-absolute"></div>
+        </aura:if>
+        <div class="slds-grid slds-grid_pull-padded-large slds-is-relative">
+            <!-- Arrow -->
+            <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward" size="x-small"/>
+            <!-- /Arrow -->
+            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
+                                  value="{!v.fieldMapping.apiName}"
+                                  onchange="{!c.processFieldSelection}"
+                                  class="{!'ds-no-label' + if(v.isChild, ' slds-m-left_xx-large')}">
+                    <option disabled="{!true}" value="">{!$Label.c.SelectAnOption}</option>
+                    <aura:if isTrue="{!v.allFields.length gt 0}">
+                        <aura:iteration items="{!v.allFields}" var="fieldGroup">
+                            <optgroup label="{!fieldGroup.label}">
+                                <aura:iteration items="{!fieldGroup.fields}" var="field">
+                                    <option value="{!field.name}">{!field.label}</option>
+                                </aura:iteration>
+                            </optgroup>
+                        </aura:iteration>
+                    </aura:if>
+                    <aura:if isTrue="{!v.childRelations.length gt 0}">
+                        <optgroup label="{!$Label.c.ChildRelations}">
+                            <aura:iteration items="{!v.childRelations}" var="field">
+                                <option value="{!field.relatesTo}">{!field.label}</option>
+                            </aura:iteration>
+                        </optgroup>
+                    </aura:if>
+                </lightning:select>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                <div class="slds-grid slds-gutters_xx-small">
+                    <div class="slds-col">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <input type="text" aura:id="token-input" class="ds-readonly slds-input"
+                                       readonly="readonly" value="{!v.token}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <div class="slds-button-group">
+                            <lightning:button label="{!$Label.c.Copy}" variant="neutral" disabled="{!empty(v.token)}"
+                                              onclick="{!c.copyToken}"/>
+                            <lightning:buttonMenu menuAlignment="right" onselect="{!c.selectedButtonMenuItem}"
+                                                  variant="border-filled">
+                                <lightning:menuItem label="{!$Label.c.Options}" value="options"
+                                                    disabled="{!empty(v.fieldMapping.apiName)}"/>
+                                <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
+                            </lightning:buttonMenu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aura:if isTrue="{!v.fieldMapping.isChildRelation}">
+            <aura:if isTrue="{!not(empty(v.allChildObjFields))}">
+                <aura:iteration items="{!v.fieldMapping.childFieldMappings}" var="childFieldMapping" indexVar="index">
+                    <c:GenFieldPicker allFieldMappings="{!v.fieldMapping.childFieldMappings}"
+                                      allFields="{!v.allChildObjFields}"
+                                      allFieldsByApiName="{!v.allChildFieldsByApiName}"
+                                      isChild="{!true}" parentFieldMapping="{!v.fieldMapping}"
+                                      fieldMapping="{!childFieldMapping}"
+                                      mappingIndex="{!index}" parentMappingIndex="{!v.mappingIndex}"
+                                      objLabel="{!v.objLabel}"
+                                      objIndex="{!v.objIndex}"/>
+                </aura:iteration>
+            </aura:if>
+
+            <div class="slds-m-vertical_x-small slds-p-left_xx-large">
+                <lightning:button iconName="utility:add" label="{!$Label.c.add}" onclick="{!c.addChildField}"/>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>
