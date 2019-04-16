@@ -2,3 +2,8 @@
     pointer-events: none;
     fill: t(colorTextError);
 }
+
+.THIS .slds-icon-doctype-word svg {
+    width: 30px;
+    height: 30px;
+}
