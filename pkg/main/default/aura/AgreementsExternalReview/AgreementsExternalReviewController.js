@@ -7,6 +7,9 @@
 
         //set the current step to 1
         component.set('v.currentStep', '1');
+        //Initialize default due date
+        var dueDateElement = component.find("externalReviewDueDate");
+        if (dueDateElement) dueDateElement.set("v.value", new Date(new Date().valueOf() + (86400000 * 30)).toJSON());        
     },
     handleRecipientChange: function (component, event, helper) {
         helper.resolveRecipient(component, event.getParam('data'));
