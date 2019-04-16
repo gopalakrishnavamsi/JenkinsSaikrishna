@@ -323,4 +323,20 @@ public class Gen {
 			this.inviteEmailBody = inviteEmailBody;
 		}
 	}
+
+	public class LayoutParameters {
+		public String genButtonApiName { get; private set; }
+		public String genButtonLabel { get; private set; }
+		public String genTemplateId { get; private set; }
+
+		public LayoutParameters(
+			final String genButtonApiName,
+			final String genButtonLabel,
+			final String genTemplateId) {
+
+			this.genButtonApiName = genButtonApiName;
+			this.genButtonLabel = genButtonLabel;
+			this.genTemplateId = genTemplateId;
+		}
+	}
 }

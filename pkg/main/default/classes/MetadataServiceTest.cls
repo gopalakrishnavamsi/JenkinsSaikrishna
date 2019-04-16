@@ -580,13 +580,13 @@ private class MetadataServiceTest {
 	@IsTest
 	static void test_mergeLayout_not_found() {
 		try {
-			MetadataService.mergeLayout(null, null, new MetadataAPI.Layout());
+			MetadataService.mergeLayout(null, null, new MetadataAPI.Layout(), null);
 			throw new AssertException('Expected mergeLayout to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.LayoutsNotFound, ex.getMessage());
 		}
 		try {
-			MetadataService.mergeLayout(null, new Layout(null, null, null, null, null), null);
+			MetadataService.mergeLayout(null, new Layout(null, null, null, null, null), null, null);
 			throw new AssertException('Expected mergeLayout to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.LayoutsNotFound, ex.getMessage());
@@ -611,7 +611,7 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(Lead.getSObjectType(), newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Lead.getSObjectType(), newLayout, currentLayout, null);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -640,7 +640,7 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout, null);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -667,7 +667,7 @@ private class MetadataServiceTest {
 		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
 
 		Test.startTest();
-		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout);
+		MetadataAPI.Layout result = MetadataService.mergeLayout(Contact.getSObjectType(), newLayout, currentLayout, null);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -760,7 +760,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -781,19 +781,19 @@ private class MetadataServiceTest {
 
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(null, new List<Layout> { l });
+				MetadataService.updateLayouts(null, new List<Layout> { l }, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>());
+				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>(), null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
@@ -807,7 +807,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null });
+				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null }, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidLayout, ex.getMessage());
@@ -844,7 +844,7 @@ private class MetadataServiceTest {
 			Test.startTest();
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
-				new List<Layout> { l1, l2 });
+				new List<Layout> { l1, l2 }, null);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -877,12 +877,11 @@ private class MetadataServiceTest {
 				});
 
 			Test.startTest();
+			String parameters = '{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}';
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
 				new List<Layout> { l1, l2 },
-				'testGenButton',
-				'testGenButtonLabel',
-				UserInfo.getUserId());
+				parameters);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));

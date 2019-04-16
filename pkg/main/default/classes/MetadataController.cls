@@ -34,6 +34,7 @@ public with sharing class MetadataController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static String getGenActionName() {
 		try {
+			Permissions.verifyIsDocuSignAdministrator();
 			return Layout.ACTION_NAME_GEN;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve GenAction Name');
@@ -52,32 +53,13 @@ public with sharing class MetadataController extends Controller {
 	@AuraEnabled
 	public static List<Layout> updateLayouts(
 		final String sObjectType,
-		final String layoutsJson) {
-
-		try {
-			return MetadataService.updateLayouts(
-				Salesforce.getSObjectType(sObjectType),
-				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class));
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to update layouts');
-		}
-	}
-
-	@AuraEnabled
-	public static List<Layout> updateLayouts(
-		final String sObjectType,
 		final String layoutsJson,
-		final String genButtonApiName,
-		final String genButtonLabel,
-		final Id genTemplateId) {
+		final String parameters) {
 
 		try {
 			return MetadataService.updateLayouts(
 				Salesforce.getSObjectType(sObjectType),
-				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class),
-				genButtonApiName,
-				genButtonLabel,
-				genTemplateId);
+				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class), parameters);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to update layouts');
 		}

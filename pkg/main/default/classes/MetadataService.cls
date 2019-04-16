@@ -565,58 +565,36 @@ public with sharing class MetadataService {
 	private static MetadataAPI.Layout mergeLayout(
 		final SObjectType type,
 		final Layout newLayout,
-		final MetadataAPI.Layout currentLayout) {
+		final MetadataAPI.Layout currentLayout,
+		final String parameters) {
 
 		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
 
 		Boolean hasSendAction = false;
+		Boolean hasGenAction = false;
+		Gen.LayoutParameters genLayoutParameters;
+		if (String.isNotBlank(parameters)) {
+			genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+		}
 		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
 			if (a.type == Layout.ACTION_TYPE_SEND) {
 				hasSendAction = true;
 				break;
-			}
-		}
-
-		currentLayout.customButtons = getCustomButtons(
-			hasSendAction,
-			Layout.ACTION_NAME_SEND,
-			currentLayout.customButtons);
-		if (currentLayout.platformActionList != null) {
-			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
-				type,
-				hasSendAction,
-				Layout.ACTION_NAME_SEND,
-				currentLayout.platformActionList.platformActionListItems);
-		}
-		return currentLayout;
-	}
-
-	@TestVisible
-	private static MetadataAPI.Layout mergeGenLayout(
-		final SObjectType type,
-		final String genButtonApiName,
-		final Layout newLayout,
-		final MetadataAPI.Layout currentLayout) {
-
-		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
-
-		Boolean hasGenAction = false;
-		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
-			if (a.type == Layout.ACTION_TYPE_GEN) {
+			} else if (a.type == Layout.ACTION_TYPE_GEN) {
 				hasGenAction = true;
 				break;
 			}
 		}
 
 		currentLayout.customButtons = getCustomButtons(
-			hasGenAction,
-			genButtonApiName,
+			genLayoutParameters != null ? hasGenAction : hasSendAction,
+			genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 			currentLayout.customButtons);
 		if (currentLayout.platformActionList != null) {
 			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
 				type,
-				hasGenAction,
-				genButtonApiName,
+				genLayoutParameters != null ? hasGenAction : hasSendAction,
+				genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 				currentLayout.platformActionList.platformActionListItems);
 		}
 		return currentLayout;
@@ -643,7 +621,7 @@ public with sharing class MetadataService {
 	}
 
 	@TestVisible
-	private static MetadataAPI.WebLink getWebLink(
+	private static MetadataAPI.WebLink getGenWebLink(
 		final SObjectType type,
 		final String actionName,
 		final String actionLabel,
@@ -684,15 +662,14 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink getGenAction(
 		final SObjectType type,
-		final String genButtonApiName,
-		final String genButtonLabel,
-		final Id genTemplateId) {
+		final String parameters) {
 
 		if (type == null) return null;
 
 		MetadataAPI.WebLink result = GEN_ACTIONS.get(type);
 		if (result == null) {
-			result = getWebLink(type, genButtonApiName, genButtonLabel, genTemplateId);
+			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+			result = getGenWebLink(type, genLayoutParameters.genButtonApiName, genLayoutParameters.genButtonLabel, genLayoutParameters.genTemplateId);
 			GEN_ACTIONS.put(type, result);
 		}
 		return result;
@@ -700,7 +677,8 @@ public with sharing class MetadataService {
 
 	public static List<Layout> updateLayouts(
 		final SObjectType type,
-		final List<Layout> layouts) {
+		final List<Layout> layouts,
+		final String parameters) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -712,49 +690,19 @@ public with sharing class MetadataService {
 			ls.put(l.fullName, l);
 			if (l.hasSendAction()) {
 				getSendAction(type);
+			} else if (l.hasGenAction()) {
+				getGenAction(type, parameters);
 			}
 		}
 
 		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
 		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
 		for (String fullName : mdLayouts.keySet()) {
-			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName)));
+			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName), parameters));
 		}
 
 		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));
 
 		return layouts;
 	}
-
-	public static List<Layout> updateLayouts(
-		final SObjectType type,
-		final List<Layout> layouts,
-		final String genButtonApiName,
-		final String genButtonLabel,
-		final Id genTemplateId) {
-
-		Permissions.verifyIsDocuSignAdministrator();
-
-		if (type == null || Collection.isEmpty(layouts)) throw new DocuSignException(Label.UndefinedArgument);
-
-		Map<String, Layout> ls = new Map<String, Layout>();
-		for (Layout l : layouts) {
-			if (l == null) throw new DocuSignException(Label.InvalidLayout);
-			ls.put(l.fullName, l);
-			if (l.hasGenAction()) {
-				getGenAction(type, genButtonApiName, genButtonLabel, genTemplateId);
-			}
-		}
-
-		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
-		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
-		for (String fullName : mdLayouts.keySet()) {
-			toUpdate.add(mergeGenLayout(type, genButtonApiName, ls.get(fullName), mdLayouts.get(fullName)));
-		}
-
-		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));
-
-		return layouts;
-	}
-
 }

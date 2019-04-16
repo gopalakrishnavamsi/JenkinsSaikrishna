@@ -87,13 +87,12 @@
     var buttonApiName = String(component.get('v.genActionName') + component.get('v.config').name);
     var buttonLabel = $A.get('$Label.c.Generate') + ' ' + component.get('v.config').name;
     var selectedLayouts = helper.getLayoutsToUpdate(component.get('v.layouts'), buttonApiName);
+    var parameters = {"genButtonApiName": buttonApiName, "genButtonLabel": buttonLabel, "genTemplateId": config.id};
 
     action.setParams({
       sObjectType: config.objectMappings[0].apiName,
       layoutsJson: JSON.stringify(selectedLayouts),
-      genButtonApiName: buttonApiName,
-      genButtonLabel: buttonLabel,
-      genTemplateId: config.id
+      parameters: JSON.stringify(parameters),
     });
 
     action.setCallback(this, function (response) {
