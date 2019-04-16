@@ -85,7 +85,7 @@
     var config = component.get('v.config');
     var action = component.get('c.updateLayouts');
     var buttonApiName = String(component.get('v.genActionName') + component.get('v.config').name);
-    var buttonLabel = $A.get('$Label.c.generate') + ' ' + component.get('v.config').name;
+    var buttonLabel = $A.get('$Label.c.Generate') + ' ' + component.get('v.config').name;
     var selectedLayouts = helper.getLayoutsToUpdate(component.get('v.layouts'), buttonApiName);
 
     action.setParams({
@@ -100,7 +100,7 @@
       var state = response.getState();
       if (state === "SUCCESS") {
         component.getEvent('publishedButtons').fire();
-        helper.showToast(component, $A.get('$Label.c.successfully_Published'), 'success');
+        helper.showToast(component, $A.get('$Label.c.SuccessfullyPublished'), 'success');
       } else if (state === "ERROR") {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();

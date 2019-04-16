@@ -7,12 +7,12 @@
 
     <div class="slds">
         <lightning:input class="{!'ds-no-label' + if(v.fileTooLarge, ' ds-too-large')}" aura:id="file-input" type="file"
-                         onchange="{!c.fileUpload}" accept=".docx" label="{!$Label.c.attachment}" name="file"
+                         onchange="{!c.fileUpload}" accept=".docx" label="{!$Label.c.Attachment}" name="file"
                          multiple="false"/>
 
         <aura:if isTrue="{!v.fileTooLarge}">
             <div class="slds-has-error">
-                <div class="slds-form-element__help">{!$Label.c.file_too_large}</div>
+                <div class="slds-form-element__help">{!$Label.c.FileTooLarge}</div>
             </div>
         </aura:if>
     </div>

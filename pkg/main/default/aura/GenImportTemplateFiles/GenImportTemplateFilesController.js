@@ -29,9 +29,9 @@
 
       component.set('v.files', files);
 
-      helper.showToast(component, $A.get('$Label.c.file_Upload_Success_Msg'), 'success');
+      helper.showToast(component, $A.get('$Label.c.FileUploadSuccessMsg'), 'success');
     } else {
-      helper.showToast(component, $A.get('$Label.c.file_Upload_Fail_Msg'), 'error');
+      helper.showToast(component, $A.get('$Label.c.FileUploadFailMsg'), 'error');
     }
   },
 
@@ -39,7 +39,7 @@
     var files = component.get('v.files');
     var fileIndex = parseInt(event.getSource().get('v.value'), 10);
     var action = component.get('c.deleteContentDocument');
-    component.set('v.currentAction', $A.get('$Label.c.removing'));
+    component.set('v.currentAction', $A.get('$Label.c.Removing'));
 
     action.setParams({
       contentVersionId: files.splice(fileIndex, 1)[0].id
@@ -49,13 +49,13 @@
       component.set('v.currentAction', '');
       var state = response.getState();
       if (state === "SUCCESS") {
-        helper.showToast(component, $A.get('$Label.c.file_Upload_Success_Delete_Msg'), 'success');
+        helper.showToast(component, $A.get('$Label.c.FileUploadSuccessDeleteMsg'), 'success');
         component.set('v.files', files);
         if (files.length < 2) {
           component.find('documentGenerationOptionCheckbox').set('v.checked', true);
         }
       } else if (state === "ERROR") {
-        helper.showToast(component, $A.get('$Label.c.file_Upload_Fail_Delete_Msg'), 'error');
+        helper.showToast(component, $A.get('$Label.c.FileUploadFailDeleteMsg'), 'error');
       }
     });
 

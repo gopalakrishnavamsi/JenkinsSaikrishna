@@ -18,11 +18,11 @@
             <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
                 <lightning:select class="ds-no-label slds-m-left_xx-large" value="{!v.fieldMapping.apiName}"
                                   onchange="{!c.setTokenValue}">
-                    <option value="s">{!$Label.c.signature}</option>
-                    <option value="i">{!$Label.c.initial}</option>
-                    <option value="oi">{!$Label.c.optional_Initial}</option>
-                    <option value="d">{!$Label.c.date_Signed}</option>
-                    <option value="n">{!$Label.c.name}</option>
+                    <option value="s">{!$Label.c.Signature}</option>
+                    <option value="i">{!$Label.c.Initial}</option>
+                    <option value="oi">{!$Label.c.OptionalInitial}</option>
+                    <option value="d">{!$Label.c.DateSigned}</option>
+                    <option value="n">{!$Label.c.NameLabel}</option>
                     <option value="c">{!$Label.c.Company}</option>
                     <option value="t">{!$Label.c.Title}</option>
                 </lightning:select>

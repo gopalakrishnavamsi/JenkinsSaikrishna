@@ -14,14 +14,14 @@
     <h3 class="slds-m-bottom_xx-small slds-m-top_medium">
 		<span
                 class="slds-text-heading_label slds-show_inline-block slds-m-bottom_xx-small">{!v.objMapping.objLabel}</span>
-        <lightning:badge label="{!if(v.objMapping.isPrimary, $Label.c.starting_Object, v.objMapping.label)}"
+        <lightning:badge label="{!if(v.objMapping.isPrimary, $Label.c.StartingObject, v.objMapping.label)}"
                          class="ds-badge-adjustment slds-theme_info slds-m-left_x-small"/>
     </h3>
 
     <div class="ds-repeater-box slds-box slds-box_x-small slds-theme_shade slds-is-relative">
         <aura:if isTrue="{!v.isLoading}">
             <div class="ds-text-loading-state slds-text-align_center slds-m-vertical_large">
-				{!$Label.c.retrieving_Fields}
+				{!$Label.c.RetrievingFields}
 			</div>
         </aura:if>
 
@@ -29,10 +29,10 @@
             <aura:if isTrue="{!v.objMapping.fieldMappings.length gt 0}">
                 <div class="slds-grid slds-grid_pull-padded-large">
                     <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                        <div class="slds-form-element__label">{!$Label.c.field}</div>
+                        <div class="slds-form-element__label">{!$Label.c.FieldLabel}</div>
                     </div>
                     <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                        <div class="slds-form-element__label">{!$Label.c.anchor_Text}</div>
+                        <div class="slds-form-element__label">{!$Label.c.AnchorText}</div>
                     </div>
                 </div>
             </aura:if>

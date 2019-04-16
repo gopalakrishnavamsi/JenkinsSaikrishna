@@ -41,10 +41,11 @@
             <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward" size="x-small"/>
             <!-- /Arrow -->
             <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                <lightning:select label="{!$Label.c.field}" variant="label-hidden" value="{!v.fieldMapping.apiName}"
+                <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
+                                  value="{!v.fieldMapping.apiName}"
                                   onchange="{!c.processFieldSelection}"
                                   class="{!'ds-no-label' + if(v.isChild, ' slds-m-left_xx-large')}">
-                    <option disabled="{!true}" value="">{!$Label.c.select_An_Option}</option>
+                    <option disabled="{!true}" value="">{!$Label.c.SelectAnOption}</option>
                     <aura:if isTrue="{!v.allFields.length gt 0}">
                         <aura:iteration items="{!v.allFields}" var="fieldGroup">
                             <optgroup label="{!fieldGroup.label}">
@@ -55,7 +56,7 @@
                         </aura:iteration>
                     </aura:if>
                     <aura:if isTrue="{!v.childRelations.length gt 0}">
-                        <optgroup label="{!$Label.c.child_Relations}">
+                        <optgroup label="{!$Label.c.ChildRelations}">
                             <aura:iteration items="{!v.childRelations}" var="field">
                                 <option value="{!field.relatesTo}">{!field.label}</option>
                             </aura:iteration>
@@ -80,7 +81,7 @@
                                               onclick="{!c.copyToken}"/>
                             <lightning:buttonMenu menuAlignment="right" onselect="{!c.selectedButtonMenuItem}"
                                                   variant="border-filled">
-                                <lightning:menuItem label="{!$Label.c.options}" value="options"
+                                <lightning:menuItem label="{!$Label.c.Options}" value="options"
                                                     disabled="{!empty(v.fieldMapping.apiName)}"/>
                                 <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
                             </lightning:buttonMenu>

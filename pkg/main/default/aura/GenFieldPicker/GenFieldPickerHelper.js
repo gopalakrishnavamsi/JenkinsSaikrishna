@@ -108,11 +108,11 @@
 
   setConditionalRadio: function (component) {
     var mergeFieldDisplayOptions = [{
-      'label': $A.get('$Label.c.merge_Field_Display_Current'),
+      'label': $A.get('$Label.c.MergeFieldDisplayCurrent'),
       'value': 'false'
     },
       {
-        'label': $A.get('$Label.c.merge_Field_Display_Conditional'),
+        'label': $A.get('$Label.c.MergeFieldDisplayConditional'),
         'value': 'true'
       }
     ];

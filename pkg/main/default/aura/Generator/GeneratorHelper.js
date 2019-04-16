@@ -32,7 +32,7 @@
 
     //there are no template files
     if (templateFiles.length == 0) {
-      component.set('v.errMsg', $A.get('$Label.c.no_Doc_For_Template_Msg'));
+      component.set('v.errMsg', $A.get('$Label.c.NoDocForTemplateMsg'));
       component.set('v.errType', 'warning');
     }
 
@@ -211,7 +211,7 @@
       }
 
     })).catch($A.getCallback(function (response) {
-      component.set('v.errMsg', $A.get('$Label.c.failed_Initiate_Doc_Generation'));
+      component.set('v.errMsg', $A.get('$Label.c.FailedInitiateDocGeneration'));
       component.set('v.errType', 'error');
       component.set('v.isGenerating', false);
     }));
@@ -390,7 +390,7 @@
         helper.completionPoll(component, jobIds, remainingJobIds, 0);
 
       } else {
-        var errorMessage = $A.get('$Label.c.failed_Initiate_Doc_Generation');
+        var errorMessage = $A.get('$Label.c.FailedInitiateDocGeneration');
         var errors = response.getError();
         if (errors) {
           if (errors[0] && errors[0].message) {
@@ -470,9 +470,9 @@
 
           if (failedFiles.length > 0) {
             component.set('v.bannerState', 'warning');
-            component.set('v.bannerMsg', $A.get('$Label.c.generator_Banner_Error_Msg'));
+            component.set('v.bannerMsg', $A.get('$Label.c.GeneratorBannerErrorMsg'));
           } else {
-            var bannerMsg = $A.get('$Label.c.generator_Banner_Success_Msg');
+            var bannerMsg = $A.get('$Label.c.GeneratorBannerSuccessMsg');
             bannerMsg = generatedFiles.length > 1 ? bannerMsg += 's!' : bannerMsg += '!';
 
             component.set('v.bannerState', 'success');
@@ -481,7 +481,7 @@
         }
 
       } else {
-        var errorMessage = $A.get('$Label.c.generator_Completion_Error_Msg') + ' ';
+        var errorMessage = $A.get('$Label.c.GeneratorCompletionErrorMsg') + ' ';
         var errors = response.getError();
         if (errors) {
           if (errors[0] && errors[0].message) {

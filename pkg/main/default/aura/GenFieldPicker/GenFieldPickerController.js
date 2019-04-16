@@ -62,7 +62,7 @@
     //ignore yourself as a dupe
     if (dupeFieldMappings.length > 1) {
       //use field data instead of fieldMapping as it doesn't have the label yet.
-      helper.showToast(component, 'warning', fieldData.label + ' ' + $A.get('$Label.c.fieldPicker_field_Exists'));
+      helper.showToast(component, 'warning', fieldData.label + ' ' + $A.get('$Label.c.FieldPickerFieldExists'));
       fieldMapping.apiName = component.get('v.previousFieldMappingName');
       component.set('v.fieldMapping', fieldMapping);
       return;
@@ -103,7 +103,7 @@
     var tokenInput = component.find('token-input');
     tokenInput.getElement().select();
     document.execCommand('copy');
-    helper.showToast(component, 'success', $A.get('$Label.c.success_Copy_Clipboard'));
+    helper.showToast(component, 'success', $A.get('$Label.c.SuccessCopyClipboard'));
   },
 
   setToken: function (component, event, helper) {

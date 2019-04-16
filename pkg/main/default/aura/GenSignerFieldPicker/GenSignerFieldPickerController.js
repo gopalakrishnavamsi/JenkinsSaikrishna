@@ -16,7 +16,7 @@
 
     evt.setParams({
       data: {
-        msg: $A.get('$Label.c.success_Copy_Clipboard'),
+        msg: $A.get('$Label.c.SuccessCopyClipboard'),
         variant: 'success'
       }
     });

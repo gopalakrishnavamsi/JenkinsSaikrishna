@@ -2648,87 +2648,87 @@
 	</customLabels>
 	<customLabels>
 		<label>STEPS FOR SUCCESS</label>
-		<name>steps_for_success</name>
+		<name>StepsForSuccess</name>
 	</customLabels>
 	<customLabels>
 		<label>Please update invalid form entries and try again</label>
-		<name>invalid_Form_Msg</name>
+		<name>InvalidFormMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Do you want to save changes?</label>
-		<name>cancel_Modal_Title</name>
+		<name>CancelModalTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>You will lose changes on the current step if you don&#39;t save.</label>
-		<name>cancel_Modal_Message</name>
+		<name>CancelModalMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Don&#39;t Save</label>
-		<name>dont_Save</name>
+		<name>DontSave</name>
 	</customLabels>
 	<customLabels>
 		<label>Edit Details</label>
-		<name>edit_Modal_Title</name>
+		<name>EditModalTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>What You'll Need</label>
-		<name>what_you_will_need</name>
+		<name>WhatYouWillNeed</name>
 	</customLabels>
 	<customLabels>
 		<label>Here are a few things you'll need to complete your template configuration:</label>
-		<name>what_you_will_need_info</name>
+		<name>WhatYouWillNeedInfo</name>
 	</customLabels>
 	<customLabels>
 		<label>Microsoft Word Templates</label>
-		<name>what_you_will_need_step1_title</name>
+		<name>WhatYouWillNeedStep1Title</name>
 	</customLabels>
 	<customLabels>
 		<label>You’ll copy and paste anchor text into your files to dynamically insert Salesforce data and DocuSign fields.</label>
-		<name>what_you_will_need_step1_info</name>
+		<name>WhatYouWillNeedStep1Info</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforce Data Sources and Fields</label>
-		<name>what_you_will_need_step2_title</name>
+		<name>WhatYouWillNeedStep2Title</name>
 	</customLabels>
 	<customLabels>
 		<label>You’ll need to have at least one Salesforce data source and the fields you want added to your document.</label>
-		<name>what_you_will_need_step2_info</name>
+		<name>WhatYouWillNeedStep2Info</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Fields</label>
-		<name>what_you_will_need_step3_title</name>
+		<name>WhatYouWillNeedStep3Title</name>
 	</customLabels>
 	<customLabels>
 		<label>You can also add DocuSign fields, such as signature or date signed into your Word templates.</label>
-		<name>what_you_will_need_step3_info</name>
+		<name>WhatYouWillNeedStep3Info</name>
 	</customLabels>
 	<customLabels>
 		<label>Data Source</label>
-		<name>add_objects_step</name>
+		<name>AddObjectsStep</name>
 	</customLabels>
 	<customLabels>
 		<label>Data Fields</label>
-		<name>add_Merge_Fields_step</name>
+		<name>AddMergeFieldsStep</name>
 	</customLabels>
 	<customLabels>
 		<label>Word Template(s)</label>
-		<name>word_templates_step</name>
+		<name>WordTemplatesStep</name>
 	</customLabels>
 	<customLabels>
 		<label>Preview</label>
-		<name>preview_step</name>
+		<name>PreviewStep</name>
 	</customLabels>
 	<customLabels>
 		<label>Custom Button</label>
-		<name>publish_step</name>
+		<name>PublishStep</name>
 	</customLabels>
 	<customLabels>
 		<label>Name</label>
-		<name>name</name>
+		<name>NameLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Gen Template</label>
-		<name>template_Configuration</name>
+		<name>TemplateConfiguration</name>
 	</customLabels>
 	<customLabels>
 		<label>Saving...</label>
@@ -2736,43 +2736,43 @@
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating documents.  For example, if you choose Opportunity, users can  pull data from an Opportunity and related objects, like Account.&lt;/p&gt;</label>
-		<name>starting_Object_Guidance_1</name>
+		<name>StartingObjectGuidance1</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Need Help?&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Find out more about template configurations in the &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;DocuSign Support Center&lt;/a&gt;.&lt;/p&gt;</label>
-		<name>starting_Object_Guidance_3</name>
+		<name>StartingObjectGuidance3</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add Salesforce fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce fields allow you to dynamically populate information on your document directly from Salesforce. For example, if you selected Account as your main data source, you may want to pull Account Name or Billing Address. Be sure to copy and paste the corresponding anchor text into your Word templates. Decide formatting and conditional options in the dropdown menu.&lt;/p&gt;</label>
-		<name>merge_Fields_Guidance_1</name>
+		<name>MergeFieldsGuidance1</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add DocuSign fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;You can also have DocuSign fields, like signature, automatically prepared for recipients. Be sure to copy and paste the corresponding anchor text into your Word templates.&lt;/p&gt;</label>
-		<name>merge_Fields_Guidance_2</name>
+		<name>MergeFieldsGuidance2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For each template, you can choose a suffix option for generated documents . You can also decide if users should generate a Word document or a PDF.&lt;/p&gt;</label>
-		<name>import_templates_Guidance_1</name>
+		<name>ImportTemplatesGuidance1</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded  multiple Word templates with this configuration, you can choose if all documents should be generated every time.  By default, users can select which ones they want to generate. However, if your users need to generate all documents, then select &lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;</label>
-		<name>import_templates_Guidance_2</name>
+		<name>ImportTemplatesGuidance2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Test your templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choose data sources from Salesforce and click &lt;strong&gt;Preview&lt;/strong&gt; to generate example documents.&lt;/p&gt;</label>
-		<name>preview_guidance_1</name>
+		<name>PreviewGuidance1</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Review and update&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Check your documents in Word to confirm text placement and formatting.You can update your templates by going back to any previous step in this configuration wizard without losing your progress.&lt;/p&gt;</label>
-		<name>preview_guidance_2</name>
+		<name>PreviewGuidance2</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine your button label&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Give your button a descriptive label, such as &lt;strong&gt;Generate Sales Order.&lt;/strong&gt;&lt;/p&gt;</label>
-		<name>publish_Guidance_1</name>
+		<name>PublishGuidance1</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where  your button should appear and select to deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;. Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;</label>
-		<name>publish_Guidance_2</name>
+		<name>PublishGuidance2</name>
 	</customLabels>
 	<customLabels>
 		<label>Error message: </label>
@@ -2784,195 +2784,195 @@
 	</customLabels>
 	<customLabels>
 		<label>Select Data Source</label>
-		<name>add_Objects</name>
+		<name>AddObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>Select the Salesforce data source you want in your Word templates.</label>
-		<name>starting_Object_Msg</name>
+		<name>StartingObjectMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Main Data Source</label>
-		<name>main_data_source</name>
+		<name>MainDataSource</name>
 	</customLabels>
 	<customLabels>
 		<label>Commonly Used Objects</label>
-		<name>commonly_Used_Objects</name>
+		<name>CommonlyUsedObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>Other Objects</label>
-		<name>other_Objects</name>
+		<name>OtherObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforce Fields</label>
-		<name>salesforce_Fields</name>
+		<name>SalesforceFields</name>
 	</customLabels>
 	<customLabels>
 		<label>Select the Salesforce data fields Then copy and paste the anchor text where you want them to appear your Word templates.</label>
-		<name>salesforce_Fields_Msg</name>
+		<name>SalesforceFieldsMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Add Data Fields to Your Word Template(s)</label>
-		<name>add_Merge_Fields</name>
+		<name>AddMergeFields</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Fields</label>
-		<name>docusign_Fields</name>
+		<name>DocusignFields</name>
 	</customLabels>
 	<customLabels>
 		<label>Select DocuSign fields for each signer, then copy and paste the corresponding anchor text in the appropriate locations in your Word template(s).</label>
-		<name>docusign_Fields_Msg</name>
+		<name>DocusignFieldsMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Signer</label>
-		<name>signerlabel</name>
+		<name>SignerText</name>
 	</customLabels>
 	<customLabels>
 		<label>Field</label>
-		<name>field</name>
+		<name>FieldLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>Anchor Text</label>
-		<name>anchor_Text</name>
+		<name>AnchorText</name>
 	</customLabels>
 	<customLabels>
 		<label>Add Signer</label>
-		<name>add_Signer</name>
+		<name>AddSigner</name>
 	</customLabels>
 	<customLabels>
 		<label>Data Field Options</label>
-		<name>merge_field_Options</name>
+		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
 		<label>Date Format</label>
-		<name>date_Format</name>
+		<name>DateFormat</name>
 	</customLabels>
 	<customLabels>
 		<label>Date Preview</label>
-		<name>date_Preview</name>
+		<name>DatePreview</name>
 	</customLabels>
 	<customLabels>
 		<label>Locale default</label>
-		<name>locale_Default</name>
+		<name>LocaleDefault</name>
 	</customLabels>
 	<customLabels>
 		<label>Currency Format</label>
-		<name>currency_Format</name>
+		<name>CurrencyFormat</name>
 	</customLabels>
 	<customLabels>
 		<label>Display as ISO code</label>
-		<name>display_As_ISO</name>
+		<name>DisplayAsISO</name>
 	</customLabels>
 	<customLabels>
 		<label>Display as ISO code (no decimals)</label>
-		<name>display_As_ISO_No_Decimals</name>
+		<name>DisplayAsISONoDecimals</name>
 	</customLabels>
 	<customLabels>
 		<label>Display as symbol</label>
-		<name>display_As_Symbol</name>
+		<name>DisplayAsSymbol</name>
 	</customLabels>
 	<customLabels>
 		<label>Display as symbol (no decimals)</label>
-		<name>display_Symbol_No_Decimals</name>
+		<name>DisplaySymbolNoDecimals</name>
 	</customLabels>
 	<customLabels>
 		<label>Display Options</label>
-		<name>displays_Options</name>
+		<name>DisplaysOptions</name>
 	</customLabels>
 	<customLabels>
 		<label>Include the additional content if the field value</label>
-		<name>displays_Options_Msg</name>
+		<name>DisplaysOptionsMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Currency Preview</label>
-		<name>currency_Preview</name>
+		<name>CurrencyPreview</name>
 	</customLabels>
 	<customLabels>
 		<label>matches</label>
-		<name>matches</name>
+		<name>MatchesLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>does not match</label>
-		<name>does_Not_Match</name>
+		<name>DoesNotMatch</name>
 	</customLabels>
 	<customLabels>
 		<label>Example: California</label>
-		<name>example_California</name>
+		<name>ExampleCalifornia</name>
 	</customLabels>
 	<customLabels>
 		<label>Always display this field in the document</label>
-		<name>always_Display_This_Field</name>
+		<name>AlwaysDisplayThisField</name>
 	</customLabels>
 	<customLabels>
 		<label>Include other content if the conditions set for this field are met</label>
-		<name>include_Other_Content</name>
+		<name>IncludeOtherContent</name>
+	</customLabels>
+	<customLabels>
+		<label>Copy</label>
+		<name>Copy</name>
 	</customLabels>
 	<customLabels>
 		<label>Signature</label>
-		<name>signature</name>
+		<name>Signature</name>
 	</customLabels>
 	<customLabels>
 		<label>Initial</label>
-		<name>initial</name>
+		<name>Initial</name>
 	</customLabels>
 	<customLabels>
 		<label>Optional Initial</label>
-		<name>optional_Initial</name>
-	</customLabels>
-	<customLabels>
-		<label>Date Signed</label>
-		<name>date_Signed</name>
+		<name>OptionalInitial</name>
 	</customLabels>
 	<customLabels>
 		<label>Successfully copied to clipboard!</label>
-		<name>success_Copy_Clipboard</name>
+		<name>SuccessCopyClipboard</name>
 	</customLabels>
 	<customLabels>
 		<label>Retrieving fields...</label>
-		<name>retrieving_Fields</name>
+		<name>RetrievingFields</name>
 	</customLabels>
 	<customLabels>
 		<label>Main Data Source</label>
-		<name>starting_Object</name>
+		<name>StartingObject</name>
 	</customLabels>
 	<customLabels>
 		<label>--Select an Option--</label>
-		<name>select_An_Option</name>
+		<name>SelectAnOption</name>
 	</customLabels>
 	<customLabels>
 		<label>Options</label>
-		<name>options</name>
+		<name>Options</name>
 	</customLabels>
 	<customLabels>
 		<label>already exists as a merge field.</label>
-		<name>fieldPicker_field_Exists</name>
+		<name>FieldPickerFieldExists</name>
 	</customLabels>
 	<customLabels>
 		<label>Display this field&#39;s value as content in the document</label>
-		<name>merge_Field_Display_Current</name>
+		<name>MergeFieldDisplayCurrent</name>
 	</customLabels>
 	<customLabels>
 		<label>Use this field&#39;s value to conditionally include other document content</label>
-		<name>merge_Field_Display_Conditional</name>
+		<name>MergeFieldDisplayConditional</name>
 	</customLabels>
 	<customLabels>
 		<label>Child Relations</label>
-		<name>child_Relations</name>
+		<name>ChildRelations</name>
 	</customLabels>
 	<customLabels>
 		<label>Upload Your Word Templates</label>
-		<name>document_Templates</name>
+		<name>DocumentTemplates</name>
 	</customLabels>
 	<customLabels>
 		<label>Once your Word templates have your anchor text, you can upload them.</label>
-		<name>import_Templates_Description</name>
+		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
 		<label>Bulk Document Creation</label>
-		<name>bulk_document_creation</name>
+		<name>BulkDocumentCreation</name>
 	</customLabels>
 	<customLabels>
 		<label>Generate all documents in this configuration with one click</label>
-		<name>bulk_document_creation_checkboxinfo</name>
+		<name>BulkDocumentCreationCheckboxInfo</name>
 	</customLabels>
 	<customLabels>
 		<label>Uploading</label>
@@ -2980,67 +2980,67 @@
 	</customLabels>
 	<customLabels>
 		<label>File was successfully deleted.</label>
-		<name>file_Upload_Success_Delete_Msg</name>
+		<name>FileUploadSuccessDeleteMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>File was successfully uploaded.</label>
-		<name>file_Upload_Success_Msg</name>
+		<name>FileUploadSuccessMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>File failed to delete. Try again.</label>
-		<name>file_Upload_Fail_Delete_Msg</name>
+		<name>FileUploadFailDeleteMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Upload failed. Please try again.</label>
-		<name>file_Upload_Fail_Msg</name>
+		<name>FileUploadFailMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Removing</label>
-		<name>removing</name>
+		<name>Removing</name>
 	</customLabels>
 	<customLabels>
 		<label>Generated File Name</label>
-		<name>generated_File_Name</name>
+		<name>GeneratedFileName</name>
 	</customLabels>
 	<customLabels>
 		<label>File Format</label>
-		<name>file_Format</name>
+		<name>FileFormat</name>
 	</customLabels>
 	<customLabels>
 		<label>File Suffix</label>
-		<name>file_Suffix</name>
+		<name>FileSuffix</name>
 	</customLabels>
 	<customLabels>
 		<label>Main Data Source Name</label>
-		<name>starting_Object_Name</name>
+		<name>StartingObjectName</name>
 	</customLabels>
 	<customLabels>
 		<label>Date</label>
-		<name>date</name>
+		<name>Date</name>
 	</customLabels>
 	<customLabels>
 		<label>Main Data Source Name and Date</label>
-		<name>starting_Object_Name_And_Date</name>
+		<name>StartingObjectNameAndDate</name>
 	</customLabels>
 	<customLabels>
 		<label>Microsoft Word</label>
-		<name>microsoft_Word</name>
+		<name>MicrosoftWord</name>
 	</customLabels>
 	<customLabels>
 		<label>PDF</label>
-		<name>pdf</name>
+		<name>Pdf</name>
 	</customLabels>
 	<customLabels>
 		<label>Attachment</label>
-		<name>attachment</name>
+		<name>Attachment</name>
 	</customLabels>
 	<customLabels>
 		<label>This supports file sizes up to 3mb only. If you want to upload larger files please do it through the files related list of DocuSign Gen Templates.</label>
-		<name>file_too_large</name>
+		<name>FileTooLarge</name>
 	</customLabels>
 	<customLabels>
 		<label>Preview Your Word Templates</label>
-		<name>preview</name>
+		<name>Preview</name>
 	</customLabels>
 	<customLabels>
 		<label>Test your templates with real Salesforce data.</label>
@@ -3048,95 +3048,83 @@
 	</customLabels>
 	<customLabels>
 		<label>Test your template(s) with real data from Salesforce.</label>
-		<name>test_Your_Template_Msg</name>
+		<name>TestYourTemplateMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>It’s taking a little while to generate your file(s). If you’d prefer to check back later, you’ll find the files under the Files tab in Salesforce.</label>
-		<name>generator_Come_Back_Msg</name>
+		<name>GeneratorComeBackMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Taking too long to generate. Please check this record at a later time to view the generated file(s).</label>
-		<name>generator_Too_Long_Msg</name>
+		<name>GeneratorTooLongMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Select an option</label>
-		<name>select_An_Option_No_Dash</name>
+		<name>SelectAnOptionNoDash</name>
 	</customLabels>
 	<customLabels>
 		<label>Invalid input</label>
-		<name>invalid_Input</name>
+		<name>InvalidInput</name>
 	</customLabels>
 	<customLabels>
 		<label>Templates</label>
-		<name>templates</name>
+		<name>Templates</name>
 	</customLabels>
 	<customLabels>
 		<label>Generate</label>
-		<name>generate</name>
+		<name>Generate</name>
 	</customLabels>
 	<customLabels>
 		<label>Unable to generate the following files:</label>
-		<name>generate_File_Fail_Msg</name>
+		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Sorry, there are no document templates for this configuration.</label>
-		<name>no_Doc_For_Template_Msg</name>
+		<name>NoDocForTemplateMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Failed to initiate document generation. Please try again later or contact your administrator for assistance.</label>
-		<name>failed_Initiate_Doc_Generation</name>
+		<name>FailedInitiateDocGeneration</name>
 	</customLabels>
 	<customLabels>
 		<label>There were some problems with your document generation</label>
-		<name>generator_Banner_Error_Msg</name>
+		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Successfully generated your document</label>
-		<name>generator_Banner_Success_Msg</name>
+		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Unable to check completion of document generation</label>
-		<name>generator_Completion_Error_Msg</name>
+		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Publishing...</label>
-		<name>publishing</name>
+		<name>Publishing</name>
 	</customLabels>
 	<customLabels>
 		<label>Create Custom Button</label>
-		<name>publish_customButtons</name>
+		<name>PublishCustomButtons</name>
 	</customLabels>
 	<customLabels>
 		<label>Let users generate documents from this template configuration with a custom button. You can also choose to place the button on specific page layouts for your main data source. If you add a custom button and make changes to this template configuration, you don’t need to add the button again.</label>
-		<name>publish_Msg</name>
+		<name>PublishMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Button Label</label>
-		<name>button_Label</name>
-	</customLabels>
-	<customLabels>
-		<label>Button Location</label>
-		<name>button_Location</name>
+		<name>ButtonLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>Page Layouts</label>
-		<name>page_Layouts</name>
+		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
 		<label>Button successfully created!</label>
-		<name>successfully_Published</name>
-	</customLabels>
-	<customLabels>
-		<label>Deploy as a Detail Page Button (Salesforce Classic)</label>
-		<name>deploy_Classic_Msg</name>
-	</customLabels>
-	<customLabels>
-		<label>Deploy as a Quick Action (Lightning Experience)</label>
-		<name>deploy_Lightning_Msg</name>
+		<name>SuccessfullyPublished</name>
 	</customLabels>
 	<customLabels>
 		<label>drafts</label>
-		<name>drafts</name>
+		<name>Drafts</name>
 	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>

@@ -1,7 +1,7 @@
 ({
   init: function (component) {
     var steps = component.get('v.steps');
-    steps = [$A.get('$Label.c.add_Objects_step'), $A.get('$Label.c.add_Merge_Fields_step'), $A.get('$Label.c.word_templates_step'), $A.get('$Label.c.preview_step'), $A.get('$Label.c.publish_step')];
+    steps = [$A.get('$Label.c.AddObjectsStep'), $A.get('$Label.c.AddMergeFieldsStep'), $A.get('$Label.c.WordTemplatesStep'), $A.get('$Label.c.PreviewStep'), $A.get('$Label.c.PublishStep')];
     component.set('v.steps', steps);
 
     var templateId = component.get('v.templateId');

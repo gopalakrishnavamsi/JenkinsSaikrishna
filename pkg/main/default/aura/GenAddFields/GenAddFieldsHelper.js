@@ -15,11 +15,11 @@
   },
   setConditionalRadio: function (component) {
     var mergeFieldDisplayOptions = [{
-      'label': $A.get('$Label.c.always_Display_This_Field'),
+      'label': $A.get('$Label.c.AlwaysDisplayThisField'),
       'value': false
     },
       {
-        'label': $A.get('$Label.c.include_Other_Content'),
+        'label': $A.get('$Label.c.IncludeOtherContent'),
         'value': true
       }
     ];

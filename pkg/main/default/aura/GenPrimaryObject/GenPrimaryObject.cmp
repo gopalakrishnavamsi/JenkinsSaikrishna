@@ -8,21 +8,21 @@
     <aura:method name="validate" action="{!c.validate}"/>
 
     <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
-        <strong>{!$Label.c.add_Objects}</strong>
+        <strong>{!$Label.c.AddObjects}</strong>
     </h3>
     <div class="slds-m-bottom_medium slds-text-longform">
-        <p>{!$Label.c.starting_Object_Msg}</p>
+        <p>{!$Label.c.StartingObjectMsg}</p>
     </div>
 
-    <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_xx-small">{!$Label.c.main_data_source}</h3>
-    <lightning:select label="{!$Label.c.main_data_source}" class="ds-no-label"
+    <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_xx-small">{!$Label.c.MainDataSource}</h3>
+    <lightning:select label="{!$Label.c.MainDataSource}" class="ds-no-label"
                       value="{!v.config.objectMappings[0].apiName}" onchange="{!c.selectedPrimary}">
-        <optgroup label="{!$Label.c.commonly_Used_Objects}">
+        <optgroup label="{!$Label.c.CommonlyUsedObjects}">
             <aura:iteration items="{!v.commonObjects}" var="obj">
                 <option value="{!obj.name}">{!obj.label}</option>
             </aura:iteration>
         </optgroup>
-        <optgroup label="{!$Label.c.other_Objects}">
+        <optgroup label="{!$Label.c.OtherObjects}">
             <aura:iteration items="{!v.availableObjects}" var="obj">
                 <option value="{!obj.name}">{!obj.label}</option>
             </aura:iteration>
@@ -55,15 +55,15 @@
                 <div class="slds-col">
                     <div class="slds-grid slds-gutters_xx-small">
                         <div class="slds-col slds-size_1-of-2">
-                            <lightning:select name="{!index}" label="{!$Label.c.starting_Object}" value="{!obj.apiName}" onchange="{!c.selectedAdditionalObject}" class="ds-no-label">
-                                <optgroup label="{!$Label.c.commonly_Used_Objects}">
+                            <lightning:select name="{!index}" label="{!$Label.c.StartingObject}" value="{!obj.apiName}" onchange="{!c.selectedAdditionalObject}" class="ds-no-label">
+                                <optgroup label="{!$Label.c.CommonlyUsedObjects}">
                                     <option value="Account">{!$Label.c.account}</option>
                                     <option value="Case">{!$Label.c.case}</option>
                                     <option value="Contact">{!$Label.c.contact}</option>
                                     <option value="Lead">{!$Label.c.lead}</option>
                                     <option value="Opportunity">{!$Label.c.opportunity}</option>
                                 </optgroup>
-                                <optgroup label="{!$Label.c.other_Objects}">
+                                <optgroup label="{!$Label.c.OtherObjects}">
                                     <aura:iteration items="{!v.availableObjects}" var="availableObject">
                                         <option value="{!availableObject.apiName}">{!availableObject.label}</option>
                                     </aura:iteration>

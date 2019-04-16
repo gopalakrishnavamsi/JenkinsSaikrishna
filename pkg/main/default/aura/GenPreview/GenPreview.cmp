@@ -8,7 +8,7 @@
     <aura:method name="validate" action="{!c.validate}"/>
 
     <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
-        <strong>{!$Label.c.preview}</strong>
+        <strong>{!$Label.c.Preview}</strong>
     </h3>
     <div class="slds-m-bottom_medium slds-text-longform">
         <p>{!$Label.c.PreviewTemplatesInfo}</p>
@@ -17,7 +17,7 @@
             class="{!'ds-try-template-config_container slds-is-relative' + if(v.showTakingTooLongMessage, ' ds-try-template-config_container-long-gen')}">
         <c:Generator templateId="{!v.config.Id}" config="{#v.config}" isPreview="{!true}" templateFiles="{#v.files}"
                      showGenerateButton="{!true}" showTakingTooLongMessage="{!v.showTakingTooLongMessage}">
-            <p class="slds-m-bottom_small">{!$Label.c.test_Your_Template_Msg}</p>
+            <p class="slds-m-bottom_small">{!$Label.c.TestYourTemplateMsg}</p>
         </c:Generator>
     </div>
 </aura:component>

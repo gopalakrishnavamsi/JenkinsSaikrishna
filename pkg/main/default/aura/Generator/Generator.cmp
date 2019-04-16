@@ -56,9 +56,9 @@
                     <aura:if isTrue="{!v.showTakingTooLongMessage}">
                         <div class="ds-long-gen slds-is-absolute slds-text-align_center">
                             <aura:if isTrue="{!v.isPreview}">
-                                {!$Label.c.generator_Come_Back_Msg}
+                                {!$Label.c.GeneratorComeBackMsg}
                                 <aura:set attribute="else">
-									{!$Label.c.generator_Too_Long_Msg}
+									{!$Label.c.GeneratorTooLongMsg}
 								</aura:set>
                             </aura:if>
                         </div>
@@ -78,9 +78,9 @@
                             <c:strike_lookup aura:id="recordLookup" value="{!v.recordId}"
                                              label="{!v.config.objectMappings[0].label}"
                                              object="{!v.config.objectMappings[0].apiName}" searchField="Name"
-                                             placeholder="{!$Label.c.select_An_Option_No_Dash}" order="Name" limit="5"
+                                             placeholder="{!$Label.c.SelectAnOptionNoDash}" order="Name" limit="5"
                                              loadingMessage="{!$Label.c.Loading}" required="true"
-                                             errorMessage="{!$Label.c.invalid_Input}" isDocuSignGenPreview="true"/>
+                                             errorMessage="{!$Label.c.InvalidInput}" isDocuSignGenPreview="true"/>
                         </div>
 
                         <aura:iteration items="{!v.lookupObjs}" start="{!1}" var="lookup" indexVar="index">
@@ -88,10 +88,10 @@
                                 <!-- Iterate Objects and Signers Here -->
                                 <c:strike_lookup aura:id="recordLookup" value="{!lookup.value}" label="{!lookup.label}"
                                                  object="{!lookup.apiName}" searchField="Name"
-                                                 placeholder="{!$Label.c.select_An_Option_No_Dash}" order="Name"
+                                                 placeholder="{!$Label.c.SelectAnOptionNoDash}" order="Name"
                                                  limit="5"
-                                                 loadingMessage="{!$Label.c.loading}" required="true"
-                                                 errorMessage="{!$Label.c.invalid_Input}" isDocuSignGenPreview="true"/>
+                                                 loadingMessage="{!$Label.c.Loading}" required="true"
+                                                 errorMessage="{!$Label.c.InvalidInput}" isDocuSignGenPreview="true"/>
                                 <!-- Iterate Objects and Signers Here -->
                             </div>
                         </aura:iteration>
@@ -101,7 +101,7 @@
                             <!-- Template Selection -->
                             <div class="slds-text-align_left slds-form_stacked">
                                 <div class="slds-form-element">
-                                    <div class="slds-form-element__label">{!$Label.c.templates}</div>
+                                    <div class="slds-form-element__label">{!$Label.c.Templates}</div>
                                     <!-- Template -->
                                     <aura:iteration items="{!v.templateFiles}" var="file">
                                         <div class="slds-grid slds-gutters_direct-xx-small slds-m-bottom_small">
@@ -126,7 +126,7 @@
 
                     <aura:if isTrue="{!v.showGenerateButton}">
                         <div class="{!'slds-m-top_medium' + if(v.isClassic, ' slds-text-align_right')}">
-                            <lightning:button label="{!if(v.isPreview, $Label.c.preview_step, $Label.c.generate)}"
+                            <lightning:button label="{!if(v.isPreview, $Label.c.PreviewStep, $Label.c.Generate)}"
                                               onclick="{!c.generateDocs}" disabled="{!v.disableGenerateButton}"/>
                         </div>
                     </aura:if>
@@ -164,7 +164,7 @@
                             <div class="slds-m-top_small slds-text-align_left">
                                 <lightning:icon class="ds-icon-fix slds-m-right_xx-small" iconName="utility:warning"
                                                 variant="warning" size="x-small"/>
-                                {!$Label.c.generate_File_Fail_Msg}
+                                {!$Label.c.GenerateFileFailMsg}
                                 <ul class="slds-list_dotted">
                                     <aura:iteration items="{!v.failedFiles}" var="failedFile">
                                         <li class="slds-item slds-m-top_xx-small">

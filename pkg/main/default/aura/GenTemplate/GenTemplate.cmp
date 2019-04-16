@@ -48,7 +48,7 @@
                         <div class="slds-media__body">
                             <div class="slds-page-header__name">
                                 <div class="slds-page-header__name-title">
-                                    <span>{!$Label.c.template_Configuration}</span>
+                                    <span>{!$Label.c.TemplateConfiguration}</span>
                                     <h1 class="slds-page-header__title slds-truncate" title="{!v.config.name}">
                                         <strong>{!v.config.name}</strong>
                                         <lightning:buttonIcon class="slds-m-left_x-small" iconName="utility:edit"
@@ -154,27 +154,27 @@
                         </div>
                         <!-- Guidance -->
                         <div class="slds-path__guidance slds-size_2-of-5 slds-border_left">
-                            <h2 class="slds-path__coach-title">{!$Label.c.steps_for_success}</h2>
+                            <h2 class="slds-path__coach-title">{!$Label.c.StepsForSuccess}</h2>
                             <div class="slds-text-longform slds-path__guidance-content">
                                 <aura:if isTrue="{!v.currentStep == 0}">
                                     <lightning:formattedRichText
-                                            value="{!$Label.c.starting_Object_Guidance_1 + $Label.c.starting_Object_Guidance_3}"/>
+                                            value="{!$Label.c.StartingObjectGuidance1 + $Label.c.StartingObjectGuidance3}"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.currentStep == 1}">
                                     <lightning:formattedRichText
-                                            value="{!$Label.c.merge_Fields_Guidance_1 + $Label.c.merge_Fields_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                            value="{!$Label.c.MergeFieldsGuidance1 + $Label.c.MergeFieldsGuidance2 + $Label.c.StartingObjectGuidance3}"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.currentStep == 2}">
                                     <lightning:formattedRichText
-                                            value="{!$Label.c.import_Templates_Guidance_1 + $Label.c.import_Templates_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                            value="{!$Label.c.ImportTemplatesGuidance1 + $Label.c.ImportTemplatesGuidance2 + $Label.c.StartingObjectGuidance3}"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.currentStep == 3}">
                                     <lightning:formattedRichText
-                                            value="{!$Label.c.preview_Guidance_1 + $Label.c.preview_Guidance_2 + $Label.c.starting_Object_Guidance_3 }"/>
+                                            value="{!$Label.c.PreviewGuidance1 + $Label.c.PreviewGuidance2 + $Label.c.StartingObjectGuidance3 }"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.currentStep == 4}">
                                     <lightning:formattedRichText
-                                            value="{!$Label.c.publish_Guidance_1 + $Label.c.publish_Guidance_2 + $Label.c.starting_Object_Guidance_3}"/>
+                                            value="{!$Label.c.PublishGuidance1 + $Label.c.PublishGuidance2 + $Label.c.StartingObjectGuidance3}"/>
                                 </aura:if>
                             </div>
                         </div>
@@ -193,10 +193,10 @@
         <div class="slds-p-horizontal_xx-large slds-p-bottom_x-small">
             <div class="slds-text-align_center">
                 <div class="slds-text-heading_medium slds-p-around_x-small">
-                    <b>{!$Label.c.what_you_will_need}</b>
+                    <b>{!$Label.c.WhatYouWillNeed}</b>
                 </div>
                 <div class="slds-text-body_regular slds-p-bottom_x-small">
-                    {!$Label.c.what_you_will_need_info}
+                    {!$Label.c.WhatYouWillNeedInfo}
                 </div>
             </div>
             <ul class="slds-p-top_x-small">
@@ -208,11 +208,11 @@
                             </div>
                             <div class="slds-media__body">
                                 <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.what_you_will_need_step1_title}</b>
+                                    <b>{!$Label.c.WhatYouWillNeedStep1Title}</b>
                                 </div>
                                 <p>
                                 <div class="slds-text-body_regular">
-                                        {!$Label.c.what_you_will_need_step1_info}
+                                        {!$Label.c.WhatYouWillNeedStep1Info}
                                     </div>
                                 </p>
                             </div>
@@ -228,11 +228,11 @@
                             </div>
                             <div class="slds-media__body">
                                 <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.what_you_will_need_step2_title}</b>
+                                    <b>{!$Label.c.WhatYouWillNeedStep2Title}</b>
                                 </div>
                                 <p>
                                 <div class="slds-text-body_regular">
-                                        {!$Label.c.what_you_will_need_step2_info}
+                                        {!$Label.c.WhatYouWillNeedStep2Info}
                                     </div>
                                 </p>
                             </div>
@@ -248,11 +248,11 @@
                             </div>
                             <div class="slds-media__body">
                                 <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.what_you_will_need_step3_title}</b>
+                                    <b>{!$Label.c.WhatYouWillNeedStep3Title}</b>
                                 </div>
                                 <p>
                                 <div class="slds-text-body_regular">
-                                        {!$Label.c.what_you_will_need_step3_info}
+                                        {!$Label.c.WhatYouWillNeedStep3Info}
                                     </div>
                                 </p>
                             </div>
@@ -264,7 +264,7 @@
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
                 <div class="slds-col">
-                    <lightning:input type="checkbox" label="{!$Label.c.dontshowThisAgain}"
+                    <lightning:input type="checkbox" label="{!$Label.c.DontShowThisAgain}"
                                      aura:id="dontShowAgainCheckBox"
                                      onchange="{!c.updateWhatYouWillNeedModalSettings}">
                     </lightning:input>
@@ -279,21 +279,21 @@
     <!-- What You Will Need Modal -->
 
     <!-- Edit Modal -->
-    <c:strike_modal aura:id="edit-modal" title="{!$Label.c.edit_Modal_Title}" primaryButtonLabel="{!$Label.c.Save}"
+    <c:strike_modal aura:id="edit-modal" title="{!$Label.c.EditModalTitle}" primaryButtonLabel="{!$Label.c.Save}"
                     strike_evt_modalPrimaryButtonClicked="{!c.saveDetails}">
         <div class="slds-form_stacked">
-            <lightning:input label="{!$Label.c.name}" aura:id="record-name-input" maxlength="80"/>
+            <lightning:input label="{!$Label.c.NameLabel}" aura:id="record-name-input" maxlength="80"/>
         </div>
     </c:strike_modal>
     <!-- /Edit Modal -->
 
     <!-- Cancel Modal -->
-    <c:strike_modal aura:id="exitModal" title="{!$Label.c.cancel_Modal_Title}">
+    <c:strike_modal aura:id="exitModal" title="{!$Label.c.CancelModalTitle}">
         <p class="slds-text-align_center">
-            {!$Label.c.cancel_Modal_Message}
+            {!$Label.c.CancelModalMessage}
         </p>
         <aura:set attribute="footerButtons">
-            <lightning:button label="{!$Label.c.dont_Save}" onclick="{!c.goToRecord}"/>
+            <lightning:button label="{!$Label.c.DontSave}" onclick="{!c.goToRecord}"/>
             <lightning:button label="{!$Label.c.Save}" variant="brand" onclick="{!c.saveAndNavigate}"/>
         </aura:set>
     </c:strike_modal>

@@ -30,20 +30,20 @@
         <aura:if isTrue="{!v.isEdit}">
             <div class="slds-grid slds-gutters_x-small slds-m-top_small">
                 <div class="slds-col">
-                    <lightning:input aura:id='generatedName' required="true" label="{!$Label.c.generated_File_Name}"
+                    <lightning:input aura:id='generatedName' required="true" label="{!$Label.c.GeneratedFileName}"
                                      value="{!v.file.generatedName}"/>
                 </div>
                 <div class="slds-col">
-                    <lightning:select label="{!$Label.c.file_Suffix}" value="{!v.file.generatedSuffix}">
-                        <option value="name">{!$Label.c.starting_Object_Name}</option>
-                        <option value="date">{!$Label.c.date}</option>
-                        <option value="name_date">{!$Label.c.starting_Object_Name_And_Date}</option>
+                    <lightning:select label="{!$Label.c.FileSuffix}" value="{!v.file.generatedSuffix}">
+                        <option value="name">{!$Label.c.StartingObjectName}</option>
+                        <option value="date">{!$Label.c.Date}</option>
+                        <option value="name_date">{!$Label.c.StartingObjectNameAndDate}</option>
                     </lightning:select>
                 </div>
                 <div class="slds-col">
-                    <lightning:select label="{!$Label.c.file_Format}" value="{!v.file.generatedFormat}">
-                        <option value="Word">{!$Label.c.microsoft_Word}</option>
-                        <option value="Pdf">{!$Label.c.pdf}</option>
+                    <lightning:select label="{!$Label.c.FileFormat}" value="{!v.file.generatedFormat}">
+                        <option value="Word">{!$Label.c.MicrosoftWord}</option>
+                        <option value="Pdf">{!$Label.c.Pdf}</option>
                     </lightning:select>
                 </div>
             </div>

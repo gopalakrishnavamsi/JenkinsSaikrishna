@@ -27,22 +27,23 @@
                 <img src="{!$Resource.loading}" alt="Loading"/>
             </div>
         </div>
-        <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak">{!$Label.c.publishing}</div>
+        <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak">{!$Label.c.Publishing}</div>
     </div>
     <!-- /Publishing Spinner -->
 
     <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
-        <strong>{!$Label.c.publish_customButtons}</strong>
+        <strong>{!$Label.c.PublishCustomButtons}</strong>
     </h3>
     <div class="slds-m-bottom_medium slds-text-longform">
-        <p>{!$Label.c.publish_Msg}</p>
+        <p>{!$Label.c.PublishMsg}</p>
     </div>
 
-    <lightning:input aura:id="buttonLabel" type="text"  label="{!$Label.c.button_Label}"
-                     value="{!$Label.c.generate + ' '+v.config.name}"  maxlength="40" onchange="{!c.checkValidState}" readonly="true"/>
+    <lightning:input aura:id="buttonLabel" type="text" label="{!$Label.c.ButtonLabel}"
+                     value="{!$Label.c.Generate + ' '+v.config.name}" maxlength="40" onchange="{!c.checkValidState}"
+                     readonly="true"/>
 
     <div class="slds-m-top_medium slds-clearfix">
-        <p class="slds-form-element__legend slds-form-element__label">{!$Label.c.page_Layouts}</p>
+        <p class="slds-form-element__legend slds-form-element__label">{!$Label.c.PageLayouts}</p>
     </div>
     <aura:iteration items="{!v.layouts}" var="layout">
         <!-- Page Layout -->
@@ -59,7 +60,7 @@
     </aura:iteration>
 
     <aura:if isTrue="{!not(v.config.Sample__c)}">
-        <lightning:button label="{!$Label.c.publish_customButtons}" class="slds-m-top_xx-small"
+        <lightning:button label="{!$Label.c.PublishCustomButtons}" class="slds-m-top_xx-small"
                           onclick="{!c.publish}" disabled="{!v.invalidState}"/>
     </aura:if>
 </aura:component>
