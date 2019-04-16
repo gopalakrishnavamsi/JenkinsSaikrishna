@@ -190,6 +190,77 @@ private class strike_lookupControllerTest {
 		results = (Map<String, Object>)response.get('results');
 		System.assertEquals(false, response.get('isSuccess'));
 	}
+
+	@IsTest
+	static void test_getRecordsGenPreview_positive_searchByRecordId() {
+		Opportunity testOpportunity = new Opportunity(Name = 'TestOpportunity', CloseDate = date.today(), StageName = 'Prospecting');
+		insert testOpportunity;
+		System.assertNotEquals(null, testOpportunity);
+		List<Opportunity> testOpportunityList = [SELECT ID, Name FROM Opportunity LIMIT 1];
+		System.assertEquals(1, testOpportunityList.size());
+		System.assertEquals('TestOpportunity', testOpportunityList[0].Name);
+		System.assertNotEquals(null, testOpportunityList[0].Id);
+		String jsonString = '{"limit":"5","object":"Opportunity","order":"Name","searchField":"Name","recordId":"' + testOpportunityList[0].Id + '"}';
+
+		Test.startTest();
+		String responseString = strike_lookupController.getRecordsGenPreview(jsonString);
+		Test.stopTest();
+
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
+
+		System.assertEquals(1, data.size());
+
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
+
+		System.assertEquals(testOpportunityList[0].Id, record.get('value'));
+		System.assertEquals(testOpportunityList[0].Name, record.get('label'));
+		System.assertEquals(true, response.get('isSuccess'));
+
+	}
+
+	@IsTest
+	static void test_getRecordsGenPreview_positive_searchBySearchTerm() {
+		Opportunity testOpportunity = new Opportunity(Name = 'TestOpportunity', CloseDate = date.today(), StageName = 'Prospecting');
+		insert testOpportunity;
+		System.assertNotEquals(null, testOpportunity);
+		List<Opportunity> testOpportunityList = [SELECT ID, Name FROM Opportunity LIMIT 1];
+		System.assertEquals(1, testOpportunityList.size());
+		System.assertEquals('TestOpportunity', testOpportunityList[0].Name);
+		System.assertNotEquals(null, testOpportunityList[0].Id);
+		String jsonString = '{"limit":"5","object":"Opportunity","order":"Name","searchField":"Name","searchTerm":"Test"}';
+
+		Test.startTest();
+		String responseString = strike_lookupController.getRecordsGenPreview(jsonString);
+		Test.stopTest();
+
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		Map<String, Object> results = (Map<String, Object>)response.get('results');
+		List<Object> data = (List<Object>)results.get('data');
+
+		System.assertEquals(1, data.size());
+
+		Map<String, Object> record = (Map<String, Object>)data.get(0);
+
+		System.assertEquals(testOpportunityList[0].Id, record.get('value'));
+		System.assertEquals(testOpportunityList[0].Name, record.get('label'));
+		System.assertEquals(true, response.get('isSuccess'));
+	}
+
+	@IsTest
+	static void test_getRecordsGenPreview_negative() {
+		String wrongJsonString = 'oops';
+
+		Test.startTest();
+		String responseString = strike_lookupController.getRecordsGenPreview(wrongJsonString);
+		Test.stopTest();
+
+		Map<String, Object> response = (Map<String, Object>)JSON.deserializeUntyped(responseString);
+		System.assertEquals(false, response.get('isSuccess'));
+		System.assertNotEquals(null, response.get('errMsg'));
+
+	}
 }
 /* --------------------------------------------------
 Copyright 2017 Appiphony, LLC

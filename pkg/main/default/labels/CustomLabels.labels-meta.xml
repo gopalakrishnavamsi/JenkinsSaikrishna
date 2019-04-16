@@ -4839,9 +4839,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DeleteAgreementMessage</shortDescription>
-		<value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous
-			versions, or ability to view redlines.
-		</value>
+		<value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</value>
 	</labels>
 	<labels>
 		<fullName>DeleteButtonLabel</fullName>
@@ -4885,4 +4883,861 @@
 		<shortDescription>Invalid search object</shortDescription>
 		<value>Invalid search object: {0}</value>
 	</labels>
+	<!-- new labels for Gen -->
+	<labels>
+		<fullName>Exit</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Exit Label</shortDescription>
+		<value>Exit</value>
+	</labels>
+	<labels>
+		<fullName>StepsForSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StepsForSuccess</shortDescription>
+		<value>STEPS FOR SUCCESS</value>
+	</labels>
+	<labels>
+		<fullName>InvalidFormMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InvalidFormMsg</shortDescription>
+		<value>Please update invalid form entries and try again</value>
+	</labels>
+	<labels>
+		<fullName>CancelModalTitle</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CancelModalTitle</shortDescription>
+		<value>Do you want to save changes?</value>
+	</labels>
+	<labels>
+		<fullName>CancelModalMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CancelModalMessage</shortDescription>
+		<value>You will lose changes on the current step if you don&#39;t save.</value>
+	</labels>
+	<labels>
+		<fullName>DontSave</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DontSave</shortDescription>
+		<value>Don&#39;t Save</value>
+	</labels>
+	<labels>
+		<fullName>EditModalTitle</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditModalTitle</shortDescription>
+		<value>Edit Details</value>
+	</labels>
+	<labels>
+		<fullName>DontShowThisAgain</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DontShowThisAgain</shortDescription>
+		<value>Don't show this again</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeed</shortDescription>
+		<value>What You'll Need</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedInfo</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedInfo</shortDescription>
+		<value>Here are a few things you'll need to complete your template configuration:</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep1Title</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep1Title</shortDescription>
+		<value>Microsoft Word Templates</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep1Info</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep1Info</shortDescription>
+		<value>You’ll copy and paste anchor text into your files to dynamically insert Salesforce data and DocuSign fields.</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep2Title</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep2Title</shortDescription>
+		<value>Salesforce Data Sources and Fields</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep2Info</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep2Info</shortDescription>
+		<value>You’ll need to have at least one Salesforce data source and the fields you want added to your document.</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep3Title</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep3Title</shortDescription>
+		<value>DocuSign Fields</value>
+	</labels>
+	<labels>
+		<fullName>WhatYouWillNeedStep3Info</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WhatYouWillNeedStep3Info</shortDescription>
+		<value>You can also add DocuSign fields, such as signature or date signed into your Word templates.</value>
+	</labels>
+	<labels>
+		<fullName>AddObjectsStep</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddObjectsStep</shortDescription>
+		<value>Data Source</value>
+	</labels>
+	<labels>
+		<fullName>AddMergeFieldsStep</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddMergeFieldsStep</shortDescription>
+		<value>Data Fields</value>
+	</labels>
+	<labels>
+		<fullName>WordTemplatesStep</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WordTemplatesStep</shortDescription>
+		<value>Word Template(s)</value>
+	</labels>
+	<labels>
+		<fullName>PreviewStep</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PreviewStep</shortDescription>
+		<value>Preview</value>
+	</labels>
+	<labels>
+		<fullName>PublishStep</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PublishStep</shortDescription>
+		<value>Custom Button</value>
+	</labels>
+	<labels>
+		<fullName>NameLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NameLabel</shortDescription>
+		<value>Name</value>
+	</labels>
+	<labels>
+		<fullName>TemplateConfiguration</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>aTemplateConfiguration</shortDescription>
+		<value>DocuSign Gen Template</value>
+	</labels>
+	<labels>
+		<fullName>Saving</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>saving</shortDescription>
+		<value>Saving...</value>
+	</labels>
+	<labels>
+		<fullName>StartingObjectGuidance1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObjectGuidance1</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating documents.  For example, if you choose Opportunity, users can  pull data from an Opportunity and related objects, like Account.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>StartingObjectGuidance3</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObjectGuidance3</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Need Help?&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Find out more about template configurations in the &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;DocuSign Support Center&lt;/a&gt;.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldsGuidance1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeFieldsGuidance1</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add Salesforce fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce fields allow you to dynamically populate information on your document directly from Salesforce. For example, if you selected Account as your main data source, you may want to pull Account Name or Billing Address. Be sure to copy and paste the corresponding anchor text into your Word templates. Decide formatting and conditional options in the dropdown menu.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldsGuidance2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeFieldsGuidance2</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add DocuSign fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;You can also have DocuSign fields, like signature, automatically prepared for recipients. Be sure to copy and paste the corresponding anchor text into your Word templates.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>ImportTemplatesGuidance1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ImportTemplatesGuidance1</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For each template, you can choose a suffix option for generated documents . You can also decide if users should generate a Word document or a PDF.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>ImportTemplatesGuidance2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ImportTemplatesGuidance2</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded  multiple Word templates with this configuration, you can choose if all documents should be generated every time.  By default, users can select which ones they want to generate. However, if your users need to generate all documents, then select &lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>PreviewGuidance1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PreviewGuidance1</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Test your templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choose data sources from Salesforce and click &lt;strong&gt;Preview&lt;/strong&gt; to generate example documents.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>PreviewGuidance2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PreviewGuidance2</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Review and update&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Check your documents in Word to confirm text placement and formatting.You can update your templates by going back to any previous step in this configuration wizard without losing your progress.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>PublishGuidance1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PublishGuidance1</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine your button label&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Give your button a descriptive label, such as &lt;strong&gt;Generate Sales Order.&lt;/strong&gt;&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>PublishGuidance2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PublishGuidance2</shortDescription>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where  your button should appear and select to deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;. Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;</value>
+	</labels>
+	<labels>
+		<fullName>ErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ErrorMessage</shortDescription>
+		<value>Error message: </value>
+	</labels>
+	<labels>
+		<fullName>UnknownError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UnknownError</shortDescription>
+		<value>Unknown error</value>
+	</labels>
+	<labels>
+		<fullName>AddObjects</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddObjects</shortDescription>
+		<value>Select Data Source</value>
+	</labels>
+	<labels>
+		<fullName>StartingObjectMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObjectMsg</shortDescription>
+		<value>Select the Salesforce data source you want in your Word templates.</value>
+	</labels>
+	<labels>
+		<fullName>MainDataSource</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MainDataSource</shortDescription>
+		<value>Main Data Source</value>
+	</labels>
+	<labels>
+		<fullName>CommonlyUsedObjects</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CommonlyUsedObjects</shortDescription>
+		<value>Commonly Used Objects</value>
+	</labels>
+	<labels>
+		<fullName>OtherObjects</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OtherObjects</shortDescription>
+		<value>Other Objects</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceFields</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SalesforceFields</shortDescription>
+		<value>Salesforce Fields</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceFieldsMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SalesforceFieldsMsg</shortDescription>
+		<value>Select the Salesforce data fields Then copy and paste the anchor text where you want them to appear your Word templates.</value>
+	</labels>
+	<labels>
+		<fullName>AddMergeFields</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddMergeFields</shortDescription>
+		<value>Add Data Fields to Your Word Template(s)</value>
+	</labels>
+	<labels>
+		<fullName>DocusignFields</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocusignFields</shortDescription>
+		<value>DocuSign Fields</value>
+	</labels>
+	<labels>
+		<fullName>DocusignFieldsMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocusignFieldsMsg</shortDescription>
+		<value>Select DocuSign fields for each signer, then copy and paste the corresponding anchor text in the appropriate locations in your Word template(s).</value>
+	</labels>
+	<labels>
+		<fullName>SignerText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SignerText</shortDescription>
+		<value>Signer</value>
+	</labels>
+	<labels>
+		<fullName>FieldLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FieldLabel</shortDescription>
+		<value>Field</value>
+	</labels>
+	<labels>
+		<fullName>AnchorText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AnchorText</shortDescription>
+		<value>Anchor Text</value>
+	</labels>
+	<labels>
+		<fullName>AddSigner</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddSigner</shortDescription>
+		<value>Add Signer</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldOptions</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeFieldOptions</shortDescription>
+		<value>Data Field Options</value>
+	</labels>
+	<labels>
+		<fullName>DateFormat</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DateFormat</shortDescription>
+		<value>Date Format</value>
+	</labels>
+
+	<labels>
+		<fullName>DatePreview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DatePreview</shortDescription>
+		<value>Date Preview</value>
+	</labels>
+	<labels>
+		<fullName>LocaleDefault</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LocaleDefault</shortDescription>
+		<value>Locale default</value>
+	</labels>
+	<labels>
+		<fullName>CurrencyFormat</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrencyFormat</shortDescription>
+		<value>Currency Format</value>
+	</labels>
+	<labels>
+		<fullName>DisplayAsISO</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplayAsISO</shortDescription>
+		<value>Display as ISO code</value>
+	</labels>
+	<labels>
+		<fullName>DisplayAsISONoDecimals</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplayAsISONoDecimals</shortDescription>
+		<value>Display as ISO code (no decimals)</value>
+	</labels>
+	<labels>
+		<fullName>DisplayAsSymbol</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplayAsSymbol</shortDescription>
+		<value>Display as symbol</value>
+	</labels>
+	<labels>
+		<fullName>DisplaySymbolNoDecimals</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplaySymbolNoDecimals</shortDescription>
+		<value>Display as symbol (no decimals)</value>
+	</labels>
+	<labels>
+		<fullName>DisplaysOptions</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplaysOptions</shortDescription>
+		<value>Display Options</value>
+	</labels>
+	<labels>
+		<fullName>CurrencyPreview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrencyPreview</shortDescription>
+		<value>Currency Preview</value>
+	</labels>
+	<labels>
+		<fullName>DisplaysOptionsMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplaysOptionsMsg</shortDescription>
+		<value>Include the additional content if the field value</value>
+	</labels>
+	<labels>
+		<fullName>MatchesLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MatchesLabel</shortDescription>
+		<value>matches</value>
+	</labels>
+	<labels>
+		<fullName>DoesNotMatch</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DoesNotMatch</shortDescription>
+		<value>does not match</value>
+	</labels>
+	<labels>
+		<fullName>ExampleCalifornia</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExampleCalifornia</shortDescription>
+		<value>Example: California</value>
+	</labels>
+	<labels>
+		<fullName>AlwaysDisplayThisField</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AlwaysDisplayThisField</shortDescription>
+		<value>Always display this field in the document</value>
+	</labels>
+	<labels>
+		<fullName>IncludeOtherContent</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>IncludeOtherContent</shortDescription>
+		<value>Include other content if the conditions set for this field are met</value>
+	</labels>
+	<labels>
+		<fullName>Copy</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Copy</shortDescription>
+		<value>Copy</value>
+	</labels>
+	<labels>
+		<fullName>Signature</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signature</shortDescription>
+		<value>Signature</value>
+	</labels>
+	<labels>
+		<fullName>Initial</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Initial</shortDescription>
+		<value>Initial</value>
+	</labels>
+	<labels>
+		<fullName>OptionalInitial</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OptionalInitial</shortDescription>
+		<value>Optional Initial</value>
+	</labels>
+	<labels>
+		<fullName>SuccessCopyClipboard</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SuccessCopyClipboard</shortDescription>
+		<value>Successfully copied to clipboard!</value>
+	</labels>
+	<labels>
+		<fullName>RetrievingFields</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RetrievingFields</shortDescription>
+		<value>Retrieving fields...</value>
+	</labels>
+	<labels>
+		<fullName>StartingObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObject</shortDescription>
+		<value>Main Data Source</value>
+	</labels>
+	<labels>
+		<fullName>SelectAnOption</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectAnOption</shortDescription>
+		<value>--Select an Option--</value>
+	</labels>
+	<labels>
+		<fullName>Options</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Options</shortDescription>
+		<value>Options</value>
+	</labels>
+	<labels>
+		<fullName>FieldPickerFieldExists</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FieldPickerFieldExists</shortDescription>
+		<value>already exists as a merge field.</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldDisplayCurrent</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeFieldDisplayCurrent</shortDescription>
+		<value>Display this field&#39;s value as content in the document</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldDisplayConditional</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeFieldDisplayConditional</shortDescription>
+		<value>Use this field&#39;s value to conditionally include other document content</value>
+	</labels>
+	<labels>
+		<fullName>ChildRelations</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ChildRelations</shortDescription>
+		<value>Child Relations</value>
+	</labels>
+	<labels>
+		<fullName>DocumentTemplates</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentTemplates</shortDescription>
+		<value>Upload Your Word Templates</value>
+	</labels>
+	<labels>
+		<fullName>ImportTemplatesDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ImportTemplatesDescription</shortDescription>
+		<value>Once your Word templates have your anchor text, you can upload them.</value>
+	</labels>
+	<labels>
+		<fullName>BulkDocumentCreation</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>BulkDocumentCreation</shortDescription>
+		<value>Bulk Document Creation</value>
+	</labels>
+	<labels>
+		<fullName>BulkDocumentCreationCheckboxInfo</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>BulkDocumentCreationCheckboxInfo</shortDescription>
+		<value>Generate all documents in this configuration with one click</value>
+	</labels>
+	<labels>
+		<fullName>Uploading</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Uploading</shortDescription>
+		<value>Uploading</value>
+	</labels>
+	<labels>
+		<fullName>FileUploadSuccessDeleteMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileUploadSuccessDeleteMsg</shortDescription>
+		<value>File was successfully deleted.</value>
+	</labels>
+	<labels>
+		<fullName>FileUploadSuccessMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileUploadSuccessMsg</shortDescription>
+		<value>File was successfully uploaded.</value>
+	</labels>
+	<labels>
+		<fullName>FileUploadFailDeleteMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileUploadFailDeleteMsg</shortDescription>
+		<value>File failed to delete. Try again.</value>
+	</labels>
+	<labels>
+		<fullName>FileUploadFailMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileUploadFailMsg</shortDescription>
+		<value>Upload failed. Please try again.</value>
+	</labels>
+	<labels>
+		<fullName>Removing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Removing</shortDescription>
+		<value>Removing</value>
+	</labels>
+	<labels>
+		<fullName>GeneratedFileName</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratedFileName</shortDescription>
+		<value>Generated File Name</value>
+	</labels>
+	<labels>
+		<fullName>FileFormat</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileFormat</shortDescription>
+		<value>File Format</value>
+	</labels>
+	<labels>
+		<fullName>FileSuffix</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileSuffix</shortDescription>
+		<value>File Suffix</value>
+	</labels>
+	<labels>
+		<fullName>StartingObjectName</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObjectName</shortDescription>
+		<value>Main Data Source Name</value>
+	</labels>
+	<labels>
+		<fullName>Date</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Date</shortDescription>
+		<value>Date</value>
+	</labels>
+	<labels>
+		<fullName>StartingObjectNameAndDate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartingObjectNameAndDate</shortDescription>
+		<value>Main Data Source Name and Date</value>
+	</labels>
+	<labels>
+		<fullName>MicrosoftWord</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MicrosoftWord</shortDescription>
+		<value>Microsoft Word</value>
+	</labels>
+	<labels>
+		<fullName>Pdf</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Pdf</shortDescription>
+		<value>PDF</value>
+	</labels>
+	<labels>
+		<fullName>Attachment</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Attachment</shortDescription>
+		<value>Attachment</value>
+	</labels>
+	<labels>
+		<fullName>FileTooLarge</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FileTooLarge</shortDescription>
+		<value>This supports file sizes up to 3mb only. If you want to upload larger files please do it through the files related list of DocuSign Gen Templates.</value>
+	</labels>
+	<labels>
+		<fullName>Preview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Preview</shortDescription>
+		<value>Preview Your Word Templates</value>
+	</labels>
+	<labels>
+		<fullName>PreviewTemplatesInfo</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PreviewTemplatesInfo</shortDescription>
+		<value>Test your templates with real Salesforce data.</value>
+	</labels>
+	<labels>
+		<fullName>TestYourTemplateMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TestYourTemplateMsg</shortDescription>
+		<value>Test your template(s) with real data from Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>GeneratorComeBackMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratorComeBackMsg</shortDescription>
+		<value>It’s taking a little while to generate your file(s). If you’d prefer to check back later, you’ll find the files under the Files tab in Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>GeneratorTooLongMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratorTooLongMsg</shortDescription>
+		<value>Taking too long to generate. Please check this record at a later time to view the generated file(s).</value>
+	</labels>
+	<labels>
+		<fullName>SelectAnOptionNoDash</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectAnOptionNoDash</shortDescription>
+		<value>Select an option</value>
+	</labels>
+	<labels>
+		<fullName>InvalidInput</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InvalidInput</shortDescription>
+		<value>Invalid input</value>
+	</labels>
+	<labels>
+		<fullName>Templates</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Templates</shortDescription>
+		<value>Templates</value>
+	</labels>
+	<labels>
+		<fullName>Generate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Generate</shortDescription>
+		<value>Generate</value>
+	</labels>
+	<labels>
+		<fullName>GenerateFileFailMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenerateFileFailMsg</shortDescription>
+		<value>Unable to generate the following files:</value>
+	</labels>
+	<labels>
+		<fullName>NoDocForTemplateMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NoDocForTemplateMsg</shortDescription>
+		<value>Sorry, there are no document templates for this configuration.</value>
+	</labels>
+	<labels>
+		<fullName>FailedInitiateDocGeneration</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FailedInitiateDocGeneration</shortDescription>
+		<value>Failed to initiate document generation. Please try again later or contact your administrator for assistance.</value>
+	</labels>
+	<labels>
+		<fullName>GeneratorBannerErrorMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratorBannerErrorMsg</shortDescription>
+		<value>There were some problems with your document generation</value>
+	</labels>
+	<labels>
+		<fullName>GeneratorBannerSuccessMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratorBannerSuccessMsg</shortDescription>
+		<value>Successfully generated your document</value>
+	</labels>
+	<labels>
+		<fullName>GeneratorCompletionErrorMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GeneratorCompletionErrorMsg</shortDescription>
+		<value>Unable to check completion of document generation</value>
+	</labels>
+	<labels>
+		<fullName>Publishing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Publishing</shortDescription>
+		<value>Publishing...</value>
+	</labels>
+	<labels>
+		<fullName>PublishCustomButtons</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PublishCustomButtons</shortDescription>
+		<value>Create Custom Button</value>
+	</labels>
+	<labels>
+		<fullName>PublishMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PublishMsg</shortDescription>
+		<value>Let users generate documents from this template configuration with a custom button. You can also choose to place the button on specific page layouts for your main data source. If you add a custom button and make changes to this template configuration, you don’t need to add the button again.</value>
+	</labels>
+	<labels>
+		<fullName>ButtonLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ButtonLabel</shortDescription>
+		<value>Button Label</value>
+	</labels>
+	<labels>
+		<fullName>PageLayouts</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PageLayouts</shortDescription>
+		<value>Page Layouts</value>
+	</labels>
+	<labels>
+		<fullName>SuccessfullyPublished</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SuccessfullyPublished</shortDescription>
+		<value>Button successfully created!</value>
+	</labels>
+	<labels>
+		<fullName>Drafts</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Drafts</shortDescription>
+		<value>drafts</value>
+	</labels>
+	<!-- end of new labels for Gen -->
 </CustomLabels>

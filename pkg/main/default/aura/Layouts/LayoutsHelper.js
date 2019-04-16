@@ -100,7 +100,7 @@
       this.onUpdateComplete(component);
     } else {
       component.get('v.uiHelper').invokeAction(component.get('c.updateLayouts'), {
-        sObjectType: component.get('v.sObjectType'), layoutsJson: JSON.stringify(layouts)
+        sObjectType: component.get('v.sObjectType'), layoutsJson: JSON.stringify(layouts), parameters: null
       }, function () {
         self.onUpdateComplete(component);
       });
