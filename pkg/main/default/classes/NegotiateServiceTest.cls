@@ -15,6 +15,7 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals(2, result.size());
 			System.assertEquals('ServiceDoc1.docx', result.get(0).name);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, result.get(0).id);
+			System.assertEquals('2019-05-25 11:13:28', String.valueOf(result.get(0).modifiedDate));
 			System.assertEquals(AgreementStatus.PENDING_REVIEW, result.get(0).status);
 			System.assertEquals(2, result.get(0).historyItems.size());
 			System.assertEquals(AgreementHistoryItem.Action.ExternalReviewInitiated, result.get(0).historyItems.get(0).historyItemType);
