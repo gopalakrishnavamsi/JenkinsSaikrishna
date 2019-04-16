@@ -372,6 +372,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				UUID.parse(this.href.substringAfterLast('/')),
 				this.name,
 				this.createdDate,
+				this.createdDate,
 				AgreementStatus.NEW_AGREEMENT);
 		}
 	}
@@ -609,7 +610,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					this.data.reviewer.emailAddress, ''));
 			}
 
-			if(this.data.approvers != null) {
+			if(this.data.approvers != null && !this.data.approvers.isEmpty()) {
 				for (ApiActor a : this.data.approvers) {
 					recipients.add(new AgreementHistoryItem.Actor(
 						a.fullName,
