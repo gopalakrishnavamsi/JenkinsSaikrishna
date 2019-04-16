@@ -1,4 +1,5 @@
-<aura:component description="Lightning component hosting Agreements"
+<aura:component access="global"
+                description="Lightning component hosting Agreements"
                 implements="force:appHostable,flexipage:availableForAllPageTypes, force:lightningQuickActionWithoutHeader,force:hasRecordId"
                 controller="AgreementsController">
     <!--TODO Implement spinner functionality -->
