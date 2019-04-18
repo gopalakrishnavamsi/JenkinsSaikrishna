@@ -65,13 +65,7 @@ public with sharing class MetadataService {
 				if (MergeField.isValid(field)) {
 					if (field.getReferenceTo().isEmpty() || String.isNotBlank(relationShipName)) {
 						result.add(MergeField.forField(field, relationShipName));
-					} else if (!isChildObj) {
-						DescribeSObjectResult parentType = field.getReferenceTo()[0].getDescribe();
-						if (MergeObject.isValid(parentType)) {
-							result.addAll(getFields(parentType, parentType.getName()));
-						}
 					}
-
 				}
 			}
 		}
