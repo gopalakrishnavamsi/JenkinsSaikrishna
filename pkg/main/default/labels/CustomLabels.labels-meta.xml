@@ -4883,6 +4883,13 @@
 		<shortDescription>Invalid search object</shortDescription>
 		<value>Invalid search object: {0}</value>
 	</labels>
+	<labels>
+		<fullName>ExpiredTrialAccount</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Expired trial account message</shortDescription>
+		<value>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup.</value>
+	</labels>
 	<!-- new labels for Gen -->
 	<labels>
 		<fullName>Exit</fullName>

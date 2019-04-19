@@ -95,12 +95,13 @@ private class AccountFeaturesTest {
 
 			// Force check API, update config
 			Integer features1 = AccountFeatures.resolveFeatures(0, Datetime.now().addDays(-2), 1);
-			AccountSettings__c config1 = AccountSettings__c.getOrgDefaults();
 
 			// Read from config, no update
 			Integer features2 = AccountFeatures.resolveFeatures(3, Datetime.now().addMinutes(-10), 60);
-			AccountSettings__c config2 = AccountSettings__c.getOrgDefaults();
 			Test.stopTest();
+
+			AccountSettings__c config1 = AccountSettings__c.getOrgDefaults();
+			AccountSettings__c config2 = AccountSettings__c.getOrgDefaults();
 
 			System.assertEquals(0, config0.Features__c);
 			System.assertEquals(null, config0.FeaturesLastChecked__c);

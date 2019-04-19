@@ -128,9 +128,19 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
+	private static Boolean checkTrialExpired() {
+		if (AccountFeatures.getInstance() != null && AccountFeatures.getInstance().isExpired != null && AccountFeatures.getInstance().isExpired) {
+			return true;
+		}
+		return false;
+	}
+
 	@AuraEnabled
 	public static Envelope sendEnvelope(final String envelopeJson) {
 		try {
+			if (checkTrialExpired()) {
+				throw Controller.wrapException(Label.ExpiredTrialAccount);
+			}
 			return EnvelopeService.sendEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class), false, true);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send envelope');
