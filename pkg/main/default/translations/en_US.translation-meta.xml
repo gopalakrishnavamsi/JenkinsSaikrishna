@@ -2641,6 +2641,10 @@
 		<label>Invalid search object: {0}</label>
 		<name>InvalidSearchObject_1</name>
 	</customLabels>
+	<customLabels>
+		<label>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup</label>
+		<name>ExpiredTrialAccount</name>
+	</customLabels>
 	<!-- new labels for Gen -->
 	<customLabels>
 		<label>Exit</label>

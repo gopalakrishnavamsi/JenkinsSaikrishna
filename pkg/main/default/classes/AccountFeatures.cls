@@ -24,6 +24,8 @@ public with sharing class AccountFeatures {
 	private static final Integer FLAG_TEMPLATES = 512;
 	@TestVisible
 	private static final Integer FLAG_BULK_SENDING = 1024;
+	@TestVisible
+	private static final Integer FLAG_IS_EXPIRED = 2048;
 
 	private static AccountFeatures self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 1440; // 1 hour
@@ -83,6 +85,11 @@ public with sharing class AccountFeatures {
 	 */
 	@AuraEnabled
 	public Boolean bulkSending { get; private set; }
+	/**
+	 * Whether trial account is expired or not.
+	 */
+	@AuraEnabled
+	public Boolean isExpired { get; private set; }
 
 	private AccountFeatures(final Integer features) {
 		this.mergeFields = (features & FLAG_MERGE_FIELDS) == FLAG_MERGE_FIELDS;
@@ -96,6 +103,7 @@ public with sharing class AccountFeatures {
 		this.smsAuthentication = (features & FLAG_SMS_AUTHENTICATION) == FLAG_SMS_AUTHENTICATION;
 		this.templates = (features & FLAG_TEMPLATES) == FLAG_TEMPLATES;
 		this.bulkSending = (features & FLAG_BULK_SENDING) == FLAG_BULK_SENDING;
+		this.isExpired = (features & FLAG_IS_EXPIRED) == FLAG_IS_EXPIRED;
 	}
 
 	// Serialization objects for getSettings
@@ -134,6 +142,8 @@ public with sharing class AccountFeatures {
 					result |= FLAG_TEMPLATES;
 				} else if (accountSetting.name == 'allowBulkSend' && accountSetting.value == 'true') {
 					result |= FLAG_BULK_SENDING;
+				} else if (accountSetting.name == 'isExpired' && accountSetting.value == 'true') {
+					result |= FLAG_IS_EXPIRED;
 				}
 			}
 			return result;
@@ -156,7 +166,19 @@ public with sharing class AccountFeatures {
 				this.log.error('Failed to get account settings: ' + response.error.toString());
 				throw new APIException(response.error);
 			}
-			return ((ApiAccountSettings)JSON.deserialize(response.body, ApiAccountSettings.class)).toExternalForm();
+			//return ((ApiAccountSettings)JSON.deserialize(response.body, ApiAccountSettings.class)).toExternalForm();
+			ApiAccountSettings apiAccountSettings = (ApiAccountSettings)JSON.deserialize(response.body, ApiAccountSettings.class);
+
+			final Account a = AccountService.getCurrentAccount();
+			ApiAccountSetting apiAccountSetting = new ApiAccountSetting();
+			apiAccountSetting.name = 'isExpired';
+			if(a == null || a.isTrial == null || a.trialStatus == null || a.trialStatus.isExpired == null) {
+				apiAccountSetting.value = 'false';
+			} else {
+				apiAccountSetting.value = String.valueOf(a.isTrial && a.trialStatus.isExpired);
+			}
+			apiAccountSettings.accountSettings.add(apiAccountSetting);
+			return apiAccountSettings.toExternalForm();
 		}
 	}
 
@@ -174,17 +196,22 @@ public with sharing class AccountFeatures {
 
 			Credentials c = Credentials.getInstance();
 			resolvedFeatures = new SettingsAPI(c.environment.eSignatureBaseUrl, c.account.id).getSettings();
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.Features__c = resolvedFeatures;
-			settings.FeaturesLastChecked__c = Datetime.now();
-			settings.FeaturesCheckFrequency__c = checkFrequencyMinutes == null
-				? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
-			upsert settings;
+			updateAccountSettings(resolvedFeatures, checkFrequencyMinutes);
 		} else {
 			resolvedFeatures = configuredFeatures;
 		}
 
 		return resolvedFeatures;
+	}
+
+	@future
+	private static void updateAccountSettings (Integer resolvedFeatures, Integer checkFrequencyMinutes) {
+		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+		settings.Features__c = resolvedFeatures;
+		settings.FeaturesLastChecked__c = Datetime.now();
+		settings.FeaturesCheckFrequency__c = checkFrequencyMinutes == null
+			? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
+		upsert settings;
 	}
 
 	/**

@@ -85,6 +85,10 @@ global with sharing class AccountService {
 	 */
 	public static Account getAccount() {
 		Permissions.verifyIsDocuSignAdministrator();
+		return getCurrentAccount();
+	}
+
+	public static Account getCurrentAccount() {
 
 		if (currentAccount == null) {
 			try {
@@ -100,6 +104,7 @@ global with sharing class AccountService {
 			}
 		}
 		return currentAccount;
+
 	}
 
 	@TestVisible
