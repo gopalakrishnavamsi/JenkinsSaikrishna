@@ -28,6 +28,16 @@ public class Agreement {
 	@AuraEnabled
 	public String status { get; private set; }
 /**
+* Agreement href at SpringCM
+*/
+	@AuraEnabled
+	public Url href { get; private set; }
+/**
+* Agreement size at SpringCM
+*/
+	@AuraEnabled
+	public Long pdfFileSize { get; private set; }
+/**
 * Agreement history
 */
 	@AuraEnabled
@@ -38,13 +48,17 @@ public class Agreement {
 		final String name,
 		final Datetime createdDate,
 		final Datetime modifiedDate,
-		final String status) {
+		final String status,
+		final Url href,
+		final Long pdfFileSize) {
 
 		this.id = id;
 		this.name = name;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
 		this.status = status;
+		this.href = href;
+		this.pdfFileSize = pdfFileSize;
 		this.historyItems = new List<AgreementHistoryItem>();
 
 	}

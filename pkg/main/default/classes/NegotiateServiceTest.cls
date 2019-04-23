@@ -8,7 +8,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			List<Agreement> result = NegotiateService.getAgreements(NegotiateAPIMock.FOLDER_ID_2, NegotiateAPIMock.ACCOUNT_ID_5);
+			List<Agreement> result = NegotiateService.getAgreements(NegotiateAPIMock.FOLDER_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

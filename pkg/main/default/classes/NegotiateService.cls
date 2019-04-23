@@ -3,11 +3,11 @@
  */
 public with sharing class NegotiateService {
 
-	public static List<Agreement> getAgreements(final UUID folderId, final UUID accountId) {
+	public static List<Agreement> getAgreements(final UUID folderId) {
 		List<Agreement> agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 		for (Agreement a : agreements) {
 			if (a != null) {
-				List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getInstance().getHistoryItems(accountId, a.id);
+				List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(a.id);
 				a.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
 				if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
 					a.withModifiedDate(agreementHistoryItems.get(0).historyDate);

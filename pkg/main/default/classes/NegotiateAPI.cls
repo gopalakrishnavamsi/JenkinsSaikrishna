@@ -9,17 +9,35 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final Long SCM_OFFSET = 20;
 
 	private static NegotiateAPI self = null;
+	private static NegotiateAPI historySelf = null;
 
-	private NegotiateAPI(final Url baseUrl) {
-		super(new Url(baseUrl, '')); // TODO: use Negotiate baseURL, if any
+	private NegotiateAPI(final Url baseUrl,
+		final String apiVersion,
+		final UUID accountId) {
+		super (new Url (baseUrl, String.format('{0}/{1}/',
+			new List<String> {
+				apiVersion,
+				String.valueOf(accountId)
+			})));
 	}
 
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
-			self = new NegotiateAPI(Credentials.getInstance().environment.scmApiBaseUrl); // TODO: as of now using Gen's
+			Credentials c = Credentials.getInstance();
+			self = new NegotiateAPI(c.environment.scmApiBaseUrl, 'v2', c.account.id); // TODO: as of now using Gen's
 		}
 		return self;
 	}
+
+	public static NegotiateAPI getHistoryAPIInstance() {
+		if (historySelf == null) {
+			Credentials c = Credentials.getInstance();
+			historySelf = new NegotiateAPI(c.environment.scmApiBaseUrl, 'gen/v1', c.account.id); // TODO: as of now using Gen's
+		}
+		return historySelf;
+	}
+
+
 
 	public class Error extends APIError {
 		public UUID referenceId { get; private set; }
@@ -366,6 +384,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public Datetime createdDate;
 		public String status;
 		public String href;
+		public Long pdfFileSize;
 
 		public Agreement convertAPIAgreement() {
 			return new Agreement(
@@ -373,7 +392,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.name,
 				this.createdDate,
 				this.createdDate,
-				AgreementStatus.NEW_AGREEMENT);
+				AgreementStatus.NEW_AGREEMENT,
+				new Url(this.href),
+				this.pdfFileSize);
 		}
 	}
 
@@ -649,7 +670,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 //Get historyItems
-	public List<AgreementHistoryItem> getHistoryItems(final UUID accountId, final UUID documentId) {
+	public List<AgreementHistoryItem> getHistoryItems(final UUID documentId) {
 		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
 		Map<String, String> queryStrings = new Map<String, String>();
 		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
@@ -663,13 +684,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			final RestAPI.Response response = get(
 				getBaseUrl(),
 				new List<Object> {
-					accountId, PATH_HISTORY_ITEMS, documentId
+					PATH_HISTORY_ITEMS, documentId
 				},
 				new QueryString(queryStrings),
 				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
-				this.log.error('Failed to get history items for accountId - ' + accountId + ' and  documentId - ' +
+				this.log.error('Failed to get history items for documentId - ' +
 					documentId + response.error);
 				throw new APIException(response.error);
 			}
