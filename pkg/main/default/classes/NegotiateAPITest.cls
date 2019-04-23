@@ -1,5 +1,5 @@
 @IsTest
-public with sharing class NegotiateAPITest {
+public with sharing class  NegotiateAPITest {
 
 	@IsTest
 	static void test_createEOSFolder_success() {
@@ -67,6 +67,8 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals(1, result.size());
 			System.assertEquals('docusignlogerror7-23-18-1.docx', result.get(0).name);
 			System.assertEquals(UUID.parse('ea7ab407-ea41-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
+			System.assertEquals(160453, result.get(0).pdfFileSize);
+			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41', result.get(0).href.toExternalForm());
 		}
 	}
 
@@ -216,7 +218,6 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.ACCOUNT_ID,
 				NegotiateAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
@@ -238,8 +239,7 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.ACCOUNT_ID_2,
-				NegotiateAPIMock.DOCUMENT_ID);
+				NegotiateAPIMock.DOCUMENT_ID_4);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -260,8 +260,7 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.ACCOUNT_ID_3,
-				NegotiateAPIMock.DOCUMENT_ID);
+				NegotiateAPIMock.DOCUMENT_ID_5);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -286,8 +285,7 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.ACCOUNT_ID_4,
-				NegotiateAPIMock.DOCUMENT_ID);
+				NegotiateAPIMock.DOCUMENT_ID_6);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
