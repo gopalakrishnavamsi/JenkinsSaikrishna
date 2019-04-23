@@ -116,11 +116,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			XmlStreamWriter w = new XmlStreamWriter();
 			w.writeStartElement(null, 'Approval', null);
 //Documents
-			w.writeCharacters(this.documentsToXML());
+			w = this.documentsToXML(w);
 //reviewers
-			w.writeCharacters(this.reviewersToXML());
+			w = this.reviewersToXML(w);
 //Email
-			w.writeCharacters(this.email.toXML());
+			w = this.email.toXML(w);
 //ExpiresInNumberOfDays param
 			w.writeStartElement(null, 'ExpiresInNumberOfDays', null);
 			w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
@@ -140,30 +140,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return xml;
 		}
 
-		private String documentsToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Documents', null);
 			for (APIDocument doc : this.documents) {
-				w.writeCharacters(doc.toXML());
+				w = doc.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
-		private String reviewersToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter reviewersToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Reviewers', null);
 			for (APIReviewer entity : this.reviewers) {
-				w.writeCharacters(entity.toXML());
+				w = entity.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
 	}
@@ -185,11 +179,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			XmlStreamWriter w = new XmlStreamWriter();
 			w.writeStartElement(null, 'Approval', null);
 //Documents
-			w.writeCharacters(this.documentsToXML());
+			w = this.documentsToXML(w);
 //Approvers
-			w.writeCharacters(this.approversToXML());
+			w = this.approversToXML(w);
 //Email
-			w.writeCharacters(this.email.toXML());
+			w = this.email.toXML(w);
 //CheckoutDocument param
 			w.writeStartElement(null, 'CheckoutDocument', null);
 			w.writeCharacters('true');
@@ -205,30 +199,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return xml;
 		}
 
-		private String documentsToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Documents', null);
 			for (APIDocument doc : this.documents) {
-				w.writeCharacters(doc.toXML());
+				w = doc.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
-		private String approversToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter approversToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Approvers', null);
 			for (APIApprover entity : this.approvers) {
-				w.writeCharacters(entity.toXML());
+				w = entity.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
 	}
@@ -242,16 +230,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.uid = email;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Approver', null);
 			w.writeStartElement(null, 'Uid', null);
 			w.writeCharacters(this.uid);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -264,16 +249,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.uid = email;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w ) {
 			w.writeStartElement(null, 'Reviewer', null);
 			w.writeStartElement(null, 'Uid', null);
 			w.writeCharacters(this.uid);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -285,16 +267,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.id = documentId;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Document', null);
 			w.writeStartElement(null, 'Id', null);
 			w.writeCharacters(String.valueOf(this.id));
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -308,8 +287,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.message = message;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Email', null);
 			w.writeStartElement(null, 'Subject', null);
 			w.writeCharacters(this.subject);
@@ -318,9 +296,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			w.writeCharacters(this.message);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
