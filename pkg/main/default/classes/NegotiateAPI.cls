@@ -361,6 +361,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String status;
 		public String href;
 		public Long pdfFileSize;
+		public String version;
 
 		public Agreement convertAPIAgreement() {
 			return new Agreement(
@@ -370,7 +371,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.createdDate,
 				AgreementStatus.NEW_AGREEMENT,
 				new Url(this.href),
-				this.pdfFileSize);
+				this.pdfFileSize,
+				this.version);
 		}
 	}
 

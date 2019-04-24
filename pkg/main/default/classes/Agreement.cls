@@ -38,10 +38,20 @@ public class Agreement {
 	@AuraEnabled
 	public Long pdfFileSize { get; private set; }
 /**
+* Agreement size at SpringCM
+*/
+	@AuraEnabled
+	public String version { get; private set; }
+/**
 * Agreement history
 */
 	@AuraEnabled
 	public List<AgreementHistoryItem> historyItems { get; private set; }
+/**
+* Agreement history
+*/
+	@AuraEnabled
+	public List<Agreement> versions { get; private set; }
 
 	public Agreement(
 		final UUID id,
@@ -50,7 +60,8 @@ public class Agreement {
 		final Datetime modifiedDate,
 		final String status,
 		final Url href,
-		final Long pdfFileSize) {
+		final Long pdfFileSize,
+		final String version) {
 
 		this.id = id;
 		this.name = name;
@@ -59,7 +70,9 @@ public class Agreement {
 		this.status = status;
 		this.href = href;
 		this.pdfFileSize = pdfFileSize;
+		this.version = version;
 		this.historyItems = new List<AgreementHistoryItem>();
+		this.versions = new List<Agreement>();
 
 	}
 
@@ -79,10 +92,19 @@ public class Agreement {
 	}
 
 	public Agreement withHistoryItems(List<AgreementHistoryItem> historyItems) {
-		if (historyItems == null || historyItems.isEmpty()){
+		if (historyItems == null || historyItems.isEmpty()) {
 			this.historyItems = new List<AgreementHistoryItem>();
 		} else {
 			this.historyItems = historyItems;
+		}
+		return this;
+	}
+
+	public Agreement withVersions(List<Agreement> versions) {
+		if (versions == null || versions.isEmpty()) {
+			this.versions = new List<Agreement>();
+		} else {
+			this.versions = versions;
 		}
 		return this;
 	}

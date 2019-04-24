@@ -20,6 +20,11 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals(2, result.get(0).historyItems.size());
 			System.assertEquals(AgreementHistoryItem.Action.ExternalReviewInitiated, result.get(0).historyItems.get(0).historyItemType);
 			System.assertEquals(AgreementHistoryItem.Action.DocumentImportedFromSalesforce, result.get(0).historyItems.get(1).historyItemType);
+			System.assertEquals(null, result.get(0).version);
+			System.assertNotEquals(null,  result.get(0).versions);
+			System.assertEquals(false,  result.get(0).versions.isEmpty());
+			System.assertEquals('newName.docx', result.get(0).versions.get(0).name);
+
 			System.assertEquals('ServiceDoc2.docx', result.get(1).name);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_3, result.get(1).id);
 			System.assertEquals(AgreementStatus.PENDING_APPROVAL, result.get(1).status);

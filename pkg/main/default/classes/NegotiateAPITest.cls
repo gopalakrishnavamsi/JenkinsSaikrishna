@@ -119,6 +119,10 @@ public with sharing class  NegotiateAPITest {
 			System.assertEquals(3, result.size());
 			System.assertEquals('newName.docx', result.get(0).name);
 			System.assertEquals(UUID.parse('213e9c1a-8f46-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
+			System.assertEquals('3.0', result.get(0).version);
+			System.assertNotEquals(null, result.get(0).versions);
+			System.assertEquals(true, result.get(0).versions.isEmpty());
+			System.assertEquals(true, result.get(0).historyItems.isEmpty());
 		}
 	}
 
