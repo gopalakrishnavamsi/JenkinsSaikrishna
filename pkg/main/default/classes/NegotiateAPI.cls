@@ -9,17 +9,35 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final Long SCM_OFFSET = 20;
 
 	private static NegotiateAPI self = null;
+	private static NegotiateAPI historySelf = null;
 
-	private NegotiateAPI(final Url baseUrl) {
-		super(new Url(baseUrl, '')); // TODO: use Negotiate baseURL, if any
+	private NegotiateAPI(final Url baseUrl,
+		final String apiVersion,
+		final UUID accountId) {
+		super (new Url (baseUrl, String.format('{0}/{1}/',
+			new List<String> {
+				apiVersion,
+				String.valueOf(accountId)
+			})));
 	}
 
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
-			self = new NegotiateAPI(Credentials.getInstance().environment.scmApiBaseUrl); // TODO: as of now using Gen's
+			Credentials c = Credentials.getInstance();
+			self = new NegotiateAPI(c.environment.scmApiBaseUrl, 'v2', c.account.id); // TODO: as of now using Gen's
 		}
 		return self;
 	}
+
+	public static NegotiateAPI getHistoryAPIInstance() {
+		if (historySelf == null) {
+			Credentials c = Credentials.getInstance();
+			historySelf = new NegotiateAPI(c.environment.scmApiBaseUrl, 'gen/v1', c.account.id); // TODO: as of now using Gen's
+		}
+		return historySelf;
+	}
+
+
 
 	public class Error extends APIError {
 		public UUID referenceId { get; private set; }
@@ -98,11 +116,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			XmlStreamWriter w = new XmlStreamWriter();
 			w.writeStartElement(null, 'Approval', null);
 //Documents
-			w.writeCharacters(this.documentsToXML());
+			w = this.documentsToXML(w);
 //reviewers
-			w.writeCharacters(this.reviewersToXML());
+			w = this.reviewersToXML(w);
 //Email
-			w.writeCharacters(this.email.toXML());
+			w = this.email.toXML(w);
 //ExpiresInNumberOfDays param
 			w.writeStartElement(null, 'ExpiresInNumberOfDays', null);
 			w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
@@ -122,30 +140,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return xml;
 		}
 
-		private String documentsToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Documents', null);
 			for (APIDocument doc : this.documents) {
-				w.writeCharacters(doc.toXML());
+				w = doc.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
-		private String reviewersToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter reviewersToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Reviewers', null);
 			for (APIReviewer entity : this.reviewers) {
-				w.writeCharacters(entity.toXML());
+				w = entity.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
 	}
@@ -167,11 +179,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			XmlStreamWriter w = new XmlStreamWriter();
 			w.writeStartElement(null, 'Approval', null);
 //Documents
-			w.writeCharacters(this.documentsToXML());
+			w = this.documentsToXML(w);
 //Approvers
-			w.writeCharacters(this.approversToXML());
+			w = this.approversToXML(w);
 //Email
-			w.writeCharacters(this.email.toXML());
+			w = this.email.toXML(w);
 //CheckoutDocument param
 			w.writeStartElement(null, 'CheckoutDocument', null);
 			w.writeCharacters('true');
@@ -187,30 +199,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return xml;
 		}
 
-		private String documentsToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Documents', null);
 			for (APIDocument doc : this.documents) {
-				w.writeCharacters(doc.toXML());
+				w = doc.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
-		private String approversToXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		private XmlStreamWriter approversToXML(XmlStreamWriter w) {
 //Header
 			w.writeStartElement(null, 'Approvers', null);
 			for (APIApprover entity : this.approvers) {
-				w.writeCharacters(entity.toXML());
+				w = entity.toXML(w);
 			}
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 
 	}
@@ -224,16 +230,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.uid = email;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Approver', null);
 			w.writeStartElement(null, 'Uid', null);
 			w.writeCharacters(this.uid);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -246,16 +249,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.uid = email;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w ) {
 			w.writeStartElement(null, 'Reviewer', null);
 			w.writeStartElement(null, 'Uid', null);
 			w.writeCharacters(this.uid);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -267,16 +267,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.id = documentId;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Document', null);
 			w.writeStartElement(null, 'Id', null);
 			w.writeCharacters(String.valueOf(this.id));
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -290,8 +287,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.message = message;
 		}
 
-		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
+		public XmlStreamWriter toXML(XmlStreamWriter w) {
 			w.writeStartElement(null, 'Email', null);
 			w.writeStartElement(null, 'Subject', null);
 			w.writeCharacters(this.subject);
@@ -300,9 +296,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			w.writeCharacters(this.message);
 			w.writeEndElement();
 			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+			return w;
 		}
 	}
 
@@ -366,6 +360,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public Datetime createdDate;
 		public String status;
 		public String href;
+		public Long pdfFileSize;
+		public String version;
 
 		public Agreement convertAPIAgreement() {
 			return new Agreement(
@@ -373,7 +369,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.name,
 				this.createdDate,
 				this.createdDate,
-				AgreementStatus.NEW_AGREEMENT);
+				AgreementStatus.NEW_AGREEMENT,
+				new Url(this.href),
+				this.pdfFileSize,
+				this.version);
 		}
 	}
 
@@ -649,7 +648,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 //Get historyItems
-	public List<AgreementHistoryItem> getHistoryItems(final UUID accountId, final UUID documentId) {
+	public List<AgreementHistoryItem> getHistoryItems(final UUID documentId) {
 		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
 		Map<String, String> queryStrings = new Map<String, String>();
 		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
@@ -663,13 +662,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			final RestAPI.Response response = get(
 				getBaseUrl(),
 				new List<Object> {
-					accountId, PATH_HISTORY_ITEMS, documentId
+					PATH_HISTORY_ITEMS, documentId
 				},
 				new QueryString(queryStrings),
 				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
-				this.log.error('Failed to get history items for accountId - ' + accountId + ' and  documentId - ' +
+				this.log.error('Failed to get history items for documentId - ' +
 					documentId + response.error);
 				throw new APIException(response.error);
 			}
