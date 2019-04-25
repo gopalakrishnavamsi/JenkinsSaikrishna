@@ -21,6 +21,16 @@ public with sharing class NegotiateService {
 				return null;
 			}
 		}
+
+		@TestVisible
+		private String getSourceObjectName(final Id sourceObjectId) {
+			Permissions.verifyIsQueryable(sourceObjectId.getSObjectType(), new List<String> {
+				'Id', 'Name'
+			});
+			String query = String.format('SELECT Id, Name FROM {0} WHERE ID = \'\'{1}\'\' ', new List<String> {sourceObjectId.getSObjectType().getDescribe().getName(), sourceObjectId});
+			Sobject obj = System.Database.query(query);
+			return String.valueOf(obj.get('Name'));
+		}
 	}
 
 	/**
@@ -36,8 +46,12 @@ public with sharing class NegotiateService {
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		List<Agreement> agreements = new List<Agreement>();
 		if (folderId == null) {
+			String sourceObjectType = sourceObjectId.getSObjectType().getDescribe().getName();
+			String sourceObjectName = DB.getSourceObjectName(sourceObjectId);
+			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
+			setFolderId(sourceObjectId, folderId.toString());
 			return agreements;
-			//Add call for create Folder
+
 		} else {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			/*
@@ -119,6 +133,19 @@ public with sharing class NegotiateService {
 				return AgreementStatus.SYSTEM_ERROR;
 			}
 		}
+	}
+
+	@future
+	private static void setFolderId(final Id sourceObjectId, final String folderId) {
+		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
+			'FolderId__c', 'SourceObject__c'
+		});
+
+		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
+		configuration.FolderId__c = folderId;
+		configuration.SourceObject__c = sourceObjectId;
+		insert configuration;
+
 	}
 
 }
