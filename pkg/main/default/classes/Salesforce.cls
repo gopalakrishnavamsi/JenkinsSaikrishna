@@ -75,6 +75,11 @@ public with sharing class Salesforce {
 			return CAN_USE_API;
 		}
 	}
+	public static String salesforceOAuthUrl {
+		get {
+			return BASE_URL.toExternalForm() + '/services/oauth2/authorize';
+		}
+	}
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
@@ -142,12 +147,12 @@ public with sharing class Salesforce {
 	}
 
 	/**
- 	 * Retrieves the name field for a Salesforce object type.
- 	 *
- 	 * @param type The Salesforce object type.
- 	 *
- 	 * @return The name field for the given object type.
- 	 */
+	  * Retrieves the name field for a Salesforce object type.
+	  *
+	  * @param type The Salesforce object type.
+	  *
+	  * @return The name field for the given object type.
+	  */
 	public static String getNameField(final SObjectType type) {
 		String result = null;
 		if (type != null) {

@@ -5747,4 +5747,35 @@
 		<value>drafts</value>
 	</labels>
 	<!-- end of new labels for Gen -->
+	<labels>
+		<fullName>UnableToConnectDocuSignGen</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UnableToConnectDocuSignGen</shortDescription>
+		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.
+		</value>
+	</labels>
+	<labels>
+		<fullName>SuccessDocuSignGenAuthorization</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SuccessDocuSignGenAuthorization</shortDescription>
+		<value>Successfully connected and authorized to DocuSign Gen.</value>
+	</labels>
+	<labels>
+		<fullName>MissingDocuSignGenAuthorizationSettings</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MissingDocuSignGenAuthorizationSettings</shortDescription>
+		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for
+			assistance.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeGen</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizeGen</shortDescription>
+		<value>Authorize Gen</value>
+	</labels>
 </CustomLabels>

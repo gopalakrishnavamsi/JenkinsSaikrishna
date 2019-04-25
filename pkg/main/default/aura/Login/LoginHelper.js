@@ -35,6 +35,15 @@
     beginOAuth(component, component.get('v.environment') || 'Production', component.get('v.otherUrl') || null);
   },
 
+  beginSpringOAuth: function (component) {
+    var uiHelper = component.get('v.uiHelper');
+    uiHelper.hideToast();
+    uiHelper.setLoading(true);
+
+    var beginSpringOAuth = component.get('v.beginSpringOAuth');
+    beginSpringOAuth(component);
+  },
+
   setLoggedIn: function (component, loginInformation) {
     var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
     var isLoggedIn = hasAccounts && loginInformation.status === 'Success';
@@ -58,6 +67,16 @@
       this.setLoggedIn(component, loginInformation);
     } else {
       uiHelper.showToast(response.message, 'error');
+    }
+    uiHelper.setLoading(component, false);
+  },
+
+  endSpringOAuth: function (component, response, loginInformation) {
+    var uiHelper = component.get('v.uiHelper');
+    if (loginInformation && loginInformation.status !== 'Fail') {
+      uiHelper.showToast(loginInformation.message, 'success');
+    } else {
+      uiHelper.showToast(loginInformation.message, 'error');
     }
     uiHelper.setLoading(component, false);
   },
