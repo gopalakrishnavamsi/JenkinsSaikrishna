@@ -79,7 +79,7 @@
                         <lightning:button label="{!$Label.c.LogOut}" variant="neutral"
                                           onclick="{!c.showLogoutModal}"/>
                         <!-- Show Authorize Gen if Gen OAuth custom setting value is false -->
-                        <lightning:button label="Authorize Gen" variant="neutral"
+                        <lightning:button label="{!$Label.c.AuthorizeGen}" variant="neutral"
                                           onclick="{!c.loginToSpring}"/>
                     </div>
                 </div>
