@@ -6,6 +6,7 @@
     <aura:attribute name="isLoggedIn" type="Boolean"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
+    <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
 
     <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="selectedAccountNumber" type="Long" access="private"/>
@@ -27,9 +28,11 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:registerEvent name="loginEvent" type="c:LoginEvent"/>
     <aura:registerEvent name="oauthEvent" type="c:OAuthEvent"/>
+    <aura:registerEvent name="springOauthEvent" type="c:OAuthEvent"/>
 
     <aura:handler name="change" value="{!v.userCountryCode}" action="{!c.handleUserCountryChange}"/>
     <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
+    <aura:handler name="springOauthEvent" event="c:OAuthEvent" action="{!c.handleSpringOAuthEvent}"/>
 
     <div class="slds-scope">
         <!-- Help Info -->
@@ -75,6 +78,9 @@
                                           onclick="{!c.navigateToUpgrade}"/>
                         <lightning:button label="{!$Label.c.LogOut}" variant="neutral"
                                           onclick="{!c.showLogoutModal}"/>
+                        <!-- Show Authorize Gen if Gen OAuth custom setting value is false -->
+                        <lightning:button label="Authorize Gen" variant="neutral"
+                                          onclick="{!c.loginToSpring}"/>
                     </div>
                 </div>
                 <!-- /Logged In State -->

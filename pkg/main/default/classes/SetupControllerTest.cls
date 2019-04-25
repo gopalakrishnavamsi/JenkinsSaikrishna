@@ -405,4 +405,106 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_beginSpringOAuth_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			String result = SetupController.beginSpringOAuth('testState');
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_beginSpringOAuth_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.beginSpringOAuth('testState');
+				throw new AssertException('Expected beginSpringOAuth to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	class SpringOAuthSuccessMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"success":true,"message":"Successfully stored refresh token."}');
+			return response;
+		}
+	}
+
+	class SpringOAuthFailureMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('Bad Request');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('Bad Request');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_completeSpringOAuth_success() {
+		Test.setMock(HttpCalloutMock.class, new SpringOAuthSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			System.assertNotEquals(null, loginInformation);
+			System.assertEquals('Success', loginInformation.status);
+			System.assertEquals(Label.SuccessDocuSignGenAuthorization, loginInformation.message);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_completeSpringOAuth_fail() {
+		Test.setMock(HttpCalloutMock.class, new SpringOAuthFailureMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			System.assertNotEquals(null, loginInformation);
+			System.assertEquals('Fail', loginInformation.status);
+			System.assertEquals(Label.UnableToConnectDocuSignGen, loginInformation.message);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_completeSpringOAuth_missingSettings() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+			accountSettings.ScmAuthBaseUrl__c = '';
+			update accountSettings;
+			Test.startTest();
+			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			System.assertNotEquals(null, loginInformation);
+			System.assertEquals('Fail', loginInformation.status);
+			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, loginInformation.message);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_completeSpringOAuth_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.completeSpringOAuth('1234556');
+				throw new AssertException('Expected completeSpringOAuth to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }
+

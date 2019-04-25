@@ -51,6 +51,16 @@ public with sharing class SetupController extends Controller {
 		return AuthService.redeemCode(authorizationCode, state);
 	}
 
+	@RemoteAction
+	public static String beginSpringOAuth(final String state) {
+		return AuthService.getSpringOAuthUrl(state).toExternalForm();
+	}
+
+	@RemoteAction
+	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
+		return AuthService.completeSpringOAuth(authorizationCode);
+	}
+
 	@AuraEnabled
 	public static LoginInformation selectAccount(
 		final String environment,

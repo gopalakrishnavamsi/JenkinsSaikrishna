@@ -414,6 +414,8 @@ public with sharing class AuthService {
 	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read';
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
+	private static SpringOAuthAPI springoauth;
+	private static final String GEN_CONNECTEDAPP_CLIENTID = '3MVG9vrJTfRxlfl73UnkTYVZ6r4FpiYpbjtFZ6j3rmP.Z1mj5_jGVnzIQIfpqR4iZngiK4tg_xoKRu679GGDi'; //TODO Move to Custom Settings once new connected app is created
 	private static Map<DocuSign.Environment, RootCredentials> rootCredentials
 		= new Map<DocuSign.Environment, RootCredentials>();
 
@@ -1069,5 +1071,83 @@ public with sharing class AuthService {
 			result.name,
 			result.email,
 			new List<LoginInformation.Account> { selected });
+	}
+
+	@TestVisible
+	private class SpringOAuthAPI extends RestAPI {
+		private Url baseUrl;
+
+		public SpringOAuthAPI(final Url baseUrl) {
+			this.baseUrl = baseUrl;
+		}
+
+		public SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
+			SpringOAuthLoginInformation results;
+			try {
+				Credentials c = Credentials.getInstance();
+				if (c != null && c.environment.scmAuthBaseUrl != null && String.isNotBlank(c.environment.scmAuthBaseUrl.toExternalForm())) {
+					getSpringOAuthAPI(c.environment.scmAuthBaseUrl);
+					Map<String, Object> body = new Map<String, Object> {
+						'code' => authorizationCode,
+						'orgUrl' => Salesforce.baseUrl.toExternalForm()
+					};
+					Response response = super.post(
+						this.baseUrl,
+						new List<Object> { 'SetupSalesforce', 'GenIntegration' },
+						QueryString.empty,
+						null,
+						JSON.serialize(body),
+						RestAPI.defaultTimeout);
+
+					if (response.hasError) {
+						results = new SpringOAuthLoginInformation('Fail', Label.UnableToConnectDocuSignGen);
+					} else {
+						results = new SpringOAuthLoginInformation('Success', Label.SuccessDocuSignGenAuthorization);
+					}
+					//TODO update the custom setting to reflect that Spring OAuth has been completed successfully. To be added after Momentum Beta
+				} else {
+					results = new SpringOAuthLoginInformation('Fail', Label.MissingDocuSignGenAuthorizationSettings);
+				}
+
+			} catch (Exception ex) {
+				results = new SpringOAuthLoginInformation('Fail', ex.getMessage());
+			}
+			return results;
+		}
+
+	}
+
+	private static SpringOAuthAPI getSpringOAuthAPI(final Url baseUrl) {
+		if (springoauth == null) {
+			springoauth = new SpringOAuthAPI(baseUrl);
+		}
+		return springoauth;
+	}
+
+	/**
+	 * Retrieves the URL to start Salesforce and Spring OAuth Flow
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return The Salesforce OAuth Url along with redirection to completeOauth
+	 */
+
+	public static Url getSpringOAuthUrl(final String state) {
+		Permissions.verifyIsDocuSignAdministrator();
+		PageReference pg = new PageReference(new Url(Salesforce.salesforceOAuthUrl).toExternalForm());
+		pg.getParameters().putAll(new Map<String, String> {
+			'response_type' => 'code',
+			'state' => state,
+			'client_id' => GEN_CONNECTEDAPP_CLIENTID, //TODO Move to custom settings
+			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
+				+ '/apex/' + Application.namespacePrefix + 'CompleteSpringOAuth'
+		});
+		return new Url(pg.getUrl());
+	}
+
+	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
+		Permissions.verifyIsDocuSignAdministrator();
+		Credentials c = Credentials.getInstance();
+		return getSpringOAuthAPI(c.environment.scmAuthBaseUrl).completeSpringOAuth(authorizationCode);
 	}
 }

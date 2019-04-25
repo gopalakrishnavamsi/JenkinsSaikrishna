@@ -2,6 +2,7 @@
                 extends="c:RootContainer">
 
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
+    <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
 
     <aura:attribute name="login" type="Object" access="private"/>
     <aura:attribute name="steps" type="Object[]" access="private"/>
@@ -44,6 +45,7 @@
                                     isTrialExpired="{!v.isTrialExpired}"
                                     nextStep="{!v.nextStep}"
                                     beginOAuth="{!v.beginOAuth}"
+                                    beginSpringOAuth="{!v.beginSpringOAuth}"
                                     exitClicked="{!c.handleStepChange}"
                                     finishClicked="{!c.goToNextStep}"/>
                 </div>

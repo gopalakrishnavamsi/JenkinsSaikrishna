@@ -18,6 +18,10 @@
     helper.beginOAuth(component);
   },
 
+  loginToSpring: function (component, event, helper) {
+    helper.beginSpringOAuth(component);
+  },
+
   logoutOfDocuSign: function (component, event, helper) {
     component.set('v.showLogoutModal', false);
     component.get('v.uiHelper').setLoading(true);
@@ -97,5 +101,10 @@
 
   handleOAuthEvent: function (component, event, helper) {
     helper.endOAuth(component, event.getParam('response'), event.getParam('loginInformation'));
+  },
+
+  handleSpringOAuthEvent: function (component, event, helper) {
+    helper.endSpringOAuth(component, event.getParam('response'), event.getParam('loginInformation'));
   }
+
 });

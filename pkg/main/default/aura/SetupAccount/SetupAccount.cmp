@@ -4,6 +4,7 @@
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="nextStep" type="String"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
+    <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
 
     <aura:attribute name="showExitModal" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="continueButtonDisabled" type="Boolean" default="{!true}" access="private"/>
@@ -30,7 +31,8 @@
                          login="{!v.login}"
                          isLoggedIn="{!v.isLoggedIn}"
                          isTrialExpired="{!v.isTrialExpired}"
-                         beginOAuth="{!v.beginOAuth}"/>
+                         beginOAuth="{!v.beginOAuth}"
+                         beginSpringOAuth="{!v.beginSpringOAuth}"/>
             </div>
         </div>
         <!-- Content -->
