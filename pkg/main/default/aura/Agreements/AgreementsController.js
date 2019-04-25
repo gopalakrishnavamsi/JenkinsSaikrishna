@@ -1,17 +1,8 @@
 ({
-  doInit: function (component) {
-    //set the namespace attribute
-    var action = component.get('c.getNameSpace');
-    action.setCallback(this, function (response) {
-      var state = response.getState();
-      if (state === "SUCCESS") {
-        component.set('v.namespace', response.getReturnValue());
-      }
-      // else if (state === "ERROR") { // eslint no-empty
-      // TODO: Handle error condition. Use uiHelper for standard toast notification.
-      // }
-    });
-    $A.enqueueAction(action);
+  doInit: function (component, event, helper) {
+    helper.setNameSpace(component, event, helper);
+    helper.getAgreements(component, event, helper);
+
   },
 
   handleToastEvent: function (component, event, helper) {

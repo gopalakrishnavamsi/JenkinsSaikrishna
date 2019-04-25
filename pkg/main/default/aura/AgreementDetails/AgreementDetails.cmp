@@ -4,7 +4,7 @@
     <!-- attributes -->
     <aura:attribute name="showTimeLine" type="boolean"/>
     <aura:attribute name="timelineDetails" type="List"/>
-    <aura:attribute name="fileDetails" type="Map"/>
+    <aura:attribute name="agreementDetails" type="Object"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
 
     <!-- handlers -->
@@ -39,19 +39,32 @@
                         </span>
                 </div>
                 <div class="slds-media__body">
-                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a href="javascript:void(0);">{!v.fileDetails.name}</a>
+                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a
+                                href="javascript:void(0);">{!v.agreementDetails.name}</a>
                     </h3>
                     <div class="slds-tile__detail">
                         <ul class="slds-list_vertical">
-                            <li class="slds-item">{!v.fileDetails.createdDate}</li>
+                            <li class="slds-item">{!$Label.c.Modified}&nbsp;{!v.agreementDetails.modifiedDate}</li>
                             <li class="slds-item slds-p-top_small">
-                                    <span class="{!'slds-badge' + if(v.fileDetails.status == 'REVIEW CANCELLED',' reviewcancelled')
-                                                                + if(v.fileDetails.status == 'PENDING APPROVAL',' pendingapproval')
-                                                                + if(v.fileDetails.status == 'COMPLETED',' complete')}">
-                                        {!v.fileDetails.status}
+                                    <span class="{!'slds-badge' + if(v.agreementDetails.status == 'NEW',' new')
+                                                                + if(v.agreementDetails.status == 'NEW VERSION',' newversion')
+                                                                + if(v.agreementDetails.status == 'PENDING REVIEW',' pendingreview')
+                                                                + if(v.agreementDetails.status == 'REVIEWED',' reviewed')
+                                                                + if(v.agreementDetails.status == 'REVIEW CANCELLED',' reviewcancelled')
+                                                                + if(v.agreementDetails.status == 'REVIEWED EXPIRED',' reviewexpired')
+                                                                + if(v.agreementDetails.status == 'PENDING APPROVAL',' pendingapproval')
+                                                                + if(v.agreementDetails.status == 'APPROVED',' approved')
+                                                                + if(v.agreementDetails.status == 'COMPLETED',' complete')
+                                                                + if(v.agreementDetails.status == 'SIGNED',' signed')
+                                                                + if(v.agreementDetails.status == 'SIGNATURE CANCELLED',' signaturecancelled')
+                                                                + if(v.agreementDetails.status == 'NO STATUS','  nostatus')
+                                                                + if(v.agreementDetails.status == 'PENDING SIGNATURE',' pendingsignature')
+                                                                + if(v.agreementDetails.status == 'SYSTEM ERROR',' systemerror')}">
+                                        {!v.agreementDetails.status}
                                     </span>
                             </li>
                         </ul>
+
                     </div>
                 </div>
             </article>
@@ -64,17 +77,17 @@
                                   menuAlignment="right">
                 <lightning:menuItem label="Download" value="Download"/>
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
-                                    onactive="{!c.showUploadModal}" />
+                                    onactive="{!c.showUploadModal}"/>
 
                 <lightning:menuItem label="Rename" value="Rename"
-                                    onactive="{!c.showRenameModal}" />
+                                    onactive="{!c.showRenameModal}"/>
                 <lightning:menuItem label="Delete" value="Delete"
-                                    onactive="{!c.showDeleteModal}" />
+                                    onactive="{!c.showDeleteModal}"/>
             </lightning:buttonMenu>
             <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small"
                                   menuAlignment="right">
                 <lightning:menuItem label="Share Link" value="Share Link"
-                                    onactive="{!c.showShareLinkModal}" />
+                                    onactive="{!c.showShareLinkModal}"/>
                 <lightning:menuItem label="External Review" value="External Review"
                                     onactive="{!c.showExternalReviewModal}"/>
                 <lightning:menuItem label="Internal Approval" value="Internal Approval"
