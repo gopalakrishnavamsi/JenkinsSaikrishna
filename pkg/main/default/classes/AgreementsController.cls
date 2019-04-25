@@ -10,4 +10,14 @@ public with sharing class AgreementsController extends Controller {
 	public static String getNameSpace() {
 		return Application.lightningNamespace;
 	}
+
+	@AuraEnabled
+	public static List<Agreement> getAgreements(final Id sourceObjectId) {
+		try {
+			return NegotiateService.getAgreements(sourceObjectId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Agreements.');
+		}
+
+	}
 }
