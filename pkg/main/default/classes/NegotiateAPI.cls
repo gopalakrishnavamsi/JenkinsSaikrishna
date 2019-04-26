@@ -408,23 +408,24 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-// taskId, we can use below taskId to check the status of the uploaded document
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
 	@TestVisible
-	private class APITaskStatus {
-
+	public class TaskStatus {
+		@AuraEnabled
 		public String message;
+		@AuraEnabled
 		public String status;
 	}
 
 //Get status of created Agreement in Folder
-	public String getAgreementInEOSFolderStatus(final UUID taskId) {
+	public NegotiateAPI.TaskStatus getAgreementInEOSFolderStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
+		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' || count < 4) {
+			while (status != 'Success' && count < 5) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -439,12 +440,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				throw new APIException(response.error);
 			}
 
-			APITaskStatus result = (APITaskStatus)JSON.deserialize(response.body, APITaskStatus.class);
-			status = result.status;
+			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
 			count += 1;
 		}
 
-		return status;
+		return result;
 	}
 
 //Get All Agreements from an EOS folder

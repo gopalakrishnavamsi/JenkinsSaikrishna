@@ -60,11 +60,26 @@ public with sharing class  NegotiateAPITest {
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			String result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals('Success', result);
+			System.assertEquals('Success', result.status);
+		}
+	}
+
+	@IsTest
+	static void test_getAgreementInEOSFolderStatus_success2() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID_2);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals('Processing', result.status);
 		}
 	}
 

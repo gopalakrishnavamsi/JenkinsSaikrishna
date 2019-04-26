@@ -67,7 +67,6 @@ public with sharing class NegotiateService {
 
 		} else {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
-			/*
 			for (Agreement agreement : agreements) {
 				if (agreement != null) {
 					// add historyItems
@@ -80,7 +79,6 @@ public with sharing class NegotiateService {
 					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
 				}
 			}
-			*/
 		}
 		return agreements;
 	}
@@ -148,10 +146,18 @@ public with sharing class NegotiateService {
 		}
 	}
 
-	public String createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
+	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		UUID taskId = NegotiateAPI.getInstance().createAgreementInEOSFolder(sfContentVersionId, folderId, documentName);
-		return NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
+		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
+		if (taskStatus.status.equals('Success')) {
+			taskStatus.message = Label.AgreementImportSuccessful;
+		} else if (taskStatus.status.equals('Processing')) {
+			taskStatus.message = Label.AgreementImportProcessing;
+		} else {
+			taskStatus.message = Label.AgreementImportFailed;
+		}
+		return taskStatus;
 	}
 }
