@@ -3,7 +3,6 @@
     component.set('v.loading', true);
     helper.setNameSpace(component, event, helper);
     helper.getAgreements(component, event, helper);
-    component.set('v.loading', false);
   },
 
   handleToastEvent: function (component, event, helper) {

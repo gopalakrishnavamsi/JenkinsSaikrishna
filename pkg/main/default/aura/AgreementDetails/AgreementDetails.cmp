@@ -44,7 +44,14 @@
                     </h3>
                     <div class="slds-tile__detail">
                         <ul class="slds-list_vertical">
-                            <li class="slds-item">{!$Label.c.Modified}&nbsp;{!v.agreementDetails.modifiedDate}</li>
+                            <li class="slds-item">
+                                {!$Label.c.Modified}&nbsp;
+                                <lightning:formattedDateTime value="{!v.agreementDetails.modifiedDate}" year="numeric"
+                                                             month="numeric" day="numeric"/>&nbsp;
+                                at&nbsp;
+                                <lightning:formattedDateTime value="{!v.agreementDetails.modifiedDate}" hour="2-digit"
+                                                             minute="2-digit" hour12="false"/>
+                            </li>
                             <li class="slds-item slds-p-top_small">
                                     <span class="{!'slds-badge' + if(v.agreementDetails.status == 'NEW',' new')
                                                                 + if(v.agreementDetails.status == 'NEW VERSION',' newversion')

@@ -1,10 +1,13 @@
 .THIS .agreementsIconBackground{
     background:rgba(27, 82, 151, 1);
 }
+
 .THIS.boxBackground{
     background:white;
+    height: 100%;
 }
 
 .THIS .ds-spinner_container {
-    min-height: 100px;
+    margin: auto;
+    min-height: 30vh;
 }

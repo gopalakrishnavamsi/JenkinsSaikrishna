@@ -47,6 +47,7 @@
   },
 
   getAgreements: function (component, event, helper) {
+    component.set('v.loading', true);
     var recordId = component.get('v.recordId');
     console.log('recordId ' + recordId);
     var action = component.get('c.getAgreements');
@@ -71,6 +72,7 @@
         }
         helper.showToast(component, errorMessage, 'error');
       }
+      component.set('v.loading', false);
     });
     $A.enqueueAction(action);
   }
