@@ -42,7 +42,6 @@
                                     <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
                                     <aura:set attribute="else">
                                         <!-- If Agreements exists -->
-                                        <!-- TODO change the count to dynamically match the count of DocuSign Agreements for the Salesforce record -->
                                         <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
                                                 ({!v.agreements.length})</b>
                                         </p>
