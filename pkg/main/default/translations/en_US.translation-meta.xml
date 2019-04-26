@@ -3153,6 +3153,18 @@
 		<label>Modified</label>
 		<name>Modified</name>
 	</customLabels>
+	<customLabels>
+		<label>Agreement has been imported successfully.</label>
+		<name>AgreementImportSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement import in progress. Please check the Agreements space after some time.</label>
+		<name>AgreementImportProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement Import failed. Please try again.</label>
+		<name>AgreementImportFailed</name>
+	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

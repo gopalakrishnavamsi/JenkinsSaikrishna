@@ -3,7 +3,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 
 	private final Boolean success;
 	public static final UUID FOLDER_ID = UUID.parse('56322efe-e541-e911-9c1d-3ca82a1e3f41');
-	public static final Id SOURCE_OBJECT_Id = Id.valueOf('0010R00000Y1M8bQAF');
+	public static final Id SOURCE_OBJECT_ID = Id.valueOf('0010R00000Y1M8bQAF');
+	public static final Id SOURCE_OBJECT_ID_2 = Id.valueOf('0010R00000Y1M8bQbF');
 	public static final UUID FOLDER_ID_2 = UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41');
 	public static final UUID DOCUMENT_ID = UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41');
 	public static final UUID DOCUMENT_ID_2 = UUID.parse('382bd222-1536-e922-9c1d-3ca82a1e3f41');
@@ -11,6 +12,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	public static final UUID DOCUMENT_ID_4 = UUID.parse('222bd222-1536-e911-9c1d-3ca82a1e3f41');
 	public static final UUID DOCUMENT_ID_5 = UUID.parse('333bd333-1536-e911-9c1d-3ca82a1e3f41');
 	public static final UUID DOCUMENT_ID_6 = UUID.parse('444bd444-1536-e911-9c1d-3ca82a1e3f41');
+	public static final UUID TASK_ID = UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566');
+	public static final UUID TASK_ID_2 = UUID.parse('5682d399-29fe-4085-9e48-126e4ffa0577');
 	public static final String USER_EMAIL = 'TestUser@TestCompany.com';
 	public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
 	public static final Id OBJECT_ID = ID.valueOf('0061U0000058I2EQAU');
@@ -50,6 +53,14 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
 			response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_EOS_FOLDER) && path.contains(String.valueOf(NegotiateAPIMock.TASK_ID_2))) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Document":{"Href":"https://apiuatna11.springcm.com/v201411/documents/51962d1b-5468-e911-9c20-3ca82a1e3f41"},"Message":"ContentDocument Processing","Status":"Processing","Href":"https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/33c0648a-7bb5-4f34-aef8-9994362ce0ae"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_EOS_FOLDER)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Document":{"Href":"https://apiuatna11.springcm.com/v201411/documents/51962d1b-5468-e911-9c20-3ca82a1e3f41"},"Message":"ContentDocumentimportedsuccessfully","Status":"Success","Href":"https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/33c0648a-7bb5-4f34-aef8-9994362ce0ae"}');
 		} else if (success && method == 'GET' && path.contains(String.valueOf(NegotiateAPIMock.FOLDER_ID_2))) {
 			response.setStatusCode(200);
 			response.setStatus('OK');
