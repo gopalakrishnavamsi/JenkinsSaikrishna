@@ -33,6 +33,19 @@ public with sharing class NegotiateService {
 		}
 	}
 
+	@future
+	private static void setFolderId(final Id sourceObjectId, final String folderId) {
+		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
+			'FolderId__c', 'SourceObject__c'
+		});
+
+		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
+		configuration.FolderId__c = folderId;
+		configuration.SourceObject__c = sourceObjectId;
+		insert configuration;
+
+	}
+
 	/**
 	 * Fetches the Agreements on the Salesforce Source Object
 	 *
@@ -135,17 +148,10 @@ public with sharing class NegotiateService {
 		}
 	}
 
-	@future
-	private static void setFolderId(final Id sourceObjectId, final String folderId) {
-		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
-			'FolderId__c', 'SourceObject__c'
-		});
-
-		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
-		configuration.FolderId__c = folderId;
-		configuration.SourceObject__c = sourceObjectId;
-		insert configuration;
-
+	public String createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		UUID folderId = DB.getFolderId(sourceObjectId);
+		UUID taskId = NegotiateAPI.getInstance().createAgreementInEOSFolder(sfContentVersionId, folderId, documentName);
+		return NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
 	}
-
 }

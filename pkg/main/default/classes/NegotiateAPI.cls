@@ -412,6 +412,41 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	@TestVisible
+	private class APITaskStatus {
+
+		public String message;
+		public String status;
+	}
+
+//Get status of created Agreement in Folder
+	public String getAgreementInEOSFolderStatus(final UUID taskId) {
+		String status = '';
+		Long count = 0;
+
+		while (status != 'Success' || count < 4) {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_AGREEMENT_IN_EOS_FOLDER, taskId
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+
+			APITaskStatus result = (APITaskStatus)JSON.deserialize(response.body, APITaskStatus.class);
+			status = result.status;
+			count += 1;
+		}
+
+		return status;
+	}
+
 //Get All Agreements from an EOS folder
 	public List<Agreement> getAgreements(final UUID folderId) {
 		List<Agreement> agreements = new List<Agreement>();

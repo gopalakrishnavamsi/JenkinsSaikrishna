@@ -220,7 +220,7 @@ global class UserMock {
 		accountSettings.ESignatureBaseUrl__c = 'https://esign.test.docusign.net/';
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
-		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/';
+		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/gen/';
 		accountSettings.InviteCallbackUrl__c = 'https://invite.test.springcm.com/provisioning/v1/callbacks/UserInvited';
 		accountSettings.InviteRedirectUrl__c = 'https://www.docusign.com/';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
