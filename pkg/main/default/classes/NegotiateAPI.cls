@@ -24,8 +24,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
 			Credentials c = Credentials.getInstance();
-			//self = new NegotiateAPI(c.environment.scmApiBaseUrl, 'v2', c.account.id); // TODO: as of now using Gen's
-			self = new NegotiateAPI(new Url('https://apiuatna11.springcm.com/'), 'v2', c.account.id);
+			String negotiateUrl = c.environment.scmApiBaseUrl.toExternalForm().subString(0, c.environment.scmApiBaseUrl.toExternalForm().indexOf(c.environment.scmApiBaseUrl.getPath()) + 1);
+			self = new NegotiateAPI(new Url(negotiateUrl), 'v2', c.account.id);
 		}
 		return self;
 	}
@@ -33,7 +33,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static NegotiateAPI getHistoryAPIInstance() {
 		if (historySelf == null) {
 			Credentials c = Credentials.getInstance();
-			historySelf = new NegotiateAPI(c.environment.scmApiBaseUrl, 'gen/v1', c.account.id); // TODO: as of now using Gen's
+			historySelf = new NegotiateAPI(c.environment.scmApiBaseUrl, 'v1', c.account.id);
 		}
 		return historySelf;
 	}
