@@ -9,6 +9,12 @@
     component.find('toast').close();
   },
 
+  loadAgreements: function (component, event, helper) {
+    component.set('v.loading', true);
+    helper.setNameSpace(component, event, helper);
+    helper.getAgreements(component, event, helper);
+  },
+
   createImportComponent: function (component) {
     $A.createComponent("c:AgreementsImport", {
       "showModal": true, "recordId": component.get('v.recordId')
@@ -49,7 +55,6 @@
   getAgreements: function (component, event, helper) {
     component.set('v.loading', true);
     var recordId = component.get('v.recordId');
-    console.log('recordId ' + recordId);
     var action = component.get('c.getAgreements');
 
     action.setParams({

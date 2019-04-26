@@ -22,8 +22,10 @@
     component.set('v.currentStep', '1');
   },
 
-  importButtonClicked: function () {
-    // FIXME: Implement or remove.
+  importButtonClicked: function (component, event, helper) {
+    console.log('Inside import button clicked');
+    helper.reloadAgreementsSpace(component);
+    helper.close(component);
   },
 
   handleFileSelection: function () {

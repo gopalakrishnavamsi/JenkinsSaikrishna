@@ -15,6 +15,14 @@
     component.set('v.loading', loading === true);
   },
 
+  reloadAgreementsSpace: function (component) {
+    var evt = component.getEvent('loadingEvent');
+    evt.setParams({
+      isLoading: true
+    });
+    evt.fire();
+  },
+
   getSalesforceFiles: function (component) {
     var self = this;
     self.setLoading(component, true);

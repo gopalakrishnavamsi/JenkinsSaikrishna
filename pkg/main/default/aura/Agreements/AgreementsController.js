@@ -1,8 +1,6 @@
 ({
   doInit: function (component, event, helper) {
-    component.set('v.loading', true);
-    helper.setNameSpace(component, event, helper);
-    helper.getAgreements(component, event, helper);
+    helper.loadAgreements(component, event, helper);
   },
 
   handleToastEvent: function (component, event, helper) {
@@ -21,5 +19,12 @@
 
   importAgreements: function (component, event, helper) {
     helper.createImportComponent(component, event, helper);
+  },
+
+  handleLoadingEvent: function (component, event, helper) {
+    var params = event.getParams();
+    if (params && params.isLoading === true) {
+      helper.loadAgreements(component, event, helper);
+    }
   }
 });
