@@ -32,4 +32,19 @@ public with sharing class NegotiateServiceTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_createAgreementInEOSFolder_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.FOLDER_ID_2.toString());
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateService.createAgreementInEOSFolder(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.SOURCE_OBJECT_ID_2, 'Test_DOC_Name');
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals('Success', result.status);
+			System.assertEquals('Agreement has been imported successfully.', result.message);
+		}
+	}
 }
