@@ -7,9 +7,18 @@
     border-bottom: 1px solid rgb(217, 219, 221);
 }
 
-.THIS  .slds-radio .slds-form-element__label
-{
+.THIS .ds-no-label .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-form-element__label,
+.THIS .ds-no-label lightning-input .slds-form-element__label {
     display: none;
+}
+
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox--faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio_faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio--faux {
+    margin: 0;
 }
 
 .THIS .fileDetails {

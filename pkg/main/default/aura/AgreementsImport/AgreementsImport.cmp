@@ -9,7 +9,6 @@
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="recordId" type="Id" />
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
-    <aura:attribute name="selectedSalesforceFile" type="Object" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}" afterScriptsLoaded="{!c.uploadScriptsLoaded}" />
@@ -92,7 +91,9 @@
                             <li class="slds-item slds-p-vertical_small">
                                 <article class="slds-tile slds-media slds-media_center">
                                     <div class="slds-media__figure">
-                                        <lightning:input type="radio"  value="{!fileIndex}" label="Select" onchange="{!c.handleFileSelection}" checked="{!file.selected}"/>
+                                        <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
+                                                         onchange="{!c.handleFileSelection}" checked="{!file.selected}"
+                                                         class="ds-no-label" value="{!file.sourceId}"/>
                                     </div>
                                     <div class="slds-media__figure">
                                         <!-- File Icon -->

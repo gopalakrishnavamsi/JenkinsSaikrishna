@@ -1,5 +1,6 @@
 ({
   onInit: function (component) {
+    component.set('v.salesforceFileSelected', false);
     component.set('v.currentStep', '1');
   },
 
@@ -23,13 +24,16 @@
   },
 
   importButtonClicked: function (component, event, helper) {
-    console.log('Inside import button clicked');
+    helper.publishAgreement(component);
     helper.reloadAgreementsSpace(component);
     helper.close(component);
   },
 
-  handleFileSelection: function () {
-    // FIXME: Implement or remove.
+  handleFileSelection: function (component, event, helper) {
+    if (event.getSource().get("v.checked")) {
+      var selectedValue = event.getSource().get("v.value");
+      helper.setSelectedFiles(component, selectedValue);
+    }
   },
 
   uploadFileButtonClicked: function (component) {
@@ -45,7 +49,6 @@
   },
 
   cancelButtonClicked: function (component, event, helper) {
-    // console.log('Cancel Button clicked');
     helper.close(component);
   }
 });

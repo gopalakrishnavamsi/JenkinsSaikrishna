@@ -58,4 +58,22 @@
     }
     return doc;
   },
+
+  publishAgreement: function (component) {
+    var salesforceFiles = component.get('v.salesforceFiles');
+  },
+
+  setSelectedFiles: function (component, selectedValue) {
+    var salesforceFiles = component.get('v.salesforceFiles');
+    salesforceFiles.forEach(function (file) {
+      if (file.sourceId === selectedValue) {
+        file.selected = true;
+      } else {
+        file.selected = false;
+      }
+    });
+    component.set('v.salesforceFiles', salesforceFiles);
+  },
+
+
 });
