@@ -4,3 +4,7 @@
 .THIS.boxBackground{
     background:white;
 }
+
+.THIS .ds-spinner_container {
+    min-height: 100px;
+}

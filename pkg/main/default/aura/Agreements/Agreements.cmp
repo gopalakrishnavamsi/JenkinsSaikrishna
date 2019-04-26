@@ -16,7 +16,7 @@
     <aura:attribute name="noData" type="Boolean" default="false"/>
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="visualforce" type="Boolean"/>
-    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="loading" type="Boolean" access="private" default="false"/>
     <aura:attribute name="agreements" type="Object[]" access="private"/>
 
     <!-- handlers -->
@@ -52,13 +52,22 @@
                         </div>
                     </div>
                     <div class="slds-col">
-                        <button class="slds-button slds-button_neutral" onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
+                        <button class="slds-button slds-button_neutral"
+                                onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
                     </div>
                 </div>
             </li>
 
+            <aura:if isTrue="{!v.loading}">
+                <!-- Loading State -->
+                <div class="ds-spinner_container slds-is-relative slds-m-bottom_large">
+                    <lightning:spinner size="medium" alternativeText="{!$Label.c.Loading}"/>
+                </div>
+            </aura:if>
+
             <!-- No DocuSign Agreements to Display -->
-            <aura:if isTrue="{!v.agreements.length == 0}">
+
+            <aura:if isTrue="{!and(v.agreements.length == 0, v.loading == false)}">
                 <li class="slds-item">
                     <div class="slds-illustration slds-illustration_small slds-p-around_large">
                         <img src="{!$Resource.noData_Agreements}"/>
