@@ -36,13 +36,19 @@
                                      src="{!$Resource.icon_DocuSignAgreements}"/>
                             </div>
                             <div class="slds-media__body">
-                                <aura:if isTrue="{!v.agreements.length == 0}">
-                                    <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
-                                    <aura:set attribute="else">
-                                        <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
-                                                ({!v.agreements.length})</b>
-                                        </p>
-                                    </aura:set>
+                                <!-- Loading Header -->
+                                <aura:if isTrue="{!v.loading}">
+                                    <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} ()</b></p>
+                                </aura:if>
+                                <!-- Header content goes here -->
+                                <aura:if isTrue="{!not(v.loading)}">
+                                    <aura:if isTrue="{!v.agreements.length == 0}">
+                                        <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
+                                        <aura:set attribute="else">
+                                            <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
+                                                    ({!v.agreements.length})</b></p>
+                                        </aura:set>
+                                    </aura:if>
                                 </aura:if>
                             </div>
                         </div>
@@ -55,7 +61,6 @@
             </li>
 
             <div id="mainContent">
-
                 <!-- Loading State -->
                 <aura:if isTrue="{!v.loading}">
                     <div class="ds-spinner_container slds-is-relative">
