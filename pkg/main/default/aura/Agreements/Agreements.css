@@ -11,3 +11,7 @@
     margin: auto;
     min-height: 30vh;
 }
+
+.THIS .ds-agreements_spacing {
+    border-bottom: 1px solid rgb(217, 219, 221);
+}
