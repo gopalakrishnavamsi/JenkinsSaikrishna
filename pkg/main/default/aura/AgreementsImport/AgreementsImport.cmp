@@ -1,4 +1,4 @@
-<aura:component description="AgreementsImport" controller="AgreementsImportController">
+<aura:component description="AgreementsImport" controller="AgreementsController">
     <!-- FIXME : Check the resource.Utiljs since it has been refactored -->
     <!-- FIXME : Check hardcoding and replace with labels  -->
     <ltng:require scripts="{!$Resource.stringUtils}"/>
@@ -9,6 +9,8 @@
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="recordId" type="Id" />
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
+    <aura:attribute name="importedFile" type="Object" access="private"/>
+    <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}" afterScriptsLoaded="{!c.uploadScriptsLoaded}" />
@@ -21,21 +23,24 @@
     <c:strike_modal aura:id="importAgreementsModal"
                     title="{!if(v.currentStep == '1', 'Import Files')
                             +if(v.currentStep == '2', 'Select a File')
-                            +if(v.currentStep == '3', 'Upload a File')}"
+                            +if(v.currentStep == '3', 'Upload a File')
+                            +if(v.currentStep == '4', 'New Agreement Created')}"
                     showModal="{!v.showModal}"
-                    showFooter="{!if(v.currentStep == '1', false,true)}">
+                    showFooter="{!if(v.currentStep == '1', false,true)}"
+                    successHeader="{!if(v.currentStep == '4', true,false)}">
 
-        <div class="slds-scope slds-p-horizontal--xx-large">
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
-                <aura:if isTrue="{!v.loading}">
-                    <div class="slds-is-static">
-                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                            <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                            <div class="slds-spinner__dot-a"></div>
-                            <div class="slds-spinner__dot-b"></div>
-                        </div>
-                    </div>
-                </aura:if>
                 <aura:if isTrue="{!v.currentStep == '1'}">
                     <div class="slds-col">
                         <div class="slds-text-align--center">
@@ -148,6 +153,119 @@
                     </div>
                 </aura:if>
 
+                <aura:if isTrue="{!v.currentStep == '4'}">
+                    <div class="slds-col">
+                        <div class="slds-text-align--center">
+                            The file below has been copied from Salesforce files, imported to DocuSign Agreements, and
+                            now can be sent for negotiation, approval or signature.
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-p-top_medium">
+                        <article class="slds-tile slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <!-- File Icon -->
+                                <lightning:icon iconName="{!
+                                            'doctype:'
+                                            + if(v.importedFile.extension == 'doc', 'word')
+                                            + if(v.importedFile.extension == 'docm', 'gdoc')
+                                            + if(v.importedFile.extension == 'docx', 'word')
+                                            + if(v.importedFile.extension == 'dot', 'gdoc')
+                                            + if(v.importedFile.extension == 'dotm', 'gdoc')
+                                            + if(v.importedFile.extension == 'dotx', 'gdoc')
+                                            + if(v.importedFile.extension == 'htm', 'html')
+                                            + if(v.importedFile.extension == 'html', 'html')
+                                            + if(v.importedFile.extension == 'msg', 'unknown')
+                                            + if(v.importedFile.extension == 'pdf', 'pdf')
+                                            + if(v.importedFile.extension == 'rtf', 'gdoc')
+                                            + if(v.importedFile.extension == 'txt', 'gdoc')
+                                            + if(v.importedFile.extension == 'wpd', 'gdoc')
+                                            + if(v.importedFile.extension == 'xps', 'unknown')
+                                            + if(v.importedFile.extension == 'bmp', 'image')
+                                            + if(v.importedFile.extension == 'gif', 'image')
+                                            + if(v.importedFile.extension == 'jpg', 'image')
+                                            + if(v.importedFile.extension == 'jpeg', 'image')
+                                            + if(v.importedFile.extension == 'png', 'image')
+                                            + if(v.importedFile.extension == 'tif', 'image')
+                                            + if(v.importedFile.extension == 'tiff', 'image')
+                                            + if(v.importedFile.extension == 'pot', 'slide')
+                                            + if(v.importedFile.extension == 'potx', 'slide')
+                                            + if(v.importedFile.extension == 'pps', 'slide')
+                                            + if(v.importedFile.extension == 'ppt', 'slide')
+                                            + if(v.importedFile.extension == 'pptm', 'slide')
+                                            + if(v.importedFile.extension == 'pptx', 'slide')
+                                            + if(v.importedFile.extension == 'csv', 'gsheet')
+                                            + if(v.importedFile.extension == 'xls', 'gsheet')
+                                            + if(v.importedFile.extension == 'xlsm', 'gsheet')
+                                            + if(v.importedFile.extension == 'xlsx', 'gsheet')
+                                        }"/>
+                                <!-- /File Icon -->
+                            </div>
+                            <div class="slds-media__body">
+                                <h3 class="slds-tile__title slds-truncate" title="{!v.importedFile.name}"><a
+                                            href="javascript:void(0);">{!v.importedFile.name}</a>
+                                </h3>
+                                <div class="slds-truncate slds-text-color_weak">
+                                    {!v.importedFile.formattedSize} • {!v.importedFile.extension}
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="slds-col slds-p-top_medium">
+                        <div class="slds-grid slds-grid_vertical">
+                            <div class="slds-col slds-p-bottom_xx-small">
+                                <a onclick=""
+                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                        <span class="slds-icon slds-icon_medium">
+                                            <lightning:icon iconName="utility:answer"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body slds-p-around_xx-small">
+                                        <h2 class="slds-truncate visualPickerHeading"
+                                            title="Send for External Review">
+                                            Send for External Review</h2>
+                                        <p class="">Negotiate with a third party and compare redlines.</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="slds-col slds-p-bottom_xx-small">
+                                <a onclick=""
+                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                        <span class="slds-icon slds-icon_medium">
+                                            <lightning:icon iconName="utility:approval"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body slds-p-around_xx-small">
+                                        <h2 class="slds-truncate visualPickerHeading"
+                                            title="Send for Approval">
+                                            Send for Approval</h2>
+                                        <p class="">Request approval and feedback from your teammates.</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="slds-col slds-p-bottom_xx-small">
+                                <a onclick=""
+                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
+                                        <span class="slds-icon slds-icon_medium">
+                                            <lightning:icon iconName="utility:edit_form"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body slds-p-around_xx-small">
+                                        <h2 class="slds-truncate visualPickerHeading"
+                                            title="Send for Signature">
+                                            Send for Signature</h2>
+                                        <p class="">Collect signatures for this agreement with DocuSign.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </aura:if>
+
                 <div id="upload-wrapper" class="{!'slds-p-around_large' + if(not(v.currentStep == '3'), ' slds-hide','')}">
 
                 </div>
@@ -163,7 +281,7 @@
                                       label="Back">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand" onclick="{!c.importButtonClicked}"
-                                      label="Import"></lightning:button>
+                                      disabled="{!v.disableSalesforceFileImport}" label="Import"></lightning:button>
                 </div>
             </aura:if>
 
@@ -175,6 +293,14 @@
                         <lightning:button class="slds-button slds-button--brand" onclick="{!c.uploadFileImportButtonClicked}"
                                           label="Import"></lightning:button>
                     </div>
+            </aura:if>
+
+            <aura:if isTrue="{!v.currentStep == '4'}">
+                <div class="slds-grid slds-align_absolute-center">
+                    <lightning:button class="slds-button slds-button_neutral" onclick="{!c.clickDone}"
+                                      label="Done">
+                    </lightning:button>
+                </div>
             </aura:if>
 
         </aura:set>

@@ -10,19 +10,17 @@
     <aura:if isTrue="{!v.showToast}">
         <div aura:id="toast"
              class="{!if(v.showToast, 'ds-toast_shown ', 'slds-hide ') + 'ds-toast slds-notify_container' + if(v.visualforce, ' ds-toast_vf', '')}">
-            <div class="{!'slds-notify slds-notify--toast ' + if(v.mode == 'success', 'slds-theme_success', if(v.mode == 'warning', 'slds-theme_warning', 'slds-theme_error'))}"
+            <div class="{!'slds-notify slds-notify_toast ' + if(v.mode == 'success', 'slds-theme_success', if(v.mode == 'warning', 'slds-theme_warning', 'slds-theme_error'))}"
                  role="alert">
                 <lightning:icon class="slds-no-flex slds-m-right_small" size="small"
                                 iconName="{!if(v.mode == 'success', 'utility:success', if(v.mode == 'warning', 'utility:warning', 'utility:error'))}"
                                 variant="inverse"/>
-                <aura:if isTrue="{!v.mode != 'success'}">
-                    <lightning:buttonIcon class="slds-button--icon-inverse slds-notify__close slds-m-left_small"
-                                          alternativeText="close"
-                                          iconName="utility:close"
-                                          size="large"
-                                          variant="bare"
-                                          onclick="{!c.close}"/>
-                </aura:if>
+                <lightning:buttonIcon class="slds-button--icon-inverse slds-notify__close slds-m-left_small"
+                                      alternativeText="close"
+                                      iconName="utility:close"
+                                      size="large"
+                                      variant="bare"
+                                      onclick="{!c.close}"/>
                 <div class="slds-notify__content">
                     <h2 class="slds-text-heading_small slds-m-top_xxx-small">{!v.message}</h2>
                 </div>

@@ -59,8 +59,63 @@
     return doc;
   },
 
-  publishAgreement: function (component) {
+  publishAgreement: function (component, event, helper) {
+    var self = this;
+    //set loading to true
+    self.setLoading(component, true);
+
+    //get selected file
     var salesforceFiles = component.get('v.salesforceFiles');
+    var selectedFile;
+    salesforceFiles.forEach(function (file) {
+      if (file.selected) {
+        selectedFile = file;
+      }
+    });
+
+    var recordId = component.get('v.recordId');
+    var action = component.get('c.createAgreementInEOSFolder');
+    action.setParams({
+      sfContentVersionId: selectedFile.sourceId,
+      sourceObjectId: recordId,
+      documentName: selectedFile.name
+    });
+
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+
+      if (state === "SUCCESS") {
+        var result = response.getReturnValue();
+        if (result.status === "Success") {
+          //TODO: return uploaded file from Controller
+          var importedFile = {
+            "name": selectedFile.name,
+            "formattedSize": selectedFile.formattedSize,
+            "extension": selectedFile.extension
+          };
+          component.set('v.importedFile', importedFile);
+          component.set('v.currentStep', '4');
+          self.setLoading(component, false);
+        } else if (result.status === "Processing") {
+          self.showToast(component, result.message, 'warning');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        }
+      } else if (state === "ERROR") {
+        var errorMessage = $A.get('$Label.c.ErrorMessage');
+        var errors = response.getError();
+        if (errors) {
+          if (errors[0] && errors[0].message) {
+            errorMessage += errors[0].message;
+          }
+        } else {
+          errorMessage += $A.get('$Label.c.UnknownError');
+        }
+        self.showToast(component, errorMessage, 'error');
+      }
+      self.setLoading(component, false);
+    });
+    $A.enqueueAction(action);
   },
 
   setSelectedFiles: function (component, selectedValue) {
@@ -73,7 +128,7 @@
       }
     });
     component.set('v.salesforceFiles', salesforceFiles);
+    component.set('v.disableSalesforceFileImport', false);
   },
-
 
 });

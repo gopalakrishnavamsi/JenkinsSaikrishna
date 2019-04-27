@@ -7,6 +7,10 @@
     border-bottom: 1px solid rgb(217, 219, 221);
 }
 
+.THIS .fadeBackground {
+    opacity: 0.2;
+}
+
 .THIS .ds-no-label .slds-form-element__label,
 .THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
 .THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-form-element__label,

@@ -1,7 +1,7 @@
 ({
   onInit: function (component) {
-    component.set('v.salesforceFileSelected', false);
     component.set('v.currentStep', '1');
+    component.set('v.disableSalesforceFileImport', true);
   },
 
   navigateToFileSelection: function (component, event, helper) {
@@ -24,15 +24,18 @@
   },
 
   importButtonClicked: function (component, event, helper) {
-    helper.publishAgreement(component);
-    helper.reloadAgreementsSpace(component);
-    helper.close(component);
+    helper.publishAgreement(component, event, helper);
   },
 
   handleFileSelection: function (component, event, helper) {
+    //checkbox checked
     if (event.getSource().get("v.checked")) {
       var selectedValue = event.getSource().get("v.value");
       helper.setSelectedFiles(component, selectedValue);
+    }
+    //checkbox unchecked
+    else {
+      component.set('v.disableSalesforceFileImport', true);
     }
   },
 
@@ -49,6 +52,11 @@
   },
 
   cancelButtonClicked: function (component, event, helper) {
+    helper.close(component);
+  },
+
+  clickDone: function (component, event, helper) {
+    helper.reloadAgreementsSpace(component);
     helper.close(component);
   }
 });
