@@ -58,7 +58,6 @@ public with sharing class NegotiateService {
 		} else {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			for (Agreement agreement : agreements) {
-				/*
 				if (agreement != null) {
 					// add historyItems
 					List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
@@ -69,7 +68,6 @@ public with sharing class NegotiateService {
 					// add versions
 					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
 				}
-				*/
 			}
 		}
 		return agreements;

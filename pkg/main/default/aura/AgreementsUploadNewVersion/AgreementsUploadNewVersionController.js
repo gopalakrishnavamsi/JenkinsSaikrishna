@@ -15,7 +15,7 @@
     helper.close(component, event, helper);
   },
 
-  uploadScriptsLoaded: function () {
+  uploadScriptsLoaded: function (component, event, helper) {
     var options = {
       "iconPath": $A.get('$Resource.scmwidgetsspritemap'),
       "apiToken": "124124124124",

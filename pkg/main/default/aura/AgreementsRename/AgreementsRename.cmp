@@ -7,7 +7,6 @@
     <aura:attribute name="agreementDetails" type="Object"/>
 
     <!-- Events -->
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
     <c:strike_modal aura:id="renameAgreementsModal"
