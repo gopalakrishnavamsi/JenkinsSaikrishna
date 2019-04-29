@@ -47,4 +47,36 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals('Agreement has been imported successfully.', result.message);
 		}
 	}
+
+	@IsTest
+	static void test_renameAgreement_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.renameAgreement(NegotiateAPIMock.DOCUMENT_ID, 'docuTestRename.docx');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_deleteAgreement_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.deleteAgreement(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
 }

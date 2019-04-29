@@ -425,7 +425,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-			while (status != 'Success' && count < 5) {
+			while (status != 'Success' && count < 10) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),

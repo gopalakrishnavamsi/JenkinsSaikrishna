@@ -57,18 +57,18 @@ public with sharing class NegotiateService {
 
 		} else {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
-			for (Agreement agreement : agreements) {
-				if (agreement != null) {
-					// add historyItems
-					List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
-					agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
-					if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
-						agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
-					}
-					// add versions
-					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
-				}
-			}
+//			for (Agreement agreement : agreements) {
+//				if (agreement != null) {
+//					// add historyItems
+//					List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
+//					agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
+//					if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
+//						agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
+//					}
+//					// add versions
+//					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
+//				}
+//			}
 		}
 		return agreements;
 	}
@@ -149,5 +149,13 @@ public with sharing class NegotiateService {
 			taskStatus.message = Label.AgreementImportFailed;
 		}
 		return taskStatus;
+	}
+
+	public static Boolean renameAgreement(final UUID documentId, final String documentName) {
+		return NegotiateAPI.getInstance().renameAgreement(documentId, documentName);
+	}
+
+	public static Boolean deleteAgreement(final UUID documentId) {
+		return NegotiateAPI.getInstance().deleteAgreement(documentId);
 	}
 }
