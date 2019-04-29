@@ -1,19 +1,30 @@
-<aura:component description="AgreementsRename">
+<aura:component description="AgreementsRename" controller="AgreementsController">
     <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
-    <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
+
 
     <!-- Events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <c:strike_modal aura:id="renameAgreementsModal"
                     title="Rename Agreement"
                     showModal="{!v.showModal}">
 
-        <div class="slds-scope slds-p-horizontal--xx-large">
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"

@@ -1095,7 +1095,7 @@ public with sharing class AuthService {
 						this.baseUrl,
 						new List<Object> { 'SetupSalesforce', 'GenIntegration' },
 						QueryString.empty,
-						null,
+						new Map<String, String> { 'Content-Type' => 'application/json' },
 						JSON.serialize(body),
 						RestAPI.defaultTimeout);
 

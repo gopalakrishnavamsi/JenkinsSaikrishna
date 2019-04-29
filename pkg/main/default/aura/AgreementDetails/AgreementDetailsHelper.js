@@ -15,8 +15,10 @@
   },
 
   createDeleteComponent: function (component) {
-    $A.createComponent("c:DeleteAgreement", {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent("c:AgreementsDelete", {
       "showModal": true,
+      "agreementDetails": agreementDetails
     }, function (componentBody) {
       if (component.isValid()) {
         var targetCmp = component.find('deleteModal');
