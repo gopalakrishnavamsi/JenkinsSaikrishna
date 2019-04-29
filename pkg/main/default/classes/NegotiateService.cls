@@ -150,4 +150,12 @@ public with sharing class NegotiateService {
 		}
 		return taskStatus;
 	}
+
+	public static Boolean renameAgreement(final UUID documentId, final String documentName) {
+		return NegotiateAPI.getInstance().renameAgreement(documentId, documentName);
+	}
+
+	public static Boolean deleteAgreement(final UUID documentId) {
+		return NegotiateAPI.getInstance().deleteAgreement(documentId);
+	}
 }
