@@ -1,10 +1,8 @@
 <aura:component access="global"
                 description="Lightning component hosting Agreements"
-                implements="force:appHostable,flexipage:availableForAllPageTypes, force:lightningQuickActionWithoutHeader,force:hasRecordId"
+                implements="force:appHostable,flexipage:availableForAllPageTypes, force:hasRecordId"
                 controller="AgreementsController">
 
-    <!--TODO : Check hardcoding and replace with labels  -->
-    <!--TODO : Add global attribute when releasing DocuSign Negotiate  -->
     <!--TODO : Vf page parameter for toast component   -->
 
     <!-- attributes -->
@@ -26,14 +24,14 @@
     </div>
 
     <!-- body -->
-    <div class="boxBackground slds-box">
+    <div class="ds-boxBackground slds-box">
         <ul class="slds-has-dividers_bottom-space">
             <li class="slds-item">
                 <div class="slds-grid slds-grid_align-spread  slds-p-bottom_xxx-small">
-                    <div class="slds-col">
+                    <div class="slds-col slds-p-bottom_xx-small">
                         <div class="slds-media slds-media_center">
                             <div class="slds-media__figure">
-                                <img class="slds-is-relative slds-icon slds-icon_small agreementsIconBackground"
+                                <img class="slds-is-relative slds-icon slds-icon_small ds-agreementsIconBackground"
                                      src="{!$Resource.icon_DocuSignAgreements}"/>
                             </div>
                             <div class="slds-media__body">
@@ -54,7 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="slds-col">
+                    <div class="slds-col slds-p-bottom_xx-small">
                         <button class="slds-button slds-button_neutral"
                                 onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
                     </div>

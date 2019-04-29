@@ -21,16 +21,6 @@ public with sharing class NegotiateService {
 				return null;
 			}
 		}
-
-		@TestVisible
-		private String getSourceObjectName(final Id sourceObjectId) {
-			Permissions.verifyIsQueryable(sourceObjectId.getSObjectType(), new List<String> {
-				'Id', 'Name'
-			});
-			String query = String.format('SELECT Id, Name FROM {0} WHERE ID = \'\'{1}\'\' ', new List<String> {sourceObjectId.getSObjectType().getDescribe().getName(), sourceObjectId});
-			Sobject obj = System.Database.query(query);
-			return String.valueOf(obj.get('Name'));
-		}
 	}
 
 	@future
@@ -60,7 +50,7 @@ public with sharing class NegotiateService {
 		List<Agreement> agreements = new List<Agreement>();
 		if (folderId == null) {
 			String sourceObjectType = sourceObjectId.getSObjectType().getDescribe().getName();
-			String sourceObjectName = DB.getSourceObjectName(sourceObjectId);
+			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
 			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
 			setFolderId(sourceObjectId, folderId.toString());
 			return agreements;
@@ -68,6 +58,7 @@ public with sharing class NegotiateService {
 		} else {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			for (Agreement agreement : agreements) {
+				/*
 				if (agreement != null) {
 					// add historyItems
 					List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
@@ -78,6 +69,7 @@ public with sharing class NegotiateService {
 					// add versions
 					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
 				}
+				*/
 			}
 		}
 		return agreements;
