@@ -10,4 +10,32 @@ public with sharing class AgreementsController extends Controller {
 	public static String getNameSpace() {
 		return Application.lightningNamespace;
 	}
+
+	@AuraEnabled
+	public static List<Agreement> getAgreements(final Id sourceObjectId) {
+		try {
+			return NegotiateService.getAgreements(sourceObjectId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Agreements.');
+		}
+
+	}
+
+	@AuraEnabled
+	public static List<Document> getLinkedDocuments(final Id sourceId) {
+		try {
+			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get linked documents');
+		}
+	}
+
+	@AuraEnabled
+	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
+		try {
+			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get linked documents');
+		}
+	}
 }

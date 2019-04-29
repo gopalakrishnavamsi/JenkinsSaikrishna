@@ -1,6 +1,17 @@
-.THIS .agreementsIconBackground{
-    background:rgba(27, 82, 151, 1);
+.THIS .ds-agreementsIconBackground {
+    background: rgba(27, 82, 151, 1);
 }
-.THIS.boxBackground{
-    background:white;
+
+.THIS.ds-boxBackground {
+    background: white;
+    height: 100%;
+}
+
+.THIS .ds-spinner_container {
+    margin: auto;
+    min-height: 30vh;
+}
+
+.THIS .ds-agreements_spacing {
+    border-bottom: 1px solid rgb(217, 219, 221);
 }

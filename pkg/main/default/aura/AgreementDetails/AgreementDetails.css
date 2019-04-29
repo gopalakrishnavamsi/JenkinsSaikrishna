@@ -7,7 +7,24 @@
     height: 80px;
 }
 
-.THIS .complete{
+.THIS .new {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .newversion {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .pendingreview {
+    background-color: rgb(255, 154, 60);
+    font-size: x-small;
+}
+
+.THIS .reviewed {
     background-color: rgb(4, 132, 75);
     color:white;
     font-size:x-small;
@@ -19,9 +36,57 @@
     font-size:x-small;
 }
 
+.THIS .reviewexpired {
+    background-color: rgb(194, 57, 52);
+    color: white;
+    font-size: x-small;
+}
+
 .THIS .pendingapproval{
     background-color: rgb(255, 154, 60);
     font-size:x-small;
+}
+
+.THIS .approved {
+    background-color: rgb(194, 57, 52);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .complete {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .signed {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .signaturecancelled {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .nostatus {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .pendingsignature {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
+}
+
+.THIS .systemerror {
+    background-color: rgb(4, 132, 75);
+    color: white;
+    font-size: x-small;
 }
 
 .THIS.strike-wizard {

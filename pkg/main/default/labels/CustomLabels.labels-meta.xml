@@ -5778,4 +5778,33 @@
 		<shortDescription>AuthorizeGen</shortDescription>
 		<value>Authorize Gen</value>
 	</labels>
+	<labels>
+		<fullName>Modified</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Modified</shortDescription>
+		<value>Modified</value>
+	</labels>
+	<labels>
+		<fullName>AgreementImportSuccessful</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementImportSuccessful</shortDescription>
+		<value>Agreement has been imported successfully.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementImportProcessing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementImportProcessing</shortDescription>
+		<value>Agreement import in progress. Please check the Agreements space after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementImportFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementImportFailed</shortDescription>
+		<value>Agreement Import failed. Please try again.</value>
+	</labels>
 </CustomLabels>
+

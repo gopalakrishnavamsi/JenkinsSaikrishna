@@ -6,11 +6,9 @@ public with sharing class NegotiateServiceTest {
 		NegotiateAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
-
+			SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_Id, NegotiateAPIMock.FOLDER_ID_2.toString());
 			Test.startTest();
-			List<Agreement> result = NegotiateService.getAgreements(NegotiateAPIMock.FOLDER_ID_2);
-			Test.stopTest();
-
+			List<Agreement> result = NegotiateService.getAgreements(NegotiateAPIMock.SOURCE_OBJECT_Id);
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
 			System.assertEquals('ServiceDoc1.docx', result.get(0).name);
@@ -31,6 +29,22 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals(4, result.get(1).historyItems.size());
 			System.assertEquals(AgreementHistoryItem.Action.WorkflowApproved, result.get(1).historyItems.get(0).historyItemType);
 			System.assertEquals(AgreementHistoryItem.Action.ApprovalCheckout, result.get(1).historyItems.get(2).historyItemType);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createAgreementInEOSFolder_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.FOLDER_ID_2.toString());
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateService.createAgreementInEOSFolder(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.SOURCE_OBJECT_ID_2, 'Test_DOC_Name');
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals('Success', result.status);
+			System.assertEquals('Agreement has been imported successfully.', result.message);
 		}
 	}
 }

@@ -215,6 +215,15 @@ global class TestUtils {
 		return createDocument(UserInfo.getUserId());
 	}
 
+	public static SObject createAgreementConfiguration(final Id sourceObjectId ,final String folderId) {
+
+		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
+		configuration.FolderId__c = folderId;
+		configuration.SourceObject__c = sourceObjectId;
+		insert configuration;
+		return configuration;
+	}
+
 	public static Schema.Document createDocument(final Id folderId) {
 		Schema.Document d = new Schema.Document(
 			Name = UUID.randomUUID().toString() + '.pdf',

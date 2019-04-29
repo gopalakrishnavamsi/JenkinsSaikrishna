@@ -1,7 +1,7 @@
 ({
   createUploadComponent: function (component) {
     //FIXME: create a reusable method for creating the components
-    $A.createComponent("c:AgreementsUpload", {
+    $A.createComponent("c:AgreementsUploadNewVersion", {
       "showModal": true,
     }, function (componentBody) {
       if (component.isValid()) {
@@ -57,8 +57,10 @@
   },
 
   createRenameComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
     $A.createComponent("c:AgreementsRename", {
       "showModal": true,
+      "agreementDetails": agreementDetails
     }, function (componentBody) {
       if (component.isValid()) {
         var targetCmp = component.find('renameModal');

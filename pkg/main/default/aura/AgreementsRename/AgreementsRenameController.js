@@ -1,9 +1,4 @@
 ({
-  onInit: function (component) {
-    var agreementDetails = {name: "FreshSoftware-Quote.docx"};
-    component.set('v.agreementDetails', agreementDetails);
-  },
-
   cancelButtonClicked: function (component, event, helper) {
     helper.close(component, event, helper);
   },

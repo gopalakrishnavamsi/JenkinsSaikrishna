@@ -1,10 +1,8 @@
 <aura:component access="global"
                 description="Lightning component hosting Agreements"
-                implements="force:appHostable,flexipage:availableForAllPageTypes, force:lightningQuickActionWithoutHeader,force:hasRecordId"
+                implements="force:appHostable,flexipage:availableForAllPageTypes, force:hasRecordId"
                 controller="AgreementsController">
-    <!--TODO Implement spinner functionality -->
-    <!--TODO : Check hardcoding and replace with labels  -->
-    <!--TODO : Add global attribute when releasing DocuSign Negotiate  -->
+
     <!--TODO : Vf page parameter for toast component   -->
 
     <!-- attributes -->
@@ -12,84 +10,94 @@
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
-    <aura:attribute name="noData" type="Boolean" default="false"/>
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="visualforce" type="Boolean"/>
-    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="agreements" type="Object[]" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
 
     <div aura:id="importModal">
     </div>
 
     <!-- body -->
-    <div class="boxBackground slds-box">
+    <div class="ds-boxBackground slds-box">
         <ul class="slds-has-dividers_bottom-space">
             <li class="slds-item">
                 <div class="slds-grid slds-grid_align-spread  slds-p-bottom_xxx-small">
-                    <div class="slds-col">
+                    <div class="slds-col slds-p-bottom_xx-small">
                         <div class="slds-media slds-media_center">
                             <div class="slds-media__figure">
-                                <img class="slds-is-relative slds-icon slds-icon_small agreementsIconBackground"
+                                <img class="slds-is-relative slds-icon slds-icon_small ds-agreementsIconBackground"
                                      src="{!$Resource.icon_DocuSignAgreements}"/>
                             </div>
                             <div class="slds-media__body">
-                                <aura:if isTrue="{!v.noData}">
-                                    <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
-                                    <aura:set attribute="else">
-                                        <!-- If Agreements exists -->
-                                        <!-- TODO change the count to dynamically match the count of DocuSign Agreements for the Salesforce record -->
-                                        <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (5)</b>
-                                        </p>
-                                    </aura:set>
+                                <!-- Loading Header -->
+                                <aura:if isTrue="{!v.loading}">
+                                    <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} ()</b></p>
+                                </aura:if>
+                                <!-- Header content goes here -->
+                                <aura:if isTrue="{!not(v.loading)}">
+                                    <aura:if isTrue="{!v.agreements.length == 0}">
+                                        <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
+                                        <aura:set attribute="else">
+                                            <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
+                                                    ({!v.agreements.length})</b></p>
+                                        </aura:set>
+                                    </aura:if>
                                 </aura:if>
                             </div>
                         </div>
                     </div>
-                    <div class="slds-col">
-                        <button class="slds-button slds-button_neutral" onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
+                    <div class="slds-col slds-p-bottom_xx-small">
+                        <button class="slds-button slds-button_neutral"
+                                onclick="{!c.importAgreements}">{!$Label.c.ImportButtonLabel}</button>
                     </div>
                 </div>
             </li>
 
-            <!-- No DocuSign Agreements to Display -->
-            <aura:if isTrue="{!v.noData}">
-                <li class="slds-item">
-                    <div class="slds-illustration slds-illustration_small slds-p-around_large">
-                        <img src="{!$Resource.noData_Agreements}"/>
-                        <div class="slds-text-longform slds-p-top_x-large">
-                            <h3 class="slds-text-heading_medium">{!$Label.c.NoAgreements}</h3>
-                            <button class="slds-button slds-button_brand">{!$Label.c.CreateAgreementsIllustration}</button>
+            <div id="mainContent">
+                <!-- Loading State -->
+                <aura:if isTrue="{!v.loading}">
+                    <div class="ds-spinner_container slds-is-relative">
+                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
                         </div>
                     </div>
-                </li>
-                <aura:set attribute="else">
-                    <!-- Iterate through the DocuSign Agreements -->
-                    <li class="slds-item">
-                        <c:AgreementDetails
-                                fileDetails="{name:'FreshSoftware-Quote.docx',createdDate:'Created 1/1/2019', status:'REVIEW CANCELLED'}"/>
-                    </li>
-                    <li class="slds-item">
-                        <c:AgreementDetails
-                                fileDetails="{name:'FreshSoftware-MSA.docx',createdDate:'Created 1/1/2019', status:'PENDING APPROVAL'}"/>
-                    </li>
-                    <li class="slds-item">
-                        <c:AgreementDetails
-                                fileDetails="{name:'FreshSoftware-NDA.docx',createdDate:'Created 1/1/2019', status:'COMPLETED'}"/>
-                    </li>
-                    <li class="slds-item">
-                        <c:AgreementDetails
-                                fileDetails="{name:'FreshSoftware-Quote.docx',createdDate:'Created 1/1/2019', status:'REVIEW CANCELLED'}"/>
-                    </li>
-                    <li class="slds-item">
-                        <c:AgreementDetails
-                                fileDetails="{name:'FreshSoftware-Quote.docx',createdDate:'Created 1/1/2019', status:'REVIEW CANCELLED'}"/>
-                    </li>
-                </aura:set>
-            </aura:if>
+                </aura:if>
+
+                <aura:if isTrue="{!not(v.loading)}">
+                    <div class="{!if(not(v.agreements.length > 0), '', 'slds-hide')}">
+                        <li class="slds-item">
+                            <div class="slds-illustration slds-illustration_small slds-p-around_large">
+                                <img src="{!$Resource.noData_Agreements}"/>
+                                <div class="slds-text-longform slds-p-top_x-large">
+                                    <h3 class="slds-text-heading_medium">{!$Label.c.NoAgreements}</h3>
+                                    <button class="slds-button slds-button_brand">{!$Label.c.CreateAgreementsIllustration}</button>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+
+                    <div class="{!if(v.agreements.length > 0, '', 'slds-hide')}">
+                        <!-- Iterate through Agreements -->
+                        <aura:iteration items="{!v.agreements}" var="agreementDetails">
+                            <li class="slds-item slds-p-top_medium">
+                                <c:AgreementDetails agreementDetails="{!agreementDetails}"/>
+                                <div class="ds-agreements_spacing"/>
+                            </li>
+                        </aura:iteration>
+                    </div>
+
+                </aura:if>
+            </div>
         </ul>
     </div>
+
     <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"/>
 </aura:component>
