@@ -4,7 +4,7 @@
     <!-- attributes -->
     <aura:attribute name="showTimeLine" type="boolean"/>
     <aura:attribute name="timelineDetails" type="List"/>
-    <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
 
     <!-- handlers -->

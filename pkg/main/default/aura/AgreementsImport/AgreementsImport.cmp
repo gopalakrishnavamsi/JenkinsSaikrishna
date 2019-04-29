@@ -5,7 +5,7 @@
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
-    <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="recordId" type="Id" />
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
@@ -39,7 +39,7 @@
             </div>
         </aura:if>
 
-        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <aura:if isTrue="{!v.currentStep == '1'}">
                     <div class="slds-col">
@@ -58,7 +58,7 @@
                                         </span>
                                     </div>
                                     <div class="slds-media__body slds-border_left slds-p-around_small">
-                                        <h2 class="slds-truncate visualPickerHeading"
+                                        <h2 class="slds-truncate ds-visualPickerHeading"
                                             title="Choose from Salesforce Files">
                                             Choose from Salesforce Files</h2>
                                         <p class="slds-m-top_small">Select with one of the files associated with this record.</p>
@@ -139,7 +139,7 @@
                                         <!-- /File Icon -->
                                     </div>
                                     <div class="slds-media__body">
-                                        <h3 class="slds-truncate fileDetails" title="{!file.name}">
+                                        <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
                                             {!file.name}
                                         </h3>
                                         <div class="slds-truncate slds-text-color_weak fileDetails">
@@ -147,7 +147,7 @@
                                     </div>
                                 </article>
                             </li>
-                            <div class="fileSpacing"/>
+                            <div class="ds-fileSpacing"/>
                         </aura:iteration>
                         </ul>
                     </div>

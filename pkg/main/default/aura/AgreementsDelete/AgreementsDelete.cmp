@@ -1,16 +1,32 @@
-<aura:component description="DeleteAgreement">
+<aura:component description="DeleteAgreement" controller="AgreementsController">
     <!-- FIXME toast message on delete needs to go in Custom Label -->
     <!-- FIXME Add an Agreement attribute the store the details of the agreement which needs to be deleted -->
 
     <!--attributes -->
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="showModal" type="Boolean"/>
+
+    <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
     <!--component body -->
     <c:strike_modal aura:id="deleteAgreementModal"
                     title="{!$Label.c.DeleteAgreement}"
                     showModal="{!v.showModal}">
+
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
         <!--modal body -->
-        <div class="slds-scope slds-p-horizontal--xx-large">
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <div class="slds-text-body_small slds-text-align--center">
@@ -21,10 +37,10 @@
         </div>
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
-            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelBut}"
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
                               label="{!$Label.c.Cancel}">
             </lightning:button>
-            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.nextButtonClicked}"
+            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.deleteClicked}"
                               label="{!$Label.c.DeleteButtonLabel}"></lightning:button>
         </aura:set>
     </c:strike_modal>

@@ -1,13 +1,13 @@
-.THIS .visualPickerHeading{
+.THIS .ds-visualPickerHeading {
     font-size: token(fontSizeTextSmall);
     color: #006DCC;
 }
 
-.THIS .fileSpacing {
+.THIS .ds-fileSpacing {
     border-bottom: 1px solid rgb(217, 219, 221);
 }
 
-.THIS .fadeBackground {
+.THIS .ds-fadeBackground {
     opacity: 0.2;
 }
 
@@ -25,6 +25,6 @@
     margin: 0;
 }
 
-.THIS .fileDetails {
+.THIS .ds-fileDetails {
     font-size: .75rem;
 }

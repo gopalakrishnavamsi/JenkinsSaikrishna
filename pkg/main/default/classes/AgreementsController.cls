@@ -35,7 +35,25 @@ public with sharing class AgreementsController extends Controller {
 		try {
 			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get linked documents');
+			throw Controller.wrapException(ex, 'Failed to create Agreement Folder');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean renameAgreement(final String documentId, final String documentName) {
+		try {
+			return NegotiateService.renameAgreement(UUID.parse(documentId), documentName);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to Rename Agreement');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean deleteAgreement(final String documentId) {
+		try {
+			return NegotiateService.deleteAgreement(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to Delete Agreement');
 		}
 	}
 }

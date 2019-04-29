@@ -19,14 +19,13 @@
     evt.fire();
   },
 
-  renameAgreement: function (component, event, helper) {
+  deleteAgreement: function (component, event, helper) {
     component.set('v.loading', true);
     var agreementDetails = component.get('v.agreementDetails');
-    var action = component.get('c.renameAgreement');
+    var action = component.get('c.deleteAgreement');
     var self = this;
     action.setParams({
-      documentId: agreementDetails.id.value,
-      documentName: agreementDetails.name
+      documentId: agreementDetails.id.value
     });
     action.setCallback(this, function (response) {
       var state = response.getState();
@@ -34,13 +33,13 @@
       if (state === "SUCCESS") {
         var result = response.getReturnValue();
         if (result === true) {
-          var renameMessage = agreementDetails.name + ' has been renamed.';
-          self.showToast(component, renameMessage, 'success');
+          var deleteMessage = agreementDetails.name + ' was deleted.';
+          self.showToast(component, deleteMessage, 'success');
           component.set('v.loading', false);
           self.reloadAgreementsSpace(component);
           self.close(component);
         } else {
-          self.showToast(component, 'Error occurred while renaming the Agreement.', 'error');
+          self.showToast(component, 'Error occurred while deleting the Agreement.', 'error');
           self.reloadAgreementsSpace(component);
           self.close(component);
         }

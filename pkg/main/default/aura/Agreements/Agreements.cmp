@@ -13,7 +13,7 @@
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="visualforce" type="Boolean"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
-    <aura:attribute name="agreements" type="Object[]" access="private"/>
+    <aura:attribute name="agreements" type="Agreement[]" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -75,10 +75,11 @@
                     <div class="{!if(not(v.agreements.length > 0), '', 'slds-hide')}">
                         <li class="slds-item">
                             <div class="slds-illustration slds-illustration_small slds-p-around_large">
-                                <img src="{!$Resource.noData_Agreements}"/>
+                                <img src="{!$Resource.noData_Agreements}" class="ds-noData_Agreements"/>
                                 <div class="slds-text-longform slds-p-top_x-large">
                                     <h3 class="slds-text-heading_medium">{!$Label.c.NoAgreements}</h3>
-                                    <button class="slds-button slds-button_brand">{!$Label.c.CreateAgreementsIllustration}</button>
+                                    <button class="slds-button slds-button_brand"
+                                            onclick="{!c.importAgreements}">{!$Label.c.CreateAgreementsIllustration}</button>
                                 </div>
                             </div>
                         </li>
