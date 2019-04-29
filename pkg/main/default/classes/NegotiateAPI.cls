@@ -549,7 +549,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				new QueryString(queryStrings),
 				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
-			if (response.hasError) {
+			if (response.hasError && response.statusCode == 404) {
+				this.log.error('Empty Agreement versions for Agreement - ' + documentId + ': ' + response.error);
+				return agreements;
+			} else if (response.hasError) {
 				this.log.error('Failed to get versions of Agreement - ' + documentId + ': ' + response.error);
 				throw new APIException(response.error);
 			}
