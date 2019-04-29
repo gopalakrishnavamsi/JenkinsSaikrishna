@@ -15,3 +15,7 @@
 .THIS .ds-agreements_spacing {
     border-bottom: 1px solid rgb(217, 219, 221);
 }
+
+.THIS .ds-noData_Agreements {
+    width: 20vw;
+}
