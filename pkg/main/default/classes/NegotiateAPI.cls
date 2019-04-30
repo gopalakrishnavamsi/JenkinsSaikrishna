@@ -142,7 +142,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public String toXML() {
 		   return XMLSerializer.toXMLForm(
-		        new Set<String>{ 'Documents', 'Reviewers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
+		        new Set<String>{ 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
 		        new Map<String, Object> {
 		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
 		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Uid' }, this.approvers, 'Approvers', 'Approver'),
