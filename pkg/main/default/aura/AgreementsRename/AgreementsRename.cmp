@@ -1,5 +1,4 @@
 <aura:component description="AgreementsRename" controller="AgreementsController">
-    <!-- FIXME : Check hardcoding and replace with labels  -->
 
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
@@ -12,7 +11,7 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <c:strike_modal aura:id="renameAgreementsModal"
-                    title="Rename Agreement"
+                    title="{!$Label.c.RenameAgreement}"
                     showModal="{!v.showModal}">
 
         <aura:if isTrue="{!v.loading}">
@@ -30,7 +29,9 @@
                     <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"
                                      value="{!v.agreementDetails.name}"
                                      maxlength="255"
-                                     messageWhenValueMissing="This field is required"
+                                     messageWhenValueMissing="{!$Label.c.RequiredField}"
+                                     pattern="^[^&#060;&#062;&#166;&#124;:&#34;\.\/\\]*$"
+                                     messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
                                      required="true"/>
                 </div>
             </div>
@@ -41,7 +42,7 @@
                               label="{!$Label.c.Cancel}">
             </lightning:button>
             <lightning:button disabled="{!if(empty(v.agreementDetails.name), true, false)}" class="slds-button slds-button_brand" onclick="{!c.renameButtonClicked}"
-                              label="Rename"></lightning:button>
+                              label="{!$Label.c.Rename}"></lightning:button>
         </aura:set>
     </c:strike_modal>
 </aura:component>

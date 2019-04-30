@@ -1,6 +1,4 @@
 <aura:component description="DeleteAgreement" controller="AgreementsController">
-    <!-- FIXME toast message on delete needs to go in Custom Label -->
-    <!-- FIXME Add an Agreement attribute the store the details of the agreement which needs to be deleted -->
 
     <!--attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
