@@ -168,10 +168,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     //Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIReviewer {
-		public String uid { get; private set; }
+		public String email { get; private set; }
 
 		public APIReviewer(final String email) {
-			this.uid = email;
+			this.email = email;
 		}
 	}
 
