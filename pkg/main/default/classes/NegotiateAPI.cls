@@ -115,7 +115,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public String toXML() {
 		   return XMLSerializer.toXMLForm(
-		        new Set<String>{ 'Documents', 'Reviewers', 'Email' }, 
+		        new Set<String>{ 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays' }, 
 		        new Map<String, Object> {
 		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
 		            'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Uid' }, this.reviewers, 'Reviewers', 'Reviewer'),
@@ -142,13 +142,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public String toXML() {
 		   return XMLSerializer.toXMLForm(
-		        new Set<String>{ 'Documents', 'Reviewers', 'Email' }, 
+		        new Set<String>{ 'Documents', 'Reviewers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
 		        new Map<String, Object> {
 		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
 		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Uid' }, this.approvers, 'Approvers', 'Approver'),
 		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
 		            'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
-		            'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
+		            'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
 		        },
 		        'Approval'
 		    );		    
