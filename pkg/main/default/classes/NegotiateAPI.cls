@@ -145,7 +145,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		        new Set<String>{ 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
 		        new Map<String, Object> {
 		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
-		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Uid' }, this.approvers, 'Approvers', 'Approver'),
+		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.approvers, 'Approvers', 'Approver'),
 		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
 		            'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 		            'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
@@ -158,10 +158,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
     //Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIApprover {
-		public String uid { get; private set; }
+		public String email { get; private set; }
 
 		public APIApprover(final String email) {
-			this.uid = email;
+			this.email = email;
 		}
 	}
 
