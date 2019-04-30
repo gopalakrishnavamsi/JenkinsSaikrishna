@@ -34,13 +34,13 @@
       if (state === "SUCCESS") {
         var result = response.getReturnValue();
         if (result === true) {
-          var renameMessage = agreementDetails.name + ' has been renamed.';
+          var renameMessage = agreementDetails.name + ' ' + $A.get('$Label.c.AgreementRenamed');
           self.showToast(component, renameMessage, 'success');
           component.set('v.loading', false);
           self.reloadAgreementsSpace(component);
           self.close(component);
         } else {
-          self.showToast(component, 'Error occurred while renaming the Agreement.', 'error');
+          self.showToast(component, $A.get('$Label.c.AgreementRenameErrorMessage'), 'error');
           self.reloadAgreementsSpace(component);
           self.close(component);
         }
