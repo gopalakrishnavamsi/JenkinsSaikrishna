@@ -13,7 +13,7 @@ public class XMLSerializer {
     }  
 
     public static String fromPrimitive(final Object data, final String tag) {
-        return fromPrimitive(EncodingUtil.urlEncode(Blob.valueOf(data.toString())), tag);
+        return fromPrimitive(EncodingUtil.urlEncode(data.toString(), 'UTF-8'), tag);
     }      
    
     public static String fromObject(final Set<String> properties, final Object data, final String parentTag) {
