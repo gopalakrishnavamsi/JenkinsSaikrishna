@@ -33,13 +33,13 @@
       if (state === "SUCCESS") {
         var result = response.getReturnValue();
         if (result === true) {
-          var deleteMessage = agreementDetails.name + ' was deleted.';
+          var deleteMessage = agreementDetails.name + ' ' + $A.get('$Label.c.AgreementDeleted');
           self.showToast(component, deleteMessage, 'success');
           component.set('v.loading', false);
           self.reloadAgreementsSpace(component);
           self.close(component);
         } else {
-          self.showToast(component, 'Error occurred while deleting the Agreement.', 'error');
+          self.showToast(component, $A.get('$Label.c.AgreementDeleteErrorMessage'), 'error');
           self.reloadAgreementsSpace(component);
           self.close(component);
         }

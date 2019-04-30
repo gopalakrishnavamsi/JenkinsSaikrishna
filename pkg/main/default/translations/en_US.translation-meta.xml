@@ -3189,6 +3189,14 @@
 		<label>has been renamed.</label>
 		<name>AgreementRenamed</name>
 	</customLabels>
+	<customLabels>
+		<label>has been deleted.</label>
+		<name>AgreementDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>There was an error in deleting the Agreement. Please try again after some time.</label>
+		<name>AgreementDeleteErrorMessage</name>
+	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -5848,5 +5848,19 @@
 		<shortDescription>AgreementRenameErrorMessage</shortDescription>
 		<value>There was an error in renaming the Agreement. Please try again after some time.</value>
 	</labels>
+	<labels>
+		<fullName>AgreementDeleteErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementDeleteErrorMessage</shortDescription>
+		<value>There was an error in deleting the Agreement. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementDeleted</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementDeleted</shortDescription>
+		<value>has been deleted.</value>
+	</labels>
 </CustomLabels>
 
