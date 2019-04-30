@@ -5806,5 +5806,61 @@
 		<shortDescription>AgreementImportFailed</shortDescription>
 		<value>Agreement Import failed. Please try again.</value>
 	</labels>
+	<labels>
+		<fullName>RequiredField</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RequiredField</shortDescription>
+		<value>This field is required</value>
+	</labels>
+	<labels>
+		<fullName>InvalidCharacters</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InvalidCharacters</shortDescription>
+		<value>Invalid characters in the name</value>
+	</labels>
+	<labels>
+		<fullName>RenameAgreement</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RenameAgreement</shortDescription>
+		<value>Rename Agreement</value>
+	</labels>
+	<labels>
+		<fullName>Rename</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Rename</shortDescription>
+		<value>Rename</value>
+	</labels>
+	<labels>
+		<fullName>AgreementRenamed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementRenamed</shortDescription>
+		<value>has been renamed.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementRenameErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementRenameErrorMessage</shortDescription>
+		<value>There was an error in renaming the Agreement. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementDeleteErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementDeleteErrorMessage</shortDescription>
+		<value>There was an error in deleting the Agreement. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementDeleted</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementDeleted</shortDescription>
+		<value>has been deleted.</value>
+	</labels>
 </CustomLabels>
 

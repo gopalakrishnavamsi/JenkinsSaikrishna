@@ -3165,6 +3165,38 @@
 		<label>Agreement Import failed. Please try again.</label>
 		<name>AgreementImportFailed</name>
 	</customLabels>
+	<customLabels>
+		<label>This field is required</label>
+		<name>RequiredField</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid characters in the name</label>
+		<name>InvalidCharacters</name>
+	</customLabels>
+	<customLabels>
+		<label>Rename Agreement</label>
+		<name>RenameAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Rename</label>
+		<name>Rename</name>
+	</customLabels>
+	<customLabels>
+		<label>There was an error in renaming the Agreement. Please try again after some time.</label>
+		<name>AgreementRenameErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>has been renamed.</label>
+		<name>AgreementRenamed</name>
+	</customLabels>
+	<customLabels>
+		<label>has been deleted.</label>
+		<name>AgreementDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>There was an error in deleting the Agreement. Please try again after some time.</label>
+		<name>AgreementDeleteErrorMessage</name>
+	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
