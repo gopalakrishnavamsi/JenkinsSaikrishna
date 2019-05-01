@@ -5862,5 +5862,12 @@
 		<shortDescription>AgreementDeleted</shortDescription>
 		<value>has been deleted.</value>
 	</labels>
+	<labels>
+		<fullName>HQTEST3</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>HQTEST3</shortDescription>
+		<value>HQTEST3</value>
+	</labels>
 </CustomLabels>
 

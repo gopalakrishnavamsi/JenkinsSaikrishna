@@ -3197,6 +3197,10 @@
 		<label>There was an error in deleting the Agreement. Please try again after some time.</label>
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
+	<customLabels>
+		<label>HQTEST3</label>
+		<name>HQTEST3</name>
+	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
