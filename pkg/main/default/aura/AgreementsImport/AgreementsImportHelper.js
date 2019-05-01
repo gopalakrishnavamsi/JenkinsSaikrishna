@@ -100,6 +100,10 @@
           self.showToast(component, result.message, 'warning');
           self.reloadAgreementsSpace(component);
           self.close(component);
+        } else {
+          self.showToast(component, result.message, 'error');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
         }
       } else if (state === "ERROR") {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
