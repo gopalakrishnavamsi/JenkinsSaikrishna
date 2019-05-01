@@ -101,180 +101,77 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	@TestVisible
 	private class APIExternalReview {
 
-		public List<APIDocument> documents { get; private set; }
+		public List<UUID> documents { get; private set; }
 		public List<APIReviewer> reviewers { get; private set; }
 		public APIEmail email { get; private set; }
 		public Integer expiresInNumberOfDays { get; private set; }
 
 		public APIExternalReview(final Integer expiresInNumberOfDays, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
-			this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+			this.documents = documentsIds;
 			this.reviewers = NegotiateAPI.getAPIReviewers(reviewerIds);
 			this.email = new APIEmail(subject, message);
 			this.expiresInNumberOfDays = expiresInNumberOfDays;
 		}
 
 		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
-			w.writeStartElement(null, 'Approval', null);
-//Documents
-			w = this.documentsToXML(w);
-//reviewers
-			w = this.reviewersToXML(w);
-//Email
-			w = this.email.toXML(w);
-//ExpiresInNumberOfDays param
-			w.writeStartElement(null, 'ExpiresInNumberOfDays', null);
-			w.writeCharacters(String.valueOf(this.expiresInNumberOfDays));
-			w.writeEndElement();
-//CheckoutDocument param
-			w.writeStartElement(null, 'CheckoutDocument', null);
-			w.writeCharacters('true');
-			w.writeEndElement();
-//AssignTasksInOrder
-			w.writeStartElement(null, 'AssignTasksInOrder', null);
-			w.writeCharacters('true');
-			w.writeEndElement();
-//End
-			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+		   return XMLSerializer.toXMLForm(
+		        new Set<String>{ 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays' }, 
+		        new Map<String, Object> {
+		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
+		            'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.reviewers, 'Reviewers', 'Reviewer'),
+		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
+		            'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays')
+		        },
+		        'ExternalReview'
+		    );
 		}
-
-		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
-//Header
-			w.writeStartElement(null, 'Documents', null);
-			for (APIDocument doc : this.documents) {
-				w = doc.toXML(w);
-			}
-			w.writeEndElement();
-			return w;
-		}
-
-		private XmlStreamWriter reviewersToXML(XmlStreamWriter w) {
-//Header
-			w.writeStartElement(null, 'Reviewers', null);
-			for (APIReviewer entity : this.reviewers) {
-				w = entity.toXML(w);
-			}
-			w.writeEndElement();
-			return w;
-		}
-
 	}
 
 	@TestVisible
 	private class APIApproval {
 
-		public List<APIDocument> documents { get; private set; }
+		public List<UUID> documents { get; private set; }
 		public List<APIApprover> approvers { get; private set; }
 		public APIEmail email { get; private set; }
 
 		public APIApproval(final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
-			this.documents = NegotiateAPI.getAPIDocuments(documentsIds);
+			this.documents = documentsIds;
 			this.approvers = NegotiateAPI.getAPIApprovers(approverIds);
 			this.email = new APIEmail(subject, message);
 		}
 
 		public String toXML() {
-			XmlStreamWriter w = new XmlStreamWriter();
-			w.writeStartElement(null, 'Approval', null);
-//Documents
-			w = this.documentsToXML(w);
-//Approvers
-			w = this.approversToXML(w);
-//Email
-			w = this.email.toXML(w);
-//CheckoutDocument param
-			w.writeStartElement(null, 'CheckoutDocument', null);
-			w.writeCharacters('true');
-			w.writeEndElement();
-//AssignTasksInOrder
-			w.writeStartElement(null, 'AssignTasksInOrder', null);
-			w.writeCharacters('true');
-			w.writeEndElement();
-//End
-			w.writeEndElement();
-			String xml = w.getXmlString();
-			w.close();
-			return xml;
+		   return XMLSerializer.toXMLForm(
+		        new Set<String>{ 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
+		        new Map<String, Object> {
+		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
+		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.approvers, 'Approvers', 'Approver'),
+		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
+		            'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
+		            'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
+		        },
+		        'Approval'
+		    );		    
 		}
-
-		private XmlStreamWriter documentsToXML(XmlStreamWriter w) {
-//Header
-			w.writeStartElement(null, 'Documents', null);
-			for (APIDocument doc : this.documents) {
-				w = doc.toXML(w);
-			}
-			w.writeEndElement();
-			return w;
-		}
-
-		private XmlStreamWriter approversToXML(XmlStreamWriter w) {
-//Header
-			w.writeStartElement(null, 'Approvers', null);
-			for (APIApprover entity : this.approvers) {
-				w = entity.toXML(w);
-			}
-			w.writeEndElement();
-			return w;
-		}
-
 	}
 
-//Todo: uid for now is an email address, this will most likely change in the future.
+    //Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIApprover {
-		public String uid { get; private set; }
+		public String email { get; private set; }
 
 		public APIApprover(final String email) {
-			this.uid = email;
-		}
-
-		public XmlStreamWriter toXML(XmlStreamWriter w) {
-			w.writeStartElement(null, 'Approver', null);
-			w.writeStartElement(null, 'Uid', null);
-			w.writeCharacters(this.uid);
-			w.writeEndElement();
-			w.writeEndElement();
-			return w;
+			this.email = email;
 		}
 	}
 
-//Todo: uid for now is an email address, this will most likely change in the future.
+    //Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIReviewer {
-		public String uid { get; private set; }
+		public String email { get; private set; }
 
 		public APIReviewer(final String email) {
-			this.uid = email;
-		}
-
-		public XmlStreamWriter toXML(XmlStreamWriter w ) {
-			w.writeStartElement(null, 'Reviewer', null);
-			w.writeStartElement(null, 'Uid', null);
-			w.writeCharacters(this.uid);
-			w.writeEndElement();
-			w.writeEndElement();
-			return w;
-		}
-	}
-
-	private class APIDocument {
-
-		public UUID id { get; private set; }
-
-		public APIDocument(final UUID documentId) {
-			this.id = documentId;
-		}
-
-		public XmlStreamWriter toXML(XmlStreamWriter w) {
-			w.writeStartElement(null, 'Document', null);
-			w.writeStartElement(null, 'Id', null);
-			w.writeCharacters(String.valueOf(this.id));
-			w.writeEndElement();
-			w.writeEndElement();
-			return w;
+			this.email = email;
 		}
 	}
 
@@ -287,26 +184,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.subject = subject;
 			this.message = message;
 		}
-
-		public XmlStreamWriter toXML(XmlStreamWriter w) {
-			w.writeStartElement(null, 'Email', null);
-			w.writeStartElement(null, 'Subject', null);
-			w.writeCharacters(this.subject);
-			w.writeEndElement();
-			w.writeStartElement(null, 'Body', null);
-			w.writeCharacters(this.message);
-			w.writeEndElement();
-			w.writeEndElement();
-			return w;
-		}
-	}
-
-	private static List<APIDocument> getAPIDocuments(final List<UUID> documentsIds) {
-		List<APIDocument> documents = new List<APIDocument>();
-		for (UUID docId : documentsIds) {
-			documents.add(new APIDocument(docId));
-		}
-		return documents;
 	}
 
 	private static List<APIApprover> getAPIApprovers(final List<String> approverIds) {
@@ -567,9 +444,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return agreements;
 	}
 
-//Send for Approval
-
-	public Boolean sendForApproval(final String name, final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
+// Send for Approval
+	public UUID sendForApproval(final List<UUID> documentsIds, final List<String> approverIds, final String subject, final String message) {
 
 		RestAPI.Response response = post(
 			getBaseUrl(),
@@ -579,22 +455,22 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'Name' => name,
+				'Name' => 'Negotiate_Approval_Template',
 				'Params' => new APIApproval(documentsIds, approverIds, subject, message).toXML()
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
-			this.log.error('Failed to Send for Approval - ' + name + ': ' + response.error);
+			this.log.error('Failed to Send for Approval - ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 201;
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
-//Send for External Review
-
-	public Boolean sendForExternalReview(final String name, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
-
+// Send for External Review
+	public UUID sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
+		
 		RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {
@@ -603,16 +479,17 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'Name' => name,
+				'Name' => 'Negotiate_ExternalReview_Template',
 				'Params' => new APIExternalReview(expiresInNumberOfDays, documentsIds, reviewerIds, subject, message).toXML()
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
-			this.log.error('Failed to Send for External Review - ' + name + ': ' + response.error);
+			this.log.error('Failed to Send for External Review - ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 201;
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
 	@TestVisible
