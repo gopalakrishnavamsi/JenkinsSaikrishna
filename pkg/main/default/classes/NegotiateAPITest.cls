@@ -163,7 +163,7 @@ public with sharing class  NegotiateAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().sendForApproval('test-document 123', new List<UUID> {
+			UUID result = NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
 				NegotiateAPIMock.DOCUMENT_ID
 			}, new List<String> {
 				NegotiateAPIMock.USER_EMAIL
@@ -171,19 +171,17 @@ public with sharing class  NegotiateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(true, result);
-
 		}
 	}
 
-	@IsTest
+ 	@IsTest
 	static void test_sendForExternalReview_success() {
 		NegotiateAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().sendForExternalReview('test-document 123', new List<UUID> {
+			UUID result = NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
 				NegotiateAPIMock.DOCUMENT_ID
 			}, new List<String> {
 				NegotiateAPIMock.USER_EMAIL
@@ -191,8 +189,6 @@ public with sharing class  NegotiateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(true, result);
-
 		}
 	}
 
@@ -205,7 +201,7 @@ public with sharing class  NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForApproval('test-document 123', new List<UUID> {
+				NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
 					NegotiateAPIMock.DOCUMENT_ID
 				}, new List<String> {
 					NegotiateAPIMock.USER_EMAIL
@@ -216,7 +212,6 @@ public with sharing class  NegotiateAPITest {
 			Test.stopTest();
 
 			System.assertEquals(hasError, true);
-
 		}
 	}
 
@@ -229,7 +224,7 @@ public with sharing class  NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForExternalReview('test-document 123', new List<UUID> {
+				NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
 					NegotiateAPIMock.DOCUMENT_ID
 				}, new List<String> {
 					NegotiateAPIMock.USER_EMAIL
@@ -240,7 +235,6 @@ public with sharing class  NegotiateAPITest {
 			Test.stopTest();
 
 			System.assertEquals(hasError, true);
-
 		}
 	}
 
