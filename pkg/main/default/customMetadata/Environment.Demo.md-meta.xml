@@ -8,11 +8,11 @@
 	</values>
 	<values>
 		<field>ClientId__c</field>
-		<value xsi:type="xsd:string">5390d6cc-a7f2-4f8e-ad62-1f2f43cca048</value>
+		<value xsi:type="xsd:string">5cf0bc0b-e4eb-4d18-93eb-bea97833a24e</value>
 	</values>
 	<values>
 		<field>ClientSecret__c</field>
-		<value xsi:type="xsd:string">7d262e1e-4d83-49c2-879c-08128cfab55d</value>
+		<value xsi:type="xsd:string">503d8dda-8fa1-4ecb-b710-6a38aa5e6a19</value>
 	</values>
 	<values>
 		<field>IsVisible__c</field>
