@@ -187,6 +187,7 @@
                                                         <option value="Production"
                                                                 selected="selected">{!$Label.c.Production}</option>
                                                         <option value="Demo">{!$Label.c.Demo}</option>
+                                                        <option value="{!$Label.c.HQTEST3}">{!$Label.c.HQTEST3}</option>
                                                         <option value="Other">{!$Label.c.Other}</option>
                                                     </lightning:select>
                                                     <lightning:input aura:id="ds-other-url"
