@@ -164,8 +164,6 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static Gen.Product addTrialGen() {
-		System.debug('in addTrialGenDummy in setup controller');
-
 		return AuthService.addTrialGenProduct();
 	}
 }

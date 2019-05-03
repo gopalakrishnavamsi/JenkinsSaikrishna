@@ -3150,6 +3150,18 @@
 		<name>AuthorizeGen</name>
 	</customLabels>
 	<customLabels>
+		<label>Start Your Gen Trial</label>
+		<name>TrialGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully started DocuSign Gen Trial.</label>
+		<name>SuccessDocuSignGenTrial</name>
+	</customLabels>
+	<customLabels>
+		<label>Unable to start DocuSign Gen Trial. Please contact your DocuSign administrator.</label>
+		<name>ErrorDocuSignGenTrial</name>
+	</customLabels>
+	<customLabels>
 		<label>Modified</label>
 		<name>Modified</name>
 	</customLabels>

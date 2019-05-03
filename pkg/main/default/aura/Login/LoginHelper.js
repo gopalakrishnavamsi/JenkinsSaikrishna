@@ -51,10 +51,10 @@
       uiHelper.setLoading(true);
 
        uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
-        if (response && response.status.toLowerCase() === 'success') {
-              uiHelper.showToast('success');
+        if (response && response.status === 'success') {
+              uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
             } else {
-              uiHelper.showToast('error');
+              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
             }
        }, null, function () {
               uiHelper.setLoading(component, false);

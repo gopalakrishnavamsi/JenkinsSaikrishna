@@ -81,7 +81,7 @@
                         <!-- Show Authorize Gen if Gen OAuth custom setting value is false -->
                         <lightning:button label="{!$Label.c.AuthorizeGen}" variant="neutral"
                                           onclick="{!c.loginToSpring}"/>
-                        <lightning:button label="Trial Gen" variant="neutral"
+                        <lightning:button label="{!$Label.c.TrialGen}" variant="neutral"
                                           onclick="{!c.addTrialGenProduct}"/>
                     </div>
                 </div>
