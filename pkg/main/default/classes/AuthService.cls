@@ -799,6 +799,65 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
+	public static Gen.Product addTrialGenProduct() {
+		Gen.Product result = null;
+
+		try {
+			Product p = ProvisioningAPI.getInstance(
+				Credentials.getInstance().environment.provisioningBaseUrl,
+				Credentials.getInstance().account.id,
+				getAccessToken()).addProduct('gen', true);
+
+			if (p != null && p.name == 'gen' && p.properties != null) {
+				Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
+				String inviteSubject, inviteBody;
+				for (String key : p.properties.keySet()) {
+					String value = p.properties.get(key);
+					if (String.isBlank(value)) continue;
+					switch on key {
+						when 'invite_callback_uri' {
+							inviteCallbackUrl = new Url(value);
+						} when 'invite_redirect_uri' {
+							inviteRedirectUrl = new Url(value);
+						} when 'merge_uri' {
+							apiUrl = new Url(value);
+						} when 'web_base_uri' {
+							authUrl = new Url(value);
+						} when 'invite_email_subject' {
+							inviteSubject = value;
+						} when 'invite_email_body' {
+							inviteBody = value;
+						}
+					}
+				}
+				result = new Gen.Product(
+					p.status,
+					p.isTrial,
+					p.trialExpires,
+					authUrl,
+					apiUrl,
+					inviteCallbackUrl,
+					inviteRedirectUrl,
+					inviteSubject,
+					inviteBody);
+			}
+		} catch (Exception ex) {
+			result = new Gen.Product(
+				'error',
+				false,
+				null,
+				null,
+				null,
+				null,
+				null,
+				'error',
+				'error');
+		}
+
+		return result;
+	}
+
+	@TestVisible
 	private static List<MetadataService.RemoteSite> getRemoteSites(
 		final DocuSign.Environment environment,
 		final Url accountBaseUrl,

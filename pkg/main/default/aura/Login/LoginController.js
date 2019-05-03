@@ -22,6 +22,10 @@
     helper.beginSpringOAuth(component);
   },
 
+  addTrialGenProduct: function (component, event, helper) {
+      helper.addTrialGenProduct(component);
+    },
+
   logoutOfDocuSign: function (component, event, helper) {
     component.set('v.showLogoutModal', false);
     component.get('v.uiHelper').setLoading(true);

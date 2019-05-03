@@ -161,4 +161,11 @@ public with sharing class SetupController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to read user.');
 		}
 	}
+
+	@AuraEnabled
+	public static Gen.Product addTrialGen() {
+		System.debug('in addTrialGenDummy in setup controller');
+
+		return AuthService.addTrialGenProduct();
+	}
 }

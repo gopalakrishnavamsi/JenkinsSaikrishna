@@ -44,6 +44,24 @@
     beginSpringOAuth(component);
   },
 
+  addTrialGenProduct: function (component) {
+
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.hideToast();
+      uiHelper.setLoading(true);
+
+       uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
+        if (response && response.status.toLowerCase() === 'success') {
+              uiHelper.showToast('success');
+            } else {
+              uiHelper.showToast('error');
+            }
+       }, null, function () {
+              uiHelper.setLoading(component, false);
+            });
+      uiHelper.setLoading(component, false);
+    },
+
   setLoggedIn: function (component, loginInformation) {
     var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
     var isLoggedIn = hasAccounts && loginInformation.status === 'Success';
