@@ -191,7 +191,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 			this.email = user.email;
 			this.firstName = user.firstName;
 			this.lastName = user.lastName;
-			this.userName = String.valueOf(user.id);
+			this.userName = user.firstName + ' ' + user.lastName;
 			this.userSettings = new List<Setting> {
 				new Setting('canManageAccount', String.valueOf(user.canManageAccount)),
 				new Setting('canSendEnvelope', 'true')
