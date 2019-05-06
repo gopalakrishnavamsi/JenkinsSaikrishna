@@ -86,5 +86,26 @@
         targetCmp.set("v.body", body);
       }
     });
+  },
+
+  showHistoryTimeLine: function (component) {
+    var showTimeLine = component.get("v.showTimeLine");
+    if (!showTimeLine) {
+      component.set("v.showTimeLine", true);
+      component.set('v.activityLinkLabel', "Hide Activity");
+      var agreementDetails = component.get('v.agreementDetails');
+      component.set('v.agreementHistoryItems', agreementDetails.historyItems);
+      var agreementHistoryItems = component.get('v.agreementHistoryItems');
+      var historyItems = [];
+      Object.assign(historyItems, agreementHistoryItems);
+      var options = {"iconPath": $A.get('$Resource.scmwidgetsspritemap')};
+      var historyWidget = new SpringCM.Widgets.History(options);
+      var historyContainerId = '#historyContainer' + component.get('v.agreementIndex');
+      historyWidget.render(historyContainerId).setHistoryItems(historyItems);
+
+    } else {
+      component.set("v.showTimeLine", false);
+      component.set('v.activityLinkLabel', "Show Activity");
+    }
   }
 });

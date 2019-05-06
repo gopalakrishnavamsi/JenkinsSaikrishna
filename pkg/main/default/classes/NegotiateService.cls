@@ -77,15 +77,15 @@ public with sharing class NegotiateService {
 		if (historyItems == null || historyItems.isEmpty()) {
 			return AgreementStatus.SYSTEM_ERROR;
 		}
-		if (historyItems.get(0).historyItemType == AgreementHistoryItem.Action.WorkflowApproved) {
+		if (historyItems.get(0).historyItemType == AgreementHistoryItem.WorkflowApproved) {
 
 			List<AgreementHistoryItem> tempHistoryItems = new List<AgreementHistoryItem>();
 			Long numberOfApprovers = 0;
 			for (AgreementHistoryItem historyItem : historyItems) {
-				if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.Action.ApprovalCheckout) {
+				if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.ApprovalCheckout) {
 					numberOfApprovers = historyItem.recipients.size();
 					break;
-				} else if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.Action.WorkflowApproved) {
+				} else if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.WorkflowApproved) {
 					tempHistoryItems.add(historyItem);
 				}
 			}
@@ -98,41 +98,54 @@ public with sharing class NegotiateService {
 		return statusActionMapping(historyItems.get(0).historyItemType);
 	}
 
-	private static String statusActionMapping(AgreementHistoryItem.Action historyItemType) {
-		switch on historyItemType {
-			when DocumentImportedFromSalesforce, TitleChanged {
-				return AgreementStatus.NEW_AGREEMENT;
-			}
-			when ExternalReviewInitiated {
-				return AgreementStatus.PENDING_REVIEW;
-			}
-			when ExternalReviewCompletedDocumentAndComments, ExternalReviewCompletedCheckoutCancelled, ExternalReviewCompletedDocumentCheckin, ExternalReviewCompletedInternally {
-				return AgreementStatus.REVIEWED;
-			}
-			when ExternalReviewCancelled {
-				return AgreementStatus.REVIEW_CANCELLED;
-			}
-			when ExternalReviewErrored {
-				return AgreementStatus.SYSTEM_ERROR;
-			}
-			when ApprovalCheckout {
-				return AgreementStatus.PENDING_APPROVAL;
-			}
-			when WorkflowApproved {
-				return AgreementStatus.APPROVED;
-			}
-			when WorkflowRejected {
-				return AgreementStatus.REJECTED;
-			}
-			when ApprovalCheckoutCanceled {
-				return AgreementStatus.APPROVAL_CANCELLED;
-			}
-			when DocumentCheckIn {
-				return AgreementStatus.NEW_VERSION;
-			}
-			when else {
-				return AgreementStatus.SYSTEM_ERROR;
-			}
+	private static String statusActionMapping(final String historyItemType) {
+
+		if (historyItemType.equals(AgreementHistoryItem.DocumentImportFromSalesforce) ||
+			historyItemType.equals(AgreementHistoryItem.TitleChanged)) {
+			return AgreementStatus.NEW_AGREEMENT;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ExternalReviewInitiated)) {
+			return AgreementStatus.PENDING_REVIEW;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments) ||
+			historyItemType.equals(AgreementHistoryItem.ExternalReviewCompletedCheckoutCancelled) ||
+			historyItemType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentCheckin) ||
+			historyItemType.equals(AgreementHistoryItem.ExternalReviewCompletedInternally)) {
+			return AgreementStatus.REVIEWED;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ExternalReviewCancelled)) {
+			return AgreementStatus.REVIEW_CANCELLED;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ExternalReviewErrored)) {
+			return AgreementStatus.SYSTEM_ERROR;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCheckout)) {
+			return AgreementStatus.PENDING_APPROVAL;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.WorkflowApproved)) {
+			return AgreementStatus.APPROVED;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.WorkflowRejected)) {
+			return AgreementStatus.REJECTED;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCheckoutCanceled)) {
+			return AgreementStatus.APPROVAL_CANCELLED;
+		}
+
+		else if (historyItemType.equals(AgreementHistoryItem.DocumentCheckIn)) {
+			return AgreementStatus.NEW_VERSION;
+		}
+
+		else {
+			return AgreementStatus.SYSTEM_ERROR;
 		}
 	}
 
