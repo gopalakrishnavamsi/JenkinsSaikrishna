@@ -13,7 +13,7 @@ public class Agreement {
 	@AuraEnabled
 	public String name { get; private set; }
 /**
-* The DocuSign Agreement or Agreement Version modified by User.
+* modified is use for Agreement versions, indicates the User modified the version.
 */
 	@AuraEnabled
 	public String modifiedBy { get; private set; }
