@@ -1120,6 +1120,20 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_addTrialGenProduct_error() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				AuthService.addTrialGenProduct();
+				throw new AssertException('Expected AuthService.addTrialGenProduct to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getRemoteSites() {
 		System.assertEquals(5, Collection.size(AuthService.getRemoteSites(
 			DocuSign.Environment.Production,

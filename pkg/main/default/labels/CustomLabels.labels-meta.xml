@@ -5774,7 +5774,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ErrorDocuSignGenTrial</shortDescription>
-		<value>Unable to start DocuSign Gen Trial. Please contact your DocuSign administrator.</value>
+		<value>Unable to start DocuSign Gen Trial. Please contact DocuSign Gen Support for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>MissingDocuSignGenAuthorizationSettings</fullName>

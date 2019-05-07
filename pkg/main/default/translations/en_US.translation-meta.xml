@@ -3158,7 +3158,7 @@
 		<name>SuccessDocuSignGenTrial</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to start DocuSign Gen Trial. Please contact your DocuSign administrator.</label>
+		<label>Unable to start DocuSign Gen Trial. Please contact DocuSign Gen Support for assistance.</label>
 		<name>ErrorDocuSignGenTrial</name>
 	</customLabels>
 	<customLabels>

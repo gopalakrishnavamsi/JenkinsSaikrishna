@@ -484,7 +484,7 @@ public with sharing class AuthService {
 
 			return settings;
 		}
-
+// TODO: leverage or consolidate previous implementation of updateSettings.
 		public AccountSettings__c updateSettings(
 			final Gen.Product product) {
 
@@ -775,6 +775,41 @@ public with sharing class AuthService {
 		return getRootCredentials(environment, baseUrl);
 	}
 
+	private static Gen.Product getGenProduct(Product p) {
+		Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
+		String inviteSubject, inviteBody;
+
+		for (String key : p.properties.keySet()) {
+			String value = p.properties.get(key);
+			if (String.isBlank(value)) continue;
+			switch on key {
+				when 'invite_callback_uri' {
+					inviteCallbackUrl = new Url(value);
+				} when 'invite_redirect_uri' {
+					inviteRedirectUrl = new Url(value);
+				} when 'merge_uri' {
+					apiUrl = new Url(value);
+				} when 'web_base_uri' {
+					authUrl = new Url(value);
+				} when 'invite_email_subject' {
+					inviteSubject = value;
+				} when 'invite_email_body' {
+					inviteBody = value;
+				}
+			}
+		}
+		return new Gen.Product(
+			p.status,
+			p.isTrial,
+			p.trialExpires,
+			authUrl,
+			apiUrl,
+			inviteCallbackUrl,
+			inviteRedirectUrl,
+			inviteSubject,
+			inviteBody);
+	}
+
 	@TestVisible
 	private static Gen.Product getGenProduct(
 		final Url provisioningBaseUrl,
@@ -784,93 +819,22 @@ public with sharing class AuthService {
 		Gen.Product result = null;
 		for (Product p : ProvisioningAPI.getInstance(provisioningBaseUrl, accountId, accessToken).getProducts()) {
 			if (p != null && p.name == 'gen' && p.properties != null) {
-				Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
-				String inviteSubject, inviteBody;
-				for (String key : p.properties.keySet()) {
-					String value = p.properties.get(key);
-					if (String.isBlank(value)) continue;
-					switch on key {
-						when 'invite_callback_uri' {
-							inviteCallbackUrl = new Url(value);
-						} when 'invite_redirect_uri' {
-							inviteRedirectUrl = new Url(value);
-						} when 'merge_uri' {
-							apiUrl = new Url(value);
-						} when 'web_base_uri' {
-							authUrl = new Url(value);
-						} when 'invite_email_subject' {
-							inviteSubject = value;
-						} when 'invite_email_body' {
-							inviteBody = value;
-						}
-					}
-				}
-				result = new Gen.Product(
-					p.status,
-					p.isTrial,
-					p.trialExpires,
-					authUrl,
-					apiUrl,
-					inviteCallbackUrl,
-					inviteRedirectUrl,
-					inviteSubject,
-					inviteBody);
+				result = getGenProduct(p);
 				break;
 			}
 		}
 		return result;
 	}
 
-	@TestVisible
 	public static Boolean addTrialGenProduct() {
+		Permissions.verifyIsDocuSignAdministrator();
 		Gen.Product genProduct = null;
-
-		try {
-			Product p = ProvisioningAPI.getInstance(
-				Credentials.getInstance().environment.provisioningBaseUrl,
-				Credentials.getInstance().account.id,
-				getAccessToken()).addProduct('gen', true);
-
-			if (p != null && p.name.toLowerCase() == 'gen' && p.properties != null) {
-				Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
-				String inviteSubject, inviteBody;
-				for (String key : p.properties.keySet()) {
-					String value = p.properties.get(key);
-					if (String.isBlank(value)) continue;
-					switch on key {
-						when 'invite_callback_uri' {
-							inviteCallbackUrl = new Url(value);
-						} when 'invite_redirect_uri' {
-							inviteRedirectUrl = new Url(value);
-						} when 'merge_uri' {
-							apiUrl = new Url(value);
-						} when 'web_base_uri' {
-							authUrl = new Url(value);
-						} when 'invite_email_subject' {
-							inviteSubject = value;
-						} when 'invite_email_body' {
-							inviteBody = value;
-						}
-					}
-				}
-				genProduct = new Gen.Product(
-					p.status,
-					p.isTrial,
-					p.trialExpires,
-					authUrl,
-					apiUrl,
-					inviteCallbackUrl,
-					inviteRedirectUrl,
-					inviteSubject,
-					inviteBody);
-
-				DB.updateSettings(genProduct);
+		Product p = ProvisioningAPI.getInstance().addProduct('gen', true);
+		if (p != null && p.name == 'gen' && p.properties != null) {
+			genProduct = getGenProduct(p);
+			DB.updateSettings(genProduct);
 			return true;
-			}
-		} catch (Exception ex) {
-			Log.error('Adding Gen Product to account : ' + Credentials.getInstance().account.id + ' failed due to exception : ' + ex);
 		}
-
 		return false;
 	}
 

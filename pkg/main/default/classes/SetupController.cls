@@ -164,6 +164,11 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static Boolean addTrialGen() {
-		return AuthService.addTrialGenProduct();
+		try {
+			return AuthService.addTrialGenProduct();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
+		}
+
 	}
 }

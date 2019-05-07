@@ -47,19 +47,16 @@
   addTrialGenProduct: function (component) {
 
       var uiHelper = component.get('v.uiHelper');
-      uiHelper.hideToast();
-      uiHelper.setLoading(true);
 
        uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
-        if (response && response) {
+        if (response) {
               uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
             } else {
               uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
             }
-       }, null, function () {
-              uiHelper.setLoading(component, false);
-            });
-      uiHelper.setLoading(component, false);
+       }, function () {
+              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+            }, null);
     },
 
   setLoggedIn: function (component, loginInformation) {
