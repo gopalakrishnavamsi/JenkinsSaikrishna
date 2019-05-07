@@ -237,6 +237,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	@TestVisible
 	private class APIAgreement {
 		public String name;
+		public String updatedBy;
 		public Datetime createdDate;
 		public String status;
 		public String href;
@@ -247,6 +248,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return new Agreement(
 				UUID.parse(this.href.substringAfterLast('/')),
 				this.name,
+				this.updatedBy,
 				this.createdDate,
 				this.createdDate,
 				AgreementStatus.NEW_AGREEMENT,

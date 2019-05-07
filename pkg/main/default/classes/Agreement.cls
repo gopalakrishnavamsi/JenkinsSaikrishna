@@ -13,6 +13,11 @@ public class Agreement {
 	@AuraEnabled
 	public String name { get; private set; }
 /**
+* The DocuSign Agreement or Agreement Version modified by User.
+*/
+	@AuraEnabled
+	public String modifiedBy { get; private set; }
+/**
 * Date and time when the Agreement was created.
 */
 	@AuraEnabled
@@ -56,6 +61,7 @@ public class Agreement {
 	public Agreement(
 		final UUID id,
 		final String name,
+		final String modifiedBy,
 		final Datetime createdDate,
 		final Datetime modifiedDate,
 		final String status,
@@ -65,6 +71,7 @@ public class Agreement {
 
 		this.id = id;
 		this.name = name;
+		this.modifiedBy = modifiedBy;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
 		this.status = status;
