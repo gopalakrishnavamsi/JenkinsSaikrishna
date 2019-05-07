@@ -252,10 +252,10 @@ public with sharing class  NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(1, result.size());
-			System.assertEquals(AgreementHistoryItem.Action.DocumentImportedFromSalesforce, result.get(0).historyItemType);
+			System.assertEquals(AgreementHistoryItem.DocumentImportFromSalesforce, result.get(0).historyItemType);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.emailAddress);
+			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
 		}
 	}
 
@@ -273,10 +273,10 @@ public with sharing class  NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.Action.TitleChanged, result.get(0).historyItemType);
+			System.assertEquals(AgreementHistoryItem.TitleChanged, result.get(0).historyItemType);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.emailAddress);
+			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
 		}
 	}
 
@@ -294,12 +294,12 @@ public with sharing class  NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.Action.ApprovalCheckout, result.get(0).historyItemType);
+			System.assertEquals(AgreementHistoryItem.ApprovalCheckout, result.get(0).historyItemType);
 			System.assertEquals(null, result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.emailAddress);
+			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
 			System.assertEquals('Full Sub', result.get(0).recipients.get(0).fullName);
-			System.assertEquals('tgreen+1@springcm.com', result.get(0).recipients.get(0).emailAddress);
+			System.assertEquals('tgreen+1@springcm.com', result.get(0).recipients.get(0).email);
 			System.assertEquals('For approval', result.get(0).subject);
 			System.assertEquals('Please approve the documents', result.get(0).message);
 		}
@@ -319,12 +319,12 @@ public with sharing class  NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.Action.ExternalReviewInitiated, result.get(0).historyItemType);
+			System.assertEquals(AgreementHistoryItem.ExternalReviewInitiated, result.get(0).historyItemType);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.emailAddress);
+			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
 			System.assertEquals('John Doe', result.get(0).recipients.get(0).fullName);
-			System.assertEquals('someguy+externalReviewRecipient@springcm.com', result.get(0).recipients.get(0).emailAddress);
+			System.assertEquals('someguy+externalReviewRecipient@springcm.com', result.get(0).recipients.get(0).email);
 			System.assertEquals('For external review', result.get(0).subject);
 			System.assertEquals('Please review the document', result.get(0).message);
 		}

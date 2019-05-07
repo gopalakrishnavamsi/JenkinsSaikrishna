@@ -17,7 +17,7 @@
         <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
             <c:strike_lookup placeholder="Search by Name, Email or Organization"
                              object="{!v.recordType}"
-                             iconName="standard:user"
+                             iconName="{!'standard:' + v.recordType}"
                              searchField="Name"
                              value="{!v.sourceId}"
                              subtitleField="Email"
