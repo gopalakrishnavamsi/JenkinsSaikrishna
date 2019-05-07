@@ -106,23 +106,21 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public APIEmail email { get; private set; }
 		public Integer expiresInNumberOfDays { get; private set; }
 
-		public APIExternalReview(final Integer expiresInNumberOfDays, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+		public APIExternalReview(final Integer expiresInNumberOfDays, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message) {
 			this.documents = documentsIds;
 			this.reviewers = NegotiateAPI.getAPIReviewers(reviewerIds);
-			this.email = new APIEmail(subject, body);
+			this.email = new APIEmail(subject, message);
 			this.expiresInNumberOfDays = expiresInNumberOfDays;
 		}
 
 		public String toXML() {
 		   return XMLSerializer.toXMLForm(
-			   new Set<String> { 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays', 'CheckoutDocument', 'AssignTasksInOrder' },
+		        new Set<String>{ 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays' }, 
 		        new Map<String, Object> {
 		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
 		            'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.reviewers, 'Reviewers', 'Reviewer'),
-					'Email' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'Body' }, this.email, 'Email'),
-					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),
-					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
-					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
+		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
+		            'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays')
 		        },
 		        'ExternalReview'
 		    );
@@ -180,11 +178,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APIEmail {
 
 		public String subject { get; private set; }
-		public String body { get; private set; }
+		public String message { get; private set; }
 
-		public APIEmail(final String subject, final String body) {
+		public APIEmail(final String subject, final String message) {
 			this.subject = subject;
-			this.body = body;
+			this.message = message;
 		}
 	}
 
@@ -471,7 +469,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 // Send for External Review
-	public UUID sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public UUID sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String message, final Integer expiresInNumberOfDays) {
 		
 		RestAPI.Response response = post(
 			getBaseUrl(),
@@ -482,7 +480,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_ExternalReview_Template',
-				'Params' => new APIExternalReview(expiresInNumberOfDays, documentsIds, reviewerIds, subject, body).toXML()
+				'Params' => new APIExternalReview(expiresInNumberOfDays, documentsIds, reviewerIds, subject, message).toXML()
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -490,8 +488,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			throw new APIException(response.error);
 		}
 
-		Map<String, Object> responsebody = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		return UUID.parse(((String)responsebody.get('Href')).substringAfterLast('/'));
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
 	@TestVisible
@@ -505,7 +503,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APIHistoryItem {
 		public APIData data;
 		public String userEmail;
-		public String actionType;
+		public AgreementHistoryItem.Action action;
 		public Datetime createdDate;
 
 		public AgreementHistoryItem convertAPIHistoryItem() {
@@ -516,12 +514,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				actor = new AgreementHistoryItem.Actor(
 					this.data.actor.fullName,
 					this.data.actor.emailAddress,
-					'https://salesforce.com'); //TODO implement account URL logic
-			} else {
-				actor = new AgreementHistoryItem.Actor(
-					'',
-					'',
-					'https://salesforce.com');
+					'');
 			}
 
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
@@ -541,14 +534,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 
 			return new AgreementHistoryItem(
-				this.actionType,
+				this.action,
 				this.userEmail,
 				this.createdDate,
 				this.data.emailSubject,
 				this.data.emailMessage,
-				this.data.documentName,
-				this.data.versionNumber != null ? this.data.versionNumber : null,
-				this.data.documentOldName != null ? this.data.documentOldName : null,
 				this.data.documentName,
 				actor,
 				recipients);
@@ -561,29 +551,16 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String emailAddress;
 	}
 
-	@TestVisible
-	private class APIUser {
-		public String userName;
-		public String Email;
-		public String FirstName;
-		public String LastName;
-		public String href;
-	}
-
 // User, do we need it ?
 	@TestVisible
 	private class APIData {
 		public String documentName;
-		public String documentOldName;
-		public String versionNumber;
-		public String documentUid;
 		public Datetime dueDate;
 		public String emailSubject;
 		public String emailMessage;
 		public APIActor actor;
 		public APIActor reviewer;
 		public List<APIActor> approvers;
-		public APIUser user;
 	}
 
 //Get historyItems

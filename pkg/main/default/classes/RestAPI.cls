@@ -57,6 +57,11 @@ public virtual class RestAPI {
 
 	@TestVisible
 	protected Response post(final Url baseUrl, final List<Object> path, final QueryString queryString, final Map<String, String> headers, final String body, final Integer timeout) {
+		System.debug('the value of request header : ' + headers);
+		System.debug('the value of request queryString : ' + queryString);
+		System.debug('the value of request body : ' + body);
+		System.debug('the value of request baseUrl : ' + baseUrl);
+		System.debug('the value of request path : ' + path);
 		return sendRequest('POST', baseUrl, path, queryString, null, headers, body, timeout);
 	}
 
