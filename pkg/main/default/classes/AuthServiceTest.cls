@@ -1107,18 +1107,15 @@ private class AuthServiceTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Gen.Product result = AuthService.addTrialGenProduct();
+			Boolean result = AuthService.addTrialGenProduct();
 			Test.stopTest();
-
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			System.assertNotEquals(null, result);
-			System.assert(String.isNotBlank(result.status));
-			System.assertNotEquals(null, result.authBaseUrl);
-			System.assertNotEquals(null, result.apiBaseUrl);
-			System.assertNotEquals(null, result.inviteCallbackUrl);
-			System.assertNotEquals(null, result.inviteRedirectUrl);
-			System.assert(String.isNotBlank(result.inviteEmailSubject));
-			System.assert(String.isNotBlank(result.inviteEmailBody));
-			System.assertEquals(result.apiBaseUrl.toExternalForm(), 'https://api.test.springcm.com/gen');
+			System.assertEquals(true, result);
+			System.assertNotEquals(null, s.AccountBaseUrl__c);
+			System.assertNotEquals(null, s.InviteCallbackUrl__c);
+			System.assertNotEquals(null, s.InviteRedirectUrl__c);
+			System.assertEquals(s.ScmApiBaseUrl__c, 'https://api.test.springcm.com/gen/');
 		}
 	}
 

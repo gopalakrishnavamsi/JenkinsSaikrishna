@@ -484,6 +484,29 @@ public with sharing class AuthService {
 
 			return settings;
 		}
+
+		public AccountSettings__c updateSettings(
+			final Gen.Product product) {
+
+			if (product != null) {
+				updateConfiguration(
+					product.inviteEmailSubject,
+					product.inviteEmailBody);
+			}
+
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			settings.ScmAuthBaseUrl__c = product == null || product.authBaseUrl == null
+				? null : canonicalizeBaseUrl(product.authBaseUrl).toExternalForm();
+			settings.ScmApiBaseUrl__c = product == null || product.apiBaseUrl == null
+				? null : canonicalizeBaseUrl(product.apiBaseUrl).toExternalForm();
+			settings.InviteCallbackUrl__c = product == null || product.inviteCallbackUrl == null
+				? null : product.inviteCallbackUrl.toExternalForm();
+			settings.InviteRedirectUrl__c = product == null || product.inviteRedirectUrl == null
+				? null : product.inviteRedirectUrl.toExternalForm();
+			upsert settings;
+
+			return settings;
+		}
 	}
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
@@ -799,8 +822,8 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
-	public static Gen.Product addTrialGenProduct() {
-		Gen.Product result = null;
+	public static Boolean addTrialGenProduct() {
+		Gen.Product genProduct = null;
 
 		try {
 			Product p = ProvisioningAPI.getInstance(
@@ -808,7 +831,7 @@ public with sharing class AuthService {
 				Credentials.getInstance().account.id,
 				getAccessToken()).addProduct('gen', true);
 
-			if (p != null && p.name == 'gen' && p.properties != null) {
+			if (p != null && p.name.toLowerCase() == 'gen' && p.properties != null) {
 				Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
 				String inviteSubject, inviteBody;
 				for (String key : p.properties.keySet()) {
@@ -830,7 +853,7 @@ public with sharing class AuthService {
 						}
 					}
 				}
-				result = new Gen.Product(
+				genProduct = new Gen.Product(
 					p.status,
 					p.isTrial,
 					p.trialExpires,
@@ -840,21 +863,15 @@ public with sharing class AuthService {
 					inviteRedirectUrl,
 					inviteSubject,
 					inviteBody);
+
+				DB.updateSettings(genProduct);
+			return true;
 			}
 		} catch (Exception ex) {
-			result = new Gen.Product(
-				'error',
-				false,
-				null,
-				null,
-				null,
-				null,
-				null,
-				'error',
-				'error');
+			Log.error('Adding Gen Product to account : ' + Credentials.getInstance().account.id + ' failed due to exception : ' + ex);
 		}
 
-		return result;
+		return false;
 	}
 
 	@TestVisible

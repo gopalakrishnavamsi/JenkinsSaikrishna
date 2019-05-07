@@ -163,7 +163,7 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Gen.Product addTrialGen() {
+	public static Boolean addTrialGen() {
 		return AuthService.addTrialGenProduct();
 	}
 }
