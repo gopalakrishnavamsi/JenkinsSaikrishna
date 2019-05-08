@@ -1,5 +1,20 @@
 library 'docusign-common'
 
+def installTasks = [
+  'Install JS Dependencies': {
+    nodejsInstall([
+      commitStatusContext: 'Install JS Dependencies',
+      nodejsInstallMethod: 'npm'
+    ])
+  }
+]
+
+def additionalPreBuildTasks = [
+  'ESLint': [
+    command: '''npm run lint'''
+  ]
+]
+
 def defaultSalesforceArgs = [
   jwtKeyFileCredsId: 'salesforce-jwt-key-file',
   consumerKeyCredsId: 'salesforce-consumer-key',
@@ -18,8 +33,11 @@ def defaultPostBuildTests = [
   ]
 ]
 
+
 salesforcePipeline(
   appName: 'salesforce-core',
+  installTasks: installTasks,
+  additionalPreBuildTasks: additionalPreBuildTasks,
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: true
