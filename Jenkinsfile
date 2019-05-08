@@ -37,7 +37,7 @@ def defaultPostBuildTests = [
 salesforcePipeline(
   appName: 'salesforce-core',
   installTasks: installTasks,
-  additionalPreBuildTasks: additionalPreBuildTasks,
+  buildTasks: additionalPreBuildTasks,
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: true
