@@ -165,10 +165,40 @@ public with sharing class NegotiateService {
 	}
 
 	public static Boolean renameAgreement(final UUID documentId, final String documentName) {
+		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().renameAgreement(documentId, documentName);
 	}
 
 	public static Boolean deleteAgreement(final UUID documentId) {
+		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().deleteAgreement(documentId);
+	}
+
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(documentsIds, reviewerIds, subject, body, expiresInNumberOfDays);
+		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
+		if (taskStatus.status.equals('Waiting')) {
+			taskStatus.message = Label.ExternalReviewSuccess;
+		} else if (taskStatus.status.equals('Executing')) {
+			taskStatus.message = Label.ExternalReviewProcessing;
+		} else {
+			taskStatus.message = Label.ExternalReviewFailed;
+		}
+		return taskStatus;
+	}
+
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		UUID taskId = NegotiateAPI.getInstance().sendForApproval(documentsIds, reviewerIds, subject, body);
+		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
+		if (taskStatus.status.equals('Waiting')) {
+			taskStatus.message = Label.InternalApprovalSuccess;
+		} else if (taskStatus.status.equals('Executing')) {
+			taskStatus.message = Label.InternalApprovalProcessing;
+		} else {
+			taskStatus.message = Label.InternalApprovalFailed;
+		}
+		return taskStatus;
 	}
 }

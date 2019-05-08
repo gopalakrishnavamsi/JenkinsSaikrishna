@@ -3201,6 +3201,102 @@
 		<label>HQTEST3</label>
 		<name>HQTEST3</name>
 	</customLabels>
+	<customLabels>
+		<label>Your document has been sent for review and copied to the DocuSign Agreements space.</label>
+		<name>ExternalReviewSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Your request for sending your document for external review is still in progress. Check the Agreements
+			space after some time.
+		</label>
+		<name>ExternalReviewProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to send the document for external review. Please try again after some time.</label>
+		<name>ExternalReviewFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Your document has been sent for internal approval and copied to the DocuSign Agreements space.</label>
+		<name>InternalApprovalSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Your request for sending your document for internal approval is still in progress. Check the Agreements
+			space after some time.
+		</label>
+		<name>InternalApprovalProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to send the document for internal approval. Please try again after some time.</label>
+		<name>InternalApprovalFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Document sent for Review</label>
+		<name>ExternalReviewEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Please approve this document at your earliest convenience.</label>
+		<name>ExternalReviewEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Reviewer</label>
+		<name>ExternalReviewModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose a Salesforce Contact or use an email address</label>
+		<name>ExternalReviewChooseRecipientMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Add a Recipient</label>
+		<name>ExternalReviewAddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Set a due Date</label>
+		<name>ExternalReviewSetDueDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Disable Due Date</label>
+		<name>ExternalReviewDisableDueDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Personalize Your Message</label>
+		<name>ExternalReviewPersonalizeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit the email subject and message your recipient will receive.</label>
+		<name>ExternalReviewEditEmailAndSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>File Name</label>
+		<name>ExternalReviewFileName</name>
+	</customLabels>
+	<customLabels>
+		<label>Recipients</label>
+		<name>ExternalReviewRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Send</label>
+		<name>Send</name>
+	</customLabels>
+	<customLabels>
+		<label>Download</label>
+		<name>Download</name>
+	</customLabels>
+	<customLabels>
+		<label>Share Link</label>
+		<name>AgreementsShareLink</name>
+	</customLabels>
+	<customLabels>
+		<label>External Review</label>
+		<name>AgreementsExternalReview</name>
+	</customLabels>
+	<customLabels>
+		<label>Internal Approval</label>
+		<name>AgreementsInternalApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>Search by Name, Email or Organization</label>
+		<name>SearchActorHelpMessage</name>
+	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

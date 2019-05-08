@@ -13,7 +13,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	public static final UUID DOCUMENT_ID_5 = UUID.parse('333bd333-1536-e911-9c1d-3ca82a1e3f41');
 	public static final UUID DOCUMENT_ID_6 = UUID.parse('444bd444-1536-e911-9c1d-3ca82a1e3f41');
 	public static final UUID TASK_ID = UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566');
-	public static final UUID TASK_ID_2 = UUID.parse('5682d399-29fe-4085-9e48-126e4ffa0577');
+	public static final UUID TASK_ID_2 = UUID.parse('5632d399-39fe-3085-9e48-126e4ffa0577');
+	public static final UUID TASK_ID_3 = UUID.parse('5682d399-49fe-5085-9e48-126e4ffa0577');
 	public static final String USER_EMAIL = 'TestUser@TestCompany.com';
 	public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
 	public static final Id OBJECT_ID = ID.valueOf('0061U0000058I2EQAU');
@@ -44,6 +45,7 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 		response.setHeader('Content-Type', 'application/json');
 		String method = request.getMethod();
 		String path = request.getEndpoint();
+		String body = request.getBody();
 
 		if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_FOLDER)) {
 			response.setStatusCode(201);
@@ -93,10 +95,30 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setBody('{"Items":[{"Data":{"__legacyMessage":"","DocumentName":"Agreement_7d50807b-0a38-4c8a-86dd-0c1e335d3e2e.docx","DocumentUid":"12d96fc8-284f-e911-92dc-309c23cb2dc0","ContentVersionId":"0681U000001yYfQQAU","Actor":{"FullName":"Tyler Green","EmailAddress":"tgreen+packageb@springcm.com"}},"UserEmail":"tgreen+packageb@springcm.com","Action":"DocumentImportFromSalesforce","ActionType":"DocumentImportFromSalesforce","Comment":"Document was downloaded from Salesforce.","User":{"UserName":"tgreen+packageb@springcm.com","Email":"tgreen+packageb@springcm.com","FirstName":"Tyler","LastName":"Green","Href":"https://apilocalhost/v1/users/tgreen%2Bpackageb%40springcm.com"},"CreatedDate":"2019-03-25T18:07:01.150201Z"}],"Href":"https://apilocalhost/v1/historyitems/12d96fc8-284f-e911-92dc-309c23cb2dc0","Offset":0,"Limit":20,"First":"https://apilocalhost/v1/historyitems/12d96fc8-284f-e911-92dc-309c23cb2dc0","Last":"https://apilocalhost/v1/historyitems/12d96fc8-284f-e911-92dc-309c23cb2dc0","Total":1}');
+		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_WORKFLOWS) && body.contains(String.valueOf(DOCUMENT_ID))) {
+			response.setStatusCode(201);
+			response.setStatus('CREATED');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Executing","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/' + TASK_ID_2 + '"}');
+		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_WORKFLOWS) && body.contains(String.valueOf(DOCUMENT_ID_2))) {
+			response.setStatusCode(201);
+			response.setStatus('CREATED');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Executing","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/' + TASK_ID_3 + '"}');
 		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_WORKFLOWS)) {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
-			response.setBody('{"Href":"https://unit.test/workflow/' + WORKFLOW_ID + '"}');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Executing","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/4cf1f36a-4070-e911-8395-005056b946c2"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_WORKFLOWS) && path.contains(String.valueOf(TASK_ID_3))) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Failed","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/4cf1f36a-4070-e911-8395-005056b946c2"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_WORKFLOWS) && path.contains(String.valueOf(TASK_ID_2))) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Executing","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/4cf1f36a-4070-e911-8395-005056b946c2"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_WORKFLOWS)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Name":"Negotiate_ExternalReview_Template","StartDate":"2019-05-06T20:49:24.577Z","Status":"Waiting","Info":"","Href":"https://apiqana11.springcm.com/v2/ee3907fb-baa7-41d4-b9a5-52756b323607/workflows/4cf1f36a-4070-e911-8395-005056b946c2"}');
 		} else if (success && method == 'GET') {
 			response.setStatusCode(200);
 			response.setStatus('OK');

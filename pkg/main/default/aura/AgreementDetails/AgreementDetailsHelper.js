@@ -45,8 +45,10 @@
   },
 
   createExternalReviewComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
     $A.createComponent("c:AgreementsExternalReview", {
       "showModal": true,
+      "agreementDetails": agreementDetails
     }, function (componentBody) {
       if (component.isValid()) {
         var targetCmp = component.find('externalReviewModal');
