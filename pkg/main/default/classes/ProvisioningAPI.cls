@@ -18,7 +18,7 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 	public static ProvisioningAPI getInstance() {
 		if (self == null) {
 			Credentials c = Credentials.getInstance();
-			self = new ProvisioningAPI(c.environment.provisioningBaseUrl, c.account.id, c.token.token);
+			self = new ProvisioningAPI(c.environment.provisioningBaseUrl, c.account.id, null);
 		}
 		return self;
 	}
