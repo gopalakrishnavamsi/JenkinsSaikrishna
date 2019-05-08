@@ -79,6 +79,8 @@ License: BSD 3-Clause License
     <aura:handler name="change" value="{!v.limit}" action="{!c.handleLimitChange}"/>
 
     <aura:registerEvent name="strike_evt_addNewRecord" type="c:strike_evt" description="Fires an event that notifies when the strike_evt_addNewRecord button is pressed"/>
+    <aura:registerEvent name="strike_evt_pillClosed" type="c:strike_evt"
+                        description="Fires an event when the pill is closed"/>
     <aura:dependency resource="force:createRecord" type="EVENT"/>
 
     <!-- Strike Lookup -->

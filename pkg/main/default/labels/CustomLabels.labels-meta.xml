@@ -5890,5 +5890,170 @@
 		<shortDescription>HQTEST3</shortDescription>
 		<value>HQTEST3</value>
 	</labels>
+	<labels>
+		<fullName>ExternalReviewSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewSuccess</shortDescription>
+		<value>Your document has been sent for review and copied to the DocuSign Agreements space.</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewProcessing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewProcessing</shortDescription>
+		<value>Your request for sending your document for external review is still in progress. Check the Agreements
+			space after some time.
+		</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFailed</shortDescription>
+		<value>Failed to send the document for external review. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalSuccess</shortDescription>
+		<value>Your document has been sent for internal approval and copied to the DocuSign Agreements space.</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalProcessing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalProcessing</shortDescription>
+		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements
+			space after some time.
+		</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalFailed</shortDescription>
+		<value>Failed to send the document for internal approval. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewEmailSubject</shortDescription>
+		<value>Document sent for Review</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewEmailBody</shortDescription>
+		<value>Please approve this document at your earliest convenience.</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewModalTitle</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewModalTitle</shortDescription>
+		<value>Select Reviewer</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewChooseRecipientMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewChooseRecipientMessage</shortDescription>
+		<value>Choose a Salesforce Contact or use an email address</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewAddRecipient</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewAddRecipient</shortDescription>
+		<value>Add a Recipient</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewSetDueDate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewSetDueDate</shortDescription>
+		<value>Set a Due Date</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewDisableDueDate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewDisableDueDate</shortDescription>
+		<value>Disable Due Date</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewPersonalizeMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewPersonalizeMessage</shortDescription>
+		<value>Personalize Your Message</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewEditEmailAndSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewEditEmailAndSubject</shortDescription>
+		<value>Edit the email subject and message your recipient will receive.</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewFileName</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFileName</shortDescription>
+		<value>File Name</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewRecipients</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewRecipients</shortDescription>
+		<value>Recipients</value>
+	</labels>
+	<labels>
+		<fullName>Send</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send</shortDescription>
+		<value>Send</value>
+	</labels>
+	<labels>
+		<fullName>Download</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Download</shortDescription>
+		<value>Download</value>
+	</labels>
+	<labels>
+		<fullName>AgreementsShareLink</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementsShareLink</shortDescription>
+		<value>Share Link</value>
+	</labels>
+	<labels>
+		<fullName>AgreementsExternalReview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementsExternalReview</shortDescription>
+		<value>External Review</value>
+	</labels>
+	<labels>
+		<fullName>AgreementsInternalApproval</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementsInternalApproval</shortDescription>
+		<value>Internal Approval</value>
+	</labels>
+	<labels>
+		<fullName>SearchActorHelpMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SearchActorHelpMessage</shortDescription>
+		<value>Search by Name, Email or Organization</value>
+	</labels>
 </CustomLabels>
 

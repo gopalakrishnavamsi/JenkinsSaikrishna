@@ -79,4 +79,120 @@ public with sharing class NegotiateServiceTest {
 
 		}
 	}
+
+	@IsTest
+	static void test_sendForExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody', 8);
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Waiting', testTaskStatus.status);
+			System.assertEquals(Label.ExternalReviewSuccess, testTaskStatus.message);
+
+		}
+	}
+
+	@IsTest
+	static void test_sendForExternalReview_executing() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody', 8);
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Executing', testTaskStatus.status);
+			System.assertEquals(Label.ExternalReviewProcessing, testTaskStatus.message);
+
+		}
+	}
+
+	@IsTest
+	static void test_sendForExternalReview_failed() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody', 8);
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Failed', testTaskStatus.status);
+			System.assertEquals(Label.ExternalReviewFailed, testTaskStatus.message);
+
+		}
+	}
+
+	@IsTest
+	static void test_sendForInternalApproval_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody');
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Waiting', testTaskStatus.status);
+			System.assertEquals(Label.InternalApprovalSuccess, testTaskStatus.message);
+
+		}
+	}
+
+	@IsTest
+	static void test_sendForInternalApproval_executing() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody');
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Executing', testTaskStatus.status);
+			System.assertEquals(Label.InternalApprovalProcessing, testTaskStatus.message);
+
+		}
+	}
+
+	@IsTest
+	static void test_sendForInternalApproval_failed() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
+				new List<String> { 'unittest@test.com' },
+				'testSubject',
+				'testBody');
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+			System.assertEquals('Failed', testTaskStatus.status);
+			System.assertEquals(Label.InternalApprovalFailed, testTaskStatus.message);
+
+		}
+	}
+
+
 }

@@ -1,12 +1,9 @@
 <aura:component description="ExternalReviewRecipient">
-    <!--TODO When a user search is made and Enter key is pressed without selecting a user from the box lightning error occurs -->
-    <!-- FIXME : Check hardcoding and replace with labels  -->
-
     <!--attributes -->
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
-    <aura:attribute name="recordType" type="String" default="user" access="private"/>
-    <aura:attribute name="iconName" type="String" access="private"/>
+    <aura:attribute name="recordType" type="String" default="user"/>
+    <aura:attribute name="iconName" type="String"/>
 
     <!--handlers -->
     <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>
@@ -15,7 +12,7 @@
     <!-- component body -->
     <div class="slds-grid">
         <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
-            <c:strike_lookup placeholder="Search by Name, Email or Organization"
+            <c:strike_lookup placeholder="{!$Label.c.SearchActorHelpMessage}"
                              object="{!v.recordType}"
                              iconName="{!'standard:' + v.recordType}"
                              searchField="Name"

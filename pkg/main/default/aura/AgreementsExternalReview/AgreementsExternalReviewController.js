@@ -1,49 +1,26 @@
 ({
-    onInit: function (component, event, helper) {
-        //initialize recipients
-        var recipients = component.get('v.recipients');
-        recipients.push(helper.newRecipient());
-        component.set('v.recipients', recipients);
+  onInit: function (component, event, helper) {
+    helper.initializeComponent(component, event, helper);
+  },
 
-        //set the current step to 1
-        component.set('v.currentStep', '1');
-        //Initialize default due date
-        var dueDateElement = component.find("externalReviewDueDate");
-        if (dueDateElement) dueDateElement.set("v.value", new Date(new Date().valueOf() + (86400000 * 30)).toJSON());        
-    },
-    handleRecipientChange: function (component, event, helper) {
-        helper.resolveRecipient(component, event.getParam('data'));
-    },
-    backButtonClicked: function (component, event, helper) {
-        var currentStep = component.get('v.currentStep');
+  handleRecipientChange: function (component, event, helper) {
+    helper.resolveRecipient(component, event.getParam('data'));
+  },
 
-        //currentStep is Select Recipients
-        if (currentStep === '1') {
-            helper.hide(component, event, helper);
-        }
+  backButtonClicked: function (component, event, helper) {
+    helper.backButtonClicked(component, event, helper);
+  },
 
-        //currentStep is Edit your Message then direct user back to Select Recipients screen
-        if (currentStep === '2') {
-            component.set('v.currentStep', '1');
-        }
+  nextButtonClicked: function (component, event, helper) {
+    helper.nextButtonClicked(component, event, helper);
+  },
 
-    },
+  onDueDateChange: function (component, event, helper) {
+    helper.setDueDateInDays(component);
+  },
 
-    nextButtonClicked: function (component, event, helper) {
-        var currentStep = component.get('v.currentStep');
+  handlePillCloseEvent: function (component, event, helper) {
+    helper.initializeRecipients(component);
+  }
 
-        if (currentStep === '1') {
-            //Proceed to the personalize message step
-            component.set('v.currentStep', '2');
-        }
-
-        if (currentStep === '2') {
-            //If successful hide the component
-            helper.hide(component, event, helper);
-            //set the current step to 1
-            component.set('v.currentStep', '1');
-            //display toast notification
-            helper.showToast(component, 'Your document has been sent for review and copied to the DocuSign Agreements space', 'success')
-        }
-    }
-})
+});
