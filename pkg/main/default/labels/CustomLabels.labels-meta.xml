@@ -5763,6 +5763,20 @@
 		<value>Successfully connected and authorized to DocuSign Gen.</value>
 	</labels>
 	<labels>
+		<fullName>SuccessDocuSignGenTrial</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SuccessDocuSignGenTrial</shortDescription>
+		<value>Successfully started DocuSign Gen Trial.</value>
+	</labels>
+	<labels>
+		<fullName>ErrorDocuSignGenTrial</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ErrorDocuSignGenTrial</shortDescription>
+		<value>Unable to start DocuSign Gen Trial. Please contact DocuSign Gen Support for assistance.</value>
+	</labels>
+	<labels>
 		<fullName>MissingDocuSignGenAuthorizationSettings</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -5777,6 +5791,13 @@
 		<protected>true</protected>
 		<shortDescription>AuthorizeGen</shortDescription>
 		<value>Authorize Gen</value>
+	</labels>
+	<labels>
+		<fullName>TrialGen</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TrialGen</shortDescription>
+		<value>Start Your Gen Trial</value>
 	</labels>
 	<labels>
 		<fullName>Modified</fullName>

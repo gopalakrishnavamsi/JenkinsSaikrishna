@@ -161,4 +161,14 @@ public with sharing class SetupController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to read user.');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean addTrialGen() {
+		try {
+			return AuthService.addTrialGenProduct();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
+		}
+
+	}
 }

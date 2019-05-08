@@ -484,6 +484,29 @@ public with sharing class AuthService {
 
 			return settings;
 		}
+// TODO: leverage or consolidate previous implementation of updateSettings.
+		public AccountSettings__c updateSettings(
+			final Gen.Product product) {
+
+			if (product != null) {
+				updateConfiguration(
+					product.inviteEmailSubject,
+					product.inviteEmailBody);
+			}
+
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			settings.ScmAuthBaseUrl__c = product == null || product.authBaseUrl == null
+				? null : canonicalizeBaseUrl(product.authBaseUrl).toExternalForm();
+			settings.ScmApiBaseUrl__c = product == null || product.apiBaseUrl == null
+				? null : canonicalizeBaseUrl(product.apiBaseUrl).toExternalForm();
+			settings.InviteCallbackUrl__c = product == null || product.inviteCallbackUrl == null
+				? null : product.inviteCallbackUrl.toExternalForm();
+			settings.InviteRedirectUrl__c = product == null || product.inviteRedirectUrl == null
+				? null : product.inviteRedirectUrl.toExternalForm();
+			upsert settings;
+
+			return settings;
+		}
 	}
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
@@ -752,6 +775,41 @@ public with sharing class AuthService {
 		return getRootCredentials(environment, baseUrl);
 	}
 
+	private static Gen.Product getGenProduct(Product p) {
+		Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
+		String inviteSubject, inviteBody;
+
+		for (String key : p.properties.keySet()) {
+			String value = p.properties.get(key);
+			if (String.isBlank(value)) continue;
+			switch on key {
+				when 'invite_callback_uri' {
+					inviteCallbackUrl = new Url(value);
+				} when 'invite_redirect_uri' {
+					inviteRedirectUrl = new Url(value);
+				} when 'merge_uri' {
+					apiUrl = new Url(value);
+				} when 'web_base_uri' {
+					authUrl = new Url(value);
+				} when 'invite_email_subject' {
+					inviteSubject = value;
+				} when 'invite_email_body' {
+					inviteBody = value;
+				}
+			}
+		}
+		return new Gen.Product(
+			p.status,
+			p.isTrial,
+			p.trialExpires,
+			authUrl,
+			apiUrl,
+			inviteCallbackUrl,
+			inviteRedirectUrl,
+			inviteSubject,
+			inviteBody);
+	}
+
 	@TestVisible
 	private static Gen.Product getGenProduct(
 		final Url provisioningBaseUrl,
@@ -761,41 +819,23 @@ public with sharing class AuthService {
 		Gen.Product result = null;
 		for (Product p : ProvisioningAPI.getInstance(provisioningBaseUrl, accountId, accessToken).getProducts()) {
 			if (p != null && p.name == 'gen' && p.properties != null) {
-				Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
-				String inviteSubject, inviteBody;
-				for (String key : p.properties.keySet()) {
-					String value = p.properties.get(key);
-					if (String.isBlank(value)) continue;
-					switch on key {
-						when 'invite_callback_uri' {
-							inviteCallbackUrl = new Url(value);
-						} when 'invite_redirect_uri' {
-							inviteRedirectUrl = new Url(value);
-						} when 'merge_uri' {
-							apiUrl = new Url(value);
-						} when 'web_base_uri' {
-							authUrl = new Url(value);
-						} when 'invite_email_subject' {
-							inviteSubject = value;
-						} when 'invite_email_body' {
-							inviteBody = value;
-						}
-					}
-				}
-				result = new Gen.Product(
-					p.status,
-					p.isTrial,
-					p.trialExpires,
-					authUrl,
-					apiUrl,
-					inviteCallbackUrl,
-					inviteRedirectUrl,
-					inviteSubject,
-					inviteBody);
+				result = getGenProduct(p);
 				break;
 			}
 		}
 		return result;
+	}
+
+	public static Boolean addTrialGenProduct() {
+		Permissions.verifyIsDocuSignAdministrator();
+		Gen.Product genProduct = null;
+		Product p = ProvisioningAPI.getInstance().addProduct('gen', true);
+		if (p != null && p.name == 'gen' && p.properties != null) {
+			genProduct = getGenProduct(p);
+			DB.updateSettings(genProduct);
+			return true;
+		}
+		return false;
 	}
 
 	@TestVisible

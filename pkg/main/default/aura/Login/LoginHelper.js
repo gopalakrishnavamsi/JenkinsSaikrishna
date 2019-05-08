@@ -44,6 +44,21 @@
     beginSpringOAuth(component);
   },
 
+  addTrialGenProduct: function (component) {
+
+      var uiHelper = component.get('v.uiHelper');
+
+       uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
+        if (response) {
+              uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
+            } else {
+              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+            }
+       }, function () {
+              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+            }, null);
+    },
+
   setLoggedIn: function (component, loginInformation) {
     var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
     var isLoggedIn = hasAccounts && loginInformation.status === 'Success';

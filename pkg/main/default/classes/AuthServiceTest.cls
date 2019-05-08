@@ -1103,6 +1103,37 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_addTrialGenProduct_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Boolean result = AuthService.addTrialGenProduct();
+			Test.stopTest();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+			System.assertNotEquals(null, s.AccountBaseUrl__c);
+			System.assertNotEquals(null, s.InviteCallbackUrl__c);
+			System.assertNotEquals(null, s.InviteRedirectUrl__c);
+			System.assertEquals(s.ScmApiBaseUrl__c, 'https://api.test.springcm.com/gen/');
+		}
+	}
+
+	@IsTest
+	static void test_addTrialGenProduct_error() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				AuthService.addTrialGenProduct();
+				throw new AssertException('Expected AuthService.addTrialGenProduct to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getRemoteSites() {
 		System.assertEquals(5, Collection.size(AuthService.getRemoteSites(
 			DocuSign.Environment.Production,
