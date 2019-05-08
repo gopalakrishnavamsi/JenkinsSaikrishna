@@ -413,7 +413,14 @@ License: BSD 3-Clause License*/
         });
 
         $A.enqueueAction(getRecordsAction);
-    }
+    },
+
+  firePillCloseEvent: function (component) {
+    var e = component.getEvent('strike_evt_pillClosed');
+    var eventData = {"pillClosed": true};
+    e.setParams({data: eventData});
+    e.fire();
+  }
 })
 /*Copyright 2017 Appiphony, LLC
 

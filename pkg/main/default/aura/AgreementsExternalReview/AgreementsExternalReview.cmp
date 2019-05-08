@@ -1,45 +1,61 @@
 <aura:component description="AgreementsExternalReview"
-                controller="SendingController">
-    <!-- FIXME : Check hardcoding and replace with labels  -->
+                controller="AgreementsController">
+
+
     <!-- attributes -->
-    <aura:attribute name="recipients" type="Object[]"/>
-    <aura:attribute name="currentStep" type="String"/>
-    <aura:attribute name="emailsubject" type="String"
-                    default="Sam Sales would like to approve a document."/>
-    <aura:attribute name="emailmessage" type="String"
-                    default="Please approve this document at your earliest convenience."/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="recipients" type="Object[]"/>
+    <aura:attribute name="currentStep" type="String" access="private"/>
+    <aura:attribute name="disableDueDate" type="Boolean" access="private"/>
+    <aura:attribute name="dueDate" type="Date" access="private"/>
+    <aura:attribute name="requestExpirationDays" type="Integer" access="private"/>
+    <aura:attribute name="emailSubject" type="String"
+                    default="{!$Label.c.ExternalReviewEmailSubject}" access="private"/>
+    <aura:attribute name="emailBody" type="String"
+                    default="{!$Label.c.ExternalReviewEmailBody}" access="private"/>
 
     <!-- Handlers -->
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="change" value="{!v.dueDate}" action="{!c.onDueDateChange}"/>
+    <aura:handler name="strike_evt_pillClosed" event="c:strike_evt" action="{!c.handlePillCloseEvent}"/>
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <c:strike_modal aura:id="externalReviewAgreementsModal"
-                    title="Select Reviewer"
+                    title="{!$Label.c.ExternalReviewModalTitle}"
                     showModal="{!v.showModal}">
 
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
         <!--modal body -->
-        <div class="slds-p-horizontal--xx-large">
+        <div class="{!'slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <!-- Select Recipients -->
             <aura:if isTrue="{!v.currentStep == '1'}">
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
                         <div class="slds-text-body_small slds-p-bottom_small">
-                            Choose a Salesforce Contact or use an email address
+                            {!$Label.c.ExternalReviewChooseRecipientMessage}
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <div class="slds-text-body_small  slds-p-top--medium">
-                            <b class="required-textcolor">* </b>Add a Recipient
+                            <b class="required-textcolor">* </b>{!$Label.c.ExternalReviewSetDueDate}
                         </div>
                         <div>
-                            <div id="instructions" class="slds-assistive-text">
-                                Press space bar to toggle drag drop mode, use arrow keys to move selected
-                                elements.
-                            </div>
+                            <div id="instructions" class="slds-assistive-text"></div>
                             <ul aria-describedby="instructions"
                                 aria-label="drag and drop single select listbox" role="listbox">
                                 <aura:iteration items="{!v.recipients}" var="recipient"
@@ -49,7 +65,7 @@
                                         id="{!recipientIndex}"
                                         role="option">
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
-                                            <li class="{!if(v.showApprovalOrder, 'slds-size_5-of-7', 'slds-size_6-of-7')}">
+                                            <li class="slds-size_6-of-7">
                                                 <c:ExternalReviewRecipient
                                                         recipient="{!recipient}"
                                                         sourceId="{#recipient.source.id}"
@@ -63,10 +79,14 @@
                         <div class="slds-p-top--x-small">
                             <div class="slds-grid slds-grid_vertical-align-end">
                                 <div class="slds-size_4-of-7 slds-col">
-                                    <lightning:input aura:id="externalReviewDueDate" type="date" label="Set a due Date" name="date"/>
+                                    <lightning:input aura:id="externalReviewDueDate" type="date"
+                                                     label="{!$Label.c.ExternalReviewSetDueDate}"
+                                                     name="date" disabled="{!v.disableDueDate}" value="{!v.dueDate}"/>
                                 </div>
                                 <div class="slds-size_3-of-7 slds-p-left--x-small slds-col slds-p-bottom--x-small">
-                                    <lightning:input type="checkbox" label="Disable Due Date"></lightning:input>
+                                    <lightning:input type="checkbox" label="{!$Label.c.ExternalReviewDisableDueDate}"
+                                                     checked="{!v.disableDueDate}"
+                                                     value="{!v.disableDueDate}"></lightning:input>
                                 </div>
                             </div>
                         </div>
@@ -80,16 +100,16 @@
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
                         <div class="slds-text-heading_small slds-p-around--x-small">
-                            Personalize Your Message
+                            {!$Label.c.ExternalReviewPersonalizeMessage}
                         </div>
                         <div class="slds-text-body_small slds-p-bottom_small">
-                            Edit the email subject and message your recipient will receive.
+                            {!$Label.c.ExternalReviewEditEmailAndSubject}
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <!-- File Name Details -->
                         <div class="slds-text-body_small  slds-p-top--x-small">
-                            File Name
+                            {!$Label.c.ExternalReviewFileName}
                         </div>
                         <div>
                             <ul class="slds-list_horizontal">
@@ -98,14 +118,14 @@
                                 </li>
                                 <li>
                                     <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small">
-                                        Snow-Systems-Automation-Software-MSA-11162018.docx
+                                        {!v.agreementDetails.name}
                                     </div>
                                 </li>
                             </ul>
                         </div>
                         <!-- Recipients -->
                         <div class="slds-text-body_small slds-p-top_small">
-                            Recipients
+                            {!$Label.c.ExternalReviewRecipients}
                         </div>
                         <div>
                             <ul class="slds-list_horizontal">
@@ -123,10 +143,12 @@
                             </ul>
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
-                            <lightning:input label="Subject" name="Subject" value="{!v.emailsubject}"/>
+                            <lightning:input label="{!$Label.c.Subject}" name="{!$Label.c.Subject}"
+                                             value="{!v.emailSubject}"/>
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
-                            <lightning:textarea name="Message" label="Message" value="{!v.emailmessage}"/>
+                            <lightning:textarea name="{!$Label.c.Message}" label="{!$Label.c.Message}"
+                                                value="{!v.emailBody}"/>
                         </div>
                     </div>
                 </article>
@@ -135,10 +157,11 @@
 
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
-                <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}">Back
-                </lightning:button>
+                <lightning:button class="slds-button slds-button--neutral"
+                                  onclick="{!c.backButtonClicked}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
-                                  label="{!if(v.currentStep == '1', 'Next', 'Send')}"></lightning:button>
+                                  disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
+                                  label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
             </div>
         </aura:set>
     </c:strike_modal>

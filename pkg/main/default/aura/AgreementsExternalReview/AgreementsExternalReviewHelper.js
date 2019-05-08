@@ -1,4 +1,41 @@
 ({
+  initializeComponent: function (component, event, helper) {
+    var recipients = component.get('v.recipients');
+    recipients.push(helper.newRecipient());
+    component.set('v.recipients', recipients);
+    component.set('v.currentStep', '1');
+    var dueDateElement = component.find("externalReviewDueDate");
+    if (dueDateElement) dueDateElement.set("v.value", new Date(new Date().valueOf() + (86400000 * 30)).toISOString().slice(0, 10));
+  },
+
+  backButtonClicked: function (component, event, helper) {
+    var currentStep = component.get('v.currentStep');
+    if (currentStep === '1') {
+      helper.close(component);
+    }
+    if (currentStep === '2') {
+      component.set('v.currentStep', '1');
+    }
+  },
+
+  nextButtonClicked: function (component, event, helper) {
+    var currentStep = component.get('v.currentStep');
+    if (currentStep === '1') {
+      component.set('v.currentStep', '2');
+    }
+    if (currentStep === '2') {
+      helper.triggerSendForExternalReview(component);
+    }
+  },
+
+  reloadAgreementsSpace: function (component) {
+    var evt = component.getEvent('loadingEvent');
+    evt.setParams({
+      isLoading: true
+    });
+    evt.fire();
+  },
+
   getErrorMessage: function (response) {
     // TODO: Use uiHelper library.
     var message = '';
@@ -14,7 +51,6 @@
 
   resolveRecipient: function (component, recipient) {
     var self = this;
-    //self.setLoading(component, true);
     var sourceId = self.getSourceId(recipient);
     if ($A.util.isEmpty(sourceId)) return;
 
@@ -46,7 +82,6 @@
       } else {
         self.showToast(component, self.getErrorMessage(response), 'error');
       }
-      //self.setLoading(component, false);
     });
     $A.enqueueAction(rr);
   },
@@ -70,12 +105,14 @@
       sourceId = x.source.id;
     }
     return sourceId;
-  }, show: function (component) {
+  },
+
+  show: function (component) {
     component.find('externalReviewAgreementsModal').show();
   },
 
-  hide: function (component) {
-    component.find('externalReviewAgreementsModal').hide();
+  close: function (component) {
+    component.destroy();
   },
 
   showToast: function (component, message, mode) {
@@ -84,5 +121,95 @@
       show: true, message: message, mode: mode
     });
     evt.fire();
+  },
+
+  setDueDateInDays: function (component) {
+    var dueDate = component.get('v.dueDate');//date selected by end user
+    var dateToday = new Date().toISOString().slice(0, 10); // today's date
+    var daysDifference = Math.floor((Date.parse(dueDate) - Date.parse(dateToday)) / 86400000);
+    if (daysDifference && daysDifference >= 0) {
+      component.set('v.requestExpirationDays', daysDifference);
+    } else {
+      component.set('v.requestExpirationDays', 0);
+    }
+  },
+
+  initializeRecipients: function (component) {
+    var recipients = component.get('v.recipients');
+    recipients.forEach(function (recipient) {
+      recipient.name = null;
+      recipient.email = null;
+      recipient.source = {};
+    });
+    component.set('v.recipients', recipients);
+  },
+
+  triggerSendForExternalReview: function (component) {
+    component.set('v.loading', true);
+    var self = this;
+    var agreementDetails = component.get('v.agreementDetails');
+
+    var documentIdList = [];
+    documentIdList.push(agreementDetails.id.value);
+
+    var recipientList = [];
+    var recipients = component.get('v.recipients');
+    recipients.forEach(function (recipient) {
+      recipientList.push(recipient.email);
+    });
+
+    var emailSubject = component.get('v.emailSubject');
+    var emailBody = component.get('v.emailBody');
+
+    var requestExpirationDays;
+    if (!component.get('v.disableDueDate')) {
+      requestExpirationDays = component.get('v.requestExpirationDays');
+    } else {
+      requestExpirationDays = 0;
+    }
+    var action = component.get('c.sendForExternalReview');
+    action.setParams({
+      documentsIds: documentIdList,
+      reviewerIds: recipientList,
+      subject: emailSubject,
+      body: emailBody,
+      expiresInNumberOfDays: requestExpirationDays
+
+    });
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+
+      if (state === "SUCCESS") {
+        var result = response.getReturnValue();
+        if (result.status === "Waiting") {
+          self.showToast(component, result.message, 'success');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+
+        } else if (result.status === "Executing") {
+          self.showToast(component, result.message, 'warning');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        } else {
+          self.showToast(component, result.message, 'error');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        }
+      } else if (state === "ERROR") {
+        var errorMessage = $A.get('$Label.c.ErrorMessage');
+        var errors = response.getError();
+        if (errors) {
+          if (errors[0] && errors[0].message) {
+            errorMessage += errors[0].message;
+          }
+        } else {
+          errorMessage += $A.get('$Label.c.UnknownError');
+        }
+        self.showToast(component, errorMessage, 'error');
+      }
+      component.set('v.loading', false);
+    });
+    $A.enqueueAction(action);
+
   }
 });

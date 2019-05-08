@@ -98,7 +98,8 @@
                                     <div class="slds-media__figure">
                                         <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
                                                          onchange="{!c.handleFileSelection}" checked="{!file.selected}"
-                                                         class="ds-no-label" value="{!file.sourceId}"/>
+                                                         class="ds-no-label" value="{!file.sourceId}"
+                                                         disabled="{!v.loading}"/>
                                     </div>
                                     <div class="slds-media__figure">
                                         <!-- File Icon -->
@@ -281,7 +282,8 @@
                                       label="Back">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand" onclick="{!c.importButtonClicked}"
-                                      disabled="{!v.disableSalesforceFileImport}" label="Import"></lightning:button>
+                                      disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"
+                                      label="Import"></lightning:button>
                 </div>
             </aura:if>
 

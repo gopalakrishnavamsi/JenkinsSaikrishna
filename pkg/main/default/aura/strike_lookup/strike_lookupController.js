@@ -111,6 +111,7 @@ License: BSD 3-Clause License*/
         component.set('v.value', '');
 
         helper.getRecordsBySearchTerm(component, event, helper);
+        helper.firePillCloseEvent(component);
 
         window.setTimeout($A.getCallback(function() {
             component.find('lookupInput').getElement().focus();

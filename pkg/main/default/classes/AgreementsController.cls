@@ -8,7 +8,12 @@ public with sharing class AgreementsController extends Controller {
 
 	@AuraEnabled(Cacheable = true)
 	public static String getNameSpace() {
-		return Application.lightningNamespace;
+		try {
+			Permissions.verifyIsDocuSignUser();
+			return Application.lightningNamespace;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get namespace.');
+		}
 	}
 
 	@AuraEnabled
@@ -24,6 +29,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
+			Permissions.verifyIsDocuSignUser();
 			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get linked documents');
@@ -54,6 +60,49 @@ public with sharing class AgreementsController extends Controller {
 			return NegotiateService.deleteAgreement(UUID.parse(documentId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to Delete Agreement');
+		}
+	}
+
+	@AuraEnabled(Cacheable = true)
+	public static Recipient resolveRecipient(final Id sourceId) {
+		try {
+			Permissions.verifyIsDocuSignUser();
+			Recipient result = null;
+			if (String.isNotBlank(sourceId)) {
+				List<Recipient> rs = RecipientService.getRecipients(sourceId.getSobjectType(), new Set<Id> { sourceId });
+				if (Collection.isNotEmpty(rs)) {
+					result = rs[0];
+				}
+			}
+			return result;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to resolve recipients');
+		}
+	}
+
+	@AuraEnabled
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+		try {
+			List<UUID> documentIdList = new List<UUID>();
+			for (String documentId : documentsIds) {
+				documentIdList.add(UUID.parse(documentId));
+			}
+			return NegotiateService.sendForExternalReview(documentIdList, reviewerIds, subject, body, expiresInNumberOfDays);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to send documents for External Review');
+		}
+	}
+
+	@AuraEnabled
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+		try {
+			List<UUID> documentIdList = new List<UUID>();
+			for (String documentId : documentsIds) {
+				documentIdList.add(UUID.parse(documentId));
+			}
+			return NegotiateService.sendForInternalApproval(documentIdList, reviewerIds, subject, body);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
 }
