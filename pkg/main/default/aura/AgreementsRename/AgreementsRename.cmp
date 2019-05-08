@@ -32,16 +32,19 @@
                                      messageWhenValueMissing="{!$Label.c.RequiredField}"
                                      pattern="^[^&#060;&#062;&#166;&#124;:&#34;\.\/\\]*$"
                                      messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
-                                     required="true"/>
+                                     required="true"
+                                     disabled="{!v.loading}"/>
                 </div>
             </div>
         </div>
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
             <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelButtonClicked}"
+                              disabled="{!v.loading}"
                               label="{!$Label.c.Cancel}">
             </lightning:button>
-            <lightning:button disabled="{!if(empty(v.agreementDetails.name), true, false)}" class="slds-button slds-button_brand" onclick="{!c.renameButtonClicked}"
+            <lightning:button disabled="{!if(or(empty(v.agreementDetails.name), v.loading == true), true, false)}"
+                              class="slds-button slds-button_brand" onclick="{!c.renameButtonClicked}"
                               label="{!$Label.c.Rename}"></lightning:button>
         </aura:set>
     </c:strike_modal>

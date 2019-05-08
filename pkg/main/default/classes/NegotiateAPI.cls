@@ -38,8 +38,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return historySelf;
 	}
 
-
-
 	public class Error extends APIError {
 		public UUID referenceId { get; private set; }
 
@@ -114,18 +112,18 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 
 		public String toXML() {
-		   return XMLSerializer.toXMLForm(
-			   new Set<String> { 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays', 'CheckoutDocument', 'AssignTasksInOrder' },
-		        new Map<String, Object> {
-		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
-		            'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.reviewers, 'Reviewers', 'Reviewer'),
+			return XMLSerializer.toXMLForm(
+				new Set<String> { 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays', 'CheckoutDocument', 'AssignTasksInOrder' },
+				new Map<String, Object> {
+					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'Id' }, this.documents, 'Documents', 'Document'),
+					'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.reviewers, 'Reviewers', 'Reviewer'),
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'Body' }, this.email, 'Email'),
 					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
-		        },
-		        'ExternalReview'
-		    );
+				},
+				'ExternalReview'
+			);
 		}
 	}
 
@@ -143,21 +141,21 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 
 		public String toXML() {
-		   return XMLSerializer.toXMLForm(
-		        new Set<String>{ 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' }, 
-		        new Map<String, Object> {
-		            'Documents' => XMLSerializer.fromIteratable(new Set<String>{ 'Id' }, this.documents ,'Documents', 'Document'),
-		            'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.approvers, 'Approvers', 'Approver'),
-		            'Email' => XMLSerializer.fromObject(new Set<String>{ 'Subject', 'Message' }, this.email, 'Email'),
-		            'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
-		            'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
-		        },
-		        'Approval'
-		    );		    
+			return XMLSerializer.toXMLForm(
+				new Set<String> { 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder' },
+				new Map<String, Object> {
+					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'Id' }, this.documents, 'Documents', 'Document'),
+					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.approvers, 'Approvers', 'Approver'),
+					'Email' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'Message' }, this.email, 'Email'),
+					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
+					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder')
+				},
+				'Approval'
+			);
 		}
 	}
 
-    //Todo: uid for now is an email address, this will most likely change in the future.
+	//Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIApprover {
 		public String email { get; private set; }
@@ -167,7 +165,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-    //Todo: uid for now is an email address, this will most likely change in the future.
+	//Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIReviewer {
 		public String email { get; private set; }
@@ -304,7 +302,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-			while (status != 'Success' && count < 10) {
+		while (status != 'Success' && count < 10) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -320,6 +318,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 
 			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
+			status = result.status;
 			count += 1;
 		}
 
@@ -472,7 +471,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 // Send for External Review
 	public UUID sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
-		
+
 		RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {
@@ -494,6 +493,34 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)responsebody.get('Href')).substringAfterLast('/'));
 	}
 
+	public NegotiateAPI.TaskStatus getWorkFlowStatus(final UUID taskId) {
+		String status = '';
+		Long count = 0;
+		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
+
+		while (status != 'Waiting' && status != 'Failed' && count < 10) {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_WORKFLOWS, taskId
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get status of Workflow Item - ' + taskId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+
+			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
+			status = result.status;
+			count += 1;
+		}
+
+		return result;
+	}
+
 	@TestVisible
 	private class APIHistoryItems {
 		public List<APIHistoryItem> items;
@@ -512,7 +539,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 			AgreementHistoryItem.Actor actor = null;
 
-			if(this.data.actor != null) {
+			if (this.data.actor != null) {
 				actor = new AgreementHistoryItem.Actor(
 					this.data.actor.fullName,
 					this.data.actor.emailAddress,
@@ -532,7 +559,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					this.data.reviewer.emailAddress, ''));
 			}
 
-			if(this.data.approvers != null && !this.data.approvers.isEmpty()) {
+			if (this.data.approvers != null && !this.data.approvers.isEmpty()) {
 				for (ApiActor a : this.data.approvers) {
 					recipients.add(new AgreementHistoryItem.Actor(
 						a.fullName,
