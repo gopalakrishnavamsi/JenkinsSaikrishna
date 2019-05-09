@@ -20,7 +20,8 @@
     "sfdx-updateOrg": "sfdx force:source:push",
     "sfdx-postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "sfdx-generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "sfdx-openOrg":"sfdx force:org:open"    
+    "sfdx-openOrg":"sfdx force:org:open",
+    "sfdx-setup":"npm run sfdx-auth && npm run sfdx-buildOrg && npm run sfdx-updateOrg && npm run sfdx-postInstall && npm run sfdx-generatePassword && npm run sfdx-openOrg"    
   },
   "repository": {
     "type": "git",
