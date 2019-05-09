@@ -157,7 +157,8 @@ public with sharing class AuthService {
 				this.log.error('Failed to exchange JWT for access token: ' + response.error);
 				throw new APIException(response.error);
 			}
-
+			System.debug('the value of exchangeJwt response : ' + response);
+			System.debug('the value of exchangeJwt response body : ' + response.body);
 			return ((APIToken)JSON.deserialize(response.body, APIToken.class)).toExternalForm();
 		}
 
@@ -412,6 +413,8 @@ public with sharing class AuthService {
 		+ 'invite spring_write spring_read manage_app_keys';
 	@TestVisible
 	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read';
+	@TestVisible
+	private static final String SCOPE_CONTENT = 'spring_content';
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
 	private static SpringOAuthAPI springoauth;
@@ -520,7 +523,7 @@ public with sharing class AuthService {
 	private static String generateJwt(
 		final String host,
 		final UUID userId,
-		final Boolean canManageAccount,
+		final String scope,
 		final String clientId,
 		final Blob jwtSigningKey) {
 
@@ -530,7 +533,7 @@ public with sharing class AuthService {
 			'iat' => Datetime.now().getTime() / 1000,
 			'exp' => Datetime.now().addHours(1).getTime() / 1000,
 			'aud' => host,
-			'scope' => canManageAccount ? SCOPE_ADMIN : SCOPE_USER
+			'scope' => scope
 		})));
 
 		String signature = base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(JWT_HEADER + '.' + payload),
@@ -565,15 +568,33 @@ public with sharing class AuthService {
 
 		if (token != null && token.isValid) return token.token;
 
-		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(generateJwt(
+		String jwtToken = canManageAccount ? generateJwt(
 			accountBaseUrl.getHost(),
 			userId,
-			canManageAccount,
+			SCOPE_ADMIN,
 			clientId,
-			jwtSigningKey));
+			jwtSigningKey) : generateJwt(
+			accountBaseUrl.getHost(),
+			userId,
+			SCOPE_USER,
+			clientId,
+			jwtSigningKey);
+
+		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(jwtToken);
 
 		Credentials.setToken(newToken);
 		return newToken.token;
+	}
+
+	public static String getContentAccessToken() {
+		Permissions.verifyIsDocuSignUser();
+		Credentials c = Credentials.getInstance();
+		return getAuthAPI(c.environment.accountBaseUrl).exchangeJwt(generateJwt(
+		c.environment.accountBaseUrl.getHost(),
+		c.user.id,
+		SCOPE_CONTENT,
+		c.client.id,
+		c.client.privateKey)).token;
 	}
 
 	/**

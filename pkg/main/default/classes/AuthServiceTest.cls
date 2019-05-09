@@ -421,7 +421,7 @@ private class AuthServiceTest {
 			Blob jwtSigningKey = TestUtils.TEST_RSA_PRIVATE_KEY;
 
 			Test.startTest();
-			String result = AuthService.generateJwt(aud, UUID.parse(sub), false, iss, jwtSigningKey);
+			String result = AuthService.generateJwt(aud, UUID.parse(sub), AuthService.SCOPE_USER, iss, jwtSigningKey);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -454,7 +454,7 @@ private class AuthServiceTest {
 			Blob jwtSigningKey = TestUtils.TEST_RSA_PRIVATE_KEY;
 
 			Test.startTest();
-			String result = AuthService.generateJwt(aud, UUID.parse(sub), true, iss, jwtSigningKey);
+			String result = AuthService.generateJwt(aud, UUID.parse(sub), AuthService.SCOPE_ADMIN, iss, jwtSigningKey);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -789,6 +789,37 @@ private class AuthServiceTest {
 
 			System.assertNotEquals(null, result1);
 			System.assertEquals(result1, result2);
+		}
+	}
+
+	@IsTest
+	static void test_getContentAccessToken_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			String result1 = AuthService.getAccessToken();
+			String result2 = AuthService.getAccessToken();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertEquals(result1, result2);
+		}
+	}
+
+
+	@IsTest
+	static void test_getContentAccessToken_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+
+			Test.startTest();
+			try {
+				AuthService.getContentAccessToken();
+				throw new AssertException('Expected getAccessToken to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.AccountNotConfigured, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 

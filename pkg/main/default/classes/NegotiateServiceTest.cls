@@ -194,5 +194,19 @@ public with sharing class NegotiateServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_generateLimitedAccessToken_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Credentials.AccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(NegotiateAPIMock.DOCUMENT_ID, 'accessTokenExample');
+			Test.stopTest();
+
+			System.assertNotEquals(null, token);
+			System.assertEquals('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjY4MTg1ZmYxLTRlNTEtNGNlOS1hZjFjLTY4OTgxMjIwMzMxNyJ9.eyJUb2tlblR5cGUiOjUsIklzc3VlSW5zdGFudCI6MTU1NzM2MjYxOSwiZXhwIjoxNTU3MzY2MjE5LCJVc2VySWQiOiI5MTVjN2ViNi05M2IxLTQ2NGEtYjBkYS00OTBiMzc4YjQ2NzEiLCJzaXRlaWQiOjEsInNjcCI6WyJzaWduYXR1cmUiLCJpbXBlcnNvbmF0aW9uIiwic3ByaW5nX3JlYWQiLCJzcHJpbmdfd3JpdGUiXSwiYXVkIjoiYjI5YWJkZTYtYjhkYi00MDg1LWFlZGYtZDRlZmNiOTc2MWE5IiwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50LWQuZG9jdXNpZ24uY29tLyIsInN1YiI6IjkxNWM3ZWI2LTkzYjEtNDY0YS1iMGRhLTQ5MGIzNzhiNDY3MSIsImFjdCI6ImIyOWFiZGU2LWI4ZGItNDA4NS1hZWRmLWQ0ZWZjYjk3NjFhOSIsImFtciI6WyJqd3RfYnIiXX0.uzv3TWXs7WEu6cshk5Je8iwxxd_jgG9AESbOT4EKbmiYD9YFHoiyr2jMA26JrkCUKq6sm-SdJtRYK5qqgKuNI-CXBTsQidTIC2V7q_ggIMllHq_ta6FrJ1Zas-C0pKondqy0GTdtWPVz0yFDk4qo51j_WimnaU8d9WcliKinUmdU05T0A5QyEKfZhN9Ji39hYGbUQDGDbdvEYbbQgTlr0-8PQnaSKVNBtB2Kl3ttGZJTK0ijRIhLmDvBOSK0n0guNHEx0aYy9HxnkeBwX8kU-Nuixk54TAHKU0Z6M_t-3xNNVMyvRRRFwlj2JzZW4j08xoyHZ7VnN1tkAjCZHzVJTA', token.token);
+			System.assert(token.isValid);
+		}
+	}
 
 }

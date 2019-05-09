@@ -201,4 +201,13 @@ public with sharing class NegotiateService {
 		}
 		return taskStatus;
 	}
+
+	public static Credentials.AccessToken generateLimitedAccessToken(final UUID objectId) {
+		// objectId = AgreementId if download
+		// objectId = FolderId if upload
+
+		Permissions.verifyIsDocuSignUser();
+		return NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(objectId, AuthService.getContentAccessToken());
+
+	}
 }
