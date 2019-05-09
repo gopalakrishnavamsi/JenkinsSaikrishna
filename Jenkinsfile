@@ -9,12 +9,6 @@ def installTasks = [
   }
 ]
 
-def additionalPreBuildTasks = [
-  'ESLint': [
-    command: '''npm run lint'''
-  ]
-]
-
 def defaultSalesforceArgs = [
   jwtKeyFileCredsId: 'salesforce-jwt-key-file',
   consumerKeyCredsId: 'salesforce-consumer-key',
@@ -30,6 +24,9 @@ def defaultPostBuildTests = [
     outputPath: 'tests/*-junit.xml',
     reporter: 'xunit',
     reportFormat: 'junit'
+  ],
+  'ESLint': [
+    command: '''npm run lint'''
   ]
 ]
 
@@ -37,7 +34,6 @@ def defaultPostBuildTests = [
 salesforcePipeline(
   appName: 'salesforce-core',
   installTasks: installTasks,
-  buildTasks: additionalPreBuildTasks,
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: true
