@@ -1,4 +1,9 @@
 ({
+
+  viewAgreement: function(component, event, helper) {
+    console.log('viewing agreement');
+  }
+
   showTimeLine: function (component, event, helper) {
     helper.showHistoryTimeLine(component);
   },
@@ -28,6 +33,6 @@
   },
 
   uploadScriptsLoaded: function (component, event, helper) {
-    // FIXME: Implement or remove.
+    component.set('v.SpringService', SpringCM.Widgets);
   },
 });

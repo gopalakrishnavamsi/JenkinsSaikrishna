@@ -1,0 +1,8 @@
+<aura:component>
+    <aura:attribute name="Agreement" type="Object" access="public"/>
+    <aura:attribute name="SpringService" type="Object" access="public"/>
+    <aura:attribute name="Widget" type="Object"/>
+    <div style="height: 100vh;">
+        <div id="agreementDocumentView"/>
+    </div>
+</aura:component>

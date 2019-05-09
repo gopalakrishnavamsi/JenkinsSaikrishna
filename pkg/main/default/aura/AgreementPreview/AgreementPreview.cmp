@@ -1,0 +1,21 @@
+<aura:component implements="lightning:isUrlAddressable,force:appHostable" controller="AgreementsController">
+    <aura:attribute name="AgreementId" type="Id" access="public"/>
+    <aura:attribute name="AgreementActionManager" type="Object"/>
+    <aura:attribute name="Agreement" type="Object"/>
+    <aura:attribute name="SpringService" type="Object"/>
+    <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
+    <!-- ADD INIT -->  
+	<ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs)}" afterScriptsLoaded="{!c.onLoad}" />    
+    <div id="fullContainer" style="width: 100vw">
+        <div id="toolbarContainer" style="float: left; width: 100vw">
+            <c:AgreementPreviewToolBar Agreement="{!v.Agreement}" AgreementActionManager="{!v.AgreementActionManager}"/>
+        </div>
+        <div id="activityContainer" style="float: left; width: 25%;">
+            <c:AgreementPreviewActivity AgreementHistory="{!v.Agreement.historyItems}" SpringService="{!v.SpringService}"/>
+        </div>
+        <div id="documentContainer" style="float: left;  width: 75%;">
+            <c:AgreementPreviewDocument Agreement="{!v.Agreement}" SpringService="{!v.SpringService}"/>
+        </div>
+        <div id="modalContent"/>
+    </div>
+</aura:component>

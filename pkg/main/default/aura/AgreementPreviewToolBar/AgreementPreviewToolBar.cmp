@@ -1,0 +1,92 @@
+<aura:component implements="force:hasRecordId,force:hasSObjectName,force:hasRecordId">
+    <aura:attribute name="Agreement" type="Object" access="public"/>
+	<aura:attribute name="AgreementActionManager" type="Object" access="public"/>
+    <div class="ToolBarContainer"> 
+        <div class="ToolBarFrame">
+            <div class="ToolBarSection">
+                <div class="MainLogo">
+                    <img class="logo" src="/resource/Logo" alt="Logo" width="110" height="24"/> <div class="headerdivider"></div> 
+                </div>
+            </div>
+            <div class="ToolBarSection">
+                <div class="FileHeader">
+                    {!v.Agreement.name}
+                </div>
+            </div>
+            <div class="ToolBarActionContainer">
+                <div class="ActionButtonContainer">
+                    <ui:menu class="ActionMenu">
+                        <ui:menuTriggerLink aura:id="trigger" label="Edit" class="slds-button slds-button_neutral">
+                            <a>
+                              <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:edit"/> <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:down"/>
+                            </a>
+                        </ui:menuTriggerLink>
+                        <ui:menuList class="actionMenu">
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="Download"
+                                                      
+                                                      style="color: inherit;">Download</a>
+                                </ui:actionMenuItem>
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="Upload"
+                                                      
+                                                      style="color: inherit;">Upload New Version</a>
+                                </ui:actionMenuItem> 
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="Rename"
+                                                      
+                                                      style="color: inherit;">Rename</a>
+                                </ui:actionMenuItem> 
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="Delete"
+                                                      
+                                                      style="color: inherit;">Delete</a>
+                                </ui:actionMenuItem>                                 
+                                <!-- onclick="{!c.salesforceAction}" -->
+                        </ui:menuList>
+                    </ui:menu>
+                    
+                    
+                    <ui:menu class="ActionMenu">
+                        <ui:menuTriggerLink aura:id="trigger" label="Edit" class="slds-button slds-button_neutral">
+                            <a>
+                              <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:internal_share"/> <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:down"/>
+                            </a>
+                        </ui:menuTriggerLink>
+                        <ui:menuList class="actionMenu">
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="Share"
+                                                      
+                                                      style="color: inherit;">Share Link</a>
+                                </ui:actionMenuItem>
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="ExternalReview"
+                                                      
+                                                      style="color: inherit;" onclick="{!c.openPackageBModal}">Send For External Review</a>
+                                </ui:actionMenuItem>
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="InternalApproval"
+                                                      
+                                                      style="color: inherit;" onclick="{!c.openPackageBModal}">Send For Approval</a>
+                                </ui:actionMenuItem>
+                                <ui:actionMenuItem>
+                                  <a data-label="edit_crl_recipient"
+                                                      data-sfid="SendForSigniture"
+                                                      
+                                                      style="color: inherit;">Send For Signiture</a>
+                                </ui:actionMenuItem>                                
+                                <!-- onclick="{!c.salesforceAction}" -->
+                        </ui:menuList>
+                    </ui:menu> 
+                </div>
+            </div> 
+        </div>
+    </div>  
+</aura:component>
