@@ -92,13 +92,13 @@ public with sharing class AgreementsController extends Controller {
 
 	@AuraEnabled
 	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
-		if (sourceId == null || agreementId == null) return null;
-
-		UUID agreementUId = UUID.parse(agreementId);
-		PageReference agreementView = Page.AgreementPreview;
-		agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-		agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
-		return agreementView.getUrl();
+		try {
+			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId);
+			if (result == null) throw Controller.wrapException('Failed to redirect to Agreement Preview page: undefined parameter');
+			return result;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to redirect to Agreement Preview');
+		}
 	}
 
 	@AuraEnabled

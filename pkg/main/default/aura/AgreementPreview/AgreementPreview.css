@@ -17,6 +17,7 @@
     float: left;
     width: 100vw;
     height: 8.5vh;
+    min-height: 55px;
     background-color: #005DB9;
     border-bottom: 2.5px solid #2883E3;
 }
