@@ -39,6 +39,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	- PUT /documents/{documentId} - Rename Agreement
 	- DELETE /documents/{documentId} - Delete Agreement
 	- GET /{accountId}/historyItems/{documentId}
+	- GET /{accountId}/documents/{documentId}/workitems?expand=Assignee
+{
  */
 	override public HttpResponse getResponse(final HttpRequest request) {
 		HttpResponse response = new HttpResponse();
@@ -55,6 +57,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
 			response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_WORK_ITEMS) && path.contains(String.valueOf(NegotiateAPIMock.DOCUMENT_ID))) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Items":[{"Name":"Approve1","Type":"ApproveDocuments","Assignee":{"FirstName":"John","LastName":"Doe","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/users/45b693e8-3b65-e911-9c20-3ca82a1e3f41"},"AssignDate":"2019-05-01T19:04:19.587Z","Documents":{"Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workitems/3ef321ec-436c-e911-8391-005056b948f7/documents"},"Workflow":{"Name":"Negotiate_Approval_Template","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workflows/ef01c0e5-436c-e911-8391-005056b948f7"},"CreatedDate":"2019-05-01T19:04:24.027Z","WorkItemUrl":"https://uatna11.springcm.com/atlas/Documents/Preview.aspx?aid=10737&wfid=3ef321ec-436c-e911-8391-005056b948f7&iter=","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workitems/3ef321ec-436c-e911-8391-005056b948f7"},{"Name":"Approve2","Type":"ApproveDocuments","Assignee":{"FirstName":"Jane","LastName":"Doe","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/users/45b693e8-3b65-e911-9c20-3ca82a1e3f41"},"AssignDate":"2019-05-01T19:04:19.587Z","Documents":{"Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workitems/3ef321ec-436c-e911-8391-005056b948f7/documents"},"Workflow":{"Name":"Negotiate_Approval_Template","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workflows/ef01c0e5-436c-e911-8391-005056b948f7"},"CreatedDate":"2019-05-01T19:04:24.027Z","WorkItemUrl":"https://uatna11.springcm.com/atlas/Documents/Preview.aspx?aid=10737&wfid=3ef321ec-436c-e911-8391-005056b948f7&iter=","Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workitems/3ef321ec-436c-e911-8391-005056b948f7"}],"Href":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/documents/06ec39af-7268-e911-9c20-3ca82a1e3f41/workitems","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/documents/06ec39af-7268-e911-9c20-3ca82a1e3f41/workitems","Last":"https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/documents/06ec39af-7268-e911-9c20-3ca82a1e3f41/workitems","Total":1}');
 		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_EOS_FOLDER) && path.contains(String.valueOf(NegotiateAPIMock.TASK_ID_2))) {
 			response.setStatusCode(200);
 			response.setStatus('OK');
