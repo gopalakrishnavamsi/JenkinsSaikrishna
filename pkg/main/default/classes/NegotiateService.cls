@@ -201,8 +201,14 @@ public with sharing class NegotiateService {
 		}
 		return taskStatus;
 	}
-
+  
+	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
+		// use fullName on Actor and accountUrl for the workItemUrl
+		Permissions.verifyIsDocuSignUser();
+		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
+	}
+  
 	public static String getDocumentURL(final UUID documentId) {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
-	}
+  }   
 }
