@@ -1,7 +1,16 @@
 ({
 
 	onLoad: function(component, event, helper) {
-		//Todo Implement SpringCM Widget with correct payload
+		var action = component.get('c.getDocumentURL');
+		var agreement = component.get('v.Agreement');
+		action.setParams({
+			documentId: agreement.id.value
+		});
+		action.setCallback(this, function(response) {
+			if (response.getState() === 'SUCCESS') helper.loadWidget(component, agreement.id.value, response.getReturnValue(), agreement.name, agreement.historyItems);
+		});
+
+		$A.enqueueAction(action);
 	}
   
 });

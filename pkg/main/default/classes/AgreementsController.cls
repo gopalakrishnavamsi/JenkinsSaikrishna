@@ -45,6 +45,16 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	//Todo: Once access tokens are implemented return an instance of an object containing all needed params for generating Spring Widget Payload.
+	@AuraEnabled
+	public static String getDocumentURL(final String documentId) {
+		try {
+			return NegotiateService.getDocumentURL(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate document url');
+		}
+	}
+
 	@AuraEnabled
 	public static Boolean renameAgreement(final String documentId, final String documentName) {
 		try {

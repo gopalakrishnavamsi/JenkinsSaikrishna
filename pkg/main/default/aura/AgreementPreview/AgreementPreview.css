@@ -15,7 +15,7 @@
 
 .THIS #documentContainer {
     float: left;
-    width: 75vw;
+    width: 100vw;
     height: 92.5vh;
     background-color: rgb(243, 242, 242);
 }

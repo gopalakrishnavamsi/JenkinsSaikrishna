@@ -201,4 +201,8 @@ public with sharing class NegotiateService {
 		}
 		return taskStatus;
 	}
+
+	public static String getDocumentURL(final UUID documentId) {
+		return NegotiateAPI.getInstance().getDocumentURL(documentId);
+	}
 }
