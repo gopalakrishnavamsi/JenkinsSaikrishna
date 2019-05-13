@@ -2,7 +2,6 @@
     <aura:attribute name="agreementId" type="Id" access="public"/>
     <aura:attribute name="AgreementActionManager" type="Object"/>
     <aura:attribute name="Agreement" type="Object"/>
-    <aura:attribute name="SpringService" type="Object"/>
     <aura:attribute name="loading" type="Boolean" default="true"/>
     <aura:attribute name="isClassic" type="Object" default="false" access="public"/>
     <aura:attribute name="sourceId" type="String" access="public"/>

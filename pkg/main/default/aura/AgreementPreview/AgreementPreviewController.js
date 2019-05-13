@@ -17,7 +17,6 @@
       }
     });
     $A.enqueueAction(action);  
-    component.set('v.SpringService', SpringCM.Widgets);  
   }
 
 });
