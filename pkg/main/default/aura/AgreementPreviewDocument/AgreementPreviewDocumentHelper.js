@@ -1,7 +1,6 @@
 ({
     loadWidget: function(component, id, documentUrl, documentName, historyItems) {
         try {
-            console.log('payload: ', typeof documentUrl);
             var widet = new SpringCM.Widgets.Preview({
                 iconPath: $A.get('$Resource.scmwidgetsspritemap'),
                 accessTokenFn: this.getAccessToken.bind(component),
