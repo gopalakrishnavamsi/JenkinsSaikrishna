@@ -6,6 +6,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
+	public static final String PATH_WORK_ITEMS = 'workitems';
 	public static final Long SCM_OFFSET = 20;
 
 	private static NegotiateAPI self = null;
@@ -603,7 +604,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String href;
 	}
 
-// User, do we need it ?
 	@TestVisible
 	private class APIData {
 		public String documentName;
@@ -654,5 +654,63 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 // catch some errors here
 		return historyItems;
+	}
+
+	// workItems to get Assignee for PreviewWidget
+
+	@TestVisible
+	private class APIWorkItems {
+		public List<APIWorkItem> items;
+		public String next;
+	}
+
+	@TestVisible
+	private class APIWorkItem {
+		// from assignee use firstName and lastName. Do not use url on Asignee for AprrovalUsers.
+		public APIUser assignee;
+		public String href;
+
+		AgreementHistoryItem.Actor convertAPIWorkItem() {
+			String name = this.assignee.FirstName + ' ' + this.assignee.LastName;
+			return new AgreementHistoryItem.Actor(name, null, this.href);
+		}
+	}
+
+	public List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
+
+		List<AgreementHistoryItem.Actor> workItems = new List<AgreementHistoryItem.Actor>();
+		Map<String, String> queryStrings = new Map<String, String>();
+		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+		Long offset = -SCM_OFFSET;
+		String next = '';
+
+		while (next != null) {
+			offset += SCM_OFFSET;
+			queryStrings.put('offset', String.valueOf(offset));
+			queryStrings.put('expand', 'Assignee');
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_DOCUMENTS, documentId, PATH_WORK_ITEMS
+				},
+				new QueryString(queryStrings),
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get history items for documentId - ' +
+					documentId + response.error);
+				throw new APIException(response.error);
+			}
+
+			APIWorkItems result = (APIWorkItems)JSON.deserialize(response.body, APIWorkItems.class);
+			for (APIWorkItem a : result.items) {
+				if (a != null) {
+					workItems.add(a.convertAPIWorkItem());
+				}
+			}
+			next = result.next;
+		}
+		return workItems;
 	}
 }
