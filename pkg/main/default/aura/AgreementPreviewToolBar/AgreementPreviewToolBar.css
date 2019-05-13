@@ -32,6 +32,10 @@
     padding-left: 20px;
 }
 
+.THIS .MainLogo img {
+    width: 110px;
+}
+
 .THIS .headerdivider {
     border-left: 1px solid white;
     background: white;

@@ -116,7 +116,7 @@
     var action = component.get('c.redirectToAgreementPreview');
     action.setParams({
       sourceId: component.get('v.sourceId'),
-      agreementId: agreement && agreement.id ? agreement.id.value.toLowerCase() : null
+      agreementId: agreement && agreement.id ? agreement.id.value : null
     });
     action.setCallback(this, function(response) {
       if (response.getState() === 'SUCCESS') navUtils.navigateToUrl(response.getReturnValue());
