@@ -6,13 +6,6 @@
     width: 100vw;
 }
 
-.THIS #activityContainer {
-    float: left;
-    width: 25vw;
-    background-color: #FFFFFF;
-    height: 92.5vh;
-}
-
 .THIS #documentContainer {
     float: left;
     width: 100vw;
@@ -26,14 +19,6 @@
     height: 7.5vh;
     background-color: #005DB9;
     border-bottom: 2.5px solid #2883E3;
-}
-
-.THIS .agreementPreviewActivityHeader {
-    margin-top: 10px;
-    font-size: 14px;
-    margin-left: 25px;
-    width: 100%;
-    margin-bottom: 10px;
 }
 
 .THIS .loadingContainer {
