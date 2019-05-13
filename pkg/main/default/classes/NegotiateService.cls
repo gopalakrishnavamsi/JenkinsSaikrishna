@@ -203,11 +203,17 @@ public with sharing class NegotiateService {
 	}
 
 	public static Credentials.AccessToken generateLimitedAccessToken(final UUID objectId) {
-		// objectId = AgreementId if download
-		// objectId = FolderId if upload
+// objectId = AgreementId if download
+// objectId = FolderId if upload
+// check iff token isValid
 
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(objectId, AuthService.getContentAccessToken());
+	}
 
+	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
+		// use fullName on Actor and accountUrl for the workItemUrl
+		Permissions.verifyIsDocuSignUser();
+		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
 	}
 }

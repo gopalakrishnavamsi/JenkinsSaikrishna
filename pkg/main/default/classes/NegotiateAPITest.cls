@@ -345,4 +345,21 @@ public with sharing class  NegotiateAPITest {
 			System.assert(token.isValid);
 		}
 	}
+
+	@IsTest
+	static void test_getApprovalUsers_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<AgreementHistoryItem.Actor> approvalUsers = NegotiateAPI.getInstance().getApprovalUsers(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, approvalUsers);
+			System.assertEquals(2, approvalUsers.size());
+			System.assertEquals('https://apiuatna11.springcm.com/v2/4d468452-6aaf-4d6f-b058-c3ea47c806bf/workitems/3ef321ec-436c-e911-8391-005056b948f7', approvalUsers.get(0).accountUrl);
+			System.assertEquals('John Doe', approvalUsers.get(0).fullName);
+			System.assertEquals('Jane Doe', approvalUsers.get(1).fullName);
+		}
+	}
 }
