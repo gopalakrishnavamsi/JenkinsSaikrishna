@@ -13,7 +13,7 @@ var generateComponent = function(anchor, component, componentName, attributes) {
                         container.set('v.body', body);
                         resolve(result);
                     } else {
-                      console.log('cant find container');
+                      reject('cant find container');
                     }
                 }
             );
