@@ -157,8 +157,6 @@ public with sharing class AuthService {
 				this.log.error('Failed to exchange JWT for access token: ' + response.error);
 				throw new APIException(response.error);
 			}
-			System.debug('the value of exchangeJwt response : ' + response);
-			System.debug('the value of exchangeJwt response body : ' + response.body);
 			return ((APIToken)JSON.deserialize(response.body, APIToken.class)).toExternalForm();
 		}
 
