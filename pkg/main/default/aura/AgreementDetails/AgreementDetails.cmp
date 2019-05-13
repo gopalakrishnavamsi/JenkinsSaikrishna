@@ -38,9 +38,9 @@
                         </span>
                 </div>
                 <div class="slds-media__body">
-                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a 
+                    <h3 class="slds-tile__title slds-truncate" title="{!v.agreementDetails.name}"><a 
                         aura:id="viewAgreementButton" 
-                        onclick="{!c.viewAgreement}" href="javascript:void(0);">{!v.agreementDetails.name}</a>
+                        onclick="{!c.viewAgreement}">{!v.agreementDetails.name}</a>
                     </h3>
                     <div class="slds-tile__detail">
                         <ul class="slds-list_vertical">

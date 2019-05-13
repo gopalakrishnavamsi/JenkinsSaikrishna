@@ -1,5 +1,5 @@
 <aura:component implements="force:hasRecordId,force:hasSObjectName,force:hasRecordId">
-    <aura:attribute name="Agreement" type="Object" access="public"/>
+    <aura:attribute name="Agreement" type="Agreement" access="public"/>
 	<aura:attribute name="AgreementActionManager" type="Object" access="public"/>
     <div class="ToolBarContainer"> 
         <div class="ToolBarFrame">
