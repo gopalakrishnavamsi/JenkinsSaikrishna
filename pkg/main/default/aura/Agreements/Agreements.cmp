@@ -85,7 +85,7 @@
                         </li>
                     </div>
 
-                   
+                    <div class="{!if(v.agreements.length > 0, '', 'slds-hide')}">
                         <!-- Iterate through Agreements -->
                         <aura:iteration items="{!v.agreements}" var="agreementDetails" indexVar="index">
                             <li class="slds-item slds-p-top_medium">
@@ -93,7 +93,7 @@
                                 <div class="ds-agreements_spacing"/>
                             </li>
                         </aura:iteration>
-                    
+                    </div>
 
                 </aura:if>
             </div>

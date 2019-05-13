@@ -6,8 +6,6 @@
     <aura:attribute name="loading" type="Boolean" default="true"/>
     <aura:attribute name="isClassic" type="Object" default="false" access="public"/>
     <aura:attribute name="sourceId" type="String" access="public"/>
-    <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
-    <!-- ADD INIT -->  
 	<ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs)}" afterScriptsLoaded="{!c.onLoad}" />    
     <div id="fullContainer">     
         <div id="toolbarContainer">

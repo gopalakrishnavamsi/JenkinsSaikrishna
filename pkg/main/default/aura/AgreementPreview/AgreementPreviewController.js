@@ -1,13 +1,5 @@
 ({
 
-  handleInit: function(component, event, helper) {
-    if (component.get('v.isClassic')) {
-      //Centering for Lighting Application Tabs
-      //setTimeout(() => window.scrollTo(10, 10), 100);
-    }
-    console.log('Landed in Init');
-  },
-
   onLoad: function(component, event, helper) {
     var sourceId = component.get("v.sourceId");
     var agreementId = component.get("v.agreementId");

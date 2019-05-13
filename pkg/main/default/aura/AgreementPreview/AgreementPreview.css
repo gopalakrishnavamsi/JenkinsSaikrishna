@@ -3,14 +3,14 @@
 }
 
 .THIS #fullContainer {
-	width: 100vw;
+    width: 100vw;
 }
 
 .THIS #activityContainer {
-	float: left; 
-	width: 25vw;
-	background-color: #FFFFFF;
-	height: 92.5vh; 
+    float: left;
+    width: 25vw;
+    background-color: #FFFFFF;
+    height: 92.5vh;
 }
 
 .THIS #documentContainer {
@@ -21,8 +21,8 @@
 }
 
 .THIS #toolbarContainer {
-	float: left; 
-	width: 100vw;
+    float: left;
+    width: 100vw;
     height: 7.5vh;
     background-color: #005DB9;
     border-bottom: 2.5px solid #2883E3;
@@ -36,7 +36,7 @@
     margin-bottom: 10px;
 }
 
-.THIS .loadingContainer{
+.THIS .loadingContainer {
     z-index: 100;
     top: 40%;
 }
