@@ -658,15 +658,16 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APILimitedAccessToken {
 		public String accessToken;
 		public String expiresIn;
+		public String APIBaseUrl;
 
-		public Credentials.AccessToken toExternalForm() {
-			return new Credentials.AccessToken(
-				accessToken,
-				Datetime.now().addSeconds(Integer.valueOf(expiresIn)));
+		public Credentials.LimitedAccessToken toExternalForm() {
+			return new Credentials.LimitedAccessToken(
+				new Credentials.AccessToken(accessToken, Datetime.now().addSeconds(Integer.valueOf(expiresIn))),
+				new Url(APIBaseUrl));
 		}
 	}
 
-	public Credentials.AccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
+	public Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
 		final RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {

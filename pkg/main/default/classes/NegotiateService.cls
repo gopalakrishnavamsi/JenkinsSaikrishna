@@ -202,10 +202,10 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static Credentials.AccessToken generateLimitedAccessToken(final UUID objectId) {
+	public static Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId) {
 // objectId = AgreementId if download
 // objectId = FolderId if upload
-// check iff token isValid
+// check if token isValid
 
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(objectId, AuthService.getContentAccessToken());
