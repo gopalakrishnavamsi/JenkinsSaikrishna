@@ -18,7 +18,7 @@ var generateComponent = function(anchor, component, componentName, attributes) {
                 }
             );
         } catch (err) {
-          throw err;
+            reject(err);
         }
     });
 };
@@ -83,7 +83,7 @@ AgreementActionManager.prototype.upload = function(component) {
         showModal: true
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 AgreementActionManager.prototype.delete = function(agreementDetails, component) {
@@ -93,7 +93,7 @@ AgreementActionManager.prototype.delete = function(agreementDetails, component) 
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 AgreementActionManager.prototype.rename = function(agreementDetails, component) {
@@ -103,7 +103,7 @@ AgreementActionManager.prototype.rename = function(agreementDetails, component) 
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 AgreementActionManager.prototype.internalReview = function(agreementDetails, component) {
@@ -113,7 +113,7 @@ AgreementActionManager.prototype.internalReview = function(agreementDetails, com
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 AgreementActionManager.prototype.externalReview = function(agreementDetails, component) {
@@ -123,7 +123,7 @@ AgreementActionManager.prototype.externalReview = function(agreementDetails, com
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 AgreementActionManager.prototype.share = function(agreementDetails, component) {
@@ -133,7 +133,7 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    });
+    }).catch(err => console.log('error generating component: ', err));
 }
 
 window.AgreementActionManager = AgreementActionManager;

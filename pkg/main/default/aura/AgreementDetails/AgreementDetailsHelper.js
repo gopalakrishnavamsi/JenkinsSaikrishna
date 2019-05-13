@@ -119,7 +119,7 @@
       agreementId: agreement && agreement.id ? agreement.id.value.toLowerCase() : null
     });
     action.setCallback(this, function(response) {
-      if (response.getState() === 'SUCCESS') window.open(response.getReturnValue());
+      if (response.getState() === 'SUCCESS') navUtils.navigateToUrl(response.getReturnValue());
     });
     $A.enqueueAction(action);
   }

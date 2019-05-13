@@ -8,6 +8,7 @@
     <aura:attribute name="sourceId" type="Id"/>
     <aura:attribute name="agreementIndex" type="Integer"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
+    <ltng:require scripts="{!$Resource.navUtils}"/>
 
     <!-- placeholder divs for dynamic component generation -->
     <div aura:id="internalApprovalModal">
