@@ -37,10 +37,10 @@ public with sharing class SetupController extends Controller {
 	public static String beginOAuth(
 		final String environment,
 		final String otherUrl) {
-
+		//since spaces are being replaced with + and this is breaking scopes we will replace + with %20
 		return AuthService.getLoginUrl(
 			DocuSign.parseEnvironment(environment),
-			String.isBlank(otherUrl) ? null : new Url(otherUrl)).toExternalForm();
+			String.isBlank(otherUrl) ? null : new Url(otherUrl)).toExternalForm().replace('+', '%20');
 	}
 
 	@RemoteAction

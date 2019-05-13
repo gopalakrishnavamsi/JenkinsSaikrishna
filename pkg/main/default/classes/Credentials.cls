@@ -707,6 +707,13 @@ public with sharing class Credentials {
 		self = null;
 	}
 
+	public static void clearTokenAfterLogin() {
+		UserSettings__c settings = UserSettings__c.getInstance();
+		DB.clearToken(settings);
+		settings.Nonce__c = null;
+		upsert settings;
+	}
+
 	@Future
 	private static void assignAdminPermissionSet(final Set<Id> userIds) {
 		Permissions.assignDocuSignAdministratorPermissionSet(userIds);
