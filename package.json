@@ -1,5 +1,5 @@
 {
-  "name": "salesforcecore",
+  "name": "SalesforceCore",
   "version": "1.0.0",
   "description": "This is the new DocuSign for Salesforce base package. This is a lighter version of DFS that is installable on Salesforce Essentials organizations. This package also contains the Apex Toolkit.",
   "main": "index.js",
