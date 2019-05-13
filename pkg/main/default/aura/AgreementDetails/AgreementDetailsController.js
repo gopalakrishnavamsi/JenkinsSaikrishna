@@ -1,6 +1,6 @@
 ({
   viewAgreement: function(component, event, helper) {
-    console.log('viewing agreement');
+    helper.launchAgreementPreview(component, event);  
   },
 
   showTimeLine: function (component, event, helper) {
@@ -29,9 +29,6 @@
 
   showShareLinkModal: function (component, event, helper) {
     helper.createShareLinkComponent(component, event, helper);
-  },
-
-  uploadScriptsLoaded: function (component, event, helper) {
-    component.set('v.SpringService', SpringCM.Widgets);
   }
+
 });

@@ -81,6 +81,17 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
+		if (sourceId == null || agreementId == null) return null;
+
+		UUID agreementUId = UUID.parse(agreementId);
+		PageReference agreementView = Page.AgreementPreview;
+		agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
+		agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
+		return agreementView.getUrl();
+	}
+
+	@AuraEnabled
 	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		try {
 			List<UUID> documentIdList = new List<UUID>();

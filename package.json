@@ -15,13 +15,13 @@
   "scripts": {
     "lint": "eslint ./; exit 0",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sfdx-auth": "sfdx force:auth:web:login -a DocuDevHub -d",
-    "sfdx-buildOrg": "sfdx force:org:create -f ./etc/dev.json -s -a dfsle-scratch-org",
-    "sfdx-updateOrg": "sfdx force:source:push",
-    "sfdx-postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
-    "sfdx-generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "sfdx-openOrg":"sfdx force:org:open",
-    "sfdx-setup":"npm run sfdx-auth && npm run sfdx-buildOrg && npm run sfdx-updateOrg && npm run sfdx-postInstall && npm run sfdx-generatePassword && npm run sfdx-openOrg"    
+    "auth": "sfdx force:auth:web:login -a DocuDevHub -d",
+    "buildOrg": "sfdx force:org:create -f ./etc/dev.json -s -a dfsle-scratch-org",
+    "updateOrg": "sfdx force:source:push",
+    "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
+    "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
+    "openOrg":"sfdx force:org:open",
+    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg"    
   },
   "repository": {
     "type": "git",

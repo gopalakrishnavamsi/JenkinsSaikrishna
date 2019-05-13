@@ -5,7 +5,7 @@
         <div class="ToolBarFrame">
             <div class="ToolBarSection">
                 <div class="MainLogo">
-                    <img class="logo" src="/resource/Logo" alt="Logo" width="110" height="24"/> <div class="headerdivider"></div> 
+                    <img class="logo" src="{!$Resource.DocuSignLogoWhite}" alt="Logo" width="110" height="24"/> <div class="headerdivider"></div> 
                 </div>
             </div>
             <div class="ToolBarSection">
@@ -15,78 +15,60 @@
             </div>
             <div class="ToolBarActionContainer">
                 <div class="ActionButtonContainer">
-                    <ui:menu class="ActionMenu">
-                        <ui:menuTriggerLink aura:id="trigger" label="Edit" class="slds-button slds-button_neutral">
-                            <a>
-                              <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:edit"/> <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:down"/>
-                            </a>
-                        </ui:menuTriggerLink>
-                        <ui:menuList class="actionMenu">
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="Download"
-                                                      
-                                                      style="color: inherit;">Download</a>
-                                </ui:actionMenuItem>
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="Upload"
-                                                      
-                                                      style="color: inherit;">Upload New Version</a>
-                                </ui:actionMenuItem> 
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="Rename"
-                                                      
-                                                      style="color: inherit;">Rename</a>
-                                </ui:actionMenuItem> 
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="Delete"
-                                                      
-                                                      style="color: inherit;">Delete</a>
-                                </ui:actionMenuItem>                                 
-                                <!-- onclick="{!c.salesforceAction}" -->
-                        </ui:menuList>
-                    </ui:menu>
-                    
-                    
-                    <ui:menu class="ActionMenu">
-                        <ui:menuTriggerLink aura:id="trigger" label="Edit" class="slds-button slds-button_neutral">
-                            <a>
-                              <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:internal_share"/> <lightning:icon size="xx-small" class="ActionIcon" iconName="utility:down"/>
-                            </a>
-                        </ui:menuTriggerLink>
-                        <ui:menuList class="actionMenu">
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="Share"
-                                                      
-                                                      style="color: inherit;">Share Link</a>
-                                </ui:actionMenuItem>
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="ExternalReview"
-                                                      
-                                                      style="color: inherit;" onclick="{!c.openPackageBModal}">Send For External Review</a>
-                                </ui:actionMenuItem>
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="InternalApproval"
-                                                      
-                                                      style="color: inherit;" onclick="{!c.openPackageBModal}">Send For Approval</a>
-                                </ui:actionMenuItem>
-                                <ui:actionMenuItem>
-                                  <a data-label="edit_crl_recipient"
-                                                      data-sfid="SendForSigniture"
-                                                      
-                                                      style="color: inherit;">Send For Signiture</a>
-                                </ui:actionMenuItem>                                
-                                <!-- onclick="{!c.salesforceAction}" -->
-                        </ui:menuList>
-                    </ui:menu> 
+                  <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
+                                        menuAlignment="right">
+
+                      <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"/>
+
+                      <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
+                                          onactive="{!c.upload}"
+                  
+                                          disabled="{!if(or(v.Agreement.status == 'COMPLETED',
+                                                            v.Agreement.status == 'PENDING REVIEW',
+                                                            v.Agreement.status == 'PENDING APPROVAL'), true, false)}"/>
+
+
+                      <lightning:menuItem label="{!$Label.c.Rename}" value="{!$Label.c.Rename}"
+                                          onactive="{!c.rename}"
+                                          disabled="{!if(or(v.Agreement.status == 'PENDING REVIEW',
+                                                            v.Agreement.status == 'PENDING APPROVAL',
+                                                            v.Agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
+
+                      <lightning:menuItem label="{!$Label.c.DeleteButtonLabel}" value="{!$Label.c.DeleteButtonLabel}"
+                                          onactive="{!c.delete}"
+                  
+                                          disabled="{!if(or(v.Agreement.status == 'PENDING REVIEW',
+                                                            v.Agreement.status == 'PENDING APPROVAL',
+                                                            v.Agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
+                  </lightning:buttonMenu>
+
+                  <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small"
+                                        menuAlignment="right">
+
+                      <lightning:menuItem label="{!$Label.c.AgreementsShareLink}" value="{!$Label.c.AgreementsShareLink}"
+                  
+                                          onactive="{!c.share}"/>
+
+                      <lightning:menuItem aura:id="ExternalReview" label="{!$Label.c.AgreementsExternalReview}"
+                                          value="{!$Label.c.AgreementsExternalReview}"
+                                          onactive="{!c.externalReview}"
+                                          disabled="{!if(or(v.Agreement.status == 'PENDING REVIEW',
+                                                            v.Agreement.status == 'PENDING APPROVAL',
+                                                            v.Agreement.status == 'PENDING SIGNATURE',
+                                                            v.Agreement.status == 'COMPLETED'), true, false)}"/>
+
+                      <lightning:menuItem label="{!$Label.c.AgreementsInternalApproval}"
+                                          value="{!$Label.c.AgreementsInternalApproval}"
+                                          onactive="{!c.internalReview}"
+                                          disabled="{!if(or(v.Agreement.status == 'PENDING REVIEW',
+                                                            v.Agreement.status == 'PENDING APPROVAL',
+                                                            v.Agreement.status == 'PENDING SIGNATURE',
+                                                            v.Agreement.status == 'COMPLETED'), true, false)}"/>
+
+                  </lightning:buttonMenu>
                 </div>
             </div> 
         </div>
-    </div>  
+    </div> 
+    <div aura:id="modalContent"/> 
 </aura:component>

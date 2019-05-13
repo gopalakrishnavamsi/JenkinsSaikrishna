@@ -832,6 +832,10 @@
 		<apexPage>SetupSplash</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
+	<pageAccesses>
+		<apexPage>AgreementPreview</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>	
 	<tabSettings>
 		<tab>EnvelopeStatus__c</tab>
 		<visibility>Available</visibility>

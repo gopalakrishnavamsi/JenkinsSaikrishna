@@ -1,14 +1,13 @@
-<aura:component description="AgreementDetails">
+<aura:component description="AgreementDetails" controller="AgreementsController">
     <!-- attributes -->
     <aura:attribute name="showTimeLine" type="boolean"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="agreementHistoryItems" type="AgreementHistoryItem[]"/>
     <aura:attribute name="modalLoading" type="Boolean"/>
     <aura:attribute name="activityLinkLabel" type="String" access="private" default="Show Activity"/>
-    <aura:attribute name="SpringService" type="Object"/>
+    <aura:attribute name="sourceId" type="Id"/>
     <aura:attribute name="agreementIndex" type="Integer"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"
-                  afterScriptsLoaded="{!c.uploadScriptsLoaded}"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
 
     <!-- placeholder divs for dynamic component generation -->
     <div aura:id="internalApprovalModal">
@@ -39,8 +38,9 @@
                         </span>
                 </div>
                 <div class="slds-media__body">
-                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a
-                                href="javascript:void(0);" onclick="{!c.viewAgreement}">{!v.agreementDetails.name}</a>
+                    <h3 class="slds-tile__title slds-truncate" title="Agreement Name"><a 
+                        aura:id="viewAgreementButton" 
+                        onclick="{!c.viewAgreement}" href="javascript:void(0);">{!v.agreementDetails.name}</a>
                     </h3>
                     <div class="slds-tile__detail">
                         <ul class="slds-list_vertical">

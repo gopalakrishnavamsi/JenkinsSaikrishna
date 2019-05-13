@@ -1,10 +1,10 @@
 <aura:component>
     <aura:attribute name="AgreementHistory" type="Object" access="public"/>
-    <aura:attribute name="SpringService" type="Object" access="public"/>
-    <div style="background-color: #FFFFFF; height: 90vh;">
-        <div style="padding-top: 10%; font-size: 14px; padding-left: 20px; padding-bottom: 10%;">
-            File Activity
-        </div>
-    </div>
+    <aura:attribute name="Widget" type="Object"/>
+    <aura:attribute name="isLocked" type="Object"/>
+    <aura:handler name="change" value="{!v.AgreementHistory}" action="{!c.onLoad}"/>
+    <h1 class="agreementPreviewActivityHeader">
+        {!$Label.c.FileActivity}
+    </h1>
     <div id="fileActivity"/>
 </aura:component>

@@ -1,16 +1,31 @@
 ({
 
   handleInit: function(component, event, helper) {
-    console.log('component.get("v.pageReference").state.agreementId');
-    // var getAgreement = component.get('c.getAgreement');
-    // getAgreement.setParams({
-    //   id: component.get("v.pageReference").state.agreementId;
-    // })
+    if (component.get('v.isClassic')) {
+      //Centering for Lighting Application Tabs
+      //setTimeout(() => window.scrollTo(10, 10), 100);
+    }
+    console.log('Landed in Init');
   },
 
   onLoad: function(component, event, helper) {
-    component.set('v.SpringService', SpringCM.Widgets);
-    component.set('v.AgreementActionManager', new AgreementActionManager('modalContent', component));
+    var sourceId = component.get("v.sourceId");
+    var agreementId = component.get("v.agreementId");
+    var action = component.get('c.getNameSpace');
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === "SUCCESS") {
+        var manager = new AgreementActionManager('modalContent', response.getReturnValue());
+        manager.getAgreement(agreementId, sourceId, component)
+        .then(function(agreement) {
+          component.set('v.Agreement', agreement);
+          component.set('v.AgreementActionManager', manager);
+          component.set('v.loading', false); 
+        });   
+      }
+    });
+    $A.enqueueAction(action);  
+    component.set('v.SpringService', SpringCM.Widgets);  
   }
 
 });

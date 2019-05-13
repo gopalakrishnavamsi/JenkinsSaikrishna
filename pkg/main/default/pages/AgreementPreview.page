@@ -1,0 +1,21 @@
+<apex:page controller="AgreementsController" title="Preview Agreement">
+    <apex:includeLightning/>
+    <apex:slds/>    
+    <div id="appContainer"></div>
+    <script type="text/javascript">
+      var namespace = '{!JSENCODE(namespace)}';
+      $Lightning.use(namespace + ':AgreementPreviewApp', function () {
+        $Lightning.createComponent(namespace + ':AgreementPreview', 
+          {
+            sourceId: '{!JSENCODE($CurrentPage.parameters.sourceId)}',
+            agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}'
+          }, 
+          'appContainer', 
+          function(component, status, errorMessage) {
+          if (errorMessage) {
+            //FixMe:Need Design
+          }
+        });
+      });
+    </script>
+</apex:page>
