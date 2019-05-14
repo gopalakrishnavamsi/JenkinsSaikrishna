@@ -1,6 +1,7 @@
 ({
     loadWidget: function(component, id, documentUrl, documentName, historyItems) {
         try {
+        	var uiHelper = component.get('v.uiHelper');
             var widet = new SpringCM.Widgets.Preview({
                 iconPath: $A.get('$Resource.scmwidgetsspritemap'),
                 accessTokenFn: this.getAccessToken.bind(component),
@@ -15,8 +16,9 @@
                 uid: id
             });
             widet.history.setHistoryItems(Object.assign([], historyItems));
+            uiHelper.showToast('Loaded Agreement', uiHelper.ToastMode.SUCCESS);
         } catch (err) {
-            console.log('error loading preview', err);
+        	uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
         }
     },
 

@@ -1,6 +1,7 @@
 var generateComponent = function(anchor, component, componentName, attributes) {
     return new Promise((resolve, reject) => {
         try {
+            if (!anchor || !component || !componentName || !attributes) reject('invalid parameters');
             $A.createComponent(
                 componentName,
                 attributes,
@@ -18,7 +19,7 @@ var generateComponent = function(anchor, component, componentName, attributes) {
                 }
             );
         } catch (err) {
-            reject(err);
+            reject('error generating component: '+ err);
         }
     });
 };
@@ -66,7 +67,7 @@ AgreementActionManager.prototype.getAgreement = function(agreementId, sourceId, 
   var getAgreements = this.getAgreements;
   return new Promise((resolve, reject) => {
     getAgreements(component, sourceId).then((agreements) => {
-      var filtered = agreements.find(agreement => agreement.id.value.toLowerCase() === agreementId.toLowerCase());
+      var filtered = agreements.find(agreement => agreement.id.value === agreementId);
       if (filtered) resolve(filtered);
       else reject('Agreement doesnt exist');
     }).catch(err => reject(err));
@@ -83,7 +84,9 @@ AgreementActionManager.prototype.upload = function(component) {
         showModal: true
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 AgreementActionManager.prototype.delete = function(agreementDetails, component) {
@@ -93,7 +96,9 @@ AgreementActionManager.prototype.delete = function(agreementDetails, component) 
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 AgreementActionManager.prototype.rename = function(agreementDetails, component) {
@@ -103,7 +108,9 @@ AgreementActionManager.prototype.rename = function(agreementDetails, component) 
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 AgreementActionManager.prototype.internalReview = function(agreementDetails, component) {
@@ -113,7 +120,9 @@ AgreementActionManager.prototype.internalReview = function(agreementDetails, com
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 AgreementActionManager.prototype.externalReview = function(agreementDetails, component) {
@@ -123,7 +132,9 @@ AgreementActionManager.prototype.externalReview = function(agreementDetails, com
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 AgreementActionManager.prototype.share = function(agreementDetails, component) {
@@ -133,7 +144,9 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
         agreementDetails: agreementDetails
     }).then(modalComponent => {
         this.activeScope = modalComponent;
-    }).catch(err => console.log('error generating component: ', err));
+    }).catch(err => {
+        throw err;
+    });
 }
 
 window.AgreementActionManager = AgreementActionManager;

@@ -1,17 +1,22 @@
 <aura:component implements="force:appHostable" controller="AgreementsController">
     <aura:attribute name="agreementId" type="Id" access="public"/>
-    <aura:attribute name="AgreementActionManager" type="Object"/>
-    <aura:attribute name="Agreement" type="Agreement"/>
+    <aura:attribute name="agreementActionManager" type="Object"/>
+    <aura:attribute name="agreement" type="Agreement"/>
+    <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="loading" type="Boolean" default="true"/>
-    <aura:attribute name="isClassic" type="Object" default="false" access="public"/>
     <aura:attribute name="sourceId" type="String" access="public"/>
-	<ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs)}" afterScriptsLoaded="{!c.onLoad}" />    
+	
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}" afterScriptsLoaded="{!c.onLoad}" />
+
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
     <div id="fullContainer">     
         <div id="toolbarContainer">
-            <c:AgreementPreviewToolBar Agreement="{!v.Agreement}" AgreementActionManager="{!v.AgreementActionManager}"/>
+            <c:AgreementPreviewToolBar agreement="{!v.agreement}" agreementActionManager="{!v.agreementActionManager}" uiHelper="{!v.uiHelper}"/>
         </div>
         <div id="documentContainer">
-            <c:AgreementPreviewDocument Agreement="{!v.Agreement}"/>
+            <c:AgreementPreviewDocument agreement="{!v.agreement}" uiHelper="{!v.uiHelper}"/>
             <aura:if isTrue="{!v.loading}">
                 <div class="slds-is-relative loadingContainer">
                     <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
