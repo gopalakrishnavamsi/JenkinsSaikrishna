@@ -1,6 +1,6 @@
 ({
   viewAgreement: function(component, event, helper) {
-    helper.launchAgreementPreview(component, event);  
+    helper.launchAgreementPreview(component);
   },
 
   showTimeLine: function (component, event, helper) {

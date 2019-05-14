@@ -19,7 +19,7 @@
     evt.fire();
   },
 
-  renameAgreement: function (component, event, helper) {
+  renameAgreement: function (component) {
     component.set('v.loading', true);
     var agreementDetails = component.get('v.agreementDetails');
     var action = component.get('c.renameAgreement');

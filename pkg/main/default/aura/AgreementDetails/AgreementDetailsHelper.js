@@ -111,7 +111,7 @@
     }
   },
 
-  launchAgreementPreview: function(component, event) {
+  launchAgreementPreview: function (component) {
     var agreement = component.get('v.agreementDetails');
     var action = component.get('c.redirectToAgreementPreview');
     action.setParams({

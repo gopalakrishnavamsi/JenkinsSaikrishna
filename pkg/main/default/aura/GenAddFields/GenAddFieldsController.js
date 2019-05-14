@@ -21,6 +21,7 @@
       resolve();
     }));
   },
+
   showOptionsModal: function (component, event, helper) {
     var optionModalParams = event.getParam('data');
     var fieldMapping = helper.getFieldMapping(component, optionModalParams);
@@ -38,6 +39,7 @@
     component.set('v.clonedFieldMapping', clonedFieldMapping);
     component.find('merge-token-options').show();
   },
+
   saveOptions: function (component, event, helper) {
     var config = component.get('v.config');
     var optionModalParams = component.get('v.optionModalParams');
@@ -53,14 +55,17 @@
     component.set('v.config', config);
     component.find('merge-token-options').hide();
   },
+
   formatDate: function (component, event, helper) {
     var dateFormat = event.getSource().get('v.value');
     helper.formatDate(component, dateFormat);
   },
+
   formatCurrency: function (component, event, helper) {
     var currencyFormat = event.getSource().get('v.value');
     helper.formatCurrency(component, currencyFormat);
   },
+
   convertToBoolean: function (component, event) {
     //html always returns the value as a string so we're going to convert it back to boolean
     var conditionalValue = event.getSource().get('v.value');
@@ -68,6 +73,7 @@
     clonedFieldMapping.isConditional = conditionalValue == 'true';
     component.set('v.clonedFieldMapping', clonedFieldMapping);
   },
+
   addSigner: function (component) {
     var config = component.get('v.config');
     var signerMappings = config.signerMappings;
@@ -80,6 +86,7 @@
 
     component.set('v.config', config);
   },
+
   removeSigner: function (component, event) {
     var index = event.getSource().get('v.value');
     var config = component.get('v.config');
@@ -89,6 +96,7 @@
 
     component.set('v.config', config);
   },
+
   addSignerField: function (component, event) {
     var index = event.getSource().get('v.value');
     var config = component.get('v.config');
@@ -100,6 +108,7 @@
 
     component.set('v.config', config);
   },
+
   removeSignerField: function (component, event) {
     var params = event.getParam('data');
     var config = component.get('v.config');

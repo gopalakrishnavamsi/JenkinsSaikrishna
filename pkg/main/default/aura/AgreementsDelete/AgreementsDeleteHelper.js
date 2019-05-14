@@ -19,7 +19,7 @@
     evt.fire();
   },
 
-  deleteAgreement: function (component, event, helper) {
+  deleteAgreement: function (component) {
     component.set('v.loading', true);
     var agreementDetails = component.get('v.agreementDetails');
     var action = component.get('c.deleteAgreement');
