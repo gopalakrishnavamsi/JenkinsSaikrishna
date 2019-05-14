@@ -6,6 +6,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
+	public static final String PATH_TOKEN_REGISTRATIONS = 'tokenregistrations';
 	public static final String PATH_WORK_ITEMS = 'workitems';
 	public static final Long SCM_OFFSET = 20;
 
@@ -369,6 +370,26 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return agreements;
 	}
 
+// get Agreement by id
+	public Agreement getAgreement(final UUID agreementId) {
+
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_DOCUMENTS, agreementId
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get Agreement  - ' + agreementId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIAgreement)Json.deserialize(response.body, APIAgreement.class)).convertAPIAgreement();
+
+	}
+
 // Rename Agreement
 
 	public Boolean renameAgreement(final UUID documentId, final String documentName) {
@@ -443,7 +464,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 
 			APIAgreements result = (APIAgreements)JSON.deserialize(response.body, APIAgreements.class);
-			for (APIAgreement a : result.items) {
+ 			for (APIAgreement a : result.items) {
 				agreements.add(a.convertAPIAgreement());
 			}
 			next = result.next;
@@ -656,6 +677,41 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return historyItems;
 	}
 
+// limited access token
+
+	private class APILimitedAccessToken {
+		public String accessToken;
+		public String expiresIn;
+		public String APIBaseUrl;
+
+		public Credentials.LimitedAccessToken toExternalForm() {
+			return new Credentials.LimitedAccessToken(
+				new Credentials.AccessToken(accessToken, Datetime.now().addSeconds(Integer.valueOf(expiresIn))),
+				new Url(APIBaseUrl));
+		}
+	}
+
+	public Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_TOKEN_REGISTRATIONS
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'objectId' => objectId.value,
+				'accessToken' => accessToken
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to generate limited access token: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APILimitedAccessToken)JSON.deserialize(response.body, APILimitedAccessToken.class)).toExternalForm();
+	}
+
 	// workItems to get Assignee for PreviewWidget
 
 	@TestVisible
@@ -714,3 +770,4 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return workItems;
 	}
 }
+

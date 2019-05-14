@@ -189,6 +189,20 @@ public with sharing class Credentials {
 		}
 	}
 
+
+	public class LimitedAccessToken {
+		public Credentials.AccessToken token { get; private set; }
+		public Url apiBaseurl { get; private set; }
+
+		public LimitedAccessToken(
+			final Credentials.AccessToken token,
+			final Url apiBaseurl) {
+
+			this.token = token;
+			this.apiBaseurl = apiBaseurl;
+		}
+	}
+
 	public static Boolean isAccountValid() {
 		return getInstance(UserInfo.getUserId(), false).isAccountValid;
 	}
@@ -705,6 +719,13 @@ public with sharing class Credentials {
 		]);
 		removePermissionSets(userIds);
 		self = null;
+	}
+
+	public static void clearTokenAfterLogin() {
+		UserSettings__c settings = UserSettings__c.getInstance();
+		DB.clearToken(settings);
+		settings.Nonce__c = null;
+		upsert settings;
 	}
 
 	@Future
