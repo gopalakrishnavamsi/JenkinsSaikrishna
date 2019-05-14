@@ -174,6 +174,17 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
+	public static String getAgreementPreviewLink(final Id sourceId, final String agreementId) {
+		Permissions.verifyIsDocuSignUser();
+		if (sourceId == null || agreementId == null) return null;
+
+		UUID agreementUId = UUID.parse(agreementId);
+		PageReference agreementView = Page.AgreementPreview;
+		agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
+		agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
+		return agreementView.getUrl();
+	}
+
 	public static Boolean renameAgreement(final UUID documentId, final String documentName) {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().renameAgreement(documentId, documentName);
@@ -226,4 +237,8 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
 	}
+  
+	public static String getDocumentURL(final UUID documentId) {
+		return NegotiateAPI.getInstance().getDocumentURL(documentId);
+  }   
 }

@@ -109,5 +109,18 @@
       component.set("v.showTimeLine", false);
       component.set('v.activityLinkLabel', "Show Activity");
     }
+  },
+
+  launchAgreementPreview: function(component, event) {
+    var agreement = component.get('v.agreementDetails');
+    var action = component.get('c.redirectToAgreementPreview');
+    action.setParams({
+      sourceId: component.get('v.sourceId'),
+      agreementId: agreement && agreement.id ? agreement.id.value : null
+    });
+    action.setCallback(this, function(response) {
+      if (response.getState() === 'SUCCESS') navUtils.navigateToUrl(response.getReturnValue());
+    });
+    $A.enqueueAction(action);
   }
 });

@@ -1,4 +1,8 @@
 ({
+  viewAgreement: function(component, event, helper) {
+    helper.launchAgreementPreview(component, event);  
+  },
+
   showTimeLine: function (component, event, helper) {
     helper.showHistoryTimeLine(component);
   },
@@ -25,9 +29,6 @@
 
   showShareLinkModal: function (component, event, helper) {
     helper.createShareLinkComponent(component, event, helper);
-  },
+  }
 
-  uploadScriptsLoaded: function (component, event, helper) {
-    // FIXME: Implement or remove.
-  },
 });

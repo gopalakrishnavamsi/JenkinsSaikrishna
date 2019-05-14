@@ -89,7 +89,7 @@
                         <!-- Iterate through Agreements -->
                         <aura:iteration items="{!v.agreements}" var="agreementDetails" indexVar="index">
                             <li class="slds-item slds-p-top_medium">
-                                <c:AgreementDetails agreementDetails="{!agreementDetails}" agreementIndex="{!index}"/>
+                                <c:AgreementDetails sourceId="{!v.recordId}" agreementDetails="{!agreementDetails}" agreementIndex="{!index}"/>
                                 <div class="ds-agreements_spacing"/>
                             </li>
                         </aura:iteration>

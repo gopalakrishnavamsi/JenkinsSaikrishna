@@ -1,0 +1,7 @@
+<aura:component controller="AgreementsController">
+    <aura:attribute name="agreement" type="Agreement" access="public"/>
+    <aura:attribute name="widget" type="Object"/>
+    <aura:attribute name="uiHelper" type="Object" access="public"/>
+    <aura:handler name="change" value="{!v.agreement}" action="{!c.onLoad}"/>
+    <div id="agreementDocumentView"/>
+</aura:component>

@@ -55,6 +55,16 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	//Todo: Once access tokens are implemented return an instance of an object containing all needed params for generating Spring Widget Payload.
+	@AuraEnabled
+	public static String getDocumentURL(final String documentId) {
+		try {
+			return NegotiateService.getDocumentURL(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate document url');
+		}
+	}
+
 	@AuraEnabled
 	public static Boolean renameAgreement(final String documentId, final String documentName) {
 		try {
@@ -87,6 +97,17 @@ public with sharing class AgreementsController extends Controller {
 			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to resolve recipients');
+		}
+	}
+
+	@AuraEnabled
+	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
+		try {
+			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId);
+			if (result == null) throw Controller.wrapException('Failed to redirect to Agreement Preview page: undefined parameter');
+			return result;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to redirect to Agreement Preview');
 		}
 	}
 

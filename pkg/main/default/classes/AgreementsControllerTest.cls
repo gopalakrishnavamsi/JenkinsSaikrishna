@@ -270,6 +270,19 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
+	static void test_redirectToAgreementPreview() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			String link = AgreementsController.redirectToAgreementPreview(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assertNotEquals(null, link);
+			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
+			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
+			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
+		}		
+	}
+
+	@IsTest
 	static void test_sendForInternalApproval_success() {
 		NegotiateAPIMock.success();
 

@@ -329,6 +329,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return result;
 	}
 
+	public String getDocumentURL(final UUID documentId) {
+		if (documentId == null) return null;
+		return getBaseUrl() + '/' + PATH_DOCUMENTS + '/' + documentId.value;
+	}
+
 //Get All Agreements from an EOS folder
 	public List<Agreement> getAgreements(final UUID folderId) {
 		List<Agreement> agreements = new List<Agreement>();
