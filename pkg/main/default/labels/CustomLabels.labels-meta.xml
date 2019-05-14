@@ -6055,11 +6055,4 @@
 		<shortDescription>SearchActorHelpMessage</shortDescription>
 		<value>Search by Name, Email or Organization</value>
 	</labels>
-	<labels>
-		<fullName>FileActivity</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>File Activity</shortDescription>
-		<value>File Activity</value>
-	</labels>
 </CustomLabels>
