@@ -330,6 +330,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	public String getDocumentURL(final UUID documentId) {
+		if (documentId == null) return null;
 		return getBaseUrl() + '/' + PATH_DOCUMENTS + '/' + documentId.value;
 	}
 

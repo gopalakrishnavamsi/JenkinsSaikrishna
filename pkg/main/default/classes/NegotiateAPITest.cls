@@ -380,4 +380,13 @@ public with sharing class  NegotiateAPITest {
 			System.assertEquals('Jane Doe', approvalUsers.get(1).fullName);
 		}
 	}
+
+	@IsTest
+	static void test_getDocumentURL() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			String endpoint = NegotiateAPI.getInstance().getDocumentURL(NegotiateAPIMock.DOCUMENT_ID);
+			System.assertNotEquals(endpoint, null);
+			System.assert(endpoint.contains('/' + NegotiateAPIMock.DOCUMENT_ID));
+		}		
+	}
 }
