@@ -67,6 +67,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static Agreement getAgreement(final UUID agreementId) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		return getAgreementData(NegotiateAPI.getInstance().getAgreement(agreementId));
 	}
 
