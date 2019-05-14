@@ -34,6 +34,19 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
+	static void test_getAgreement_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Agreement agreement = AgreementsController.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2.value);
+			Test.stopTest();
+			System.assertNotEquals(null, agreement);
+		}
+	}
+
+	@IsTest
 	static void test_getAgreements_failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

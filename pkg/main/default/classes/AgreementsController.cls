@@ -27,6 +27,16 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static Agreement getAgreement(final String agreementId) {
+		try {
+			return NegotiateService.getAgreement(UUID.parse(agreementId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Agreement.');
+		}
+
+	}
+
+	@AuraEnabled
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
 			Permissions.verifyIsDocuSignUser();
