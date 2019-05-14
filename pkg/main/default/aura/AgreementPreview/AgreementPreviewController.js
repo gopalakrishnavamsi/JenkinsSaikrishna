@@ -1,7 +1,5 @@
 ({
-
-  onLoad: function(component, event, helper) {
-    var sourceId = component.get("v.sourceId");
+  onLoad: function (component) {
     var agreementId = component.get("v.agreementId");
     var action = component.get('c.getNameSpace');
     var uiHelper = new UIHelper(function () {
@@ -14,7 +12,7 @@
       var state = response.getState();
       if (state === "SUCCESS") {
         var manager = new AgreementActionManager('modalContent', response.getReturnValue());
-        manager.getAgreement(agreementId, sourceId, component)
+        manager.getAgreement(component, agreementId)
         .then(function(agreement) {
           component.set('v.agreement', agreement);
           component.set('v.agreementActionManager', manager);

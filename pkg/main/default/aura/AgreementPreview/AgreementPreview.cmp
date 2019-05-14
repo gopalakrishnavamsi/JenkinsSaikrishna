@@ -5,15 +5,18 @@
     <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="loading" type="Boolean" default="true"/>
     <aura:attribute name="sourceId" type="String" access="public"/>
-	
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}" afterScriptsLoaded="{!c.onLoad}" />
+
+    <ltng:require styles="{!$Resource.scmwidgetscss}"
+                  scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"
+                  afterScriptsLoaded="{!c.onLoad}"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
-    <div id="fullContainer">     
+    <div id="fullContainer">
         <div id="toolbarContainer">
-            <c:AgreementPreviewToolBar agreement="{!v.agreement}" agreementActionManager="{!v.agreementActionManager}" uiHelper="{!v.uiHelper}"/>
+            <c:AgreementPreviewToolBar agreement="{!v.agreement}" agreementActionManager="{!v.agreementActionManager}"
+                                       uiHelper="{!v.uiHelper}"/>
         </div>
         <div id="documentContainer">
             <c:AgreementPreviewDocument agreement="{!v.agreement}" uiHelper="{!v.uiHelper}"/>
@@ -25,7 +28,7 @@
                         <div class="slds-spinner__dot-b"></div>
                     </div>
                 </div>
-            </aura:if>               
+            </aura:if>
         </div>
-    </div>    
+    </div>
 </aura:component>

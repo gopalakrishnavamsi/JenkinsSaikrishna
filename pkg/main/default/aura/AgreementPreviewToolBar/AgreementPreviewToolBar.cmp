@@ -1,6 +1,6 @@
 <aura:component>
-    <aura:attribute name="agreement" type="Agreement" access="public" />
-    <aura:attribute name="agreementActionManager" type="Object" access="public" />
+    <aura:attribute name="agreement" type="Agreement" access="public"/>
+    <aura:attribute name="agreementActionManager" type="Object" access="public"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <div class="ToolBarContainer">
         <div class="ToolBarFrame">
@@ -17,32 +17,42 @@
             </div>
             <div class="ToolBarActionContainer">
                 <div class="ActionButtonContainer">
-                    <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small" menuAlignment="right">
-                        <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}" />
-                        <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}" onactive="{!c.upload}" disabled="{!if(or(v.agreement.status == 'COMPLETED',
+                    <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
+                                          menuAlignment="right">
+                        <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"/>
+                        <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
+                                            onactive="{!c.upload}" disabled="{!if(or(v.agreement.status == 'COMPLETED',
                                                             v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL'), true, false)}" />
-                        <lightning:menuItem label="{!$Label.c.Rename}" value="{!$Label.c.Rename}" onactive="{!c.rename}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
+                                                            v.agreement.status == 'PENDING APPROVAL'), true, false)}"/>
+                        <lightning:menuItem label="{!$Label.c.Rename}" value="{!$Label.c.Rename}" onactive="{!c.rename}"
+                                            disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
                                                             v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}" />
-                        <lightning:menuItem label="{!$Label.c.DeleteButtonLabel}" value="{!$Label.c.DeleteButtonLabel}" onactive="{!c.delete}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
+                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
+                        <lightning:menuItem label="{!$Label.c.DeleteButtonLabel}" value="{!$Label.c.DeleteButtonLabel}"
+                                            onactive="{!c.delete}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
                                                             v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}" />
+                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
                     </lightning:buttonMenu>
-                    <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small" menuAlignment="right">
-                        <lightning:menuItem label="{!$Label.c.agreementsShareLink}" value="{!$Label.c.agreementsShareLink}" onactive="{!c.share}" />
-                        <lightning:menuItem aura:id="ExternalReview" label="{!$Label.c.agreementsExternalReview}" value="{!$Label.c.agreementsExternalReview}" onactive="{!c.externalReview}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
+                    <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share"
+                                          class="slds-p-left_xx-small" menuAlignment="right">
+                        <lightning:menuItem label="{!$Label.c.agreementsShareLink}"
+                                            value="{!$Label.c.agreementsShareLink}" onactive="{!c.share}"/>
+                        <lightning:menuItem aura:id="ExternalReview" label="{!$Label.c.agreementsExternalReview}"
+                                            value="{!$Label.c.agreementsExternalReview}" onactive="{!c.externalReview}"
+                                            disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
                                                             v.agreement.status == 'PENDING APPROVAL',
                                                             v.agreement.status == 'PENDING SIGNATURE',
-                                                            v.agreement.status == 'COMPLETED'), true, false)}" />
-                        <lightning:menuItem label="{!$Label.c.agreementsInternalApproval}" value="{!$Label.c.agreementsInternalApproval}" onactive="{!c.internalReview}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
+                                                            v.agreement.status == 'COMPLETED'), true, false)}"/>
+                        <lightning:menuItem label="{!$Label.c.agreementsInternalApproval}"
+                                            value="{!$Label.c.agreementsInternalApproval}"
+                                            onactive="{!c.internalReview}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
                                                             v.agreement.status == 'PENDING APPROVAL',
                                                             v.agreement.status == 'PENDING SIGNATURE',
-                                                            v.agreement.status == 'COMPLETED'), true, false)}" />
+                                                            v.agreement.status == 'COMPLETED'), true, false)}"/>
                     </lightning:buttonMenu>
                 </div>
             </div>
         </div>
     </div>
-    <div aura:id="modalContent" />
+    <div aura:id="modalContent"/>
 </aura:component>
