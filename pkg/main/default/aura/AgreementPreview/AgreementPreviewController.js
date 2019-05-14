@@ -23,6 +23,7 @@
           uiHelper.showToast(uiHelper.ToastMode.ERROR, error);
         });   
       }
+      else if (state === "ERROR") uiHelper.showToast(uiHelper.ToastMode.ERROR, uiHelper.getErrorMessage(response));
     });
     $A.enqueueAction(action);  
   }
