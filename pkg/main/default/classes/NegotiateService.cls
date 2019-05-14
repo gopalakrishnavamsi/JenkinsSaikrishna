@@ -59,18 +59,27 @@ public with sharing class NegotiateService {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			for (Agreement agreement : agreements) {
 				if (agreement != null) {
-					// add historyItems
-					List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
-					agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
-					if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
-						agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
-					}
-					// add versions
-					agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
+					agreement = getAgreementData(agreement);
 				}
 			}
 		}
 		return agreements;
+	}
+
+	public static Agreement getAgreement(final UUID agreementId) {
+		return getAgreementData(NegotiateAPI.getInstance().getAgreement(agreementId));
+	}
+
+	private static Agreement getAgreementData(Agreement agreement) {
+		// add historyItems
+		List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
+		agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
+		if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
+			agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
+		}
+		// add versions
+		agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
+		return agreement;
 	}
 
 	private static String calculateStatus(final List<AgreementHistoryItem> historyItems) {
