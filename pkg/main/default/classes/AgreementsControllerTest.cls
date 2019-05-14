@@ -32,7 +32,34 @@ private class AgreementsControllerTest {
 			System.assertNotEquals(null, result);
 		}
 	}
+	
+	@IsTest
+	static void test_getAgreement_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2.value);
+				throw new AssertException('Expected get Agreement to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 
+	@IsTest
+	static void test_getAgreement_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Agreement agreement = AgreementsController.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2.value);
+			Test.stopTest();
+			System.assertNotEquals(null, agreement);
+		}
+	}
+	
 	@IsTest
 	static void test_getAgreements_failure() {
 		System.runAs(UserMock.createUser()) {

@@ -34,6 +34,30 @@ public with sharing class NegotiateServiceTest {
 	}
 
 	@IsTest
+	static void test_getAgreement_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Agreement result = NegotiateService.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2);
+			System.assertNotEquals(null, result);
+			System.assertEquals('ServiceDoc1.docx', result.name);
+			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, result.id);
+			System.assertEquals('2019-05-25 11:13:28', String.valueOf(result.modifiedDate));
+			System.assertEquals(AgreementStatus.PENDING_REVIEW, result.status);
+			System.assertEquals(2, result.historyItems.size());
+			System.assertEquals(AgreementHistoryItem.ExternalReviewInitiated, result.historyItems.get(0).historyItemType);
+			System.assertEquals(AgreementHistoryItem.DocumentImportFromSalesforce, result.historyItems.get(1).historyItemType);
+			System.assertNotEquals(null, result.versions);
+			System.assertEquals(false, result.versions.isEmpty());
+			System.assertEquals('newName.docx', result.versions.get(0).name);
+
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_createAgreementInEOSFolder_success() {
 		NegotiateAPIMock.success();
 
