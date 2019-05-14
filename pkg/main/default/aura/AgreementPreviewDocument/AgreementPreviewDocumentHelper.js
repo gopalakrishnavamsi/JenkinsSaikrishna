@@ -2,21 +2,21 @@
     loadWidget: function(component, id, documentUrl, documentName, historyItems) {
         try {
         	var uiHelper = component.get('v.uiHelper');
-            var widet = new SpringCM.Widgets.Preview({
+            var widget = new SpringCM.Widgets.Preview({
                 iconPath: $A.get('$Resource.scmwidgetsspritemap'),
                 accessTokenFn: this.getAccessToken.bind(component),
                 uploadApiBaseDomain: "https://apiuploadna11.springcm.com",
                 downloadApiBaseDomain: "https://apidownloadna11.springcm.com"
             });
-            widet.render('#agreementDocumentView');
-            widet.renderDocumentPreview({
+            widget.render('#agreementDocumentView');
+            widget.renderDocumentPreview({
                 name: documentName,
                 href: documentUrl,
                 hasPdfPreview: true,
                 uid: id
             });
-            widet.history.setHistoryItems(Object.assign([], historyItems));
-            uiHelper.showToast('Loaded Agreement', uiHelper.ToastMode.SUCCESS);
+            widget.history.setHistoryItems(Object.assign([], historyItems));
+            component.set('v.widget', widget);
         } catch (err) {
         	uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
         }
