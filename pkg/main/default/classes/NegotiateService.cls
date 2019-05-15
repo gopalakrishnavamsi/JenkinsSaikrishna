@@ -21,6 +21,44 @@ public with sharing class NegotiateService {
 				return null;
 			}
 		}
+
+		//REMOVE This method once the spring cm api starts returning the correct upload and download urls
+		@TestVisible
+		private String resolveWidgetContentUrls(final String requestType, final String requestUrl) {
+			String returnUrl;
+			//upload
+			if (requestType.equals('Upload')) {
+				//qa
+				if (requestUrl.contains('qa')) {
+					returnUrl = requestUrl.replace('qa', 'uploadqa');
+				}
+				//uat
+				else if (requestUrl.contains('uat')) {
+					returnUrl = requestUrl.replace('uat', 'uploaduat');
+				}
+				//prod
+				else {
+					returnUrl = requestUrl.replace('api', 'apiupload');
+				}
+			}
+
+			//upload
+			if (requestType.equals('Download')) {
+				//qa
+				if (requestUrl.contains('qa')) {
+					returnUrl = requestUrl.replace('qa', 'downloadqa');
+				}
+				//uat
+				else if (requestUrl.contains('uat')) {
+					returnUrl = requestUrl.replace('uat', 'downloaduat');
+				}
+				//prod
+				else {
+					returnUrl = requestUrl.replace('api', 'apidownload');
+				}
+			}
+			return returnUrl;
+		}
 	}
 
 	@future
@@ -237,8 +275,9 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
 	}
-  
+
 	public static String getDocumentURL(final UUID documentId) {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
-  }   
+	}
+
 }
