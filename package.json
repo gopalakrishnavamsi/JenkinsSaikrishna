@@ -12,7 +12,9 @@
     "eslint-plugin-import": "^2.16.0",
     "husky": "^2.2.0",
     "lint-staged": "^8.1.6",
-    "prettier": "^1.17.0"
+    "prettier": "^1.17.0",
+    "mocha": "^6.1.4",
+    "module-alias": "^2.2.0"
   },
   "scripts": {
     "auth": "sfdx force:auth:web:login -a DocuDevHub -d",
@@ -20,10 +22,10 @@
     "updateOrg": "sfdx force:source:push",
     "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "openOrg":"sfdx force:org:open",
-    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",    
+    "openOrg": "sfdx force:org:open",
+    "setup": "npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",
     "lint": "eslint ./;",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
