@@ -68,7 +68,7 @@
       doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
       doc.formattedLastModified = doc.lastModified
         ? new Date(doc.lastModified).toLocaleString()
-        : "";
+        : '';
     }
     return doc;
   },
@@ -185,7 +185,7 @@
             extension: selectedFile.extension
           };
           component.set('v.importedFile', importedFile);
-          component.set('v.currentStep', "4");
+          component.set('v.currentStep', '4');
           self.setLoading(component, false);
         } else if (result.status === 'Processing') {
           self.showToast(component, result.message, 'warning');
