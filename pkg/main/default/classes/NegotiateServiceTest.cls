@@ -111,7 +111,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
+			testTaskStatus = NegotiateService.sendForExternalReview('Test Agreement', new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody', 8);
@@ -130,7 +130,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+			testTaskStatus = NegotiateService.sendForExternalReview('Test Agreement', new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody', 8);
@@ -149,7 +149,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForExternalReview(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
+			testTaskStatus = NegotiateService.sendForExternalReview('Test Agreement', new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody', 8);
@@ -168,7 +168,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
+			testTaskStatus = NegotiateService.sendForInternalApproval('Test Agreement', new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody');
@@ -187,7 +187,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+			testTaskStatus = NegotiateService.sendForInternalApproval('Test Agreement', new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody');
@@ -206,7 +206,7 @@ public with sharing class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = NegotiateService.sendForInternalApproval(new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
+			testTaskStatus = NegotiateService.sendForInternalApproval('Test Agreement', new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody');

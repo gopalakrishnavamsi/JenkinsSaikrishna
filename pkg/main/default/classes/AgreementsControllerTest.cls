@@ -224,7 +224,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForExternalReview(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.sendForExternalReview('Test Agreement', new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					new List<String> { 'unittest@test.com' },
 					'testSubject',
 					'testBody', 8);
@@ -243,7 +243,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForExternalReview(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.sendForExternalReview('Test Agreement', new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody', 8);
@@ -257,7 +257,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForInternalApproval(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.sendForInternalApproval('Test Agreement', new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					new List<String> { 'unittest@test.com' },
 					'testSubject',
 					'testBody');
@@ -289,7 +289,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForInternalApproval(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.sendForInternalApproval('Test Agreement', new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				new List<String> { 'unittest@test.com' },
 				'testSubject',
 				'testBody');

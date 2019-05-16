@@ -233,9 +233,9 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().deleteAgreement(documentId);
 	}
 
-	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
-		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(documentsIds, reviewerIds, subject, body, expiresInNumberOfDays);
+		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, documentsIds, reviewerIds, subject, body, expiresInNumberOfDays);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
 			taskStatus.message = Label.ExternalReviewSuccess;
@@ -247,9 +247,9 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
-		UUID taskId = NegotiateAPI.getInstance().sendForApproval(documentsIds, reviewerIds, subject, body);
+		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, documentsIds, reviewerIds, subject, body);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
 			taskStatus.message = Label.InternalApprovalSuccess;

@@ -181,7 +181,7 @@ public with sharing class  NegotiateAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
+			UUID result = NegotiateAPI.getInstance().sendForApproval('Test Agreement', new List<UUID> {
 				NegotiateAPIMock.DOCUMENT_ID
 			}, new List<String> {
 				NegotiateAPIMock.USER_EMAIL
@@ -199,7 +199,7 @@ public with sharing class  NegotiateAPITest {
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
+			UUID result = NegotiateAPI.getInstance().sendForExternalReview('Test Agreement', new List<UUID> {
 				NegotiateAPIMock.DOCUMENT_ID
 			}, new List<String> {
 				NegotiateAPIMock.USER_EMAIL
@@ -219,7 +219,7 @@ public with sharing class  NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
+				NegotiateAPI.getInstance().sendForApproval('Test Agreement', new List<UUID> {
 					NegotiateAPIMock.DOCUMENT_ID
 				}, new List<String> {
 					NegotiateAPIMock.USER_EMAIL
@@ -242,7 +242,7 @@ public with sharing class  NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
+				NegotiateAPI.getInstance().sendForExternalReview('Test Agreement', new List<UUID> {
 					NegotiateAPIMock.DOCUMENT_ID
 				}, new List<String> {
 					NegotiateAPIMock.USER_EMAIL

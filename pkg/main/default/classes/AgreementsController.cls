@@ -112,26 +112,26 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		try {
 			List<UUID> documentIdList = new List<UUID>();
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForExternalReview(documentIdList, reviewerIds, subject, body, expiresInNumberOfDays);
+			return NegotiateService.sendForExternalReview(agreementName, documentIdList, reviewerIds, subject, body, expiresInNumberOfDays);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send documents for External Review');
 		}
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
 		try {
 			List<UUID> documentIdList = new List<UUID>();
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForInternalApproval(documentIdList, reviewerIds, subject, body);
+			return NegotiateService.sendForInternalApproval(agreementName, documentIdList, reviewerIds, subject, body);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}

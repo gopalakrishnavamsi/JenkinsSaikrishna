@@ -169,6 +169,7 @@
     }
     var action = component.get('c.sendForExternalReview');
     action.setParams({
+      agreementName: agreementDetails.name,
       documentsIds: documentIdList,
       reviewerIds: recipientList,
       subject: emailSubject,

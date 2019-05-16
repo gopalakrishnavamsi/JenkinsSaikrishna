@@ -6055,4 +6055,238 @@
 		<shortDescription>SearchActorHelpMessage</shortDescription>
 		<value>Search by Name, Email or Organization</value>
 	</labels>
+	
+
+	<labels>
+		<fullName>ViewDocumentButton</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ViewDocumentButton</shortDescription>
+		<value>View Document</value>		
+	</labels>
+	<labels>
+		<fullName>ExternalReviewFailureEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFailureEmailBody</shortDescription>
+		<value>There was a problem with your review request and it was not sent. The issue should resolve itself if you resend the request.</value>
+	</labels>	
+	<labels>
+		<fullName>ExternalReviewFailureEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFailureEmailHeader</shortDescription>
+		<value>External Review Failed</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewFailureEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFailureEmailSubject</shortDescription>
+		<value>We couldn't send your review request for {0}.</value>
+	</labels>
+	
+
+	<labels>
+		<fullName>ExpiredReviewSenderEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewSenderEmailBody</shortDescription>
+		<value>The review request for {0} has expired. If you still want someone review this, you'll need to send a new review request</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredReviewSenderEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewSenderEmailSubject</shortDescription>
+		<value>Your review request has expired</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredReviewSenderEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewSenderEmailHeader</shortDescription>
+		<value>Your review request has expired</value>
+	</labels>			
+	<labels>
+		<fullName>OpenAgreementButton</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Open Agreement</shortDescription>
+		<value>Open Agreement</value>
+	</labels>
+
+
+	<labels>
+		<fullName>CompletedReviewEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedReviewEmailSubject</shortDescription>
+		<value>Review completed for {0}</value>
+	</labels>	
+	<labels>
+		<fullName>CompletedReviewEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedReviewEmailHeader</shortDescription>
+		<value>Review Complete</value>
+	</labels>
+	<labels>
+		<fullName>CompletedReviewEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedReviewEmailBody</shortDescription>
+		<value>The review request for {0} has been completed. There is nothing you need to do.</value>
+	</labels>		
+
+
+
+	<labels>
+		<fullName>ExpiredReviewReviewerEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewReviewerEmailBody</shortDescription>
+		<value>The review request for {0} has expired. There is nothing you need to do.</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredReviewReviewerEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewReviewerEmailSubject</shortDescription>
+		<value>Your review request has expired</value>
+	</labels>		
+	<labels>
+		<fullName>ExpiredReviewHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredReviewHeader</shortDescription>		
+		<value>Review request for {0} has expired.</value>
+	</labels>
+	
+	<labels>
+		<fullName>CanceledReviewEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledReviewEmailBody</shortDescription>		
+		<value>Review request for {0} has been canceled. There is nothing you need to do.</value>
+	</labels>
+	<labels>
+		<fullName>CanceledReviewEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledReviewEmailSubject</shortDescription>		
+		<value>Review for {0} has been canceled</value>
+	</labels>
+	<labels>
+		<fullName>CanceledReviewEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledReviewEmailHeader</shortDescription>		
+		<value>Review for {0} canceled.</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailBody</shortDescription>
+		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if you resend the request.</value>
+	</labels>	
+	<labels>
+		<fullName>ApprovalFailureEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailHeader</shortDescription>
+		<value>Approval Failed</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailSubject</shortDescription>
+		<value>We couldn't send your approval request for {0}.</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredApprovalSenderEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalSenderEmailBody</shortDescription>
+		<value>The approval request for {0} has expired. If you still want someone approval this, you'll need to send a new approval request</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredApprovalSenderEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalSenderEmailSubject</shortDescription>
+		<value>Your approval request has expired</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredApprovalSenderEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalSenderEmailHeader</shortDescription>
+		<value>Your approval request has expired</value>
+	</labels>			
+	<labels>
+		<fullName>CompletedApprovalEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedApprovalEmailSubject</shortDescription>
+		<value>Approval completed for {0}</value>
+	</labels>	
+	<labels>
+		<fullName>CompletedApprovalEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedApprovalEmailHeader</shortDescription>
+		<value>Approval Complete</value>
+	</labels>
+	<labels>
+		<fullName>CompletedApprovalEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompletedApprovalEmailBody</shortDescription>
+		<value>The approval request for {0} has been completed. There is nothing you need to do.</value>
+	</labels>		
+	<labels>
+		<fullName>ExpiredApprovalApproverEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalApproverEmailBody</shortDescription>
+		<value>The approval request for {0} has expired. There is nothing you need to do.</value>
+	</labels>
+	<labels>
+		<fullName>ExpiredApprovalApproverEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalApproverEmailSubject</shortDescription>
+		<value>Your approval request has expired</value>
+	</labels>		
+	<labels>
+		<fullName>ExpiredApprovalHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExpiredApprovalHeader</shortDescription>		
+		<value>Approval request for {0} has expired.</value>
+	</labels>
+	<labels>
+		<fullName>CanceledApprovalEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledApprovalEmailBody</shortDescription>		
+		<value>Approval request for {0} has been canceled. There is nothing you need to do.</value>
+	</labels>
+	<labels>
+		<fullName>CanceledApprovalEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledApprovalEmailSubject</shortDescription>		
+		<value>Approval for {0} has been canceled</value>
+	</labels>
+	<labels>
+		<fullName>CanceledApprovalEmailHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CanceledApprovalEmailHeader</shortDescription>		
+		<value>Approval for {0} canceled.</value>
+	</labels>					
 </CustomLabels>
