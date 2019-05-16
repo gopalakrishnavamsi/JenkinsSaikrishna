@@ -1,5 +1,5 @@
 ({
-    loadWidget: function(component, agreement, documentUrl, historyItems) {
+    loadWidget: function(component, agreement, documentUrl) {
         try {
             var widget = this.resolvePreview(
               this.baseOptions(component),
