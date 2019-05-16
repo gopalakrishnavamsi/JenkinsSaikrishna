@@ -300,11 +300,18 @@ public with sharing class NegotiateService {
 	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
 		Permissions.verifyIsDocuSignUser();
 		UUID folderId = DB.getFolderId(objectId);
-		System.debug('folderId : ' + folderId);
 		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(folderId, AuthService.getContentAccessToken());
 		return token.withEntityId(folderId)
 			.withAccountId(Credentials.getInstance().account.id)
 			.withApiBaseUrl(DB.resolveWidgetContentUrls('Upload', token.apiBaseUrl));
+	}
+
+	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
+		Permissions.verifyIsDocuSignUser();
+		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
+		return token.withEntityId(agreementId)
+			.withAccountId(Credentials.getInstance().account.id)
+			.withApiBaseUrl(DB.resolveWidgetContentUrls('Download', token.apiBaseUrl));
 	}
 
 	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
