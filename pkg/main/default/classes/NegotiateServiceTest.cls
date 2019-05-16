@@ -263,4 +263,34 @@ public with sharing class NegotiateServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_resolveWidgetContentUrls_upload() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apiqana11.springcm.com'), 'https://apiuploadqana11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apiuatna11.springcm.com'), 'https://apiuploaduatna11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apina11.springcm.com'), 'https://apiuploadna11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apiqaeu11.springcm.com'), 'https://apiuploadqaeu11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apiuateu11.springcm.com'), 'https://apiuploaduateu11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Upload', 'https://apieu11.springcm.com'), 'https://apiuploadeu11.springcm.com');
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resolveWidgetContentUrls_download() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apiqana11.springcm.com'), 'https://apidownloadqana11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apiuatna11.springcm.com'), 'https://apidownloaduatna11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apina11.springcm.com'), 'https://apidownloadna11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apiqaeu11.springcm.com'), 'https://apidownloadqaeu11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apiuateu11.springcm.com'), 'https://apidownloaduateu11.springcm.com');
+			System.assertEquals(NegotiateService.DB.resolveWidgetContentUrls('Download', 'https://apieu11.springcm.com'), 'https://apidownloadeu11.springcm.com');
+			Test.stopTest();
+		}
+	}
+
+
+
 }
