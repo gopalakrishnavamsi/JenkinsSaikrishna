@@ -1,9 +1,10 @@
 <aura:component description="AgreementsRename" controller="AgreementsController">
 
     <!-- attributes -->
-    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
+    <aura:attribute name="invalidFileName" type="Boolean" default="false"/>
 
 
     <!-- Events -->
@@ -23,7 +24,7 @@
                 </div>
             </div>
         </aura:if>
-        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"
@@ -33,7 +34,7 @@
                                      pattern="^[^&#060;&#062;&#166;&#124;:&#34;\.\/\\]*$"
                                      messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
                                      required="true"
-                                     disabled="{!v.loading}"/>
+                                     disabled="{!v.loading}" onchange="{!c.onNameChange}"/>
                 </div>
             </div>
         </div>
@@ -43,7 +44,9 @@
                               disabled="{!v.loading}"
                               label="{!$Label.c.Cancel}">
             </lightning:button>
-            <lightning:button disabled="{!if(or(empty(v.agreementDetails.name), v.loading == true), true, false)}"
+            <lightning:button aura:id="renameButton" disabled="{!if(empty(v.agreementDetails.name), true)
+                                                                +if(v.loading, true)
+                                                                +if(v.invalidFileName, true)}"
                               class="slds-button slds-button_brand" onclick="{!c.renameButtonClicked}"
                               label="{!$Label.c.Rename}"></lightning:button>
         </aura:set>

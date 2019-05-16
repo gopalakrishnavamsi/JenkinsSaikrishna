@@ -59,6 +59,6 @@
       component.set('v.loading', false);
     });
     $A.enqueueAction(action);
-  },
+  }
 
 });
