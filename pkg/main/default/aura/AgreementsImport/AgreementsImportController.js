@@ -1,25 +1,25 @@
 ({
-  onInit: function (component, event, helper) {
+  initialize: function (component, event, helper) {
     helper.initialize(component);
   },
 
-  navigateToFileSelection: function (component, event, helper) {
-    helper.getSalesforceFiles(component, event, helper);
+  initializeSalesforceFileImport: function (component, event, helper) {
+    helper.fetchSalesforceFiles(component, event, helper);
   },
 
-  navigateToUploadFilesfromPC: function (component, event, helper) {
-    helper.uploadFilesFromPC(component, event, helper);
+  initializePcFileImport: function (component, event, helper) {
+    helper.setupFileUploadWidget(component, event, helper);
   },
 
-  backButtonClicked: function (component) {
-    component.set('v.currentStep', '1');
+  salesforceFileImportTriggered: function (component, event, helper) {
+    helper.importSalesforceFile(component, event, helper);
   },
 
-  importButtonClicked: function (component, event, helper) {
-    helper.publishAgreement(component, event, helper);
+  pcFileImportTriggered: function (component, event, helper) {
+    helper.importFileFromPc(component, event, helper);
   },
 
-  handleFileSelection: function (component, event, helper) {
+  salesforceFileCheckboxToggle: function (component, event, helper) {
     //checkbox checked
     if (event.getSource().get('v.checked')) {
       var selectedValue = event.getSource().get('v.value');
@@ -31,21 +31,20 @@
     }
   },
 
-  uploadFileButtonClicked: function (component) {
+  doneButtonClicked: function (component, event, helper) {
+    helper.completeImport(component, event, helper);
+  },
+
+  navigateToFirstStep: function (component) {
     component.set('v.currentStep', '1');
   },
-
-  uploadFileImportButtonClicked: function (component, event, helper) {
-    helper.uploadContent(component, event, helper);
-  },
-
 
   cancelButtonClicked: function (component, event, helper) {
     helper.close(component);
   },
 
-  clickDone: function (component, event, helper) {
-    helper.completeImport(component, event, helper);
-  }
+  backButtonClicked: function (component) {
+    component.set('v.currentStep', '1');
+  },
 
 });

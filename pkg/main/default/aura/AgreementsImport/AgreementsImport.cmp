@@ -2,13 +2,13 @@
     <!-- FIXME : Check hardcoding and replace with labels  -->
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!-- attributes -->
-    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
-    <aura:attribute name="importedFile" type="Object" access="private"/>
+    <aura:attribute name="importedFile" type="Object"/>
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
@@ -17,7 +17,7 @@
     <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
 
     <!-- Events -->
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
@@ -51,7 +51,7 @@
                     <div class="slds-col slds-p-top_medium">
                         <div class="slds-grid slds-gutters_small slds-grid_vertical">
                             <div class="slds-col">
-                                <a onclick="{!c.navigateToFileSelection}"
+                                <a onclick="{!c.initializeSalesforceFileImport}"
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
                                         <span class="slds-icon slds-icon_medium">
@@ -68,7 +68,7 @@
                                 </a>
                             </div>
                             <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                                <a onclick="{!c.navigateToUploadFilesfromPC}"
+                                <a onclick="{!c.initializePcFileImport}"
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
                                         <span class="slds-icon slds-icon_medium">
@@ -99,7 +99,7 @@
                                     <article class="slds-tile slds-media slds-media_center">
                                         <div class="slds-media__figure">
                                             <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
-                                                             onchange="{!c.handleFileSelection}"
+                                                             onchange="{!c.salesforceFileCheckboxToggle}"
                                                              checked="{!file.selected}"
                                                              class="ds-no-label" value="{!file.sourceId}"
                                                              disabled="{!v.loading}"/>
@@ -284,9 +284,10 @@
             <aura:if isTrue="{!v.currentStep == '2'}">
                 <div class="slds-grid slds-grid_align-spread">
                     <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}"
-                                      label="Back">
+                                      label="Back" disabled="{!v.loading}">
                     </lightning:button>
-                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.importButtonClicked}"
+                    <lightning:button class="slds-button slds-button_brand"
+                                      onclick="{!c.salesforceFileImportTriggered}"
                                       disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"
                                       label="Import"></lightning:button>
                 </div>
@@ -294,18 +295,18 @@
 
             <aura:if isTrue="{!v.currentStep == '3'}">
                 <div class="slds-grid slds-grid_align-spread">
-                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.uploadFileButtonClicked}"
-                                      label="Back">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.navigateToFirstStep}"
+                                      label="Back" disabled="{!v.loading}">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand"
-                                      onclick="{!c.uploadFileImportButtonClicked}"
-                                      label="Import"></lightning:button>
+                                      onclick="{!c.pcFileImportTriggered}"
+                                      label="Import" disabled="{!v.loading}"></lightning:button>
                 </div>
             </aura:if>
 
             <aura:if isTrue="{!v.currentStep == '4'}">
                 <div class="slds-grid slds-align_absolute-center">
-                    <lightning:button class="slds-button slds-button_neutral" onclick="{!c.clickDone}"
+                    <lightning:button class="slds-button slds-button_neutral" onclick="{!c.doneButtonClicked}"
                                       label="Done">
                     </lightning:button>
                 </div>

@@ -4,40 +4,8 @@
     component.set('v.disableSalesforceFileImport', true);
   },
 
-  uploadFilesFromPC: function (component, event, helper) {
-    component.set('v.currentStep', '3');
-    helper.uploadFile(component);
-  },
-
-  close: function (component) {
-    component.destroy();
-  },
-
-  showToast: function (component, message, mode) {
-    var evt = component.getEvent('toastEvent');
-    evt.setParams({
-      show: true,
-      message: message,
-      mode: mode
-    });
-    evt.fire();
-  },
-
-  setLoading: function (component, loading) {
-    component.set('v.loading', loading === true);
-  },
-
-  reloadAgreementsSpace: function (component) {
-    var evt = component.getEvent('loadingEvent');
-    evt.setParams({
-      isLoading: true
-    });
-    evt.fire();
-  },
-
-  getSalesforceFiles: function (component) {
-    var self = this;
-    self.setLoading(component, true);
+  fetchSalesforceFiles: function (component, event, helper) {
+    component.set('v.loading', true);
     var getSalesforceFiles = component.get('c.getLinkedDocuments');
     getSalesforceFiles.setParams({
       sourceId: component.get('v.recordId')
@@ -48,34 +16,23 @@
         // Add front-end properties to documents
         if (!$A.util.isEmpty(result)) {
           result.forEach(function (d) {
-            self.addDocumentProperties(d, false);
+            helper.addDocumentProperties(d, false);
           });
         }
         component.set('v.salesforceFiles', result);
       } else {
-        self.showToast(component, self.getErrorMessage(response), 'error');
+        helper.showToast(component, helper.getErrorMessage(response), 'error');
       }
-      self.setLoading(component, false);
+      component.set('v.loading', false);
       component.set('v.currentStep', '2');
     });
 
     $A.enqueueAction(getSalesforceFiles);
   },
 
-  addDocumentProperties: function (doc, selected) {
-    if (doc) {
-      doc.selected = selected;
-      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
-      doc.formattedLastModified = doc.lastModified
-        ? new Date(doc.lastModified).toLocaleString()
-        : '';
-    }
-    return doc;
-  },
-
-  uploadFile: function (component) {
-    var self = this;
-    self.setLoading(component, true);
+  setupFileUploadWidget: function (component, event, helper) {
+    component.set('v.currentStep', '3');
+    component.set('v.loading', true);
     var sourceId = component.get('v.recordId');
     var limitedAccessToken = component.get('c.generateUploadToken');
     limitedAccessToken.setParams({
@@ -108,10 +65,10 @@
           uploadWidget.render('#upload-wrapper');
           component.set('v.widget', uploadWidget);
           component.set('v.entityId', result.entityId);
-          self.setLoading(component, false);
+          component.set('v.loading', false);
         } catch (error) {
-          self.showToast(component, error, 'error');
-          self.setLoading(component, false);
+          helper.showToast(component, error, 'error');
+          component.set('v.loading', false);
         }
       } else {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
@@ -123,38 +80,16 @@
         } else {
           errorMessage += $A.get('$Label.c.UnknownError');
         }
-        self.setLoading(component, false);
-        self.showToast(component, errorMessage, 'error');
+        component.set('v.loading', false);
+        helper.showToast(component, errorMessage, 'error');
       }
     });
     $A.enqueueAction(limitedAccessToken);
   },
 
-  uploadContent: function (component, event, helper) {
-    component.set('v.loading', true);
-    var widget = component.get('v.widget');
-    var folderId = component.get('v.entityId');
-    try {
-      widget
-        .uploadNewDocument(folderId.value)
-        .then(function (response) {
-          helper.showToast(component, 'File uploaded successfully', 'success');
-          helper.completeImport(component, event, helper);
-        })
-        .catch(function (error) {
-          helper.showToast(component, 'Error Uploading File', 'error');
-          helper.completeImport(component, event, helper);
-        });
-    } catch (error) {
-      helper.showToast(component, 'Error Uploading File', 'error');
-      helper.completeImport(component, event, helper);
-    }
-  },
-
-  publishAgreement: function (component, event, helper) {
-    var self = this;
+  importSalesforceFile: function (component, event, helper) {
     //set loading to true
-    self.setLoading(component, true);
+    component.set('v.loading', true);
 
     //get selected file
     var salesforceFiles = component.get('v.salesforceFiles');
@@ -175,7 +110,6 @@
 
     action.setCallback(this, function (response) {
       var state = response.getState();
-
       if (state === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result.status === 'Success') {
@@ -185,17 +119,15 @@
             formattedSize: selectedFile.formattedSize,
             extension: selectedFile.extension
           };
-          component.set('v.importedFile', importedFile);
-          component.set('v.currentStep', '4');
-          self.setLoading(component, false);
+          helper.displayCreatedAgreement(component, importedFile);
         } else if (result.status === 'Processing') {
-          self.showToast(component, result.message, 'warning');
-          self.reloadAgreementsSpace(component);
-          self.close(component);
+          helper.showToast(component, result.message, 'warning');
+          helper.reloadAgreementsSpace(component);
+          helper.close(component);
         } else {
-          self.showToast(component, result.message, 'error');
-          self.reloadAgreementsSpace(component);
-          self.close(component);
+          helper.showToast(component, result.message, 'error');
+          helper.reloadAgreementsSpace(component);
+          helper.close(component);
         }
       } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
@@ -207,11 +139,42 @@
         } else {
           errorMessage += $A.get('$Label.c.UnknownError');
         }
-        self.showToast(component, errorMessage, 'error');
+        helper.showToast(component, errorMessage, 'error');
       }
-      self.setLoading(component, false);
+      component.set('v.loading', false);
     });
     $A.enqueueAction(action);
+  },
+
+  importFileFromPc: function (component, event, helper) {
+    component.set('v.loading', true);
+    var widget = component.get('v.widget');
+    var folderId = component.get('v.entityId');
+    try {
+      widget
+        .uploadNewDocument(folderId.value)
+        .then(function (response) {
+          var importedFile = {
+            name: response.Name,
+            formattedSize: response.NativeFileSize ? stringUtils.formatSize(response.NativeFileSize) : '',
+            extension: 'docx'
+          };
+          helper.displayCreatedAgreement(component, importedFile);
+        })
+        .catch(function (error) {
+          helper.showToast(component, 'Error Uploading File', 'error');
+          helper.completeImport(component, event, helper);
+        });
+    } catch (error) {
+      helper.showToast(component, 'Error Uploading File', 'error');
+      helper.completeImport(component, event, helper);
+    }
+  },
+
+  displayCreatedAgreement: function (component, importedFile) {
+    component.set('v.importedFile', importedFile);
+    component.set('v.currentStep', '4');
+    component.set('v.loading', false);
   },
 
   setSelectedFiles: function (component, selectedValue) {
@@ -230,5 +193,39 @@
   completeImport: function (component, event, helper) {
     helper.reloadAgreementsSpace(component);
     helper.close(component);
+  },
+
+  close: function (component) {
+    component.destroy();
+  },
+
+  showToast: function (component, message, mode) {
+    var fireToastEvent = component.getEvent('toastEvent');
+    fireToastEvent.setParams({
+      show: true,
+      message: message,
+      mode: mode
+    });
+    fireToastEvent.fire();
+  },
+
+  reloadAgreementsSpace: function (component) {
+    var reloadEvent = component.getEvent('loadingEvent');
+    reloadEvent.setParams({
+      isLoading: true
+    });
+    reloadEvent.fire();
+  },
+
+  addDocumentProperties: function (doc, selected) {
+    if (doc) {
+      doc.selected = selected;
+      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
+      doc.formattedLastModified = doc.lastModified
+        ? new Date(doc.lastModified).toLocaleString()
+        : '';
+    }
+    return doc;
   }
+
 });
