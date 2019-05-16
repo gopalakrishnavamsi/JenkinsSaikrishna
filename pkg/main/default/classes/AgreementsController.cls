@@ -145,5 +145,5 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
-	
+
 }

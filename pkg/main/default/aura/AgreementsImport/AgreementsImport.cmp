@@ -1,5 +1,4 @@
 <aura:component description="AgreementsImport" controller="AgreementsController">
-    <!-- FIXME : Check the resource.Utiljs since it has been refactored -->
     <!-- FIXME : Check hardcoding and replace with labels  -->
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!-- attributes -->
@@ -7,7 +6,7 @@
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="currentStep" type="String"/>
-    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
     <aura:attribute name="importedFile" type="Object" access="private"/>
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
@@ -15,7 +14,8 @@
     <aura:attribute name="entityId" type="Object" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}" afterScriptsLoaded="{!c.uploadScriptsLoaded}" />
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"
+                  afterScriptsLoaded="{!c.uploadScriptsLoaded}"/>
 
     <!-- Events -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
@@ -63,7 +63,8 @@
                                         <h2 class="slds-truncate ds-visualPickerHeading"
                                             title="Choose from Salesforce Files">
                                             Choose from Salesforce Files</h2>
-                                        <p class="slds-m-top_small">Select with one of the files associated with this record.</p>
+                                        <p class="slds-m-top_small">Select with one of the files associated with this
+                                            record.</p>
                                     </div>
                                 </a>
                             </div>
@@ -94,18 +95,19 @@
                             Choose one of the files available from this Salesforce record.
                         </div>
                         <ul class="slds-p-top_small">
-                        <aura:iteration items="{!v.salesforceFiles}" var="file" indexVar="fileIndex">
-                            <li class="slds-item slds-p-vertical_small">
-                                <article class="slds-tile slds-media slds-media_center">
-                                    <div class="slds-media__figure">
-                                        <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
-                                                         onchange="{!c.handleFileSelection}" checked="{!file.selected}"
-                                                         class="ds-no-label" value="{!file.sourceId}"
-                                                         disabled="{!v.loading}"/>
-                                    </div>
-                                    <div class="slds-media__figure">
-                                        <!-- File Icon -->
-                                        <lightning:icon iconName="{!
+                            <aura:iteration items="{!v.salesforceFiles}" var="file" indexVar="fileIndex">
+                                <li class="slds-item slds-p-vertical_small">
+                                    <article class="slds-tile slds-media slds-media_center">
+                                        <div class="slds-media__figure">
+                                            <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
+                                                             onchange="{!c.handleFileSelection}"
+                                                             checked="{!file.selected}"
+                                                             class="ds-no-label" value="{!file.sourceId}"
+                                                             disabled="{!v.loading}"/>
+                                        </div>
+                                        <div class="slds-media__figure">
+                                            <!-- File Icon -->
+                                            <lightning:icon iconName="{!
                                             'doctype:'
                                             + if(file.extension == 'doc', 'word')
                                             + if(file.extension == 'docm', 'gdoc')
@@ -139,19 +141,20 @@
                                             + if(file.extension == 'xlsm', 'gsheet')
                                             + if(file.extension == 'xlsx', 'gsheet')
                                         }"/>
-                                        <!-- /File Icon -->
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
+                                            <!-- /File Icon -->
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
                                             {!file.name}
                                         </h3>
-                                        <div class="slds-truncate slds-text-color_weak fileDetails">
-                                            {!file.formattedSize} • {!file.extension}</div>
-                                    </div>
-                                </article>
-                            </li>
-                            <div class="ds-fileSpacing"/>
-                        </aura:iteration>
+                                            <div class="slds-truncate slds-text-color_weak fileDetails">
+                                                {!file.formattedSize} • {!file.extension}
+                                            </div>
+                                        </div>
+                                    </article>
+                                </li>
+                                <div class="ds-fileSpacing"/>
+                            </aura:iteration>
                         </ul>
                     </div>
                 </aura:if>
@@ -269,7 +272,8 @@
                     </div>
                 </aura:if>
 
-                <div id="upload-wrapper" class="{!'slds-p-around_large' + if(not(v.currentStep == '3'), ' slds-hide','')}">
+                <div id="upload-wrapper"
+                     class="{!'slds-p-around_large' + if(not(v.currentStep == '3'), ' slds-hide','')}">
 
                 </div>
 
@@ -290,13 +294,14 @@
             </aura:if>
 
             <aura:if isTrue="{!v.currentStep == '3'}">
-                    <div class="slds-grid slds-grid_align-spread">
-                        <lightning:button class="slds-button slds-button--neutral" onclick="{!c.uploadFileButtonClicked}"
-                                          label="Back">
-                        </lightning:button>
-                        <lightning:button class="slds-button slds-button--brand" onclick="{!c.uploadFileImportButtonClicked}"
-                                          label="Import"></lightning:button>
-                    </div>
+                <div class="slds-grid slds-grid_align-spread">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.uploadFileButtonClicked}"
+                                      label="Back">
+                    </lightning:button>
+                    <lightning:button class="slds-button slds-button--brand"
+                                      onclick="{!c.uploadFileImportButtonClicked}"
+                                      label="Import"></lightning:button>
+                </div>
             </aura:if>
 
             <aura:if isTrue="{!v.currentStep == '4'}">

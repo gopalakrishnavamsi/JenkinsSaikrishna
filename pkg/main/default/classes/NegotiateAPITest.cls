@@ -1,5 +1,5 @@
 @IsTest
-public with sharing class  NegotiateAPITest {
+public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_createEOSFolder_success() {
@@ -83,7 +83,6 @@ public with sharing class  NegotiateAPITest {
 		}
 	}
 
-
 	@IsTest
 	static void test_getAgreements_success() {
 		NegotiateAPIMock.success();
@@ -107,7 +106,7 @@ public with sharing class  NegotiateAPITest {
 	static void test_getAreement_success() {
 		NegotiateAPIMock.success();
 
-		System.runAs(UserMock.createDocuSignUser()){
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Agreement agreement = NegotiateAPI.getInstance().getAgreement(NegotiateAPIMock.DOCUMENT_ID_2);
 			Test.stopTest();
@@ -192,7 +191,7 @@ public with sharing class  NegotiateAPITest {
 		}
 	}
 
- 	@IsTest
+	@IsTest
 	static void test_sendForExternalReview_success() {
 		NegotiateAPIMock.success();
 
@@ -386,6 +385,6 @@ public with sharing class  NegotiateAPITest {
 			String endpoint = NegotiateAPI.getInstance().getDocumentURL(NegotiateAPIMock.DOCUMENT_ID);
 			System.assertNotEquals(endpoint, null);
 			System.assert(endpoint.contains('/' + NegotiateAPIMock.DOCUMENT_ID));
-		}		
+		}
 	}
 }

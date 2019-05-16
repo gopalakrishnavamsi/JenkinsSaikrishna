@@ -19,8 +19,8 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals(AgreementHistoryItem.ExternalReviewInitiated, result.get(0).historyItems.get(0).historyItemType);
 			System.assertEquals(AgreementHistoryItem.DocumentImportFromSalesforce, result.get(0).historyItems.get(1).historyItemType);
 			System.assertEquals(null, result.get(0).version);
-			System.assertNotEquals(null,  result.get(0).versions);
-			System.assertEquals(false,  result.get(0).versions.isEmpty());
+			System.assertNotEquals(null, result.get(0).versions);
+			System.assertEquals(false, result.get(0).versions.isEmpty());
 			System.assertEquals('newName.docx', result.get(0).versions.get(0).name);
 
 			System.assertEquals('ServiceDoc2.docx', result.get(1).name);
@@ -244,9 +244,9 @@ public with sharing class NegotiateServiceTest {
 			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
 			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
 			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
-	  }		
-  }
-  
+		}
+	}
+
 	@IsTest
 	static void test_generateUploadToken_success() {
 		NegotiateAPIMock.success();
@@ -291,7 +291,5 @@ public with sharing class NegotiateServiceTest {
 			Test.stopTest();
 		}
 	}
-
-
 
 }

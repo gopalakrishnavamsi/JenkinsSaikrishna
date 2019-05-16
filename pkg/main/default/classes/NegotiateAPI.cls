@@ -465,7 +465,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 
 			APIAgreements result = (APIAgreements)JSON.deserialize(response.body, APIAgreements.class);
- 			for (APIAgreement a : result.items) {
+			for (APIAgreement a : result.items) {
 				agreements.add(a.convertAPIAgreement());
 			}
 			next = result.next;

@@ -189,7 +189,6 @@ public with sharing class Credentials {
 		}
 	}
 
-
 	public static Boolean isAccountValid() {
 		return getInstance(UserInfo.getUserId(), false).isAccountValid;
 	}
