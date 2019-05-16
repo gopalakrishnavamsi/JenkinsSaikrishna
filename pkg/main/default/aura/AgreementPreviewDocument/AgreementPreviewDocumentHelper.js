@@ -31,8 +31,8 @@
             });
             action.setCallback(this, function(response) {
               var state = response.getState();
-              if (case === 'SUCCESS') resolve(response.getReturnValue());
-              if (case === 'ERROR') reject(uiHelper.getErrorMessage(response));
+              if (state === 'SUCCESS') resolve(response.getReturnValue());
+              if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
             });
             $A.enqueueAction(action);
         });
