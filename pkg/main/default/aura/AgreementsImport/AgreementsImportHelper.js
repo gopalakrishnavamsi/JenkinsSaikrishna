@@ -83,6 +83,7 @@
     });
     limitedAccessToken.setCallback(this, function (response) {
       var state = response.getState();
+      var result = response.getReturnValue();
       if (state === 'SUCCESS') {
         try {
           var options = {
