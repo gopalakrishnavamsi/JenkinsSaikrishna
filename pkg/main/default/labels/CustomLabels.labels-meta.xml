@@ -4412,6 +4412,27 @@
 		<value>Collect signatures for this agreement with DocuSign.</value>
 	</labels>
 	<labels>
+		<fullName>ErrorUploadingFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Error Uploading File</shortDescription>
+		<value>Error Uploading File</value>
+	</labels>
+	<labels>
+		<fullName>ErrorDownloadingFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Error Downloading File</shortDescription>
+		<value>Error Downloading File</value>
+	</labels>
+	<labels>
+		<fullName>SuccessDownloadingFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Successfully downloaded</shortDescription>
+		<value>Successfully downloaded</value>
+	</labels>
+	<labels>
 		<fullName>Uruguay</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

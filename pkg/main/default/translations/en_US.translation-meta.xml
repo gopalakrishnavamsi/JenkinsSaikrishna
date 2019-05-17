@@ -2376,6 +2376,18 @@
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Uploading File</label>
+		<name>ErrorUploadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Downloading File</label>
+		<name>ErrorDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully downloaded</label>
+		<name>SuccessDownloadingFile</name>
+	</customLabels>
+	<customLabels>
 		<label>Uruguay</label>
 		<name>Uruguay</name>
 	</customLabels>

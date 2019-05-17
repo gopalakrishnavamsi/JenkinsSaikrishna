@@ -83,7 +83,7 @@
             <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
                                   menuAlignment="right">
 
-                <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"/>
+                <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}" onactive="{!c.showDownloadModal}"/>
 
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                     onactive="{!c.showUploadModal}"

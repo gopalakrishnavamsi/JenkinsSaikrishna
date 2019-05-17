@@ -93,9 +93,9 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID objectId) {
+	public static NegotiateService.LimitedAccessToken generateDownloadToken(final String objectId) {
 		try {
-			return NegotiateService.generateDownloadToken(objectId);
+			return NegotiateService.generateDownloadToken(UUID.parse(objectId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate upload access token.');
 		}
