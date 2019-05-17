@@ -65,7 +65,9 @@ public with sharing class NegotiateService {
 		@AuraEnabled
 		public String token { get; private set; }
 		@AuraEnabled
-		public String apiBaseUrl { get; private set; }
+		public String apiBaseUploadUrl { get; private set; }
+		@AuraEnabled
+		public String apiBaseDownloadUrl { get; private set; }		
 		@AuraEnabled
 		public UUID accountId { get; private set; }
 		@AuraEnabled
@@ -73,10 +75,12 @@ public with sharing class NegotiateService {
 
 		public LimitedAccessToken(
 			final String token,
-			final String apiBaseUrl) {
+			final String apiBaseUploadUrl,
+			final String apiBaseDownloadUrl) {
 
 			this.token = token;
-			this.apiBaseUrl = apiBaseUrl;
+			this.apiBaseUploadUrl = apiBaseUploadUrl;
+			this.apiBaseDownloadUrl = apiBaseDownloadUrl;
 			this.accountId = null;
 			this.entityId = null;
 		}
