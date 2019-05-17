@@ -54,7 +54,7 @@
                 return this.approvalSenderView(this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, true, auth));
 
             default:
-                return this.basePreview(agreement.id, agreement.name, documentUrl, false, auth);
+                return this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, false, auth);
         }
     },
 
