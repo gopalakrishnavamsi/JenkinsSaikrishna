@@ -41,17 +41,17 @@
     resolvePreview: function(auth, agreement, documentUrl, isAdmin, isSender) {
         switch (agreement.status) {
             case 'New' || 'New Version' || 'Completed' || 'Approved' || 'Rejected' || 'Approval Canceled' || 'Review Canceled' || 'Reviewed':
-                return this.basePreview(agreement.id, agreement.name, documentUrl, true, auth);
+                return this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, true, auth);
 
             case 'Pending Review':
-                return this.externalReviewSenderView(this.basePreview(agreement.id, agreement.name, documentUrl, true, auth), isAdmin);
+                return this.externalReviewSenderView(this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, true, auth), isAdmin);
 
             case 'Review Expired':
-                return this.basePreview(agreement.id, agreement.name, documentUrl, false, auth);
+                return this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, false, auth);
 
             case 'Pending Approval':
-                if (isSender) this.renderApprovalRecipientView(this.basePreview(agreement.id, agreement.name, documentUrl, false, auth));
-                return this.approvalSenderView(this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems true, auth));
+                if (isSender) this.renderApprovalRecipientView(this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, false, auth));
+                return this.approvalSenderView(this.basePreview(agreement.id, agreement.name, documentUrl, agreement.historyItems, true, auth));
 
             default:
                 return this.basePreview(agreement.id, agreement.name, documentUrl, false, auth);
@@ -69,8 +69,8 @@
             uid: agreementId
         });
         if (showHistoryView) {
-            preview.history.setHistoryItems(Object.assign([], agreements.historyItems));
-            preview.renderHistoryView(Object.assign([], agreements.historyItems));
+            preview.history.setHistoryItems(Object.assign([], historyItems));
+            preview.renderHistoryView(Object.assign([], historyItems));
         }
         return preview;
     },
