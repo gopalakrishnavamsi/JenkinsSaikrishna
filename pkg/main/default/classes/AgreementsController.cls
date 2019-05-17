@@ -83,6 +83,15 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
+		try {
+			return NegotiateService.generateUploadToken(objectId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate upload access token.');
+		}
+	}
+
 	@AuraEnabled(Cacheable = true)
 	public static Recipient resolveRecipient(final Id sourceId) {
 		try {
@@ -136,5 +145,5 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
-	
+
 }
