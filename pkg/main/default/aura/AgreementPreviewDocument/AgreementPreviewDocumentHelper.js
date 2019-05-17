@@ -34,7 +34,7 @@
               iconPath: $A.get('$Resource.scmwidgetsspritemap'),
               accessTokenFn: self.getAccessToken.bind(self, component, sourceId),
               uploadApiBaseDomain: token.apiBaseUrl,
-              downloadApiBaseDomain: "https://apidownloadna11.springcm.com"      
+              downloadApiBaseDomain: "https://apidownloadna11.springcm.com"  //FixMe: should be returned from generateToken    
             }));
           }
           if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
