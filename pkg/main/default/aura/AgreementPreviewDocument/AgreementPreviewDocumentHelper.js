@@ -64,7 +64,7 @@
         console.log('agreement: ', agreement);
         switch (agreement.status.toLowerCase()) {
             case 'new' || 'new version' || 'completed' || 'approved' || 'rejected' || 'approval canceled' || 'review canceled' || 'reviewed':
-                return this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth);
+                return this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth);
 
             case 'pending review':
                 return this.externalReviewSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), isAdmin);
