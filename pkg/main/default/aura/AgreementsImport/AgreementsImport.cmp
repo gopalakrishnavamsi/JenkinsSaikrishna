@@ -22,10 +22,10 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <c:strike_modal aura:id="importAgreementsModal"
-                    title="{!if(v.currentStep == '1', 'Import Files')
-                            +if(v.currentStep == '2', 'Select a File')
-                            +if(v.currentStep == '3', 'Upload a File')
-                            +if(v.currentStep == '4', 'New Agreement Created')}"
+                    title="{!if(v.currentStep == '1', $Label.c.ImportFiles)
+                            +if(v.currentStep == '2', $Label.c.SelectFile)
+                            +if(v.currentStep == '3', $Label.c.UploadFile)
+                            +if(v.currentStep == '4', $Label.c.NewAgreementCreated)}"
                     showModal="{!v.showModal}"
                     showFooter="{!if(v.currentStep == '1', false,true)}"
                     successHeader="{!if(v.currentStep == '4', true,false)}">
@@ -45,7 +45,7 @@
                 <aura:if isTrue="{!v.currentStep == '1'}">
                     <div class="slds-col">
                         <div class="slds-text-align--center">
-                            Start by choosing a source to import your files from.
+                            {!$Label.c.ChooseFile}
                         </div>
                     </div>
                     <div class="slds-col slds-p-top_medium">
@@ -60,10 +60,9 @@
                                     </div>
                                     <div class="slds-media__body slds-border_left slds-p-around_small">
                                         <h2 class="slds-truncate ds-visualPickerHeading"
-                                            title="Choose from Salesforce Files">
-                                            Choose from Salesforce Files</h2>
-                                        <p class="slds-m-top_small">Select with one of the files associated with this
-                                            record.</p>
+                                            title="{!$Label.c.ChooseSalesforceFiles}">
+                                            {!$Label.c.ChooseSalesforceFiles}</h2>
+                                        <p class="slds-m-top_small">{!$Label.c.SelectAssociatedFiles}</p>
                                     </div>
                                 </a>
                             </div>
@@ -77,10 +76,10 @@
                                     </div>
                                     <div class="slds-media__body slds-border_left slds-p-around_small">
                                         <h2 class="slds-truncate visualPickerHeading"
-                                            title="Upload from PC">
-                                            Upload from PC</h2>
+                                            title="{!$Label.c.UploadFromPC}">
+                                            {!$Label.c.UploadFromPC}</h2>
                                         <p class="slds-m-top_small">
-                                            Upload a document directly from computer.</p>
+                                            {!$Label.c.UploadFromComputer}</p>
                                     </div>
                                 </a>
                             </div>
@@ -91,7 +90,7 @@
                 <aura:if isTrue="{!v.currentStep == '2'}">
                     <div class="slds-col slds-p-horizontal_large">
                         <div class=" slds-text-align_center">
-                            Choose one of the files available from this Salesforce record.
+                            {!$Label.c.ChooseSalesforceFiles2}
                         </div>
                         <ul class="slds-p-top_small">
                             <aura:iteration items="{!v.salesforceFiles}" var="file" indexVar="fileIndex">
@@ -161,8 +160,7 @@
                 <aura:if isTrue="{!v.currentStep == '4'}">
                     <div class="slds-col">
                         <div class="slds-text-align--center">
-                            The file below has been copied from Salesforce files, imported to DocuSign Agreements, and
-                            now can be sent for negotiation, approval or signature.
+                            {!$Label.c.SalesforceFileCopyComplete}
                         </div>
                     </div>
 
@@ -229,9 +227,9 @@
                                     </div>
                                     <div class="slds-media__body slds-p-around_xx-small">
                                         <h2 class="slds-truncate visualPickerHeading"
-                                            title="Send for External Review">
-                                            Send for External Review</h2>
-                                        <p class="">Negotiate with a third party and compare redlines.</p>
+                                            title="{!$Label.c.SendForExternalReview}">
+                                           {!$Label.c.SendForExternalReview}</h2>
+                                        <p class="">{!$Label.c.NegotiateCompare}</p>
                                     </div>
                                 </a>
                             </div>
@@ -245,9 +243,9 @@
                                     </div>
                                     <div class="slds-media__body slds-p-around_xx-small">
                                         <h2 class="slds-truncate visualPickerHeading"
-                                            title="Send for Approval">
-                                            Send for Approval</h2>
-                                        <p class="">Request approval and feedback from your teammates.</p>
+                                            title="{!$Label.c.SendForApproval}">
+                                            {!$Label.c.SendForApproval}</h2>
+                                        <p class="">{!$Label.c.RequestApproval}</p>
                                     </div>
                                 </a>
                             </div>
@@ -261,9 +259,9 @@
                                     </div>
                                     <div class="slds-media__body slds-p-around_xx-small">
                                         <h2 class="slds-truncate visualPickerHeading"
-                                            title="Send for Signature">
-                                            Send for Signature</h2>
-                                        <p class="">Collect signatures for this agreement with DocuSign.</p>
+                                            title="{!$Label.c.SendForSignature}">
+                                            {!$Label.c.SendForSignature}</h2>
+                                        <p class="">{!$Label.c.CollectSignatures}</p>
                                     </div>
                                 </a>
                             </div>
@@ -289,7 +287,7 @@
                     <lightning:button class="slds-button slds-button_brand"
                                       onclick="{!c.salesforceFileImportTriggered}"
                                       disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"
-                                      label="Import"></lightning:button>
+                                      label="{!$Label.c.ImportButtonLabel}"></lightning:button>
                 </div>
             </aura:if>
 
@@ -300,14 +298,14 @@
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand"
                                       onclick="{!c.pcFileImportTriggered}"
-                                      label="Import" disabled="{!v.loading}"></lightning:button>
+                                      label="{!$Label.c.ImportButtonLabel}" disabled="{!v.loading}"></lightning:button>
                 </div>
             </aura:if>
 
             <aura:if isTrue="{!v.currentStep == '4'}">
                 <div class="slds-grid slds-align_absolute-center">
                     <lightning:button class="slds-button slds-button_neutral" onclick="{!c.doneButtonClicked}"
-                                      label="Done">
+                                      label="{!$Label.c.Done}">
                     </lightning:button>
                 </div>
             </aura:if>
