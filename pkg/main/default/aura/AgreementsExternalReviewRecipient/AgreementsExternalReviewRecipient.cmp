@@ -1,9 +1,7 @@
-<aura:component description="ExternalReviewRecipient">
+<aura:component description="AgreementsExternalReviewRecipient">
     <!--attributes -->
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
-    <aura:attribute name="recordType" type="String" default="user"/>
-    <aura:attribute name="iconName" type="String"/>
 
     <!--handlers -->
     <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>
@@ -13,12 +11,13 @@
     <div class="slds-grid">
         <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
             <c:strike_lookup placeholder="{!$Label.c.SearchActorHelpMessage}"
-                             object="{!v.recordType}"
-                             iconName="{!'standard:' + v.recordType}"
+                             object="Contact"
+                             iconName="standard:contact"
                              searchField="Name"
                              value="{!v.sourceId}"
                              subtitleField="Email"
-                             valueLabel="{!v.recipient.name}"/>
+                             valueLabel="{!v.recipient.name}"
+                             isDocuSignAgreementsWorkflow="true"/>
         </div>
     </div>
 </aura:component>
