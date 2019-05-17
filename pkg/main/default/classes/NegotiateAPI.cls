@@ -117,35 +117,34 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public String toXML() {
 			Map<String, APIEmail> templateEmails = getExternalReviewTemplateEmails(this.name, this.email.subject, this.email.bodyText);
-
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'Documents', 'Reviewers', 'Email', 'ExpiresInNumberOfDays', 'CheckoutDocument', 'AssignTasksInOrder', 'FailureEmail', 'ExpiredReview', 'ReviewCompleted' },
 				new Map<String, Object> {
-					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'Id' }, this.documents, 'Documents', 'Document'),
-					'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.reviewers, 'Reviewers', 'Reviewer'),
+					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document'),
+					'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.reviewers, 'Reviewers', 'Reviewer'),
 					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder'),					
-					'Email' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText' }, this.email, 'Email'),
-					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText' }, templateEmails.get('FailureEmail'), 'Email'),
+					'Email' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText' }, this.email, 'Email'),
+					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText' }, templateEmails.get('FailureEmail'), 'Email'),
 					'ExpiredReview' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ReviewerEmail' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ExpiredReview:SenderEmail'), 'SenderEmail'),
-							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ExpiredReview:ReviewerEmail'), 'ReviewerEmail')
+							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ExpiredReview:SenderEmail'), 'SenderEmail'),
+							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ExpiredReview:ReviewerEmail'), 'ReviewerEmail')
 						},
 						'ExpiredReview'
 					),
 					'ReviewCompleted' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ReviewerEmail' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'SenderEmail'),
-							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'ReviewerEmail'),
+							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'SenderEmail'),
+							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'ReviewerEmail'),
 							'OnBehalfOf' => XMLSerializer.toXMLForm(
 								new Set<String> { 'SenderEmail', 'ReviewerEmail' },
 								new Map<String, Object> {
-									'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'SenderEmail'),
-									'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'ReviewerEmail')										
+									'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'SenderEmail'),
+									'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'ReviewerEmail')										
 								},
 								'OnBehalfOf'
 							)
@@ -224,34 +223,33 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public String toXML() {
 			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name, this.email.subject, this.email.bodyText);
-
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'Documents', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder', 'FailureEmail', 'ExpiredApproval', 'ApprovalCompleted' },
 				new Map<String, Object> {
-					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'Id' }, this.documents, 'Documents', 'Document'),
-					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'Email' }, this.approvers, 'Approvers', 'Approver'),
+					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document'),
+					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver'),
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder'),					
-					'Email' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'Message' }, this.email, 'Email'),
-					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText' }, templateEmails.get('FailureEmail'), 'Email'),
+					'Email' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText' }, this.email, 'Email'),
+					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText' }, templateEmails.get('FailureEmail'), 'Email'),
 					'ExpiredApproval' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ApproverEmail' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ExpiredApproval:SenderEmail'), 'SenderEmail'),
-							'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ExpiredApproval:ApproverEmail'), 'ApproverEmail')
+							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ExpiredApproval:SenderEmail'), 'SenderEmail'),
+							'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ExpiredApproval:ApproverEmail'), 'ApproverEmail')
 						},
 						'ExpiredApproval'
 					),
 					'ApprovalCompleted' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ApproverEmail' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ApprovalCompleted:SenderEmail'), 'SenderEmail'),
-							'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('ApprovalCompleted:SenderEmail'), 'ApproverEmail'),
+							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ApprovalCompleted:SenderEmail'), 'SenderEmail'),
+							'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('ApprovalCompleted:SenderEmail'), 'ApproverEmail'),
 							'OnBehalfOf' => XMLSerializer.toXMLForm(
 								new Set<String> { 'SenderEmail', 'ApproverEmail' },
 								new Map<String, Object> {
-									'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'SenderEmail'),
-									'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'Subject', 'BodyText', 'ButtonText', 'HeaderTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'ApproverEmail')										
+									'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'SenderEmail'),
+									'ApproverEmail' =>  XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'buttonText', 'headerTitleText' },  templateEmails.get('OnBehalfOfEmail'), 'ApproverEmail')										
 								},
 								'OnBehalfOf'
 							)
@@ -656,6 +654,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
+			System.debug('Error: '+ response.error);
 			this.log.error('Failed to Send for Approval - ' + response.error);
 			throw new APIException(response.error);
 		}
@@ -666,7 +665,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 // Send for External Review
 	public UUID sendForExternalReview(final String agreementName, final List<UUID> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
-
+		System.debug('XML: ' + new APIExternalReview(agreementName, expiresInNumberOfDays, documentsIds, reviewerIds, subject, body).toXML());
 		RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {
@@ -680,6 +679,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
+			System.debug('Error: '+ response.error);
 			this.log.error('Failed to Send for External Review - ' + response.error);
 			throw new APIException(response.error);
 		}

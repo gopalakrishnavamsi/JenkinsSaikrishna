@@ -20,7 +20,7 @@ public class XMLSerializer {
         Map<String, Object> dataMap = (Map<String, Object>) JSON.deserializeUntyped(JSON.serialize(data));
         List<String> tags = new List<String>();
         for (String key : properties) {
-            if (dataMap.get(key.toLowerCase()) != null) tags.add(fromPrimitive(dataMap.get(key.toLowerCase()), key.capitalize()));
+            if (dataMap.get(key) != null) tags.add(fromPrimitive(dataMap.get(key), key.capitalize()));
         }
         return fromPrimitive(String.join(tags, ''), parentTag);
     }
@@ -28,7 +28,7 @@ public class XMLSerializer {
     public static String fromObject(final Set<String> properties, final Map<String, Object> data, final String parentTag) {
         List<String> tags = new List<String>();
         for (String key : properties) {
-            if (data.get(key.toLowerCase()) != null) tags.add(fromPrimitive(data.get(key.toLowerCase()), key.capitalize()));
+            if (data.get(key) != null) tags.add(fromPrimitive(data.get(key), key.capitalize()));
         }
         return fromPrimitive(String.join(tags, ''), parentTag);
     }    
