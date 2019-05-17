@@ -61,46 +61,6 @@ public with sharing class NegotiateService {
 		}
 	}
 
-	public class LimitedAccessToken {
-		@AuraEnabled
-		public String token { get; private set; }
-		@AuraEnabled
-		public String apiBaseUploadUrl { get; private set; }
-		@AuraEnabled
-		public String apiBaseDownloadUrl { get; private set; }		
-		@AuraEnabled
-		public UUID accountId { get; private set; }
-		@AuraEnabled
-		public UUID entityId { get; private set; }
-
-		public LimitedAccessToken(
-			final String token,
-			final String apiBaseUploadUrl,
-			final String apiBaseDownloadUrl) {
-
-			this.token = token;
-			this.apiBaseUploadUrl = apiBaseUploadUrl;
-			this.apiBaseDownloadUrl = apiBaseDownloadUrl;
-			this.accountId = null;
-			this.entityId = null;
-		}
-
-		public LimitedAccessToken withAccountId(UUID accountId) {
-			this.accountId = accountId;
-			return this;
-		}
-
-		public LimitedAccessToken withApiBaseUrl(String apiBaseUrl) {
-			this.apiBaseUrl = apiBaseUrl;
-			return this;
-		}
-
-		public LimitedAccessToken withEntityId(UUID entityId) {
-			this.entityId = entityId;
-			return this;
-		}
-	}
-
 	@future
 	private static void setFolderId(final Id sourceObjectId, final String folderId) {
 		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
@@ -301,14 +261,13 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
+	public static Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId) {
+// objectId = AgreementId if download
+// objectId = FolderId if upload
+// check if token isValid
+
 		Permissions.verifyIsDocuSignUser();
-		UUID folderId = DB.getFolderId(objectId);
-		System.debug('folderId : ' + folderId);
-		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(folderId, AuthService.getContentAccessToken());
-		return token.withEntityId(folderId)
-			.withAccountId(Credentials.getInstance().account.id)
-			.withApiBaseUrl(DB.resolveWidgetContentUrls('Upload', token.apiBaseUrl));
+		return NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(objectId, AuthService.getContentAccessToken());
 	}
 
 	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {

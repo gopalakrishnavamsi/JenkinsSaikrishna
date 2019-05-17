@@ -30,7 +30,6 @@
           var state = response.getState();
           if (state === 'SUCCESS') {
             var token = response.getReturnValue();
-            console.log('token: ' , token);
             resolve(Object.freeze({
               iconPath: $A.get('$Resource.scmwidgetsspritemap'),
               accessTokenFn: self.getAccessToken.bind(self, component, sourceId),
@@ -95,7 +94,7 @@
         });
         if (showHistoryView) {
             preview.history.setHistoryItems(Object.assign([], historyItems));
-            preview.renderHistoryView(Object.assign([], historyItems));
+            preview.renderHistoryView({ historyItems: Object.assign([], historyItems) });
         }
         return preview;
     },
