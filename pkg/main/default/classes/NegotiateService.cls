@@ -316,5 +316,4 @@ public with sharing class NegotiateService {
 	public static String getDocumentURL(final UUID documentId) {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
 	}
-
 }
