@@ -66,7 +66,7 @@
                                         role="option">
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
                                             <li class="slds-size_6-of-7">
-                                                <c:ExternalReviewRecipient
+                                                <c:AgreementsExternalReviewRecipient
                                                         recipient="{!recipient}"
                                                         sourceId="{#recipient.source.id}"
                                                 />
@@ -132,7 +132,7 @@
                                 <aura:iteration items="{!v.recipients}" var="recipient"
                                                 indexVar="recipientIndex">
                                     <li>
-                                        <lightning:icon iconName="action:user" size="xx-small"/>
+                                        <lightning:icon iconName="action:add_contact" size="xx-small"/>
                                     </li>
                                     <li>
                                         <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small slds-p-right--x-small">
@@ -158,7 +158,8 @@
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
                 <lightning:button class="slds-button slds-button--neutral"
-                                  onclick="{!c.backButtonClicked}">{!$Label.c.Back}</lightning:button>
+                                  onclick="{!c.backButtonClicked}"
+                                  disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
                                   disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
