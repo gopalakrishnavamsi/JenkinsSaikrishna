@@ -22,11 +22,11 @@
     }
   },
 
-  internalReview: function (component) {
+  internalApproval: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.internalReview(agreement, component);
+      actions.internalApproval(agreement, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
