@@ -6074,14 +6074,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewChooseRecipientMessage</shortDescription>
-		<value>Choose a Salesforce Contact or use an email address</value>
+		<value>Choose a Salesforce contact or use an email address.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewAddRecipient</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewAddRecipient</shortDescription>
-		<value>Add a Recipient</value>
+		<value>Add a Reviewer</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewSetDueDate</fullName>
@@ -6161,10 +6161,80 @@
 		<value>Internal Approval</value>
 	</labels>
 	<labels>
-		<fullName>SearchActorHelpMessage</fullName>
+		<fullName>ExternalReviewSearchMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>SearchActorHelpMessage</shortDescription>
-		<value>Search by Name, Email or Organization</value>
+		<shortDescription>ExternalReviewSearchMessage</shortDescription>
+		<value>Search your contacts..</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalSearchActorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalSearchActorMessage</shortDescription>
+		<value>Search by name or email</value>
+	</labels>
+	<labels>
+		<fullName>Approvers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Approvers</shortDescription>
+		<value>Approvers</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailHelpMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailHelpMessage</shortDescription>
+		<value>Let the recipients know what you're looking for.</value>
+	</labels>
+	<labels>
+		<fullName>AddAnotherApprover</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddAnotherApprover</shortDescription>
+		<value>Add Another Approver</value>
+	</labels>
+	<labels>
+		<fullName>AddApprovers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddApprovers</shortDescription>
+		<value>Add Approvers</value>
+	</labels>
+	<labels>
+		<fullName>SetApprovalOrder</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetApprovalOrder</shortDescription>
+		<value>Set Approval Order</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalChooseUsers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalChooseUsers</shortDescription>
+		<value>Choose from the Salesforce users in your organization.</value>
+	</labels>
+	<labels>
+		<fullName>SelectApprovers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectApprovers</shortDescription>
+		<value>Select Approvers</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailSubject</shortDescription>
+		<value>Document for your Approval</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailBody</shortDescription>
+		<value>Please approve this document at your earliest convenience.</value>
 	</labels>
 </CustomLabels>
