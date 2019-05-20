@@ -3,4 +3,4 @@
 
 var moduleAlias = require("module-Alias");
 
-moduleAlias.addPath(__dirname + "/../pkg/main/default");
+moduleAlias.addPath(__dirname + "/../pkg/main/default/staticresources");
