@@ -24,7 +24,7 @@
                                        uiHelper="{!v.uiHelper}"/>
         </div>
         <div id="documentContainer">
-            <c:AgreementPreviewDocument agreement="{!v.agreement}" uiHelper="{!v.uiHelper}"/>
+            <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"/>
             <aura:if isTrue="{!v.loading}">
                 <div class="slds-is-relative loadingContainer">
                     <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
