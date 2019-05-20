@@ -1,3 +1,7 @@
+.THIS .required-textcolor {
+    color: token(colorTextError);
+}
+
 .THIS .ds-remove .slds-button__icon {
     pointer-events: none;
     fill: t(colorTextError);
@@ -6,4 +10,8 @@
 .THIS .slds-icon-doctype-word svg {
     width: 30px;
     height: 30px;
+}
+
+.THIS .ds-approver-icon-color {
+    background-color: #14A9DA;
 }

@@ -3318,11 +3318,11 @@
 		<name>ExternalReviewModalTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Choose a Salesforce Contact or use an email address</label>
+		<label>Choose a Salesforce contact or use an email address.</label>
 		<name>ExternalReviewChooseRecipientMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Add a Recipient</label>
+		<label>Add a Reviewer</label>
 		<name>ExternalReviewAddRecipient</name>
 	</customLabels>
 	<customLabels>
@@ -3370,8 +3370,48 @@
 		<name>AgreementsInternalApproval</name>
 	</customLabels>
 	<customLabels>
-		<label>Search by Name, Email or Organization</label>
-		<name>SearchActorHelpMessage</name>
+		<label>Search your contacts..</label>
+		<name>ExternalReviewSearchMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Search by name or email</label>
+		<name>InternalApprovalSearchActorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Approvers</label>
+		<name>Approvers</name>
+	</customLabels>
+	<customLabels>
+		<label>Let the recipients know what you're looking for.</label>
+		<name>InternalApprovalEmailHelpMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Another Approver</label>
+		<name>AddAnotherApprover</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Approvers</label>
+		<name>AddApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>Set Approval Order</label>
+		<name>SetApprovalOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose from the Salesforce users in your organization.</label>
+		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Approvers</label>
+		<name>SelectApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>Document for your Approval</label>
+		<name>InternalApprovalEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Please approve this document at your earliest convenience.</label>
+		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<!-- end of new labels for Gen -->
 	<customPageWebLinks>

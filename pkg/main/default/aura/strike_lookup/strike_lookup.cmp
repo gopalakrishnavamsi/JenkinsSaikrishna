@@ -67,6 +67,8 @@ License: BSD 3-Clause License
     <aura:attribute name="isDocuSignGenPreview" type="Boolean" default="{!false}" description="If set to true indicates the component is called from DocuSign Gen Preview component"/>
     <aura:attribute name="isDocuSignAgreementsWorkflow" type="Boolean" default="{!false}"
                     description="If set to true indicates the component is called from DocuSign Agreements External Review or Internal Approval Screens"/>
+    <aura:attribute name="isDocuSignAgreementsInternalApproval" type="Boolean" default="{!false}"
+                    description="If set to true indicates the component is called from DocuSign Agreements Internal Approval screen"/>
 
     <!-- Event registration and handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
@@ -166,7 +168,9 @@ License: BSD 3-Clause License
                         <li role="presentation" class="{!if(index == v.focusIndex, 'slds-has-focus', '')}" data-index="{!index}" onclick="{!c.handleRecordClick}">
                             <span class="slds-lookup__item-action slds-media" role="option">
                                 <aura:if isTrue="{!not(empty(v.iconName))}">
-                                    <lightning:icon class="slds-media__figure" iconName="{!'standard:' + record.type}" size="small"/>
+                                    <lightning:icon
+                                            class="{!'slds-media__figure' + if(v.isDocuSignAgreementsInternalApproval, ' ds-approver-icon-color', '')}"
+                                            iconName="{!'standard:' + record.type}" size="small"/>
                                 </aura:if>
                                 <div class="slds-media__body">
                                     <div class="slds-lookup__result-text">{!record.label}</div>
