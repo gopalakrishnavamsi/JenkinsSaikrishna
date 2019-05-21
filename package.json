@@ -7,11 +7,16 @@
     "doc": "doc"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "husky": "^2.2.0",
+    "jsdom": "15.1.0",
+    "jsdom-global": "3.0.2",
     "lint-staged": "^8.1.6",
+    "mocha": "^6.1.4",
+    "module-alias": "^2.2.0",
     "prettier": "^1.17.0"
   },
   "scripts": {
@@ -20,10 +25,10 @@
     "updateOrg": "sfdx force:source:push",
     "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "openOrg":"sfdx force:org:open",
-    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",    
+    "openOrg": "sfdx force:org:open",
+    "setup": "npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",
     "lint": "eslint ./;",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r jsdom-global/register"
   },
   "repository": {
     "type": "git",
@@ -43,8 +48,9 @@
       "git add"
     ],
     "*.js": [
-      "eslint ./",
+      "eslint",
       "git add"
     ]
-  }
+  },
+  "dependencies": {}
 }

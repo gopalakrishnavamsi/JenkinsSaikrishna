@@ -8,7 +8,7 @@
       documentId: agreement.id.value
     });
     action.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') helper.loadWidget(component, agreement.id.value, response.getReturnValue(), agreement.name, agreement.historyItems);
+      if (response.getState() === 'SUCCESS') helper.loadWidget(component, agreement, response.getReturnValue());
       if (response.getState() === 'ERROR') uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
     });
 

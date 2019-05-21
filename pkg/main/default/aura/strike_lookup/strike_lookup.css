@@ -215,6 +215,11 @@ Salesforce1 Styles
 .THIS.sl-lookup--mobile .slds-lookup__list .sl-lookup__new .slds-icon {
     margin-top: 0;
 }
+
+.THIS .ds-approver-icon-color {
+    background-color: #14A9DA;
+}
+
 /*Copyright 2017 Appiphony, LLC
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 

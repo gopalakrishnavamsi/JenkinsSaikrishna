@@ -21,6 +21,80 @@ public with sharing class NegotiateService {
 				return null;
 			}
 		}
+
+		//REMOVE This method once the spring cm api starts returning the correct upload and download urls
+		@TestVisible
+		private String resolveWidgetContentUrls(final String requestType, final String requestUrl) {
+			String returnUrl;
+			//upload
+			if (requestType.equals('Upload')) {
+				//qa
+				if (requestUrl.contains('qa')) {
+					returnUrl = requestUrl.replace('qa', 'uploadqa');
+				}
+				//uat
+				else if (requestUrl.contains('uat')) {
+					returnUrl = requestUrl.replace('uat', 'uploaduat');
+				}
+				//prod
+				else {
+					returnUrl = requestUrl.replace('api', 'apiupload');
+				}
+			}
+
+			//upload
+			if (requestType.equals('Download')) {
+				//qa
+				if (requestUrl.contains('qa')) {
+					returnUrl = requestUrl.replace('qa', 'downloadqa');
+				}
+				//uat
+				else if (requestUrl.contains('uat')) {
+					returnUrl = requestUrl.replace('uat', 'downloaduat');
+				}
+				//prod
+				else {
+					returnUrl = requestUrl.replace('api', 'apidownload');
+				}
+			}
+			return returnUrl;
+		}
+	}
+
+	public class LimitedAccessToken {
+		@AuraEnabled
+		public String token { get; private set; }
+		@AuraEnabled
+		public String apiBaseUrl { get; private set; }
+		@AuraEnabled
+		public UUID accountId { get; private set; }
+		@AuraEnabled
+		public UUID entityId { get; private set; }
+
+		public LimitedAccessToken(
+			final String token,
+			final String apiBaseUrl) {
+
+			this.token = token;
+			this.apiBaseUrl = apiBaseUrl;
+			this.accountId = null;
+			this.entityId = null;
+		}
+
+		public LimitedAccessToken withAccountId(UUID accountId) {
+			this.accountId = accountId;
+			return this;
+		}
+
+		public LimitedAccessToken withApiBaseUrl(String apiBaseUrl) {
+			this.apiBaseUrl = apiBaseUrl;
+			return this;
+		}
+
+		public LimitedAccessToken withEntityId(UUID entityId) {
+			this.entityId = entityId;
+			return this;
+		}
 	}
 
 	@future
@@ -223,13 +297,21 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId) {
-// objectId = AgreementId if download
-// objectId = FolderId if upload
-// check if token isValid
-
+	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
 		Permissions.verifyIsDocuSignUser();
-		return NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(objectId, AuthService.getContentAccessToken());
+		UUID folderId = DB.getFolderId(objectId);
+		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(folderId, AuthService.getContentAccessToken());
+		return token.withEntityId(folderId)
+			.withAccountId(Credentials.getInstance().account.id)
+			.withApiBaseUrl(DB.resolveWidgetContentUrls('Upload', token.apiBaseUrl));
+	}
+
+	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
+		Permissions.verifyIsDocuSignUser();
+		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
+		return token.withEntityId(agreementId)
+			.withAccountId(Credentials.getInstance().account.id)
+			.withApiBaseUrl(DB.resolveWidgetContentUrls('Download', token.apiBaseUrl));
 	}
 
 	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
@@ -237,8 +319,8 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
 	}
-  
+
 	public static String getDocumentURL(final UUID documentId) {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
-  }   
+	}
 }

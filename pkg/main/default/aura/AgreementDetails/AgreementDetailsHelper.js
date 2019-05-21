@@ -31,8 +31,10 @@
   },
 
   createInternalApprovalComponent: function (component) {
-    $A.createComponent("c:AgreementsInternalReview", {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent("c:AgreementsInternalApproval", {
       "showModal": true,
+      "agreementDetails": agreementDetails
     }, function (componentBody) {
       if (component.isValid()) {
         var targetCmp = component.find('internalApprovalModal');

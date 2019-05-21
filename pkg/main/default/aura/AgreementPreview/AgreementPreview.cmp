@@ -5,6 +5,9 @@
     <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="loading" type="Boolean" default="true"/>
     <aura:attribute name="sourceId" type="String" access="public"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"
@@ -12,6 +15,8 @@
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
 
     <div id="fullContainer">
         <div id="toolbarContainer">
@@ -19,7 +24,7 @@
                                        uiHelper="{!v.uiHelper}"/>
         </div>
         <div id="documentContainer">
-            <c:AgreementPreviewDocument agreement="{!v.agreement}" uiHelper="{!v.uiHelper}"/>
+            <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"/>
             <aura:if isTrue="{!v.loading}">
                 <div class="slds-is-relative loadingContainer">
                     <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
@@ -31,4 +36,6 @@
             </aura:if>
         </div>
     </div>
+
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" visualforce="true"/>
 </aura:component>
