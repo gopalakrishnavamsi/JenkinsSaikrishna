@@ -67,21 +67,21 @@
                 return this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth);
             
             case 'reviewed':
-                return this.externalReviewSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), component, true);                
+                return this.externalReviewSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), true);                
             
             case 'pending review':
-                return this.externalReviewSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), component, false);
+                return this.externalReviewSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), false);
             
             case 'review expired':
                 return this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth);
 
             case 'pending approval':
-                if (isSender) this.approvalSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), component, false);
-                return this.renderApprovalRecipientView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth), component);
+                if (isSender) this.approvalSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), false);
+                return this.renderApprovalRecipientView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth));
 
             case 'approved':
-                if (isSender) this.approvalSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), component, true);
-                return this.renderApprovalRecipientView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth), component);
+                if (isSender) this.approvalSenderView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, true, auth), true);
+                return this.renderApprovalRecipientView(this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth));
             
             default:
                 return this.basePreview(agreement.id.value, agreement.name, documentUrl, agreement.historyItems, false, auth);
@@ -106,19 +106,20 @@
         return preview;
     },
 
-    externalReviewSenderView: function(widget, component, isCompleted) {
+    externalReviewSenderView: function(widget, isCompleted) {
         if (!widget || widget.prototype !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
         this.registerEvent('resendExternalReviewRequest', function() {
-
+            widget.toggleSpinner(false);
         });    
         this.registerEvent('externalReviewCompleteOnBehalf', function(event) {
             //event.details contains response.
+            widget.toggleSpinner(false);
         });    
         this.registerEvent('cancelExternalReview', function() {
-
+            widget.toggleSpinner(false);
         });          
-                      
+
         widget.renderExternalReviewSenderView({
             subTitle: "",
             showCompleteExternalReview: isCompleted,
@@ -128,17 +129,18 @@
         return widget;
     },
 
-    approvalSenderView: function(widget, component, isCompleted) {
+    approvalSenderView: function(widget, isCompleted) {
         if (!widget || widget.prototype !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
         this.registerEvent('approveOnBehalf', function(event) {
             //event.details contains response.
+            widget.toggleSpinner(false);
         });
         this.registerEvent('cancelApproval', function() {
-            
+            widget.toggleSpinner(false);
         });
         this.registerEvent('resendApprovalRequest', function() {
-
+            widget.toggleSpinner(false);
         });
  
         widget.renderApprovalSenderView({
@@ -151,7 +153,7 @@
         return widget;
     },
 
-    renderApprovalRecipientView: function(widget, component, title, message) {
+    renderApprovalRecipientView: function(widget, title, message) {
         if (!widget || widget.prototype !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
         this.registerEvent('recipientResponse', function(event) {
@@ -162,6 +164,7 @@
                  "response": true
                 }
             **/
+            widget.toggleSpinner(false);
         }); 
 
         widget.renderApprovalRecipientView({
@@ -175,7 +178,7 @@
         document.addEventListener('springcm:preview:' + name, callback);
     },
 
-    toggleSpinner: function(component, isLoading) {
-
+    toggleSpinner: function(widget, isLoading) {
+        widget.toggleLoadingSpinner(isLoading);
     }
 });
