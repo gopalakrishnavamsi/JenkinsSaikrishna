@@ -104,10 +104,10 @@
             preview.renderHistoryView({ historyItems: Object.assign([], historyItems) });
         }  
 
-        this.registerEvent('preview:closeWindow', function() {
+        this.registerEvent('closeWindow', function() {
             $A.get('e.force:refreshView').fire();
         }); 
-                     
+
         return preview;
     },
 
