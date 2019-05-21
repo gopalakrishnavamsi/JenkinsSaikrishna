@@ -84,10 +84,10 @@
   },
 
   show: function (component) {
-    component.find('internalReviewAgreementsModal').show();
+    component.find('internalApprovalAgreementsModal').show();
   },
 
   hide: function (component) {
-    component.find('internalReviewAgreementsModal').hide();
+    component.find('internalApprovalAgreementsModal').hide();
   }
 });

@@ -1,4 +1,4 @@
-<aura:component description="AgreementsExternalReviewRecipient">
+<aura:component description="AgreementsInternalApprovalRecipient">
     <!--attributes -->
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
@@ -10,14 +10,16 @@
     <!-- component body -->
     <div class="slds-grid">
         <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
-            <c:strike_lookup placeholder="{!$Label.c.ExternalReviewSearchMessage}"
-                             object="Contact"
-                             iconName="standard:contact"
+            <c:strike_lookup placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
+                             object="User"
+                             iconName="standard:avatar"
                              searchField="Name"
                              value="{!v.sourceId}"
                              subtitleField="Email"
+                             filter="dfsle__Username__c != null AND isActive=true"
                              valueLabel="{!v.recipient.name}"
-                             isDocuSignAgreementsWorkflow="true"/>
+                             isDocuSignAgreementsWorkflow="true"
+                             isDocuSignAgreementsInternalApproval="true"/>
         </div>
     </div>
 </aura:component>

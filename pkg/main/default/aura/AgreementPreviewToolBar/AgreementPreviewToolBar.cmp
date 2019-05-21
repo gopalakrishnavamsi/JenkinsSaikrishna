@@ -45,7 +45,7 @@
                                                             v.agreement.status == 'COMPLETED'), true, false)}"/>
                         <lightning:menuItem label="{!$Label.c.agreementsInternalApproval}"
                                             value="{!$Label.c.agreementsInternalApproval}"
-                                            onactive="{!c.internalReview}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
+                                            onactive="{!c.internalApproval}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
                                                             v.agreement.status == 'PENDING APPROVAL',
                                                             v.agreement.status == 'PENDING SIGNATURE',
                                                             v.agreement.status == 'COMPLETED'), true, false)}"/>
