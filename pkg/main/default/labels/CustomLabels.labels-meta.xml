@@ -6237,8 +6237,6 @@
 		<shortDescription>InternalApprovalEmailBody</shortDescription>
 		<value>Please approve this document at your earliest convenience.</value>
 	</labels>
-	
-
 	<labels>
 		<fullName>ViewDocumentButton</fullName>
 		<language>en_US</language>
@@ -6267,8 +6265,6 @@
 		<shortDescription>ExternalReviewFailureEmailSubject</shortDescription>
 		<value>We couldn't send your review request for {0}</value>
 	</labels>
-	
-
 	<labels>
 		<fullName>ExpiredReviewSenderEmailBody</fullName>
 		<language>en_US</language>
@@ -6297,8 +6293,6 @@
 		<shortDescription>Open Agreement</shortDescription>
 		<value>Open Agreement</value>
 	</labels>
-
-
 	<labels>
 		<fullName>CompletedReviewEmailSubject</fullName>
 		<language>en_US</language>
@@ -6319,10 +6313,7 @@
 		<protected>true</protected>
 		<shortDescription>CompletedReviewEmailBody</shortDescription>
 		<value>The review request for {0} has been completed. There is nothing you need to do.</value>
-	</labels>		
-
-
-
+	</labels>
 	<labels>
 		<fullName>ExpiredReviewReviewerEmailBody</fullName>
 		<language>en_US</language>
@@ -6344,7 +6335,6 @@
 		<shortDescription>ExpiredReviewHeader</shortDescription>		
 		<value>Review request for {0} has expired.</value>
 	</labels>
-	
 	<labels>
 		<fullName>CanceledReviewEmailBody</fullName>
 		<language>en_US</language>
