@@ -110,14 +110,14 @@
         if (!widget || widget.prototype !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
         this.registerEvent('resendExternalReviewRequest', function() {
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });    
         this.registerEvent('externalReviewCompleteOnBehalf', function(event) {
             //event.details contains response.
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });    
         this.registerEvent('cancelExternalReview', function() {
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });          
 
         widget.renderExternalReviewSenderView({
@@ -134,13 +134,13 @@
 
         this.registerEvent('approveOnBehalf', function(event) {
             //event.details contains response.
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });
         this.registerEvent('cancelApproval', function() {
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });
         this.registerEvent('resendApprovalRequest', function() {
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         });
  
         widget.renderApprovalSenderView({
@@ -164,7 +164,7 @@
                  "response": true
                 }
             **/
-            widget.toggleSpinner(false);
+            this.toggleSpinner(widget, false);
         }); 
 
         widget.renderApprovalRecipientView({
