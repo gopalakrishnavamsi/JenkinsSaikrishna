@@ -117,7 +117,8 @@
         });    
         this.registerEvent('cancelExternalReview', function() {
 
-        });                        
+        });          
+                      
         widget.renderExternalReviewSenderView({
             subTitle: "",
             showCompleteExternalReview: isCompleted,
@@ -139,15 +140,7 @@
         this.registerEvent('resendApprovalRequest', function() {
 
         });
-        this.registerEvent('recipientResponse', function(event) {
-            /**
-                event.details contains response.
-                {
-                 "comments": "Yes",
-                 "response": true
-                }
-            **/
-        });   
+ 
         widget.renderApprovalSenderView({
             subTitle: "",
             showCancel: isCompleted,
