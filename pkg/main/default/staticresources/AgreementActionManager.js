@@ -98,11 +98,12 @@ AgreementActionManager.prototype.rename = function (agreementDetails, component)
   });
 };
 
-AgreementActionManager.prototype.internalReview = function (agreementDetails, component) {
+AgreementActionManager.prototype.internalReview = function (agreementDetails, sourceId, component) {
   if (this.activeScope) this.activeScope.destroy();
   generateComponent(this.anchor, component, this.getComponentName(AgreementComponents.InternalReview), {
     showModal: true,
-    agreementDetails: agreementDetails
+    agreementDetails: agreementDetails,
+    sourceId: sourceId
   }).then(modalComponent => {
     this.activeScope = modalComponent;
   }).catch(err => {
@@ -110,11 +111,12 @@ AgreementActionManager.prototype.internalReview = function (agreementDetails, co
   });
 };
 
-AgreementActionManager.prototype.externalReview = function (agreementDetails, component) {
+AgreementActionManager.prototype.externalReview = function (agreementDetails, sourceId, component) {
   if (this.activeScope) this.activeScope.destroy();
   generateComponent(this.anchor, component, this.getComponentName(AgreementComponents.ExternalReview), {
     showModal: true,
-    agreementDetails: agreementDetails
+    agreementDetails: agreementDetails,
+    sourceId: sourceId
   }).then(modalComponent => {
     this.activeScope = modalComponent;
   }).catch(err => {

@@ -155,7 +155,7 @@
     var recipientList = [];
     var recipients = component.get('v.recipients');
     recipients.forEach(function (recipient) {
-      recipientList.push(recipient.email);
+      recipientList.push({ name: recipient.name, email: recipient.email });
     });
 
     var emailSubject = component.get('v.emailSubject');
@@ -167,15 +167,17 @@
     } else {
       requestExpirationDays = 0;
     }
+
     var action = component.get('c.sendForExternalReview');
+
     action.setParams({
       agreementName: agreementDetails.name,
+      sourceId: component.get('v.sourceId'),
       documentsIds: documentIdList,
-      reviewerIds: recipientList,
+      reviewers: JSON.stringify(recipientList),
       subject: emailSubject,
       body: emailBody,
       expiresInNumberOfDays: requestExpirationDays
-
     });
     action.setCallback(this, function (response) {
       var state = response.getState();

@@ -6083,7 +6083,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFailureEmailSubject</shortDescription>
-		<value>We couldn't send your review request for {0}.</value>
+		<value>We couldn't send your review request for {0}</value>
 	</labels>
 	
 
