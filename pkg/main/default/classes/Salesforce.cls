@@ -75,9 +75,9 @@ public with sharing class Salesforce {
 			return CAN_USE_API;
 		}
 	}
-	public static String salesforceOAuthUrl {
+	public static Url oauthUrl {
 		get {
-			return BASE_URL.toExternalForm() + '/services/oauth2/authorize';
+			return new Url(BASE_URL, '/services/oauth2/authorize');
 		}
 	}
 
@@ -167,13 +167,45 @@ public with sharing class Salesforce {
 		return result;
 	}
 
-	public static String getLightningHost() {
-		String host = baseUrl.getHost();
-		return host.substringBefore('.').remove('--c').remove('--' + Application.packageNamespace)
-			+ '.lightning.force.com';
+	private static String getOrigin(
+		final String domain,
+		final Boolean useNamespace) {
+
+		if (useNamespace) {
+			return String.format('https://{0}--{1}.{2}', new List<String> {
+				baseUrl.getHost().substringBefore('.'),
+				Application.namespace,
+				domain
+			});
+		}
+		return String.format('https://{0}.{1}', new List<String> {
+			baseUrl.getHost().substringBefore('.'),
+			domain
+		});
 	}
 
-	public static String getVisualforceHost() {
-		return baseUrl.getHost().substringBefore('.') + '.visualforce.com';
+	public static String getLightningOrigin(final Boolean useNamespace) {
+		return getOrigin('lightning.force.com', useNamespace);
+	}
+
+	public static String getVisualforceOrigin(final Boolean useNamespace) {
+		return getOrigin('visualforce.com', useNamespace);
+	}
+
+	public static Boolean isValidOrigin(final String origin) {
+		Boolean result = false;
+		if (String.isNotBlank(origin)) {
+			try {
+				Url u = new Url(origin);
+				String host = u.getHost();
+				result = u.getProtocol() == 'https'
+					&& host.startsWith(baseUrl.getHost().substringBefore('.'))
+					&& (host.endsWith('.lightning.force.com')
+					|| host.endsWith('.visualforce.com'));
+			} catch (Exception ex) {
+				LoggerService.getInstance().exception(ex, 'Failed to validate origin: ' + origin);
+			}
+		}
+		return result;
 	}
 }

@@ -1,6 +1,6 @@
 <apex:page sidebar="false" showHeader="true" controller="SetupController" title="{!$Label.DocuSign}">
-    <apex:includeLightning />
-    <apex:slds />
+    <apex:includeLightning/>
+    <apex:slds/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
@@ -36,39 +36,44 @@
       function showError(component, message) {
         var evt = component.getEvent('toastEvent');
         evt.setParams({
-          show: true,
-          message: message,
-          mode: 'error'
+          show: true, message: message, mode: 'error'
         });
         evt.fire();
       }
 
       function beginOAuth(component, environment, otherUrl) {
         try {
-          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.beginOAuth}', environment, otherUrl, function (result, event) {
+          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.beginOAuth}', '{!visualforceOrigin}', environment, otherUrl, function (result, event) {
             if (event && event.status) {
-              window.endOAuth = function (response, loginInformation) {
-                var evt = component.getEvent('oauthEvent');
-                evt.setParams({
-                  response: response,
-                  loginInformation: loginInformation
-                });
-                evt.fire();
-              };
-
               var width = 600;
               var height = 600;
               var left = (screen.width / 2) - (width / 2);
               var top = (screen.height / 2) - (height / 2);
 
               var w = window.open(stringUtils.unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
-              w.addEventListener('unload', function () {
+
+              var onMessage = function (event) {
+                if (event.origin === window.location.origin) {
+                  window.removeEventListener('message', onMessage);
+                  var evt = component.getEvent('oauthEvent');
+                  evt.setParams({
+                    response: event.data.response, loginInformation: event.data.loginInformation
+                  });
+                  evt.fire();
+                }
+              };
+
+              var onUnload = function () {
                 var evt = component.getEvent('loadingEvent');
                 evt.setParams({
                   isLoading: false
                 });
                 evt.fire();
-              });
+              };
+
+              window.addEventListener('message', onMessage);
+              w.addEventListener('unload', onUnload);
+              w.focus();
             } else {
               showError(component, event.message);
             }
@@ -86,8 +91,7 @@
               window.endSpringOAuth = function (response, loginInformation) {
                 var evt = component.getEvent('springOauthEvent');
                 evt.setParams({
-                  response: response,
-                  loginInformation: loginInformation
+                  response: response, loginInformation: loginInformation
                 });
                 evt.fire();
               };
@@ -96,7 +100,6 @@
               var height = 600;
               var left = (screen.width / 2) - (width / 2);
               var top = (screen.height / 2) - (height / 2);
-
 
               var w = window.open(stringUtils.unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
               w.addEventListener('unload', function () {

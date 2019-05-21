@@ -59,17 +59,6 @@
 		</value>
 	</labels>
 	<labels>
-		<fullName>ActivationRequired</fullName>
-		<categories>Errors,AccountAPI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DocuSign Account Activation Required</shortDescription>
-		<value>A DocuSign account already exists, but requires activation. The user should have received an email
-			message containing an activation link. Once the activation has been completed the user must click on the
-			DocuSign Admin tab and enter the password there.
-		</value>
-	</labels>
-	<labels>
 		<fullName>Active</fullName>
 		<categories>Users</categories>
 		<language>en_US</language>
@@ -2666,8 +2655,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
-		<value>Please verify that you have been granted access to DocuSign, your account settings are correct and that
-			you have responded to all activation emails.
+		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and
+			have granted your consent to DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -6236,5 +6225,26 @@
 		<protected>true</protected>
 		<shortDescription>InternalApprovalEmailBody</shortDescription>
 		<value>Please approve this document at your earliest convenience.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidOrigin</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Salesforce event origin</shortDescription>
+		<value>Invalid Salesforce event origin.</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeDocuSignInstructions</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Authorize DocuSign instructions</shortDescription>
+		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf. Click the &quot;Authorize&quot; button to continue.</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeButton</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Authorize button</shortDescription>
+		<value>Authorize</value>
 	</labels>
 </CustomLabels>

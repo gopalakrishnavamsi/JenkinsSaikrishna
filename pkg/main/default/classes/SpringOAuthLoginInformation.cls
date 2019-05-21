@@ -1,15 +1,23 @@
 public class SpringOAuthLoginInformation {
-	@AuraEnabled
-	public String status { get; private set; }
 
+	@AuraEnabled
+	public Boolean success { get; private set; }
 	@AuraEnabled
 	public String message { get; private set; }
 
-	public SpringOAuthLoginInformation(
-		final String status,
+	private SpringOAuthLoginInformation(
+		final Boolean success,
 		final String message) {
 
-		this.status = status;
+		this.success = success;
 		this.message = message;
+	}
+
+	public static SpringOAuthLoginInformation success(final String message) {
+		return new SpringOAuthLoginInformation(true, message);
+	}
+
+	public static SpringOAuthLoginInformation failure(final String message) {
+		return new SpringOAuthLoginInformation(false, message);
 	}
 }

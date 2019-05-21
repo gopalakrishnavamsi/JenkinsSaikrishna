@@ -9,9 +9,8 @@ private class SetupControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(Application.lightningNamespace, result.namespace);
-			System.assertEquals(Salesforce.getLightningHost(), result.lightningHost);
-			System.assertEquals(Salesforce.getVisualforceHost(), result.visualforceHost);
+			System.assertEquals(Application.namespace, result.namespace);
+			System.assertEquals(Salesforce.getVisualforceOrigin(true), result.visualforceOrigin);
 		}
 	}
 
@@ -72,7 +71,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				SetupController.beginOAuth('prod', null);
+				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'prod', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -86,31 +85,31 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				SetupController.beginOAuth(null, null);
+				SetupController.beginOAuth(null, null, null);
+				throw new AssertException('Expected beginOAuth to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+			}
+			try {
+				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), '', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth('', null);
+				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), '  ', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth('  ', null);
+				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth('other', null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			try {
-				SetupController.beginOAuth('other', 'https://example.com');
+				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', 'https://example.com');
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -125,11 +124,11 @@ private class SetupControllerTest {
 			TestUtils.generateKey();
 
 			Test.startTest();
-			System.assertNotEquals(null, SetupController.beginOAuth('PROD', null));
-			System.assertNotEquals(null, SetupController.beginOAuth('pRODUCTIOn', null));
-			System.assertNotEquals(null, SetupController.beginOAuth('demo', null));
-			System.assertNotEquals(null, SetupController.beginOAuth('stage', null));
-			System.assertNotEquals(null, SetupController.beginOAuth('other', 'https://other.docusign.com'));
+			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'PROD', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'pRODUCTIOn', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'demo', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'stage', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', 'https://other.docusign.com'));
 			Test.stopTest();
 		}
 	}
@@ -139,7 +138,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				SetupController.completeOAuth('code', 'state');
+				SetupController.completeOAuth('code', TestUtils.generateState(true), null, null);
 				throw new AssertException('Expected completeOAuth to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -153,14 +152,29 @@ private class SetupControllerTest {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState();
+			String state = TestUtils.generateState(true);
 
 			Test.startTest();
-			LoginInformation result = SetupController.completeOAuth('code', state);
+			LoginInformation result = SetupController.completeOAuth('code', state, null, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(LoginInformation.LoginStatus.Success.name(), result.status);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+		}
+	}
+
+	@IsTest
+	static void test_completeOAuth_error() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			String state = TestUtils.generateState(true);
+
+			Test.startTest();
+			LoginInformation result = SetupController.completeOAuth(null, state, 'consent_required', 'Consent required.');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.ConsentRequired, result.message);
 		}
 	}
 
@@ -190,7 +204,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(LoginInformation.LoginStatus.Success.name(), result.status);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
 		}
 	}
 
@@ -459,7 +473,7 @@ private class SetupControllerTest {
 			Test.startTest();
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
-			System.assertEquals('Success', loginInformation.status);
+			System.assert(loginInformation.success);
 			System.assertEquals(Label.SuccessDocuSignGenAuthorization, loginInformation.message);
 			Test.stopTest();
 		}
@@ -472,7 +486,7 @@ private class SetupControllerTest {
 			Test.startTest();
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
-			System.assertEquals('Fail', loginInformation.status);
+			System.assert(!loginInformation.success);
 			System.assertEquals(Label.UnableToConnectDocuSignGen, loginInformation.message);
 			Test.stopTest();
 		}
@@ -487,7 +501,7 @@ private class SetupControllerTest {
 			Test.startTest();
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
-			System.assertEquals('Fail', loginInformation.status);
+			System.assert(!loginInformation.success);
 			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, loginInformation.message);
 			Test.stopTest();
 		}
@@ -503,6 +517,30 @@ private class SetupControllerTest {
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addTrialGen_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.addTrialGen();
+				throw new AssertException('Expected addTrialGen to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addTrialGen_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			System.assert(SetupController.addTrialGen());
 			Test.stopTest();
 		}
 	}

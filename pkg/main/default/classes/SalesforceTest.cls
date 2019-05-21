@@ -21,6 +21,18 @@ private class SalesforceTest {
 	}
 
 	@IsTest
+	static void test_edition() {
+		System.assertEquals([SELECT OrganizationType FROM Organization LIMIT 1].OrganizationType,
+			Salesforce.edition);
+	}
+
+	@IsTest
+	static void test_oauthUrl() {
+		System.assertEquals(Salesforce.baseUrl.toExternalForm() + '/services/oauth2/authorize',
+			Salesforce.oauthUrl.toExternalForm());
+	}
+
+	@IsTest
 	static void test_instanceName() {
 		System.assertEquals([SELECT InstanceName FROM Organization LIMIT 1].InstanceName, Salesforce.instanceName);
 	}
@@ -140,21 +152,45 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_getLightningHost() {
-		String host = Url.getOrgDomainUrl().getHost();
-		host = host.substring(0, host.indexOf('.')).remove('--c').remove('--' + Application.packageNamespace)
-			+ '.lightning.force.com';
-
+	static void test_getLightningOrigin() {
 		Test.startTest();
-		System.assertEquals(host, Salesforce.getLightningHost());
+		System.assertEquals(
+			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '--' + Application.namespace + '.lightning.force.com',
+			Salesforce.getLightningOrigin(true));
+		System.assertEquals(
+			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.lightning.force.com',
+			Salesforce.getLightningOrigin(false));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_getVisualforceHost() {
+	static void test_getVisualforceOrigin() {
 		Test.startTest();
-		System.assertEquals(Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com',
-			Salesforce.getVisualforceHost());
+		System.assertEquals(
+			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '--' + Application.namespace + '.visualforce.com',
+			Salesforce.getVisualforceOrigin(true));
+		System.assertEquals(
+			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com',
+			Salesforce.getVisualforceOrigin(false));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isValidOrigin() {
+		Test.startTest();
+		System.assert(!Salesforce.isValidOrigin(null));
+		System.assert(!Salesforce.isValidOrigin('  '));
+		System.assert(!Salesforce.isValidOrigin('https://example.com'));
+		System.assert(!Salesforce.isValidOrigin('https://' + UUID.randomUUID() + '.lightning.force.com'));
+		System.assert(!Salesforce.isValidOrigin('https://' + UUID.randomUUID() + '.visualforce.com'));
+		System.assert(!Salesforce.isValidOrigin('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
+		System.assert(!Salesforce.isValidOrigin('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
+		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
+		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
+		System.assert(Salesforce.isValidOrigin(Salesforce.getLightningOrigin(true)));
+		System.assert(Salesforce.isValidOrigin(Salesforce.getLightningOrigin(false)));
+		System.assert(Salesforce.isValidOrigin(Salesforce.getVisualforceOrigin(true)));
+		System.assert(Salesforce.isValidOrigin(Salesforce.getVisualforceOrigin(false)));
 		Test.stopTest();
 	}
 }

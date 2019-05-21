@@ -1,7 +1,9 @@
 ({
-  onInitialize: function (component, event, helper) {
-    component.set('v.loading', true);
-    helper.initialize(component, helper);
+  onChangeIsAuthorized: function (component, event, helper) {
+    if (component.get('v.isAuthorized')) {
+      component.set('v.loading', true);
+      helper.initialize(component, helper);
+    }
   },
 
   toggleRecipientDetails: function (component, event) {

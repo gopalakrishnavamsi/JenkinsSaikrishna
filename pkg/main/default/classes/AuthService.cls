@@ -92,21 +92,25 @@ public with sharing class AuthService {
 			if (e != APIError.none) {
 				String body = response.getBody();
 				this.log.warn('Authorization service error:\n' + body);
-				try {
-					Map<String, Object> errResp = (Map<String, Object>)JSON.deserializeUntyped(body);
-					switch on (String)errResp.get('error') {
-						when 'consent_required' {
-							e = new AuthError(APIErrorCode.CONSENT_REQUIRED, Label.ConsentRequired);
-						} when 'invalid_grant' {
-							e = new AuthError(APIErrorCode.INVALID_GRANT, Label.InvalidGrant);
-						} when else {
-							this.log.warn('Unknown auth error');
-							e = new AuthError(response.getStatusCode(), errResp.containsKey('error_message')
-								? (String)errResp.get('error_message') : response.getStatus());
+				if (body == 'Bad Request') { // Less-fragile method of checking this?
+					e = new AuthError(APIErrorCode.USER_NOT_ACTIVATED, Label.MustBeActivated);
+				} else {
+					try {
+						Map<String, Object> errResp = (Map<String, Object>)JSON.deserializeUntyped(body);
+						switch on (String)errResp.get('error') {
+							when 'consent_required' {
+								e = new AuthError(APIErrorCode.CONSENT_REQUIRED, Label.ConsentRequired);
+							} when 'invalid_grant' {
+								e = new AuthError(APIErrorCode.INVALID_GRANT, Label.InvalidGrant);
+							} when else {
+								this.log.warn('Unknown auth error');
+								e = new AuthError(response.getStatusCode(), errResp.containsKey('error_message')
+									? (String)errResp.get('error_message') : response.getStatus());
+							}
 						}
+					} catch (Exception ex) {
+						this.log.exception(ex, 'Failed to parse response as a DocuSign auth error');
 					}
-				} catch (Exception ex) {
-					this.log.exception(ex, 'Failed to parse response as a DocuSign auth error');
 				}
 			}
 			return e;
@@ -417,7 +421,6 @@ public with sharing class AuthService {
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
 	private static SpringOAuthAPI springoauth;
-	private static final String GEN_CONNECTEDAPP_CLIENTID = '3MVG9vrJTfRxlfl73UnkTYVZ6r4FpiYpbjtFZ6j3rmP.Z1mj5_jGVnzIQIfpqR4iZngiK4tg_xoKRu679GGDi'; //TODO Move to Custom Settings once new connected app is created
 	private static Map<DocuSign.Environment, RootCredentials> rootCredentials
 		= new Map<DocuSign.Environment, RootCredentials>();
 
@@ -486,7 +489,8 @@ public with sharing class AuthService {
 
 			return settings;
 		}
-// TODO: leverage or consolidate previous implementation of updateSettings.
+
+		// TODO: leverage or consolidate previous implementation of updateSettings.
 		public AccountSettings__c updateSettings(
 			final Gen.Product product) {
 
@@ -549,11 +553,11 @@ public with sharing class AuthService {
 			c.user.id,
 			c.user.canManageAccount,
 			c.client.id,
-			c.client.privateKey);
+			c.client.privateKey).token;
 	}
 
 	@TestVisible
-	private static String getAccessToken(
+	private static Credentials.AccessToken getAccessToken(
 		final Credentials.AccessToken token,
 		final Url accountBaseUrl,
 		final UUID userId,
@@ -565,35 +569,29 @@ public with sharing class AuthService {
 			throw new DocuSignException(Label.AccountNotConfigured);
 		}
 
-		if (token != null && token.isValid) return token.token;
+		if (token != null && token.isValid) return token;
 
-		String jwtToken = canManageAccount ? generateJwt(
+		String jwtToken = generateJwt(
 			accountBaseUrl.getHost(),
 			userId,
-			SCOPE_ADMIN,
-			clientId,
-			jwtSigningKey) : generateJwt(
-			accountBaseUrl.getHost(),
-			userId,
-			SCOPE_USER,
+			canManageAccount ? SCOPE_ADMIN : SCOPE_USER,
 			clientId,
 			jwtSigningKey);
-
 		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(jwtToken);
 
 		Credentials.setToken(newToken);
-		return newToken.token;
+		return newToken;
 	}
 
 	public static String getContentAccessToken() {
 		Permissions.verifyIsDocuSignUser();
 		Credentials c = Credentials.getInstance();
 		return getAuthAPI(c.environment.accountBaseUrl).exchangeJwt(generateJwt(
-		c.environment.accountBaseUrl.getHost(),
-		c.user.id,
-		SCOPE_CONTENT,
-		c.client.id,
-		c.client.privateKey)).token;
+			c.environment.accountBaseUrl.getHost(),
+			c.user.id,
+			SCOPE_CONTENT,
+			c.client.id,
+			c.client.privateKey)).token;
 	}
 
 	/**
@@ -695,11 +693,38 @@ public with sharing class AuthService {
 		return result;
 	}
 
+	@TestVisible
+	private class State {
+		public String origin { get; private set; }
+		public DocuSign.Environment environment { get; private set; }
+		public Url baseUrl { get; private set; }
+		public Boolean setup { get; private set; }
+		public Boolean isValid {
+			get {
+				return Salesforce.isValidOrigin(origin)
+					&& DocuSign.isValidEnvironment(environment, baseUrl);
+			}
+		}
+
+		public State(
+			final String origin,
+			final DocuSign.Environment environment,
+			final Url baseUrl,
+			final Boolean setup) {
+
+			this.origin = origin;
+			this.environment = environment;
+			this.baseUrl = baseUrl;
+			this.setup = setup;
+		}
+	}
+
 	/**
-	 * Retrieves the DocuSign login URL.
+	 * Retrieves the DocuSign login URL for initial setup.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
+	 * @param origin Salesforce location where OAuth events will be handled.
 	 * @param environment The target DocuSign environment.
 	 * @param otherUrl Optional account URL for the DocuSign environment, used with
 	 * <code>Environment.Target.Other</code>.
@@ -707,16 +732,17 @@ public with sharing class AuthService {
 	 * @return The DocuSign login URL. The user should be redirected here to complete authorization.
 	 */
 	public static Url getLoginUrl(
+		final String origin,
 		final DocuSign.Environment environment,
 		final Url otherUrl) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
+		if (!Salesforce.isValidOrigin(origin)) throw new DocuSignException(Label.InvalidOrigin);
 		if (!DocuSign.isValidEnvironment(environment, otherUrl)) throw new DocuSignException(Label.InvalidEnvironment);
 
 		// 1) Retrieve root client credentials.
 		RootCredentials rc = getRootCredentials(environment, otherUrl);
-		// TODO: Get instance client ID and secret and use those for subsequent calls.
 
 		// 2) Build login URL
 		PageReference pg = new PageReference(new Url(rc.accountBaseUrl, '/oauth/auth').toExternalForm());
@@ -726,7 +752,43 @@ public with sharing class AuthService {
 			'client_id' => rc.clientId,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
-			'state' => encodeState(generateNonce(), rc.environment, rc.accountBaseUrl)
+			'state' => encodeState(generateNonce(), new State(origin, rc.environment, rc.accountBaseUrl, true))
+		});
+		return new Url(pg.getUrl());
+	}
+
+	@TestVisible
+	private static Url getOAuthRedirectUrl() {
+		return new Url(Salesforce.baseUrl, Page.CompleteOAuth.getUrl());
+	}
+
+	/**
+	 * Retrieves the DocuSign login URL to initiate the user OAuth and consent flow. This is an optional post-setup
+	 * step for end-users.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param origin Salesforce location where OAuth events will be handled.
+	 *
+	 * @return The DocuSign login URL. The user should be redirected here to complete authorization.
+	 */
+	public static Url getLoginUrl(final String origin) {
+		Permissions.verifyIsDocuSignUser();
+
+		if (!Salesforce.isValidOrigin(origin)) throw new DocuSignException(Label.InvalidOrigin);
+
+		Credentials c = Credentials.getInstance();
+		PageReference pg = new PageReference(new Url(c.environment.accountBaseUrl, '/oauth/auth').toExternalForm());
+		pg.getParameters().putAll(new Map<String, String> {
+			'response_type' => 'code',
+			'scope' => SCOPE_USER,
+			'client_id' => c.client.id,
+			'redirect_uri' => getOAuthRedirectUrl().toExternalForm(),
+			'state' => encodeState(generateNonce(), new State(
+				origin,
+				c.environment.environment,
+				c.environment.accountBaseUrl,
+				false))
 		});
 		return new Url(pg.getUrl());
 	}
@@ -734,14 +796,22 @@ public with sharing class AuthService {
 	@TestVisible
 	private static String encodeState(
 		final String nonce,
-		final DocuSign.Environment environment,
-		final Url baseUrl) {
+		final State state) {
 
-		return SecureUtils.encrypt(nonce + '|' + environment.name() + '|' + baseUrl.toExternalForm());
+		if (state == null || !state.isValid) throw new DocuSignException(Label.InvalidAuthState);
+
+		return SecureUtils.encrypt(nonce
+			+ '|' + state.origin
+			+ '|' + state.environment.name()
+			+ '|' + state.baseUrl.toExternalForm()
+			+ '|' + state.setup);
 	}
 
 	@TestVisible
-	private static RootCredentials decodeState(final String state, final String nonce) {
+	private static State decodeState(
+		final String state,
+		final String nonce) {
+
 		// 1) Verify state is non-blank.
 		if (String.isBlank(state)) {
 			LOG.error('OAuth state is blank');
@@ -757,9 +827,9 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 3) Verify 3 state tokens
+		// 3) Verify 5 state tokens
 		List<String> toks = decrypted.split('\\|');
-		if (Collection.size(toks) != 3) {
+		if (Collection.size(toks) != 5) {
 			LOG.error('Unexpected state: ' + decrypted);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
@@ -770,29 +840,39 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 5) Verify DocuSign environment
-		DocuSign.Environment environment = DocuSign.parseEnvironment(toks[1]);
-		if (environment == null || environment == DocuSign.Environment.Invalid) {
-			LOG.error('Invalid DocuSign environment: ' + toks[1]);
+		// 5) Verify Salesforce origin.
+		String origin = toks[1];
+		if (!Salesforce.isValidOrigin(origin)) {
+			LOG.error('Invalid Salesforce origin: ' + origin);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 6) Verify URL format
+		// 6) Verify DocuSign environment
+		DocuSign.Environment environment = DocuSign.parseEnvironment(toks[2]);
+		if (environment == null || environment == DocuSign.Environment.Invalid) {
+			LOG.error('Invalid DocuSign environment: ' + toks[2]);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 7) Verify URL format
 		Url baseUrl;
 		try {
-			baseUrl = new Url(toks[2]);
+			baseUrl = new Url(toks[3]);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Invalid base URL: ' + toks[2]);
+			LOG.exception(ex, 'Invalid base URL: ' + toks[3]);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 7) Verify whitelisted DocuSign URL
+		// 8) Verify whitelisted DocuSign URL
 		if (!DocuSign.isValidUrl(baseUrl)) {
 			LOG.error('Invalid DocuSign base URL: ' + baseUrl.toExternalForm());
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		return getRootCredentials(environment, baseUrl);
+		// 9) Parse setup boolean
+		Boolean setup = Boolean.valueOf(toks[4]);
+
+		return new State(origin, environment, baseUrl, setup);
 	}
 
 	private static Gen.Product getGenProduct(Product p) {
@@ -868,6 +948,7 @@ public with sharing class AuthService {
 		final Url scmApiBaseUrl) {
 
 		List<MetadataService.RemoteSite> sites = new List<MetadataService.RemoteSite>();
+		// FIXME: Creating Account and Provisioning remote sites twice?
 		if (DocuSign.isValidUrl(accountBaseUrl)) {
 			sites.add(MetadataService.newRemoteSite(
 				environment,
@@ -953,21 +1034,29 @@ public with sharing class AuthService {
 			scmApiBaseUrl);
 		if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 
+		// Get instance credentials and new access token
 		Credentials.ClientCredentials instanceCredentials = getAuthAPI(aBaseUrl)
 			.getInstanceCredentials(
 				rootClientId,
 				account.id,
 				product == null ? new List<Url> {
-					Salesforce.baseUrl
+					getOAuthRedirectUrl()
 				} : new List<Url> {
-					Salesforce.baseUrl,
+					getOAuthRedirectUrl(),
 					product.inviteRedirectUrl,
 					product.inviteCallbackUrl
 				},
 				token.token);
+		Credentials.AccessToken newToken = getAccessToken(
+			null,
+			aBaseUrl,
+			loginInfo.id,
+			true,
+			instanceCredentials.id,
+			instanceCredentials.privateKey);
 
 		DB.updateSettings(
-			new AuthService.AccountAPI(eSignatureBaseUrl, account.id, token.token).getPermissionProfileIds(),
+			new AuthService.AccountAPI(eSignatureBaseUrl, account.id, newToken.token).getPermissionProfileIds(),
 			product);
 
 		return Credentials.save(
@@ -990,7 +1079,111 @@ public with sharing class AuthService {
 				loginInfo.name,
 				loginInfo.email,
 				true),
-			token);
+			newToken);
+	}
+
+	@TestVisible
+	private static List<String> createRemoteSites(final RootCredentials rootCredentials) {
+		return MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
+			MetadataService.newRemoteSite(
+				rootCredentials.environment,
+				'Account',
+				Label.AccountServiceDescription,
+				rootCredentials.accountBaseUrl),
+			MetadataService.newRemoteSite(
+				rootCredentials.environment,
+				'Provisioning',
+				Label.AccountServiceDescription,
+				rootCredentials.provisioningBaseUrl)
+		});
+	}
+
+	@TestVisible
+	private class Login {
+		public Credentials.AccessToken token { get; private set; }
+		public LoginInformation loginInformation { get; private set; }
+
+		public Login(
+			final Credentials.AccessToken token,
+			final LoginInformation loginInformation) {
+
+			this.token = token;
+			this.loginInformation = loginInformation;
+		}
+	}
+
+	@TestVisible
+	private static Login loginToDocuSign(
+		final RootCredentials rootCredentials,
+		final String authorizationCode) {
+
+		AuthService.AuthAPI client = getAuthAPI(rootCredentials.accountBaseUrl);
+
+		Credentials.AccessToken token = client.exchangeCode(
+			authorizationCode,
+			rootCredentials.clientId,
+			rootCredentials.clientSecret);
+
+		LoginInformation li = client.getLoginInformation(token.token);
+		if (li == null || li.status == LoginInformation.STATUS_FAILURE) {
+			LOG.warn('No valid accounts for user '
+				+ (li == null ? 'UNKNOWN' : li.email + '. Login URL = '
+				+ rootCredentials.accountBaseUrl.toExternalForm()));
+			throw new DocuSignException(Label.NoValidAccounts);
+		}
+
+		return new Login(token, li);
+	}
+
+	@TestVisible
+	private static LoginInformation saveSetupCredentials(
+		final String authorizationCode,
+		final State state) {
+
+		RootCredentials rc = getRootCredentials(state.environment, state.baseUrl);
+
+		createRemoteSites(rc);
+
+		Login l = loginToDocuSign(rc, authorizationCode);
+		// If one valid account is returned, store result. Else, user must select account.
+		if (l != null
+			&& l.token != null
+			&& l.loginInformation != null
+			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
+
+			save(
+				rc.environment,
+				rc.accountBaseUrl,
+				rc.provisioningBaseUrl,
+				rc.clientId,
+				l.loginInformation,
+				l.loginInformation.accounts[0],
+				getGenProduct(
+					rc.provisioningBaseUrl,
+					l.loginInformation.accounts[0].id,
+					l.token.token),
+				l.token);
+		} else if (l.token != null) { // Multiple accounts. Save root access token for subsequent calls.
+			Credentials.setToken(l.token);
+			Credentials.save();
+		}
+
+		return l == null ? null : l.loginInformation;
+	}
+
+	@TestVisible
+	private static Credentials saveUserCredentials(
+		final String authorizationCode,
+		final Url baseUrl) {
+
+		Credentials c = Credentials.getInstance();
+		Credentials.AccessToken token = getAuthAPI(baseUrl).exchangeCode(
+			authorizationCode,
+			c.client.id,
+			c.client.secret);
+
+		Credentials.setToken(token);
+		return Credentials.save();
 	}
 
 	/**
@@ -1000,7 +1193,8 @@ public with sharing class AuthService {
 	 * maps to valid multiple accounts, those account options are returned to the caller to select the desired account
 	 * in a subsequent call to this method.
 	 * <p>
-	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 * If setup is not yet complete, the caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 * Otherwise, the caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param authorizationCode The authorization code returned by DocuSign after successful login and consent.
 	 * @param state The state passed through the DocuSign authorization service. This value is opaque to the caller and
@@ -1014,62 +1208,64 @@ public with sharing class AuthService {
 		final String authorizationCode,
 		final String state) {
 
-		Permissions.verifyIsDocuSignAdministrator();
-
-		UserSettings__c s = UserSettings__c.getInstance();
+		LoginInformation result = null;
+		UserSettings__c us = UserSettings__c.getInstance();
 		try {
-			// 1) Parse state and retrieve client credentials
-			// TODO: Use instance client credentials?
-			RootCredentials rc = decodeState(state, s.Nonce__c);
-
-			// 2) Create Account Server remote site
-			MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
-				MetadataService.newRemoteSite(
-					rc.environment,
-					'Account',
-					Label.AccountServiceDescription,
-					rc.accountBaseUrl),
-				MetadataService.newRemoteSite(
-					rc.environment,
-					'Provisioning',
-					Label.AccountServiceDescription,
-					rc.provisioningBaseUrl)
-			});
-
-			// 2) Get accounts associated with login
-			AuthService.AuthAPI client = getAuthAPI(rc.accountBaseUrl);
-			Credentials.AccessToken token = client.exchangeCode(authorizationCode, rc.clientId, rc.clientSecret);
-			LoginInformation result = client.getLoginInformation(token.token);
-			if (result == null || result.status == LoginInformation.LoginStatus.Failure.name()) {
-				LOG.warn('No valid accounts for user '
-					+ (result == null ? 'UNKNOWN' : result.email + '. Login URL = '
-					+ rc.accountBaseUrl.toExternalForm()));
-				throw new DocuSignException(Label.NoValidAccounts);
+			State s = decodeState(state, us.Nonce__c);
+			if (s.setup) {
+				Permissions.verifyIsDocuSignAdministrator();
+				result = saveSetupCredentials(authorizationCode, s);
+			} else {
+				Permissions.verifyIsDocuSignUser();
+				saveUserCredentials(authorizationCode, s.baseUrl);
 			}
-
-			// 3) If one valid account is returned, store result. Else, user must select account.
-			if (result.status == LoginInformation.LoginStatus.Success.name()) {
-				save(
-					rc.environment,
-					rc.accountBaseUrl,
-					rc.provisioningBaseUrl,
-					rc.clientId,
-					result,
-					result.accounts[0],
-					getGenProduct(
-						rc.provisioningBaseUrl,
-						result.accounts[0].id,
-						token.token),
-					token);
-			} else { // Multiple accounts. Save access token for subsequent calls.
-				Credentials.setToken(token);
-				Credentials.save();
-			}
-			return result;
+			return result == null
+				? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.origin)
+				: result.withTarget(s.origin);
 		} finally {
-			//clear the access token stored for this user since this access token has not been generated by using Instance Application Id
-			Credentials.clearTokenAfterLogin();
+			if (String.isNotBlank(us.Nonce__c)) {
+				us.Nonce__c = null;
+				update us;
+			}
 		}
+	}
+
+	/**
+	 * Completes a DocuSign OAuth transaction with an error.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 *
+	 * @param errorCode The error code returned by the DocuSign account service.
+	 * @param errorMessage The error message returned by the DocuSign account service.
+	 * @param state The state passed through the DocuSign authorization service. This value is opaque to the caller and
+	 * may not be tampered with.
+	 *
+	 * @return The failure result of the login with event target specified.
+	 */
+	public static LoginInformation redeemError(
+		final String errorCode,
+		final String errorMessage,
+		final String state) {
+
+		Permissions.verifyIsDocuSignUser();
+
+		LoginInformation result = null;
+		UserSettings__c us = UserSettings__c.getInstance();
+		try {
+			State s = decodeState(state, us.Nonce__c);
+			result = new LoginInformation(
+				LoginInformation.STATUS_FAILURE,
+				errorCode == 'consent_required' || errorCode == 'access_denied' || String.isBlank(errorMessage)
+					? Label.ConsentRequired : errorMessage,
+				s.origin);
+		} finally {
+			if (String.isNotBlank(us.Nonce__c)) {
+				us.Nonce__c = null;
+				update us;
+			}
+		}
+		return result;
 	}
 
 	public static LoginInformation selectAccount(
@@ -1094,7 +1290,7 @@ public with sharing class AuthService {
 
 		RootCredentials rc = getRootCredentials(environment, otherUrl);
 		LoginInformation result = getAuthAPI(rc.accountBaseUrl).getLoginInformation(token.token);
-		if (result == null || result.status == LoginInformation.LoginStatus.Failure.name()) {
+		if (result == null || result.status == LoginInformation.STATUS_FAILURE) {
 			LOG.warn('No valid accounts for user '
 				+ (result == null ? 'UNKNOWN' : result.email + '. Login URL = '
 				+ rc.accountBaseUrl.toExternalForm()));
@@ -1143,7 +1339,6 @@ public with sharing class AuthService {
 			try {
 				Credentials c = Credentials.getInstance();
 				if (c != null && c.environment.scmAuthBaseUrl != null && String.isNotBlank(c.environment.scmAuthBaseUrl.toExternalForm())) {
-					getSpringOAuthAPI(c.environment.scmAuthBaseUrl);
 					Map<String, Object> body = new Map<String, Object> {
 						'code' => authorizationCode,
 						'orgUrl' => Salesforce.baseUrl.toExternalForm()
@@ -1157,23 +1352,26 @@ public with sharing class AuthService {
 						RestAPI.defaultTimeout);
 
 					if (response.hasError) {
-						results = new SpringOAuthLoginInformation('Fail', Label.UnableToConnectDocuSignGen);
+						LoggerService.getInstance().error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
+						results = SpringOAuthLoginInformation.failure(Label.UnableToConnectDocuSignGen);
 					} else {
-						results = new SpringOAuthLoginInformation('Success', Label.SuccessDocuSignGenAuthorization);
+						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignGenAuthorization);
 					}
 					//TODO update the custom setting to reflect that Spring OAuth has been completed successfully. To be added after Momentum Beta
 				} else {
-					results = new SpringOAuthLoginInformation('Fail', Label.MissingDocuSignGenAuthorizationSettings);
+					results = SpringOAuthLoginInformation.failure(Label.MissingDocuSignGenAuthorizationSettings);
 				}
 
 			} catch (Exception ex) {
-				results = new SpringOAuthLoginInformation('Fail', ex.getMessage());
+				LoggerService.getInstance().exception(ex, 'Failed to setup SCM to Salesforce OAuth');
+				results = SpringOAuthLoginInformation.failure(ex.getMessage());
 			}
 			return results;
 		}
 
 	}
 
+	@TestVisible
 	private static SpringOAuthAPI getSpringOAuthAPI(final Url baseUrl) {
 		if (springoauth == null) {
 			springoauth = new SpringOAuthAPI(baseUrl);
@@ -1188,14 +1386,18 @@ public with sharing class AuthService {
 	 *
 	 * @return The Salesforce OAuth Url along with redirection to completeOauth
 	 */
-
 	public static Url getSpringOAuthUrl(final String state) {
 		Permissions.verifyIsDocuSignAdministrator();
-		PageReference pg = new PageReference(new Url(Salesforce.salesforceOAuthUrl).toExternalForm());
+		PageReference pg = new PageReference(Salesforce.oauthUrl.toExternalForm());
 		pg.getParameters().putAll(new Map<String, String> {
 			'response_type' => 'code',
 			'state' => state,
-			'client_id' => GEN_CONNECTEDAPP_CLIENTID, //TODO Move to custom settings
+			'client_id' => [
+				SELECT ConnectedAppId__c
+				FROM Organization__mdt
+				WHERE DeveloperName = 'Current'
+				LIMIT 1
+			].ConnectedAppId__c,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'CompleteSpringOAuth'
 		});
@@ -1205,6 +1407,13 @@ public with sharing class AuthService {
 	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
 		Permissions.verifyIsDocuSignAdministrator();
 		Credentials c = Credentials.getInstance();
-		return getSpringOAuthAPI(c.environment.scmAuthBaseUrl).completeSpringOAuth(authorizationCode);
+		SpringOAuthLoginInformation result = getSpringOAuthAPI(c.environment.scmAuthBaseUrl)
+			.completeSpringOAuth(authorizationCode);
+		if (result.success) {
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			settings.IsPlatformAuthorized__c = true;
+			update settings;
+		}
+		return result;
 	}
 }
