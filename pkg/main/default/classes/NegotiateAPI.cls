@@ -125,9 +125,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
 					'DocumentUrl' => XMLSerializer.fromPrimitive(getDocumentDeepLink(this.sourceId, this.documents[0]), 'DocumentUrl'),
 					'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'email', 'name' }, this.reviewers, 'Reviewers', 'Reviewer', false),
-					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),
-					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
-					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder'),					
+					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),					
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'subject', 'body' }, this.email, 'Email', false),
 					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('FailureEmail'), 'FailureEmail', false),
 					'ExpiredReview' => XMLSerializer.toXMLForm(
@@ -229,13 +227,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String toXML() {
 			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name, this.email.subject, this.email.bodyText);
 			return XMLSerializer.toXMLForm(
-				new Set<String> { 'Documents', 'DocumentUrl', 'Approvers', 'Email', 'CheckoutDocument', 'AssignTasksInOrder', 'FailureEmail', 'ExpiredApproval', 'ApprovalCompleted' },
+				new Set<String> { 'Documents', 'ExpiresInNumberOfDays', 'Approvers', 'Email', 'DocumentUrl', 'FailureEmail', 'ExpiredApproval', 'ApprovalCompleted', 'CanceledApprovalEmail' },
 				new Map<String, Object> {
 					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
 					'DocumentUrl' => XMLSerializer.fromPrimitive(getDocumentDeepLink(this.sourceId, this.documents[0]), 'DocumentUrl'),					
-					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver', false),
-					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
-					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder'),					
+					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver', false),					
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'subject', 'body' }, this.email, 'Email', false),
 					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('FailureEmail'), 'Email', false),
 					'ExpiredApproval' => XMLSerializer.toXMLForm(
