@@ -22,7 +22,7 @@
     }
   },
 
-  internalReview: function (component) {
+  internalApproval: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');

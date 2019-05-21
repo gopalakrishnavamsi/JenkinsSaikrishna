@@ -1,7 +1,6 @@
 <aura:component description="AgreementsExternalReview"
                 controller="AgreementsController">
 
-
     <!-- attributes -->
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="sourceId" type="String"/>
@@ -28,7 +27,7 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
     <c:strike_modal aura:id="externalReviewAgreementsModal"
-                    title="{!$Label.c.ExternalReviewModalTitle}"
+                    title="{!if(v.currentStep == '1',$Label.c.ExternalReviewModalTitle, $Label.c.ExternalReviewPersonalizeMessage)}"
                     showModal="{!v.showModal}">
 
         <aura:if isTrue="{!v.loading}">
@@ -47,13 +46,13 @@
             <aura:if isTrue="{!v.currentStep == '1'}">
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
-                        <div class="slds-text-body_small slds-p-bottom_small">
+                        <div class="slds-text-body_small slds-p-bottom_large">
                             {!$Label.c.ExternalReviewChooseRecipientMessage}
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <div class="slds-text-body_small  slds-p-top--medium">
-                            <b class="required-textcolor">* </b>{!$Label.c.ExternalReviewSetDueDate}
+                            <b class="required-textcolor">* </b>{!$Label.c.ExternalReviewAddRecipient}
                         </div>
                         <div>
                             <div id="instructions" class="slds-assistive-text"></div>
@@ -67,7 +66,7 @@
                                         role="option">
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
                                             <li class="slds-size_6-of-7">
-                                                <c:ExternalReviewRecipient
+                                                <c:AgreementsExternalReviewRecipient
                                                         recipient="{!recipient}"
                                                         sourceId="{#recipient.source.id}"
                                                 />
@@ -100,9 +99,6 @@
             <aura:if isTrue="{!v.currentStep == '2'}">
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
-                        <div class="slds-text-heading_small slds-p-around--x-small">
-                            {!$Label.c.ExternalReviewPersonalizeMessage}
-                        </div>
                         <div class="slds-text-body_small slds-p-bottom_small">
                             {!$Label.c.ExternalReviewEditEmailAndSubject}
                         </div>
@@ -125,7 +121,7 @@
                             </ul>
                         </div>
                         <!-- Recipients -->
-                        <div class="slds-text-body_small slds-p-top_small">
+                        <div class="slds-text-body_small slds-p-top_medium">
                             {!$Label.c.ExternalReviewRecipients}
                         </div>
                         <div>
@@ -133,7 +129,7 @@
                                 <aura:iteration items="{!v.recipients}" var="recipient"
                                                 indexVar="recipientIndex">
                                     <li>
-                                        <lightning:icon iconName="action:user" size="xx-small"/>
+                                        <lightning:icon iconName="action:add_contact" size="xx-small"/>
                                     </li>
                                     <li>
                                         <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small slds-p-right--x-small">
@@ -159,7 +155,8 @@
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
                 <lightning:button class="slds-button slds-button--neutral"
-                                  onclick="{!c.backButtonClicked}">{!$Label.c.Back}</lightning:button>
+                                  onclick="{!c.backButtonClicked}"
+                                  disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
                                   disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>

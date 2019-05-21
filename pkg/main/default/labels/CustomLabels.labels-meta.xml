@@ -4300,6 +4300,118 @@
 		<value>File was uploaded successfully</value>
 	</labels>
 	<labels>
+		<fullName>ImportFiles</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Import Files</shortDescription>
+		<value>Import Files</value>
+	</labels>
+	<labels>
+		<fullName>SelectFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select a File</shortDescription>
+		<value>Select a File</value>
+	</labels>
+	<labels>
+		<fullName>NewAgreementCreated</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>New Agreement Created</shortDescription>
+		<value>New Agreement Created</value>
+	</labels>
+	<labels>
+		<fullName>ChooseFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Start by choosing a source to import your files from.</shortDescription>
+		<value>Start by choosing a source to import your files from.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseSalesforceFiles</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Choose from Salesforce Files</shortDescription>
+		<value>Choose from Salesforce Files</value>
+	</labels>
+	<labels>
+		<fullName>SelectAssociatedFiles</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select one of the files associated with this record.</shortDescription>
+		<value>Select one of the files associated with this record.</value>
+	</labels>
+	<labels>
+		<fullName>UploadFromPC</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Upload from PC</shortDescription>
+		<value>Upload from PC</value>
+	</labels>
+	<labels>
+		<fullName>UploadFromComputer</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Upload a document directly from computer.</shortDescription>
+		<value>Upload a document directly from computer.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseSalesforceFiles2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Choose one of the files available from this Salesforce record.</shortDescription>
+		<value>Choose one of the files available from this Salesforce record.</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceFileCopyComplete</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SalesforceFileCopyComplete</shortDescription>
+		<value>The file below has been copied from Salesforce files, imported to DocuSign Agreements, and now can be sent for negotiation, approval or signature.</value>
+	</labels>
+	<labels>
+		<fullName>SendForExternalReview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send for External Review</shortDescription>
+		<value>Send for External Review</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateCompare</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiate with a third party and compare redlines.</shortDescription>
+		<value>Negotiate with a third party and compare redlines.</value>
+	</labels>
+	<labels>
+		<fullName>SendForApproval</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send for Approval</shortDescription>
+		<value>Send for Approval</value>
+	</labels>
+	<labels>
+		<fullName>RequestApproval</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Request approval and feedback from your teammates.</shortDescription>
+		<value>Request approval and feedback from your teammates.</value>
+	</labels>
+	<labels>
+		<fullName>SendForSignature</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send for Signature</shortDescription>
+		<value>Send for Signature</value>
+	</labels>
+	<labels>
+		<fullName>CollectSignatures</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Collect signatures for this agreement with DocuSign.</shortDescription>
+		<value>Collect signatures for this agreement with DocuSign.</value>
+	</labels>
+	<labels>
 		<fullName>Uruguay</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -5962,14 +6074,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewChooseRecipientMessage</shortDescription>
-		<value>Choose a Salesforce Contact or use an email address</value>
+		<value>Choose a Salesforce contact or use an email address.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewAddRecipient</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewAddRecipient</shortDescription>
-		<value>Add a Recipient</value>
+		<value>Add a Reviewer</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewSetDueDate</fullName>
@@ -6049,11 +6161,81 @@
 		<value>Internal Approval</value>
 	</labels>
 	<labels>
-		<fullName>SearchActorHelpMessage</fullName>
+		<fullName>ExternalReviewSearchMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>SearchActorHelpMessage</shortDescription>
-		<value>Search by Name, Email or Organization</value>
+		<shortDescription>ExternalReviewSearchMessage</shortDescription>
+		<value>Search your contacts..</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalSearchActorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalSearchActorMessage</shortDescription>
+		<value>Search by name or email</value>
+	</labels>
+	<labels>
+		<fullName>Approvers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Approvers</shortDescription>
+		<value>Approvers</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailHelpMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailHelpMessage</shortDescription>
+		<value>Let the recipients know what you're looking for.</value>
+	</labels>
+	<labels>
+		<fullName>AddAnotherApprover</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddAnotherApprover</shortDescription>
+		<value>Add Another Approver</value>
+	</labels>
+	<labels>
+		<fullName>AddApprovers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddApprovers</shortDescription>
+		<value>Add Approvers</value>
+	</labels>
+	<labels>
+		<fullName>SetApprovalOrder</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetApprovalOrder</shortDescription>
+		<value>Set Approval Order</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalChooseUsers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalChooseUsers</shortDescription>
+		<value>Choose from the Salesforce users in your organization.</value>
+	</labels>
+	<labels>
+		<fullName>SelectApprovers</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectApprovers</shortDescription>
+		<value>Select Approvers</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailSubject</shortDescription>
+		<value>Document for your Approval</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalEmailBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalEmailBody</shortDescription>
+		<value>Please approve this document at your earliest convenience.</value>
 	</labels>
 	
 

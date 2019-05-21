@@ -36,10 +36,10 @@
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
             <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
-                              label="{!$Label.c.Cancel}">
+                              label="{!$Label.c.Cancel}" disabled="{!v.loading}">
             </lightning:button>
             <lightning:button class="slds-button slds-button_destructive" onclick="{!c.deleteClicked}"
-                              label="{!$Label.c.DeleteButtonLabel}"></lightning:button>
+                              label="{!$Label.c.DeleteButtonLabel}" disabled="{!v.loading}"></lightning:button>
         </aura:set>
     </c:strike_modal>
 </aura:component>

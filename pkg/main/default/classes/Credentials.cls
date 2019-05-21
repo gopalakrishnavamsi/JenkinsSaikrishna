@@ -189,20 +189,6 @@ public with sharing class Credentials {
 		}
 	}
 
-
-	public class LimitedAccessToken {
-		public Credentials.AccessToken token { get; private set; }
-		public Url apiBaseurl { get; private set; }
-
-		public LimitedAccessToken(
-			final Credentials.AccessToken token,
-			final Url apiBaseurl) {
-
-			this.token = token;
-			this.apiBaseurl = apiBaseurl;
-		}
-	}
-
 	public static Boolean isAccountValid() {
 		return getInstance(UserInfo.getUserId(), false).isAccountValid;
 	}

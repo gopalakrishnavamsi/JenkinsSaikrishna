@@ -1,27 +1,27 @@
-<aura:component description="AgreementsInternalReview"
-                controller="SendingController">
-    <!-- FIXME : Check hardcoding and replace with labels  -->
+<aura:component description="AgreementsInternalApproval"
+                controller="AgreementsController">
 
     <!-- attributes -->
+    <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="recipients" type="Object[]"/>
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="showApprovalOrder" type="Boolean"/>
     <aura:attribute name="draggedId" type="Integer" access="private"/>
     <aura:attribute name="droppedId" type="Integer" access="private"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
-    <aura:attribute name="emailsubject" type="String" default="Sam Sales would like to approve a document."/>
-    <aura:attribute name="emailmessage" type="String"
-                    default="Please approve this document at your earliest convenience."/>
+    <aura:attribute name="emailSubject" type="String" default="{!$Label.c.InternalApprovalEmailSubject}"/>
+    <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
 
     <!-- handlers -->
-    <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
+    <aura:handler name="strike_evt_pillClosed" event="c:strike_evt" action="{!c.handlePillCloseEvent}"/>
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <c:strike_modal aura:id="internalReviewAgreementsModal"
-                    title="Send for Approval"
+    <c:strike_modal aura:id="internalApprovalAgreementsModal"
+                    title="{!if(v.currentStep == '1',$Label.c.SelectApprovers, $Label.c.ExternalReviewPersonalizeMessage)}"
                     showModal="{!v.showModal}">
         <!--modal body -->
         <div class="slds-p-horizontal--xx-large">
@@ -29,24 +29,23 @@
             <aura:if isTrue="{!v.currentStep == '1'}">
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
-                        <div class="slds-text-body_small slds-p-bottom_small">
-                            Choose Salesforce users in your organization
+                        <div class="slds-text-body_small slds-p-bottom_large">
+                            {!$Label.c.InternalApprovalChooseUsers}
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <div class="slds-text-body_small">
-                            <lightning:input type="checkbox" label="Set Approval Order"
+                            <lightning:input type="checkbox" label="{!$Label.c.SetApprovalOrder}"
                                              onchange="{!c.setApprovalOrder}"
-                                             aura:id="approvalOrderCheckbox"></lightning:input>
+                                             aura:id="approvalOrderCheckbox"
+                                             disabled="{!if(v.recipients.length lt 2, true, false)}"></lightning:input>
+
                         </div>
                         <div class="slds-text-body_small  slds-p-top--medium">
-                            Add Approvers
+                            <b class="required-textcolor">* </b>{!$Label.c.AddApprovers}
                         </div>
                         <div>
-                            <div id="instructions" class="slds-assistive-text">
-                                Press space bar to toggle drag drop mode, use arrow keys to move selected
-                                elements.
-                            </div>
+                            <div id="instructions" class="slds-assistive-text"></div>
                             <ul aria-describedby="instructions"
                                 aria-label="drag and drop single select listbox" role="listbox">
                                 <aura:iteration items="{!v.recipients}" var="recipient"
@@ -74,7 +73,7 @@
                                                 </li>
                                             </aura:if>
                                             <li class="{!if(v.showApprovalOrder, 'slds-size_5-of-7', 'slds-size_6-of-7')}">
-                                                <c:InternalReviewRecipient
+                                                <c:AgreementsInternalApprovalRecipient
                                                         recipient="{!recipient}"
                                                         sourceId="{#recipient.source.id}"
                                                 />
@@ -85,7 +84,8 @@
                                                                       alternativeText="{!$Label.c.Remove}"
                                                                       class="slds-button ds-remove slds-m-top_x-small slds-m-right_x-small"
                                                                       onclick="{!c.removeRecipient}"
-                                                                      value="{!recipientIndex}"/>
+                                                                      value="{!recipientIndex}"
+                                                                      disabled="{!if(v.recipients.length lt 2, true, false)}"/>
                                             </li>
 
                                         </ul>
@@ -93,9 +93,11 @@
                                 </aura:iteration>
                             </ul>
                         </div>
-                        <div class="slds-p-top--x-small">
+                        <div class="slds-p-top_large">
                             <lightning:button class="slds-theme_brand" variant="neutral"
-                                              label="+ Add Approvers" onclick="{!c.addRecipient}"/>
+                                              label="{!$Label.c.AddAnotherApprover}" iconName="utility:add"
+                                              onclick="{!c.addRecipient}"
+                                              disabled="{!if(v.recipients.length gt 15 , true, false)}"/>
                         </div>
 
                     </div>
@@ -105,17 +107,14 @@
             <aura:if isTrue="{!v.currentStep == '2'}">
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
-                        <div class="slds-text-heading_small slds-p-around--x-small">
-                            Personalize Your Message
-                        </div>
                         <div class="slds-text-body_small slds-p-bottom_small">
-                            Edit the email subject and message your recipient will receive.
+                            {!$Label.c.InternalApprovalEmailHelpMessage}
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <!-- File Name Details -->
                         <div class="slds-text-body_small  slds-p-top--x-small">
-                            File Name
+                            {!$Label.c.ExternalReviewFileName}
                         </div>
                         <div>
                             <ul class="slds-list_horizontal">
@@ -124,21 +123,21 @@
                                 </li>
                                 <li>
                                     <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small">
-                                        Snow-Systems-Automation-Software-MSA-11162018.docx
+                                        {!v.agreementDetails.name}
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <!-- Recipients -->
-                        <div class="slds-text-body_small slds-p-top_small">
-                            Recipients
+                        <div class="slds-text-body_small slds-p-top_medium">
+                            {!$Label.c.Approvers}
                         </div>
                         <div>
                             <ul class="slds-list_horizontal">
                                 <aura:iteration items="{!v.recipients}" var="recipient"
                                                 indexVar="recipientIndex">
                                     <li>
-                                        <lightning:icon iconName="action:user" size="xx-small"/>
+                                        <lightning:icon iconName="action:user" size="xx-small"
+                                                        class="ds-approver-icon-color"/>
                                     </li>
                                     <li>
                                         <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small slds-p-right--x-small">
@@ -149,10 +148,12 @@
                             </ul>
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
-                            <lightning:input label="Subject" name="Subject" value="{!v.emailsubject}"/>
+                            <lightning:input label="{!$Label.c.Subject}" name="{!$Label.c.Subject}"
+                                             value="{!v.emailSubject}"/>
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
-                            <lightning:textarea name="Message" label="Message" value="{!v.emailmessage}"/>
+                            <lightning:textarea name="{!$Label.c.Message}" label="{!$Label.c.Message}"
+                                                value="{!v.emailBody}"/>
                         </div>
                     </div>
                 </article>
@@ -160,10 +161,11 @@
         </div>
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
-                <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}">Back
-                </lightning:button>
+                <lightning:button class="slds-button slds-button--neutral"
+                                  onclick="{!c.backButtonClicked}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
-                                  label="{!if(v.currentStep == '1', 'Next', 'Send')}"></lightning:button>
+                                  disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
+                                  label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
             </div>
         </aura:set>
     </c:strike_modal>

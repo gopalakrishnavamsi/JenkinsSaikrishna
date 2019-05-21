@@ -298,4 +298,28 @@ private class AgreementsControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_generateUploadToken_success() {
+		NegotiateAPIMock.success();
+		SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.FOLDER_ID_2.toString());
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(NegotiateAPIMock.SOURCE_OBJECT_ID_2);
+			Test.stopTest();
+			System.assertNotEquals(null, limitedAccessToken);
+		}
+	}
+
+	@IsTest
+	static void test_generateDownloadToken_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+			System.assertNotEquals(null, limitedAccessToken);
+		}
+	}
+
 }
