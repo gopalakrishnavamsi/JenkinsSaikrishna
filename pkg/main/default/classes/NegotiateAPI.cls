@@ -648,7 +648,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 
 			APIAgreements result = (APIAgreements)JSON.deserialize(response.body, APIAgreements.class);
- 			for (APIAgreement a : result.items) {
+			for (APIAgreement a : result.items) {
 				agreements.add(a.convertAPIAgreement());
 			}
 			next = result.next;
@@ -868,14 +868,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String expiresIn;
 		public String APIBaseUrl;
 
-		public Credentials.LimitedAccessToken toExternalForm() {
-			return new Credentials.LimitedAccessToken(
-				new Credentials.AccessToken(accessToken, Datetime.now().addSeconds(Integer.valueOf(expiresIn))),
-				new Url(APIBaseUrl));
+		public NegotiateService.LimitedAccessToken toExternalForm() {
+			return new NegotiateService.LimitedAccessToken(accessToken, APIBaseUrl);
 		}
 	}
 
-	public Credentials.LimitedAccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
+	public NegotiateService.LimitedAccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
 		final RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {

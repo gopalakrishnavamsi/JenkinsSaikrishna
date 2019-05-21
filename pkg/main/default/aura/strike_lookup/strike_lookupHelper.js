@@ -107,7 +107,9 @@ License: BSD 3-Clause License*/
                         component.set('v.valueLabel', record.label);
                         component.set('v.valueSublabel', record.sublabel);
                         component.set('v.recordType', record.type);
+                      if (component.get('v.isDocuSignAgreementsWorkflow') !== true) {
                         component.set('v.iconName', 'standard:' + record.type);
+                      }
                     });
                 }
             }
@@ -245,8 +247,9 @@ License: BSD 3-Clause License*/
             component.set('v.valueLabel', records[focusIndex].label);
             component.set('v.valueSublabel', records[focusIndex].sublabel);
             component.find('lookupInput').getElement().value = '';
+          if (component.get('v.isDocuSignAgreementsWorkflow') !== true) {
             component.set('v.iconName', 'standard:' + records[focusIndex].type);
-
+          }
             helper.closeMenu(component, event, helper);
         } else if (focusIndex === records.length) {
             helper.addNewRecord(component, event, helper);

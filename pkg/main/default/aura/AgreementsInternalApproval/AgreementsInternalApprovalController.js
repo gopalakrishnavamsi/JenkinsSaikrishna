@@ -19,7 +19,7 @@
     component.set('v.recipients', recipients);
   },
 
-  removeRecipient: function (component) {
+  removeRecipient: function (component, event) {
     var recipients = component.get('v.recipients');
     recipients.splice(event.getSource().get('v.value'), 1);
     component.set('v.recipients', recipients);
@@ -88,5 +88,9 @@
       //display toast notification
       helper.showToast(component, 'Your document has been sent for approval.', 'success');
     }
+  },
+
+  handlePillCloseEvent: function (component, event, helper) {
+    //TODO: Add the logic for updating the recipients array on this pill handle close event.
   }
 });
