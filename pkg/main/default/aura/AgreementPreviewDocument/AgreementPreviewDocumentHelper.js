@@ -102,7 +102,12 @@
         if (showHistoryView) {
             preview.history.setHistoryItems(Object.assign([], historyItems));
             preview.renderHistoryView({ historyItems: Object.assign([], historyItems) });
-        }
+        }  
+
+        this.registerEvent('preview:closeWindow', function() {
+            $A.get('e.force:refreshView').fire();
+        }); 
+                     
         return preview;
     },
 
