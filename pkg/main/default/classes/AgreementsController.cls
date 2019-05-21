@@ -10,7 +10,7 @@ public with sharing class AgreementsController extends Controller {
 	public static String getNameSpace() {
 		try {
 			Permissions.verifyIsDocuSignUser();
-			return Application.lightningNamespace;
+			return Application.namespace;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get namespace.');
 		}
@@ -136,5 +136,4 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
-	
 }

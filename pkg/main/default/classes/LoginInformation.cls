@@ -3,17 +3,24 @@
  */
 public class LoginInformation {
 	/**
-	 * Login statuses:
-	 * <ul>
-	 *     <li><code>Success</code>: Login was successful and mapped to a single valid DocuSign account.</li>
-	 *     <li><code>Failure</code>: Invalid DocuSign username or password.</li>
-	 *     <li><code>SelectAccount</code>: Login was successful, but maps to mulitple valid DocuSign accounts.</li>
-	 * </ul>
+	 * Status where a login was successful and mapped to a single valid DocuSign account.
 	 */
-	public enum LoginStatus {
-		Success, Failure, SelectAccount
-	}
+	public static final String STATUS_SUCCESS = 'Success';
+	/**
+	 * Status where a login was successful, but maps to multiple valid DocuSign accounts.
+	 */
+	public static final String STATUS_SELECT_ACCOUNT = 'SelectAccount';
+	/**
+	 * Status where a login failed because the DocuSign username or password was invalid or the user did not grant
+	 * consent.
+	 */
+	public static final String STATUS_FAILURE = 'Failure';
 
+	/**
+	 * The Salesforce OAuth event target.
+	 */
+	@AuraEnabled
+	public String target { get; private set; }
 	/**
 	 * The DocuSign user ID.
 	 */
@@ -40,6 +47,21 @@ public class LoginInformation {
 	 */
 	@AuraEnabled
 	public String status { get; private set; }
+	/**
+	 * A message associated with the login attempt, e.g. an error message.
+	 */
+	@AuraEnabled
+	public String message { get; private set; }
+
+	public LoginInformation(
+		final String status,
+		final String message,
+		final String target) {
+
+		this.status = status;
+		this.message = message;
+		this.target = target;
+	}
 
 	public LoginInformation(
 		final UUID id,
@@ -52,12 +74,19 @@ public class LoginInformation {
 		this.email = email;
 		this.accounts = accounts == null ? new List<LoginInformation.Account>() : accounts;
 		if (Collection.isEmpty(this.accounts)) {
-			this.status = LoginStatus.Failure.name();
+			this.status = STATUS_FAILURE;
+			this.message = Label.InvalidUsernameOrPassword;
 		} else if (Collection.size(this.accounts) == 1) {
-			this.status = LoginStatus.Success.name();
+			this.status = STATUS_SUCCESS;
 		} else {
-			this.status = LoginStatus.SelectAccount.name();
+			this.status = STATUS_SELECT_ACCOUNT;
+			this.message = Label.MultipleAccountsMessage;
 		}
+	}
+
+	public LoginInformation withTarget(final String target) {
+		this.target = target;
+		return this;
 	}
 
 	/**

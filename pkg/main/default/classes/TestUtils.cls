@@ -215,7 +215,7 @@ global class TestUtils {
 		return createDocument(UserInfo.getUserId());
 	}
 
-	public static SObject createAgreementConfiguration(final Id sourceObjectId ,final String folderId) {
+	public static SObject createAgreementConfiguration(final Id sourceObjectId, final String folderId) {
 
 		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
 		configuration.FolderId__c = folderId;
@@ -356,9 +356,10 @@ global class TestUtils {
 		return nonce;
 	}
 
-	public static String generateState() {
+	public static String generateState(final Boolean setup) {
 		generateKey();
-		return SecureUtils.encrypt(generateNonce() + '|Other|https://unit.test.docusign.net/');
+		String origin = 'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com';
+		return SecureUtils.encrypt(generateNonce() + '|' + origin + '|Other|https://unit.test.docusign.net/|' + String.valueOf(setup));
 	}
 
 	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {

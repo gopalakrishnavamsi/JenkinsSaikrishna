@@ -1,5 +1,11 @@
 public with sharing class SetupController extends Controller {
 
+	public String visualforceOrigin {
+		get {
+			return Salesforce.getVisualforceOrigin(true);
+		}
+	}
+
 	@AuraEnabled(Cacheable = true)
 	public static LoginInformation getLogin() {
 		try {
@@ -35,10 +41,12 @@ public with sharing class SetupController extends Controller {
 
 	@RemoteAction
 	public static String beginOAuth(
+		final String origin,
 		final String environment,
 		final String otherUrl) {
 		//since spaces are being replaced with + and this is breaking scopes we will replace + with %20
 		return AuthService.getLoginUrl(
+			origin,
 			DocuSign.parseEnvironment(environment),
 			String.isBlank(otherUrl) ? null : new Url(otherUrl)).toExternalForm().replace('+', '%20');
 	}
@@ -46,9 +54,15 @@ public with sharing class SetupController extends Controller {
 	@RemoteAction
 	public static LoginInformation completeOAuth(
 		final String authorizationCode,
-		final String state) {
+		final String state,
+		final String errorCode,
+		final String errorMessage) {
 
-		return AuthService.redeemCode(authorizationCode, state);
+		if (String.isBlank(errorCode)) {
+			return AuthService.redeemCode(authorizationCode, state);
+		} else {
+			return AuthService.redeemError(errorCode, errorMessage, state);
+		}
 	}
 
 	@RemoteAction
@@ -169,6 +183,5 @@ public with sharing class SetupController extends Controller {
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
 		}
-
 	}
 }

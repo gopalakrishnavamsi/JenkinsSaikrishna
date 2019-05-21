@@ -45,19 +45,18 @@
   },
 
   addTrialGenProduct: function (component) {
+    var uiHelper = component.get('v.uiHelper');
 
-      var uiHelper = component.get('v.uiHelper');
-
-       uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
-        if (response) {
-              uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
-            } else {
-              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
-            }
-       }, function () {
-              uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
-            }, null);
-    },
+    uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
+      if (response) {
+        uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
+      } else {
+        uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+      }
+    }, function () {
+      uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+    }, null);
+  },
 
   setLoggedIn: function (component, loginInformation) {
     var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
@@ -137,7 +136,7 @@
       var trial = component.get('v.trialAccount');
       trial.user.email = component.get('v.login.email');
 
-      uiHelper.invokeAction(component.get('c.startTrial'), {trialJson: JSON.stringify(trial)}, function(account) {
+      uiHelper.invokeAction(component.get('c.startTrial'), {trialJson: JSON.stringify(trial)}, function (account) {
         component.set('v.login.isTrial', true);
         component.set('v.selectedAccountNumber', account.accountNumber);
         component.set('v.environment', 'Production');

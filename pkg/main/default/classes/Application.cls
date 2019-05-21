@@ -78,7 +78,7 @@ public with sharing class Application {
 		}
 	}
 
-	public static String lightningNamespace {
+	public static String namespace {
 		get {
 			return IS_MANAGED_PACKAGE ? PACKAGE_NAMESPACE : (String.isNotBlank(Salesforce.namespace) ? Salesforce.namespace : 'c');
 		}

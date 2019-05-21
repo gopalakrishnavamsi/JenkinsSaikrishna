@@ -1,6 +1,8 @@
 ({
-  onInitialize: function (component, event, helper) {
-    helper.createEnvelope(component, component.get('v.recordId'));
+  onChangeIsAuthorized: function (component, event, helper) {
+    if (component.get('v.isAuthorized')) {
+      helper.createEnvelope(component, component.get('v.recordId'));
+    }
   },
 
   setExpirationDate: function (component, event, helper) {
