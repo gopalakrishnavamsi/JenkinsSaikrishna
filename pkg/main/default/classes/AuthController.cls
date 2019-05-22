@@ -8,18 +8,18 @@ public with sharing class AuthController {
 		@AuraEnabled
 		public String message { get; private set; }
 		@AuraEnabled
-		public String eventOrigin { get; private set; }
+		public List<String> eventOrigins { get; private set; }
 
 		public AuthStatus(
 			final Boolean isAuthorized,
 			final Boolean isConsentRequired,
 			final String message,
-			final String eventOrigin) {
+			final List<String> eventOrigins) {
 
 			this.isAuthorized = isAuthorized;
 			this.isConsentRequired = isConsentRequired;
 			this.message = message;
-			this.eventOrigin = eventOrigin;
+			this.eventOrigins = eventOrigins;
 		}
 	}
 
@@ -59,13 +59,13 @@ public with sharing class AuthController {
 			isAuthorized,
 			isConsentRequired,
 			message,
-			Salesforce.getVisualforceOrigin(true));
+			Salesforce.getVisualforceOrigins());
 	}
 
 	@AuraEnabled
-	public static String beginOAuth(final String origin) {
+	public static String beginOAuth(final String target) {
 		try {
-			return AuthService.getLoginUrl(origin).toExternalForm().replace('+', '%20');
+			return AuthService.getLoginUrl(target).toExternalForm().replace('+', '%20');
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to initiate user OAuth flow.');
 		}

@@ -43,7 +43,7 @@
 
       function beginOAuth(component, environment, otherUrl) {
         try {
-          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.beginOAuth}', '{!visualforceOrigin}', environment, otherUrl, function (result, event) {
+          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.beginOAuth}', window.location.origin, environment, otherUrl, function (result, event) {
             if (event && event.status) {
               var width = 600;
               var height = 600;

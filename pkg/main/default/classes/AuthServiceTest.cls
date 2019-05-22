@@ -885,26 +885,26 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getLoginUrl_setup_invalid_origin() {
+	static void test_getLoginUrl_setup_invalid_target() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
 				AuthService.getLoginUrl(null, DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('  ', DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('http://example.com', DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -915,19 +915,19 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.getLoginUrl(Salesforce.getVisualforceOrigin(false), null, null);
+				AuthService.getLoginUrl(TestUtils.getOrigin(), null, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.getLoginUrl(Salesforce.getVisualforceOrigin(false), DocuSign.Environment.Other, null);
+				AuthService.getLoginUrl(TestUtils.getOrigin(), DocuSign.Environment.Other, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.getLoginUrl(Salesforce.getVisualforceOrigin(false), DocuSign.Environment.Other, new Url('https://evil-docusign.net/'));
+				AuthService.getLoginUrl(TestUtils.getOrigin(), DocuSign.Environment.Other, new Url('https://evil-docusign.net/'));
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -943,7 +943,7 @@ private class AuthServiceTest {
 			TestUtils.generateKey();
 
 			Test.startTest();
-			Url result = AuthService.getLoginUrl(Salesforce.getVisualforceOrigin(false), DocuSign.Environment.Stage, null);
+			Url result = AuthService.getLoginUrl(TestUtils.getOrigin(), DocuSign.Environment.Stage, null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -977,7 +977,7 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
 			try {
-				AuthService.getLoginUrl(Salesforce.getLightningOrigin(false));
+				AuthService.getLoginUrl(TestUtils.getOrigin());
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -987,26 +987,26 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getLoginUrl_non_setup_invalid_origin() {
+	static void test_getLoginUrl_non_setup_invalid_target() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				AuthService.getLoginUrl(null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('   ');
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('http://salesforce.com');
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -1016,7 +1016,7 @@ private class AuthServiceTest {
 	static void test_getLoginUrl_non_setup_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			Url result = AuthService.getLoginUrl(Salesforce.getLightningOrigin(false));
+			Url result = AuthService.getLoginUrl(TestUtils.getOrigin());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1039,7 +1039,7 @@ private class AuthServiceTest {
 	static void test_encodeState_setup() {
 		TestUtils.generateKey();
 		String nonce = UUID.randomUUID().toString();
-		String origin = Salesforce.getVisualforceOrigin(false);
+		String origin = TestUtils.getOrigin();
 		Url url = new Url('https://unit.test.docusign.net/');
 		AuthService.State state = new AuthService.State(
 			origin,
@@ -1059,7 +1059,7 @@ private class AuthServiceTest {
 	static void test_encodeState_non_setup() {
 		TestUtils.generateKey();
 		String nonce = UUID.randomUUID().toString();
-		String origin = Salesforce.getLightningOrigin(false);
+		String origin = TestUtils.getOrigin();
 		Url url = new Url('https://unit.test.docusign.net/');
 		AuthService.State state = new AuthService.State(
 			origin,
@@ -1136,7 +1136,7 @@ private class AuthServiceTest {
 	static void test_decodeState_invalid_nonce() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String origin = Salesforce.getVisualforceOrigin(false);
+			String origin = TestUtils.getOrigin();
 			String state = SecureUtils.encrypt('test|' + origin + '|Demo|https://unit.test.docusign.net|false');
 
 			Test.startTest();
@@ -1151,7 +1151,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_origin() {
+	static void test_decodeState_invalid_target() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String state = SecureUtils.encrypt('test|http://bad.origin|Demo|https://unit.test.docusign.net|false');
@@ -1171,7 +1171,7 @@ private class AuthServiceTest {
 	static void test_decodeState_invalid_environment() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String origin = Salesforce.getVisualforceOrigin(false);
+			String origin = TestUtils.getOrigin();
 			String state = SecureUtils.encrypt('test|' + origin + '|Bad|https://unit.test|false');
 
 			Test.startTest();
@@ -1189,7 +1189,7 @@ private class AuthServiceTest {
 	static void test_decodeState_invalid_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String origin = Salesforce.getVisualforceOrigin(false);
+			String origin = TestUtils.getOrigin();
 			String state = SecureUtils.encrypt('test|' + origin + '|Demo|test|false');
 
 			Test.startTest();
@@ -1207,7 +1207,7 @@ private class AuthServiceTest {
 	static void test_decodeState_non_whitelist_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String origin = Salesforce.getVisualforceOrigin(false);
+			String origin = TestUtils.getOrigin();
 			String state = SecureUtils.encrypt('test|' + origin + '|Production|https://evil-docusign.net/oauth/token|false');
 
 			Test.startTest();
@@ -1225,16 +1225,16 @@ private class AuthServiceTest {
 	static void test_decodeState_valid() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
-			String origin = Salesforce.getLightningOrigin(false);
+			String target = TestUtils.getOrigin();
 			String url = 'https://other.docusign.net/oauth/token';
-			String state = SecureUtils.encrypt('test|' + origin + '|Other|' + url + '|false');
+			String state = SecureUtils.encrypt('test|' + target + '|Other|' + url + '|false');
 
 			Test.startTest();
 			AuthService.State result = AuthService.decodeState(state, 'test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(origin, result.origin);
+			System.assertEquals(target, result.target);
 			System.assertEquals(DocuSign.Environment.Other, result.environment);
 			System.assertNotEquals(null, result.baseUrl);
 			System.assert(!result.setup);

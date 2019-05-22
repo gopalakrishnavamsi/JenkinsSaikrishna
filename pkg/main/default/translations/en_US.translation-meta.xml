@@ -3412,6 +3412,10 @@
 		<name>InvalidOrigin</name>
 	</customLabels>
 	<customLabels>
+		<label>Invalid Salesforce event target.</label>
+		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
 		<label>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf. Click the &quot;Authorize&quot; button to continue.</label>
 		<name>AuthorizeDocuSignInstructions</name>
 	</customLabels>

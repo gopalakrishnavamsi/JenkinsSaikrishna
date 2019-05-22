@@ -33,11 +33,6 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_instanceName() {
-		System.assertEquals([SELECT InstanceName FROM Organization LIMIT 1].InstanceName, Salesforce.instanceName);
-	}
-
-	@IsTest
 	static void test_isSandbox() {
 		System.assertEquals([SELECT IsSandbox FROM Organization LIMIT 1].IsSandbox, Salesforce.isSandbox);
 	}
@@ -152,27 +147,76 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_getLightningOrigin() {
+	static void test_getOrigin() {
+		String myDomain = Salesforce.baseUrl.getHost().substringBefore('.');
+		String instance = Salesforce.INSTANCE_NAME.toLowerCase();
+		String namespace = Salesforce.namespace;
+		String rootDomain = 'salesforce.com';
+
 		Test.startTest();
-		System.assertEquals(
-			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '--' + Application.namespace + '.lightning.force.com',
-			Salesforce.getLightningOrigin(true));
-		System.assertEquals(
-			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.lightning.force.com',
-			Salesforce.getLightningOrigin(false));
+		System.assertEquals('https://' + myDomain + '.' + rootDomain,
+			Salesforce.getOrigin(myDomain, null, null, rootDomain));
+		System.assertEquals('https://' + myDomain + '--' + namespace + '.' + rootDomain,
+			Salesforce.getOrigin(myDomain, namespace, null, rootDomain));
+		System.assertEquals('https://' + myDomain + '--' + namespace + '.' + instance + '.' + rootDomain,
+			Salesforce.getOrigin(myDomain, namespace, instance, rootDomain));
+		System.assertEquals('https://' + myDomain + '.' + instance + '.' + rootDomain,
+			Salesforce.getOrigin(myDomain, null, instance, rootDomain));
 		Test.stopTest();
 	}
 
+	static String vfOrigin1() {
+		return 'https://'
+			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
+			+ '--' + Application.namespace
+			+ '.visualforce.com';
+	}
+
+	static String vfOrigin2() {
+		return 'https://'
+			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
+			+ '--' + Application.namespace
+			+ '.' + Salesforce.INSTANCE_NAME.toLowerCase()
+			+ '.visual.force.com';
+	}
+
 	@IsTest
-	static void test_getVisualforceOrigin() {
+	static void test_getVisualforceOrigins() {
 		Test.startTest();
-		System.assertEquals(
-			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '--' + Application.namespace + '.visualforce.com',
-			Salesforce.getVisualforceOrigin(true));
-		System.assertEquals(
-			'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com',
-			Salesforce.getVisualforceOrigin(false));
+		List<String> result = Salesforce.getVisualforceOrigins();
 		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, result.size());
+		System.assert(result.contains(vfOrigin1()), 'Origin not found: ' + vfOrigin1());
+		System.assert(result.contains(vfOrigin2()), 'Origin not found: ' + vfOrigin2());
+	}
+
+	static String lexOrigin1() {
+		return 'https://'
+			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
+//			+ '--' + Application.namespace
+			+ '.lightning.force.com';
+	}
+
+	static String lexOrigin2() {
+		return 'https://'
+			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
+//			+ '--' + Application.namespace
+			+ '.' + Salesforce.INSTANCE_NAME.toLowerCase()
+			+ '.lightning.force.com';
+	}
+
+	@IsTest
+	static void test_getLightningOrigins() {
+		Test.startTest();
+		List<String> result = Salesforce.getLightningOrigins();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, result.size());
+		System.assert(result.contains(lexOrigin1()), 'Origin not found: ' + lexOrigin1());
+		System.assert(result.contains(lexOrigin2()), 'Origin not found: ' + lexOrigin2());
 	}
 
 	@IsTest
@@ -187,10 +231,29 @@ private class SalesforceTest {
 		System.assert(!Salesforce.isValidOrigin('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
 		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
 		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
-		System.assert(Salesforce.isValidOrigin(Salesforce.getLightningOrigin(true)));
-		System.assert(Salesforce.isValidOrigin(Salesforce.getLightningOrigin(false)));
-		System.assert(Salesforce.isValidOrigin(Salesforce.getVisualforceOrigin(true)));
-		System.assert(Salesforce.isValidOrigin(Salesforce.getVisualforceOrigin(false)));
+		System.assert(!Salesforce.isValidOrigin(lexOrigin1()), 'Origin not valid: ' + lexOrigin1());
+		System.assert(!Salesforce.isValidOrigin(lexOrigin2()), 'Origin not valid: ' + lexOrigin2());
+		System.assert(Salesforce.isValidOrigin(vfOrigin1()), 'Origin not valid: ' + vfOrigin1());
+		System.assert(Salesforce.isValidOrigin(vfOrigin2()), 'Origin not valid: ' + vfOrigin1());
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isValidTarget() {
+		Test.startTest();
+		System.assert(!Salesforce.isValidTarget(null));
+		System.assert(!Salesforce.isValidTarget('  '));
+		System.assert(!Salesforce.isValidTarget('https://example.com'));
+		System.assert(!Salesforce.isValidTarget('https://' + UUID.randomUUID() + '.lightning.force.com'));
+		System.assert(!Salesforce.isValidTarget('https://' + UUID.randomUUID() + '.visualforce.com'));
+		System.assert(!Salesforce.isValidTarget('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
+		System.assert(!Salesforce.isValidTarget('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
+		System.assert(!Salesforce.isValidTarget('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
+		System.assert(!Salesforce.isValidTarget('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
+		System.assert(Salesforce.isValidTarget(lexOrigin1()), 'Target not valid: ' + lexOrigin1());
+		System.assert(Salesforce.isValidTarget(lexOrigin2()), 'Target not valid: ' + lexOrigin2());
+		System.assert(Salesforce.isValidTarget(vfOrigin1()), 'Target not valid: ' + vfOrigin1());
+		System.assert(Salesforce.isValidTarget(vfOrigin2()), 'Target not valid: ' + vfOrigin1());
 		Test.stopTest();
 	}
 }

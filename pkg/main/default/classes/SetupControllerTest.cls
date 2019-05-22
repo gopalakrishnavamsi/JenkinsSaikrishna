@@ -10,7 +10,6 @@ private class SetupControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(Application.namespace, result.namespace);
-			System.assertEquals(Salesforce.getVisualforceOrigin(true), result.visualforceOrigin);
 		}
 	}
 
@@ -71,7 +70,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'prod', null);
+				SetupController.beginOAuth(TestUtils.getOrigin(), 'prod', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -88,28 +87,28 @@ private class SetupControllerTest {
 				SetupController.beginOAuth(null, null, null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidOrigin, ex.getMessage());
+				System.assertEquals(Label.InvalidTarget, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), '', null);
+				SetupController.beginOAuth(TestUtils.getOrigin(), '', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), '  ', null);
+				SetupController.beginOAuth(TestUtils.getOrigin(), '  ', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', null);
+				SetupController.beginOAuth(TestUtils.getOrigin(), 'other', null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', 'https://example.com');
+				SetupController.beginOAuth(TestUtils.getOrigin(), 'other', 'https://example.com');
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -124,11 +123,11 @@ private class SetupControllerTest {
 			TestUtils.generateKey();
 
 			Test.startTest();
-			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'PROD', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'pRODUCTIOn', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'demo', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'stage', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(Salesforce.getVisualforceOrigin(false), 'other', 'https://other.docusign.com'));
+			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'PROD', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'pRODUCTIOn', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'demo', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'stage', null));
+			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'other', 'https://other.docusign.com'));
 			Test.stopTest();
 		}
 	}

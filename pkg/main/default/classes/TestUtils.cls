@@ -356,10 +356,34 @@ global class TestUtils {
 		return nonce;
 	}
 
+	private static String namespace;
+
+	public static String getNamespace() {
+		if (namespace == null) {
+			namespace = [SELECT NamespacePrefix FROM ApexClass WHERE Name = 'TestUtils' LIMIT 1].NamespacePrefix;
+			namespace = String.isBlank(namespace) ? 'c' : namespace;
+		}
+		return namespace;
+	}
+
+	private static String origin;
+
+	public static String getOrigin() {
+		if (origin == null) {
+			origin = 'https://'
+				+ Url.getOrgDomainUrl().getHost().substringBefore('.')
+				+ '--' + getNamespace()
+				+ '.visualforce.com';
+		}
+		return origin;
+	}
+
 	public static String generateState(final Boolean setup) {
 		generateKey();
-		String origin = 'https://' + Url.getOrgDomainUrl().getHost().substringBefore('.') + '.visualforce.com';
-		return SecureUtils.encrypt(generateNonce() + '|' + origin + '|Other|https://unit.test.docusign.net/|' + String.valueOf(setup));
+		return SecureUtils.encrypt(generateNonce()
+			+ '|' + getOrigin()
+			+ '|Other|https://unit.test.docusign.net/|'
+			+ String.valueOf(setup));
 	}
 
 	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {

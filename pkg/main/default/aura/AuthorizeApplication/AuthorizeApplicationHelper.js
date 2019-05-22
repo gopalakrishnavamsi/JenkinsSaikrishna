@@ -7,7 +7,7 @@
         component.set('v.isAuthorized', authStatus.isAuthorized);
         component.set('v.isConsentRequired', authStatus.isConsentRequired);
         component.set('v.userStatusMessage', authStatus.message);
-        component.set('v.eventOrigin', authStatus.eventOrigin);
+        component.set('v.eventOrigins', authStatus.eventOrigins);
       }
 
       if (!component.get('v.isAuthorized')) {
@@ -24,13 +24,13 @@
     var openOAuthWindow = function (loginUrl) {
       var width = 600;
       var height = 600;
-      var left = (screen.width / 2) - (width / 2);
-      var top = (screen.height / 2) - (height / 2);
+      var left = screen.width / 2 - width / 2;
+      var top = screen.height / 2 - height / 2;
 
       var onMessage = function (event) {
         if (component && component.isValid()) {
           // event must originate from Visualforce page on our domain
-          if (event.origin === component.get('v.eventOrigin')) {
+          if (component.get('v.eventOrigins').indexOf(event.origin) !== -1) {
             window.removeEventListener('message', onMessage);
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
             component.set('v.isAuthorized', success);
@@ -45,6 +45,6 @@
       oauthWindow.focus();
     };
 
-    uiHelper.invokeAction(component.get('c.beginOAuth'), {origin: window.location.origin}, openOAuthWindow);
+    uiHelper.invokeAction(component.get('c.beginOAuth'), {target: window.location.origin}, openOAuthWindow);
   }
 });

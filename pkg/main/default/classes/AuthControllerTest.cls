@@ -127,7 +127,7 @@ private class AuthControllerTest {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
 			try {
-				AuthController.beginOAuth(Salesforce.getLightningOrigin(false));
+				AuthController.beginOAuth(TestUtils.getOrigin());
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -140,7 +140,7 @@ private class AuthControllerTest {
 	static void test_beginOAuth_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			String result = AuthController.beginOAuth(Salesforce.getLightningOrigin(false));
+			String result = AuthController.beginOAuth(TestUtils.getOrigin());
 			Test.stopTest();
 
 			System.assert(String.isNotBlank(result));
