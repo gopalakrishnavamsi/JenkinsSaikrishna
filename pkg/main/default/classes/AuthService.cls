@@ -695,24 +695,24 @@ public with sharing class AuthService {
 
 	@TestVisible
 	private class State {
-		public String origin { get; private set; }
+		public String target { get; private set; }
 		public DocuSign.Environment environment { get; private set; }
 		public Url baseUrl { get; private set; }
 		public Boolean setup { get; private set; }
 		public Boolean isValid {
 			get {
-				return Salesforce.isValidOrigin(origin)
+				return Salesforce.isValidTarget(target)
 					&& DocuSign.isValidEnvironment(environment, baseUrl);
 			}
 		}
 
 		public State(
-			final String origin,
+			final String target,
 			final DocuSign.Environment environment,
 			final Url baseUrl,
 			final Boolean setup) {
 
-			this.origin = origin;
+			this.target = target;
 			this.environment = environment;
 			this.baseUrl = baseUrl;
 			this.setup = setup;
@@ -724,7 +724,7 @@ public with sharing class AuthService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param origin Salesforce location where OAuth events will be handled.
+	 * @param target Salesforce location where OAuth events will be handled.
 	 * @param environment The target DocuSign environment.
 	 * @param otherUrl Optional account URL for the DocuSign environment, used with
 	 * <code>Environment.Target.Other</code>.
@@ -732,13 +732,13 @@ public with sharing class AuthService {
 	 * @return The DocuSign login URL. The user should be redirected here to complete authorization.
 	 */
 	public static Url getLoginUrl(
-		final String origin,
+		final String target,
 		final DocuSign.Environment environment,
 		final Url otherUrl) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (!Salesforce.isValidOrigin(origin)) throw new DocuSignException(Label.InvalidOrigin);
+		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(Label.InvalidTarget);
 		if (!DocuSign.isValidEnvironment(environment, otherUrl)) throw new DocuSignException(Label.InvalidEnvironment);
 
 		// 1) Retrieve root client credentials.
@@ -752,7 +752,7 @@ public with sharing class AuthService {
 			'client_id' => rc.clientId,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
-			'state' => encodeState(generateNonce(), new State(origin, rc.environment, rc.accountBaseUrl, true))
+			'state' => encodeState(generateNonce(), new State(target, rc.environment, rc.accountBaseUrl, true))
 		});
 		return new Url(pg.getUrl());
 	}
@@ -768,14 +768,14 @@ public with sharing class AuthService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param origin Salesforce location where OAuth events will be handled.
+	 * @param target Salesforce location where OAuth events will be handled.
 	 *
 	 * @return The DocuSign login URL. The user should be redirected here to complete authorization.
 	 */
-	public static Url getLoginUrl(final String origin) {
+	public static Url getLoginUrl(final String target) {
 		Permissions.verifyIsDocuSignUser();
 
-		if (!Salesforce.isValidOrigin(origin)) throw new DocuSignException(Label.InvalidOrigin);
+		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(Label.InvalidTarget);
 
 		Credentials c = Credentials.getInstance();
 		PageReference pg = new PageReference(new Url(c.environment.accountBaseUrl, '/oauth/auth').toExternalForm());
@@ -785,7 +785,7 @@ public with sharing class AuthService {
 			'client_id' => c.client.id,
 			'redirect_uri' => getOAuthRedirectUrl().toExternalForm(),
 			'state' => encodeState(generateNonce(), new State(
-				origin,
+				target,
 				c.environment.environment,
 				c.environment.accountBaseUrl,
 				false))
@@ -801,7 +801,7 @@ public with sharing class AuthService {
 		if (state == null || !state.isValid) throw new DocuSignException(Label.InvalidAuthState);
 
 		return SecureUtils.encrypt(nonce
-			+ '|' + state.origin
+			+ '|' + state.target
 			+ '|' + state.environment.name()
 			+ '|' + state.baseUrl.toExternalForm()
 			+ '|' + state.setup);
@@ -840,10 +840,10 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 5) Verify Salesforce origin.
-		String origin = toks[1];
-		if (!Salesforce.isValidOrigin(origin)) {
-			LOG.error('Invalid Salesforce origin: ' + origin);
+		// 5) Verify Salesforce target.
+		String target = toks[1];
+		if (!Salesforce.isValidTarget(target)) {
+			LOG.error('Invalid Salesforce target: ' + target);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
@@ -872,7 +872,7 @@ public with sharing class AuthService {
 		// 9) Parse setup boolean
 		Boolean setup = Boolean.valueOf(toks[4]);
 
-		return new State(origin, environment, baseUrl, setup);
+		return new State(target, environment, baseUrl, setup);
 	}
 
 	private static Gen.Product getGenProduct(Product p) {
@@ -1220,8 +1220,8 @@ public with sharing class AuthService {
 				saveUserCredentials(authorizationCode, s.baseUrl);
 			}
 			return result == null
-				? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.origin)
-				: result.withTarget(s.origin);
+				? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.target)
+				: result.withTarget(s.target);
 		} finally {
 			if (String.isNotBlank(us.Nonce__c)) {
 				us.Nonce__c = null;
@@ -1258,7 +1258,7 @@ public with sharing class AuthService {
 				LoginInformation.STATUS_FAILURE,
 				errorCode == 'consent_required' || errorCode == 'access_denied' || String.isBlank(errorMessage)
 					? Label.ConsentRequired : errorMessage,
-				s.origin);
+				s.target);
 		} finally {
 			if (String.isNotBlank(us.Nonce__c)) {
 				us.Nonce__c = null;

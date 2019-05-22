@@ -6234,6 +6234,13 @@
 		<value>Invalid Salesforce event origin.</value>
 	</labels>
 	<labels>
+		<fullName>InvalidTarget</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Salesforce event target</shortDescription>
+		<value>Invalid Salesforce event target.</value>
+	</labels>
+	<labels>
 		<fullName>AuthorizeDocuSignInstructions</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
