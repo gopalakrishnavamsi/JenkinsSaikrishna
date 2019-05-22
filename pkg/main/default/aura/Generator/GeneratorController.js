@@ -1,5 +1,5 @@
 ({
-  init: function (component, event, helper) {
+  init: function(component, event, helper) {
     var config = component.get('v.config');
     helper.checkMultiCurrency(component);
 
@@ -10,14 +10,14 @@
         templateId: component.get('v.templateId')
       });
 
-      action.setCallback(this, function (response) {
+      action.setCallback(this, function(response) {
         var state = response.getState();
-        if (state === "SUCCESS") {
+        if (state === 'SUCCESS') {
           var results = response.getReturnValue();
           component.set('v.config', results);
           component.set('v.templateFiles', results.generated);
           helper.setupData(component);
-        } else if (state === "ERROR") {
+        } else if (state === 'ERROR') {
           var errorMessage = $A.get('$Label.c.ErrorMessage');
           var errors = response.getError();
           if (errors) {
@@ -32,7 +32,6 @@
         }
       });
       $A.enqueueAction(action);
-
     } else {
       component.set('v.isLoading', true);
       // TODO: Verify has Gen license, trial not expired, etc.
@@ -41,24 +40,24 @@
     }
   },
 
-  generateDocs: function (component, event, helper) {
+  generateDocs: function(component, event, helper) {
     helper.getRecordData(component);
   },
 
-  checkRemaingFiles: function (component) {
+  checkRemaingFiles: function(component) {
     var files = component.get('v.templateFiles');
     var selected = [];
 
-    files.forEach(function (el) {
+    files.forEach(function(el) {
       if (el.isChecked) {
         selected.push(el);
       }
     });
 
-    component.set('v.disableGenerateButton', selected.length == 0);
+    component.set('v.disableGenerateButton', selected.length === 0);
   },
 
-  removeFocusCatcher: function (component, event) {
+  removeFocusCatcher: function(component, event) {
     event.currentTarget.remove();
   }
 });

@@ -1,5 +1,5 @@
 ({
-  onInit: function (component, event, helper) {
+  onInit: function(component, event, helper) {
     //initialize recipients
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
@@ -9,35 +9,41 @@
     component.set('v.currentStep', '1');
   },
 
-  handleRecipientChange: function (component, event, helper) {
+  handleRecipientChange: function(component, event, helper) {
     helper.resolveRecipient(component, event.getParam('data'));
   },
 
-  addRecipient: function (component, event, helper) {
+  addRecipient: function(component, event, helper) {
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
     component.set('v.recipients', recipients);
   },
 
-  removeRecipient: function (component, event) {
+  removeRecipient: function(component, event) {
     var recipients = component.get('v.recipients');
     recipients.splice(event.getSource().get('v.value'), 1);
     component.set('v.recipients', recipients);
   },
 
-  onApproverDrag: function (component, event) {
+  onApproverDrag: function(component, event) {
     event.dataTransfer.setData('Text', '');
-    if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
+    if (
+      event.currentTarget.id &&
+      !$A.util.isUndefinedOrNull(parseInt(event.currentTarget.id))
+    ) {
       component.set('v.draggedId', parseInt(event.currentTarget.id));
     }
   },
 
-  allowDrop: function (component, event) {
+  allowDrop: function(component, event) {
     event.preventDefault();
   },
 
-  onApproverDrop: function (component, event) {
-    if (event.currentTarget.id && parseInt(event.currentTarget.id) !== 'undefined') {
+  onApproverDrop: function(component, event) {
+    if (
+      event.currentTarget.id &&
+      !$A.util.isUndefinedOrNull(parseInt(event.currentTarget.id))
+    ) {
       component.set('v.droppedId', parseInt(event.currentTarget.id));
     }
 
@@ -45,9 +51,19 @@
     var droppedId = component.get('v.droppedId');
     var recipients = component.get('v.recipients');
 
-    if (draggedId !== 'undefined' && droppedId !== 'undefined' && recipients !== 'undefined') {
-
-      if (recipients[droppedId] !== 'undefined' && recipients[draggedId] !== 'undefined' && recipients[draggedId].name !== 'undefined' && recipients[draggedId].name !== '' && recipients[droppedId].name !== 'undefined' && recipients[droppedId].name !== '') {
+    if (
+      draggedId !== 'undefined' &&
+      droppedId !== 'undefined' &&
+      recipients !== 'undefined'
+    ) {
+      if (
+        recipients[droppedId] !== 'undefined' &&
+        recipients[draggedId] !== 'undefined' &&
+        recipients[draggedId].name !== 'undefined' &&
+        recipients[draggedId].name !== '' &&
+        recipients[droppedId].name !== 'undefined' &&
+        recipients[droppedId].name !== ''
+      ) {
         var temp = recipients[draggedId];
         recipients.splice(draggedId, 1);
         recipients.splice(droppedId, 0, temp);
@@ -56,13 +72,13 @@
     }
   },
 
-  setApprovalOrder: function (component) {
+  setApprovalOrder: function(component) {
     //set the attribute showApprovalOrder based on Checkbox value
     var isChecked = component.find('approvalOrderCheckbox').get('v.checked');
     component.set('v.showApprovalOrder', isChecked);
   },
 
-  backButtonClicked: function (component, event, helper) {
+  backButtonClicked: function(component, event, helper) {
     var currentStep = component.get('v.currentStep');
     //currentStep is Select Recipients
     if (currentStep === '1') {
@@ -74,7 +90,7 @@
     }
   },
 
-  nextButtonClicked: function (component, event, helper) {
+  nextButtonClicked: function(component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '1') {
       //Proceed to the personalize message step
@@ -86,11 +102,15 @@
       //set the current step to 1
       component.set('v.currentStep', '1');
       //display toast notification
-      helper.showToast(component, 'Your document has been sent for approval.', 'success');
+      helper.showToast(
+        component,
+        'Your document has been sent for approval.',
+        'success'
+      );
     }
   },
 
-  handlePillCloseEvent: function (component, event, helper) {
+  handlePillCloseEvent: function(/*component, event, helper*/) {
     //TODO: Add the logic for updating the recipients array on this pill handle close event.
   }
 });

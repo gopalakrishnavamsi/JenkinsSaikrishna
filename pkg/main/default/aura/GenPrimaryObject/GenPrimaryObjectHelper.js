@@ -1,5 +1,5 @@
 ({
-  addObject: function (component, isPrimary) {
+  addObject: function(component, isPrimary) {
     var config = component.get('v.config');
 
     if ($A.util.isEmpty(config.objectMappings)) {
@@ -16,14 +16,16 @@
     component.set('v.config', config);
   },
 
-  getUniqueLabel: function (component, label, index) {
+  getUniqueLabel: function(component, label, index) {
     var config = component.get('v.config');
-    var selectedMapping = config.objectMappings[index];
     var mappings = config.objectMappings;
     var labelCount = 1;
 
-    mappings.forEach(function (objMap, loopIndex) {
-      if (index != loopIndex && (objMap.label == label || objMap.label == label + labelCount)) {
+    mappings.forEach(function(objMap, loopIndex) {
+      if (
+        index !== loopIndex &&
+        (objMap.label === label || objMap.label === label + labelCount)
+      ) {
         labelCount++;
       }
     });

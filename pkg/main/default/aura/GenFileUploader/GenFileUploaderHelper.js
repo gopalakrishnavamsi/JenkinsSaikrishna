@@ -1,9 +1,8 @@
 ({
-  upload: function (component, file, base64Data, recordId) {
+  upload: function(component, file, base64Data, recordId) {
     var action = component.get('c.saveChunk');
 
     component.getEvent('uploadStart').fire();
-
 
     action.setParams({
       contentVersionId: null,
@@ -12,11 +11,11 @@
       base64Data: base64Data
     });
 
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var endEvt = component.getEvent('uploadedFile');
       var state = response.getState();
 
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         var responseFile = response.getReturnValue();
         endEvt.setParams({
           data: {
@@ -24,7 +23,7 @@
             success: true
           }
         });
-      } else if (state === "ERROR") {
+      } else if (state === 'ERROR') {
         endEvt.setParams({
           data: {
             file: null,

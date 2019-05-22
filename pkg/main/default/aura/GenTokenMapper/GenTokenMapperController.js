@@ -1,33 +1,33 @@
 ({
-  init: function (component) {
+  init: function(component) {
     var action = component.get('c.getMergeFields');
     var objMapping = component.get('v.objMapping');
 
     action.setParams({
       sObjectType: objMapping.apiName,
-      isChild : false
+      isChild: false
     });
 
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         var returnValue = response.getReturnValue();
 
         var childRelations = [];
         var objectFields = [];
         var allFields = [];
-        allFields.push({'fields': [], 'label': objMapping.label});
+        allFields.push({ fields: [], label: objMapping.label });
         var allFieldsByApiName = {};
 
-        returnValue.forEach(function (object) {
-          if (object.type === "CHILD_RELATIONSHIP") {
+        returnValue.forEach(function(object) {
+          if (object.type === 'CHILD_RELATIONSHIP') {
             childRelations.push(object);
           } else {
             objectFields.push(object);
           }
         });
 
-        childRelations.sort(function (a, b) {
+        childRelations.sort(function(a, b) {
           if (a.label > b.label) {
             return 1;
           } else {
@@ -39,66 +39,65 @@
           var relationShipName;
           if (object.name.substr(0, object.name.indexOf('.')) !== '') {
             relationShipName = object.name.substr(0, object.name.indexOf('.'));
-          }
-          else {
+          } else {
             relationShipName = objMapping.label;
           }
           var labelExists = false;
           allFields.forEach(function(field) {
             if (field.label === relationShipName) {
-                 field.fields.push(object);
-                 labelExists = true;
+              field.fields.push(object);
+              labelExists = true;
             }
           });
           if (!labelExists) {
             var fields = [];
             fields.push(object);
-            var allFieldsInstance = {'fields': fields, 'label': relationShipName};
+            var allFieldsInstance = { fields: fields, label: relationShipName };
             allFields.push(allFieldsInstance);
           }
         });
 
-        allFields.forEach(function (obj) {
-          obj.fields.forEach(function (field) {
+        allFields.forEach(function(obj) {
+          obj.fields.forEach(function(field) {
             allFieldsByApiName[field.name] = field;
           });
         });
 
-        childRelations.forEach(function (obj) {
+        childRelations.forEach(function(obj) {
           allFieldsByApiName[obj.relatesTo] = obj;
         });
         component.set('v.childRelations', childRelations);
         component.set('v.allFields', allFields);
         component.set('v.allFieldsByApiName', allFieldsByApiName);
 
-        if (objMapping.fieldMappings.length == 0) {
+        if (objMapping.fieldMappings.length === 0) {
           component.set('v.isLoading', false);
         }
       }
 
-      if (state === "ERROR") {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
+      if (state === 'ERROR') {
+        // FIXME: errorMessage is constructed but never used. Can use uiHelper.getErrorMessage to do the same.
+        // var errorMessage = $A.get('$Label.c.ErrorMessage');
+        // var errors = response.getError();
+        // if (errors) {
+        //   if (errors[0] && errors[0].message) {
+        //     errorMessage += errors[0].message;
+        //   }
+        // } else {
+        //   errorMessage += $A.get('$Label.c.UnknownError');
+        // }
         component.set('v.saving', false);
       }
-
     });
     action.setBackground();
     $A.enqueueAction(action);
   },
 
-  enableLoading: function (component) {
+  enableLoading: function(component) {
     component.set('v.isLoading', true);
   },
 
-  childrenLoaded: function (component) {
+  childrenLoaded: function(component) {
     var objMapping = component.get('v.objMapping');
     var loadedChildren = component.get('v.loadedChildren');
     loadedChildren++;
@@ -110,7 +109,7 @@
     }
   },
 
-  addField: function (component) {
+  addField: function(component) {
     var objMapping = component.get('v.objMapping');
 
     if ($A.util.isEmpty(objMapping.fieldMappings)) {
@@ -118,19 +117,19 @@
     }
 
     objMapping.fieldMappings.push({
-      'apiName': '',
-      'dataType': '',
-      'childFieldMappings': [],
-      'isConditional': false,
-      'isChildRelation': false,
-      'dateFormat': 'default',
-      'currencyFormat': 'symbol'
+      apiName: '',
+      dataType: '',
+      childFieldMappings: [],
+      isConditional: false,
+      isChildRelation: false,
+      dateFormat: 'default',
+      currencyFormat: 'symbol'
     });
 
     component.set('v.objMapping', objMapping);
   },
 
-  removeField: function (component, event) {
+  removeField: function(component, event) {
     var objMapping = component.get('v.objMapping');
     var index = parseInt(event.getParam('data'), 10);
 
