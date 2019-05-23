@@ -58,7 +58,7 @@
                 $A.enqueueAction(limitedAccessToken);
               });
             },
-            apiBaseDomain: result.apiBaseUrl,
+            apiBaseDomain: result.apiUploadBaseUrl,
             accountId: result.accountId.value
           };
           var uploadWidget = new SpringCM.Widgets.Upload(options);
