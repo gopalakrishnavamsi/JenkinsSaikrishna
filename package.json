@@ -25,8 +25,9 @@
     "updateOrg": "sfdx force:source:push",
     "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "openOrg": "sfdx force:org:open",
-    "setup": "npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",
+    "openOrg":"sfdx force:org:open",
+    "installGen":"sfdx force:package:install --package 04t5A00000295yd",
+    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run installGen && npm run generatePassword && npm run openOrg",    
     "lint": "eslint ./;",
     "test": "mocha -r jsdom-global/register"
   },

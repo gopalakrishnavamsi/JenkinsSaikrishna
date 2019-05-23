@@ -16,35 +16,42 @@ public class XMLSerializer {
         return fromPrimitive(data.toString(), tag);
     }      
    
-    public static String fromObject(final Set<String> properties, final Object data, final String parentTag) {
+    public static String fromObject(final Set<String> properties, final Object data, final String parentTag, final Boolean encode) {
         Map<String, Object> dataMap = (Map<String, Object>) JSON.deserializeUntyped(JSON.serialize(data));
         List<String> tags = new List<String>();
         for (String key : properties) {
-            if (dataMap.get(key.toLowerCase()) != null) tags.add(fromPrimitive(dataMap.get(key.toLowerCase()), key.capitalize()));
+            if (dataMap.get(key) != null) {
+                if (encode) tags.add(fromPrimitive(StringUtils.encode(String.valueOf(dataMap.get(key))), key.capitalize()));
+                else tags.add(fromPrimitive(dataMap.get(key), key.capitalize()));
+
+            }
         }
         return fromPrimitive(String.join(tags, ''), parentTag);
     }
     
-    public static String fromObject(final Set<String> properties, final Map<String, Object> data, final String parentTag) {
+    public static String fromObject(final Set<String> properties, final Map<String, Object> data, final String parentTag, final Boolean encode) {
         List<String> tags = new List<String>();
         for (String key : properties) {
-            if (data.get(key.toLowerCase()) != null) tags.add(fromPrimitive(data.get(key.toLowerCase()), key.capitalize()));
+            if (data.get(key) != null) {
+                if (encode) tags.add(fromPrimitive(StringUtils.encode(String.valueOf(data.get(key))), key.capitalize()));
+                else tags.add(fromPrimitive(data.get(key), key.capitalize()));
+            }
         }
         return fromPrimitive(String.join(tags, ''), parentTag);
     }    
     
-    public static String fromIteratable(final Set<String> properties, final List<Object> data, final String parentTag, final string itemTag) {
+    public static String fromIteratable(final Set<String> properties, final List<Object> data, final String parentTag, final string itemTag, final Boolean encode) {
         String results = '';
         for (Object obj : data) {
-            results += fromObject(properties, obj, itemTag);
+            results += fromObject(properties, obj, itemTag, encode);
         }
         return fromPrimitive(results, parentTag);
     }
     
-    public static String fromIteratable(final Set<String> properties, final List<UUID> data, final String parentTag, final string itemTag) {
+    public static String fromIteratable(final Set<String> properties, final List<UUID> data, final String parentTag, final string itemTag, final Boolean encode) {
         String results = '';
         for (UUID id : data) {
-            results += fromObject(properties, new Map<String, String>{ 'id' => id.toString() }, itemTag);
+            results += fromObject(properties, new Map<String, String>{ 'id' => id.toString() }, itemTag, encode);
         }
         return fromPrimitive(results, parentTag);
     }    
