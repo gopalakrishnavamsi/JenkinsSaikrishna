@@ -8,6 +8,7 @@ private class OrgServiceTest {
 			List<String> testResults = OrgService.getOrgSettings();
 			OrgService.OrgSettings settings = ((OrgService.OrgSettings)JSON.deserialize(testResults[0], OrgService.OrgSettings.class));
 			System.assertNotEquals(settings.accountId, null);
+			System.assertEquals(settings.accountId, AccountSettings__c.getOrgDefaults().AccountId__c);
 			Test.stopTest();
 		}
 	}
