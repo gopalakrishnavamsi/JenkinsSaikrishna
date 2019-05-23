@@ -132,24 +132,27 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<String> documentsIds, final String reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		try {
+			if (String.isBlank(reviewers)) throw Controller.wrapException('Failed to send documents for External Review: Invalid Reviewers');
 			List<UUID> documentIdList = new List<UUID>();
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
 			return NegotiateService.sendForExternalReview(agreementName, sourceId, documentIdList, reviewers, subject, body, expiresInNumberOfDays);
 		} catch (Exception ex) {
+			System.debug('ex: ' + ex.getMessage());
 			throw Controller.wrapException(ex, 'Failed to send documents for External Review');
 		}
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String reviewers, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String approvers, final String subject, final String body) {
 		try {
+			if (String.isBlank(approvers)) throw Controller.wrapException('Failed to send documents for Internal Approval: Invalid Approvers');			
 			List<UUID> documentIdList = new List<UUID>();
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForInternalApproval(agreementName, sourceId, documentIdList, reviewers, subject, body);
+			return NegotiateService.sendForInternalApproval(agreementName, sourceId, documentIdList, approvers, subject, body);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}

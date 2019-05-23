@@ -6,7 +6,7 @@
     <aura:attribute name="sourceId" type="String"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
-    <aura:attribute name="recipients" type="Object[]"/>
+    <aura:attribute name="recipients" type="Recipient[]"/>
     <aura:attribute name="currentStep" type="String" access="private"/>
     <aura:attribute name="disableDueDate" type="Boolean" access="private"/>
     <aura:attribute name="dueDate" type="Date" access="private"/>

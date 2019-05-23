@@ -6263,14 +6263,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFailureEmailSubject</shortDescription>
-		<value>We couldn't send your review request for {0}</value>
+		<value>We could not send your review request for {0}</value>
 	</labels>
 	<labels>
 		<fullName>ExpiredReviewSenderEmailBody</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExpiredReviewSenderEmailBody</shortDescription>
-		<value>The review request for {0} has expired. If you still want someone review this, you'll need to send a new review request</value>
+		<value>The review request for {0} has expired. If you still want someone review this, you will need to send a new review request</value>
 	</labels>
 	<labels>
 		<fullName>ExpiredReviewSenderEmailSubject</fullName>

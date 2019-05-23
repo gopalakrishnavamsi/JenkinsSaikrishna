@@ -316,10 +316,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	//Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
 	private class APIApprover {
+		public String name { get; private set; }
 		public String email { get; private set; }
 
-		public APIApprover(final String email) {
+		public APIApprover(final String email, final String name) {
 			this.email = email;
+			this.name = name;
 		}
 	}
 
@@ -361,9 +363,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}		
 	}		
 
-	private static List<APIApprover> getAPIApprovers(final String approvers) {
+	private static List<APIApprover> getAPIApprovers(final List<Recipient> approvers) {
 		try {
-			List<APIApprover> results = (List<APIApprover>) JSON.deserialize(approvers, List<APIApprover>.class);
+			List<APIApprover> results = new List<APIApprover>();
+			for (Recipient rec : approvers) {
+				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIApprover(rec.name, rec.email));
+				else throw new APIException('Invalid Approver email');
+			}
 			return results;
 		} catch(Exception ex) {
 			throw new APIException('Invalid Approvers: ' + ex.getMessage());
@@ -371,9 +377,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private static List<APIReviewer> getAPIReviewers(final String reviewers) {
+	private static List<APIReviewer> getAPIReviewers(final List<Recipient> approvers) {
 		try {
-			List<APIReviewer> results = (List<APIReviewer>)  JSON.deserialize(reviewers, List<APIReviewer>.class);
+			List<APIReviewer> results = new List<APIReviewer>();
+			for (Recipient rec : approvers) {
+				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIReviewer(rec.name, rec.email));
+				else throw new APIException('Invalid Reviewer email');
+			}
 			return results;
 		} catch(Exception ex) {
 			throw new APIException('Invalid Reviewers: ' + ex.getMessage());
@@ -513,8 +523,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static String getDocumentDeepLink(final String sourceId, final UUID documentId) {
 		String previewPath = NegotiateService.getAgreementPreviewLink(sourceId, documentId.value);
 		if (previewPath == null) return null;
-
-		return Site.getBaseUrl() + previewPath;
+		return new Url(Salesforce.baseUrl, previewPath).toExternalForm().replace('&', '&amp;');
 	}
 
 //Get All Agreements from an EOS folder
@@ -658,7 +667,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 // Send for Approval
-	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final String approvers, final String subject, final String message) {
+	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String message) {
 
 		RestAPI.Response response = post(
 			getBaseUrl(),
@@ -682,7 +691,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 // Send for External Review
-	public UUID sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final String reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public UUID sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
 
 		RestAPI.Response response = post(
 			getBaseUrl(),

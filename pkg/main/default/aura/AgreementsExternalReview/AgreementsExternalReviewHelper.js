@@ -148,15 +148,11 @@
     component.set('v.loading', true);
     var self = this;
     var agreementDetails = component.get('v.agreementDetails');
+    var recipients = component.get('v.recipients');
+    var sourceId = component.get('v.sourceId');
 
     var documentIdList = [];
     documentIdList.push(agreementDetails.id.value);
-
-    var recipientList = [];
-    var recipients = component.get('v.recipients');
-    recipients.forEach(function (recipient) {
-      recipientList.push({ name: recipient.name, email: recipient.email });
-    });
 
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
@@ -172,9 +168,9 @@
 
     action.setParams({
       agreementName: agreementDetails.name,
-      sourceId: component.get('v.sourceId'),
+      sourceId: sourceId,
       documentsIds: documentIdList,
-      reviewers: JSON.stringify(recipientList),
+      reviewers: JSON.stringify(recipients),
       subject: emailSubject,
       body: emailBody,
       expiresInNumberOfDays: requestExpirationDays
