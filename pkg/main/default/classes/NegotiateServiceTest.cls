@@ -1,5 +1,5 @@
 @IsTest
-public with sharing class NegotiateServiceTest {
+private class NegotiateServiceTest {
 
 	@IsTest
 	static void test_getAgreements_success() {
