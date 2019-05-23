@@ -883,9 +883,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String accessToken;
 		public String expiresIn;
 		public String APIBaseUrl;
+		public String APIUploadBaseUrl;
+		public String APIDownloadBaseUrl;
+
+
 
 		public NegotiateService.LimitedAccessToken toExternalForm() {
-			return new NegotiateService.LimitedAccessToken(accessToken, APIBaseUrl);
+			return new NegotiateService.LimitedAccessToken(accessToken, APIBaseUrl, APIUploadBaseUrl, APIDownloadBaseUrl);
 		}
 	}
 
