@@ -18,6 +18,9 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	public static final String USER_EMAIL = 'TestUser@TestCompany.com';
 	public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
 	public static final Id OBJECT_ID = ID.valueOf('0061U0000058I2EQAU');
+	public static final String REVIEWERS_OBJECT = '[{"email":"unittest@test.com", "name":"test user"}]';
+	public static final Entity USER_ENTITY = new Entity(UserInfo.getUserId());
+	public static final Recipient WORKFLOW_RECIPIENT = Recipient.newBulkRecipient('Test User', 'Test@Test.com', NegotiateAPIMock.USER_ENTITY);
 
 	public NegotiateAPIMock(final Boolean success) {
 		this.success = success;
