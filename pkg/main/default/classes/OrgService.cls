@@ -14,14 +14,15 @@ global with sharing class OrgService {
 	global static List<String> getOrgSettings() {
 		List<String> results = new List<String>();
 		OrgSettings settings;
-		if (!Permissions.isDocuSignUser()) {
+		if (Permissions.isDocuSignUser()) {
+			try {
+				settings = new OrgSettings(AccountSettings__c.getOrgDefaults().AccountId__c);
+			} catch (Exception ex) {
+				settings = new OrgSettings('');
+				System.Debug(LoggingLevel.ERROR, 'Error fetching org Settings: ' + ex.getMessage());
+			}
+		} else {
 			throw new UnauthorizedException(Label.MustBeDocuSignUser);
-		}
-		try {
-			Credentials c = Credentials.getInstance();
-			settings = new OrgSettings(c.account.id.toString());
-		} catch (Exception ex) {
-			settings = new OrgSettings('');
 		}
 		results.add(JSON.serialize(settings));
 		return results;
