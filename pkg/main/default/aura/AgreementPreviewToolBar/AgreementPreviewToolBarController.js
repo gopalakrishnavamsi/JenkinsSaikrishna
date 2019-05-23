@@ -27,7 +27,7 @@
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
       var sourceId = component.get('v.sourceId');
-      actions.internalReview(agreement, sourceId, component);
+      actions.internalApproval(agreement, sourceId, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);

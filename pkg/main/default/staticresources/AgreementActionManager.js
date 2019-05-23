@@ -98,7 +98,7 @@ AgreementActionManager.prototype.rename = function (agreementDetails, component)
   });
 };
 
-AgreementActionManager.prototype.internalReview = function (agreementDetails, sourceId, component) {
+AgreementActionManager.prototype.internalApproval = function (agreementDetails, sourceId, component) {
   if (this.activeScope) this.activeScope.destroy();
   generateComponent(this.anchor, component, this.getComponentName(AgreementComponents.InternalApproval), {
     showModal: true,
