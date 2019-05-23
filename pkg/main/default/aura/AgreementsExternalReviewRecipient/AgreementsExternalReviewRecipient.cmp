@@ -1,6 +1,6 @@
 <aura:component description="AgreementsExternalReviewRecipient">
     <!--attributes -->
-    <aura:attribute name="recipient" type="Object" required="true"/>
+    <aura:attribute name="recipient" type="Recipient" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
 
     <!--handlers -->

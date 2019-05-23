@@ -25,7 +25,8 @@
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.internalApproval(agreement, component);
+      var sourceId = component.get('v.sourceId');
+      actions.internalApproval(agreement, sourceId, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
@@ -36,7 +37,8 @@
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.externalReview(agreement, component);
+      var sourceId = component.get('v.sourceId');
+      actions.externalReview(agreement, sourceId, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);

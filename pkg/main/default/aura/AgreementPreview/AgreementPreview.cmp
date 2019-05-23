@@ -20,7 +20,7 @@
 
     <div id="fullContainer">
         <div id="toolbarContainer">
-            <c:AgreementPreviewToolBar agreement="{!v.agreement}" agreementActionManager="{!v.agreementActionManager}"
+            <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}" agreementActionManager="{!v.agreementActionManager}"
                                        uiHelper="{!v.uiHelper}"/>
         </div>
         <div id="documentContainer">

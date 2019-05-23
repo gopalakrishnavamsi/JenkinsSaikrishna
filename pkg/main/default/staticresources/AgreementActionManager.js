@@ -127,6 +127,7 @@ AgreementActionManager.prototype.rename = function(
 
 AgreementActionManager.prototype.internalApproval = function(
   agreementDetails,
+  sourceId,
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
@@ -136,7 +137,8 @@ AgreementActionManager.prototype.internalApproval = function(
     this.getComponentName(AgreementComponents.InternalApproval),
     {
       showModal: true,
-      agreementDetails: agreementDetails
+      agreementDetails: agreementDetails,
+      sourceId: sourceId
     }
   )
     .then(function(modalComponent) {
@@ -149,6 +151,7 @@ AgreementActionManager.prototype.internalApproval = function(
 
 AgreementActionManager.prototype.externalReview = function(
   agreementDetails,
+  sourceId, 
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
@@ -158,7 +161,8 @@ AgreementActionManager.prototype.externalReview = function(
     this.getComponentName(AgreementComponents.ExternalReview),
     {
       showModal: true,
-      agreementDetails: agreementDetails
+      agreementDetails: agreementDetails,
+      sourceId: sourceId
     }
   )
     .then(function(modalComponent) {
