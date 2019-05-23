@@ -180,11 +180,12 @@ public with sharing class NegotiateAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
-				NegotiateAPIMock.DOCUMENT_ID
-			}, new List<String> {
-				NegotiateAPIMock.USER_EMAIL
-			}, 'Test subject', 'Test message body: hello world');
+			UUID result = NegotiateAPI.getInstance().sendForApproval('Test Agreement', 
+			NegotiateAPIMock.SOURCE_OBJECT_ID,
+			new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+			new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }
+			, 'Test subject'
+			, 'Test message body: hello world');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -198,11 +199,12 @@ public with sharing class NegotiateAPITest {
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
-				NegotiateAPIMock.DOCUMENT_ID
-			}, new List<String> {
-				NegotiateAPIMock.USER_EMAIL
-			}, 'Test subject', 'Test message body: hello world', 5);
+			UUID result = NegotiateAPI.getInstance().sendForExternalReview('Test Agreement',
+			NegotiateAPIMock.SOURCE_OBJECT_ID, 
+			new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+			new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
+			'Test subject', 'Test message body: hello world', 
+			5);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -218,11 +220,12 @@ public with sharing class NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForApproval(new List<UUID> {
-					NegotiateAPIMock.DOCUMENT_ID
-				}, new List<String> {
-					NegotiateAPIMock.USER_EMAIL
-				}, 'Test subject', 'Test message body: hello world');
+				NegotiateAPI.getInstance().sendForApproval('Test Agreement', 
+				NegotiateAPIMock.SOURCE_OBJECT_ID,	
+				new List<UUID> {NegotiateAPIMock.DOCUMENT_ID }, 
+				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
+				'Test subject', 
+				'Test message body: hello world');
 			} catch (APIException ex) {
 				hasError = true;
 			}
@@ -241,11 +244,13 @@ public with sharing class NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForExternalReview(new List<UUID> {
-					NegotiateAPIMock.DOCUMENT_ID
-				}, new List<String> {
-					NegotiateAPIMock.USER_EMAIL
-				}, 'Test subject', 'Test message body: hello world', 5);
+				NegotiateAPI.getInstance().sendForExternalReview('Test Agreement', 
+					NegotiateAPIMock.SOURCE_OBJECT_ID, 
+					new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
+					'Test subject', 
+					'Test message body: hello world', 
+					5);
 			} catch (APIException ex) {
 				hasError = true;
 			}

@@ -49,7 +49,7 @@ public class XMLSerializerTest {
 		Test.startTest();
 		//Using EnvelopeSettings class and the two properties on that object for this test.
 		EnvelopeSettings ec1 = EnvelopeSettings.getInstance();
-		String result = XMLSerializer.fromObject(new Set<String>{ 'showRemindAndExpireSettings', 'showTagButton' }, ec1, 'EnvelopeSettings');
+		String result = XMLSerializer.fromObject(new Set<String>{ 'showRemindAndExpireSettings', 'showTagButton' }, ec1, 'EnvelopeSettings', false);
 		
 		Test.stopTest();
         
@@ -65,7 +65,7 @@ public class XMLSerializerTest {
 		Test.startTest();
 		
 		List<UUID> ids = new List<UUID>{ UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f42'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f45') };
-		String result = XMLSerializer.fromIteratable(new Set<String>{ 'Value' } , ids, 'Documents', 'Document');
+		String result = XMLSerializer.fromIteratable(new Set<String>{ 'Value' } , ids, 'Documents', 'Document', false);
 		Test.stopTest();
 
 		System.assert(XMLSerializer.isValid(result));
