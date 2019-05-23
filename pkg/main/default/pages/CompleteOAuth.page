@@ -1,20 +1,16 @@
 <apex:page id="CompleteOAuth" controller="SetupController" title="{!$Label.DocuSign}">
-    <c:Loading />
+    <c:Loading/>
     <script>
-      function endOAuth(event, result) {
-        window.opener.endOAuth(event, result);
-        window.close();
+      function endOAuth(response, loginInformation) {
+        if (loginInformation && loginInformation.target) {
+          var target = loginInformation.target;
+          window.opener.postMessage({response: response, loginInformation: loginInformation}, target);
+          window.close();
+        }
       }
 
-      var error = '{!JSENCODE($CurrentPage.parameters.error)}';
-      if (error) {
-        endOAuth({
-          status: false, message: '{!JSENCODE($CurrentPage.parameters.error_message)}' || '{!$Label.ConsentRequired}'
-        }, null);
-      } else {
-        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.completeOAuth}', '{!JSENCODE($CurrentPage.parameters.code)}', '{!JSENCODE($CurrentPage.parameters.state)}', function (result, event) {
-          endOAuth(event, result);
-        });
-      }
+      Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.completeOAuth}', '{!JSENCODE($CurrentPage.parameters.code)}', '{!JSENCODE($CurrentPage.parameters.state)}', '{!JSENCODE($CurrentPage.parameters.error)}', '{!JSENCODE($CurrentPage.parameters.error_message)}', function (loginInformation, response) {
+        endOAuth(response, loginInformation);
+      });
     </script>
 </apex:page>

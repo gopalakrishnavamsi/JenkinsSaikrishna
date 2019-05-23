@@ -9,9 +9,7 @@ private class SettingsControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(Application.lightningNamespace, result.namespace);
-			System.assertEquals(Salesforce.getLightningHost(), result.lightningHost);
-			System.assertEquals(Salesforce.getVisualforceHost(), result.visualforceHost);
+			System.assertEquals(Application.namespace, result.namespace);
 		}
 	}
 

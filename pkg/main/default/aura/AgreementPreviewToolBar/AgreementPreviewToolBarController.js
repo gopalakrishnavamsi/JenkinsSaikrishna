@@ -1,6 +1,5 @@
 ({
-
-  rename: function (component) {
+  rename: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -11,7 +10,7 @@
     }
   },
 
-  delete: function (component) {
+  delete: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -22,7 +21,7 @@
     }
   },
 
-  internalApproval: function (component) {
+  internalApproval: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -34,7 +33,7 @@
     }
   },
 
-  externalReview: function (component) {
+  externalReview: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -46,10 +45,9 @@
     }
   },
 
-  upload: function (component) {
+  upload: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
-      var agreement = component.get('v.agreement');
       actions.upload(component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
@@ -57,7 +55,7 @@
     }
   },
 
-  share: function (component) {
+  share: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -67,5 +65,4 @@
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   }
-
 });

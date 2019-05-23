@@ -44,7 +44,7 @@ private class ApplicationTest {
 	@IsTest
 	static void test_lightningNamespace() {
 		String orgNS = [SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix;
-		System.assertEquals(Application.isManaged ? 'dfsle' : (String.isNotBlank(orgNS) ? orgNS : 'c'), Application.lightningNamespace);
+		System.assertEquals(Application.isManaged ? 'dfsle' : (String.isNotBlank(orgNS) ? orgNS : 'c'), Application.namespace);
 	}
 
 	@IsTest
