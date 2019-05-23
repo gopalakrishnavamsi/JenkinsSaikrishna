@@ -163,32 +163,32 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private static Map<String, APIEmail> getExternalReviewTemplateEmails(final String documentName, final String customEmailBody, final String customEmailSubject) {
 		return new Map<String, APIEmail> {
 			'FailureEmail' => new APIEmail(
-				String.format(Label.ExternalReviewFailureEmailSubject, new List<String> { documentName }),
+				String.format(Label.ExternalReviewFailureEmailSubject_1, new List<String> { documentName }),
 				Label.ExternalReviewFailureEmailBody,
 				Label.ViewDocumentButton,
 				Label.ExternalReviewFailureEmailHeader
 			),
 			'ExpiredReview:SenderEmail' => new APIEmail(
 				Label.ExpiredReviewSenderEmailSubject,
-				String.format(Label.ExpiredReviewSenderEmailBody, new List<String> { documentName }),
+				String.format(Label.ExpiredReviewSenderEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.ExpiredReviewHeader, new List<String> { documentName })
+				String.format(Label.ExpiredReviewHeader_1, new List<String> { documentName })
 			),
 			'ExpiredReview:ReviewerEmail' => new APIEmail(
 				Label.ExpiredReviewReviewerEmailSubject,
-				String.format(Label.ExpiredReviewReviewerEmailBody, new List<String> { documentName }),
+				String.format(Label.ExpiredReviewReviewerEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.ExpiredReviewHeader	, new List<String> { documentName })
+				String.format(Label.ExpiredReviewHeader_1	, new List<String> { documentName })
 			),
 			'ReviewCompleted:SenderEmail' => new APIEmail(
-				String.format(Label.CompletedReviewEmailSubject, new List<String> { documentName }),
-				String.format(Label.CompletedReviewEmailBody, new List<String> { documentName }),
+				String.format(Label.CompletedReviewEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CompletedReviewEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
 				Label.CompletedReviewEmailHeader
 			), 
 			'ReviewCompleted:ReviewerEmail' => new APIEmail(
-				String.format(Label.CompletedReviewEmailSubject, new List<String> { documentName }),
-				String.format(Label.CompletedReviewEmailBody, new List<String> { documentName }),
+				String.format(Label.CompletedReviewEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CompletedReviewEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
 				Label.CompletedReviewEmailHeader
 			),
@@ -199,10 +199,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				Label.CompletedReviewEmailHeader
 			),
 			'CanceledReviewEmail' => new APIEmail(
-				String.format(Label.CanceledReviewEmailSubject, new List<String> { documentName }),
-				String.format(Label.CanceledReviewEmailBody, new List<String> { documentName }),
+				String.format(Label.CanceledReviewEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CanceledReviewEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.CanceledReviewEmailHeader, new List<String> { documentName })
+				String.format(Label.CanceledReviewEmailHeader_1, new List<String> { documentName })
 			)
 		};
 	}
@@ -269,32 +269,32 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private static Map<String, APIEmail> getApprovalTemplateEmails(final String documentName, final String customEmailBody, final String customEmailSubject) {
 		return new Map<String, APIEmail> {
 			'FailureEmail' => new APIEmail(
-				String.format(Label.ApprovalFailureEmailSubject, new List<String> { documentName }),
+				String.format(Label.ApprovalFailureEmailSubject_1, new List<String> { documentName }),
 				Label.ApprovalFailureEmailBody,
 				Label.ViewDocumentButton,
 				Label.ApprovalFailureEmailHeader
 			),
 			'ExpiredApproval:SenderEmail' => new APIEmail(
 				Label.ExpiredApprovalSenderEmailSubject,
-				String.format(Label.ExpiredApprovalSenderEmailBody, new List<String> { documentName }),
+				String.format(Label.ExpiredApprovalSenderEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.ExpiredApprovalHeader, new List<String> { documentName })
+				String.format(Label.ExpiredApprovalHeader_1, new List<String> { documentName })
 			),
 			'ExpiredApproval:ApproverEmail' => new APIEmail(
 				Label.ExpiredApprovalApproverEmailSubject,
-				String.format(Label.ExpiredApprovalApproverEmailBody, new List<String> { documentName }),
+				String.format(Label.ExpiredApprovalApproverEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.ExpiredApprovalHeader	, new List<String> { documentName })
+				String.format(Label.ExpiredApprovalHeader_1	, new List<String> { documentName })
 			),
 			'ApprovalCompleted:SenderEmail' => new APIEmail(
-				String.format(Label.CompletedApprovalEmailSubject, new List<String> { documentName }),
-				String.format(Label.CompletedApprovalEmailBody, new List<String> { documentName }),
+				String.format(Label.CompletedApprovalEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CompletedApprovalEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
 				Label.CompletedApprovalEmailHeader
 			), 
 			'ApprovalCompleted:ApproverEmail' => new APIEmail(
-				String.format(Label.CompletedApprovalEmailSubject, new List<String> { documentName }),
-				String.format(Label.CompletedApprovalEmailBody, new List<String> { documentName }),
+				String.format(Label.CompletedApprovalEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CompletedApprovalEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
 				Label.CompletedApprovalEmailHeader
 			),
@@ -305,10 +305,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				Label.CompletedApprovalEmailHeader
 			),
 			'CanceledApprovalEmail' => new APIEmail(
-				String.format(Label.CanceledApprovalEmailSubject, new List<String> { documentName }),
-				String.format(Label.CanceledApprovalEmailBody, new List<String> { documentName }),
+				String.format(Label.CanceledApprovalEmailSubject_1, new List<String> { documentName }),
+				String.format(Label.CanceledApprovalEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				Label.CanceledApprovalEmailHeader
+				Label.CanceledApprovalEmailHeader_1
 			)
 		};
 	}	
