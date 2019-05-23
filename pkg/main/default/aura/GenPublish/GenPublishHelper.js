@@ -1,5 +1,5 @@
 ({
-  getLayouts: function (component, event, helper) {
+  getLayouts: function(component, event, helper) {
     var config = component.get('v.config');
     var action = component.get('c.getLayouts');
 
@@ -7,14 +7,14 @@
       sObjectType: config.objectMappings[0].apiName
     });
 
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         var layouts = response.getReturnValue();
         if (!$A.util.isEmpty(layouts)) {
           component.set('v.layouts', layouts);
         }
-      } else if (state === "ERROR") {
+      } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {
@@ -29,16 +29,16 @@
     $A.enqueueAction(action);
   },
 
-  getGenActionName: function (component, event, helper) {
+  getGenActionName: function(component, event, helper) {
     var action = component.get('c.getGenActionName');
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         var genActionName = response.getReturnValue();
         if (!$A.util.isEmpty(genActionName)) {
           component.set('v.genActionName', genActionName);
         }
-      } else if (state === "ERROR") {
+      } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {
@@ -53,7 +53,7 @@
     $A.enqueueAction(action);
   },
 
-  copyLayout: function (layout) {
+  copyLayout: function(layout) {
     var result = null;
     if (!$A.util.isUndefinedOrNull(layout)) {
       result = JSON.parse(JSON.stringify(layout));
@@ -62,7 +62,7 @@
     return result;
   },
 
-  getLayoutsToUpdate: function (layouts, sendActionName) {
+  getLayoutsToUpdate: function(layouts, sendActionName) {
     var ls = [];
     if (!$A.util.isEmpty(layouts)) {
       for (var i = 0; i < layouts.length; i++) {
@@ -70,7 +70,8 @@
           var layout = this.copyLayout(layouts[i]);
           layout.actions = [];
           layout.actions.push({
-            type: 'GEN', name: sendActionName
+            type: 'GEN',
+            name: sendActionName
           });
           delete layout.checked;
           delete layout.original;
@@ -81,26 +82,40 @@
     return ls;
   },
 
-  publishGenButtons: function (component, event, helper) {
+  publishGenButtons: function(component, event, helper) {
     var config = component.get('v.config');
     var action = component.get('c.updateLayouts');
-    var buttonApiName = String(component.get('v.genActionName') + component.get('v.config').name);
-    var buttonLabel = $A.get('$Label.c.Generate') + ' ' + component.get('v.config').name;
-    var selectedLayouts = helper.getLayoutsToUpdate(component.get('v.layouts'), buttonApiName);
-    var parameters = {"genButtonApiName": buttonApiName, "genButtonLabel": buttonLabel, "genTemplateId": config.id};
+    var buttonApiName = String(
+      component.get('v.genActionName') + component.get('v.config').name
+    );
+    var buttonLabel =
+      $A.get('$Label.c.Generate') + ' ' + component.get('v.config').name;
+    var selectedLayouts = helper.getLayoutsToUpdate(
+      component.get('v.layouts'),
+      buttonApiName
+    );
+    var parameters = {
+      genButtonApiName: buttonApiName,
+      genButtonLabel: buttonLabel,
+      genTemplateId: config.id
+    };
 
     action.setParams({
       sObjectType: config.objectMappings[0].apiName,
       layoutsJson: JSON.stringify(selectedLayouts),
-      parameters: JSON.stringify(parameters),
+      parameters: JSON.stringify(parameters)
     });
 
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         component.getEvent('publishedButtons').fire();
-        helper.showToast(component, $A.get('$Label.c.SuccessfullyPublished'), 'success');
-      } else if (state === "ERROR") {
+        helper.showToast(
+          component,
+          $A.get('$Label.c.SuccessfullyPublished'),
+          'success'
+        );
+      } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {
@@ -117,7 +132,7 @@
     $A.enqueueAction(action);
   },
 
-  showToast: function (component, msg, variant) {
+  showToast: function(component, msg, variant) {
     var evt = component.getEvent('showToast');
     evt.setParams({
       data: {

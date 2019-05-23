@@ -13,9 +13,6 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result1);
 			System.assertNotEquals(null, result2);
-			System.assertEquals(Application.lightningNamespace, result1.namespace);
-			System.assertEquals(Salesforce.getLightningHost(), result1.lightningHost);
-			System.assertEquals(Salesforce.getVisualforceHost(), result1.visualforceHost);
 		}
 	}
 
@@ -106,6 +103,34 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.templates);
+		}
+	}
+
+	class ConsentRequiredMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setHeader('Content-Type', 'application/json');
+			response.setBody('{"error":"consent_required","error_message":"Consent is required."}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelope_consent_required() {
+		Test.setMock(HttpCalloutMock.class, new ConsentRequiredMock());
+		System.runAs(UserMock.createDocuSignUser()) {
+			delete UserSettings__c.getInstance();
+			Lead l = TestUtils.createLead();
+
+			Test.startTest();
+			try {
+				SendingController.createDraftEnvelope(l.Id);
+				throw new AssertException('Expected createDraftEnvelope to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.ConsentRequired, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 

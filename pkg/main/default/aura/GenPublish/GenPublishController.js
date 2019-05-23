@@ -1,14 +1,14 @@
 ({
-  init: function (component, event, helper) {
+  init: function(component, event, helper) {
     helper.getLayouts(component, event, helper);
     helper.getGenActionName(component, event, helper);
   },
 
-  publish: function (component, event, helper) {
+  publish: function(component, event, helper) {
     helper.publishGenButtons(component, event, helper);
   },
 
-  checkValidState: function (component, event, helper) {
+  checkValidState: function(component) {
     var layouts = component.get('v.layouts');
     var selectedLayouts = [];
     layouts.forEach(function(layout) {
@@ -23,10 +23,11 @@
     component.set('v.invalidState', invalid);
   },
 
-  validate: function () {
-    return new Promise($A.getCallback(function (resolve, reject) {
-      resolve();
-    }));
+  validate: function() {
+    return new Promise(
+      $A.getCallback(function(resolve) {
+        resolve();
+      })
+    );
   }
-
 });

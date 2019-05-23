@@ -9,20 +9,19 @@ public with sharing class Salesforce {
 	private static final Boolean IS_COMMUNITY_SITE;
 	private static final Boolean CAN_USE_API;
 	private static final Url BASE_URL;
+	@TestVisible
 	private static final String INSTANCE_NAME;
 	private static final String NAMESPACE_PREFIX;
 	private static final Boolean IS_SANDBOX;
 	private static final String ORG_TYPE;
 	public static final Double API_VERSION = 45.0;
 
+	private static List<String> visualforceOrigins;
+	private static List<String> lightningOrigins;
+
 	public static Url baseUrl {
 		get {
 			return BASE_URL;
-		}
-	}
-	public static String instanceName {
-		get {
-			return INSTANCE_NAME;
 		}
 	}
 	public static Boolean isSandbox {
@@ -75,9 +74,9 @@ public with sharing class Salesforce {
 			return CAN_USE_API;
 		}
 	}
-	public static String salesforceOAuthUrl {
+	public static Url oauthUrl {
 		get {
-			return BASE_URL.toExternalForm() + '/services/oauth2/authorize';
+			return new Url(BASE_URL, '/services/oauth2/authorize');
 		}
 	}
 
@@ -85,7 +84,7 @@ public with sharing class Salesforce {
 		String siteBaseUrl = Site.getBaseUrl();
 		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
 		Organization org = [SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix FROM Organization LIMIT 1];
-		INSTANCE_NAME = org.InstanceName;
+		INSTANCE_NAME = org.InstanceName.toLowerCase();
 		IS_SANDBOX = org.IsSandbox;
 		ORG_TYPE = org.OrganizationType;
 		NAMESPACE_PREFIX = org.NamespacePrefix;
@@ -167,13 +166,95 @@ public with sharing class Salesforce {
 		return result;
 	}
 
-	public static String getLightningHost() {
-		String host = baseUrl.getHost();
-		return host.substringBefore('.').remove('--c').remove('--' + Application.packageNamespace)
-			+ '.lightning.force.com';
+	@TestVisible
+	private static String getOrigin(
+		final String myDomain,
+		final String namespace,
+		final String instance,
+		final String rootDomain) {
+
+		String result = null;
+
+		// Add instance name to origin if critical update is disabled
+		if (String.isNotBlank(instance)) {
+			if (String.isNotBlank(namespace)) {
+				result = String.format('https://{0}--{1}.{2}.{3}', new List<String> {
+					myDomain,
+					Application.namespace,
+					INSTANCE_NAME,
+					rootDomain
+				});
+			} else {
+				result = String.format('https://{0}.{1}.{2}', new List<String> {
+					myDomain,
+					INSTANCE_NAME,
+					rootDomain
+				});
+			}
+		} else if (String.isNotBlank(namespace)) {
+			result = String.format('https://{0}--{1}.{2}', new List<String> {
+				myDomain,
+				Application.namespace,
+				rootDomain
+			});
+		} else {
+			result = String.format('https://{0}.{1}', new List<String> {
+				myDomain,
+				rootDomain
+			});
+		}
+
+		return result;
 	}
 
-	public static String getVisualforceHost() {
-		return baseUrl.getHost().substringBefore('.') + '.visualforce.com';
+	public static List<String> getVisualforceOrigins() {
+		if (visualforceOrigins == null) {
+			String host = BASE_URL.getHost();
+			String myDomain = host.substringBefore('.');
+
+			visualforceOrigins = new List<String> {
+				getOrigin(
+					myDomain,
+					Application.namespace,
+					null,
+					'visualforce.com'),
+				getOrigin(
+					myDomain,
+					Application.namespace,
+					INSTANCE_NAME,
+					'visual.force.com')
+			};
+		}
+		return visualforceOrigins;
+	}
+
+	public static List<String> getLightningOrigins() {
+		if (lightningOrigins == null) {
+			String host = BASE_URL.getHost();
+			String myDomain = host.substringBefore('.');
+
+			lightningOrigins = new List<String> {
+				getOrigin(
+					myDomain,
+					null,
+					null,
+					'lightning.force.com'),
+				getOrigin(
+					myDomain,
+					null,
+					INSTANCE_NAME,
+					'lightning.force.com')
+			};
+		}
+		return lightningOrigins;
+	}
+
+	public static Boolean isValidOrigin(final String origin) {
+		return getVisualforceOrigins().contains(origin);
+	}
+
+	public static Boolean isValidTarget(final String target) {
+		return getVisualforceOrigins().contains(target)
+			|| getLightningOrigins().contains(target);
 	}
 }

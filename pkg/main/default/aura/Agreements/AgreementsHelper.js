@@ -1,42 +1,47 @@
 ({
-  showToast: function (component, message, mode) {
+  showToast: function(component, message, mode) {
     component.set('v.message', message);
     component.set('v.mode', mode);
     component.set('v.showToast', true);
   },
 
-  hideToast: function (component) {
+  hideToast: function(component) {
     component.find('toast').close();
   },
 
-  loadAgreements: function (component, event, helper) {
+  loadAgreements: function(component, event, helper) {
     component.set('v.loading', true);
     helper.setNameSpace(component, event, helper);
     helper.getAgreements(component, event, helper);
   },
 
-  createImportComponent: function (component) {
-    $A.createComponent("c:AgreementsImport", {
-      "showModal": true, "recordId": component.get('v.recordId')
-    }, function (componentBody) {
-      if (component.isValid()) {
-        var targetCmp = component.find('importModal');
-        var body = targetCmp.get("v.body");
-        targetCmp.set("v.body", []);
-        body.push(componentBody);
-        targetCmp.set("v.body", body);
+  createImportComponent: function(component) {
+    $A.createComponent(
+      'c:AgreementsImport',
+      {
+        showModal: true,
+        recordId: component.get('v.recordId')
+      },
+      function(componentBody) {
+        if (component.isValid()) {
+          var targetCmp = component.find('importModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
       }
-    });
+    );
   },
 
-  setNameSpace: function (component, event, helper) {
+  setNameSpace: function(component, event, helper) {
     //set the namespace attribute
     var action = component.get('c.getNameSpace');
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         component.set('v.namespace', response.getReturnValue());
-      } else if (state === "ERROR") {
+      } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {
@@ -52,7 +57,7 @@
     $A.enqueueAction(action);
   },
 
-  getAgreements: function (component, event, helper) {
+  getAgreements: function(component, event, helper) {
     component.set('v.loading', true);
     var recordId = component.get('v.recordId');
     var action = component.get('c.getAgreements');
@@ -61,11 +66,11 @@
       sourceObjectId: recordId
     });
 
-    action.setCallback(this, function (response) {
+    action.setCallback(this, function(response) {
       var state = response.getState();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         component.set('v.agreements', response.getReturnValue());
-      } else if (state === "ERROR") {
+      } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {

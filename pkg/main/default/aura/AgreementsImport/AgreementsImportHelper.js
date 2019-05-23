@@ -1,17 +1,17 @@
 ({
   initialize: function(component) {
-    component.set("v.currentStep", "1");
-    component.set("v.disableSalesforceFileImport", true);
+    component.set('v.currentStep', '1');
+    component.set('v.disableSalesforceFileImport', true);
   },
 
   fetchSalesforceFiles: function(component, event, helper) {
-    component.set("v.loading", true);
-    var getSalesforceFiles = component.get("c.getLinkedDocuments");
+    component.set('v.loading', true);
+    var getSalesforceFiles = component.get('c.getLinkedDocuments');
     getSalesforceFiles.setParams({
-      sourceId: component.get("v.recordId")
+      sourceId: component.get('v.recordId')
     });
     getSalesforceFiles.setCallback(this, function(response) {
-      if (response.getState() === "SUCCESS") {
+      if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         // Add front-end properties to documents
         if (!$A.util.isEmpty(result)) {
@@ -19,69 +19,69 @@
             helper.addDocumentProperties(d, false);
           });
         }
-        component.set("v.salesforceFiles", result);
+        component.set('v.salesforceFiles', result);
       } else {
-        helper.showToast(component, helper.getErrorMessage(response), "error");
+        helper.showToast(component, helper.getErrorMessage(response), 'error');
       }
-      component.set("v.loading", false);
-      component.set("v.currentStep", "2");
+      component.set('v.loading', false);
+      component.set('v.currentStep', '2');
     });
 
     $A.enqueueAction(getSalesforceFiles);
   },
 
   setupFileUploadWidget: function(component, event, helper) {
-    component.set("v.currentStep", "3");
-    component.set("v.loading", true);
-    var sourceId = component.get("v.recordId");
-    var limitedAccessToken = component.get("c.generateUploadToken");
+    component.set('v.currentStep', '3');
+    component.set('v.loading', true);
+    var sourceId = component.get('v.recordId');
+    var limitedAccessToken = component.get('c.generateUploadToken');
     limitedAccessToken.setParams({
       objectId: sourceId
     });
     limitedAccessToken.setCallback(this, function(response) {
       var state = response.getState();
       var result = response.getReturnValue();
-      if (state === "SUCCESS") {
+      if (state === 'SUCCESS') {
         try {
           var options = {
-            iconPath: $A.get("$Resource.scmwidgetsspritemap"),
+            iconPath: $A.get('$Resource.scmwidgetsspritemap'),
             accessTokenFn: function() {
-              return new Promise((resolve, reject) => {
-                limitedAccessToken.setCallback(this, function(response) {
-                  var state = response.getState();
-                  if (state === "SUCCESS") {
-                    resolve(response.getReturnValue().token);
-                  } else if (state === "ERROR") {
-                    reject(response.getError());
+              return new Promise(function(resolve, reject) {
+                limitedAccessToken.setCallback(this, function(response2) {
+                  var state2 = response2.getState();
+                  if (state2 === 'SUCCESS') {
+                    resolve(response2.getReturnValue().token);
+                  } else if (state2 === 'ERROR') {
+                    reject(response2.getError());
                   }
                 });
                 $A.enqueueAction(limitedAccessToken);
               });
             },
-            apiBaseDomain: result.apiBaseUrl,
+            apiBaseDomain: result.apiUploadBaseUrl,
             accountId: result.accountId.value
           };
           var uploadWidget = new SpringCM.Widgets.Upload(options);
-          uploadWidget.render("#upload-wrapper");
-          component.set("v.widget", uploadWidget);
-          component.set("v.entityId", result.entityId);
-          component.set("v.loading", false);
+          uploadWidget.render('#upload-wrapper');
+          component.set('v.widget', uploadWidget);
+          component.set('v.entityId', result.entityId);
+          component.set('v.loading', false);
         } catch (error) {
-          helper.showToast(component, error, "error");
-          component.set("v.loading", false);
+          helper.showToast(component, error, 'error');
+          component.set('v.loading', false);
         }
       } else {
-        var errorMessage = $A.get("$Label.c.ErrorMessage");
+        var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
         if (errors) {
           if (errors[0] && errors[0].message) {
             errorMessage += errors[0].message;
           }
         } else {
-          errorMessage += $A.get("$Label.c.UnknownError");
+          errorMessage += $A.get('$Label.c.UnknownError');
         }
-        component.set("v.loading", false);
-        helper.showToast(component, errorMessage, "error");
+        component.set('v.loading', false);
+        helper.showToast(component, errorMessage, 'error');
       }
     });
     $A.enqueueAction(limitedAccessToken);
@@ -89,10 +89,10 @@
 
   importSalesforceFile: function(component, event, helper) {
     //set loading to true
-    component.set("v.loading", true);
+    component.set('v.loading', true);
 
     //get selected file
-    var salesforceFiles = component.get("v.salesforceFiles");
+    var salesforceFiles = component.get('v.salesforceFiles');
     var selectedFile;
     salesforceFiles.forEach(function(file) {
       if (file.selected) {
@@ -100,56 +100,57 @@
       }
     });
 
-    var recordId = component.get("v.recordId");
-    var action = component.get("c.createAgreementInEOSFolder");
-    action.setParams({
-      sfContentVersionId: selectedFile.sourceId,
-      sourceObjectId: recordId,
-      documentName: selectedFile.name
-    });
-
-    action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === "SUCCESS") {
-        var result = response.getReturnValue();
-        if (result.status === "Success") {
-          //TODO: return uploaded file from Controller
-          var importedFile = {
-            name: selectedFile.name,
-            formattedSize: selectedFile.formattedSize,
-            extension: selectedFile.extension
-          };
-          helper.displayCreatedAgreement(component, importedFile);
-        } else if (result.status === "Processing") {
-          helper.showToast(component, result.message, "warning");
-          helper.reloadAgreementsSpace(component);
-          helper.close(component);
-        } else {
-          helper.showToast(component, result.message, "error");
-          helper.reloadAgreementsSpace(component);
-          helper.close(component);
-        }
-      } else if (state === "ERROR") {
-        var errorMessage = $A.get("$Label.c.ErrorMessage");
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
+    if (selectedFile) {
+      var recordId = component.get('v.recordId');
+      var action = component.get('c.createAgreementInEOSFolder');
+      action.setParams({
+        sfContentVersionId: selectedFile.sourceId,
+        sourceObjectId: recordId,
+        documentName: selectedFile.name
+      });
+      action.setCallback(this, function(response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          var result = response.getReturnValue();
+          if (result.status === 'Success') {
+            //TODO: return uploaded file from Controller
+            var importedFile = {
+              name: selectedFile.name,
+              formattedSize: selectedFile.formattedSize,
+              extension: selectedFile.extension
+            };
+            helper.displayCreatedAgreement(component, importedFile);
+          } else if (result.status === 'Processing') {
+            helper.showToast(component, result.message, 'warning');
+            helper.reloadAgreementsSpace(component);
+            helper.close(component);
+          } else {
+            helper.showToast(component, result.message, 'error');
+            helper.reloadAgreementsSpace(component);
+            helper.close(component);
           }
-        } else {
-          errorMessage += $A.get("$Label.c.UnknownError");
+        } else if (state === 'ERROR') {
+          var errorMessage = $A.get('$Label.c.ErrorMessage');
+          var errors = response.getError();
+          if (errors) {
+            if (errors[0] && errors[0].message) {
+              errorMessage += errors[0].message;
+            }
+          } else {
+            errorMessage += $A.get('$Label.c.UnknownError');
+          }
+          helper.showToast(component, errorMessage, 'error');
         }
-        helper.showToast(component, errorMessage, "error");
-      }
-      component.set("v.loading", false);
-    });
-    $A.enqueueAction(action);
+        component.set('v.loading', false);
+      });
+      $A.enqueueAction(action);
+    }
   },
 
   importFileFromPc: function(component, event, helper) {
-    component.set("v.loading", true);
-    var widget = component.get("v.widget");
-    var folderId = component.get("v.entityId");
+    component.set('v.loading', true);
+    var widget = component.get('v.widget');
+    var folderId = component.get('v.entityId');
     try {
       widget
         .uploadNewDocument(folderId.value)
@@ -158,46 +159,34 @@
             name: response.Name,
             formattedSize: response.NativeFileSize
               ? stringUtils.formatSize(response.NativeFileSize)
-              : "",
-            extension: "docx"
+              : '',
+            extension: 'docx'
           };
           helper.displayCreatedAgreement(component, importedFile);
         })
-        .catch(function(error) {
-          helper.showToast(
-            component,
-            $A.get("$Label.c.ErrorUploadingFile"),
-            "error"
-          );
+        .catch(function() {
+          helper.showToast(component, 'Error Uploading File', 'error');
           helper.completeImport(component, event, helper);
         });
     } catch (error) {
-      helper.showToast(
-        component,
-        $A.get("$Label.c.ErrorUploadingFile"),
-        "error"
-      );
+      helper.showToast(component, 'Error Uploading File', 'error');
       helper.completeImport(component, event, helper);
     }
   },
 
   displayCreatedAgreement: function(component, importedFile) {
-    component.set("v.importedFile", importedFile);
-    component.set("v.currentStep", "4");
-    component.set("v.loading", false);
+    component.set('v.importedFile', importedFile);
+    component.set('v.currentStep', '4');
+    component.set('v.loading', false);
   },
 
   setSelectedFiles: function(component, selectedValue) {
-    var salesforceFiles = component.get("v.salesforceFiles");
+    var salesforceFiles = component.get('v.salesforceFiles');
     salesforceFiles.forEach(function(file) {
-      if (file.sourceId === selectedValue) {
-        file.selected = true;
-      } else {
-        file.selected = false;
-      }
+      file.selected = file.sourceId === selectedValue;
     });
-    component.set("v.salesforceFiles", salesforceFiles);
-    component.set("v.disableSalesforceFileImport", false);
+    component.set('v.salesforceFiles', salesforceFiles);
+    component.set('v.disableSalesforceFileImport', false);
   },
 
   completeImport: function(component, event, helper) {
@@ -210,7 +199,7 @@
   },
 
   showToast: function(component, message, mode) {
-    var fireToastEvent = component.getEvent("toastEvent");
+    var fireToastEvent = component.getEvent('toastEvent');
     fireToastEvent.setParams({
       show: true,
       message: message,
@@ -220,7 +209,7 @@
   },
 
   reloadAgreementsSpace: function(component) {
-    var reloadEvent = component.getEvent("loadingEvent");
+    var reloadEvent = component.getEvent('loadingEvent');
     reloadEvent.setParams({
       isLoading: true
     });
@@ -230,10 +219,10 @@
   addDocumentProperties: function(doc, selected) {
     if (doc) {
       doc.selected = selected;
-      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : "";
+      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
       doc.formattedLastModified = doc.lastModified
         ? new Date(doc.lastModified).toLocaleString()
-        : "";
+        : '';
     }
     return doc;
   }
