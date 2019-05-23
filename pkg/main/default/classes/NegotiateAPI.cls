@@ -520,10 +520,17 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return getBaseUrl().toExternalForm() + PATH_DOCUMENTS + '/' + documentId.value;
 	}
 
-	public static String getDocumentDeepLink(final String sourceId, final UUID documentId) {
-		String previewPath = NegotiateService.getAgreementPreviewLink(sourceId, documentId.value);
-		if (previewPath == null) return null;
-		return new Url(Salesforce.baseUrl, previewPath).toExternalForm().replace('&', '&amp;');
+	public static String getDocumentDeepLink(final Id sourceId, final UUID documentId) {
+		if (sourceId == null || documentId == null) return null;
+		try {
+			PageReference previewPath = Page.AgreementPreview;
+			previewPath.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
+			previewPath.getParameters().put('agreementId', EncodingUtil.urlEncode(documentId.value, StringUtils.ENCODING));		
+
+			return new Url(Salesforce.baseUrl, previewPath.getUrl()).toExternalForm().replace('&', '&amp;');
+		} catch(Exception ex) {
+			throw new APIException('Failed to generate Document deep link: ' + ex.getMessage());
+		}
 	}
 
 //Get All Agreements from an EOS folder

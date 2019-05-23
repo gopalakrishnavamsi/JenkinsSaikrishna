@@ -183,7 +183,7 @@
       agreementName: agreementDetails.name,
       sourceId: sourceId,
       documentsIds: documentIdList,
-      reviewers: JSON.stringify(recipients),
+      reviewersJson: JSON.stringify(recipients),
       subject: emailSubject,
       body: emailBody,
       expiresInNumberOfDays: requestExpirationDays

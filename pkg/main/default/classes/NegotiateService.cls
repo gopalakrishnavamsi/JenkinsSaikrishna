@@ -273,10 +273,9 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().deleteAgreement(documentId);
 	}
 
-	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final String reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
-		List<Recipient> reviewersList = (List<Recipient>) JSON.deserialize(reviewers, List<Recipient>.class);
-		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, sourceId, documentsIds, reviewersList, subject, body, expiresInNumberOfDays);
+		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, sourceId, documentsIds, reviewers, subject, body, expiresInNumberOfDays);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
 			taskStatus.message = Label.ExternalReviewSuccess;
@@ -288,10 +287,9 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final String approvers, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String body) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
-		List<Recipient> reviewersList = (List<Recipient>) JSON.deserialize(approvers, List<Recipient>.class);
-		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, reviewersList, subject, body);
+		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
 			taskStatus.message = Label.InternalApprovalSuccess;
