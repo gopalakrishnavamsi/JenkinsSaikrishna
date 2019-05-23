@@ -161,15 +161,11 @@
     component.set('v.loading', true);
     var self = this;
     var agreementDetails = component.get('v.agreementDetails');
+    var recipients = component.get('v.recipients');
+    var sourceId = component.get('v.sourceId');
 
     var documentIdList = [];
     documentIdList.push(agreementDetails.id.value);
-
-    var recipientList = [];
-    var recipients = component.get('v.recipients');
-    recipients.forEach(function(recipient) {
-      recipientList.push(recipient.email);
-    });
 
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
@@ -180,10 +176,14 @@
     } else {
       requestExpirationDays = 0;
     }
+
     var action = component.get('c.sendForExternalReview');
+
     action.setParams({
+      agreementName: agreementDetails.name,
+      sourceId: sourceId,
       documentsIds: documentIdList,
-      reviewerIds: recipientList,
+      reviewersJson: JSON.stringify(recipients),
       subject: emailSubject,
       body: emailBody,
       expiresInNumberOfDays: requestExpirationDays
