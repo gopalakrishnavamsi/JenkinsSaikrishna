@@ -18,6 +18,18 @@
     );
   },
 
+  createDownloadComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+        'c:AgreementDownload',
+        {
+          agreementDetails: agreementDetails
+        },
+        function () {
+        }
+    );
+  },
+
   createDeleteComponent: function(component) {
     var agreementDetails = component.get('v.agreementDetails');
     $A.createComponent(
