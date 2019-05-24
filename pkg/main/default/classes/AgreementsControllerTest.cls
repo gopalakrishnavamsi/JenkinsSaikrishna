@@ -316,7 +316,7 @@ private class AgreementsControllerTest {
 
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID);
+			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
