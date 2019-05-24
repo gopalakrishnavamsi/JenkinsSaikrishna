@@ -19,7 +19,7 @@ global with sharing class OrgService {
 				settings = new OrgSettings(AccountSettings__c.getOrgDefaults().AccountId__c);
 			} catch (Exception ex) {
 				settings = new OrgSettings('');
-				System.Debug(LoggingLevel.ERROR, 'Error fetching org Settings: ' + ex.getMessage());
+				LoggerService.getInstance().exception(ex, 'getOrgSettings');
 			}
 		} else {
 			throw new UnauthorizedException(Label.MustBeDocuSignUser);
