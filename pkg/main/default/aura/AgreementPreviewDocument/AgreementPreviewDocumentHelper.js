@@ -217,7 +217,7 @@
   },
 
   externalReviewSenderView: function(widget, isCompleted) {
-    if (!widget || !widget instanceof SpringCM.Widgets.Preview) throw 'Invalid Widget';
+    if (!widget || widget instanceof !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
     this.registerEvent('resendExternalReviewRequest', function() {
       this.toggleSpinner(
@@ -225,7 +225,7 @@
         false
       );
     });
-    this.registerEvent('externalReviewCompleteOnBehalf', function(event) {
+    this.registerEvent('externalReviewCompleteOnBehalf', function() {
       //event.details contains response.
       this.toggleSpinner(
         widget,
@@ -246,9 +246,9 @@
   },
 
   approvalSenderView: function(widget, isCompleted) {
-    if (!widget || !widget instanceof SpringCM.Widgets.Preview) throw 'Invalid Widget';
+    if (!widget || widget instanceof !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
-    this.registerEvent('approveOnBehalf', function(event) {
+    this.registerEvent('approveOnBehalf', function() {
       //event.details contains response.
       this.toggleSpinner(widget, false);
     });
@@ -270,9 +270,9 @@
   },
 
   renderApprovalRecipientView: function(widget, title, message) {
-    if (!widget || !widget instanceof SpringCM.Widgets.Preview) throw 'Invalid Widget';
+    if (!widget || widget instanceof !== SpringCM.Widgets.Preview) throw 'Invalid Widget';
 
-    this.registerEvent('recipientResponse', function(event) {
+    this.registerEvent('recipientResponse', function() {
       /**
           event.details contains response.
           {
