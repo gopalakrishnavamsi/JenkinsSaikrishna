@@ -73,11 +73,11 @@
     console.log('agreement: ', agreement);
     switch (agreement.status.toLowerCase()) {
       case 'new' ||
-      'new version' ||
-      'completed' ||
-      'rejected' ||
-      'approval canceled' ||
-      'review canceled':
+        'new version' ||
+        'completed' ||
+        'rejected' ||
+        'approval canceled' ||
+        'review canceled':
         return this.basePreview(
           agreement.id.value,
           agreement.name,
