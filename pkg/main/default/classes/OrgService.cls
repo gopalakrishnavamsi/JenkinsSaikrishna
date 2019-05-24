@@ -14,15 +14,12 @@ global with sharing class OrgService {
 	global static List<String> getOrgSettings() {
 		List<String> results = new List<String>();
 		OrgSettings settings;
-		if (Permissions.isDocuSignUser()) {
-			try {
-				settings = new OrgSettings(AccountSettings__c.getOrgDefaults().AccountId__c);
-			} catch (Exception ex) {
-				settings = new OrgSettings('');
-				LoggerService.getInstance().exception(ex, 'getOrgSettings');
-			}
-		} else {
-			throw new UnauthorizedException(Label.MustBeDocuSignUser);
+		Permissions.verifyIsDocuSignUser();
+		try {
+			settings = new OrgSettings(AccountSettings__c.getOrgDefaults().AccountId__c);
+		} catch (Exception ex) {
+			settings = new OrgSettings('');
+			LoggerService.getInstance().exception(ex, 'getOrgSettings');
 		}
 		results.add(JSON.serialize(settings));
 		return results;
