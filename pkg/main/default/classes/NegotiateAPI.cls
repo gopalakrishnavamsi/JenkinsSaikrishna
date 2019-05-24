@@ -381,7 +381,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		try {
 			List<APIReviewer> results = new List<APIReviewer>();
 			for (Recipient rec : approvers) {
-				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIReviewer(rec.name, rec.email));
+				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIReviewer(rec.email, rec.name));
 				else throw new APIException('Invalid Reviewer email');
 			}
 			return results;
@@ -699,7 +699,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 // Send for External Review
 	public UUID sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
-
 		RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {
