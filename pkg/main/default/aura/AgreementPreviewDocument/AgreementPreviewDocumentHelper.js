@@ -74,11 +74,9 @@
       case 'new' ||
         'new version' ||
         'completed' ||
-        'approved' ||
         'rejected' ||
         'approval canceled' ||
-        'review canceled' ||
-        'reviewed':
+        'review canceled':
         return this.basePreview(
           agreement.id.value,
           agreement.name,
@@ -86,6 +84,19 @@
           agreement.historyItems,
           true,
           auth
+        );
+
+      case 'reviewed':
+        return this.externalReviewSenderView(
+          this.basePreview(
+            agreement.id.value,
+            agreement.name,
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          ),
+          true
         );
 
       case 'pending review':
@@ -98,7 +109,7 @@
             true,
             auth
           ),
-          isAdmin
+          false
         );
 
       case 'review expired':
@@ -113,23 +124,50 @@
 
       case 'pending approval':
         if (isSender)
-          this.renderApprovalRecipientView(
+          return this.approvalSenderView(
             this.basePreview(
               agreement.id.value,
               agreement.name,
               documentUrl,
               agreement.historyItems,
-              false,
+              true,
               auth
-            )
+            ),
+            false
           );
-        return this.approvalSenderView(
+
+        return this.renderApprovalRecipientView(
           this.basePreview(
             agreement.id.value,
             agreement.name,
             documentUrl,
             agreement.historyItems,
-            true,
+            false,
+            auth
+          )
+        );
+
+      case 'approved':
+        if (isSender)
+          return this.approvalSenderView(
+            this.basePreview(
+              agreement.id.value,
+              agreement.name,
+              documentUrl,
+              agreement.historyItems,
+              true,
+              auth
+            ), 
+            true
+          );
+
+        return this.renderApprovalRecipientView(
+          this.basePreview(
+            agreement.id.value,
+            agreement.name,
+            documentUrl,
+            agreement.historyItems,
+            false,
             auth
           )
         );
@@ -154,8 +192,7 @@
     showHistoryView,
     auth
   ) {
-    if (!agreementId || !documentUrl || !agreementName || !auth)
-      throw 'Missing Parameter';
+    if (!agreementId || !documentUrl || !agreementName || !auth) throw 'Missing Parameter';
     var preview = new SpringCM.Widgets.Preview(auth);
     preview.render('#agreementDocumentView');
     preview.renderDocumentPreview({
@@ -171,44 +208,99 @@
         historyItems: Object.assign([], historyItems)
       });
     }
+
+    this.registerEvent('closeWindow', function() {
+      $A.get('e.force:refreshView').fire();
+    });
+
     return preview;
   },
 
   externalReviewSenderView: function(widget, isCompleted) {
-    if (!widget || widget.prototype !== SpringCM.Widgets.Preview)
-      throw 'Invalid Widget';
+    if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
+
+    this.registerEvent('resendExternalReviewRequest', function() {
+      this.toggleSpinner(
+        widget,
+        false
+      );
+    });
+    this.registerEvent('externalReviewCompleteOnBehalf', function() {
+      //event.details contains response.
+      this.toggleSpinner(
+        widget,
+        false
+      );
+    });
+    this.registerEvent('cancelExternalReview', function() {
+      this.toggleSpinner(widget, false);
+    });
 
     widget.renderExternalReviewSenderView({
       subTitle: '',
       showCompleteExternalReview: isCompleted,
-      showCancel: true,
-      showResendRequest: true
+      showCancel: isCompleted,
+      showResendRequest: isCompleted
     });
     return widget;
   },
 
-  approvalSenderView: function(widget) {
-    if (!widget || widget.prototype !== SpringCM.Widgets.Preview)
-      throw 'Invalid Widget';
+  approvalSenderView: function(widget, isCompleted) {
+    if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
+
+    this.registerEvent('approveOnBehalf', function() {
+      //event.details contains response.
+      this.toggleSpinner(widget, false);
+    });
+    this.registerEvent('cancelApproval', function() {
+      this.toggleSpinner(widget, false);
+    });
+    this.registerEvent('resendApprovalRequest', function() {
+      this.toggleSpinner(widget, false);
+    });
 
     widget.renderApprovalSenderView({
       subTitle: '',
-      showCancel: true,
-      showResendRequest: true,
-      showOnBehalf: false,
+      showCancel: isCompleted,
+      showResendRequest: isCompleted,
+      showOnBehalf: isCompleted,
       approvalUsers: []
     });
     return widget;
   },
 
   renderApprovalRecipientView: function(widget, title, message) {
-    if (!widget || widget.prototype !== SpringCM.Widgets.Preview)
-      throw 'Invalid Widget';
+    if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
+
+    this.registerEvent('recipientResponse', function() {
+      /**
+          event.details contains response.
+          {
+           "comments": "Yes",
+           "response": true
+          }
+      **/
+      this.toggleSpinner(widget, false);
+    });
+
 
     widget.renderApprovalRecipientView({
       title: title || '',
       message: message || ''
     });
     return widget;
+    
+  },
+
+  isValidWidget: function(widget) {
+    return widget && widget instanceof SpringCM.Widgets.Preview;
+  },
+
+  registerEvent: function(name, callback) {
+    document.addEventListener('springcm:preview:' + name, callback);
+  },
+
+  toggleSpinner: function(widget, isLoading) {
+    widget.toggleLoadingSpinner(isLoading);
   }
 });
