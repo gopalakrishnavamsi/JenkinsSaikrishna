@@ -19,9 +19,9 @@
   },
 
   createDownloadComponent: function (component) {
-    var agreementDetails = component.get("v.agreementDetails");
+    var agreementDetails = component.get('v.agreementDetails');
     $A.createComponent(
-        "c:AgreementDownload",
+        'c:AgreementDownload',
         {
           agreementDetails: agreementDetails
         },
