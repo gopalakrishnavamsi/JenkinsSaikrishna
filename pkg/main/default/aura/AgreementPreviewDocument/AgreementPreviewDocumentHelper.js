@@ -70,7 +70,6 @@
   },
 
   resolvePreview: function(auth, agreement, documentUrl, isAdmin, isSender) {
-    console.log('agreement: ', agreement);
     switch (agreement.status.toLowerCase()) {
       case 'new' ||
         'new version' ||
@@ -125,7 +124,7 @@
 
       case 'pending approval':
         if (isSender)
-          this.approvalSenderView(
+          return this.approvalSenderView(
             this.basePreview(
               agreement.id.value,
               agreement.name,
@@ -136,6 +135,7 @@
             ),
             false
           );
+
         return this.renderApprovalRecipientView(
           this.basePreview(
             agreement.id.value,
@@ -149,14 +149,18 @@
 
       case 'approved':
         if (isSender)
-          this.approvalSenderView(t this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
-            true,
-            auth
-          ), true);
+          return this.approvalSenderView(
+            this.basePreview(
+              agreement.id.value,
+              agreement.name,
+              documentUrl,
+              agreement.historyItems,
+              true,
+              auth
+            ), 
+            true
+          );
+
         return this.renderApprovalRecipientView(
           this.basePreview(
             agreement.id.value,
