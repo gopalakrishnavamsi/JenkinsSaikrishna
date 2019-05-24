@@ -3,7 +3,7 @@
 
     <!-- attributes -->
     <aura:attribute name="agreementDetails" type="Agreement"/>
-    <aura:attribute name="sourceId" type="String"/>
+    <aura:attribute name="sourceId" type="Id"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="recipients" type="Recipient[]"/>
