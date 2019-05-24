@@ -3,7 +3,7 @@
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
-      this.baseOptions(component, component.get('v.sourceId'))
+      this.baseOptions(component, uiHelper, component.get('v.sourceId'))
         .then(function(options) {
           var widget = self.resolvePreview(
             options,
