@@ -224,8 +224,8 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForExternalReview(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
-					new List<String> { 'unittest@test.com' },
+				AgreementsController.sendForExternalReview('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
 					'testBody', 8);
 				throw new AssertException('Expected sendForExternalReview to fail');
@@ -243,8 +243,8 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForExternalReview(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
-				new List<String> { 'unittest@test.com' },
+			testTaskStatus = AgreementsController.sendForExternalReview('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
 				'testBody', 8);
 			Test.stopTest();
@@ -257,8 +257,8 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForInternalApproval(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
-					new List<String> { 'unittest@test.com' },
+				AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID,new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
 					'testBody');
 				throw new AssertException('Expected sendForInternalApproval to fail');
@@ -289,8 +289,8 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForInternalApproval(new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
-				new List<String> { 'unittest@test.com' },
+			testTaskStatus = AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
 				'testBody');
 			Test.stopTest();
@@ -316,7 +316,7 @@ private class AgreementsControllerTest {
 
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID);
+			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}

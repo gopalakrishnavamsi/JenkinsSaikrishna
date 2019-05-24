@@ -279,11 +279,13 @@
       this.toggleSpinner(widget, false);
     });
 
+
     widget.renderApprovalRecipientView({
       title: title || '',
       message: message || ''
     });
     return widget;
+    
   },
 
   registerEvent: function(name, callback) {

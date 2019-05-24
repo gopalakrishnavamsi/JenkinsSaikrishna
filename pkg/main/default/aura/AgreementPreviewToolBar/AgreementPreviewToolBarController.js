@@ -1,6 +1,5 @@
 ({
-
-  rename: function (component) {
+  rename: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -11,7 +10,7 @@
     }
   },
 
-  delete: function (component) {
+  delete: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -22,32 +21,33 @@
     }
   },
 
-  internalApproval: function (component) {
+  internalApproval: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.internalApproval(agreement, component);
+      var sourceId = component.get('v.sourceId');
+      actions.internalApproval(agreement, sourceId, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   },
 
-  externalReview: function (component) {
+  externalReview: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.externalReview(agreement, component);
+      var sourceId = component.get('v.sourceId');
+      actions.externalReview(agreement, sourceId, component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   },
 
-  upload: function (component) {
+  upload: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
-      var agreement = component.get('v.agreement');
       actions.upload(component);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
@@ -55,7 +55,7 @@
     }
   },
 
-  share: function (component) {
+  share: function(component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -65,5 +65,4 @@
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   }
-
 });

@@ -1,5 +1,5 @@
 ({
-  init: function (component, event, helper) {
+  init: function(component, event, helper) {
     var fieldMapping = component.get('v.fieldMapping');
     var isChild = component.get('v.isChild');
     component.set('v.previousFieldMappingName', fieldMapping.apiName);
@@ -14,7 +14,7 @@
     }
   },
 
-  selectedButtonMenuItem: function (component, event, helper) {
+  selectedButtonMenuItem: function(component, event, helper) {
     var action = event.getParam('value');
     var isChild = component.get('v.isChild');
 
@@ -50,19 +50,23 @@
     }
   },
 
-  processFieldSelection: function (component, event, helper) {
+  processFieldSelection: function(component, event, helper) {
     var allFieldMappings = component.get('v.allFieldMappings');
     var allFieldsByApiName = component.get('v.allFieldsByApiName');
     var fieldMapping = component.get('v.fieldMapping');
     var fieldData = allFieldsByApiName[fieldMapping.apiName];
-    var dupeFieldMappings = allFieldMappings.filter(function (objFieldMapping) {
-      return fieldMapping.apiName == objFieldMapping.apiName;
+    var dupeFieldMappings = allFieldMappings.filter(function(objFieldMapping) {
+      return fieldMapping.apiName === objFieldMapping.apiName;
     });
 
     //ignore yourself as a dupe
     if (dupeFieldMappings.length > 1) {
       //use field data instead of fieldMapping as it doesn't have the label yet.
-      helper.showToast(component, 'warning', fieldData.label + ' ' + $A.get('$Label.c.FieldPickerFieldExists'));
+      helper.showToast(
+        component,
+        'warning',
+        fieldData.label + ' ' + $A.get('$Label.c.FieldPickerFieldExists')
+      );
       fieldMapping.apiName = component.get('v.previousFieldMappingName');
       component.set('v.fieldMapping', fieldMapping);
       return;
@@ -72,13 +76,17 @@
 
     var newFieldMapping;
     if (fieldData.hasRelationship) {
-      newFieldMapping = {'apiName': fieldData.relatesTo, 'isChildRelation': true, 'label': fieldData.name};
+      newFieldMapping = {
+        apiName: fieldData.relatesTo,
+        isChildRelation: true,
+        label: fieldData.name
+      };
     } else {
       newFieldMapping = {
-        'apiName': fieldData.name,
-        'dataType': fieldData.type,
-        'isChildRelation': false,
-        'label': fieldData.label
+        apiName: fieldData.name,
+        dataType: fieldData.type,
+        isChildRelation: false,
+        label: fieldData.label
       };
     }
 
@@ -93,21 +101,24 @@
     component.set('v.fieldMapping', fieldMapping);
   },
 
-  addChildField: function (component, event, helper) {
+  addChildField: function(component, event, helper) {
     var fieldMapping = component.get('v.fieldMapping');
     fieldMapping.childFieldMappings.push(helper.getChildFieldStub());
     component.set('v.fieldMapping', fieldMapping);
   },
 
-  copyToken: function (component, event, helper) {
+  copyToken: function(component, event, helper) {
     var tokenInput = component.find('token-input');
     tokenInput.getElement().select();
     document.execCommand('copy');
-    helper.showToast(component, 'success', $A.get('$Label.c.SuccessCopyClipboard'));
+    helper.showToast(
+      component,
+      'success',
+      $A.get('$Label.c.SuccessCopyClipboard')
+    );
   },
 
-  setToken: function (component, event, helper) {
+  setToken: function(component, event, helper) {
     helper.setTokenValue(component);
   }
-
 });

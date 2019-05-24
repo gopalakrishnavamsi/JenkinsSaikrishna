@@ -5,9 +5,7 @@ private class ControllerTest {
 	static void test_properties() {
 		Controller c = new Controller();
 		System.assertNotEquals(null, c);
-		System.assertEquals(Application.lightningNamespace, c.namespace);
-		System.assertEquals(Salesforce.getLightningHost(), c.lightningHost);
-		System.assertEquals(Salesforce.getVisualforceHost(), c.visualforceHost);
+		System.assertEquals(Application.namespace, c.namespace);
 	}
 
 	@IsTest

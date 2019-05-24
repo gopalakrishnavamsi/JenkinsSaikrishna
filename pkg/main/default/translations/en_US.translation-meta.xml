@@ -35,13 +35,6 @@
 		<name>AccountProvisioningFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>A DocuSign account already exists, but requires activation. The user should have received an email
-			message containing an activation link. Once the activation has been completed the user must click on the
-			DocuSign Admin tab and enter the password there.
-		</label>
-		<name>ActivationRequired</name>
-	</customLabels>
-	<customLabels>
 		<label>Active</label>
 		<name>Active</name>
 	</customLabels>
@@ -2376,6 +2369,18 @@
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Uploading File</label>
+		<name>ErrorUploadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Downloading File</label>
+		<name>ErrorDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully downloaded</label>
+		<name>SuccessDownloadingFile</name>
+	</customLabels>
+	<customLabels>
 		<label>Uruguay</label>
 		<name>Uruguay</name>
 	</customLabels>
@@ -3414,6 +3419,22 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<!-- end of new labels for Gen -->
+	<customLabels>
+		<label>Invalid Salesforce event origin.</label>
+		<name>InvalidOrigin</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid Salesforce event target.</label>
+		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<label>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf. Click the &quot;Authorize&quot; button to continue.</label>
+		<name>AuthorizeDocuSignInstructions</name>
+	</customLabels>
+	<customLabels>
+		<label>Authorize</label>
+		<name>AuthorizeButton</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

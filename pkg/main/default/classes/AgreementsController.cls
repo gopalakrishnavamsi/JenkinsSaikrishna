@@ -10,7 +10,7 @@ public with sharing class AgreementsController extends Controller {
 	public static String getNameSpace() {
 		try {
 			Permissions.verifyIsDocuSignUser();
-			return Application.lightningNamespace;
+			return Application.namespace;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get namespace.');
 		}
@@ -93,9 +93,9 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID objectId) {
+	public static NegotiateService.LimitedAccessToken generateDownloadToken(final String objectId) {
 		try {
-			return NegotiateService.generateDownloadToken(objectId);
+			return NegotiateService.generateDownloadToken(UUID.parse(objectId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate upload access token.');
 		}
@@ -130,29 +130,33 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForExternalReview(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body, final Integer expiresInNumberOfDays) {
+	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<String> documentsIds, final String reviewersJson, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		try {
+			if (String.isBlank(reviewersJson)) throw Controller.wrapException('Failed to send documents for External Review: Invalid Reviewers');
 			List<UUID> documentIdList = new List<UUID>();
+			List<Recipient> reviewers = (List<Recipient>) JSON.deserialize(reviewersJson, List<Recipient>.class);
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForExternalReview(documentIdList, reviewerIds, subject, body, expiresInNumberOfDays);
+			return NegotiateService.sendForExternalReview(agreementName, sourceId, documentIdList, reviewers, subject, body, expiresInNumberOfDays);
 		} catch (Exception ex) {
+			System.debug('ex: ' + ex.getMessage());
 			throw Controller.wrapException(ex, 'Failed to send documents for External Review');
 		}
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final List<String> documentsIds, final List<String> reviewerIds, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String approversJson, final String subject, final String body) {
 		try {
+			if (String.isBlank(approversJson)) throw Controller.wrapException('Failed to send documents for Internal Approval: Invalid Approvers');			
 			List<UUID> documentIdList = new List<UUID>();
+			List<Recipient> approvers = (List<Recipient>) JSON.deserialize(approversJson, List<Recipient>.class);
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForInternalApproval(documentIdList, reviewerIds, subject, body);
+			return NegotiateService.sendForInternalApproval(agreementName, sourceId, documentIdList, approvers, subject, body);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
-
 }

@@ -66,7 +66,13 @@ public with sharing class SendingController extends Controller {
 			try {
 				templates = TemplateAPI.getInstance().getTemplates();
 			} catch (APIException ex) {
-				// TODO: Handle only USER_LACKS_PERMISSIONS error here. Cache response.
+				if (ex.error != null
+					&& ex.error instanceof AuthService.AuthError
+					&& ((AuthService.AuthError)ex.error).reason == APIErrorCode.CONSENT_REQUIRED) {
+
+					LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');
+					throw ex; // Let frontend deal with consent flow
+				}
 				LoggerService.getInstance().warn('User does not have access to DocuSign templates');
 				templates = new List<Template>();
 			} finally {
@@ -128,19 +134,11 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	private static Boolean checkTrialExpired() {
-		if (AccountFeatures.getInstance() != null && AccountFeatures.getInstance().isExpired != null && AccountFeatures.getInstance().isExpired) {
-			return true;
-		}
-		return false;
-	}
-
 	@AuraEnabled
 	public static Envelope sendEnvelope(final String envelopeJson) {
+		if (AccountFeatures.getInstance().isExpired) throw Controller.wrapException(Label.ExpiredTrialAccount);
+
 		try {
-			if (checkTrialExpired()) {
-				throw Controller.wrapException(Label.ExpiredTrialAccount);
-			}
 			return EnvelopeService.sendEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class), false, true);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send envelope');

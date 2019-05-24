@@ -380,6 +380,108 @@ private class RestAPITest {
 	}
 
 	@IsTest
+	static void test_patch_success() {
+		final RestAPI client = new RestAPI();
+		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
+
+		Test.startTest();
+		final RestAPI.Response r1 = client.patch(
+			new Url('https://unit.test:200/'),
+			new List<Object> { 'success' },
+			QueryString.empty,
+			new Map<String, String> {
+				'Accept' => 'application/json'
+			},
+			'{"some":"json"}',
+			30000);
+		final RestAPI.Response r2 = client.patch(
+			new Url('https://unit.test:200/'),
+			new List<Object> { 'success', 'no-body' },
+			QueryString.empty,
+			new Map<String, String> {
+				'Accept' => 'application/json'
+			},
+			'{"some":"json"}',
+			30000);
+		Test.stopTest();
+
+		System.assertNotEquals(null, r1);
+		System.assertNotEquals(null, r1.request);
+		System.assertNotEquals(null, r1.response);
+		System.assertNotEquals(null, r1.error);
+		System.assertEquals('PATCH', r1.request.getMethod());
+		System.assertEquals('https://unit.test:200/success', r1.request.getEndpoint());
+		System.assert(!r1.hasError);
+		System.assertEquals(APIError.none, r1.error);
+		System.assertEquals(200, r1.statusCode);
+		System.assertEquals('application/json', r1.response.getHeader('Content-Type'));
+		System.assertEquals('{"some":"json"}', r1.body);
+
+		System.assertNotEquals(null, r2);
+		System.assertNotEquals(null, r2.request);
+		System.assertNotEquals(null, r2.response);
+		System.assertNotEquals(null, r2.error);
+		System.assertEquals('PATCH', r2.request.getMethod());
+		System.assertEquals('https://unit.test:200/success/no-body', r2.request.getEndpoint());
+		System.assert(!r2.hasError);
+		System.assertEquals(APIError.none, r2.error);
+		System.assertEquals(200, r2.statusCode);
+		System.assertEquals('application/json', r2.response.getHeader('Content-Type'));
+		System.assertEquals('', r2.body);
+	}
+
+	@IsTest
+	static void test_patch_failure() {
+		final RestAPI client = new RestAPI();
+		Test.setMock(HttpCalloutMock.class, new RestAPIMock());
+
+		Test.startTest();
+		final RestAPI.Response r1 = client.patch(
+			new Url('https://unit.test:400/'),
+			new List<Object> { 'failure', 'no-body' },
+			new QueryString(new Map<String, String> {
+				'status' => 'boo'
+			}),
+			new Map<String, String>(),
+			'',
+			30000);
+		final RestAPI.Response r2 = client.patch(
+			new Url('https://unit.test:200/'),
+			new List<Object> { 'failure' },
+			QueryString.empty,
+			new Map<String, String> {
+				'Accept' => 'text/xml'
+			},
+			'{"some":"error"}',
+			30000);
+		Test.stopTest();
+
+		System.assertNotEquals(null, r1);
+		System.assertNotEquals(null, r1.request);
+		System.assertNotEquals(null, r1.response);
+		System.assertNotEquals(null, r1.error);
+		System.assertEquals('PATCH', r1.request.getMethod());
+		System.assertEquals('https://unit.test:400/failure/no-body?status=boo', r1.request.getEndpoint());
+		System.assert(r1.hasError);
+		System.assertEquals(new APIError(APIErrorCode.BAD_REQUEST, 'boo'), r1.error);
+		System.assertEquals(400, r1.statusCode);
+		System.assertEquals(null, r1.response.getHeader('Content-Type'));
+		System.assertEquals('', r1.body);
+
+		System.assertNotEquals(null, r2);
+		System.assertNotEquals(null, r2.request);
+		System.assertNotEquals(null, r2.response);
+		System.assertNotEquals(null, r2.error);
+		System.assertEquals('PATCH', r2.request.getMethod());
+		System.assertEquals('https://unit.test:200/failure', r2.request.getEndpoint());
+		System.assert(r2.hasError);
+		System.assertEquals(new APIError(APIErrorCode.INVALID_CONTENT_TYPE, Label.ContentTypeNotSupported), r2.error);
+		System.assertEquals(200, r2.statusCode);
+		System.assertEquals('text/xml', r2.response.getHeader('Content-Type'));
+		System.assertEquals('{"some":"error"}', r2.body);
+	}
+
+	@IsTest
 	static void test_del_success() {
 		final RestAPI client = new RestAPI();
 		Test.setMock(HttpCalloutMock.class, new RestAPIMock());

@@ -1,5 +1,5 @@
 ({
-  viewAgreement: function(component, event, helper) {
+  viewAgreement: function (component, event, helper) {
     helper.launchAgreementPreview(component);
   },
 
@@ -23,6 +23,10 @@
     helper.createUploadComponent(component, event, helper);
   },
 
+  showDownloadModal: function (component, event, helper) {
+    helper.createDownloadComponent(component, event, helper);
+  },
+
   showRenameModal: function (component, event, helper) {
     helper.createRenameComponent(component, event, helper);
   },
@@ -30,5 +34,4 @@
   showShareLinkModal: function (component, event, helper) {
     helper.createShareLinkComponent(component, event, helper);
   }
-
 });
