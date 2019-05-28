@@ -15,6 +15,7 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	public static final UUID TASK_ID = UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566');
 	public static final UUID TASK_ID_2 = UUID.parse('5632d399-39fe-3085-9e48-126e4ffa0577');
 	public static final UUID TASK_ID_3 = UUID.parse('5682d399-49fe-5085-9e48-126e4ffa0577');
+	public static final Url DOCUMNET_HREF = new Url('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17');
 	public static final String USER_EMAIL = 'TestUser@TestCompany.com';
 	public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
 	public static final Id OBJECT_ID = ID.valueOf('0061U0000058I2EQAU');
@@ -44,6 +45,8 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	- DELETE /documents/{documentId} - Delete Agreement
 	- GET /{accountId}/historyItems/{documentId}
 	- GET /{accountId}/documents/{documentId}/workitems?expand=Assignee
+	- DELETE /v2/{accoundId}/documents/{documentId}/lock
+	- POST /gen/v1/{accountId}/emails
  */
 	override public HttpResponse getResponse(final HttpRequest request) {
 		HttpResponse response = new HttpResponse();
@@ -56,6 +59,9 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
 			response.setBody('{"Href":"https://unit.test/folders/' + FOLDER_ID + '"}');
+		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_EMAILS)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
 		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_EOS_FOLDER)) {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');

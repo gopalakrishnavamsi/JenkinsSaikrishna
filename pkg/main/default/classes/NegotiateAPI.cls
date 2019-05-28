@@ -8,6 +8,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
 	public static final String PATH_TOKEN_REGISTRATIONS = 'tokenregistrations';
 	public static final String PATH_WORK_ITEMS = 'workitems';
+	public static final String PATH_EMAILS = 'emails';
+	public static final String PATH_LOCK = 'lock';
 	public static final Long SCM_OFFSET = 20;
 
 	private static NegotiateAPI self = null;
@@ -970,5 +972,85 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 		return workItems;
 	}
+
+	// resend approval request and resend external review request
+
+	@TestVisible
+	private class APIHref {
+		public String href;
+
+		public APIHref(final String href) {
+			this.href = href;
+		}
+	}
+
+	public Boolean resendRequest(final Url documentHref, final String resendEmailType) {
+
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_EMAILS
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'Document' => new APIHref(documentHref.toExternalForm()),
+				'ResendEmailType' => resendEmailType
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to resend request: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.statusCode == 200 ;
+	}
+
+	// Cancel Approval or External Review
+
+	public Boolean cancelApprovalOrExternalReview(final UUID documentId) {
+
+		final RestAPI.Response response = del(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_DOCUMENTS, documentId, PATH_LOCK
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			'',
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to cancel Approval or External Review for document - ' + documentId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.statusCode == 200 ;
+	}
+
+	// approveOnBehalf and recipientResponse
+
+	public Boolean approveOnBehalf(final Url documentHref, final String resendEmailType) {
+
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_EMAILS
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'Document' => new APIHref(documentHref.toExternalForm()),
+				'ResendEmailType' => resendEmailType
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to resend request: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.statusCode == 200 ;
+	}
+
+
 }
 

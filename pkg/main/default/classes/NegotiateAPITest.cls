@@ -394,4 +394,36 @@ public with sharing class NegotiateAPITest {
 			System.assert(endpoint.contains('/' + NegotiateAPIMock.DOCUMENT_ID));
 		}
 	}
+
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_resendRequest_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().resendRequest(NegotiateAPIMock.DOCUMNET_HREF, 'ExternalReview');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
 }

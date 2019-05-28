@@ -290,4 +290,14 @@ public with sharing class NegotiateService {
 	public static String getDocumentURL(final UUID documentId) {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
 	}
+
+	public static Boolean resendRequest(final Url documentHref, final String resendEmailType) {
+		Permissions.verifyIsDocuSignUser();
+		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);
+	}
+
+	public static Boolean cancelApprovalOrExternalReview(final UUID documentId) {
+		Permissions.verifyIsDocuSignUser();
+		return NegotiateAPI.getInstance().cancelApprovalOrExternalReview(documentId);
+	}
 }
