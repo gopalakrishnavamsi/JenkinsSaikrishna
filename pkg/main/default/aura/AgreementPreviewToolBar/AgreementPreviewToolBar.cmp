@@ -1,6 +1,6 @@
 <aura:component>
     <aura:attribute name="agreement" type="Agreement" access="public"/>
-    <aura:attribute name="sourceId" type="String" access="public"/>
+    <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="agreementActionManager" type="Object" access="public"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <div class="ToolBarContainer">
