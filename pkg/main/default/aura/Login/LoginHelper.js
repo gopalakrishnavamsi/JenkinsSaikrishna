@@ -49,25 +49,25 @@
 
     uiHelper.invokeAction(component.get('c.addTrialGen'), null, function (response) {
       if (response) {
-        uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), 'success');
+        uiHelper.showToast($A.get('$Label.c.SuccessDocuSignGenTrial'), uiHelper.ToastMode.SUCCESS);
       } else {
-        uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+        uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), uiHelper.ToastMode.ERROR);
       }
     }, function () {
-      uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), 'error');
+      uiHelper.showToast($A.get('$Label.c.ErrorDocuSignGenTrial'), uiHelper.ToastMode.ERROR);
     }, null);
   },
 
   setLoggedIn: function (component, loginInformation) {
-    var hasAccounts = !$A.util.isEmpty(loginInformation.accounts);
+    var hasAccounts = !$A.util.isUndefinedOrNull(loginInformation) && !$A.util.isEmpty(loginInformation.accounts);
     var isLoggedIn = hasAccounts && loginInformation.status === 'Success';
-    if (loginInformation.status === 'SelectAccount' && hasAccounts) {
+    if (hasAccounts && loginInformation.status === 'SelectAccount') {
       component.set('v.showAccountSelectionModal', true);
     }
     component.set('v.login', loginInformation);
     component.set('v.isLoggedIn', isLoggedIn);
     // TODO: Fix trial accounts
-    component.set('v.login.isTrial', false);
+    component.set('v.isTrial', false);
     component.set('v.isTrialExpired', false);
     if (isLoggedIn) {
       component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber);
@@ -80,28 +80,28 @@
     if (response && response.status && loginInformation) {
       this.setLoggedIn(component, loginInformation);
     } else {
-      uiHelper.showToast(response.message, 'error');
+      uiHelper.showToast(response.message, uiHelper.ToastMode.ERROR);
     }
-    uiHelper.setLoading(component, false);
+    uiHelper.setLoading(false);
   },
 
   endSpringOAuth: function (component, response, loginInformation) {
     var uiHelper = component.get('v.uiHelper');
     if (loginInformation && loginInformation.status !== 'Fail') {
-      uiHelper.showToast(loginInformation.message, 'success');
+      uiHelper.showToast(loginInformation.message, uiHelper.ToastMode.SUCCESS);
     } else {
-      uiHelper.showToast(loginInformation.message, 'error');
+      uiHelper.showToast(loginInformation.message, uiHelper.ToastMode.ERROR);
     }
-    uiHelper.setLoading(component, false);
+    uiHelper.setLoading(false);
   },
 
   selectAccount: function (component) {
     var self = this;
     var uiHelper = component.get('v.uiHelper');
-    uiHelper.invokeAction(component.get('c.selectAccount'), {
+    uiHelper.invokeAction(component.get('c.setAccount'), {
       environment: component.get('v.environment'),
       otherUrl: component.get('v.otherUrl'),
-      selectedAccountNumber: component.get('v.selectedAccountNumber')
+      accountNumber: component.get('v.selectedAccountNumber')
     }, function (loginInformation) {
       self.setLoggedIn(component, loginInformation);
     });
@@ -113,7 +113,7 @@
       component.set('v.login', loginInformation);
       component.set('v.isLoggedIn', false);
       component.set('v.selectedAccountNumber', null);
-      component.set('v.login.isTrial', false);
+      component.set('v.isTrial', false);
       component.set('v.isTrialExpired', false);
       self.setLogin(component, false);
     });
@@ -137,7 +137,7 @@
       trial.user.email = component.get('v.login.email');
 
       uiHelper.invokeAction(component.get('c.startTrial'), {trialJson: JSON.stringify(trial)}, function (account) {
-        component.set('v.login.isTrial', true);
+        component.set('v.isTrial', true);
         component.set('v.selectedAccountNumber', account.accountNumber);
         component.set('v.environment', 'Production');
         component.set('v.otherUrl', null);

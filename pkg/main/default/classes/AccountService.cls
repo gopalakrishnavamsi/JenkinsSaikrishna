@@ -326,7 +326,9 @@ global with sharing class AccountService {
 		@AuraEnabled
 		public UUID id { get; private set; }
 		@AuraEnabled
-		public String display { get; private set; }
+		public String name { get; private set; }
+		@AuraEnabled
+		public String email { get; private set; }
 
 		private SystemSender(
 			final UUID id,
@@ -334,7 +336,8 @@ global with sharing class AccountService {
 			final String email) {
 
 			this.id = id;
-			this.display = String.format(Label.AccountDisplay_2, new List<String> { name, email });
+			this.name = name;
+			this.email = email;
 		}
 	}
 

@@ -576,9 +576,6 @@ private class AuthServiceTest {
 			System.assertEquals(s.AccountName__c, result.accounts[0].name);
 			System.assertEquals(s.ESignatureBaseUrl__c, result.accounts[0].eSignatureBaseUrl);
 			System.assert(result.accounts[0].isDefault);
-			System.assertEquals(String.format(Label.AccountDisplay_2, new List<String> {
-				result.accounts[0].name, String.valueOf(result.accounts[0].accountNumber)
-			}), result.accounts[0].display);
 		}
 	}
 
@@ -1910,12 +1907,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_unauthorized() {
+	static void test_setAccount_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(null, null, null);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(null, null, null);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -1924,12 +1921,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_invalid_environment() {
+	static void test_setAccount_invalid_environment() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(DocuSign.Environment.Other, null, 1234L);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(DocuSign.Environment.Other, null, 1234L);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
@@ -1938,12 +1935,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_invalid_account() {
+	static void test_setAccount_invalid_account() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(DocuSign.Environment.Demo, null, null);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(DocuSign.Environment.Demo, null, null);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidAccount, ex.getMessage());
 			}
@@ -1952,13 +1949,13 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_api_error() {
+	static void test_setAccount_api_error() {
 		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(DocuSign.Environment.Demo, null, 1234L);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(DocuSign.Environment.Demo, null, 1234L);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (APIException ex) {
 				System.assertEquals(APIError.unauthorized, ex.error);
 			}
@@ -1967,13 +1964,13 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_no_accounts() {
+	static void test_setAccount_no_accounts() {
 		Test.setMock(HttpCalloutMock.class, new NoAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(DocuSign.Environment.Demo, null, 1234L);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(DocuSign.Environment.Demo, null, 1234L);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.NoValidAccounts, ex.getMessage());
 			}
@@ -1982,13 +1979,13 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_account_not_found() {
+	static void test_setAccount_account_not_found() {
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				AuthService.selectAccount(DocuSign.Environment.Demo, null, 99999L);
-				throw new AssertException('Expected selectAccount to fail');
+				AuthService.setAccount(DocuSign.Environment.Demo, null, 99999L);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.AccountNotFound, ex.getMessage());
 			}
@@ -1997,12 +1994,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_success() {
+	static void test_setAccount_success() {
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountsMock());
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			LoginInformation result = AuthService.selectAccount(DocuSign.Environment.Demo, null, 22222L);
+			LoginInformation result = AuthService.setAccount(DocuSign.Environment.Demo, null, 22222L);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

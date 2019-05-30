@@ -1,10 +1,10 @@
 <aura:component controller="SetupController">
-
     <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <aura:attribute name="login" type="Object" required="true"/>
-    <aura:attribute name="isLoggedIn" type="Boolean"/>
-    <aura:attribute name="isTrialExpired" type="Boolean"/>
+    <aura:attribute name="isLoggedIn" type="Boolean" default="false"/>
+    <aura:attribute name="isTrial" type="Boolean" default="false"/>
+    <aura:attribute name="isTrialExpired" type="Boolean" default="false"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
     <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
 
@@ -56,11 +56,11 @@
             <aura:if isTrue="{!v.isLoggedIn}">
                 <!-- Logged In State -->
                 <div>
-                    <div class="{!'slds-notify slds-notify_alert slds-theme_alert-texture' + if(and(v.login.isTrial, v.isTrialExpired), ' slds-theme_warning', ' slds-theme_success')}"
+                    <div class="{!'slds-notify slds-notify_alert slds-theme_alert-texture' + if(and(v.isTrial, v.isTrialExpired), ' slds-theme_warning', ' slds-theme_success')}"
                          role="alert">
                         <lightning:icon size="x-small" iconName="utility:user" variant="inverse"
                                         class="slds-m-right_x-small"/>
-                        <aura:if isTrue="{!and(v.login.isTrial, v.isTrialExpired)}">
+                        <aura:if isTrue="{!and(v.isTrial, v.isTrialExpired)}">
                             <h2>{!format($Label.c.TrialExpired_2, v.login.email, v.selectedAccountNumber)}</h2>
                             <aura:set attribute="else">
                                 <h2>{!format($Label.c.LoggedInAs_2, v.login.email, v.selectedAccountNumber)}</h2>
@@ -68,13 +68,13 @@
                         </aura:if>
                     </div>
 
-                    <aura:if isTrue="{!and(v.login.isTrial, not(v.isTrialExpired))}">
+                    <aura:if isTrue="{!and(v.isTrial, not(v.isTrialExpired))}">
                         <p class="slds-m-top_medium"><em>{!v.trialMessage}</em></p>
                     </aura:if>
 
                     <div class="slds-text-align_right slds-m-top_medium">
                         <lightning:button label="{!$Label.c.Upgrade}" variant="neutral"
-                                          class="{!if(v.login.isTrial, '', 'slds-hide')}"
+                                          class="{!if(v.isTrial, '', 'slds-hide')}"
                                           onclick="{!c.navigateToUpgrade}"/>
                         <lightning:button label="{!$Label.c.LogOut}" variant="neutral"
                                           onclick="{!c.showLogoutModal}"/>
@@ -142,7 +142,8 @@
                                                                  label="{!$Label.c.MarketingOptIn}"
                                                                  variant="label-hidden"
                                                                  checked="{!v.trialAccount.user.marketingOptIn}"/>
-                                                <label for="marketing-opt-in" class="slds-form-element__label">{!$Label.c.MarketingOptIn}</label>
+                                                <label for="marketing-opt-in"
+                                                       class="slds-form-element__label">{!$Label.c.MarketingOptIn}</label>
                                             </div>
                                         </aura:if>
                                         <div class="slds-m-top_medium">
@@ -152,9 +153,11 @@
                                                         <em class="slds-text-color_weak">
                                                             <aura:if
                                                                     isTrue="{!v.userCountryCode == 'US'}">
-                                                                <lightning:formattedRichText value="{!$Label.c.USConsentMessage}"/>
+                                                                <lightning:formattedRichText
+                                                                        value="{!$Label.c.USConsentMessage}"/>
                                                                 <aura:set attribute="else">
-                                                                    <lightning:formattedRichText value="{!$Label.c.NonUSConsentMessage}"/>
+                                                                    <lightning:formattedRichText
+                                                                            value="{!$Label.c.NonUSConsentMessage}"/>
                                                                 </aura:set>
                                                             </aura:if>
                                                         </em>
@@ -214,19 +217,20 @@
                     <!-- Account Selection Modal -->
                     <c:strike_modal showModal="{!v.showAccountSelectionModal}" title="{!$Label.c.SelectAccount}">
                         <p class="slds-m-bottom_small">{!$Label.c.MultipleAccountsMessage}</p>
-                        <lightning:select value="{!v.selectedAccountNumber}" label="{!$Label.c.Account}">
-                            <aura:if isTrue="{!not(empty(v.login.accounts))}">
-                                <option value="" disabled="disabled" selected="selected">-- {!$Label.c.SelectLabel} --
-                                </option>
+                        <aura:if isTrue="{!and(v.showAccountSelectionModal, not(empty(v.login.accounts)))}">
+                            <lightning:select value="{!v.selectedAccountNumber}" label="{!$Label.c.Account}">
+                                <option value=""
+                                        selected="selected">{!$Label.c.SelectAccountOption}</option>
                                 <aura:iteration items="{!v.login.accounts}" var="account" indexVar="index">
-                                    <option value="{!account.id}">{!account.display}</option>
+                                    <option value="{!account.accountNumber}">{!format($Label.c.AccountDisplay_2, account.name, account.accountNumber)}</option>
                                 </aura:iteration>
-                            </aura:if>
-                        </lightning:select>
+                            </lightning:select>
+                        </aura:if>
                         <aura:set attribute="footerButtons">
                             <lightning:button variant="neutral" label="{!$Label.c.Cancel}"
                                               onclick="{!c.cancelSelectAccount}"/>
-                            <lightning:button variant="brand" label="{!$Label.c.SelectLabel}"
+                            <lightning:button variant="brand" label="{!$Label.c.SelectAccount}"
+                                              disabled="{!empty(v.selectedAccountNumber)}"
                                               onclick="{!c.selectAccount}"/>
                         </aura:set>
                     </c:strike_modal>

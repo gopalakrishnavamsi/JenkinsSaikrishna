@@ -118,17 +118,6 @@ public class LoginInformation {
 		 */
 		@AuraEnabled
 		public Boolean isDefault { get; private set; }
-		/**
-		 * The account display string.
-		 */
-		@AuraEnabled
-		public String display {
-			get {
-				return String.format(Label.AccountDisplay_2, new List<String> {
-					this.name, String.valueOf(this.accountNumber)
-				});
-			}
-		}
 
 		public Account(
 			final UUID id,

@@ -1838,8 +1838,8 @@
 		<name>SelectCountry</name>
 	</customLabels>
 	<customLabels>
-		<label>Select</label>
-		<name>SelectLabel</name>
+		<label>-- Select an account --</label>
+		<name>SelectAccountOption</name>
 	</customLabels>
 	<customLabels>
 		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>

@@ -178,12 +178,12 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_unauthorized() {
+	static void test_setAccount_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				SetupController.selectAccount(null, null, null);
-				throw new AssertException('Expected selectAccount to fail');
+				SetupController.setAccount(null, null, null);
+				throw new AssertException('Expected setAccount to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -192,14 +192,14 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_selectAccount_success() {
+	static void test_setAccount_success() {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Long accountNumber = (Long)AccountSettings__c.getOrgDefaults().AccountNumber__c;
 
 			Test.startTest();
-			LoginInformation result = SetupController.selectAccount('prod', null, accountNumber);
+			LoginInformation result = SetupController.setAccount('prod', null, accountNumber);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
