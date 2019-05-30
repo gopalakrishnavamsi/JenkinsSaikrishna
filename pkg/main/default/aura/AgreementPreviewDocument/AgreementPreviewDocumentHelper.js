@@ -23,7 +23,6 @@
 
   baseOptions: function(component, uiHelper, sourceId) {
     var action = component.get('c.generateUploadToken');
-    var self = this;
     return new Promise(function(resolve, reject) {
       action.setParams({
         objectId: sourceId
@@ -35,33 +34,24 @@
           resolve(
             Object.freeze({
               iconPath: $A.get('$Resource.scmwidgetsspritemap'),
-              accessTokenFn: self.getAccessToken.bind(
-                self,
-                component,
-                uiHelper,
-                sourceId
-              ),
-              uploadApiBaseDomain: token.apiBaseUrl,
-              downloadApiBaseDomain: 'https://apidownloadna11.springcm.com' //FixMe: should be returned from generateToken
+              accessTokenFn: function () {
+                return new Promise(function () {
+                  action.setCallback(this, function (response2) {
+                    var state2 = response2.getState();
+                    if (state2 === 'SUCCESS') {
+                      resolve(response2.getReturnValue().token);
+                    } else if (state2 === 'ERROR') {
+                      reject(response2.getError());
+                    }
+                  });
+                  $A.enqueueAction(action);
+
+                });
+              },
+              uploadApiBaseDomain: token.apiUploadBaseUrl,
+              downloadApiBaseDomain: token.apiDownloadBaseUrl
             })
           );
-        }
-        if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
-      });
-      $A.enqueueAction(action);
-    });
-  },
-
-  getAccessToken: function(component, uiHelper, sourceId) {
-    var action = component.get('c.generateUploadToken');
-    return new Promise(function(resolve, reject) {
-      action.setParams({
-        objectId: sourceId
-      });
-      action.setCallback(this, function(response) {
-        var state = response.getState();
-        if (state === 'SUCCESS') {
-          resolve(response.getReturnValue().token);
         }
         if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
       });

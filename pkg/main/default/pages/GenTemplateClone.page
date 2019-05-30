@@ -32,11 +32,7 @@
                     </svg>
                 </span>
                 <div class="slds-notify__content">
-                    <h2 class="slds-text-heading_small">
-                        <apex:outputText value="{!$Label.FailedToCloneGenTemplate_1}">
-                            <apex:param value="{!GenTemplate__c.Name}"/>
-                        </apex:outputText>
-                    </h2>
+                    <h2 class="slds-text-heading_small">{!$Label.FailedToCloneGenTemplate}</h2>
                 </div>
             </div>
         </div>
