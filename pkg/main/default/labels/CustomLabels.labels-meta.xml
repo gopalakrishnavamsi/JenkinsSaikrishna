@@ -4710,11 +4710,11 @@
 		<value>One or more layouts does not match the supplied source type.</value>
 	</labels>
 	<labels>
-		<fullName>FailedToCloneGenTemplate_1</fullName>
+		<fullName>FailedToCloneGenTemplate</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Failed to clone Gen template</shortDescription>
-		<value>Failed to clone template {0}.</value>
+		<value>Failed to clone template</value>
 	</labels>
 	<labels>
 		<fullName>GenTemplateNotFound</fullName>

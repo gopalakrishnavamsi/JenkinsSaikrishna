@@ -2539,8 +2539,8 @@
 		<name>InvalidLayout</name>
 	</customLabels>
 	<customLabels>
-		<label>Failed to clone template {0}.</label>
-		<name>FailedToCloneGenTemplate_1</name>
+		<label>Failed to clone template</label>
+		<name>FailedToCloneGenTemplate</name>
 	</customLabels>
 	<customLabels>
 		<label>Template not found.</label>
