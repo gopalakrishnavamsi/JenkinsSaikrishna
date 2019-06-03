@@ -110,5 +110,4 @@
   handleSpringOAuthEvent: function (component, event, helper) {
     helper.endSpringOAuth(component, event.getParam('response'), event.getParam('loginInformation'));
   }
-
 });

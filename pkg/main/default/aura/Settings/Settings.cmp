@@ -35,7 +35,9 @@
                                 selected="{!if(empty(v.systemSenderId), 'selected', '')}">{!$Label.c.None}</option>
                         <aura:iteration items="{!v.availableSystemSenders}" var="ss">
                             <option value="{!ss.id.value}"
-                                    selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">{!ss.display}</option>
+                                    selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">
+                                {!format($Label.c.AccountDisplay_2, ss.name, ss.email)}}
+                            </option>
                         </aura:iteration>
                     </lightning:select>
                 </div>

@@ -3422,12 +3422,12 @@
 		<value>-- Select a country --</value>
 	</labels>
 	<labels>
-		<fullName>SelectLabel</fullName>
+		<fullName>SelectAccountOption</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Select</shortDescription>
-		<value>Select</value>
+		<shortDescription>Select account option</shortDescription>
+		<value>-- Select an Account --</value>
 	</labels>
 	<labels>
 		<fullName>SelectSalesforceUsers</fullName>

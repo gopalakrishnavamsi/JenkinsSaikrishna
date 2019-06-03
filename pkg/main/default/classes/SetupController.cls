@@ -70,16 +70,16 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static LoginInformation selectAccount(
+	public static LoginInformation setAccount(
 		final String environment,
 		final String otherUrl,
-		final Long selectedAccountNumber) {
+		final Long accountNumber) {
 
 		try {
-			return AuthService.selectAccount(
+			return AuthService.setAccount(
 				DocuSign.parseEnvironment(environment),
 				String.isBlank(otherUrl) ? null : new Url(otherUrl),
-				selectedAccountNumber);
+				accountNumber);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to select account');
 		}

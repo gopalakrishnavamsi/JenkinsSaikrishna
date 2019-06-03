@@ -8,6 +8,7 @@
     <aura:attribute name="steps" type="Object[]" access="private"/>
     <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
     <aura:attribute name="isUserStepComplete" type="Boolean" access="private"/>
+    <aura:attribute name="isTrial" type="Boolean" access="private"/>
     <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
     <aura:attribute name="progressionStatus" type="String" access="private"/>
     <aura:attribute name="completedCounter" type="Integer" access="private"/>
@@ -42,6 +43,7 @@
                     <c:SetupAccount aura:id="setupAccount"
                                     login="{!v.login}"
                                     isLoggedIn="{!v.isLoggedIn}"
+                                    isTrial="{!v.isTrial}"
                                     isTrialExpired="{!v.isTrialExpired}"
                                     nextStep="{!v.nextStep}"
                                     beginOAuth="{!v.beginOAuth}"
