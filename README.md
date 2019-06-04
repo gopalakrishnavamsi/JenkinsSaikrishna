@@ -14,7 +14,7 @@ Salesforce DX is used to build, test, and deploy this project.
 
 Once you have completed the initial scratch org setup, you can sync any local changes with that org using the `sfdx force:source:push`.
 
-##Update: Shortcut Commands
+### Update: Shortcut Commands
 1. In addition to using SFDX commands directly you can run "npm init" (if it’s your first time running npm scripts on this package) then run "npm setup". The npm setup command will run all necessary commands for generating a sandbox/ configuration sequentially and prompt for responses as needed.
 
 ## Installing and running ESLint (pre-requisites : have npm installed)
