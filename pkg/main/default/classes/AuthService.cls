@@ -1345,7 +1345,7 @@ public with sharing class AuthService {
 					};
 					Response response = super.post(
 						this.baseUrl,
-						new List<Object> { 'SetupSalesforce', 'GenIntegration' },
+						new List<Object> { 'SetupSalesforce', 'UnifiedAppIntegration' },
 						QueryString.empty,
 						new Map<String, String> { 'Content-Type' => 'application/json' },
 						JSON.serialize(body),
