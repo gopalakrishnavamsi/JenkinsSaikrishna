@@ -140,7 +140,6 @@ public with sharing class AgreementsController extends Controller {
 			}
 			return NegotiateService.sendForExternalReview(agreementName, sourceId, documentIdList, reviewers, subject, body, expiresInNumberOfDays);
 		} catch (Exception ex) {
-			System.debug('ex: ' + ex.getMessage());
 			throw Controller.wrapException(ex, 'Failed to send documents for External Review');
 		}
 	}

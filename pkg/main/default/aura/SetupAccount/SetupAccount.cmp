@@ -1,6 +1,7 @@
 <aura:component>
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="isLoggedIn" type="Boolean"/>
+    <aura:attribute name="isTrial" type="Boolean"/>
     <aura:attribute name="isTrialExpired" type="Boolean"/>
     <aura:attribute name="nextStep" type="String"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
@@ -30,6 +31,7 @@
                 <c:Login aura:id="salesforceToThirdParty"
                          login="{!v.login}"
                          isLoggedIn="{!v.isLoggedIn}"
+                         isTrial="{!v.isTrial}"
                          isTrialExpired="{!v.isTrialExpired}"
                          beginOAuth="{!v.beginOAuth}"
                          beginSpringOAuth="{!v.beginSpringOAuth}"/>
