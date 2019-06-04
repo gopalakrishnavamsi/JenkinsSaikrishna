@@ -770,12 +770,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				actor = new AgreementHistoryItem.Actor(
 					this.data.actor.fullName,
 					this.data.actor.emailAddress,
-					'https://salesforce.com'); //TODO implement account URL logic
+					resolveActorUrl(this.data.actor.emailAddress) != null ? resolveActorUrl(this.data.actor.emailAddress) : '');
 			} else {
 				actor = new AgreementHistoryItem.Actor(
 					'',
 					'',
-					'https://salesforce.com');
+					'');
 			}
 
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
@@ -796,7 +796,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 			return new AgreementHistoryItem(
 				this.actionType,
-				this.userEmail,
+				UserInfo.getUserEmail(),
 				this.createdDate,
 				this.data.emailSubject,
 				this.data.emailMessage,
@@ -806,6 +806,21 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.data.documentName,
 				actor,
 				recipients);
+		}
+
+		@TestVisible
+		private String resolveActorUrl(final String userEmail) {
+			String result;
+			try {
+				List<User> userList = new List<User>();
+				userList = [SELECT Id FROM User WHERE email = :userEmail and isActive = true LIMIT 1];
+				if (!userList.isEmpty()) {
+					result = Salesforce.baseUrl.toExternalForm() + '/' + userList[0].Id;
+				}
+			} catch (Exception ex) {
+				LoggerService.getInstance().error('Failed to resolve actorUrl ' + ex.getMessage());
+			}
+			return result;
 		}
 	}
 
