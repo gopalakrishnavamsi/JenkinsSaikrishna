@@ -345,8 +345,6 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-			System.assertEquals('John Doe', result.get(0).recipients.get(0).fullName);
-			System.assertEquals('someguy+externalReviewRecipient@springcm.com', result.get(0).recipients.get(0).email);
 			System.assertEquals('For external review', result.get(0).subject);
 			System.assertEquals('Please review the document', result.get(0).message);
 		}
@@ -396,29 +394,59 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveActorUrl_success() {
+	static void test_resolveSalesforceUser_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveActorUrl(UserInfo.getUserEmail());
+			String result = item.resolveSalesforceUser(UserInfo.getUserEmail());
 			System.assertNotEquals(result, null);
 			System.assertEquals(result, Salesforce.baseUrl.toExternalForm() + '/' + UserInfo.getUserId());
 		}
 	}
 
 	@IsTest
-	static void test_resolveActorUrl_blankInput() {
+	static void test_resolveSalesforceUser_blankInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveActorUrl('');
+			String result = item.resolveSalesforceUser('');
 			System.assertEquals(result, null);
 		}
 	}
 
 	@IsTest
-	static void test_resolveActorUrl_randomEmailInput() {
+	static void test_resolveSalesforceUser_randomEmailInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveActorUrl('test@test.com');
+			String result = item.resolveSalesforceUser('test@test.com');
+			System.assertEquals(result, null);
+		}
+	}
+
+	@IsTest
+	static void test_resolveSalesforceContact_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Contact testContact = new Contact (FirstName = 'test', LastName = 'contact', Email = 'test@test.com');
+			insert testContact;
+			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
+			Contact result = item.resolveSalesforceContact(testContact.Email);
+			System.assertNotEquals(result, null);
+			System.assertEquals(result.Email, testContact.Email);
+		}
+	}
+
+	@IsTest
+	static void test_resolveSalesforceContact_randomEmailInput() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
+			Contact result = item.resolveSalesforceContact('randomInput');
+			System.assertEquals(result, null);
+		}
+	}
+
+	@IsTest
+	static void test_resolveSalesforceContact_blankInput() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
+			Contact result = item.resolveSalesforceContact('');
 			System.assertEquals(result, null);
 		}
 	}
