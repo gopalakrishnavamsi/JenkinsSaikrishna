@@ -20,7 +20,7 @@
                 <div class="ActionButtonContainer">
                     <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
                                           menuAlignment="right">
-                        <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"/>
+                        <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}" onactive="{!c.download}"/>
                         <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                             onactive="{!c.upload}" disabled="{!if(or(v.agreement.status == 'COMPLETED',
                                                             v.agreement.status == 'PENDING REVIEW',
