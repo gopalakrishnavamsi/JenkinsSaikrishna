@@ -30,6 +30,7 @@
     "installGen":"npm run installPackage -- --package 04t5A00000295yd",
     "installHQTest3Gen":"sfdx force:package:install --package 04t5A00000295CU",
     "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run installGen && npm run generatePassword && npm run openOrg",    
+    "setupHQTest3":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run installHQTest3Gen && npm run generatePassword && npm run openOrg",
     "lint": "eslint ./;",
     "test": "mocha -r jsdom-global/register"
   },
