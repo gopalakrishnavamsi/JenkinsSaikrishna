@@ -113,7 +113,25 @@ public with sharing class SetupController extends Controller {
 		final String lastName, final Boolean canManageAccount) {
 
 		try {
+			//commenting out for Beta
+			//Provisioning will be handled based Invite flow
+			/*
 			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
+				new Account.User(
+					null,
+					sourceId,
+					email,
+					firstName,
+					lastName,
+					null,
+					null,
+					null,
+					canManageAccount,
+					null,
+					APIError.none)
+			});
+			*/
+			List<Account.User> users = UserService.inviteUsers(new List<Account.User> {
 				new Account.User(
 					null,
 					sourceId,
