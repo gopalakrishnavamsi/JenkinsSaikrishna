@@ -134,7 +134,7 @@
       //display toast notification
       helper.showToast(
         component,
-        'Your document has been sent for approval.',
+        $A.get('$Label.c.InternalApprovalSuccess'),
         'success'
       );
     }
