@@ -64,5 +64,17 @@
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
+  },
+
+  download: function(component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreement');
+      actions.download(agreement, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   }
+
 });

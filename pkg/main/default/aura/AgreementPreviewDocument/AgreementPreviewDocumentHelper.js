@@ -66,7 +66,8 @@
         'completed' ||
         'rejected' ||
         'approval canceled' ||
-        'review canceled':
+        'review canceled'||
+        'reviewed':
         return this.basePreview(
           agreement.id.value,
           agreement.name,
@@ -74,19 +75,6 @@
           agreement.historyItems,
           true,
           auth
-        );
-
-      case 'reviewed':
-        return this.externalReviewSenderView(
-          this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
-            true,
-            auth
-          ),
-          true
         );
 
       case 'pending review':
@@ -99,7 +87,7 @@
             true,
             auth
           ),
-          false
+          true
         );
 
       case 'review expired':
@@ -168,7 +156,7 @@
           agreement.name,
           documentUrl,
           agreement.historyItems,
-          false,
+          true,
           auth
         );
     }
@@ -193,6 +181,7 @@
       historyItems: historyItems
     });
     if (showHistoryView) {
+
       preview.history.setHistoryItems(Object.assign([], historyItems));
       preview.renderHistoryView({
         historyItems: Object.assign([], historyItems)
@@ -206,7 +195,7 @@
     return preview;
   },
 
-  externalReviewSenderView: function(widget, isCompleted) {
+  externalReviewSenderView: function(widget, inProgress) {
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
     this.registerEvent('resendExternalReviewRequest', function() {
@@ -228,9 +217,9 @@
 
     widget.renderExternalReviewSenderView({
       subTitle: '',
-      showCompleteExternalReview: isCompleted,
-      showCancel: isCompleted,
-      showResendRequest: isCompleted
+      showCompleteExternalReview: inProgress,
+      showCancel: inProgress,
+      showResendRequest: inProgress,
     });
     return widget;
   },
