@@ -343,7 +343,7 @@ private class AgreementsControllerTest {
 			Test.startTest();
 			try {
 				String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
-			} catch(APIException ex) {
+			} catch(Exception ex) {
 				hasError = true;
 			}
 			Test.stopTest();
