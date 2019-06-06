@@ -322,4 +322,33 @@ private class AgreementsControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_generateResourceToken_success() {
+		GenAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.contains(GenAPIMock.DOCUMENT_ID.toString()));
+		}
+	}
+
+	@IsTest
+	static void test_generateResourceToken_fail() {
+		GenAPIMock.failure();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Boolean hasError = false;
+			Test.startTest();
+			try {
+				String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
+			} catch(Exception ex) {
+				hasError = true;
+			}
+			Test.stopTest();
+			System.assert(hasError);
+		}
+	}	
+
 }
