@@ -1,5 +1,4 @@
 public with sharing class AgreementsController extends Controller {
-	//FIXME : Add Test classes once the class body is locked down
 	public AgreementsController() {
 	}
 

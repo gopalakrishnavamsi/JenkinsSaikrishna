@@ -3435,6 +3435,116 @@
 		<label>Authorize</label>
 		<name>AuthorizeButton</name>
 	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementButtonText</name>
+		<label>REVIEW AGREEMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementSubject</name>
+		<label>Your approval is needed for {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementBodyText</name>
+		<label>Please approve the documents.</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementHeaderTitleText</name>
+		<label>Documents for you to approve {0}.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailButtonText</name>
+		<label>OPEN AGREEMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailSubject</name>
+		<label>{0} was approved</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailBodyText</name>
+		<label>Approve Comments</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailHeaderTitleText</name>
+		<label>Document approved {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailButtonText</name>
+		<label>VIEW DOCUMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailSubject</name>
+		<label>Document approved {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailBodyText</name>
+		<label>Approve Comments</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
+		<label>Document approved {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailButtonText</name>
+		<label>OPEN AGREEMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailSubject</name>
+		<label>Approval rejected {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailBodyText</name>
+		<label>Approve Comments</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailHeaderTitleText</name>
+		<label>Approval rejected {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailSubject</name>
+		<label>Approval request for {0} canceled</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailBodyText</name>
+		<label>Approval Request cancelled for {0}. There is nothing you need to do.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailHeaderTitleText</name>
+		<label>Approval Request Cancelled.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailButtonText</name>
+		<label>OPEN AGREEMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailSubject</name>
+		<label>{0} was rejected</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailBodyText</name>
+		<label>Approve Comments</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailHeaderTitleText</name>
+		<label>Document rejected {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailButtonText</name>
+		<label>VIEW DOCUMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailSubject</name>
+		<label>Approval Failed</label>
+	</customLabels>
+	<customLabels>
+		<label>There was a problem with your approval request and it was not sent. The issue should resolve itself if
+			you resend the request.
+		</label>
+		<name>ApprovalFailureEmailBodyText</name>
+	</customLabels>
+	<customLabels>
+		<label>There was a problem with your review request.</label>
+		<name>ApprovalFailureEmailHeaderTitleText</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

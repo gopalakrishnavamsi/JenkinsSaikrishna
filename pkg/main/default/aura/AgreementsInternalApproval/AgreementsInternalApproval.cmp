@@ -3,15 +3,18 @@
 
     <!-- attributes -->
     <aura:attribute name="agreementDetails" type="Agreement"/>
-    <aura:attribute name="recipients" type="Object[]"/>
-    <aura:attribute name="currentStep" type="String"/>
-    <aura:attribute name="showApprovalOrder" type="Boolean"/>
+    <aura:attribute name="sourceId" type="Id"/>
+    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="recipients" type="Recipient[]"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="currentStep" type="String" access="private"/>
+    <aura:attribute name="showApprovalOrder" type="Boolean" default="{!false}"/>
     <aura:attribute name="draggedId" type="Integer" access="private"/>
     <aura:attribute name="droppedId" type="Integer" access="private"/>
-    <aura:attribute name="loading" type="Boolean" access="private"/>
-    <aura:attribute name="emailSubject" type="String" default="{!$Label.c.InternalApprovalEmailSubject}"/>
-    <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}"/>
-    <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
+    <aura:attribute name="emailSubject" type="String" default="{!$Label.c.InternalApprovalEmailSubject}"
+                    access="private"/>
+    <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}" access="private"/>
+
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
@@ -20,11 +23,24 @@
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
     <c:strike_modal aura:id="internalApprovalAgreementsModal"
                     title="{!if(v.currentStep == '1',$Label.c.SelectApprovers, $Label.c.ExternalReviewPersonalizeMessage)}"
                     showModal="{!v.showModal}">
+
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
         <!--modal body -->
-        <div class="slds-p-horizontal--xx-large">
+        <div class="{!'slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <!-- Select Recipients -->
             <aura:if isTrue="{!v.currentStep == '1'}">
                 <article class="slds-card slds-p-bottom_medium">
@@ -162,7 +178,8 @@
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
                 <lightning:button class="slds-button slds-button--neutral"
-                                  onclick="{!c.backButtonClicked}">{!$Label.c.Back}</lightning:button>
+                                  onclick="{!c.backButtonClicked}"
+                                  disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
                                   disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
