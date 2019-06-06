@@ -63,16 +63,18 @@
                 }
               };
 
-              var onUnload = function () {
-                var evt = component.getEvent('loadingEvent');
-                evt.setParams({
-                  isLoading: false
-                });
-                evt.fire();
-              };
+              var closeTimer = setInterval(function () {
+                if (w.closed) {
+                  clearInterval(closeTimer);
+                  var evt = component.getEvent('loadingEvent');
+                  evt.setParams({
+                    isLoading: false
+                  });
+                  evt.fire();
+                }
+              }, 500);
 
               window.addEventListener('message', onMessage);
-              w.addEventListener('unload', onUnload);
               w.focus();
             } else {
               showError(component, event.message);

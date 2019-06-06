@@ -1,15 +1,12 @@
 ({
-  getErrorMessage: function (response) {
-    // TODO: Use uiHelper library.
-    var message = '';
-    if (response) {
-      var errors = response.getError();
-      message = errors;
-      if (Array.isArray(errors) && errors.length > 0) {
-        message = errors[0].message;
-      }
-    }
-    return message;
+  onInit: function (component, event, helper) {
+    //initialize recipients
+    var recipients = component.get('v.recipients');
+    recipients.push(helper.newRecipient());
+    component.set('v.recipients', recipients);
+
+    //set the current step to 1
+    component.set('v.currentStep', '1');
   },
 
   resolveRecipient: function (component, recipient) {
@@ -50,6 +47,99 @@
     $A.enqueueAction(rr);
   },
 
+  addRecipient: function (component, event, helper) {
+    var recipients = component.get('v.recipients');
+    recipients.push(helper.newRecipient());
+    component.set('v.recipients', recipients);
+  },
+
+  removeRecipient: function (component, event) {
+    var recipients = component.get('v.recipients');
+    recipients.splice(event.getSource().get('v.value'), 1);
+    component.set('v.recipients', recipients);
+  },
+
+  onApproverDrag: function (component, event) {
+    event.dataTransfer.setData('Text', '');
+    if (
+      event.currentTarget.id &&
+      !$A.util.isUndefinedOrNull(parseInt(event.currentTarget.id))
+    ) {
+      component.set('v.draggedId', parseInt(event.currentTarget.id));
+    }
+  },
+
+  onApproverDrop: function (component, event) {
+    if (
+      event.currentTarget.id &&
+      !$A.util.isUndefinedOrNull(parseInt(event.currentTarget.id))
+    ) {
+      component.set('v.droppedId', parseInt(event.currentTarget.id));
+    }
+
+    var draggedId = component.get('v.draggedId');
+    var droppedId = component.get('v.droppedId');
+    var recipients = component.get('v.recipients');
+
+    if (
+      draggedId !== 'undefined' &&
+      droppedId !== 'undefined' &&
+      recipients !== 'undefined'
+    ) {
+      if (
+        recipients[droppedId] !== 'undefined' &&
+        recipients[draggedId] !== 'undefined' &&
+        recipients[draggedId].name !== 'undefined' &&
+        recipients[draggedId].name !== '' &&
+        recipients[droppedId].name !== 'undefined' &&
+        recipients[droppedId].name !== ''
+      ) {
+        var temp = recipients[draggedId];
+        recipients.splice(draggedId, 1);
+        recipients.splice(droppedId, 0, temp);
+        component.set('v.recipients', recipients);
+      }
+    }
+  },
+
+  setApprovalOrder: function (component) {
+    //set the attribute showApprovalOrder based on Checkbox value
+    var isChecked = component.find('approvalOrderCheckbox').get('v.checked');
+    component.set('v.showApprovalOrder', isChecked);
+  },
+
+  backButtonClicked: function (component, event, helper) {
+    var currentStep = component.get('v.currentStep');
+    //currentStep is Select Recipients
+    if (currentStep === '1') {
+      helper.hide(component, event, helper);
+    }
+    //currentStep is Edit your Message then direct user back to Select Recipients screen
+    if (currentStep === '2') {
+      component.set('v.currentStep', '1');
+    }
+  },
+
+  nextButtonClicked: function (component, event, helper) {
+    var currentStep = component.get('v.currentStep');
+    if (currentStep === '1') {
+      //Proceed to the personalize message step
+      component.set('v.currentStep', '2');
+    }
+    if (currentStep === '2') {
+      //If successful hide the component
+      helper.hide(component, event, helper);
+      //set the current step to 1
+      component.set('v.currentStep', '1');
+      //display toast notification
+      helper.showToast(
+        component,
+        $A.get('$Label.c.InternalApprovalSuccess'),
+        'success'
+      );
+    }
+  },
+
   newRecipient: function (recipient) {
     var isDefined = !$A.util.isUndefinedOrNull(recipient);
     return {
@@ -71,6 +161,19 @@
     return sourceId;
   },
 
+  getErrorMessage: function (response) {
+    // TODO: Use uiHelper library.
+    var message = '';
+    if (response) {
+      var errors = response.getError();
+      message = errors;
+      if (Array.isArray(errors) && errors.length > 0) {
+        message = errors[0].message;
+      }
+    }
+    return message;
+  },
+
   showToast: function (component, message, mode) {
     var evt = component.getEvent('toastEvent');
     evt.setParams({
@@ -90,4 +193,5 @@
   hide: function (component) {
     component.find('internalApprovalAgreementsModal').hide();
   }
+
 });

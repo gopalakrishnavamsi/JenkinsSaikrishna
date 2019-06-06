@@ -7,7 +7,7 @@ public class SpringOAuthAPIMock extends OAuthTokenMock {
 		this.success = success;
 	}
 
-	// Handles POST SetupSalesforce/GenIntegration
+	// Handles POST SetupSalesforce/UnifiedAppIntegration
 	override public HttpResponse getResponse(final HttpRequest request) {
 		HttpResponse response = new HttpResponse();
 		response.setHeader('Content-Type', 'application/json; charset=utf-8');

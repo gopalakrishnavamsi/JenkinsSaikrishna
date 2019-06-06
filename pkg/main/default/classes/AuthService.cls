@@ -1202,7 +1202,7 @@ public with sharing class AuthService {
 	 *
 	 * @return The result of the login. This may succeed with a single account (no additional action is
 	 * required to configure DocuSign for Salesforce), or with multiple accounts in which case the
-	 * <code>selectAccount</code> method should be called after the user selects the desired account.
+	 * <code>setAccount</code> method should be called after the user selects the desired account.
 	 */
 	public static LoginInformation redeemCode(
 		final String authorizationCode,
@@ -1268,10 +1268,10 @@ public with sharing class AuthService {
 		return result;
 	}
 
-	public static LoginInformation selectAccount(
+	public static LoginInformation setAccount(
 		final DocuSign.Environment environment,
 		final Url otherUrl,
-		final Long selectedAccountNumber) {
+		final Long accountNumber) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -1281,7 +1281,7 @@ public with sharing class AuthService {
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
 
-		if (selectedAccountNumber == null || selectedAccountNumber <= 0L) {
+		if (accountNumber == null || accountNumber <= 0L) {
 			throw new DocuSignException(Label.InvalidAccount);
 		}
 
@@ -1298,7 +1298,7 @@ public with sharing class AuthService {
 		}
 		LoginInformation.Account selected = null;
 		for (LoginInformation.Account a : result.accounts) {
-			if (a.accountNumber == selectedAccountNumber) {
+			if (a.accountNumber == accountNumber) {
 				selected = a;
 				break;
 			}
@@ -1345,7 +1345,7 @@ public with sharing class AuthService {
 					};
 					Response response = super.post(
 						this.baseUrl,
-						new List<Object> { 'SetupSalesforce', 'GenIntegration' },
+						new List<Object> { 'SetupSalesforce', 'UnifiedAppIntegration' },
 						QueryString.empty,
 						new Map<String, String> { 'Content-Type' => 'application/json' },
 						JSON.serialize(body),

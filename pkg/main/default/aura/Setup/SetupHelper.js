@@ -16,8 +16,9 @@
           ? null
           : login.accounts[0].accountNumber
       );
-      // TODO: Fix trials
-      component.set('v.isTrialExpired', false); //login.isTrial && login.trialStatus && login.trialStatus.isExpired === true);
+      // TODO: Fix trial accounts. GET /oauth/userinfo response includes no account plan information.
+      component.set('v.isTrial', false);
+      component.set('v.isTrialExpired', false);
       var steps = [
         {
           name: 'setupAccount',

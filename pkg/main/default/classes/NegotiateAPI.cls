@@ -775,33 +775,36 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				actor = new AgreementHistoryItem.Actor(
 					this.data.actor.fullName,
 					this.data.actor.emailAddress,
-					'https://salesforce.com'); //TODO implement account URL logic
+					resolveSalesforceUser(this.data.actor.emailAddress) != null ? resolveSalesforceUser(this.data.actor.emailAddress) : '');
 			} else {
 				actor = new AgreementHistoryItem.Actor(
 					'',
 					'',
-					'https://salesforce.com');
+					'');
 			}
 
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
 
 			if (this.data.reviewer != null) {
+				Contact resolvedContact = resolveSalesforceContact(this.data.reviewer.emailAddress);
 				recipients.add(new AgreementHistoryItem.Actor(
-					this.data.reviewer.fullName,
-					this.data.reviewer.emailAddress, ''));
+					(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
+					this.data.reviewer.emailAddress,
+					(resolvedContact != null && resolvedContact.Id != null) ? Salesforce.baseUrl.toExternalForm() + '/' + resolvedContact.Id : ''));
 			}
 
 			if (this.data.approvers != null && !this.data.approvers.isEmpty()) {
 				for (ApiActor a : this.data.approvers) {
 					recipients.add(new AgreementHistoryItem.Actor(
 						a.fullName,
-						a.emailAddress, ''));
+						a.emailAddress,
+						resolveSalesforceUser(a.emailAddress) != null ? resolveSalesforceUser(a.emailAddress) : ''));
 				}
 			}
 
 			return new AgreementHistoryItem(
 				this.actionType,
-				this.userEmail,
+				UserInfo.getUserEmail(),
 				this.createdDate,
 				this.data.emailSubject,
 				this.data.emailMessage,
@@ -811,6 +814,36 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.data.documentName,
 				actor,
 				recipients);
+		}
+
+		@TestVisible
+		private String resolveSalesforceUser(final String userEmail) {
+			String result;
+			try {
+				List<User> userList = new List<User>();
+				userList = [SELECT Id FROM User WHERE email = :userEmail and isActive = true LIMIT 1];
+				if (!userList.isEmpty()) {
+					result = Salesforce.baseUrl.toExternalForm() + '/' + userList[0].Id;
+				}
+			} catch (Exception ex) {
+				LoggerService.getInstance().error('Failed to resolve salesforce user in history items ' + ex.getMessage());
+			}
+			return result;
+		}
+
+		@TestVisible
+		private Contact resolveSalesforceContact(final String contactEmail) {
+			Contact result;
+			try {
+				List<Contact> contactList = new List<Contact>();
+				contactList = [SELECT Id, Name, Email FROM Contact WHERE email = :contactEmail LIMIT 1];
+				if (!contactList.isEmpty()) {
+					result = contactList[0];
+				}
+			} catch (Exception ex) {
+				LoggerService.getInstance().error('Failed to resolve salesforce contact in history items ' + ex.getMessage());
+			}
+			return result;
 		}
 	}
 

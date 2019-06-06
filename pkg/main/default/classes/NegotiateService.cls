@@ -154,6 +154,7 @@ public with sharing class NegotiateService {
 	private static String statusActionMapping(final String historyItemType) {
 
 		if (historyItemType.equals(AgreementHistoryItem.DocumentImportFromSalesforce) ||
+			historyItemType.equals(AgreementHistoryItem.DocumentAdded) ||
 			historyItemType.equals(AgreementHistoryItem.TitleChanged)) {
 			return AgreementStatus.NEW_AGREEMENT;
 		}

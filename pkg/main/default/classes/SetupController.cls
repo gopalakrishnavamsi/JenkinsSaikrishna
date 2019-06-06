@@ -70,16 +70,16 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static LoginInformation selectAccount(
+	public static LoginInformation setAccount(
 		final String environment,
 		final String otherUrl,
-		final Long selectedAccountNumber) {
+		final Long accountNumber) {
 
 		try {
-			return AuthService.selectAccount(
+			return AuthService.setAccount(
 				DocuSign.parseEnvironment(environment),
 				String.isBlank(otherUrl) ? null : new Url(otherUrl),
-				selectedAccountNumber);
+				accountNumber);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to select account');
 		}
@@ -113,7 +113,25 @@ public with sharing class SetupController extends Controller {
 		final String lastName, final Boolean canManageAccount) {
 
 		try {
+			//commenting out for Beta
+			//Provisioning will be handled based Invite flow
+			/*
 			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
+				new Account.User(
+					null,
+					sourceId,
+					email,
+					firstName,
+					lastName,
+					null,
+					null,
+					null,
+					canManageAccount,
+					null,
+					APIError.none)
+			});
+			*/
+			List<Account.User> users = UserService.inviteUsers(new List<Account.User> {
 				new Account.User(
 					null,
 					sourceId,

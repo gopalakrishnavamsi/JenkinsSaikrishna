@@ -4,6 +4,7 @@
 public class AgreementHistoryItem {
 	public static final String DocumentImportFromSalesforce = 'DocumentImportFromSalesforce';
 	public static final String DocumentExportedToSalesforce = 'DocumentExportedToSalesforce';
+	public static final String DocumentAdded = 'DocumentAdded';
 	public static final String TitleChanged = 'TitleChanged';
 	public static final String ExternalReviewInitiated = 'ExternalReviewInitiated';
 	public static final String ExternalReviewCompletedDocumentAndComments = 'ExternalReviewCompletedDocumentAndComments';

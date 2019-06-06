@@ -649,14 +649,12 @@ public class AccountServiceTest {
 				String username = String.valueOf(ss.id);
 				if (username == dsa1.Username__c) {
 					foundDSA1 = true;
-					System.assertEquals(
-						String.format(Label.AccountDisplay_2, new List<String> { dsa1.Name, dsa1.Email }),
-						ss.display);
+					System.assertEquals(dsa1.Name, ss.name);
+					System.assertEquals(dsa1.Email, ss.email);
 				} else if (username == dsa3.Username__c) {
 					foundDSA3 = true;
-					System.assertEquals(
-						String.format(Label.AccountDisplay_2, new List<String> { dsa3.Name, dsa3.Email }),
-						ss.display);
+					System.assertEquals(dsa3.Name, ss.name);
+					System.assertEquals(dsa3.Email, ss.email);
 				} else if (invalidUsernames.contains(username)) {
 					throw new AssertException('Unexpected system sender: ' + ss);
 				}

@@ -4,7 +4,7 @@
     <aura:attribute name="agreement" type="Agreement"/>
     <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="loading" type="Boolean" default="true"/>
-    <aura:attribute name="sourceId" type="String" access="public"/>
+    <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>

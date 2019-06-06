@@ -23,7 +23,6 @@
 
   baseOptions: function(component, uiHelper, sourceId) {
     var action = component.get('c.generateUploadToken');
-    var self = this;
     return new Promise(function(resolve, reject) {
       action.setParams({
         objectId: sourceId
@@ -35,33 +34,24 @@
           resolve(
             Object.freeze({
               iconPath: $A.get('$Resource.scmwidgetsspritemap'),
-              accessTokenFn: self.getAccessToken.bind(
-                self,
-                component,
-                uiHelper,
-                sourceId
-              ),
-              uploadApiBaseDomain: token.apiBaseUrl,
-              downloadApiBaseDomain: 'https://apidownloadna11.springcm.com' //FixMe: should be returned from generateToken
+              accessTokenFn: function () {
+                return new Promise(function () {
+                  action.setCallback(this, function (response2) {
+                    var state2 = response2.getState();
+                    if (state2 === 'SUCCESS') {
+                      resolve(response2.getReturnValue().token);
+                    } else if (state2 === 'ERROR') {
+                      reject(response2.getError());
+                    }
+                  });
+                  $A.enqueueAction(action);
+
+                });
+              },
+              uploadApiBaseDomain: token.apiUploadBaseUrl,
+              downloadApiBaseDomain: token.apiDownloadBaseUrl
             })
           );
-        }
-        if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
-      });
-      $A.enqueueAction(action);
-    });
-  },
-
-  getAccessToken: function(component, uiHelper, sourceId) {
-    var action = component.get('c.generateUploadToken');
-    return new Promise(function(resolve, reject) {
-      action.setParams({
-        objectId: sourceId
-      });
-      action.setCallback(this, function(response) {
-        var state = response.getState();
-        if (state === 'SUCCESS') {
-          resolve(response.getReturnValue().token);
         }
         if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
       });
@@ -76,7 +66,8 @@
         'completed' ||
         'rejected' ||
         'approval canceled' ||
-        'review canceled':
+        'review canceled'||
+        'reviewed':
         return this.basePreview(
           agreement.id.value,
           agreement.name,
@@ -84,19 +75,6 @@
           agreement.historyItems,
           true,
           auth
-        );
-
-      case 'reviewed':
-        return this.externalReviewSenderView(
-          this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
-            true,
-            auth
-          ),
-          true
         );
 
       case 'pending review':
@@ -109,7 +87,7 @@
             true,
             auth
           ),
-          false
+          true
         );
 
       case 'review expired':
@@ -178,7 +156,7 @@
           agreement.name,
           documentUrl,
           agreement.historyItems,
-          false,
+          true,
           auth
         );
     }
@@ -203,6 +181,7 @@
       historyItems: historyItems
     });
     if (showHistoryView) {
+
       preview.history.setHistoryItems(Object.assign([], historyItems));
       preview.renderHistoryView({
         historyItems: Object.assign([], historyItems)
@@ -216,7 +195,7 @@
     return preview;
   },
 
-  externalReviewSenderView: function(widget, isCompleted) {
+  externalReviewSenderView: function(widget, inProgress) {
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
     this.registerEvent('resendExternalReviewRequest', function() {
@@ -238,9 +217,9 @@
 
     widget.renderExternalReviewSenderView({
       subTitle: '',
-      showCompleteExternalReview: isCompleted,
-      showCancel: isCompleted,
-      showResendRequest: isCompleted
+      showCompleteExternalReview: inProgress,
+      showCancel: inProgress,
+      showResendRequest: inProgress,
     });
     return widget;
   },

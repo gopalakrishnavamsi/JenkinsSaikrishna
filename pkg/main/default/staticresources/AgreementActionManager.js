@@ -28,7 +28,8 @@ var AgreementComponents = Object.freeze({
   InternalApproval: 'AgreementsInternalApproval',
   ExternalReview: 'AgreementsExternalReview',
   Rename: 'AgreementsRename',
-  Share: 'AgreementsShareLink'
+  Share: 'AgreementsShareLink',
+  Download: 'AgreementDownload'
 });
 
 function AgreementActionManager(anchor, namespace) {
@@ -65,6 +66,7 @@ AgreementActionManager.prototype.getComponentName = function(name) {
 
 AgreementActionManager.prototype.upload = function(component) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -74,7 +76,7 @@ AgreementActionManager.prototype.upload = function(component) {
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
@@ -86,6 +88,7 @@ AgreementActionManager.prototype.delete = function(
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -96,7 +99,7 @@ AgreementActionManager.prototype.delete = function(
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
@@ -108,6 +111,7 @@ AgreementActionManager.prototype.rename = function(
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -118,7 +122,7 @@ AgreementActionManager.prototype.rename = function(
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
@@ -131,6 +135,7 @@ AgreementActionManager.prototype.internalApproval = function(
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -142,7 +147,7 @@ AgreementActionManager.prototype.internalApproval = function(
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
@@ -155,6 +160,7 @@ AgreementActionManager.prototype.externalReview = function(
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -166,7 +172,7 @@ AgreementActionManager.prototype.externalReview = function(
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
@@ -175,6 +181,7 @@ AgreementActionManager.prototype.externalReview = function(
 
 AgreementActionManager.prototype.share = function(agreementDetails, component) {
   if (this.activeScope) this.activeScope.destroy();
+  var self = this;
   generateComponent(
     this.anchor,
     component,
@@ -185,7 +192,27 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
     }
   )
     .then(function(modalComponent) {
-      this.activeScope = modalComponent;
+      self.activeScope = modalComponent;
+    })
+    .catch(function(err) {
+      throw err;
+    });
+};
+
+AgreementActionManager.prototype.download = function(agreementDetails, component) {
+  if (this.activeScope) this.activeScope.destroy();
+  var self = this;
+  generateComponent(
+    this.anchor,
+    component,
+    this.getComponentName(AgreementComponents.Download),
+    {
+      showModal: true,
+      agreementDetails: agreementDetails
+    }
+  )
+    .then(function(modalComponent) {
+      self.activeScope = modalComponent;
     })
     .catch(function(err) {
       throw err;
