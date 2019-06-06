@@ -345,11 +345,6 @@ private class AgreementsControllerTest {
 				String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
 			} catch(APIException ex) {
 				hasError = true;
-				System.assertNotEquals(null, ex.error);
-				System.assertNotEquals(null, ex.error.code);
-				System.assertNotEquals(null, ex.error.description);
-				System.assert(ex.error instanceof GenAPI.Error);
-				System.assert(UUID.isNotEmpty(((GenAPI.Error)ex.error).referenceId));
 			}
 			Test.stopTest();
 			System.assert(hasError);
