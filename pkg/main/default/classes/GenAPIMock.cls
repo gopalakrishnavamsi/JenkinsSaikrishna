@@ -1,6 +1,6 @@
 @IsTest
 public class GenAPIMock extends OAuthTokenMock {
-
+	public static UUID DOCUMENT_ID = UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41');
 	private final Boolean success;
 
 	public GenAPIMock(final Boolean success) {
@@ -23,9 +23,15 @@ public class GenAPIMock extends OAuthTokenMock {
 			response.setStatus('OK');
 			response.setBody('{"SfContentVersionId":' + JSON.serialize(cvId) + ',"Status":"Success","Message":"Test success message"}');
 		} else if (success && method == 'POST') {
-			response.setStatusCode(201);
-			response.setStatus('CREATED');
-			response.setBody('{"Href":"https://unit.test/gen/' + UUID.randomUUID() + '"}');
+			if (request.getEndpoint().contains(GenAPI.PATH_RESOURCETOKEN)) {
+				response.setStatusCode(201);
+				response.setStatus('CREATED');
+				response.setBody('{"secret_uri":"https://unit.test/gen/' + GenAPIMock.DOCUMENT_ID + '"}');
+			} else {
+				response.setStatusCode(201);
+				response.setStatus('CREATED');
+				response.setBody('{"Href":"https://unit.test/gen/' + UUID.randomUUID() + '"}');				
+			}
 		} else {
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
