@@ -15,3 +15,7 @@
 .THIS .ds-approver-icon-color {
     background-color: #14A9DA;
 }
+
+.THIS .ds-fadeBackground {
+    opacity: 0.2;
+}
