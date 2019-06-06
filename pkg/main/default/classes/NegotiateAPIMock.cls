@@ -15,9 +15,11 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 	public static final UUID TASK_ID = UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566');
 	public static final UUID TASK_ID_2 = UUID.parse('5632d399-39fe-3085-9e48-126e4ffa0577');
 	public static final UUID TASK_ID_3 = UUID.parse('5682d399-49fe-5085-9e48-126e4ffa0577');
-	public static final Url DOCUMNET_HREF = new Url('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17');
+	public static final Url DOCUMENT_HREF = new Url('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17');
 	public static final String USER_EMAIL = 'TestUser@TestCompany.com';
 	public static final String WORKFLOW_ID = '382bd222-e541-e911-9c1d-3ca82a1e3f41';
+	public static final UUID WORKITEM_ID = UUID.parse('382bd222-e541-e911-9c1d-3ca82a1e3a66');
+	public static final UUID EXTERNAL_REVIEW_ID = UUID.parse('2a2167ad-0187-e911-9c35-3863bb335c17');
 	public static final Id OBJECT_ID = ID.valueOf('0061U0000058I2EQAU');
 	public static final String REVIEWERS_OBJECT = '[{"email":"unittest@test.com", "name":"test user"}]';
 	public static final Entity USER_ENTITY = new Entity(UserInfo.getUserId());
@@ -70,6 +72,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
 			response.setBody('{"AccessToken":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjY4MTg1ZmYxLTRlNTEtNGNlOS1hZjFjLTY4OTgxMjIwMzMxNyJ9.eyJUb2tlblR5cGUiOjUsIklzc3VlSW5zdGFudCI6MTU1ODU2NDgyMywiZXhwIjoxNTU4NTY4NDIzLCJVc2VySWQiOiIzZGVkYWM1My00OGZhLTRkZTYtODk0YS0zNWI0ODAyYWQxMGQiLCJzaXRlaWQiOjEsInNjcCI6WyJzcHJpbmdfY29udGVudCJdLCJhdWQiOiI1NzUxYzI1NS0zM2E0LTRjOGQtYmY1YS0wNjU0YTUwNDE4ODYiLCJpc3MiOiJodHRwczovL2FjY291bnQtZC5kb2N1c2lnbi5jb20vIiwic3ViIjoiM2RlZGFjNTMtNDhmYS00ZGU2LTg5NGEtMzViNDgwMmFkMTBkIiwiYWN0IjoiNTc1MWMyNTUtMzNhNC00YzhkLWJmNWEtMDY1NGE1MDQxODg2IiwiYW1yIjpbImp3dF9iciJdfQ.aBrwKSZ09AqGqCNTE4NsAY-qDhflif94kcMEdq7zosZ7HRSFIggSOdRY8d9cvznGWsCp4hk4eKlihoUaHohMRKMwNW8dsmhPbff1t4Cm5xYEDTOOOrhA5ZC6bKJXBlLB5vhEga0yShMAY7ggbCOqxdCZH9pi3hp_1Z8G_8-7vQAPLfmqJo3tcdtyDXHfpdyJs5-4toxWiFtxX1VZS3I4tVre8w0P1QIpESDv-_-qHaE-4zniddCpg_CCR90ON83ZtBTG0HLQNj52YFAjKs5wm3nQrMC4V9C3vo9uyCSeBa9Lq0AgswFNoSLn7eiviRJB9iwSBx9Vuqx8xsOaKC9CMg","APIBaseUrl":"https://apiuatna11.springcm.com/v2/63d5ccaa-67ff-452b-8e5e-ee2dd94f1a00","APIDownloadBaseUrl":"https://apidownloaduatna11.springcm.com/v2/63d5ccaa-67ff-452b-8e5e-ee2dd94f1a00","APIUploadBaseUrl":"https://apiuploaduatna11.springcm.com/v2/63d5ccaa-67ff-452b-8e5e-ee2dd94f1a00","ExpiresIn":3599}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_REVIEWS)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Sender":{"Href":"https://apiqana11.springcm.com/v2/41554d72-28fd-477f-9dd9-7701c4e750b5/members/e0faebab-b56a-e911-8398-005056b97c7d"},"Documents":{"Items":[{"Href":"https://apiqana11.springcm.com/v2/41554d72-28fd-477f-9dd9-7701c4e750b5/documents/acb1e384-4886-e911-9c35-3863bb335c17"}],"Offset":0,"Limit":20,"Total":1},"Recipient":{"Name":"SamCicero","Email":"sam.cicero@docusign.com"},"Status":"Sent","DueDate":"2019-08-23T05:00:00Z","EmailMessage":"<p>Pleasereview</p>","EmailSubject":"Review-Document","AlsoNotify":[],"AddSignature":true,"HideDueDateFromEmail":false,"EmailAppearance":0,"CreatedDate":"2019-06-04T19:48:09.603Z","Href":"https://apiqana11.springcm.com/v2/41554d72-28fd-477f-9dd9-7701c4e750b5/externalreviews/2a2167ad-0187-e911-9c35-3863bb335c17"}');
 		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_VERSIONS)) {
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -146,6 +152,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setBody('{"Items":[{"Name":"docusignlogerror7-23-18-1.docx","CreatedDate":"2019-03-08T21:35:08.97Z","CreatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","UpdatedDate":"2019-03-08T21:35:08.97Z","UpdatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41"},"HistoryItems":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/historyitems"},"AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"PageCount":5,"Lock":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/lock"},"PreviewUrl":"https://uatna11.springcm.com/atlas/documents/preview.aspx?aid=10250&lduid=ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","Versions":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/versions"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/sharelinks"},"DocumentProcessTrackingActivities":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentprocesstrackingactivities"},"DocumentReminders":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentreminders"},"RelatedDocuments":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/relateddocuments"},"DownloadDocumentHref":"https://apidownloaduatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","NativeFileSize":20557,"PdfFileSize":160453,"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41"}],"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Last":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Total":1}');
+		} else if (success && method == 'PUT' && path.contains(NegotiateAPI.PATH_REVIEWS)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Sender":{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/members/0a8823c8-3147-e911-b323-309c23cb2ea4"},"Documents":{"Items":[{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/documents/625a04ad-2882-e911-b333-309c23cb2ea4"}],"Offset":0,"Limit":20,"Total":1},"Recipient":{"Name":"","Email":"kevin.test.docusign@gmail.com"},"Status":"Complete","DueDate":"2019-06-28T05:00:00Z","EmailMessage":"Pleasereviewthedocument","EmailSubject":"YourreviewisneededforAgreement_Document.docx","Comment":"Completed","AlsoNotify":[],"AddSignature":false,"HideDueDateFromEmail":false,"EmailAppearance":0,"CreatedDate":"2019-05-29T15:44:47.753Z","Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/externalreviews/6e5a04ad-2882-e911-b333-309c23cb2ea4"}');
 		} else if (success && method == 'PUT') {
 			response.setStatusCode(200);
 			response.setStatus('OK');
@@ -153,6 +163,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 		} else if (success && method == 'DELETE') {
 			response.setStatusCode(200);
 			response.setStatus('OK');
+		} else if (success && method == 'PATCH') {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Name":"Approve1","Type":"ApproveDocuments","Assignee":{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/members/8f6c7260-e34c-e911-b324-309c23cb2ea4"},"AssignDate":"2019-05-29T15:36:33.65Z","Documents":{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workitems/52309483-2782-e911-b333-309c23cb2ea4/documents"},"Workflow":{"Name":"Negotiate_Approval_Template","Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workflows/2f309483-2782-e911-b333-309c23cb2ea4"},"CreatedDate":"2019-05-29T15:36:33.65Z","WorkItemUrl":"https://localhost/atlas/Documents/Preview.aspx?aid=30581986&wfid=52309483-2782-e911-b333-309c23cb2ea4&iter=","Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workitems/52309483-2782-e911-b333-309c23cb2ea4"}');
 		} else {
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');

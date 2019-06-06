@@ -10,6 +10,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_WORK_ITEMS = 'workitems';
 	public static final String PATH_EMAILS = 'emails';
 	public static final String PATH_LOCK = 'lock';
+	public static final String PATH_REVIEWS = 'reviews';
+	public static final String APPROVE = 'Approve';
+	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
 
 	private static NegotiateAPI self = null;
@@ -1029,18 +1032,29 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 	// approveOnBehalf and recipientResponse
 
-	public Boolean approveOnBehalf(final Url documentHref, final String resendEmailType) {
+	@TestVisible
+	private class APISelected {
 
-		final RestAPI.Response response = post(
+		public String Comment;
+		public List<String> Items;
+
+		public APISelected(final String comment, final String item) {
+			this.Comment = comment;
+			this.Items = new List<String>{item};
+		}
+	}
+
+	public Boolean approveOnBehalfOrRecipientResponse(final String comment, final String itemResponse, final UUID workItemsId) {
+
+		final RestAPI.Response response = patch(
 			getBaseUrl(),
 			new List<String> {
-				PATH_EMAILS
+				PATH_WORK_ITEMS, workItemsId.value
 			},
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'Document' => new APIHref(documentHref.toExternalForm()),
-				'ResendEmailType' => resendEmailType
+				'Selected' => new APISelected(comment, itemResponse)
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -1051,6 +1065,61 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return response.statusCode == 200 ;
 	}
 
+	// externalReview complete on behalf
+
+	@TestVisible
+	private class APIUploadDocuments {
+
+		public List<APIHref> Items;
+
+		public APIUploadDocuments(final String href) {
+			this.Items = new List<APIHref>{new APIHref(href)};
+		}
+	}
+
+	public Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID externalReviewId) {
+		// add else part
+
+		final RestAPI.Response response = put(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_REVIEWS, externalReviewId
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'Comments' => comments,
+				'UploadedDocuments' => new APIUploadDocuments(newVersionUrl.toExternalForm())
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed external review on Behalf for externalReviewId: ' + externalReviewId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.statusCode == 200 ;
+	}
+
+	// get document reviews
+	public UUID getDocumentReview(final UUID documentId) {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_DOCUMENTS, documentId, PATH_REVIEWS
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+
+	}
 
 }
 

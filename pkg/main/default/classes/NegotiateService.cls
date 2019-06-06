@@ -300,4 +300,18 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().cancelApprovalOrExternalReview(documentId);
 	}
+
+	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final UUID workItemsId) {
+		Permissions.verifyIsDocuSignUser();
+		if(itemResponse)
+			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId);
+		else
+			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.REJECT, workItemsId);
+	}
+
+	public static Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID documentId) {
+		Permissions.verifyIsDocuSignUser();
+		UUID externalReviewId = NegotiateAPI.getInstance().getDocumentReview(documentId);
+		return NegotiateAPI.getInstance().externalReviewCompleteOnBehalf(comments, newVersionUrl, externalReviewId);
+	}
 }
