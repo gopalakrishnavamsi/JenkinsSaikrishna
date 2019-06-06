@@ -1,4 +1,5 @@
 public with sharing class GenAPI extends DocuSignAPI {
+	public static String PATH_RESOURCETOKEN = 'resourcetokenregistrations';
 	private static GenAPI self = null;
 
 	@TestVisible
@@ -146,6 +147,30 @@ public with sharing class GenAPI extends DocuSignAPI {
 			(Id)body.get('SfContentVersionId'),
 			(String)body.get('Status'),
 			(String)body.get('Message'));
+	}
+
+	public Url getResourceToken(final UUID documentId) {
+		RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<Object> { PATH_RESOURCETOKEN },
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'objectid' => documentId.toString(),
+				'objecttype' => 'document',
+				'contenttype' => 'pdf',
+				'requesttype' => 'inline'
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to retrieve Gen resource token: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);	
+		return new Url(
+			(String) body.get('secret_uri')
+		);	
 	}
 }
 

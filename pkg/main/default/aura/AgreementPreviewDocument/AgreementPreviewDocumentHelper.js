@@ -3,25 +3,58 @@
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
-      this.baseOptions(component, uiHelper, component.get('v.sourceId'))
-        .then(function(options) {
-          var widget = self.resolvePreview(
+      Promise.all(
+        [   
+            this.baseOptions(component, uiHelper, component.get('v.sourceId')),
+            this.getResourceToken(agreement.id.value, component, uiHelper)
+        ]
+      )
+      .then(function(tokens) {
+        return Object.freeze({
+            baseOptions: tokens[0],
+            resourceToken: tokens[1]
+        });
+      })
+      .then(function(options) {
+        var widget = self.resolvePreview(
             options,
             agreement,
             documentUrl,
             true //TODO: Add Support for Non-Admin users
-          );
-          component.set('v.widget', widget);
-        })
-        .catch(function(err) {
+          );   
+          component.set('v.widget', widget);                               
+       })
+       .catch(function(err) {
           uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
-        });
+       });      
     } catch (err) {
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   },
 
   baseOptions: function(component, uiHelper, sourceId) {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+        self.getAccessToken(component, uiHelper, sourceId, true)
+        .then(function(token) {
+            resolve(
+                Object.freeze({
+                  iconPath: $A.get('$Resource.scmwidgetsspritemap'),
+                  accessTokenFn: function() {
+                    return self.getAccessToken(component, uiHelper, sourceId, false);
+                  },
+                  uploadApiBaseDomain: token.apiUploadBaseUrl,
+                  downloadApiBaseDomain: token.apiDownloadBaseUrl
+                })
+            );
+        })
+        .catch(function(err) {
+            reject(err);
+        });
+    });
+  },
+
+  getAccessToken: function(component, uiHelper, sourceId, isSetup){
     var action = component.get('c.generateUploadToken');
     return new Promise(function(resolve, reject) {
       action.setParams({
@@ -30,32 +63,30 @@
       action.setCallback(this, function(response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
-          var token = response.getReturnValue();
-          resolve(
-            Object.freeze({
-              iconPath: $A.get('$Resource.scmwidgetsspritemap'),
-              accessTokenFn: function () {
-                return new Promise(function () {
-                  action.setCallback(this, function (response2) {
-                    var state2 = response2.getState();
-                    if (state2 === 'SUCCESS') {
-                      resolve(response2.getReturnValue().token);
-                    } else if (state2 === 'ERROR') {
-                      reject(response2.getError());
-                    }
-                  });
-                  $A.enqueueAction(action);
-
-                });
-              },
-              uploadApiBaseDomain: token.apiUploadBaseUrl,
-              downloadApiBaseDomain: token.apiDownloadBaseUrl
-            })
-          );
+          if (isSetup) resolve(response.getReturnValue());
+          else resolve(response.getReturnValue().token);
         }
         if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
       });
       $A.enqueueAction(action);
+    });
+  },   
+
+  getResourceToken: function(agreementId, component, uiHelper) {
+    var action = component.get('c.generateResourceToken');
+ 
+    return new Promise(function(resolve, reject) {
+      action.setParams({
+        agreementId: agreementId
+      });           
+      action.setCallback(this, function(response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(response.getReturnValue());
+        }
+        if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
+      });
+      $A.enqueueAction(action);        
     });
   },
 
@@ -171,9 +202,10 @@
     auth
   ) {
     if (!agreementId || !documentUrl || !agreementName || !auth) throw 'Missing Parameter';
-    var preview = new SpringCM.Widgets.Preview(auth);
+    var preview = new SpringCM.Widgets.Preview(auth.baseOptions);
     preview.render('#agreementDocumentView');
     preview.renderDocumentPreview({
+      url: auth.resourceToken,
       name: agreementName,
       href: documentUrl,
       hasPdfPreview: true,
