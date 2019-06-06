@@ -19,7 +19,7 @@ Once you have completed the initial scratch org setup, you can sync any local ch
 
 ## Installing and running ESLint (pre-requisites : have npm installed)
 To install ESLint in mac run - 'npm install'
-To run linting run - 'npm run lint'
+To run linting run - 'npm run lint'.
 
 ## Testing Notes
 - Run unit tests with coverage: `sfdx force:apex:test:run -c -r human -w 5`. This will wait 5 minutes for the test run to complete. You can also execute this command asynchronously by omitting `-w #`.

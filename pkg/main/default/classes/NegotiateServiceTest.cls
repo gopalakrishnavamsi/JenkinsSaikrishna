@@ -295,4 +295,69 @@ private class NegotiateServiceTest {
 	}
 
 
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_resendRequest_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.resendRequest(NegotiateAPIMock.DOCUMENT_HREF, 'ExternalReview');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_approveOnBehalfOrRecipientResponse_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
+				NegotiateAPIMock.WORKITEM_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_externalReviewCompleteOnBehalf_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateService.externalReviewCompleteOnBehalf('this is the comment',
+				NegotiateAPIMock.DOCUMENT_HREF, NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
 }
