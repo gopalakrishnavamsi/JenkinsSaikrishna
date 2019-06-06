@@ -6,8 +6,8 @@ public class XMLSerializer {
     
     public static String fromPrimitive(final Integer data, final String tag) {
         return fromPrimitive(String.valueOf(data), tag);
-    } 
-    
+    }
+
     public static String fromPrimitive(final Double data, final String tag) {
         return fromPrimitive(String.valueOf(data), tag);
     }  

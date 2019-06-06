@@ -112,7 +112,7 @@
     var currentStep = component.get('v.currentStep');
     //currentStep is Select Recipients
     if (currentStep === '1') {
-      helper.hide(component, event, helper);
+      helper.close(component);
     }
     //currentStep is Edit your Message then direct user back to Select Recipients screen
     if (currentStep === '2') {
@@ -123,20 +123,10 @@
   nextButtonClicked: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '1') {
-      //Proceed to the personalize message step
       component.set('v.currentStep', '2');
     }
     if (currentStep === '2') {
-      //If successful hide the component
-      helper.hide(component, event, helper);
-      //set the current step to 1
-      component.set('v.currentStep', '1');
-      //display toast notification
-      helper.showToast(
-        component,
-        $A.get('$Label.c.InternalApprovalSuccess'),
-        'success'
-      );
+      helper.triggerSendForInternalApproval(component);
     }
   },
 
@@ -190,8 +180,76 @@
     component.find('internalApprovalAgreementsModal').show();
   },
 
-  hide: function (component) {
-    component.find('internalApprovalAgreementsModal').hide();
+  close: function (component) {
+    component.destroy();
+  },
+
+  reloadAgreementsSpace: function (component) {
+    var evt = component.getEvent('loadingEvent');
+    evt.setParams({
+      isLoading: true
+    });
+    evt.fire();
+  },
+
+  triggerSendForInternalApproval: function (component) {
+    component.set('v.loading', true);
+    var self = this;
+    var agreementDetails = component.get('v.agreementDetails');
+    var recipients = component.get('v.recipients');
+    var sourceId = component.get('v.sourceId');
+
+    var documentIdList = [];
+    documentIdList.push(agreementDetails.id.value);
+
+    var emailSubject = component.get('v.emailSubject');
+    var emailBody = component.get('v.emailBody');
+
+    var action = component.get('c.sendForInternalApproval');
+
+    action.setParams({
+      agreementName: agreementDetails.name,
+      sourceId: sourceId,
+      documentsIds: documentIdList,
+      approversJson: JSON.stringify(recipients),
+      subject: emailSubject,
+      body: emailBody
+    });
+
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result.status === 'Waiting') {
+          self.showToast(component, result.message, 'success');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        } else if (result.status === 'Executing') {
+          self.showToast(component, result.message, 'warning');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        } else {
+          self.showToast(component, result.message, 'error');
+          self.reloadAgreementsSpace(component);
+          self.close(component);
+        }
+      } else if (state === 'ERROR') {
+        var errorMessage = $A.get('$Label.c.ErrorMessage');
+        var errors = response.getError();
+        if (errors) {
+          if (errors[0] && errors[0].message) {
+            errorMessage += errors[0].message;
+          }
+        } else {
+          errorMessage += $A.get('$Label.c.UnknownError');
+        }
+        self.showToast(component, errorMessage, 'error');
+      }
+      component.set('v.loading', false);
+    });
+    $A.enqueueAction(action);
+
   }
 
 });

@@ -188,6 +188,7 @@
       body: emailBody,
       expiresInNumberOfDays: requestExpirationDays
     });
+
     action.setCallback(this, function(response) {
       var state = response.getState();
 

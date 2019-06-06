@@ -6252,7 +6252,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ViewDocumentButton</shortDescription>
-		<value>View Document</value>		
+		<value>VIEW DOCUMENT</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewFailureEmailBody</fullName>
@@ -6367,111 +6367,6 @@
 		<value>Review for {0} canceled.</value>
 	</labels>
 	<labels>
-		<fullName>ApprovalFailureEmailBody</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalFailureEmailBody</shortDescription>
-		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if you resend the request.</value>
-	</labels>	
-	<labels>
-		<fullName>ApprovalFailureEmailHeader</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalFailureEmailHeader</shortDescription>
-		<value>Approval Failed</value>
-	</labels>
-	<labels>
-		<fullName>ApprovalFailureEmailSubject_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalFailureEmailSubject_1</shortDescription>
-		<value>We couldn't send your approval request for {0}.</value>
-	</labels>
-	<labels>
-		<fullName>ExpiredApprovalSenderEmailBody_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalSenderEmailBody_1</shortDescription>
-		<value>The approval request for {0} has expired. If you still want someone approval this, you'll need to send a new approval request</value>
-	</labels>
-	<labels>
-		<fullName>ExpiredApprovalSenderEmailSubject</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalSenderEmailSubject</shortDescription>
-		<value>Your approval request has expired</value>
-	</labels>
-	<labels>
-		<fullName>ExpiredApprovalSenderEmailHeader</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalSenderEmailHeader</shortDescription>
-		<value>Your approval request has expired</value>
-	</labels>			
-	<labels>
-		<fullName>CompletedApprovalEmailSubject_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CompletedApprovalEmailSubject_1</shortDescription>
-		<value>Approval completed for {0}</value>
-	</labels>	
-	<labels>
-		<fullName>CompletedApprovalEmailHeader</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CompletedApprovalEmailHeader</shortDescription>
-		<value>Approval Complete</value>
-	</labels>
-	<labels>
-		<fullName>CompletedApprovalEmailBody_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CompletedApprovalEmailBody_1</shortDescription>
-		<value>The approval request for {0} has been completed. There is nothing you need to do.</value>
-	</labels>		
-	<labels>
-		<fullName>ExpiredApprovalApproverEmailBody_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalApproverEmailBody_1</shortDescription>
-		<value>The approval request for {0} has expired. There is nothing you need to do.</value>
-	</labels>
-	<labels>
-		<fullName>ExpiredApprovalApproverEmailSubject</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalApproverEmailSubject</shortDescription>
-		<value>Your approval request has expired</value>
-	</labels>		
-	<labels>
-		<fullName>ExpiredApprovalHeader_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredApprovalHeader_1</shortDescription>		
-		<value>Approval request for {0} has expired.</value>
-	</labels>
-	<labels>
-		<fullName>CanceledApprovalEmailBody_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CanceledApprovalEmailBody_1</shortDescription>		
-		<value>Approval request for {0} has been canceled. There is nothing you need to do.</value>
-	</labels>
-	<labels>
-		<fullName>CanceledApprovalEmailSubject_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CanceledApprovalEmailSubject_1</shortDescription>		
-		<value>Approval for {0} has been canceled</value>
-	</labels>
-	<labels>
-		<fullName>CanceledApprovalEmailHeader_1</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CanceledApprovalEmailHeader_1</shortDescription>		
-		<value>Approval for {0} canceled.</value>
-	</labels>					
-  <labels>
 		<fullName>InvalidOrigin</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -6490,7 +6385,9 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Authorize DocuSign instructions</shortDescription>
-		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf. Click the &quot;Authorize&quot; button to continue.</value>
+		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.
+			Click the &quot;Authorize&quot; button to continue.
+		</value>
 	</labels>
 	<labels>
 		<fullName>AuthorizeButton</fullName>
@@ -6498,5 +6395,196 @@
 		<protected>true</protected>
 		<shortDescription>Authorize button</shortDescription>
 		<value>Authorize</value>
+	</labels>
+	<labels>
+		<fullName>ReviewAgreementButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ReviewAgreementButtonText</shortDescription>
+		<value>REVIEW AGREEMENT</value>
+	</labels>
+	<labels>
+		<fullName>ReviewAgreementSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ReviewAgreementSubject</shortDescription>
+		<value>Your approval is needed for {0}</value>
+	</labels>
+	<labels>
+		<fullName>ReviewAgreementBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ReviewAgreementBodyText</shortDescription>
+		<value>Please approve the documents.</value>
+	</labels>
+	<labels>
+		<fullName>ReviewAgreementHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ReviewAgreementHeaderTitleText</shortDescription>
+		<value>Documents for you to approve {0}.</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalEmailButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalEmailButtonText</shortDescription>
+		<value>OPEN AGREEMENT</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalEmailSubject</shortDescription>
+		<value>{0} was approved</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalEmailBodyText</shortDescription>
+		<value>Approve Comments</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalEmailHeaderTitleText</shortDescription>
+		<value>Document approved {0}</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalOnBehalfEmailButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalOnBehalfEmailButtonText</shortDescription>
+		<value>VIEW DOCUMENT</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalOnBehalfEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalOnBehalfEmailSubject</shortDescription>
+		<value>>Document approved {0}</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalOnBehalfEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalOnBehalfEmailBodyText</shortDescription>
+		<value>Approve Comments</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalOnBehalfEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalOnBehalfEmailHeaderTitleText</shortDescription>
+		<value>Document approved {0}</value>
+	</labels>
+	<labels>
+		<fullName>RejectOnBehalfEmailButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RejectOnBehalfEmailButtonText</shortDescription>
+		<value>OPEN AGREEMENT</value>
+	</labels>
+	<labels>
+		<fullName>RejectOnBehalfEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RejectOnBehalfEmailSubject</shortDescription>
+		<value>Approval rejected {0}</value>
+	</labels>
+	<labels>
+		<fullName>RejectOnBehalfEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RejectOnBehalfEmailBodyText</shortDescription>
+		<value>Approve Comments</value>
+	</labels>
+	<labels>
+		<fullName>RejectOnBehalfEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RejectOnBehalfEmailHeaderTitleText</shortDescription>
+		<value>Approval rejected {0}</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalCancelEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalCancelEmailSubject</shortDescription>
+		<value>Approval request for {0} canceled</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalCancelEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalCancelEmailBodyText</shortDescription>
+		<value>Approval Request cancelled for {0}. There is nothing you need to do.</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalCancelEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalCancelEmailHeaderTitleText</shortDescription>
+		<value>Approval Request Cancelled.</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalRejectEmailButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalRejectEmailButtonText</shortDescription>
+		<value>OPEN AGREEMENT</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalRejectEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalRejectEmailSubject</shortDescription>
+		<value>{0} was rejected</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalRejectEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalRejectEmailBodyText</shortDescription>
+		<value>Approve Comments</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalRejectEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalRejectEmailHeaderTitleText</shortDescription>
+		<value>Document rejected {0}</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailButtonText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailButtonText</shortDescription>
+		<value>VIEW DOCUMENT</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailSubject</shortDescription>
+		<value>Approval Failed</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailBodyText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailBodyText</shortDescription>
+		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if
+			you resend the request.
+		</value>
+	</labels>
+	<labels>
+		<fullName>ApprovalFailureEmailHeaderTitleText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApprovalFailureEmailHeaderTitleText</shortDescription>
+		<value>There was a problem with your review request.</value>
 	</labels>
 </CustomLabels>
