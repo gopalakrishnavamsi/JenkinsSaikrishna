@@ -3,6 +3,7 @@
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
+      var isCurrentUserLatestActor = this.isCurrentUserLatestActor(component, agreement);
       Promise.all(
         [   
             this.baseOptions(component, uiHelper, component.get('v.sourceId')),
@@ -20,7 +21,8 @@
             options,
             agreement,
             documentUrl,
-            true //TODO: Add Support for Non-Admin users
+          true,//TODO: Add Support for Non-Admin users,
+          isCurrentUserLatestActor
           );   
           component.set('v.widget', widget);                               
        })
@@ -70,9 +72,12 @@
       });
       $A.enqueueAction(action);
     });
-  },   
+  },
 
-  getResourceToken: function(agreementId, component, uiHelper) {
+  getResourceToken: function () {
+    /*
+    input parameters : agreementId, component, uiHelper
+    commenting out for now
     var action = component.get('c.generateResourceToken');
  
     return new Promise(function(resolve, reject) {
@@ -87,6 +92,10 @@
         if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
       });
       $A.enqueueAction(action);        
+    });*/
+    return new Promise(function (resolve, reject) {
+      resolve('');
+      reject('');
     });
   },
 
@@ -142,7 +151,7 @@
               true,
               auth
             ),
-            false
+            true
           );
 
         return this.renderApprovalRecipientView(
@@ -151,7 +160,7 @@
             agreement.name,
             documentUrl,
             agreement.historyItems,
-            false,
+            true,
             auth
           )
         );
@@ -166,8 +175,8 @@
               agreement.historyItems,
               true,
               auth
-            ), 
-            true
+            ),
+            false
           );
 
         return this.renderApprovalRecipientView(
@@ -176,7 +185,7 @@
             agreement.name,
             documentUrl,
             agreement.historyItems,
-            false,
+            true,
             auth
           )
         );
@@ -248,7 +257,7 @@
     });
 
     widget.renderExternalReviewSenderView({
-      subTitle: '',
+      subTitle: 'Document sent for External Review',
       showCompleteExternalReview: inProgress,
       showCancel: inProgress,
       showResendRequest: inProgress,
@@ -256,7 +265,7 @@
     return widget;
   },
 
-  approvalSenderView: function(widget, isCompleted) {
+  approvalSenderView: function (widget, inProgress) {
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
     this.registerEvent('approveOnBehalf', function() {
@@ -271,10 +280,10 @@
     });
 
     widget.renderApprovalSenderView({
-      subTitle: '',
-      showCancel: isCompleted,
-      showResendRequest: isCompleted,
-      showOnBehalf: isCompleted,
+      subTitle: 'Document sent for Internal Approval',
+      showCancel: inProgress,
+      showResendRequest: inProgress,
+      showOnBehalf: inProgress,
       approvalUsers: []
     });
     return widget;
@@ -291,7 +300,6 @@
            "response": true
           }
       **/
-      this.toggleSpinner(widget, false);
     });
 
 
@@ -313,5 +321,19 @@
 
   toggleSpinner: function(widget, isLoading) {
     widget.toggleLoadingSpinner(isLoading);
+  },
+
+  isCurrentUserLatestActor: function (component, agreement) {
+    var returnValue = false;
+
+    if (!$A.util.isEmpty(agreement.historyItems) &&
+      !$A.util.isEmpty(agreement.historyItems[0].actor)) {
+      if (component.get('v.currentUserEmail') === agreement.historyItems[0].actor.email) {
+        returnValue = true;
+      }
+    }
+    return returnValue;
   }
+
+
 });

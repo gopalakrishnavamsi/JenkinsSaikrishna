@@ -36,7 +36,7 @@ public class Agreement {
 * Agreement href at SpringCM
 */
 	@AuraEnabled
-	public Url href { get; private set; }
+	public String href { get; private set; }
 /**
 * Agreement size at SpringCM
 */
@@ -65,7 +65,7 @@ public class Agreement {
 		final Datetime createdDate,
 		final Datetime modifiedDate,
 		final String status,
-		final Url href,
+		final String href,
 		final Long pdfFileSize,
 		final String version) {
 

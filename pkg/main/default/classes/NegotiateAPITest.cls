@@ -98,7 +98,7 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals('docusignlogerror7-23-18-1.docx', result.get(0).name);
 			System.assertEquals(UUID.parse('ea7ab407-ea41-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
 			System.assertEquals(160453, result.get(0).pdfFileSize);
-			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41', result.get(0).href.toExternalForm());
+			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41', result.get(0).href);
 		}
 	}
 
@@ -115,7 +115,7 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals('ServiceDoc1.docx', agreement.name);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, agreement.id);
 			System.assertEquals(160568, agreement.pdfFileSize);
-			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/382bd222-1536-e922-9c1d-3ca82a1e3f41', agreement.href.toExternalForm());
+			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/382bd222-1536-e922-9c1d-3ca82a1e3f41', agreement.href);
 		}
 	}
 

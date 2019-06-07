@@ -422,7 +422,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.createdDate,
 				this.createdDate,
 				AgreementStatus.NEW_AGREEMENT,
-				new Url(this.href),
+				this.href,
 				this.pdfFileSize,
 				this.version);
 		}
