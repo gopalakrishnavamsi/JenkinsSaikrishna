@@ -74,13 +74,10 @@
     });
   },
 
-  getResourceToken: function () {
-    /*
-    input parameters : agreementId, component, uiHelper
-    commenting out for now
+  getResourceToken: function (agreementId, component, uiHelper) {
     var action = component.get('c.generateResourceToken');
- 
-    return new Promise(function(resolve, reject) {
+
+    return new Promise(function (resolve) {
       action.setParams({
         agreementId: agreementId
       });           
@@ -89,13 +86,14 @@
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
         }
-        if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
+        if (state === 'ERROR') {
+          uiHelper.getErrorMessage(response);
+          resolve('');
+          //TODO: add reject once the issue with registering tokens is sorted out
+          //reject(uiHelper.getErrorMessage(response));
+        }
       });
-      $A.enqueueAction(action);        
-    });*/
-    return new Promise(function (resolve, reject) {
-      resolve('');
-      reject('');
+      $A.enqueueAction(action);
     });
   },
 
