@@ -1,5 +1,4 @@
 ({
-
   onLoad: function (component, event, helper) {
     var uiHelper = component.get('v.uiHelper');
     var action = component.get('c.getDocumentURL');

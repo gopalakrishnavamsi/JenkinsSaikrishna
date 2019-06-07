@@ -8,7 +8,8 @@
         $Lightning.createComponent(namespace + ':AgreementPreview', 
           {
             sourceId: '{!JSENCODE($CurrentPage.parameters.sourceId)}',
-            agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}'
+            agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}',
+            currentUserEmail: '{!JSENCODE($User.email)}'
           }, 
           'appContainer', 
           function(component, status, errorMessage) {
