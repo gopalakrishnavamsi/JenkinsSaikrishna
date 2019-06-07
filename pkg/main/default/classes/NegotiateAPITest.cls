@@ -394,12 +394,42 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
+	static void test_cancelApprovalOrExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+		}
+	}
+
+	@IsTest
 	static void test_resolveSalesforceUser_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
 			String result = item.resolveSalesforceUser(UserInfo.getUserEmail());
 			System.assertNotEquals(result, null);
 			System.assertEquals(result, Salesforce.baseUrl.toExternalForm() + '/' + UserInfo.getUserId());
+		}
+	}
+
+	@IsTest
+	static void test_resendRequest_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().resendRequest(NegotiateAPIMock.DOCUMENT_HREF, 'ExternalReview');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
 		}
 	}
 
@@ -413,11 +443,44 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
+	static void test_approveOnBehalfOrRecipientResponse_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse('this is the comment',
+				'Approve', NegotiateAPIMock.WORKITEM_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
+
+		}
+	}
+
+	@IsTest
 	static void test_resolveSalesforceUser_randomEmailInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
 			String result = item.resolveSalesforceUser('test@test.com');
 			System.assertEquals(result, null);
+		}
+	}
+
+	@IsTest
+	static void test_externalReviewCompleteOnBehalf_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			Boolean result = NegotiateAPI.getInstance().externalReviewCompleteOnBehalf('this is the comment',
+				NegotiateAPIMock.DOCUMENT_HREF, NegotiateAPIMock.EXTERNAL_REVIEW_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(true, result);
 		}
 	}
 
@@ -430,6 +493,21 @@ public with sharing class NegotiateAPITest {
 			Contact result = item.resolveSalesforceContact(testContact.Email);
 			System.assertNotEquals(result, null);
 			System.assertEquals(result.Email, testContact.Email);
+		}
+	}
+
+	@IsTest
+	static void test_getDocumentReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			UUID result = NegotiateAPI.getInstance().getDocumentReview(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(NegotiateAPIMock.EXTERNAL_REVIEW_ID, result);
 		}
 	}
 
@@ -450,6 +528,4 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals(result, null);
 		}
 	}
-
-
 }
