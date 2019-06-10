@@ -163,7 +163,7 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 		} else if (success && method == 'DELETE') {
 			response.setStatusCode(200);
 			response.setStatus('OK');
-		} else if (success && method == 'PATCH') {
+		} else if (success && method == 'PUT' && path.contains(NegotiateAPI.PATH_WORK_ITEMS)) {
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setBody('{"Name":"Approve1","Type":"ApproveDocuments","Assignee":{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/members/8f6c7260-e34c-e911-b324-309c23cb2ea4"},"AssignDate":"2019-05-29T15:36:33.65Z","Documents":{"Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workitems/52309483-2782-e911-b333-309c23cb2ea4/documents"},"Workflow":{"Name":"Negotiate_Approval_Template","Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workflows/2f309483-2782-e911-b333-309c23cb2ea4"},"CreatedDate":"2019-05-29T15:36:33.65Z","WorkItemUrl":"https://localhost/atlas/Documents/Preview.aspx?aid=30581986&wfid=52309483-2782-e911-b333-309c23cb2ea4&iter=","Href":"https://apilocalhost/v2/681cde0b-5a84-455a-b2df-1e7ffe790003/workitems/52309483-2782-e911-b333-309c23cb2ea4"}');

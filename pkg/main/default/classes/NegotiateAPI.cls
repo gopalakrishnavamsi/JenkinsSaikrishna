@@ -1063,7 +1063,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 	public Boolean approveOnBehalfOrRecipientResponse(final String comment, final String itemResponse, final UUID workItemsId) {
 
-		final RestAPI.Response response = patch(
+		final RestAPI.Response response = put(
 			getBaseUrl(),
 			new List<String> {
 				PATH_WORK_ITEMS, workItemsId.value
