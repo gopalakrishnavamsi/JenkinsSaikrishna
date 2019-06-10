@@ -185,7 +185,7 @@ public with sharing class NegotiateAPITest {
 			new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
 			new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }
 			, 'Test subject'
-			, 'Test message body: hello world');
+				, 'Test message body: hello world', true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -224,8 +224,8 @@ public with sharing class NegotiateAPITest {
 				NegotiateAPIMock.SOURCE_OBJECT_ID,	
 				new List<UUID> {NegotiateAPIMock.DOCUMENT_ID }, 
 				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
-				'Test subject', 
-				'Test message body: hello world');
+				'Test subject',
+					'Test message body: hello world', true);
 			} catch (APIException ex) {
 				hasError = true;
 			}

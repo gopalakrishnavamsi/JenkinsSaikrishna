@@ -220,13 +220,15 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public List<UUID> documents { get; private set; }
 		public List<APIApprover> approvers { get; private set; }
 		public APIEmail email { get; private set; }
+		public Boolean isSequential { get; private set; }
 
-		public APIApproval(final String name, final Id sourceId, final List<UUID> documentsIds, final List<APIApprover> approvers, final String subject, final String message) {
+		public APIApproval(final String name, final Id sourceId, final List<UUID> documentsIds, final List<APIApprover> approvers, final String subject, final String message, final Boolean isSequential) {
 			this.name = name;
 			this.sourceId = sourceId;
 			this.documents = documentsIds;
 			this.approvers = approvers;
 			this.email = new APIEmail(subject, message);
+			this.isSequential = isSequential;
 		}
 
 		public String toXML() {
@@ -234,7 +236,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'AssignTasksInOrder', 'CheckoutDocument', 'RequiresAllToApprove', 'RequiresAllToComplete', 'Approvers', 'Documents', 'Email', 'ApprovalEmail', 'ApprovalOnBehalfEmail', 'RejectOnBehalfEmail', 'CancelEmail', 'RejectEmail', 'FailureEmail', 'DocumentUrl' },
 				new Map<String, Object> {
-					'AssignTasksInOrder' => XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder'),
+					'AssignTasksInOrder' => isSequential == true ? XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder') : XMLSerializer.fromPrimitive(false, 'AssignTasksInOrder'),
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'RequiresAllToApprove' => XMLSerializer.fromPrimitive(true, 'RequiresAllToApprove'),
 					'RequiresAllToComplete' => XMLSerializer.fromPrimitive(true, 'RequiresAllToComplete'),
@@ -663,7 +665,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 // Send for Approval
-	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String message) {
+	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String message, final Boolean isSequential) {
 
 		RestAPI.Response response = post(
 			getBaseUrl(),
@@ -674,7 +676,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_Approval_Template',
-				'Params' => new APIApproval(agreementName, sourceId, documentsIds, getAPIApprovers(approvers), subject, message).toXML()
+				'Params' => new APIApproval(agreementName, sourceId, documentsIds, getAPIApprovers(approvers), subject, message, isSequential).toXML()
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {

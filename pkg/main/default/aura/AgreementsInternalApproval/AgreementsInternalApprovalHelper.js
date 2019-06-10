@@ -204,21 +204,21 @@
 
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
+    var isSequential = component.get('v.showApprovalOrder');
 
-    var action = component.get('c.sendForInternalApproval');
-
+    var action = component.get('c.internalApproval');
     action.setParams({
       agreementName: agreementDetails.name,
       sourceId: sourceId,
       documentsIds: documentIdList,
       approversJson: JSON.stringify(recipients),
       subject: emailSubject,
-      body: emailBody
+      body: emailBody,
+      isSequential: isSequential
     });
 
     action.setCallback(this, function (response) {
       var state = response.getState();
-
       if (state === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result.status === 'Waiting') {
