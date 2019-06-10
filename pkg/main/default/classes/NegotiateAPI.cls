@@ -136,28 +136,28 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					'ExpiredReview' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ReviewerEmail' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('ExpiredReview:SenderEmail'), 'SenderEmail', false),
-							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('ExpiredReview:ReviewerEmail'), 'ReviewerEmail', false)
+							'SenderEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ExpiredReview:SenderEmail'), 'SenderEmail', false),
+							'ReviewerEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ExpiredReview:ReviewerEmail'), 'ReviewerEmail', false)
 						},
 						'ExpiredReview'
 					),
 					'ReviewCompleted' => XMLSerializer.toXMLForm(
 						new Set<String> { 'SenderEmail', 'ReviewerEmail', 'OnBehalfOf' },
 						new Map<String, Object> {
-							'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'SenderEmail', false),
-							'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('ReviewCompleted:SenderEmail'), 'ReviewerEmail', false),
+							'SenderEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ReviewCompleted:SenderEmail'), 'SenderEmail', false),
+							'ReviewerEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ReviewCompleted:SenderEmail'), 'ReviewerEmail', false),
 							'OnBehalfOf' => XMLSerializer.toXMLForm(
 								new Set<String> { 'SenderEmail', 'ReviewerEmail' },
 								new Map<String, Object> {
-									'SenderEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('OnBehalfOfEmail'), 'SenderEmail', false),
-									'ReviewerEmail' =>  XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' },  templateEmails.get('OnBehalfOfEmail'), 'ReviewerEmail', false)										
+									'SenderEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('OnBehalfOfEmail'), 'SenderEmail', false),
+									'ReviewerEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('OnBehalfOfEmail'), 'ReviewerEmail', false)
 								},
 								'OnBehalfOf'
 							)
 						},
 						'ReviewCompleted'
 					),
-					'CanceledReviewEmail' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'headerTitleText' },  templateEmails.get('CanceledReviewEmail'), 'CanceledReviewEmail', false)
+					'CanceledReviewEmail' => XMLSerializer.fromObject(new Set<String> { 'subject', 'bodyText', 'headerTitleText' }, templateEmails.get('CanceledReviewEmail'), 'CanceledReviewEmail', false)
 				},
 				'ExternalReview'
 			);
@@ -183,14 +183,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				Label.ExpiredReviewReviewerEmailSubject,
 				String.format(Label.ExpiredReviewReviewerEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
-				String.format(Label.ExpiredReviewHeader_1	, new List<String> { documentName })
+				String.format(Label.ExpiredReviewHeader_1, new List<String> { documentName })
 			),
 			'ReviewCompleted:SenderEmail' => new APIEmail(
 				String.format(Label.CompletedReviewEmailSubject_1, new List<String> { documentName }),
 				String.format(Label.CompletedReviewEmailBody_1, new List<String> { documentName }),
 				Label.OpenAgreementButton,
 				Label.CompletedReviewEmailHeader
-			), 
+			),
 			'ReviewCompleted:ReviewerEmail' => new APIEmail(
 				String.format(Label.CompletedReviewEmailSubject_1, new List<String> { documentName }),
 				String.format(Label.CompletedReviewEmailBody_1, new List<String> { documentName }),
@@ -302,7 +302,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				Label.ApprovalFailureEmailHeaderTitleText
 			)
 		};
-	}	
+	}
 
 	//Todo: uid for now is an email address, this will most likely change in the future.
 	@TestVisible
@@ -351,20 +351,19 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			this.bodyText = body;
 			this.buttonText = buttonText; //Custom Label
 			this.headerTitleText = headerTitle; //Custom Label
-		}		
-	}		
+		}
+	}
 
 	private static List<APIApprover> getAPIApprovers(final List<Recipient> approvers) {
 		try {
 			List<APIApprover> results = new List<APIApprover>();
 			for (Recipient rec : approvers) {
-				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIApprover(rec.email, rec.name));
-				else throw new APIException('Invalid Approver email');
+				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIApprover(rec.email, rec.name)); else throw new APIException('Invalid Approver email');
 			}
 			return results;
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw new APIException('Invalid Approvers: ' + ex.getMessage());
-		}		
+		}
 	}
 
 	@TestVisible
@@ -376,7 +375,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				else throw new APIException('Invalid Reviewer email');
 			}
 			return results;
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw new APIException('Invalid Reviewers: ' + ex.getMessage());
 		}
 	}
@@ -516,10 +515,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		try {
 			PageReference previewPath = Page.AgreementPreview;
 			previewPath.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			previewPath.getParameters().put('agreementId', EncodingUtil.urlEncode(documentId.value, StringUtils.ENCODING));		
+			previewPath.getParameters().put('agreementId', EncodingUtil.urlEncode(documentId.value, StringUtils.ENCODING));
 
 			return new Url(Salesforce.baseUrl, previewPath.getUrl()).toExternalForm().replace('&', '&amp;');
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw new APIException('Failed to generate Document deep link: ' + ex.getMessage());
 		}
 	}
@@ -757,7 +756,32 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 			AgreementHistoryItem.Actor actor = null;
 
-			if (this.data.actor != null) {
+			if (this.data.actor != null &&
+				(this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments)
+					|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedCheckoutCancelled)
+					|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentCheckin))) {
+
+				Contact resolvedContact = resolveSalesforceContact(this.data.actor.emailAddress);
+				//for action types where external review has been completed the actor should map to Salesforce contact
+				//once DocumentCheckIn action item type provides the correct actor we will update the if condition to include DocumentCheckIn action Item check as well
+				if (resolvedContact != null) {
+					actor = new AgreementHistoryItem.Actor(
+						(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
+						this.data.actor.emailAddress,
+						(resolvedContact != null && resolvedContact.Id != null) ? Salesforce.baseUrl.toExternalForm() + '/' + resolvedContact.Id : '');
+				}
+				//if a Salesforce contact is not being resolved correctly that means that the External review has been completed by the internal Salesforce Admin user
+				//in this case Resolve the actor to a Salesforce user
+				else {
+					actor = new AgreementHistoryItem.Actor(
+						this.data.actor.fullName,
+						this.data.actor.emailAddress,
+						resolveSalesforceUser(this.data.actor.emailAddress) != null ? resolveSalesforceUser(this.data.actor.emailAddress) : '');
+				}
+
+			}
+			//for all other action types actor will be mapped to a Salesforce user
+			else if (this.data.actor != null) {
 				actor = new AgreementHistoryItem.Actor(
 					this.data.actor.fullName,
 					this.data.actor.emailAddress,
@@ -909,8 +933,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String APIUploadBaseUrl;
 		public String APIDownloadBaseUrl;
 
-
-
 		public NegotiateService.LimitedAccessToken toExternalForm() {
 			return new NegotiateService.LimitedAccessToken(accessToken, APIBaseUrl, APIUploadBaseUrl, APIDownloadBaseUrl);
 		}
@@ -1059,7 +1081,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		public APISelected(final String comment, final String item) {
 			this.Comment = comment;
-			this.Items = new List<String>{item};
+			this.Items = new List<String> { item };
 		}
 	}
 
@@ -1092,7 +1114,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public List<APIHref> Items;
 
 		public APIUploadDocuments(final String href) {
-			this.Items = new List<APIHref>{new APIHref(href)};
+			this.Items = new List<APIHref> { new APIHref(href) };
 		}
 	}
 
@@ -1122,18 +1144,18 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	// get document reviews
 	public UUID getDocumentReview(final UUID documentId) {
 
-			final RestAPI.Response response = get(
-				getBaseUrl(),
-				new List<Object> {
-					PATH_DOCUMENTS, documentId, PATH_REVIEWS
-				},
-				QueryString.empty,
-				getDefaultHeaders(),
-				RestAPI.defaultTimeout);
-			if (response.hasError) {
-				this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
-				throw new APIException(response.error);
-			}
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_DOCUMENTS, documentId, PATH_REVIEWS
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
