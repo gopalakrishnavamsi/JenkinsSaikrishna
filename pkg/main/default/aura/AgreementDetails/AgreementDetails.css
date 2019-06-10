@@ -102,6 +102,10 @@
     font-size: x-small;
 }
 
+.THIS .ds-max-width {
+    max-width: 50vw;
+}
+
 .THIS.strike-wizard {
     max-height: 100vh;
     display: flex;

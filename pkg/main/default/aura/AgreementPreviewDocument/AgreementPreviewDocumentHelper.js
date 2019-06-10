@@ -1,9 +1,25 @@
 ({
+  onload: function (component, event, helper) {
+    var uiHelper = component.get('v.uiHelper');
+    var action = component.get('c.getDocumentURL');
+    var agreement = component.get('v.agreement');
+    action.setParams({
+      documentId: agreement.id.value
+    });
+    action.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') helper.loadWidget(component, agreement, response.getReturnValue());
+      if (response.getState() === 'ERROR') uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
+    });
+
+    $A.enqueueAction(action);
+  },
+
   loadWidget: function(component, agreement, documentUrl) {
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
       var isCurrentUserLatestActor = this.isCurrentUserLatestActor(component, agreement);
+      var isCurrentUserRecipientForApproval = this.isCurrentUserRecipientForApproval(component, agreement);
       Promise.all(
         [   
             this.baseOptions(component, uiHelper, component.get('v.sourceId')),
@@ -18,11 +34,13 @@
       })
       .then(function(options) {
         var widget = self.resolvePreview(
+          component,
             options,
             agreement,
             documentUrl,
-          true,//TODO: Add Support for Non-Admin users,
-          isCurrentUserLatestActor
+          component.get('v.currentUserDocuSignAdmin'),
+          isCurrentUserLatestActor,
+          isCurrentUserRecipientForApproval
           );   
           component.set('v.widget', widget);                               
        })
@@ -97,7 +115,7 @@
     });
   },
 
-  resolvePreview: function(auth, agreement, documentUrl, isAdmin, isSender) {
+  resolvePreview: function (component, auth, agreement, documentUrl, isAdmin, isSender, isApprover) {
     switch (agreement.status.toLowerCase()) {
       case 'new' ||
         'new version' ||
@@ -105,8 +123,12 @@
         'rejected' ||
         'approval canceled' ||
         'review canceled'||
-        'reviewed':
+      'reviewed' ||
+      'review expired' ||
+      'approved' :
+        //render the Status + History View
         return this.basePreview(
+          component,
           agreement.id.value,
           agreement.name,
           documentUrl,
@@ -115,33 +137,15 @@
           auth
         );
 
+      //External Review Pending
       case 'pending review':
-        return this.externalReviewSenderView(
-          this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
-            true,
-            auth
-          ),
-          true
-        );
-
-      case 'review expired':
-        return this.basePreview(
-          agreement.id.value,
-          agreement.name,
-          documentUrl,
-          agreement.historyItems,
-          false,
-          auth
-        );
-
-      case 'pending approval':
-        if (isSender)
-          return this.approvalSenderView(
+        //If current user is the sender of the external review request or the current user is an admin user
+        //In this case the user should be presented with the options for resending, completing and cancelling the review
+        if (isSender === true || isAdmin === true)
+          return this.externalReviewSenderView(
+            component,
             this.basePreview(
+              component,
               agreement.id.value,
               agreement.name,
               documentUrl,
@@ -152,21 +156,27 @@
             true
           );
 
-        return this.renderApprovalRecipientView(
-          this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
-            true,
-            auth
-          )
+        //If the current user is neither the sender of the external review nor an Admin user
+        //In this case the user should just be shown the History + Status view
+        return this.basePreview(
+          component,
+          agreement.id.value,
+          agreement.name,
+          documentUrl,
+          agreement.historyItems,
+          true,
+          auth
         );
 
-      case 'approved':
-        if (isSender)
+      //Internal Approval pending
+      case 'pending approval':
+        //If current user is the sender of the Approval request but not an Admin User
+        //In this case the user should be presented with the options for resending, cancelling the approval request
+        if (isSender === true && isAdmin === false)
           return this.approvalSenderView(
+            component,
             this.basePreview(
+              component,
               agreement.id.value,
               agreement.name,
               documentUrl,
@@ -174,22 +184,77 @@
               true,
               auth
             ),
+            true,
             false
           );
 
-        return this.renderApprovalRecipientView(
-          this.basePreview(
-            agreement.id.value,
-            agreement.name,
-            documentUrl,
-            agreement.historyItems,
+        //If current user is the sender of the Approval request and also an Admin User
+        //In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
+        if (isSender === true && isAdmin === true)
+          return this.approvalSenderView(
+            component,
+            this.basePreview(
+              component,
+              agreement.id.value,
+              agreement.name,
+              documentUrl,
+              agreement.historyItems,
+              true,
+              auth
+            ),
             true,
-            auth
-          )
+            true
+          );
+
+        //If the current user is the Approver for the Approval request
+        //In this case the user should be presented with option for submitting a response for the approval
+        if (isApprover === true)
+          return this.renderApprovalRecipientView(
+            component,
+            this.basePreview(
+              component,
+              agreement.id.value,
+              agreement.name,
+              documentUrl,
+              agreement.historyItems,
+              true,
+              auth
+            )
+          );
+
+        //If the current user is neither and Approver nor the Sender but an Admin user
+        ////In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
+        if (isAdmin === true && (isSender !== true && isApprover !== true))
+          return this.approvalSenderView(
+            component,
+            this.basePreview(
+              component,
+              agreement.id.value,
+              agreement.name,
+              documentUrl,
+              agreement.historyItems,
+              true,
+              auth
+            ),
+            true,
+            true
+          );
+
+        //If current user is neither the sender , admin or recipient of the approval request
+        //In this case the user should be displayed with the base Status+History View
+        return this.basePreview(
+          component,
+          agreement.id.value,
+          agreement.name,
+          documentUrl,
+          agreement.historyItems,
+          true,
+          auth
         );
 
       default:
         return this.basePreview(
+          component,
           agreement.id.value,
           agreement.name,
           documentUrl,
@@ -201,6 +266,7 @@
   },
 
   basePreview: function(
+    component,
     agreementId,
     agreementName,
     documentUrl,
@@ -234,24 +300,43 @@
     return preview;
   },
 
-  externalReviewSenderView: function(widget, inProgress) {
+  externalReviewSenderView: function (component, widget, inProgress) {
+    var thisComponent = component;
+    var self = this;
+
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
     this.registerEvent('resendExternalReviewRequest', function() {
-      this.toggleSpinner(
-        widget,
-        false
-      );
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //Call Apex method to resend the external review request
+
+      //reload preview
+      self.reloadPreview(thisComponent);
+
     });
+
     this.registerEvent('externalReviewCompleteOnBehalf', function() {
-      //event.details contains response.
-      this.toggleSpinner(
-        widget,
-        false
-      );
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //capture event.detail.comments and event.detail.response
+
+      //call Apex Action to complete review on behalf of
+
+      //reload preview
+      self.reloadPreview(thisComponent);
     });
+
     this.registerEvent('cancelExternalReview', function() {
-      this.toggleSpinner(widget, false);
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //call Apex Action to Cancel the current external review request
+
+      //reload preview
+      self.reloadPreview(thisComponent);
     });
 
     widget.renderExternalReviewSenderView({
@@ -263,41 +348,70 @@
     return widget;
   },
 
-  approvalSenderView: function (widget, inProgress) {
+  approvalSenderView: function (component, widget, inProgress, isAdminUser) {
+    var thisComponent = component;
+    var self = this;
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
     this.registerEvent('approveOnBehalf', function() {
-      //event.details contains response.
-      this.toggleSpinner(widget, false);
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //capture event.detail.comments and event.detail.response
+
+      //call Apex Action to Approve the user record on Behalf of
+
+      //reload preview
+      self.reloadPreview(thisComponent);
+
     });
+
     this.registerEvent('cancelApproval', function() {
-      this.toggleSpinner(widget, false);
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //call Apex Action to Cancel the current Approval request
+
+      //reload preview
+      self.reloadPreview(thisComponent);
     });
+
     this.registerEvent('resendApprovalRequest', function() {
-      this.toggleSpinner(widget, false);
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //call Apex Action to Resend the Approval request
+
+
+      //reload preview
+      self.reloadPreview(thisComponent);
     });
 
     widget.renderApprovalSenderView({
       subTitle: 'Document sent for Internal Approval',
       showCancel: inProgress,
       showResendRequest: inProgress,
-      showOnBehalf: inProgress,
+      showOnBehalf: isAdminUser,
       approvalUsers: []
     });
     return widget;
   },
 
-  renderApprovalRecipientView: function(widget, title, message) {
+  renderApprovalRecipientView: function (component, widget, title, message) {
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
-
+    var thisComponent = component;
+    var self = this;
     this.registerEvent('recipientResponse', function() {
-      /**
-          event.details contains response.
-          {
-           "comments": "Yes",
-           "response": true
-          }
-      **/
+      //show the spinner and fade background
+      thisComponent.set('v.loading', true);
+
+      //capture event.detail.comments and event.detail.response
+
+      //call Apex Action to record user response and update worktItem
+
+      //reload preview
+      self.reloadPreview(thisComponent);
+
     });
 
 
@@ -309,16 +423,20 @@
     
   },
 
+  reloadPreview: function (component) {
+    var evt = component.getEvent('loadingEvent');
+    evt.setParams({
+      isLoading: true
+    });
+    evt.fire();
+  },
+
   isValidWidget: function(widget) {
     return widget && widget instanceof SpringCM.Widgets.Preview;
   },
 
   registerEvent: function(name, callback) {
     document.addEventListener('springcm:preview:' + name, callback);
-  },
-
-  toggleSpinner: function(widget, isLoading) {
-    widget.toggleLoadingSpinner(isLoading);
   },
 
   isCurrentUserLatestActor: function (component, agreement) {
@@ -331,7 +449,22 @@
       }
     }
     return returnValue;
-  }
+  },
 
+  isCurrentUserRecipientForApproval: function (component, agreement) {
+    var returnValue = false;
+
+    if (agreement.status.toLowerCase() === 'pending approval' &&
+      !$A.util.isEmpty(agreement.historyItems) &&
+      !$A.util.isEmpty(agreement.historyItems[0].recipients)) {
+
+      agreement.historyItems[0].recipients.forEach(function (recipient) {
+        if (component.get('v.currentUserEmail') === recipient.email) {
+          returnValue = true;
+        }
+      });
+    }
+    return returnValue;
+  }
 
 });
