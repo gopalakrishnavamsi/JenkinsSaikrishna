@@ -1,6 +1,5 @@
 <aura:component description="AgreementsImport" controller="AgreementsController">
     <!-- FIXME : Check hardcoding and replace with labels  -->
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
@@ -9,12 +8,14 @@
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
     <aura:attribute name="importedFile" type="Object"/>
+    <aura:attribute name="namespace" type="String" default="c"/>
+    <aura:attribute name="agreementActionManager" type="Object"/>
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.stringUtils)}" afterScriptsLoaded="{!c.onLoad}"/>
 
     <!-- Events -->
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
@@ -217,8 +218,8 @@
 
                     <div class="slds-col slds-p-top_medium">
                         <div class="slds-grid slds-grid_vertical">
-                            <div class="slds-col slds-p-bottom_xx-small">
-                                <a onclick=""
+                            <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.sendExternalReview}">
+                                <a
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
@@ -233,8 +234,8 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="slds-col slds-p-bottom_xx-small">
-                                <a onclick=""
+                            <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.sendApproval}">
+                                <a
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
@@ -275,6 +276,7 @@
                 </div>
 
             </div>
+            <div aura:id="importActionContainer"/>
         </div>
 
         <!-- modal footer buttons -->

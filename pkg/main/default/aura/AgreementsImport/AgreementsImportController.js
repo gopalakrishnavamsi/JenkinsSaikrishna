@@ -1,4 +1,12 @@
 ({
+  onLoad: function(component) {
+    var manager = new AgreementActionManager(
+      'importActionContainer',
+      component.get('v.namespace')
+    );
+    component.set('v.agreementActionManager', manager);  
+  },
+
   initialize: function (component, event, helper) {
     helper.initialize(component);
   },
@@ -46,5 +54,29 @@
   backButtonClicked: function (component) {
     component.set('v.currentStep', '1');
   },
+
+  sendApproval: function(component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.recordId');
+      actions.internalApproval(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
+  },
+
+  sendExternalReview: function(component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.recordId');
+      actions.externalReview(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
+  }
 
 });

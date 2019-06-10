@@ -29,7 +29,8 @@ var AgreementComponents = Object.freeze({
   ExternalReview: 'AgreementsExternalReview',
   Rename: 'AgreementsRename',
   Share: 'AgreementsShareLink',
-  Download: 'AgreementDownload'
+  Download: 'AgreementDownload',
+  Import: 'AgreementsImport'
 });
 
 function AgreementActionManager(anchor, namespace) {
@@ -218,5 +219,26 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
       throw err;
     });
 };
+
+// AgreementActionManager.prototype.import = function(sourceId, component) {
+//   if (this.activeScope) this.activeScope.destroy();
+//   var self = this;
+//   generateComponent(
+//     this.anchor,
+//     component,
+//     this.getComponentName(AgreementComponents.Import),
+//     {
+//       showModal: true,
+//       recordId: sourceId,
+//       namespace: this.namespace
+//     }
+//   )
+//     .then(function(modalComponent) {
+//       self.activeScope = modalComponent;
+//     })
+//     .catch(function(err) {
+//       throw err;
+//     });
+// };
 
 window.AgreementActionManager = AgreementActionManager;

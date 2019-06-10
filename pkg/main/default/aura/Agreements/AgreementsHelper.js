@@ -16,11 +16,13 @@
   },
 
   createImportComponent: function(component) {
+    var namespace = component.get('v.namespace');
     $A.createComponent(
       'c:AgreementsImport',
       {
         showModal: true,
-        recordId: component.get('v.recordId')
+        recordId: component.get('v.recordId'),
+        namespace: namespace ? namespace : 'c'
       },
       function(componentBody) {
         if (component.isValid()) {
