@@ -1,5 +1,5 @@
 ({
-  onload: function (component, event, helper) {
+  onLoad: function (component, event, helper) {
     var uiHelper = component.get('v.uiHelper');
     var action = component.get('c.getDocumentURL');
     var agreement = component.get('v.agreement');
