@@ -257,10 +257,10 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID,new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
-					'testBody');
+					'testBody', true);
 				throw new AssertException('Expected sendForInternalApproval to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -289,10 +289,10 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
-				'testBody');
+				'testBody', true);
 			Test.stopTest();
 			System.assertNotEquals(null, testTaskStatus);
 		}

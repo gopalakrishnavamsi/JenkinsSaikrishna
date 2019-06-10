@@ -180,7 +180,7 @@ private class NegotiateServiceTest {
 				new List<UUID> { UUID.parse('22222efe-e541-e911-9c1d-3ca82a1e3f41') },
 				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
 				'testSubject',
-				'testBody');
+				'testBody', true);
 			Test.stopTest();
 			System.assertNotEquals(null, testTaskStatus);
 			System.assertEquals('Waiting', testTaskStatus.status);
@@ -201,7 +201,7 @@ private class NegotiateServiceTest {
 				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
 				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
 				'testSubject',
-				'testBody');
+				'testBody', true);
 			Test.stopTest();
 			System.assertNotEquals(null, testTaskStatus);
 			System.assertEquals('Executing', testTaskStatus.status);
@@ -222,7 +222,7 @@ private class NegotiateServiceTest {
 				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID_2 },
 				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
 				'testSubject',
-				'testBody');
+				'testBody', true);
 			Test.stopTest();
 			System.assertNotEquals(null, testTaskStatus);
 			System.assertEquals('Failed', testTaskStatus.status);

@@ -157,7 +157,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String approversJson, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus internalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String approversJson, final String subject, final String body, final Boolean isSequential) {
 		try {
 			if (String.isBlank(approversJson)) throw Controller.wrapException('Failed to send documents for Internal Approval: Invalid Approvers');			
 			List<UUID> documentIdList = new List<UUID>();
@@ -165,7 +165,7 @@ public with sharing class AgreementsController extends Controller {
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
-			return NegotiateService.sendForInternalApproval(agreementName, sourceId, documentIdList, approvers, subject, body);
+			return NegotiateService.sendForInternalApproval(agreementName, sourceId, documentIdList, approvers, subject, body, isSequential);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
