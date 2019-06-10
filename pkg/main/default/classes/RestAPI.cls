@@ -126,9 +126,11 @@ public virtual class RestAPI {
 				request.setHeader(type, headers.get(type));
 			}
 		}
+		System.Debug(LoggingLevel.INFO, 'headers ' + headers);
 		request.setHeader('User-Agent', Application.userAgent);
-
+		System.Debug(LoggingLevel.INFO, 'request body ' + request.getBody());
 		final HttpResponse response = http.send(request);
+		System.Debug(LoggingLevel.INFO, 'response body ' + response.getBody());
 		return new Response(request, response, getError(response));
 	}
 
