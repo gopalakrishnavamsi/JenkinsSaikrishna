@@ -122,7 +122,6 @@ public virtual class RestAPI {
 			}
 		}
 		request.setHeader('User-Agent', Application.userAgent);
-
 		final HttpResponse response = http.send(request);
 		return new Response(request, response, getError(response));
 	}
