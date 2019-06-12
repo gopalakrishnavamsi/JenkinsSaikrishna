@@ -180,4 +180,13 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static Boolean cancelApprovalOrExternalReview(final String documentId) {
+		try {
+			return NegotiateService.cancelApprovalOrExternalReview(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to cancel request');
+		}
+	}
+
 }

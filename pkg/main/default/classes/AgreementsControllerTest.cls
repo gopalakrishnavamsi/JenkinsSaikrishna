@@ -398,4 +398,31 @@ private class AgreementsControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected cancel request to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Boolean result = AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assert(result);
+		}
+	}
+
 }

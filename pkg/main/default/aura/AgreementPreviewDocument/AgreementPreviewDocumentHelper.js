@@ -322,15 +322,9 @@
       self.reloadPreview(thisComponent);
     });
 
-    this.registerEvent('cancelExternalReview', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //call Apex Action to Cancel the current external review request
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-    });
+    this.registerEvent('cancelExternalReview', $A.getCallback(function() {
+      self.cancelRequest(thisComponent, self, 'ExternalReview');
+    }));
 
     widget.renderExternalReviewSenderView({
       subTitle: 'Document sent for External Review',
@@ -359,15 +353,9 @@
 
     });
 
-    this.registerEvent('cancelApproval', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //call Apex Action to Cancel the current Approval request
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-    });
+    this.registerEvent('cancelApproval', $A.getCallback(function() {
+      self.cancelRequest(thisComponent, self, 'Approval');
+    }));
 
     this.registerEvent('resendApprovalRequest', $A.getCallback(function() {
       self.externalReviewResendRequest(thisComponent, self, 'Approval');
@@ -482,6 +470,40 @@
         }
       } else {
         helper.showToast(component, $A.get('$Label.c.AgreementResendErrorMessage'), 'error');
+      }
+      helper.reloadPreview(component);
+    });
+    $A.enqueueAction(resendAction);
+  },
+
+  cancelRequest: function (component, helper, reviewType) {
+    component.set('v.loading', true);
+    var agreement = component.get('v.agreement');
+
+    var resendAction = component.get('c.cancelApprovalOrExternalReview');
+
+    resendAction.setParams({
+      documentId: agreement.id.value,
+    });
+
+    resendAction.setCallback(this, function (response) {
+      component.set('v.loading', true);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          var cancelMessage = '';
+          if(reviewType === 'ExternalReview') {
+            cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelExternalReviewMessage'), agreement.name);
+          } else {
+            cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelInternalApprovalMessage'), agreement.name);
+          }
+          helper.showToast(component, cancelMessage, 'success');
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementCancelErrorMessage'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementCancelErrorMessage'), 'error');
       }
       helper.reloadPreview(component);
     });

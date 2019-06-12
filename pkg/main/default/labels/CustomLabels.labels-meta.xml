@@ -6020,6 +6020,27 @@
 		<value>resend for internal approval.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementCancelInternalApprovalMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementCancelInternalApprovalMessage</shortDescription>
+		<value>Internal approval canceled for</value>
+	</labels>
+	<labels>
+		<fullName>AgreementCancelExternalReviewMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementCancelExternalReviewMessage</shortDescription>
+		<value>External Review canceled for</value>
+	</labels>
+	<labels>
+		<fullName>AgreementCancelErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementCancelErrorMessage</shortDescription>
+		<value>There was an error in canceling the Agreement. Please try again after some time.</value>
+	</labels>
+	<labels>
 		<fullName>AgreementDeleted</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
