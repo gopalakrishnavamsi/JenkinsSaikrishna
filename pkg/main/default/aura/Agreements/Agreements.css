@@ -12,6 +12,14 @@
     min-height: 30vh;
 }
 
+.THIS .ds-spinner_container::after {
+    position: absolute;
+    content: 'Fetching DocuSign Agreements';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
 .THIS .ds-agreements_spacing {
     border-bottom: 1px solid rgb(217, 219, 221);
 }
