@@ -11,6 +11,36 @@
     opacity: 0.2;
 }
 
+.THIS .dsImport-spinner_container {
+    min-height: 20vh;
+    position: relative;
+}
+
+.THIS .dsImport-spinner_setupFileUpload::after {
+    position: absolute;
+    content: 'Setting up Upload Widget';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
+.THIS .dsImport-spinner_setupSalesforceFiles::after {
+    position: absolute;
+    content: 'Fetching Salesforce files';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
+.THIS .dsImport-spinner_uploadingAgreement::after {
+    position: absolute;
+    content: 'Uploading to DocuSign Agreements';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
+
 .THIS .ds-no-label .slds-form-element__label,
 .THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
 .THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-form-element__label,

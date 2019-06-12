@@ -6608,4 +6608,11 @@
 		<shortDescription>ApprovalFailureEmailHeaderTitleText</shortDescription>
 		<value>There was a problem with your review request.</value>
 	</labels>
+	<labels>
+		<fullName>UploadingAgreement</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UploadingAgreement</shortDescription>
+		<value>Uploading Agreement</value>
+	</labels>
 </CustomLabels>
