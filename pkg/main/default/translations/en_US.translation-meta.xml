@@ -3291,6 +3291,18 @@
 		<name>AgreementResendInternalApprovalMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>Internal approval canceled for</label>
+		<name>AgreementCancelInternalApprovalMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>External Review canceled for</label>
+		<name>AgreementCancelExternalReviewMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>There was an error in canceling the Agreement. Please try again after some time.</label>
+		<name>AgreementCancelErrorMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>HQTEST3</label>
 		<name>HQTEST3</name>
 	</customLabels>
