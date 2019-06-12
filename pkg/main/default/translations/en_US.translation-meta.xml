@@ -3279,6 +3279,18 @@
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>There was an error in resending the Agreement. Please try again after some time.</label>
+		<name>AgreementResendErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>resend for external review.</label>
+		<name>AgreementResendExternalReviewMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>resend for internal approval.</label>
+		<name>AgreementResendInternalApprovalMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>HQTEST3</label>
 		<name>HQTEST3</name>
 	</customLabels>

@@ -292,7 +292,7 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
 	}
 
-	public static Boolean resendRequest(final Url documentHref, final String resendEmailType) {
+	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);
 	}

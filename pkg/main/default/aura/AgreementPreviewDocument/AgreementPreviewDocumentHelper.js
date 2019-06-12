@@ -306,16 +306,9 @@
 
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
-    this.registerEvent('resendExternalReviewRequest', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //Call Apex method to resend the external review request
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-
-    });
+    this.registerEvent('resendExternalReviewRequest', $A.getCallback(function() {
+      self.externalReviewResendRequest(thisComponent, self, 'ExternalReview');
+    }));
 
     this.registerEvent('externalReviewCompleteOnBehalf', function() {
       //show the spinner and fade background
@@ -376,16 +369,9 @@
       self.reloadPreview(thisComponent);
     });
 
-    this.registerEvent('resendApprovalRequest', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //call Apex Action to Resend the Approval request
-
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-    });
+    this.registerEvent('resendApprovalRequest', $A.getCallback(function() {
+      self.externalReviewResendRequest(thisComponent, self, 'Approval');
+    }));
 
     widget.renderApprovalSenderView({
       subTitle: 'Document sent for Internal Approval',
@@ -465,6 +451,51 @@
       });
     }
     return returnValue;
+  },
+
+  externalReviewResendRequest: function (component, helper, reviewType) {
+    component.set('v.loading', true);
+    var agreement = component.get('v.agreement');
+
+    var resendAction = component.get('c.resendRequest');
+
+    resendAction.setParams({
+      documentHref: agreement.href,
+      resendEmailType: reviewType
+    });
+
+    resendAction.setCallback(this, function (response) {
+      component.set('v.loading', true);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          var resendMessage = '';
+          if(reviewType === 'ExternalReview') {
+            resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendExternalReviewMessage'));
+          } else {
+            resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendInternalApprovalMessage'));
+          }
+          helper.showToast(component, resendMessage, 'success');
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementResendErrorMessage'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementResendErrorMessage'), 'error');
+      }
+      helper.reloadPreview(component);
+    });
+    $A.enqueueAction(resendAction);
+  },
+
+  showToast: function (component, message, mode) {
+    var evt = component.getEvent('toastEvent');
+    evt.setParams({
+      show: true,
+      message: message,
+      mode: mode
+    });
+    evt.fire();
   }
 
 });
