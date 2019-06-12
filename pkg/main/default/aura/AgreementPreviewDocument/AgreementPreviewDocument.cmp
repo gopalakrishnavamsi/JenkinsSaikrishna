@@ -1,5 +1,6 @@
 <aura:component controller="AgreementsController">
     <!-- component attributes -->
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
     <aura:attribute name="agreement" type="Agreement" access="public"/>
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>

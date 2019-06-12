@@ -5999,6 +5999,27 @@
 		<value>There was an error in deleting the Agreement. Please try again after some time.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementResendErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementResendErrorMessage</shortDescription>
+		<value>There was an error in resending the Agreement. Please try again after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementResendExternalReviewMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementResendExternalReviewMessage</shortDescription>
+		<value>resend for external review.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementResendInternalApprovalMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementResendInternalApprovalMessage</shortDescription>
+		<value>resend for internal approval.</value>
+	</labels>
+	<labels>
 		<fullName>AgreementDeleted</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

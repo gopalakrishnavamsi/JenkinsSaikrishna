@@ -1006,7 +1006,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-	public Boolean resendRequest(final Url documentHref, final String resendEmailType) {
+	public Boolean resendRequest(final String documentHref, final String resendEmailType) {
 
 		final RestAPI.Response response = post(
 			getBaseUrl(),
@@ -1016,7 +1016,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'Document' => new APIHref(documentHref.toExternalForm()),
+				'Document' => new APIHref(documentHref),
 				'ResendEmailType' => resendEmailType
 			}),
 			RestAPI.defaultTimeout);

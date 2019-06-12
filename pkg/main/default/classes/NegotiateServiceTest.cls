@@ -318,7 +318,7 @@ private class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 
 			Test.startTest();
-			Boolean result = NegotiateService.resendRequest(NegotiateAPIMock.DOCUMENT_HREF, 'ExternalReview');
+			Boolean result = NegotiateService.resendRequest('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17', 'ExternalReview');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

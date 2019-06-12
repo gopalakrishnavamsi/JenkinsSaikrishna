@@ -170,4 +170,14 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to send documents for Internal Approval');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
+		try {
+			return NegotiateService.resendRequest(documentHref, resendEmailType);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to resend Agreement');
+		}
+	}
+
 }
