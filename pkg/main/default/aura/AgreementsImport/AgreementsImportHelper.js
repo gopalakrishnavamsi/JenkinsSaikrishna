@@ -120,7 +120,7 @@
               extension: selectedFile.extension
             };
             helper.displayCreatedAgreement(component, importedFile);
-            helper.getAgreementDetails(result.agreementId, component);
+            helper.getAgreementDetails(result.agreementId.value, component);
           } else if (result.status === 'Processing') {
             helper.showToast(component, result.message, 'warning');
             helper.reloadAgreementsSpace(component);
@@ -151,7 +151,7 @@
   getAgreementDetails: function(agreementId, component) {
     var action = component.get('c.getAgreement');
     action.setParams({
-      agreementId: agreementId.value
+      agreementId: agreementId
     });
     action.setCallback(this, function(response) {
       var state = response.getState();
@@ -180,6 +180,7 @@
             extension: 'docx'
           };
           helper.displayCreatedAgreement(component, importedFile);
+          helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), component);
         })
         .catch(function() {
           helper.showToast(component, 'Error Uploading File', 'error');
@@ -189,6 +190,10 @@
       helper.showToast(component, 'Error Uploading File', 'error');
       helper.completeImport(component, event, helper);
     }
+  },
+
+  parseAgreementId: function(documentHref) {
+      return documentHref.substring(documentHref.lastIndexOf('/') + 1);
   },
 
   displayCreatedAgreement: function(component, importedFile) {
