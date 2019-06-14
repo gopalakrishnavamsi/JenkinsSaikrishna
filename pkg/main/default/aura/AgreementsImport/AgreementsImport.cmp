@@ -46,7 +46,7 @@
             </div>
         </aura:if>
 
-        <div aura:id="mainContent" class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <aura:if isTrue="{!and(v.currentStep == '1', not(v.loading))}">
                     <div class="slds-col">
