@@ -1,9 +1,33 @@
 <aura:component controller="AgreementsController">
+    <!-- component attributes -->
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
     <aura:attribute name="agreement" type="Agreement" access="public"/>
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
+    <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
     <aura:attribute name="widget" type="Object"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+
+    <!--handlers -->
     <aura:handler name="change" value="{!v.agreement}" action="{!c.onLoad}"/>
-    <div id="agreementDocumentView"/>
+
+    <!-- events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
+    <!-- body of the component -->
+
+    <!-- loading -->
+    <aura:if isTrue="{!v.loading}">
+        <div class="slds-is-static">
+            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+    <div class="{!if(v.loading, 'ds-fadeBackground')}" id="agreementDocumentView"/>
 </aura:component>

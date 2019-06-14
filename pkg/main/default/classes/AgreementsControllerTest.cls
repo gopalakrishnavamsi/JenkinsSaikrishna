@@ -257,10 +257,10 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID,new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
-					'testBody');
+					'testBody', true);
 				throw new AssertException('Expected sendForInternalApproval to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -289,10 +289,10 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForInternalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
-				'testBody');
+				'testBody', true);
 			Test.stopTest();
 			System.assertNotEquals(null, testTaskStatus);
 		}
@@ -349,6 +349,80 @@ private class AgreementsControllerTest {
 			Test.stopTest();
 			System.assert(hasError);
 		}
-	}	
+	}
+
+	@IsTest
+	static void test_getIsCurrentUserDocuSignAdmin_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Boolean result = AgreementsController.getIsCurrentUserDocuSignAdmin();
+			Test.stopTest();
+			System.assertEquals(result, true);
+		}
+	}
+
+	@IsTest
+	static void test_getIsCurrentUserDocuSignAdmin_negative() {
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			Boolean result = AgreementsController.getIsCurrentUserDocuSignAdmin();
+			Test.stopTest();
+			System.assertEquals(result, false);
+		}
+	}
+
+	@IsTest
+	static void test_resendRequest_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.resendRequest('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17', 'xyz');
+				throw new AssertException('Expected resend Agreement to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resendRequest_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Boolean result = AgreementsController.resendRequest('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17', 'ExternalReview');
+			Test.stopTest();
+			System.assert(result);
+		}
+	}
+
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected cancel request to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_cancelApprovalOrExternalReview_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Boolean result = AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assert(result);
+		}
+	}
 
 }

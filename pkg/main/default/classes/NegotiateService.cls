@@ -253,9 +253,9 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String body) {
+	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String body, final Boolean isSequential) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
-		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body);
+		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body, isSequential);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
 			taskStatus.message = Label.InternalApprovalSuccess;
@@ -292,7 +292,7 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().getDocumentURL(documentId);
 	}
 
-	public static Boolean resendRequest(final Url documentHref, final String resendEmailType) {
+	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);
 	}

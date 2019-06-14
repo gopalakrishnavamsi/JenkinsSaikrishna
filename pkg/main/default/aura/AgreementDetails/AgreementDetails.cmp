@@ -135,7 +135,7 @@
             </div>
         </div>
         <div id="{!'historyContainer' + (v.agreementIndex)}"
-             class="{!'slds-p-around_large' + if(not(v.showTimeLine), ' slds-hide','')}">
+             class="{!'slds-p-around_large ds-max-width' + if(not(v.showTimeLine), ' slds-hide','')}">
 
         </div>
     </div>
