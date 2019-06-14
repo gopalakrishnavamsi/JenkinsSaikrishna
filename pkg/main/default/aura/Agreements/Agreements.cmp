@@ -14,9 +14,11 @@
     <aura:attribute name="visualforce" type="Boolean"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
-
+    <aura:attribute name="agreementActionManager" type="Object"/>
+    <ltng:require scripts="{!$Resource.AgreementActionManager}"
+                  afterScriptsLoaded="{!c.doInit}"/>
     <!-- handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+<!--     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> -->
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
 

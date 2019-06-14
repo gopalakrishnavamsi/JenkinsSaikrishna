@@ -8,14 +8,15 @@
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
     <aura:attribute name="importedFile" type="Object"/>
-    <aura:attribute name="namespace" type="String" default="c"/>
-    <aura:attribute name="agreementActionManager" type="Object"/>
+    <aura:attribute name="externalReviewCallback" type="Object"/>
+    <aura:attribute name="internalApprovalCallback" type="Object"/>
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
-
+    <aura:attribute name="sourceComponent" type="Object"/>
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.stringUtils)}" afterScriptsLoaded="{!c.onLoad}"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}" 
+        scripts="{!join(',', $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.stringUtils)}"/>
 
     <!-- Events -->
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
@@ -41,7 +42,7 @@
             </div>
         </aura:if>
 
-        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div aura:id="mainContent" class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <aura:if isTrue="{!v.currentStep == '1'}">
                     <div class="slds-col">

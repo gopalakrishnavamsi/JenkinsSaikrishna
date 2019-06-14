@@ -120,6 +120,7 @@
               extension: selectedFile.extension
             };
             helper.displayCreatedAgreement(component, importedFile);
+            helper.getAgreementDetails(result.agreementId, component);
           } else if (result.status === 'Processing') {
             helper.showToast(component, result.message, 'warning');
             helper.reloadAgreementsSpace(component);
@@ -145,6 +146,22 @@
       });
       $A.enqueueAction(action);
     }
+  },
+
+  getAgreementDetails: function(agreementId, component) {
+    var action = component.get('c.getAgreement');
+    action.setParams({
+      agreementId: agreementId.value
+    });
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        component.set('v.agreementDetails',response.getReturnValue());
+      } else if (state === 'ERROR') {
+        this.showToast(component, 'Failed to get agreement details', 'error');
+      }
+    });
+    $A.enqueueAction(action);
   },
 
   importFileFromPc: function(component, event, helper) {
