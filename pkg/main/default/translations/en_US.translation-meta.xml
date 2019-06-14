@@ -3279,6 +3279,30 @@
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>There was an error in resending the Agreement. Please try again after some time.</label>
+		<name>AgreementResendErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>resend for external review.</label>
+		<name>AgreementResendExternalReviewMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>resend for internal approval.</label>
+		<name>AgreementResendInternalApprovalMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Internal approval canceled for</label>
+		<name>AgreementCancelInternalApprovalMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>External Review canceled for</label>
+		<name>AgreementCancelExternalReviewMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>There was an error in canceling the Agreement. Please try again after some time.</label>
+		<name>AgreementCancelErrorMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>HQTEST3</label>
 		<name>HQTEST3</name>
 	</customLabels>
@@ -3544,6 +3568,10 @@
 	<customLabels>
 		<label>There was a problem with your review request.</label>
 		<name>ApprovalFailureEmailHeaderTitleText</name>
+	</customLabels>
+	<customLabels>
+		<label>Uploading Agreement</label>
+		<name>UploadingAgreement</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

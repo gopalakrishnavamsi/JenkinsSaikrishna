@@ -5,6 +5,7 @@
   },
 
   fetchSalesforceFiles: function(component, event, helper) {
+    component.set('v.currentStep', '2');
     component.set('v.loading', true);
     var getSalesforceFiles = component.get('c.getLinkedDocuments');
     getSalesforceFiles.setParams({
@@ -24,7 +25,6 @@
         helper.showToast(component, helper.getErrorMessage(response), 'error');
       }
       component.set('v.loading', false);
-      component.set('v.currentStep', '2');
     });
 
     $A.enqueueAction(getSalesforceFiles);
@@ -88,7 +88,7 @@
   },
 
   importSalesforceFile: function(component, event, helper) {
-    //set loading to true
+    component.set('v.currentStep', '4');
     component.set('v.loading', true);
 
     //get selected file
@@ -165,6 +165,7 @@
   },
 
   importFileFromPc: function(component, event, helper) {
+    component.set('v.currentStep', '4');
     component.set('v.loading', true);
     var widget = component.get('v.widget');
     var folderId = component.get('v.entityId');
@@ -198,7 +199,6 @@
 
   displayCreatedAgreement: function(component, importedFile) {
     component.set('v.importedFile', importedFile);
-    component.set('v.currentStep', '4');
     component.set('v.loading', false);
   },
 

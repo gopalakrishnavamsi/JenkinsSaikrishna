@@ -65,11 +65,6 @@ public virtual class RestAPI {
 		return sendRequest('PUT', baseUrl, path, queryString, null, headers, body, timeout);
 	}
 
-	@TestVisible
-	protected Response patch(final Url baseUrl, final List<Object> path, final QueryString queryString, final Map<String, String> headers, final String body, final Integer timeout) {
-		return sendRequest('PATCH', baseUrl, path, queryString, null, headers, body, timeout);
-	}
-
 	/**
      * Make a http request
 	 * @param Url  the request endpoint
@@ -127,7 +122,6 @@ public virtual class RestAPI {
 			}
 		}
 		request.setHeader('User-Agent', Application.userAgent);
-
 		final HttpResponse response = http.send(request);
 		return new Response(request, response, getError(response));
 	}

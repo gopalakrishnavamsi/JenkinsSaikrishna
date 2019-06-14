@@ -13,6 +13,8 @@
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
+
+
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" 
         scripts="{!join(',', $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.stringUtils)}"/>
@@ -26,13 +28,16 @@
                     title="{!if(v.currentStep == '1', $Label.c.ImportFiles)
                             +if(v.currentStep == '2', $Label.c.SelectFile)
                             +if(v.currentStep == '3', $Label.c.UploadFile)
-                            +if(v.currentStep == '4', $Label.c.NewAgreementCreated)}"
+                            +if(and(v.currentStep == '4', not(v.loading)), $Label.c.NewAgreementCreated)
+                            +if(and(v.currentStep == '4', v.loading), $Label.c.UploadingAgreement)}"
                     showModal="{!v.showModal}"
                     showFooter="{!if(v.currentStep == '1', false,true)}"
-                    successHeader="{!if(v.currentStep == '4', true,false)}">
+                    successHeader="{!if(and(v.currentStep == '4', not(v.loading)), true,false)}">
 
         <aura:if isTrue="{!v.loading}">
-            <div class="slds-is-static">
+            <div class="{!'dsImport-spinner_container' + if(v.currentStep == '3', ' dsImport-spinner_setupFileUpload')
+                                                       + if(v.currentStep == '2', ' dsImport-spinner_setupSalesforceFiles')
+                                                       + if(v.currentStep == '4', ' dsImport-spinner_uploadingAgreement')}">
                 <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
                     <span class="slds-assistive-text">{!$Label.c.Loading}</span>
                     <div class="slds-spinner__dot-a"></div>
@@ -43,7 +48,7 @@
 
         <div aura:id="mainContent" class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
-                <aura:if isTrue="{!v.currentStep == '1'}">
+                <aura:if isTrue="{!and(v.currentStep == '1', not(v.loading))}">
                     <div class="slds-col">
                         <div class="slds-text-align--center">
                             {!$Label.c.ChooseFile}
@@ -88,7 +93,7 @@
                     </div>
                 </aura:if>
 
-                <aura:if isTrue="{!v.currentStep == '2'}">
+                <aura:if isTrue="{!and(v.currentStep == '2', not(v.loading))}">
                     <div class="slds-col slds-p-horizontal_large">
                         <div class=" slds-text-align_center">
                             {!$Label.c.ChooseSalesforceFiles2}
@@ -158,7 +163,7 @@
                     </div>
                 </aura:if>
 
-                <aura:if isTrue="{!v.currentStep == '4'}">
+                <aura:if isTrue="{!and(v.currentStep == '4', not(v.loading))}">
                     <div class="slds-col">
                         <div class="slds-text-align--center">
                             {!$Label.c.SalesforceFileCopyComplete}
@@ -271,7 +276,7 @@
                 </aura:if>
 
                 <div id="upload-wrapper"
-                     class="{!'slds-p-around_large' + if(not(v.currentStep == '3'), ' slds-hide','')}">
+                     class="{!'slds-p-around_large' + if(or(not(v.currentStep == '3'), v.loading), ' slds-hide','')}">
 
                 </div>
 
