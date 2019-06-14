@@ -13,7 +13,6 @@
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
-    <aura:attribute name="sourceComponent" type="Object"/>
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" 
         scripts="{!join(',', $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.stringUtils)}"/>
