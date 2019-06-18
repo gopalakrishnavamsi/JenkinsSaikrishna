@@ -386,7 +386,7 @@
         }
       });
       if (!$A.util.isEmpty(selectedWorkItemId)) {
-        self.completeInternalApprovalOnBehalfOf(thisComponent, self, event.detail.response, event.detail.comments, selectedWorkItemId);
+        self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments, selectedWorkItemId);
       }
     }));
 
@@ -414,7 +414,16 @@
     var self = this;
 
     this.registerEvent('recipientResponse', $A.getCallback(function (event) {
-      self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments);
+      var approvalWorkItemId;
+      var agreementApprovalWorkItems = thisComponent.get('v.approvalWorkItems');
+      agreementApprovalWorkItems.forEach(function (workItem) {
+        if (component.get('v.currentUserEmail') === workItem.email) {
+          approvalWorkItemId = workItem.workItemId.value;
+        }
+      });
+      if (!$A.util.isEmpty(approvalWorkItemId)) {
+        self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments, approvalWorkItemId);
+      }
     }));
 
     widget.renderApprovalRecipientView({
@@ -538,50 +547,8 @@
     $A.enqueueAction(resendAction);
   },
 
-  completeInternalApproval: function (component, helper, approvalResponseType, approvalResponseComments) {
+  completeInternalApproval: function (component, helper, approvalResponseType, approvalResponseComments, approvalWorkItemId) {
     component.set('v.loading', true);
-
-    var approvalWorkItemId;
-    var agreementApprovalWorkItems = component.get('v.approvalWorkItems');
-    agreementApprovalWorkItems.forEach(function (workItem) {
-      if (component.get('v.currentUserEmail') === workItem.email) {
-        approvalWorkItemId = workItem.workItemId.value;
-      }
-    });
-
-    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
-
-    approvalAction.setParams({
-      comment: approvalResponseComments,
-      itemResponse: approvalResponseType,
-      workItemsId: approvalWorkItemId
-    });
-
-    approvalAction.setCallback(this, function (response) {
-      component.set('v.loading', true);
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var result = response.getReturnValue();
-        if (result === true) {
-          if (approvalResponseType === true) {
-            helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
-          } else {
-            helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
-          }
-        } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
-        }
-      } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
-      }
-      helper.reloadPreview(component);
-    });
-    $A.enqueueAction(approvalAction);
-  },
-
-  completeInternalApprovalOnBehalfOf: function (component, helper, approvalResponseType, approvalResponseComments, approvalWorkItemId) {
-    component.set('v.loading', true);
-
     var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
 
     approvalAction.setParams({
