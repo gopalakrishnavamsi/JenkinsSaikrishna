@@ -3573,6 +3573,18 @@
 		<label>Uploading Agreement</label>
 		<name>UploadingAgreement</name>
 	</customLabels>
+	<customLabels>
+		<label>Response for Agreement approval submitted successfully.</label>
+		<name>AgreementApprovalResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Response for Agreement rejection submitted successfully.</label>
+		<name>AgreementRejectionResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Error while submitting Approval response.</label>
+		<name>AgreementApprovalError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

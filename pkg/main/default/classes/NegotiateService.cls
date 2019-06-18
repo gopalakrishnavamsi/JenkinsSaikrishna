@@ -282,10 +282,9 @@ public with sharing class NegotiateService {
 			.withAccountId(Credentials.getInstance().account.id);
 	}
 
-	public static List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
-		// use fullName on Actor and accountUrl for the workItemUrl
+	public static List<AgreementApprovalWorkItem> getApprovalWorkItems(final UUID documentId) {
 		Permissions.verifyIsDocuSignUser();
-		return NegotiateAPI.getInstance().getApprovalUsers(documentId);
+		return NegotiateAPI.getInstance().getApprovalWorkItems(documentId);
 	}
 
 	public static String getDocumentURL(final UUID documentId) {

@@ -6636,4 +6636,25 @@
 		<shortDescription>UploadingAgreement</shortDescription>
 		<value>Uploading Agreement</value>
 	</labels>
+	<labels>
+		<fullName>AgreementApprovalResponseSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementApprovalResponseSuccess</shortDescription>
+		<value>Response for Agreement approval submitted successfully.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementRejectionResponseSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementRejectionResponseSuccess</shortDescription>
+		<value>Response for Agreement rejection submitted successfully.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementApprovalError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementApprovalError</shortDescription>
+		<value>Error while submitting Approval response.</value>
+	</labels>
 </CustomLabels>

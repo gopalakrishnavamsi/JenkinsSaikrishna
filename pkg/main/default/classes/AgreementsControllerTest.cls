@@ -425,4 +425,61 @@ private class AgreementsControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_getApprovalWorkItems_success() {
+		NegotiateAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			List<AgreementApprovalWorkItem> approvalWorkItems = AgreementsController.getApprovalWorkItems(String.valueOf(NegotiateAPIMock.APPROVAL_DOCUMENT_ID));
+			Test.stopTest();
+			System.assertNotEquals(null, approvalWorkItems);
+			System.assertNotEquals(null, approvalWorkItems[0].workItemUrl);
+			System.assertNotEquals(null, approvalWorkItems[1].workItemUrl);
+			System.assertNotEquals(null, approvalWorkItems[0].email);
+			System.assertNotEquals(null, approvalWorkItems[1].email);
+			System.assertEquals(2, approvalWorkItems.size());
+		}
+	}
+
+	@IsTest
+	static void test_getApprovalWorkItems_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.getApprovalWorkItems(NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected getApprovalWorkItems request to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_approveOnBehalfOrRecipientResponse_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+
+			Test.startTest();
+			Boolean result = AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assert(result);
+		}
+	}
+
+	@IsTest
+	static void test_approveOnBehalfOrRecipientResponse_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected approveOnBehalfOrRecipientResponse request to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 }

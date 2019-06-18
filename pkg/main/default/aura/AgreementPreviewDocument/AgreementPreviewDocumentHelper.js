@@ -23,7 +23,8 @@
       Promise.all(
         [   
             this.baseOptions(component, uiHelper, component.get('v.sourceId')),
-            this.getResourceToken(agreement.id.value, component, uiHelper)
+          this.getResourceToken(agreement.id.value, component, uiHelper),
+          this.getApprovalWorkItems(component, uiHelper)
         ]
       )
       .then(function(tokens) {
@@ -90,6 +91,34 @@
       });
       $A.enqueueAction(action);
     });
+  },
+
+  getApprovalWorkItems: function (component, uiHelper) {
+    var action = component.get('c.getApprovalWorkItems');
+    var agreementId = component.get('v.agreement').id.value;
+    var agreementStatus = component.get('v.agreement').status.toLowerCase();
+    //We will be fetching the approvers only if the current agreement status is pending approval
+    if (agreementStatus === 'pending approval') {
+      return new Promise(function (resolve, reject) {
+        action.setParams({
+          agreementId: agreementId
+        });
+        action.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            component.set('v.approvalWorkItems', response.getReturnValue());
+            resolve();
+          }
+          if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
+        });
+        $A.enqueueAction(action);
+      });
+    } else {
+      return new Promise(function (resolve) {
+        resolve();
+      });
+    }
+
   },
 
   getResourceToken: function (agreementId, component, uiHelper) {
@@ -339,19 +368,27 @@
     var thisComponent = component;
     var self = this;
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
-
-    this.registerEvent('approveOnBehalf', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to Approve the user record on Behalf of
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-
+    var agreementApprovalUsers = [];
+    var approvalWorkItems = component.get('v.approvalWorkItems');
+    approvalWorkItems.forEach(function (workItem) {
+      var approvalUser = {
+        'href': workItem.workItemUrl,
+        'name': stringUtils.format('{0} {1}', workItem.firstName, workItem.lastName)
+      };
+      agreementApprovalUsers.push(approvalUser);
     });
+
+    this.registerEvent('approveOnBehalf', $A.getCallback(function (event) {
+      var selectedWorkItemId;
+      approvalWorkItems.forEach(function (workItem) {
+        if (event.detail.selectedWorkitem === workItem.workItemUrl) {
+          selectedWorkItemId = workItem.workItemId.value;
+        }
+      });
+      if (!$A.util.isEmpty(selectedWorkItemId)) {
+        self.completeInternalApprovalOnBehalfOf(thisComponent, self, event.detail.response, event.detail.comments, selectedWorkItemId);
+      }
+    }));
 
     this.registerEvent('cancelApproval', $A.getCallback(function() {
       self.cancelRequest(thisComponent, self, 'Approval');
@@ -366,7 +403,7 @@
       showCancel: inProgress,
       showResendRequest: inProgress,
       showOnBehalf: isAdminUser,
-      approvalUsers: []
+      approvalUsers: agreementApprovalUsers
     });
     return widget;
   },
@@ -375,19 +412,10 @@
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
     var thisComponent = component;
     var self = this;
-    this.registerEvent('recipientResponse', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
 
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to record user response and update worktItem
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-
-    });
-
+    this.registerEvent('recipientResponse', $A.getCallback(function (event) {
+      self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments);
+    }));
 
     widget.renderApprovalRecipientView({
       title: title || '',
@@ -508,6 +536,80 @@
       helper.reloadPreview(component);
     });
     $A.enqueueAction(resendAction);
+  },
+
+  completeInternalApproval: function (component, helper, approvalResponseType, approvalResponseComments) {
+    component.set('v.loading', true);
+
+    var approvalWorkItemId;
+    var agreementApprovalWorkItems = component.get('v.approvalWorkItems');
+    agreementApprovalWorkItems.forEach(function (workItem) {
+      if (component.get('v.currentUserEmail') === workItem.email) {
+        approvalWorkItemId = workItem.workItemId.value;
+      }
+    });
+
+    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
+
+    approvalAction.setParams({
+      comment: approvalResponseComments,
+      itemResponse: approvalResponseType,
+      workItemsId: approvalWorkItemId
+    });
+
+    approvalAction.setCallback(this, function (response) {
+      component.set('v.loading', true);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          if (approvalResponseType === true) {
+            helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
+          } else {
+            helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
+          }
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+      }
+      helper.reloadPreview(component);
+    });
+    $A.enqueueAction(approvalAction);
+  },
+
+  completeInternalApprovalOnBehalfOf: function (component, helper, approvalResponseType, approvalResponseComments, approvalWorkItemId) {
+    component.set('v.loading', true);
+
+    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
+
+    approvalAction.setParams({
+      comment: approvalResponseComments,
+      itemResponse: approvalResponseType,
+      workItemsId: approvalWorkItemId
+    });
+
+    approvalAction.setCallback(this, function (response) {
+      component.set('v.loading', true);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          if (approvalResponseType === true) {
+            helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
+          } else {
+            helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
+          }
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+      }
+      helper.reloadPreview(component);
+    });
+    $A.enqueueAction(approvalAction);
   },
 
   showToast: function (component, message, mode) {
