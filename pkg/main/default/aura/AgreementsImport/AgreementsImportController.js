@@ -1,4 +1,5 @@
 ({
+
   initialize: function (component, event, helper) {
     helper.initialize(component);
   },
@@ -46,5 +47,27 @@
   backButtonClicked: function (component) {
     component.set('v.currentStep', '1');
   },
+
+  sendApproval: function (component) {
+    try {
+      var action = component.get('v.internalApprovalCallback');
+      var agreement = component.get('v.agreementDetails');
+      action(agreement);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
+  },
+
+  sendExternalReview: function (component) {
+    try {
+      var action = component.get('v.externalReviewCallback');
+      var agreement = component.get('v.agreementDetails');
+      action(agreement);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
+  }
 
 });

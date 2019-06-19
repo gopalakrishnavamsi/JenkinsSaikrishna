@@ -3,8 +3,10 @@
     if (component.get('v.isAuthorized')) {
       //Hide the error toast message
       var toastComponent = component.find('toast');
-      $A.util.toggleClass(toastComponent, 'slds-hide');
-      //Make call to load the agreements after succesful authorization
+      if (!$A.util.isUndefinedOrNull(toastComponent)) {
+        $A.util.toggleClass(toastComponent, 'slds-hide');
+      }
+      //Make call to load the agreements after successful authorization
       helper.loadAgreements(component, event, helper);
     }
   },

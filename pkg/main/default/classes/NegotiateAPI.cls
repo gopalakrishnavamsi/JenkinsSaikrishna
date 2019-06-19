@@ -475,12 +475,21 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String message;
 		@AuraEnabled
 		public String status;
+		public APIHref document;
+		@AuraEnabled
+		public UUID agreementId {
+			get {
+				if (this.document == null) return null;
+				return UUID.parse((this.document.href).substringAfterLast('/'));
+			}
+		}
 	}
 
 //Get status of created Agreement in Folder
 	public NegotiateAPI.TaskStatus getAgreementInEOSFolderStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
+		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
 		while (status != 'Success' && count < 10) {
@@ -497,7 +506,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
 				throw new APIException(response.error);
 			}
-
 			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
 			status = result.status;
 			count += 1;
@@ -505,6 +513,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		return result;
 	}
+
+	//private UUID parse
 
 	public String getDocumentURL(final UUID documentId) {
 		if (documentId == null) return null;

@@ -29,7 +29,8 @@ var AgreementComponents = Object.freeze({
   ExternalReview: 'AgreementsExternalReview',
   Rename: 'AgreementsRename',
   Share: 'AgreementsShareLink',
-  Download: 'AgreementDownload'
+  Download: 'AgreementDownload',
+  Import: 'AgreementsImport'
 });
 
 function AgreementActionManager(anchor, namespace) {
@@ -75,10 +76,10 @@ AgreementActionManager.prototype.upload = function(component) {
       showModal: true
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -98,10 +99,10 @@ AgreementActionManager.prototype.delete = function(
       agreementDetails: agreementDetails
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -121,10 +122,10 @@ AgreementActionManager.prototype.rename = function(
       agreementDetails: agreementDetails
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -146,10 +147,10 @@ AgreementActionManager.prototype.internalApproval = function(
       sourceId: sourceId
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -171,10 +172,10 @@ AgreementActionManager.prototype.externalReview = function(
       sourceId: sourceId
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -191,10 +192,10 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
       agreementDetails: agreementDetails
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
       throw err;
     });
 };
@@ -211,10 +212,36 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
       agreementDetails: agreementDetails
     }
   )
-    .then(function(modalComponent) {
+    .then(function (modalComponent) {
       self.activeScope = modalComponent;
     })
-    .catch(function(err) {
+    .catch(function (err) {
+      throw err;
+    });
+};
+
+AgreementActionManager.prototype.import = function (sourceId, component) {
+  if (this.activeScope) this.activeScope.destroy();
+  var self = this;
+  generateComponent(
+    this.anchor,
+    component,
+    this.getComponentName(AgreementComponents.Import),
+    {
+      showModal: true,
+      recordId: sourceId,
+      externalReviewCallback: function (agreementDetails) {
+        self.externalReview(agreementDetails, sourceId, component);
+      },
+      internalApprovalCallback: function (agreementDetails) {
+        self.internalApproval(agreementDetails, sourceId, component);
+      }
+    }
+  )
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
       throw err;
     });
 };
