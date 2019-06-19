@@ -148,15 +148,15 @@
     }
   },
 
-  getAgreementDetails: function(agreementId, component) {
+  getAgreementDetails: function (agreementId, component) {
     var action = component.get('c.getAgreement');
     action.setParams({
       agreementId: agreementId
     });
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        component.set('v.agreementDetails',response.getReturnValue());
+        component.set('v.agreementDetails', response.getReturnValue());
       } else if (state === 'ERROR') {
         this.showToast(component, 'Failed to get agreement details', 'error');
       }
@@ -193,8 +193,8 @@
     }
   },
 
-  parseAgreementId: function(documentHref) {
-      return documentHref.substring(documentHref.lastIndexOf('/') + 1);
+  parseAgreementId: function (documentHref) {
+    return documentHref.substring(documentHref.lastIndexOf('/') + 1);
   },
 
   displayCreatedAgreement: function(component, importedFile) {

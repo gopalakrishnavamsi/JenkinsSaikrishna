@@ -477,7 +477,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String status;
 		public APIHref document;
 		@AuraEnabled
-		public UUID agreementId { 
+		public UUID agreementId {
 			get {
 				if (this.document == null) return null;
 				return UUID.parse((this.document.href).substringAfterLast('/'));

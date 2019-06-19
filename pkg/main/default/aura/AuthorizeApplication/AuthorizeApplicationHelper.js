@@ -4,6 +4,7 @@
 
     var onSuccess = function (authStatus) {
       if (authStatus) {
+        component.set('v.fetchingOAuthStatus', false);
         component.set('v.isAuthorized', authStatus.isAuthorized);
         component.set('v.isConsentRequired', authStatus.isConsentRequired);
         component.set('v.userStatusMessage', authStatus.message);

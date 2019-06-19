@@ -76,12 +76,12 @@ AgreementActionManager.prototype.upload = function(component) {
       showModal: true
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.delete = function(
@@ -99,12 +99,12 @@ AgreementActionManager.prototype.delete = function(
       agreementDetails: agreementDetails
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.rename = function(
@@ -122,12 +122,12 @@ AgreementActionManager.prototype.rename = function(
       agreementDetails: agreementDetails
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.internalApproval = function(
@@ -147,12 +147,12 @@ AgreementActionManager.prototype.internalApproval = function(
       sourceId: sourceId
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.externalReview = function(
@@ -172,12 +172,12 @@ AgreementActionManager.prototype.externalReview = function(
       sourceId: sourceId
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.share = function(agreementDetails, component) {
@@ -192,12 +192,12 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
       agreementDetails: agreementDetails
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 AgreementActionManager.prototype.download = function(agreementDetails, component) {
@@ -212,15 +212,15 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
       agreementDetails: agreementDetails
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
-AgreementActionManager.prototype.import = function(sourceId, component) {
+AgreementActionManager.prototype.import = function (sourceId, component) {
   if (this.activeScope) this.activeScope.destroy();
   var self = this;
   generateComponent(
@@ -230,20 +230,20 @@ AgreementActionManager.prototype.import = function(sourceId, component) {
     {
       showModal: true,
       recordId: sourceId,
-      externalReviewCallback: function(agreementDetails) {
+      externalReviewCallback: function (agreementDetails) {
         self.externalReview(agreementDetails, sourceId, component);
       },
-      internalApprovalCallback: function(agreementDetails) {
+      internalApprovalCallback: function (agreementDetails) {
         self.internalApproval(agreementDetails, sourceId, component);
       }
     }
   )
-  .then(function(modalComponent) {
-    self.activeScope = modalComponent;
-  })
-  .catch(function(err) {
-    throw err;
-  });
+    .then(function (modalComponent) {
+      self.activeScope = modalComponent;
+    })
+    .catch(function (err) {
+      throw err;
+    });
 };
 
 window.AgreementActionManager = AgreementActionManager;

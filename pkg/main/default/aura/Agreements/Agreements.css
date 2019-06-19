@@ -7,6 +7,19 @@
     height: 100%;
 }
 
+.THIS .ds-spinner_oauth_container {
+    margin: auto;
+    min-height: 30vh;
+}
+
+.THIS .ds-spinner_oauth_container::after {
+    position: absolute;
+    content: 'Authorizing';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
 .THIS .ds-spinner_container {
     margin: auto;
     min-height: 30vh;

@@ -48,7 +48,7 @@
     component.set('v.currentStep', '1');
   },
 
-  sendApproval: function(component) {
+  sendApproval: function (component) {
     try {
       var action = component.get('v.internalApprovalCallback');
       var agreement = component.get('v.agreementDetails');
@@ -59,7 +59,7 @@
     }
   },
 
-  sendExternalReview: function(component) {
+  sendExternalReview: function (component) {
     try {
       var action = component.get('v.externalReviewCallback');
       var agreement = component.get('v.agreementDetails');
