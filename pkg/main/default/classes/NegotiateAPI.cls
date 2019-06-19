@@ -11,6 +11,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_EMAILS = 'emails';
 	public static final String PATH_LOCK = 'lock';
 	public static final String PATH_REVIEWS = 'reviews';
+	public static final String PATH_MEMBERS = 'members';
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
@@ -875,7 +876,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 	@TestVisible
 	private class APIUser {
-		public String userName;
 		public String Email;
 		public String FirstName;
 		public String LastName;
@@ -897,7 +897,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public APIUser user;
 	}
 
-//Get historyItems
+	//Get historyItems
 	public List<AgreementHistoryItem> getHistoryItems(final UUID documentId) {
 		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
 		Map<String, String> queryStrings = new Map<String, String>();
@@ -970,7 +970,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	// workItems to get Assignee for PreviewWidget
-
 	@TestVisible
 	private class APIWorkItems {
 		public List<APIWorkItem> items;
@@ -978,20 +977,26 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
+	private class APIMemberDetails {
+		public String email;
+		public String firstName;
+		public String lastName;
+	}
+
+	@TestVisible
 	private class APIWorkItem {
-		// from assignee use firstName and lastName. Do not use url on Asignee for AprrovalUsers.
 		public APIUser assignee;
 		public String href;
 
-		AgreementHistoryItem.Actor convertAPIWorkItem() {
-			String name = this.assignee.FirstName + ' ' + this.assignee.LastName;
-			return new AgreementHistoryItem.Actor(name, null, this.href);
+		AgreementApprovalWorkItem convertAPIWorkItem() {
+			NegotiateAPI.APIMemberDetails memberResult = (NegotiateAPI.APIMemberDetails)JSON.deserialize(NegotiateAPI.getInstance().resolveApproverDetails(UUID.parse(this.assignee.href.substringAfterLast('/'))), NegotiateAPI.APIMemberDetails.class);
+			return new AgreementApprovalWorkItem(memberResult.firstName, memberResult.lastName, memberResult.email, this.href);
 		}
 	}
 
-	public List<AgreementHistoryItem.Actor> getApprovalUsers(final UUID documentId) {
+	public List<AgreementApprovalWorkItem> getApprovalWorkItems(final UUID documentId) {
 
-		List<AgreementHistoryItem.Actor> workItems = new List<AgreementHistoryItem.Actor>();
+		List<AgreementApprovalWorkItem> workItems = new List<AgreementApprovalWorkItem>();
 		Map<String, String> queryStrings = new Map<String, String>();
 		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
 		Long offset = -SCM_OFFSET;
@@ -1025,6 +1030,23 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			next = result.next;
 		}
 		return workItems;
+	}
+
+	public String resolveApproverDetails(final UUID memberId) {
+
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_MEMBERS, memberId
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get memberId  - ' + memberId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
+		return response.body;
 	}
 
 	// resend approval request and resend external review request

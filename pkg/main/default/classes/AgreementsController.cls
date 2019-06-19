@@ -189,4 +189,22 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static List<AgreementApprovalWorkItem> getApprovalWorkItems(final String agreementId) {
+		try {
+			return NegotiateService.getApprovalWorkItems(UUID.parse(agreementId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get ApprovalWorkItems');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final String workItemsId) {
+		try {
+			return NegotiateService.approveOnBehalfOrRecipientResponse(comment, itemResponse, UUID.parse(workItemsId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get ApprovalWorkItems');
+		}
+	}
+
 }
