@@ -1,6 +1,12 @@
 ({
-  doInit: function (component, event, helper) {
-    helper.loadAgreements(component, event, helper);
+  onChangeIsAuthorized: function (component, event, helper) {
+    if (component.get('v.isAuthorized')) {
+      //Hide the error toast message
+      var toastComponent = component.find('toast');
+      $A.util.toggleClass(toastComponent, 'slds-hide');
+      //Make call to load the agreements after succesful authorization
+      helper.loadAgreements(component, event, helper);
+    }
   },
 
   handleToastEvent: function (component, event, helper) {

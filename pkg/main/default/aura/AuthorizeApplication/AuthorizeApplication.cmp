@@ -3,6 +3,7 @@
     <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean"/>
 
     <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="{!false}"/>
