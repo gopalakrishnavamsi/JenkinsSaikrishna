@@ -120,6 +120,7 @@
               extension: selectedFile.extension
             };
             helper.displayCreatedAgreement(component, importedFile);
+            helper.getAgreementDetails(result.agreementId.value, component);
           } else if (result.status === 'Processing') {
             helper.showToast(component, result.message, 'warning');
             helper.reloadAgreementsSpace(component);
@@ -147,6 +148,22 @@
     }
   },
 
+  getAgreementDetails: function(agreementId, component) {
+    var action = component.get('c.getAgreement');
+    action.setParams({
+      agreementId: agreementId
+    });
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        component.set('v.agreementDetails',response.getReturnValue());
+      } else if (state === 'ERROR') {
+        this.showToast(component, 'Failed to get agreement details', 'error');
+      }
+    });
+    $A.enqueueAction(action);
+  },
+
   importFileFromPc: function(component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
@@ -164,6 +181,7 @@
             extension: 'docx'
           };
           helper.displayCreatedAgreement(component, importedFile);
+          helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), component);
         })
         .catch(function() {
           helper.showToast(component, 'Error Uploading File', 'error');
@@ -173,6 +191,10 @@
       helper.showToast(component, 'Error Uploading File', 'error');
       helper.completeImport(component, event, helper);
     }
+  },
+
+  parseAgreementId: function(documentHref) {
+      return documentHref.substring(documentHref.lastIndexOf('/') + 1);
   },
 
   displayCreatedAgreement: function(component, importedFile) {
