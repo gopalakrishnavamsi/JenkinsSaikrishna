@@ -14,73 +14,74 @@
     $A.enqueueAction(action);
   },
 
-  loadWidget: function(component, agreement, documentUrl) {
+  loadWidget: function (component, agreement, documentUrl) {
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
       var isCurrentUserLatestActor = this.isCurrentUserLatestActor(component, agreement);
       var isCurrentUserRecipientForApproval = this.isCurrentUserRecipientForApproval(component, agreement);
       Promise.all(
-        [   
-            this.baseOptions(component, uiHelper, component.get('v.sourceId')),
-            this.getResourceToken(agreement.id.value, component, uiHelper)
+        [
+          this.baseOptions(component, uiHelper, component.get('v.sourceId')),
+          this.getResourceToken(agreement.id.value, component, uiHelper),
+          this.getApprovalWorkItems(component, uiHelper)
         ]
       )
-      .then(function(tokens) {
-        return Object.freeze({
+        .then(function (tokens) {
+          return Object.freeze({
             baseOptions: tokens[0],
             resourceToken: tokens[1]
-        });
-      })
-      .then(function(options) {
-        var widget = self.resolvePreview(
-          component,
+          });
+        })
+        .then(function (options) {
+          var widget = self.resolvePreview(
+            component,
             options,
             agreement,
             documentUrl,
-          component.get('v.currentUserDocuSignAdmin'),
-          isCurrentUserLatestActor,
-          isCurrentUserRecipientForApproval
-          );   
-          component.set('v.widget', widget);                               
-       })
-       .catch(function(err) {
+            component.get('v.currentUserDocuSignAdmin'),
+            isCurrentUserLatestActor,
+            isCurrentUserRecipientForApproval
+          );
+          component.set('v.widget', widget);
+        })
+        .catch(function (err) {
           uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
-       });      
+        });
     } catch (err) {
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
   },
 
-  baseOptions: function(component, uiHelper, sourceId) {
+  baseOptions: function (component, uiHelper, sourceId) {
     var self = this;
-    return new Promise(function(resolve, reject) {
-        self.getAccessToken(component, uiHelper, sourceId, true)
-        .then(function(token) {
-            resolve(
-                Object.freeze({
-                  iconPath: $A.get('$Resource.scmwidgetsspritemap'),
-                  accessTokenFn: function() {
-                    return self.getAccessToken(component, uiHelper, sourceId, false);
-                  },
-                  uploadApiBaseDomain: token.apiUploadBaseUrl,
-                  downloadApiBaseDomain: token.apiDownloadBaseUrl
-                })
-            );
+    return new Promise(function (resolve, reject) {
+      self.getAccessToken(component, uiHelper, sourceId, true)
+        .then(function (token) {
+          resolve(
+            Object.freeze({
+              iconPath: $A.get('$Resource.scmwidgetsspritemap'),
+              accessTokenFn: function () {
+                return self.getAccessToken(component, uiHelper, sourceId, false);
+              },
+              uploadApiBaseDomain: token.apiUploadBaseUrl,
+              downloadApiBaseDomain: token.apiDownloadBaseUrl
+            })
+          );
         })
-        .catch(function(err) {
-            reject(err);
+        .catch(function (err) {
+          reject(err);
         });
     });
   },
 
-  getAccessToken: function(component, uiHelper, sourceId, isSetup){
+  getAccessToken: function (component, uiHelper, sourceId, isSetup) {
     var action = component.get('c.generateUploadToken');
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       action.setParams({
         objectId: sourceId
       });
-      action.setCallback(this, function(response) {
+      action.setCallback(this, function (response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
           if (isSetup) resolve(response.getReturnValue());
@@ -92,14 +93,41 @@
     });
   },
 
+  getApprovalWorkItems: function (component, uiHelper) {
+    var action = component.get('c.getApprovalWorkItems');
+    var agreementId = component.get('v.agreement').id.value;
+    var agreementStatus = component.get('v.agreement').status.toLowerCase();
+    return new Promise(function (resolve, reject) {
+      //Fetching approval workItems only if the current agreement status is pending approval
+      if (agreementStatus === 'pending approval') {
+        action.setParams({
+          agreementId: agreementId
+        });
+        action.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            component.set('v.approvalWorkItems', response.getReturnValue());
+            resolve();
+          }
+          if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
+        });
+        $A.enqueueAction(action);
+      }
+      //resolving the promise directly since we do not need to fetch approval workitems for agreements that are not pending approval
+      else {
+        resolve();
+      }
+    });
+  },
+
   getResourceToken: function (agreementId, component, uiHelper) {
     var action = component.get('c.generateResourceToken');
 
     return new Promise(function (resolve) {
       action.setParams({
         agreementId: agreementId
-      });           
-      action.setCallback(this, function(response) {
+      });
+      action.setCallback(this, function (response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
@@ -118,11 +146,11 @@
   resolvePreview: function (component, auth, agreement, documentUrl, isAdmin, isSender, isApprover) {
     switch (agreement.status.toLowerCase()) {
       case 'new' ||
-        'new version' ||
-        'completed' ||
-        'rejected' ||
-        'approval canceled' ||
-        'review canceled'||
+      'new version' ||
+      'completed' ||
+      'rejected' ||
+      'approval canceled' ||
+      'review canceled' ||
       'reviewed' ||
       'review expired' ||
       'approved' :
@@ -265,7 +293,7 @@
     }
   },
 
-  basePreview: function(
+  basePreview: function (
     component,
     agreementId,
     agreementName,
@@ -293,7 +321,7 @@
       });
     }
 
-    this.registerEvent('closeWindow', function() {
+    this.registerEvent('closeWindow', function () {
       $A.get('e.force:refreshView').fire();
     });
 
@@ -306,11 +334,11 @@
 
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
-    this.registerEvent('resendExternalReviewRequest', $A.getCallback(function() {
+    this.registerEvent('resendExternalReviewRequest', $A.getCallback(function () {
       self.externalReviewResendRequest(thisComponent, self, 'ExternalReview');
     }));
 
-    this.registerEvent('externalReviewCompleteOnBehalf', function() {
+    this.registerEvent('externalReviewCompleteOnBehalf', function () {
       //show the spinner and fade background
       thisComponent.set('v.loading', true);
 
@@ -322,7 +350,7 @@
       self.reloadPreview(thisComponent);
     });
 
-    this.registerEvent('cancelExternalReview', $A.getCallback(function() {
+    this.registerEvent('cancelExternalReview', $A.getCallback(function () {
       self.cancelRequest(thisComponent, self, 'ExternalReview');
     }));
 
@@ -339,25 +367,33 @@
     var thisComponent = component;
     var self = this;
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
-
-    this.registerEvent('approveOnBehalf', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
-
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to Approve the user record on Behalf of
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-
+    var agreementApprovalUsers = [];
+    var approvalWorkItems = component.get('v.approvalWorkItems');
+    approvalWorkItems.forEach(function (workItem) {
+      var approvalUser = {
+        'href': workItem.workItemUrl,
+        'name': stringUtils.format('{0} {1}', workItem.firstName, workItem.lastName)
+      };
+      agreementApprovalUsers.push(approvalUser);
     });
 
-    this.registerEvent('cancelApproval', $A.getCallback(function() {
+    this.registerEvent('approveOnBehalf', $A.getCallback(function (event) {
+      var selectedWorkItemId;
+      approvalWorkItems.forEach(function (workItem) {
+        if (event.detail.selectedWorkitem === workItem.workItemUrl) {
+          selectedWorkItemId = workItem.workItemId.value;
+        }
+      });
+      if (!$A.util.isEmpty(selectedWorkItemId)) {
+        self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments, selectedWorkItemId);
+      }
+    }));
+
+    this.registerEvent('cancelApproval', $A.getCallback(function () {
       self.cancelRequest(thisComponent, self, 'Approval');
     }));
 
-    this.registerEvent('resendApprovalRequest', $A.getCallback(function() {
+    this.registerEvent('resendApprovalRequest', $A.getCallback(function () {
       self.externalReviewResendRequest(thisComponent, self, 'Approval');
     }));
 
@@ -366,7 +402,7 @@
       showCancel: inProgress,
       showResendRequest: inProgress,
       showOnBehalf: isAdminUser,
-      approvalUsers: []
+      approvalUsers: agreementApprovalUsers
     });
     return widget;
   },
@@ -375,26 +411,26 @@
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
     var thisComponent = component;
     var self = this;
-    this.registerEvent('recipientResponse', function() {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
 
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to record user response and update worktItem
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-
-    });
-
+    this.registerEvent('recipientResponse', $A.getCallback(function (event) {
+      var approvalWorkItemId;
+      var agreementApprovalWorkItems = thisComponent.get('v.approvalWorkItems');
+      agreementApprovalWorkItems.forEach(function (workItem) {
+        if (component.get('v.currentUserEmail') === workItem.email) {
+          approvalWorkItemId = workItem.workItemId.value;
+        }
+      });
+      if (!$A.util.isEmpty(approvalWorkItemId)) {
+        self.completeInternalApproval(thisComponent, self, event.detail.response, event.detail.comments, approvalWorkItemId);
+      }
+    }));
 
     widget.renderApprovalRecipientView({
       title: title || '',
       message: message || ''
     });
     return widget;
-    
+
   },
 
   reloadPreview: function (component) {
@@ -405,11 +441,11 @@
     evt.fire();
   },
 
-  isValidWidget: function(widget) {
+  isValidWidget: function (widget) {
     return widget && widget instanceof SpringCM.Widgets.Preview;
   },
 
-  registerEvent: function(name, callback) {
+  registerEvent: function (name, callback) {
     document.addEventListener('springcm:preview:' + name, callback);
   },
 
@@ -459,7 +495,7 @@
         var result = response.getReturnValue();
         if (result === true) {
           var resendMessage = '';
-          if(reviewType === 'ExternalReview') {
+          if (reviewType === 'ExternalReview') {
             resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendExternalReviewMessage'));
           } else {
             resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendInternalApprovalMessage'));
@@ -493,7 +529,7 @@
         var result = response.getReturnValue();
         if (result === true) {
           var cancelMessage = '';
-          if(reviewType === 'ExternalReview') {
+          if (reviewType === 'ExternalReview') {
             cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelExternalReviewMessage'), agreement.name);
           } else {
             cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelInternalApprovalMessage'), agreement.name);
@@ -508,6 +544,38 @@
       helper.reloadPreview(component);
     });
     $A.enqueueAction(resendAction);
+  },
+
+  completeInternalApproval: function (component, helper, approvalResponseType, approvalResponseComments, approvalWorkItemId) {
+    component.set('v.loading', true);
+    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
+
+    approvalAction.setParams({
+      comment: approvalResponseComments,
+      itemResponse: approvalResponseType,
+      workItemsId: approvalWorkItemId
+    });
+
+    approvalAction.setCallback(this, function (response) {
+      component.set('v.loading', true);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          if (approvalResponseType === true) {
+            helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
+          } else {
+            helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
+          }
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+      }
+      helper.reloadPreview(component);
+    });
+    $A.enqueueAction(approvalAction);
   },
 
   showToast: function (component, message, mode) {

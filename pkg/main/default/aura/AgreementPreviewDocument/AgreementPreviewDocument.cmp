@@ -5,6 +5,7 @@
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
     <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
+    <aura:attribute name="approvalWorkItems" type="AgreementApprovalWorkItem"/>
     <aura:attribute name="widget" type="Object"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
