@@ -14,8 +14,6 @@
     <aura:attribute name="visualforce" type="Boolean"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
-    <aura:attribute name="agreementActionManager" type="Object"/>
-    <ltng:require scripts="{!$Resource.AgreementActionManager}"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
 

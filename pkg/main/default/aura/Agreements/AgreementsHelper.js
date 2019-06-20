@@ -16,12 +16,22 @@
   },
 
   createImportComponent: function(component) {
-    try {
-      var actions = component.get('v.agreementActionManager');
-      actions.import(component.get('v.recordId'), component);
-    } catch (err) {
-      this.showToast(component, err, 'error');
-    }
+    $A.createComponent(
+      'c:AgreementsImport',
+      {
+        showModal: true,
+        recordId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          var targetCmp = component.find('importModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
   },
 
   setNameSpace: function(component, event, helper) {
@@ -31,11 +41,6 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         component.set('v.namespace', response.getReturnValue());
-        var manager = new AgreementActionManager(
-          'importModal',
-          response.getReturnValue()
-        );
-        component.set('v.agreementActionManager', manager); 
       } else if (state === 'ERROR') {
         var errorMessage = $A.get('$Label.c.ErrorMessage');
         var errors = response.getError();
