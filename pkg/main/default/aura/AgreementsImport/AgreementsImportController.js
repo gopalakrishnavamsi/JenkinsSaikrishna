@@ -1,5 +1,4 @@
 ({
-
   initialize: function (component, event, helper) {
     helper.initialize(component);
   },
@@ -48,26 +47,48 @@
     component.set('v.currentStep', '1');
   },
 
-  sendApproval: function (component) {
-    try {
-      var action = component.get('v.internalApprovalCallback');
-      var agreement = component.get('v.agreementDetails');
-      action(agreement);
-    } catch (err) {
-      var uiHelper = component.get('v.uiHelper');
-      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
-    }
+  createInternalApprovalComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+      'c:AgreementsInternalApproval',
+      {
+        showModal: true,
+        agreementDetails: agreementDetails,
+        sourceId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          component.set('v.showModal', false);
+          var targetCmp = component.find('internalApprovalModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
   },
 
-  sendExternalReview: function (component) {
-    try {
-      var action = component.get('v.externalReviewCallback');
-      var agreement = component.get('v.agreementDetails');
-      action(agreement);
-    } catch (err) {
-      var uiHelper = component.get('v.uiHelper');
-      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
-    }
-  }
+  createExternalReviewComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+      'c:AgreementsExternalReview',
+      {
+        showModal: true,
+        agreementDetails: agreementDetails,
+        sourceId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          component.set('v.showModal', false);
+          var targetCmp = component.find('externalReviewModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
+  },
 
 });
