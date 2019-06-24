@@ -133,13 +133,24 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
 		try {
-			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId);
+			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId, false);
 			if (result == null) throw Controller.wrapException('Failed to redirect to Agreement Preview page: undefined parameter');
 			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to redirect to Agreement Preview');
 		}
 	}
+
+	@AuraEnabled
+	public static String getAgreementShareLink(final Id sourceId, final String agreementId) {
+		try {
+			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId, true);
+			if (result == null) throw Controller.wrapException('Failed to redirect to Agreement Preview page: undefined parameter');
+			return result;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to redirect to Agreement Preview');
+		}		
+	}	
 
 	@AuraEnabled
 	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<String> documentsIds, final String reviewersJson, final String subject, final String body, final Integer expiresInNumberOfDays) {

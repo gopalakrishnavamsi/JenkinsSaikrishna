@@ -60,11 +60,39 @@ AgreementActionManager.prototype.getAgreement = function(
   });
 };
 
+AgreementActionManager.prototype.getDocumentPreviewLink = function(
+  component,
+  agreementId,
+  sourceId
+) {
+  var action = component.get('c.getAgreementShareLink');
+
+  return new Promise(function(resolve, reject) {
+    action.setParams({
+      agreementId: agreementId,
+      sourceId: sourceId
+    });
+    action.setCallback(this, function(response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        resolve(response.getReturnValue());
+      } else if (state === 'ERROR') {
+        reject(response.getError());
+      }
+    });
+    $A.enqueueAction(action);
+  });  
+}
+
 AgreementActionManager.prototype.getComponentName = function(name) {
   return this.namespace + ':' + name;
 };
 
-AgreementActionManager.prototype.upload = function(component) {
+AgreementActionManager.prototype.upload = function(
+  agreementDetails,
+  sourceId, 
+  component
+  ) {
   if (this.activeScope) this.activeScope.destroy();
   var self = this;
   generateComponent(
@@ -72,15 +100,17 @@ AgreementActionManager.prototype.upload = function(component) {
     component,
     this.getComponentName(AgreementComponents.Upload),
     {
-      showModal: true
+      showModal: true,
+      agreementDetails: agreementDetails,
+      sourceId: sourceId
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 AgreementActionManager.prototype.delete = function(
@@ -98,12 +128,12 @@ AgreementActionManager.prototype.delete = function(
       agreementDetails: agreementDetails
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 AgreementActionManager.prototype.rename = function(
@@ -121,12 +151,12 @@ AgreementActionManager.prototype.rename = function(
       agreementDetails: agreementDetails
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 AgreementActionManager.prototype.internalApproval = function(
@@ -146,12 +176,12 @@ AgreementActionManager.prototype.internalApproval = function(
       sourceId: sourceId
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 AgreementActionManager.prototype.externalReview = function(
@@ -171,15 +201,15 @@ AgreementActionManager.prototype.externalReview = function(
       sourceId: sourceId
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
-AgreementActionManager.prototype.share = function(agreementDetails, component) {
+AgreementActionManager.prototype.share = function(agreementDetails, sourceId, component) {
   if (this.activeScope) this.activeScope.destroy();
   var self = this;
   generateComponent(
@@ -188,15 +218,16 @@ AgreementActionManager.prototype.share = function(agreementDetails, component) {
     this.getComponentName(AgreementComponents.Share),
     {
       showModal: true,
-      agreementDetails: agreementDetails
+      agreementDetails: agreementDetails,
+      onLoad: self.getDocumentPreviewLink.bind(self, component, agreementDetails.id.value, sourceId)
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 AgreementActionManager.prototype.download = function(agreementDetails, component) {
@@ -211,12 +242,12 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
       agreementDetails: agreementDetails
     }
   )
-    .then(function (modalComponent) {
-      self.activeScope = modalComponent;
-    })
-    .catch(function (err) {
-      throw err;
-    });
+  .then(function(modalComponent) {
+    self.activeScope = modalComponent;
+  })
+  .catch(function(err) {
+    throw err;
+  });
 };
 
 window.AgreementActionManager = AgreementActionManager;
