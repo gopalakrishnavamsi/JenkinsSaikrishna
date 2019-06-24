@@ -1,4 +1,8 @@
 ({
+  onLoad: function(component, event, helper) {
+    helper.initAgreementActionManager(component);
+  },
+
   viewAgreement: function (component, event, helper) {
     helper.launchAgreementPreview(component);
   },
@@ -8,30 +12,30 @@
   },
 
   showInternalApprovalModal: function (component, event, helper) {
-    helper.createInternalApprovalComponent(component, event, helper);
+    helper.createInternalApprovalComponent(component);
   },
 
   showExternalReviewModal: function (component, event, helper) {
-    helper.createExternalReviewComponent(component, event, helper);
+    helper.createExternalReviewComponent(component);
   },
 
   showDeleteModal: function (component, event, helper) {
-    helper.createDeleteComponent(component, event, helper);
+    helper.createDeleteComponent(component);
   },
 
   showUploadModal: function (component, event, helper) {
-    helper.createUploadComponent(component, event, helper);
+    helper.createUploadComponent(component);
   },
 
   showDownloadModal: function (component, event, helper) {
-    helper.createDownloadComponent(component, event, helper);
+    helper.createDownloadComponent(component);
   },
 
   showRenameModal: function (component, event, helper) {
-    helper.createRenameComponent(component, event, helper);
+    helper.createRenameComponent(component);
   },
 
   showShareLinkModal: function (component, event, helper) {
-    helper.createShareLinkComponent(component, event, helper);
-  }
+    helper.createShareLinkComponent(component);
+  } 
 });

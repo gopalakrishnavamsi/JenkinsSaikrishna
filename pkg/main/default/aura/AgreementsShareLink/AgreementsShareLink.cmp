@@ -1,4 +1,4 @@
-<aura:component description="AgreementsShareLink">
+<aura:component description="AgreementsShareLink" controller="AgreementsController">
     <!-- FIXME Copy Functionality pending -->
     <!-- FIXME Add custom labels -->
     <!-- FIXME : Check hardcoding and replace with labels  -->
@@ -6,6 +6,8 @@
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Object"/>
+    <aura:attribute name="onLoad" type="Object"/>
+    <aura:attribute name="documentUrl" type="String"/>
     <aura:attribute name="linkCopied" type="Boolean" default="false" access="private"/>
 
     <!-- Events -->
@@ -23,13 +25,21 @@
             </div>
             <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top_medium slds-p-bottom_medium">
                 <div class="slds-large-size_3-of-4">
-                    <lightning:input aura:id="copyLinkTextBox" type="text" variant="label-hidden" label="link" value="{!v.agreementDetails.url}" />
+                    <lightning:input aura:id="copyLinkTextBox" 
+                        type="text" 
+                        variant="label-hidden" 
+                        label="link" 
+                        value="{!v.documentUrl}" 
+                        />
                 </div>
                 <div class="slds-large-size_1-of-4">
-                    <lightning:button variant="brand" aura:id="copyLinkButton" label="{!if(v.linkCopied, '', 'Copy Link')}"
-                                      class="{!'shareLinkButton' + if(v.linkCopied, ' shareLinkWidthOnCopy')}"
-                                      onclick="{!c.copyButtonClicked}"
-                                      iconName="{!if(v.linkCopied, 'action:check', '')}" />
+                    <lightning:button variant="brand" 
+                        aura:id="copyLinkButton" 
+                        label="{!if(v.linkCopied, '', 'Copy Link')}"
+                        class="{!'shareLinkButton' + if(v.linkCopied, ' shareLinkWidthOnCopy')}"
+                        onclick="{!c.copyButtonClicked}"
+                        iconName="{!if(v.linkCopied, 'action:check', '')}" 
+                        />
                     <div class="slds-input_height slds-p-top_xx-small">
                         <aura:if isTrue="{!v.linkCopied}">
                             <div class="slds-grid slds-grid_align-end slds-text-color_weak shareLinkButtonHelpText">

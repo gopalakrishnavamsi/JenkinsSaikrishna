@@ -252,14 +252,27 @@ private class NegotiateServiceTest {
 	static void test_getAgreementPreviewLink() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			String link = NegotiateService.getAgreementPreviewLink(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value);
+			String link = NegotiateService.getAgreementPreviewLink(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value, false);			
+			Test.stopTest();
+			System.assertNotEquals(null, link);
+			System.assertEquals(link.startsWith(Site.getBaseUrl()), false);
+			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
+			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
+		}
+	}
+
+	@IsTest
+	static void test_getAgreementShareLink() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			String link = NegotiateService.getAgreementPreviewLink(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value, true);			
 			Test.stopTest();
 			System.assertNotEquals(null, link);
 			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
 			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
 			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
 		}
-	}
+	}	
 
 	@IsTest
 	static void test_generateUploadToken_success() {

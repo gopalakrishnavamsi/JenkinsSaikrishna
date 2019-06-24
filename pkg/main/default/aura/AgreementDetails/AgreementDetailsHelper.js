@@ -1,133 +1,102 @@
 ({
-  createUploadComponent: function(component) {
-    //FIXME: create a reusable method for creating the components
-    $A.createComponent(
-      'c:AgreementsUploadNewVersion',
-      {
-        showModal: true
+  initAgreementActionManager: function(component) {
+    //Saving instance of uiHelper
+    var uiHelper = new UIHelper(
+      function() {
+        return component.getEvent('loadingEvent');
       },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('uploadModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
+      function() {
+        return component.getEvent('toastEvent');
       }
     );
+    component.set('v.uiHelper', uiHelper);
+    //Agreement Action Manager
+    var manager = new AgreementActionManager(
+      'detailModalContent',
+      component.get('v.namespace')
+    );
+    component.set('v.agreementActionManager', manager);
+  },
+
+  createUploadComponent: function(component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.sourceId');
+      actions.upload(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createDownloadComponent: function (component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-        'c:AgreementDownload',
-        {
-          agreementDetails: agreementDetails
-        },
-        function () {
-        }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      actions.download(agreement, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createDeleteComponent: function(component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsDelete',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails
-      },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('deleteModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      actions.delete(agreement, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createInternalApprovalComponent: function(component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsInternalApproval',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails,
-        sourceId: component.get('v.sourceId')
-      },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('internalApprovalModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.sourceId');
+      actions.internalApproval(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createExternalReviewComponent: function(component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsExternalReview',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails,
-        sourceId: component.get('v.sourceId')
-      },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('externalReviewModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.sourceId');
+      actions.externalReview(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createRenameComponent: function(component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsRename',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails
-      },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('renameModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      actions.rename(agreement, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   createShareLinkComponent: function(component) {
-    $A.createComponent(
-      'c:AgreementsShareLink',
-      {
-        showModal: true
-      },
-      function(componentBody) {
-        if (component.isValid()) {
-          var targetCmp = component.find('shareLinkModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreementDetails');
+      var sourceId = component.get('v.sourceId');
+      actions.share(agreement, sourceId, component);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   },
 
   showHistoryTimeLine: function(component) {

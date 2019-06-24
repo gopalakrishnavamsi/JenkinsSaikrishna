@@ -1,13 +1,16 @@
 ({
-  onInit: function(component) {
-    var agreementDetails = {
-      name: 'FreshSoftware-Quote.docx',
-      url: 'https://sampleUrl/001S000000x824BIAQ'
-    };
-    component.set('v.agreementDetails', agreementDetails);
+  onInit: function(component, event, helper) {
+    var onLoad = component.get('v.onLoad');
+    onLoad()
+    .then(function(documentUrl) {
+      component.set('v.documentUrl', documentUrl);
+    })
+    .catch(function(err) {
+      helper.showToast(component, err, 'error');
+    });
   },
 
-  copyButtonClicked: function(component) {
-    component.set('v.linkCopied', true);
+  copyButtonClicked: function(component, event, helper) {
+    helper.copyToClipboard(component);
   }
 });

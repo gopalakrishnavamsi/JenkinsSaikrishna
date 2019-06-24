@@ -7,27 +7,16 @@
     <aura:attribute name="activityLinkLabel" type="String" access="private" default="Show Activity"/>
     <aura:attribute name="sourceId" type="Id"/>
     <aura:attribute name="agreementIndex" type="Integer"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
-    <ltng:require scripts="{!$Resource.navUtils}"/>
+    <aura:attribute name="agreementActionManager" type="Object"/>
+    <aura:attribute name="namespace" type="String"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}" 
+        scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils)}" 
+        afterScriptsLoaded="{!c.onLoad}"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
-    <!-- placeholder divs for dynamic component generation -->
-    <div aura:id="internalApprovalModal">
-    </div>
-
-    <div aura:id="externalReviewModal">
-    </div>
-
-    <div aura:id="deleteModal">
-    </div>
-
-    <div aura:id="uploadModal">
-    </div>
-
-    <div aura:id="renameModal">
-    </div>
-
-    <div aura:id="shareLinkModal">
-    </div>
+    <!-- placeholder div for dynamic component generation -->
+    <div aura:id="detailModalContent"/>
 
     <!-- body -->
     <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-p-top_medium slds-p-bottom_medium slds-has-flexi-truncate">
@@ -138,5 +127,5 @@
              class="{!'slds-p-around_large ds-max-width' + if(not(v.showTimeLine), ' slds-hide','')}">
 
         </div>
-    </div>
+    </div>   
 </aura:component>

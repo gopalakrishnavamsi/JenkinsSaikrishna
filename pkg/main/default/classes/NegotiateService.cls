@@ -218,7 +218,7 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static String getAgreementPreviewLink(final Id sourceId, final String agreementId) {
+	public static String getAgreementPreviewLink(final Id sourceId, final String agreementId, final Boolean isFullUrl) {
 		Permissions.verifyIsDocuSignUser();
 		if (sourceId == null || agreementId == null) return null;
 
@@ -226,6 +226,7 @@ public with sharing class NegotiateService {
 		PageReference agreementView = Page.AgreementPreview;
 		agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
 		agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
+		if (isFullUrl) return new Url(Salesforce.baseUrl, agreementView.getUrl()).toExternalForm();
 		return agreementView.getUrl();
 	}
 
