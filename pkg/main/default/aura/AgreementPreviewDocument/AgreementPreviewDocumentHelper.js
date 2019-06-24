@@ -123,7 +123,7 @@
   getResourceToken: function (agreementId, component, uiHelper) {
     var action = component.get('c.generateResourceToken');
 
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
       action.setParams({
         agreementId: agreementId
       });
@@ -134,9 +134,7 @@
         }
         if (state === 'ERROR') {
           uiHelper.getErrorMessage(response);
-          resolve('');
-          //TODO: add reject once the issue with registering tokens is sorted out
-          //reject(uiHelper.getErrorMessage(response));
+          reject(uiHelper.getErrorMessage(response));
         }
       });
       $A.enqueueAction(action);
