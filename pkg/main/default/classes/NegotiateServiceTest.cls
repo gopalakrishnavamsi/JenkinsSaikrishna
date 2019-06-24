@@ -255,9 +255,8 @@ private class NegotiateServiceTest {
 			String link = NegotiateService.getAgreementPreviewLink(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value, false);			
 			Test.stopTest();
 			System.assertNotEquals(null, link);
-			System.assertEquals(link.startsWith(Site.getBaseUrl()), false);
-			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
-			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
+			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true, link);
+			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true, link);
 		}
 	}
 
@@ -269,8 +268,8 @@ private class NegotiateServiceTest {
 			Test.stopTest();
 			System.assertNotEquals(null, link);
 			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
-			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
-			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
+			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true, link);
+			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true, link);
 		}
 	}	
 
