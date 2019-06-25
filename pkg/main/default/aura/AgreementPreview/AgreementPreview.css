@@ -2,23 +2,21 @@
     background-color: #F3F2F2;
 }
 
-.THIS #fullContainer {
+.THIS .fullContainer {
     width: 100vw;
 }
 
-.THIS #documentContainer {
-    float: left;
+.THIS .documentContainer {
     width: 100vw;
     height: 92.5vh;
     background-color: rgb(243, 242, 242);
 }
 
-.THIS #toolbarContainer {
-    float: left;
+.THIS .toolbarContainer {
     width: 100vw;
     min-height: 55px;
     background-color: #005DB9;
-    border-bottom: 2.5px solid #2883E3;
+    border-bottom: 2.5px solid #194BA0;
 }
 
 .THIS .loadingContainer {

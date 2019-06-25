@@ -23,27 +23,28 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
-
-    <div id="fullContainer">
-        <div id="toolbarContainer">
-            <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}" agreementActionManager="{!v.agreementActionManager}"
-                                       uiHelper="{!v.uiHelper}"/>
-        </div>
-        <div id="documentContainer">
-            <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
-                                        currentUserEmail="{!v.currentUserEmail}"
-                                        currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
-            <aura:if isTrue="{!v.loading}">
-                <div class="slds-is-relative loadingContainer">
-                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                        <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                        <div class="slds-spinner__dot-a"></div>
-                        <div class="slds-spinner__dot-b"></div>
+    <div class="slds-scope">
+        <div class="fullContainer">
+            <div class="toolbarContainer">
+                <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
+                                           agreementActionManager="{!v.agreementActionManager}"
+                                           uiHelper="{!v.uiHelper}"/>
+            </div>
+            <div class="documentContainer">
+                <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
+                                            currentUserEmail="{!v.currentUserEmail}"
+                                            currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
+                <aura:if isTrue="{!v.loading}">
+                    <div class="slds-is-relative loadingContainer">
+                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
                     </div>
-                </div>
-            </aura:if>
+                </aura:if>
+            </div>
         </div>
     </div>
-
     <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" visualforce="true"/>
 </aura:component>
