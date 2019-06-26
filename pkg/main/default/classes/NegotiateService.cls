@@ -288,10 +288,6 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().getApprovalWorkItems(documentId);
 	}
 
-	public static String getDocumentURL(final UUID documentId) {
-		return NegotiateAPI.getInstance().getDocumentURL(documentId);
-	}
-
 	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);

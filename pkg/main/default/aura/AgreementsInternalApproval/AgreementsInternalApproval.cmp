@@ -165,11 +165,11 @@
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
                             <lightning:input label="{!$Label.c.Subject}" name="{!$Label.c.Subject}"
-                                             value="{!v.emailSubject}"/>
+                                             value="{!v.emailSubject}" disabled="{!v.loading}"/>
                         </div>
                         <div class="slds-text-body_small slds-p-top_small">
                             <lightning:textarea name="{!$Label.c.Message}" label="{!$Label.c.Message}"
-                                                value="{!v.emailBody}"/>
+                                                value="{!v.emailBody}" disabled="{!v.loading}"/>
                         </div>
                     </div>
                 </article>
