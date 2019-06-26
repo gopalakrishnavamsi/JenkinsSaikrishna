@@ -1,92 +1,16 @@
-.THIS svg {
-    fill: #005DB9; 
-}
-
-.THIS .ToolBarContainer {
-    background-color: #005DB9; 
-}
-
-.THIS .ToolBarFrame {
+.THIS.toolBarContainer {
+    background-color: #005DB9;
     color: white;
 }
 
-.THIS img {
-    float: left;
-}
-
-
-.THIS .ActionMenu {
-    float: left;
-    padding-left: 10px;
-}
-
-.THIS .ActionIcon {
-    float: left;
-    fill: #005DB9; 
-}
-
-.THIS .MainLogo {
-    font-size: 20px;
-    padding-top: 8px;
-    padding-right: 10px;
-    padding-left: 20px;
-}
-
-.THIS .MainLogo img {
+.THIS .mainLogo img {
     width: 110px;
 }
 
-.THIS .headerdivider {
+.THIS .headerDivider {
     border-left: 1px solid white;
     background: white;
     width: 1px;
     height: 35px;
-    float: left;
-    margin-left: 15px;
-}
-
-.THIS .FileHeader {
-    font-size: 12px;
-    padding-top: 16px;
-    padding-right: 10px;
-    padding-left: 5px;
-}
-
-.THIS .ToolBarSection {
-    float: left;
-}
-
-.THIS .ToolBarActionContainer {
-    float: right;
-}
-
-.THIS .ActionButtonContainer {
-    float: left;
-    padding-top: 10px;
-    padding-right: 10px;
-}
-
-.THIS .ActionButton {
-    float: left;
-    padding-right: 15px;
-}
-
-.THIS .slds-theme_info {
-    background-color: #005DB9;
-}
-
-.THIS .slds-theme_default {
-    background-color: #005DB9;
-}
-
-.THIS .slds-theme--default {
-    background-color: #005DB9;
-}
-
-.THIS .slds-icon-utility-down {
-    fill: #005DB9;
-}
-
-.THIS .slds-box {
-   background-color: #005DB9; 
+    margin-top: 9px;
 }

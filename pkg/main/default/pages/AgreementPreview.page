@@ -1,6 +1,28 @@
 <apex:page controller="AgreementsController" title="Preview Agreement" sidebar="false" showHeader="true">
     <apex:includeLightning/>
-    <apex:slds/>    
+    <apex:slds/>
+    <style type="text/css">
+        #appContainer {
+            min-height: 100vh;
+            background-color: #f7f9fb;
+            position: fixed;
+        }
+
+        .noSidebarCell #appContainer {
+            min-height: calc(100vh - 120px);
+        }
+
+        .bodyDiv .outerNoSidebar,
+        .noSidebarCell,
+        .sidebarCell .fixed {
+            padding: 0;
+        }
+
+        .noSidebarCell #appContainer .slds-scope .strike-wizard__footer {
+            position: absolute;
+        }
+    </style>
+
     <div id="appContainer"></div>
     <script type="text/javascript">
       var namespace = '{!JSENCODE(namespace)}';
