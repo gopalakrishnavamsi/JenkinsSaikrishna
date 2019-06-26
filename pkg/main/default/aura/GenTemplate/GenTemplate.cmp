@@ -108,7 +108,7 @@
                 </div>
                 <div class="slds-path__content" role="tabpanel">
                     <div class="slds-path__coach slds-grid slds-p-top_xxx-small">
-                        <div class="slds-path__keys slds-size_3-of-5 slds-m-top_x-small">
+                        <div class="slds-path__keys slds-size_3-of-5 slds-m-top_x-small slds-p-around_medium">
 
                             <aura:if isTrue="{!not(empty(v.config))}">
 
@@ -153,7 +153,7 @@
                             </aura:if>
                         </div>
                         <!-- Guidance -->
-                        <div class="slds-path__guidance slds-size_2-of-5 slds-border_left">
+                        <div class="slds-path__guidance slds-size_2-of-5 slds-border_left slds-p-around_medium">
                             <h2 class="slds-path__coach-title">{!$Label.c.StepsForSuccess}</h2>
                             <div class="slds-text-longform slds-path__guidance-content">
                                 <aura:if isTrue="{!v.currentStep == 0}">
