@@ -1025,7 +1025,7 @@ private class AuthServiceTest {
 			QueryString params = QueryString.parse(result.getQuery());
 			System.assertNotEquals(QueryString.empty, params);
 			System.assertEquals('code', params.get('response_type'));
-			System.assertEquals(AuthService.SCOPE_USER, params.get('scope'));
+			System.assertEquals(AuthService.SCOPE_ADMIN, params.get('scope'));
 			System.assertEquals(s.ClientId__c, params.get('client_id'));
 			System.assertEquals(AuthService.getOAuthRedirectUrl().toExternalForm(), params.get('redirect_uri'));
 			System.assert(String.isNotBlank(params.get('state')));
