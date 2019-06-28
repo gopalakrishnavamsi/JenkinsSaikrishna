@@ -315,7 +315,7 @@
             <aura:if isTrue="{!v.currentStep == '4'}">
                 <div class="slds-grid slds-align_absolute-center">
                     <lightning:button class="slds-button slds-button_neutral" onclick="{!c.doneButtonClicked}"
-                                      label="{!$Label.c.Done}">
+                                      label="{!$Label.c.Done}" disabled="{!v.loading}">
                     </lightning:button>
                 </div>
             </aura:if>

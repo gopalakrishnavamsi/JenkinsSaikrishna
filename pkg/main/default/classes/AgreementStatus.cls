@@ -9,7 +9,7 @@ public class AgreementStatus {
 	public static final String PENDING_REVIEW = 'PENDING REVIEW';
 	public static final String REVIEWED = 'REVIEWED';
 	public static final String REVIEW_CANCELLED = 'REVIEW CANCELLED';
-	public static final String REVIEWED_EXPIRED = 'REVIEWED EXPIRED ';
+	public static final String REVIEW_EXPIRED = 'REVIEW EXPIRED';
 
 	public static final String PENDING_APPROVAL = 'PENDING APPROVAL';
 	public static final String APPROVED = 'APPROVED';
@@ -25,7 +25,7 @@ public class AgreementStatus {
 	public static final String SYSTEM_ERROR = 'SYSTEM ERROR';
 
 	public static final Set<String> VALID_STATUS = new Set<String> { NEW_AGREEMENT, NEW_VERSION, PENDING_REVIEW, REVIEWED,
-		REVIEW_CANCELLED, REVIEWED_EXPIRED, PENDING_APPROVAL, APPROVED, APPROVAL_CANCELLED, COMPLETED, REJECTED, SIGNED,
+		REVIEW_CANCELLED, REVIEW_EXPIRED, PENDING_APPROVAL, APPROVED, APPROVAL_CANCELLED, COMPLETED, REJECTED, SIGNED,
 		SIGNATURE_CANCELLED, NO_STATUS, PENDING_SIGNATURE, SYSTEM_ERROR };
 
 	public static Boolean isValid(String status) {

@@ -48,7 +48,7 @@
                                                                 + if(v.agreementDetails.status == 'PENDING REVIEW',' pendingreview')
                                                                 + if(v.agreementDetails.status == 'REVIEWED',' reviewed')
                                                                 + if(v.agreementDetails.status == 'REVIEW CANCELLED',' reviewcancelled')
-                                                                + if(v.agreementDetails.status == 'REVIEWED EXPIRED',' reviewexpired')
+                                                                + if(v.agreementDetails.status == 'REVIEW EXPIRED',' reviewexpired')
                                                                 + if(v.agreementDetails.status == 'PENDING APPROVAL',' pendingapproval')
                                                                 + if(v.agreementDetails.status == 'APPROVED',' approved')
                                                                 + if(v.agreementDetails.status == 'APPROVAL CANCELLED',' approvalcancelled')

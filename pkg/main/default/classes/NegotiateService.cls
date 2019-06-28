@@ -198,6 +198,10 @@ public with sharing class NegotiateService {
 			return AgreementStatus.NEW_VERSION;
 		}
 
+		else if (historyItemType.equals(AgreementHistoryItem.ExternalReviewExpirationNew)) {
+			return AgreementStatus.REVIEW_EXPIRED;
+		}
+
 		else {
 			return AgreementStatus.SYSTEM_ERROR;
 		}

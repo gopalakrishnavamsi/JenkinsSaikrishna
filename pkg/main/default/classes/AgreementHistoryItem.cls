@@ -18,6 +18,7 @@ public class AgreementHistoryItem {
 	public static final String WorkflowRejected = 'WorkflowRejected';
 	public static final String ApprovalCheckoutCanceled = 'ApprovalCheckoutCanceled';
 	public static final String DocumentCheckIn = 'DocumentCheckIn';
+	public static final String ExternalReviewExpirationNew = 'ExternalReviewExpirationNew';
 
 	public class Actor {
 

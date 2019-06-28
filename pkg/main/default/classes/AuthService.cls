@@ -781,7 +781,7 @@ public with sharing class AuthService {
 		PageReference pg = new PageReference(new Url(c.environment.accountBaseUrl, '/oauth/auth').toExternalForm());
 		pg.getParameters().putAll(new Map<String, String> {
 			'response_type' => 'code',
-			'scope' => SCOPE_USER,
+			'scope' => SCOPE_ADMIN,
 			'client_id' => c.client.id,
 			'redirect_uri' => getOAuthRedirectUrl().toExternalForm(),
 			'state' => encodeState(generateNonce(), new State(
