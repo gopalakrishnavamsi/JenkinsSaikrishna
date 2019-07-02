@@ -6657,4 +6657,41 @@
 		<shortDescription>AgreementApprovalError</shortDescription>
 		<value>Error while submitting Approval response.</value>
 	</labels>
+	<labels>
+		<fullName>AgreementShareLinkMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementShareLinkMessage</shortDescription>
+		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit
+			this agreement.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AgreementShareLinkCopiedMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementShareLinkCopiedMessage</shortDescription>
+		<value>Link Copied!</value>
+	</labels>
+	<labels>
+		<fullName>CopyLinkPrompt</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Copy Link</shortDescription>
+		<value>Copy Link</value>
+	</labels>
+	<labels>
+		<fullName>LinkLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Link</shortDescription>
+		<value>Link</value>
+	</labels>
+	<labels>
+		<fullName>ShareAgreementLinkHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ShareAgreementLinkHeader</shortDescription>
+		<value>Share Agreement Link</value>
+	</labels>
 </CustomLabels>
