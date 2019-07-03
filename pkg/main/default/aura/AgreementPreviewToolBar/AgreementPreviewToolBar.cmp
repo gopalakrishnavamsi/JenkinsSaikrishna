@@ -1,4 +1,4 @@
-<aura:component>
+<aura:component controller="AgreementsController">
     <aura:attribute name="agreement" type="Agreement" access="public"/>
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="agreementActionManager" type="Object" access="public"/>
