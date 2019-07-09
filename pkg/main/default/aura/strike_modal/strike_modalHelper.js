@@ -15,7 +15,7 @@ License: BSD 3-Clause License
             afterEvent: 'strike_evt_modalShown',
             showModal: true,
             targetEl: 'modal'
-        }
+        };
 
         component.set('v.showModal', params.showModal);
         helper.modalTransitioner(component, params);
@@ -28,7 +28,7 @@ License: BSD 3-Clause License
             afterEvent: 'strike_evt_modalHidden',
             showModal: false,
             targetEl: 'backdrop'
-        }
+        };
 
         component.set('v.showModal', params.showModal);
         helper.modalTransitioner(component, params);
@@ -45,8 +45,8 @@ License: BSD 3-Clause License
 
         var preEvent = component.getEvent(params.preEvent);
         var showModal = params.showModal;
-        var preEventAttribute = showModal ? 'v.showingModal' : 'v.fadeIn'
-        var afterEventAttribute = showModal ? 'v.fadeIn' : 'v.showingModal'
+      var preEventAttribute = showModal ? 'v.showingModal' : 'v.fadeIn';
+      var afterEventAttribute = showModal ? 'v.fadeIn' : 'v.showingModal';
 
         component.set(preEventAttribute, showModal);
         preEvent.fire();
@@ -58,7 +58,7 @@ License: BSD 3-Clause License
             }), 5);
         }
     }
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 

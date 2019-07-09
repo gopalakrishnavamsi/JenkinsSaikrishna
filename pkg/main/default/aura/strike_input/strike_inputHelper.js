@@ -46,7 +46,7 @@ License: BSD 3-Clause License
         }
 
     }
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 

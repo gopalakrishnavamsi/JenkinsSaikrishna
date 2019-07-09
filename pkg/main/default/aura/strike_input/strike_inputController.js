@@ -113,7 +113,7 @@ License: BSD 3-Clause License
             helper.enableInput(component, event, helper);
         }
     }
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 
