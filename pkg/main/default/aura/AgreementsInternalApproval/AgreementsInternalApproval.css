@@ -1,5 +1,5 @@
 .THIS .required-textcolor {
-    color: token(colorTextError);
+    color: t(colorTextError);
 }
 
 .THIS .ds-remove .slds-button__icon {

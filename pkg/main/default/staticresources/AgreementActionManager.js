@@ -81,8 +81,8 @@ AgreementActionManager.prototype.getDocumentPreviewLink = function(
       }
     });
     $A.enqueueAction(action);
-  });  
-}
+  });
+};
 
 AgreementActionManager.prototype.getComponentName = function(name) {
   return this.namespace + ':' + name;

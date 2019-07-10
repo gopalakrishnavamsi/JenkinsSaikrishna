@@ -3585,6 +3585,28 @@
 		<label>Error while submitting Approval response.</label>
 		<name>AgreementApprovalError</name>
 	</customLabels>
+	<customLabels>
+		<label>Users with permission to access your DocuSign Agreements can use this link to view, download and edit
+			this agreement.
+		</label>
+		<name>AgreementShareLinkMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Link Copied!</label>
+		<name>AgreementShareLinkCopiedMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Copy Link</label>
+		<name>CopyLinkPrompt</name>
+	</customLabels>
+	<customLabels>
+		<label>Link</label>
+		<name>LinkLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Share Agreement Link</label>
+		<name>ShareAgreementLinkHeader</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

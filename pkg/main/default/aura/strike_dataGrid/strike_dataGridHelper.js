@@ -71,7 +71,7 @@ License: BSD 3-Clause License
 							"value":value,
 							"dataType":type,
 							"label":''
-						}
+            };
 						fields.push(fieldsToAdd);
 					}
 				}
@@ -83,7 +83,7 @@ License: BSD 3-Clause License
 							sortedColumnFields[i] = columnField;
 						}
 					})
-				})
+        });
 				formattedRow.fields = sortedColumnFields;
 				formattedRows.push(formattedRow);
 			});
@@ -127,7 +127,7 @@ License: BSD 3-Clause License
 				component.set('v.body', body);
 				component.set('v.showTable', true);
 			}
-		}
+    };
 
 		for(var i = 0; i < rowsToCreate; i++){
 			$A.createComponent(
@@ -207,7 +207,7 @@ License: BSD 3-Clause License
 	loadMore: function(component, event, helper) {
 		helper.createRowComponents(component, event, helper, true);
 	}
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 

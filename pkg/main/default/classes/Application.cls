@@ -26,6 +26,8 @@ public with sharing class Application {
 		Boolean result = null;
 		try {
 			result = UserInfo.isCurrentUserLicensed(PACKAGE_NAMESPACE);
+			//UserInfo.isCurrentUserLicensed method has been deprecated post API version 45.0
+			//Until we find a workaround for this method please do not update the API version of this Apex class.
 		} catch (TypeException ex) {
 			// Not managed
 		}

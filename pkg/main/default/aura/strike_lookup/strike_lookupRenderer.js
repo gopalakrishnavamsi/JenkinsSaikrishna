@@ -10,7 +10,7 @@ License: BSD 3-Clause License*/
 
         window.removeEventListener('click', component.handleClick);
     }
-})
+});
 /*Copyright 2017 Appiphony, LLC
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 

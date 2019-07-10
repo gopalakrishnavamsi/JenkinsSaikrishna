@@ -53,7 +53,7 @@ License: BSD 3-Clause License
         secondaryClicked.fire();
         helper.hide(component, event, helper);
     }
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 
