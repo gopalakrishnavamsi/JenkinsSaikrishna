@@ -27,7 +27,8 @@ License: BSD 3-Clause License*/
         var randomNumber = Math.floor(1000 + Math.random() * 9000);
 
         component.set('v.idNumber', randomNumber);
-        
+
+      // noinspection RedundantConditionalExpressionJS
         component.set('v.isMobile', $A.get('$Browser.formFactor') === 'DESKTOP' ? false : true);
     },
     handleInputClick: function(component, event, helper) {
@@ -224,7 +225,7 @@ License: BSD 3-Clause License*/
     focus: function(component, event, helper){
         component.find('lookupInput').getElement().focus();
     },
-})
+});
 /*Copyright 2017 Appiphony, LLC
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 

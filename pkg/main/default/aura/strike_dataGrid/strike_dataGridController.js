@@ -19,7 +19,7 @@ License: BSD 3-Clause License
 	loadMore: function(component, event, helper){
 		helper.loadMore(component, event, helper);
 	}
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 

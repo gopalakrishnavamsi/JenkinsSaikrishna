@@ -1,5 +1,5 @@
 .THIS .required-textcolor{
-    color: token(colorTextError);
+    color: t(colorTextError);
 }
 
 .THIS .slds-icon-doctype-word svg {

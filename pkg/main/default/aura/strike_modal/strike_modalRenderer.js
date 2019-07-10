@@ -11,7 +11,7 @@ License: BSD 3-Clause License
         this.superUnrender();
         window.removeEventListener('keyup', component._closeModal);
     }
-})
+});
 /*
 Copyright 2017 Appiphony, LLC
 
