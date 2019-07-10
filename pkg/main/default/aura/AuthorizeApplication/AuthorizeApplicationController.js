@@ -1,7 +1,7 @@
 ({
   onInitialize: function (component, event, helper) {
     component.set('v.uiHelper', new UIHelper(function () {
-      return component.getEvent('loadingEvent');
+      //removed load event call from here as this is before authorized
     }, function () {
       return component.getEvent('toastEvent');
     }));

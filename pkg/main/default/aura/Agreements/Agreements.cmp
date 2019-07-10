@@ -1,6 +1,6 @@
 <aura:component access="global"
                 description="Lightning component hosting Agreements"
-                implements="force:appHostable,flexipage:availableForAllPageTypes, force:hasRecordId"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
                 controller="AgreementsController">
 
     <!--TODO : Vf page parameter for toast component   -->
@@ -16,7 +16,8 @@
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
-
+    <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" />
+    
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -76,7 +77,7 @@
                             </div>
                         </aura:if>
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+                                              fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
                     </aura:set>
 
                     <aura:if isTrue="{!v.loading}">
