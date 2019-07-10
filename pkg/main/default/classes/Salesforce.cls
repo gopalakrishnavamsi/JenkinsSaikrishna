@@ -250,11 +250,43 @@ public with sharing class Salesforce {
 	}
 
 	public static Boolean isValidOrigin(final String origin) {
-		return getVisualforceOrigins().contains(origin);
+		//Make case insensitive comparison
+		Boolean result = false;
+		List<String> visualForceOrigins = getVisualforceOrigins();
+		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
+			for (String vfOrigin : visualForceOrigins) {
+				if (vfOrigin.equalsIgnoreCase(origin)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
 	}
 
 	public static Boolean isValidTarget(final String target) {
-		return getVisualforceOrigins().contains(target)
-			|| getLightningOrigins().contains(target);
+		//target is the window.location.origin passed from the visualforce page when the DocuSign OAuth is being triggered.
+		//this is sometimes in a different case as compared to the myDomain names returned from Apex.
+		//Hence we need to make a case insensitive comparison.
+		Boolean result = false;
+		List<String> visualForceOrigins = getVisualforceOrigins();
+		List<String> lightningOrigins = getLightningOrigins();
+		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
+			for (String vfOrigin : visualForceOrigins) {
+				if (vfOrigin.equalsIgnoreCase(target)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		if (lightningOrigins != null && !lightningOrigins.isEmpty() && !result) {
+			for (String ltngOrigin : lightningOrigins) {
+				if (ltngOrigin.equalsIgnoreCase(target)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
 	}
 }
