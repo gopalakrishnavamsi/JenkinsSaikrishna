@@ -7,7 +7,7 @@
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
 
     <!--component body -->
     <c:strike_modal aura:id="deleteAgreementModal"

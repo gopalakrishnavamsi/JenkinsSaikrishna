@@ -36,5 +36,9 @@
     if (params && params.isLoading === true && !component.get('v.isAgreementLoaded')) {
       helper.loadAgreements(component, event, helper);
     }
+  },
+    
+  reloadAgreements: function (component, event, helper) {
+     helper.loadAgreements(component, event, helper);
   }
 });

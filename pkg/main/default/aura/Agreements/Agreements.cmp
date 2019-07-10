@@ -16,10 +16,11 @@
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
-    <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" />
+    <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
     
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
+    <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadAgreements}"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
     <div aura:id="importModal">

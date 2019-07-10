@@ -17,6 +17,7 @@
   },
 
   createImportComponent: function(component) {
+    component.set('v.isAgreementLoaded',false);
     $A.createComponent(
       'c:AgreementsImport',
       {
