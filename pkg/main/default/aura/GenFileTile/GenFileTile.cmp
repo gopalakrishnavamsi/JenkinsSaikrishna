@@ -11,13 +11,7 @@
         <div class="slds-media slds-media_center">
             <div class="slds-media__figure">
                 <!-- File Icon -->
-                <lightning:icon size="medium" iconName="{!
-                    'doctype:'
-                    + if(v.file.extension == 'doc', 'gdoc')
-                    + if(v.file.extension == 'docm', 'gdoc')
-                    + if(v.file.extension == 'docx', 'gdoc')
-                    + if(v.file.extension == 'pdf', 'pdf')
-                }"/>
+                <c:IconByFileExtension extension="{!v.file.extension}"/>
                 <!-- /File Icon -->
             </div>
             <div class="slds-media__content slds-has-flexi-truncate">

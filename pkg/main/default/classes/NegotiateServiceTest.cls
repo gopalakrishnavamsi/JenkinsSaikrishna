@@ -11,7 +11,8 @@ private class NegotiateServiceTest {
 			List<Agreement> result = NegotiateService.getAgreements(NegotiateAPIMock.SOURCE_OBJECT_Id);
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
-			System.assertEquals('ServiceDoc1.docx', result.get(0).name);
+			System.assertEquals('ServiceDoc1', result.get(0).name);
+			System.assertEquals('docx', result.get(0).extension);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, result.get(0).id);
 			System.assertEquals('2019-05-25 11:13:28', String.valueOf(result.get(0).modifiedDate));
 			System.assertEquals(AgreementStatus.PENDING_REVIEW, result.get(0).status);
@@ -21,9 +22,10 @@ private class NegotiateServiceTest {
 			System.assertEquals(null, result.get(0).version);
 			System.assertNotEquals(null, result.get(0).versions);
 			System.assertEquals(false, result.get(0).versions.isEmpty());
-			System.assertEquals('newName.docx', result.get(0).versions.get(0).name);
-
-			System.assertEquals('ServiceDoc2.docx', result.get(1).name);
+			System.assertEquals('newName', result.get(0).versions.get(0).name);
+			System.assertEquals('docx', result.get(0).versions.get(0).extension);
+			System.assertEquals('ServiceDoc2', result.get(1).name);
+			System.assertEquals('docx', result.get(1).extension);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_3, result.get(1).id);
 			System.assertEquals(AgreementStatus.PENDING_APPROVAL, result.get(1).status);
 			System.assertEquals(4, result.get(1).historyItems.size());
@@ -42,7 +44,8 @@ private class NegotiateServiceTest {
 			Test.startTest();
 			Agreement result = NegotiateService.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2);
 			System.assertNotEquals(null, result);
-			System.assertEquals('ServiceDoc1.docx', result.name);
+			System.assertEquals('ServiceDoc1', result.name);
+			System.assertEquals('docx', result.extension);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, result.id);
 			System.assertEquals('2019-05-25 11:13:28', String.valueOf(result.modifiedDate));
 			System.assertEquals(AgreementStatus.PENDING_REVIEW, result.status);
@@ -51,7 +54,8 @@ private class NegotiateServiceTest {
 			System.assertEquals(AgreementHistoryItem.DocumentImportFromSalesforce, result.historyItems.get(1).historyItemType);
 			System.assertNotEquals(null, result.versions);
 			System.assertEquals(false, result.versions.isEmpty());
-			System.assertEquals('newName.docx', result.versions.get(0).name);
+			System.assertEquals('newName', result.versions.get(0).name);
+			System.assertEquals('docx', result.versions.get(0).extension);
 
 			Test.stopTest();
 		}

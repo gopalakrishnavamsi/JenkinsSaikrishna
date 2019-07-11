@@ -1,0 +1,44 @@
+<aura:component>
+    <!--attributes -->
+    <aura:attribute name="extension" type="String"/>
+    <aura:attribute name="size" type="String" default="medium"/>
+
+    <!--body -->
+    <lightning:icon iconName="{!
+            'doctype:'
+                    + if(v.extension == 'doc', 'word')
+                    + if(v.extension == 'docm', 'gdoc')
+                    + if(v.extension == 'docx', 'word')
+                    + if(v.extension == 'dot', 'gdoc')
+                    + if(v.extension == 'dotm', 'gdoc')
+                    + if(v.extension == 'dotx', 'gdoc')
+                    + if(v.extension == 'htm', 'html')
+                    + if(v.extension == 'html', 'html')
+                    + if(v.extension == 'msg', 'unknown')
+                    + if(v.extension == 'pdf', 'pdf')
+                    + if(v.extension == 'rtf', 'gdoc')
+                    + if(v.extension == 'txt', 'gdoc')
+                    + if(v.extension == 'wpd', 'gdoc')
+                    + if(v.extension == 'xps', 'unknown')
+                    + if(v.extension == 'bmp', 'image')
+                    + if(v.extension == 'gif', 'image')
+                    + if(v.extension == 'jpg', 'image')
+                    + if(v.extension == 'jpeg', 'image')
+                    + if(v.extension == 'png', 'image')
+                    + if(v.extension == 'tif', 'image')
+                    + if(v.extension == 'tiff', 'image')
+                    + if(v.extension == 'pot', 'slide')
+                    + if(v.extension == 'potx', 'slide')
+                    + if(v.extension == 'pps', 'slide')
+                    + if(v.extension == 'ppt', 'slide')
+                    + if(v.extension == 'pptm', 'slide')
+                    + if(v.extension == 'pptx', 'slide')
+                    + if(v.extension == 'csv', 'csv')
+                    + if(v.extension == 'xls', 'gsheet')
+                    + if(v.extension == 'xlsm', 'gsheet')
+                    + if(v.extension == 'xlsx', 'gsheet')
+                    + if(v.extension == 'xml', 'xml')
+                    + if(v.extension == '', 'unknown')
+            }" size="{!v.size}"/>
+
+</aura:component>
