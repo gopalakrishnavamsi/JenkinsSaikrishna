@@ -7,7 +7,9 @@
         $A.util.toggleClass(toastComponent, 'slds-hide');
       }
       //Make call to load the agreements after successful authorization
-      helper.loadAgreements(component, event, helper);
+      if (!component.get('v.isAgreementLoaded')) {
+        helper.loadAgreements(component, event, helper);
+      }
     }
   },
 
@@ -31,8 +33,12 @@
 
   handleLoadingEvent: function (component, event, helper) {
     var params = event.getParams();
-    if (params && params.isLoading === true) {
+    if (params && params.isLoading === true && !component.get('v.isAgreementLoaded')) {
       helper.loadAgreements(component, event, helper);
     }
+  },
+    
+  reloadAgreements: function (component, event, helper) {
+     helper.loadAgreements(component, event, helper);
   }
 });

@@ -59,6 +59,15 @@
     }
   },
 
+  reLoadingEvent: function() {
+    setTimeout(
+      $A.getCallback(function() {
+        window.location.reload();
+      }),
+      2000
+    );
+  },
+
   toastEvent: function(component, event, helper) {
     var params = event.getParams();
     if (params && params.show === true) {

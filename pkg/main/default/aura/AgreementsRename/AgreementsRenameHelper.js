@@ -14,11 +14,7 @@
   },
 
   reloadAgreementsSpace: function(component) {
-    var evt = component.getEvent('loadingEvent');
-    evt.setParams({
-      isLoading: true
-    });
-    evt.fire();
+    component.getEvent('reloadEvent').fire();
   },
 
   renameAgreement: function(component) {

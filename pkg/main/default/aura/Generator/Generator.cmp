@@ -22,8 +22,11 @@
     <aura:attribute name="showGenerateButton" type="Boolean" default="{!false}"/>
     <aura:attribute name="disableGenerateButton" type="Boolean" default="{!false}" access="global"/>
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+   
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
 
@@ -36,7 +39,7 @@
             <input type="text" class="slds-is-absolute" style="opacity: 0;" onfocus="{!c.removeFocusCatcher}"/>
         </aura:if>
 
-        <aura:if isTrue="{!not(empty(v.errMsg))}">
+        <aura:if isTrue="{!and(not(empty(v.errMsg)), v.isAuthorized)}">
             <div class="{!'slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.errType}"
                  role="alert">
                 <lightning:icon iconName="{!'utility:' + v.errType}" variant="inverse" size="small"
@@ -47,7 +50,10 @@
             </div>
         </aura:if>
 
-        <aura:if isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ) )}">
+          <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/> 
+
+        <aura:if isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
             <aura:if isTrue="{!or(v.isLoading, v.isGenerating)}">
                 <div
                         class="{!'ds-generator-spinner_container' + if(v.isGenerating, ' ds-spinner_generating-container' + if(and(not(v.isPreview), v.isClassic), ' slds-box slds-is-relative'))}">
@@ -106,7 +112,7 @@
                                     <aura:iteration items="{!v.templateFiles}" var="file">
                                         <div class="slds-grid slds-gutters_direct-xx-small slds-m-bottom_small">
                                             <div class="slds-col slds-no-flex">
-                                                <lightning:input type="checkbox" label="{!$Label.c.select}"
+                                                <lightning:input type="checkbox" label="{!$Label.c.Select}"
                                                                  checked="{!file.isChecked}"
                                                                  class="ds-checkbox_large slds-no-label"
                                                                  onchange="{!c.checkRemaingFiles}"/>
