@@ -9,7 +9,7 @@
 
     <!-- Events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
 
     <c:strike_modal aura:id="renameAgreementsModal"
                     title="{!$Label.c.RenameAgreement}"

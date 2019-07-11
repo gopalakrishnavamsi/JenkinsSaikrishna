@@ -14,6 +14,9 @@
       if (!component.get('v.isAuthorized')) {
         $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide');
       }
+      var loadingEvent = component.getEvent('loadingEvent');
+      loadingEvent.setParam('isLoading', authStatus.isAuthorized);
+      loadingEvent.fire();
     };
 
     uiHelper.invokeAction(component.get('c.getAuthStatus'), null, onSuccess);
@@ -36,6 +39,11 @@
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
             component.set('v.isAuthorized', success);
             component.set('v.isConsentRequired', !success);
+            if (component.get('v.isAuthorized')) {
+              $A.util.addClass(component.find('ds-app-auth'), 'slds-hide');
+            }else{
+              $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide'); 
+            }
             event.source.close();
           }
         }

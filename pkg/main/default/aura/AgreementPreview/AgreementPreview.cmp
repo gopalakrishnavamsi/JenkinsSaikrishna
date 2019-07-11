@@ -23,6 +23,7 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
+    <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.handleReloadEvent}"/>
     <div class="slds-scope">
         <div class="fullContainer">
             <div class="toolbarContainer">

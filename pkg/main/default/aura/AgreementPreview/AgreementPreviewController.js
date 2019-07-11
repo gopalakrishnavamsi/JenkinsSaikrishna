@@ -9,6 +9,10 @@
 
   handleLoadingEvent: function (component, event, helper) {
     helper.loadingEvent(component, event, helper);
+  },
+
+  handleReloadEvent: function (component, event, helper) {
+    helper.reLoadingEvent(component, event, helper);
   }
 
 });

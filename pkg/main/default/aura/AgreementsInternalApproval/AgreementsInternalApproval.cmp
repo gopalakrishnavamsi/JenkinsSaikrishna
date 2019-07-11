@@ -23,7 +23,7 @@
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+    <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
 
     <c:strike_modal aura:id="internalApprovalAgreementsModal"
                     title="{!if(v.currentStep == '1',$Label.c.SelectApprovers, $Label.c.ExternalReviewPersonalizeMessage)}"
