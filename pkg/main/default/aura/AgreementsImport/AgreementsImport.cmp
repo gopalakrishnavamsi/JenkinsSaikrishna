@@ -115,42 +115,8 @@
                                         </div>
                                         <div class="slds-media__figure">
                                             <!-- File Icon -->
-                                            <lightning:icon iconName="{!
-                                            'doctype:'
-                                            + if(file.extension == 'doc', 'word')
-                                            + if(file.extension == 'docm', 'gdoc')
-                                            + if(file.extension == 'docx', 'word')
-                                            + if(file.extension == 'dot', 'gdoc')
-                                            + if(file.extension == 'dotm', 'gdoc')
-                                            + if(file.extension == 'dotx', 'gdoc')
-                                            + if(file.extension == 'htm', 'html')
-                                            + if(file.extension == 'html', 'html')
-                                            + if(file.extension == 'msg', 'unknown')
-                                            + if(file.extension == 'pdf', 'pdf')
-                                            + if(file.extension == 'rtf', 'gdoc')
-                                            + if(file.extension == 'txt', 'gdoc')
-                                            + if(file.extension == 'wpd', 'gdoc')
-                                            + if(file.extension == 'xps', 'unknown')
-                                            + if(file.extension == 'bmp', 'image')
-                                            + if(file.extension == 'gif', 'image')
-                                            + if(file.extension == 'jpg', 'image')
-                                            + if(file.extension == 'jpeg', 'image')
-                                            + if(file.extension == 'png', 'image')
-                                            + if(file.extension == 'tif', 'image')
-                                            + if(file.extension == 'tiff', 'image')
-                                            + if(file.extension == 'pot', 'slide')
-                                            + if(file.extension == 'potx', 'slide')
-                                            + if(file.extension == 'pps', 'slide')
-                                            + if(file.extension == 'ppt', 'slide')
-                                            + if(file.extension == 'pptm', 'slide')
-                                            + if(file.extension == 'pptx', 'slide')
-                                            + if(file.extension == 'csv', 'csv')
-                                            + if(file.extension == 'xls', 'gsheet')
-                                            + if(file.extension == 'xlsm', 'gsheet')
-                                            + if(file.extension == 'xlsx', 'gsheet')
-                                            + if(file.extension == 'xml', 'xml')
-                                        }"/>
-                                            <!-- /File Icon -->
+                                            <c:IconByFileExtension extension="{!file.extension}"/>
+                                            <!-- File Icon -->
                                         </div>
                                         <div class="slds-media__body">
                                             <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
@@ -179,41 +145,7 @@
                         <article class="slds-tile slds-media slds-media_center">
                             <div class="slds-media__figure">
                                 <!-- File Icon -->
-                                <lightning:icon iconName="{!
-                                            'doctype:'
-                                            + if(v.importedFile.extension == 'doc', 'word')
-                                            + if(v.importedFile.extension == 'docm', 'gdoc')
-                                            + if(v.importedFile.extension == 'docx', 'word')
-                                            + if(v.importedFile.extension == 'dot', 'gdoc')
-                                            + if(v.importedFile.extension == 'dotm', 'gdoc')
-                                            + if(v.importedFile.extension == 'dotx', 'gdoc')
-                                            + if(v.importedFile.extension == 'htm', 'html')
-                                            + if(v.importedFile.extension == 'html', 'html')
-                                            + if(v.importedFile.extension == 'msg', 'unknown')
-                                            + if(v.importedFile.extension == 'pdf', 'pdf')
-                                            + if(v.importedFile.extension == 'rtf', 'gdoc')
-                                            + if(v.importedFile.extension == 'txt', 'gdoc')
-                                            + if(v.importedFile.extension == 'wpd', 'gdoc')
-                                            + if(v.importedFile.extension == 'xps', 'unknown')
-                                            + if(v.importedFile.extension == 'bmp', 'image')
-                                            + if(v.importedFile.extension == 'gif', 'image')
-                                            + if(v.importedFile.extension == 'jpg', 'image')
-                                            + if(v.importedFile.extension == 'jpeg', 'image')
-                                            + if(v.importedFile.extension == 'png', 'image')
-                                            + if(v.importedFile.extension == 'tif', 'image')
-                                            + if(v.importedFile.extension == 'tiff', 'image')
-                                            + if(v.importedFile.extension == 'pot', 'slide')
-                                            + if(v.importedFile.extension == 'potx', 'slide')
-                                            + if(v.importedFile.extension == 'pps', 'slide')
-                                            + if(v.importedFile.extension == 'ppt', 'slide')
-                                            + if(v.importedFile.extension == 'pptm', 'slide')
-                                            + if(v.importedFile.extension == 'pptx', 'slide')
-                                            + if(v.importedFile.extension == 'csv', 'csv')
-                                            + if(v.importedFile.extension == 'xls', 'gsheet')
-                                            + if(v.importedFile.extension == 'xlsm', 'gsheet')
-                                            + if(v.importedFile.extension == 'xlsx', 'gsheet')
-                                            + if(v.importedFile.extension == 'xml', 'xml')
-                                        }"/>
+                                <c:IconByFileExtension extension="{!v.importedFile.extension}"/>
                                 <!-- /File Icon -->
                             </div>
                             <div class="slds-media__body">

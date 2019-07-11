@@ -95,7 +95,8 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(1, result.size());
-			System.assertEquals('docusignlogerror7-23-18-1.docx', result.get(0).name);
+			System.assertEquals('docusignlogerror7-23-18-1', result.get(0).name);
+			System.assertEquals('docx', result.get(0).extension);
 			System.assertEquals(UUID.parse('ea7ab407-ea41-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
 			System.assertEquals(160453, result.get(0).pdfFileSize);
 			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41', result.get(0).href);
@@ -112,7 +113,8 @@ public with sharing class NegotiateAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, agreement);
-			System.assertEquals('ServiceDoc1.docx', agreement.name);
+			System.assertEquals('ServiceDoc1', agreement.name);
+			System.assertEquals('docx', agreement.extension);
 			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, agreement.id);
 			System.assertEquals(160568, agreement.pdfFileSize);
 			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/382bd222-1536-e922-9c1d-3ca82a1e3f41', agreement.href);
@@ -164,7 +166,8 @@ public with sharing class NegotiateAPITest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(3, result.size());
-			System.assertEquals('newName.docx', result.get(0).name);
+			System.assertEquals('newName', result.get(0).name);
+			System.assertEquals('docx', result.get(0).extension);
 			System.assertEquals('pratik.hatkar@docusign.com', result.get(0).modifiedBy);
 			System.assertEquals(UUID.parse('213e9c1a-8f46-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
 			System.assertEquals('3.0', result.get(0).version);

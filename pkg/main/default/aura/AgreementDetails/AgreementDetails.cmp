@@ -24,42 +24,7 @@
             <article class="slds-tile slds-media">
                 <div class="slds-media__figure">
                         <span class="slds-icon_container" title="description of icon when needed">
-                            <lightning:icon iconName="{!
-                                    'doctype:'
-                                            + if(v.agreementDetails.extension == 'doc', 'word')
-                                            + if(v.agreementDetails.extension == 'docm', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'docx', 'word')
-                                            + if(v.agreementDetails.extension == 'dot', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'dotm', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'dotx', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'htm', 'html')
-                                            + if(v.agreementDetails.extension == 'html', 'html')
-                                            + if(v.agreementDetails.extension == 'msg', 'unknown')
-                                            + if(v.agreementDetails.extension == 'pdf', 'pdf')
-                                            + if(v.agreementDetails.extension == 'rtf', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'txt', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'wpd', 'gdoc')
-                                            + if(v.agreementDetails.extension == 'xps', 'unknown')
-                                            + if(v.agreementDetails.extension == 'bmp', 'image')
-                                            + if(v.agreementDetails.extension == 'gif', 'image')
-                                            + if(v.agreementDetails.extension == 'jpg', 'image')
-                                            + if(v.agreementDetails.extension == 'jpeg', 'image')
-                                            + if(v.agreementDetails.extension == 'png', 'image')
-                                            + if(v.agreementDetails.extension == 'tif', 'image')
-                                            + if(v.agreementDetails.extension == 'tiff', 'image')
-                                            + if(v.agreementDetails.extension == 'pot', 'slide')
-                                            + if(v.agreementDetails.extension == 'potx', 'slide')
-                                            + if(v.agreementDetails.extension == 'pps', 'slide')
-                                            + if(v.agreementDetails.extension == 'ppt', 'slide')
-                                            + if(v.agreementDetails.extension == 'pptm', 'slide')
-                                            + if(v.agreementDetails.extension == 'pptx', 'slide')
-                                            + if(v.agreementDetails.extension == 'csv', 'csv')
-                                            + if(v.agreementDetails.extension == 'xls', 'gsheet')
-                                            + if(v.agreementDetails.extension == 'xlsm', 'gsheet')
-                                            + if(v.agreementDetails.extension == 'xlsx', 'gsheet')
-                                            + if(v.agreementDetails.extension == 'xml', 'xml')
-                                            + if(v.agreementDetails.extension == '', 'unknown')
-                                    }"/>
+                            <c:IconByFileExtension extension="{!v.agreementDetails.extension}"/>
                         </span>
                 </div>
                 <div class="slds-media__body">
