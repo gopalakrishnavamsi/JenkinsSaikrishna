@@ -135,7 +135,7 @@
                         <div>
                             <ul class="slds-list_horizontal">
                                 <li>
-                                    <lightning:icon iconName="doctype:word" size="small"/>
+                                    <c:IconByFileExtension extension="{!v.agreementDetails.extension}" size="small"/>
                                 </li>
                                 <li>
                                     <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small">
