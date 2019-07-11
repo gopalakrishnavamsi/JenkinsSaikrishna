@@ -28,7 +28,7 @@
     var self = this;
     action.setParams({
       documentId: agreementDetails.id.value,
-      documentName: agreementDetails.name
+      documentName: agreementDetails.name + '.' + agreementDetails.extension
     });
     action.setCallback(this, function(response) {
       var state = response.getState();

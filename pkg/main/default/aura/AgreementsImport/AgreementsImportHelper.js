@@ -106,7 +106,7 @@
       action.setParams({
         sfContentVersionId: selectedFile.sourceId,
         sourceObjectId: recordId,
-        documentName: selectedFile.name
+        documentName: selectedFile.name + '.' + selectedFile.extension
       });
       action.setCallback(this, function(response) {
         var state = response.getState();
@@ -115,7 +115,7 @@
           if (result.status === 'Success') {
             //TODO: return uploaded file from Controller
             var importedFile = {
-              name: selectedFile.name,
+              name: selectedFile.name + '.' + selectedFile.extension,
               formattedSize: selectedFile.formattedSize,
               extension: selectedFile.extension
             };

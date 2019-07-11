@@ -144,10 +144,11 @@
                                             + if(file.extension == 'ppt', 'slide')
                                             + if(file.extension == 'pptm', 'slide')
                                             + if(file.extension == 'pptx', 'slide')
-                                            + if(file.extension == 'csv', 'gsheet')
+                                            + if(file.extension == 'csv', 'csv')
                                             + if(file.extension == 'xls', 'gsheet')
                                             + if(file.extension == 'xlsm', 'gsheet')
                                             + if(file.extension == 'xlsx', 'gsheet')
+                                            + if(file.extension == 'xml', 'xml')
                                         }"/>
                                             <!-- /File Icon -->
                                         </div>
@@ -207,10 +208,11 @@
                                             + if(v.importedFile.extension == 'ppt', 'slide')
                                             + if(v.importedFile.extension == 'pptm', 'slide')
                                             + if(v.importedFile.extension == 'pptx', 'slide')
-                                            + if(v.importedFile.extension == 'csv', 'gsheet')
+                                            + if(v.importedFile.extension == 'csv', 'csv')
                                             + if(v.importedFile.extension == 'xls', 'gsheet')
                                             + if(v.importedFile.extension == 'xlsm', 'gsheet')
                                             + if(v.importedFile.extension == 'xlsx', 'gsheet')
+                                            + if(v.importedFile.extension == 'xml', 'xml')
                                         }"/>
                                 <!-- /File Icon -->
                             </div>
