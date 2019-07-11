@@ -9,8 +9,6 @@
     <aura:attribute name="agreementIndex" type="Integer"/>
     <aura:attribute name="agreementActionManager" type="Object"/>
     <aura:attribute name="namespace" type="String"/>
-    <aura:attribute name="uiHelper" type="Object"/>
-
     <ltng:require styles="{!$Resource.scmwidgetscss}" 
         scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils)}" 
         afterScriptsLoaded="{!c.onLoad}"/>
