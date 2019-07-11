@@ -190,7 +190,7 @@ public with sharing class NegotiateService {
 			return AgreementStatus.REJECTED;
 		}
 
-		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCheckoutCanceled)) {
+		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCanceledByUser)) {
 			return AgreementStatus.APPROVAL_CANCELLED;
 		}
 
