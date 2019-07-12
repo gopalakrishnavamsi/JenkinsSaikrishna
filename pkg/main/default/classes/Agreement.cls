@@ -13,6 +13,11 @@ public class Agreement {
 	@AuraEnabled
 	public String name { get; private set; }
 /**
+* The DocuSign Agreement extension.
+*/
+	@AuraEnabled
+	public String extension { get; private set; }
+/**
 * modified is use for Agreement versions, indicates the User modified the version.
 */
 	@AuraEnabled
@@ -70,7 +75,8 @@ public class Agreement {
 		final String version) {
 
 		this.id = id;
-		this.name = name;
+		this.name = name.contains('.') ? name.substringBefore('.') : name;
+		this.extension = name.contains('.') ? name.substringAfter('.') : '';
 		this.modifiedBy = modifiedBy;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;

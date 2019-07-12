@@ -88,41 +88,7 @@
                                                                  onchange="{!c.handleFileSelected}"/>
                                             </div>
                                             <div class="slds-media__figure">
-                                                <!-- File Icon -->
-                                                <lightning:icon iconName="{!
-                                            'doctype:'
-                                            + if(doc.extension == 'doc', 'gdoc')
-                                            + if(doc.extension == 'docm', 'gdoc')
-                                            + if(doc.extension == 'docx', 'gdoc')
-                                            + if(doc.extension == 'dot', 'gdoc')
-                                            + if(doc.extension == 'dotm', 'gdoc')
-                                            + if(doc.extension == 'dotx', 'gdoc')
-                                            + if(doc.extension == 'htm', 'html')
-                                            + if(doc.extension == 'html', 'html')
-                                            + if(doc.extension == 'msg', 'unknown')
-                                            + if(doc.extension == 'pdf', 'pdf')
-                                            + if(doc.extension == 'rtf', 'gdoc')
-                                            + if(doc.extension == 'txt', 'gdoc')
-                                            + if(doc.extension == 'wpd', 'gdoc')
-                                            + if(doc.extension == 'xps', 'unknown')
-                                            + if(doc.extension == 'bmp', 'image')
-                                            + if(doc.extension == 'gif', 'image')
-                                            + if(doc.extension == 'jpg', 'image')
-                                            + if(doc.extension == 'jpeg', 'image')
-                                            + if(doc.extension == 'png', 'image')
-                                            + if(doc.extension == 'tif', 'image')
-                                            + if(doc.extension == 'tiff', 'image')
-                                            + if(doc.extension == 'pot', 'slide')
-                                            + if(doc.extension == 'potx', 'slide')
-                                            + if(doc.extension == 'pps', 'slide')
-                                            + if(doc.extension == 'ppt', 'slide')
-                                            + if(doc.extension == 'pptm', 'slide')
-                                            + if(doc.extension == 'pptx', 'slide')
-                                            + if(doc.extension == 'csv', 'gsheet')
-                                            + if(doc.extension == 'xls', 'gsheet')
-                                            + if(doc.extension == 'xlsm', 'gsheet')
-                                            + if(doc.extension == 'xlsx', 'gsheet')
-                                        }"/>
+                                                <c:IconByFileExtension extension="{!doc.extension}"/>
                                                 <!-- /File Icon -->
                                             </div>
                                             <div class="slds-media__body">
