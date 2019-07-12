@@ -27,3 +27,8 @@
 .THIS .scmwgt .flexbox__container.-horizontal {
     height: 91.5vh;
 }
+
+.THIS .backgroundisabled{
+    opacity: 0.7;
+    pointer-events:none;
+}
