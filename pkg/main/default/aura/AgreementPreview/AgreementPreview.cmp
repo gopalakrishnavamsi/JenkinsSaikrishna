@@ -26,7 +26,7 @@
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.handleReloadEvent}"/>
     <div class="slds-scope">
         <div class="fullContainer">
-            <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundisabled')}">
+            <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                 <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                            agreementActionManager="{!v.agreementActionManager}"
                                            uiHelper="{!v.uiHelper}"/>

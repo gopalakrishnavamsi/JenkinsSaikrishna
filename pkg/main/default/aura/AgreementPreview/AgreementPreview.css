@@ -28,7 +28,7 @@
     height: 91.5vh;
 }
 
-.THIS .backgroundisabled{
+.THIS .backgroundDisabled{
     opacity: 0.7;
     pointer-events:none;
 }
