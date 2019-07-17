@@ -1,6 +1,6 @@
 <apex:page controller="AgreementsController" title="Preview Agreement" sidebar="false" showHeader="true">
-    <apex:includeLightning />
-    <apex:slds />
+    <apex:includeLightning/>
+    <apex:slds/>
     <style type="text/css">
         #appContainer {
             min-height: 100vh;
