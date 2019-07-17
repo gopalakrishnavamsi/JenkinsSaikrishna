@@ -15,6 +15,7 @@
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
       actions.delete(agreement, component);
+      component.set('v.isAgreementDeleted', true);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
