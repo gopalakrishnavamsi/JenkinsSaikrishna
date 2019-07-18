@@ -59,13 +59,19 @@
     }
   },
 
-  reLoadingEvent: function() {
-    setTimeout(
-      $A.getCallback(function() {
-        window.location.reload();
-      }),
-      2000
-    );
+  reLoadingEvent: function(component) {
+    var isAgreementDeleted = component.get('v.isAgreementDeleted');
+    if (isAgreementDeleted) {
+       $A.get('e.force:navigateToSObject').setParams({'recordId': component.get('v.sourceId')}).fire();
+    } else {
+      setTimeout(
+        $A.getCallback(function () {
+          window.location.reload();
+        }),
+        2000
+      );
+    }
+
   },
 
   toastEvent: function(component, event, helper) {

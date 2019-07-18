@@ -4,6 +4,7 @@
     <aura:attribute name="agreementId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
     <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
+    <aura:attribute name="isAgreementDeleted" type="Boolean" access="public" default="false"/>
 
     <!-- end of attributes passed from Lightning out VF page -->
 
@@ -29,7 +30,7 @@
             <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                 <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                            agreementActionManager="{!v.agreementActionManager}"
-                                           uiHelper="{!v.uiHelper}"/>
+                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"/>
             </div>
             <div class="documentContainer">
                 <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
