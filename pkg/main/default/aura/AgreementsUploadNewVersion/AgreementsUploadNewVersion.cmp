@@ -79,7 +79,7 @@
                                         {!agreementVersion.currentVersion}
                                         <lightning:formattedDateTime value="{!agreementVersion.createdDate}"
                                                                      year="numeric"
-                                                                     month="numeric" day="numeric"/>&nbsp;
+                                                                     month="numeric" day="numeric"/>
                                     </td>
                                 </tr>
                             </aura:iteration>
