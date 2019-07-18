@@ -1,23 +1,41 @@
-<aura:component description="AgreementsUpload">
-    <!-- FIXME : Check hardcoding and replace with labels  -->
+<aura:component description="AgreementsUploadNewVersion"
+                controller="AgreementsController">
+    <!-- scripts and styles -->
+    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"
+                  afterScriptsLoaded="{!c.initializeNewVersionWidget}"/>
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!-- attributes -->
-    <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
-    <aura:attribute name="agreementVersions" type="Object[]"/>
+    <aura:attribute name="agreementDetails" type="Agreement"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+    <aura:attribute name="agreementVersions" type="Object[]" access="private"/>
     <aura:attribute name="hasDocument" type="Boolean" default="false"/>
+    <aura:attribute name="widget" type="Object" access="private"/>
 
     <!-- Events -->
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
 
+    <!-- handlers -->
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}" afterScriptsLoaded="{!c.uploadScriptsLoaded}" />
 
     <c:strike_modal aura:id="uploadAgreementsModal"
                     title="{!$Label.c.UploadNewVersion}"
                     showModal="{!v.showModal}">
 
-        <div class="slds-scope slds-p-horizontal--xx-large">
+        <!-- loading spinner -->
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
+        <div class="{!'slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <div class="slds-text-body_small slds-text-align--center">
@@ -49,7 +67,7 @@
                                         <div class="slds-media slds-media_small slds-media_center slds-p-top_x-small">
                                             <div class="slds-media__figure">
                                                 <span class="slds-avatar slds-avatar_small">
-                                                    <lightning:icon iconName="doctype:word" size="medium"/>
+                                                    <c:IconByFileExtension extension="{!agreementVersion.extension}"/>
                                                 </span>
                                             </div>
                                             <div class="slds-media__body">
@@ -59,6 +77,9 @@
                                     </td>
                                     <td data-label="{!$Label.c.CurrentVersion}">
                                         {!agreementVersion.currentVersion}
+                                        <lightning:formattedDateTime value="{!agreementVersion.createdDate}"
+                                                                     year="numeric"
+                                                                     month="numeric" day="numeric"/>&nbsp;
                                     </td>
                                 </tr>
                             </aura:iteration>
@@ -66,10 +87,10 @@
                         </table>
                     </div>
                 </div>
-                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                    <div id="upload-wrapper">
 
-                    </div>
+                <!-- upload new version widget -->
+                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                    <div id="upload-wrapper"></div>
                 </div>
             </div>
         </div>
@@ -77,11 +98,12 @@
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
             <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelButtonClicked}"
-                              label="{!$Label.c.Cancel}">
-            </lightning:button>
+                              label="{!$Label.c.Cancel}"
+                              disabled="{!v.loading}"/>
+
             <lightning:button class="slds-button slds-button_brand" onclick="{!c.uploadButtonClicked}"
-                              label="{!$Label.c.Upload}" 
-                              disabled="{!!v.hasDocument}"></lightning:button>
+                              label="{!$Label.c.Upload}"
+                              disabled="{!if(or(not(v.hasDocument), v.loading), true , false)}"/>
         </aura:set>
     </c:strike_modal>
 </aura:component>

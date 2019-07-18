@@ -21,6 +21,10 @@
         .noSidebarCell #appContainer .slds-scope .strike-wizard__footer {
             position: absolute;
         }
+
+        html body.sfdcBody {
+            padding: 0;
+        }
     </style>
 
     <div id="appContainer"></div>
