@@ -18,8 +18,12 @@
             padding: 0;
         }
 
-        .noSidebarCell #appContainer .slds-scope .strike-wizard__footer {
+        .noSidebarCell #appContainer .slds-scope {
             position: absolute;
+        }
+
+        html body.sfdcBody {
+            padding: 0;
         }
     </style>
 
@@ -44,14 +48,13 @@
                     event: 'force:navigateToSObject',
                     handler: function (event) {
                          var myUserContext = "{!$User.UITheme}";
-                        if (myUserContext == 'Theme4t' || myUserContext == 'Theme4d') {
+                        if (myUserContext === 'Theme4t' || myUserContext === 'Theme4d') {
                             // The Visualforce page is in S1 or Lightning Experience
                             sforce.one.navigateToSObject(event.getParams().recordId);
-                        } else if (myUserContext == 'Theme3') {
-                            // The Visualforce page is  running in Classic
+                        } else if (myUserContext === 'Theme3') {
+                            // The Visualforce page is running in Classic
                             window.parent.location = '/' + event.getParams().recordId;
                         } else {
-                            console.log("Unsupported theme");
                         }
                     }
                 });    

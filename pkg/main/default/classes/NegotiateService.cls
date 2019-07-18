@@ -287,6 +287,13 @@ public with sharing class NegotiateService {
 			.withAccountId(Credentials.getInstance().account.id);
 	}
 
+	public static NegotiateService.LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
+		Permissions.verifyIsDocuSignUser();
+		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
+		return token.withEntityId(agreementId)
+			.withAccountId(Credentials.getInstance().account.id);
+	}
+
 	public static List<AgreementApprovalWorkItem> getApprovalWorkItems(final UUID documentId) {
 		Permissions.verifyIsDocuSignUser();
 		return NegotiateAPI.getInstance().getApprovalWorkItems(documentId);

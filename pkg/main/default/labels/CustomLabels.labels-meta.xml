@@ -6694,4 +6694,18 @@
 		<shortDescription>ShareAgreementLinkHeader</shortDescription>
 		<value>Share Agreement Link</value>
 	</labels>
+	<labels>
+		<fullName>UploadNewVersionSuccess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UploadNewVersionSuccess</shortDescription>
+		<value>A new version of the agreement has been uploaded successfully.</value>
+	</labels>
+	<labels>
+		<fullName>UploadNewVersionError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UploadNewVersionError</shortDescription>
+		<value>Error while uploading a new version of the agreement.</value>
+	</labels>
 </CustomLabels>

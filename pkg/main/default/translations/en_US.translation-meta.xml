@@ -3607,6 +3607,14 @@
 		<label>Share Agreement Link</label>
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
+	<customLabels>
+		<label>A new version of the agreement has been uploaded successfully.</label>
+		<name>UploadNewVersionSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Error while uploading a new version of the agreement.</label>
+		<name>UploadNewVersionError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
