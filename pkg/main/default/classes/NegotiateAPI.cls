@@ -15,6 +15,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
+	public static final Integer BUFFER_SOQL_LIMIT = 5;
 
 	@TestVisible private Set<String> userEmails = new Set<String>();
 	@TestVisible private Set<String> contactEmails = new Set<String>();
@@ -938,35 +939,28 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Map<String, String> queryStrings = new Map<String, String>();
 		List<NegotiateAPI.APIHistoryItems> resultAPIHistoryItems = new List<NegotiateAPI.APIHistoryItems>();
 		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
-		Long offset = -SCM_OFFSET;
-		String next = '';
-		while (next != null) {
-			offset += SCM_OFFSET;
-			queryStrings.put('offset', String.valueOf(offset));
 
-			final RestAPI.Response response = get(
-				getBaseUrl(),
-				new List<Object> {
-					PATH_HISTORY_ITEMS, documentId
-				},
-				new QueryString(queryStrings),
-				getDefaultHeaders(),
-				RestAPI.defaultTimeout);
-			if (response.hasError) {
-				this.log.error('Failed to get history items for documentId - ' +
-					documentId + response.error);
-				throw new APIException(response.error);
-			}
-			APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
-			for (APIHistoryItem a : result.items) {
-				if (a != null && a.data != null) {
-					userEmails = a.prepareUserEmails(a.data, userEmails);
-					contactEmails = a.prepareContactEmails(a.data, contactEmails);
-				}
-			}
-			resultAPIHistoryItems.add(result);
-			next = result.next;
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_HISTORY_ITEMS, documentId
+			},
+			new QueryString(queryStrings),
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get history items for documentId - ' +
+				documentId + response.error);
+			throw new APIException(response.error);
 		}
+		APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
+		for (APIHistoryItem a : result.items) {
+			if (a != null && a.data != null) {
+				userEmails = a.prepareUserEmails(a.data, userEmails);
+				contactEmails = a.prepareContactEmails(a.data, contactEmails);
+			}
+		}
+		resultAPIHistoryItems.add(result);
 		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
 	}
 
@@ -974,11 +968,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		Map<UUID, List<AgreementHistoryItem>> documentIdToAgreementHistoryItems
 			= new Map<UUID, List<AgreementHistoryItem>>();
-
-		if (userEmails != null && userEmails.size() > 0) {
+		Boolean isQueryEligible = Limits.getQueries() < (Limits.getLimitQueries() - BUFFER_SOQL_LIMIT);
+		if (userEmails != null && userEmails.size() > 0 && isQueryEligible) {
 			populateEmailToUser(userEmails);
 		}
-		if (contactEmails != null && contactEmails.size() > 0) {
+		if (contactEmails != null && contactEmails.size() > 0 && isQueryEligible) {
 			populateEmailToContact(contactEmails);
 		}
 		for (UUID documentId : documentIdToAPIHistoryItems.keyset()) {
@@ -1031,10 +1025,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 					contactEmails = a.prepareContactEmails(a.data, contactEmails);
 				}
 			}
-			if (userEmails != null && userEmails.size() > 0) {
+			Boolean isQueryEligible = Limits.getQueries() < (Limits.getLimitQueries() - BUFFER_SOQL_LIMIT);
+			if (userEmails != null && userEmails.size() > 0 && isQueryEligible) {
 				populateEmailToUser(userEmails);
 			}
-			if (contactEmails != null && contactEmails.size() > 0) {
+			if (contactEmails != null && contactEmails.size() > 0 && isQueryEligible) {
 				populateEmailToContact(contactEmails);
 			}
 			for (APIHistoryItem a : result.items) {
