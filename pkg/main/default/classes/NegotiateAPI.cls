@@ -16,6 +16,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
 
+	@TestVisible private Set<String> userEmails = new Set<String>();
+	@TestVisible private Set<String> contactEmails = new Set<String>();
+	@TestVisible private Map<String, User> emailToUser = new Map<String, User>();
+	@TestVisible private Map<String, Contact> emailToContact = new Map<String, Contact>();
+	@TestVisible private Map<UUID, List<APIHistoryItems>> documentIdToAPIHistoryItems = new Map<UUID, List<APIHistoryItems>>();
 	private static NegotiateAPI self = null;
 	private static NegotiateAPI historySelf = null;
 
@@ -372,8 +377,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		try {
 			List<APIReviewer> results = new List<APIReviewer>();
 			for (Recipient rec : approvers) {
-				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIReviewer(rec.email, rec.name));
-				else throw new APIException('Invalid Reviewer email');
+				if (StringUtils.isValidEmail(rec.email) && !String.isBlank(rec.name)) results.add(new APIReviewer(rec.email, rec.name)); else throw new APIException('Invalid Reviewer email');
 			}
 			return results;
 		} catch (Exception ex) {
@@ -746,7 +750,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	private class APIHistoryItems {
 		public List<APIHistoryItem> items;
 		public String next;
-
 	}
 
 	@TestVisible
@@ -756,66 +759,52 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public String actionType;
 		public Datetime createdDate;
 
-		public AgreementHistoryItem convertAPIHistoryItem() {
+		public AgreementHistoryItem convertAPIHistoryItem(Map<String, User> emailToUser, Map<String, Contact> emailToContact) {
 
-			AgreementHistoryItem.Actor actor = null;
-
-			if (this.data.actor != null &&
-				(this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments)
-					|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedCheckoutCancelled)
-					|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentCheckin))) {
-
-				Contact resolvedContact = resolveSalesforceContact(this.data.actor.emailAddress);
-				//for action types where external review has been completed the actor should map to Salesforce contact
-				//once DocumentCheckIn action item type provides the correct actor we will update the if condition to include DocumentCheckIn action Item check as well
-				if (resolvedContact != null) {
-					actor = new AgreementHistoryItem.Actor(
-						(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
-						this.data.actor.emailAddress,
-						(resolvedContact != null && resolvedContact.Id != null) ? Salesforce.baseUrl.toExternalForm() + '/' + resolvedContact.Id : '');
-				}
-				//if a Salesforce contact is not being resolved correctly that means that the External review has been completed by the internal Salesforce Admin user
-				//in this case Resolve the actor to a Salesforce user
-				else {
-					actor = new AgreementHistoryItem.Actor(
-						this.data.actor.fullName,
-						this.data.actor.emailAddress,
-						resolveSalesforceUser(this.data.actor.emailAddress) != null ? resolveSalesforceUser(this.data.actor.emailAddress) : '');
-				}
-
-			}
-			//for all other action types actor will be mapped to a Salesforce user
-			else if (this.data.actor != null) {
-				actor = new AgreementHistoryItem.Actor(
-					this.data.actor.fullName,
-					this.data.actor.emailAddress,
-					resolveSalesforceUser(this.data.actor.emailAddress) != null ? resolveSalesforceUser(this.data.actor.emailAddress) : '');
-			} else {
-				actor = new AgreementHistoryItem.Actor(
-					'',
-					'',
-					'');
-			}
-
+			AgreementHistoryItem.Actor actor = new AgreementHistoryItem.Actor(
+				'',
+				'',
+				'');
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
 
-			if (this.data.reviewer != null) {
-				Contact resolvedContact = resolveSalesforceContact(this.data.reviewer.emailAddress);
-				recipients.add(new AgreementHistoryItem.Actor(
-					(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
-					this.data.reviewer.emailAddress,
-					(resolvedContact != null && resolvedContact.Id != null) ? Salesforce.baseUrl.toExternalForm() + '/' + resolvedContact.Id : ''));
-			}
+			if (this.data != null) {
 
-			if (this.data.approvers != null && !this.data.approvers.isEmpty()) {
-				for (ApiActor a : this.data.approvers) {
-					recipients.add(new AgreementHistoryItem.Actor(
-						a.fullName,
-						a.emailAddress,
-						resolveSalesforceUser(a.emailAddress) != null ? resolveSalesforceUser(a.emailAddress) : ''));
+				String baseURL = Salesforce.baseUrl.toExternalForm() + '/' ;
+
+				if (this.data.actor != null && this.actionType != null) {
+
+					//When Actor is User (Default)
+					//Scenario 1 : When Action Type should map to salesforce  contact however contact is not in salesforce
+					//Scenario 2 : For  All other action type
+					User resolvedUser = emailToUser.containsKey(this.data.actor.emailAddress) ? emailToUser.get(this.data.actor.emailAddress) : null;
+					actor = generateActorFromUser(this.data.actor, resolvedUser, baseURL);
+
+					Boolean isActionTypeMapToSalesforceContact =
+						(this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments)
+							|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedCheckoutCancelled)
+							|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentCheckin));
+
+					//for action types where external review has been completed the actor should map to Salesforce contact
+					//once DocumentCheckIn action item type provides the correct actor we will update the if condition to include DocumentCheckIn action Item check as well
+					//actor = (isActionTypeMapToSalesforceContact) ? generateActorFromContact(this.data.actor, baseURL) : (Actor)generateActorFromUser(this.data.actor, baseURL);
+					if (isActionTypeMapToSalesforceContact) {
+						Contact resolvedContact = emailToContact.containsKey(this.data.actor.emailAddress) ? emailToContact.get(this.data.actor.emailAddress) : null;
+						actor = generateActorFromContact(this.data.actor, resolvedContact, baseURL);
+					}
+				}
+
+				if (this.data.reviewer != null) {
+					Contact resolvedContact = emailToContact.get(this.data.reviewer.emailAddress);
+					recipients.add(generateActorFromContact(this.data.reviewer, resolvedContact, baseURL));
+				}
+
+				if (this.data.approvers != null && !this.data.approvers.isEmpty()) {
+					for (ApiActor a : this.data.approvers) {
+						User resolvedUser = emailToUser.containsKey(a.emailAddress) ? emailToUser.get(a.emailAddress) : null;
+						recipients.add(generateActorFromUser(a, resolvedUser, baseURL));
+					}
 				}
 			}
-
 			return new AgreementHistoryItem(
 				this.actionType,
 				UserInfo.getUserEmail(),
@@ -831,33 +820,88 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 
 		@TestVisible
-		private String resolveSalesforceUser(final String userEmail) {
-			String result;
-			try {
-				List<User> userList = new List<User>();
-				userList = [SELECT Id FROM User WHERE email = :userEmail and isActive = true LIMIT 1];
-				if (!userList.isEmpty()) {
-					result = Salesforce.baseUrl.toExternalForm() + '/' + userList[0].Id;
-				}
-			} catch (Exception ex) {
-				LoggerService.getInstance().error('Failed to resolve salesforce user in history items ' + ex.getMessage());
-			}
-			return result;
+		private AgreementHistoryItem.Actor generateActorFromContact(NegotiateAPI.APIActor actor, Contact resolvedContact, String baseURL) {
+			return new AgreementHistoryItem.Actor(
+				(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
+				actor.emailAddress,
+				(resolvedContact != null && resolvedContact.Id != null) ? baseURL + resolvedContact.Id : '');
 		}
 
 		@TestVisible
-		private Contact resolveSalesforceContact(final String contactEmail) {
-			Contact result;
-			try {
-				List<Contact> contactList = new List<Contact>();
-				contactList = [SELECT Id, Name, Email FROM Contact WHERE email = :contactEmail LIMIT 1];
-				if (!contactList.isEmpty()) {
-					result = contactList[0];
-				}
-			} catch (Exception ex) {
-				LoggerService.getInstance().error('Failed to resolve salesforce contact in history items ' + ex.getMessage());
+		private AgreementHistoryItem.Actor generateActorFromUser(NegotiateAPI.APIActor actor, User resolvedUser, String baseURL) {
+
+			return new AgreementHistoryItem.Actor(
+				actor.fullName,
+				actor.emailAddress,
+				resolvedUser != null ? baseURL + resolvedUser.Id : '');
+		}
+
+		@TestVisible
+		private Set<String> prepareUserEmails(APIData data, Set<String> userEmails) {
+			if (data.actor != null && data.actor.emailAddress != null) {
+				userEmails.add(data.actor.emailAddress);
 			}
-			return result;
+			if (data.approvers != null && !data.approvers.isEmpty()) {
+				for (ApiActor a : this.data.approvers) {
+					if (a.emailAddress == null) {
+						continue;
+					}
+					userEmails.add(a.emailAddress);
+				}
+			}
+			return userEmails;
+		}
+
+		@TestVisible
+		private Set<String> prepareContactEmails(APIData data, Set<String> contactEmails) {
+
+			if (data.actor != null && data.actor.emailAddress != null) {
+				contactEmails.add(data.actor.emailAddress);
+			}
+			if (data.reviewer != null && data.reviewer.emailAddress != null) {
+				contactEmails.add(data.reviewer.emailAddress);
+			}
+			return contactEmails;
+		}
+	}
+
+	@TestVisible
+	private void populateEmailToUser(Set<String> userEmails) {
+		try {
+			Set<String> queryEmails = new Set<String>();
+			for (String userEmail : userEmails) {
+				if (emailToUser.containsKey(userEmail)) {
+					continue;
+				}
+				queryEmails.add(userEmail);
+			}
+			if (queryEmails.size() > 0) {
+				for (User u : [SELECT Id, Email FROM User WHERE email IN :queryEmails and isActive = true]) {
+					emailToUser.put(u.Email, u);
+				}
+			}
+		} Catch (Exception ex) {
+			LoggerService.getInstance().error('Failed to resolve salesforce user in history items ' + ex.getMessage());
+		}
+	}
+
+	@TestVisible
+	private void populateEmailToContact(Set<String> contactEmails) {
+		try {
+			Set<String> queryEmails = new Set<String>();
+			for (String contactEmail : contactEmails) {
+				if (emailToContact.containsKey(contactEmail)) {
+					continue;
+				}
+				queryEmails.add(contactEmail);
+			}
+			if (queryEmails.size() > 0) {
+				for (Contact con : [SELECT Id, Name, Email FROM Contact WHERE Email IN :queryEmails]) {
+					emailToContact.put(con.Email, con);
+				}
+			}
+		} Catch (Exception ex) {
+			LoggerService.getInstance().error('Failed to resolve salesforce contact in history items ' + ex.getMessage());
 		}
 	}
 
@@ -890,6 +934,71 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		public APIUser user;
 	}
 
+	public void prepareHistoryItems(final UUID documentId) {
+		Map<String, String> queryStrings = new Map<String, String>();
+		List<NegotiateAPI.APIHistoryItems> resultAPIHistoryItems = new List<NegotiateAPI.APIHistoryItems>();
+		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
+		Long offset = -SCM_OFFSET;
+		String next = '';
+		while (next != null) {
+			offset += SCM_OFFSET;
+			queryStrings.put('offset', String.valueOf(offset));
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_HISTORY_ITEMS, documentId
+				},
+				new QueryString(queryStrings),
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get history items for documentId - ' +
+					documentId + response.error);
+				throw new APIException(response.error);
+			}
+			APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
+			for (APIHistoryItem a : result.items) {
+				if (a != null && a.data != null) {
+					userEmails = a.prepareUserEmails(a.data, userEmails);
+					contactEmails = a.prepareContactEmails(a.data, contactEmails);
+				}
+			}
+			resultAPIHistoryItems.add(result);
+			next = result.next;
+		}
+		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
+	}
+
+	public Map<UUID, List<AgreementHistoryItem>> processHistoryItems() {
+
+		Map<UUID, List<AgreementHistoryItem>> documentIdToAgreementHistoryItems
+			= new Map<UUID, List<AgreementHistoryItem>>();
+
+		if (userEmails != null && userEmails.size() > 0) {
+			populateEmailToUser(userEmails);
+		}
+		if (contactEmails != null && contactEmails.size() > 0) {
+			populateEmailToContact(contactEmails);
+		}
+		for (UUID documentId : documentIdToAPIHistoryItems.keyset()) {
+			documentIdToAgreementHistoryItems.put(documentId, getAgreementHistoryItems(documentId));
+		}
+		return documentIdToAgreementHistoryItems;
+	}
+
+	private List<AgreementHistoryItem> getAgreementHistoryItems(final UUID documentId) {
+		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
+		for (APIHistoryItems apiHistoryItems : documentIdToAPIHistoryItems.get(documentId)) {
+			for (APIHistoryItem a : apiHistoryItems.items) {
+				if (a != null && a.data != null) {
+					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
+				}
+			}
+		}
+		return historyItems;
+	}
+
 	//Get historyItems
 	public List<AgreementHistoryItem> getHistoryItems(final UUID documentId) {
 		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
@@ -917,8 +1026,20 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 			APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
 			for (APIHistoryItem a : result.items) {
-				if (a != null) {
-					historyItems.add(a.convertAPIHistoryItem());
+				if (a != null && a.data != null) {
+					userEmails = a.prepareUserEmails(a.data, userEmails);
+					contactEmails = a.prepareContactEmails(a.data, contactEmails);
+				}
+			}
+			if (userEmails != null && userEmails.size() > 0) {
+				populateEmailToUser(userEmails);
+			}
+			if (contactEmails != null && contactEmails.size() > 0) {
+				populateEmailToContact(contactEmails);
+			}
+			for (APIHistoryItem a : result.items) {
+				if (a != null && a.data != null) {
+					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
 				}
 			}
 			next = result.next;
