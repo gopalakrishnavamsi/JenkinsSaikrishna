@@ -418,6 +418,8 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AdministratorProfileId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
 
+			System.assert(Collection.isEmpty(ProductSettings__c.getAll().values()));
+
 			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
@@ -490,6 +492,8 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AdministratorProfileId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
+
+			System.assert(Collection.isEmpty(ProductSettings__c.getAll().values()));
 
 			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
