@@ -49,7 +49,6 @@ private class SendingControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assert(AccountFeatures.getInstance() === result.accountFeatures);
 			System.assertNotEquals(null, result.envelope);
 			System.assertNotEquals(null, result.templates);
 			System.assertNotEquals(null, result.documents);

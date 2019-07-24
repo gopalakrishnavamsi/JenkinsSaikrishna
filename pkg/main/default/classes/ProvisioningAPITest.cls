@@ -99,8 +99,13 @@ private class ProvisioningAPITest {
 			List<Product> result = ProvisioningAPI.getInstance().getProducts();
 			Test.stopTest();
 
-			System.assertEquals(1, Collection.size(result));
+			System.assertEquals(3, Collection.size(result));
 			System.assertNotEquals(null, result[0]);
+			System.assert(result[0] instanceof GenProduct);
+			System.assertNotEquals(null, result[1]);
+			System.assert(result[1] instanceof NegotiateProduct);
+			System.assertNotEquals(null, result[2]);
+			System.assert(result[2] instanceof ClmProduct);
 		}
 	}
 
@@ -125,7 +130,7 @@ private class ProvisioningAPITest {
 		ProvisioningAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Product result = ProvisioningAPI.getInstance().addProduct('p1', true);
+			Product result = ProvisioningAPI.getInstance().addProduct(ProvisioningAPI.PRODUCT_NEGOTIATE, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

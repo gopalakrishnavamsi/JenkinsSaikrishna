@@ -173,6 +173,7 @@ private class AccountAPITest {
 				UUID.randomUUID(),
 				1234L,
 				'UNIT TEST',
+				'active',
 				new Account.Plan(
 					UUID.randomUUID(),
 					'UNIT TEST PLAN',
@@ -203,6 +204,7 @@ private class AccountAPITest {
 				UUID.randomUUID(),
 				1234L,
 				'UNIT TEST',
+				'active',
 				new Account.Plan(
 					UUID.randomUUID(),
 					'UNIT TEST PLAN',
@@ -249,6 +251,7 @@ private class AccountAPITest {
 				UUID.randomUUID(),
 				1234L,
 				'UNIT TEST',
+				'active',
 				new Account.Plan(
 					initialPlanId,
 					'UNIT TEST PLAN',
@@ -952,6 +955,35 @@ private class AccountAPITest {
 			System.assertNotEquals(null, ex);
 			System.assertNotEquals(null, ex.error);
 			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_getProduct_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(true));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			ESignatureProduct result = AccountAPI.getInstance().getProduct();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_getProduct_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				AccountAPI.getInstance().getProduct();
+				throw new AssertException('Expected getProduct to fail');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
 		}
 	}
 }
