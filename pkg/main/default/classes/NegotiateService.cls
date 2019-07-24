@@ -91,6 +91,7 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		List<Agreement> agreements = new List<Agreement>();
+		Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItem = new Map<UUID, List<AgreementHistoryItem>>();
 		if (folderId == null) {
 			String sourceObjectType = sourceObjectId.getSObjectType().getDescribe().getName();
 			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
@@ -102,7 +103,15 @@ public with sharing class NegotiateService {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			for (Agreement agreement : agreements) {
 				if (agreement != null) {
-					agreement = getAgreementData(agreement);
+					NegotiateAPI.getHistoryAPIInstance().prepareHistoryItems(agreement.id);
+				}
+			}
+			Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItems
+				= NegotiateAPI.getHistoryAPIInstance().processHistoryItems();
+
+			for (Agreement agreement : agreements) {
+				if (agreement != null) {
+					agreement = getAgreementData(agreement, documentIdToHistoryItems);
 				}
 			}
 		}
@@ -112,6 +121,18 @@ public with sharing class NegotiateService {
 	public static Agreement getAgreement(final UUID agreementId) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		return getAgreementData(NegotiateAPI.getInstance().getAgreement(agreementId));
+	}
+
+	private static Agreement getAgreementData(Agreement agreement, Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItems) {
+		// add historyItems
+		List<AgreementHistoryItem> agreementHistoryItems = documentIdToHistoryItems.get(agreement.Id);
+		agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
+		if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
+			agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
+		}
+		// add versions
+		agreement.withVersions(NegotiateAPI.getInstance().getAgreementVersions(agreement.id));
+		return agreement;
 	}
 
 	private static Agreement getAgreementData(Agreement agreement) {
@@ -311,9 +332,8 @@ public with sharing class NegotiateService {
 
 	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final UUID workItemsId) {
 		Permissions.verifyIsDocuSignUser();
-		if(itemResponse)
-			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId);
-		else
+		if (itemResponse)
+			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId); else
 			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.REJECT, workItemsId);
 	}
 
