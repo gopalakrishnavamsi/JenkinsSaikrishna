@@ -183,11 +183,11 @@ public with sharing class NegotiateAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().sendForApproval('Test Agreement', 
-			NegotiateAPIMock.SOURCE_OBJECT_ID,
-			new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-			new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }
-			, 'Test subject'
+			UUID result = NegotiateAPI.getInstance().sendForApproval('Test Agreement',
+				NegotiateAPIMock.SOURCE_OBJECT_ID,
+				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }
+				, 'Test subject'
 				, 'Test message body: hello world', true);
 			Test.stopTest();
 
@@ -203,11 +203,11 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			UUID result = NegotiateAPI.getInstance().sendForExternalReview('Test Agreement',
-			NegotiateAPIMock.SOURCE_OBJECT_ID, 
-			new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-			new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
-			'Test subject', 'Test message body: hello world', 
-			5);
+				NegotiateAPIMock.SOURCE_OBJECT_ID,
+				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+				'Test subject', 'Test message body: hello world',
+				5);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -223,11 +223,11 @@ public with sharing class NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForApproval('Test Agreement', 
-				NegotiateAPIMock.SOURCE_OBJECT_ID,	
-				new List<UUID> {NegotiateAPIMock.DOCUMENT_ID }, 
-				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
-				'Test subject',
+				NegotiateAPI.getInstance().sendForApproval('Test Agreement',
+					NegotiateAPIMock.SOURCE_OBJECT_ID,
+					new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
+					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+					'Test subject',
 					'Test message body: hello world', true);
 			} catch (APIException ex) {
 				hasError = true;
@@ -247,12 +247,12 @@ public with sharing class NegotiateAPITest {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().sendForExternalReview('Test Agreement', 
-					NegotiateAPIMock.SOURCE_OBJECT_ID, 
+				NegotiateAPI.getInstance().sendForExternalReview('Test Agreement',
+					NegotiateAPIMock.SOURCE_OBJECT_ID,
 					new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }, 
-					'Test subject', 
-					'Test message body: hello world', 
+					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+					'Test subject',
+					'Test message body: hello world',
 					5);
 			} catch (APIException ex) {
 				hasError = true;
@@ -418,12 +418,12 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveSalesforceUser_success() {
+	static void test_populateEmailToUser_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveSalesforceUser(UserInfo.getUserEmail());
-			System.assertNotEquals(result, null);
-			System.assertEquals(result, Salesforce.baseUrl.toExternalForm() + '/' + UserInfo.getUserId());
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToUser(new Set<String> { UserInfo.getUserEmail() });
+			System.assertNotEquals(negotiateAPI.emailToUser, null);
+			System.assertEquals(negotiateAPI.emailToUser.get(UserInfo.getUserEmail()).Id, UserInfo.getUserId());
 		}
 	}
 
@@ -443,11 +443,11 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveSalesforceUser_blankInput() {
+	static void test_populateEmailToUser_blankInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveSalesforceUser('');
-			System.assertEquals(result, null);
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToUser(new Set<String> { '' });
+			System.assert(!negotiateAPI.emailToUser.containsKey(''));
 		}
 	}
 
@@ -469,11 +469,11 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveSalesforceUser_randomEmailInput() {
+	static void test_populateEmailToUser_randomEmailInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			String result = item.resolveSalesforceUser('test@test.com');
-			System.assertEquals(result, null);
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToUser(new Set<String> { 'test@test.com' });
+			System.assert(!negotiateAPI.emailToUser.containsKey('test@test.com'));
 		}
 	}
 
@@ -494,14 +494,14 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveSalesforceContact_success() {
+	static void test_populateEmailToContact_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Contact testContact = new Contact (FirstName = 'test', LastName = 'contact', Email = 'test@test.com');
 			insert testContact;
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			Contact result = item.resolveSalesforceContact(testContact.Email);
-			System.assertNotEquals(result, null);
-			System.assertEquals(result.Email, testContact.Email);
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToContact(new Set<String> { testContact.Email });
+			System.assertNotEquals(negotiateAPI.emailToContact, null);
+			System.assert(negotiateAPI.emailToContact.containsKey(testContact.Email));
 		}
 	}
 
@@ -521,20 +521,20 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_resolveSalesforceContact_randomEmailInput() {
+	static void test_populateEmailToContact_randomEmailInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			Contact result = item.resolveSalesforceContact('randomInput');
-			System.assertEquals(result, null);
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToContact(new Set<String> { 'randomInput' });
+			System.assert(!negotiateAPI.emailToContact.containsKey('randomInput'));
 		}
 	}
 
 	@IsTest
-	static void test_resolveSalesforceContact_blankInput() {
+	static void test_populateEmailToContact_blankInput() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			NegotiateAPI.APIHistoryItem item = new NegotiateAPI.APIHistoryItem();
-			Contact result = item.resolveSalesforceContact('');
-			System.assertEquals(result, null);
+			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
+			negotiateAPI.populateEmailToContact(new Set<String> { '' });
+			System.assert(!negotiateAPI.emailToContact.containsKey(''));
 		}
 	}
 }
