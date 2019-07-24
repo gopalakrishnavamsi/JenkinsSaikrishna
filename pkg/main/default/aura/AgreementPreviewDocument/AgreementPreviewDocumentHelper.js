@@ -67,7 +67,6 @@
             isCurrentUserRecipientForApproval
           );
           component.set('v.widget', widget);
-          component.set('v.loadCompareBox', true);
         })
         .catch(function (err) {
           uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
