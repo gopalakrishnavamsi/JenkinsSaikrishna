@@ -244,12 +244,40 @@ global class UserMock {
 		accountSettings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 		accountSettings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 		accountSettings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
-		accountSettings.CanUseSalesforceApi__c = true;
 		accountSettings.SystemSenderId__c = UUID.randomUUID().toString();
 		accountSettings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
 		accountSettings.AdministratorProfileId__c = TestUtils.randomInteger(1000000);
 		accountSettings.SenderProfileId__c = TestUtils.randomInteger(1000000);
+		accountSettings.ProductsLastChecked__c = Datetime.now();
 		insert accountSettings;
+
+		insert new List<ProductSettings__c> {
+			new ProductSettings__c(
+				Name = Product.NAME_ESIGNATURE,
+				Status__c = Product.STATUS_ACTIVE,
+				IsTrial__c = false,
+				TrialExpires__c = null,
+				Features__c = AccountProducts.FLAG_BULK_SENDING
+					| AccountProducts.FLAG_MERGE_FIELDS
+					| AccountProducts.FLAG_SIGNING_GROUPS
+					| AccountProducts.FLAG_SMS_AUTHENTICATION
+					| AccountProducts.FLAG_TEMPLATES),
+			new ProductSettings__c(
+				Name = Product.NAME_GEN,
+				Status__c = Product.STATUS_ACTIVE,
+				IsTrial__c = false,
+				TrialExpires__c = null),
+			new ProductSettings__c(
+				Name = Product.NAME_NEGOTIATE,
+				Status__c = Product.STATUS_ACTIVE,
+				IsTrial__c = false,
+				TrialExpires__c = null),
+			new ProductSettings__c(
+				Name = Product.NAME_CLM,
+				Status__c = Product.STATUS_ACTIVE,
+				IsTrial__c = false,
+				TrialExpires__c = null)
+		};
 
 		insert EnvelopeSettings__c.getOrgDefaults();
 

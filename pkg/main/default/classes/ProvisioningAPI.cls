@@ -1,5 +1,12 @@
 public with sharing class ProvisioningAPI extends DocuSignAPI {
 
+	@TestVisible
+	private static final String PRODUCT_GEN = 'Gen';
+	@TestVisible
+	private static final String PRODUCT_NEGOTIATE = 'Negotiate';
+	@TestVisible
+	private static final String PRODUCT_CLM = 'CLM';
+
 	private static ProvisioningAPI self;
 	private final UUID accountId;
 	private final String accessToken;
@@ -110,12 +117,28 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 					if (pp != null) properties.put(pp.name, pp.value);
 				}
 			}
-			return new Product(
-				this.product_id,
-				this.provision_status,
-				this.free_trial == true,
-				StringUtils.parseDatetime(this.expiration_date),
-				properties);
+
+			Product p = null;
+			if (this.product_id == PRODUCT_GEN) {
+				p = new GenProduct(
+					this.provision_status,
+					this.free_trial == true,
+					StringUtils.parseDate(this.expiration_date),
+					properties);
+			} else if (this.product_id == PRODUCT_NEGOTIATE) {
+				p = new NegotiateProduct(
+					this.provision_status,
+					this.free_trial == true,
+					StringUtils.parseDate(this.expiration_date),
+					properties);
+			} else if (this.product_id == PRODUCT_CLM) {
+				p = new ClmProduct(
+					this.provision_status,
+					this.free_trial == true,
+					StringUtils.parseDate(this.expiration_date),
+					properties);
+			}
+			return p;
 		}
 	}
 
@@ -128,7 +151,10 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 		public List<Product> toExternalForm() {
 			List<Product> result = new List<Product>();
 			for (APIProduct p : (this.products == null ? new List<APIProduct>() : this.products)) {
-				if (result != null) result.add(p.toExternalForm());
+				if (result != null) {
+					Product pp = p.toExternalForm();
+					if (pp != null) result.add(pp);
+				}
 			}
 			return result;
 		}

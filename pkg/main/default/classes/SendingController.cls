@@ -10,8 +10,6 @@ public with sharing class SendingController extends Controller {
 
 	public class DraftEnvelope {
 		@AuraEnabled
-		public AccountFeatures accountFeatures { get; private set; }
-		@AuraEnabled
 		public Envelope envelope { get; private set; }
 		@AuraEnabled
 		public List<Template> templates { get; private set; }
@@ -25,7 +23,6 @@ public with sharing class SendingController extends Controller {
 		public List<Recipient.EmailSettings> emailLocalizations { get; private set; }
 
 		private DraftEnvelope(
-			final AccountFeatures accountFeatures,
 			final Envelope envelope,
 			final List<Template> templates,
 			final List<Document> documents,
@@ -33,7 +30,6 @@ public with sharing class SendingController extends Controller {
 			final List<Recipient.Role> defaultRoles,
 			final List<Recipient.EmailSettings> emailLocalizations) {
 
-			this.accountFeatures = accountFeatures;
 			this.envelope = envelope;
 			this.templates = templates;
 			this.documents = documents;
@@ -79,7 +75,6 @@ public with sharing class SendingController extends Controller {
 				Credentials.save();
 			}
 			return new DraftEnvelope(
-				AccountFeatures.getInstance(),
 				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
 				templates,
 				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
@@ -136,10 +131,13 @@ public with sharing class SendingController extends Controller {
 
 	@AuraEnabled
 	public static Envelope sendEnvelope(final String envelopeJson) {
-		if (AccountFeatures.getInstance().isExpired) throw Controller.wrapException(Label.ExpiredTrialAccount);
+		if (AccountProducts.getInstance().isESignatureTrialExpired()) throw Controller.wrapException(Label.ExpiredTrialAccount);
 
 		try {
-			return EnvelopeService.sendEnvelope((Envelope)JSON.deserialize(envelopeJson, Envelope.class), false, true);
+			return EnvelopeService.sendEnvelope(
+				(Envelope)JSON.deserialize(envelopeJson, Envelope.class),
+				false,
+				true);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send envelope');
 		}

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>FeaturesCheckFrequency__c</fullName>
+    <fullName>ProductsCheckFrequency__c</fullName>
     <defaultValue>60</defaultValue>
     <deprecated>false</deprecated>
-    <description>Account Features Minutes Between Checks</description>
+    <description>Account Products Minutes Between Checks</description>
     <externalId>false</externalId>
-    <inlineHelpText>Account Features Minutes Between Checks</inlineHelpText>
-    <label>Account Features Minutes Between Checks</label>
+    <inlineHelpText>Account Products Minutes Between Checks</inlineHelpText>
+    <label>Account Products Minutes Between Checks</label>
     <precision>6</precision>
     <required>false</required>
     <scale>0</scale>

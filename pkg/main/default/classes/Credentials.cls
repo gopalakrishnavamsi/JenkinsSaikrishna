@@ -188,19 +188,6 @@ public with sharing class Credentials {
 			this.expires = expires;
 		}
 	}
-	
-	public class LimitedAccessToken {
-		public Credentials.AccessToken token { get; private set; }
-		public Url apiBaseurl { get; private set; }
-
-		public LimitedAccessToken(
-			final Credentials.AccessToken token,
-			final Url apiBaseurl) {
-
-			this.token = token;
-			this.apiBaseurl = apiBaseurl;
-		}
-	}
 
 	public static Boolean isAccountValid() {
 		return getInstance(UserInfo.getUserId(), false).isAccountValid;
@@ -564,12 +551,17 @@ public with sharing class Credentials {
 			settings.AccountName__c = null;
 			settings.Email__c = null;
 			settings.SystemSenderId__c = null;
-			settings.Features__c = null;
-			settings.FeaturesLastChecked__c = null;
+			settings.ProductsLastChecked__c = null;
 			settings.AdministratorProfileId__c = null;
 			settings.SenderProfileId__c = null;
 			upsert settings;
 			return settings;
+		}
+
+		public List<ProductSettings__c> deleteProductSettings() {
+			List<ProductSettings__c> result = ProductSettings__c.getAll().values();
+			delete result;
+			return result;
 		}
 
 		public List<Schema.User> deleteUserCredentials(final List<Schema.User> users) {
@@ -685,6 +677,7 @@ public with sharing class Credentials {
 
 	public static void clear(final Boolean resetUsers) {
 		DB.deleteAccountCredentials();
+		DB.deleteProductSettings();
 		if (resetUsers) {
 			Set<Id> userIds = new Set<Id>();
 			Boolean isWorking = true;
