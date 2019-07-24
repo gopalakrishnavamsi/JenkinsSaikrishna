@@ -95,6 +95,15 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static NegotiateService.LimitedAccessToken generateUploadNewVersionToken(final String agreementId) {
+		try {
+			return NegotiateService.generateUploadNewVersionToken(UUID.parse(agreementId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate upload new version access token.');
+		}
+	}
+
+	@AuraEnabled
 	public static String generateResourceToken(final String agreementId) {
 		try {
 			return GenService.getResourceToken(UUID.parse(agreementId));

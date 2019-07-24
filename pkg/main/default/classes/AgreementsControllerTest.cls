@@ -32,7 +32,7 @@ private class AgreementsControllerTest {
 			System.assertNotEquals(null, result);
 		}
 	}
-	
+
 	@IsTest
 	static void test_getAgreement_failure() {
 		System.runAs(UserMock.createUser()) {
@@ -59,7 +59,7 @@ private class AgreementsControllerTest {
 			System.assertNotEquals(null, agreement);
 		}
 	}
-	
+
 	@IsTest
 	static void test_getAgreements_failure() {
 		System.runAs(UserMock.createUser()) {
@@ -279,7 +279,7 @@ private class AgreementsControllerTest {
 			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
 			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
 			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
-		}		
+		}
 	}
 
 	@IsTest
@@ -311,6 +311,20 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
+	static void test_generateUploadToken_nonDocuSignUser() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.generateUploadToken(NegotiateAPIMock.SOURCE_OBJECT_ID_2);
+				throw new AssertException('Expected generate upload token to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_generateDownloadToken_success() {
 		NegotiateAPIMock.success();
 
@@ -319,6 +333,46 @@ private class AgreementsControllerTest {
 			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
+		}
+	}
+
+	@IsTest
+	static void test_generateDownloadToken_nonDocuSignUser() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected generate download token to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_generateUploadNewVersionToken_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadNewVersionToken(NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assertNotEquals(null, limitedAccessToken);
+		}
+	}
+
+	@IsTest
+	static void test_generateUploadNewVersionToken_nonDocuSignUser() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.generateUploadNewVersionToken(NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected generate upload new version token to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 
@@ -343,7 +397,7 @@ private class AgreementsControllerTest {
 			Test.startTest();
 			try {
 				String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				hasError = true;
 			}
 			Test.stopTest();
@@ -475,6 +529,30 @@ private class AgreementsControllerTest {
 			try {
 				AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected approveOnBehalfOrRecipientResponse request to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAgreementShareLink_success() {
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+			Test.stopTest();
+			System.assertNotEquals(result, null);
+		}
+	}
+
+	@IsTest
+	static void test_getAgreementShareLink_nonDocuSignUser() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected getAgreementShareLink to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}

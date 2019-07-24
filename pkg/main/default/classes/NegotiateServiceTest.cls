@@ -310,6 +310,22 @@ private class NegotiateServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_generateUploadNewVersionToken_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			NegotiateService.LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadNewVersionToken(NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, limitedAccessToken);
+			System.assertEquals('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjY4MTg1ZmYxLTRlNTEtNGNlOS1hZjFjLTY4OTgxMjIwMzMxNyJ9.eyJUb2tlblR5cGUiOjUsIklzc3VlSW5zdGFudCI6MTU1ODU2NDgyMywiZXhwIjoxNTU4NTY4NDIzLCJVc2VySWQiOiIzZGVkYWM1My00OGZhLTRkZTYtODk0YS0zNWI0ODAyYWQxMGQiLCJzaXRlaWQiOjEsInNjcCI6WyJzcHJpbmdfY29udGVudCJdLCJhdWQiOiI1NzUxYzI1NS0zM2E0LTRjOGQtYmY1YS0wNjU0YTUwNDE4ODYiLCJpc3MiOiJodHRwczovL2FjY291bnQtZC5kb2N1c2lnbi5jb20vIiwic3ViIjoiM2RlZGFjNTMtNDhmYS00ZGU2LTg5NGEtMzViNDgwMmFkMTBkIiwiYWN0IjoiNTc1MWMyNTUtMzNhNC00YzhkLWJmNWEtMDY1NGE1MDQxODg2IiwiYW1yIjpbImp3dF9iciJdfQ.aBrwKSZ09AqGqCNTE4NsAY-qDhflif94kcMEdq7zosZ7HRSFIggSOdRY8d9cvznGWsCp4hk4eKlihoUaHohMRKMwNW8dsmhPbff1t4Cm5xYEDTOOOrhA5ZC6bKJXBlLB5vhEga0yShMAY7ggbCOqxdCZH9pi3hp_1Z8G_8-7vQAPLfmqJo3tcdtyDXHfpdyJs5-4toxWiFtxX1VZS3I4tVre8w0P1QIpESDv-_-qHaE-4zniddCpg_CCR90ON83ZtBTG0HLQNj52YFAjKs5wm3nQrMC4V9C3vo9uyCSeBa9Lq0AgswFNoSLn7eiviRJB9iwSBx9Vuqx8xsOaKC9CMg', limitedAccessToken.token);
+			System.assertEquals('https://apidownloaduatna11.springcm.com', limitedAccessToken.apiDownloadBaseUrl);
+			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID, limitedAccessToken.entityId);
+		}
+	}
+
 
 	@IsTest
 	static void test_cancelApprovalOrExternalReview_success() {

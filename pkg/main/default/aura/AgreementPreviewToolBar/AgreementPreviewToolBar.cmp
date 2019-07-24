@@ -3,6 +3,7 @@
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="agreementActionManager" type="Object" access="public"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
+    <aura:attribute name="isAgreementDeleted" type="Boolean" access="public"/>
 
     <div class="toolBarContainer">
         <div class="slds-grid slds-grid_align-spread">
