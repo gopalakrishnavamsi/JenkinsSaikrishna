@@ -45,22 +45,22 @@
                                                              minute="2-digit" hour12="false"/>
                             </li>
                             <li class="slds-item slds-p-top_small">
-                                    <span class="{!'slds-badge' + if(v.agreementDetails.status == 'NEW',' new')
-                                                                + if(v.agreementDetails.status == 'NEW VERSION',' newversion')
-                                                                + if(v.agreementDetails.status == 'PENDING REVIEW',' pendingreview')
-                                                                + if(v.agreementDetails.status == 'REVIEWED',' reviewed')
-                                                                + if(v.agreementDetails.status == 'REVIEW CANCELLED',' reviewcancelled')
-                                                                + if(v.agreementDetails.status == 'REVIEW EXPIRED',' reviewexpired')
-                                                                + if(v.agreementDetails.status == 'PENDING APPROVAL',' pendingapproval')
-                                                                + if(v.agreementDetails.status == 'APPROVED',' approved')
-                                                                + if(v.agreementDetails.status == 'APPROVAL CANCELLED',' approvalcancelled')
-                                                                + if(v.agreementDetails.status == 'COMPLETED',' complete')
-                                                                + if(v.agreementDetails.status == 'REJECTED',' rejected')
-                                                                + if(v.agreementDetails.status == 'SIGNED',' signed')
-                                                                + if(v.agreementDetails.status == 'SIGNATURE CANCELLED',' signaturecancelled')
-                                                                + if(v.agreementDetails.status == 'NO STATUS','  nostatus')
-                                                                + if(v.agreementDetails.status == 'PENDING SIGNATURE',' pendingsignature')
-                                                                + if(v.agreementDetails.status == 'SYSTEM ERROR',' systemerror')}">
+                                    <span class="{!'slds-badge' + if(v.agreementDetails.status == 'NEW',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'NEW VERSION',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'PENDING REVIEW',' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == 'REVIEWED',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'REVIEW CANCELLED',' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == 'REVIEW EXPIRED',' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == 'PENDING APPROVAL',' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == 'APPROVED',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'APPROVAL CANCELLED',' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == 'COMPLETED',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'REJECTED',' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == 'SIGNED',' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'SIGNATURE CANCELLED',' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == 'NO STATUS','  ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == 'PENDING SIGNATURE',' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == 'SYSTEM ERROR',' ds-redAgreement-status')}">
                                         {!v.agreementDetails.status}
                                     </span>
                             </li>

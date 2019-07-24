@@ -1,6 +1,6 @@
 .THIS.toolBarContainer {
-    background-color: #005DB9;
-    color: white;
+    background-color: t(colorBackgroundAgreementPreviewHeader);
+    color: t(colorGray1);
 }
 
 .THIS .mainLogo img {
@@ -9,7 +9,7 @@
 
 .THIS .headerDivider {
     border-left: 1px solid white;
-    background: white;
+    background: t(colorBackgroundWhite);
     width: 1px;
     height: 35px;
     margin-top: 9px;
