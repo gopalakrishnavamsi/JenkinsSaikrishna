@@ -292,7 +292,7 @@
     text-align: center;
     vertical-align: middle;
     border: 1px solid t(colorTextWarning);
-    background-color: t(colorTextWarning);
+    background-color: t(colorBackgroundWarning);
     color: t(colorTextDefault);
 }
 
