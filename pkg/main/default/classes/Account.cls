@@ -18,6 +18,11 @@ public class Account {
 	@AuraEnabled
 	public String name { get; private set; }
 	/**
+	 * The DocuSign account status.
+	 */
+	@AuraEnabled
+	public String status { get; private set; }
+	/**
 	 * The DocuSign account plan.
 	 */
 	@AuraEnabled
@@ -54,6 +59,7 @@ public class Account {
 	 * @param id The DocuSign account ID.
 	 * @param accountNumber The DocuSign account number.
 	 * @param name The DocuSign account name.
+	 * @param status The DocuSign account status.
 	 * @param plan The DocuSign account plan.
 	 * @param billing The DocuSign account billing information.
 	 * @param connect The DocuSign Connect permissions for the account.
@@ -62,6 +68,7 @@ public class Account {
 		final UUID id,
 		final Long accountNumber,
 		final String name,
+		final String status,
 		final Plan plan,
 		final Billing billing,
 		final ConnectPermission connect) {
@@ -69,6 +76,7 @@ public class Account {
 		this.id = id;
 		this.accountNumber = accountNumber;
 		this.name = name;
+		this.status = status;
 		this.plan = plan;
 		this.billing = billing;
 		this.connect = connect == null ? ConnectPermission.None : connect;

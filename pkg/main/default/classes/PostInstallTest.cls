@@ -31,7 +31,6 @@ private class PostInstallTest {
 			pir.endStepSuccess('STEP2');
 			pir.skipStep('STEP3', 'SKIP3');
 			pir.endStepFailure('STEP4', new DocuSignException('FAILURE4'));
-			List<String> toAddresses = new List<String> { 'test1@unit.test', 'test2@unit.test' };
 
 			Test.startTest();
 			Boolean result = PostInstall.notify(pir, UserInfo.getOrganizationId(), UserInfo.getUserId(),
@@ -103,9 +102,8 @@ private class PostInstallTest {
 			System.assertEquals(null, settings.AccountId__c);
 			System.assertEquals(null, settings.Email__c);
 			System.assertEquals(null, settings.SystemSenderId__c);
-			System.assertEquals(0, settings.Features__c);
-			System.assertEquals(null, settings.FeaturesLastChecked__c);
-			System.assertEquals(60, settings.FeaturesCheckFrequency__c);
+			System.assertEquals(null, settings.ProductsLastChecked__c);
+			System.assertEquals(60, settings.ProductsCheckFrequency__c);
 			System.assertEquals(60000, settings.CalloutTimeout__c);
 			System.assertNotEquals(null, settings.EncryptionKey__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultEntityResolver', settings.EntityResolvers__c);
@@ -129,9 +127,8 @@ private class PostInstallTest {
 			settings.EntityResolvers__c = 'Resolver1,Resolver2';
 			settings.DocumentResolvers__c = 'Resolver1,Resolver2';
 			settings.RecipientResolvers__c = 'Resolver1,Resolver2';
-			settings.Features__c = 1234;
-			settings.FeaturesLastChecked__c = Datetime.now();
-			settings.FeaturesCheckFrequency__c = 60;
+			settings.ProductsLastChecked__c = Datetime.now();
+			settings.ProductsCheckFrequency__c = 60;
 			settings.CalloutTimeout__c = 9999;
 			insert settings;
 

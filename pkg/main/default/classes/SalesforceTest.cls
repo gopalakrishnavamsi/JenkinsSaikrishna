@@ -63,20 +63,6 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_canUseApi_default() {
-		System.assert(!Salesforce.canUseApi);
-	}
-
-	@IsTest
-	static void test_canUseApi_enabled() {
-		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-		s.CanUseSalesforceApi__c = true;
-		insert s;
-
-		System.assert(Salesforce.canUseApi);
-	}
-
-	@IsTest
 	static void test_isSObjectId() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a = TestUtils.createAccount();

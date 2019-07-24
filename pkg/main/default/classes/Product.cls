@@ -1,16 +1,44 @@
-public class Product {
+public abstract class Product {
 
+	public static final String NAME_ESIGNATURE = 'esign';
+	public static final String NAME_GEN = 'gen';
+	public static final String NAME_NEGOTIATE = 'negotiate';
+	public static final String NAME_CLM = 'clm';
+
+	public static final String STATUS_PENDING = 'pending';
+	public static final String STATUS_ACTIVE = 'active';
+	public static final String STATUS_EXPIRED = 'expired';
+
+	@AuraEnabled
 	public String name { get; private set; }
+	@AuraEnabled
 	public String status { get; private set; }
+	@AuraEnabled
 	public Boolean isTrial { get; private set; }
-	public Datetime trialExpires { get; private set; }
+	@AuraEnabled
+	public Date trialExpires { get; private set; }
+	@AuraEnabled
+	public Boolean isExpired {
+		get {
+			return this.isTrial
+				&& this.trialExpires < Date.today();
+		}
+	}
+	@AuraEnabled
+	public Integer daysUntilExpires {
+		get {
+			if (!this.isTrial || this.isExpired) return 0;
+
+			return Math.max(Date.today().daysBetween(this.trialExpires), 0);
+		}
+	}
 	public Map<String, String> properties { get; private set; }
 
-	public Product(
+	protected Product(
 		final String name,
 		final String status,
 		final Boolean isTrial,
-		final Datetime trialExpires,
+		final Date trialExpires,
 		final Map<String, String> properties) {
 
 		this.name = name;

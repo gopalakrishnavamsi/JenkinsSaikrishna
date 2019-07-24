@@ -7,7 +7,6 @@ public with sharing class Salesforce {
 	private static final Boolean ARE_QUOTES_ENABLED;
 	private static final Boolean ARE_WORK_ORDERS_ENABLED;
 	private static final Boolean IS_COMMUNITY_SITE;
-	private static final Boolean CAN_USE_API;
 	private static final Url BASE_URL;
 	@TestVisible
 	private static final String INSTANCE_NAME;
@@ -69,11 +68,6 @@ public with sharing class Salesforce {
 			return IS_COMMUNITY_SITE;
 		}
 	}
-	public static Boolean canUseApi {
-		get {
-			return CAN_USE_API;
-		}
-	}
 	public static Url oauthUrl {
 		get {
 			return new Url(BASE_URL, '/services/oauth2/authorize');
@@ -95,7 +89,6 @@ public with sharing class Salesforce {
 		IS_CHATTER_ENABLED = GLOBAL_DESCRIBE.containsKey('FeedItem');
 		IS_CPQ_ENABLED = GLOBAL_DESCRIBE.containsKey('SBQQ__QuoteDocument__c');
 		IS_COMMUNITY_SITE = Site.getSiteType() == 'ChatterNetwork';
-		CAN_USE_API = AccountSettings__c.getOrgDefaults().CanUseSalesforceApi__c;
 	}
 
 	public class MetadataApiNotSupportedException extends Exception {

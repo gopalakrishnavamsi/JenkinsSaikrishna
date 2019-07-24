@@ -56,13 +56,12 @@ public class ProvisioningAPIMock extends OAuthTokenMock {
 				ProvisioningAPI.APIProducts ps = new ProvisioningAPI.APIProducts();
 				ps.id = accountId;
 				ps.name = 'Unit Test';
-				ps.products = new List<ProvisioningAPI.APIProduct>();
-				ProvisioningAPI.APIProduct p = new ProvisioningAPI.APIProduct();
-				p.product_id = 'gen';
-				p.free_trial = true;
-				p.provision_status = 'active';
-				p.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
-				p.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
+				ProvisioningAPI.APIProduct gen = new ProvisioningAPI.APIProduct();
+				gen.product_id = 'Gen';
+				gen.free_trial = true;
+				gen.provision_status = 'active';
+				gen.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+				gen.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
 					new ProvisioningAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
 					new ProvisioningAPI.APIProductProperty('invite_callback_uri', 'https://integration.test.springcm.com/provisioning/v1/callbacks/UserInvited'),
 					new ProvisioningAPI.APIProductProperty('invite_redirect_uri', 'https://invite.redirect.docusign.com/'),
@@ -71,7 +70,19 @@ public class ProvisioningAPIMock extends OAuthTokenMock {
 					new ProvisioningAPI.APIProductProperty('invite_email_subject', 'Unit Test'),
 					new ProvisioningAPI.APIProductProperty('invite_email_body', '<html/>')
 				};
-				ps.products.add(p);
+				ProvisioningAPI.APIProduct negotiate = new ProvisioningAPI.APIProduct();
+				negotiate.product_id = 'Negotiate';
+				negotiate.free_trial = true;
+				negotiate.provision_status = 'active';
+				negotiate.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+				ProvisioningAPI.APIProduct clm = new ProvisioningAPI.APIProduct();
+				clm.product_id = 'CLM';
+				clm.free_trial = false;
+				clm.provision_status = 'active';
+				clm.expiration_date = null;
+				ps.products = new List<ProvisioningAPI.APIProduct> {
+					gen, negotiate, clm
+				};
 				response.setBody(JSON.serialize(ps));
 			} else { // GET all account products
 				// TODO: Mock resp

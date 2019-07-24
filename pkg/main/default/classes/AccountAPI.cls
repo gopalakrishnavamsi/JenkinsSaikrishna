@@ -61,6 +61,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 				UUID.parse(this.accountIdGuid),
 				String.isBlank(this.externalAccountId) ? null : Long.valueOf(this.externalAccountId),
 				this.accountName,
+				String.isBlank(this.suspensionStatus) ? Product.STATUS_ACTIVE : this.suspensionStatus,
 				new Account.Plan(
 					UUID.parse(this.currentPlanId),
 					this.planName,
@@ -619,5 +620,53 @@ public with sharing class AccountAPI extends ESignatureAPI {
 		}
 
 		return true;
+	}
+
+	// Serialization objects for getProduct
+	private class ApiFeature {
+		public String name;
+		public String value;
+	}
+
+	private class ApiProduct {
+		public List<ApiFeature> accountSettings;
+
+		public ESignatureProduct toExternalForm(final Account account) {
+			Set<ESignatureProduct.Feature> features = new Set<ESignatureProduct.Feature>();
+			if (Collection.isNotEmpty(this.accountSettings)) {
+				for (ApiFeature accountSetting : this.accountSettings) {
+					if (accountSetting.name == 'allowMergeFields' && accountSetting.value == 'true') {
+						features.add(ESignatureProduct.Feature.MergeFields);
+					} else if (accountSetting.name == 'allowSigningGroups' && accountSetting.value == 'true') {
+						features.add(ESignatureProduct.Feature.SigningGroups);
+					} else if (accountSetting.name == 'enableSMSAuthentication' && accountSetting.value == 'true') {
+						features.add(ESignatureProduct.Feature.SmsAuthentication);
+					} else if (accountSetting.name == 'allowServerTemplates' && accountSetting.value == 'true') {
+						features.add(ESignatureProduct.Feature.Templates);
+					} else if (accountSetting.name == 'allowBulkSend' && accountSetting.value == 'true') {
+						features.add(ESignatureProduct.Feature.BulkSending);
+					}
+				}
+			}
+			return new ESignatureProduct(
+				account == null ? null : account.status,
+				account != null && account.isTrial,
+				account == null || account.billing == null || !account.isTrial ? null : account.billing.endDate,
+				features);
+		}
+	}
+
+	public ESignatureProduct getProduct() {
+		return this.getProduct(RestAPI.defaultTimeout);
+	}
+
+	public ESignatureProduct getProduct(final Integer timeout) {
+		RestAPI.Response response = this.get('settings', timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get eSignature product: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+		return ((ApiProduct)JSON.deserialize(response.body, ApiProduct.class)).toExternalForm(
+			this.getAccount());
 	}
 }

@@ -89,7 +89,6 @@ global with sharing class AccountService {
 	}
 
 	public static Account getCurrentAccount() {
-
 		if (currentAccount == null) {
 			try {
 				Account a = AccountAPI.getInstance().getAccount();
