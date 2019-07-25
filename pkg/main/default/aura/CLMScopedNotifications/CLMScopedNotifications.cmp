@@ -1,0 +1,33 @@
+<aura:component>
+    <aura:attribute name="notificationIcon" type="String" />
+    <aura:attribute name="notificationTitle" type="String" default="{!$Label.c.PreSetObjMappings}" />
+    <aura:attribute name="notificationText" type="String" default="{!$Label.c.PreSetObjMappingsBody}"/>
+    <aura:attribute name="isClosable" type="Boolean" default="true" />
+    <aura:attribute name="notificationIconSize" type="String" />
+
+    <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light" role="status">
+        <div class="slds-media__figure">
+            <span class="slds-icon_container slds-icon-utility-info" title="information">
+                <span class="slds-icon_container slds-icon-utility-info" title="Information Icon">
+                    <div class="ds-iconAlign">
+                        <lightning:icon iconName="utility:info" size="small" alternativeText="Information Icon" class="ds-icon-top-margin"/>
+                    </div>
+                </span>
+            <span class="slds-assistive-text">information</span>
+            </span>
+        </div>
+        <div class="slds-media__body">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_11-of-12">
+                    <div class="slds-p-bottom_xx-small "><b>{!v.notificationTitle}</b></div>
+                    <p>{!v.notificationText}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <div class="slds-float_right slds-p-bottom_large">
+                        <lightning:icon iconName="utility:close" size="xx-small" alternativeText="Information Icon" onclick="{!c.closeScopedNotification}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

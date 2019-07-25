@@ -1,0 +1,121 @@
+<aura:component extends="c:CLMUtility">
+    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+
+    <aura:attribute name="summary" type="String" default="Map Salesforce objects to DocuSign CLM first. Then you can create templates and generate documents using your Salesforce data." />
+    <aura:attribute name="title" type="String" default="Map Your Salesforce Objects" />
+    <aura:attribute name="buttonName" type="String" default="Map Objects" />
+    <aura:attribute name="mappedObjCount" type="String" default="2" />
+
+    
+    <lightning:card>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_9-of-12">
+                <lightning:card>
+                    <aura:set attribute="title">
+                        <div class="slds-p-left_medium ds-card-heading">
+                            <b>{!v.title}</b>
+                        </div>
+                    </aura:set>
+                    <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                        <p>
+                            {!v.summary}
+                        </p>
+                    </div>
+                </lightning:card>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                    <lightning:button variant="brand" class="ds-button-width" label="{!v.buttonName}" title="{!v.buttonName}" onclick="{!c.gotoIntegrationHome}" />
+                </div>
+            </div>
+        </div>
+        <div class="ds-green-svg slds-float--left slds-p-left_large slds-m-left_small slds-m-bottom_large">
+            <lightning:icon iconName="utility:success" size="x-small" alternativeText="Information Icon" />
+            <a href="javascript:void(0)" class="slds-p-left_small " onclick="{!c.gotoIntegrationHome}">
+                {!v.mappedObjCount} mapped objects 
+            </a>
+        </div>
+        <div class="slds-m-right_medium" style="cursor: pointer;" onclick="{!c.toggleSection}">
+            <section class="slds-clearfix">
+
+                <div class="slds-float--right slds-p-right_medium">
+                    <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small" alternativeText="Indicates add" />
+                    <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevronup" size="x-small" alternativeText="Indicates dash" />
+                </div>
+                <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small" aura:id="objMapping">Show Steps</a>
+                <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small" aura:id="objMapping">Hide Steps</a>
+            </section>
+        </div>
+        <div class="slds-border_top slds-hide slds-p-around--medium" aura:id="objMapping">
+            <div class="slds-grid slds-p-around_x-small slds-wrap">
+                <div class="slds-col slds-size_1-of-12 ">
+                    <div class="slds-p-left_small">
+                        <button class="ds-index-style">1</button>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_11-of-12">
+                    <strong class="ds-font-size ds-blue-color">{!$Label.c.SelectObject}</strong>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
+                <div class=" slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.PickObjectTitle}</b></span>
+                    <div>
+                        {!$Label.c.PickObjectBody}
+                    </div>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.PickSpecificObjectTitle}</b></span>
+                    <div>
+                        {!$Label.c.PickSpecificObjectBody}
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-around_x-small slds-wrap">
+                <div class="slds-col slds-size_1-of-12">
+                    <div class="slds-p-left_small">
+                        <button class="ds-index-style">2</button>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_11-of-12">
+                    <strong class="ds-blue-color ds-font-size">{!$Label.c.ChooseLocation}</strong>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.ChooseLocationTitle}</b></span>
+                    <div>
+                        {!$Label.c.ChooseLocationBody}
+                    </div>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.ObjectFolderTitle}</b></span>
+                    <div>
+                        {!$Label.c.ObjectFolderBody}
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-around_x-small slds-wrap">
+                <div class="slds-col slds-size_1-of-12">
+                    <div class="slds-p-left_small">
+                        <button class="ds-index-style">3</button>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_11-of-12">
+                    <strong class="ds-font-size ds-blue-color">{!$Label.c.NameObjectFolder}</strong>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.NameObjectFolderTitle}</b></span>
+                    <div>
+                       {!$Label.c.NameObjectFolderBody}
+                    </div>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.PickAFieldTitle}</b></span>
+                    <div>
+                        {!$Label.c.PickAFieldBody}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

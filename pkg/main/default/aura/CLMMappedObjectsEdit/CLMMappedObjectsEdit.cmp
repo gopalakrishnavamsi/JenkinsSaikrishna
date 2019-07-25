@@ -1,0 +1,257 @@
+<aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
+    <!--event fire-->
+    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+    <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
+    <aura:registerEvent name="CLMPathEvent" type="c:CLMPathEvent" />
+    <!--event handler-->
+    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
+    <!--place holder attributes-->
+    <aura:attribute name="title" type="String" default="Your Salesforce Objects" />
+    <aura:attribute name="titleHelpText" type="String" default="We have listed all your standard and custom Salesforce objects below." />
+    <aura:attribute name="currentStep" type="String" default="1" />
+    <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
+    <!--internal attributes-->
+    <aura:attribute name="allObjects" type="List" access="private" />
+    <aura:attribute name="allObjectsList" type="List" access="private" />
+    <aura:attribute name="allObjectFileds" type="List" access="private" />
+    <aura:attribute name="allObjectFiledsList" type="List" access="private" />
+    <aura:attribute name="SelectedObjDetais" type="Object" access="private" />
+    <aura:attribute name="SelectedFiledsDetails" type="List" default="[]" access="private" />
+    <aura:attribute name="SelectedObjFieldName" default="{}" type="String" access="private" />
+    
+    
+    
+    <div class="slds-card__body  slds-p-left_x-large slds-p-right_x-large">
+        <div class="slds-border_top">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <div class="slds-p-top_medium slds-p-bottom_small ">
+                        <span class="medium-fonts-size blue-text-color">
+                            <b>{!v.title} </b>
+                            
+                        </span>
+                        <span class="blue-help-text position-helptext slds-p-left_xx-small slds-m-top_xxx-small">
+                            <lightning:helptext content="{!v.titleHelpText}" />
+                        </span>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-p-top_x-small slds-p-bottom_small">
+                        <aura:if isTrue="{!v.currentStep=='1'}">
+                            <div onkeyup="{! c.handleSearchObject }">
+                                <lightning:input aura:id="search-object" placeholder="Search Object" type="search" variant="label-hidden" />
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.currentStep=='2'}">
+                            <lightning:input name="fileName" label="Select a field below to name your folder" value="{!v.SelectedObjFieldName}" />
+                            <div class="slds-grid">
+                                <div>
+                                    <lightning:button variant="base" label="Why am I selecting fields?" title="Why am I selecting fields?" />
+                                    
+                                </div>
+                                <div class="slds-col_bump-left">
+                                    <lightning:button variant="base" label="See Example" title="See Example" />
+                                    
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.currentStep=='3'}">
+                            <b>Path in DocuSign CLM:</b><span class="slds-p-left_medium blue-text-color">Other Sources/Salesforce/{!v.SelectedObjDetais.objectName}/</span>
+                        </aura:if>
+                        
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-p-top_small slds-p-bottom_small ">
+                        
+                        <div class="slds-scrollable_y" style="max-height:500px">
+                            <aura:if isTrue="{!v.currentStep=='1'}">
+                                <ul class="slds-tree" role="tree">
+                                    <aura:iteration items="{!v.allObjectsList}" var="data">
+                                        <li aria-level="1" id="{!data.objecApiName}" role="treeitem" tabindex="0" onclick="{!c.onObjSelection}">
+                                            <div class="slds-tree__item">
+                                                <lightning:icon size="x-small" iconName="{! data.selected ? 'utility:check':'utility:open_folder'}" alternativeText="open_folder" />
+                                                <span class="slds-p-left_small slds-has-flexi-truncate">
+                                                    {!data.objectName}
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </aura:iteration>
+                                </ul>
+                            </aura:if>
+                            <aura:if isTrue="{!v.currentStep=='2'}">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none">
+                                        <div class="slds-p-bottom_small" onkeyup="{! c.handleSearchField }">
+                                            <lightning:input aura:id="search-field" placeholder="Search Fields" type="search" variant="label-hidden" />
+                                            
+                                        </div>
+                                        <ul class="slds-tree" role="tree">
+                                            <li aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:down" alternativeText="open_folder" />
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <span class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    {!v.SelectedObjDetais.objectName} 
+                                                </span>
+                                                <ul role="group">
+                                                    <aura:iteration items="{!v.allObjectFiledsList}" var="data">
+                                                        <li aria-level="2" id="{!data.objecApiName}" role="treeitem" onclick="{!c.onObjFieldSelection}">
+                                                            <div class="slds-tree__item slds-p-around_x-small">
+                                                                <lightning:icon size="x-small" iconName="{! data.selected ? 'utility:check':'utility:topic2'}" alternativeText="topic2" />
+                                                                <span class="slds-p-left_x-small slds-tree__item-label slds-truncate" title="Tree Item">
+                                                                    {!data.objectName}
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                    </aura:iteration>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none ">
+                                        <div class=" slds-p-left_small slds-p-bottom_small slds-p-top_small">
+                                            <span class="x-medium-fonts-size blue-text-color">
+                                                <b>Selected Fields ({!v.SelectedFiledsDetails.length})</b>
+                                            </span>
+                                        </div>
+                                        <ul class="slds-tree" role="tree">
+                                            <li aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <span class="  slds-p-left_x-small slds-has-flexi-truncate">
+                                                    <b>  {!v.SelectedObjDetais.objectName} </b>
+                                                </span>
+                                                <ul role="group">
+                                                    <aura:iteration items="{!v.allObjectFiledsList}" var="data">
+                                                        <aura:if isTrue="{!data.selected}">
+                                                            <li aria-level="2" id="{!data.objecApiName}" role="treeitem" onclick="{!c.onObjFieldDeSelection}">
+                                                                <div class="slds-tree__item slds-p-around_x-small slds-grid">
+                                                                    <lightning:icon size="x-small" iconName="utility:topic2" alternativeText="topic2" />
+                                                                    <span class="slds-p-left_x-small slds-tree__item-label slds-truncate" title="Tree Item">
+                                                                        {!data.objectName}
+                                                                    </span>
+                                                                    <div class="slds-col_bump-left">
+                                                                        <lightning:icon size="x-small" iconName="utility:close" alternativeText="Remove" variant="error" />
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </aura:if>
+                                                    </aura:iteration>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{!v.currentStep=='3'}">
+                                <div class="slds-grid slds-m-around_x-small ">
+                                    <div class="slds-col_bump-left">
+                                        <lightning:button label="Add Subfolder" iconName="utility:add" iconPosition="right" />
+                                        <lightning:button label="Rename" iconName="utility:edit" iconPosition="right" />
+                                        <lightning:button label="Delete" iconName="utility:delete" iconPosition="right" variant="destructive" />
+                                    </div>
+                                </div>
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none">
+                                        <div class="slds-p-around_medium slds-border_bottom">
+                                            Your DocuSign CLM Folders
+                                        </div>
+                                        <ul class="slds-tree slds-p-around_medium" role="tree">
+                                            <li aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    Other Sources
+                                                </span>
+                                                <ul role="group">
+                                                    <li aria-level="2" aria-expanded="true" role="treeitem">
+                                                        <div class="slds-tree__item slds-p-around_x-small">
+                                                            <lightning:icon size="x-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                            <span class="slds-p-left_x-small slds-tree__item-label slds-truncate" title="Salesforce">
+                                                                Salesforce
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                    <ul role="group">
+                                                        <li aria-level="3" aria-expanded="true" role="treeitem">
+                                                            <div class="slds-tree__item slds-p-around_x-small">
+                                                                <lightning:icon size="x-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                                <span class="slds-p-left_x-small slds-tree__item-label slds-truncate" title="Salesforce">
+                                                                    {!v.SelectedObjDetais.objectName}
+                                                                </span>
+                                                            </div>
+                                                        </li>
+                                                        <ul role="group">
+                                                            <li aria-level="4" role="treeitem">
+                                                                <div class="slds-tree__item slds-p-around_x-small">
+                                                                    <lightning:icon size="x-small" iconName="utility:frozen" alternativeText="open_folder" />
+                                                                    <span class="slds-p-left_x-small slds-tree__item-label slds-truncate" title="Salesforce">
+                                                                        {!v.SelectedObjFieldName}
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </ul>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none ">
+                                        <div class="slds-p-around_medium slds-border_bottom">
+                                            Case Folder Contents
+                                        </div>
+                                        <ul class="slds-tree slds-p-around_medium" role="tree">
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    {!v.SelectedObjDetais.objectName} Object 1
+                                                </span>
+                                            </li>
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    
+                                                </span>
+                                            </li>
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedObjDetais.objecApiName}" role="treeitem" tabindex="0">
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul class="slds-tree slds-p-around_medium" role="tree">
+                                            <li aria-expanded="true" class="slds-grid" aria-level="1" role="treeitem" tabindex="0">
+                                                <div>
+                                                    <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:info" alternativeText="open_folder" />
+                                                </div>
+                                                <div>
+                                                    <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                        This is a logical interpretatation of how all the instances of your mapped object(such as 'New Account 1')
+                                                        will each have folder of thir own in DocuSign CLM.
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </div>
+                </lightning:layoutItem>
+                
+            </lightning:layout>
+        </div>
+    </div>
+    <footer class="slds-modal__footer">
+        <aura:if isTrue="{!v.currentStep=='1'}">
+            <lightning:button label="Cancel" title="Cancel" onclick="{! c.back }" />
+            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!!v.SelectedObjDetais}" />
+        </aura:if>
+        <aura:if isTrue="{!v.currentStep=='2'}">
+            <lightning:button label="Back" title="Back" onclick="{! c.back }" />
+            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!v.SelectedFiledsDetails.length==0}" />
+        </aura:if>
+        <aura:if isTrue="{!v.currentStep=='3'}">
+            <lightning:button label="Back" title="Back" onclick="{! c.back }" />
+            <lightning:button variant="brand" label="Confirm" title="Confirm" />
+        </aura:if>
+    </footer>
+</aura:component>

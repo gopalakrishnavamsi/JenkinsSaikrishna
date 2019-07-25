@@ -1,0 +1,7 @@
+<aura:event type="APPLICATION" description="Event For Capturing Navigational button clicks " >
+    <aura:attribute type="string" name="componentName"/>
+    <aura:attribute type="string" name="tabIndex"/>
+    <aura:attribute type="string" name="fromComponent"/>
+    <aura:attribute type="string" name="toComponent"/>
+    <aura:attribute type="string" name="type"/>
+</aura:event>

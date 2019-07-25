@@ -1,0 +1,32 @@
+<aura:component>
+  
+
+    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLM_DocuSign+'/Illustration/HavingTrouble.png')}" />
+    <aura:attribute name="summary" type="String" default="{!$Label.c.HelpInfoBody}" />
+    <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}" />
+    <aura:attribute name="isGrey" type="Boolean" default="false" />    
+   
+    <lightning:card class="{!v.isGrey?'slds-m-top_none ds-gray-color':'slds-m-top_none'}">
+        <div class="slds-grid">
+            <div class="slds-col slds-size_9-of-12">
+                <lightning:card class="{!v.isGrey?'ds-gray-color':''}">
+                    <aura:set attribute="title">
+                        <div class="slds-p-left_medium ds-card-heading">
+                            <b>{!v.title}</b>
+                        </div>
+                    </aura:set>
+                    <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                        <p>
+                            <aura:unescapedHtml value="{!v.summary}"> </aura:unescapedHtml>
+                        </p>
+                    </div>
+                </lightning:card>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <div class="slds-float_right slds-p-right_large">
+                    <img src="{!v.imageURL}" style="height:6rem;width:6rem;" alt="troubleImage" />
+                </div>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>
