@@ -1,13 +1,71 @@
 <aura:tokens extends="force:base">
+    <!--spacing -->
     <aura:token name="spacingXxLarge" value="3rem"/>
+    <aura:token name="spacingMedium" value="1rem"/>
+    <aura:token name="spacingLarge" value="1.5rem"/>
+
+    <!-- used as border color in strike look up pills -->
     <aura:token name="colorBorderInputDisabled" value="#a8b7c7"/>
-    <aura:token name="fontSizeTextSmall" value="0.8125rem"/>
-    <aura:token name="colorBackgroundDestructive" value="#c23934"/>
+
+    <!-- font sizes -->
+    <aura:token name="fontSize1" value="0.625rem"/>
+    <aura:token name="fontSize2" value="0.75rem"/>
+    <aura:token name="fontSize3" value="0.8125rem"/>
+
+    <!-- z index overlay -->
     <aura:token name="zIndexOverlay" value="8000"/>
+
+    <!-- Heights -->
+
+    <!-- container heights -->
+    <aura:token name="heightHeader" value="3.125rem"/>
+    <aura:token name="ninetyPercentViewPortHeight" value="90vh"/>
+
+    <!-- Widths -->
+
+    <!-- container widths -->
+    <aura:token name="fullViewPortWidth" value="100vw"/>
+
+    <!--Background Colors -->
+    <!-- Default background gray color -->
+    <aura:token name="colorBackground" value="#f3f2f2"/>
+    <!--Used in Setup -->
     <aura:token name="colorBackgroundInfo" value="#54698d"/>
-    <aura:token name="colorBackgroundWarning" value="#ffb75d"/>
-    <aura:token name="colorTextWarning" value="#ffb75d"/>
-    <aura:token name="colorTextSuccessInverse" value="#4bca81"/>
-    <aura:token name="colorBackgroundBrandPrimary" value="#0070d2"/>
+    <!-- Use this token for white background -->
+    <aura:token name="colorBackgroundWhite" value="#ffffff"/>
+    <!-- Use this token for success green -->
     <aura:token name="colorBackgroundSuccessDark" value="#04844b"/>
+    <!-- Use this token for yellow warning -->
+    <aura:token name="colorBackgroundWarning" value="#ffb75d"/>
+    <!-- Use this token for red error -->
+    <aura:token name="colorBackgroundDestructive" value="#c23934"/>
+    <!--Science blue Color in LDS tokens -->
+    <aura:token name="colorBackgroundBrandPrimary" value="#0070d2"/>
+    <!-- Agreement Preview Header background color -->
+    <aura:token name="colorBackgroundAgreementPreviewHeader" value="#005DB9"/>
+    <!-- color brand darker -->
+    <aura:token name="colorBrandDarker" value="#005fb2"/>
+    <!-- color background approver icon -->
+    <aura:token name="colorBackgroundApproverIcon" value="#14A9DA"/>
+
+
+    <!-- Colors -->
+    <!--White -->
+    <aura:token name="colorGray1" value="#ffffff"/>
+    <!--Light Gray -->
+    <aura:token name="colorGray3" value="#f3f2f2"/>
+    <!--Brand Accessible -->
+    <aura:token name="brandAccessible" value="#0070d2"/>
+
+
+    <!-- Text Colors -->
+    <aura:token name="colorTextWarning" value="#ffb75d"/>
+    <!-- Text color for success text on dark backgrounds./ Variant of Green success color -->
+    <aura:token name="colorTextSuccessInverse" value="#4bca81"/>
+    <!--Error text color -->
+    <aura:token name="colorTextError" value="#c23934"/>
+    <!--color text link -->
+    <aura:token name="colorTextLink" value="#006DCC"/>
+
+
 </aura:tokens>

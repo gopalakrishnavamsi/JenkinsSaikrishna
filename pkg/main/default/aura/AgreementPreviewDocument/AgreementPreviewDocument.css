@@ -5,3 +5,11 @@
 .THIS.ds-fadeBackground {
     opacity: 0.2;
 }
+
+.THIS .ds-text-currentVersionName {
+    color: t(brandAccessible);
+}
+
+.THIS .scmwgt {
+    height: t(ninetyPercentViewPortHeight);
+}

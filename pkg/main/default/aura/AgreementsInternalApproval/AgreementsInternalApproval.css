@@ -13,7 +13,7 @@
 }
 
 .THIS .ds-approver-icon-color {
-    background-color: #14A9DA;
+    background-color: t(colorBackgroundApproverIcon);
 }
 
 .THIS .ds-fadeBackground {

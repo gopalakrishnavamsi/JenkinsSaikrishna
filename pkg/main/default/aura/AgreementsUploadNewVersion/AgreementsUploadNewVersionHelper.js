@@ -62,7 +62,7 @@
     //set original version
     var originalVersion = {
       'name': stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-      'currentVersion': stringUtils.format('{0} {1} ', 'Original', '-'),
+      'currentVersion': $A.get('$Label.c.OriginalVersion'),
       'createdDate': agreement.createdDate,
       'extension': agreement.extension
     };

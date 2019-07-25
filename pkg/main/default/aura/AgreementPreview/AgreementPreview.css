@@ -1,31 +1,27 @@
 .THIS {
-    background-color: #F3F2F2;
+    background-color: t(colorBackground);
 }
 
 .THIS .fullContainer {
-    width: 100vw;
+    width: t(fullViewPortWidth);
 }
 
 .THIS .documentContainer {
-    width: 100vw;
-    height: 92.5vh;
-    background-color: rgb(243, 242, 242);
+    width: t(fullViewPortWidth);
+    height: t(ninetyPercentViewPortHeight);
+    background-color: t(colorBackground);
 }
 
 .THIS .toolbarContainer {
-    width: 100vw;
-    min-height: 55px;
-    background-color: #005DB9;
+    width: t(fullViewPortWidth);
+    min-height: t(heightHeader);
+    background-color: t(colorBackgroundAgreementPreviewHeader);
     border-bottom: 2.5px solid #194BA0;
 }
 
 .THIS .loadingContainer {
     z-index: 100;
     top: 40%;
-}
-
-.THIS .scmwgt .flexbox__container.-horizontal {
-    height: 91.5vh;
 }
 
 .THIS .backgroundDisabled{

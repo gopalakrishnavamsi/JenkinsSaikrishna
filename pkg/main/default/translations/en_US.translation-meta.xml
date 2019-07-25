@@ -3615,6 +3615,10 @@
 		<label>Error while uploading a new version of the agreement.</label>
 		<name>UploadNewVersionError</name>
 	</customLabels>
+	<customLabels>
+		<label>Original -</label>
+		<name>OriginalVersion</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

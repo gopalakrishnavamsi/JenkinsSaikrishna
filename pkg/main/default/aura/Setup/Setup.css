@@ -291,7 +291,7 @@
     padding-right: t(spacingMedium);
     text-align: center;
     vertical-align: middle;
-    border: 1px solid t(colorBackgroundWarning);
+    border: 1px solid t(colorTextWarning);
     background-color: t(colorBackgroundWarning);
     color: t(colorTextDefault);
 }

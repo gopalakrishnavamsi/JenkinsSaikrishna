@@ -6708,4 +6708,11 @@
 		<shortDescription>UploadNewVersionError</shortDescription>
 		<value>Error while uploading a new version of the agreement.</value>
 	</labels>
+	<labels>
+		<fullName>OriginalVersion</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OriginalVersion</shortDescription>
+		<value>Original -</value>
+	</labels>
 </CustomLabels>

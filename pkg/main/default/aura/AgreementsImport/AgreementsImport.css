@@ -1,6 +1,6 @@
 .THIS .ds-visualPickerHeading {
-    font-size: t(fontSizeTextSmall);
-    color: #006DCC;
+    font-size: t(fontSize3);
+    color: t(colorTextLink);
 }
 
 .THIS .ds-fileSpacing {
