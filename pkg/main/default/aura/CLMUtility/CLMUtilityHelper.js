@@ -1,5 +1,5 @@
 ({
-    'callServer': function(component, serverMethod, params, callback) {        
+    callServer: function(component, serverMethod, params, callback) {        
         var action = component.get(serverMethod);
         if (params) {
             action.setParams(params);
@@ -15,7 +15,8 @@
         });
         $A.enqueueAction(action);        
     },
-    'fireComponentEvent': function(component, eventName, attributes) {
+
+    fireComponentEvent: function(component, eventName, attributes) {
         var componentEvent = component.getEvent(eventName);
         if (componentEvent) {
             componentEvent.setParams(attributes);
@@ -24,7 +25,8 @@
 			this.fireErrorToast(component, eventName);
         }
     },
-    'fireApplicationEvent': function(component, params, eventName) {        
+
+    fireApplicationEvent: function(component, params, eventName) {        
         var appEvent = $A.get('e.c:' + eventName);
         if (appEvent) {
             appEvent.setParams(params);
@@ -33,6 +35,7 @@
 			this.fireErrorToast(component, eventName);
         }
     },    
+    
     fireErrorToast: function(component, error){
         var toast = component.find('toast');
         if(toast){
