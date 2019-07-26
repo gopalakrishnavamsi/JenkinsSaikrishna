@@ -71,7 +71,7 @@
                         <aura:if isTrue="{!v.mappedObjData.length==0}">
                             <tr aria-selected="false">
                                 <td class="ds-center-image" colspan="2">
-                                    <img src="{!($Resource.CLM_DocuSign+'/Illustration/Nomappedobjects.png')}" alt="troubleImage" />
+                                    <img src="{!($Resource.CLMNoMappedObjects)}" alt="troubleImage" />
                                 </td>
                                 <td colspan="2">
                                     <div class="ds-small-fonts-size slds-truncate">
