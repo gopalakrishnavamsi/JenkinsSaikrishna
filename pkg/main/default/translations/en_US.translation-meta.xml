@@ -3619,11 +3619,7 @@
 		<label>Original -</label>
 		<name>OriginalVersion</name>
 	</customLabels>
-	<customPageWebLinks>
-		<label>DocuSign Setup</label>
-		<name>Setup</name>
-	</customPageWebLinks>
-	<customTabs>
+		<customTabs>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
 	</customTabs>
@@ -3923,4 +3919,8 @@
         <label>Workflow</label>
         <name>Workflow</name>
     </customLabels>	
+	<customPageWebLinks>
+		<label>DocuSign Setup</label>
+		<name>Setup</name>
+	</customPageWebLinks>
 </Translations>
