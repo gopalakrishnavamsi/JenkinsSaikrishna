@@ -1,6 +1,4 @@
 <aura:component>
-  
-
     <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}" />
     <aura:attribute name="summary" type="String" default="{!$Label.c.HelpInfoBody}" />
     <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}" />

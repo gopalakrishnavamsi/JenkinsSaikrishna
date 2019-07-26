@@ -1,7 +1,5 @@
 ({
-    updateUI: function(component, event, helper) {
-        
-        
+    updateUI: function (component, event) {
         var title = event.getParam('title');
         var summary = event.getParam('summary');
         var index = event.getParam('index');

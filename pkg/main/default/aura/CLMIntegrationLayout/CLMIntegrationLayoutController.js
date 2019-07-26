@@ -28,8 +28,8 @@
                 component.set('v.showTrouble', false);
                 component.set('v.showPathAndNew', true);
                 helper.fireApplicationEvent(component, {
-                    title: $A.get("$Label.c.SelectObject"),
-                    summary: $A.get("$Label.c.ChooseObjectInfo"),
+                    title: $A.get('$Label.c.SelectObject'),
+                    summary: $A.get('$Label.c.ChooseObjectInfo'),
                     index: '1',
                     body: '',
                     fromComponent: 'CLMIntegrationLayout',
@@ -46,11 +46,11 @@
     },
     onPrimaryButtonClick: function(component, event) {
         var buttonLabel = event.getParam('buttonLabel');
-        if (buttonLabel === $A.get("$Label.c.ConfigureLayouts") || buttonLabel === $A.get("$Label.c.ConfigureButtons")) {
+        if (buttonLabel === $A.get('$Label.c.ConfigureLayouts') || buttonLabel === $A.get('$Label.c.ConfigureButtons')) {
             if (!navUtils.isLightningOrMobile()) {
-                 window.open($A.get("$Label.c.LEXObjectManagerURL"));
+                 window.open($A.get('$Label.c.LEXObjectManagerURL'));
             } else {
-                window.open($A.get("$Label.c.ClassicObjectManagerURL"));
+                window.open($A.get('$Label.c.ClassicObjectManagerURL'));
             }
         }
     },

@@ -42,10 +42,6 @@
             setTimeout($A.getCallback(function() {
                 toast.close();
             }), 2000);        
-        }
-        else{
-            
-        }
-                    
+        }                            
     }    
 })

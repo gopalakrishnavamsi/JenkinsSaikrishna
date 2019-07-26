@@ -1,5 +1,5 @@
 ({
-    toggleSection: function(component, event, helper) {
+    toggleSection: function(component) {
         var acc = component.find('objMapping');
         for (var cmp in acc) {
             $A.util.toggleClass(acc[cmp], 'slds-show');

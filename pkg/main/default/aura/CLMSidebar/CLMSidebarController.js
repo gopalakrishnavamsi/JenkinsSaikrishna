@@ -9,11 +9,10 @@
             tabIndex: index,
         }, 'CLMNavigationEvent');
     },
-    updateState: function(component, event, helper) {
+    updateState: function(component, event) {
         var tabIndex = event.getParam('tabIndex');
         var fromComponent = event.getParam('fromComponent');
         var toComponent = event.getParam('toComponent');
-        var type = event.getParam('type');
         if (toComponent === 'CLMSetupLayout' && fromComponent !== 'CLMSetupLayout') {
             component.set('v.currentIndex', tabIndex);
         }

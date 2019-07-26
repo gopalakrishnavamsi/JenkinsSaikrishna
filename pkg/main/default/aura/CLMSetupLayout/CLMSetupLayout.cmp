@@ -1,11 +1,14 @@
 <aura:component implements="force:appHostable">
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
+    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
     <aura:attribute name="sideBar" type="Aura.Component[]" />
     <aura:attribute name="header" type="Aura.Component[]" />
     <aura:attribute name="main" type="Aura.Component[]" />
     <aura:attribute name="fullLayout" type="Boolean" default="false" />
-    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
-    
+    <aura:attribute name="toastTitleText" type="String" access="private" />
+    <aura:attribute name="toastVariant" type="String" access="private" />
+
+    <c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}" />
     <lightning:layout>
         <lightning:layoutItem size="2" class="slds-theme_default slds-m-right_small">
             <!--left side bar-->

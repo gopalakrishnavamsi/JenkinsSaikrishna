@@ -3,7 +3,7 @@
         $A.createComponent(
             componentName,
             parameter,
-            function(newComp, status, errorMessage) {
+            function(newComp, status) {
                 if (status === 'SUCCESS') {
                     if (isUpdate) {
                         var compList = component.get(body);
@@ -14,7 +14,13 @@
                     }
                 } 
                 else if (status === 'ERROR') {
-                    console.log('cannot create ',componentName)                          
+                    var toast = component.find('toast');
+                    component.set('v.toastTitleText', 'Cannot create ',componentName);
+                    component.set('v.toastVariant', 'error');
+                    toast.show();
+                    setTimeout($A.getCallback(function() {
+                        toast.close();
+                    }), 2000);
                 }
             }
         );
@@ -32,7 +38,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.Integration"),
+                title: $A.get('$Label.c.Integration'),
                 iconUrl: 'standard:social'
             }, false, 'v.header');
             //main
@@ -41,7 +47,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.DocumentGeneration"),
+                title: $A.get('$Label.c.DocumentGeneration'),
                 iconUrl: 'custom:custom66'
             }, false, 'v.header');
             //main
@@ -50,7 +56,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.Workflow"),
+                title: $A.get('$Label.c.Workflow'),
                 iconUrl: 'custom:custom66'
             }, false, 'v.header');
             //main
@@ -59,7 +65,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.UserManagement"),
+                title: $A.get('$Label.c.UserManagement'),
                 iconUrl: 'custom:custom66'
             }, false, 'v.header');
             //main
@@ -68,7 +74,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.ButtonsAndComponents"),
+                title: $A.get('$Label.c.ButtonsAndComponents'),
                 iconUrl: 'custom:custom66'
             }, false, 'v.header');
             //main
@@ -77,7 +83,7 @@
             component.set('v.fullLayout', false);
             //header 
             helper.insertComponent(component, 'c:CLMPageHeader', {
-                title: $A.get("$Label.c.Help"),
+                title: $A.get('$Label.c.Help'),
                 iconUrl: 'custom:custom66'
             }, false, 'v.header');
             //main

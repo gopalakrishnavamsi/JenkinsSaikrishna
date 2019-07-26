@@ -22,8 +22,8 @@
             type: 'show'
         }, 'CLMNavigationEvent');
     },
-    edit: function(component, event, helper) {
-        var id = event.getSource().get("v.value");
+    edit: function(component, event) {
+        var id = event.getSource().get('v.value');
         component.set('v.tempMappingModelDataHolder', {
             id: id,
             type: 'edit'
@@ -40,8 +40,8 @@
             modelComponent.show();
         }), 5);
     },
-    remove: function(component, event, helper) {
-        var id = event.getSource().get("v.value");
+    remove: function(component, event) {
+        var id = event.getSource().get('v.value');
         component.set('v.tempMappingModelDataHolder', {
             id: id,
             type: 'remove'
@@ -58,27 +58,27 @@
             modelComponent.show();
         }), 5);
     },
-    editMappingModelHandler: function(component, event, helper) {
+    editMappingModelHandler: function(component) {
         var data = component.get('v.tempMappingModelDataHolder');
         var modelComponent = component.find('popupModel');
         var toast = component.find('toast');
         var mappedObjData = component.get('v.mappedObjData');
         var objDetails = mappedObjData.filter(function(obj){            
-            return (obj.Id == data.id)
+            return (obj.Id === data.id)
         });
         if (data.type === 'remove') {
-            component.set('v.toastTitleText', `${objDetails[0].objectName} object was removed from your mappings.`);
+            component.set('v.toastTitleText', objDetails[0].objectName+' object was removed from your mappings.');
             component.set('v.toastVariant', 'success');
             toast.show();
             setTimeout($A.getCallback(function() {
                 toast.close();
             }), 2000);
             component.set('v.mappedObjData', mappedObjData.filter(function(obj){
-                return (obj.Id != data.id)
+                return (obj.Id !== data.id)
             }));                          
             modelComponent.hide();
         } else if (data.type === 'edit') {
-            component.set('v.toastTitleText', `${objDetails[0].objectName} object was successfully edited.`);
+            component.set('v.toastTitleText', objDetails[0].objectName+' object was successfully edited.');
             component.set('v.toastVariant', 'success');
             toast.show();
             setTimeout($A.getCallback(function() {
@@ -88,7 +88,7 @@
         }
         component.set('v.showModal', 'false');
     },
-    closeModal: function(component, event, helper) {
+    closeModal: function(component) {
         component.set('v.showModal', 'false');
     }
 })

@@ -1,5 +1,5 @@
 ({
-    onPrimaryButtonClick: function(component, event, helper) {
+    onPrimaryButtonClick: function(component, event) {
         var primaryClicked = component.getEvent('CLMHelpPrimaryButtonClicked');
         var buttonName = event.getSource().get('v.label');
         primaryClicked.setParams({
@@ -9,7 +9,7 @@
         });
         primaryClicked.fire()
     },
-    onSecondayButtonClick: function(component, event, helper) {
+    onSecondayButtonClick: function(component, event) {
         var secondaryClicked = component.getEvent('CLMHelpSecondaryButtonClicked');
         var buttonName = event.getSource().get('v.label');
         secondaryClicked.setParams({

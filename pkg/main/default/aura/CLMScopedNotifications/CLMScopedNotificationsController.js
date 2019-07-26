@@ -1,5 +1,5 @@
 ({
-	closeScopedNotification : function(component, event, helper) {
+	closeScopedNotification : function(component) {
 		component.destroy();
     }
 })

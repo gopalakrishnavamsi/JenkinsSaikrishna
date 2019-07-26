@@ -27,10 +27,10 @@
             }, 'CLMBreadcrumbsEvent');
         }
     },
-    updateStep: function(component, event, helper) {
-        var navigateTo = event.getParam("navigateTo");
-        var fromComponent = event.getParam("fromComponent");
-        var toComponent = event.getParam("toComponent");
+    updateStep: function(component, event) {
+        var navigateTo = event.getParam('navigateTo');
+        var fromComponent = event.getParam('fromComponent');
+        var toComponent = event.getParam('toComponent');
         if (toComponent === 'CLMBreadcrumbs' && fromComponent !== 'CLMBreadcrumbs') {
             if (navigateTo.index !== undefined) {
                 var allSteps = component.get('v.steps');
