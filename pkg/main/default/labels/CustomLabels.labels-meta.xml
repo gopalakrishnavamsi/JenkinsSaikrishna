@@ -7300,4 +7300,11 @@
         <shortDescription>CLM - Sidebar Item Workflow</shortDescription>
         <value>Workflow</value>
     </labels>	
+	<labels>
+		<fullName>OriginalVersion</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OriginalVersion</shortDescription>
+		<value>Original -</value>
+	</labels>
 </CustomLabels>

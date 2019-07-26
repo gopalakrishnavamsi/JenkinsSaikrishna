@@ -1,7 +1,40 @@
 ({
   onLoad: function (component, event, helper) {
     var agreement = component.get('v.agreement');
+    helper.fetchAgreementVersions(component);
     helper.loadWidget(component, agreement, agreement.href);
+  },
+
+  fetchAgreementVersions: function (component) {
+    var agreementVersions = [];
+    var agreement = component.get('v.agreement');
+    //set original version
+    var originalVersion = {
+      'name': stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+      'currentVersion': $A.get('$Label.c.OriginalVersion'),
+      'createdDate': agreement.createdDate,
+      'extension': agreement.extension
+    };
+
+    //If no versions have been uploaded apart from the original version then display only the original version with details
+    if ($A.util.isEmpty(agreement.versions)) {
+      agreementVersions.push(originalVersion);
+    }
+
+    //If versions exists for an agreement push all the version details
+    else {
+      agreement.versions.forEach(function (versionInformation) {
+        agreementVersions.push({
+          'name': stringUtils.format('{0}{1}{2}', versionInformation.name, '.', versionInformation.extension),
+          'currentVersion': stringUtils.format('{0} {1} ', versionInformation.version, '-'),
+          'createdDate': versionInformation.createdDate,
+          'extension': versionInformation.extension
+        });
+      });
+      //Add original version
+      agreementVersions.push(originalVersion);
+    }
+    component.set('v.agreementVersions', agreementVersions);
   },
 
   loadWidget: function (component, agreement, documentUrl) {
@@ -146,7 +179,7 @@
         return this.basePreview(
           component,
           agreement.id.value,
-          agreement.name,
+          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
           documentUrl,
           agreement.historyItems,
           true,
@@ -163,7 +196,7 @@
             this.basePreview(
               component,
               agreement.id.value,
-              agreement.name,
+              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
               documentUrl,
               agreement.historyItems,
               true,
@@ -177,7 +210,7 @@
         return this.basePreview(
           component,
           agreement.id.value,
-          agreement.name,
+          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
           documentUrl,
           agreement.historyItems,
           true,
@@ -194,7 +227,7 @@
             this.basePreview(
               component,
               agreement.id.value,
-              agreement.name,
+              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
               documentUrl,
               agreement.historyItems,
               true,
@@ -212,7 +245,7 @@
             this.basePreview(
               component,
               agreement.id.value,
-              agreement.name,
+              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
               documentUrl,
               agreement.historyItems,
               true,
@@ -230,7 +263,7 @@
             this.basePreview(
               component,
               agreement.id.value,
-              agreement.name,
+              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
               documentUrl,
               agreement.historyItems,
               true,
@@ -246,7 +279,7 @@
             this.basePreview(
               component,
               agreement.id.value,
-              agreement.name,
+              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
               documentUrl,
               agreement.historyItems,
               true,
@@ -261,7 +294,7 @@
         return this.basePreview(
           component,
           agreement.id.value,
-          agreement.name,
+          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
           documentUrl,
           agreement.historyItems,
           true,
@@ -272,7 +305,7 @@
         return this.basePreview(
           component,
           agreement.id.value,
-          agreement.name,
+          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
           documentUrl,
           agreement.historyItems,
           true,
@@ -293,16 +326,30 @@
     if (!agreementId || !documentUrl || !agreementName || !auth) throw 'Missing Parameter';
     var preview = new SpringCM.Widgets.Preview(auth.baseOptions);
     preview.render('#agreementDocumentView');
+    /* Start of versions for setting up with the widget*/
+    var versions = [];
+    var agreementDetails = component.get('v.agreement');
+    if (!$A.util.isEmpty(agreementDetails.versions)) {
+      agreementDetails.versions.forEach(function (agreementVersion) {
+        versions.push({
+          'version': agreementVersion.version,
+          'href': agreementVersion.href,
+          'modifiedBy': agreementVersion.modifiedBy,
+          'modifiedDate': agreementVersion.modifiedDate
+        });
+      });
+    }
+    /* End of versions for setting up with the widget */
     preview.renderDocumentPreview({
       url: auth.resourceToken,
       name: agreementName,
       href: documentUrl,
       hasPdfPreview: true,
       uid: agreementId,
-      historyItems: historyItems
+      historyItems: historyItems,
+      versions: versions
     });
     if (showHistoryView) {
-
       preview.history.setHistoryItems(Object.assign([], historyItems));
       preview.renderHistoryView({
         historyItems: Object.assign([], historyItems)
@@ -575,5 +622,4 @@
     });
     evt.fire();
   }
-
 });

@@ -6,6 +6,7 @@
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
     <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
     <aura:attribute name="approvalWorkItems" type="AgreementApprovalWorkItem"/>
+    <aura:attribute name="agreementVersions" type="Object[]" access="private"/>
     <aura:attribute name="widget" type="Object"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
@@ -30,5 +31,6 @@
         </div>
     </aura:if>
 
+    <!--div for loading the Agreement Preview Widget and history Items -->
     <div class="{!if(v.loading, 'ds-fadeBackground')}" id="agreementDocumentView"/>
 </aura:component>

@@ -1,9 +1,9 @@
 .THIS .ds-agreementsIconBackground {
-    background: rgba(27, 82, 151, 1);
+    background-color: t(colorBrandDarker);
 }
 
 .THIS.ds-boxBackground {
-    background: white;
+    background-color: t(colorBackgroundWhite);
     height: 100%;
 }
 
