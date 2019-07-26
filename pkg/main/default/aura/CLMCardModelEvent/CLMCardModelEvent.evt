@@ -1,0 +1,9 @@
+<aura:event type="APPLICATION" description="Event For Capturing changes that needs to be made on card header " >
+    <aura:attribute type="string" name="title" />
+    <aura:attribute type="string" name="summary"/>
+    <aura:attribute type="string" name="index"/>
+    <aura:attribute name="body" type="Aura.Component[]"/>
+    <aura:attribute type="string" name="fromComponent"/>
+    <aura:attribute type="string" name="toComponent"/>
+    <aura:attribute type="string" name="type"/>
+</aura:event>
