@@ -14,7 +14,7 @@
         <div class="slds-grid">
             <aura:if isTrue="{!v.showIcon}">
                 <div class="slds-m-top_medium slds-p-left_x-large ">
-                    <lightning:icon iconName="{!v.imageURL}" size="large" alternativeText="Information Icon" />
+                    <lightning:icon iconName="{!v.imageURL}" size="large" alternativeText="{!$Label.c.InformationIcon}" />
                 </div>
             </aura:if>
             <div class="{! join(' ', 'slds-col slds-size_6-of-12', v.showIcon ? '' : 'slds-p-left_small') }">

@@ -4,8 +4,8 @@
     var SelectedObjDetais = component.get('v.SelectedObjDetais');
     if (index === '2' && SelectedObjDetais) {
       helper.fireApplicationEvent(component, {
-        title: 'Name Object Folder',
-        summary: 'Browse for and select a field to name the folder that you have just created',
+        title: $A.get('$Label.c.NameObjectFolder'),
+        summary: $A.get('$Label.c.SelectFieldInfo'),
         index: '2',
         fromComponent: 'CLMMappedObjectEdit',
         toComponent: 'CLMCardModel',
@@ -13,7 +13,7 @@
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '2');
       component.set('v.title', SelectedObjDetais.objectName + ' Folder Name');
-      component.set('v.titleHelpText', 'For example:if your object has a name field which contains \'Chicago\' we will create a new \'Chicago\' folder');
+      component.set('v.titleHelpText', $A.get('$Label.c.SelectFolderHelpBody'));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '2' },
         fromComponent: 'CLMMappedObjectsEdit',
@@ -34,16 +34,16 @@
         return;
       }
       helper.fireApplicationEvent(component, {
-        title: 'Choose Location',
-        summery: 'Allocate an easy-to-find location with DOcuSign CLM for your filder to live.Ther folder path you have create will be indepedent of other mappings',
+        title: $A.get('$Label.c.ChooseLocation'),
+        summary: $A.get('$Label.c.ChooseLocationInfo'),
         index: '3',
         fromComponent: 'CLMMappedObjectEdit',
         toComponent: 'CLMCardModel',
         type: 'update'
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '3');
-      component.set('v.title', SelectedObjDetais.objectName + ' Folder Location');
-      component.set('v.titleHelpText', 'We have Created Folder with following location.');
+      component.set('v.title', stringUtils.format('{0} {1}', SelectedObjDetais.objectName, 'Folder Location'));
+        component.set('v.titleHelpText', stringUtils.format($A.get('$Label.c.ChooseLocationTitleHelpText'), SelectedObjDetais.objectName));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '3' },
         fromComponent: 'CLMMappedObjectsEdit',
@@ -51,16 +51,16 @@
       }, 'CLMPathEvent');
     } else {
       helper.fireApplicationEvent(component, {
-        title: 'Select Object',
-        summery: 'Choose the Salesforce object you want to be the source for your documents.You\'ll choose one object at a time',
+        title: $A.get('$Label.c.SelectObject'),
+        summary: $A.get('$Label.c.SelectObjectHelpBody'),
         index: '1',
         fromComponent: 'CLMMappedObjectEdit',
         toComponent: 'CLMCardModel',
         type: 'update'
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '1');
-      component.set('v.title', 'Your Salesforce Objects');
-      component.set('v.titleHelpText', 'We have listed all your standard and custom Salesforce objects below.');
+      component.set('v.title', $A.get('$Label.c.YourSalesforceObjects'));
+      component.set('v.titleHelpText', $A.get('$Label.c.AllObjectsListed'));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '1' },
         fromComponent: 'CLMMappedObjectsEdit',

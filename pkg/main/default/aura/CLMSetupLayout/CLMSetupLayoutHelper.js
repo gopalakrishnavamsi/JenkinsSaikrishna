@@ -15,7 +15,7 @@
         }
         else if (status === 'ERROR') {
           var toast = component.find('toast');
-          component.set('v.toastTitleText', 'Cannot create ', componentName);
+          component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName));
           component.set('v.toastVariant', 'error');
           toast.show();
           setTimeout($A.getCallback(function () {

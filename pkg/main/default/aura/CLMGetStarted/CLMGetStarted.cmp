@@ -1,4 +1,5 @@
 <aura:component extends="c:CLMUtility">
+    <ltng:require scripts="{!$Resource.stringUtils}" />
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <article class="slds-card slds-grid slds-p-around_xx-large">
@@ -13,7 +14,8 @@
                 {!$Label.c.DocusignAgreement}
             </div>
             <div class="slds-col ">
-                <lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoHome}" label="{!$Label.c.GetStarted}" />
+                <lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoHome}"
+                    label="{!$Label.c.GetStarted}" />
             </div>
         </div>
     </article>

@@ -8,7 +8,7 @@
 
   handleSearchObject: function (component) {
     var queryTerm = component.find('search-object').get('v.value');
-    var allObjs = component.get('v.allObjects');
+    var allObjs = component.get('v.allObjects');      
     if (queryTerm.length > 1) {
       component.set('v.allObjectsList', allObjs.filter(function (obj) {
         return (obj.objectName.toLowerCase().includes(queryTerm.toLowerCase()));
@@ -30,7 +30,7 @@
     }
   },
   
-  onObjSelection: function (component) {
+  onObjSelection: function (component, event) {
     var apiName = event.currentTarget.id;
     var allObjects = component.get('v.allObjects');
     var allObjectsList = component.get('v.allObjectsList');

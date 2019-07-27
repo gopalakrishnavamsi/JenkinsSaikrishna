@@ -71,7 +71,7 @@
       return (obj.Id === data.id)
     });
     if (data.type === 'remove') {
-      component.set('v.toastTitleText', objDetails[0].objectName + ' object was removed from your mappings.');
+      component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ObjectRemoved'), objDetails[0].objectName));
       component.set('v.toastVariant', 'success');
       toast.show();
       setTimeout($A.getCallback(function () {
@@ -82,7 +82,7 @@
       }));
       modelComponent.hide();
     } else if (data.type === 'edit') {
-      component.set('v.toastTitleText', objDetails[0].objectName + ' object was successfully edited.');
+      component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ObjectEditSuccessful'), objDetails[0].objectName));
       component.set('v.toastVariant', 'success');
       toast.show();
       setTimeout($A.getCallback(function () {

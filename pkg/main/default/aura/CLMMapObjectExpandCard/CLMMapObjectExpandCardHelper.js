@@ -6,7 +6,7 @@
       appEvent.fire();
     } else {
       var toast = component.find('toast');
-      component.set('v.toastTitleText', 'No Application event found with name -' + eventName);
+      component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.NoEventFound'), eventName));
       component.set('v.toastVariant', 'error');
       toast.show();
       setTimeout($A.getCallback(function () {

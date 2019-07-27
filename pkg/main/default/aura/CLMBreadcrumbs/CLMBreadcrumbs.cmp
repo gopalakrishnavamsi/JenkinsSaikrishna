@@ -10,11 +10,11 @@
                 <aura:if isTrue="{!v.currentStep  >= step.index }">
                     <li class="slds-breadcrumb__item ">
                         <aura:if isTrue="{!v.currentStep==step.index}">
-                            <span class=" slds-p-left_x-small slds-text-heading_x-small">
+                            <span class=" slds-p-left_x-small slds-text-heading_x-small slds-text-title_caps ds-click-pointer">
                                 {!step.label}
                             </span>
                             <aura:set attribute="else">
-                                <a href="javascript:void(0);" id="{!step.index}" onclick="{!c.goto}">
+                                <a href="javascript:void(0);" id="{!step.index}" onclick="{!c.goto}" class="slds-text-title_caps ds-click-pointer" >
                                     {!step.label}
                                 </a>
                             </aura:set>

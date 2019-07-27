@@ -1,5 +1,5 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
-
+    <ltng:require scripts="{!$Resource.stringUtils}" />
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />

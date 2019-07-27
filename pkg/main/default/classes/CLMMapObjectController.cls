@@ -7,7 +7,7 @@ public with sharing class CLMMapObjectController {
             '{"objectName": "Opportunity", "folderName": "{!Opportunity.Name}", "path": "/Salesforce/Accounts/{!Account.Name}/Opportunities","Id":"2"}'+
             ']';
     }
-
+    //TODO: Change below method to use MergeObject instead of AllObjects
     @AuraEnabled(Cacheable=true)
     public static List<AllObjects> getAllObjects(){
         List<AllObjects> returnValue=new List<AllObjects>();
@@ -19,7 +19,7 @@ public with sharing class CLMMapObjectController {
         }
         return returnValue;
     }
-    
+    //TODO: Change below method to use MergeObject instead of AllObjects
     @AuraEnabled(Cacheable=true)
     public static List<AllObjects> getAllObjectFileds(String objApiName){
         List<AllObjects> returnValue=new List<AllObjects>();

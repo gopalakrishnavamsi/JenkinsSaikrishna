@@ -1,10 +1,11 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
     <aura:registerEvent name="CLMPathEvent" type="c:CLMPathEvent" />
     <!--event handler-->
-    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
+    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />    
     <!--place holder attributes-->
     <aura:attribute name="title" type="String" default="Your Salesforce Objects" />
     <aura:attribute name="titleHelpText" type="String" default="We have listed all your standard and custom Salesforce objects below." />
@@ -18,8 +19,6 @@
     <aura:attribute name="SelectedObjDetais" type="Object" access="private" />
     <aura:attribute name="SelectedFiledsDetails" type="List" default="[]" access="private" />
     <aura:attribute name="SelectedObjFieldName" default="{}" type="String" access="private" />
-    
-    
     
     <div class="slds-card__body  slds-p-left_x-large slds-p-right_x-large">
         <div class="slds-border_top">
