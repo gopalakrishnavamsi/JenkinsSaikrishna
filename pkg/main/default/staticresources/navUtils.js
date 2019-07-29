@@ -54,6 +54,7 @@ window.navUtils = (function () {
   return Object.freeze({
     isInIFrame: isInIFrame,
     navigateToSObject: navigateToSObject,
-    navigateToUrl: navigateToUrl
+    navigateToUrl: navigateToUrl,
+    isLightningOrMobile: _isLightningOrMobile,
   });
 }());

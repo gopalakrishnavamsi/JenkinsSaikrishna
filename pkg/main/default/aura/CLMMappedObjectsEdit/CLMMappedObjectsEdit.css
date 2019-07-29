@@ -1,0 +1,20 @@
+.THIS .medium-fonts-size{
+    font-size:1.25rem
+}
+
+.THIS .x-medium-fonts-size{
+    font-size:1rem
+}
+
+.THIS .blue-text-color{
+    color:#0e2549!important;
+}
+
+.THIS .blue-help-text svg{
+    color:#0e2549!important;
+}
+
+.THIS .position-helptext{
+    position: absolute;
+    
+}

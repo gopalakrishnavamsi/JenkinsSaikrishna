@@ -1,0 +1,28 @@
+.THIS .ds-card-heading{
+    color:t(colorTextLinkActive);
+    font-size:1.25rem
+}
+.THIS .ds-blue-color{
+     color:t(colorTextLinkActive);
+}
+.THIS .ds-textLabel-color{
+    color: t(colorTextLabel);
+}
+.THIS .ds-font-size {
+    font-size: 15px;
+}
+.THIS .ds-green-svg svg{
+    fill:green;
+}
+.THIS .ds-index-style {
+    background: #2a426c;
+    color: white;
+    border-radius: 50%;
+    pointer-events: none;
+    border: none;
+}
+.THIS .ds-button-width{
+    min-width:142px;
+    max-width:144px;
+    height: 100%;
+}

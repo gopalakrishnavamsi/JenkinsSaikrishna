@@ -1,0 +1,6 @@
+<aura:event type="APPLICATION" description="Event Fired On selection of breadcrumb">
+    <aura:attribute type="Object" name="navigateFrom" />
+    <aura:attribute type="Object" name="navigateTo" />
+    <aura:attribute type="string" name="fromComponent" />
+    <aura:attribute type="string" name="toComponent" />
+</aura:event>
