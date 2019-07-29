@@ -1,0 +1,22 @@
+<aura:component extends="c:CLMUtility">
+    <ltng:require scripts="{!$Resource.stringUtils}" />
+    <!--event fire-->
+    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+    <article class="slds-card slds-grid slds-p-around_xx-large">
+        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center slds-p-right_large">
+            <img src="{!($Resource.CLMGetStarted)}" alt="troubleImage" />
+        </div>
+        <div class="slds-col  slds-size_2-of-3 slds-grid slds-grid_vertical">
+            <div class="slds-col slds-m-bottom_medium ds-card-heading">
+                <h1><b>{!$Label.c.WelcomeToDocuSign}</b></h1>
+            </div>
+            <div class="slds-col slds-m-bottom_medium">
+                {!$Label.c.DocusignAgreement}
+            </div>
+            <div class="slds-col ">
+                <lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoHome}"
+                    label="{!$Label.c.GetStarted}" />
+            </div>
+        </div>
+    </article>
+</aura:component>

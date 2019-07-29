@@ -1,0 +1,28 @@
+<aura:component >
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="iconUrl" type="String" default="custom:custom66"/>
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="{!v.iconUrl}" size="large" alternativeText="{!v.title}" />
+                    </div>
+                    <div class="slds-media__body slds-grid slds-grid_vertical">
+                        <div class="slds-col">
+                            <span class=" slds-truncate" title="CLM">
+                                CLM
+                            </span>
+                            <div class="slds-col">
+                                <span  class="slds-truncate slds-text-heading_medium" >                                    
+                                        <b>{!v.title}</b>                                    
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

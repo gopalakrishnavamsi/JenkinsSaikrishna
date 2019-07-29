@@ -1,0 +1,12 @@
+.THIS .ds-blue-color{
+     color:t(colorTextLinkActive);
+}
+
+.THIS .ds-font-size {
+    font-size: 15px;
+}
+
+.THIS .ds-card-heading{
+    color:t(colorTextLinkActive);
+    font-size:1.25rem
+}

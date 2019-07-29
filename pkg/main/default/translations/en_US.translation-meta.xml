@@ -962,18 +962,15 @@
 	<customLabels>
 		<label>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with
 			DocuSign
-			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
+			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
 			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
 		</label>
 		<name>HelpSection1</name>
 	</customLabels>
 	<customLabels>
 		<label>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
-			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
-			documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot;
-			target=&quot;_blank&quot;&gt;here&lt;/a&gt;
+			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
+			documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;
 		</label>
 		<name>HelpSection2</name>
 	</customLabels>
@@ -1537,8 +1534,7 @@
 	</customLabels>
 	<customLabels>
 		<label>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-			and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a
-			target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
+			and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
 		</label>
 		<name>NonUSConsentMessage</name>
 	</customLabels>
@@ -2022,8 +2018,7 @@
 		<name>SupportCenter</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot;
-			target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
+		<label>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
 			to common questions, and display system performance information.
 		</label>
 		<name>SupportInfo</name>
@@ -2035,8 +2030,7 @@
 	<customLabels>
 		<label>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be
 			sure to
-			have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot;
-			target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
+			have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
 		</label>
 		<name>SupportPrep</name>
 	</customLabels>
@@ -2109,27 +2103,23 @@
 		<name>Tonga</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade
+		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
 			your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
-		<label>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<label>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
 		<name>TrialAccountExpiresOneDay</name>
 	</customLabels>
 	<customLabels>
-		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
 		<name>TrialAccountExpiresSoon_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<label>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</label>
 		<name>TrialAccountExpiresToday</name>
 	</customLabels>
@@ -3618,6 +3608,366 @@
 	<customLabels>
 		<label>Original -</label>
 		<name>OriginalVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</label>
+		<name>AddLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>ADMINISTRATION</label>
+		<name>Administration</name>
+	</customLabels>
+	<customLabels>
+		<label>Automate document generation</label>
+		<name>AutomateDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Save time with contract generation by merging your data into custom template.</label>
+		<name>AutomateDocumentGenerationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Automates tasks, route contracts, and reduce human error with DocuSign CLM&apos;s workflow.</label>
+		<name>AutomateYourProcessesBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Automate your processes</label>
+		<name>AutomateYourProcessesTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Buttons and Components</label>
+		<name>ButtonsAndComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM</label>
+		<name>CLM</name>
+	</customLabels>
+	<customLabels>
+		<label>			<!-- CLM - Pick a Field Title --></label>
+		<name>CLM_PickAFieldTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose Location</label>
+		<name>ChooseLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Choosing a location for your object folder keeps your document organized. Later, you can customize Salesforce to view your CLM folder contents from within Salesforce.</label>
+		<name>ChooseLocationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Why do I need to choose a location?</label>
+		<name>ChooseLocationTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object at a time.</label>
+		<name>ChooseObjectInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>/ui/setup/Setup?setupid=Customize</label>
+		<name>ClassicObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking the custom button opens the affiliated Document Generation form.</label>
+		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Configure Buttons</label>
+		<name>ConfigureButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>Configure Layouts</label>
+		<name>ConfigureLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>CONFIGURE OBJECT PAGE LAYOUT</label>
+		<name>ConfigureObjectPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>To see your folders in DocuSign CLM or Salesforce you&apos;ll have to configure your object page&apos;s layout. Then, add a custom section for DocuSign CLM to that layout.</label>
+		<name>ConfigureObjectPageLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Confirm Edits</label>
+		<name>ConfirmEdits</name>
+	</customLabels>
+	<customLabels>
+		<label>DISCOVER DOCUSIGN CLM</label>
+		<name>DiscoverDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM</label>
+		<name>DocGenInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Generation</label>
+		<name>DocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</label>
+		<name>DocusignAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</label>
+		<name>EditModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Help</label>
+		<name>Help</name>
+	</customLabels>
+	<customLabels>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</label>
+		<name>HelpInfoBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Home</label>
+		<name>Home</name>
+	</customLabels>
+	<customLabels>
+		<label>Integration</label>
+		<name>Integration</name>
+	</customLabels>
+	<customLabels>
+		<label>/lightning/setup/ObjectManager/home</label>
+		<name>LEXObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about Document Generation</label>
+		<name>LearnAboutDocGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn More</label>
+		<name>LearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Manage</label>
+		<name>Manage</name>
+	</customLabels>
+	<customLabels>
+		<label>MAP NEW</label>
+		<name>MapNew</name>
+	</customLabels>
+	<customLabels>
+		<label>MAP YOUR SALESFORCE OBJECTS</label>
+		<name>MapYourSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Mapped Objects</label>
+		<name>MappedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Name Object Folder</label>
+		<name>NameObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>We recommend that you always name the folder after a field associated with the mapped Salesforce object. That way the folder will update when your object data updates.</label>
+		<name>NameObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>What should I call my object folder?</label>
+		<name>NameObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>			<!-- CLM - No Mapped Objects Found --></label>
+		<name>NoMappedObjectsFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Every instance of a mapped object will have a dedicated folder in DocuSign CLM. That&apos;s where you&apos;ll find the documents generated by using that object&apos;s data.</label>
+		<name>ObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Object Folder Name</label>
+		<name>ObjectFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>What is an Object Folder?</label>
+		<name>ObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>/lightning/setup/ObjectManager/home</label>
+		<name>ObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>OBJECT MAPPING</label>
+		<name>ObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>OPTIMIZE DOCUMENT GENERATION</label>
+		<name>OptimizeDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</label>
+		<name>OrganizeAndSearchDocumentsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Organize and search documents</label>
+		<name>OrganizeAndSearchDocumentsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Overview</label>
+		<name>Overview</name>
+	</customLabels>
+	<customLabels>
+		<label>Path in DocuSign CLM</label>
+		<name>PathInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Once you have set a location for your object folder, you&apos;ll be able to browse for and select one or more fields to create a dynamic name for your new folder.</label>
+		<name>PickAFieldBody</name>
+	</customLabels>
+	<customLabels>
+		<label>How do I pick a field?</label>
+		<name>PickAFieldTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping process.</label>
+		<name>PickObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Why pick objects to map?</label>
+		<name>PickObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>You can pick any standard or custom Salesforce object to map. Every organization will have different needs and objects, but Account and Opportunity are good examples.</label>
+		<name>PickSpecificObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Which object should I pick?</label>
+		<name>PickSpecificObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>We mapped 2 objects for you</label>
+		<name>PreSetObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>We&apos;ve already mapped &apos;Accounts&apos; and &apos;Opportunities&apos; to your DocuSign CLM. This will help you have time and focus on other objects. Don&apos;t need them? Click &apos;Remove&apos; to get rid of any objects.</label>
+		<name>PreSetObjMappingsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove Mapping</label>
+		<name>RemoveMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</label>
+		<name>RemoveModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate detailed charts and reports on your documents, attributes and workflows. These will let you track account activity and performance.</label>
+		<name>RunReportsAndAnalyticsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Run reports and analytics</label>
+		<name>RunReportsAndAnalyticsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Object</label>
+		<name>SelectObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and readline important documents when negotiating.</label>
+		<name>ShareAndCollaborateBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Share and collaborate</label>
+		<name>ShareAndCollaborateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Speed up Document Generation</label>
+		<name>SpeedUpDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your document get reviewed.</label>
+		<name>TrackDocumentStatusAndActivityBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Track document status and activity</label>
+		<name>TrackDocumentStatusAndActivityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>User Management</label>
+		<name>UserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>You can add, modify and manage DocuSign CLM users from within Salesforce without leaving the app.</label>
+		<name>UserManagementInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>View Your Object Folders</label>
+		<name>ViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Welcome to DocuSign Agreements for Salesforce!</label>
+		<name>WelcomeToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>What&apos;s Next?</label>
+		<name>WhatsNext</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow</label>
+		<name>Workflow</name>
+	</customLabels>
+	<customLabels>
+		<label>We have listed all your standard and custom Salesforce objects below.</label>
+		<name>AllObjectsListed</name>
+	</customLabels>
+	<customLabels>
+		<label>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create will be independent of other mappings.</label>
+		<name>ChooseLocationInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>All the instances of the object type {0} will each have a folder that will live where you see the blue folder in the hierarchy.</label>
+		<name>ChooseLocationTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Component creation failed: {0}</label>
+		<name>ComponentCreationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Hide Steps</label>
+		<name>HideSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Information Icon</label>
+		<name>InformationIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>No event found with name {0}.</label>
+		<name>NoEventFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} object was successfully edited.</label>
+		<name>ObjectEditSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} object was removed from your mappings.</label>
+		<name>ObjectRemoved</name>
+	</customLabels>
+	<customLabels>
+		<label>Open Folder</label>
+		<name>OpenFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Browse for and select a field to name the folder that you have just created</label>
+		<name>SelectFieldInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos; folder</label>
+		<name>SelectFolderHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose the Salesforce object you want to be the source for your documents.You\&apos;ll choose one object at a time.</label>
+		<name>SelectObjectHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Show Steps</label>
+		<name>ShowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>topic2</label>
+		<name>Topic2</name>
+	</customLabels>
+	<customLabels>
+		<label>Your Salesforce Objects</label>
+		<name>YourSalesforceObjects</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

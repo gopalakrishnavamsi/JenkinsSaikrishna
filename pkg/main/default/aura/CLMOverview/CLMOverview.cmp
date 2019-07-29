@@ -1,0 +1,16 @@
+<aura:component >
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-col slds-m-around_medium">
+            <c:CLMGetStarted/>
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <div class="slds-p-bottom_small slds-p-top_small textLabel-color">
+                {!$Label.c.DiscoverDocuSignCLM}
+            </div>
+            <c:CLMDiscoverDocuSign/>
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <c:CLMTroubleshoot summary="{!$Label.c.DocGenInfo}" title="{!$Label.c.LearnAboutDocGen}" isGrey="true"/>
+        </div>
+    </div>
+</aura:component>
