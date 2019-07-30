@@ -61,7 +61,6 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			UUID result = NegotiateAPI.getInstance().exportAgreementToSalesforce(NegotiateAPIMock.SOURCE_OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID);
-			system.debug('result**' + result);
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			System.assertEquals(UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566'), result);

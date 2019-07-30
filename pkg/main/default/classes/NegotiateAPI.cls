@@ -1022,7 +1022,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 		}
 		resultAPIHistoryItems.add(result);
-		system.debug('**documentId**' + documentId);
 		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
 	}
 
