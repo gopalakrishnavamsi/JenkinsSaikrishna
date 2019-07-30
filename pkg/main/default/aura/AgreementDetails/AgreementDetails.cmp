@@ -77,8 +77,7 @@
                 <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}" onactive="{!c.showDownloadModal}"/>
 
                 <lightning:menuItem label="{!$Label.c.AddToSalesforce}" value="{!$Label.c.AddToSalesforce}"
-                                    onactive="{!c.showAddToSalesforceModal}"
-                                    />
+                                    onactive="{!c.showAddToSalesforceModal}"/>
 
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                     onactive="{!c.showUploadModal}"

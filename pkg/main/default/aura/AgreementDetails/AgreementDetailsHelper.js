@@ -135,7 +135,6 @@
   },
 
   exportAgreementToSalesforce: function(component) {
-
     try {
       var actions = component.get('v.agreementActionManager');
       var sourceId = component.get('v.sourceId');
