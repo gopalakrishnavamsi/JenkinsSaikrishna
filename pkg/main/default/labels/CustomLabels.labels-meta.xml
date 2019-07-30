@@ -2977,6 +2977,22 @@
 		<value>You must have DocuSign user permissions to perform this operation.</value>
 	</labels>
 	<labels>
+		<fullName>MustBeDocuSignGenerator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Generator</shortDescription>
+		<value>You must have DocuSign generator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignNegotiator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Negotiator</shortDescription>
+		<value>You must have DocuSign negotiator permissions to perform this operation.</value>
+	</labels>
+	<labels>
 		<fullName>MyPersonalContent</fullName>
 		<categories>Document</categories>
 		<language>en_US</language>
