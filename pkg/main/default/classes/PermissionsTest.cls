@@ -783,6 +783,7 @@ private class PermissionsTest {
 			SELECT Id
 			FROM PermissionSet
 			WHERE Name = :Permissions.DOCUSIGN_ADMINISTRATOR
+			AND NamespacePrefix = :Application.packageNamespace
 			LIMIT 1
 		].Id;
 
@@ -797,11 +798,27 @@ private class PermissionsTest {
 			SELECT Id
 			FROM PermissionSet
 			WHERE Name = :Permissions.DOCUSIGN_USER
+			AND NamespacePrefix = :Application.packageNamespace
 			LIMIT 1
 		].Id;
 
 		Test.startTest();
 		System.assertEquals(id, Permissions.getDocuSignUserPermissionSetId());
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getDocuSignSenderPermissionSetId() {
+		Id id = [
+			SELECT Id
+			FROM PermissionSet
+			WHERE Name = :Permissions.DOCUSIGN_SENDER
+			AND NamespacePrefix = :Application.packageNamespace
+			LIMIT 1
+		].Id;
+
+		Test.startTest();
+		System.assertEquals(id, Permissions.getDocuSignSenderPermissionSetId());
 		Test.stopTest();
 	}
 

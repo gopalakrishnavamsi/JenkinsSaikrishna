@@ -64,7 +64,7 @@ public with sharing class Application {
 
 	public static String packageNamespace {
 		get {
-			return PACKAGE_NAMESPACE;
+			return IS_MANAGED_PACKAGE ? PACKAGE_NAMESPACE : Salesforce.namespace;
 		}
 	}
 

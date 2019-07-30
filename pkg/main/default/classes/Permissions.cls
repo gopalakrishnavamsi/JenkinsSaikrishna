@@ -88,7 +88,8 @@ public with sharing class Permissions {
 			for (PermissionSet p : [
 				SELECT Id, Name
 				FROM PermissionSet
-				WHERE Name IN :(new Set<String> { DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER })
+				WHERE Name IN :(NEW Set<String> { DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER })
+				AND NamespacePrefix = :Application.packageNamespace
 			]) {
 				result.put(p.Name, p.Id);
 			}

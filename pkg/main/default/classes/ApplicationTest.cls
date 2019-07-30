@@ -26,7 +26,7 @@ private class ApplicationTest {
 
 	@IsTest
 	static void test_packageNamespace() {
-		System.assertEquals('dfsle', Application.packageNamespace);
+		System.assertEquals(Application.isManaged ? 'dfsle' : Salesforce.namespace, Application.packageNamespace);
 	}
 
 	@IsTest
