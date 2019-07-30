@@ -243,7 +243,7 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceObjectId,  final UUID documentId ){
+	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceObjectId, final UUID documentId) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		UUID taskId = NegotiateAPI.getInstance().exportAgreementToSalesforce(sourceObjectId, documentId);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(taskId);

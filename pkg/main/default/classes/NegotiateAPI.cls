@@ -508,7 +508,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
-
 	@TestVisible
 	public class TaskStatus {
 		@AuraEnabled
@@ -580,7 +579,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		return result;
 	}
-
 
 	public static String getDocumentDeepLink(final Id sourceId, final UUID documentId) {
 		if (sourceId == null || documentId == null) return null;
@@ -1024,7 +1022,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 		}
 		resultAPIHistoryItems.add(result);
-		system.debug('**documentId**'+documentId);
+		system.debug('**documentId**' + documentId);
 		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
 	}
 

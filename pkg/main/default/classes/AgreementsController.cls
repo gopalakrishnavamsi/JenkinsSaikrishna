@@ -107,7 +107,7 @@ public with sharing class AgreementsController extends Controller {
 	public static String generateResourceToken(final String agreementId) {
 		try {
 			return GenService.getResourceToken(UUID.parse(agreementId));
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate resource access token.');
 		}
 	}
@@ -148,15 +148,15 @@ public with sharing class AgreementsController extends Controller {
 			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to redirect to Agreement Preview');
-		}		
-	}	
+		}
+	}
 
 	@AuraEnabled
 	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<String> documentsIds, final String reviewersJson, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		try {
 			if (String.isBlank(reviewersJson)) throw Controller.wrapException('Failed to send documents for External Review: Invalid Reviewers');
 			List<UUID> documentIdList = new List<UUID>();
-			List<Recipient> reviewers = (List<Recipient>) JSON.deserialize(reviewersJson, List<Recipient>.class);
+			List<Recipient> reviewers = (List<Recipient>)JSON.deserialize(reviewersJson, List<Recipient>.class);
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
@@ -169,9 +169,9 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static NegotiateAPI.TaskStatus internalApproval(final String agreementName, final Id sourceId, final List<String> documentsIds, final String approversJson, final String subject, final String body, final Boolean isSequential) {
 		try {
-			if (String.isBlank(approversJson)) throw Controller.wrapException('Failed to send documents for Internal Approval: Invalid Approvers');			
+			if (String.isBlank(approversJson)) throw Controller.wrapException('Failed to send documents for Internal Approval: Invalid Approvers');
 			List<UUID> documentIdList = new List<UUID>();
-			List<Recipient> approvers = (List<Recipient>) JSON.deserialize(approversJson, List<Recipient>.class);
+			List<Recipient> approvers = (List<Recipient>)JSON.deserialize(approversJson, List<Recipient>.class);
 			for (String documentId : documentsIds) {
 				documentIdList.add(UUID.parse(documentId));
 			}
@@ -218,9 +218,9 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce( final Id sourceId ,final String agreementId){
+	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceId, final String agreementId) {
 		try {
-			return NegotiateService.exportAgreementToSalesforce(sourceId,UUID.parse(agreementId));
+			return NegotiateService.exportAgreementToSalesforce(sourceId, UUID.parse(agreementId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to Add Agreement in Salesforce');
 		}
