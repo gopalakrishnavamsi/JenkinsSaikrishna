@@ -1,0 +1,8 @@
+.THIS {   
+    background-color: #FAFAFB; 
+    border-radius: t(borderRadiusMedium);    
+}
+
+.THIS .ds-textLabel-color{
+    color: t(colorTextLabel); 
+}

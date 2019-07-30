@@ -1,0 +1,13 @@
+.THIS .ds-card-heading{
+    color:t(colorTextLinkActive);
+    font-size:1.25rem
+}
+.THIS .ds-button-width{
+    min-width:142px;
+    max-width:144px;
+    height: 100%;
+}
+.THIS .ds-button-height {
+    height: 35px;
+}
+    

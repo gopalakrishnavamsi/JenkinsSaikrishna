@@ -1,0 +1,43 @@
+<aura:component extends="c:CLMUtility">
+    <ltng:require scripts="{!$Resource.navUtils}" />
+
+    <!--event handlers-->
+    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
+    <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onSecondaryButtonClick}" />
+    
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-col slds-m-around_medium">
+            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
+                {!$Label.c.ObjectMapping}
+            </div>
+            <c:CLMMapObjectExpandCard />
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
+                {!$Label.c.ConfigureObjectPageLayout}
+            </div>
+            <c:CLMHelp title="{!$Label.c.ViewYourObjectFolders}" buttonName="{!$Label.c.ConfigureLayouts}" secondButtonName="{!$Label.c.LearnMore}"
+                showIcon='false'
+                summary="{!$Label.c.AddLayoutInfo}" />
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
+                {!$Label.c.OptimizeDocumentGeneration}
+            </div>
+            <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" buttonName="{!$Label.c.ConfigureButtons}" secondButtonName="{!$Label.c.LearnMore}"
+                showIcon='false'
+                summary="{!$Label.c.ConfigureButtonInfo}" />
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
+                {!$Label.c.Administration}
+            </div>
+            <c:CLMHelp title="{!$Label.c.UserManagement}" buttonName="{!$Label.c.Manage}" secondButtonName="{!$Label.c.LearnMore}" showIcon='false'
+                showFirstButton='false'
+                summary="{!$Label.c.UserManagementInfo}" />
+        </div>
+        <div class="slds-col slds-m-around_medium">
+            <c:CLMTroubleshoot isGrey="true" />
+        </div>
+    </div>
+</aura:component>

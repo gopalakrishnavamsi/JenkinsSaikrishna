@@ -14,13 +14,21 @@ public with sharing class Permissions {
 	private static final String DOCUSIGN_USER = 'DocuSign_User';
 	@TestVisible
 	private static final String DOCUSIGN_SENDER = 'DocuSign_Sender';
+	@TestVisible
+	private static final String DOCUSIGN_GENERATOR = 'DocuSign_Generator';
+	@TestVisible
+	private static final String DOCUSIGN_NEGOTIATOR = 'DocuSign_Negotiator';
 	private static Map<String, Id> permissionSetMap = null;
 	private static Id dsAdministratorPermissionSetId = null;
 	private static Id dsUserPermissionSetId = null;
 	private static Id dsSenderPermissionSetId = null;
+	private static Id dsGeneratorPermissionSetId = null;
+	private static Id dsNegotiatorPermissionSetId = null;
 	private static final Map<Id, Boolean> dsAdmins = new Map<Id, Boolean>();
 	private static final Map<Id, Boolean> dsUsers = new Map<Id, Boolean>();
 	private static final Map<Id, Boolean> dsSenders = new Map<Id, Boolean>();
+	private static final Map<Id, Boolean> dsGenerators = new Map<Id, Boolean>();
+	private static final Map<Id, Boolean> dsNegotiators = new Map<Id, Boolean>();
 
 	static {
 		IS_FLS_SUPPORTED = (Salesforce.edition == 'Developer Edition' || Salesforce.edition == 'Enterprise Edition' || Salesforce.edition == 'Unlimited Edition');
@@ -58,10 +66,12 @@ public with sharing class Permissions {
 				List<PermissionSetAssignment> ps = [
 					SELECT Id, AssigneeId, PermissionSetId
 					FROM PermissionSetAssignment
-					WHERE PermissionSetId IN :(new Set<Id> {
+					WHERE PermissionSetId IN :(NEW Set<Id> {
 						getDocuSignUserPermissionSetId(),
 						getDocuSignAdministratorPermissionSetId(),
-						getDocuSignSenderPermissionSetId()
+						getDocuSignSenderPermissionSetId(),
+						getDocuSignGeneratorPermissionSetId(),
+						getDocuSignNegotiatorPermissionSetId()
 					})
 					AND AssigneeId IN :userIds
 				];
@@ -88,7 +98,14 @@ public with sharing class Permissions {
 			for (PermissionSet p : [
 				SELECT Id, Name
 				FROM PermissionSet
-				WHERE Name IN :(new Set<String> { DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER })
+				WHERE Name IN :(NEW Set<String> {
+					DOCUSIGN_ADMINISTRATOR,
+					DOCUSIGN_USER,
+					DOCUSIGN_SENDER,
+					DOCUSIGN_GENERATOR,
+					DOCUSIGN_NEGOTIATOR
+				})
+				AND NamespacePrefix = :Application.packageNamespace
 			]) {
 				result.put(p.Name, p.Id);
 			}
@@ -165,6 +182,22 @@ public with sharing class Permissions {
 			dsSenderPermissionSetId = getPermissionSetMap().get(DOCUSIGN_SENDER);
 		}
 		return dsSenderPermissionSetId;
+	}
+
+	@TestVisible
+	private static Id getDocuSignGeneratorPermissionSetId() {
+		if (dsGeneratorPermissionSetId == null) {
+			dsGeneratorPermissionSetId = getPermissionSetMap().get(DOCUSIGN_GENERATOR);
+		}
+		return dsGeneratorPermissionSetId;
+	}
+
+	@TestVisible
+	private static Id getDocuSignNegotiatorPermissionSetId() {
+		if (dsNegotiatorPermissionSetId == null) {
+			dsNegotiatorPermissionSetId = getPermissionSetMap().get(DOCUSIGN_NEGOTIATOR);
+		}
+		return dsNegotiatorPermissionSetId;
 	}
 
 	/**
@@ -296,6 +329,124 @@ public with sharing class Permissions {
 	}
 
 	/**
+	 * Checks whether the current user is assigned the <code>DocuSign Generator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce document generator, <code>false</code>
+	 * otherwise.
+	 */
+	public static Boolean isDocuSignGenerator() {
+		return isDocuSignGenerator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isDocuSignGenerator(final Id userId) {
+		Boolean result = false;
+		if (String.isNotBlank(userId)) {
+			final Boolean value = dsGenerators.get(userId);
+			if (value != null) {
+				result = value;
+			} else {
+				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+					getDocuSignGeneratorPermissionSetId()
+				}));
+				dsGenerators.put(userId, result);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>DocuSign Generator</code> permission set.
+	 */
+	public static void verifyIsDocuSignGenerator() {
+		verifyIsDocuSignGenerator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsDocuSignGenerator(final Id userId) {
+		if (String.isBlank(userId) || !isDocuSignGenerator(userId)) throw UnauthorizedException.notDocuSignGenerator();
+	}
+
+	/**
+	 * Checks whether the current user is assigned the <code>DocuSign Negotiator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce document negotiator,
+	 * <code>false</code> otherwise.
+	 */
+	public static Boolean isDocuSignNegotiator() {
+		return isDocuSignNegotiator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isDocuSignNegotiator(final Id userId) {
+		Boolean result = false;
+		if (String.isNotBlank(userId)) {
+			final Boolean value = dsNegotiators.get(userId);
+			if (value != null) {
+				result = value;
+			} else {
+				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+					getDocuSignNegotiatorPermissionSetId()
+				}));
+				dsNegotiators.put(userId, result);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>DocuSign Negotiator</code> permission set.
+	 */
+	public static void verifyIsDocuSignNegotiator() {
+		verifyIsDocuSignNegotiator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsDocuSignNegotiator(final Id userId) {
+		if (String.isBlank(userId) || !isDocuSignNegotiator(userId)) {
+			throw UnauthorizedException.notDocuSignNegotiator();
+		}
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Negotiator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignNegotiatorPermissionSet(final Set<Id> userIds) {
+		Boolean result = Collection.isNotEmpty(userIds);
+		if (result) {
+			result &= DB.upsertPermissionSetAssignments(getDocuSignNegotiatorPermissionSetId(), userIds);
+			for (Id userId : userIds) {
+				dsNegotiators.put(userId, true);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Generator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignGeneratorPermissionSet(final Set<Id> userIds) {
+		Boolean result = Collection.isNotEmpty(userIds);
+		if (result) {
+			result &= DB.upsertPermissionSetAssignments(getDocuSignGeneratorPermissionSetId(), userIds);
+			for (Id userId : userIds) {
+				dsGenerators.put(userId, true);
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Assigns the <code>DocuSign Sender</code> permission set to one or more users.
 	 *
 	 * @param userIds The user IDs.
@@ -368,6 +519,8 @@ public with sharing class Permissions {
 				dsAdmins.remove(userId);
 				dsUsers.remove(userId);
 				dsSenders.remove(userId);
+				dsGenerators.remove(userId);
+				dsNegotiators.remove(userId);
 			}
 		}
 		return result;

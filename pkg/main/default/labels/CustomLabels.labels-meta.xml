@@ -55,7 +55,7 @@
 		<protected>true</protected>
 		<shortDescription>Account Provisioning Failed</shortDescription>
 		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support:
-			https://support.docusign.com/.
+		https://support.docusign.com/.
 		</value>
 	</labels>
 	<labels>
@@ -81,6 +81,14 @@
 		<protected>true</protected>
 		<shortDescription>Add_DocuSign_Buttons</shortDescription>
 		<value>Add DocuSign buttons and components to page layouts</value>
+	</labels>
+	<labels>
+		<fullName>AddLayoutInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Add Layout Info</shortDescription>
+		<value>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</value>
 	</labels>
 	<labels>
 		<fullName>AddRecipient</fullName>
@@ -121,7 +129,7 @@
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign details</shortDescription>
 		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to
-			the list below. Each new user will automatically be added to the DocuSign account.
+		the list below. Each new user will automatically be added to the DocuSign account.
 		</value>
 	</labels>
 	<labels>
@@ -147,6 +155,14 @@
 		<protected>true</protected>
 		<shortDescription>Admin</shortDescription>
 		<value>Admin</value>
+	</labels>
+	<labels>
+		<fullName>Administration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM Sidebar item - Administration</shortDescription>
+		<value>ADMINISTRATION</value>
 	</labels>
 	<labels>
 		<fullName>AdvancedOptions</fullName>
@@ -342,6 +358,38 @@
 		<value>Austria</value>
 	</labels>
 	<labels>
+		<fullName>AutomateDocumentGeneration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Automate Document Generation</shortDescription>
+		<value>Automate document generation</value>
+	</labels>
+	<labels>
+		<fullName>AutomateDocumentGenerationBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Automate Document Generation Body</shortDescription>
+		<value>Save time with contract generation by merging your data into custom template.</value>
+	</labels>
+	<labels>
+		<fullName>AutomateYourProcessesBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Automate Your Processes Body</shortDescription>
+		<value>Automates tasks, route contracts, and reduce human error with DocuSign CLM&apos;s workflow.</value>
+	</labels>
+	<labels>
+		<fullName>AutomateYourProcessesTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Automate Your Processes Title</shortDescription>
+		<value>Automate your processes</value>
+	</labels>
+	<labels>
 		<fullName>Azerbaijan</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -512,6 +560,30 @@
 		<value>Burundi</value>
 	</labels>
 	<labels>
+		<fullName>ButtonsAndComponents</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM Sidebar item - Buttons and Components</shortDescription>
+		<value>Buttons and Components</value>
+	</labels>
+	<labels>
+		<fullName>CLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item</shortDescription>
+		<value>CLM</value>
+	</labels>
+	<labels>
+		<fullName>CLM_PickAFieldTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick a Field Title</shortDescription>
+		<value>How do I pick a field?</value>
+	</labels>
+	<labels>
 		<fullName>Cambodia</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -635,7 +707,7 @@
 		<protected>true</protected>
 		<shortDescription>Cannot remove self</shortDescription>
 		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to
-			administer DocuSign for Salesforce.
+		administer DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -768,11 +840,51 @@
 		<value>Chinese (Simplified)</value>
 	</labels>
 	<labels>
+		<fullName>ChooseLocation</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Location</shortDescription>
+		<value>Choose Location</value>
+	</labels>
+	<labels>
+		<fullName>ChooseLocationBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Location Body</shortDescription>
+		<value>Choosing a location for your object folder keeps your document organized. Later, you can customize Salesforce to view your CLM folder contents from within Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseLocationTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Location Title</shortDescription>
+		<value>Why do I need to choose a location?</value>
+	</labels>
+	<labels>
+		<fullName>ChooseObjectInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Object Info</shortDescription>
+		<value>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object at a time.</value>
+	</labels>
+	<labels>
 		<fullName>ChristmasIsland</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ChristmasIsland</shortDescription>
 		<value>Christmas Island</value>
+	</labels>
+	<labels>
+		<fullName>ClassicObjectManagerURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Classic Object Manager URL</shortDescription>
+		<value>/ui/setup/Setup?setupid=Customize</value>
 	</labels>
 	<labels>
 		<fullName>Close</fullName>
@@ -866,6 +978,54 @@
 		<protected>true</protected>
 		<shortDescription>ConfigurationError</shortDescription>
 		<value>DocuSign is not configured correctly. Please contact your system administrator for assistance.</value>
+	</labels>
+	<labels>
+		<fullName>ConfigureButtonInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure Button Info</shortDescription>
+		<value>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking the custom button opens the affiliated Document Generation form.</value>
+	</labels>
+	<labels>
+		<fullName>ConfigureButtons</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure Buttons</shortDescription>
+		<value>Configure Buttons</value>
+	</labels>
+	<labels>
+		<fullName>ConfigureLayouts</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure Layouts</shortDescription>
+		<value>Configure Layouts</value>
+	</labels>
+	<labels>
+		<fullName>ConfigureObjectPageLayout</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure Object Page Layout</shortDescription>
+		<value>CONFIGURE OBJECT PAGE LAYOUT</value>
+	</labels>
+	<labels>
+		<fullName>ConfigureObjectPageLayoutInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure Object Page Layout Info</shortDescription>
+		<value>To see your folders in DocuSign CLM or Salesforce you&apos;ll have to configure your object page&apos;s layout. Then, add a custom section for DocuSign CLM to that layout.</value>
+	</labels>
+	<labels>
+		<fullName>ConfirmEdits</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Confirm Edits</shortDescription>
+		<value>Confirm Edits</value>
 	</labels>
 	<labels>
 		<fullName>CongoBrazzaville</fullName>
@@ -1155,11 +1315,27 @@
 		<value>Disabled</value>
 	</labels>
 	<labels>
+		<fullName>DiscoverDocuSignCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Discover DocuSign CLM</shortDescription>
+		<value>DISCOVER DOCUSIGN CLM</value>
+	</labels>
+	<labels>
 		<fullName>Djibouti</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Djibouti</shortDescription>
 		<value>Djibouti</value>
+	</labels>
+	<labels>
+		<fullName>DocGenInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Document Generation Info</shortDescription>
+		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM</value>
 	</labels>
 	<labels>
 		<fullName>DocuSign</fullName>
@@ -1176,6 +1352,22 @@
 		<protected>true</protected>
 		<shortDescription>DocuSign Template</shortDescription>
 		<value>DocuSign Template</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGeneration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item Document Generation</shortDescription>
+		<value>Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>DocusignAgreement</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Docusign Agreement</shortDescription>
+		<value>DocuSign Agreements intigrates your Salesforce data smoothly into DocuSign CLM.This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>Dominica</fullName>
@@ -1229,6 +1421,14 @@
 		<protected>true</protected>
 		<shortDescription>Edit</shortDescription>
 		<value>Edit</value>
+	</labels>
+	<labels>
+		<fullName>EditModalBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Modal Body for Mapped objects</shortDescription>
+		<value>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</value>
 	</labels>
 	<labels>
 		<fullName>Editor</fullName>
@@ -1411,7 +1611,7 @@
 		<protected>true</protected>
 		<shortDescription>Envelopes must be sent</shortDescription>
 		<value>All envelopes must be in &#39;sent&#39; or &#39;created&#39; state with a valid DocuSign ID to create
-			associated status records.
+		associated status records.
 		</value>
 	</labels>
 	<labels>
@@ -1481,7 +1681,7 @@
 		<protected>true</protected>
 		<shortDescription>Signers Required to Meet 21 CFR Part 11</shortDescription>
 		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
-			required, non-conditional Signature or Initials tab.
+		required, non-conditional Signature or Initials tab.
 		</value>
 	</labels>
 	<labels>
@@ -1811,16 +2011,31 @@
 		<value>Heard Island and McDonald Islands</value>
 	</labels>
 	<labels>
+		<fullName>Help</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item Help</shortDescription>
+		<value>Help</value>
+	</labels>
+	<labels>
+		<fullName>HelpInfoBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Help Info Body</shortDescription>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
+	</labels>
+	<labels>
 		<fullName>HelpSection1</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Help section 1</shortDescription>
 		<value>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with
-			DocuSign
-			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
-			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
+		DocuSign
+		button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
+		objects: Accounts, Contacts, Opportunities, Cases, and Leads.
 		</value>
 	</labels>
 	<labels>
@@ -1830,10 +2045,8 @@
 		<protected>true</protected>
 		<shortDescription>Help section 2</shortDescription>
 		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
-			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
-			documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot;
-			target=&quot;_blank&quot;&gt;here&lt;/a&gt;
+		the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
+		documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;
 		</value>
 	</labels>
 	<labels>
@@ -1851,6 +2064,14 @@
 		<protected>true</protected>
 		<shortDescription>Hide</shortDescription>
 		<value>Hide</value>
+	</labels>
+	<labels>
+		<fullName>Home</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item Home</shortDescription>
+		<value>Home</value>
 	</labels>
 	<labels>
 		<fullName>Honduras</fullName>
@@ -1951,6 +2172,14 @@
 		<value>Initialize envelope settings</value>
 	</labels>
 	<labels>
+		<fullName>Integration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item Integration</shortDescription>
+		<value>Integration</value>
+	</labels>
+	<labels>
 		<fullName>Intermediary</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
@@ -1965,15 +2194,15 @@
 		<protected>true</protected>
 		<shortDescription>Invalid User Settings</shortDescription>
 		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
-			used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
-			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
-			Send
-			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
-			setting may be accessed by
-			logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
-			Administration console. Unless all of those settings are enabled, the integration will not function
-			properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
-			contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
+		used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
+		user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
+		Send
+		Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
+		setting may be accessed by
+		logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
+		Administration console. Unless all of those settings are enabled, the integration will not function
+		properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
+		contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
 		</value>
 	</labels>
 	<labels>
@@ -1991,7 +2220,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid Correction State</shortDescription>
 		<value>Correction permission must be turned on and envelope must be in &#39;sent&#39; or &#39;delivered&#39;
-			state to allow correction.
+		state to allow correction.
 		</value>
 	</labels>
 	<labels>
@@ -2049,7 +2278,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid File Extension</shortDescription>
 		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-			extension unknown to DocuSign.
+		extension unknown to DocuSign.
 		</value>
 	</labels>
 	<labels>
@@ -2099,7 +2328,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid related contact</shortDescription>
 		<value>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column
-			mappings.
+		mappings.
 		</value>
 	</labels>
 	<labels>
@@ -2303,6 +2532,14 @@
 		<value>Kyrgyzstan</value>
 	</labels>
 	<labels>
+		<fullName>LEXObjectManagerURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - LEX Object Manager URL</shortDescription>
+		<value>/lightning/setup/ObjectManager/home</value>
+	</labels>
+	<labels>
 		<fullName>LandingProgress_2</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -2347,6 +2584,22 @@
 		<protected>true</protected>
 		<shortDescription>Latvia</shortDescription>
 		<value>Latvia</value>
+	</labels>
+	<labels>
+		<fullName>LearnAboutDocGen</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Learn More About Doc Gen</shortDescription>
+		<value>Learn more about Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>LearnMore</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Learn More</shortDescription>
+		<value>Learn More</value>
 	</labels>
 	<labels>
 		<fullName>Lebanon</fullName>
@@ -2502,12 +2755,44 @@
 		<value>Malta</value>
 	</labels>
 	<labels>
+		<fullName>Manage</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Manage</shortDescription>
+		<value>Manage</value>
+	</labels>
+	<labels>
 		<fullName>ManageUsers</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Manage users</shortDescription>
 		<value>Manage Users</value>
+	</labels>
+	<labels>
+		<fullName>MapNew</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Map New</shortDescription>
+		<value>MAP NEW</value>
+	</labels>
+	<labels>
+		<fullName>MapYourSalesforceObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Map Your Salesforce Objects</shortDescription>
+		<value>MAP YOUR SALESFORCE OBJECTS</value>
+	</labels>
+	<labels>
+		<fullName>MappedObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapped Objects</shortDescription>
+		<value>Mapped Objects</value>
 	</labels>
 	<labels>
 		<fullName>MarketingOptIn</fullName>
@@ -2654,7 +2939,7 @@
 		<protected>true</protected>
 		<shortDescription>Multiple_Accounts_Message</shortDescription>
 		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would
-			like to connect with your Salesforce organization.
+		like to connect with your Salesforce organization.
 		</value>
 	</labels>
 	<labels>
@@ -2664,7 +2949,7 @@
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
 		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and
-			have granted your consent to DocuSign for Salesforce.
+		have granted your consent to DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -2698,6 +2983,22 @@
 		<protected>true</protected>
 		<shortDescription>Must Be DocuSign User</shortDescription>
 		<value>You must have DocuSign user permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignGenerator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Generator</shortDescription>
+		<value>You must have DocuSign generator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignNegotiator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Negotiator</shortDescription>
+		<value>You must have DocuSign negotiator permissions to perform this operation.</value>
 	</labels>
 	<labels>
 		<fullName>MyPersonalContent</fullName>
@@ -2872,8 +3173,7 @@
 		<protected>true</protected>
 		<shortDescription>Non-US consent messsage</shortDescription>
 		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-			and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a
-			target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
+		and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
 		</value>
 	</labels>
 	<labels>
@@ -2943,6 +3243,46 @@
 		<protected>true</protected>
 		<shortDescription>Null API Response</shortDescription>
 		<value>No response received from API.</value>
+	</labels>
+	<labels>
+		<fullName>ObjectFolderBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Folder Body</shortDescription>
+		<value>Every instance of a mapped object will have a dedicated folder in DocuSign CLM. That&apos;s where you&apos;ll find the documents generated by using that object&apos;s data.</value>
+	</labels>
+	<labels>
+		<fullName>ObjectFolderName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Folder Name</shortDescription>
+		<value>Object Folder Name</value>
+	</labels>
+	<labels>
+		<fullName>ObjectFolderTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Folder Title</shortDescription>
+		<value>What is an Object Folder?</value>
+	</labels>
+	<labels>
+		<fullName>ObjectManagerURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - LEX Object Manager URL</shortDescription>
+		<value>/lightning/setup/ObjectManager/home</value>
+	</labels>
+	<labels>
+		<fullName>ObjectMapping</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Mapping</shortDescription>
+		<value>OBJECT MAPPING</value>
 	</labels>
 	<labels>
 		<fullName>Oman</fullName>
@@ -3225,7 +3565,7 @@
 		<protected>true</protected>
 		<shortDescription>Empty List</shortDescription>
 		<value>Custom field &#39;{0}&#39; is not configured correctly for your account: a required list field does not
-			have any options. Please contact your DocuSign administrator to correct the custom field.
+		have any options. Please contact your DocuSign administrator to correct the custom field.
 		</value>
 	</labels>
 	<labels>
@@ -3786,9 +4126,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Support info</shortDescription>
-		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot;
-			target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
-			to common questions, and display system performance information.
+		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
+		to common questions, and display system performance information.
 		</value>
 	</labels>
 	<labels>
@@ -3806,9 +4145,8 @@
 		<protected>true</protected>
 		<shortDescription>Support preparation</shortDescription>
 		<value>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be
-			sure to
-			have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot;
-			target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
+		sure to
+		have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
 		</value>
 	</labels>
 	<labels>
@@ -3939,9 +4277,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade
-			your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
+		your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -3950,8 +4287,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires in One Day</shortDescription>
-		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -3960,8 +4296,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Soon</shortDescription>
-		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -3970,8 +4305,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Today</shortDescription>
-		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -3989,7 +4323,7 @@
 		<protected>true</protected>
 		<shortDescription>Trial instructions</shortDescription>
 		<value>You will receive email with instructions on how to activate your account. You will then be able to log in
-			using your credentials.
+		using your credentials.
 		</value>
 	</labels>
 	<labels>
@@ -4065,8 +4399,8 @@
 		<protected>true</protected>
 		<shortDescription>US consent message</shortDescription>
 		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-			and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy
-			Policy&lt;/a&gt;.
+		and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy
+		Policy&lt;/a&gt;.
 		</value>
 	</labels>
 	<labels>
@@ -4105,7 +4439,7 @@
 		<protected>true</protected>
 		<shortDescription>Unauthorized user</shortDescription>
 		<value>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant
-			access.
+		access.
 		</value>
 	</labels>
 	<labels>
@@ -4451,7 +4785,7 @@
 		<protected>true</protected>
 		<shortDescription>Use system sender help</shortDescription>
 		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes.
-			The sender in this case will be the configured DocuSign administrator.
+		The sender in this case will be the configured DocuSign administrator.
 		</value>
 	</labels>
 	<labels>
@@ -4779,7 +5113,7 @@
 		<protected>true</protected>
 		<shortDescription>Gen API error</shortDescription>
 		<value>[{0}] {1}
-			Reference ID: {2}
+		Reference ID: {2}
 		</value>
 	</labels>
 	<labels>
@@ -4928,6 +5262,14 @@
 		<protected>true</protected>
 		<shortDescription>No layouts for selected object</shortDescription>
 		<value>No layouts are associated with the selected object</value>
+	</labels>
+	<labels>
+		<fullName>NoMappedObjectsFound</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - No Mapped Objects Found</shortDescription>
+		<value>You have no mapped objects yet. Map a new object.</value>
 	</labels>
 	<labels>
 		<fullName>DocuSignAgreements</fullName>
@@ -5174,6 +5516,30 @@
 		<protected>true</protected>
 		<shortDescription>NameLabel</shortDescription>
 		<value>Name</value>
+	</labels>
+	<labels>
+		<fullName>NameObjectFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name Object Folder</shortDescription>
+		<value>Name Object Folder</value>
+	</labels>
+	<labels>
+		<fullName>NameObjectFolderBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name Object Folder Body</shortDescription>
+		<value>We recommend that you always name the folder after a field associated with the mapped Salesforce object. That way the folder will update when your object data updates.</value>
+	</labels>
+	<labels>
+		<fullName>NameObjectFolderTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name Object Folder Title</shortDescription>
+		<value>What should I call my object folder?</value>
 	</labels>
 	<labels>
 		<fullName>TemplateConfiguration</fullName>
@@ -5912,7 +6278,7 @@
 		<protected>true</protected>
 		<shortDescription>MissingDocuSignGenAuthorizationSettings</shortDescription>
 		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for
-			assistance.
+		assistance.
 		</value>
 	</labels>
 	<labels>
@@ -6096,7 +6462,7 @@
 		<protected>true</protected>
 		<shortDescription>ExternalReviewProcessing</shortDescription>
 		<value>Your request for sending your document for external review is still in progress. Check the Agreements
-			space after some time.
+		space after some time.
 		</value>
 	</labels>
 	<labels>
@@ -6119,7 +6485,7 @@
 		<protected>true</protected>
 		<shortDescription>InternalApprovalProcessing</shortDescription>
 		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements
-			space after some time.
+		space after some time.
 		</value>
 	</labels>
 	<labels>
@@ -6331,7 +6697,7 @@
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFailureEmailBody</shortDescription>
 		<value>There was a problem with your review request and it was not sent. The issue should resolve itself if you resend the request.</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>ExternalReviewFailureEmailHeader</fullName>
 		<language>en_US</language>
@@ -6366,7 +6732,7 @@
 		<protected>true</protected>
 		<shortDescription>ExpiredReviewSenderEmailHeader</shortDescription>
 		<value>Your review request has expired</value>
-	</labels>			
+	</labels>
 	<labels>
 		<fullName>OpenAgreementButton</fullName>
 		<language>en_US</language>
@@ -6375,12 +6741,20 @@
 		<value>Open Agreement</value>
 	</labels>
 	<labels>
+		<fullName>OptimizeDocumentGeneration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Optimize Document Generation</shortDescription>
+		<value>OPTIMIZE DOCUMENT GENERATION</value>
+	</labels>
+	<labels>
 		<fullName>CompletedReviewEmailSubject_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CompletedReviewEmailSubject_1</shortDescription>
 		<value>Review completed for {0}</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>CompletedReviewEmailHeader</fullName>
 		<language>en_US</language>
@@ -6408,33 +6782,33 @@
 		<protected>true</protected>
 		<shortDescription>ExpiredReviewReviewerEmailSubject</shortDescription>
 		<value>Your review request has expired</value>
-	</labels>		
+	</labels>
 	<labels>
 		<fullName>ExpiredReviewHeader_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>ExpiredReviewHeader_1</shortDescription>		
+		<shortDescription>ExpiredReviewHeader_1</shortDescription>
 		<value>Review request for {0} has expired.</value>
 	</labels>
 	<labels>
 		<fullName>CanceledReviewEmailBody_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CanceledReviewEmailBody_1</shortDescription>		
+		<shortDescription>CanceledReviewEmailBody_1</shortDescription>
 		<value>Review request for {0} has been canceled. There is nothing you need to do.</value>
 	</labels>
 	<labels>
 		<fullName>CanceledReviewEmailSubject_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CanceledReviewEmailSubject_1</shortDescription>		
+		<shortDescription>CanceledReviewEmailSubject_1</shortDescription>
 		<value>Review for {0} has been canceled</value>
 	</labels>
 	<labels>
 		<fullName>CanceledReviewEmailHeader_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CanceledReviewEmailHeader_1</shortDescription>		
+		<shortDescription>CanceledReviewEmailHeader_1</shortDescription>
 		<value>Review for {0} canceled.</value>
 	</labels>
 	<labels>
@@ -6457,7 +6831,7 @@
 		<protected>true</protected>
 		<shortDescription>Authorize DocuSign instructions</shortDescription>
 		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.
-			Click the &quot;Authorize&quot; button to continue.
+		Click the &quot;Authorize&quot; button to continue.
 		</value>
 	</labels>
 	<labels>
@@ -6648,7 +7022,7 @@
 		<protected>true</protected>
 		<shortDescription>ApprovalFailureEmailBodyText</shortDescription>
 		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if
-			you resend the request.
+		you resend the request.
 		</value>
 	</labels>
 	<labels>
@@ -6692,7 +7066,7 @@
 		<protected>true</protected>
 		<shortDescription>AgreementShareLinkMessage</shortDescription>
 		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit
-			this agreement.
+		this agreement.
 		</value>
 	</labels>
 	<labels>
@@ -6738,10 +7112,362 @@
 		<value>Error while uploading a new version of the agreement.</value>
 	</labels>
 	<labels>
+		<fullName>OrganizeAndSearchDocumentsBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Organize And Search Documents Body</shortDescription>
+		<value>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</value>
+	</labels>
+	<labels>
+		<fullName>OrganizeAndSearchDocumentsTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - OrganizeAndSearchDocumentsTitle</shortDescription>
+		<value>Organize and search documents</value>
+	</labels>
+	<labels>
+		<fullName>Overview</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Overview</shortDescription>
+		<value>Overview</value>
+	</labels>
+	<labels>
+		<fullName>PathInDocuSignCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Path In DocuSign CLM</shortDescription>
+		<value>Path in DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>PickAFieldBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick a Field Body</shortDescription>
+		<value>Once you have set a location for your object folder, you&apos;ll be able to browse for and select one or more fields to create a dynamic name for your new folder.</value>
+	</labels>
+	<labels>
+		<fullName>PickAFieldTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick a Field Title</shortDescription>
+		<value>How do I pick a field?</value>
+	</labels>
+	<labels>
+		<fullName>PickObjectBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick Object Body</shortDescription>
+		<value>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping process.</value>
+	</labels>
+	<labels>
+		<fullName>PickObjectTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick Object Title</shortDescription>
+		<value>Why pick objects to map?</value>
+	</labels>
+	<labels>
+		<fullName>PickSpecificObjectBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick Specific Object Body</shortDescription>
+		<value>You can pick any standard or custom Salesforce object to map. Every organization will have different needs and objects, but Account and Opportunity are good examples.</value>
+	</labels>
+	<labels>
+		<fullName>PickSpecificObjectTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pick Specific Object Title</shortDescription>
+		<value>Which object should I pick?</value>
+	</labels>
+	<labels>
+		<fullName>PreSetObjMappings</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pre-set Object Mappings</shortDescription>
+		<value>We mapped 2 objects for you</value>
+	</labels>
+	<labels>
+		<fullName>PreSetObjMappingsBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Pre-set Object Mappings Body</shortDescription>
+		<value>We&apos;ve already mapped &apos;Accounts&apos; and &apos;Opportunities&apos; to your DocuSign CLM. This will help you have time and focus on other objects. Don&apos;t need them? Click &apos;Remove&apos; to get rid of any objects.</value>
+	</labels>
+	<labels>
+		<fullName>RemoveMapping</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Remove Mapping Modal</shortDescription>
+		<value>Remove Mapping</value>
+	</labels>
+	<labels>
+		<fullName>RemoveModalBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Remove Modal Body</shortDescription>
+		<value>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
+	</labels>
+	<labels>
+		<fullName>RunReportsAndAnalyticsBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Run Reports And Analytics Body</shortDescription>
+		<value>Generate detailed charts and reports on your documents, attributes and workflows. These will let you track account activity and performance.</value>
+	</labels>
+	<labels>
+		<fullName>RunReportsAndAnalyticsTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - RunReportsAndAnalyticsTitle</shortDescription>
+		<value>Run reports and analytics</value>
+	</labels>
+	<labels>
+		<fullName>SelectObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Select Object</shortDescription>
+		<value>Select Object</value>
+	</labels>
+	<labels>
+		<fullName>ShareAndCollaborateBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Share And Collaborate Body</shortDescription>
+		<value>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and readline important documents when negotiating.</value>
+	</labels>
+	<labels>
+		<fullName>ShareAndCollaborateTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Share And CollaborateTitle</shortDescription>
+		<value>Share and collaborate</value>
+	</labels>
+	<labels>
+		<fullName>SpeedUpDocumentGeneration</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Speed up Document Generation</shortDescription>
+		<value>Speed up Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>TrackDocumentStatusAndActivityBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Track Document Status And Activity Body</shortDescription>
+		<value>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your document get reviewed.</value>
+	</labels>
+	<labels>
+		<fullName>TrackDocumentStatusAndActivityTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Track Document Status And Activity Title</shortDescription>
+		<value>Track document status and activity</value>
+	</labels>
+	<labels>
+		<fullName>UserManagement</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item User Management</shortDescription>
+		<value>User Management</value>
+	</labels>
+	<labels>
+		<fullName>UserManagementInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - User Management Info</shortDescription>
+		<value>You can add, modify and manage DocuSign CLM users from within Salesforce without leaving the app.</value>
+	</labels>
+	<labels>
+		<fullName>ViewYourObjectFolders</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - View Your Object Folders</shortDescription>
+		<value>View Your Object Folders</value>
+	</labels>
+	<labels>
+		<fullName>WelcomeToDocuSign</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Welcome To DocuSign</shortDescription>
+		<value>Welcome to DocuSign Agreements for Salesforce!</value>
+	</labels>
+	<labels>
+		<fullName>WhatsNext</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What&apos;s Next?</shortDescription>
+		<value>What&apos;s Next?</value>
+	</labels>
+	<labels>
+		<fullName>Workflow</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Sidebar Item Workflow</shortDescription>
+		<value>Workflow</value>
+	</labels>
+	<labels>
 		<fullName>OriginalVersion</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>OriginalVersion</shortDescription>
 		<value>Original -</value>
+	</labels>
+	<labels>
+		<fullName>AllObjectsListed</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - All Objects Listed</shortDescription>
+		<value>We have listed all your standard and custom Salesforce objects below.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseLocationInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Location Info</shortDescription>
+		<value>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create will be independent of other mappings.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseLocationTitleHelpText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Choose Location Title Help Text</shortDescription>
+		<value>All the instances of the object type {0} will each have a folder that will live where you see the blue folder in the hierarchy.</value>
+	</labels>
+	<labels>
+		<fullName>ComponentCreationFailed</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Component Creation Failed</shortDescription>
+		<value>Component creation failed: {0}</value>
+	</labels>
+	<labels>
+		<fullName>HideSteps</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Hide Steps</shortDescription>
+		<value>Hide Steps</value>
+	</labels>
+	<labels>
+		<fullName>InformationIcon</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Information Icon</shortDescription>
+		<value>Information Icon</value>
+	</labels>
+	<labels>
+		<fullName>NoEventFound</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - No Event Found</shortDescription>
+		<value>No event found with name {0}.</value>
+	</labels>
+	<labels>
+		<fullName>ObjectEditSuccessful</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Edit Successful</shortDescription>
+		<value>{0} object was successfully edited.</value>
+	</labels>
+	<labels>
+		<fullName>ObjectRemoved</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Removed</shortDescription>
+		<value>{0} object was removed from your mappings.</value>
+	</labels>
+	<labels>
+		<fullName>OpenFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Open Folder Icon</shortDescription>
+		<value>open_folder</value>
+	</labels>
+	<labels>
+		<fullName>SelectFieldInfo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Select a field info</shortDescription>
+		<value>Browse for and select a field to name the folder that you have just created</value>
+	</labels>
+	<labels>
+		<fullName>SelectFolderHelpBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Select Folder Help Body</shortDescription>
+		<value>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos; folder</value>
+	</labels>
+	<labels>
+		<fullName>SelectObjectHelpBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Select Object Help Body</shortDescription>
+		<value>Choose the Salesforce object you want to be the source for your documents.You\&apos;ll choose one object at a time.</value>
+	</labels>
+	<labels>
+		<fullName>ShowSteps</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Show Steps</shortDescription>
+		<value>Show Steps</value>
+	</labels>
+	<labels>
+		<fullName>Topic2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Topic2</shortDescription>
+		<value>topic2</value>
+	</labels>
+	<labels>
+		<fullName>YourSalesforceObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
+		<value>Your Salesforce Objects</value>
 	</labels>
 </CustomLabels>

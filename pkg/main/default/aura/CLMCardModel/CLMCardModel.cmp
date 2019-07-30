@@ -1,0 +1,20 @@
+<aura:component extends="c:CLMUtility">
+    <aura:handler event="c:CLMCardModelEvent" action="{!c.updateUI}" />
+    <aura:attribute type="string" name="title" default="" />
+    <aura:attribute type="string" name="summary" default="" />
+    <aura:attribute type="string" name="index" default="" />
+    <aura:attribute name="main" type="Aura.Component" />
+
+    <article class="slds-card ">
+        <header class="slds-grid slds-p-left_x-large slds-p-right_x-large slds-p-top_x-large slds-p-bottom_medium">
+            <div class="slds-col slds-size_3-of-8">
+                <button class="ds-index-style">{!v.index}</button>
+                <span class="ds-title-style slds-p-left_medium"><b>{!v.title}</b></span>
+            </div>
+            <div class="slds-col slds-size_5-of-8 slds-m-top_xx-small">
+                <span>{!v.summary}</span>
+            </div>
+        </header>
+        {!v.main}
+    </article>
+</aura:component>

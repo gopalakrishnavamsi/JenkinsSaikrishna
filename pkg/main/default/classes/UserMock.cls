@@ -16,13 +16,12 @@ global class UserMock {
 	 * DocuSign for Salesforce administrative methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignUser</code> or
-	 * <code>dfsle.UserMock.createDocuSignSender</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignAdministrator()) {
 	 *     // Call service method requiring the DocuSign Administrator permission set.
 	 *   }
@@ -58,13 +57,12 @@ global class UserMock {
 	 * most DocuSign for Salesforce methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignAdministrator</code> or
-	 * <code>dfsle.UserMock.createDocuSignSender</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignUser()) {
 	 *     // Call service method requiring the DocuSign User permission set.
 	 *   }
@@ -100,13 +98,12 @@ global class UserMock {
 	 * DocuSign for Salesforce methods that create, send, or sign envelopes.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignAdministrator</code> or
-	 * <code>dfsle.UserMock.createDocuSignUser</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignSender()) {
 	 *     // Call service method requiring the DocuSign Sender permission set.
 	 *   }
@@ -127,6 +124,76 @@ global class UserMock {
 		}
 		System.runAs(getAdministrator()) {
 			Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>DocuSign Generator</code> permission set for unit tests. This may be used
+	 * for DocuSign for Salesforce methods that generate documents.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createDocuSignGenerator()) {
+	 *     // Call service method requiring the DocuSign Generator permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the DocuSign Generator permission set.
+	 */
+	public static User createDocuSignGenerator() {
+		return createDocuSignGenerator(true);
+	}
+
+	public static User createDocuSignGenerator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>DocuSign Negotiator</code> permission set for unit tests. This may be used
+	 * for DocuSign for Salesforce methods that negotiate documents.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createDocuSignNegotiator()) {
+	 *     // Call service method requiring the DocuSign Negotiator permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the DocuSign Negotiator permission set.
+	 */
+	public static User createDocuSignNegotiator() {
+		return createDocuSignNegotiator(true);
+	}
+
+	public static User createDocuSignNegotiator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
 	}
