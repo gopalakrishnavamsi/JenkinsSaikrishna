@@ -96,6 +96,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 			SELECT Id
 			FROM PermissionSet
 			WHERE Name = 'DocuSign_Administrator'
+			AND NamespacePrefix = :Application.packageNamespace
 		];
 		if (userId != null && Collection.isNotEmpty(pss)) {
 			try {

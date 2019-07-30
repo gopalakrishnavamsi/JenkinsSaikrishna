@@ -1444,6 +1444,14 @@
 		<name>MustBeDocuSignUser</name>
 	</customLabels>
 	<customLabels>
+		<label>You must have DocuSign generator permissions to perform this operation</label>
+		<name>MustBeDocuSignGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign negotiator permissions to perform this operation</label>
+		<name>MustBeDocuSignNegotiator</name>
+	</customLabels>
+	<customLabels>
 		<label>My Personal Content</label>
 		<name>MyPersonalContent</name>
 	</customLabels>

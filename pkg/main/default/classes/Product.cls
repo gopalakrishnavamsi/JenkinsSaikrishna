@@ -1,6 +1,6 @@
 public abstract class Product {
 
-	public static final String NAME_ESIGNATURE = 'esign';
+	public static final String NAME_ESIGNATURE = 'e_sign';
 	public static final String NAME_GEN = 'gen';
 	public static final String NAME_NEGOTIATE = 'negotiate';
 	public static final String NAME_CLM = 'clm';
