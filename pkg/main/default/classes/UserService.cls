@@ -5,6 +5,7 @@ public with sharing class UserService {
 
 	@TestVisible
 	private static final UserService.Database DB = new UserService.Database();
+	private static final LoggerService LOG = LoggerService.getInstance();
 
 	/**
 	 * User configuration.
@@ -42,8 +43,7 @@ public with sharing class UserService {
 				user.FirstName,
 				user.LastName,
 				user.Status__c,
-				UUID.tryParse(user.InviteId__c),
-				user.InviteDate__c,
+				user.Provisioned__c,
 				user.CanManageAccount__c == true,
 				user.Profile.Name,
 				APIError.none);
@@ -75,10 +75,9 @@ public with sharing class UserService {
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
 				'Id', 'FirstName', 'LastName', 'Email',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'InviteId__c',
-				Application.namespacePrefix + 'InviteDate__c',
 				Application.namespacePrefix + 'Status__c',
-				Application.namespacePrefix + 'Username__c'
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'Provisioned__c'
 			});
 			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
 				'Name'
@@ -86,10 +85,10 @@ public with sharing class UserService {
 
 			return convert([
 				SELECT Id, FirstName, LastName, Email, Profile.Name,
-					CanManageAccount__c, InviteId__c, InviteDate__c, Status__c, Username__c
+					CanManageAccount__c, Status__c, Username__c, Provisioned__c
 				FROM User
 				WHERE IsActive = TRUE
-				AND (InviteId__c != NULL OR Username__c != NULL)
+				AND (Username__c != NULL)
 				LIMIT :(maximumRecords > 0 && maximumRecords < 50000 ? maximumRecords : 50)
 			]);
 		}
@@ -102,7 +101,11 @@ public with sharing class UserService {
 			final Integer maximumRecords) {
 
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
-				'Id', 'FirstName', 'LastName', 'Email'
+				'Id', 'FirstName', 'LastName', 'Email',
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'Provisioned__c',
+				Application.namespacePrefix + 'CanManageAccount__c'
 			});
 			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
 				'Name'
@@ -110,13 +113,11 @@ public with sharing class UserService {
 
 			String query = 'SELECT Id, FirstName, LastName, Email, Profile.Name, '
 				+ Application.namespacePrefix + 'Username__c, '
-				+ Application.namespacePrefix + 'CanManageAccount__c, '
 				+ Application.namespacePrefix + 'Status__c, '
-				+ Application.namespacePrefix + 'InviteId__c, '
-				+ Application.namespacePrefix + 'InviteDate__c '
+				+ Application.namespacePrefix + 'Provisioned__c, '
+				+ Application.namespacePrefix + 'CanManageAccount__c '
 				+ 'FROM User '
-				+ 'WHERE ' + Application.namespacePrefix + 'InviteId__c = NULL '
-				+ 'AND ' + Application.namespacePrefix + 'Username__c = NULL '
+				+ 'WHERE ' + Application.namespacePrefix + 'Username__c = NULL '
 				+ 'AND IsActive = TRUE';
 			String n;
 			if (String.isNotBlank(name)) { // TODO: Check is filterable, encrypted
@@ -145,9 +146,8 @@ public with sharing class UserService {
 			Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'Username__c',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'InviteDate__c',
-				Application.namespacePrefix + 'InviteId__c',
-				Application.namespacePrefix + 'Status__c'
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'Provisioned__c'
 			});
 
 			List<User> toUpdate = new List<User>();
@@ -156,14 +156,13 @@ public with sharing class UserService {
 			Set<Id> inactiveIds = new Set<Id>();
 			for (Account.User user : (users == null ? new List<Account.User>() : users)) {
 				if (user != null && !user.hasError && user.sourceId != null) {
-					Boolean isInactive = UUID.isEmpty(user.id) && UUID.isEmpty(user.inviteId);
+					Boolean isInactive = UUID.isEmpty(user.id);
 					toUpdate.add(new User(
 						Id = user.sourceId,
 						Username__c = isInactive ? null : String.valueOf(user.id),
 						CanManageAccount__c = isInactive ? false : user.canManageAccount == true,
-						InviteDate__c = isInactive ? null : user.inviteDate,
-						InviteId__c = isInactive ? null : String.valueOf(user.inviteId),
-						Status__c = isInactive ? Account.USER_STATUS_INACTIVE : user.status));
+						Status__c = isInactive ? Account.USER_STATUS_INACTIVE : user.status,
+						Provisioned__c = isInactive ? null : user.provisioned));
 					if (isInactive) {
 						inactiveIds.add(user.sourceId);
 					} else if (user.canManageAccount) {
@@ -181,6 +180,29 @@ public with sharing class UserService {
 			Permissions.assignDocuSignUserPermissionSet(senderIds);
 
 			return users;
+		}
+
+		public List<SystemSender> queryAvailableSystemSenders() {
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+				'Id', 'Name', 'Email', Application.namespacePrefix + 'Username__c'
+			});
+
+			List<SystemSender> result = new List<SystemSender>();
+			for (User u : [
+				SELECT Name, Email, Username__c
+				FROM User
+				WHERE Username__c != NULL
+				AND IsActive = TRUE
+				AND CanManageAccount__c = TRUE
+				ORDER BY Name ASC
+				LIMIT 1000
+			]) {
+				result.add(new SystemSender(
+					UUID.parse(u.Username__c),
+					u.Name,
+					u.Email));
+			}
+			return result;
 		}
 	}
 
@@ -240,63 +262,170 @@ public with sharing class UserService {
 			maximumRecords);
 	}
 
+
 	/**
-	 * Invite one or more Salesforce users to the DocuSign account. Each user will receive an individualized invite
-	 * email to complete registration.
-	 * <p>
-	 * This operation may partially succeed or fail, so check the <code>error</code> property on each returned user.
-	 * <p>
-	 * Callers must be assigned the <code>DocuSign Administrator</code> permission set.
+	 * Retrieves a list of DocuSign account members.
 	 *
-	 * @param users The users to invite.
+	 * @param maximumRecords The maximum number of records to retrieve.
 	 *
-	 * @return The invited users.
+	 * @return The current DocuSign account members.
 	 */
-	public static List<Account.User> inviteUsers(final List<Account.User> users) {
+	public static List<Account.User> getUsers(final Integer maximumRecords) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
-
-		return DB.updateUsers(UserInviteAPI.getInstance().inviteUsers(users));
+		return DB.queryCurrentUsers(maximumRecords);
 	}
 
 	/**
-	 * Resends DocuSign account invites to one or more Salesforce users.
-	 * <p>
-	 * This operation may partially succeed or fail, so check the <code>error</code> property on each returned user.
-	 * <p>
-	 * Callers must be assigned the <code>DocuSign Administrator</code> permission set.
+	 * Adds one or more users as members of the current DocuSign account.
+ 	 * <p>
+ 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param users The users for which to resend invites.
-	 *
-	 * @return The resent invite users.
-	 */
-	public static List<Account.User> resendInvites(final List<Account.User> users) {
+	 * @param users A list of users to add.
+ 	 *
+	 * @return The users added. This may be partially successful with details in the returned <code>User.error</code>
+	 * property.
+	 * @see Account.User.error for details on any errors.
+ 	 */
+	public static List<Account.User> addUsers(final List<Account.User> users) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
+		try {
+			if (Collection.isEmpty(users)) return users;
 
-		return DB.updateUsers(UserInviteAPI.getInstance().resendInvites(users));
+			// Update the username and password for the users
+			List<Account.User> result = new List<Account.User>();
+			Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
+			for (Account.User u : UserAPI.getInstance().addUsers(users)) {
+				// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
+				if (u.hasError && u.error.code != APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
+					LOG.warn('Error while adding user ' + u.email + ': ' + u.error);
+					result.add(u);
+				} else {
+					creds.put(u.sourceId, new Credentials.UserCredentials(
+						u.id,
+						u.name,
+						u.email,
+						u.canManageAccount));
+					result.add(u.withError(null));
+				}
+			}
+
+			Credentials.addUsers(creds);
+
+			return result;
+		} finally {
+			Credentials.save();
+		}
+	}
+
+	@TestVisible
+	private static Set<Id> getUserIdsToRemove(final List<Account.User> users) {
+		Set<Id> result = new Set<Id>();
+		if (users != null) {
+			String currentDSUsername = [
+				SELECT Username__c
+				FROM User
+				WHERE Id = :UserInfo.getUserId()
+				LIMIT 1
+			].Username__c;
+			Id currentUserId = UserInfo.getUserId();
+			for (Account.User u : users) {
+				if (u.sourceId == currentUserId
+					|| (String.isNotBlank(currentDSUsername)
+					&& String.valueOf(u.id) == currentDSUsername)) {
+
+					throw new DocuSignException(Label.CannotRemoveSelf);
+				}
+				result.add(u.sourceId);
+			}
+		}
+		return result;
 	}
 
 	/**
-	 * Revokes DocuSign account invites for one or more Salesforce users.
+	 * Removes one or more users from the current DocuSign account.
 	 * <p>
-	 * This operation may partially succeed or fail, so check the <code>error</code> property on each returned user.
-	 * <p>
-	 * Callers must be assigned the <code>DocuSign Administrator</code> permission set.
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param users The users for which to revoke invites.
+	 * @param users A list of users to remove.
 	 *
-	 * @return The revoked invite users.
+	 * @return The users removed. This may be partially successful with details in the returned <code>User.error</code>
+	 * property.
+	 * @see Account.User.error for details on any errors.
 	 */
-	public static List<Account.User> revokeInvites(final List<Account.User> users) {
+	public static List<Account.User> removeUsers(
+		final List<Account.User> users,
+		final Boolean closeMembership) {
+
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
+		Set<Id> userIds = getUserIdsToRemove(users);
 
-		return DB.updateUsers(UserInviteAPI.getInstance().resendInvites(users));
+		List<Account.User> result = new List<Account.User>();
+		if (closeMembership) {
+			try {
+				for (Account.User u : UserAPI.getInstance().removeUsers(users)) {
+					// Ignore errors where user is unknown to DS. The user was already removed from the account.
+					if (u.hasError && u.error.code != APIErrorCode.UNKNOWN_USER) {
+						if (u.sourceId != null) userIds.remove(u.sourceId);
+						result.add(u);
+					} else {
+						result.add(u.withError(null));
+					}
+				}
+			} finally {
+				Credentials.save();
+			}
+		}
+
+		Credentials.clear(userIds);
+
+		return result;
 	}
 
-	// FIXME: How to remove users? Legacy eSignature API method?
+	/**
+	 * A DocuSign for Salesforce system sender, i.e. the sender to use when a Salesforce user is not a member of the
+	 * DocuSign account.
+	 */
+	public class SystemSender {
+		/**
+		 * The DocuSign user ID.
+		 */
+		@AuraEnabled
+		public UUID id { get; private set; }
+		/**
+		 * The user name.
+		 */
+		@AuraEnabled
+		public String name { get; private set; }
+		/**
+		 * The user email.
+		 */
+		@AuraEnabled
+		public String email { get; private set; }
+
+		private SystemSender(
+			final UUID id,
+			final String name,
+			final String email) {
+
+			this.id = id;
+			this.name = name;
+			this.email = email;
+		}
+	}
+
+	/**
+	 * Retrieves a list of users that may be used as the DocuSign for Salesforce system sender.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return
+	 */
+	public static List<SystemSender> getAvailableSystemSenders() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return DB.queryAvailableSystemSenders();
+	}
 }

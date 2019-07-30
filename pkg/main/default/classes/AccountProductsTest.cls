@@ -41,9 +41,9 @@ private class AccountProductsTest {
 	static void test_isESignatureTrialExpired() {
 		AccountProducts aps1 = new AccountProducts(null);
 		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NAME_ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NAME_ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, false, Date.today().addDays(-1), null) });
-		AccountProducts aps5 = new AccountProducts(new Map<String, Product> { Product.NAME_ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, false, Date.today().addDays(-1), null) });
+		AccountProducts aps5 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isESignatureTrialExpired());
@@ -58,8 +58,8 @@ private class AccountProductsTest {
 	static void test_isESignatureEnabled() {
 		AccountProducts aps1 = new AccountProducts(null);
 		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NAME_ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NAME_ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isESignatureEnabled());
@@ -73,8 +73,8 @@ private class AccountProductsTest {
 	static void test_isGenEnabled() {
 		AccountProducts aps1 = new AccountProducts(null);
 		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NAME_GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NAME_GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
+		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isGenEnabled());
@@ -88,8 +88,8 @@ private class AccountProductsTest {
 	static void test_isNegotiateEnabled() {
 		AccountProducts aps1 = new AccountProducts(null);
 		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NAME_NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NAME_NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isNegotiateEnabled());
@@ -103,8 +103,8 @@ private class AccountProductsTest {
 	static void test_isClmEnabled() {
 		AccountProducts aps1 = new AccountProducts(null);
 		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NAME_CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NAME_CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isClmEnabled());
@@ -131,7 +131,7 @@ private class AccountProductsTest {
 
 			Test.startTest();
 			Map<String, Product> result = AccountProducts.resolveProducts(
-				new Map<String, Product> { Product.NAME_ESIGNATURE => esign },
+				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addDays(-1),
 				1);
 			Test.stopTest();
@@ -154,7 +154,7 @@ private class AccountProductsTest {
 
 			Test.startTest();
 			Map<String, Product> result = AccountProducts.resolveProducts(
-				new Map<String, Product> { Product.NAME_ESIGNATURE => esign },
+				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addMinutes(-1),
 				60);
 			Test.stopTest();
@@ -204,5 +204,75 @@ private class AccountProductsTest {
 		Test.startTest();
 		System.assertEquals(features, AccountProducts.unpackFeatures(flags));
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_startTrial_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				AccountProducts.getInstance().startTrial(null);
+				throw new AssertException('Expected startTrial to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_startTrial_invalid() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				AccountProducts.getInstance().startTrial(null);
+				throw new AssertException('Expected startTrial to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				AccountProducts.getInstance().startTrial('  ');
+				throw new AssertException('Expected startTrial to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				AccountProducts.getInstance().startTrial(Product.CLM);
+				throw new AssertException('Expected startTrial to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(
+					String.format(Label.InvalidTrialProduct_1, new List<String> { Product.CLM }),
+					ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_startTrial_success() {
+		ProvisioningAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			delete ProductSettings__c.getAll().values();
+			ProductSettings__c ps = new ProductSettings__c(
+				Name = Product.GEN
+			);
+			insert ps;
+
+			Test.startTest();
+			Product result1 = AccountProducts.getInstance().startTrial(Product.GEN);
+			Product result2 = AccountProducts.getInstance().startTrial(Product.NEGOTIATE);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assertNotEquals(null, result2);
+
+			Map<String, ProductSettings__c> pss = ProductSettings__c.getAll();
+			System.assertNotEquals(null, pss);
+			System.assertEquals(2, pss.size());
+			System.assertEquals(new Set<String> { Product.GEN, Product.NEGOTIATE }, pss.keySet());
+			System.assertEquals(ps.Id, pss.get(Product.GEN).Id);
+
+		}
 	}
 }

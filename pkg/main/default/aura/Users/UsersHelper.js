@@ -42,7 +42,6 @@
       var allowRemove = user.sourceId.indexOf(currentUserId) !== 0;
       userRows.push({
         id: user.id,
-        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         name: user.name,
@@ -175,7 +174,6 @@
 
     addUser.setParams({
       sourceId: user.sourceId,
-      username: user.email,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -216,7 +214,7 @@
 
           removeFromDocuSign.setParams({
             sourceId: user.sourceId,
-            username: user.username
+            id: user.id ? user.id.value : ''
           });
 
           removeFromDocuSign.setCallback(this, function(response) {

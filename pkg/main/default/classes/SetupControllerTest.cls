@@ -300,7 +300,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SetupController.addUser(null, null, null, null, false);
+				SetupController.addUser(UserInfo.getUserId(), 'u@unit.test', null, null, false);
 				throw new AssertException('Expected addUser to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -328,14 +328,12 @@ private class SetupControllerTest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
-			ESignatureAPI.Error e = new ESignatureAPI.Error(400, 'MAX_MEMBERS_EXCEEDED', 'The maximum number of members for the account has been exceeded.');
 
 			Test.startTest();
 			try {
 				SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
 				throw new AssertException('Expected addUser to fail');
 			} catch (AuraHandledException ex) {
-				//System.assertEquals(String.format('[{0}] {1}', new List<String> { e.docuSignCode, e.description }), ex.getMessage());
 				System.assertNotEquals(null, ex.getMessage());
 			}
 			Test.stopTest();
@@ -361,7 +359,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SetupController.removeUser(null, null);
+				SetupController.removeUser(UserInfo.getUserId(), UUID.randomUUID().toString());
 				throw new AssertException('Expected removeUser to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());

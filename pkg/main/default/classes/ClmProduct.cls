@@ -9,7 +9,7 @@ public class ClmProduct extends Product {
 		final Map<String, String> properties) {
 
 		super(
-			Product.NAME_CLM,
+			Product.CLM,
 			status,
 			isTrial,
 			trialExpires,

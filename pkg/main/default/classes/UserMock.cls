@@ -255,9 +255,8 @@ global class UserMock {
 			LanguageLocaleKey = 'en_US',
 			Username__c = String.valueOf(dsUserId),
 			CanManageAccount__c = canManageAccount,
-			InviteId__c = dsUserId == null ? null : UUID.randomUUID().toString(),
-			InviteDate__c = dsUserId == null ? null : Date.today().addDays(-10),
-			Status__c = dsUserId == null ? null : 'active');
+			Status__c = dsUserId == null ? null : 'active',
+			Provisioned__c = dsUserId == null ? null : Date.today());
 		insert u;
 
 		if (UUID.isNotEmpty(dsUserId)) {
@@ -269,7 +268,7 @@ global class UserMock {
 
 		return [
 			SELECT Id, FirstName, LastName, Name, Email, Profile.Name, Phone, MobilePhone,
-				CanManageAccount__c, InviteId__c, InviteDate__c, Status__c, Username__c
+				CanManageAccount__c, Status__c, Username__c, Provisioned__c
 			FROM User
 			WHERE Id = :u.Id
 			LIMIT 1
@@ -288,8 +287,6 @@ global class UserMock {
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
 		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/gen/';
-		accountSettings.InviteCallbackUrl__c = 'https://invite.test.springcm.com/provisioning/v1/callbacks/UserInvited';
-		accountSettings.InviteRedirectUrl__c = 'https://www.docusign.com/';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
 		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
 		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);
@@ -320,7 +317,7 @@ global class UserMock {
 
 		insert new List<ProductSettings__c> {
 			new ProductSettings__c(
-				Name = Product.NAME_ESIGNATURE,
+				Name = Product.ESIGNATURE,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null,
@@ -330,17 +327,17 @@ global class UserMock {
 					| AccountProducts.FLAG_SMS_AUTHENTICATION
 					| AccountProducts.FLAG_TEMPLATES),
 			new ProductSettings__c(
-				Name = Product.NAME_GEN,
+				Name = Product.GEN,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null),
 			new ProductSettings__c(
-				Name = Product.NAME_NEGOTIATE,
+				Name = Product.NEGOTIATE,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null),
 			new ProductSettings__c(
-				Name = Product.NAME_CLM,
+				Name = Product.CLM,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null)
@@ -362,11 +359,6 @@ global class UserMock {
 			Language__c = 'en',
 			EmailSubject__c = 'Please sign this document',
 			EmailMessage__c = 'This email contains a document');
-
-		insert new Configuration__c(
-			Name = 'Gen',
-			InviteEmailSubject__c = 'Invite email subject',
-			InviteEmailBody__c = 'Invite email body');
 
 		createdAccountConfiguration = true;
 

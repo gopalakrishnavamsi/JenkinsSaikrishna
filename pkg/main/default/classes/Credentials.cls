@@ -286,15 +286,13 @@ public with sharing class Credentials {
 				'Name', 'Email',
 				Application.namespacePrefix + 'Username__c',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'InviteId__c',
-				Application.namespacePrefix + 'InviteDate__c',
 				Application.namespacePrefix + 'Status__c'
 			});
 
 			if (userId == null) return new UserCredentials(null, null, null, false);
 
 			User user = (User)Collection.head([
-				SELECT Username__c, Name, Email, CanManageAccount__c, InviteId__c, InviteDate__c, Status__c
+				SELECT Username__c, Name, Email, CanManageAccount__c, Status__c
 				FROM User
 				WHERE Id = :userId
 				LIMIT 1
@@ -394,8 +392,6 @@ public with sharing class Credentials {
 			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'Username__c',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'InviteId__c',
-				Application.namespacePrefix + 'InviteDate__c',
 				Application.namespacePrefix + 'Status__c'
 			});
 
@@ -480,13 +476,11 @@ public with sharing class Credentials {
 			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'Username__c',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'InviteId__c',
-				Application.namespacePrefix + 'InviteDate__c',
 				Application.namespacePrefix + 'Status__c'
 			});
 
 			List<User> dbUsers = [
-				SELECT Id, Username__c, CanManageAccount__c, InviteId__c, InviteDate__c, Status__c
+				SELECT Id, Username__c, CanManageAccount__c, Status__c
 				FROM User
 				WHERE Id IN :users.keySet()
 			];
@@ -495,13 +489,10 @@ public with sharing class Credentials {
 				if (uu == null) {
 					u.Username__c = null;
 					u.CanManageAccount__c = false;
-					u.InviteId__c = null;
-					u.InviteDate__c = null;
 					u.Status__c = null;
 				} else {
 					u.Username__c = String.valueOf(uu.id);
 					u.CanManageAccount__c = uu.canManageAccount == true;
-					// TODO: Update invite properties
 				}
 			}
 			update dbUsers;
@@ -509,20 +500,7 @@ public with sharing class Credentials {
 			return users;
 		}
 
-		private void deleteConfigurations(final Set<String> names) {
-			Permissions.verifyIsDeletable(Configuration__c.getSObjectType());
-
-			delete [
-				SELECT Id
-				FROM Configuration__c
-				WHERE Name IN :names
-				LIMIT 2000
-			];
-		}
-
 		public AccountSettings__c deleteAccountCredentials() {
-			deleteConfigurations(new Set<String> { 'Gen' });
-
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.Environment__c = null;
 			settings.ClientId__c = null;
@@ -544,8 +522,6 @@ public with sharing class Credentials {
 			settings.ESignatureBaseUrl__c = null;
 			settings.ScmAuthBaseUrl__c = null;
 			settings.ScmApiBaseUrl__c = null;
-			settings.InviteCallbackUrl__c = null;
-			settings.InviteRedirectUrl__c = null;
 			settings.AccountId__c = null;
 			settings.AccountNumber__c = null;
 			settings.AccountName__c = null;
@@ -569,8 +545,6 @@ public with sharing class Credentials {
 				Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
 					Application.namespacePrefix + 'Username__c',
 					Application.namespacePrefix + 'CanManageAccount__c',
-					Application.namespacePrefix + 'InviteDate__c',
-					Application.namespacePrefix + 'InviteId__c',
 					Application.namespacePrefix + 'Status__c'
 				});
 
@@ -578,8 +552,6 @@ public with sharing class Credentials {
 				for (Schema.User u : users) {
 					u.Username__c = null;
 					u.CanManageAccount__c = false;
-					u.InviteDate__c = null;
-					u.InviteId__c = null;
 					u.Status__c = null;
 					UserSettings__c us = UserSettings__c.getInstance(u.Id);
 					if (us.Id != null) settings.add(us);
@@ -683,7 +655,7 @@ public with sharing class Credentials {
 			Boolean isWorking = true;
 			while (isWorking) {
 				List<Schema.User> users = [
-					SELECT Id, Username__c, CanManageAccount__c, InviteId__c, InviteDate__c, Status__c
+					SELECT Id, Username__c, CanManageAccount__c, Status__c
 					FROM User
 					WHERE Username__c != NULL
 					LIMIT 200
@@ -705,7 +677,7 @@ public with sharing class Credentials {
 
 	public static void clear(final Set<Id> userIds) {
 		DB.deleteUserCredentials([
-			SELECT Id, Username__c, CanManageAccount__c, InviteId__c, InviteDate__c, Status__c
+			SELECT Id, Username__c, CanManageAccount__c, Status__c
 			FROM User
 			WHERE Id IN :userIds
 		]);
