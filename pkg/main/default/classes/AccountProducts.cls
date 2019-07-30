@@ -163,7 +163,7 @@ public with sharing class AccountProducts {
 		if (products != null) {
 			for (String key : products.keySet()) {
 				switch on key {
-					when 'esign' {
+					when 'e_sign' {
 						result.add((Product)JSON.deserialize(products.get(key), ESignatureProduct.class));
 					} when 'gen' {
 						result.add((Product)JSON.deserialize(products.get(key), GenProduct.class));
@@ -218,7 +218,7 @@ public with sharing class AccountProducts {
 	private static Product convertProduct(final ProductSettings__c product) {
 		Product result = null;
 		switch on (product == null ? '' : product.Name) {
-			when 'esign' {
+			when 'e_sign' {
 				result = new ESignatureProduct(
 					product.Status__c,
 					product.IsTrial__c == true,
