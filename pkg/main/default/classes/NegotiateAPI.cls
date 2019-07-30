@@ -3,6 +3,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_FOLDER = 'folders';
 	public static final String PATH_DOCUMENTS = 'documents';
 	public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
+	public static final String PATH_AGREEMENT_IN_SALESFORCE = 'salesforcecontentdocumentexporttasks';
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
@@ -449,6 +450,15 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
+	@TestVisible
+	private class APIDocument {
+		public String href;
+
+		APIDocument(final String href) {
+			this.href = href;
+		}
+	}
+
 //Create Agreement in EOS folder
 	public UUID createAgreementInEOSFolder(final Id sfContentVersionId, final UUID folderId, final String documentName) {
 
@@ -474,6 +484,31 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	//Add Agreement to Salesforce Files
+	public UUID exportAgreementToSalesforce(final Id sourceId, final UUID documentId) {
+
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_AGREEMENT_IN_SALESFORCE
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'SfObjectId' => sourceId,
+				'Document' => new APIDocument(getBaseUrl() + '/' + PATH_DOCUMENTS + '/' + String.valueOf(documentId))
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to export Agreement to Salesforce: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
+
 	@TestVisible
 	public class TaskStatus {
 		@AuraEnabled
@@ -494,7 +529,6 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public NegotiateAPI.TaskStatus getAgreementInEOSFolderStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
-		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
 		while (status != 'Success' && count < 10) {
@@ -518,6 +552,35 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		return result;
 	}
+
+	public NegotiateAPI.TaskStatus getExportAgreementToSalesforceStatus(final UUID taskId) {
+		String status = '';
+		Long count = 0;
+		UUID agreementId;
+		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
+
+		while (status != 'Success' && count < 10) {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_AGREEMENT_IN_SALESFORCE, taskId
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get status of newly exported Agreement to Salesforce - ' + taskId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
+			status = result.status;
+			count += 1;
+		}
+
+		return result;
+	}
+
 
 	public static String getDocumentDeepLink(final Id sourceId, final UUID documentId) {
 		if (sourceId == null || documentId == null) return null;
@@ -961,6 +1024,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			}
 		}
 		resultAPIHistoryItems.add(result);
+		system.debug('**documentId**'+documentId);
 		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
 	}
 
