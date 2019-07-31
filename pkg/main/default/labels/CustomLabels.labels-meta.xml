@@ -5159,27 +5159,6 @@
 		<value>DocuSign Gen Service</value>
 	</labels>
 	<labels>
-		<fullName>UserInviteFailed</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite failed</shortDescription>
-		<value>User invite failed.</value>
-	</labels>
-	<labels>
-		<fullName>UserAlreadyInvited</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User already invited</shortDescription>
-		<value>The user has already been invited to the DocuSign account.</value>
-	</labels>
-	<labels>
-		<fullName>UserInviteRevoked</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite revoked</shortDescription>
-		<value>Invite Revoked</value>
-	</labels>
-	<labels>
 		<fullName>SystemSender</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7469,5 +7448,13 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
 		<value>Your Salesforce Objects</value>
+	</labels>
+	<labels>
+		<fullName>InvalidTrialProduct_1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid trial product</shortDescription>
+		<value>Cannot initiate a trial for product '{0}'</value>
 	</labels>
 </CustomLabels>

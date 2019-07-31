@@ -2599,18 +2599,6 @@
 		<name>GenServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>User invite failed.</label>
-		<name>UserInviteFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>The user has already been invited to the DocuSign account.</label>
-		<name>UserAlreadyInvited</name>
-	</customLabels>
-	<customLabels>
-		<label>Invite Revoked</label>
-		<name>UserInviteRevoked</name>
-	</customLabels>
-	<customLabels>
 		<label>System sender</label>
 		<name>SystemSender</name>
 	</customLabels>
@@ -3977,6 +3965,10 @@
 		<label>Your Salesforce Objects</label>
 		<name>YourSalesforceObjects</name>
 	</customLabels>
+	<customLabels>
+		<label>Cannot initiate a trial for product '{0}'</label>
+		<name>InvalidTrialProduct_1</name>
+ 	</customLabels>  
 	<customLabels>
 		<label>Agreement has been exported successfully.</label>
 		<name>AgreementExportSuccessful</name>

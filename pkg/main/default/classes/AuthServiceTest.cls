@@ -21,36 +21,19 @@ private class AuthServiceTest {
 	static void test_database_updateSettings() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			AuthService.PermissionProfileIds ppIds = new AuthService.PermissionProfileIds(1111L, 2222L);
-			Gen.Product p = new Gen.Product(
-				'active',
-				false,
-				null,
-				null,
-				null,
-				new Url('https://callback.test.springcm.com/'),
-				new Url('https://redirect.test.springcm.com/'),
-				'email subject',
-				'email body');
+			Url authUrl = new Url('https://auth.test.springcm.com/');
+			Url apiUrl = new Url('https://api.test.springcm.com/');
 
 			Test.startTest();
-			AccountSettings__c result = AuthService.DB.updateSettings(ppIds, p);
+			AccountSettings__c result = AuthService.DB.updateSettings(ppIds, authUrl, apiUrl);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			List<Configuration__c> cs = [
-				SELECT InviteEmailSubject__c, InviteEmailBody__c
-				FROM Configuration__c
-				WHERE Name = 'Gen'
-				LIMIT 1000
-			];
-			System.assertEquals(1, Collection.size(cs));
-			System.assertEquals(cs[0].InviteEmailSubject__c, p.inviteEmailSubject);
-			System.assertEquals(cs[0].InviteEmailBody__c, p.inviteEmailBody);
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			System.assertEquals(ppIds.administratorId, (Long)s.AdministratorProfileId__c);
 			System.assertEquals(ppIds.senderId, (Long)s.SenderProfileId__c);
-			System.assertEquals(p.inviteCallbackUrl.toExternalForm(), s.InviteCallbackUrl__c);
-			System.assertEquals(p.inviteRedirectUrl.toExternalForm(), s.InviteRedirectUrl__c);
+			System.assertEquals(result.ScmAuthBaseUrl__c, authUrl.toExternalForm());
+			System.assertEquals(result.ScmApiBaseUrl__c, apiUrl.toExternalForm());
 		}
 	}
 
@@ -719,8 +702,8 @@ private class AuthServiceTest {
 				UUID.randomUUID().toString(),
 				UUID.randomUUID(),
 				new List<Url> {
-					new Url('https://invite.callback.test.springcm.com/'),
-					new Url('https://invite.redirect.test.springcm.com/')
+					new Url('https://redirect.test.docusign.net/'),
+					new Url('https://redirect.test.springcm.com/')
 				},
 				'test');
 			Test.stopTest();
@@ -1239,117 +1222,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getGenProduct_failure() {
-		DocuSignAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				AuthService.getGenProduct(
-					new Url('https://provisioning.test.docusign.net'),
-					UUID.randomUUID(),
-					'test');
-				throw new AssertException('Expected getGenProduct to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getGenProduct_success() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Gen.Product result = AuthService.getGenProduct(
-				new Url('https://provisioning.test.docusign.net'),
-				UUID.randomUUID(),
-				'test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(String.isNotBlank(result.status));
-			System.assertNotEquals(null, result.authBaseUrl);
-			System.assertNotEquals(null, result.apiBaseUrl);
-			System.assertNotEquals(null, result.inviteCallbackUrl);
-			System.assertNotEquals(null, result.inviteRedirectUrl);
-			System.assert(String.isNotBlank(result.inviteEmailSubject));
-			System.assert(String.isNotBlank(result.inviteEmailBody));
-		}
-	}
-
-	@IsTest
-	static void test_addTrialGenProduct_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			try {
-				AuthService.addTrialGenProduct();
-				throw new AssertException('Expected addTrialGenProduct to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	private class AddTrialGenProductFailureMock extends OAuthTokenMock {
-		override public HttpResponse getResponse(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setHeader('Content-Type', 'application/json');
-			ProvisioningAPI.APIProduct p = new ProvisioningAPI.APIProduct();
-			p.product_id = 'bad';
-			p.free_trial = true;
-			p.provision_status = 'active';
-			p.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
-			p.activation_properties = null;
-			response.setBody(JSON.serialize(p));
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_addTrialGenProduct_failure() {
-		Test.setMock(HttpCalloutMock.class, new AddTrialGenProductFailureMock());
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			System.assert(!AuthService.addTrialGenProduct());
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_addTrialGenProduct_success() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Boolean result = AuthService.addTrialGenProduct();
-			Test.stopTest();
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			System.assertNotEquals(null, result);
-			System.assertEquals(true, result);
-			System.assertNotEquals(null, s.AccountBaseUrl__c);
-			System.assertNotEquals(null, s.InviteCallbackUrl__c);
-			System.assertNotEquals(null, s.InviteRedirectUrl__c);
-			System.assertEquals(s.ScmApiBaseUrl__c, 'https://api.test.springcm.com/gen/');
-		}
-	}
-
-	@IsTest
-	static void test_addTrialGenProduct_error() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			try {
-				AuthService.addTrialGenProduct();
-				throw new AssertException('Expected AuthService.addTrialGenProduct to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getRemoteSites() {
 		System.assertEquals(5, Collection.size(AuthService.getRemoteSites(
 			DocuSign.Environment.Production,
@@ -1380,25 +1252,61 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AuthService.save(null, null, null, null, null, null, null, null);
+				AuthService.save(null, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null);
+				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.save(DocuSign.Environment.Demo, new Url('https://bad-docusign.net'), new Url('https://provisioning.test.docusign.net'), null, null, null, null, null);
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://bad-docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.save(DocuSign.Environment.Demo, new Url('https://account.testdocusign.net'), new Url('https://bad-docusign.net'), null, null, null, null, null);
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://account.testdocusign.net'),
+					new Url('https://bad-docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					null, null, null, null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://auth.test.docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://bad-springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					null, null, null, null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://auth.test.docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.evil.com'),
+					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -1416,6 +1324,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					null,
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1428,16 +1338,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						'https://esign.test.docusign.net',
 						true),
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					new Credentials.AccessToken(
 						'test',
 						Datetime.now().addHours(1)));
@@ -1450,6 +1350,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					'\n ',
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1462,16 +1364,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						'https://esign.test.docusign.net',
 						true),
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					new Credentials.AccessToken(
 						'test',
 						Datetime.now().addHours(1)));
@@ -1484,6 +1376,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					null,
 					new LoginInformation.Account(
@@ -1492,16 +1386,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						'https://esign.test.docusign.net',
 						true),
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					new Credentials.AccessToken(
 						'test',
 						Datetime.now().addHours(1)));
@@ -1514,6 +1398,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1521,16 +1407,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						null),
 					null,
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					new Credentials.AccessToken(
 						'test',
 						Datetime.now().addHours(1)));
@@ -1543,6 +1419,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1555,16 +1433,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						'https://esign.test.docusign.net',
 						true),
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1575,6 +1443,8 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1587,16 +1457,6 @@ private class AuthServiceTest {
 						UUID.randomUUID().toString(),
 						'https://esign.test.docusign.net',
 						true),
-					new Gen.Product(
-						'active',
-						false,
-						null,
-						new Url('https://auth.test.springcm.com'),
-						new Url('https://api.test.springcm.com'),
-						new Url('https://invite.callback.test.springcm.com'),
-						new Url('https://invite.redirect.test.springcm.com'),
-						'email subject',
-						'email body'),
 					new Credentials.AccessToken(
 						'test',
 						Datetime.now().addHours(-1)));
@@ -1618,6 +1478,8 @@ private class AuthServiceTest {
 				DocuSign.Environment.Stage,
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://auth.test.springcm.com'),
+				new Url('https://api.test.springcm.com'),
 				UUID.randomUUID().toString(),
 				new LoginInformation(
 					UUID.randomUUID(),
@@ -1630,16 +1492,6 @@ private class AuthServiceTest {
 					UUID.randomUUID().toString(),
 					'https://esign.test.docusign.net',
 					true),
-				new Gen.Product(
-					'active',
-					false,
-					null,
-					new Url('https://auth.test.springcm.com'),
-					new Url('https://api.test.springcm.com'),
-					new Url('https://invite.callback.test.springcm.com'),
-					new Url('https://invite.redirect.test.springcm.com'),
-					'email subject',
-					'email body'),
 				new Credentials.AccessToken(
 					'test',
 					Datetime.now().addHours(1)));
@@ -1660,6 +1512,8 @@ private class AuthServiceTest {
 				DocuSign.Environment.Stage,
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
+				null,
+				null,
 				UUID.randomUUID().toString(),
 				new LoginInformation(
 					UUID.randomUUID(),
@@ -1672,7 +1526,6 @@ private class AuthServiceTest {
 					UUID.randomUUID().toString(),
 					'https://esign.test.docusign.net',
 					true),
-				null,
 				new Credentials.AccessToken(
 					'test',
 					Datetime.now().addHours(1)));

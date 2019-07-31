@@ -3,9 +3,9 @@
     <fullName>CanManageAccount__c</fullName>
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
-    <description>Can manage DocuSign account</description>
+    <description>Can Manage DocuSign Account</description>
     <externalId>false</externalId>
-    <label>Can manage DocuSign account</label>
+    <label>Can Manage DocuSign Account</label>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Checkbox</type>
 </CustomField>
