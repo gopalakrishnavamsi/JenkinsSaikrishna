@@ -3874,6 +3874,10 @@
 		<name>RunReportsAndAnalyticsTitle</name>
 	</customLabels>
 	<customLabels>
+		<label>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</label>
+		<name>MapObjectsSummary</name>
+	</customLabels>
+	<customLabels>
 		<label>Select Object</label>
 		<name>SelectObject</name>
 	</customLabels>
