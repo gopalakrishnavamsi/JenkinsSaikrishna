@@ -1,5 +1,9 @@
 public with sharing class CLMMapObjectController {
-    
+
+    @auraEnabled 
+    public static String getNamespace(){
+        return Application.namespace;
+    }
     @AuraEnabled
     public static String getMappedObjectsList(){
         return '['+
@@ -21,9 +25,9 @@ public with sharing class CLMMapObjectController {
     }
     //TODO: Change below method to use MergeObject instead of AllObjects
     @AuraEnabled(Cacheable=true)
-    public static List<AllObjects> getAllObjectFileds(String objApiName){
+    public static List<AllObjects> getAllObjectFileds(String apiName){ 
         List<AllObjects> returnValue=new List<AllObjects>();
-     	Map<string,SObjectField> fList = schema.getGlobalDescribe().get(objApiName).getDescribe().fields.getMap();
+     	Map<string,SObjectField> fList = schema.getGlobalDescribe().get(apiName).getDescribe().fields.getMap();
         for(string str: fList.keySet()){
             returnValue.add(new AllObjects(fList.get(str).getDescribe().getLabel(),str));
         }
@@ -32,14 +36,14 @@ public with sharing class CLMMapObjectController {
     
     public class AllObjects{
         @AuraEnabled
-        public String objectName;
+        public String name;
         @AuraEnabled 
-        public String objecApiName;
+        public String apiName;
         @AuraEnabled 
         public Boolean selected;
-        public AllObjects(String objectName,String objecApiName){
-            this.objectName=objectName;
-            this.objecApiName=objecApiName;
+        public AllObjects(String name,String apiName){
+            this.name=name;
+            this.apiName=apiName;
             selected=false;            
         }
     }    

@@ -2,14 +2,14 @@
     <lightning:card>
         <div class="slds-grid slds-p-left_medium slds-p-right_medium slds-grid_vertical">
             <div class="slds-col ">
-                <div class="slds-grid slds-p-around--medium">
+                <div class="slds-grid slds-p-around_medium">
                     <div class="slds-col slds-size_1-of-2 slds-m-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.AutomateDocumentGeneration}</strong>
                         <div>
                             {!$Label.c.AutomateDocumentGenerationBody}
                         </div>
                     </div>
-                    <div class="slds-col slds-size_1-of-2 slds-m-left_small">
+                    <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-p-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.AutomateYourProcessesTitle}</strong>
                         <div>
                             {!$Label.c.AutomateYourProcessesBody}
@@ -18,14 +18,14 @@
                 </div>
             </div>
             <div class="slds-col">
-                <div class="slds-grid slds-p-around--medium">
+                <div class="slds-grid slds-p-around_medium">
                     <div class="slds-col slds-size_1-of-2 slds-m-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.ShareAndCollaborateTitle}</strong>
                         <div>
                             {!$Label.c.ShareAndCollaborateBody}
                         </div>
                     </div>
-                    <div class="slds-col slds-size_1-of-2 slds-m-left_small">
+                    <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-p-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.TrackDocumentStatusAndActivityTitle}</strong>
                         <div>
                             {!$Label.c.TrackDocumentStatusAndActivityBody}
@@ -34,14 +34,14 @@
                 </div>
             </div>
             <div class="slds-col">
-                <div class="slds-grid slds-p-around--medium">
+                <div class="slds-grid slds-p-around_medium">
                     <div class="slds-col slds-size_1-of-2 slds-m-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.OrganizeAndSearchDocumentsTitle}</strong>
                         <div>
                             {!$Label.c.OrganizeAndSearchDocumentsBody}
                         </div>
                     </div>
-                    <div class="slds-col slds-size_1-of-2 slds-m-left_small">
+                    <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-p-right_small">
                         <strong class="ds-blue-color ds-card-heading">{!$Label.c.RunReportsAndAnalyticsTitle}</strong>
                         <div>
                             {!$Label.c.RunReportsAndAnalyticsBody}
