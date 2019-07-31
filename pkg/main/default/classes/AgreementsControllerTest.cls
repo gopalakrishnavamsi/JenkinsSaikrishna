@@ -141,6 +141,33 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
+	static void test_exportAgreementToSalesforce_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.exportAgreementToSalesforce(UserInfo.getUserId(), '382bd222-1536-e911-9c1d-3ca82a1e3f41');
+				throw new AssertException('Expected createAgreementInEOSFolder to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_exportAgreementToSalesforce_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = AgreementsController.exportAgreementToSalesforce(UserInfo.getUserId(), '382bd222-1536-e911-9c1d-3ca82a1e3f41');
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+		}
+	}
+
+	@IsTest
 	static void test_renameAgreement_failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

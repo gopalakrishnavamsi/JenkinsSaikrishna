@@ -54,6 +54,20 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
+	static void test_exportAgreementToSalesforce_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			UUID result = NegotiateAPI.getInstance().exportAgreementToSalesforce(NegotiateAPIMock.SOURCE_OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals(UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566'), result);
+		}
+	}
+
+	@IsTest
 	static void test_getAgreementInEOSFolderStatus_success() {
 		NegotiateAPIMock.success();
 
@@ -69,6 +83,23 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
+	static void test_getExportAgreementToSalesforceStatus_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(NegotiateAPIMock.TASK_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals('Success', result.status);
+			System.assertEquals('Document exported successfully', result.message);
+
+		}
+	}
+
+	@IsTest
 	static void test_getAgreementInEOSFolderStatus_success2() {
 		NegotiateAPIMock.success();
 
@@ -76,6 +107,21 @@ public with sharing class NegotiateAPITest {
 
 			Test.startTest();
 			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID_2);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals('Processing', result.status);
+		}
+	}
+
+	@IsTest
+	static void test_getExportAgreementToSalesforceStatus_success2() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(NegotiateAPIMock.TASK_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
