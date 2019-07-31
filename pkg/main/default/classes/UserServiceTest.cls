@@ -44,7 +44,7 @@ private class UserServiceTest {
 		User u2 = UserMock.createUser();
 		User a1 = UserMock.createAdministrator();
 		User a2 = UserMock.createAdministrator();
-		System.runAs(a1) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Map<Id, Profile> ps = new Map<Id, Profile>([
 				SELECT Id
 				FROM Profile
@@ -85,7 +85,7 @@ private class UserServiceTest {
 				1000);
 			Test.stopTest();
 
-			System.assert(Collection.size(result1) >= 4);
+			System.assertEquals(4, Collection.size(result1));
 			System.assertEquals(2, Collection.size(result2));
 			System.assertEquals(1, Collection.size(result3));
 		}

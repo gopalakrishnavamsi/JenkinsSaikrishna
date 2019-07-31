@@ -46,7 +46,7 @@ global class UserMock {
 	public static User createDocuSignAdministrator(final UUID dsUserId) {
 		User u = createUser(getSystemAdministratorProfileId(),
 			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, true);
-		System.runAs(getAdministrator()) {
+		System.runAs(u) {
 			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
