@@ -243,6 +243,20 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
+	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceObjectId, final UUID documentId) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		UUID taskId = NegotiateAPI.getInstance().exportAgreementToSalesforce(sourceObjectId, documentId);
+		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(taskId);
+		if (taskStatus.status.equals('Success')) {
+			taskStatus.message = Label.AgreementExportSuccessful;
+		} else if (taskStatus.status.equals('Processing')) {
+			taskStatus.message = Label.AgreementExportProcessing;
+		} else {
+			taskStatus.message = Label.AgreementExportFailed;
+		}
+		return taskStatus;
+	}
+
 	public static String getAgreementPreviewLink(final Id sourceId, final String agreementId, final Boolean isFullUrl) {
 		Permissions.verifyIsDocuSignUser();
 		if (sourceId == null || agreementId == null) return null;

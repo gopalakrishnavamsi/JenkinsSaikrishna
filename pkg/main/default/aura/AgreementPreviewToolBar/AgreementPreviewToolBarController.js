@@ -80,6 +80,18 @@
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
+  },
+
+  addToSalesforce: function(component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var sourceId = component.get('v.sourceId');
+      var agreement = component.get('v.agreement');
+      actions.exportToSalesforce(agreement, sourceId, component);
+    }catch(err){
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
   }
 
 });

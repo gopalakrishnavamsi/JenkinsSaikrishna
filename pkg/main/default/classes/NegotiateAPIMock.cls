@@ -71,6 +71,10 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
 			response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
+		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_SALESFORCE)) {
+			response.setStatusCode(201);
+			response.setStatus('CREATED');
+			response.setBody('{"Status": "Processing","Href": "https://apiuatna11.springcm.com/v2/salesforcecontentdocumentexporttasks/4682d399-29fe-4085-9e48-126e4ffa0566"}');
 		} else if (success && method == 'POST' && path.contains(NegotiateAPI.PATH_TOKEN_REGISTRATIONS)) {
 			response.setStatusCode(201);
 			response.setStatus('CREATED');
@@ -99,6 +103,14 @@ public with sharing class NegotiateAPIMock extends OAuthTokenMock {
 			response.setStatusCode(200);
 			response.setStatus('OK');
 			response.setBody('{"Document":{"Href":"https://apiuatna11.springcm.com/v201411/documents/51962d1b-5468-e911-9c20-3ca82a1e3f41"},"Message":"ContentDocumentimportedsuccessfully","Status":"Success","Href":"https://apiuatna11.springcm.com/v201411/salesforcecontentdocumentimporttasks/33c0648a-7bb5-4f34-aef8-9994362ce0ae"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_SALESFORCE) && path.contains(String.valueOf(NegotiateAPIMock.TASK_ID_2))) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"Message":"Document Export Processing","Status":"Processing","Href":"https://apiuatna11.springcm.com/v2/salesforcecontentdocumentexporttasks/33c0648a-7bb5-4f34-aef8-9994362ce0ae"}');
+		} else if (success && method == 'GET' && path.contains(NegotiateAPI.PATH_AGREEMENT_IN_SALESFORCE)) {
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setBody('{"SfContentVersionId":"06817000000TrbmAAC","Message":"Document exported successfully","Status":"Success","Href":"https://apiuatna11.springcm.com/v2/salesforcecontentdocumentexporttasks/33c0648a-7bb5-4f34-aef8-9994362ce0ae"}');
 		} else if (success && method == 'GET' && path.contains(String.valueOf(NegotiateAPIMock.FOLDER_ID_2))) {
 			response.setStatusCode(200);
 			response.setStatus('OK');

@@ -1,18 +1,23 @@
 public class GenProduct extends Product {
 
-	// TODO: Need Gen-specific properties?
+	public transient Url authBaseUrl { get; private set; }
+	public transient Url apiBaseUrl { get; private set; }
 
 	public GenProduct(
 		final String status,
 		final Boolean isTrial,
 		final Date trialExpires,
-		final Map<String, String> properties) {
+		final Url authBaseUrl,
+		final Url apiBaseUrl) {
 
 		super(
-			Product.NAME_GEN,
+			Product.GEN,
 			status,
 			isTrial,
 			trialExpires,
-			properties);
+			null);
+
+		this.authBaseUrl = authBaseUrl;
+		this.apiBaseUrl = apiBaseUrl;
 	}
 }
