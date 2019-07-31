@@ -37,5 +37,10 @@
 
   showShareLinkModal: function (component, event, helper) {
     helper.createShareLinkComponent(component);
-  } 
+  },
+
+  showAddToSalesforceModal: function (component, event, helper) {
+    helper.exportAgreementToSalesforce(component);
+  },
+
 });
