@@ -2,16 +2,16 @@
     <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}" />
     <aura:attribute name="summary" type="String" default="{!$Label.c.HelpInfoBody}" />
     <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}" />
-    <aura:attribute name="isGrey" type="Boolean" default="false" />
+    <aura:attribute name="isGray" type="Boolean" default="false" />
     <aura:attribute name="hasHyperlink" type="Boolean" default="false" />
     <aura:attribute name="hyperlinkedText" type="String" />
     <aura:attribute name="hyperlinkedSummary1" type="String" />
     <aura:attribute name="hyperlinkedSummary2" type="String"/>
 
-    <lightning:card class="{!v.isGrey?'slds-m-top_none ds-gray-color':'slds-m-top_none'}">
+    <lightning:card class="{!v.isGray?'slds-m-top_none ds-gray-color':'slds-m-top_none'}">
         <div class="slds-grid">
             <div class="slds-col slds-size_9-of-12">
-                <lightning:card class="{!v.isGrey?'ds-gray-color':''}">
+                <lightning:card class="{!v.isGray?'ds-gray-color':''}">
                     <aura:set attribute="title">
                         <div class="slds-p-left_medium ds-card-heading">
                             <b>{!v.title}</b>

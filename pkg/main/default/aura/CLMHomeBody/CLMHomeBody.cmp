@@ -37,7 +37,7 @@
                 summary="{!$Label.c.UserManagementInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot isGrey="true" />
+            <c:CLMTroubleshoot isGray="true" />
         </div>
     </div>
 </aura:component>
