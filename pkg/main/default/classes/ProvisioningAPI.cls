@@ -124,7 +124,8 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties);
+					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
+					properties.containsKey('merge_uri') ? new Url(properties.get('merge_uri')) : null);
 			} else if (this.product_id == PRODUCT_NEGOTIATE) {
 				p = new NegotiateProduct(
 					this.provision_status,

@@ -408,8 +408,6 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteCallbackUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteRedirectUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
@@ -419,8 +417,6 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
 
 			System.assert(Collection.isEmpty(ProductSettings__c.getAll().values()));
-
-			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(adminId.toString(), uu.Username__c);
@@ -483,8 +479,6 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteCallbackUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().InviteRedirectUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
@@ -494,8 +488,6 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
 
 			System.assert(Collection.isEmpty(ProductSettings__c.getAll().values()));
-
-			System.assert(Collection.isEmpty([SELECT Id FROM Configuration__c WHERE Name = 'Gen' LIMIT 1]));
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);

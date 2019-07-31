@@ -234,7 +234,7 @@ public class Account {
 	 */
 	public static final String USER_STATUS_ACTIVE = 'Active';
 	/**
-	 * The user account membership has been closed or an invite has been revoked.
+	 * The user account membership has been closed.
 	 */
 	public static final String USER_STATUS_INACTIVE = 'Inactive';
 
@@ -282,15 +282,10 @@ public class Account {
 		@AuraEnabled
 		public String status { get; private set; }
 		/**
-		 * The DocuSign user invite ID.
+		 * Date when the user was provisioned.
 		 */
 		@AuraEnabled
-		public UUID inviteId { get; private set; }
-		/**
-		 * The DocuSign user invite date.
-		 */
-		@AuraEnabled
-		public Date inviteDate { get; private set; }
+		public Date provisioned { get; private set; }
 		/**
 		 * Whether or not the user is a DocuSign account administrator.
 		 */
@@ -334,7 +329,6 @@ public class Account {
 				null,
 				null,
 				null,
-				null,
 				false,
 				null,
 				APIError.none);
@@ -364,7 +358,6 @@ public class Account {
 				lastName,
 				null,
 				null,
-				null,
 				canManageAccount,
 				null,
 				null);
@@ -379,8 +372,7 @@ public class Account {
 		 * @param firstName The user's first name.
 		 * @param lastName The user's last name.
 		 * @param status The user's status.
-		 * @param inviteId The DocuSign user invite ID.
-		 * @param inviteDate The DocuSign user invite date.
+		 * @param provisioned Date when the user was provisioned.
 		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
 		 * @param profile The user's Salesforce profile name.
 		 * @param error The error returned by the API for bulk add or remove account member operations.
@@ -392,8 +384,7 @@ public class Account {
 			final String firstName,
 			final String lastName,
 			final String status,
-			final UUID inviteId,
-			final Date inviteDate,
+			final Date provisioned,
 			final Boolean canManageAccount,
 			final String profile,
 			final APIError error) {
@@ -404,8 +395,7 @@ public class Account {
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.status = status;
-			this.inviteId = inviteId;
-			this.inviteDate = inviteDate;
+			this.provisioned = provisioned;
 			this.canManageAccount = canManageAccount;
 			this.profile = profile;
 			this.error = error == null ? APIError.none : error;
@@ -420,26 +410,6 @@ public class Account {
 		 */
 		public User withError(final APIError error) {
 			this.error = error;
-			return this;
-		}
-
-		/**
-		 * Updates a user's <code>status</code>, <code>inviteId</code>, and <code>inviteDate</code> properties.
-		 *
-		 * @param status The DocuSign user status.
-		 * @param inviteId The DocuSign invite ID.
-		 * @param inviteDate The DocuSign invite date.
-		 *
-		 * @return The user with updated invite properties.
-		 */
-		public User withInvite(
-			final String status,
-			final UUID inviteId,
-			final Date inviteDate) {
-
-			this.status = status;
-			this.inviteId = inviteId;
-			this.inviteDate = inviteDate;
 			return this;
 		}
 	}

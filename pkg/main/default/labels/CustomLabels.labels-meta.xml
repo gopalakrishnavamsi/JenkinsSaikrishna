@@ -133,6 +133,14 @@
 		</value>
 	</labels>
 	<labels>
+		<fullName>AddToSalesforce</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Agreement to Salesforce</shortDescription>
+		<value>Add To Salesforce</value>
+	</labels>
+	<labels>
 		<fullName>AddUser</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -5159,27 +5167,6 @@
 		<value>DocuSign Gen Service</value>
 	</labels>
 	<labels>
-		<fullName>UserInviteFailed</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite failed</shortDescription>
-		<value>User invite failed.</value>
-	</labels>
-	<labels>
-		<fullName>UserAlreadyInvited</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User already invited</shortDescription>
-		<value>The user has already been invited to the DocuSign account.</value>
-	</labels>
-	<labels>
-		<fullName>UserInviteRevoked</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite revoked</shortDescription>
-		<value>Invite Revoked</value>
-	</labels>
-	<labels>
 		<fullName>SystemSender</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -6324,6 +6311,27 @@
 		<value>Agreement Import failed. Please try again.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementExportSuccessful</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportSuccessful</shortDescription>
+		<value>Agreement has been exported successfully.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExportProcessing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportProcessing</shortDescription>
+		<value>Agreement export in progress. Please check the Agreements space after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExportFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportFailed</shortDescription>
+		<value>Agreement Export failed. Please try again.</value>
+	</labels>
+	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7464,5 +7472,13 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement 2</shortDescription>
 		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</value>
+  </labels>
+  <labels>
+		<fullName>InvalidTrialProduct_1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid trial product</shortDescription>
+		<value>Cannot initiate a trial for product '{0}'</value>
 	</labels>
 </CustomLabels>
