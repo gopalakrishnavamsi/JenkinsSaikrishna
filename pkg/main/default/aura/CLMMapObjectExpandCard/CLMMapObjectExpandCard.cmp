@@ -1,6 +1,6 @@
 <aura:component extends="c:CLMUtility">
     <ltng:require scripts="{!$Resource.stringUtils}" />
-    <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
     <aura:attribute name="namespace" type="string" default="c" />  
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:attribute name="summary" type="String" />
