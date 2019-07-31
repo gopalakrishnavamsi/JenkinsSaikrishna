@@ -3968,7 +3968,8 @@
 	<customLabels>
 		<label>Cannot initiate a trial for product '{0}'</label>
 		<name>InvalidTrialProduct_1</name>
-  </customLabels>  
+ 	</customLabels>  
+	<customLabels>
 		<label>Agreement has been exported successfully.</label>
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
