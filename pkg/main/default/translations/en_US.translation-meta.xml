@@ -3982,7 +3982,7 @@
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<labelAdd To Salesforce</label>
+		<label>Add To Salesforce</label>
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
