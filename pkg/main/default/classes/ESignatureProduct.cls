@@ -42,7 +42,7 @@ public class ESignatureProduct extends Product {
 		final Set<Feature> features) {
 
 		super(
-			Product.NAME_ESIGNATURE,
+			Product.ESIGNATURE,
 			status,
 			isTrial,
 			trialExpires,

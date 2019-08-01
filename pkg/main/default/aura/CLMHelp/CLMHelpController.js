@@ -7,7 +7,7 @@
       buttonType: 'primary',
       buttonLabel: buttonName
     });
-    primaryClicked.fire()
+    primaryClicked.fire();
   },
   
   onSecondayButtonClick: function (component, event) {
@@ -18,6 +18,6 @@
       buttonType: 'secondary',
       buttonLabel: buttonName
     });
-    secondaryClicked.fire()
+    secondaryClicked.fire();
   },
-})
+});

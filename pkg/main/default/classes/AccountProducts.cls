@@ -5,6 +5,7 @@ public with sharing class AccountProducts {
 
 	private static AccountProducts self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 60; // 1 hour
+	private static final Set<String> validProductTrials = new Set<String> { Product.GEN, Product.NEGOTIATE };
 
 	@TestVisible
 	private static final Integer FLAG_MERGE_FIELDS = 1;
@@ -22,28 +23,28 @@ public with sharing class AccountProducts {
 	@AuraEnabled
 	public ESignatureProduct eSignature {
 		get {
-			return (ESignatureProduct)this.products.get(Product.NAME_ESIGNATURE);
+			return (ESignatureProduct)this.products.get(Product.ESIGNATURE);
 		}
 	}
 
 	@AuraEnabled
 	public GenProduct gen {
 		get {
-			return (GenProduct)this.products.get(Product.NAME_GEN);
+			return (GenProduct)this.products.get(Product.GEN);
 		}
 	}
 
 	@AuraEnabled
 	public NegotiateProduct negotiate {
 		get {
-			return (NegotiateProduct)this.products.get(Product.NAME_NEGOTIATE);
+			return (NegotiateProduct)this.products.get(Product.NEGOTIATE);
 		}
 	}
 
 	@AuraEnabled
 	public ClmProduct clm {
 		get {
-			return (ClmProduct)this.products.get(Product.NAME_CLM);
+			return (ClmProduct)this.products.get(Product.CLM);
 		}
 	}
 
@@ -53,27 +54,27 @@ public with sharing class AccountProducts {
 	}
 
 	public Boolean isESignatureTrialExpired() {
-		Product p = this.products.get(Product.NAME_ESIGNATURE);
+		Product p = this.products.get(Product.ESIGNATURE);
 		return p != null && p.isExpired;
 	}
 
 	public Boolean isESignatureEnabled() {
-		Product p = this.products.get(Product.NAME_ESIGNATURE);
+		Product p = this.products.get(Product.ESIGNATURE);
 		return p != null && !p.isExpired;
 	}
 
 	public Boolean isGenEnabled() {
-		Product p = this.products.get(Product.NAME_GEN);
+		Product p = this.products.get(Product.GEN);
 		return p != null && !p.isExpired;
 	}
 
 	public Boolean isNegotiateEnabled() {
-		Product p = this.products.get(Product.NAME_NEGOTIATE);
+		Product p = this.products.get(Product.NEGOTIATE);
 		return p != null && !p.isExpired;
 	}
 
 	public Boolean isClmEnabled() {
-		Product p = this.products.get(Product.NAME_CLM);
+		Product p = this.products.get(Product.CLM);
 		return p != null && !p.isExpired;
 	}
 
@@ -91,7 +92,7 @@ public with sharing class AccountProducts {
 
 			resolvedProducts = new Map<String, Product>();
 			resolvedProducts.put(
-				Product.NAME_ESIGNATURE,
+				Product.ESIGNATURE,
 				AccountAPI.getInstance().getProduct());
 			for (Product p : ProvisioningAPI.getInstance().getProducts()) {
 				if (p != null) resolvedProducts.put(p.name, p);
@@ -163,7 +164,7 @@ public with sharing class AccountProducts {
 		if (products != null) {
 			for (String key : products.keySet()) {
 				switch on key {
-					when 'esign' {
+					when 'e_sign' {
 						result.add((Product)JSON.deserialize(products.get(key), ESignatureProduct.class));
 					} when 'gen' {
 						result.add((Product)JSON.deserialize(products.get(key), GenProduct.class));
@@ -216,9 +217,10 @@ public with sharing class AccountProducts {
 	}
 
 	private static Product convertProduct(final ProductSettings__c product) {
+
 		Product result = null;
 		switch on (product == null ? '' : product.Name) {
-			when 'esign' {
+			when 'e_sign' {
 				result = new ESignatureProduct(
 					product.Status__c,
 					product.IsTrial__c == true,
@@ -229,6 +231,7 @@ public with sharing class AccountProducts {
 					product.Status__c,
 					product.IsTrial__c == true,
 					product.TrialExpires__c,
+					null,
 					null);
 			} when 'negotiate' {
 				result = new NegotiateProduct(
@@ -279,5 +282,37 @@ public with sharing class AccountProducts {
 			self = new AccountProducts(products);
 		}
 		return self;
+	}
+
+	@Future
+	private static void updateProducts(final Map<String, String> productsJson) {
+		Map<String, ProductSettings__c> settings = ProductSettings__c.getAll();
+		List<ProductSettings__c> toUpsert = new List<ProductSettings__c>();
+		for (Product p : deserializeProducts(productsJson)) {
+			if (p == null) continue;
+
+			ProductSettings__c ps = convertProduct(p);
+			if (settings.containsKey(p.name)) {
+				ps.Id = settings.get(p.name).Id;
+			}
+
+			toUpsert.add(ps);
+		}
+		upsert toUpsert;
+	}
+
+	public Product startTrial(final String productName) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (String.isBlank(productName)) throw new DocuSignException(Label.UndefinedArgument);
+
+		if (!validProductTrials.contains(productName.toLowerCase())) {
+			throw new DocuSignException(String.format(Label.InvalidTrialProduct_1, new List<String> { productName }));
+		}
+
+		Product result = ProvisioningAPI.getInstance().addProduct(productName.toLowerCase(), true);
+		updateProducts(new Map<String, String> { result.name => JSON.serialize(result) });
+		this.products.put(result.name, result);
+		return result;
 	}
 }

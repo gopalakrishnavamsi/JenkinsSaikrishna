@@ -38,6 +38,30 @@ private class UnauthorizedExceptionTest {
 	}
 
 	@IsTest
+	static void test_notDocuSignGenerator() {
+		Test.startTest();
+		final UnauthorizedException ex = UnauthorizedException.notDocuSignGenerator();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignGenerator, ex.requirement);
+	}
+
+	@IsTest
+	static void test_notDocuSignNegotiator() {
+		Test.startTest();
+		final UnauthorizedException ex = UnauthorizedException.notDocuSignNegotiator();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignNegotiator, ex.requirement);
+	}
+
+	@IsTest
 	static void test_notSalesforceAdministrator() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notSalesforceAdministrator();

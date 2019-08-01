@@ -133,6 +133,14 @@
 		</value>
 	</labels>
 	<labels>
+		<fullName>AddToSalesforce</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Agreement to Salesforce</shortDescription>
+		<value>Add To Salesforce</value>
+	</labels>
+	<labels>
 		<fullName>AddUser</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -1327,7 +1335,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Document Generation Info</shortDescription>
-		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM</value>
+		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a</value>
 	</labels>
 	<labels>
 		<fullName>DocuSign</fullName>
@@ -1359,7 +1367,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement</shortDescription>
-		<value>DocuSign Agreements intigrates your Salesforce data smoothly into DocuSign CLM.This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</value>
+		<value>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>Dominica</fullName>
@@ -2779,6 +2787,14 @@
 		<value>MAP YOUR SALESFORCE OBJECTS</value>
 	</labels>
 	<labels>
+		<fullName>MapObjectsSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Map Objects summary</shortDescription>
+		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</value>
+	</labels>
+	<labels>
 		<fullName>MappedObjects</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -2975,6 +2991,22 @@
 		<protected>true</protected>
 		<shortDescription>Must Be DocuSign User</shortDescription>
 		<value>You must have DocuSign user permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignGenerator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Generator</shortDescription>
+		<value>You must have DocuSign generator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeDocuSignNegotiator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be DocuSign Negotiator</shortDescription>
+		<value>You must have DocuSign negotiator permissions to perform this operation.</value>
 	</labels>
 	<labels>
 		<fullName>MyPersonalContent</fullName>
@@ -5135,27 +5167,6 @@
 		<value>DocuSign Gen Service</value>
 	</labels>
 	<labels>
-		<fullName>UserInviteFailed</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite failed</shortDescription>
-		<value>User invite failed.</value>
-	</labels>
-	<labels>
-		<fullName>UserAlreadyInvited</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User already invited</shortDescription>
-		<value>The user has already been invited to the DocuSign account.</value>
-	</labels>
-	<labels>
-		<fullName>UserInviteRevoked</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>User invite revoked</shortDescription>
-		<value>Invite Revoked</value>
-	</labels>
-	<labels>
 		<fullName>SystemSender</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -6300,6 +6311,27 @@
 		<value>Agreement Import failed. Please try again.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementExportSuccessful</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportSuccessful</shortDescription>
+		<value>Agreement has been exported successfully.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExportProcessing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportProcessing</shortDescription>
+		<value>Agreement export in progress. Please check the Agreements space after some time.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExportFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExportFailed</shortDescription>
+		<value>Agreement Export failed. Please try again.</value>
+	</labels>
+	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7424,5 +7456,29 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
 		<value>Your Salesforce Objects</value>
+	</labels>
+	<labels>
+		<fullName>DocGenInfo2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Document Generation Info2</shortDescription>
+		<value>page to talk about the powerful document generation capabilities of DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>DocusignAgreement2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Docusign Agreement 2</shortDescription>
+		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidTrialProduct_1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid trial product</shortDescription>
+		<value>Cannot initiate a trial for product '{0}'</value>
 	</labels>
 </CustomLabels>

@@ -16,13 +16,12 @@ global class UserMock {
 	 * DocuSign for Salesforce administrative methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignUser</code> or
-	 * <code>dfsle.UserMock.createDocuSignSender</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignAdministrator()) {
 	 *     // Call service method requiring the DocuSign Administrator permission set.
 	 *   }
@@ -47,7 +46,7 @@ global class UserMock {
 	public static User createDocuSignAdministrator(final UUID dsUserId) {
 		User u = createUser(getSystemAdministratorProfileId(),
 			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, true);
-		System.runAs(getAdministrator()) {
+		System.runAs(u) {
 			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
@@ -58,13 +57,12 @@ global class UserMock {
 	 * most DocuSign for Salesforce methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignAdministrator</code> or
-	 * <code>dfsle.UserMock.createDocuSignSender</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignUser()) {
 	 *     // Call service method requiring the DocuSign User permission set.
 	 *   }
@@ -100,13 +98,12 @@ global class UserMock {
 	 * DocuSign for Salesforce methods that create, send, or sign envelopes.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with <code>dfsle.UserMock.createDocuSignAdministrator</code> or
-	 * <code>dfsle.UserMock.createDocuSignUser</code>.
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
 	 *
 	 * Example:
 	 * <pre>
 	 * static testMethod void myTest() {
-	 *   dfsle.TestUtils.setMock(new dfsle.ESignatureAPIMock());
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
 	 *   System.runAs(dfsle.UserMock.createDocuSignSender()) {
 	 *     // Call service method requiring the DocuSign Sender permission set.
 	 *   }
@@ -127,6 +124,76 @@ global class UserMock {
 		}
 		System.runAs(getAdministrator()) {
 			Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>DocuSign Generator</code> permission set for unit tests. This may be used
+	 * for DocuSign for Salesforce methods that generate documents.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createDocuSignGenerator()) {
+	 *     // Call service method requiring the DocuSign Generator permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the DocuSign Generator permission set.
+	 */
+	public static User createDocuSignGenerator() {
+		return createDocuSignGenerator(true);
+	}
+
+	public static User createDocuSignGenerator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>DocuSign Negotiator</code> permission set for unit tests. This may be used
+	 * for DocuSign for Salesforce methods that negotiate documents.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createDocuSignNegotiator()) {
+	 *     // Call service method requiring the DocuSign Negotiator permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the DocuSign Negotiator permission set.
+	 */
+	public static User createDocuSignNegotiator() {
+		return createDocuSignNegotiator(true);
+	}
+
+	public static User createDocuSignNegotiator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
 	}
@@ -188,9 +255,8 @@ global class UserMock {
 			LanguageLocaleKey = 'en_US',
 			Username__c = String.valueOf(dsUserId),
 			CanManageAccount__c = canManageAccount,
-			InviteId__c = dsUserId == null ? null : UUID.randomUUID().toString(),
-			InviteDate__c = dsUserId == null ? null : Date.today().addDays(-10),
-			Status__c = dsUserId == null ? null : 'active');
+			Status__c = dsUserId == null ? null : 'active',
+			Provisioned__c = dsUserId == null ? null : Date.today());
 		insert u;
 
 		if (UUID.isNotEmpty(dsUserId)) {
@@ -202,7 +268,7 @@ global class UserMock {
 
 		return [
 			SELECT Id, FirstName, LastName, Name, Email, Profile.Name, Phone, MobilePhone,
-				CanManageAccount__c, InviteId__c, InviteDate__c, Status__c, Username__c
+				CanManageAccount__c, Status__c, Username__c, Provisioned__c
 			FROM User
 			WHERE Id = :u.Id
 			LIMIT 1
@@ -221,8 +287,6 @@ global class UserMock {
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
 		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/gen/';
-		accountSettings.InviteCallbackUrl__c = 'https://invite.test.springcm.com/provisioning/v1/callbacks/UserInvited';
-		accountSettings.InviteRedirectUrl__c = 'https://www.docusign.com/';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
 		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
 		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);
@@ -253,7 +317,7 @@ global class UserMock {
 
 		insert new List<ProductSettings__c> {
 			new ProductSettings__c(
-				Name = Product.NAME_ESIGNATURE,
+				Name = Product.ESIGNATURE,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null,
@@ -263,17 +327,17 @@ global class UserMock {
 					| AccountProducts.FLAG_SMS_AUTHENTICATION
 					| AccountProducts.FLAG_TEMPLATES),
 			new ProductSettings__c(
-				Name = Product.NAME_GEN,
+				Name = Product.GEN,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null),
 			new ProductSettings__c(
-				Name = Product.NAME_NEGOTIATE,
+				Name = Product.NEGOTIATE,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null),
 			new ProductSettings__c(
-				Name = Product.NAME_CLM,
+				Name = Product.CLM,
 				Status__c = Product.STATUS_ACTIVE,
 				IsTrial__c = false,
 				TrialExpires__c = null)
@@ -295,11 +359,6 @@ global class UserMock {
 			Language__c = 'en',
 			EmailSubject__c = 'Please sign this document',
 			EmailMessage__c = 'This email contains a document');
-
-		insert new Configuration__c(
-			Name = 'Gen',
-			InviteEmailSubject__c = 'Invite email subject',
-			InviteEmailBody__c = 'Invite email body');
 
 		createdAccountConfiguration = true;
 

@@ -19,6 +19,9 @@ global class UnauthorizedException extends Exception {
 	 *     <li><code>DocuSignUser</code>: Must be assigned the <code>DocuSign User</code> permission set.</li>
 	 *     <li><code>DocuSignAdministrator</code>: Must be assigned the <code>DocuSign Administrator</code> permission
 	 *     set.</li>
+	 *     <li><code>DocuSignGenerator</code>: Must be assigned the <code>DocuSign Generator</code> permission set.</li>
+	 *     <li><code>DocuSignNegotiator</code>: Must be assigned the <code>DocuSign Negotiator</code> permission
+	 *     set.</li>
 	 *     <li><code>SalesforceAdministrator</code>: Must be a Salesforce administrator.</li>
 	 *     <li><code>EnvelopeOwner</code>: Must be the envelope owner.</li>
 	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
@@ -29,6 +32,8 @@ global class UnauthorizedException extends Exception {
 		DocuSignUser,
 		DocuSignAdministrator,
 		DocuSignSender,
+		DocuSignGenerator,
+		DocuSignNegotiator,
 		SalesforceAdministrator,
 		EnvelopeOwner,
 		ConfigureAccount
@@ -106,6 +111,32 @@ global class UnauthorizedException extends Exception {
 		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignSender);
 		ex.userId = UserInfo.getUserId();
 		ex.requirement = AccessRequirement.DocuSignSender;
+		return ex;
+	}
+
+	/**
+	 * Factory method to construct an exception when the user is not assigned the <code>DocuSign Generator</code>
+	 * permission set.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException notDocuSignGenerator() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignGenerator);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.DocuSignGenerator;
+		return ex;
+	}
+
+	/**
+	 * Factory method to construct an exception when the user is not assigned the <code>DocuSign Negotiator</code>
+	 * permission set.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException notDocuSignNegotiator() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeDocuSignNegotiator);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.DocuSignNegotiator;
 		return ex;
 	}
 

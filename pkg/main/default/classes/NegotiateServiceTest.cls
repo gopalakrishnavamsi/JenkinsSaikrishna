@@ -77,6 +77,21 @@ private class NegotiateServiceTest {
 	}
 
 	@IsTest
+	static void test_exportAgreementToSalesforce_success() {
+		 NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.FOLDER_ID_2.toString());
+			Test.startTest();
+			NegotiateAPI.TaskStatus result = NegotiateService.exportAgreementToSalesforce(NegotiateAPIMock.SOURCE_OBJECT_ID_2,NegotiateAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals('Success', result.status);
+			System.assertEquals('Agreement has been exported successfully.', result.message);
+		}
+	}
+
+	@IsTest
 	static void test_renameAgreement_success() {
 		NegotiateAPIMock.success();
 

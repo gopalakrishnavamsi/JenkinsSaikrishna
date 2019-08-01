@@ -43,12 +43,8 @@ public class ProvisioningAPIMock extends OAuthTokenMock {
 				p.expiration_date = p.free_trial ? StringUtils.formatDatetime(Datetime.now().addDays(7)) : null;
 				p.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
 					new ProvisioningAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
-					new ProvisioningAPI.APIProductProperty('invite_callback_uri', 'https://integration.test.springcm.com/provisioning/v1/callbacks/UserInvited'),
-					new ProvisioningAPI.APIProductProperty('invite_redirect_uri', 'https://test.docusign.com'),
 					new ProvisioningAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
-					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
-					new ProvisioningAPI.APIProductProperty('invite_email_subject', 'Unit Test'),
-					new ProvisioningAPI.APIProductProperty('invite_email_body', '<html/>')
+					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
 				};
 
 				response.setBody(JSON.serialize(p));
@@ -56,38 +52,35 @@ public class ProvisioningAPIMock extends OAuthTokenMock {
 				ProvisioningAPI.APIProducts ps = new ProvisioningAPI.APIProducts();
 				ps.id = accountId;
 				ps.name = 'Unit Test';
+				ProvisioningAPI.APIProduct eSign = new ProvisioningAPI.APIProduct();
+				eSign.product_id = Product.ESIGNATURE;
+				eSign.free_trial = false;
+				eSign.provision_status = 'active';
 				ProvisioningAPI.APIProduct gen = new ProvisioningAPI.APIProduct();
-				gen.product_id = 'Gen';
+				gen.product_id = Product.GEN;
 				gen.free_trial = true;
 				gen.provision_status = 'active';
 				gen.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
 				gen.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
 					new ProvisioningAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
-					new ProvisioningAPI.APIProductProperty('invite_callback_uri', 'https://integration.test.springcm.com/provisioning/v1/callbacks/UserInvited'),
-					new ProvisioningAPI.APIProductProperty('invite_redirect_uri', 'https://invite.redirect.docusign.com/'),
 					new ProvisioningAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
-					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
-					new ProvisioningAPI.APIProductProperty('invite_email_subject', 'Unit Test'),
-					new ProvisioningAPI.APIProductProperty('invite_email_body', '<html/>')
+					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
 				};
 				ProvisioningAPI.APIProduct negotiate = new ProvisioningAPI.APIProduct();
-				negotiate.product_id = 'Negotiate';
+				negotiate.product_id = Product.NEGOTIATE;
 				negotiate.free_trial = true;
 				negotiate.provision_status = 'active';
 				negotiate.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
 				ProvisioningAPI.APIProduct clm = new ProvisioningAPI.APIProduct();
-				clm.product_id = 'CLM';
+				clm.product_id = Product.CLM;
 				clm.free_trial = false;
 				clm.provision_status = 'active';
 				clm.expiration_date = null;
 				ps.products = new List<ProvisioningAPI.APIProduct> {
-					gen, negotiate, clm
+					eSign, gen, negotiate, clm
 				};
 				response.setBody(JSON.serialize(ps));
-			} else { // GET all account products
-				// TODO: Mock resp
 			}
-
 		} else {
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');

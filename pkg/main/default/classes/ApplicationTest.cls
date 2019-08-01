@@ -1,11 +1,11 @@
-@IsTest(isParallel = true)
+@IsTest(IsParallel = true)
 private class ApplicationTest {
 
 	@IsTest
 	static void test_isManaged() {
 		Boolean isManaged = false;
 		try {
-			UserInfo.isCurrentUserLicensed('dfsle');
+			UserInfo.isCurrentUserLicensedForPackage(Application.PACKAGE_ID);
 			isManaged = true;
 		} catch (TypeException ex) {
 			// Not managed
@@ -26,7 +26,7 @@ private class ApplicationTest {
 
 	@IsTest
 	static void test_packageNamespace() {
-		System.assertEquals('dfsle', Application.packageNamespace);
+		System.assertEquals(Application.isManaged ? 'dfsle' : Salesforce.namespace, Application.packageNamespace);
 	}
 
 	@IsTest

@@ -13,7 +13,7 @@ public with sharing class Salesforce {
 	private static final String NAMESPACE_PREFIX;
 	private static final Boolean IS_SANDBOX;
 	private static final String ORG_TYPE;
-	public static final Double API_VERSION = 45.0;
+	public static final Double API_VERSION = 46.0;
 
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;

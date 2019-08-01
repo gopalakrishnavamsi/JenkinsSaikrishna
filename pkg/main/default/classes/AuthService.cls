@@ -413,7 +413,7 @@ public with sharing class AuthService {
 	private static final String JWT_HEADER;
 	@TestVisible
 	private static final String SCOPE_ADMIN = 'account_product_read signature impersonation account_product_activate '
-		+ 'invite spring_write spring_read manage_app_keys spring_content';
+		+ 'spring_write spring_read manage_app_keys spring_content';
 	@TestVisible
 	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read spring_content';
 	@TestVisible
@@ -434,81 +434,20 @@ public with sharing class AuthService {
 	@TestVisible
 	private class Database {
 
-		private Configuration__c updateConfiguration(
-			final String inviteEmailSubject,
-			final String inviteEmailBody) {
-
-			Permissions.verifyIsCreateable(Configuration__c.getSObjectType(), new List<String> {
-				'Name',
-				Application.namespacePrefix + 'InviteEmailSubject__c',
-				Application.namespacePrefix + 'InviteEmailBody__c'
-			});
-			Permissions.verifyIsUpdateable(Configuration__c.getSObjectType(), new List<String> {
-				Application.namespacePrefix + 'InviteEmailSubject__c',
-				Application.namespacePrefix + 'InviteEmailBody__c'
-			});
-
-			Configuration__c config = (Configuration__c)Collection.head([
-				SELECT InviteEmailSubject__c, InviteEmailBody__c
-				FROM Configuration__c
-				WHERE Name = 'Gen'
-			]);
-			if (config == null) {
-				config = new Configuration__c(
-					Name = 'Gen',
-					InviteEmailSubject__c = inviteEmailSubject,
-					InviteEmailBody__c = inviteEmailBody);
-			}
-			config.InviteEmailSubject__c = inviteEmailSubject;
-			config.InviteEmailBody__c = inviteEmailBody;
-			upsert config;
-
-			return config;
-		}
-
 		public AccountSettings__c updateSettings(
 			final PermissionProfileIds permissionProfileIds,
-			final Gen.Product product) {
-
-			if (product != null) {
-				updateConfiguration(
-					product.inviteEmailSubject,
-					product.inviteEmailBody);
-			}
+			final Url scmAuthBaseUrl,
+			final Url scmApiBaseUrl) {
 
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.AdministratorProfileId__c = permissionProfileIds == null
 				? null : permissionProfileIds.administratorId;
 			settings.SenderProfileId__c = permissionProfileIds == null
 				? null : permissionProfileIds.senderId;
-			settings.InviteCallbackUrl__c = product == null || product.inviteCallbackUrl == null
-				? null : product.inviteCallbackUrl.toExternalForm();
-			settings.InviteRedirectUrl__c = product == null || product.inviteRedirectUrl == null
-				? null : product.inviteRedirectUrl.toExternalForm();
-			upsert settings;
-
-			return settings;
-		}
-
-		// TODO: leverage or consolidate previous implementation of updateSettings.
-		public AccountSettings__c updateSettings(
-			final Gen.Product product) {
-
-			if (product != null) {
-				updateConfiguration(
-					product.inviteEmailSubject,
-					product.inviteEmailBody);
-			}
-
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.ScmAuthBaseUrl__c = product == null || product.authBaseUrl == null
-				? null : canonicalizeBaseUrl(product.authBaseUrl).toExternalForm();
-			settings.ScmApiBaseUrl__c = product == null || product.apiBaseUrl == null
-				? null : canonicalizeBaseUrl(product.apiBaseUrl).toExternalForm();
-			settings.InviteCallbackUrl__c = product == null || product.inviteCallbackUrl == null
-				? null : product.inviteCallbackUrl.toExternalForm();
-			settings.InviteRedirectUrl__c = product == null || product.inviteRedirectUrl == null
-				? null : product.inviteRedirectUrl.toExternalForm();
+			settings.ScmAuthBaseUrl__c = scmAuthBaseUrl == null
+				? null : canonicalizeBaseUrl(scmAuthBaseUrl).toExternalForm();
+			settings.ScmApiBaseUrl__c = scmApiBaseUrl == null
+				? null : canonicalizeBaseUrl(scmApiBaseUrl).toExternalForm();
 			upsert settings;
 
 			return settings;
@@ -875,69 +814,6 @@ public with sharing class AuthService {
 		return new State(target, environment, baseUrl, setup);
 	}
 
-	private static Gen.Product getGenProduct(Product p) {
-		Url authUrl, apiUrl, inviteCallbackUrl, inviteRedirectUrl;
-		String inviteSubject, inviteBody;
-
-		for (String key : p.properties.keySet()) {
-			String value = p.properties.get(key);
-			if (String.isBlank(value)) continue;
-			switch on key {
-				when 'invite_callback_uri' {
-					inviteCallbackUrl = new Url(value);
-				} when 'invite_redirect_uri' {
-					inviteRedirectUrl = new Url(value);
-				} when 'merge_uri' {
-					apiUrl = new Url(value);
-				} when 'web_base_uri' {
-					authUrl = new Url(value);
-				} when 'invite_email_subject' {
-					inviteSubject = value;
-				} when 'invite_email_body' {
-					inviteBody = value;
-				}
-			}
-		}
-		return new Gen.Product(
-			p.status,
-			p.isTrial,
-			p.trialExpires,
-			authUrl,
-			apiUrl,
-			inviteCallbackUrl,
-			inviteRedirectUrl,
-			inviteSubject,
-			inviteBody);
-	}
-
-	@TestVisible
-	private static Gen.Product getGenProduct(
-		final Url provisioningBaseUrl,
-		final UUID accountId,
-		final String accessToken) {
-
-		Gen.Product result = null;
-		for (Product p : ProvisioningAPI.getInstance(provisioningBaseUrl, accountId, accessToken).getProducts()) {
-			if (p != null && p.name == 'gen' && p.properties != null) {
-				result = getGenProduct(p);
-				break;
-			}
-		}
-		return result;
-	}
-
-	public static Boolean addTrialGenProduct() {
-		Permissions.verifyIsDocuSignAdministrator();
-		Gen.Product genProduct = null;
-		Product p = ProvisioningAPI.getInstance().addProduct('gen', true);
-		if (p != null && p.name == 'gen' && p.properties != null) {
-			genProduct = getGenProduct(p);
-			DB.updateSettings(genProduct);
-			return true;
-		}
-		return false;
-	}
-
 	@TestVisible
 	private static List<MetadataService.RemoteSite> getRemoteSites(
 		final DocuSign.Environment environment,
@@ -980,7 +856,7 @@ public with sharing class AuthService {
 		if (DocuSign.isValidUrl(scmApiBaseUrl)) {
 			sites.add(MetadataService.newRemoteSite(
 				environment,
-				'Gen',
+				'API',
 				Label.GenServiceDescription,
 				new Url('https://' + scmApiBaseUrl.getAuthority())));
 		}
@@ -1000,16 +876,19 @@ public with sharing class AuthService {
 		final DocuSign.Environment environment,
 		final Url accountBaseUrl,
 		final Url provisioningBaseUrl,
+		final Url scmAuthBaseUrl,
+		final Url scmApiBaseUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
 		final LoginInformation.Account account,
-		final Gen.Product product,
 		final Credentials.AccessToken token) {
 
 		if (environment == null
 			|| environment == DocuSign.Environment.Invalid
 			|| !DocuSign.isValidUrl(accountBaseUrl)
-			|| !DocuSign.isValidUrl(provisioningBaseUrl)) {
+			|| !DocuSign.isValidUrl(provisioningBaseUrl)
+			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))
+			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
@@ -1023,15 +902,15 @@ public with sharing class AuthService {
 		Url pBaseUrl = canonicalizeBaseUrl(provisioningBaseUrl);
 		Url eSignatureBaseUrl = String.isBlank(account.eSignatureBaseUrl)
 			? null : canonicalizeBaseUrl(new Url(account.eSignatureBaseUrl));
-		Url scmAuthBaseUrl = product == null ? null : canonicalizeBaseUrl(product.authBaseUrl);
-		Url scmApiBaseUrl = product == null ? null : canonicalizeBaseUrl(product.apiBaseUrl);
+		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : canonicalizeBaseUrl(scmAuthBaseUrl);
+		Url sApiBaseUrl = scmApiBaseUrl == null ? null : canonicalizeBaseUrl(scmApiBaseUrl);
 		List<MetadataService.RemoteSite> sites = getRemoteSites(
 			environment,
 			aBaseUrl,
 			pBaseUrl,
 			eSignatureBaseUrl,
-			scmAuthBaseUrl,
-			scmApiBaseUrl);
+			sAuthBaseUrl,
+			sApiBaseUrl);
 		if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 
 		// Get instance credentials and new access token
@@ -1039,12 +918,8 @@ public with sharing class AuthService {
 			.getInstanceCredentials(
 				rootClientId,
 				account.id,
-				product == null ? new List<Url> {
+				new List<Url> {
 					getOAuthRedirectUrl()
-				} : new List<Url> {
-					getOAuthRedirectUrl(),
-					product.inviteRedirectUrl,
-					product.inviteCallbackUrl
 				},
 				token.token);
 		Credentials.AccessToken newToken = getAccessToken(
@@ -1057,7 +932,8 @@ public with sharing class AuthService {
 
 		DB.updateSettings(
 			new AuthService.AccountAPI(eSignatureBaseUrl, account.id, newToken.token).getPermissionProfileIds(),
-			product);
+			sAuthBaseUrl,
+			sApiBaseUrl);
 
 		return Credentials.save(
 			new Credentials.Environment(
@@ -1151,17 +1027,17 @@ public with sharing class AuthService {
 			&& l.loginInformation != null
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
+			// TODO: Verify URLs for Negotiate, CLM
+			GenProduct p = AccountProducts.getInstance().gen;
 			save(
 				rc.environment,
 				rc.accountBaseUrl,
 				rc.provisioningBaseUrl,
+				p == null ? null : p.authBaseUrl,
+				p == null ? null : p.apiBaseUrl,
 				rc.clientId,
 				l.loginInformation,
 				l.loginInformation.accounts[0],
-				getGenProduct(
-					rc.provisioningBaseUrl,
-					l.loginInformation.accounts[0].id,
-					l.token.token),
 				l.token);
 		} else if (l.token != null) { // Multiple accounts. Save root access token for subsequent calls.
 			Credentials.setToken(l.token);
@@ -1306,17 +1182,17 @@ public with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
+		// TODO: Verify URLs for Negotiate, CLM
+		GenProduct p = AccountProducts.getInstance().gen;
 		save(
 			rc.environment,
 			rc.accountBaseUrl,
 			rc.provisioningBaseUrl,
+			p == null ? null : p.authBaseUrl,
+			p == null ? null : p.apiBaseUrl,
 			rc.clientId,
 			result,
 			selected,
-			getGenProduct(
-				rc.provisioningBaseUrl,
-				selected.id,
-				token.token),
 			token);
 
 		return new LoginInformation(

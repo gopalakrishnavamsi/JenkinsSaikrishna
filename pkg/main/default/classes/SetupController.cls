@@ -1,5 +1,7 @@
 public with sharing class SetupController extends Controller {
 
+	private static final Integer USER_LIMIT = 10000;
+
 	@AuraEnabled(Cacheable = true)
 	public static LoginInformation getLogin() {
 		try {
@@ -38,6 +40,7 @@ public with sharing class SetupController extends Controller {
 		final String target,
 		final String environment,
 		final String otherUrl) {
+
 		//since spaces are being replaced with + and this is breaking scopes we will replace + with %20
 		return AuthService.getLoginUrl(
 			target,
@@ -109,36 +112,23 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> addUser(final Id sourceId, final String email, final String firstName,
-		final String lastName, final Boolean canManageAccount) {
+	public static List<Account.User> addUser(
+		final Id sourceId,
+		final String email,
+		final String firstName,
+		final String lastName,
+		final Boolean canManageAccount) {
 
 		try {
-			//commenting out for Beta
-			//Provisioning will be handled based Invite flow
-			/*
-			List<Account.User> users = AccountService.addUsers(new List<Account.User> {
+			if (sourceId == null || String.isBlank(email)) throw new DocuSignException(Label.UndefinedArgument);
+
+			List<Account.User> users = UserService.addUsers(new List<Account.User> {
 				new Account.User(
 					null,
 					sourceId,
 					email,
 					firstName,
 					lastName,
-					null,
-					null,
-					null,
-					canManageAccount,
-					null,
-					APIError.none)
-			});
-			*/
-			List<Account.User> users = UserService.inviteUsers(new List<Account.User> {
-				new Account.User(
-					null,
-					sourceId,
-					email,
-					firstName,
-					lastName,
-					null,
 					null,
 					null,
 					canManageAccount,
@@ -148,21 +138,27 @@ public with sharing class SetupController extends Controller {
 			if (Collection.isNotEmpty(users) && users[0].hasError) {
 				throw new APIException(users[0].error);
 			}
-			return AccountService.getUsers();
+			return UserService.getUsers(USER_LIMIT);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
 		}
 	}
 
 	@AuraEnabled
-	public static List<Account.User> removeUser(final Id sourceId, final String username) {
+	public static List<Account.User> removeUser(
+		final Id sourceId,
+		final String id) {
+
 		try {
-			AccountService.removeUsers(new List<Account.User> {
+			if (sourceId == null || String.isBlank(id)) throw new DocuSignException(Label.UndefinedArgument);
+
+			UserService.removeUsers(new List<Account.User> {
 				new Account.User(
-					UUID.tryParse(username),
+					UUID.parse(id),
 					sourceId)
 			}, true);
-			return AccountService.getUsers();
+
+			return UserService.getUsers(USER_LIMIT);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to remove DocuSign account users.');
 		}
@@ -171,7 +167,7 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static List<Account.User> getUsers() {
 		try {
-			return AccountService.getUsers();
+			return UserService.getUsers(USER_LIMIT);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to read DocuSign account users.');
 		}
@@ -180,7 +176,9 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static User getUser(final Id userId) {
 		try {
-			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> { 'Id', 'Email', 'FirstName', 'LastName' });
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+				'Id', 'Email', 'FirstName', 'LastName'
+			});
 
 			return [SELECT Id, Email, FirstName, LastName FROM User WHERE Id = :userId LIMIT 1];
 		} catch (Exception ex) {
@@ -191,7 +189,7 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled
 	public static Boolean addTrialGen() {
 		try {
-			return AuthService.addTrialGenProduct();
+			return AccountProducts.getInstance().startTrial(Product.GEN) != null;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
 		}

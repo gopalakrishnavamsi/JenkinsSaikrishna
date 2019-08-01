@@ -9,7 +9,7 @@ public class NegotiateProduct extends Product {
 		final Map<String, String> properties) {
 
 		super(
-			Product.NAME_NEGOTIATE,
+			Product.NEGOTIATE,
 			status,
 			isTrial,
 			trialExpires,

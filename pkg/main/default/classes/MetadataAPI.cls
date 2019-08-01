@@ -331,6 +331,8 @@ public class MetadataAPI {
 		public Boolean identityConfirmationOnTwoFactorRegistrationEnabled;
 		public Boolean lockSessionsToDomain;
 		public Boolean lockSessionsToIp;
+		public Boolean lockerServiceCSP;
+		public Boolean lockerServiceFrozenRealm;
 		public String logoutUrl;
 		public Boolean redirectionWarning;
 		public Boolean referrerPolicy;
@@ -360,6 +362,8 @@ public class MetadataAPI {
 		private String[] identityConfirmationOnTwoFactorRegistrationEnabled_type_info = new String[] { 'identityConfirmationOnTwoFactorRegistrationEnabled', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] lockSessionsToDomain_type_info = new String[] { 'lockSessionsToDomain', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] lockSessionsToIp_type_info = new String[] { 'lockSessionsToIp', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] lockerServiceCSP_type_info = new String[] { 'lockerServiceCSP', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] lockerServiceFrozenRealm_type_info = new String[] { 'lockerServiceFrozenRealm', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] logoutUrl_type_info = new String[] { 'logoutUrl', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] redirectionWarning_type_info = new String[] { 'redirectionWarning', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] referrerPolicy_type_info = new String[] { 'referrerPolicy', SOAP_M_URI, null, '0', '1', 'false' };

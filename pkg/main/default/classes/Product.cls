@@ -1,9 +1,9 @@
 public abstract class Product {
 
-	public static final String NAME_ESIGNATURE = 'esign';
-	public static final String NAME_GEN = 'gen';
-	public static final String NAME_NEGOTIATE = 'negotiate';
-	public static final String NAME_CLM = 'clm';
+	public static final String ESIGNATURE = 'e_sign';
+	public static final String GEN = 'gen';
+	public static final String NEGOTIATE = 'negotiate';
+	public static final String CLM = 'clm';
 
 	public static final String STATUS_PENDING = 'pending';
 	public static final String STATUS_ACTIVE = 'active';

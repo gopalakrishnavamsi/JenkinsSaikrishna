@@ -450,18 +450,18 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			MockResponse response = null;
 			if (request.method == 'GET') {
 				response = MockResponse.ok(new Map<String, Object> {
-					'accountSettings' => new List<AccountAPI.Setting> {
-						new AccountAPI.Setting('allowMergeFields', 'true'),
-						new AccountAPI.Setting('sharedCustomTabsEnabled', 'true'),
-						new AccountAPI.Setting('savingCustomTabsEnabled', 'true'),
-						new AccountAPI.Setting('dataFieldRegexEnabled', 'true'),
-						new AccountAPI.Setting('dataFieldSizeEnabled', 'true'),
-						new AccountAPI.Setting('tabTextFormattingEnabled', 'true'),
-						new AccountAPI.Setting('allowSigningGroups', 'true'),
-						new AccountAPI.Setting('tabDataLabelEnabled', 'true'),
-						new AccountAPI.Setting('enableSMSAuthentication', 'true'),
-						new AccountAPI.Setting('allowServerTemplates', 'true'),
-						new AccountAPI.Setting('allowBulkSend', 'true')
+					'accountSettings' => new List<UserAPI.APISetting> {
+						new UserAPI.APISetting('allowMergeFields', 'true'),
+						new UserAPI.APISetting('sharedCustomTabsEnabled', 'true'),
+						new UserAPI.APISetting('savingCustomTabsEnabled', 'true'),
+						new UserAPI.APISetting('dataFieldRegexEnabled', 'true'),
+						new UserAPI.APISetting('dataFieldSizeEnabled', 'true'),
+						new UserAPI.APISetting('tabTextFormattingEnabled', 'true'),
+						new UserAPI.APISetting('allowSigningGroups', 'true'),
+						new UserAPI.APISetting('tabDataLabelEnabled', 'true'),
+						new UserAPI.APISetting('enableSMSAuthentication', 'true'),
+						new UserAPI.APISetting('allowServerTemplates', 'true'),
+						new UserAPI.APISetting('allowBulkSend', 'true')
 					}
 				});
 			}
@@ -796,12 +796,11 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'POST') {
-				AccountAPI.NewUsers nu = (AccountAPI.NewUsers)JSON.deserialize(request.body, AccountAPI.NewUsers.class);
+				UserAPI.NewUsers nu = (UserAPI.NewUsers)JSON.deserialize(request.body, UserAPI.NewUsers.class);
 				if (nu != null && nu.newUsers != null) {
-					for (AccountAPI.APIUser u : nu.newUsers) {
+					for (UserAPI.APIUser u : nu.newUsers) {
 						u.userId = UUID.randomUUID().toString();
 						u.userStatus = 'Pending';
-						u.apiPassword = randomPassword();
 					}
 				}
 				response = MockResponse.created(nu);
