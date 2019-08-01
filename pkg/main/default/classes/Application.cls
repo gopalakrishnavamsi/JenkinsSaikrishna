@@ -3,6 +3,8 @@
  */
 public with sharing class Application {
 
+	@TestVisible
+	private static final Id PACKAGE_ID = '0336A000000R2HG'; // DFS-E package ID
 	private static final String PACKAGE_NAMESPACE = 'dfsle';
 	private static final String ORG_NAMESPACE_PREFIX;
 	private static final String ORG_CLASS_NAMESPACE_PREFIX;
@@ -25,9 +27,7 @@ public with sharing class Application {
 		// HACK: Get managed package version: https://salesforce.stackexchange.com/questions/11049/cant-catch-system-procedureexception-thrown-by-system-requestversion
 		Boolean result = null;
 		try {
-			result = UserInfo.isCurrentUserLicensed(PACKAGE_NAMESPACE);
-			//UserInfo.isCurrentUserLicensed method has been deprecated post API version 45.0
-			//Until we find a workaround for this method please do not update the API version of this Apex class.
+			result = UserInfo.isCurrentUserLicensedForPackage(PACKAGE_ID);
 		} catch (TypeException ex) {
 			// Not managed
 		}

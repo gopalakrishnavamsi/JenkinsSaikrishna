@@ -3,6 +3,5 @@
 	<customObject>true</customObject>
 	<description>DocuSign Gen Templates</description>
 	<icon>DocuSign/AppIcon.png</icon>
-	<mobileReady>false</mobileReady>
 	<motif>Custom67: Gears</motif>
 </CustomTab>
