@@ -226,4 +226,14 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static Boolean externalReviewOnBehalfOfRequest(final String comment, final String newVersionUrl,final String documentId) {
+		try {
+			return NegotiateService.externalReviewCompleteOnBehalf(comment,newVersionUrl != ''?new Url(newVersionUrl):null,UUID.parse(documentId));
+		} catch (Exception ex) {
+			system.debug('ex'+ex.getmessage());
+			throw Controller.wrapException(ex, 'Failed to complete External Review Request');
+		}
+	}
+
 }

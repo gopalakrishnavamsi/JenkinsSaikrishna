@@ -373,17 +373,17 @@
       self.externalReviewResendRequest(thisComponent, self, 'ExternalReview');
     }));
 
-    this.registerEvent('externalReviewCompleteOnBehalf', function () {
+    this.registerEvent('externalReviewCompleteOnBehalf', $A.getCallback(function (event) {
       //show the spinner and fade background
-      thisComponent.set('v.loading', true);
 
+      self.externalReviewOnBehalfOfRequest(thisComponent, self, event);
       //capture event.detail.comments and event.detail.response
 
       //call Apex Action to complete review on behalf of
 
       //reload preview
-      self.reloadPreview(thisComponent);
-    });
+     // self.reloadPreview(thisComponent);
+    }));
 
     this.registerEvent('cancelExternalReview', $A.getCallback(function () {
       self.cancelRequest(thisComponent, self, 'ExternalReview');
@@ -611,6 +611,40 @@
       helper.reloadPreview(component);
     });
     $A.enqueueAction(approvalAction);
+  },
+
+  externalReviewOnBehalfOfRequest: function(component, helper,event){
+    component.set('v.loading', true);
+    var comments = event.detail.comments;
+    var agreement = component.get('v.agreement');
+    if(comments !== null) {
+
+      var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
+      externalReviewOnBehalfOfAction.setParams({
+        comment: comments,
+        newVersionUrl: '',
+        documentId: agreement.id.value
+      });
+      externalReviewOnBehalfOfAction.setCallback(this, function (response) {
+        component.set('v.loading', false);
+        var state = response.getState();
+        alert(state);
+        if (state === 'SUCCESS') {
+          var result = response.getReturnValue();
+          if (result === true) {
+            helper.showToast(component, 'Success', 'success');
+            helper.reloadPreview(component);
+
+          } else {
+            helper.showToast(component, 'Failure', 'error');
+          }
+        }else{
+          helper.showToast(component,'Failure State', 'error');
+        }
+
+      });
+      $A.enqueueAction(externalReviewOnBehalfOfAction);
+    }
   },
 
   showToast: function (component, message, mode) {

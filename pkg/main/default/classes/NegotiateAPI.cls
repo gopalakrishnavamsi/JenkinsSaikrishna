@@ -1332,7 +1332,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Comments' => comments,
-				'UploadedDocuments' => new APIUploadDocuments(newVersionUrl.toExternalForm())
+				'UploadedDocuments' => newVersionUrl != null ? new APIUploadDocuments(newVersionUrl.toExternalForm()) : new APIUploadDocuments('')
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
