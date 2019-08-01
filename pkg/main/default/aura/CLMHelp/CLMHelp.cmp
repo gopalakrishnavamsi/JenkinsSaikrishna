@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+<aura:component>
     <aura:registerEvent name="CLMHelpPrimaryButtonClicked" type="c:CLMHelpCardEvent" />
     <aura:registerEvent name="CLMHelpSecondaryButtonClicked" type="c:CLMHelpCardEvent" />
 
@@ -14,7 +14,8 @@
         <div class="slds-grid">
             <aura:if isTrue="{!v.showIcon}">
                 <div class="slds-m-top_medium slds-p-left_x-large ">
-                    <lightning:icon iconName="{!v.imageURL}" size="large" alternativeText="{!$Label.c.InformationIcon}" />
+                    <lightning:icon iconName="{!v.imageURL}" size="large"
+                        alternativeText="{!$Label.c.InformationIcon}" />
                 </div>
             </aura:if>
             <div class="{! join(' ', 'slds-col slds-size_6-of-12', v.showIcon ? '' : 'slds-p-left_small') }">
@@ -35,9 +36,12 @@
                 <div class="slds-p-left_none slds-p-right_medium slds-float_right">
                     <div class="slds-m-top_small ds-button-height">
                         <aura:if isTrue="{!v.showFirstButton}">
-                            <lightning:button label="{!v.secondButtonName}" iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondayButtonClick}" class="slds-m-right_x-small ds-button-width" />
+                            <lightning:button label="{!v.secondButtonName}" iconName="utility:new_window"
+                                iconPosition="right" onclick="{!c.onSecondayButtonClick}"
+                                class="slds-m-right_x-small ds-button-width" />
                         </aura:if>
-                        <lightning:button variant="brand" label="{!v.buttonName}" title="{!v.buttonName}" onclick="{!c.onPrimaryButtonClick}" class="ds-button-width slds-m-right_small" />
+                        <lightning:button variant="brand" label="{!v.buttonName}" title="{!v.buttonName}"
+                            onclick="{!c.onPrimaryButtonClick}" class="ds-button-width slds-m-right_small" />
                     </div>
                 </div>
             </div>

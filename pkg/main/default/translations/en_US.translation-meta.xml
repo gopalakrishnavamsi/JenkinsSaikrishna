@@ -3690,16 +3690,24 @@
 		<name>DiscoverDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM</label>
+		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a</label>
 		<name>DocGenInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>page to talk about the powerful document generation capabilities of DocuSign CLM.</label>
+		<name>DocGenInfo2</name>
 	</customLabels>
 	<customLabels>
 		<label>Document Generation</label>
 		<name>DocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</label>
+		<label>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.</label>
 		<name>DocusignAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</label>
+		<name>DocusignAgreement2</name>
 	</customLabels>
 	<customLabels>
 		<label>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</label>
@@ -3852,6 +3860,10 @@
 	<customLabels>
 		<label>Run reports and analytics</label>
 		<name>RunReportsAndAnalyticsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</label>
+		<name>MapObjectsSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Select Object</label>

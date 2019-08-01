@@ -91,4 +91,4 @@
       component.set('v.main', '');
     }
   }
-})
+});

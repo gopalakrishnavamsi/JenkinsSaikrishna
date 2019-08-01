@@ -1,6 +1,6 @@
 ({
   fireApplicationEvent: function (component, params, eventName) {
-    var appEvent = $A.get('e.c:' + eventName);
+    var appEvent = $A.get('e.'+component.get('v.namespace')+':' + eventName);
     if (appEvent) {
       appEvent.setParams(params);
       appEvent.fire();
@@ -12,7 +12,6 @@
       setTimeout($A.getCallback(function () {
         toast.close();
       }), 2000);
-
     }
   },
-})
+});

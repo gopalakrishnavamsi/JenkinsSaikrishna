@@ -1335,7 +1335,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Document Generation Info</shortDescription>
-		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM</value>
+		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a</value>
 	</labels>
 	<labels>
 		<fullName>DocuSign</fullName>
@@ -1367,7 +1367,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement</shortDescription>
-		<value>DocuSign Agreements intigrates your Salesforce data smoothly into DocuSign CLM.This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</value>
+		<value>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>Dominica</fullName>
@@ -2785,6 +2785,14 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Map Your Salesforce Objects</shortDescription>
 		<value>MAP YOUR SALESFORCE OBJECTS</value>
+	</labels>
+	<labels>
+		<fullName>MapObjectsSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Map Objects summary</shortDescription>
+		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</value>
 	</labels>
 	<labels>
 		<fullName>MappedObjects</fullName>
@@ -7448,6 +7456,22 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
 		<value>Your Salesforce Objects</value>
+	</labels>
+	<labels>
+		<fullName>DocGenInfo2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Document Generation Info2</shortDescription>
+		<value>page to talk about the powerful document generation capabilities of DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>DocusignAgreement2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Docusign Agreement 2</shortDescription>
+		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidTrialProduct_1</fullName>

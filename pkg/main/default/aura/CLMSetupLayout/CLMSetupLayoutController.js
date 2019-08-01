@@ -12,4 +12,4 @@
       helper.updateUi(component, tabIndex);
     }
   }
-})
+});
