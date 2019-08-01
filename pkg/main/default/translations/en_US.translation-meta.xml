@@ -3997,6 +3997,14 @@
 		<label>Agreement Export failed. Please try again.</label>
 		<name>AgreementExportFailed</name>
 	</customLabels>
+	<customLabels>
+		<label>eSignature enabled</label>
+		<name>ESignatureEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
+		<name>ESignatureEnabledHelp</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

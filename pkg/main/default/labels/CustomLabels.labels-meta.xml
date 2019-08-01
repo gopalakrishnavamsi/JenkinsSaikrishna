@@ -7481,4 +7481,20 @@
 		<shortDescription>Invalid trial product</shortDescription>
 		<value>Cannot initiate a trial for product '{0}'</value>
 	</labels>
+	<labels>
+		<fullName>ESignatureEnabled</fullName>
+		<categories>eSignature</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>eSignature enabled</shortDescription>
+		<value>eSignature enabled</value>
+	</labels>
+	<labels>
+		<fullName>ESignatureEnabledHelp</fullName>
+		<categories>eSignature</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>eSignature enabled help</shortDescription>
+		<value>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</value>
+	</labels>
 </CustomLabels>

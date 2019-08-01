@@ -2,8 +2,11 @@
 private class PostInstall2Test {
 
 	@IsTest
-	static void test_initializeAccountSettings_no_key() {
-		insert AccountSettings__c.getOrgDefaults();
+	static void test_initializeAccountSettings_uninitialized() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.IsESignatureEnabled__c = false;
+		insert s;
+		System.assertNotEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 
 		Test.startTest();
@@ -14,13 +17,15 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, result.getSteps()[0].status);
+		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 	}
 
 	@IsTest
-	static void test_initializeAccountSettings_key_exists() {
+	static void test_initializeAccountSettings_initialized() {
 		String pvk = UUID.randomUUID().toShortString();
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.IsESignatureEnabled__c = true;
 		s.EncryptionKey__c = pvk;
 		insert s;
 
@@ -32,6 +37,7 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
+		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertEquals(pvk, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 	}
 
@@ -56,6 +62,7 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, result.getSteps()[0].status);
+		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 	}
 }
