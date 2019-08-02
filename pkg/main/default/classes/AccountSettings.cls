@@ -42,6 +42,12 @@ public with sharing class AccountSettings {
 	 */
 	@AuraEnabled
 	public UUID systemSenderId { get; private set; }
+	/**
+	 * Whether eSignature functionality is enabled for this package. Set to <code>false</code> if using another
+	 * eSignature product such as DocuSign for Salesforce.
+	 */
+	@AuraEnabled
+	public Boolean isESignatureEnabled { get; private set; }
 
 	public AccountSettings(
 		final Integer calloutTimeout,
@@ -49,7 +55,8 @@ public with sharing class AccountSettings {
 		final List<String> documentResolvers,
 		final List<String> recipientResolvers,
 		final String recipientSearchBehavior,
-		final UUID systemSenderId) {
+		final UUID systemSenderId,
+		final Boolean isESignatureEnabled) {
 
 		this.calloutTimeout = calloutTimeout;
 		this.entityResolvers = entityResolvers;
@@ -57,6 +64,7 @@ public with sharing class AccountSettings {
 		this.recipientResolvers = recipientResolvers;
 		this.recipientSearchBehavior = recipientSearchBehavior;
 		this.systemSenderId = systemSenderId;
+		this.isESignatureEnabled = isESignatureEnabled;
 	}
 
 	public static AccountSettings getInstance() {
@@ -68,7 +76,8 @@ public with sharing class AccountSettings {
 				String.isBlank(s.DocumentResolvers__c) ? new List<String>() : s.DocumentResolvers__c.split(','),
 				String.isBlank(s.RecipientResolvers__c) ? new List<String>() : s.RecipientResolvers__c.split(','),
 				s.RecipientSearchBehavior__c,
-				UUID.tryParse(s.SystemSenderId__c));
+				UUID.tryParse(s.SystemSenderId__c),
+				s.IsESignatureEnabled__c == true);
 		}
 		return self;
 	}
@@ -83,6 +92,7 @@ public with sharing class AccountSettings {
 		s.RecipientResolvers__c = Collection.mkString(settings.recipientResolvers, ',');
 		s.RecipientSearchBehavior__c = settings.recipientSearchBehavior;
 		s.SystemSenderId__c = String.valueOf(settings.systemSenderId);
+		s.IsESignatureEnabled__c = settings.isESignatureEnabled == true;
 		upsert s;
 
 		self = null;

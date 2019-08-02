@@ -143,4 +143,18 @@ public class MetadataAPITest {
 
 		System.assert(true);
 	}
+
+	@IsTest
+	static void test_headers() {
+		Test.startTest();
+		MetadataAPI.Client client = MetadataAPI.getInstance();
+		System.assertNotEquals(null, client);
+		System.assertNotEquals(null, client.SessionHeader);
+		System.assertNotEquals(null, client.SessionHeader.sessionId);
+		System.assertNotEquals(null, client.AllOrNoneHeader);
+		System.assert(client.AllOrNoneHeader.allOrNone);
+		System.assertNotEquals(null, client.CallOptions);
+		System.assertEquals('DocuSign/DocuSignforSalesforce Essentials/', client.CallOptions.client);
+		Test.stopTest();
+	}
 }

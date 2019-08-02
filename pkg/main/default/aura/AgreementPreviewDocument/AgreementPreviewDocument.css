@@ -10,6 +10,6 @@
     color: t(brandAccessible);
 }
 
-.THIS .scmwgt {
-    height: t(ninetyPercentViewPortHeight);
+.THIS .scmwgt__preview_documentViewer {
+    height: 80vh;
 }

@@ -21,7 +21,8 @@ private class AccountSettingsTest {
 			new List<String> { 'dr1', 'dr2' },
 			new List<String> { 'rr1', 'rr2' },
 			'CompoundMatchBeginning',
-			ssId);
+			ssId,
+			false);
 
 		Test.startTest();
 		AccountSettings result1 = AccountSettings.getInstance();
@@ -39,5 +40,6 @@ private class AccountSettingsTest {
 		System.assertEquals(new List<String> { 'rr1', 'rr2' }, result3.recipientResolvers);
 		System.assertEquals(Recipient.SearchBehavior.CompoundMatchBeginning.name(), result3.recipientSearchBehavior);
 		System.assertEquals(ssId, result3.systemSenderId);
+		System.assertEquals(false, result3.isESignatureEnabled);
 	}
 }

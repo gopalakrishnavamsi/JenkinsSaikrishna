@@ -1,11 +1,11 @@
-@IsTest(isParallel = true)
+@IsTest(IsParallel = true)
 private class ApplicationTest {
 
 	@IsTest
 	static void test_isManaged() {
 		Boolean isManaged = false;
 		try {
-			UserInfo.isCurrentUserLicensed('dfsle');
+			UserInfo.isCurrentUserLicensedForPackage(Application.PACKAGE_ID);
 			isManaged = true;
 		} catch (TypeException ex) {
 			// Not managed
