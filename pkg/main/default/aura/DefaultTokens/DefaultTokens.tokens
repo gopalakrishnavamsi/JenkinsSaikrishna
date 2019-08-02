@@ -11,6 +11,12 @@
     <aura:token name="fontSize1" value="0.625rem"/>
     <aura:token name="fontSize2" value="0.75rem"/>
     <aura:token name="fontSize3" value="0.8125rem"/>
+    <aura:token name="fontSize5" value="1rem"/>
+    <aura:token name="fontSize7" value="1.25rem"/>
+
+    <!-- fonts -->
+    <aura:token name="fontFamily" value="Salesforce Sans"/>
+    <aura:token name="fontWeightBold" value="700"/>
 
     <!-- z index overlay -->
     <aura:token name="zIndexOverlay" value="8000"/>
