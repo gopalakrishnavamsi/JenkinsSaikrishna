@@ -24,23 +24,41 @@
         <!-- Header -->
         <div class="strike-wizard__body">
             <div class="slds-container_medium slds-container_center slds-p-horizontal_medium">
+                <!-- begin eSignature settings -->
                 <div class="slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
-                    <label for="system-sender" class="slds-form-element__label">{!$Label.c.SystemSender}</label>
-                    <lightning:helptext content="{!$Label.c.UseSystemSenderHelp}"/>
-                    <lightning:select aura:id="system-sender"
-                                      label="{!$Label.c.SystemSender}"
-                                      variant="label-hidden"
-                                      value="{!v.systemSenderId}">
-                        <option value=""
-                                selected="{!if(empty(v.systemSenderId), 'selected', '')}">{!$Label.c.None}</option>
-                        <aura:iteration items="{!v.availableSystemSenders}" var="ss">
-                            <option value="{!ss.id.value}"
-                                    selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">
-                                {!format($Label.c.AccountDisplay_2, ss.name, ss.email)}}
-                            </option>
-                        </aura:iteration>
-                    </lightning:select>
+                    <div> <!-- begin eSignature enabled -->
+                        <label for="e-signature-enabled"
+                               class="slds-form-element__label">{!$Label.c.ESignatureEnabled}</label>
+                        <lightning:helptext content="{!$Label.c.ESignatureEnabledHelp}"/>
+                        <lightning:input aura:id="e-signature-enabled"
+                                         type="toggle"
+                                         label=""
+                                         variant="label-hidden"
+                                         checked="{!v.settings.isESignatureEnabled}"
+                                         messageToggleActive="{!$Label.c.Enabled}"
+                                         messageToggleInactive="{!$Label.c.Disabled}"/>
+                    </div> <!-- end eSignature enabled -->
+                    <aura:if isTrue="{!and(not(empty(v.settings)), v.settings.isESignatureEnabled)}">
+                        <div> <!-- begin system sender -->
+                            <label for="system-sender" class="slds-form-element__label">{!$Label.c.SystemSender}</label>
+                            <lightning:helptext content="{!$Label.c.UseSystemSenderHelp}"/>
+                            <lightning:select aura:id="system-sender"
+                                              label="{!$Label.c.SystemSender}"
+                                              variant="label-hidden"
+                                              value="{!v.systemSenderId}">
+                                <option value=""
+                                        selected="{!if(empty(v.systemSenderId), 'selected', '')}">{!$Label.c.None}</option>
+                                <aura:iteration items="{!v.availableSystemSenders}" var="ss">
+                                    <option value="{!ss.id.value}"
+                                            selected="{!if(equals(v.systemSenderId, ss.id.value), 'selected', '')}">
+                                        {!format($Label.c.AccountDisplay_2, ss.name, ss.email)}}
+                                    </option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div> <!-- end system sender -->
+                    </aura:if>
                 </div>
+                <!-- end eSignature settings -->
             </div>
         </div>
 

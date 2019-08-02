@@ -212,7 +212,8 @@ public class AccountServiceTest {
 				new List<String> { 'dr1', 'dr2' },
 				new List<String> { 'rr1', 'rr2' },
 				'CompoundMatchBeginning',
-				ssId);
+				ssId,
+				true);
 
 			Test.startTest();
 			AccountSettings result = AccountService.saveSettings(s);
