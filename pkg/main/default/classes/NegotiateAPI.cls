@@ -1321,8 +1321,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	public Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID externalReviewId) {
-		// add else part
-
+        Map<String, Object> requestParameters = new Map<String, Object>();
+        if(comments != null){
+         requestParameters.put('Comment',comments);
+        }
+        if(newVersionUrl != null){
+         requestParameters.put('UploadedDocuments', new APIUploadDocuments(newVersionUrl.toExternalForm()));
+        }
 		final RestAPI.Response response = put(
 			getBaseUrl(),
 			new List<Object> {
@@ -1330,10 +1335,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			},
 			QueryString.empty,
 			getDefaultHeaders(),
-			JSON.serialize(new Map<String, Object> {
-				'Comments' => comments,
-				'UploadedDocuments' => newVersionUrl != null ? new APIUploadDocuments(newVersionUrl.toExternalForm()) : new APIUploadDocuments('')
-			}),
+			JSON.serialize(requestParameters),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed external review on Behalf for externalReviewId: ' + externalReviewId + ': ' + response.error);

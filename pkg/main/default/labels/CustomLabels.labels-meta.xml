@@ -6332,6 +6332,20 @@
 		<value>Agreement Export failed. Please try again.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementExternalReviewSucess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExternalReviewSucess</shortDescription>
+		<value>Agreement has been successfully reviewed.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExternalReviewFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExternalReviewFailed</shortDescription>
+		<value>Agreement review has been failed. Please try again.</value>
+   </labels>
+	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

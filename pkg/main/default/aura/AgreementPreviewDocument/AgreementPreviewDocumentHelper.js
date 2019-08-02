@@ -65,7 +65,7 @@
             component.get('v.currentUserDocuSignAdmin'),
             isCurrentUserLatestActor,
             isCurrentUserRecipientForApproval
-          );
+        );
           component.set('v.widget', widget);
         })
         .catch(function (err) {
@@ -88,7 +88,8 @@
                 return self.getAccessToken(component, uiHelper, sourceId, false);
               },
               uploadApiBaseDomain: token.apiUploadBaseUrl,
-              downloadApiBaseDomain: token.apiDownloadBaseUrl
+              downloadApiBaseDomain: token.apiDownloadBaseUrl,
+              accountId: token.accountId.value
             })
           );
         })
@@ -366,6 +367,7 @@
   externalReviewSenderView: function (component, widget, inProgress) {
     var thisComponent = component;
     var self = this;
+    var agreement = component.get('v.agreement');
 
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
@@ -374,15 +376,7 @@
     }));
 
     this.registerEvent('externalReviewCompleteOnBehalf', $A.getCallback(function (event) {
-      //show the spinner and fade background
-
       self.externalReviewOnBehalfOfRequest(thisComponent, self, event);
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to complete review on behalf of
-
-      //reload preview
-     // self.reloadPreview(thisComponent);
     }));
 
     this.registerEvent('cancelExternalReview', $A.getCallback(function () {
@@ -394,6 +388,7 @@
       showCompleteExternalReview: inProgress,
       showCancel: inProgress,
       showResendRequest: inProgress,
+      documentUid: agreement.id.value
     });
     return widget;
   },
@@ -616,8 +611,8 @@
   externalReviewOnBehalfOfRequest: function(component, helper,event){
     component.set('v.loading', true);
     var comments = event.detail.comments;
-    var agreement = component.get('v.agreement');
     if(comments !== null) {
+      var agreement = component.get('v.agreement');
 
       var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
       externalReviewOnBehalfOfAction.setParams({
@@ -628,23 +623,22 @@
       externalReviewOnBehalfOfAction.setCallback(this, function (response) {
         component.set('v.loading', false);
         var state = response.getState();
-        alert(state);
         if (state === 'SUCCESS') {
           var result = response.getReturnValue();
           if (result === true) {
-            helper.showToast(component, 'Success', 'success');
+            helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewSucess'), 'success');
             helper.reloadPreview(component);
-
           } else {
-            helper.showToast(component, 'Failure', 'error');
+            helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewFailed'), 'error');
           }
-        }else{
-          helper.showToast(component,'Failure State', 'error');
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewFailed'), 'error');
         }
 
       });
       $A.enqueueAction(externalReviewOnBehalfOfAction);
     }
+
   },
 
   showToast: function (component, message, mode) {

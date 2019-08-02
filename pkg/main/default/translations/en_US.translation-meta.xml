@@ -4005,6 +4005,14 @@
 		<label>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
+	<customLabels>
+		<label>Agreement has been successfully reviewed.</label>
+		<name>AgreementExternalReviewSucess</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement review has been failed. Please try again.</label>
+		<name>AgreementExternalReviewFailed</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
