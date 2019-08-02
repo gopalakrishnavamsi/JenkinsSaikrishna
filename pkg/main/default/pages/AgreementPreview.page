@@ -3,9 +3,8 @@
     <apex:slds/>
     <style type="text/css">
         #appContainer {
-            min-height: 100vh;
             background-color: #f7f9fb;
-            position: fixed;
+            position: absolute;
         }
 
         .noSidebarCell #appContainer {
