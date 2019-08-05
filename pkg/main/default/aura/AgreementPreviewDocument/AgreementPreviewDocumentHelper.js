@@ -609,9 +609,10 @@
   },
 
   externalReviewOnBehalfOfRequest: function(component, helper,event){
-    component.set('v.loading', true);
     var comments = event.detail.comments;
+
     if(comments !== null) {
+      component.set('v.loading', true);
       var agreement = component.get('v.agreement');
 
       var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
