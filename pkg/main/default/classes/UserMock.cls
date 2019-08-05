@@ -16,7 +16,7 @@ global class UserMock {
 	 * DocuSign for Salesforce administrative methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
 	 *
 	 * Example:
 	 * <pre>
@@ -57,7 +57,7 @@ global class UserMock {
 	 * most DocuSign for Salesforce methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
 	 *
 	 * Example:
 	 * <pre>
@@ -98,7 +98,7 @@ global class UserMock {
 	 * DocuSign for Salesforce methods that create, send, or sign envelopes.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
 	 *
 	 * Example:
 	 * <pre>
@@ -133,7 +133,7 @@ global class UserMock {
 	 * for DocuSign for Salesforce methods that generate documents.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
 	 *
 	 * Example:
 	 * <pre>
@@ -168,7 +168,7 @@ global class UserMock {
 	 * for DocuSign for Salesforce methods that negotiate documents.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
-	 * and it may not be combined with any other <code>dfsle.UserMock.createDocuSign*</code> method.
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
 	 *
 	 * Example:
 	 * <pre>
@@ -198,7 +198,112 @@ global class UserMock {
 		return u;
 	}
 
-	private static User getAdministrator() {
+	/**
+	 * Creates a user and assigns the <code>CLM Administrator</code> permission set for unit tests. This may be used
+	 * for DocuSign CLM methods that require administrative access.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createClmAdministrator()) {
+	 *     // Call service method requiring the CLM Administrator permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the CLM Administrator permission set.
+	 */
+	public static User createClmAdministrator() {
+		return createClmAdministrator(true);
+	}
+
+	public static User createClmAdministrator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignClmAdministratorPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>CLM Subscriber</code> permission set for unit tests. This may be used
+	 * for DocuSign CLM methods that require subscriber access.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createClmSubscriber()) {
+	 *     // Call service method requiring the CLM Subscriber permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the CLM Subscriber permission set.
+	 */
+	public static User createClmSubscriber() {
+		return createClmSubscriber(true);
+	}
+
+	public static User createClmSubscriber(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignClmSubscriberPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	/**
+	 * Creates a user and assigns the <code>CLM Guest</code> permission set for unit tests. This may be used
+	 * for DocuSign CLM methods that require administrative access.
+	 * <p>
+	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
+	 *
+	 * Example:
+	 * <pre>
+	 * static testMethod void myTest() {
+	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+	 *   System.runAs(dfsle.UserMock.createClmGuest()) {
+	 *     // Call service method requiring the CLM Guest permission set.
+	 *   }
+	 * }
+	 * </pre>
+	 * @return A user with the CLM Guest permission set.
+	 */
+	public static User createClmGuest() {
+		return createClmGuest(true);
+	}
+
+	public static User createClmGuest(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignClmGuestPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
+	public static User getAdministrator() {
 		if (administrator == null) {
 			administrator = createAdministrator();
 		}

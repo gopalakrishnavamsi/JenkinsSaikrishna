@@ -851,74 +851,47 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_assignDocuSignNegotiatorPermissionSet() {
-		final User testUser = UserMock.createUser();
+	static void test_getClmAdministratorPermissionSetId() {
+		Id id = [
+			SELECT Id
+			FROM PermissionSet
+			WHERE Name = :Permissions.CLM_ADMINISTRATOR
+			AND NamespacePrefix = :Application.packageNamespace
+			LIMIT 1
+		].Id;
 
 		Test.startTest();
-		// Verify the user doesn't have the permission set before assigning
-		System.assert(!Permissions.isDocuSignNegotiator(testUser.Id));
-		// Assign permission set to user
-		System.assert(Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user has the permission set before assigning
-		System.assert(Permissions.isDocuSignNegotiator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignNegotiatorPermissionSet(null));
+		System.assertEquals(id, Permissions.getClmAdministratorPermissionSetId());
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignGeneratorPermissionSet() {
-		final User testUser = UserMock.createUser();
+	static void test_getClmSubscriberPermissionSetId() {
+		Id id = [
+			SELECT Id
+			FROM PermissionSet
+			WHERE Name = :Permissions.CLM_SUBSCRIBER
+			AND NamespacePrefix = :Application.packageNamespace
+			LIMIT 1
+		].Id;
 
 		Test.startTest();
-		// Verify the user doesn't have the permission set before assigning
-		System.assert(!Permissions.isDocuSignGenerator(testUser.Id));
-		// Assign permission set to user
-		System.assert(Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user has the permission set before assigning
-		System.assert(Permissions.isDocuSignGenerator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignGeneratorPermissionSet(null));
+		System.assertEquals(id, Permissions.getClmSubscriberPermissionSetId());
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignSenderPermissionSet() {
-		final User testUser = UserMock.createUser();
+	static void test_getClmGuestPermissionSetId() {
+		Id id = [
+			SELECT Id
+			FROM PermissionSet
+			WHERE Name = :Permissions.CLM_GUEST
+			AND NamespacePrefix = :Application.packageNamespace
+			LIMIT 1
+		].Id;
 
 		Test.startTest();
-		// Verify the user doesn't have the permission set before assigning
-		System.assert(!Permissions.isDocuSignSender(testUser.Id));
-		System.assert(!Permissions.isDocuSignUser(testUser.Id));
-		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Assign docusign user permission set to user
-		System.assert(Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user has the permission set before assigning
-		System.assert(Permissions.isDocuSignSender(testUser.Id));
-		System.assert(!Permissions.isDocuSignUser(testUser.Id));
-		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignSenderPermissionSet(null));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_assignDocuSignUserPermissionSet() {
-		final User testUser = UserMock.createUser();
-
-		Test.startTest();
-		// Verify the user doesn't have the permission set before assigning
-		System.assert(!Permissions.isDocuSignSender(testUser.Id));
-		System.assert(!Permissions.isDocuSignUser(testUser.Id));
-		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Assign docusign user permission set to user
-		System.assert(Permissions.assignDocuSignUserPermissionSet(new Set<Id> { testUser.Id }));
-		// Verify the user has the permission set before assigning
-		System.assert(Permissions.isDocuSignSender(testUser.Id));
-		System.assert(Permissions.isDocuSignUser(testUser.Id));
-		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignUserPermissionSet(null));
+		System.assertEquals(id, Permissions.getClmGuestPermissionSetId());
 		Test.stopTest();
 	}
 
@@ -943,12 +916,148 @@ private class PermissionsTest {
 	}
 
 	@IsTest
+	static void test_assignDocuSignUserPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Assign docusign user permission set to user
+		System.assert(Permissions.assignDocuSignUserPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignSender(testUser.Id));
+		System.assert(Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignDocuSignUserPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignDocuSignSenderPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Assign docusign user permission set to user
+		System.assert(Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignSender(testUser.Id));
+		System.assert(!Permissions.isDocuSignUser(testUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignDocuSignSenderPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignDocuSignGeneratorPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignGenerator(testUser.Id));
+		// Assign permission set to user
+		System.assert(Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignGenerator(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignDocuSignGeneratorPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignDocuSignNegotiatorPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isDocuSignNegotiator(testUser.Id));
+		// Assign permission set to user
+		System.assert(Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set before assigning
+		System.assert(Permissions.isDocuSignNegotiator(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignDocuSignNegotiatorPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignClmAdministratorPermissionSet() {
+		User testUser = UserMock.createUser();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isClmAdministrator(testUser.Id));
+		System.assert(!Permissions.isClmSubscriber(testUser.Id));
+		System.assert(!Permissions.isClmGuest(testUser.Id));
+
+		Test.startTest();
+		// Assign permission set to user
+		System.assert(Permissions.assignClmAdministratorPermissionSet(new Set<Id> { testUser.Id }));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignClmAdministratorPermissionSet(null));
+		Test.stopTest();
+
+		// Verify the user has the permission set after assignment
+		System.assert(Permissions.isClmAdministrator(testUser.Id));
+		System.assert(Permissions.isClmSubscriber(testUser.Id));
+		System.assert(Permissions.isClmGuest(testUser.Id));
+	}
+
+	@IsTest
+	static void test_assignClmSubscriberPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isClmAdministrator(testUser.Id));
+		System.assert(!Permissions.isClmSubscriber(testUser.Id));
+		System.assert(!Permissions.isClmGuest(testUser.Id));
+		// Assign permission set to user
+		System.assert(Permissions.assignClmSubscriberPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set after assignment
+		System.assert(!Permissions.isClmAdministrator(testUser.Id));
+		System.assert(Permissions.isClmSubscriber(testUser.Id));
+		System.assert(Permissions.isClmGuest(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignClmSubscriberPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_assignClmGuestPermissionSet() {
+		final User testUser = UserMock.createUser();
+
+		Test.startTest();
+		// Verify the user doesn't have the permission set before assigning
+		System.assert(!Permissions.isClmAdministrator(testUser.Id));
+		System.assert(!Permissions.isClmSubscriber(testUser.Id));
+		System.assert(!Permissions.isClmGuest(testUser.Id));
+		// Assign permission set to user
+		System.assert(Permissions.assignClmGuestPermissionSet(new Set<Id> { testUser.Id }));
+		// Verify the user has the permission set after assignment
+		System.assert(!Permissions.isClmAdministrator(testUser.Id));
+		System.assert(!Permissions.isClmSubscriber(testUser.Id));
+		System.assert(Permissions.isClmGuest(testUser.Id));
+		// Make sure it handles invalid inputs
+		System.assert(!Permissions.assignClmGuestPermissionSet(null));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_removeDocuSignPermissionSets() {
 		User dsSender = UserMock.createDocuSignSender(false);
 		User dsUser = UserMock.createDocuSignUser(false);
 		User dsAdmin = UserMock.createDocuSignAdministrator(false);
 		User dsGenerator = UserMock.createDocuSignGenerator(false);
 		User dsNegotiator = UserMock.createDocuSignNegotiator(false);
+		User clmAdmin = UserMock.createClmAdministrator(false);
+		User clmSub = UserMock.createClmSubscriber(false);
+		User clmGuest = UserMock.createClmGuest(false);
 		User nonDocuSignUser = UserMock.createUser();
 
 		System.assert(Permissions.isDocuSignSender(dsSender.Id));
@@ -965,10 +1074,23 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
 		System.assert(Permissions.isDocuSignGenerator(dsGenerator.Id));
 		System.assert(Permissions.isDocuSignNegotiator(dsNegotiator.Id));
+		System.assert(Permissions.isClmAdministrator(clmAdmin.Id));
+		System.assert(Permissions.isClmSubscriber(clmAdmin.Id));
+		System.assert(Permissions.isClmGuest(clmAdmin.Id));
+		System.assert(!Permissions.isClmAdministrator(clmSub.Id));
+		System.assert(Permissions.isClmSubscriber(clmSub.Id));
+		System.assert(Permissions.isClmGuest(clmSub.Id));
+		System.assert(!Permissions.isClmAdministrator(clmGuest.Id));
+		System.assert(!Permissions.isClmSubscriber(clmGuest.Id));
+		System.assert(Permissions.isClmGuest(clmGuest.Id));
 
 		Test.startTest();
 		Boolean result = Permissions.removeDocuSignPermissionSets(new Set<Id> {
-			dsSender.Id, dsUser.Id, dsAdmin.Id, dsGenerator.Id, dsNegotiator.Id, nonDocuSignUser.Id
+			dsSender.Id, dsUser.Id, dsAdmin.Id,
+			dsGenerator.Id,
+			dsNegotiator.Id,
+			clmAdmin.Id, clmSub.Id, clmGuest.Id,
+			nonDocuSignUser.Id
 		});
 		Test.stopTest();
 
@@ -984,205 +1106,18 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignAdministrator(dsAdmin.Id));
 		System.assert(!Permissions.isDocuSignGenerator(dsGenerator.Id));
 		System.assert(!Permissions.isDocuSignNegotiator(dsNegotiator.Id));
+		System.assert(!Permissions.isClmAdministrator(clmAdmin.Id));
+		System.assert(!Permissions.isClmSubscriber(clmAdmin.Id));
+		System.assert(!Permissions.isClmGuest(clmAdmin.Id));
+		System.assert(!Permissions.isClmAdministrator(clmSub.Id));
+		System.assert(!Permissions.isClmSubscriber(clmSub.Id));
+		System.assert(!Permissions.isClmGuest(clmSub.Id));
+		System.assert(!Permissions.isClmAdministrator(clmGuest.Id));
+		System.assert(!Permissions.isClmSubscriber(clmGuest.Id));
+		System.assert(!Permissions.isClmGuest(clmGuest.Id));
 		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(nonDocuSignUser.Id));
-	}
-
-	@IsTest
-	static void test_isDocuSignNegotiator() {
-		final User nonDocuSignUser = UserMock.createUser();
-		final User dsNegotiator = UserMock.createDocuSignNegotiator(false);
-
-		Test.startTest();
-		System.assert(!Permissions.isDocuSignNegotiator(null));
-		System.assert(!Permissions.isDocuSignNegotiator(nonDocuSignUser.Id));
-		System.assert(Permissions.isDocuSignNegotiator(dsNegotiator.Id));
-		Permissions.verifyIsDocuSignNegotiator(dsNegotiator.Id);
-		System.runAs(dsNegotiator) {
-			System.assert(Permissions.isDocuSignNegotiator());
-			Permissions.verifyIsDocuSignNegotiator();
-		}
-		System.runAs(nonDocuSignUser) {
-			try {
-				System.assert(!Permissions.isDocuSignNegotiator());
-				Permissions.verifyIsDocuSignNegotiator();
-				throw new AssertException('Expected UnauthorizedException');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
-			}
-		}
-		try {
-			Permissions.verifyIsDocuSignNegotiator(null);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
-		}
-		try {
-			Permissions.verifyIsDocuSignNegotiator(nonDocuSignUser.Id);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
-		}
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_isDocuSignGenerator() {
-		final User nonDocuSignUser = UserMock.createUser();
-		final User dsGenerator = UserMock.createDocuSignGenerator(false);
-
-		Test.startTest();
-		System.assert(!Permissions.isDocuSignGenerator(null));
-		System.assert(!Permissions.isDocuSignGenerator(nonDocuSignUser.Id));
-		System.assert(Permissions.isDocuSignGenerator(dsGenerator.Id));
-		Permissions.verifyIsDocuSignGenerator(dsGenerator.Id);
-		System.runAs(dsGenerator) {
-			System.assert(Permissions.isDocuSignGenerator());
-			Permissions.verifyIsDocuSignGenerator();
-		}
-		System.runAs(nonDocuSignUser) {
-			try {
-				System.assert(!Permissions.isDocuSignGenerator());
-				Permissions.verifyIsDocuSignGenerator();
-				throw new AssertException('Expected UnauthorizedException');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-			}
-		}
-		try {
-			Permissions.verifyIsDocuSignGenerator(null);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-		}
-		try {
-			Permissions.verifyIsDocuSignGenerator(nonDocuSignUser.Id);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-		}
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_isDocuSignSender() {
-		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
-		// 3) user DocuSign permission set, 4) admin DocuSign permission set
-		// Verify only users #2, #3, and #4 are DocuSign users
-		final User nonDocuSignUser = UserMock.createUser();
-		final User dsSender = UserMock.createDocuSignSender(false);
-		final User dsUser = UserMock.createDocuSignUser(false);
-		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
-
-		Test.startTest();
-		System.assert(!Permissions.isDocuSignSender(null));
-		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
-		System.assert(Permissions.isDocuSignSender(dsSender.Id));
-		System.assert(Permissions.isDocuSignSender(dsUser.Id));
-		System.assert(Permissions.isDocuSignSender(dsAdmin.Id));
-		Permissions.verifyIsDocuSignSender(dsSender.Id);
-		Permissions.verifyIsDocuSignSender(dsUser.Id);
-		Permissions.verifyIsDocuSignSender(dsAdmin.Id);
-		System.runAs(dsSender) {
-			System.assert(Permissions.isDocuSignSender());
-			Permissions.verifyIsDocuSignSender();
-		}
-		System.runAs(dsUser) {
-			System.assert(Permissions.isDocuSignSender());
-			Permissions.verifyIsDocuSignSender();
-		}
-		System.runAs(dsAdmin) {
-			System.assert(Permissions.isDocuSignSender());
-			Permissions.verifyIsDocuSignSender();
-		}
-		System.runAs(nonDocuSignUser) {
-			try {
-				System.assert(!Permissions.isDocuSignUser());
-				Permissions.verifyIsDocuSignSender();
-				throw new AssertException('Expected UnauthorizedException');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
-			}
-		}
-		try {
-			Permissions.verifyIsDocuSignSender(null);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
-		}
-		try {
-			Permissions.verifyIsDocuSignSender(nonDocuSignUser.Id);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
-		}
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_isDocuSignUser() {
-		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
-		// 3) user DocuSign permission set, 4) admin DocuSign permission set
-		// Verify only users #3 and #4 are DocuSign users
-		final User nonDocuSignUser = UserMock.createUser();
-		final User dsSender = UserMock.createDocuSignSender(false);
-		final User dsUser = UserMock.createDocuSignUser(false);
-		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
-
-		Test.startTest();
-		System.assert(!Permissions.isDocuSignUser(null));
-		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
-		System.assert(!Permissions.isDocuSignUser(dsSender.Id));
-		System.assert(Permissions.isDocuSignUser(dsUser.Id));
-		System.assert(Permissions.isDocuSignUser(dsAdmin.Id));
-		try {
-			Permissions.verifyIsDocuSignUser(dsSender.Id);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-		}
-		Permissions.verifyIsDocuSignUser(dsUser.Id);
-		Permissions.verifyIsDocuSignUser(dsAdmin.Id);
-		System.runAs(dsSender) {
-			try {
-				System.assert(!Permissions.isDocuSignUser());
-				Permissions.verifyIsDocuSignUser();
-				throw new AssertException('Expected UnauthorizedException');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-		}
-		System.runAs(dsUser) {
-			System.assert(Permissions.isDocuSignUser());
-			Permissions.verifyIsDocuSignUser();
-		}
-		System.runAs(dsAdmin) {
-			System.assert(Permissions.isDocuSignUser());
-			Permissions.verifyIsDocuSignUser();
-		}
-		System.runAs(nonDocuSignUser) {
-			try {
-				System.assert(!Permissions.isDocuSignUser());
-				Permissions.verifyIsDocuSignUser();
-				throw new AssertException('Expected UnauthorizedException');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-		}
-		try {
-			Permissions.verifyIsDocuSignUser(null);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-		}
-		try {
-			Permissions.verifyIsDocuSignUser(nonDocuSignUser.Id);
-			throw new AssertException('Expected UnauthorizedException');
-		} catch (UnauthorizedException ex) {
-			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-		}
-		Test.stopTest();
 	}
 
 	@IsTest
@@ -1256,6 +1191,385 @@ private class PermissionsTest {
 			throw new AssertException('Expected UnauthorizedException');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isDocuSignUser() {
+		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
+		// 3) user DocuSign permission set, 4) admin DocuSign permission set
+		// Verify only users #3 and #4 are DocuSign users
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsSender = UserMock.createDocuSignSender(false);
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isDocuSignUser(null));
+		System.assert(!Permissions.isDocuSignUser(nonDocuSignUser.Id));
+		System.assert(!Permissions.isDocuSignUser(dsSender.Id));
+		System.assert(Permissions.isDocuSignUser(dsUser.Id));
+		System.assert(Permissions.isDocuSignUser(dsAdmin.Id));
+		try {
+			Permissions.verifyIsDocuSignUser(dsSender.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+		}
+		Permissions.verifyIsDocuSignUser(dsUser.Id);
+		Permissions.verifyIsDocuSignUser(dsAdmin.Id);
+		System.runAs(dsSender) {
+			try {
+				System.assert(!Permissions.isDocuSignUser());
+				Permissions.verifyIsDocuSignUser();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+		}
+		System.runAs(dsUser) {
+			System.assert(Permissions.isDocuSignUser());
+			Permissions.verifyIsDocuSignUser();
+		}
+		System.runAs(dsAdmin) {
+			System.assert(Permissions.isDocuSignUser());
+			Permissions.verifyIsDocuSignUser();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isDocuSignUser());
+				Permissions.verifyIsDocuSignUser();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsDocuSignUser(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsDocuSignUser(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isDocuSignSender() {
+		// Create 4 users: 1) no DocuSign permission set, 2) sender DocuSign permission set,
+		// 3) user DocuSign permission set, 4) admin DocuSign permission set
+		// Verify only users #2, #3, and #4 are DocuSign users
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsSender = UserMock.createDocuSignSender(false);
+		final User dsUser = UserMock.createDocuSignUser(false);
+		final User dsAdmin = UserMock.createDocuSignAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isDocuSignSender(null));
+		System.assert(!Permissions.isDocuSignSender(nonDocuSignUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsSender.Id));
+		System.assert(Permissions.isDocuSignSender(dsUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsAdmin.Id));
+		Permissions.verifyIsDocuSignSender(dsSender.Id);
+		Permissions.verifyIsDocuSignSender(dsUser.Id);
+		Permissions.verifyIsDocuSignSender(dsAdmin.Id);
+		System.runAs(dsSender) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(dsUser) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(dsAdmin) {
+			System.assert(Permissions.isDocuSignSender());
+			Permissions.verifyIsDocuSignSender();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isDocuSignUser());
+				Permissions.verifyIsDocuSignSender();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsDocuSignSender(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsDocuSignSender(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isDocuSignGenerator() {
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsGenerator = UserMock.createDocuSignGenerator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isDocuSignGenerator(null));
+		System.assert(!Permissions.isDocuSignGenerator(nonDocuSignUser.Id));
+		System.assert(Permissions.isDocuSignGenerator(dsGenerator.Id));
+		Permissions.verifyIsDocuSignGenerator(dsGenerator.Id);
+		System.runAs(dsGenerator) {
+			System.assert(Permissions.isDocuSignGenerator());
+			Permissions.verifyIsDocuSignGenerator();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isDocuSignGenerator());
+				Permissions.verifyIsDocuSignGenerator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsDocuSignGenerator(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsDocuSignGenerator(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isDocuSignNegotiator() {
+		final User nonDocuSignUser = UserMock.createUser();
+		final User dsNegotiator = UserMock.createDocuSignNegotiator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isDocuSignNegotiator(null));
+		System.assert(!Permissions.isDocuSignNegotiator(nonDocuSignUser.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsNegotiator.Id));
+		Permissions.verifyIsDocuSignNegotiator(dsNegotiator.Id);
+		System.runAs(dsNegotiator) {
+			System.assert(Permissions.isDocuSignNegotiator());
+			Permissions.verifyIsDocuSignNegotiator();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isDocuSignNegotiator());
+				Permissions.verifyIsDocuSignNegotiator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsDocuSignNegotiator(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsDocuSignNegotiator(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isClmAdministrator() {
+		User nonDocuSignUser = UserMock.createUser();
+		User clmGuest = UserMock.createClmGuest(false);
+		User clmSub = UserMock.createClmSubscriber(false);
+		User clmAdmin = UserMock.createClmAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isClmAdministrator(null));
+		System.assert(!Permissions.isClmAdministrator(nonDocuSignUser.Id));
+		System.assert(!Permissions.isClmAdministrator(clmGuest.Id));
+		System.assert(!Permissions.isClmAdministrator(clmSub.Id));
+		System.assert(Permissions.isClmAdministrator(clmAdmin.Id));
+		Permissions.verifyIsClmAdministrator(clmAdmin.Id);
+		System.runAs(clmAdmin) {
+			System.assert(Permissions.isClmAdministrator());
+			Permissions.verifyIsClmAdministrator();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isClmAdministrator());
+				Permissions.verifyIsClmAdministrator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+			}
+		}
+		System.runAs(clmSub) {
+			try {
+				System.assert(!Permissions.isClmAdministrator());
+				Permissions.verifyIsClmAdministrator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+			}
+		}
+		System.runAs(clmGuest) {
+			try {
+				System.assert(!Permissions.isClmAdministrator());
+				Permissions.verifyIsClmAdministrator();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsClmAdministrator(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmAdministrator(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmAdministrator(clmGuest.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmAdministrator(clmSub.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isClmSubscriber() {
+		User nonDocuSignUser = UserMock.createUser();
+		User clmGuest = UserMock.createClmGuest(false);
+		User clmSub = UserMock.createClmSubscriber(false);
+		User clmAdmin = UserMock.createClmAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isClmSubscriber(null));
+		System.assert(!Permissions.isClmSubscriber(nonDocuSignUser.Id));
+		System.assert(!Permissions.isClmSubscriber(clmGuest.Id));
+		System.assert(Permissions.isClmSubscriber(clmSub.Id));
+		System.assert(Permissions.isClmSubscriber(clmAdmin.Id));
+		Permissions.verifyIsClmSubscriber(clmSub.Id);
+		System.runAs(clmAdmin) {
+			System.assert(Permissions.isClmSubscriber());
+			Permissions.verifyIsClmSubscriber();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isClmSubscriber());
+				Permissions.verifyIsClmSubscriber();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmSubscriber, ex.getMessage());
+			}
+		}
+		System.runAs(clmSub) {
+			System.assert(Permissions.isClmSubscriber());
+			Permissions.verifyIsClmSubscriber();
+		}
+		System.runAs(clmGuest) {
+			try {
+				System.assert(!Permissions.isClmSubscriber());
+				Permissions.verifyIsClmSubscriber();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmSubscriber, ex.getMessage());
+			}
+		}
+		try {
+			Permissions.verifyIsClmSubscriber(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmSubscriber, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmSubscriber(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmSubscriber, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmSubscriber(clmGuest.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmSubscriber, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isClmGuest() {
+		User nonDocuSignUser = UserMock.createUser();
+		User clmGuest = UserMock.createClmGuest(false);
+		User clmSub = UserMock.createClmSubscriber(false);
+		User clmAdmin = UserMock.createClmAdministrator(false);
+
+		Test.startTest();
+		System.assert(!Permissions.isClmGuest(null));
+		System.assert(!Permissions.isClmGuest(nonDocuSignUser.Id));
+		System.assert(Permissions.isClmGuest(clmGuest.Id));
+		System.assert(Permissions.isClmSubscriber(clmSub.Id));
+		System.assert(Permissions.isClmSubscriber(clmAdmin.Id));
+		Permissions.verifyIsClmGuest(clmGuest.Id);
+		System.runAs(clmAdmin) {
+			System.assert(Permissions.isClmGuest());
+			Permissions.verifyIsClmGuest();
+		}
+		System.runAs(nonDocuSignUser) {
+			try {
+				System.assert(!Permissions.isClmGuest());
+				Permissions.verifyIsClmGuest();
+				throw new AssertException('Expected UnauthorizedException');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeClmGuest, ex.getMessage());
+			}
+		}
+		System.runAs(clmSub) {
+			System.assert(Permissions.isClmGuest());
+			Permissions.verifyIsClmGuest();
+		}
+		System.runAs(clmGuest) {
+			System.assert(Permissions.isClmGuest());
+			Permissions.verifyIsClmGuest();
+		}
+		try {
+			Permissions.verifyIsClmGuest(null);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmGuest, ex.getMessage());
+		}
+		try {
+			Permissions.verifyIsClmGuest(nonDocuSignUser.Id);
+			throw new AssertException('Expected UnauthorizedException');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.MustBeClmGuest, ex.getMessage());
 		}
 		Test.stopTest();
 	}
@@ -1341,5 +1655,186 @@ private class PermissionsTest {
 			System.assert(!Permissions.isOwner(new Set<UUID> { dsEnvelopeId }, null));
 			Test.stopTest();
 		}
+	}
+
+	@IsTest
+	static void test_getPermissionSetIds_invalid() {
+		Test.startTest();
+		try {
+			Permissions.getPermissionSetIds(new Set<String> { Permissions.DOCUSIGN_USER, null, Permissions.DOCUSIGN_GENERATOR });
+			throw new AssertException('Expected getPermissionSetIds to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { null }), ex.getMessage());
+		}
+		try {
+			Permissions.getPermissionSetIds(new Set<String> { '\t' });
+			throw new AssertException('Expected getPermissionSetIds to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { '\t' }), ex.getMessage());
+		}
+		try {
+			Permissions.getPermissionSetIds(new Set<String> { 'BAD', Permissions.DOCUSIGN_GENERATOR });
+			throw new AssertException('Expected getPermissionSetIds to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { 'BAD' }), ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getPermissionSetIds_valid() {
+		Test.startTest();
+		Set<Id> result = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.DOCUSIGN_ADMINISTRATOR,
+			Permissions.DOCUSIGN_GENERATOR,
+			Permissions.DOCUSIGN_NEGOTIATOR,
+			Permissions.CLM_ADMINISTRATOR
+		});
+		Test.stopTest();
+
+		System.assertEquals(new Set<Id> {
+			Permissions.getDocuSignAdministratorPermissionSetId(),
+			Permissions.getDocuSignGeneratorPermissionSetId(),
+			Permissions.getDocuSignNegotiatorPermissionSetId(),
+			Permissions.getClmAdministratorPermissionSetId()
+		}, result);
+	}
+
+	@IsTest
+	static void test_getPermissionSetIds_eSignature() {
+		Test.startTest();
+		Set<Id> result1 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.DOCUSIGN_ADMINISTRATOR,
+			Permissions.DOCUSIGN_USER
+		});
+		Set<Id> result2 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.DOCUSIGN_USER,
+			Permissions.DOCUSIGN_SENDER
+		});
+		Set<Id> result3 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.DOCUSIGN_SENDER
+		});
+		Test.stopTest();
+
+		System.assertEquals(new Set<Id> { Permissions.getDocuSignAdministratorPermissionSetId() }, result1);
+		System.assertEquals(new Set<Id> { Permissions.getDocuSignUserPermissionSetId() }, result2);
+		System.assertEquals(new Set<Id> { Permissions.getDocuSignSenderPermissionSetId() }, result3);
+	}
+
+	@IsTest
+	static void test_getPermissionSetIds_clm() {
+		Test.startTest();
+		Set<Id> result1 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.CLM_ADMINISTRATOR,
+			Permissions.CLM_SUBSCRIBER
+		});
+		Set<Id> result2 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.CLM_SUBSCRIBER,
+			Permissions.CLM_GUEST
+		});
+		Set<Id> result3 = Permissions.getPermissionSetIds(new Set<String> {
+			Permissions.CLM_GUEST
+		});
+		Test.stopTest();
+
+		System.assertEquals(new Set<Id> { Permissions.getClmAdministratorPermissionSetId() }, result1);
+		System.assertEquals(new Set<Id> { Permissions.getClmSubscriberPermissionSetId() }, result2);
+		System.assertEquals(new Set<Id> { Permissions.getClmGuestPermissionSetId() }, result3);
+	}
+
+	@IsTest
+	static void test_replacePermissionSets_empty() {
+		Test.startTest();
+		System.assert(!Permissions.replacePermissionSets(null, null));
+		System.assert(!Permissions.replacePermissionSets(new Set<Id>(), new Set<String>()));
+		System.assert(!Permissions.replacePermissionSets(null, new Set<String> { Permissions.CLM_GUEST }));
+		System.assert(!Permissions.replacePermissionSets(new Set<Id>(), new Set<String> { Permissions.CLM_GUEST }));
+		System.assert(!Permissions.replacePermissionSets(new Set<Id> { UserInfo.getUserId() }, null));
+		System.assert(!Permissions.replacePermissionSets(new Set<Id> { UserInfo.getUserId() }, new Set<String>()));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_replacePermissionSets_non_clm() {
+		User dsAdmin = UserMock.createDocuSignAdministrator(false);
+		User dsUser = UserMock.createDocuSignAdministrator(false);
+		User dsSender = UserMock.createDocuSignAdministrator(false);
+		User dsGenerator = UserMock.createDocuSignGenerator(false);
+		User dsNegotiator = UserMock.createDocuSignNegotiator(false);
+		User nonDSUser = UserMock.createUser();
+
+		System.runAs(UserMock.getAdministrator()) {
+			Test.startTest();
+			System.assert(Permissions.replacePermissionSets(new Set<Id> {
+				dsAdmin.Id, dsUser.Id, dsSender.Id, dsGenerator.Id, dsNegotiator.Id, nonDSUser.Id
+			}, new Set<String> {
+				Permissions.DOCUSIGN_USER,
+				Permissions.DOCUSIGN_NEGOTIATOR
+			}));
+			Test.stopTest();
+		}
+
+		System.assert(!Permissions.isDocuSignAdministrator(dsAdmin.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsUser.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsSender.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsGenerator.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(dsNegotiator.Id));
+		System.assert(!Permissions.isDocuSignAdministrator(nonDSUser.Id));
+		System.assert(Permissions.isDocuSignUser(dsAdmin.Id));
+		System.assert(Permissions.isDocuSignUser(dsUser.Id));
+		System.assert(Permissions.isDocuSignUser(dsSender.Id));
+		System.assert(Permissions.isDocuSignUser(dsGenerator.Id));
+		System.assert(Permissions.isDocuSignUser(dsNegotiator.Id));
+		System.assert(Permissions.isDocuSignUser(nonDSUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsAdmin.Id));
+		System.assert(Permissions.isDocuSignSender(dsUser.Id));
+		System.assert(Permissions.isDocuSignSender(dsSender.Id));
+		System.assert(Permissions.isDocuSignSender(dsGenerator.Id));
+		System.assert(Permissions.isDocuSignSender(dsNegotiator.Id));
+		System.assert(Permissions.isDocuSignSender(nonDSUser.Id));
+		System.assert(!Permissions.isDocuSignGenerator(dsAdmin.Id));
+		System.assert(!Permissions.isDocuSignGenerator(dsUser.Id));
+		System.assert(!Permissions.isDocuSignGenerator(dsSender.Id));
+		System.assert(!Permissions.isDocuSignGenerator(dsGenerator.Id));
+		System.assert(!Permissions.isDocuSignGenerator(dsNegotiator.Id));
+		System.assert(!Permissions.isDocuSignGenerator(nonDSUser.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsAdmin.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsUser.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsSender.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsGenerator.Id));
+		System.assert(Permissions.isDocuSignNegotiator(dsNegotiator.Id));
+		System.assert(Permissions.isDocuSignNegotiator(nonDSUser.Id));
+	}
+
+	@IsTest
+	static void test_replacePermissionSets_clm() {
+		User clmAdmin = UserMock.createClmAdministrator(false);
+		User clmSub = UserMock.createClmSubscriber(false);
+		User clmGuest = UserMock.createClmGuest(false);
+		User nonClmUser = UserMock.createUser();
+
+		System.runAs(UserMock.getAdministrator()) {
+			Test.startTest();
+			System.assert(Permissions.replacePermissionSets(new Set<Id> {
+				clmAdmin.Id, clmSub.Id, clmGuest.Id, nonClmUser.Id
+			}, new Set<String> {
+				Permissions.CLM_GUEST,
+				Permissions.CLM_SUBSCRIBER
+			}));
+			Test.stopTest();
+		}
+
+		System.assert(!Permissions.isClmAdministrator(clmAdmin.Id));
+		System.assert(!Permissions.isClmAdministrator(clmSub.Id));
+		System.assert(!Permissions.isClmAdministrator(clmGuest.Id));
+		System.assert(!Permissions.isClmAdministrator(nonClmUser.Id));
+		System.assert(Permissions.isClmSubscriber(clmAdmin.Id));
+		System.assert(Permissions.isClmSubscriber(clmSub.Id));
+		System.assert(Permissions.isClmSubscriber(clmGuest.Id));
+		System.assert(Permissions.isClmSubscriber(nonClmUser.Id));
+		System.assert(Permissions.isClmGuest(clmAdmin.Id));
+		System.assert(Permissions.isClmGuest(clmSub.Id));
+		System.assert(Permissions.isClmGuest(clmGuest.Id));
+		System.assert(Permissions.isClmGuest(nonClmUser.Id));
 	}
 }

@@ -1452,6 +1452,18 @@
 		<name>MustBeDocuSignNegotiator</name>
 	</customLabels>
 	<customLabels>
+		<label>You must have DocuSign CLM administrator permissions to perform this operation.</label>
+		<name>MustBeClmAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign CLM subscriber permissions to perform this operation.</label>
+		<name>MustBeClmSubscriber</name>
+	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign CLM guest permissions to perform this operation.</label>
+		<name>MustBeClmGuest</name>
+	</customLabels>
+	<customLabels>
 		<label>My Personal Content</label>
 		<name>MyPersonalContent</name>
 	</customLabels>
@@ -4000,6 +4012,10 @@
 	<customLabels>
 		<label>eSignature enabled</label>
 		<name>ESignatureEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid permission set: {0}</label>
+		<name>InvalidPermissionSet_1</name>
 	</customLabels>
 	<customLabels>
 		<label>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
