@@ -609,7 +609,13 @@
   },
 
   externalReviewOnBehalfOfRequest: function(component, helper,event){
+
     var comments = event.detail.comments;
+    var docUrl = event.details.response;
+    var documentUrl = '';
+    if(docUrl !== null){
+      documentUrl = docUrl;
+    }
 
     if(comments !== null) {
       component.set('v.loading', true);
@@ -618,7 +624,7 @@
       var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
       externalReviewOnBehalfOfAction.setParams({
         comment: comments,
-        newVersionUrl: '',
+        newVersionUrl: documentUrl,
         documentId: agreement.id.value
       });
       externalReviewOnBehalfOfAction.setCallback(this, function (response) {
