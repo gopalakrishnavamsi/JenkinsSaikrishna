@@ -100,10 +100,11 @@
   },
 
   getAccessToken: function (component, uiHelper, sourceId, isSetup) {
-    var action = component.get('c.generateUploadToken');
+    var agreementIdValue = component.get('v.agreement').id.value;
+    var action = component.get('c.generateUploadNewVersionToken');
     return new Promise(function (resolve, reject) {
       action.setParams({
-        objectId: sourceId
+        agreementId: agreementIdValue
       });
       action.setCallback(this, function (response) {
         var state = response.getState();
@@ -376,6 +377,7 @@
     }));
 
     this.registerEvent('externalReviewCompleteOnBehalf', $A.getCallback(function (event) {
+
       self.externalReviewOnBehalfOfRequest(thisComponent, self, event);
     }));
 
@@ -611,11 +613,6 @@
   externalReviewOnBehalfOfRequest: function(component, helper,event){
 
     var comments = event.detail.comments;
-    var docUrl = event.details.response;
-    var documentUrl = '';
-    if(docUrl !== null){
-      documentUrl = docUrl;
-    }
 
     if(comments !== null) {
       component.set('v.loading', true);
@@ -624,7 +621,7 @@
       var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
       externalReviewOnBehalfOfAction.setParams({
         comment: comments,
-        newVersionUrl: documentUrl,
+        newVersionUrl: '',
         documentId: agreement.id.value
       });
       externalReviewOnBehalfOfAction.setCallback(this, function (response) {
