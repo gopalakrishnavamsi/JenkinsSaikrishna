@@ -302,7 +302,7 @@
         );
 
       default:
-        return this.basePreview(
+        return this.renderApprovalRecipientView(
           component,
           this.basePreview(
             component,
