@@ -304,12 +304,15 @@
       default:
         return this.basePreview(
           component,
-          agreement.id.value,
-          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-          documentUrl,
-          agreement.historyItems,
-          true,
-          auth
+          this.basePreview(
+            component,
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          )
         );
     }
   },
