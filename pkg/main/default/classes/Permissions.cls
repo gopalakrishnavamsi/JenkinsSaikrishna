@@ -8,27 +8,31 @@ public with sharing class Permissions {
 	@TestVisible
 	private static final Boolean IS_FLS_SUPPORTED;
 	private static final Map<String, DescribeFieldResult> FIELD_DESCRIBE_MAP = new Map<String, DescribeFieldResult>();
-	@TestVisible
-	private static final String DOCUSIGN_ADMINISTRATOR = 'DocuSign_Administrator';
-	@TestVisible
-	private static final String DOCUSIGN_USER = 'DocuSign_User';
-	@TestVisible
-	private static final String DOCUSIGN_SENDER = 'DocuSign_Sender';
-	@TestVisible
-	private static final String DOCUSIGN_GENERATOR = 'DocuSign_Generator';
-	@TestVisible
-	private static final String DOCUSIGN_NEGOTIATOR = 'DocuSign_Negotiator';
 	private static Map<String, Id> permissionSetMap = null;
 	private static Id dsAdministratorPermissionSetId = null;
 	private static Id dsUserPermissionSetId = null;
 	private static Id dsSenderPermissionSetId = null;
 	private static Id dsGeneratorPermissionSetId = null;
 	private static Id dsNegotiatorPermissionSetId = null;
-	private static final Map<Id, Boolean> dsAdmins = new Map<Id, Boolean>();
-	private static final Map<Id, Boolean> dsUsers = new Map<Id, Boolean>();
-	private static final Map<Id, Boolean> dsSenders = new Map<Id, Boolean>();
-	private static final Map<Id, Boolean> dsGenerators = new Map<Id, Boolean>();
-	private static final Map<Id, Boolean> dsNegotiators = new Map<Id, Boolean>();
+	private static Id dsClmAdministratorPermissionSetId = null;
+	private static Id dsClmSubscriberPermissionSetId = null;
+	private static Id dsClmGuestPermissionSetId = null;
+
+	// Permission set names
+	public static final String DOCUSIGN_ADMINISTRATOR = 'DocuSign_Administrator';
+	public static final String DOCUSIGN_USER = 'DocuSign_User';
+	public static final String DOCUSIGN_SENDER = 'DocuSign_Sender';
+	public static final String DOCUSIGN_GENERATOR = 'DocuSign_Generator';
+	public static final String DOCUSIGN_NEGOTIATOR = 'DocuSign_Negotiator';
+	public static final String CLM_ADMINISTRATOR = 'CLM_Administrator';
+	public static final String CLM_SUBSCRIBER = 'CLM_Subscriber';
+	public static final String CLM_GUEST = 'CLM_Guest';
+	private static final Set<String> validPermissionSets = new Set<String> {
+		DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER,
+		DOCUSIGN_GENERATOR,
+		DOCUSIGN_NEGOTIATOR,
+		CLM_ADMINISTRATOR, CLM_SUBSCRIBER, CLM_GUEST
+	};
 
 	static {
 		IS_FLS_SUPPORTED = (Salesforce.edition == 'Developer Edition' || Salesforce.edition == 'Enterprise Edition' || Salesforce.edition == 'Unlimited Edition');
@@ -38,7 +42,7 @@ public with sharing class Permissions {
 	private with sharing class Database {
 
 		private Boolean upsertPermissionSetAssignments(
-			final Id permissionSetId,
+			final Set<Id> permissionSetIds,
 			final Set<Id> userIds) {
 
 			Permissions.verifyIsCreateable(TYPE_PERMISSION_SET_ASSIGNMENT, new List<String> {
@@ -47,10 +51,12 @@ public with sharing class Permissions {
 			// Doesn't actually update during upsert. It just doesn't fail to insert if the assignment already exists.
 
 			Boolean result = false;
-			if (String.isNotBlank(permissionSetId) && Collection.isNotEmpty(userIds)) {
+			if (Collection.isNotEmpty(permissionSetIds) && Collection.isNotEmpty(userIds)) {
 				List<PermissionSetAssignment> ps = new List<PermissionSetAssignment>();
 				for (Id userId : userIds) {
-					ps.add(new PermissionSetAssignment(PermissionSetId = permissionSetId, AssigneeId = userId));
+					for (Id permissionSetId : permissionSetIds) {
+						ps.add(new PermissionSetAssignment(PermissionSetId = permissionSetId, AssigneeId = userId));
+					}
 				}
 				upsert ps;
 				result = true;
@@ -58,21 +64,18 @@ public with sharing class Permissions {
 			return result;
 		}
 
-		private Boolean deletePermissionSetAssignments(final Set<Id> userIds) {
+		private Boolean deletePermissionSetAssignments(
+			final Set<Id> userIds,
+			final Set<Id> permissionSetIds) {
+
 			Permissions.verifyIsDeletable(TYPE_PERMISSION_SET_ASSIGNMENT);
 
 			Boolean result = false;
-			if (Collection.isNotEmpty(userIds)) {
+			if (Collection.isNotEmpty(userIds) && Collection.isNotEmpty(permissionSetIds)) {
 				List<PermissionSetAssignment> ps = [
 					SELECT Id, AssigneeId, PermissionSetId
 					FROM PermissionSetAssignment
-					WHERE PermissionSetId IN :(NEW Set<Id> {
-						getDocuSignUserPermissionSetId(),
-						getDocuSignAdministratorPermissionSetId(),
-						getDocuSignSenderPermissionSetId(),
-						getDocuSignGeneratorPermissionSetId(),
-						getDocuSignNegotiatorPermissionSetId()
-					})
+					WHERE PermissionSetId IN :permissionSetIds
 					AND AssigneeId IN :userIds
 				];
 				delete ps;
@@ -103,7 +106,10 @@ public with sharing class Permissions {
 					DOCUSIGN_USER,
 					DOCUSIGN_SENDER,
 					DOCUSIGN_GENERATOR,
-					DOCUSIGN_NEGOTIATOR
+					DOCUSIGN_NEGOTIATOR,
+					CLM_ADMINISTRATOR,
+					CLM_SUBSCRIBER,
+					CLM_GUEST
 				})
 				AND NamespacePrefix = :Application.packageNamespace
 			]) {
@@ -200,6 +206,30 @@ public with sharing class Permissions {
 		return dsNegotiatorPermissionSetId;
 	}
 
+	@TestVisible
+	private static Id getClmAdministratorPermissionSetId() {
+		if (dsClmAdministratorPermissionSetId == null) {
+			dsClmAdministratorPermissionSetId = getPermissionSetMap().get(CLM_ADMINISTRATOR);
+		}
+		return dsClmAdministratorPermissionSetId;
+	}
+
+	@TestVisible
+	private static Id getClmSubscriberPermissionSetId() {
+		if (dsClmSubscriberPermissionSetId == null) {
+			dsClmSubscriberPermissionSetId = getPermissionSetMap().get(CLM_SUBSCRIBER);
+		}
+		return dsClmSubscriberPermissionSetId;
+	}
+
+	@TestVisible
+	private static Id getClmGuestPermissionSetId() {
+		if (dsClmGuestPermissionSetId == null) {
+			dsClmGuestPermissionSetId = getPermissionSetMap().get(CLM_GUEST);
+		}
+		return dsClmGuestPermissionSetId;
+	}
+
 	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Administrator</code> permission set.
 	 *
@@ -212,20 +242,10 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Boolean isDocuSignAdministrator(final Id userId) {
-		Boolean result = false;
-
-		if (String.isNotBlank(userId)) {
-			final Boolean value = dsAdmins.get(userId);
-			if (value != null) {
-				result = value;
-			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
-					getDocuSignAdministratorPermissionSetId()
-				}));
-				dsAdmins.put(userId, result);
-			}
-		}
-		return result;
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getDocuSignAdministratorPermissionSetId()
+		}));
 	}
 
 	/**
@@ -256,20 +276,11 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Boolean isDocuSignUser(final Id userId) {
-		Boolean result = false;
-		if (String.isNotBlank(userId)) {
-			final Boolean value = dsUsers.get(userId);
-			if (value != null) {
-				result = value;
-			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
-					getDocuSignAdministratorPermissionSetId(),
-					getDocuSignUserPermissionSetId()
-				}));
-				dsUsers.put(userId, result);
-			}
-		}
-		return result;
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getDocuSignAdministratorPermissionSetId(),
+			getDocuSignUserPermissionSetId()
+		}));
 	}
 
 	/**
@@ -298,21 +309,12 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Boolean isDocuSignSender(final Id userId) {
-		Boolean result = false;
-		if (String.isNotBlank(userId)) {
-			final Boolean value = dsSenders.get(userId);
-			if (value != null) {
-				result = value;
-			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
-					getDocuSignAdministratorPermissionSetId(),
-					getDocuSignUserPermissionSetId(),
-					getDocuSignSenderPermissionSetId()
-				}));
-				dsSenders.put(userId, result);
-			}
-		}
-		return result;
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getDocuSignAdministratorPermissionSetId(),
+			getDocuSignUserPermissionSetId(),
+			getDocuSignSenderPermissionSetId()
+		}));
 	}
 
 	/**
@@ -340,19 +342,10 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Boolean isDocuSignGenerator(final Id userId) {
-		Boolean result = false;
-		if (String.isNotBlank(userId)) {
-			final Boolean value = dsGenerators.get(userId);
-			if (value != null) {
-				result = value;
-			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
-					getDocuSignGeneratorPermissionSetId()
-				}));
-				dsGenerators.put(userId, result);
-			}
-		}
-		return result;
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getDocuSignGeneratorPermissionSetId()
+		}));
 	}
 
 	/**
@@ -380,19 +373,10 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Boolean isDocuSignNegotiator(final Id userId) {
-		Boolean result = false;
-		if (String.isNotBlank(userId)) {
-			final Boolean value = dsNegotiators.get(userId);
-			if (value != null) {
-				result = value;
-			} else {
-				result = Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
-					getDocuSignNegotiatorPermissionSetId()
-				}));
-				dsNegotiators.put(userId, result);
-			}
-		}
-		return result;
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getDocuSignNegotiatorPermissionSetId()
+		}));
 	}
 
 	/**
@@ -411,76 +395,107 @@ public with sharing class Permissions {
 	}
 
 	/**
-	 * Assigns the <code>DocuSign Negotiator</code> permission set to one or more users.
+	 * Checks whether the current user is assigned the <code>CLM Administrator</code> permission set.
 	 *
-	 * @param userIds The user IDs.
-	 *
-	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM administrator,
+	 * <code>false</code> otherwise.
 	 */
-	public static Boolean assignDocuSignNegotiatorPermissionSet(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.upsertPermissionSetAssignments(getDocuSignNegotiatorPermissionSetId(), userIds);
-			for (Id userId : userIds) {
-				dsNegotiators.put(userId, true);
-			}
-		}
-		return result;
+	public static Boolean isClmAdministrator() {
+		return isClmAdministrator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isClmAdministrator(final Id userId) {
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getClmAdministratorPermissionSetId()
+		}));
 	}
 
 	/**
-	 * Assigns the <code>DocuSign Generator</code> permission set to one or more users.
-	 *
-	 * @param userIds The user IDs.
-	 *
-	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>CLM Administrator</code> permission set.
 	 */
-	public static Boolean assignDocuSignGeneratorPermissionSet(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.upsertPermissionSetAssignments(getDocuSignGeneratorPermissionSetId(), userIds);
-			for (Id userId : userIds) {
-				dsGenerators.put(userId, true);
-			}
+	public static void verifyIsClmAdministrator() {
+		verifyIsClmAdministrator(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsClmAdministrator(final Id userId) {
+		if (String.isBlank(userId) || !isClmAdministrator(userId)) {
+			throw UnauthorizedException.notClmAdministrator();
 		}
-		return result;
 	}
 
 	/**
-	 * Assigns the <code>DocuSign Sender</code> permission set to one or more users.
+	 * Checks whether the current user is assigned the <code>CLM Subscriber</code> or <code>CLM Administrator</code>
+	 * permission set.
 	 *
-	 * @param userIds The user IDs.
-	 *
-	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM subscriber,
+	 * <code>false</code> otherwise.
 	 */
-	public static Boolean assignDocuSignSenderPermissionSet(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.upsertPermissionSetAssignments(getDocuSignSenderPermissionSetId(), userIds);
-			for (Id userId : userIds) {
-				dsSenders.put(userId, true);
-			}
-		}
-		return result;
+	public static Boolean isClmSubscriber() {
+		return isClmSubscriber(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isClmSubscriber(final Id userId) {
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getClmAdministratorPermissionSetId(),
+			getClmSubscriberPermissionSetId()
+		}));
 	}
 
 	/**
-	 * Assigns the <code>DocuSign User</code> permission set to one or more users.
-	 *
-	 * @param userIds The user IDs.
-	 *
-	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>CLM Susbscriber</code> or <code>CLM Administrator</code> permission set.
 	 */
-	public static Boolean assignDocuSignUserPermissionSet(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.upsertPermissionSetAssignments(getDocuSignUserPermissionSetId(), userIds);
-			for (Id userId : userIds) {
-				dsSenders.put(userId, true);
-				dsUsers.put(userId, true);
-			}
+	public static void verifyIsClmSubscriber() {
+		verifyIsClmSubscriber(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsClmSubscriber(final Id userId) {
+		if (String.isBlank(userId) || !isClmSubscriber(userId)) {
+			throw UnauthorizedException.notClmSubscriber();
 		}
-		return result;
+	}
+
+	/**
+	 * Checks whether the current user is assigned the <code>CLM Guest</code>, <code>CLM Subscriber</code>, or
+	 * <code>CLM Administrator</code> permission set.
+	 *
+	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM guest,
+	 * <code>false</code> otherwise.
+	 */
+	public static Boolean isClmGuest() {
+		return isClmGuest(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static Boolean isClmGuest(final Id userId) {
+		return String.isNotBlank(userId)
+			&& Collection.isNotEmpty(DB.queryPermissionSetAssignments(userId, new Set<Id> {
+			getClmAdministratorPermissionSetId(),
+			getClmSubscriberPermissionSetId(),
+			getClmGuestPermissionSetId()
+		}));
+	}
+
+	/**
+	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
+	 * <code>CLM Guest</code>, <code>CLM Subscriber</code>, or <code>CLM Administrator</code> permission set.
+	 */
+	public static void verifyIsClmGuest() {
+		verifyIsClmGuest(UserInfo.getUserId());
+	}
+
+	@TestVisible
+	private static void verifyIsClmGuest(final Id userId) {
+		if (String.isBlank(userId) || !isClmGuest(userId)) {
+			throw UnauthorizedException.notClmGuest();
+		}
 	}
 
 	/**
@@ -491,39 +506,104 @@ public with sharing class Permissions {
 	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
 	 */
 	public static Boolean assignDocuSignAdministratorPermissionSet(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.upsertPermissionSetAssignments(getDocuSignAdministratorPermissionSetId(), userIds);
-			for (Id userId : userIds) {
-				dsSenders.put(userId, true);
-				dsUsers.put(userId, true);
-				dsAdmins.put(userId, true);
-			}
-		}
-		return result;
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getDocuSignAdministratorPermissionSetId() }, userIds);
 	}
 
 	/**
-	 * Removes the <code>DocuSign Administrator</code> and <code>DocuSign User</code> permission sets from one or more
-	 * users.
+	 * Assigns the <code>DocuSign User</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignUserPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getDocuSignUserPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Sender</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignSenderPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getDocuSignSenderPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Generator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignGeneratorPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getDocuSignGeneratorPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>DocuSign Negotiator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignDocuSignNegotiatorPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getDocuSignNegotiatorPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>CLM Administrator</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignClmAdministratorPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getClmAdministratorPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>CLM Subscriber</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignClmSubscriberPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getClmSubscriberPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Assigns the <code>CLM Guest</code> permission set to one or more users.
+	 *
+	 * @param userIds The user IDs.
+	 *
+	 * @return <code>true</code> if the permission set assignments were successful, <code>false</code> otherwise.
+	 */
+	public static Boolean assignClmGuestPermissionSet(final Set<Id> userIds) {
+		return Collection.isNotEmpty(userIds)
+			&& DB.upsertPermissionSetAssignments(new Set<Id> { getClmGuestPermissionSetId() }, userIds);
+	}
+
+	/**
+	 * Removes all DocuSign permission sets from one or more users.
 	 *
 	 * @param userIds The user IDs.
 	 *
 	 * @return <code>true</code> if the permission set removals were successful, <code>false</code> otherwise.
 	 */
 	public static Boolean removeDocuSignPermissionSets(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			DB.deletePermissionSetAssignments(userIds);
-			for (Id userId : userIds) {
-				dsAdmins.remove(userId);
-				dsUsers.remove(userId);
-				dsSenders.remove(userId);
-				dsGenerators.remove(userId);
-				dsNegotiators.remove(userId);
-			}
-		}
-		return result;
+		return Collection.isNotEmpty(userIds)
+			&& DB.deletePermissionSetAssignments(userIds, new Set<Id>(getPermissionSetMap().values()));
 	}
 
 	/**
@@ -1059,5 +1139,42 @@ public with sharing class Permissions {
 	public static void verifyIsUnencrypted(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isUnencrypted(type, fieldNames);
 		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+	}
+
+	@TestVisible
+	private static Set<Id> getPermissionSetIds(final Set<String> permissionSetNames) {
+		Set<Id> result = new Set<Id>();
+
+		if (Collection.isNotEmpty(permissionSetNames)) {
+			Boolean hasDSUser = permissionSetNames.contains(DOCUSIGN_USER);
+			Boolean hasDSAdmin = permissionSetNames.contains(DOCUSIGN_ADMINISTRATOR);
+			Boolean hasClmSub = permissionSetNames.contains(CLM_SUBSCRIBER);
+			Boolean hasClmAdmin = permissionSetNames.contains(CLM_ADMINISTRATOR);
+			Map<String, Id> psMap = getPermissionSetMap();
+
+			for (String psName : permissionSetNames) {
+				if (!validPermissionSets.contains(psName)) {
+					throw new DocuSignException(String.format(Label.InvalidPermissionSet_1,
+						new List<String> { psName }));
+				}
+
+				// For eSignature or CLM, only use most permissive set specified
+				if (psName == DOCUSIGN_SENDER && (hasDSUser || hasDSAdmin)) continue;
+				if (psName == DOCUSIGN_USER && hasDSAdmin) continue;
+				if (psName == CLM_GUEST && (hasClmSub || hasClmAdmin)) continue;
+				if (psName == CLM_SUBSCRIBER && hasClmAdmin) continue;
+
+				result.add(psMap.get(psName));
+			}
+		}
+		return result;
+	}
+
+	public static Boolean replacePermissionSets(
+		final Set<Id> userIds,
+		final Set<String> permissionSetNames) {
+
+		return removeDocuSignPermissionSets(userIds)
+			&& DB.upsertPermissionSetAssignments(getPermissionSetIds(permissionSetNames), userIds);
 	}
 }

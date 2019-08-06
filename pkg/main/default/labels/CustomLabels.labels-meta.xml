@@ -3009,6 +3009,30 @@
 		<value>You must have DocuSign negotiator permissions to perform this operation.</value>
 	</labels>
 	<labels>
+		<fullName>MustBeClmAdministrator</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be CLM Administrator</shortDescription>
+		<value>You must have DocuSign CLM administrator permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeClmSubscriber</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be CLM Subscriber</shortDescription>
+		<value>You must have DocuSign CLM subscriber permissions to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>MustBeClmGuest</fullName>
+		<categories>Errors</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must Be CLM Guest</shortDescription>
+		<value>You must have DocuSign CLM guest permissions to perform this operation.</value>
+	</labels>
+	<labels>
 		<fullName>MyPersonalContent</fullName>
 		<categories>Document</categories>
 		<language>en_US</language>
@@ -6441,7 +6465,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementDeleted</shortDescription>
-		<value>has been deleted.</value>
+		<value>The {0} agreement has been deleted.</value>
 	</labels>
 	<labels>
 		<fullName>HQTEST3</fullName>
@@ -7510,5 +7534,12 @@
 		<protected>true</protected>
 		<shortDescription>eSignature enabled help</shortDescription>
 		<value>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidPermissionSet_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid permission set</shortDescription>
+		<value>Invalid permission set: {0}</value>
 	</labels>
 </CustomLabels>
