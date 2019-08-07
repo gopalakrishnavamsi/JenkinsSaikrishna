@@ -1456,12 +1456,12 @@
 		<name>MustBeClmAdministrator</name>
 	</customLabels>
 	<customLabels>
-		<label>You must have DocuSign CLM subscriber permissions to perform this operation.</label>
-		<name>MustBeClmSubscriber</name>
+		<label>You must have DocuSign CLM user permissions to perform this operation.</label>
+		<name>MustBeClmUser</name>
 	</customLabels>
 	<customLabels>
-		<label>You must have DocuSign CLM guest permissions to perform this operation.</label>
-		<name>MustBeClmGuest</name>
+		<label>You must have DocuSign CLM viewer permissions to perform this operation.</label>
+		<name>MustBeClmViewer</name>
 	</customLabels>
 	<customLabels>
 		<label>My Personal Content</label>
@@ -4020,6 +4020,10 @@
 	<customLabels>
 		<label>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
 		<name>ESignatureEnabledHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Maximum batch size exceeded: {0} > {1}</label>
+		<name>MaximumBatchSizeExceeded_2</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
