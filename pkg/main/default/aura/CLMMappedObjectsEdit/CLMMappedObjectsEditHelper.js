@@ -97,7 +97,7 @@
     else {
       helper.fireApplicationEvent(component, {
         title: $A.get('$Label.c.SelectObject'),
-        summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', 'A.get($Label.c.SelectObjectHelpBody2)'),
+        summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
         index: '1',
         fromComponent: 'CLMMappedObjectEdit',
         toComponent: 'CLMCardModel',
