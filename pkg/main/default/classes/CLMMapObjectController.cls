@@ -11,7 +11,7 @@ public with sharing class CLMMapObjectController {
             return true;
         }
         catch(Exception e){
-            throw New auraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage());
         }
     }
     
@@ -22,7 +22,7 @@ public with sharing class CLMMapObjectController {
             return true;
         }
         catch(Exception e){
-            throw New auraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage());
         }
     }
     
@@ -40,21 +40,20 @@ public with sharing class CLMMapObjectController {
            
         }
         catch(exception e){
-            throw New auraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage());
         }
     }
     
     @AuraEnabled(Cacheable=true)                                        
     public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild){ 
         try{
-            
-         
             return MetadataService.getFields(schema.getGlobalDescribe().get(apiName),isChild);
         }
         catch(exception e){
-            throw New auraHandledException(e.getMessage());
+            throw new AuraHandledException(e.getMessage());
         }
     }
+
     //Returns the record count from the custom setting
     @AuraEnabled(Cacheable=true)
     public static Integer getRecordCount(){
