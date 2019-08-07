@@ -32,7 +32,9 @@
         var result = response.getReturnValue();
         if (result === true) {
           var deleteMessage =
-            agreementDetails.name + ' ' + $A.get('$Label.c.AgreementDeleted');
+            stringUtils.format(
+              $A.get('$Label.c.AgreementDeleted'), agreementDetails.name
+            );
           self.showToast(component, deleteMessage, 'success');
           component.set('v.loading', false);
           self.reloadAgreementsSpace(component);

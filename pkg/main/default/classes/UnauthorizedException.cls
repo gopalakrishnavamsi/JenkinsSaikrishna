@@ -23,8 +23,8 @@ global class UnauthorizedException extends Exception {
 	 *     <li><code>DocuSignNegotiator</code>: Must be assigned the <code>DocuSign Negotiator</code> permission
 	 *     set.</li>
 	 *     <li><code>ClmAdministrator</code>: Must be assigned the <code>CLM Administrator</code> permission set.</li>
-	 *     <li><code>ClmSubscriber</code>: Must be assigned the <code>CLM Subscriber</code> permission set.</li>
-	 *     <li><code>ClmGuest</code>: Must be assigned the <code>CLM Guest</code> permission set.</li>
+	 *     <li><code>ClmUser</code>: Must be assigned the <code>CLM User</code> permission set.</li>
+	 *     <li><code>ClmViewer</code>: Must be assigned the <code>CLM Viewer</code> permission set.</li>
 	 *     <li><code>SalesforceAdministrator</code>: Must be a Salesforce administrator.</li>
 	 *     <li><code>EnvelopeOwner</code>: Must be the envelope owner.</li>
 	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
@@ -38,8 +38,8 @@ global class UnauthorizedException extends Exception {
 		DocuSignGenerator,
 		DocuSignNegotiator,
 		ClmAdministrator,
-		ClmSubscriber,
-		ClmGuest,
+		ClmUser,
+		ClmViewer,
 		SalesforceAdministrator,
 		EnvelopeOwner,
 		ConfigureAccount
@@ -160,28 +160,28 @@ global class UnauthorizedException extends Exception {
 	}
 
 	/**
-	 * Factory method to construct an exception when the user is not assigned the <code>CLM Administrator</code>
+	 * Factory method to construct an exception when the user is not assigned the <code>CLM User</code>
 	 * permission set.
 	 *
 	 * @return The new exception.
 	 */
-	public static UnauthorizedException notClmSubscriber() {
-		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeClmSubscriber);
+	public static UnauthorizedException notClmUser() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeClmUser);
 		ex.userId = UserInfo.getUserId();
-		ex.requirement = AccessRequirement.ClmSubscriber;
+		ex.requirement = AccessRequirement.ClmUser;
 		return ex;
 	}
 
 	/**
-	 * Factory method to construct an exception when the user is not assigned the <code>CLM Guest</code>
+	 * Factory method to construct an exception when the user is not assigned the <code>CLM Viewer</code>
 	 * permission set.
 	 *
 	 * @return The new exception.
 	 */
-	public static UnauthorizedException notClmGuest() {
-		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeClmGuest);
+	public static UnauthorizedException notClmViewer() {
+		final UnauthorizedException ex = new UnauthorizedException(Label.MustBeClmViewer);
 		ex.userId = UserInfo.getUserId();
-		ex.requirement = AccessRequirement.ClmGuest;
+		ex.requirement = AccessRequirement.ClmViewer;
 		return ex;
 	}
 

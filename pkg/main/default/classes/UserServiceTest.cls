@@ -92,95 +92,6 @@ private class UserServiceTest {
 	}
 
 	@IsTest
-	static void test_Database_updateUsers() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String username = UUID.randomUUID().toString();
-			String username2 = UUID.randomUUID().toString();
-			Date provisionedDate = Date.today().addDays(-1);
-			User u1 = UserMock.createUser();
-			u1.Username__c = username;
-			u1.Status__c = Account.USER_STATUS_ACTIVE;
-			u1.CanManageAccount__c = true;
-			u1.Provisioned__c = provisionedDate;
-			User u2 = UserMock.createUser();
-			u2.Username__c = username2;
-			u2.Status__c = Account.USER_STATUS_PENDING;
-			User u3 = UserMock.createDocuSignUser(false);
-			u3.Username__c = null;
-			u3.Status__c = Account.USER_STATUS_ACTIVE;
-			u3.Provisioned__c = provisionedDate;
-			List<Account.User> users = UserService.DB.convert(new List<User> { u1, u2, u3 });
-
-			Test.startTest();
-			List<Account.User> result = UserService.DB.updateUsers(users);
-			Test.stopTest();
-
-			System.assertEquals(3, Collection.size(result));
-
-			List<User> us = [
-				SELECT Id, Username__c, CanManageAccount__c, Status__c, Provisioned__c
-				FROM User
-				WHERE Id IN :(NEW List<Id> { u1.Id, u2.Id, u3.Id })
-				LIMIT 10
-			];
-			System.assertEquals(3, Collection.size(us));
-			for (User u : us) {
-				if (u.Id == u1.Id) {
-					System.assertEquals(username, u.Username__c);
-					System.assertEquals(Account.USER_STATUS_ACTIVE, u.Status__c);
-					System.assertEquals(true, u.CanManageAccount__c);
-					System.assertEquals(provisionedDate, u.Provisioned__c);
-				} else if (u.Id == u2.Id) {
-					System.assertEquals(username2, u.Username__c);
-					System.assertEquals(Account.USER_STATUS_PENDING, u.Status__c);
-					System.assertEquals(false, u.CanManageAccount__c);
-					System.assertEquals(null, u.Provisioned__c);
-				} else if (u.Id == u3.Id) {
-					System.assertEquals(null, u.Username__c);
-					System.assertEquals(Account.USER_STATUS_INACTIVE, u.Status__c);
-					System.assertEquals(false, u.CanManageAccount__c);
-					System.assertEquals(null, u.Provisioned__c);
-				} else {
-					throw new AssertException('Unexpected user: ' + u);
-				}
-			}
-
-			Id dsaId = Permissions.getDocuSignAdministratorPermissionSetId();
-			Id dsuId = Permissions.getDocuSignUserPermissionSetId();
-			Id dssId = Permissions.getDocuSignSenderPermissionSetId();
-			Set<Id> psIds = new Set<Id> { dsaId, dsuId, dssId };
-
-			List<PermissionSetAssignment> psas = [
-				SELECT PermissionSetId
-				FROM PermissionSetAssignment
-				WHERE AssigneeId = :u1.Id
-				AND PermissionSetId IN :psIds
-				LIMIT 100
-			];
-			System.assertEquals(1, Collection.size(psas));
-			System.assertEquals(dsaId, psas[0].PermissionSetId);
-
-			psas = [
-				SELECT PermissionSetId
-				FROM PermissionSetAssignment
-				WHERE AssigneeId = :u2.Id
-				AND PermissionSetId IN :psIds
-				LIMIT 100
-			];
-			System.assertEquals(1, Collection.size(psas));
-			System.assertEquals(dsuId, psas[0].PermissionSetId);
-
-			System.assertEquals(0, Collection.size([
-				SELECT PermissionSetId
-				FROM PermissionSetAssignment
-				WHERE AssigneeId = :u3.Id
-				AND PermissionSetId IN :psIds
-				LIMIT 100
-			]));
-		}
-	}
-
-	@IsTest
 	static void test_getConfiguration_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -336,7 +247,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			});
+			}, new Set<String>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -370,7 +281,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			});
+			}, new Set<String>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -407,7 +318,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			});
+			}, new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR, Permissions.DOCUSIGN_SENDER });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -605,6 +516,66 @@ private class UserServiceTest {
 	}
 
 	@IsTest
+	static void test_updateUserRoles_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				UserService.updateUserRoles(null, null);
+				throw new AssertException('Expected updateUserRoles to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateUserRoles_undefined_argument() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				UserService.updateUserRoles(null, null);
+				throw new AssertException('Expected updateUserRoles to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateUserRoles_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u1 = UserMock.createClmAdministrator(false);
+			User u2 = UserMock.createDocuSignNegotiator(false);
+			User u3 = UserMock.createDocuSignSender(false);
+			
+			Test.startTest();
+			System.assert(UserService.updateUserRoles(new Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id, u3.Id },
+				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.CLM_VIEWER }));
+			Test.stopTest();
+
+			Set<String> psas = new Set<String>();
+			for (PermissionSetAssignment psa : [
+				SELECT AssigneeId, PermissionSetId
+				FROM PermissionSetAssignment
+				WHERE AssigneeId IN :(NEW Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id, u3.Id })
+				AND PermissionSetId IN :Permissions.getPermissionSetMap().values()
+			]) {
+				psas.add(psa.AssigneeId + ':' + psa.PermissionSetId);
+			}
+			System.assertEquals(7, psas.size());
+			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+		}
+	}
+
+	@IsTest
 	static void test_getAvailableSystemSenders_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -655,6 +626,60 @@ private class UserServiceTest {
 			}
 			System.assert(foundDSA1);
 			System.assert(foundDSA3);
+		}
+	}
+
+	@IsTest
+	static void test_verifyBatchSize_user() {
+		System.runAs(UserMock.getAdministrator()) {
+			List<Account.User> users = new List<Account.User> {
+				new Account.User(UUID.randomUUID(), UserInfo.getUserId()),
+				new Account.User(UUID.randomUUID(), UserInfo.getUserId()),
+				new Account.User(UUID.randomUUID(), UserInfo.getUserId())
+			};
+
+			Test.startTest();
+			System.assertEquals(new List<Account.User>(), UserService.verifyBatchSize((List<Account.User>)null, -1));
+			System.assertEquals(new List<Account.User>(), UserService.verifyBatchSize(new List<Account.User>(), -1));
+			System.assertEquals(users, UserService.verifyBatchSize(users, null));
+			System.assertEquals(users, UserService.verifyBatchSize(users, -1));
+			System.assertEquals(users, UserService.verifyBatchSize(users, 0));
+			System.assertEquals(users, UserService.verifyBatchSize(users, 3));
+			try {
+				UserService.verifyBatchSize(users, 2);
+				throw new AssertException('Expected verifyBatchSize to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.MaximumBatchSizeExceeded_2, new List<Object> { 3, 2 }),
+					ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_verifyBatchSize_id() {
+		System.runAs(UserMock.getAdministrator()) {
+			Set<Id> users = new Set<Id> {
+				UserMock.createUser().Id,
+				UserMock.createUser().Id,
+				UserMock.createUser().Id
+			};
+
+			Test.startTest();
+			System.assertEquals(new Set<Id>(), UserService.verifyBatchSize((Set<Id>)null, -1));
+			System.assertEquals(new Set<Id>(), UserService.verifyBatchSize(new Set<Id>(), -1));
+			System.assertEquals(users, UserService.verifyBatchSize(users, null));
+			System.assertEquals(users, UserService.verifyBatchSize(users, -1));
+			System.assertEquals(users, UserService.verifyBatchSize(users, 0));
+			System.assertEquals(users, UserService.verifyBatchSize(users, 3));
+			try {
+				UserService.verifyBatchSize(users, 2);
+				throw new AssertException('Expected verifyBatchSize to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.MaximumBatchSizeExceeded_2, new List<Object> { 3, 2 }),
+					ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }

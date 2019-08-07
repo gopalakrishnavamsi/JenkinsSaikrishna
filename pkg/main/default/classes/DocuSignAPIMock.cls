@@ -6,6 +6,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 	private ESignatureAPIMock eSignatureMock;
 	private ProvisioningAPIMock provisioningMock;
 	private GenAPIMock genMock;
+	private GroupAPIMock groupMock;
 	private Boolean success;
 
 	public DocuSignAPIMock(final Boolean success) {
@@ -56,6 +57,13 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return this.genMock;
 	}
 
+	private GroupAPIMock getGroupMock() {
+		if (this.groupMock == null) {
+			this.groupMock = new GroupAPIMock(this.success);
+		}
+		return this.groupMock;
+	}
+
 	override public HttpResponse getResponse(final HttpRequest request) {
 		String path = new Url(request.getEndpoint()).getPath();
 		if (path.startsWith('/oauth')) {
@@ -66,6 +74,8 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 			return this.getProvisioningMock().getResponse(request);
 		} else if (path.startsWith('/gen')) {
 			return this.getGenMock().getResponse(request);
+		} else if (path.startsWith('/management')) {
+			return this.getGroupMock().getResponse(request);
 		}
 		return this.getESignatureMock().getResponse(request);
 	}

@@ -813,7 +813,7 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AuthService.resetCredentials(true);
+				AuthService.resetAccount(true);
 				throw new AssertException('Expected resetCredentials to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -823,15 +823,37 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_resetCredentials_success() {
+	static void test_resetAccount_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u1 = UserMock.createDocuSignUser(false);
+			// Senders are unique in that they do not have DS user credentials.
+			User u2 = UserMock.createDocuSignSender(false);
+
 			Test.startTest();
-			AuthService.resetCredentials(true);
+			AuthService.resetAccount(true);
 			Test.stopTest();
 
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			System.assertEquals(null, s.AccountId__c);
 			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId()].Username__c);
+			System.assertEquals(0, Collection.size([
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId IN :(NEW Set<Id> { u1.Id, u2.Id })
+				AND PermissionSetId IN (
+					SELECT Id
+					FROM PermissionSet
+					WHERE Name IN :Permissions.VALID_PERMISSION_SETS
+					AND NamespacePrefix = :Application.packageNamespace
+				)
+			]));
+			// Verify current user didn't lose admin permissions
+			System.assertEquals(1, Collection.size([
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
+			]));
 		}
 	}
 

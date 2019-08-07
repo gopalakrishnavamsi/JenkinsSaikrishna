@@ -392,7 +392,8 @@ public with sharing class Credentials {
 			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'Username__c',
 				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'Status__c'
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'Provisioned__c'
 			});
 
 			if (userId == null || user == null) return user;
@@ -401,7 +402,8 @@ public with sharing class Credentials {
 				update new User(
 					Id = userId,
 					Username__c = String.valueOf(user.id),
-					CanManageAccount__c = user.canManageAccount == true);
+					CanManageAccount__c = user.canManageAccount == true,
+					Provisioned__c = Date.today());
 			}
 
 			return user;
@@ -419,6 +421,41 @@ public with sharing class Credentials {
 			settings.AccessTokenExpires__c = null;
 
 			return settings;
+		}
+
+		public List<User> updateUsers(
+			final Set<Id> userIds,
+			final Boolean canManageAccount) {
+
+			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
+				Application.namespacePrefix + 'CanManageAccount__c'
+			});
+
+			List<User> result = new List<User>();
+			if (userIds != null) {
+				for (User u : [
+					SELECT CanManageAccount__c
+					FROM User
+					WHERE Id IN :userIds
+					LIMIT :Application.batchLimit
+				]) {
+					u.CanManageAccount__c = canManageAccount == true;
+					result.add(u);
+				}
+				update result;
+			}
+			return result;
+		}
+
+		public List<UserSettings__c> clearTokens(final Set<Id> userIds) {
+			List<UserSettings__c> result = new List<UserSettings__c>();
+			if (userIds != null) {
+				for (Id userId : userIds) {
+					result.add(clearToken(UserSettings__c.getInstance(userId)));
+				}
+				upsert result;
+			}
+			return result;
 		}
 
 		public Credentials updateCredentials(
@@ -470,36 +507,6 @@ public with sharing class Credentials {
 			return token;
 		}
 
-		public Map<Id, UserCredentials> updateUsers(final Map<Id, UserCredentials> users) {
-			if (users == null || users.isEmpty()) return users;
-
-			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
-				Application.namespacePrefix + 'Username__c',
-				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'Status__c'
-			});
-
-			List<User> dbUsers = [
-				SELECT Id, Username__c, CanManageAccount__c, Status__c
-				FROM User
-				WHERE Id IN :users.keySet()
-			];
-			for (User u : dbUsers) {
-				UserCredentials uu = users.get(u.Id);
-				if (uu == null) {
-					u.Username__c = null;
-					u.CanManageAccount__c = false;
-					u.Status__c = null;
-				} else {
-					u.Username__c = String.valueOf(uu.id);
-					u.CanManageAccount__c = uu.canManageAccount == true;
-				}
-			}
-			update dbUsers;
-
-			return users;
-		}
-
 		public AccountSettings__c deleteAccountCredentials() {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			settings.Environment__c = null;
@@ -545,7 +552,8 @@ public with sharing class Credentials {
 				Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
 					Application.namespacePrefix + 'Username__c',
 					Application.namespacePrefix + 'CanManageAccount__c',
-					Application.namespacePrefix + 'Status__c'
+					Application.namespacePrefix + 'Status__c',
+					Application.namespacePrefix + 'Provisioned__c'
 				});
 
 				List<UserSettings__c> settings = new List<UserSettings__c>();
@@ -553,12 +561,47 @@ public with sharing class Credentials {
 					u.Username__c = null;
 					u.CanManageAccount__c = false;
 					u.Status__c = null;
+					u.Provisioned__c = null;
 					UserSettings__c us = UserSettings__c.getInstance(u.Id);
 					if (us.Id != null) settings.add(us);
 				}
 				delete settings;
 				update users;
 			}
+			return users;
+		}
+
+		public Map<Id, UserCredentials> updateUsers(final Map<Id, UserCredentials> users) {
+			if (users == null || users.isEmpty()) return users;
+
+			Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'CanManageAccount__c',
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'Provisioned__c'
+			});
+
+			List<User> dbUsers = [
+				SELECT Id, Username__c, CanManageAccount__c, Status__c, Provisioned__c
+				FROM User
+				WHERE Id IN :users.keySet()
+				LIMIT :Application.batchLimit
+			];
+			for (User u : dbUsers) {
+				UserCredentials uu = users.get(u.Id);
+				if (uu == null) {
+					u.Username__c = null;
+					u.CanManageAccount__c = false;
+					u.Status__c = null;
+					u.Provisioned__c = null;
+				} else {
+					u.Username__c = String.valueOf(uu.id);
+					u.CanManageAccount__c = uu.canManageAccount == true;
+					u.Provisioned__c = Date.today();
+				}
+			}
+			update dbUsers;
+
 			return users;
 		}
 	}
@@ -623,80 +666,105 @@ public with sharing class Credentials {
 		return getInstance(userId, false);
 	}
 
-	public static Map<Id, UserCredentials> addUsers(final Map<Id, UserCredentials> users) {
-		Set<Id> adminIds = new Set<Id>();
-		Set<Id> userIds = new Set<Id>();
-		for (Id userId : users.keySet()) {
-			UserCredentials u = users.get(userId);
-			if (u != null) {
-				if (u.canManageAccount) {
-					adminIds.add(userId);
-				} else {
-					userIds.add(userId);
-				}
-			}
-		}
+	@TestVisible
+	private static Set<Id> filterNotCurrentUserId(final Set<Id> userIds) {
+		if (userIds == null) return new Set<Id>();
 
-		Map<Id, UserCredentials> result = DB.updateUsers(users);
-		if (!userIds.isEmpty()) {
-			assignUserPermissionSet(userIds);
-		}
-		if (!adminIds.isEmpty()) {
-			assignAdminPermissionSet(adminIds);
-		}
-		return result;
+		userIds.remove(UserInfo.getUserId());
+		return userIds;
 	}
 
-	public static void clear(final Boolean resetUsers) {
+	@TestVisible
+	private static Set<Id> verifyMaximumBatchSize(
+		final Set<Id> userIds,
+		final Integer maximumSize) {
+
+		if (userIds == null) return new Set<Id>();
+
+		Integer max = maximumSize <= 0 ? Application.batchLimit : maximumSize;
+		Integer size = userIds.size();
+		if (size > max) {
+			throw new DocuSignException(String.format(Label.MaximumBatchSizeExceeded_2,
+				new List<Object> { size, max }));
+		}
+		return userIds;
+	}
+
+	public static Map<Id, UserCredentials> add(final Map<Id, Credentials.UserCredentials> users) {
+		if (users == null) return new Map<Id, UserCredentials>();
+
+		users.remove(UserInfo.getUserId());
+		verifyMaximumBatchSize(users.keySet(), Application.batchLimit);
+
+		return DB.updateUsers(users);
+	}
+
+	public static Set<Id> clear(final Boolean resetUsers) {
+		Set<Id> result = new Set<Id>();
 		DB.deleteAccountCredentials();
 		DB.deleteProductSettings();
 		if (resetUsers) {
-			Set<Id> userIds = new Set<Id>();
 			Boolean isWorking = true;
 			while (isWorking) {
 				List<Schema.User> users = [
 					SELECT Id, Username__c, CanManageAccount__c, Status__c
 					FROM User
 					WHERE Username__c != NULL
-					LIMIT 200
+					LIMIT :Application.batchLimit
 				];
 				if (Collection.isNotEmpty(users)) {
 					DB.deleteUserCredentials(users);
 					for (Schema.User u : users) {
 						// Don't remove permission set from current user.
-						if (u.Id != UserInfo.getUserId()) userIds.add(u.Id);
+						if (u.Id != UserInfo.getUserId()) result.add(u.Id);
 					}
 				} else {
 					isWorking = false;
 				}
 			}
-			removePermissionSets(userIds);
 		}
 		self = null;
+		return result;
 	}
 
-	public static void clear(final Set<Id> userIds) {
-		DB.deleteUserCredentials([
-			SELECT Id, Username__c, CanManageAccount__c, Status__c
+	/**
+	 * Deletes user credentials.
+	 * <p>
+	 * A maximum of 2000 user IDs may be processed in one batch.
+	 *
+	 * @param userIds The IDs of users for which to clear credentials.
+	 *
+	 * @return Whether or not any credentials were cleared.
+	 */
+	public static Boolean clear(final Set<Id> userIds) {
+		return Collection.isNotEmpty(DB.deleteUserCredentials([
+			SELECT Id, Username__c, CanManageAccount__c, Status__c, Provisioned__c
 			FROM User
-			WHERE Id IN :userIds
-		]);
-		removePermissionSets(userIds);
-		self = null;
+			WHERE Username__c != NULL
+			AND Id IN :verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit)
+			LIMIT :Application.batchLimit
+		]));
 	}
 
-	@Future
-	private static void assignAdminPermissionSet(final Set<Id> userIds) {
-		Permissions.assignDocuSignAdministratorPermissionSet(userIds);
-	}
+	/**
+	 * Resets user credentials and updates the administrator flag on the <code>User</code> record. This should be called
+	 * when user roles change.
+	 * <p>
+	 * A maximum of 2000 user IDs may be processed in one batch.
+	 *
+	 * @param userIds The IDs of users for which to reset credentials.
+	 * @param canManageAccount Whether or not the user is an administrator on the DocuSign account.
+	 *
+	 * @return Whether or not any credentials were reset.
+	 */
+	public static Boolean reset(
+		final Set<Id> userIds,
+		final Boolean canManageAccount) {
 
-	@Future
-	private static void assignUserPermissionSet(final Set<Id> userIds) {
-		Permissions.assignDocuSignUserPermissionSet(userIds);
-	}
+		// Don't reset current user's credentials and bail if the batch limit is exceeded.
+		Set<Id> uIds = verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit);
 
-	@Future
-	private static void removePermissionSets(final Set<Id> userIds) {
-		Permissions.removeDocuSignPermissionSets(userIds);
+		return Collection.isNotEmpty(DB.clearTokens(uIds))
+			&& Collection.isNotEmpty(DB.updateUsers(uIds, canManageAccount));
 	}
 }
