@@ -3269,7 +3269,7 @@
 		<name>AgreementRenamed</name>
 	</customLabels>
 	<customLabels>
-		<label>has been deleted.</label>
+		<label>The {0} agreement has been deleted.</label>
 		<name>AgreementDeleted</name>
 	</customLabels>
 	<customLabels>

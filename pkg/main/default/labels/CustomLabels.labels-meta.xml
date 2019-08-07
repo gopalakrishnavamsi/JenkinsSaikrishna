@@ -6451,7 +6451,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementDeleted</shortDescription>
-		<value>has been deleted.</value>
+		<value>The {0} agreement has been deleted.</value>
 	</labels>
 	<labels>
 		<fullName>HQTEST3</fullName>
