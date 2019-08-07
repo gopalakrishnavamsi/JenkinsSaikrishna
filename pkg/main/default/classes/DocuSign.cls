@@ -1,6 +1,5 @@
 public class DocuSign {
 
-	public static final String PRODUCT_GEN = 'gen';
 	public static final UUID TRIAL_PLAN_ID = UUID.parse([
 		SELECT TrialPlanId__c
 		FROM Environment__mdt

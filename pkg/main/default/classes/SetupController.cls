@@ -100,7 +100,7 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled
 	public static LoginInformation logout(final Boolean resetUsers) {
 		try {
-			AuthService.resetCredentials(resetUsers);
+			AuthService.resetAccount(resetUsers);
 			return new LoginInformation(
 				null,
 				UserInfo.getName(),
@@ -131,10 +131,12 @@ public with sharing class SetupController extends Controller {
 					lastName,
 					null,
 					null,
-					canManageAccount,
+					canManageAccount == true,
 					null,
 					APIError.none)
-			});
+			}, canManageAccount == true
+				? new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR }
+				: new Set<String> { Permissions.DOCUSIGN_USER });
 			if (Collection.isNotEmpty(users) && users[0].hasError) {
 				throw new APIException(users[0].error);
 			}

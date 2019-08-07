@@ -533,18 +533,39 @@ public with sharing class AuthService {
 			c.client.privateKey)).token;
 	}
 
+	@Future
+	private static void clearUserRoles(final Set<Id> userIds) {
+		Permissions.clear(userIds);
+	}
+
 	/**
 	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
 	 * so invoke only after confirming with the administrator.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param resetUsers Whether or not to also clear user credentials.
+	 * @param resetUsers Whether or not to also reset user credentials and clear any permission set assignments.
+	 *
+	 * @return The IDs for any users whose credentials were cleared.
 	 */
-	public static void resetCredentials(final Boolean resetUsers) {
+	public static Set<Id> resetAccount(final Boolean resetUsers) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Credentials.clear(resetUsers);
+		Set<Id> result = Credentials.clear(resetUsers);
+		if (resetUsers) {
+			// Ensure users with the DocuSign Sender permission set are also cleared. They don't have a DS user ID, so
+			// they are not picked up by credential clearing.
+			for (PermissionSetAssignment psa : [
+				SELECT AssigneeId
+				FROM PermissionSetAssignment
+				WHERE PermissionSet.Name = :Permissions.DOCUSIGN_SENDER
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+			]) {
+				result.add(psa.AssigneeId);
+			}
+			clearUserRoles(result);
+		}
+		return result;
 	}
 
 	@TestVisible
