@@ -718,7 +718,7 @@ public with sharing class GenService {
 	}
 
 	public static String getResourceToken(final UUID documentID) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignUserOrNegotiator();
 		return GenAPI.getInstance().getResourceToken(documentID).toExternalForm();
 	}
 }

@@ -523,7 +523,7 @@ public with sharing class AuthService {
 	}
 
 	public static String getContentAccessToken() {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignUserOrNegotiator();
 		Credentials c = Credentials.getInstance();
 		return getAuthAPI(c.environment.accountBaseUrl).exchangeJwt(generateJwt(
 			c.environment.accountBaseUrl.getHost(),

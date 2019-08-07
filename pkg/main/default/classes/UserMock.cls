@@ -199,6 +199,42 @@ global class UserMock {
 	}
 
 	/**
+ * Creates a user and assigns the <code>DocuSign Negotiator</code> and <code>DocuSign Administrator</code> permission
+ * set for unit tests. This may be used for DocuSign for Salesforce methods that negotiate documents.
+ * <p>
+ * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
+ * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
+ *
+ * Example:
+ * <pre>
+ * static testMethod void myTest() {
+ *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
+ *   System.runAs(dfsle.UserMock.createDocuSignNegotiatorWithDocuSignAdministrator()) {
+ *     // Call service method requiring the DocuSign Negotiator and Docusign Administrator permission set.
+ *   }
+ * }
+ * </pre>
+ * @return A user with the DocuSign Negotiator permission set.
+ */
+	public static User createDocuSignNegotiatorWithDocuSignAdministrator() {
+		return createDocuSignNegotiatorWithDocuSignAdministrator(true);
+	}
+
+	public static User createDocuSignNegotiatorWithDocuSignAdministrator(final Boolean createAccountSettings) {
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> {u.Id});
+		}
+		return u;
+	}
+
+	/**
 	 * Creates a user and assigns the <code>CLM Administrator</code> permission set for unit tests. This may be used
 	 * for DocuSign CLM methods that require administrative access.
 	 * <p>
