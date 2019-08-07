@@ -1,60 +1,60 @@
-<aura:component extends="c:CLMUtility">
-    <ltng:require scripts="{!$Resource.navUtils}" />
+<aura:component extends='c:CLMUtility'>
+    <ltng:require scripts='{!$Resource.navUtils}' />
 
     <!--handler-->
-    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}" />
-    <aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}" />
+    <aura:handler event='c:CLMNavigationEvent' action='{!c.updateUI}' />
+    <aura:handler event='c:CLMBreadcrumbsEvent' action='{!c.updateFromBreadCrumbUI}' />
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
-    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
-    <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"  action="{!c.onSecondaryButtonClick}" />
+    <aura:handler name='CLMHelpPrimaryButtonClicked' event='c:CLMHelpCardEvent' action='{!c.onPrimaryButtonClick}' />
+    <aura:handler name='CLMHelpSecondaryButtonClicked' event='c:CLMHelpCardEvent'  action='{!c.onSecondaryButtonClick}' />
     
-    <aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent" />
+    <aura:registerEvent name='CLMCardModelEvent' type='c:CLMCardModelEvent' />
     
     <!--Place holder attributes-->
-    <aura:attribute name="breadCrumbValues" type="List" />
-    <aura:attribute name="pathValues" type="List" />
-    <aura:attribute name="editComponent" type="Aura.Component" />
+    <aura:attribute name='breadCrumbValues' type='List' />
+    <aura:attribute name='pathValues' type='List' />
+    <aura:attribute name='editComponent' type='Aura.Component' />
 
     <!--ui attributes-->
-    <aura:attribute type="boolean" name="showHelp" default="true" />
-    <aura:attribute type="boolean" name="showTrouble" default="true" />
-    <aura:attribute type="boolean" name="showPathAndNew" default="false" />
+    <aura:attribute type='boolean' name='showHelp' default='true' />
+    <aura:attribute type='boolean' name='showTrouble' default='true' />
+    <aura:attribute type='boolean' name='showPathAndNew' default='false' />
 
-    <lightning:layout multipleRows="true">
-        <aura:if isTrue="{!!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="horizontal-small">
+    <lightning:layout multipleRows='true'>
+        <aura:if isTrue='{!!v.showPathAndNew}'>
+            <lightning:layoutItem size='12' padding='horizontal-small'>
                 <c:CLMScopedNotifications />
             </lightning:layoutItem>
         </aura:if>
-        <lightning:layoutItem size="12" padding="around-small">
-            <c:CLMBreadcrumbs steps="{!v.breadCrumbValues}" />
+        <lightning:layoutItem size='12' padding='around-small'>
+            <c:CLMBreadcrumbs steps='{!v.breadCrumbValues}' />
         </lightning:layoutItem>
-        <aura:if isTrue="{!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <div class="slds-p-left_xx-large slds-p-right_xx-large">
-                    <c:CLMPath steps="{!v.pathValues}" />
+        <aura:if isTrue='{!v.showPathAndNew}'>
+            <lightning:layoutItem size='12' padding='around-small'>
+                <div class='slds-p-left_xx-large slds-p-right_xx-large'>
+                    <c:CLMPath steps='{!v.pathValues}' />
                 </div>
             </lightning:layoutItem>
         </aura:if>
-        <aura:if isTrue="{!!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
+        <aura:if isTrue='{!!v.showPathAndNew}'>
+            <lightning:layoutItem size='12' padding='around-small'>
                 <c:CLMMappedObjectsHome />
             </lightning:layoutItem>
         </aura:if>
-        <aura:if isTrue="{!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMCardModel main="{!v.editComponent}" />
+        <aura:if isTrue='{!v.showPathAndNew}'>
+            <lightning:layoutItem size='12' padding='around-small'>
+                <c:CLMCardModel main='{!v.editComponent}' />
             </lightning:layoutItem>
         </aura:if>
-        <aura:if isTrue="{!v.showTrouble}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required" buttonName="{!$Label.c.ConfigureLayouts}"
-                    showIcon='true' secondButtonName="{!$Label.c.LearnMore}" showFirstButton='true'
-                    summary="{!$Label.c.ConfigureObjectPageLayoutInfo}" />
+        <aura:if isTrue='{!v.showTrouble}'>
+            <lightning:layoutItem size='12' padding='around-small'>
+                <c:CLMHelp title='{!$Label.c.WhatsNext}' imageURL='standard:product_required' buttonName='{!$Label.c.ConfigureLayouts}'
+                    showIcon='true' secondButtonName='{!$Label.c.LearnMore}' showFirstButton='true'
+                    summary='{!$Label.c.ConfigureObjectPageLayoutInfo}' />
             </lightning:layoutItem>
         </aura:if>
-        <aura:if isTrue="{!v.showHelp}">
-            <lightning:layoutItem size="12" padding="around-small">
+        <aura:if isTrue='{!v.showHelp}'>
+            <lightning:layoutItem size='12' padding='around-small'>
                 <c:CLMTroubleshoot />
             </lightning:layoutItem>
         </aura:if>

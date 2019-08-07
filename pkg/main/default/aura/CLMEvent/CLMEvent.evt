@@ -1,0 +1,6 @@
+<aura:event type="APPLICATION" description="Application Event used to communicate between CLM components" >
+    <aura:attribute type="Object" name="data" />
+    <aura:attribute type="String" name="type" />
+    <aura:attribute type="String" name="fromComponent" />
+    <aura:attribute type="String" name="toComponent" />
+</aura:event>

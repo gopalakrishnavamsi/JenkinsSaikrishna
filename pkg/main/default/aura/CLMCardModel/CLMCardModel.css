@@ -1,7 +1,13 @@
 .THIS .ds-index-style {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
     background: #2a426c;
-    color: white;
-    border-radius: 1000px;
+    color: #fff;
+    border-radius: 100%;
+    position: relative;
+    top: -2px;
     pointer-events: none;
     border: none;
 }

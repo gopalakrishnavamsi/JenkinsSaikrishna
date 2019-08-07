@@ -13,6 +13,15 @@ public class MergeObject implements Comparable {
 	public String label { get; private set; }
 	@AuraEnabled
 	public Boolean isUpdateable { get; private set; }
+    
+  public static MergeObject addData(String name, String label){
+    return new MergeObject(
+			null,
+			null,
+			name,
+			label,
+			null);
+	}    
 
 	private MergeObject(
 		final SObjectType type,

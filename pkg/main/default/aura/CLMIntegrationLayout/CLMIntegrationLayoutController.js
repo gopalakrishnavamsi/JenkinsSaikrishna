@@ -31,7 +31,7 @@
         component.set('v.showPathAndNew', true);
         helper.fireApplicationEvent(component, {
           title: $A.get('$Label.c.SelectObject'),
-          summary: $A.get('$Label.c.ChooseObjectInfo'),
+          summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
           index: '1',
           body: '',
           fromComponent: 'CLMIntegrationLayout',
@@ -66,4 +66,4 @@
       tabIndex: '8',
     }, 'CLMNavigationEvent');
   }
-})
+});

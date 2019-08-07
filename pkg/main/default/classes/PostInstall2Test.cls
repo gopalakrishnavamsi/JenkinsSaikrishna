@@ -1,12 +1,9 @@
-@IsTest
-private class PostInstall2Test {
+	@IsTest
+	private class PostInstall2Test {
 
 	@IsTest
-	static void test_initializeAccountSettings_uninitialized() {
-		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-		s.IsESignatureEnabled__c = false;
-		insert s;
-		System.assertNotEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
+	static void test_initializeAccountSettings_no_key() {
+		insert AccountSettings__c.getOrgDefaults();
 		System.assertEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 
 		Test.startTest();
@@ -17,15 +14,13 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, result.getSteps()[0].status);
-		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 	}
 
 	@IsTest
-	static void test_initializeAccountSettings_initialized() {
+	static void test_initializeAccountSettings_key_exists() {
 		String pvk = UUID.randomUUID().toShortString();
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-		s.IsESignatureEnabled__c = true;
 		s.EncryptionKey__c = pvk;
 		insert s;
 
@@ -37,8 +32,47 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
-		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertEquals(pvk, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
+	}
+
+	@isTest
+	static void test_createDefaultCLMObjMappings_mappings_do_not_exist(){
+		System.assertEquals(null, EOS_Type__c.getOrgDefaults().Name__c);
+
+		Test.startTest();
+		PostInstallResults result = PostInstall2.createDefaultCLMObjMappings();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@isTest
+	static void test_createDefaultCLMObjMappings_mappings_exist(){
+		EOS_Type__c eos_1 = EOS_Type__c.getOrgDefaults();
+		eos_1.Folder_Name__c = UUID.randomUUID().toShortString();
+		eos_1.Path__c = UUID.randomUUID().toShortString();
+		eos_1.Name__c = UUID.randomUUID().toShortString();
+		eos_1.Folder_Name_Format__c	= UUID.randomUUID().toShortString();
+		eos_1.Variables__c = UUID.randomUUID().toShortString();
+		eos_1.Path_Format__c = UUID.randomUUID().toShortString();			
+		eos_1.Name = UUID.randomUUID().toShortString();		
+		insert eos_1;
+
+		EOS_Type__c eos_2 = new EOS_Type__c();
+		eos_2.Folder_Name__c = UUID.randomUUID().toShortString();
+		eos_2.Path__c = UUID.randomUUID().toShortString();
+		eos_2.Name__c = UUID.randomUUID().toShortString();
+		eos_2.Folder_Name_Format__c	= UUID.randomUUID().toShortString();
+		eos_2.Variables__c = UUID.randomUUID().toShortString();
+		eos_2.Path_Format__c = UUID.randomUUID().toShortString();			
+		eos_2.Name = UUID.randomUUID().toShortString();		
+		insert eos_2;
+
+		Test.startTest();
+		PostInstallResults result = PostInstall2.createDefaultCLMObjMappings();
+		Test.stopTest();
+
+		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
 	}
 
 	@IsTest
@@ -62,7 +96,6 @@ private class PostInstall2Test {
 		System.assert(result.success);
 		System.assertEquals(1, Collection.size(result.getSteps()));
 		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, result.getSteps()[0].status);
-		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
 	}
 }

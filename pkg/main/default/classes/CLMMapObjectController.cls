@@ -1,50 +1,63 @@
-public with sharing class CLMMapObjectController {
-
-    @auraEnabled 
+public with sharing class CLMMapObjectController {    
+    @AuraEnabled 
     public static String getNamespace(){
         return Application.namespace;
     }
+    
     @AuraEnabled
-    public static String getMappedObjectsList(){
-        return '['+
-            '{"objectName": "Account", "folderName": "{!Account.Name}", "path": "/Salesforce/Accounts/","Id":"1"},'+
-            '{"objectName": "Opportunity", "folderName": "{!Opportunity.Name}", "path": "/Salesforce/Accounts/{!Account.Name}/Opportunities","Id":"2"}'+
-            ']';
-    }
-    //TODO: Change below method to use MergeObject instead of AllObjects
-    @AuraEnabled(Cacheable=true)
-    public static List<AllObjects> getAllObjects(){
-        List<AllObjects> returnValue=new List<AllObjects>();
-        for ( Schema.SObjectType o : Schema.getGlobalDescribe().values() )
-        {
-            Schema.DescribeSObjectResult objResult = o.getDescribe();
-            returnValue.add(new AllObjects(objResult.getLabel(),objResult.getName()));
-            
+    public static Boolean removeMappedObject(String name){
+        try{
+            delete EOS_Type__c.getInstance(name);
+            return true;
         }
-        return returnValue;
-    }
-    //TODO: Change below method to use MergeObject instead of AllObjects
-    @AuraEnabled(Cacheable=true)
-    public static List<AllObjects> getAllObjectFileds(String apiName){ 
-        List<AllObjects> returnValue=new List<AllObjects>();
-     	Map<string,SObjectField> fList = schema.getGlobalDescribe().get(apiName).getDescribe().fields.getMap();
-        for(string str: fList.keySet()){
-            returnValue.add(new AllObjects(fList.get(str).getDescribe().getLabel(),str));
+        catch(Exception e){
+            throw New auraHandledException(e.getMessage());
         }
-        return returnValue;
     }
     
-    public class AllObjects{
-        @AuraEnabled
-        public String name;
-        @AuraEnabled 
-        public String apiName;
-        @AuraEnabled 
-        public Boolean selected;
-        public AllObjects(String name,String apiName){
-            this.name=name;
-            this.apiName=apiName;
-            selected=false;            
+    @AuraEnabled
+    public static Boolean setMappedObject(EOS_Type__c eosDetails){
+        try{
+            insert eosDetails;
+            return true;
         }
-    }    
+        catch(Exception e){
+            throw New auraHandledException(e.getMessage());
+        }
+    }
+    
+    @AuraEnabled(Cacheable=true)
+    public static Map<String, EOS_Type__c> getMappedObjectsList(){
+      
+		return EOS_Type__c.getAll();
+    }
+   
+    @AuraEnabled(Cacheable=true)
+    public static List<MergeObject> getAllObjects(){
+        try{
+            
+            return MetadataService.getObjects();
+           
+        }
+        catch(exception e){
+            throw New auraHandledException(e.getMessage());
+        }
+    }
+    
+    @AuraEnabled(Cacheable=true)                                        
+    public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild){ 
+        try{
+            
+         
+            return MetadataService.getFields(schema.getGlobalDescribe().get(apiName),isChild);
+        }
+        catch(exception e){
+            throw New auraHandledException(e.getMessage());
+        }
+    }
+    //Returns the record count from the custom setting
+    @AuraEnabled(Cacheable=true)
+    public static Integer getRecordCount(){
+        return EOS_Type__c.getAll().values().size();
+    }     
 }
