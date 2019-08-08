@@ -358,4 +358,9 @@ public with sharing class NegotiateService {
 		UUID externalReviewId = NegotiateAPI.getInstance().getDocumentReview(documentId);
 		return NegotiateAPI.getInstance().externalReviewCompleteOnBehalf(comments, newVersionUrl, externalReviewId);
 	}
+
+	public static String getResourceToken(final UUID documentID) {
+		Permissions.verifyIsDocuSignNegotiator();
+		return ResourceTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
+	}
 }

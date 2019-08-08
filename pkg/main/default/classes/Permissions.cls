@@ -289,20 +289,6 @@ public with sharing class Permissions {
 	}
 
 	/**
-	 * Throws an <code>UnauthorizedException</code> if the current user is not assigned the
-	 * <code>DocuSign User</code> or <code>DocuSign Negotiator</code> permission set.
-	 */
-
-	public static void verifyIsDocuSignUserOrNegotiator() {
-		verifyIsDocuSignUserOrNegotiator(UserInfo.getUserId());
-	}
-
-	@TestVisible
-	private static void verifyIsDocuSignUserOrNegotiator(final Id userId) {
-		if (String.isBlank(userId) || !(isDocuSignUser(userId) || isDocuSignNegotiator(userId))) throw UnauthorizedException.notDocuSignUser();
-	}
-
-	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Sender</code>,
 	 * <code>DocuSign User</code>, or <code>DocuSign Administrator</code> permission set.
 	 *

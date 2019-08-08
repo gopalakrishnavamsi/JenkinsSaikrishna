@@ -377,9 +377,9 @@ private class NegotiateServiceTest {
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
 		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiatorWithDocuSignAdministrator()) {
-
+		User user = UserMock.createDocuSignAdministrator();
+		System.runAs(user) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
 			Boolean result = NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
 				NegotiateAPIMock.WORKITEM_ID);
@@ -394,9 +394,9 @@ private class NegotiateServiceTest {
 	@IsTest
 	static void test_externalReviewCompleteOnBehalf_success() {
 		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiatorWithDocuSignAdministrator()) {
-
+		User user = UserMock.createDocuSignAdministrator();
+		System.runAs(user) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
 			Boolean result = NegotiateService.externalReviewCompleteOnBehalf('this is the comment',
 				NegotiateAPIMock.DOCUMENT_HREF, NegotiateAPIMock.DOCUMENT_ID);
@@ -405,6 +405,40 @@ private class NegotiateServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(true, result);
 
+		}
+	}
+
+	@IsTest
+	static void test_getResourceToken_success() {
+		GenAPIMock.success();
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+			Test.startTest();
+			String result = NegotiateService.getResourceToken(GenAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.contains(GenAPIMock.DOCUMENT_ID.toString()));
+		}
+	}
+
+	@IsTest
+	static void test_getResourceToken_fail() {
+		NegotiateAPIMock.failure();
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+			Boolean hasError = false;
+			Test.startTest();
+			try {
+				String result = NegotiateService.getResourceToken(GenAPIMock.DOCUMENT_ID);
+			} catch(APIException ex) {
+				hasError = true;
+				System.assertNotEquals(null, ex.error);
+				System.assertNotEquals(null, ex.error.code);
+				System.assertNotEquals(null, ex.error.description);
+				System.assert(ex.error instanceof ResourceTokenAPI.Error);
+				System.assert(UUID.isNotEmpty(((ResourceTokenAPI.Error)ex.error).referenceId));
+			}
+			Test.stopTest();
+			System.assert(hasError);
 		}
 	}
 }

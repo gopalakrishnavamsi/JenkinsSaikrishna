@@ -539,9 +539,9 @@ private class AgreementsControllerTest {
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
 		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiatorWithDocuSignAdministrator(true)) {
-
+		User user = UserMock.createDocuSignAdministrator();
+		System.runAs(user) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
 			Boolean result = AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();

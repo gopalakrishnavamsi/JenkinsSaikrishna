@@ -106,7 +106,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String generateResourceToken(final String agreementId) {
 		try {
-			return GenService.getResourceToken(UUID.parse(agreementId));
+			return NegotiateService.getResourceToken(UUID.parse(agreementId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate resource access token.');
 		}
