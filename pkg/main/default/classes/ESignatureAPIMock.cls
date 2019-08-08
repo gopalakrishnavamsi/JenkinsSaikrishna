@@ -116,11 +116,12 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				a.planEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
 				a.billingPeriodStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
 				a.billingPeriodEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
-				a.accountName = UUID.randomUUID().toString();
+				a.accountName = String.isBlank(s.AccountName__c) ? UUID.randomUUID().toString() : s.AccountName__c;
 				a.accountIdGuid = UUID.isEmpty(request.accountId)
-					? UUID.randomUUID().toString()
+					? (String.isBlank(s.AccountId__c) ? UUID.randomUUID().toString() : s.AccountId__c)
 					: request.accountId.toString();
-				a.externalAccountId = String.valueOf(TestUtils.randomInteger(1000000));
+				a.externalAccountId = s.AccountNumber__c == null
+					? String.valueOf(TestUtils.randomInteger(1000000)) : String.valueOf(s.AccountNumber__c);
 				a.connectPermission = 'full';
 				a.suspensionStatus = null;
 				a.suspensionDate = null;

@@ -94,8 +94,18 @@ public with sharing class AccountProducts {
 			resolvedProducts.put(
 				Product.ESIGNATURE,
 				AccountAPI.getInstance().getProduct());
-			for (Product p : ProvisioningAPI.getInstance().getProducts()) {
-				if (p != null) resolvedProducts.put(p.name, p);
+			ProvisioningAPI client = ProvisioningAPI.getInstance();
+			for (Product p : client.getProducts()) {
+				if (p != null) {
+					Product pp;
+					if (p.status == Product.STATUS_PENDING) { // Activate any pending products we care about.
+						LoggerService.getInstance().info('Activating product: ' + p.name);
+						pp = client.activateProduct(p.name, false);
+					} else {
+						pp = p;
+					}
+					resolvedProducts.put(pp.name, pp);
+				}
 			}
 			updateProducts(
 				serializeProducts(resolvedProducts),
@@ -216,7 +226,9 @@ public with sharing class AccountProducts {
 		return result;
 	}
 
-	private static Product convertProduct(final ProductSettings__c product) {
+	private static Product convertProduct(
+		final ProductSettings__c product,
+		final AccountSettings__c account) {
 
 		Product result = null;
 		switch on (product == null ? '' : product.Name) {
@@ -231,20 +243,23 @@ public with sharing class AccountProducts {
 					product.Status__c,
 					product.IsTrial__c == true,
 					product.TrialExpires__c,
-					null,
-					null);
+					account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
+					account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c));
 			} when 'negotiate' {
 				result = new NegotiateProduct(
 					product.Status__c,
 					product.IsTrial__c == true,
 					product.TrialExpires__c,
-					null);
+					account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
+					account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c));
 			} when 'clm' {
 				result = new ClmProduct(
 					product.Status__c,
 					product.IsTrial__c == true,
 					product.TrialExpires__c,
-					null);
+					account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
+					account == null || account.ClmLandingPageUrl__c == null ? null : new Url(account.ClmLandingPageUrl__c),
+					account == null || account.ClmAdminUrl__c == null ? null : new Url(account.ClmAdminUrl__c));
 			}
 		}
 		return result;
@@ -253,10 +268,11 @@ public with sharing class AccountProducts {
 	private static Map<String, Product> loadProducts() {
 		Map<String, Product> result = new Map<String, Product>();
 		Map<String, ProductSettings__c> pss = ProductSettings__c.getAll();
+		AccountSettings__c accs = AccountSettings__c.getOrgDefaults();
 		if (pss != null) {
 			for (String key : pss.keySet()) {
 				ProductSettings__c ps = pss.get(key);
-				if (String.isNotBlank(key) && ps != null) result.put(key, convertProduct(ps));
+				if (String.isNotBlank(key) && ps != null) result.put(key, convertProduct(ps, accs));
 			}
 		}
 		return result;
@@ -310,9 +326,39 @@ public with sharing class AccountProducts {
 			throw new DocuSignException(String.format(Label.InvalidTrialProduct_1, new List<String> { productName }));
 		}
 
-		Product result = ProvisioningAPI.getInstance().addProduct(productName.toLowerCase(), true);
+		Product result = ProvisioningAPI.getInstance().activateProduct(productName.toLowerCase(), true);
 		updateProducts(new Map<String, String> { result.name => JSON.serialize(result) });
 		this.products.put(result.name, result);
 		return result;
+	}
+
+	public Url getScmAuthBaseUrl() {
+		Url result = null;
+		if (this.clm != null && this.clm.authBaseUrl != null) {
+			result = this.clm.authBaseUrl;
+		} else if (this.negotiate != null && this.negotiate.authBaseUrl != null) {
+			result = this.negotiate.authBaseUrl;
+		} else if (this.gen != null && this.gen.authBaseUrl != null) {
+			result = this.gen.authBaseUrl;
+		}
+		return result;
+	}
+
+	public Url getScmApiBaseUrl() {
+		Url result = null;
+		if (this.negotiate != null && this.negotiate.apiBaseUrl != null) {
+			result = this.negotiate.apiBaseUrl;
+		} else if (this.gen != null && this.gen.apiBaseUrl != null) {
+			result = this.gen.apiBaseUrl;
+		}
+		return result;
+	}
+
+	public Url getClmAdminUrl() {
+		return this.clm == null ? null : this.clm.adminUrl;
+	}
+
+	public Url getClmLandingPageUrl() {
+		return this.clm == null ? null : this.clm.landingPageUrl;
 	}
 }

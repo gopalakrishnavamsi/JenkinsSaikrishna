@@ -22,6 +22,8 @@ public with sharing class Application {
 		'organization__mdt', 'localization__mdt', 'bulklist__c', 'bulkstatus__c',
 		'gentemplate__c'
 	};
+	@TestVisible
+	private static final Integer BATCH_LIMIT = 2000;
 
 	static {
 		// HACK: Get managed package version: https://salesforce.stackexchange.com/questions/11049/cant-catch-system-procedureexception-thrown-by-system-requestversion
@@ -89,6 +91,12 @@ public with sharing class Application {
 	public static String userAgent {
 		get {
 			return USER_AGENT;
+		}
+	}
+
+	public static Integer batchLimit {
+		get {
+			return BATCH_LIMIT;
 		}
 	}
 

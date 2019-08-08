@@ -234,8 +234,8 @@ global class UserMock {
 	}
 
 	/**
-	 * Creates a user and assigns the <code>CLM Subscriber</code> permission set for unit tests. This may be used
-	 * for DocuSign CLM methods that require subscriber access.
+	 * Creates a user and assigns the <code>CLM User</code> permission set for unit tests. This may be used
+	 * for DocuSign CLM methods that require user access.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -244,18 +244,18 @@ global class UserMock {
 	 * <pre>
 	 * static testMethod void myTest() {
 	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
-	 *   System.runAs(dfsle.UserMock.createClmSubscriber()) {
-	 *     // Call service method requiring the CLM Subscriber permission set.
+	 *   System.runAs(dfsle.UserMock.createClmUSer()) {
+	 *     // Call service method requiring the CLM User permission set.
 	 *   }
 	 * }
 	 * </pre>
-	 * @return A user with the CLM Subscriber permission set.
+	 * @return A user with the CLM User permission set.
 	 */
-	public static User createClmSubscriber() {
-		return createClmSubscriber(true);
+	public static User createClmUser() {
+		return createClmUser(true);
 	}
 
-	public static User createClmSubscriber(final Boolean createAccountSettings) {
+	public static User createClmUser(final Boolean createAccountSettings) {
 		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
 		if (createAccountSettings) {
 			System.runAs(u) {
@@ -263,14 +263,14 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignClmSubscriberPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignClmUserPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
 	}
 
 	/**
-	 * Creates a user and assigns the <code>CLM Guest</code> permission set for unit tests. This may be used
-	 * for DocuSign CLM methods that require administrative access.
+	 * Creates a user and assigns the <code>CLM Viewer</code> permission set for unit tests. This may be used
+	 * for DocuSign CLM methods that require viewer access.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -279,18 +279,18 @@ global class UserMock {
 	 * <pre>
 	 * static testMethod void myTest() {
 	 *   dfsle.TestUtils.setMock(dfsle.DocuSignAPIMock.success());
-	 *   System.runAs(dfsle.UserMock.createClmGuest()) {
-	 *     // Call service method requiring the CLM Guest permission set.
+	 *   System.runAs(dfsle.UserMock.createClmViewer()) {
+	 *     // Call service method requiring the CLM Viewer permission set.
 	 *   }
 	 * }
 	 * </pre>
-	 * @return A user with the CLM Guest permission set.
+	 * @return A user with the CLM Viewer permission set.
 	 */
-	public static User createClmGuest() {
-		return createClmGuest(true);
+	public static User createClmViewer() {
+		return createClmViewer(true);
 	}
 
-	public static User createClmGuest(final Boolean createAccountSettings) {
+	public static User createClmViewer(final Boolean createAccountSettings) {
 		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
 		if (createAccountSettings) {
 			System.runAs(u) {
@@ -298,7 +298,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignClmGuestPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignClmViewerPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;
 	}
@@ -392,6 +392,8 @@ global class UserMock {
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
 		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/gen/';
+		accountSettings.ClmAdminUrl__c = 'https://test.springcm.com/admin';
+		accountSettings.ClmLandingPageUrl__c = 'https://test.springcm.com/landing';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
 		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
 		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);

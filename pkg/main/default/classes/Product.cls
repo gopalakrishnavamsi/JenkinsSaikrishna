@@ -32,19 +32,16 @@ public abstract class Product {
 			return Math.max(Date.today().daysBetween(this.trialExpires), 0);
 		}
 	}
-	public Map<String, String> properties { get; private set; }
 
 	protected Product(
 		final String name,
 		final String status,
 		final Boolean isTrial,
-		final Date trialExpires,
-		final Map<String, String> properties) {
+		final Date trialExpires) {
 
 		this.name = name;
 		this.status = status;
 		this.isTrial = isTrial == true;
 		this.trialExpires = trialExpires;
-		this.properties = properties == null ? new Map<String, String>() : properties;
 	}
 }

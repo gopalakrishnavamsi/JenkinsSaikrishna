@@ -533,18 +533,39 @@ public with sharing class AuthService {
 			c.client.privateKey)).token;
 	}
 
+	@Future
+	private static void clearUserRoles(final Set<Id> userIds) {
+		Permissions.clear(userIds);
+	}
+
 	/**
 	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
 	 * so invoke only after confirming with the administrator.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @param resetUsers Whether or not to also clear user credentials.
+	 * @param resetUsers Whether or not to also reset user credentials and clear any permission set assignments.
+	 *
+	 * @return The IDs for any users whose credentials were cleared.
 	 */
-	public static void resetCredentials(final Boolean resetUsers) {
+	public static Set<Id> resetAccount(final Boolean resetUsers) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Credentials.clear(resetUsers);
+		Set<Id> result = Credentials.clear(resetUsers);
+		if (resetUsers) {
+			// Ensure users with the DocuSign Sender permission set are also cleared. They don't have a DS user ID, so
+			// they are not picked up by credential clearing.
+			for (PermissionSetAssignment psa : [
+				SELECT AssigneeId
+				FROM PermissionSetAssignment
+				WHERE PermissionSet.Name = :Permissions.DOCUSIGN_SENDER
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+			]) {
+				result.add(psa.AssigneeId);
+			}
+			clearUserRoles(result);
+		}
+		return result;
 	}
 
 	@TestVisible
@@ -878,6 +899,8 @@ public with sharing class AuthService {
 		final Url provisioningBaseUrl,
 		final Url scmAuthBaseUrl,
 		final Url scmApiBaseUrl,
+		final Url clmAdminUrl,
+		final Url clmLandingPageUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
 		final LoginInformation.Account account,
@@ -888,7 +911,9 @@ public with sharing class AuthService {
 			|| !DocuSign.isValidUrl(accountBaseUrl)
 			|| !DocuSign.isValidUrl(provisioningBaseUrl)
 			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))
-			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))) {
+			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))
+			|| (clmAdminUrl != null && !DocuSign.isValidUrl(clmAdminUrl))
+			|| (clmLandingPageUrl != null && !DocuSign.isValidUrl(clmLandingPageUrl))) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
@@ -942,7 +967,9 @@ public with sharing class AuthService {
 				pBaseUrl,
 				eSignatureBaseUrl,
 				scmAuthBaseUrl,
-				scmApiBaseUrl),
+				scmApiBaseUrl,
+				clmAdminUrl,
+				clmLandingPageUrl),
 			instanceCredentials,
 			new Credentials.AccountCredentials(
 				account.id,
@@ -1027,14 +1054,15 @@ public with sharing class AuthService {
 			&& l.loginInformation != null
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
-			// TODO: Verify URLs for Negotiate, CLM
-			GenProduct p = AccountProducts.getInstance().gen;
+			AccountProducts aps = AccountProducts.getInstance();
 			save(
 				rc.environment,
 				rc.accountBaseUrl,
 				rc.provisioningBaseUrl,
-				p == null ? null : p.authBaseUrl,
-				p == null ? null : p.apiBaseUrl,
+				aps.getScmAuthBaseUrl(),
+				aps.getScmApiBaseUrl(),
+				aps.getClmAdminUrl(),
+				aps.getClmLandingPageUrl(),
 				rc.clientId,
 				l.loginInformation,
 				l.loginInformation.accounts[0],
@@ -1182,14 +1210,15 @@ public with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
-		// TODO: Verify URLs for Negotiate, CLM
-		GenProduct p = AccountProducts.getInstance().gen;
+		AccountProducts aps = AccountProducts.getInstance();
 		save(
 			rc.environment,
 			rc.accountBaseUrl,
 			rc.provisioningBaseUrl,
-			p == null ? null : p.authBaseUrl,
-			p == null ? null : p.apiBaseUrl,
+			aps.getScmAuthBaseUrl(),
+			aps.getScmApiBaseUrl(),
+			aps.getClmAdminUrl(),
+			aps.getClmLandingPageUrl(),
 			rc.clientId,
 			result,
 			selected,

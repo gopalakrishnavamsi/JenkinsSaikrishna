@@ -1456,12 +1456,12 @@
 		<name>MustBeClmAdministrator</name>
 	</customLabels>
 	<customLabels>
-		<label>You must have DocuSign CLM subscriber permissions to perform this operation.</label>
-		<name>MustBeClmSubscriber</name>
+		<label>You must have DocuSign CLM user permissions to perform this operation.</label>
+		<name>MustBeClmUser</name>
 	</customLabels>
 	<customLabels>
-		<label>You must have DocuSign CLM guest permissions to perform this operation.</label>
-		<name>MustBeClmGuest</name>
+		<label>You must have DocuSign CLM viewer permissions to perform this operation.</label>
+		<name>MustBeClmViewer</name>
 	</customLabels>
 	<customLabels>
 		<label>My Personal Content</label>
@@ -2607,7 +2607,7 @@
 		<name>ScmAuthServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Gen Service</label>
+		<label>DocuSign Gen/Negotiate Service</label>
 		<name>GenServiceDescription</name>
 	</customLabels>
 	<customLabels>
@@ -4022,6 +4022,7 @@
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
+<<<<<<< HEAD
 		<label>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</label>
 		<name>CaseFolderContentsHelp</name>
 	</customLabels>
@@ -4100,6 +4101,10 @@
 	<customLabels>
 		<label>Select a field below to name your folder</label>
 		<name>SelectFieldToNameTheFolder</name>
+=======
+		<label>Maximum batch size exceeded: {0} > {1}</label>
+		<name>MaximumBatchSizeExceeded_2</name>
+>>>>>>> 2b120040118f51743241e4b15aa2b25f2a631320
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

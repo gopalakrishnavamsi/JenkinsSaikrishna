@@ -3017,20 +3017,20 @@
 		<value>You must have DocuSign CLM administrator permissions to perform this operation.</value>
 	</labels>
 	<labels>
-		<fullName>MustBeClmSubscriber</fullName>
+		<fullName>MustBeClmUser</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Must Be CLM Subscriber</shortDescription>
-		<value>You must have DocuSign CLM subscriber permissions to perform this operation.</value>
+		<shortDescription>Must Be CLM User</shortDescription>
+		<value>You must have DocuSign CLM user permissions to perform this operation.</value>
 	</labels>
 	<labels>
-		<fullName>MustBeClmGuest</fullName>
+		<fullName>MustBeClmViewer</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Must Be CLM Guest</shortDescription>
-		<value>You must have DocuSign CLM guest permissions to perform this operation.</value>
+		<shortDescription>Must Be CLM Viewer</shortDescription>
+		<value>You must have DocuSign CLM viewer permissions to perform this operation.</value>
 	</labels>
 	<labels>
 		<fullName>MyPersonalContent</fullName>
@@ -5187,8 +5187,8 @@
 		<fullName>GenServiceDescription</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>DocuSign Gen Service</shortDescription>
-		<value>DocuSign Gen Service</value>
+		<shortDescription>DocuSign Gen/Negotiate Service</shortDescription>
+		<value>DocuSign Gen/Negotiate Service</value>
 	</labels>
 	<labels>
 		<fullName>SystemSender</fullName>
@@ -7695,5 +7695,10 @@
 		<protected>true</protected>
 		<shortDescription>Select field to name your folder</shortDescription>
 		<value>Select a field below to name your folder</value>
+		<fullName>MaximumBatchSizeExceeded_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Maximum batch size exceeded</shortDescription>
+		<value>Maximum batch size exceeded: {0} > {1}</value>
 	</labels>
 </CustomLabels>

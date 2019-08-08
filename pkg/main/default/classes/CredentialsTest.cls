@@ -173,7 +173,9 @@ private class CredentialsTest {
 					new Url('https://api.test.docusign.net/'),
 					new Url('https://esign.test.docusign.net/'),
 					new Url('https://auth.test.springcm.com/'),
-					new Url('https://api.test.springcm.com/')),
+					new Url('https://api.test.springcm.com/'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -208,6 +210,10 @@ private class CredentialsTest {
 			System.assertEquals('https://auth.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
 			System.assertEquals('https://api.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
+			System.assertEquals('https://test.springcm.com/landing', result1.environment.clmLandingPageUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmAdminUrl);
+			System.assertEquals('https://test.springcm.com/admin', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -262,7 +268,9 @@ private class CredentialsTest {
 					new Url('https://api1.test.docusign.net/'),
 					new Url('https://esign1.test.docusign.net/'),
 					new Url('https://auth1.test.springcm.com/'),
-					new Url('https://api1.test.springcm.com/')),
+					new Url('https://api1.test.springcm.com/'),
+					new Url('https://test.springcm.com/landing1'),
+					new Url('https://test.springcm.com/admin1')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -298,6 +306,10 @@ private class CredentialsTest {
 			System.assertEquals('https://auth1.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
 			System.assertEquals('https://api1.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
+			System.assertEquals('https://test.springcm.com/landing1', result1.environment.clmLandingPageUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmAdminUrl);
+			System.assertEquals('https://test.springcm.com/admin1', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -328,6 +340,46 @@ private class CredentialsTest {
 	}
 
 	@IsTest
+	static void test_filterNotCurrentUserId() {
+		System.runAs(UserMock.getAdministrator()) {
+			Id u0 = UserInfo.getUserId();
+			Id u1 = UserMock.createUser().Id;
+			Id u2 = UserMock.createUser().Id;
+
+			Test.startTest();
+			System.assertEquals(new Set<Id>(), Credentials.filterNotCurrentUserId(null));
+			System.assertEquals(new Set<Id> { u1, u2 }, Credentials.filterNotCurrentUserId(new Set<Id> { u1, u2 }));
+			System.assertEquals(new Set<Id> { u1, u2 }, Credentials.filterNotCurrentUserId(new Set<Id> { u0, u1, u2 }));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_verifyMaximumBatchSize() {
+		System.runAs(UserMock.getAdministrator()) {
+			Id u0 = UserInfo.getUserId();
+			Id u1 = UserMock.createUser().Id;
+			Id u2 = UserMock.createUser().Id;
+			Set<Id> ids = new Set<Id> { u0, u1, u2 };
+
+			Test.startTest();
+			System.assertEquals(ids, Credentials.verifyMaximumBatchSize(ids, null));
+			System.assertEquals(ids, Credentials.verifyMaximumBatchSize(ids, -1));
+			System.assertEquals(ids, Credentials.verifyMaximumBatchSize(ids, 0));
+			System.assertEquals(ids, Credentials.verifyMaximumBatchSize(ids, Application.batchLimit));
+			System.assertEquals(ids, Credentials.verifyMaximumBatchSize(ids, 3));
+			try {
+				Credentials.verifyMaximumBatchSize(ids, 2);
+				throw new AssertException('Expected verifyMaximumBatchSize to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.MaximumBatchSizeExceeded_2, new List<Object> { 3, 2 }),
+					ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_addUsers() {
 		User dsu1 = UserMock.createUser(),
 			dsu2 = UserMock.createUser(),
@@ -339,7 +391,7 @@ private class CredentialsTest {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
 
 			Test.startTest();
-			Map<Id, Credentials.UserCredentials> result = Credentials.addUsers(new Map<Id, Credentials.UserCredentials> {
+			Map<Id, Credentials.UserCredentials> result = Credentials.add(new Map<Id, Credentials.UserCredentials> {
 				dsu1.Id => new Credentials.UserCredentials(userId1, 'u1', 'u1@unit.test', false),
 				dsu2.Id => new Credentials.UserCredentials(userId2, 'u2', 'u2@unit.test', true),
 				dsu3.Id => null
@@ -352,20 +404,14 @@ private class CredentialsTest {
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(userId1.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignAdministrator(dsu1.Id));
-			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertEquals(userId2.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignAdministrator(dsu2.Id));
-			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignAdministrator(dsu3.Id));
-			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
 
@@ -421,22 +467,18 @@ private class CredentialsTest {
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(adminId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(userId1.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignUser(dsu1.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertEquals(userId2.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(userId3.toString(), uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
 
@@ -492,22 +534,18 @@ private class CredentialsTest {
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignUser(dsu2.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
 
@@ -552,22 +590,18 @@ private class CredentialsTest {
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertNotEquals(null, uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignAdministrator(dsa.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu1.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignUser(dsu1.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu2.Id LIMIT 1];
 			System.assertNotEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(Permissions.isDocuSignUser(dsu2.Id));
 
 			uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsu3.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
 			System.assert(!uu.CanManageAccount__c);
-			System.assert(!Permissions.isDocuSignUser(dsu3.Id));
 		}
 	}
 
@@ -739,6 +773,125 @@ private class CredentialsTest {
 				}), ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_Database_updateUsers() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			User u1 = UserMock.createDocuSignUser(false);
+			User u2 = UserMock.createDocuSignUser(false);
+
+			Test.startTest();
+			List<User> result = Credentials.DB.updateUsers(new Set<Id> { u1.Id, u2.Id }, true);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			List<User> users = [SELECT CanManageAccount__c FROM User WHERE Id IN :(NEW List<Id> { u1.Id, u2.Id })];
+			System.assertEquals(2, Collection.size(users));
+			System.assert(users[0].CanManageAccount__c);
+			System.assert(users[1].CanManageAccount__c);
+		}
+	}
+
+	@IsTest
+	static void test_Database_clearTokens() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			User u1 = UserMock.createDocuSignUser(false);
+			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
+			us1.AccessToken0__c = 'u1_0';
+			us1.AccessToken1__c = 'u1_1';
+			us1.AccessToken2__c = 'u1_2';
+			us1.AccessToken3__c = 'u1_3';
+			us1.AccessToken4__c = 'u1_4';
+			us1.AccessToken5__c = 'u1_5';
+			us1.AccessTokenExpires__c = Datetime.now().addHours(1);
+			User u2 = UserMock.createDocuSignUser(false);
+			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
+			us2.AccessToken0__c = 'u2_0';
+			us2.AccessToken1__c = 'u2_1';
+			us2.AccessToken2__c = 'u2_2';
+			us2.AccessToken3__c = 'u2_3';
+			us2.AccessToken4__c = 'u2_4';
+			us2.AccessToken5__c = 'u2_5';
+			us2.AccessTokenExpires__c = Datetime.now().addHours(-1);
+			update new List<UserSettings__c> { us1, us2 };
+
+			Test.startTest();
+			List<UserSettings__c> result = Credentials.DB.clearTokens(new Set<Id> { u1.Id, u2.Id });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+
+			us1 = UserSettings__c.getInstance(u1.Id);
+			System.assertEquals(null, us1.AccessToken0__c);
+			System.assertEquals(null, us1.AccessToken1__c);
+			System.assertEquals(null, us1.AccessToken2__c);
+			System.assertEquals(null, us1.AccessToken3__c);
+			System.assertEquals(null, us1.AccessToken4__c);
+			System.assertEquals(null, us1.AccessToken5__c);
+			System.assertEquals(null, us1.AccessTokenExpires__c);
+
+			us2 = UserSettings__c.getInstance(u2.Id);
+			System.assertEquals(null, us2.AccessToken0__c);
+			System.assertEquals(null, us2.AccessToken1__c);
+			System.assertEquals(null, us2.AccessToken2__c);
+			System.assertEquals(null, us2.AccessToken3__c);
+			System.assertEquals(null, us2.AccessToken4__c);
+			System.assertEquals(null, us2.AccessToken5__c);
+			System.assertEquals(null, us2.AccessTokenExpires__c);
+		}
+	}
+
+	@IsTest
+	static void test_reset() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			User u1 = UserMock.createDocuSignAdministrator(false);
+			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
+			us1.AccessToken0__c = 'u1_0';
+			us1.AccessToken1__c = 'u1_1';
+			us1.AccessToken2__c = 'u1_2';
+			us1.AccessToken3__c = 'u1_3';
+			us1.AccessToken4__c = 'u1_4';
+			us1.AccessToken5__c = 'u1_5';
+			us1.AccessTokenExpires__c = Datetime.now().addHours(1);
+			User u2 = UserMock.createDocuSignUser(false);
+			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
+			us2.AccessToken0__c = 'u2_0';
+			us2.AccessToken1__c = 'u2_1';
+			us2.AccessToken2__c = 'u2_2';
+			us2.AccessToken3__c = 'u2_3';
+			us2.AccessToken4__c = 'u2_4';
+			us2.AccessToken5__c = 'u2_5';
+			us2.AccessTokenExpires__c = Datetime.now().addHours(-1);
+			update new List<UserSettings__c> { us1, us2 };
+
+			Test.startTest();
+			System.assert(Credentials.reset(new Set<Id> { u1.Id, u2.Id }, false));
+			Test.stopTest();
+
+			List<User> users = [SELECT CanManageAccount__c FROM User WHERE Id IN :(NEW Set<Id> { u1.Id, u2.Id })];
+			System.assertEquals(2, Collection.size(users));
+			System.assert(!users[0].CanManageAccount__c);
+			System.assert(!users[1].CanManageAccount__c);
+
+			us1 = UserSettings__c.getInstance(u1.Id);
+			System.assertEquals(null, us1.AccessToken0__c);
+			System.assertEquals(null, us1.AccessToken1__c);
+			System.assertEquals(null, us1.AccessToken2__c);
+			System.assertEquals(null, us1.AccessToken3__c);
+			System.assertEquals(null, us1.AccessToken4__c);
+			System.assertEquals(null, us1.AccessToken5__c);
+			System.assertEquals(null, us1.AccessTokenExpires__c);
+
+			us2 = UserSettings__c.getInstance(u2.Id);
+			System.assertEquals(null, us2.AccessToken0__c);
+			System.assertEquals(null, us2.AccessToken1__c);
+			System.assertEquals(null, us2.AccessToken2__c);
+			System.assertEquals(null, us2.AccessToken3__c);
+			System.assertEquals(null, us2.AccessToken4__c);
+			System.assertEquals(null, us2.AccessToken5__c);
+			System.assertEquals(null, us2.AccessTokenExpires__c);
 		}
 	}
 }
