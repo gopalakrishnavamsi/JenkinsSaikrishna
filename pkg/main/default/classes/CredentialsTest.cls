@@ -173,7 +173,9 @@ private class CredentialsTest {
 					new Url('https://api.test.docusign.net/'),
 					new Url('https://esign.test.docusign.net/'),
 					new Url('https://auth.test.springcm.com/'),
-					new Url('https://api.test.springcm.com/')),
+					new Url('https://api.test.springcm.com/'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -208,6 +210,10 @@ private class CredentialsTest {
 			System.assertEquals('https://auth.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
 			System.assertEquals('https://api.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
+			System.assertEquals('https://test.springcm.com/landing', result1.environment.clmLandingPageUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmAdminUrl);
+			System.assertEquals('https://test.springcm.com/admin', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -262,7 +268,9 @@ private class CredentialsTest {
 					new Url('https://api1.test.docusign.net/'),
 					new Url('https://esign1.test.docusign.net/'),
 					new Url('https://auth1.test.springcm.com/'),
-					new Url('https://api1.test.springcm.com/')),
+					new Url('https://api1.test.springcm.com/'),
+					new Url('https://test.springcm.com/landing1'),
+					new Url('https://test.springcm.com/admin1')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -298,6 +306,10 @@ private class CredentialsTest {
 			System.assertEquals('https://auth1.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
 			System.assertEquals('https://api1.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
+			System.assertEquals('https://test.springcm.com/landing1', result1.environment.clmLandingPageUrl.toExternalForm());
+			System.assertNotEquals(null, result1.environment.clmAdminUrl);
+			System.assertEquals('https://test.springcm.com/admin1', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);

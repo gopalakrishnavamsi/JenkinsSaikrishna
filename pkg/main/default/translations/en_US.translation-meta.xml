@@ -2607,7 +2607,7 @@
 		<name>ScmAuthServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Gen Service</label>
+		<label>DocuSign Gen/Negotiate Service</label>
 		<name>GenServiceDescription</name>
 	</customLabels>
 	<customLabels>

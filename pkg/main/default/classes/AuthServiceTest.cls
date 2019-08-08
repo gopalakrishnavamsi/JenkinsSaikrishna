@@ -1274,13 +1274,13 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AuthService.save(null, null, null, null, null, null, null, null, null);
+				AuthService.save(null, null, null, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null, null);
+				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -1292,6 +1292,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1304,6 +1306,8 @@ private class AuthServiceTest {
 					new Url('https://bad-docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1316,6 +1320,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://bad-springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1328,6 +1334,36 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.evil.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
+					null, null, null, null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://auth.test.docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					new Url('https://evil-springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
+					null, null, null, null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://auth.test.docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://evil.com/admin'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1348,6 +1384,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					null,
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1374,6 +1412,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					'\n ',
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1400,6 +1440,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					UUID.randomUUID().toString(),
 					null,
 					new LoginInformation.Account(
@@ -1422,6 +1464,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1443,6 +1487,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1467,6 +1513,8 @@ private class AuthServiceTest {
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1502,6 +1550,8 @@ private class AuthServiceTest {
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://auth.test.springcm.com'),
 				new Url('https://api.test.springcm.com'),
+				new Url('https://test.springcm.com/landing'),
+				new Url('https://test.springcm.com/admin'),
 				UUID.randomUUID().toString(),
 				new LoginInformation(
 					UUID.randomUUID(),
@@ -1534,6 +1584,8 @@ private class AuthServiceTest {
 				DocuSign.Environment.Stage,
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
+				null,
+				null,
 				null,
 				null,
 				UUID.randomUUID().toString(),

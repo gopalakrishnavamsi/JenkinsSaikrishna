@@ -899,6 +899,8 @@ public with sharing class AuthService {
 		final Url provisioningBaseUrl,
 		final Url scmAuthBaseUrl,
 		final Url scmApiBaseUrl,
+		final Url clmAdminUrl,
+		final Url clmLandingPageUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
 		final LoginInformation.Account account,
@@ -909,7 +911,9 @@ public with sharing class AuthService {
 			|| !DocuSign.isValidUrl(accountBaseUrl)
 			|| !DocuSign.isValidUrl(provisioningBaseUrl)
 			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))
-			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))) {
+			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))
+			|| (clmAdminUrl != null && !DocuSign.isValidUrl(clmAdminUrl))
+			|| (clmLandingPageUrl != null && !DocuSign.isValidUrl(clmLandingPageUrl))) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
@@ -963,7 +967,9 @@ public with sharing class AuthService {
 				pBaseUrl,
 				eSignatureBaseUrl,
 				scmAuthBaseUrl,
-				scmApiBaseUrl),
+				scmApiBaseUrl,
+				clmAdminUrl,
+				clmLandingPageUrl),
 			instanceCredentials,
 			new Credentials.AccountCredentials(
 				account.id,
@@ -1048,14 +1054,15 @@ public with sharing class AuthService {
 			&& l.loginInformation != null
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
-			// TODO: Verify URLs for Negotiate, CLM
-			GenProduct p = AccountProducts.getInstance().gen;
+			AccountProducts aps = AccountProducts.getInstance();
 			save(
 				rc.environment,
 				rc.accountBaseUrl,
 				rc.provisioningBaseUrl,
-				p == null ? null : p.authBaseUrl,
-				p == null ? null : p.apiBaseUrl,
+				aps.getScmAuthBaseUrl(),
+				aps.getScmApiBaseUrl(),
+				aps.getClmAdminUrl(),
+				aps.getClmLandingPageUrl(),
 				rc.clientId,
 				l.loginInformation,
 				l.loginInformation.accounts[0],
@@ -1203,14 +1210,15 @@ public with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
-		// TODO: Verify URLs for Negotiate, CLM
-		GenProduct p = AccountProducts.getInstance().gen;
+		AccountProducts aps = AccountProducts.getInstance();
 		save(
 			rc.environment,
 			rc.accountBaseUrl,
 			rc.provisioningBaseUrl,
-			p == null ? null : p.authBaseUrl,
-			p == null ? null : p.apiBaseUrl,
+			aps.getScmAuthBaseUrl(),
+			aps.getScmApiBaseUrl(),
+			aps.getClmAdminUrl(),
+			aps.getClmLandingPageUrl(),
 			rc.clientId,
 			result,
 			selected,

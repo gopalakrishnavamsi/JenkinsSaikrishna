@@ -14,8 +14,7 @@ public class GenProduct extends Product {
 			Product.GEN,
 			status,
 			isTrial,
-			trialExpires,
-			null);
+			trialExpires);
 
 		this.authBaseUrl = authBaseUrl;
 		this.apiBaseUrl = apiBaseUrl;

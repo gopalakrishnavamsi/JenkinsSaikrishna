@@ -102,10 +102,17 @@ private class ProvisioningAPITest {
 			System.assertEquals(3, Collection.size(result));
 			System.assertNotEquals(null, result[0]);
 			System.assert(result[0] instanceof GenProduct);
+			System.assertNotEquals(null, ((GenProduct)result[0]).apiBaseUrl);
+			System.assertNotEquals(null, ((GenProduct)result[0]).authBaseUrl);
 			System.assertNotEquals(null, result[1]);
 			System.assert(result[1] instanceof NegotiateProduct);
+			System.assertNotEquals(null, ((NegotiateProduct)result[1]).apiBaseUrl);
+			System.assertNotEquals(null, ((NegotiateProduct)result[1]).authBaseUrl);
 			System.assertNotEquals(null, result[2]);
 			System.assert(result[2] instanceof ClmProduct);
+			System.assertNotEquals(null, ((ClmProduct)result[2]).adminUrl);
+			System.assertNotEquals(null, ((ClmProduct)result[2]).authBaseUrl);
+			System.assertNotEquals(null, ((ClmProduct)result[2]).landingPageUrl);
 		}
 	}
 
@@ -126,11 +133,11 @@ private class ProvisioningAPITest {
 	}
 
 	@IsTest
-	static void test_addProduct_success() {
+	static void test_activateProduct_success() {
 		ProvisioningAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Product result = ProvisioningAPI.getInstance().addProduct(ProvisioningAPI.PRODUCT_NEGOTIATE, true);
+			Product result = ProvisioningAPI.getInstance().activateProduct(ProvisioningAPI.PRODUCT_NEGOTIATE, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -138,13 +145,13 @@ private class ProvisioningAPITest {
 	}
 
 	@IsTest
-	static void test_addProduct_failure() {
+	static void test_activateProduct_failure() {
 		ProvisioningAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				ProvisioningAPI.getInstance().addProduct('p1', false);
-				throw new AssertException('Expected addProduct to fail');
+				ProvisioningAPI.getInstance().activateProduct('p1', false);
+				throw new AssertException('Expected activateProduct to fail');
 			} catch (APIException ex) {
 				System.assertEquals(APIError.badRequest, ex.error);
 				System.assert(ex.error instanceof ProvisioningAPI.Error);
