@@ -67,8 +67,19 @@ public with sharing class UserService {
 			});
 
 			return new Configuration(
-			[SELECT Id, Name FROM Profile ORDER BY Name LIMIT 1000],
-			[SELECT Id, Label FROM PermissionSet WHERE IsOwnedByProfile = FALSE ORDER BY Label LIMIT 1000]);
+			[
+				SELECT Id, Name
+				FROM Profile
+				ORDER BY Name
+				LIMIT :Application.batchLimit
+			],
+			[
+				SELECT Id, Label
+				FROM PermissionSet
+				WHERE IsOwnedByProfile = FALSE
+				ORDER BY Label
+				LIMIT :Application.batchLimit
+			]);
 		}
 
 		public List<Account.User> queryCurrentUsers(final Integer maximumRecords) {
@@ -89,7 +100,8 @@ public with sharing class UserService {
 				FROM User
 				WHERE IsActive = TRUE
 				AND (Username__c != NULL)
-				LIMIT :(maximumRecords > 0 && maximumRecords < 50000 ? maximumRecords : 50)
+				LIMIT :(maximumRecords > 0 && maximumRecords <= Application.batchLimit
+					? maximumRecords : Application.batchLimit)
 			]);
 		}
 
@@ -136,50 +148,11 @@ public with sharing class UserService {
 				query += ' AND Id IN (SELECT AssigneeId FROM PermissionSetAssignment'
 					+ ' WHERE PermissionSetId IN :permissionSetIds)';
 			}
-			Integer l = maximumRecords > 0 && maximumRecords < 50000 ? maximumRecords : 50;
+			Integer l = maximumRecords > 0 && maximumRecords <= Application.batchLimit
+				? maximumRecords : Application.batchLimit;
 			query += ' LIMIT :l';
 
 			return convert((List<User>)System.Database.query(query));
-		}
-
-		public List<Account.User> updateUsers(final List<Account.User> users) {
-			Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
-				Application.namespacePrefix + 'Username__c',
-				Application.namespacePrefix + 'CanManageAccount__c',
-				Application.namespacePrefix + 'Status__c',
-				Application.namespacePrefix + 'Provisioned__c'
-			});
-
-			List<User> toUpdate = new List<User>();
-			Set<Id> adminIds = new Set<Id>();
-			Set<Id> senderIds = new Set<Id>();
-			Set<Id> inactiveIds = new Set<Id>();
-			for (Account.User user : (users == null ? new List<Account.User>() : users)) {
-				if (user != null && !user.hasError && user.sourceId != null) {
-					Boolean isInactive = UUID.isEmpty(user.id);
-					toUpdate.add(new User(
-						Id = user.sourceId,
-						Username__c = isInactive ? null : String.valueOf(user.id),
-						CanManageAccount__c = isInactive ? false : user.canManageAccount == true,
-						Status__c = isInactive ? Account.USER_STATUS_INACTIVE : user.status,
-						Provisioned__c = isInactive ? null : user.provisioned));
-					if (isInactive) {
-						inactiveIds.add(user.sourceId);
-					} else if (user.canManageAccount) {
-						adminIds.add(user.sourceId);
-					} else {
-						senderIds.add(user.sourceId);
-					}
-				}
-			}
-
-			update toUpdate;
-
-			Permissions.removeDocuSignPermissionSets(inactiveIds);
-			Permissions.assignDocuSignAdministratorPermissionSet(adminIds);
-			Permissions.assignDocuSignUserPermissionSet(senderIds);
-
-			return users;
 		}
 
 		public List<SystemSender> queryAvailableSystemSenders() {
@@ -195,7 +168,7 @@ public with sharing class UserService {
 				AND IsActive = TRUE
 				AND CanManageAccount__c = TRUE
 				ORDER BY Name ASC
-				LIMIT 1000
+				LIMIT :Application.batchLimit
 			]) {
 				result.add(new SystemSender(
 					UUID.parse(u.Username__c),
@@ -262,7 +235,6 @@ public with sharing class UserService {
 			maximumRecords);
 	}
 
-
 	/**
 	 * Retrieves a list of DocuSign account members.
 	 *
@@ -276,22 +248,62 @@ public with sharing class UserService {
 		return DB.queryCurrentUsers(maximumRecords);
 	}
 
+	@TestVisible
+	private static List<Account.User> verifyBatchSize(
+		final List<Account.User> users,
+		final Integer batchSize) {
+
+		if (users == null) return new List<Account.User>();
+
+		Integer size = users.size();
+		Integer max = batchSize <= 0 ? Application.batchLimit : batchSize;
+		if (size > max) {
+			throw new DocuSignException(String.format(Label.MaximumBatchSizeExceeded_2,
+				new List<Object> { size, max }));
+		}
+		return users;
+	}
+
+	@TestVisible
+	private static Set<Id> verifyBatchSize(
+		final Set<Id> userIds,
+		final Integer batchSize) {
+
+		if (userIds == null) return new Set<Id>();
+
+		Integer max = batchSize <= 0 ? Application.batchLimit : batchSize;
+		Integer size = userIds.size();
+		if (size > max) {
+			throw new DocuSignException(String.format(Label.MaximumBatchSizeExceeded_2,
+				new List<Object> { size, max }));
+		}
+		return userIds;
+	}
+
 	/**
 	 * Adds one or more users as members of the current DocuSign account.
+	 * <p>
+	 * A maximum of 2000 users may be added at a time.
  	 * <p>
  	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @param users A list of users to add.
+	 * @param roles The application roles for the users.
  	 *
 	 * @return The users added. This may be partially successful with details in the returned <code>User.error</code>
 	 * property.
 	 * @see Account.User.error for details on any errors.
  	 */
-	public static List<Account.User> addUsers(final List<Account.User> users) {
+	public static List<Account.User> addUsers(
+		final List<Account.User> users,
+		final Set<String> roles) {
+
 		Permissions.verifyIsDocuSignAdministrator();
 
 		try {
 			if (Collection.isEmpty(users)) return users;
+
+			verifyBatchSize(users, Application.batchLimit);
 
 			// Update the username and password for the users
 			List<Account.User> result = new List<Account.User>();
@@ -311,7 +323,10 @@ public with sharing class UserService {
 				}
 			}
 
-			Credentials.addUsers(creds);
+			// FIXME: add user roles via MAGNUM
+
+			Credentials.add(creds);
+			replaceUserRoles(creds.keySet(), roles);
 
 			return result;
 		} finally {
@@ -343,6 +358,11 @@ public with sharing class UserService {
 		return result;
 	}
 
+	@Future
+	private static void clearUserRoles(final Set<Id> userIds) {
+		Permissions.clear(userIds);
+	}
+
 	/**
 	 * Removes one or more users from the current DocuSign account.
 	 * <p>
@@ -360,7 +380,7 @@ public with sharing class UserService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Set<Id> userIds = getUserIdsToRemove(users);
+		Set<Id> userIds = getUserIdsToRemove(verifyBatchSize(users, Application.batchLimit));
 
 		List<Account.User> result = new List<Account.User>();
 		if (closeMembership) {
@@ -380,8 +400,49 @@ public with sharing class UserService {
 		}
 
 		Credentials.clear(userIds);
+		clearUserRoles(userIds);
 
 		return result;
+	}
+
+	@Future
+	private static void replaceUserRoles(
+		final Set<Id> userIds,
+		final Set<String> roles) {
+
+		Permissions.replacePermissionSets(userIds, roles);
+	}
+
+	/**
+	 * Updates application roles for one or more users.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @param userIds The IDs of the users for which to replace application roles.
+	 * @param roles The new application roles for the users.
+	 *
+	 * @return Whether or not any user roles were updated.
+	 */
+	public static Boolean updateUserRoles(
+		final Set<Id> userIds,
+		final Set<String> roles) {
+
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (Collection.isEmpty(userIds)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Set<Id> uIds = verifyBatchSize(userIds, Application.batchLimit);
+
+		// FIXME: Update user groups in MAGNUM API.
+
+		// Update permission sets. This must be done in a @Future context.
+		replaceUserRoles(uIds, roles);
+
+		// Reset user access tokens and set CanManageAccount__c accordingly.
+		// TODO: Is CLM_ADMINISTRATOR OK here as well?
+		return Credentials.reset(
+			uIds,
+			roles != null && roles.contains(Permissions.DOCUSIGN_ADMINISTRATOR));
 	}
 
 	/**

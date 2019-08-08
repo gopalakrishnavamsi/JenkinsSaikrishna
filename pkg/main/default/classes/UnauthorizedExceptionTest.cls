@@ -62,6 +62,42 @@ private class UnauthorizedExceptionTest {
 	}
 
 	@IsTest
+	static void test_notClmAdministrator() {
+		Test.startTest();
+		UnauthorizedException ex = UnauthorizedException.notClmAdministrator();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeClmAdministrator, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.ClmAdministrator, ex.requirement);
+	}
+
+	@IsTest
+	static void test_notClmUser() {
+		Test.startTest();
+		UnauthorizedException ex = UnauthorizedException.notClmUser();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeClmUser, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.ClmUser, ex.requirement);
+	}
+
+	@IsTest
+	static void test_notClmViewer() {
+		Test.startTest();
+		UnauthorizedException ex = UnauthorizedException.notClmViewer();
+		Test.stopTest();
+
+		System.assertNotEquals(null, ex);
+		System.assertEquals(Label.MustBeClmViewer, ex.getMessage());
+		System.assertEquals(UserInfo.getUserId(), ex.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.ClmViewer, ex.requirement);
+	}
+
+	@IsTest
 	static void test_notSalesforceAdministrator() {
 		Test.startTest();
 		final UnauthorizedException ex = UnauthorizedException.notSalesforceAdministrator();

@@ -64,4 +64,11 @@ private class ApplicationTest {
 		System.assertEquals(Application.namespacePrefix + 'Envelope__c', Application.resolveType('Envelope__c\n'));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_batchLimit() {
+		Test.startTest();
+		System.assertEquals(Application.BATCH_LIMIT, Application.batchLimit);
+		Test.stopTest();
+	}
 }

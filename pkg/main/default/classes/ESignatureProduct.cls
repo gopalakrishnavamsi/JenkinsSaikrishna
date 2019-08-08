@@ -45,8 +45,7 @@ public class ESignatureProduct extends Product {
 			Product.ESIGNATURE,
 			status,
 			isTrial,
-			trialExpires,
-			null);
+			trialExpires);
 
 		this.features = features == null ? new Set<Feature>() : features;
 	}
