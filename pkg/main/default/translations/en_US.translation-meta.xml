@@ -4022,7 +4022,6 @@
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
-<<<<<<< HEAD
 		<label>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</label>
 		<name>CaseFolderContentsHelp</name>
 	</customLabels>
@@ -4101,10 +4100,8 @@
 	<customLabels>
 		<label>Select a field below to name your folder</label>
 		<name>SelectFieldToNameTheFolder</name>
-=======
 		<label>Maximum batch size exceeded: {0} > {1}</label>
 		<name>MaximumBatchSizeExceeded_2</name>
->>>>>>> 2b120040118f51743241e4b15aa2b25f2a631320
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
