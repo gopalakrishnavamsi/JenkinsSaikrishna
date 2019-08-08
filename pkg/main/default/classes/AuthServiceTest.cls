@@ -785,7 +785,7 @@ private class AuthServiceTest {
 	@IsTest
 	static void test_getContentAccessToken_success() {
 		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			String result = AuthService.getContentAccessToken();
 			Test.stopTest();
@@ -796,7 +796,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_getContentAccessToken_failure() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignNegotiator(false)) {
 			Test.startTest();
 			try {
 				AuthService.getContentAccessToken();
