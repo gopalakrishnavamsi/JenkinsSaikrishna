@@ -4022,17 +4022,16 @@
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
-<<<<<<< HEAD
 		<label>Agreement has been successfully reviewed.</label>
 		<name>AgreementExternalReviewSucess</name>
 	</customLabels>
 	<customLabels>
 		<label>Agreement review has been failed. Please try again.</label>
 		<name>AgreementExternalReviewFailed</name>
-=======
+	</customLabels>
+	<customLabels>
 		<label>Maximum batch size exceeded: {0} > {1}</label>
 		<name>MaximumBatchSizeExceeded_2</name>
->>>>>>> 2b120040118f51743241e4b15aa2b25f2a631320
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
