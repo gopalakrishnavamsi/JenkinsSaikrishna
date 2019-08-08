@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+	<applicationVisibilities>
+		<application>DocuSignForSalesforceCore</application>
+		<visible>false</visible>
+	</applicationVisibilities>
 	<description>Provides access to document negotiation</description>
 	<hasActivationRequired>false</hasActivationRequired>
 	<label>DocuSign Document Negotiator</label>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Username__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.CanManageAccount__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Status__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<objectPermissions>
+		<allowCreate>true</allowCreate>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
+		<allowRead>true</allowRead>
+		<modifyAllRecords>false</modifyAllRecords>
+		<object>AgreementConfiguration__c</object>
+		<viewAllRecords>false</viewAllRecords>
+	</objectPermissions>
+	<pageAccesses>
+		<apexPage>AgreementPreview</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>CompleteOAuth</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 </PermissionSet>
