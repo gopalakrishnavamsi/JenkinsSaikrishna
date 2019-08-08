@@ -131,13 +131,16 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties);
+					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
+					properties.containsKey('merge_uri') ? new Url(properties.get('merge_uri')) : null);
 			} else if (this.product_id == PRODUCT_CLM) {
 				p = new ClmProduct(
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties);
+					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
+					properties.containsKey('landing_page_uri') ? new Url(properties.get('landing_page_uri')) : null,
+					properties.containsKey('admin_uri') ? new Url(properties.get('admin_uri')) : null);
 			}
 			return p;
 		}
@@ -183,14 +186,14 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 		return ((APIProducts)JSON.deserialize(response.body, APIProducts.class)).toExternalForm();
 	}
 
-	public Product addProduct(
+	public Product activateProduct(
 		final String product,
 		final Boolean isTrial) {
 
-		return this.addProduct(product, isTrial, RestAPI.defaultTimeout);
+		return this.activateProduct(product, isTrial, RestAPI.defaultTimeout);
 	}
 
-	public Product addProduct(
+	public Product activateProduct(
 		final String product,
 		final Boolean isTrial,
 		final Integer timeout) {

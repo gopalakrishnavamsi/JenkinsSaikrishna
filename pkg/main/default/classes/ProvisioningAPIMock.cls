@@ -71,11 +71,21 @@ public class ProvisioningAPIMock extends OAuthTokenMock {
 				negotiate.free_trial = true;
 				negotiate.provision_status = 'active';
 				negotiate.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+				negotiate.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
+					new ProvisioningAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
+					new ProvisioningAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
+					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+				};
 				ProvisioningAPI.APIProduct clm = new ProvisioningAPI.APIProduct();
 				clm.product_id = Product.CLM;
 				clm.free_trial = false;
 				clm.provision_status = 'active';
 				clm.expiration_date = null;
+				clm.activation_properties = new List<ProvisioningAPI.APIProductProperty> {
+					new ProvisioningAPI.APIProductProperty('admin_uri', 'https://test.springcm.com/atlas/Admin/AccountSettings'),
+					new ProvisioningAPI.APIProductProperty('landing_page_uri', 'https://test.springcm.com/atlas/LandingPage'),
+					new ProvisioningAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+				};
 				ps.products = new List<ProvisioningAPI.APIProduct> {
 					eSign, gen, negotiate, clm
 				};

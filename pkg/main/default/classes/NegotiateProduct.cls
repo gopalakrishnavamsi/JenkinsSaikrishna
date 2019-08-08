@@ -1,18 +1,22 @@
 public class NegotiateProduct extends Product {
 
-	// TODO: Need Negotiate-specific properties?
+	public transient Url authBaseUrl { get; private set; }
+	public transient Url apiBaseUrl { get; private set; }
 
 	public NegotiateProduct(
 		final String status,
 		final Boolean isTrial,
 		final Date trialExpires,
-		final Map<String, String> properties) {
+		final Url authBaseUrl,
+		final Url apiBaseUrl) {
 
 		super(
 			Product.NEGOTIATE,
 			status,
 			isTrial,
-			trialExpires,
-			properties);
+			trialExpires);
+
+		this.authBaseUrl = authBaseUrl;
+		this.apiBaseUrl = apiBaseUrl;
 	}
 }
