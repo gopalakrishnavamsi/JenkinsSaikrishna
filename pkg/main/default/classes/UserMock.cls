@@ -392,6 +392,8 @@ global class UserMock {
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
 		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/gen/';
+		accountSettings.ClmAdminUrl__c = 'https://test.springcm.com/admin';
+		accountSettings.ClmLandingPageUrl__c = 'https://test.springcm.com/landing';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
 		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
 		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);

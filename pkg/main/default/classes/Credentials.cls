@@ -67,6 +67,8 @@ public with sharing class Credentials {
 		public Url eSignatureBaseUrl { get; private set; }
 		public Url scmAuthBaseUrl { get; private set; }
 		public Url scmApiBaseUrl { get; private set; }
+		public Url clmLandingPageUrl { get; private set; }
+		public Url clmAdminUrl { get; private set; }
 		public Boolean isValid {
 			get {
 				return this.environment != null
@@ -75,7 +77,9 @@ public with sharing class Credentials {
 					&& DocuSign.isValidUrl(this.provisioningBaseUrl)
 					&& (this.eSignatureBaseUrl == null || DocuSign.isValidUrl(this.eSignatureBaseUrl))
 					&& (this.scmAuthBaseUrl == null || DocuSign.isValidUrl(this.scmAuthBaseUrl))
-					&& (this.scmApiBaseUrl == null || DocuSign.isValidUrl(this.scmApiBaseUrl));
+					&& (this.scmApiBaseUrl == null || DocuSign.isValidUrl(this.scmApiBaseUrl))
+					&& (this.clmLandingPageUrl == null || DocuSign.isValidUrl(this.clmLandingPageUrl))
+					&& (this.clmAdminUrl == null || DocuSign.isValidUrl(this.clmAdminUrl));
 			}
 		}
 
@@ -85,7 +89,9 @@ public with sharing class Credentials {
 			final Url provisioningBaseUrl,
 			final Url eSignatureBaseUrl,
 			final Url scmAuthBaseUrl,
-			final Url scmApiBaseUrl) {
+			final Url scmApiBaseUrl,
+			final Url clmLandingPageUrl,
+			final Url clmAdminUrl) {
 
 			this.environment = environment;
 			this.accountBaseUrl = accountBaseUrl;
@@ -93,6 +99,8 @@ public with sharing class Credentials {
 			this.eSignatureBaseUrl = eSignatureBaseUrl;
 			this.scmAuthBaseUrl = scmAuthBaseUrl;
 			this.scmApiBaseUrl = scmApiBaseUrl;
+			this.clmLandingPageUrl = clmLandingPageUrl;
+			this.clmAdminUrl = clmAdminUrl;
 		}
 	}
 
@@ -233,7 +241,15 @@ public with sharing class Credentials {
 
 		private Environment getEnvironment(final AccountSettings__c settings) {
 			if (settings == null || String.isBlank(settings.Environment__c)) {
-				return new Environment(DocuSign.Environment.Invalid, null, null, null, null, null);
+				return new Environment(
+					DocuSign.Environment.Invalid,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null);
 			}
 			return new Environment(
 				DocuSign.parseEnvironment(settings.Environment__c),
@@ -241,7 +257,9 @@ public with sharing class Credentials {
 				settings.ProvisioningBaseUrl__c == null ? null : new Url(settings.ProvisioningBaseUrl__c),
 				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c),
 				settings.ScmAuthBaseUrl__c == null ? null : new Url(settings.ScmAuthBaseUrl__c),
-				settings.ScmApiBaseUrl__c == null ? null : new Url(settings.ScmApiBaseUrl__c));
+				settings.ScmApiBaseUrl__c == null ? null : new Url(settings.ScmApiBaseUrl__c),
+				settings.ClmLandingPageUrl__c == null ? null : new Url(settings.ClmLandingPageUrl__c),
+				settings.ClmAdminUrl__c == null ? null : new Url(settings.ClmAdminUrl__c));
 		}
 
 		private ClientCredentials getClient(final AccountSettings__c settings) {
@@ -337,6 +355,10 @@ public with sharing class Credentials {
 				? null : environment.scmAuthBaseUrl.toExternalForm();
 			settings.ScmApiBaseUrl__c = environment.scmApiBaseUrl == null
 				? null : environment.scmApiBaseUrl.toExternalForm();
+			settings.ClmLandingPageUrl__c = environment.clmLandingPageUrl == null
+				? null : environment.clmLandingPageUrl.toExternalForm();
+			settings.ClmAdminUrl__c = environment.clmAdminUrl == null
+				? null : environment.clmAdminUrl.toExternalForm();
 			return settings;
 		}
 

@@ -5187,8 +5187,8 @@
 		<fullName>GenServiceDescription</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>DocuSign Gen Service</shortDescription>
-		<value>DocuSign Gen Service</value>
+		<shortDescription>DocuSign Gen/Negotiate Service</shortDescription>
+		<value>DocuSign Gen/Negotiate Service</value>
 	</labels>
 	<labels>
 		<fullName>SystemSender</fullName>
