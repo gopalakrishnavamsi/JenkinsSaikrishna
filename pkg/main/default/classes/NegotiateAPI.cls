@@ -1313,10 +1313,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	@TestVisible
 	private class APIUploadDocuments {
 
-		public List<APIHref> Items;
+		public String Href;
 
 		public APIUploadDocuments(final String href) {
-			this.Items = new List<APIHref> { new APIHref(href) };
+			this.Href = href;
 		}
 	}
 
@@ -1326,7 +1326,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
          requestParameters.put('Comment',comments);
         }
         if(newVersionUrl != null){
-         requestParameters.put('UploadedDocuments', new APIUploadDocuments(newVersionUrl.toExternalForm()));
+         requestParameters.put('UploadedDocuments', new List<APIUploadDocuments>{new APIUploadDocuments(newVersionUrl.toExternalForm())});
         }
 		final RestAPI.Response response = put(
 			getBaseUrl(),
