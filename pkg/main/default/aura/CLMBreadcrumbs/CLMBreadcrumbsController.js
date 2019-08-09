@@ -3,20 +3,18 @@
     var id = event.currentTarget.id;
     var allSteps = component.get('v.steps');
     var currentStep = component.get('v.currentStep');
-    var currentStepValue = ''
+    var currentStepValue = '';
     allSteps.forEach(function (step) {
       if (step.index === currentStep) {
-        currentStepValue = step
+        currentStepValue = step;
       }
     });
-
     var nextStepValue = '';
     allSteps.forEach(function (step) {
       if (step.index === id) {
         nextStepValue = step;
       }
     });
-
     if (nextStepValue && currentStepValue) {
       component.set('v.currentStep', nextStepValue.index);
       helper.fireApplicationEvent(component, {
@@ -27,7 +25,7 @@
       }, 'CLMBreadcrumbsEvent');
     }
   },
-  
+
   updateStep: function (component, event) {
     var navigateTo = event.getParam('navigateTo');
     var fromComponent = event.getParam('fromComponent');
@@ -35,15 +33,15 @@
     if (toComponent === 'CLMBreadcrumbs' && fromComponent !== 'CLMBreadcrumbs') {
       if (navigateTo.index !== undefined) {
         var allSteps = component.get('v.steps');
-        //verifying if we have valid index value
-        var currentStepValue = '';
+        //verifying for valid index value
+        var currentStepValue = navigateTo.index;
         allSteps.forEach(function (step) {
           if (step.index === navigateTo.index) {
-            currentStepValue = step;
+            currentStepValue = step.index;
           }
         });
         component.set('v.currentStep', currentStepValue);
       }
     }
   }
-})
+});
