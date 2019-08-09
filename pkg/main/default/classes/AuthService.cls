@@ -413,7 +413,7 @@ public with sharing class AuthService {
 	private static final String JWT_HEADER;
 	@TestVisible
 	private static final String SCOPE_ADMIN = 'account_product_read signature impersonation account_product_activate '
-		+ 'spring_write spring_read manage_app_keys spring_content';
+		+ 'spring_write spring_read manage_app_keys spring_content group_management_read group_management_write';
 	@TestVisible
 	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read spring_content';
 	@TestVisible
@@ -903,7 +903,7 @@ public with sharing class AuthService {
 		final Url clmLandingPageUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
-		final LoginInformation.Account account,
+		final LoginInformation.Account acct,
 		final Credentials.AccessToken token) {
 
 		if (environment == null
@@ -918,15 +918,15 @@ public with sharing class AuthService {
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
 
-		if (String.isBlank(rootClientId) || loginInfo == null || account == null || token == null || !token.isValid) {
+		if (String.isBlank(rootClientId) || loginInfo == null || acct == null || token == null || !token.isValid) {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 
 		// Create remote sites
 		Url aBaseUrl = canonicalizeBaseUrl(accountBaseUrl);
 		Url pBaseUrl = canonicalizeBaseUrl(provisioningBaseUrl);
-		Url eSignatureBaseUrl = String.isBlank(account.eSignatureBaseUrl)
-			? null : canonicalizeBaseUrl(new Url(account.eSignatureBaseUrl));
+		Url eSignatureBaseUrl = String.isBlank(acct.eSignatureBaseUrl)
+			? null : canonicalizeBaseUrl(new Url(acct.eSignatureBaseUrl));
 		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : canonicalizeBaseUrl(scmAuthBaseUrl);
 		Url sApiBaseUrl = scmApiBaseUrl == null ? null : canonicalizeBaseUrl(scmApiBaseUrl);
 		List<MetadataService.RemoteSite> sites = getRemoteSites(
@@ -942,7 +942,7 @@ public with sharing class AuthService {
 		Credentials.ClientCredentials instanceCredentials = getAuthAPI(aBaseUrl)
 			.getInstanceCredentials(
 				rootClientId,
-				account.id,
+				acct.id,
 				new List<Url> {
 					getOAuthRedirectUrl()
 				},
@@ -956,7 +956,7 @@ public with sharing class AuthService {
 			instanceCredentials.privateKey);
 
 		DB.updateSettings(
-			new AuthService.AccountAPI(eSignatureBaseUrl, account.id, newToken.token).getPermissionProfileIds(),
+			new AuthService.AccountAPI(eSignatureBaseUrl, acct.id, newToken.token).getPermissionProfileIds(),
 			sAuthBaseUrl,
 			sApiBaseUrl);
 
@@ -972,15 +972,16 @@ public with sharing class AuthService {
 				clmLandingPageUrl),
 			instanceCredentials,
 			new Credentials.AccountCredentials(
-				account.id,
-				account.accountNumber,
-				account.name,
+				acct.id,
+				acct.accountNumber,
+				acct.name,
 				loginInfo.email,
 				null),
 			new Credentials.UserCredentials(
 				loginInfo.id,
 				loginInfo.name,
 				loginInfo.email,
+				Account.USER_STATUS_ACTIVE,
 				true),
 			newToken);
 	}
@@ -1052,27 +1053,47 @@ public with sharing class AuthService {
 		if (l != null
 			&& l.token != null
 			&& l.loginInformation != null
+			&& l.loginInformation.accounts != null
+			&& l.loginInformation.accounts[0] != null
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
-			AccountProducts aps = AccountProducts.getInstance();
-			save(
-				rc.environment,
-				rc.accountBaseUrl,
-				rc.provisioningBaseUrl,
-				aps.getScmAuthBaseUrl(),
-				aps.getScmApiBaseUrl(),
-				aps.getClmAdminUrl(),
-				aps.getClmLandingPageUrl(),
-				rc.clientId,
-				l.loginInformation,
-				l.loginInformation.accounts[0],
-				l.token);
+			try {
+				AccountProducts aps = AccountProducts.getInstance(
+					rc.provisioningBaseUrl,
+					canonicalizeBaseUrl(new Url(l.loginInformation.accounts[0].eSignatureBaseUrl)),
+					l.loginInformation.accounts[0].id,
+					l.token.token);
+				save(
+					rc.environment,
+					rc.accountBaseUrl,
+					rc.provisioningBaseUrl,
+					aps.getScmAuthBaseUrl(),
+					aps.getScmApiBaseUrl(),
+					aps.getClmAdminUrl(),
+					aps.getClmLandingPageUrl(),
+					rc.clientId,
+					l.loginInformation,
+					l.loginInformation.accounts[0],
+					l.token);
+			} finally {
+				AccountProducts.save();
+			}
 		} else if (l.token != null) { // Multiple accounts. Save root access token for subsequent calls.
 			Credentials.setToken(l.token);
 			Credentials.save();
 		}
 
 		return l == null ? null : l.loginInformation;
+	}
+
+	private static User activateUser(final Id userId) {
+		User user = (User)Collection.head([SELECT Status__c FROM User WHERE Id = :userId LIMIT 1]);
+		if (user == null) throw new DocuSignException(Label.UserNotFound);
+		if (user.Status__c != Account.USER_STATUS_ACTIVE) {
+			user.Status__c = Account.USER_STATUS_ACTIVE;
+			update user;
+		}
+		return user;
 	}
 
 	@TestVisible
@@ -1087,6 +1108,9 @@ public with sharing class AuthService {
 			c.client.secret);
 
 		Credentials.setToken(token);
+
+		activateUser(UserInfo.getUserId());
+
 		return Credentials.save();
 	}
 
@@ -1210,19 +1234,27 @@ public with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
-		AccountProducts aps = AccountProducts.getInstance();
-		save(
-			rc.environment,
-			rc.accountBaseUrl,
-			rc.provisioningBaseUrl,
-			aps.getScmAuthBaseUrl(),
-			aps.getScmApiBaseUrl(),
-			aps.getClmAdminUrl(),
-			aps.getClmLandingPageUrl(),
-			rc.clientId,
-			result,
-			selected,
-			token);
+		try {
+			AccountProducts aps = AccountProducts.getInstance(
+				rc.provisioningBaseUrl,
+				canonicalizeBaseUrl(new Url(selected.eSignatureBaseUrl)),
+				selected.id,
+				token.token);
+			save(
+				rc.environment,
+				rc.accountBaseUrl,
+				rc.provisioningBaseUrl,
+				aps.getScmAuthBaseUrl(),
+				aps.getScmApiBaseUrl(),
+				aps.getClmAdminUrl(),
+				aps.getClmLandingPageUrl(),
+				rc.clientId,
+				result,
+				selected,
+				token);
+		} finally {
+			AccountProducts.save();
+		}
 
 		return new LoginInformation(
 			result.id,

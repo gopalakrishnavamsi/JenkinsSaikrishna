@@ -208,32 +208,6 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_getAccount_success() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Account result = SetupController.getAccount();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_getAccount_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
-			Test.startTest();
-			try {
-				SetupController.getAccount();
-				throw new AssertException('Expected getAccount to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_logout_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
@@ -282,7 +256,21 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_addUser_success() {
+	static void test_addUser_admin() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
+
+			Test.startTest();
+			List<Account.User> result = SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, true);
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+		}
+	}
+
+	@IsTest
+	static void test_addUser_non_admin() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
@@ -521,7 +509,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_addTrialGen_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
 				SetupController.addTrialGen();
@@ -539,6 +527,30 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			System.assert(SetupController.addTrialGen());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addTrialNegotiate_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				SetupController.addTrialNegotiate();
+				throw new AssertException('Expected addTrialNegotiate to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addTrialNegotiate_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			System.assert(SetupController.addTrialNegotiate());
 			Test.stopTest();
 		}
 	}

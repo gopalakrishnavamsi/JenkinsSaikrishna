@@ -21,29 +21,103 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_error() {
-		DocuSignAPIMock.failure();
-
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			AccountProducts result = AccountProducts.getInstance();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(null, result.eSignature);
-			System.assertEquals(null, result.gen);
-			System.assertEquals(null, result.negotiate);
-			System.assertEquals(null, result.clm);
+	static void test_getInstance_undefined_arguments() {
+		Test.startTest();
+		try {
+			AccountProducts.getInstance(
+				null,
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
+		try {
+			AccountProducts.getInstance(
+				new Url('https://provisioning.test.docusign.net/'),
+				null,
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AccountProducts.getInstance(
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				null,
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AccountProducts.getInstance(
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'\t');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getInstance_invalid_environment() {
+		Test.startTest();
+		try {
+			AccountProducts.getInstance(
+				new Url('https://provisioning.test.bad-docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			AccountProducts.getInstance(
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://example.com/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getInstance_setup() {
+		DocuSignAPIMock.success();
+
+		Test.startTest();
+		AccountProducts result = AccountProducts.getInstance(
+			new Url('https://provisioning.test.docusign.net/'),
+			new Url('https://esign.test.docusign.net/'),
+			UUID.randomUUID(),
+			'unit.test');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+	
+	static AccountProducts newAccountProducts(final Map<String, Product> products) {
+		return new AccountProducts(products, null, null, false);
 	}
 
 	@IsTest
 	static void test_isESignatureTrialExpired() {
-		AccountProducts aps1 = new AccountProducts(null);
-		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, false, Date.today().addDays(-1), null) });
-		AccountProducts aps5 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps1 = newAccountProducts(null);
+		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, false, Date.today().addDays(-1), null) });
+		AccountProducts aps5 = newAccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isESignatureTrialExpired());
@@ -56,10 +130,10 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_isESignatureEnabled() {
-		AccountProducts aps1 = new AccountProducts(null);
-		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
+		AccountProducts aps1 = newAccountProducts(null);
+		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.ESIGNATURE => new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null) });
 
 		Test.startTest();
 		System.assert(!aps1.isESignatureEnabled());
@@ -71,10 +145,10 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_isGenEnabled() {
-		AccountProducts aps1 = new AccountProducts(null);
-		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
+		AccountProducts aps1 = newAccountProducts(null);
+		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isGenEnabled());
@@ -86,10 +160,10 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_isNegotiateEnabled() {
-		AccountProducts aps1 = new AccountProducts(null);
-		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
+		AccountProducts aps1 = newAccountProducts(null);
+		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isNegotiateEnabled());
@@ -101,10 +175,10 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_isClmEnabled() {
-		AccountProducts aps1 = new AccountProducts(null);
-		AccountProducts aps2 = new AccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = new AccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null, null) });
-		AccountProducts aps4 = new AccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null, null) });
+		AccountProducts aps1 = newAccountProducts(null);
+		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isClmEnabled());
@@ -130,16 +204,19 @@ private class AccountProductsTest {
 				new Set<ESignatureProduct.Feature> { ESignatureProduct.Feature.Templates });
 
 			Test.startTest();
-			Map<String, Product> result = AccountProducts.resolveProducts(
+			AccountProducts result = AccountProducts.resolveProducts(
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addDays(-1),
-				1);
+				1,
+				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://esign.test.docusign.net'),
+				UUID.randomUUID(),
+				'unit.test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(4, result.size());
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
-			System.assertEquals(4, Collection.size(ProductSettings__c.getAll().values()));
+			System.assertNotEquals(null, result.products);
+			System.assertEquals(4, result.products.size());
 		}
 	}
 
@@ -153,14 +230,19 @@ private class AccountProductsTest {
 				new Set<ESignatureProduct.Feature> { ESignatureProduct.Feature.Templates });
 
 			Test.startTest();
-			Map<String, Product> result = AccountProducts.resolveProducts(
+			AccountProducts result = AccountProducts.resolveProducts(
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addMinutes(-1),
-				60);
+				60,
+				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://esign.test.docusign.net'),
+				UUID.randomUUID(),
+				'unit.test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
+			System.assertNotEquals(null, result.products);
+			System.assertEquals(1, result.products.size());
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
 			System.assertEquals(0, Collection.size(ProductSettings__c.getAll().values()));
 		}
@@ -182,7 +264,7 @@ private class AccountProductsTest {
 		};
 
 		Test.startTest();
-		System.assertEquals(flags, AccountProducts.packFeatures(features));
+		System.assertEquals(flags, AccountProducts.DB.packFeatures(features));
 		Test.stopTest();
 	}
 
@@ -202,7 +284,7 @@ private class AccountProductsTest {
 		};
 
 		Test.startTest();
-		System.assertEquals(features, AccountProducts.unpackFeatures(flags));
+		System.assertEquals(features, AccountProducts.DB.unpackFeatures(flags));
 		Test.stopTest();
 	}
 
@@ -211,8 +293,8 @@ private class AccountProductsTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
-				AccountProducts.getInstance().startTrial(null);
-				throw new AssertException('Expected startTrial to fail');
+				AccountProducts.getInstance().startTrials(null);
+				throw new AssertException('Expected startTrials to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -221,24 +303,24 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_startTrial_invalid() {
+	static void test_startTrials_invalid() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AccountProducts.getInstance().startTrial(null);
-				throw new AssertException('Expected startTrial to fail');
+				AccountProducts.getInstance().startTrials(null);
+				throw new AssertException('Expected startTrials to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				AccountProducts.getInstance().startTrial('  ');
-				throw new AssertException('Expected startTrial to fail');
+				AccountProducts.getInstance().startTrials(new Set<String>());
+				throw new AssertException('Expected startTrials to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				AccountProducts.getInstance().startTrial(Product.CLM);
-				throw new AssertException('Expected startTrial to fail');
+				AccountProducts.getInstance().startTrials(new Set<String> { Product.CLM });
+				throw new AssertException('Expected startTrials to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(
 					String.format(Label.InvalidTrialProduct_1, new List<String> { Product.CLM }),
@@ -249,7 +331,7 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_startTrial_success() {
+	static void test_startTrials_success() {
 		ProvisioningAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
@@ -260,18 +342,19 @@ private class AccountProductsTest {
 			insert ps;
 
 			Test.startTest();
-			Product result1 = AccountProducts.getInstance().startTrial(Product.GEN);
-			Product result2 = AccountProducts.getInstance().startTrial(Product.NEGOTIATE);
+			List<Product> result = AccountProducts.getInstance().startTrials(
+				new Set<String> { Product.GEN, Product.NEGOTIATE });
 			Test.stopTest();
 
-			System.assertNotEquals(null, result1);
-			System.assertNotEquals(null, result2);
+			System.assertEquals(2, Collection.size(result));
 
 			Map<String, ProductSettings__c> pss = ProductSettings__c.getAll();
 			System.assertNotEquals(null, pss);
 			System.assertEquals(2, pss.size());
 			System.assertEquals(new Set<String> { Product.GEN, Product.NEGOTIATE }, pss.keySet());
 			System.assertEquals(ps.Id, pss.get(Product.GEN).Id);
+			System.assertEquals(true, pss.get(Product.GEN).IsTrial__c);
+			System.assertEquals(true, pss.get(Product.NEGOTIATE).IsTrial__c);
 
 		}
 	}
@@ -307,14 +390,14 @@ private class AccountProductsTest {
 					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
 					response.setBody(JSON.serialize(settings));
 				} else if (request.getEndpoint().contains('/billing_plan')) {
-					AccountAPI.PlanId pid = new AccountAPI.PlanId();
+					ESignatureProductAPI.PlanId pid = new ESignatureProductAPI.PlanId();
 					pid.planId = '8b7c743b-5321-401f-8615-275021832201';
-					AccountAPI.BillingPlans bps = new AccountAPI.BillingPlans();
+					ESignatureProductAPI.BillingPlans bps = new ESignatureProductAPI.BillingPlans();
 					bps.billingPlan = pid;
 					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
 					response.setBody(JSON.serialize(bps));
 				} else { // get account
-					AccountAPI.APIAccount a = new AccountAPI.APIAccount();
+					ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
 					a.currentPlanId = 'd1d8e549-4f0f-464a-a474-813b21c659da';
 					a.planName = 'DEVCENTER_DEMO_APRIL2013';
 					a.planStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
@@ -377,17 +460,17 @@ private class AccountProductsTest {
 			new Url('https://auth.test.springcm.com'), new Url('https://api.springcm.com/admin'));
 
 		Test.startTest();
-		Url result1 = new AccountProducts(null).getScmAuthBaseUrl();
-		Url result2 = new AccountProducts(new Map<String, Product> {
+		Url result1 = newAccountProducts(null).getScmAuthBaseUrl();
+		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
 		}).getScmAuthBaseUrl();
-		Url result3 = new AccountProducts(new Map<String, Product> {
+		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
 		}).getScmAuthBaseUrl();
-		Url result4 = new AccountProducts(new Map<String, Product> {
+		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
 		}).getScmAuthBaseUrl();
-		Url result5 = new AccountProducts(new Map<String, Product> {
+		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
@@ -416,17 +499,17 @@ private class AccountProductsTest {
 			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
 
 		Test.startTest();
-		Url result1 = new AccountProducts(null).getScmApiBaseUrl();
-		Url result2 = new AccountProducts(new Map<String, Product> {
+		Url result1 = newAccountProducts(null).getScmApiBaseUrl();
+		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
 		}).getScmApiBaseUrl();
-		Url result3 = new AccountProducts(new Map<String, Product> {
+		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
 		}).getScmApiBaseUrl();
-		Url result4 = new AccountProducts(new Map<String, Product> {
+		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
 		}).getScmApiBaseUrl();
-		Url result5 = new AccountProducts(new Map<String, Product> {
+		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
@@ -454,17 +537,17 @@ private class AccountProductsTest {
 			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
 
 		Test.startTest();
-		Url result1 = new AccountProducts(null).getClmAdminUrl();
-		Url result2 = new AccountProducts(new Map<String, Product> {
+		Url result1 = newAccountProducts(null).getClmAdminUrl();
+		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
 		}).getClmAdminUrl();
-		Url result3 = new AccountProducts(new Map<String, Product> {
+		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
 		}).getClmAdminUrl();
-		Url result4 = new AccountProducts(new Map<String, Product> {
+		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
 		}).getClmAdminUrl();
-		Url result5 = new AccountProducts(new Map<String, Product> {
+		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
@@ -491,17 +574,17 @@ private class AccountProductsTest {
 			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
 
 		Test.startTest();
-		Url result1 = new AccountProducts(null).getClmLandingPageUrl();
-		Url result2 = new AccountProducts(new Map<String, Product> {
+		Url result1 = newAccountProducts(null).getClmLandingPageUrl();
+		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
 		}).getClmLandingPageUrl();
-		Url result3 = new AccountProducts(new Map<String, Product> {
+		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
 		}).getClmLandingPageUrl();
-		Url result4 = new AccountProducts(new Map<String, Product> {
+		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
 		}).getClmLandingPageUrl();
-		Url result5 = new AccountProducts(new Map<String, Product> {
+		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
@@ -515,5 +598,62 @@ private class AccountProductsTest {
 		System.assertEquals(null, result4);
 		System.assertNotEquals(null, result5);
 		System.assertEquals('https://test.springcm.com/landing', result5.toExternalForm());
+	}
+
+	@IsTest
+	static void test_save_uninitialized() {
+		Test.startTest();
+		System.assert(!AccountProducts.save());
+		Test.stopTest();
+
+		System.assert(ProductSettings__c.getAll().isEmpty());
+	}
+
+	@IsTest
+	static void test_save_clean() {
+		ESignatureProduct esign = new ESignatureProduct(
+			'active', false, null, new Set<ESignatureProduct.Feature>());
+		ProductSettings__c p = AccountProducts.DB.convert(esign);
+		insert p;
+		AccountSettings__c a = AccountSettings__c.getOrgDefaults();
+		a.ProductsLastChecked__c = Datetime.now();
+		a.ProductsCheckFrequency__c = 60;
+		insert a;
+		AccountProducts ap = AccountProducts.getInstance(
+			new Url('https://provisioning.test.docusign.net'),
+			new Url('https://esign.test.docusign.net'),
+			UUID.randomUUID(),
+			'unit.test');
+		System.assertNotEquals(null, ap);
+		System.assert(ap === AccountProducts.self);
+		System.assert(!ap.isDirty);
+
+		Test.startTest();
+		System.assert(!AccountProducts.save());
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_save_dirty() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignSender()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ProductsLastChecked__c = null;
+			s.ProductsCheckFrequency__c = null;
+			update s;
+
+			Test.startTest();
+			AccountProducts ap = AccountProducts.getInstance();
+			System.assertNotEquals(null, ap);
+			System.assert(ap === AccountProducts.self);
+			System.assert(ap.isDirty);
+			System.assert(AccountProducts.save());
+			Test.stopTest();
+
+			System.assertEquals(4, ProductSettings__c.getAll().size());
+			System.assertNotEquals(null, AccountSettings__c.getInstance().ProductsLastChecked__c);
+			System.assertNotEquals(null, AccountSettings__c.getInstance().ProductsCheckFrequency__c);
+		}
 	}
 }

@@ -1635,10 +1635,6 @@
 		<name>Password</name>
 	</customLabels>
 	<customLabels>
-		<label>Pending Activation</label>
-		<name>PendingActivation</name>
-	</customLabels>
-	<customLabels>
 		<label>Peru</label>
 		<name>Peru</name>
 	</customLabels>
@@ -4024,6 +4020,14 @@
 	<customLabels>
 		<label>Maximum batch size exceeded: {0} > {1}</label>
 		<name>MaximumBatchSizeExceeded_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Pending</label>
+		<name>Pending</name>
+	</customLabels>
+	<customLabels>
+		<label>Inactive</label>
+		<name>Inactive</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
