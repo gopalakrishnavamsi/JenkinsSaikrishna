@@ -4100,6 +4100,8 @@
 	<customLabels>
 		<label>Select a field below to name your folder</label>
 		<name>SelectFieldToNameTheFolder</name>
+	</customLabels>
+	<customLabels>
 		<label>Maximum batch size exceeded: {0} > {1}</label>
 		<name>MaximumBatchSizeExceeded_2</name>
 	</customLabels>

@@ -7694,6 +7694,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select field to name your folder</shortDescription>
+	</labels>
+	<labels>
 		<value>Select a field below to name your folder</value>
 		<fullName>MaximumBatchSizeExceeded_2</fullName>
 		<language>en_US</language>
