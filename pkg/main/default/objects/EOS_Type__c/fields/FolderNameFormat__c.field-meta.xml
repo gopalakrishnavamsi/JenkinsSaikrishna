@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Folder_Name_Format__c</fullName>
+    <fullName>FolderNameFormat__c</fullName>
     <description>A field to store the format of the folder name that maps a Salesforce object to a folder in SpringCM.</description>
     <externalId>false</externalId>
     <inlineHelpText>A field to store the format of the folder name that maps a Salesforce object to a folder in SpringCM.</inlineHelpText>

@@ -61,22 +61,19 @@
                     role="grid">
                     <thead>
                         <tr class="slds-line-height_reset">
-                            <th aria-label="{!$Label.c.SalesforceObject}" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.SalesforceObject}" aria-sort="none" class="ds-thead-width" scope="col">
                                 <span class="slds-truncate"
                                     title="{!$Label.c.SalesforceObject}">{!$Label.c.SalesforceObject}</span>
                             </th>
-                            <th aria-label="{!$Label.c.ObjectFolderName}" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.ObjectFolderName}" aria-sort="none" class="ds-thead-width" scope="col">
                                 <span class="slds-truncate"
                                     title="{!$Label.c.ObjectFolderName}">{!$Label.c.ObjectFolderName}</span>
                             </th>
-                            <th aria-label="{!$Label.c.PathInDocuSignCLM}" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.PathInDocuSignCLM}" aria-sort="none" class="ds-thead-width" scope="col">
                                 <span class="slds-truncate"
                                     title="{!$Label.c.PathInDocuSignCLM}">{!$Label.c.PathInDocuSignCLM}</span>
                             </th>
-                            <th aria-label="Action" aria-sort="none" class="" scope="col" style="width:8.75rem">
+                            <th aria-label="Action" aria-sort="none" class="ds-thead-width" scope="col" >
                                 <span class="slds-truncate" title="Action"> </span>
                             </th>
                         </tr>
@@ -98,13 +95,13 @@
                             <tr aria-selected="false">
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-truncate" title="{!data.objectName}">
-                                        {!data.Name__c}
+                                        {!data.Name}
                                     </span>
                                 </td>
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-grid slds-grid_align-spread">
                                         <span class="slds-truncate" title="{!data.folderName}">
-                                            {!data.Folder_Name__c}
+                                            {!data.FolderName__c}
                                         </span>
                                     </span>
                                 </td>

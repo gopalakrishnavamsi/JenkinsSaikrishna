@@ -1,58 +1,185 @@
 @isTest
 public class CLMMapObjectControllerTest {
     @isTest
-    public static void getMappedObjectsListTest(){
-      System.assert(CLMMapObjectController.getMappedObjectsList()!=null);
+    public static void getMappedObjectsListTest_authorized(){
+        System.runAs(UserMock.createClmAdministrator()){
+            Test.startTest();
+            Map<String, EOS_Type__c> result = CLMMapObjectController.getMappedObjectsList();        
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+        }      
     }
+    
     @isTest
-    public static void getAllObjectsTest(){
-      System.assert(CLMMapObjectController.getAllObjects().size()!=0);
+    public static void getMappedObjectsListTest_unauthorized(){
+        System.runAs(UserMock.createUser()){
+            Test.startTest();
+            try {
+                CLMMapObjectController.getMappedObjectsList();
+                throw new AssertException('Expected failure when fetching mapped objects list.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
     }
+    
     @isTest
-    public static void getAllObjectFields_positiveTest(){
-      System.assert(CLMMapObjectController.getAllObjectFields('Case', false).size()!=0);
+    public static void getAllObjectsTest_authorized(){
+        System.runAs(UserMock.createDocuSignAdministrator()){
+            Test.startTest();
+            List<MergeObject> result = CLMMapObjectController.getAllObjects();
+            Test.stopTest();  
+            System.assertNotEquals(null, result);
+        }      
     }
+    
     @isTest
-    public static void getAllObjectFields_negativeTest(){
-				try {
-					CLMMapObjectController.getAllObjectFields(null, false);
-				} catch (AuraHandledException ae) {
-					System.assert(ae != null);
-				}			
+    public static void getAllObjectsTest_unauthorized(){
+        System.runAs(UserMock.createUser()){
+            Test.startTest();
+            try {
+                CLMMapObjectController.getAllObjects();
+                throw new AssertException('Expected failure when fetching all objects.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
     }
+    
     @isTest
-    public static void getNamespaceTest(){
-        System.assertNotEquals(null, CLMMapObjectController.getNamespace());
+    public static void getAllObjectFieldsTest_authorized(){
+        System.runAs(UserMock.createDocuSignAdministrator()){
+            Test.startTest();
+            List<MergeField> result = CLMMapObjectController.getAllObjectFields('Case', false);  
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+        }      
     }
+    
     @isTest
-    public static void removeMappedObject_positiveTest(){
-      EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
-      eos.Name = 'Case';
-			eos.Name__c = 'Case';
-			eos.Folder_Name__c = '{!Case.Id}';
-			eos.Path__c = '/Salesforce/Case';
-			insert eos;
-			System.assertNotEquals(false, CLMMapObjectController.removeMappedObject('Case'));
+    public static void getAllObjectFields_unauthorized(){
+        System.runAs(UserMock.createUser()){        
+            Test.startTest();
+            try {
+                CLMMapObjectController.getAllObjectFields(null, false);
+                throw new AssertException('Expected failure when fetching all object fields.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }			
+            Test.stopTest();
+        }
     }
-		@isTest
-		public static void removeMappedObjectTest_negativeTest(){
-			try{
-				Boolean result = CLMMapObjectController.removeMappedObject('Case');
-			}catch(AuraHandledException ae){
-				System.assert(ae != null);
-			}
-		}
+    
     @isTest
-    public static void getRecordCountTest(){
-        System.assert(CLMMapObjectController.getRecordCount() != null);
+    public static void getNamespace_authorized(){
+        System.runAs(UserMock.createClmAdministrator()){
+            Test.startTest();
+            String result = CLMMapObjectController.getNamespace();
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+        }
     }
+    
     @isTest
-    public static void setMappedObjectTest(){
-      EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
-			eos.Folder_Name__c = UUID.randomUUID().toShortString();
-			eos.Path__c = UUID.randomUUID().toShortString();
-			eos.Name__c = UUID.randomUUID().toShortString();
-			eos.Name = UUID.randomUUID().toShortString();				
-      System.assertEquals(true, CLMMapObjectController.setMappedObject(eos));
+    public static void getNamespace_unauthorized(){
+        System.runAs(UserMock.createUser()){
+            Test.startTest();
+            try {
+                CLMMapObjectController.getNamespace();
+                throw new AssertException('Expected failure when fetching namespace.');  
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
+    }
+    
+    @isTest
+    public static void removeMappedObjectTest_authorized(){
+        System.runAs(UserMock.createClmAdministrator()){    
+            String objToRemove = UUID.randomUUID().toShortString();  
+            EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
+            eos.Name = objToRemove;
+            eos.FolderName__c = objToRemove;
+            eos.Path__c = objToRemove;
+            insert eos;
+            Test.startTest();      
+            Boolean result = CLMMapObjectController.removeMappedObject(objToRemove);
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+        }
+    }
+    
+    @isTest
+    public static void removeMappedObjectTest_unauthorized(){
+        System.runAs(UserMock.createUser()){   
+            String objToRemove = UUID.randomUUID().toShortString();           
+            Test.startTest();
+            try {
+                CLMMapObjectController.removeMappedObject(objToRemove);
+                throw new AssertException('Expected failure when removing existing mapping.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
+    }
+    
+    @isTest
+    public static void getRecordCountTest_authorized(){
+        System.runAs(UserMock.createClmAdministrator()){
+            Test.startTest();
+            Integer result = CLMMapObjectController.getRecordCount();
+            Test.stopTest();
+            System.assertNotEquals(null, result);
+        }         
+    }
+    
+    @isTest
+    public static void getRecordCountTest_unauthorized(){
+        System.runAs(UserMock.createUser()){
+            Test.startTest();
+            try {
+                CLMMapObjectController.getRecordCount();
+                throw new AssertException('Expected failure when fetching mapping records count.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
+    }
+    
+    @isTest
+    public static void setMappedObjectTest_authorized(){
+        System.runAs(UserMock.createClmAdministrator()){
+            EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
+            eos.FolderName__c = UUID.randomUUID().toShortString();
+            eos.Path__c = UUID.randomUUID().toShortString();
+            eos.Name = UUID.randomUUID().toShortString();	
+            Test.startTest();			
+            Boolean result = CLMMapObjectController.setMappedObject(eos);
+            Test.stopTest();
+            System.assertNotEquals(false, result);
+        }
+    }
+    
+    @isTest
+    public static void setMappedObjectTest_unauthorized(){
+        System.runAs(UserMock.createUser()){
+            Test.startTest();
+            try {
+                EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
+                eos.FolderName__c = UUID.randomUUID().toShortString();
+                eos.Path__c = UUID.randomUUID().toShortString();
+                eos.Name = UUID.randomUUID().toShortString();
+                CLMMapObjectController.setMappedObject(eos);
+                throw new AssertException('Expected failure when inserting mapping.');
+            } catch (AuraHandledException ae) {
+                System.assertNotEquals(null, ae);
+            }
+            Test.stopTest();
+        }
     }
 }

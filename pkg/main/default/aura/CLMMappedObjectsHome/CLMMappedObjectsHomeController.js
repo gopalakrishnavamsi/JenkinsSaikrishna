@@ -1,15 +1,12 @@
 ({
   onInit: function (component, event, helper) {
-
     helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
       component.set('v.mappedObjData', Object.values(result));
-
-
     });
     helper.createComponent(component, 'c:CLMModelFooterButton', {
-      primaryButtonLabel: 'Remove',
-      secondaryButtonLabel: 'Cancel',
-      primaryButtonVarient: 'destructive'
+      primaryButtonLabel: $A.get('$Label.c.Remove'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+      primaryButtonVariant: 'destructive'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
     });
@@ -48,10 +45,8 @@
     setTimeout($A.getCallback(function () {
       modelComponent.show();
     }), 5);
-
     var cmpEvent = component.getEvent('CLMScopedNotificationEvent');
     cmpEvent.fire();
-
   },
 
   remove: function (component, event, helper) {
@@ -61,9 +56,9 @@
       type: 'remove'
     });
     helper.createComponent(component, 'c:CLMModelFooterButton', {
-      primaryButtonLabel: 'Remove',
-      secondaryButtonLabel: 'Cancel',
-      primaryButtonVarient: 'destructive'
+      primaryButtonLabel: $A.get('$Label.c.Remove'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+      primaryButtonVariant: 'destructive'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
       component.set('v.isRemove', 'true');
@@ -84,7 +79,6 @@
   editMappingModelHandler: function (component, event, helper) {
     var data = component.get('v.tempMappingModelDataHolder');
     var modelComponent = component.find('popupModel');
-
     var mappedObjData = component.get('v.mappedObjData');
     var objDetails;
     mappedObjData.forEach(function (obj) {

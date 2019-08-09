@@ -4,7 +4,7 @@
     <aura:attribute name="primaryButtonLabel" type="String" default="Ok"/>
     <aura:attribute name="secondaryButtonLabel" type="String" default="Cancel"/>
     
-    <aura:attribute name="primaryButtonVarient" type="String" default="brand"/>
+    <aura:attribute name="primaryButtonVariant" type="String" default="brand"/>
     <aura:attribute name="secondaryButtonVarient" type="String" default="neutral"/>
     
     <aura:attribute name="showPrimaryButton" type="boolean" default="true"/>
@@ -23,6 +23,6 @@
         <lightning:button class="{!'slds-button slds-button--'+v.secondaryButtonVarient}" onclick="{!c.clickedSecondary}">{!v.secondaryButtonLabel}</lightning:button>
     </aura:if>
     <aura:if isTrue="{!v.showPrimaryButton}">
-        <lightning:button class="{!'slds-button slds-button--'+v.primaryButtonVarient}" disabled="{!v.primaryButtonDisabled}" onclick="{!c.clickedPrimary}">{!v.primaryButtonLabel}</lightning:button>
+        <lightning:button class="{!'slds-button slds-button--'+v.primaryButtonVariant}" disabled="{!v.primaryButtonDisabled}" onclick="{!c.clickedPrimary}">{!v.primaryButtonLabel}</lightning:button>
     </aura:if>    
 </aura:component>

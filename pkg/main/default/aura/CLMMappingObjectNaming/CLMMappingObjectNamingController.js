@@ -1,13 +1,13 @@
 ({
   onInit: function (component, event, helper) {
-    var SelectedObjDetais = component.get('v.selectedObjDetails');
-    if (SelectedObjDetais && SelectedObjDetais.name) {
+    var SelectedObjDetails = component.get('v.selectedObjDetails');
+    if (SelectedObjDetails && SelectedObjDetails.name) {
 
-      helper.callServer(component, 'c.getAllObjectFields', { apiName: SelectedObjDetais.name, isChild: false }, function (result) {
+      helper.callServer(component, 'c.getAllObjectFields', { apiName: SelectedObjDetails.name, isChild: false }, function (result) {
         var allFields = [];
         allFields.push({
-          name: SelectedObjDetais.name,
-          label: SelectedObjDetais.label,
+          name: SelectedObjDetails.name,
+          label: SelectedObjDetails.label,
           selected: true,
           fields: result,
         });
@@ -73,16 +73,16 @@
     event.stopPropagation();
 
 
-    var SelectedObjDetais = component.get('v.selectedObjDetails');
+    var SelectedObjDetails = component.get('v.selectedObjDetails');
 
 
     var folderName = component.get('v.folderName');
 
     if (folderName) {
-      folderName += '{!' + SelectedObjDetais.label + '.' + label + '}';
+      folderName += '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
     else {
-      folderName = '{!' + SelectedObjDetais.label + '.' + label + '}';
+      folderName = '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
 
     helper.passModelText(component, folderName, helper);

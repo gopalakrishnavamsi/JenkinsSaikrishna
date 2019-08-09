@@ -3650,7 +3650,7 @@
 		<name>CLM</name>
 	</customLabels>
 	<customLabels>
-		<label></label>
+		<label><!-- CLM - Pick a Field Title --></label>
 		<name>CLM_PickAFieldTitle</name>
 	</customLabels>
 	<customLabels>

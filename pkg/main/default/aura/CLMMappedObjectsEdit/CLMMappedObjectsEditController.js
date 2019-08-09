@@ -1,5 +1,6 @@
 ({
   onInit: function (component, event, helper) {
+    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     component.set('v.clmFolderTree', [
       {
         level: 1,
@@ -23,15 +24,17 @@
       component.set('v.allObjects', result);
       component.set('v.allObjectsList', result);
     });
+    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       primaryButtonLabel: 'Confirm',
       secondaryButtonLabel: 'Cancel',
-      primaryButtonVarient: 'brand',
+      primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'true'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
 
     });
+    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     helper.createComponent(component, 'c:CLMMappingObjectNaming', {
       title: 'Name',
       summary: 'Name',
@@ -40,6 +43,7 @@
     });
 
   },
+
   back: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '3') {
@@ -62,6 +66,7 @@
       }, 'CLMNavigationEvent');
     }
   },
+
   gotNextStep: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '1') {
@@ -70,6 +75,8 @@
       helper.UpdateUI(component, '3');
     }
   },
+
+  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   openSeeExample: function (component, event, helper) {
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       showPrimaryButton: 'false',
@@ -87,8 +94,9 @@
         modelComponent.show();
       }), 5);
     });
-
   },
+
+  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   openWhyExample: function (component, event, helper) {
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       showPrimaryButton: 'false',
@@ -108,21 +116,18 @@
     });
   },
 
+  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   insertPath: function (component, event, helper) {
-
-    var selectedObjDetais = component.get('v.SelectedObjDetais');
+    var selectedObjDetails = component.get('v.SelectedObjDetails');
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
     var insertObj = {
-      Name: selectedObjDetais.name,
-      Name__c: selectedObjDetais.name,
-      Folder_Name__c: SelectedObjFieldName,
+      Name: selectedObjDetails.name,      
+      FolderName__c: SelectedObjFieldName,
       Path__c: component.get('v.pathInCLM'),
     };
-
     helper.callServer(component, 'c.setMappedObject', { eosDetails: insertObj }, function (result) {
-
       if (result) {
-        helper.fireToast(component, stringUtils.format('\'{0}\' object type was successfully mapped to DocuSign CLM.', selectedObjDetais.name), helper.SUCCESS);
+        helper.fireToast(component, stringUtils.format('\'{0}\' object type was successfully mapped to DocuSign CLM.', selectedObjDetails.name), helper.SUCCESS);
         helper.fireApplicationEvent(component, {
           fromComponent: 'CLMSMappedObjectsEdit',
           toComponent: 'CLMSetupLayout',
@@ -131,11 +136,11 @@
         }, 'CLMNavigationEvent');
       }
       else {
-        helper.fireToast(component, stringUtils.format('\'{0}\' object type was not mapped to DocuSign CLM.', selectedObjDetais.name), 'error');
+        helper.fireToast(component, stringUtils.format('\'{0}\' object type was not mapped to DocuSign CLM.', selectedObjDetails.name), 'error');
       }
     });
-
   },
+  
   //Step 1
   handleSearchObject: function (component) {
     var queryTerm = component.find('search-object').get('v.value');
@@ -152,12 +157,12 @@
       component.set('v.allObjectsList', allObjs);
     }
   },
+
   onObjSelection: function (component, event) {
     var name = event.currentTarget.id;
     var allObjects = component.get('v.allObjects');
     var allObjectsList = component.get('v.allObjectsList');
     var objDetails = {};
-
     allObjects.forEach(function (data) {
       if (data.name === name) {
         data.selected = true;
@@ -166,7 +171,6 @@
         data.selected = false;
       }
     });
-
     allObjectsList.forEach(function (data) {
       if (data.name === name) {
         data.selected = true;
@@ -174,7 +178,6 @@
         data.selected = false;
       }
     });
-
     var clmFolderTree = component.get('v.clmFolderTree');
     var objectIndex = 0;
     clmFolderTree.forEach(function (treeData, index) {
@@ -194,9 +197,7 @@
         id: 3
       });
     }
-
-
-    component.set('v.SelectedObjDetais', objDetails);
+    component.set('v.SelectedObjDetails', objDetails);
     component.set('v.allObjects', allObjects);
     component.set('v.allObjectsList', allObjectsList);
   },
@@ -204,30 +205,28 @@
   //Step 2
   onObjFolderSelection: function (component, event, helper) {
     var name = event.currentTarget.id;
-    var allObjectFiledsList = component.get('v.allObjectFiledsList');
-
-    allObjectFiledsList.forEach(function (folderData, index) {
+    var allObjectFieldsList = component.get('v.allObjectFieldsList');
+    allObjectFieldsList.forEach(function (folderData, index) {
       if (folderData.name === name) {
-
         folderData.selected = !folderData.selected;
         if (folderData.fields.length === 0 && folderData.selected === true) {
           helper.callServer(component, 'c.getAllObjectFields', { apiName: folderData.name, isChild: true }, function (result) {
-            var allObjectFiledsListtemp = component.get('v.allObjectFiledsList');
-            allObjectFiledsListtemp[index].fields = result;
-            component.set('v.allObjectFileds', allObjectFiledsListtemp);
-            component.set('v.allObjectFiledsList', allObjectFiledsListtemp);
+            var allObjectFieldsListtemp = component.get('v.allObjectFieldsList');
+            allObjectFieldsListtemp[index].fields = result;
+            component.set('v.allObjectFields', allObjectFieldsListtemp);
+            component.set('v.allObjectFieldsList', allObjectFieldsListtemp);
           });
         }
       }
-
     });
-    component.set('v.allObjectFiledsList', allObjectFiledsList);
+    component.set('v.allObjectFieldsList', allObjectFieldsList);
   },
+
   handleSearchField: function (component) {
     var queryTerm = component.find('search-field').get('v.value');
-    var allObjectFileds = JSON.parse(JSON.stringify(component.get('v.allObjectFileds')));
+    var allObjectFields = JSON.parse(JSON.stringify(component.get('v.allObjectFields')));
     if (queryTerm.length > 1) {
-      allObjectFileds.forEach(function (objFieldData) {
+      allObjectFields.forEach(function (objFieldData) {
         var filteredList = [];
         objFieldData.fields.forEach(function (filedData) {
           if (filedData.label.toLowerCase().includes(queryTerm.toLowerCase())) {
@@ -237,30 +236,24 @@
         objFieldData.fields = filteredList;
 
       });
-      component.set('v.allObjectFiledsList', allObjectFileds);
+      component.set('v.allObjectFieldsList', allObjectFields);
     } else {
-      component.set('v.allObjectFiledsList', allObjectFileds);
+      component.set('v.allObjectFieldsList', allObjectFields);
     }
   },
+
   onObjFieldSelection: function (component, event) {
     var label = event.currentTarget.id;
     event.stopPropagation();
     var clmFolderTree = component.get('v.clmFolderTree');
-
-    var SelectedObjDetais = component.get('v.SelectedObjDetais');
-
-
+    var SelectedObjDetails = component.get('v.SelectedObjDetails');
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
-
     if (SelectedObjFieldName) {
-      SelectedObjFieldName += '{!' + SelectedObjDetais.label + '.' + label + '}';
+      SelectedObjFieldName += '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
     else {
-      SelectedObjFieldName = '{!' + SelectedObjDetais.label + '.' + label + '}';
+      SelectedObjFieldName = '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
-
-
-
     var fieldIndex = 0;
     clmFolderTree.forEach(function (treeData, index) {
       if (treeData.type === 'tail') {
@@ -279,11 +272,10 @@
         id: 4
       });
     }
-
     component.set('v.clmFolderTree', clmFolderTree);
     component.set('v.SelectedObjFieldName', SelectedObjFieldName);
-
   },
+
   validateFieldSelection: function (component, event) {
     var value = event.getSource().get('v.value');
     var clmFolderTree = component.get('v.clmFolderTree');
@@ -294,8 +286,6 @@
 
       component.set('v.SelectedObjFieldName', value);
     }
-
-
     var fieldIndex = 0;
     clmFolderTree.forEach(function (treeData, index) {
       if (treeData.type === 'tail') {
@@ -314,7 +304,6 @@
         id: 4
       });
     }
-
     component.set('v.clmFolderTree', clmFolderTree);
   },
 
@@ -323,11 +312,9 @@
     var dataset = JSON.parse(JSON.stringify(event.currentTarget.dataset));
     var clmFolderTree = component.get('v.clmFolderTree');
     var index = parseInt(dataset.id);
-
     clmFolderTree.forEach(function (treeData, treeIndex) {
       if (treeData.id === index) {
         treeData.selected = true;
-
         if (treeData.type === 'root') {
           component.set('v.isDeletefolder', true);
           component.set('v.isAddSubfolder', false);
@@ -352,10 +339,11 @@
       else {
         treeData.selected = false;
       }
-
     });
     component.set('v.clmFolderTree', clmFolderTree);
   },
+
+  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   addSubfolder: function (component, event, helper) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var selectedFolder;
@@ -366,40 +354,37 @@
         selectedFolderIndex = treeIndex;
       }
     });
-
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       primaryButtonLabel: 'Confirm',
       secondaryButtonLabel: 'Cancel',
-      primaryButtonVarient: 'brand',
+      primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'true'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
     });
-
     helper.createComponent(component, 'c:CLMMappingObjectNaming', {
       title: 'Name your sub-folder',
       summary: 'Type in for a static or add fields to create a variable name for your sub-folder.then click confirm once done',
-      selectedObjDetails: component.get('v.SelectedObjDetais'),
+      selectedObjDetails: component.get('v.SelectedObjDetails'),
       buttondisabled: true
     }, function (newCmp) {
       component.set('v.modelbody', newCmp);
     });
-
     component.set('v.modelTitleText', 'Name Subfolder');
     component.set('v.showModal', 'true');
-
     component.set('v.modelValueHolder', {
       buttontype: 'subfolder',
       selectedFolder: selectedFolder,
       selectedFolderIndex: selectedFolderIndex,
       buttonDisabled: true
     });
-
     var modelComponent = component.find('popupModel');
     setTimeout($A.getCallback(function () {
       modelComponent.show();
     }), 5);
   },
+
+  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   renameSubfolder: function (component, event, helper) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var selectedFolder;
@@ -413,7 +398,7 @@
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       primaryButtonLabel: 'Confirm',
       secondaryButtonLabel: 'Cancel',
-      primaryButtonVarient: 'brand',
+      primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'false'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
@@ -422,26 +407,26 @@
       title: 'Name your folder',
       summary: 'Type in for a static or add fields to create a variable name for your sub-folder.then click confirm once done',
       folderName: selectedFolder.name,
-      selectedObjDetails: component.get('v.SelectedObjDetais'),
+      selectedObjDetails: component.get('v.SelectedObjDetails'),
       buttondisabled: false
     }, function (newCmp) {
       component.set('v.modelbody', newCmp);
     });
     component.set('v.modelTitleText', 'Rename Folder');
     component.set('v.showModal', 'true');
-
     component.set('v.modelValueHolder', {
       buttontype: 'rename',
       selectedFolder: selectedFolder,
       selectedFolderIndex: selectedFolderIndex,
       buttonDisabled: false
     });
-
     var modelComponent = component.find('popupModel');
     setTimeout($A.getCallback(function () {
       modelComponent.show();
     }), 5);
   },
+
+
   deleteSubfolder: function (component, event, helper) {
     var clmFolderTree = component.get('v.clmFolderTree');
     for (var i = 0; i < clmFolderTree.length; i++) {
@@ -454,17 +439,18 @@
       treeData.id = treeData.level;
     });
     component.set('v.clmFolderTree', clmFolderTree);
+      component.set('v.isDeletefolder', false);
+      component.set('v.isAddSubfolder', false);
+      component.set('v.isRenamefolder', false);
     helper.updatepath(component);
   },
 
   //Handlers
   updateTextFromModel: function (component, event, helper) {
-
     var fromComponent = event.getParam('fromComponent');
     var toComponent = event.getParam('toComponent');
     var type = event.getParam('type');
     var data = event.getParam('data');
-
     if (toComponent === 'CLMMappedObjectEdit' && fromComponent !== 'CLMMappedObjectEdit') {
       if (type === helper.ACTIONUPDATE) {
         var modelValueHolder = component.get('v.modelValueHolder');
@@ -473,6 +459,7 @@
       }
     }
   },
+
   updateFromPathUI: function (component, event, helper) {
     var navigateTo = event.getParam('navigateTo');
     var fromComponent = event.getParam('fromComponent');
@@ -483,6 +470,7 @@
       }
     }
   },
+  
   handleConfirm: function (component, event, helper) {
     var modelValueHolder = component.get('v.modelValueHolder');
     var clmFolderTree = component.get('v.clmFolderTree');
@@ -494,7 +482,6 @@
     }
     else if (modelValueHolder.buttontype === 'subfolder') {
       clmFolderTree = helper.sortTree(clmFolderTree);
-
       clmFolderTree.forEach(function (treeData) {
         if (treeData.level > clmFolderTree[modelValueHolder.selectedFolderIndex].level) {
           treeData.level = treeData.level + 1;
@@ -504,7 +491,6 @@
           treeData.id = treeData.level;
         }
       });
-
       clmFolderTree.push({
         level: clmFolderTree[modelValueHolder.selectedFolderIndex].level + 1,
         name: modelValueHolder.folderName,
@@ -512,14 +498,13 @@
         selected: false,
         id: clmFolderTree[modelValueHolder.selectedFolderIndex].level + 1
       });
-
       clmFolderTree = helper.sortTree(clmFolderTree);
-
       component.set('v.clmFolderTree', clmFolderTree);
       component.set('v.showModal', 'false');
       helper.updatepath(component);
     }
   },
+
   closeModal: function (component) {
     component.set('v.showModal', 'false');
     component.set('v.modelValueHolder', {});

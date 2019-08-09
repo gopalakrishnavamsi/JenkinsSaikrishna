@@ -30,10 +30,10 @@
     <aura:attribute name="allObjects" type="List" access="private" />
     <aura:attribute name="allObjectsList" type="List" access="private" />
     
-    <aura:attribute name="allObjectFileds" type="List" access="private" />
-    <aura:attribute name="allObjectFiledsList" type="List" access="private" />
+    <aura:attribute name="allObjectFields" type="List" access="private" />
+    <aura:attribute name="allObjectFieldsList" type="List" access="private" />
     
-    <aura:attribute name="SelectedObjDetais" type="Object" access="private" />
+    <aura:attribute name="SelectedObjDetails" type="Object" access="private" />
    
     
     <aura:attribute name="SelectedObjFieldName" default="" type="String" access="private" />
@@ -137,7 +137,7 @@
                                         <lightning:input aura:id="search-field" placeholder="Search Fields" type="search" variant="label-hidden" />
                                     </div>
                                     <ul class="slds-tree" role="tree">
-                                        <aura:iteration items="{!v.allObjectFiledsList}" var="objectData">
+                                        <aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
                                             <li  aria-expanded="{!objectData.selected}" aria-level="1" id="{!objectData.name}" role="treeitem" onclick="{!c.onObjFolderSelection}">
                                                 <div class="slds-tree__item">
                                                     <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="{!objectData.selected?'utility:down':'utility:right'}" alternativeText="open" />
@@ -244,7 +244,7 @@
     <footer class="slds-modal__footer">
         <aura:if isTrue="{!v.currentStep=='1'}">
             <lightning:button label="Cancel" title="Cancel" onclick="{! c.back }" />
-            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!!v.SelectedObjDetais}" />
+            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!!v.SelectedObjDetails}" />
         </aura:if>
         <aura:if isTrue="{!v.currentStep=='2'}">
             <lightning:button label="Back" title="Back" onclick="{! c.back }" />
