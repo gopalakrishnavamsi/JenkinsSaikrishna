@@ -47,12 +47,6 @@ private class ProvisioningAPITest {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				ProvisioningAPI.getInstance(new Url('https://test.docusign.com'), UUID.randomUUID(), ' ');
-				throw new AssertException('Expected getInstance to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
-			}
-			try {
 				ProvisioningAPI.getInstance(new Url('https://invalid.url'), UUID.randomUUID(), 'test');
 				throw new AssertException('Expected getInstance to fail');
 			} catch (DocuSignException ex) {

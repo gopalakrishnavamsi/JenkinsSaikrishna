@@ -3390,14 +3390,6 @@
 		<value>Password</value>
 	</labels>
 	<labels>
-		<fullName>PendingActivation</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Pending activation</shortDescription>
-		<value>Pending Activation</value>
-	</labels>
-	<labels>
 		<fullName>Peru</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7702,5 +7694,19 @@
 		<protected>true</protected>
 		<shortDescription>Maximum batch size exceeded</shortDescription>
 		<value>Maximum batch size exceeded: {0} > {1}</value>
+	</labels>
+	<labels>
+		<fullName>Pending</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Pending</shortDescription>
+		<value>Pending</value>
+	</labels>
+	<labels>
+		<fullName>Inactive</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Inactive</shortDescription>
+		<value>Inactive</value>
 	</labels>
 </CustomLabels>

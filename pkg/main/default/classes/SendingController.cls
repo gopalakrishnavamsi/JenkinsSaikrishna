@@ -131,13 +131,18 @@ public with sharing class SendingController extends Controller {
 
 	@AuraEnabled
 	public static Envelope sendEnvelope(final String envelopeJson) {
-		if (AccountProducts.getInstance().isESignatureTrialExpired()) throw Controller.wrapException(Label.ExpiredTrialAccount);
+		if (AccountProducts.getInstance().isESignatureTrialExpired()) {
+			AccountProducts.save();
+			throw Controller.wrapException(Label.ExpiredTrialAccount);
+		}
 
 		try {
-			return EnvelopeService.sendEnvelope(
+			Envelope result = EnvelopeService.sendEnvelope(
 				(Envelope)JSON.deserialize(envelopeJson, Envelope.class),
 				false,
 				true);
+			AccountProducts.save();
+			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to send envelope');
 		}

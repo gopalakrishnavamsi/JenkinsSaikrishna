@@ -190,6 +190,7 @@ private class CredentialsTest {
 					userId,
 					userId.toString(),
 					email,
+					Account.USER_STATUS_ACTIVE,
 					true),
 				new Credentials.AccessToken(token, expires));
 			Credentials result2 = Credentials.getInstance();
@@ -285,6 +286,7 @@ private class CredentialsTest {
 					userId,
 					userId.toString(),
 					email,
+					Account.USER_STATUS_ACTIVE,
 					true),
 				new Credentials.AccessToken(token, expires));
 			Credentials result2 = Credentials.getInstance();
@@ -392,8 +394,8 @@ private class CredentialsTest {
 
 			Test.startTest();
 			Map<Id, Credentials.UserCredentials> result = Credentials.add(new Map<Id, Credentials.UserCredentials> {
-				dsu1.Id => new Credentials.UserCredentials(userId1, 'u1', 'u1@unit.test', false),
-				dsu2.Id => new Credentials.UserCredentials(userId2, 'u2', 'u2@unit.test', true),
+				dsu1.Id => new Credentials.UserCredentials(userId1, 'u1', 'u1@unit.test', Account.USER_STATUS_ACTIVE, false),
+				dsu2.Id => new Credentials.UserCredentials(userId2, 'u2', 'u2@unit.test', Account.USER_STATUS_ACTIVE, true),
 				dsu3.Id => null
 			});
 			Test.stopTest();

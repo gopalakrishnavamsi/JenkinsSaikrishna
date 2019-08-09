@@ -2069,4 +2069,29 @@ private class AuthServiceTest {
 			System.assert(AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
 		}
 	}
+
+	@IsTest
+	static void test_saveUserCredentials_activate() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			update new User(Id = UserInfo.getUserId(), Status__c = Account.USER_STATUS_PENDING);
+
+			Test.startTest();
+			Credentials result = AuthService.saveUserCredentials(
+				'unit.test',
+				new Url('https://auth.test.docusign.net/'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.user);
+			System.assert(result.isUserValid);
+			System.assertEquals(Account.USER_STATUS_ACTIVE, [
+				SELECT Status__c
+				FROM User
+				WHERE Id = :UserInfo.getUserId()
+				LIMIT 1
+			].Status__c);
+		}
+	}
 }

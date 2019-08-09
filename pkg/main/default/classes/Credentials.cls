@@ -158,6 +158,7 @@ public with sharing class Credentials {
 		public UUID id { get; private set; }
 		public String name { get; private set; }
 		public String email { get; private set; }
+		public String status { get; private set; }
 		public Boolean canManageAccount { get; private set; }
 		public Boolean isValid {
 			get {
@@ -169,11 +170,13 @@ public with sharing class Credentials {
 			final UUID id,
 			final String name,
 			final String email,
+			final String status,
 			final Boolean canManageAccount) {
 
 			this.id = id;
 			this.name = name;
 			this.email = email;
+			this.status = status;
 			this.canManageAccount = canManageAccount;
 		}
 	}
@@ -307,7 +310,7 @@ public with sharing class Credentials {
 				Application.namespacePrefix + 'Status__c'
 			});
 
-			if (userId == null) return new UserCredentials(null, null, null, false);
+			if (userId == null) return new UserCredentials(null, null, null, null, false);
 
 			User user = (User)Collection.head([
 				SELECT Username__c, Name, Email, CanManageAccount__c, Status__c
@@ -320,6 +323,7 @@ public with sharing class Credentials {
 				String.isBlank(user.Username__c) ? systemSenderId : UUID.tryParse(user.Username__c),
 				user.Name,
 				user.Email,
+				user.Status__c,
 				user.CanManageAccount__c == true);
 		}
 
@@ -551,6 +555,8 @@ public with sharing class Credentials {
 			settings.ESignatureBaseUrl__c = null;
 			settings.ScmAuthBaseUrl__c = null;
 			settings.ScmApiBaseUrl__c = null;
+			settings.ClmLandingPageUrl__c = null;
+			settings.ClmAdminUrl__c = null;
 			settings.AccountId__c = null;
 			settings.AccountNumber__c = null;
 			settings.AccountName__c = null;
@@ -619,6 +625,7 @@ public with sharing class Credentials {
 				} else {
 					u.Username__c = String.valueOf(uu.id);
 					u.CanManageAccount__c = uu.canManageAccount == true;
+					u.Status__c = uu.status;
 					u.Provisioned__c = Date.today();
 				}
 			}
