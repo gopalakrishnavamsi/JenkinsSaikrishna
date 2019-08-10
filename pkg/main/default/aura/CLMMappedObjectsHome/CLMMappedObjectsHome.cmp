@@ -1,9 +1,14 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
     <ltng:require scripts="{!$Resource.stringUtils}" />
+
+    <!--component dependencies-->
+    <aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT"/>
+
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
-
+    <aura:registerEvent name="CLMScopedNotificationEvent" type="c:CLMScopedNotificationEvent"/>
+    <aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
     <!--event handlers-->
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
     <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
@@ -16,9 +21,6 @@
     <aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
     <aura:attribute name="tempMappingModelDataHolder" type="object" default="" access="private" />
 
-    <!--toast attributes-->
-    <aura:attribute name="toastTitleText" type="String" access="private" />
-    <aura:attribute name="toastVariant" type="String" access="private" />
 
     <!--model attributes-->
     <aura:attribute name="modelTitleText" type="String" access="private" />
@@ -26,13 +28,22 @@
     <aura:attribute name="modelSecondaryButtonText" type="String" access="private" />
     <aura:attribute name="modelPrimaryButtonText" type="String" access="private" />
     <aura:attribute name="showModal" type="Boolean" default="false" access="private" />
-
+    <aura:attribute name="isRemove" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]"/>
     <!--child components-->
     <aura:if isTrue="{!v.showModal}">
-        <c:strike_modal aura:id="popupModel" body="{!v.modelbodyText}" title="{!v.modelTitleText}"
-            primaryButtonLabel="{!v.modelPrimaryButtonText}" secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
+        <aura:if isTrue="{!v.isRemove}">
+            <c:strike_modal aura:id="popupModel" footerButtons="{!v.strikeModelFooterButtons}" body="{!v.modelbodyText}"
+                            title="{!v.modelTitleText}"
+                            primaryButtonLabel="{!v.modelPrimaryButtonText}"
+                            secondaryButtonLabel="{!v.modelSecondaryButtonText}"/>
+            <aura:set attribute="else">
+                <c:strike_modal aura:id="popupModel" body="{!v.modelbodyText}" title="{!v.modelTitleText}"
+                                primaryButtonLabel="{!v.modelPrimaryButtonText}"
+                                secondaryButtonLabel="{!v.modelSecondaryButtonText}"/>
+            </aura:set>
+        </aura:if>
     </aura:if>
-    <c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}" />
 
     <lightning:card>
         <aura:set attribute="title">
@@ -53,33 +64,28 @@
                     role="grid">
                     <thead>
                         <tr class="slds-line-height_reset">
-                            <th aria-label="Salesforce Object" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.SalesforceObject}" aria-sort="none" class="ds-thead-width"
+                                scope="col">
                                 <span class="slds-truncate"
-                                    title="Salesdorce Object">{!$Label.c.SalesforceObject}</span>
+                                      title="{!$Label.c.SalesforceObject}">{!$Label.c.SalesforceObject}</span>
                             </th>
-                            <th aria-label="Object Folder Name" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.ObjectFolderName}" aria-sort="none" class="ds-thead-width"
+                                scope="col">
                                 <span class="slds-truncate"
-                                    title="Object Folder Name">{!$Label.c.ObjectFolderName}</span>
+                                      title="{!$Label.c.ObjectFolderName}">{!$Label.c.ObjectFolderName}</span>
                             </th>
-                            <th aria-label="Path in DocuSign CLM" aria-sort="none" class="" scope="col"
-                                style="width:8.75rem">
+                            <th aria-label="{!$Label.c.PathInDocuSignCLM}" aria-sort="none" class="ds-thead-width"
+                                scope="col">
                                 <span class="slds-truncate"
-                                    title="Path in DocuSign CLM">{!$Label.c.PathInDocuSignCLM}</span>
+                                      title="{!$Label.c.PathInDocuSignCLM}">{!$Label.c.PathInDocuSignCLM}</span>
                             </th>
-                            <th aria-label="Action" aria-sort="none" class="" scope="col" style="width:8.75rem">
+                            <th aria-label="Action" aria-sort="none" class="ds-thead-width" scope="col">
                                 <span class="slds-truncate" title="Action"> </span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr aria-selected="false">
-                            <td colspan="4">
-                                <c:Loading aura:id="loader" />
-                            </td>
-                        </tr>
-                        <aura:if isTrue="{!v.mappedObjData.length==0}">
+                    <aura:if isTrue="{!v.mappedObjData.length==0}">
                             <tr aria-selected="false">
                                 <td class="ds-center-image" colspan="2">
                                     <img src="{!($Resource.CLMNoMappedObjects)}" alt="troubleImage" />
@@ -95,20 +101,20 @@
                             <tr aria-selected="false">
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-truncate" title="{!data.objectName}">
-                                        {!data.objectName}
+                                            {!data.Name}
                                     </span>
                                 </td>
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-grid slds-grid_align-spread">
                                         <span class="slds-truncate" title="{!data.folderName}">
-                                            {!data.folderName}
+                                                {!data.FolderName__c}
                                         </span>
                                     </span>
                                 </td>
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-grid slds-grid_align-spread">
                                         <span class="slds-truncate" title="{!data.path}">
-                                            {!data.path}
+                                                {!data.Path__c}
                                         </span>
                                     </span>
                                 </td>

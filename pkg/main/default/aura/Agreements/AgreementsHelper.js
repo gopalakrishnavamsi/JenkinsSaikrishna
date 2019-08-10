@@ -49,6 +49,9 @@
         if (errors) {
           if (errors[0] && errors[0].message) {
             errorMessage += errors[0].message;
+            if (errors[0].message === $A.get('$Label.c.MustBeDocuSignNegotiator')) {
+              component.set('v.isNotDocuSignNegotiator', true);
+            }
           }
         } else {
           errorMessage += $A.get('$Label.c.UnknownError');

@@ -1,0 +1,31 @@
+<aura:component>
+
+
+    <aura:attribute name="primaryButtonLabel" type="String" default="Ok"/>
+    <aura:attribute name="secondaryButtonLabel" type="String" default="Cancel"/>
+
+    <aura:attribute name="primaryButtonVariant" type="String" default="brand"/>
+    <aura:attribute name="secondaryButtonVarient" type="String" default="neutral"/>
+
+    <aura:attribute name="showPrimaryButton" type="boolean" default="true"/>
+    <aura:attribute name="showSecondaryButton" type="boolean" default="true"/>
+
+    <aura:attribute name="primaryButtonDisabled" type="boolean" default="false"/>
+
+
+    <aura:handler event="c:CLMEvent" action="{!c.handleEvent}"/>
+    <aura:registerEvent name="strike_evt_modalPrimaryButtonClicked" type="c:strike_evt"/>
+    <aura:registerEvent name="strike_evt_modalSecondaryButtonClicked" type="c:strike_evt"/>
+
+    <aura:handler name="CLMModelFooterPrimaryBtn_disable" event="c:strike_evt" action="{!c.disabledPrimaryButton}"/>
+    <aura:handler name="CLMModelFooterPrimaryBtn_enable" event="c:strike_evt" action="{!c.enablePrimaryButton}"/>
+    <aura:if isTrue="{!v.showSecondaryButton}">
+        <lightning:button class="{!'slds-button slds-button--'+v.secondaryButtonVarient}"
+                          onclick="{!c.clickedSecondary}">{!v.secondaryButtonLabel}</lightning:button>
+    </aura:if>
+    <aura:if isTrue="{!v.showPrimaryButton}">
+        <lightning:button class="{!'slds-button slds-button--'+v.primaryButtonVariant}"
+                          disabled="{!v.primaryButtonDisabled}"
+                          onclick="{!c.clickedPrimary}">{!v.primaryButtonLabel}</lightning:button>
+    </aura:if>
+</aura:component>

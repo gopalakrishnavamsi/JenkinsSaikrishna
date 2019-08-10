@@ -8,9 +8,9 @@
         <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
             <aura:iteration items="{!v.steps}" var="step">
                 <aura:if isTrue="{!v.currentStep  >= step.index }">
-                    <li class="slds-breadcrumb__item ">
+                    <li class="slds-breadcrumb__item ds-crumb-item-pointer">
                         <aura:if isTrue="{!v.currentStep==step.index}">
-                            <span class=" slds-p-left_x-small slds-text-heading_x-small slds-text-title_caps ds-click-pointer">
+                            <span class=" slds-p-left_x-small slds-text-heading_x-small slds-text-title_caps ">
                                 {!step.label}
                             </span>
                             <aura:set attribute="else">

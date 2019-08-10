@@ -34,3 +34,7 @@
     max-width:144px;
     height: 100%;
 }
+
+.THIS .ds-thead-width {
+    width: 8.75rem;
+}

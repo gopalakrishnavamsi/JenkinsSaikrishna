@@ -88,7 +88,7 @@ public with sharing class NegotiateService {
 	 */
 
 	public static List<Agreement> getAgreements(final Id sourceObjectId) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		List<Agreement> agreements = new List<Agreement>();
 		Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItem = new Map<UUID, List<AgreementHistoryItem>>();
@@ -119,7 +119,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static Agreement getAgreement(final UUID agreementId) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		return getAgreementData(NegotiateAPI.getInstance().getAgreement(agreementId));
 	}
 
@@ -229,7 +229,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		UUID taskId = NegotiateAPI.getInstance().createAgreementInEOSFolder(sfContentVersionId, folderId, documentName);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
@@ -255,7 +255,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceObjectId, final UUID documentId) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().exportAgreementToSalesforce(sourceObjectId, documentId);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(taskId);
 		if (taskStatus.status.equals('Success')) {
@@ -269,7 +269,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static String getAgreementPreviewLink(final Id sourceId, final String agreementId, final Boolean isFullUrl) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		if (sourceId == null || agreementId == null) return null;
 
 		UUID agreementUId = UUID.parse(agreementId);
@@ -281,17 +281,17 @@ public with sharing class NegotiateService {
 	}
 
 	public static Boolean renameAgreement(final UUID documentId, final String documentName) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		return NegotiateAPI.getInstance().renameAgreement(documentId, documentName);
 	}
 
 	public static Boolean deleteAgreement(final UUID documentId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		return NegotiateAPI.getInstance().deleteAgreement(documentId);
 	}
 
 	public static NegotiateAPI.TaskStatus sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, sourceId, documentsIds, reviewers, subject, body, expiresInNumberOfDays);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
@@ -305,7 +305,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static NegotiateAPI.TaskStatus sendForInternalApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String body, final Boolean isSequential) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body, isSequential);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
 		if (taskStatus.status.equals('Waiting')) {
@@ -319,7 +319,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID folderId = DB.getFolderId(objectId);
 		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(folderId, AuthService.getContentAccessToken());
 		return token.withEntityId(folderId)
@@ -327,44 +327,51 @@ public with sharing class NegotiateService {
 	}
 
 	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
 		return token.withEntityId(agreementId)
 			.withAccountId(Credentials.getInstance().account.id);
 	}
 
 	public static NegotiateService.LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
 		return token.withEntityId(agreementId)
 			.withAccountId(Credentials.getInstance().account.id);
 	}
 
 	public static List<AgreementApprovalWorkItem> getApprovalWorkItems(final UUID documentId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		return NegotiateAPI.getInstance().getApprovalWorkItems(documentId);
 	}
 
 	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);
 	}
 
 	public static Boolean cancelApprovalOrExternalReview(final UUID documentId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignNegotiator();
 		return NegotiateAPI.getInstance().cancelApprovalOrExternalReview(documentId);
 	}
 
 	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final UUID workItemsId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsDocuSignNegotiator();
 		if (itemResponse)
 			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId); else
 			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.REJECT, workItemsId);
 	}
 
 	public static Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID documentId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID externalReviewId = NegotiateAPI.getInstance().getDocumentReview(documentId);
 		return NegotiateAPI.getInstance().externalReviewCompleteOnBehalf(comments, newVersionUrl, externalReviewId);
+	}
+
+	public static String getResourceToken(final UUID documentID) {
+		Permissions.verifyIsDocuSignNegotiator();
+		return ResourceTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
 	}
 }

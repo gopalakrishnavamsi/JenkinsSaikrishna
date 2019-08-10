@@ -15,9 +15,10 @@
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="isNotDocuSignNegotiator" type="Boolean" default="{!false}"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
-    
+
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadAgreements}"/>
@@ -48,7 +49,7 @@
                                         <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
                                         <aura:set attribute="else">
                                             <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
-                                                    ({!v.agreements.length})</b></p>
+                                                ({!v.agreements.length})</b></p>
                                         </aura:set>
                                     </aura:if>
                                 </aura:if>
@@ -58,7 +59,7 @@
                     <div class="slds-col slds-p-bottom_xx-small">
                         <lightning:button class="slds-button slds-button_neutral"
                                           onclick="{!c.importAgreements}"
-                                          disabled="{!if(or(v.loading, not(v.isAuthorized)), true, false)}"
+                                          disabled="{!if(or(or(v.loading, not(v.isAuthorized)), v.isNotDocuSignNegotiator), true, false)}"
                                           label="{!$Label.c.ImportButtonLabel}"></lightning:button>
                     </div>
                 </div>
@@ -66,7 +67,7 @@
 
             <div id="mainContent">
                 <!-- Loading State -->
-                <aura:if isTrue="{!v.isAuthorized}">
+                <aura:if isTrue="{!and (v.isAuthorized, not(v.isNotDocuSignNegotiator))}">
                     <aura:set attribute="else">
                         <aura:if isTrue="{!v.fetchingOAuthStatus}">
                             <div class="ds-spinner_oauth_container slds-is-relative">
@@ -78,7 +79,7 @@
                             </div>
                         </aura:if>
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                              fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
                     </aura:set>
 
                     <aura:if isTrue="{!v.loading}">
@@ -110,16 +111,22 @@
                             <!-- Iterate through Agreements -->
                             <aura:iteration items="{!v.agreements}" var="agreementDetails" indexVar="index">
                                 <li class="slds-item slds-p-top_medium">
-                                    <c:AgreementDetails 
-                                        namespace="{!v.namespace}"
-                                        sourceId="{!v.recordId}" 
-                                        agreementDetails="{!agreementDetails}"
-                                        agreementIndex="{!index}"/>
+                                    <c:AgreementDetails
+                                            namespace="{!v.namespace}"
+                                            sourceId="{!v.recordId}"
+                                            agreementDetails="{!agreementDetails}"
+                                            agreementIndex="{!index}"/>
                                     <div class="ds-agreements_spacing"/>
                                 </li>
                             </aura:iteration>
                         </div>
                     </aura:if>
+                </aura:if>
+
+                <aura:if isTrue="{!v.isNotDocuSignNegotiator}">
+                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                            {!$Label.c.MustBeDocuSignNegotiator}
+                    </div>
                 </aura:if>
             </div>
         </ul>

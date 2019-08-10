@@ -88,15 +88,6 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
-	@AuraEnabled(Cacheable = true)
-	public static Account getAccount() {
-		try {
-			return AccountService.getAccount();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to read DocuSign account.');
-		}
-	}
-
 	@AuraEnabled
 	public static LoginInformation logout(final Boolean resetUsers) {
 		try {
@@ -191,9 +182,23 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled
 	public static Boolean addTrialGen() {
 		try {
-			return AccountProducts.getInstance().startTrial(Product.GEN) != null;
+			List<Product> ps = AccountProducts.getInstance().startTrials(new Set<String> { Product.GEN });
+			AccountProducts.save();
+			return Collection.size(ps) == 1;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean addTrialNegotiate() {
+		try {
+			List<Product> ps = AccountProducts.getInstance().startTrials(
+				new Set<String> { Product.GEN, Product.NEGOTIATE });
+			AccountProducts.save();
+			return Collection.size(ps) == 2;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to add Negotiate Trial.');
 		}
 	}
 }

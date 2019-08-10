@@ -88,6 +88,26 @@ public with sharing class UserAPI extends ESignatureAPI {
 			return e;
 		}
 
+		@TestVisible
+		private String getStatusExternalForm() {
+			String result = (this.userStatus == null ? null : this.userStatus.toLowerCase());
+			switch on result {
+				when 'active' {
+					result = Account.USER_STATUS_ACTIVE;
+				} when 'activationsent', 'activationrequired' {
+					result = Account.USER_STATUS_PENDING;
+				} when 'closed', 'disabled' {
+					result = Account.USER_STATUS_INACTIVE;
+				} when else {
+					LoggerService.getInstance().warn(
+						String.format('Unrecognized status for user {0} ({1}): {2}', new List<Object> {
+							this.userName, this.userId, this.userStatus
+						}));
+				}
+			}
+			return result;
+		}
+
 		public Account.User toExternalForm(final Id sourceId, final Boolean canManageAccount) {
 			Boolean isAdmin = canManageAccount;
 			if (this.userSettings != null) {
@@ -104,7 +124,7 @@ public with sharing class UserAPI extends ESignatureAPI {
 				this.email,
 				this.firstName,
 				this.lastName,
-				this.userStatus,
+				this.getStatusExternalForm(),
 				StringUtils.parseDate(this.createdDateTime),
 				isAdmin,
 				null,
@@ -146,10 +166,13 @@ public with sharing class UserAPI extends ESignatureAPI {
 		return this.addUsers(users, RestAPI.defaultTimeout);
 	}
 
-	public List<Account.User> addUsers(final List<Account.User> users, final Integer timeout) {
+	public List<Account.User> addUsers(
+		final List<Account.User> users,
+		final Integer timeout) {
+
 		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
 
-		final RestAPI.Response response = this.post(
+		RestAPI.Response response = this.post(
 			'users',
 			JSON.serialize(new NewUsers(users)),
 			timeout);

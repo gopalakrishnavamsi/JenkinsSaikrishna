@@ -717,11 +717,6 @@ public with sharing class GenService {
 		return DB.deleteContentDocument(contentVersionId);
 	}
 
-	public static String getResourceToken(final UUID documentID) {
-		Permissions.verifyIsDocuSignUser();
-		return GenAPI.getInstance().getResourceToken(documentID).toExternalForm();
-	}
-
 	public static String getCompareUrl(final UUID compareTaskId) {
 		Permissions.verifyIsDocuSignUser();
 		return GenAPI.getInstance().getCompareUrl(compareTaskId).toExternalForm();

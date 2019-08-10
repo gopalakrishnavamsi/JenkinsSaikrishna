@@ -1,10 +1,14 @@
 ({
   onInit: function (component, event, helper) {
-    var loader = component.find('loader');
-    loader.show();
     helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
-      component.set('v.mappedObjData', JSON.parse(result));
-      loader.hide();
+      component.set('v.mappedObjData', Object.values(result));
+    });
+    helper.createComponent(component, 'c:CLMModelFooterButton', {
+      primaryButtonLabel: $A.get('$Label.c.Remove'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+      primaryButtonVariant: 'destructive'
+    }, function (newCmp) {
+      component.set('v.strikeModelFooterButtons', newCmp);
     });
   },
 
@@ -41,13 +45,23 @@
     setTimeout($A.getCallback(function () {
       modelComponent.show();
     }), 5);
+    var cmpEvent = component.getEvent('CLMScopedNotificationEvent');
+    cmpEvent.fire();
   },
 
-  remove: function (component, event) {
+  remove: function (component, event, helper) {
     var id = event.getSource().get('v.value');
     component.set('v.tempMappingModelDataHolder', {
       id: id,
       type: 'remove'
+    });
+    helper.createComponent(component, 'c:CLMModelFooterButton', {
+      primaryButtonLabel: $A.get('$Label.c.Remove'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+      primaryButtonVariant: 'destructive'
+    }, function (newCmp) {
+      component.set('v.strikeModelFooterButtons', newCmp);
+      component.set('v.isRemove', 'true');
     });
     var modelTitle = $A.get('$Label.c.RemoveMapping');
     var modelbody = $A.get('$Label.c.RemoveModalBody');
@@ -62,32 +76,34 @@
     }), 5);
   },
 
-  editMappingModelHandler: function (component) {
+  editMappingModelHandler: function (component, event, helper) {
     var data = component.get('v.tempMappingModelDataHolder');
     var modelComponent = component.find('popupModel');
-    var toast = component.find('toast');
     var mappedObjData = component.get('v.mappedObjData');
-    var objDetails = mappedObjData.filter(function (obj) {
-      return (obj.Id === data.id)
+    var objDetails;
+    mappedObjData.forEach(function (obj) {
+      if (obj.Id === data.id) {
+        objDetails = obj;
+      }
     });
     if (data.type === 'remove') {
-      component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ObjectRemoved'), objDetails[0].objectName));
-      component.set('v.toastVariant', 'success');
-      toast.show();
-      setTimeout($A.getCallback(function () {
-        toast.close();
-      }), 2000);
-      component.set('v.mappedObjData', mappedObjData.filter(function (obj) {
-        return (obj.Id !== data.id)
-      }));
-      modelComponent.hide();
+      helper.callServer(component, 'c.removeMappedObject', {
+        name: objDetails.Name
+      }, function () {
+        helper.fireToast(component, stringUtils.format($A.get('$Label.c.ObjectRemoved'), objDetails.Name), helper.SUCCESS);
+        component.getEvent('CLMScopedNotificationEvent').fire();
+        component.set('v.isRemove', 'false');
+        var newObjectList = [];
+        mappedObjData.forEach(function (obj) {
+          if (obj.Id !== data.id) {
+            newObjectList.push(obj);
+          }
+        });
+        component.set('v.mappedObjData', newObjectList);
+        modelComponent.hide();
+      });
     } else if (data.type === 'edit') {
-      component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ObjectEditSuccessful'), objDetails[0].objectName));
-      component.set('v.toastVariant', 'success');
-      toast.show();
-      setTimeout($A.getCallback(function () {
-        toast.close();
-      }), 2000);
+      helper.fireToast(component, stringUtils.format($A.get('$Label.c.ObjectEditSuccessful'), objDetails.Name), helper.SUCCESS);
       modelComponent.hide();
     }
     component.set('v.showModal', 'false');
@@ -95,5 +111,6 @@
 
   closeModal: function (component) {
     component.set('v.showModal', 'false');
+    component.set('v.isRemove', 'false');
   }
-})
+});

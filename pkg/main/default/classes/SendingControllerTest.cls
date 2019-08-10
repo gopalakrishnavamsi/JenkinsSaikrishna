@@ -252,13 +252,33 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
+	static void test_sendEnvelope_trial_expired() {
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			ProductSettings__c ps = ProductSettings__c.getAll().get(Product.ESIGNATURE);
+			System.assertNotEquals(null, ps);
+			ps.IsTrial__c = true;
+			ps.TrialExpires__c = Date.today().addDays(-1);
+			update ps;
+
+			Test.startTest();
+			try {
+				SendingController.sendEnvelope(null);
+				throw new AssertException('Expected sendEnvelope to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.ExpiredTrialAccount, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_sendEnvelope_error() {
 		Envelope e;
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
 		}
 
-		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
+		System.runAs(UserMock.createDocuSignUser(true)) { // Unauthorized
 			Test.startTest();
 			try {
 				SendingController.sendEnvelope(JSON.serialize(e));
