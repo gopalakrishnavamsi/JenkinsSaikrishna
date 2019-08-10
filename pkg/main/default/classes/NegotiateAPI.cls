@@ -4,6 +4,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_DOCUMENTS = 'documents';
 	public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
 	public static final String PATH_AGREEMENT_IN_SALESFORCE = 'salesforcecontentdocumentexporttasks';
+	public static final String PATH_AGREEMENT_COMPARE = 'documentcomparetasks';
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
@@ -508,6 +509,30 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	//Generate TaskID for comparing 2 agreements
+	public UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
+
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_AGREEMENT_COMPARE
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'OriginalDocument' => new APIDocument(originalDocumentHref),
+				'RevisedDocument' => new APIDocument(compareVersionHref)
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to trigger document comparison: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
 	@TestVisible
 	public class TaskStatus {
 		@AuraEnabled
@@ -542,6 +567,34 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
+			status = result.status;
+			count += 1;
+		}
+
+		return result;
+	}
+
+	public NegotiateAPI.TaskStatus getCompareAgreementsStatus(final UUID taskId) {
+		String status = '';
+		Long count = 0;
+		UUID agreementId;
+		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
+
+		while (status != 'Success') {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_AGREEMENT_COMPARE, taskId
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get status of comparison of Agreements - ' + taskId + ': ' + response.error);
 				throw new APIException(response.error);
 			}
 			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);

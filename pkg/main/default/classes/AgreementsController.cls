@@ -59,6 +59,17 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static String compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
+		try {
+			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
+			if (compareTaskId == null) throw Controller.wrapException('Failed to trigger document comparison task');
+			return GenService.getCompareUrl(compareTaskId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to initiate compare Agreements');
+		}
+	}
+
+	@AuraEnabled
 	public static Boolean renameAgreement(final String documentId, final String documentName) {
 		try {
 			return NegotiateService.renameAgreement(UUID.parse(documentId), documentName);

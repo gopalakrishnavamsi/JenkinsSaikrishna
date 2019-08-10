@@ -243,6 +243,17 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
+	public static UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
+		Permissions.verifyIsDocuSignUser(); //TODO check if additional Negotiate permissions check
+		UUID returnValue;
+		UUID taskId = NegotiateAPI.getInstance().compareAgreements(originalDocumentHref, compareVersionHref);
+		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getCompareAgreementsStatus(taskId);
+		if (taskStatus.status.equals('Success')) {
+			returnValue = taskId;
+		}
+		return returnValue;
+	}
+
 	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceObjectId, final UUID documentId) {
 		Permissions.verifyIsDocuSignUser(); //TODO check if additional Netgotiate permissions check
 		UUID taskId = NegotiateAPI.getInstance().exportAgreementToSalesforce(sourceObjectId, documentId);

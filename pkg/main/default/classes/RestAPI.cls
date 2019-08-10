@@ -122,7 +122,9 @@ public virtual class RestAPI {
 			}
 		}
 		request.setHeader('User-Agent', Application.userAgent);
+		System.Debug(LoggingLevel.INFO, 'Request Body ' + request.getBody());
 		final HttpResponse response = http.send(request);
+		System.Debug(LoggingLevel.INFO, 'Response Body ' + response.getBody());
 		return new Response(request, response, getError(response));
 	}
 

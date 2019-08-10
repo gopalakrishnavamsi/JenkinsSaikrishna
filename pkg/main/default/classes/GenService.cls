@@ -721,4 +721,9 @@ public with sharing class GenService {
 		Permissions.verifyIsDocuSignUser();
 		return GenAPI.getInstance().getResourceToken(documentID).toExternalForm();
 	}
+
+	public static String getCompareUrl(final UUID compareTaskId) {
+		Permissions.verifyIsDocuSignUser();
+		return GenAPI.getInstance().getCompareUrl(compareTaskId).toExternalForm();
+	}
 }
