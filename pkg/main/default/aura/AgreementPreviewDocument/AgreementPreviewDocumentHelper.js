@@ -108,15 +108,13 @@
     return new Promise($A.getCallback(function (resolve, reject) {
 
       generateUploadAction.setCallback(this, $A.getCallback(function (response) {
-
         var state = response.getState();
         if (state === 'SUCCESS') {
-          if (isSetup) {
-            resolve(response.getReturnValue());
-          } else {
-            resolve(response.getReturnValue().token);
-          }
-        } else {
+          if (isSetup) resolve(response.getReturnValue());
+          else resolve(response.getReturnValue().token);
+        }
+        if (state === 'ERROR') {
+          uiHelper.getErrorMessage(response);
           reject(uiHelper.getErrorMessage(response));
         }
       }));
@@ -618,8 +616,8 @@
 
   externalReviewOnBehalfOfRequest: function (component, helper, event) {
 
-    var comments = event.detail.comments;
-    var documentHref = event.detail.documentHref;
+    var comments = (event.detail && event.detail.comments) ? event.detail.comments : '';
+    var documentHref = (event.detail && event.detail.documentHref) ? event.detail.documentHref : '';
     var agreement = component.get('v.agreement');
     var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
 

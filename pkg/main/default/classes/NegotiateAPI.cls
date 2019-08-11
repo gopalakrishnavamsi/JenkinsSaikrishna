@@ -1313,20 +1313,27 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	@TestVisible
 	private class APIUploadDocuments {
 
-		public String Href;
+		public List<APIExternalReviewOnBehalfOfHref> Items;
 
 		public APIUploadDocuments(final String href) {
+			this.Items = new List<APIExternalReviewOnBehalfOfHref> { new APIExternalReviewOnBehalfOfHref(href) };
+		}
+	}
+
+	private class APIExternalReviewOnBehalfOfHref{
+	    public String Href;
+
+		public APIExternalReviewOnBehalfOfHref(final String href) {
 			this.Href = href;
 		}
 	}
 
 	public Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID externalReviewId) {
         Map<String, Object> requestParameters = new Map<String, Object>();
-        if(comments != null){
-         requestParameters.put('Comment',comments);
-        }
+        requestParameters.put('Comment',comments);
+
         if(newVersionUrl != null){
-         requestParameters.put('UploadedDocuments', new List<APIUploadDocuments>{new APIUploadDocuments(newVersionUrl.toExternalForm())});
+        	requestParameters.put('UploadedDocuments', new APIUploadDocuments(newVersionUrl.toExternalForm()));
         }
 		final RestAPI.Response response = put(
 			getBaseUrl(),
