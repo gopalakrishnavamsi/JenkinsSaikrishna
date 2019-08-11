@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
 	<description>Provides guest access to CLM</description>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Username__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.CanManageAccount__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Status__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Provisioned__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
 	<hasActivationRequired>false</hasActivationRequired>
 	<label>DocuSign CLM Viewer</label>
+	<pageAccesses>
+		<apexPage>CompleteOAuth</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 </PermissionSet>

@@ -278,7 +278,7 @@ public with sharing class AccountProducts {
 			products.put(
 				Product.ESIGNATURE,
 				ESignatureProductAPI.getInstance(eSignatureBaseUrl, accountId, accessToken).getProduct());
-			ProvisioningAPI client = ProvisioningAPI.getInstance(provisioningBaseUrl, accountId, accessToken);
+			ProductAPI client = ProductAPI.getInstance(provisioningBaseUrl, accountId, accessToken);
 			for (Product p : client.getProducts()) {
 				if (p != null) {
 					Product pp;
@@ -358,7 +358,7 @@ public with sharing class AccountProducts {
 		if (Collection.isEmpty(productNames)) throw new DocuSignException(Label.UndefinedArgument);
 
 		List<Product> result = new List<Product>();
-		ProvisioningAPI client = ProvisioningAPI.getInstance();
+		ProductAPI client = ProductAPI.getInstance();
 		for (String pn : productNames) {
 			if (pn == null || !validProductTrials.contains(pn.toLowerCase())) {
 				throw new DocuSignException(String.format(Label.InvalidTrialProduct_1, new List<String> { pn }));

@@ -332,7 +332,7 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_startTrials_success() {
-		ProvisioningAPIMock.success();
+		ProductAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			delete ProductSettings__c.getAll().values();

@@ -20,4 +20,18 @@ private class ProductTest {
 		System.assertEquals(0, new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null).daysUntilExpires);
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_isValidProduct() {
+		Test.startTest();
+		System.assert(!Product.isValidProduct(null));
+		System.assert(!Product.isValidProduct('  '));
+		System.assert(!Product.isValidProduct('whatever'));
+		System.assert(Product.isValidProduct('CLM'));
+		System.assert(Product.isValidProduct('clm'));
+		System.assert(Product.isValidProduct('e_Sign'));
+		System.assert(Product.isValidProduct('Gen'));
+		System.assert(Product.isValidProduct('Negotiate'));
+		Test.stopTest();
+	}
 }
