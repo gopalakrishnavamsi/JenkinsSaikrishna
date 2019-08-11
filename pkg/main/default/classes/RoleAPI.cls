@@ -1,47 +1,56 @@
 public with sharing class RoleAPI extends ProvisioningAPI {
 
 	private static RoleAPI self;
+
+	// HACK: Use hardcoded, fake IDs for eSignature roles until API supports them
 	@TestVisible
-	private static final String ROLE_GEN_GENERATORS = 'Generators';
+	private static final UUID ESIGNATURE_ADMINISTRATOR_ID = UUID.parse('11111111-1111-1111-1111-111111111111');
 	@TestVisible
-	private static final String ROLE_NEGOTIATE_NEGOTIATORS = 'Negotiators';
+	private static final UUID ESIGNATURE_USER_ID = UUID.parse('22222222-2222-2222-2222-222222222222');
 	@TestVisible
-	private static final String ROLE_CLM_ADMINISTRATORS = 'Administrators';
-	@TestVisible
-	private static final String ROLE_CLM_USERS = 'Users';
-	@TestVisible
-	private static final String ROLE_CLM_VIEWERS = 'Viewers';
+	private static final UUID ESIGNATURE_SENDER_ID = UUID.parse('33333333-3333-3333-3333-333333333333');
+	private static final Set<UUID> ESIGNATURE_IDS = new Set<UUID> {
+		ESIGNATURE_ADMINISTRATOR_ID, ESIGNATURE_USER_ID, ESIGNATURE_SENDER_ID
+	};
+
 	// This is a map of product groups to application roles.
 	private static final Map<String, Map<String, String>> PRODUCT_GROUP_ROLE_MAP = new Map<String, Map<String, String>> {
 		Product.ESIGNATURE => new Map<String, String> {
 			// TODO: map eSign groups to roles (v2, pending API support)
+			'Administrator' => ESignatureProduct.ROLE_ADMINISTRATOR,
+			'User' => ESignatureProduct.ROLE_USER,
+			'Sender' => ESignatureProduct.ROLE_SENDER
 		},
 		Product.GEN => new Map<String, String> {
-			// TODO: map Gen groups to roles (pending API support)
-			'Generator' => ROLE_GEN_GENERATORS
+			// TODO: Use final Gen API group name
+			'Generator' => GenProduct.ROLE_GENERATOR
 		},
 		Product.NEGOTIATE => new Map<String, String> {
-			// TODO: map Negotiator groups to roles (pending API support)
-			'Negotiator' => ROLE_NEGOTIATE_NEGOTIATORS
+			// TODO: Use final Negotiate API group name
+			'Negotiator' => NegotiateProduct.ROLE_NEGOTIATOR
 		},
 		Product.CLM => new Map<String, String> {
-			'Super Administrator' => ROLE_CLM_ADMINISTRATORS,
-			'Full Subscriber' => ROLE_CLM_USERS,
-			'Guest' => ROLE_CLM_ADMINISTRATORS
+			'Super Administrator' => ClmProduct.ROLE_ADMINISTRATOR,
+			'Full Subscriber' => ClmProduct.ROLE_USER,
+			'Guest' => ClmProduct.ROLE_VIEWER
 		}
 	};
 	private static final Map<String, Set<String>> PRODUCT_ROLE_MAP = new Map<String, Set<String>> {
-		Product.ESIGNATURE => new Set<String>(),
+		Product.ESIGNATURE => new Set<String> {
+			ESignatureProduct.ROLE_ADMINISTRATOR,
+			ESignatureProduct.ROLE_USER,
+			ESignatureProduct.ROLE_SENDER
+		},
 		Product.GEN => new Set<String> {
-			ROLE_GEN_GENERATORS
+			GenProduct.ROLE_GENERATOR
 		},
 		Product.NEGOTIATE => new Set<String> {
-			ROLE_NEGOTIATE_NEGOTIATORS
+			NegotiateProduct.ROLE_NEGOTIATOR
 		},
 		Product.CLM => new Set<String> {
-			ROLE_CLM_ADMINISTRATORS,
-			ROLE_CLM_USERS,
-			ROLE_CLM_VIEWERS
+			ClmProduct.ROLE_ADMINISTRATOR,
+			ClmProduct.ROLE_USER,
+			ClmProduct.ROLE_VIEWER
 		}
 	};
 
@@ -77,9 +86,31 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				this.ds_group_id = String.valueOf(role.id);
 				this.group_id = String.valueOf(role.groupId);
 				this.group_name = role.name;
-				this.description = role.description;
+				this.description = Label.ProductRoleDescription;
 				this.source_product_name = role.product;
 				this.is_admin = role.isAdministrator == true;
+			}
+		}
+
+		@TestVisible
+		private String getRoleLabel() {
+			String role = this.group_name == null ? '' : this.group_name.toLowerCase();
+			switch on role {
+				when 'administrator' {
+					return Label.Administrator;
+				} when 'user' {
+					return Label.User;
+				} when 'viewer' {
+					return Label.Viewer;
+				} when 'negotiator' {
+					return Label.Negotiator;
+				} when 'generator' {
+					return Label.Generator;
+				} when 'sender' {
+					return Label.Sender;
+				} when else {
+					return this.group_name;
+				}
 			}
 		}
 
@@ -97,7 +128,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				this.group_id == null ? null : Long.valueOf(this.group_id),
 				this.source_product_name.toLowerCase(),
 				this.group_name,
-				this.description,
+				getRoleLabel(),
 				this.is_admin == true);
 		}
 
@@ -119,7 +150,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				this.group_id == null ? null : Long.valueOf(this.group_id),
 				this.source_product_name.toLowerCase(),
 				groupRoles.get(this.group_name),
-				this.description,
+				getRoleLabel(),
 				this.is_admin == true);
 		}
 	}
@@ -157,6 +188,36 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		}
 
 		if (result.isEmpty()) return result;
+
+		// HACK: Special case for eSignature until full API support (v2?)
+		if (result.containsKey(Product.ESIGNATURE)) {
+			result.get(Product.ESIGNATURE).addAll(new List<Product.Role> {
+				new Product.Role(
+					ESIGNATURE_ADMINISTRATOR_ID,
+					-1L,
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_ADMINISTRATOR,
+					Label.Administrator,
+					true),
+				new Product.Role(
+					ESIGNATURE_USER_ID,
+					-1L,
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_USER,
+					Label.User,
+					false),
+				new Product.Role(
+					ESIGNATURE_SENDER_ID,
+					-1L,
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_SENDER,
+					Label.Sender,
+					false)
+			});
+
+			// Short-circuit if this is the only requested product
+			if (result.size() == 1) return result;
+		}
 
 		// TODO: Implement paging. Is not yet functional in current API.
 		RestAPI.Response response = this.get(
@@ -275,6 +336,212 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			result.get(r.product).add(this.createAccountRole(r, timeout));
 		}
 
+		return result;
+	}
+
+	public class UserResults {
+		public Boolean success { get; private set; }
+		public Map<UUID, APIError> results;
+
+		public UserResults(
+			final Boolean success,
+			final Map<UUID, APIError> results) {
+
+			this.success = success == true;
+			this.results = results == null ? new Map<UUID, APIError>() : results;
+		}
+	}
+
+	@TestVisible
+	private class APIUsers {
+		public List<String> user_ids;
+
+		public APIUsers(final Set<UUID> ids) {
+			this.user_ids = new List<String>();
+			if (ids != null) {
+				for (UUID id : ids) {
+					if (UUID.isNotEmpty(id)) this.user_ids.add(id.toString());
+				}
+			}
+		}
+	}
+
+	@TestVisible
+	private class APIErrorDetails {
+		public String error;
+		public String error_description;
+
+		public APIError toExternalForm() {
+			return new APIError(
+				this.error == 'invalid_request' ? APIErrorCode.INVALID_OPERATION : APIErrorCode.FAILURE,
+				this.error_description);
+		}
+	}
+
+	@TestVisible
+	private class APIGroupUser {
+		public String user_id;
+		public APIErrorDetails error_details;
+	}
+
+	@TestVisible
+	private class APIGroupUsers {
+		public Boolean is_success;
+		public List<APIGroupUser> users;
+
+		public UserResults toExternalForm() {
+			Map<UUID, APIError> results = new Map<UUID, APIError>();
+			if (users != null) {
+				for (APIGroupUser u : users) {
+					if (u != null && String.isNotBlank(u.user_id)) {
+						results.put(
+							UUID.tryParse(u.user_id),
+							u.error_details == null ? APIError.none : u.error_details.toExternalForm());
+					}
+				}
+			}
+			return new UserResults(this.is_success, results);
+		}
+	}
+
+	@TestVisible
+	private class APIAddUserResult {
+		public APIGroupUsers group_users;
+
+		public UserResults toExternalForm() {
+			if (this.group_users == null) return new UserResults(false, null);
+
+			return this.group_users.toExternalForm();
+		}
+	}
+
+	@TestVisible
+	private UserResults addRoleUsers(
+		final UUID roleId,
+		final Set<UUID> userIds,
+		final Integer timeout) {
+
+		Map<UUID, APIError> result = new Map<UUID, APIError>();
+		if (UUID.isEmpty(roleId) || Collection.isEmpty(userIds)) return new UserResults(false, result);
+
+		// HACK: No API support for eSignature roles, so just return success here.
+		if (ESIGNATURE_IDS.contains(roleId)) {
+			for (UUID uId : userIds) {
+				result.put(uId, APIError.none);
+			}
+			return new UserResults(true, result);
+		}
+
+		RestAPI.Response response = this.post(
+			new List<Object> { 'dsgroups', roleId, 'users' },
+			QueryString.empty,
+			JSON.serialize(new APIUsers(userIds)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to add role users: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIAddUserResult)JSON.deserialize(response.body, APIAddUserResult.class)).toExternalForm();
+	}
+
+	public Map<UUID, UserResults> addRoleUsers(final Map<UUID, Set<UUID>> roleUsers) {
+		return this.addRoleUsers(roleUsers, RestAPI.defaultTimeout);
+	}
+
+	public Map<UUID, UserResults> addRoleUsers(
+		final Map<UUID, Set<UUID>> roleUsers,
+		final Integer timeout) {
+
+		Map<UUID, UserResults> result = new Map<UUID, UserResults>();
+		if (roleUsers != null) {
+			for (UUID roleId : roleUsers.keySet()) {
+				result.put(roleId, this.addRoleUsers(roleId, roleUsers.get(roleId), timeout));
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private class APIRemoveUserResult {
+		public Boolean is_success;
+		public List<APIGroupUser> failed_users;
+
+		public UserResults toExternalForm(final Set<UUID> userIds) {
+			Map<UUID, APIError> results = new Map<UUID, APIError>();
+
+			if (userIds == null) return new UserResults(true, results);
+
+			if (this.is_success == true) {
+				for (UUID uId : userIds) {
+					if (UUID.isNotEmpty(uId)) results.put(uId, APIError.none);
+				}
+			} else if (this.failed_users != null) {
+				for (APIGroupUser u : this.failed_users) {
+					if (u != null && String.isNotBlank(u.user_id)) {
+						results.put(
+							UUID.tryParse(u.user_id),
+							u.error_details == null
+								? new APIError(APIErrorCode.FAILURE, Label.UnknownError)
+								: u.error_details.toExternalForm());
+					}
+				}
+			}
+
+			for (UUID uId : (Set<UUID>)Collection.difference(userIds, results.keySet())) {
+				// No results for these users, assume success
+				if (UUID.isNotEmpty(uId)) results.put(uId, APIError.none);
+			}
+
+			return new UserResults(this.is_success == true, results);
+		}
+	}
+
+	@TestVisible
+	private UserResults removeRoleUsers(
+		final UUID roleId,
+		final Set<UUID> userIds,
+		final Integer timeout) {
+
+		Map<UUID, APIError> result = new Map<UUID, APIError>();
+		if (UUID.isEmpty(roleId) || Collection.isEmpty(userIds)) return new UserResults(false, result);
+
+		// HACK: No API support for eSignature roles, so just return success here.
+		if (ESIGNATURE_IDS.contains(roleId)) {
+			for (UUID uId : userIds) {
+				result.put(uId, APIError.none);
+			}
+			return new UserResults(true, result);
+		}
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'dsgroups', roleId, 'users' },
+			QueryString.empty,
+			JSON.serialize(new APIUsers(userIds)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to remove role users: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIRemoveUserResult)JSON.deserialize(response.body, APIRemoveUserResult.class))
+			.toExternalForm(userIds);
+	}
+
+	public Map<UUID, UserResults> removeRoleUsers(final Map<UUID, Set<UUID>> roleUsers) {
+		return this.removeRoleUsers(roleUsers, RestAPI.defaultTimeout);
+	}
+
+	public Map<UUID, UserResults> removeRoleUsers(
+		final Map<UUID, Set<UUID>> roleUsers,
+		final Integer timeout) {
+
+		Map<UUID, UserResults> result = new Map<UUID, UserResults>();
+		if (roleUsers != null) {
+			for (UUID roleId : roleUsers.keySet()) {
+				result.put(roleId, this.removeRoleUsers(roleId, roleUsers.get(roleId), timeout));
+			}
+		}
 		return result;
 	}
 }

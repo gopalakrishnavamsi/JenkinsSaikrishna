@@ -100,6 +100,7 @@ public with sharing abstract class ProvisioningAPI extends DocuSignAPI {
 	protected RestAPI.Response del(
 		final List<Object> path,
 		final QueryString parameters,
+		final String body,
 		final Integer timeout) {
 
 		return this.del(
@@ -107,7 +108,7 @@ public with sharing abstract class ProvisioningAPI extends DocuSignAPI {
 			path,
 			parameters,
 			this.getDefaultHeaders(),
-			null,
+			body,
 			timeout);
 	}
 }

@@ -4109,6 +4109,34 @@
 		<label>Inactive</label>
 		<name>Inactive</name>
 	</customLabels>
+	<customLabels>
+		<label>Sender</label>
+		<name>Sender</name>
+	</customLabels>
+	<customLabels>
+		<label>Generator</label>
+		<name>Generator</name>
+	</customLabels>
+	<customLabels>
+		<label>Negotiator</label>
+		<name>Negotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>Administrator</label>
+		<name>Administrator</name>
+	</customLabels>
+	<customLabels>
+		<label>User</label>
+		<name>User</name>
+	</customLabels>
+	<customLabels>
+		<label>Viewer</label>
+		<name>Viewer</name>
+	</customLabels>
+	<customLabels>
+		<label>Role managed by DocuSign for Salesforce</label>
+		<name>ProductRoleDescription</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

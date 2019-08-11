@@ -1,5 +1,7 @@
 public class NegotiateProduct extends Product {
 
+	public static final String ROLE_NEGOTIATOR = 'Negotiator';
+
 	public transient Url authBaseUrl { get; private set; }
 	public transient Url apiBaseUrl { get; private set; }
 

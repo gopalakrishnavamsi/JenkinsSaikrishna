@@ -7709,4 +7709,53 @@
 		<shortDescription>Inactive</shortDescription>
 		<value>Inactive</value>
 	</labels>
+	<labels>
+		<fullName>Sender</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sender</shortDescription>
+		<value>Sender</value>
+	</labels>
+	<labels>
+		<fullName>Generator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Generator</shortDescription>
+		<value>Generator</value>
+	</labels>
+	<labels>
+		<fullName>Negotiator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiator</shortDescription>
+		<value>Negotiator</value>
+	</labels>
+	<labels>
+		<fullName>Administrator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Administrator</shortDescription>
+		<value>Administrator</value>
+	</labels>
+	<labels>
+		<fullName>User</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>User</shortDescription>
+		<value>User</value>
+	</labels>
+	<labels>
+		<fullName>Viewer</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Viewer</shortDescription>
+		<value>Viewer</value>
+	</labels>
+	<labels>
+		<fullName>ProductRoleDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Role Description</shortDescription>
+		<value>Role managed by DocuSign for Salesforce</value>
+	</labels>
 </CustomLabels>

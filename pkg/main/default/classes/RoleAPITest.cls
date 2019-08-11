@@ -15,6 +15,42 @@ private class RoleAPITest {
 	}
 
 	@IsTest
+	static void test_getRoleLabel() {
+		Test.startTest();
+		RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+		g.group_name = null;
+		System.assertEquals(null, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = 'foo';
+		System.assertEquals('foo', g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ESignatureProduct.ROLE_ADMINISTRATOR;
+		System.assertEquals(Label.Administrator, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ESignatureProduct.ROLE_USER;
+		System.assertEquals(Label.User, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ESignatureProduct.ROLE_SENDER;
+		System.assertEquals(Label.Sender, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = GenProduct.ROLE_GENERATOR;
+		System.assertEquals(Label.Generator, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
+		System.assertEquals(Label.Negotiator, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ClmProduct.ROLE_ADMINISTRATOR;
+		System.assertEquals(Label.Administrator, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ClmProduct.ROLE_USER;
+		System.assertEquals(Label.User, g.getRoleLabel());
+		g = new RoleAPI.APIGroup(null);
+		g.group_name = ClmProduct.ROLE_VIEWER;
+		System.assertEquals(Label.Viewer, g.getRoleLabel());
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getAccountRoles_empty_products() {
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
@@ -61,7 +97,7 @@ private class RoleAPITest {
 			HttpResponse response = new HttpResponse();
 			response.setHeader('Content-Type', 'application/json; charset=utf-8');
 			response.setStatusCode(200);
-			response.setBody('{"groups":[{"source_product_name":"clm","group_name":"Administrators"}]}');
+			response.setBody('{"groups":[{"source_product_name":"clm","group_name":"' + ClmProduct.ROLE_ADMINISTRATOR + '"}]}');
 			return response;
 		}
 	}
@@ -88,21 +124,30 @@ private class RoleAPITest {
 		RoleAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignGenerator()) {
+			Set<String> products = new Set<String> { Product.ESIGNATURE, Product.GEN, Product.NEGOTIATE, Product.CLM };
+
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(
-				new Set<String> { 'gen', 'negotiate', 'clm' }, 30000);
+			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(products, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(3, result.size());
-			System.assertEquals(new Set<String> { 'clm', 'negotiate', 'gen' }, result.keySet());
-			List<Product.Role> roles = result.get('gen');
+			System.assertEquals(4, result.size());
+			System.assertEquals(products, result.keySet());
+			List<Product.Role> roles = result.get(Product.ESIGNATURE);
+			System.assertEquals(3, Collection.size(roles));
+			System.assertNotEquals(null, roles[0]);
+			System.assertEquals(RoleAPI.ESIGNATURE_ADMINISTRATOR_ID, roles[0].id);
+			System.assertNotEquals(null, roles[1]);
+			System.assertEquals(RoleAPI.ESIGNATURE_USER_ID, roles[1].id);
+			System.assertNotEquals(null, roles[2]);
+			System.assertEquals(RoleAPI.ESIGNATURE_SENDER_ID, roles[2].id);
+			roles = result.get(Product.GEN);
 			System.assertEquals(1, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
-			roles = result.get('negotiate');
+			roles = result.get(Product.NEGOTIATE);
 			System.assertEquals(1, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
-			roles = result.get('clm');
+			roles = result.get(Product.CLM);
 			System.assertEquals(3, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
 			System.assertNotEquals(null, roles[1]);
@@ -168,7 +213,7 @@ private class RoleAPITest {
 			System.assertEquals(r.groupId, result.groupId);
 			System.assertEquals(r.product, result.product);
 			System.assertEquals(r.name, result.name);
-			System.assertEquals(r.description, result.description);
+			System.assertEquals(r.name, result.label);
 			System.assertEquals(r.isAdministrator, result.isAdministrator);
 		}
 	}
@@ -376,7 +421,7 @@ private class RoleAPITest {
 				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '0';
-				g.group_name = 'Administrators';
+				g.group_name = ClmProduct.ROLE_ADMINISTRATOR;
 				g.description = 'Administrators!';
 				g.source_product_name = 'clm';
 				g.is_admin = true;
@@ -384,7 +429,7 @@ private class RoleAPITest {
 				g = new RoleAPI.APIGroup(null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '2';
-				g.group_name = 'Viewers';
+				g.group_name = ClmProduct.ROLE_VIEWER;
 				g.description = 'Viewers!';
 				g.source_product_name = 'clm';
 				g.is_admin = true;
@@ -392,7 +437,7 @@ private class RoleAPITest {
 				g = new RoleAPI.APIGroup(null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '4';
-				g.group_name = 'Negotiators';
+				g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
 				g.description = 'Negotiator!';
 				g.source_product_name = 'negotiate';
 				g.is_admin = true;
@@ -444,11 +489,11 @@ private class RoleAPITest {
 			System.assertEquals(1, Collection.size(result.get(Product.GEN)));
 			System.assertNotEquals(null, result.get(Product.GEN)[0]);
 			System.assertNotEquals(null, result.get(Product.GEN)[0].id);
-			System.assertEquals(RoleAPI.ROLE_GEN_GENERATORS, result.get(Product.GEN)[0].name);
+			System.assertEquals(GenProduct.ROLE_GENERATOR, result.get(Product.GEN)[0].name);
 			System.assertEquals(1, Collection.size(result.get(Product.NEGOTIATE)));
 			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0]);
 			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0].id);
-			System.assertEquals(RoleAPI.ROLE_NEGOTIATE_NEGOTIATORS, result.get(Product.NEGOTIATE)[0].name);
+			System.assertEquals(NegotiateProduct.ROLE_NEGOTIATOR, result.get(Product.NEGOTIATE)[0].name);
 			System.assertEquals(3, Collection.size(result.get(Product.CLM)));
 			System.assertNotEquals(null, result.get(Product.CLM)[0]);
 			System.assertNotEquals(null, result.get(Product.CLM)[0].id);
@@ -458,11 +503,425 @@ private class RoleAPITest {
 			System.assertNotEquals(null, result.get(Product.CLM)[2].id);
 			System.assertEquals(
 				new Set<String> {
-					RoleAPI.ROLE_CLM_USERS, RoleAPI.ROLE_CLM_ADMINISTRATORS, RoleAPI.ROLE_CLM_VIEWERS
+					ClmProduct.ROLE_USER, ClmProduct.ROLE_ADMINISTRATOR, ClmProduct.ROLE_VIEWER
 				},
 				new Set<String> {
 					result.get(Product.CLM)[0].name, result.get(Product.CLM)[1].name, result.get(Product.CLM)[2].name
 				});
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_empty() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			RoleAPI client = RoleAPI.getInstance();
+
+			Test.startTest();
+			RoleAPI.UserResults result1 = client.addRoleUsers(null, new Set<UUID> { UUID.randomUUID() }, 10000);
+			RoleAPI.UserResults result2 = client.addRoleUsers(UUID.randomUUID(), new Set<UUID>(), 10000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(!result1.success);
+			System.assertNotEquals(null, result2);
+			System.assert(!result2.success);
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_error() {
+		RoleAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Set<UUID> userIds = new Set<UUID> {
+				UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()
+			};
+
+			Test.startTest();
+			try {
+				RoleAPI.getInstance().addRoleUsers(UUID.randomUUID(), userIds, 30000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+				System.assert(ex.error instanceof ProvisioningAPI.Error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_success() {
+		RoleAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Set<UUID> userIds = new Set<UUID> {
+				UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()
+			};
+
+			Test.startTest();
+			RoleAPI.UserResults result = RoleAPI.getInstance().addRoleUsers(UUID.randomUUID(), userIds, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			System.assertNotEquals(null, result.results);
+			System.assertEquals(3, result.results.size());
+			for (UUID uId : result.results.keySet()) {
+				System.assert(userIds.contains(uId));
+				System.assertEquals(APIError.none, result.results.get(uId));
+			}
+		}
+	}
+
+	class UserPartialSuccessMock extends OAuthTokenMock {
+		private final Set<String> toFail;
+
+		public UserPartialSuccessMock(final Set<String> toFail) {
+			this.toFail = toFail == null ? new Set<String>() : toFail;
+		}
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json');
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			RoleAPI.APIUsers users = (RoleAPI.APIUsers)JSON.deserialize(request.getBody(), RoleAPI.APIUsers.class);
+			if (request.getMethod() == 'POST') { // add users
+				RoleAPI.APIAddUserResult result = new RoleAPI.APIAddUserResult();
+				result.group_users = new RoleAPI.APIGroupUsers();
+				result.group_users.is_success = false;
+				result.group_users.users = new List<RoleAPI.APIGroupUser>();
+				for (String uId : users.user_ids) {
+					RoleAPI.APIGroupUser u = new RoleAPI.APIGroupUser();
+					u.user_id = uId;
+					if (this.toFail.contains(uId)) {
+						u.error_details = new RoleAPI.APIErrorDetails();
+						u.error_details.error = 'invalid_request';
+						u.error_details.error_description = 'User is already a member';
+					}
+					result.group_users.users.add(u);
+				}
+				response.setBody(JSON.serialize(result));
+			} else { // remove users
+				RoleAPI.APIRemoveUserResult result = new RoleAPI.APIRemoveUserResult();
+				result.is_success = false;
+				result.failed_users = new List<RoleAPI.APIGroupUser>();
+				for (String uId : users.user_ids) {
+					if (this.toFail.contains(uId)) {
+						RoleAPI.APIGroupUser u = new RoleAPI.APIGroupUser();
+						u.user_id = uId;
+						u.error_details = new RoleAPI.APIErrorDetails();
+						u.error_details.error = 'invalid_request';
+						u.error_details.error_description = 'User is not a member';
+						result.failed_users.add(u);
+					}
+				}
+				response.setBody(JSON.serialize(result));
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_success_partial() {
+		UUID uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID();
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock(
+			new Set<String> { uId1.toString(), uId3.toString() }));
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			RoleAPI.UserResults result = RoleAPI.getInstance().addRoleUsers(UUID.randomUUID(), new Set<UUID> { uId1, uId2, uId3, uId4 }, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(!result.success);
+			System.assertNotEquals(null, result.results);
+			System.assertEquals(4, result.results.size());
+			APIError err = new APIError(APIErrorCode.INVALID_OPERATION, 'User is already a member');
+			System.assertEquals(err, result.results.get(uId1));
+			System.assertEquals(APIError.none, result.results.get(uId2));
+			System.assertEquals(err, result.results.get(uId3));
+			System.assertEquals(APIError.none, result.results.get(uId4));
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_multiple() {
+		UUID rId1 = UUID.randomUUID(),
+			rId2 = UUID.randomUUID(),
+			rId3 = UUID.randomUUID(),
+			uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID(),
+			uId5 = UUID.randomUUID(),
+			uId6 = UUID.randomUUID();
+		Map<UUID, Set<UUID>> roleUsers = new Map<UUID, Set<UUID>> {
+			rId1 => new Set<UUID> { uId1, uId2 },
+			rId2 => new Set<UUID> { uId3, uId4 },
+			rId3 => new Set<UUID> { uId5, uId6 }
+		};
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock(
+			new Set<String> { uId2.toString(), uId5.toString() }));
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result.get(rId1));
+			System.assertNotEquals(null, result.get(rId1).results);
+			System.assertEquals(new Set<UUID> { uId1, uId2 }, result.get(rId1).results.keySet());
+			System.assertNotEquals(null, result.get(rId2));
+			System.assertNotEquals(null, result.get(rId2).results);
+			System.assertEquals(new Set<UUID> { uId3, uId4 }, result.get(rId2).results.keySet());
+			System.assertNotEquals(null, result.get(rId3));
+			System.assertNotEquals(null, result.get(rId3).results);
+			System.assertEquals(new Set<UUID> { uId5, uId6 }, result.get(rId3).results.keySet());
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_esign() {
+		UUID rId1 = RoleAPI.ESIGNATURE_ADMINISTRATOR_ID,
+			rId2 = RoleAPI.ESIGNATURE_USER_ID,
+			rId3 = RoleAPI.ESIGNATURE_SENDER_ID,
+			uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID(),
+			uId5 = UUID.randomUUID(),
+			uId6 = UUID.randomUUID();
+		Map<UUID, Set<UUID>> roleUsers = new Map<UUID, Set<UUID>> {
+			rId1 => new Set<UUID> { uId1, uId2 },
+			rId2 => new Set<UUID> { uId3, uId4 },
+			rId3 => new Set<UUID> { uId5, uId6 }
+		};
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result.get(rId1));
+			System.assertNotEquals(null, result.get(rId1).results);
+			System.assertEquals(new Set<UUID> { uId1, uId2 }, result.get(rId1).results.keySet());
+			System.assertNotEquals(null, result.get(rId2));
+			System.assertNotEquals(null, result.get(rId2).results);
+			System.assertEquals(new Set<UUID> { uId3, uId4 }, result.get(rId2).results.keySet());
+			System.assertNotEquals(null, result.get(rId3));
+			System.assertNotEquals(null, result.get(rId3).results);
+			System.assertEquals(new Set<UUID> { uId5, uId6 }, result.get(rId3).results.keySet());
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_empty() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			RoleAPI client = RoleAPI.getInstance();
+
+			Test.startTest();
+			RoleAPI.UserResults result1 = client.removeRoleUsers(null, new Set<UUID> { UUID.randomUUID() }, 10000);
+			RoleAPI.UserResults result2 = client.removeRoleUsers(UUID.randomUUID(), new Set<UUID>(), 10000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(!result1.success);
+			System.assertNotEquals(null, result2);
+			System.assert(!result2.success);
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_error() {
+		RoleAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Set<UUID> userIds = new Set<UUID> {
+				UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()
+			};
+
+			Test.startTest();
+			try {
+				RoleAPI.getInstance().removeRoleUsers(UUID.randomUUID(), userIds, 30000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+				System.assert(ex.error instanceof ProvisioningAPI.Error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_success() {
+		RoleAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Set<UUID> userIds = new Set<UUID> {
+				UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()
+			};
+
+			Test.startTest();
+			RoleAPI.UserResults result = RoleAPI.getInstance().removeRoleUsers(UUID.randomUUID(), userIds, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			System.assertNotEquals(null, result.results);
+			System.assertEquals(3, result.results.size());
+			for (UUID uId : result.results.keySet()) {
+				System.assert(userIds.contains(uId));
+				System.assertEquals(APIError.none, result.results.get(uId));
+			}
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_success_partial() {
+		UUID uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID();
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock(
+			new Set<String> { uId1.toString(), uId3.toString() }));
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			RoleAPI.UserResults result = RoleAPI.getInstance().removeRoleUsers(UUID.randomUUID(), new Set<UUID> { uId1, uId2, uId3, uId4 }, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(!result.success);
+			System.assertNotEquals(null, result.results);
+			System.assertEquals(4, result.results.size());
+			APIError err = new APIError(APIErrorCode.INVALID_OPERATION, 'User is not a member');
+			System.assertEquals(err, result.results.get(uId1));
+			System.assertEquals(APIError.none, result.results.get(uId2));
+			System.assertEquals(err, result.results.get(uId3));
+			System.assertEquals(APIError.none, result.results.get(uId4));
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_multiple() {
+		UUID rId1 = UUID.randomUUID(),
+			rId2 = UUID.randomUUID(),
+			rId3 = UUID.randomUUID(),
+			uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID(),
+			uId5 = UUID.randomUUID(),
+			uId6 = UUID.randomUUID();
+		Map<UUID, Set<UUID>> roleUsers = new Map<UUID, Set<UUID>> {
+			rId1 => new Set<UUID> { uId1, uId2 },
+			rId2 => new Set<UUID> { uId3, uId4 },
+			rId3 => new Set<UUID> { uId5, uId6 }
+		};
+		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock(
+			new Set<String> { uId2.toString(), uId5.toString() }));
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result.get(rId1));
+			System.assertNotEquals(null, result.get(rId1).results);
+			System.assertEquals(new Set<UUID> { uId1, uId2 }, result.get(rId1).results.keySet());
+			System.assertNotEquals(null, result.get(rId2));
+			System.assertNotEquals(null, result.get(rId2).results);
+			System.assertEquals(new Set<UUID> { uId3, uId4 }, result.get(rId2).results.keySet());
+			System.assertNotEquals(null, result.get(rId3));
+			System.assertNotEquals(null, result.get(rId3).results);
+			System.assertEquals(new Set<UUID> { uId5, uId6 }, result.get(rId3).results.keySet());
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_esign() {
+		UUID rId1 = RoleAPI.ESIGNATURE_ADMINISTRATOR_ID,
+			rId2 = RoleAPI.ESIGNATURE_USER_ID,
+			rId3 = RoleAPI.ESIGNATURE_SENDER_ID,
+			uId1 = UUID.randomUUID(),
+			uId2 = UUID.randomUUID(),
+			uId3 = UUID.randomUUID(),
+			uId4 = UUID.randomUUID(),
+			uId5 = UUID.randomUUID(),
+			uId6 = UUID.randomUUID();
+		Map<UUID, Set<UUID>> roleUsers = new Map<UUID, Set<UUID>> {
+			rId1 => new Set<UUID> { uId1, uId2 },
+			rId2 => new Set<UUID> { uId3, uId4 },
+			rId3 => new Set<UUID> { uId5, uId6 }
+		};
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result.get(rId1));
+			System.assertNotEquals(null, result.get(rId1).results);
+			System.assertEquals(new Set<UUID> { uId1, uId2 }, result.get(rId1).results.keySet());
+			System.assertNotEquals(null, result.get(rId2));
+			System.assertNotEquals(null, result.get(rId2).results);
+			System.assertEquals(new Set<UUID> { uId3, uId4 }, result.get(rId2).results.keySet());
+			System.assertNotEquals(null, result.get(rId3));
+			System.assertNotEquals(null, result.get(rId3).results);
+			System.assertEquals(new Set<UUID> { uId5, uId6 }, result.get(rId3).results.keySet());
+		}
+	}
+
+	class UnknownErrorMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json');
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			RoleAPI.APIRemoveUserResult result = new RoleAPI.APIRemoveUserResult();
+			result.is_success = false;
+			result.failed_users = new List<RoleAPI.APIGroupUser>();
+			RoleAPI.APIUsers users = (RoleAPI.APIUsers)JSON.deserialize(request.getBody(), RoleAPI.APIUsers.class);
+			for (String uId : users.user_ids) {
+				RoleAPI.APIGroupUser u = new RoleAPI.APIGroupUser();
+				u.user_id = uId;
+				result.failed_users.add(u);
+			}
+			response.setBody(JSON.serialize(result));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_removeRoleUsers_unknown_error() {
+		UUID uId = UUID.randomUUID();
+		Test.setMock(HttpCalloutMock.class, new UnknownErrorMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			RoleAPI.UserResults result = RoleAPI.getInstance().removeRoleUsers(UUID.randomUUID(), new Set<UUID> { uId }, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(!result.success);
+			System.assertNotEquals(null, result.results);
+			System.assertEquals(1, result.results.size());
+			System.assertNotEquals(null, result.results.get(uId));
+			System.assertEquals(APIErrorCode.FAILURE , result.results.get(uId).code);
+			System.assertEquals(Label.UnknownError, result.results.get(uId).description);
 		}
 	}
 }
