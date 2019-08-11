@@ -1635,10 +1635,6 @@
 		<name>Password</name>
 	</customLabels>
 	<customLabels>
-		<label>Pending Activation</label>
-		<name>PendingActivation</name>
-	</customLabels>
-	<customLabels>
 		<label>Peru</label>
 		<name>Peru</name>
 	</customLabels>
@@ -3650,7 +3646,7 @@
 		<name>CLM</name>
 	</customLabels>
 	<customLabels>
-		<label>			<!-- CLM - Pick a Field Title --></label>
+		<label><!-- CLM - Pick a Field Title --></label>
 		<name>CLM_PickAFieldTitle</name>
 	</customLabels>
 	<customLabels>
@@ -3718,7 +3714,7 @@
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>This allows you to use your Salesforce objecs to generate documents and contracts which you can view from inside of Salesforce.</label>
+		<label>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</label>
 		<name>DocusignAgreement2</name>
 	</customLabels>
 	<customLabels>
@@ -3974,7 +3970,7 @@
 		<name>SelectFolderHelpBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Choose the Salesforce object you want to be the source for your documents.You\&apos;ll choose one object at a time.</label>
+		<label>Choose the Salesforce object you want to be the source for your documents.</label>
 		<name>SelectObjectHelpBody</name>
 	</customLabels>
 	<customLabels>
@@ -3992,7 +3988,7 @@
 	<customLabels>
 		<label>Cannot initiate a trial for product '{0}'</label>
 		<name>InvalidTrialProduct_1</name>
- 	</customLabels>  
+	</customLabels>
 	<customLabels>
 		<label>Agreement has been exported successfully.</label>
 		<name>AgreementExportSuccessful</name>
@@ -4022,16 +4018,104 @@
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
+		<label>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</label>
+		<name>CaseFolderContentsHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Case Folder Contents</label>
+		<name>CaseFolderContents</name>
+	</customLabels>
+	<customLabels>
+		<label>Create Default CLM Object Mappings</label>
+		<name>CreateDefaultCLMObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>DefaultAccountFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Accounts/</label>
+		<name>DefaultAccountObjectMappingPath</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Accounts</label>
+		<name>DefaultAccountPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name</label>
+		<name>DefaultAccountVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>{1}</label>
+		<name>DefaultFolderNameFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Opportunity.Name}</label>
+		<name>DefaultOpportunityFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Accounts/{!Account.Name}/Opportunities</label>
+		<name>DefaultOpportunityObjectMappingPath</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Accounts/{0}/Opportunities</label>
+		<name>DefaultOpportunityPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name, Opportunity.Name</label>
+		<name>DefaultOpportunityVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>Opportunity</label>
+		<name>Opportunity</name>
+	</customLabels>
+	<customLabels>
+		<label>You&apos;ll choose one object at a time.</label>
+		<name>SelectObjectHelpBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>Why am I selecting fields?</label>
+		<name>WhyAmISelectingFields</name>
+	</customLabels>
+	<customLabels>
+		<label>We&apos;ve listed all your standard and custom Salesforce objects below.</label>
+		<name>MapEditObjectsTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>See Example</label>
+		<name>SeeExample</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign CLM Folders</label>
+		<name>YourDocuSignCLMFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Your Salesforce Objects</label>
+		<name>MapEditObjectsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Select a field below to name your folder</label>
+		<name>SelectFieldToNameTheFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Maximum batch size exceeded: {0} > {1}</label>
+		<name>MaximumBatchSizeExceeded_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Pending</label>
+		<name>Pending</name>
+	</customLabels>
+	<customLabels>
+		<label>Inactive</label>
+		<name>Inactive</name>
+	</customLabels>
+	<customLabels>
 		<label>Agreement has been successfully reviewed.</label>
 		<name>AgreementExternalReviewSucess</name>
 	</customLabels>
 	<customLabels>
 		<label>Agreement review has been failed. Please try again.</label>
 		<name>AgreementExternalReviewFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>Maximum batch size exceeded: {0} > {1}</label>
-		<name>MaximumBatchSizeExceeded_2</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -35,7 +35,7 @@ public with sharing class ProvisioningAPI extends DocuSignAPI {
 		final UUID accountId,
 		final String accessToken) {
 
-		if (baseUrl == null || UUID.isEmpty(accountId) || String.isBlank(accessToken)) {
+		if (baseUrl == null || UUID.isEmpty(accountId)) {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 

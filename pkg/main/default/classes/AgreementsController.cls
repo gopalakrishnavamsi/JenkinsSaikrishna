@@ -12,7 +12,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static String getNameSpace() {
 		try {
-			Permissions.verifyIsDocuSignUser();
+			Permissions.verifyIsDocuSignNegotiator();
 			return Application.namespace;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get namespace.');
@@ -42,7 +42,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
-			Permissions.verifyIsDocuSignUser();
+			Permissions.verifyIsDocuSignNegotiator();
 			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get linked documents');
@@ -106,7 +106,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String generateResourceToken(final String agreementId) {
 		try {
-			return GenService.getResourceToken(UUID.parse(agreementId));
+			return NegotiateService.getResourceToken(UUID.parse(agreementId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate resource access token.');
 		}
@@ -115,7 +115,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static Recipient resolveRecipient(final Id sourceId) {
 		try {
-			Permissions.verifyIsDocuSignUser();
+			Permissions.verifyIsDocuSignNegotiator();
 			Recipient result = null;
 			if (String.isNotBlank(sourceId)) {
 				List<Recipient> rs = RecipientService.getRecipients(sourceId.getSobjectType(), new Set<Id> { sourceId });

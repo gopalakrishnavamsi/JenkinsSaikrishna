@@ -8,7 +8,7 @@
     <article class="slds-card ">
         <header class="slds-grid slds-p-left_x-large slds-p-right_x-large slds-p-top_x-large slds-p-bottom_medium">
             <div class="slds-col slds-size_3-of-8">
-                <button class="ds-index-style">{!v.index}</button>
+                <span class="ds-index-style">{!v.index}</span>
                 <span class="ds-title-style slds-p-left_medium"><b>{!v.title}</b></span>
             </div>
             <div class="slds-col slds-size_5-of-8 slds-m-top_xx-small">

@@ -109,7 +109,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			MockResponse response = null;
 			if (request.method == 'GET') {
 				AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-				AccountAPI.APIAccount a = new AccountAPI.APIAccount();
+				ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
 				a.currentPlanId = 'd1d8e549-4f0f-464a-a474-813b21c659da';
 				a.planName = 'DEVCENTER_DEMO_APRIL2013';
 				a.planStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
@@ -136,9 +136,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				AccountAPI.PlanId pid = new AccountAPI.PlanId();
+				ESignatureProductAPI.PlanId pid = new ESignatureProductAPI.PlanId();
 				pid.planId = '8b7c743b-5321-401f-8615-275021832201';
-				AccountAPI.BillingPlans bps = new AccountAPI.BillingPlans();
+				ESignatureProductAPI.BillingPlans bps = new ESignatureProductAPI.BillingPlans();
 				bps.billingPlan = pid;
 				response = MockResponse.ok(bps);
 			}
@@ -801,7 +801,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				if (nu != null && nu.newUsers != null) {
 					for (UserAPI.APIUser u : nu.newUsers) {
 						u.userId = UUID.randomUUID().toString();
-						u.userStatus = 'Pending';
+						u.userStatus = 'ActivationSent';
 					}
 				}
 				response = MockResponse.created(nu);

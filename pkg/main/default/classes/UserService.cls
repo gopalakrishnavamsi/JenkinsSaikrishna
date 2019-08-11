@@ -318,6 +318,7 @@ public with sharing class UserService {
 						u.id,
 						u.name,
 						u.email,
+						u.status,
 						u.canManageAccount));
 					result.add(u.withError(null));
 				}

@@ -3390,14 +3390,6 @@
 		<value>Password</value>
 	</labels>
 	<labels>
-		<fullName>PendingActivation</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Pending activation</shortDescription>
-		<value>Pending Activation</value>
-	</labels>
-	<labels>
 		<fullName>Peru</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7469,7 +7461,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Select Object Help Body</shortDescription>
-		<value>Choose the Salesforce object you want to be the source for your documents.You\&apos;ll choose one object at a time.</value>
+		<value>Choose the Salesforce object you want to be the source for your documents.</value>
 	</labels>
 	<labels>
 		<fullName>ShowSteps</fullName>
@@ -7543,10 +7535,192 @@
 		<value>Invalid permission set: {0}</value>
 	</labels>
 	<labels>
+		<fullName>CaseFolderContents</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Case Folder Contents</shortDescription>
+		<value>Case Folder Contents</value>
+	</labels>
+	<labels>
+		<fullName>CreateDefaultCLMObjMappings</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Create Default CLM Object Mappings</shortDescription>
+		<value>Create Default CLM Object Mappings</value>
+	</labels>
+	<labels>
+		<fullName>DefaultAccountFolderName</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Account Folder Name</shortDescription>
+		<value>{!Account.Name}</value>
+	</labels>
+	<labels>
+		<fullName>DefaultAccountObjectMappingPath</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Account Object Mapping Path</shortDescription>
+		<value>/Salesforce/Accounts/</value>
+	</labels>
+	<labels>
+		<fullName>DefaultAccountPathFormat</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Account Path Format</shortDescription>
+		<value>/Salesforce/Accounts</value>
+	</labels>
+	<labels>
+		<fullName>DefaultAccountVariables</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Account Variables</shortDescription>
+		<value>Account.Name</value>
+	</labels>
+	<labels>
+		<fullName>DefaultFolderNameFormat</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Folder Name Format</shortDescription>
+		<value>{1}</value>
+	</labels>
+	<labels>
+		<fullName>DefaultOpportunityFolderName</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Opportunity Folder Name</shortDescription>
+		<value>{!Opportunity.Name}</value>
+	</labels>
+	<labels>
+		<fullName>DefaultOpportunityObjectMappingPath</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Opportunity Object Mapping Path</shortDescription>
+		<value>/Salesforce/Accounts/{!Account.Name}/Opportunities</value>
+	</labels>
+	<labels>
+		<fullName>DefaultOpportunityPathFormat</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Opportunity Path Format</shortDescription>
+		<value>/Salesforce/Accounts/{0}/Opportunities</value>
+	</labels>
+	<labels>
+		<fullName>DefaultOpportunityVariables</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Default Opportunity Variables</shortDescription>
+		<value>Account.Name, Opportunity.Name</value>
+	</labels>
+	<labels>
+		<fullName>FolderContents</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Folder Contents</shortDescription>
+		<value>Folder Contents</value>
+	</labels>
+	<labels>
+		<fullName>Opportunity</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Opportunity</shortDescription>
+		<value>Opportunity</value>
+	</labels>
+	<labels>
+		<fullName>SelectObjectHelpBody2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Select Object Help Body 2</shortDescription>
+		<value>You&apos;ll choose one object at a time.</value>
+	</labels>
+	<labels>
+		<fullName>CaseFolderContentsHelp</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Case Folder Contents Helptext</shortDescription>
+		<value>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>WhyAmISelectingFields</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Why am I selecting fields</shortDescription>
+		<value>Why am I selecting fields?</value>
+	</labels>
+	<labels>
+		<fullName>MapEditObjectsTitleHelpText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Map Edit Objects Title Help Text</shortDescription>
+		<value>We&apos;ve listed all your standard and custom Salesforce objects below.</value>
+	</labels>
+	<labels>
+		<fullName>SeeExample</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>See Example</shortDescription>
+		<value>See Example</value>
+	</labels>
+	<labels>
+		<fullName>YourDocuSignCLMFolders</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Your DocuSign CLM Folders</shortDescription>
+		<value>Your DocuSign CLM Folders</value>
+	</labels>
+	<labels>
+		<fullName>MapEditObjectsTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Map Edit Objects Title</shortDescription>
+		<value>Your Salesforce Objects</value>
+	</labels>
+	<labels>
+		<fullName>SelectFieldToNameTheFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select field to name your folder</shortDescription>
+		<value>Select a field below to name your folder</value>
+	</labels>
+	<labels>		
 		<fullName>MaximumBatchSizeExceeded_2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Maximum batch size exceeded</shortDescription>
 		<value>Maximum batch size exceeded: {0} > {1}</value>
+	</labels>
+	<labels>
+		<fullName>Pending</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Pending</shortDescription>
+		<value>Pending</value>
+	</labels>
+	<labels>
+		<fullName>Inactive</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Inactive</shortDescription>
+		<value>Inactive</value>
 	</labels>
 </CustomLabels>

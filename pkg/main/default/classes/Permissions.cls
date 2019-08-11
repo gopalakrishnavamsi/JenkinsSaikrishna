@@ -963,7 +963,6 @@ public with sharing class Permissions {
 	@TestVisible
 	private static FlsResults getFlsResults(final FlsAccess requestedAccess, final SObjectType type,
 		final List<String> fieldNames) {
-
 		if (type == null) {
 			return new FlsResults(requestedAccess, false, new FlsResult(Label.Unknown, FlsStatus.BadRequest),
 				new List<FlsResult>());
