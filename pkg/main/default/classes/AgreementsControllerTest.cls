@@ -614,16 +614,16 @@ private class AgreementsControllerTest {
 
 	@isTest
 	static void test_externalReviewOnBehalfOfRequest_Success() {
-     	NegotiateAPIMock.success();
-     	User user = UserMock.createDocuSignAdministrator();
-     	System.runAs(user) {
-     		Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
+		NegotiateAPIMock.success();
+		User user = UserMock.createDocuSignAdministrator();
+		System.runAs(user) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
 				Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
 			Test.stopTest();
-		    System.assertEquals(isExternalReviewCompleted, true);
+			System.assertEquals(isExternalReviewCompleted, true);
 		}
- 	}
+	}
 
 	@isTest
 	static void test_externalReviewOnBehalfOfRequest_Failure() {
