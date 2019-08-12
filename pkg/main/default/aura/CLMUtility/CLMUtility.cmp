@@ -1,8 +1,8 @@
 <aura:component extensible="true" abstract="true" controller="CLMMapObjectController">
     <!--toast attributes-->
-    <aura:attribute name="toastTitleText" type="String" access="private" />
-    <aura:attribute name="toastVariant" type="String" access="private" />
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
-    <aura:attribute name="namespace" type="string" default="c" />
-    {!v.body}    
+    <aura:attribute name="toastTitleText" type="String" access="private"/>
+    <aura:attribute name="toastVariant" type="String" access="private"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:attribute name="namespace" type="string" default="c"/>
+        {!v.body}
 </aura:component>

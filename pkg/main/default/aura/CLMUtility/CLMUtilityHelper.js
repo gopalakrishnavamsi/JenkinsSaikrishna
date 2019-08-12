@@ -10,8 +10,7 @@
       function (newComp, status) {
         if (status === 'SUCCESS') {
           callback.call(this, newComp);
-        }
-        else if (status === 'ERROR') {
+        } else if (status === 'ERROR') {
           _self.fireToast(component, stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName), 'error');
         }
       });

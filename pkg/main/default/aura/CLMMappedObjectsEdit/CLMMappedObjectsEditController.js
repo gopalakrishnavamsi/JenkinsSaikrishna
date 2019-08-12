@@ -121,11 +121,11 @@
     var selectedObjDetails = component.get('v.SelectedObjDetails');
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
     var insertObj = {
-      Name: selectedObjDetails.name,      
+      Name: selectedObjDetails.name,
       FolderName__c: SelectedObjFieldName,
       Path__c: component.get('v.pathInCLM'),
     };
-    helper.callServer(component, 'c.setMappedObject', { eosDetails: insertObj }, function (result) {
+    helper.callServer(component, 'c.setMappedObject', {eosDetails: insertObj}, function (result) {
       if (result) {
         helper.fireToast(component, stringUtils.format('\'{0}\' object type was successfully mapped to DocuSign CLM.', selectedObjDetails.name), helper.SUCCESS);
         helper.fireApplicationEvent(component, {
@@ -134,13 +134,12 @@
           type: 'update',
           tabIndex: '3',
         }, 'CLMNavigationEvent');
-      }
-      else {
+      } else {
         helper.fireToast(component, stringUtils.format('\'{0}\' object type was not mapped to DocuSign CLM.', selectedObjDetails.name), 'error');
       }
     });
   },
-  
+
   //Step 1
   handleSearchObject: function (component) {
     var queryTerm = component.find('search-object').get('v.value');
@@ -187,8 +186,7 @@
     });
     if (objectIndex) {
       clmFolderTree[objectIndex].name = objDetails.label;
-    }
-    else {
+    } else {
       clmFolderTree.push({
         level: 3,
         name: objDetails.label,
@@ -210,7 +208,10 @@
       if (folderData.name === name) {
         folderData.selected = !folderData.selected;
         if (folderData.fields.length === 0 && folderData.selected === true) {
-          helper.callServer(component, 'c.getAllObjectFields', { apiName: folderData.name, isChild: true }, function (result) {
+          helper.callServer(component, 'c.getAllObjectFields', {
+            apiName: folderData.name,
+            isChild: true
+          }, function (result) {
             var allObjectFieldsListtemp = component.get('v.allObjectFieldsList');
             allObjectFieldsListtemp[index].fields = result;
             component.set('v.allObjectFields', allObjectFieldsListtemp);
@@ -250,8 +251,7 @@
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
     if (SelectedObjFieldName) {
       SelectedObjFieldName += '{!' + SelectedObjDetails.label + '.' + label + '}';
-    }
-    else {
+    } else {
       SelectedObjFieldName = '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
     var fieldIndex = 0;
@@ -262,8 +262,7 @@
     });
     if (fieldIndex) {
       clmFolderTree[fieldIndex].name = SelectedObjFieldName;
-    }
-    else {
+    } else {
       clmFolderTree.push({
         level: 4,
         name: SelectedObjFieldName,
@@ -281,8 +280,7 @@
     var clmFolderTree = component.get('v.clmFolderTree');
     if (!value) {
       component.set('v.SelectedObjFieldName', '');
-    }
-    else {
+    } else {
 
       component.set('v.SelectedObjFieldName', value);
     }
@@ -294,8 +292,7 @@
     });
     if (fieldIndex) {
       clmFolderTree[fieldIndex].name = value;
-    }
-    else {
+    } else {
       clmFolderTree.push({
         level: 4,
         name: value,
@@ -319,13 +316,11 @@
           component.set('v.isDeletefolder', true);
           component.set('v.isAddSubfolder', false);
           component.set('v.isRenamefolder', true);
-        }
-        else if (treeData.type === 'tail') {
+        } else if (treeData.type === 'tail') {
           component.set('v.isDeletefolder', true);
           component.set('v.isAddSubfolder', true);
           component.set('v.isRenamefolder', true);
-        }
-        else {
+        } else {
           component.set('v.isDeletefolder', false);
           component.set('v.isAddSubfolder', false);
           component.set('v.isRenamefolder', false);
@@ -335,8 +330,7 @@
           component.set('v.SelectedFolderParentExample', clmFolderTree[treeIndex].name);
           component.set('v.SelectedFolderExample', clmFolderTree[treeIndex + 1].name);
         }
-      }
-      else {
+      } else {
         treeData.selected = false;
       }
     });
@@ -439,9 +433,9 @@
       treeData.id = treeData.level;
     });
     component.set('v.clmFolderTree', clmFolderTree);
-      component.set('v.isDeletefolder', false);
-      component.set('v.isAddSubfolder', false);
-      component.set('v.isRenamefolder', false);
+    component.set('v.isDeletefolder', false);
+    component.set('v.isAddSubfolder', false);
+    component.set('v.isRenamefolder', false);
     helper.updatepath(component);
   },
 
@@ -470,7 +464,7 @@
       }
     }
   },
-  
+
   handleConfirm: function (component, event, helper) {
     var modelValueHolder = component.get('v.modelValueHolder');
     var clmFolderTree = component.get('v.clmFolderTree');
@@ -479,15 +473,13 @@
       component.set('v.clmFolderTree', clmFolderTree);
       component.set('v.showModal', 'false');
       helper.updatepath(component);
-    }
-    else if (modelValueHolder.buttontype === 'subfolder') {
+    } else if (modelValueHolder.buttontype === 'subfolder') {
       clmFolderTree = helper.sortTree(clmFolderTree);
       clmFolderTree.forEach(function (treeData) {
         if (treeData.level > clmFolderTree[modelValueHolder.selectedFolderIndex].level) {
           treeData.level = treeData.level + 1;
           treeData.id = treeData.level + 1;
-        }
-        else {
+        } else {
           treeData.id = treeData.level;
         }
       });

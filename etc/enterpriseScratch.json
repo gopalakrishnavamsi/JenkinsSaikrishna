@@ -1,0 +1,10 @@
+{
+  "orgName": "DFS-Core Developer",
+  "edition": "Enterprise",
+  "hasSampleData": true,
+  "settings": {
+    "orgPreferenceSettings": {
+      "translation": true
+    }
+  }
+}

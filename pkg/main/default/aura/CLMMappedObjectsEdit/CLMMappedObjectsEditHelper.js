@@ -40,7 +40,10 @@
         toComponent: 'CLMPath'
       }, 'CLMPathEvent');
       if (SelectedObjDetails.name) {
-        helper.callServer(component, 'c.getAllObjectFields', { apiName: SelectedObjDetails.name, isChild: false }, function (result) {
+        helper.callServer(component, 'c.getAllObjectFields', {
+          apiName: SelectedObjDetails.name,
+          isChild: false
+        }, function (result) {
           var allFields = [];
           allFields.push({
             name: SelectedObjDetails.name,
@@ -64,8 +67,7 @@
           component.set('v.allObjectFieldsList', allFields);
         });
       }
-    }
-    else if (index === '3' && SelectedObjDetails && SelectedObjFieldName) {
+    } else if (index === '3' && SelectedObjDetails && SelectedObjFieldName) {
 
 
       if (!SelectedObjFieldName || SelectedObjFieldName.length === 0 || $A.util.isEmpty(SelectedObjFieldName)) {
@@ -93,8 +95,7 @@
         toComponent: 'CLMPath'
       }, 'CLMPathEvent');
       helper.updatepath(component);
-    }
-    else {
+    } else {
       helper.fireApplicationEvent(component, {
         title: $A.get('$Label.c.SelectObject'),
         summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),

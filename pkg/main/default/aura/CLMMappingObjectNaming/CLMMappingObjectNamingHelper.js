@@ -8,8 +8,7 @@
         type: 'enable'
       }, 'CLMEvent');
       component.set('v.buttondisabled', false);
-    }
-    else if (!text && buttondisabled === false) {
+    } else if (!text && buttondisabled === false) {
       helper.fireApplicationEvent(component, {
         fromComponent: 'CLMMappingObjectNaming',
         toComponent: 'CLMModelFooterButton',
@@ -22,7 +21,7 @@
       'type': helper.ACTIONUPDATE,
       'fromComponent': 'CLMMappingObjectNaming',
       'toComponent': 'CLMMappedObjectEdit',
-      'data': { 'value': text }
+      'data': {'value': text}
     });
     onchangeValue.fire();
   }

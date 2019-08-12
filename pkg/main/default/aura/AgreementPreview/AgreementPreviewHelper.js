@@ -23,16 +23,15 @@
           .then(function(agreement) {
             component.set('v.agreement', agreement);
             component.set('v.agreementActionManager', manager);
-            component.set('v.loading', false);
           })
           .catch(function(error) {
-            uiHelper.showToast(uiHelper.ToastMode.ERROR, error);
+            uiHelper.showToast(error, uiHelper.ToastMode.ERROR);
           });
-      } else if (state === 'ERROR')
-        uiHelper.showToast(
-          uiHelper.ToastMode.ERROR,
-          uiHelper.getErrorMessage(response)
-        );
+      } else if (state === 'ERROR') {
+        uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
+        component.set('v.showToolBarAndPreview', false);
+      }
+      component.set('v.loading', false);
     });
     $A.enqueueAction(action);
   },

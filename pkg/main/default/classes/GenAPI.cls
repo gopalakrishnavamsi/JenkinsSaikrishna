@@ -148,6 +148,5 @@ public with sharing class GenAPI extends DocuSignAPI {
 			(String)body.get('Status'),
 			(String)body.get('Message'));
 	}
-
 }
 

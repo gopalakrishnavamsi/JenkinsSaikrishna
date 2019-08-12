@@ -1,6 +1,6 @@
-<aura:event type="Component" description="Event Used in passing data of CLMMapping components" >
-    <aura:attribute name="data" type="Object" />    
-    <aura:attribute type="string" name="fromComponent" />
-    <aura:attribute type="string" name="toComponent" />
-    <aura:attribute type="string" name="type" />
+<aura:event type="Component" description="Event Used in passing data of CLMMapping components">
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute type="string" name="fromComponent"/>
+    <aura:attribute type="string" name="toComponent"/>
+    <aura:attribute type="string" name="type"/>
 </aura:event>

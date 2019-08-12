@@ -90,8 +90,32 @@ public with sharing class ResourceTokenAPI extends DocuSignAPI {
 		}
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return new Url(
-			(String) body.get('secret_uri')
-		);	
+			(String)body.get('secret_uri')
+		);
+	}
+
+	public Url getCompareUrl(final UUID compareTaskId) {
+		RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<Object> { PATH_RESOURCETOKEN },
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'objectid' => compareTaskId.toString(),
+				'objecttype' => 'transientdocument',
+				'contenttype' => 'pdf',
+				'requesttype' => 'inline'
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to retrieve Url for document comparison: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return new Url(
+			(String)body.get('secret_uri')
+		);
 	}
 }
 
