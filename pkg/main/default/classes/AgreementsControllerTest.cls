@@ -611,7 +611,7 @@ private class AgreementsControllerTest {
 			   );
 				throw new AssertException('Expected externalreview on behalf of to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
