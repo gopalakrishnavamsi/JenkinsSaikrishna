@@ -133,7 +133,6 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String compareAgreements(final String originalDocumentHref, String compareVersionHref) {
 		try {
-			compareVersionHref = '';
 			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
 			if (compareTaskId == null) throw Controller.wrapException('Failed to trigger document comparison task');
 			return NegotiateService.getCompareUrl(compareTaskId);
