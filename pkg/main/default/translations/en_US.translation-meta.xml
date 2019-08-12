@@ -4114,7 +4114,7 @@
 		<name>Inactive</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement has been successfully reviewed.</label>
+		<label>Agreement external review on behalf of completed.</label>
 		<name>AgreementExternalReviewSucess</name>
 	</customLabels>
 	<customLabels>

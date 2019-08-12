@@ -6352,7 +6352,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExternalReviewSucess</shortDescription>
-		<value>Agreement has been successfully reviewed.</value>
+		<value>Agreement external review on behalf of completed.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExternalReviewFailed</fullName>
