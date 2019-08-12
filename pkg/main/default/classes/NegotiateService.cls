@@ -244,7 +244,7 @@ public with sharing class NegotiateService {
 	}
 
 	public static UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
-		Permissions.verifyIsDocuSignUser(); //TODO check if additional Negotiate permissions check
+		Permissions.verifyIsDocuSignNegotiator();
 		UUID returnValue;
 		UUID taskId = NegotiateAPI.getInstance().compareAgreements(originalDocumentHref, compareVersionHref);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getCompareAgreementsStatus(taskId);
@@ -373,5 +373,10 @@ public with sharing class NegotiateService {
 	public static String getResourceToken(final UUID documentID) {
 		Permissions.verifyIsDocuSignNegotiator();
 		return ResourceTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
+	}
+
+	public static String getCompareUrl(final UUID compareTaskId) {
+		Permissions.verifyIsDocuSignNegotiator();
+		return ResourceTokenAPI.getInstance().getCompareUrl(compareTaskId).toExternalForm();
 	}
 }

@@ -1,4 +1,5 @@
 public with sharing class AgreementsController extends Controller {
+
 	public AgreementsController() {
 	}
 
@@ -55,17 +56,6 @@ public with sharing class AgreementsController extends Controller {
 			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to create Agreement Folder');
-		}
-	}
-
-	@AuraEnabled
-	public static String compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
-		try {
-			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
-			if (compareTaskId == null) throw Controller.wrapException('Failed to trigger document comparison task');
-			return GenService.getCompareUrl(compareTaskId);
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to initiate compare Agreements');
 		}
 	}
 
@@ -137,6 +127,18 @@ public with sharing class AgreementsController extends Controller {
 			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to resolve recipients');
+		}
+	}
+
+	@AuraEnabled
+	public static String compareAgreements(final String originalDocumentHref, String compareVersionHref) {
+		try {
+			compareVersionHref = '';
+			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
+			if (compareTaskId == null) throw Controller.wrapException('Failed to trigger document comparison task');
+			return NegotiateService.getCompareUrl(compareTaskId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to initiate compare Agreements');
 		}
 	}
 
@@ -236,5 +238,4 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to Add Agreement in Salesforce');
 		}
 	}
-
 }

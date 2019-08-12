@@ -4,11 +4,11 @@
     <style type="text/css">
         #appContainer {
             background-color: #f7f9fb;
-            position: absolute;
         }
 
         .noSidebarCell #appContainer {
             min-height: calc(100vh - 120px);
+            width: -webkit-fill-available;
         }
 
         .bodyDiv .outerNoSidebar,
@@ -17,16 +17,12 @@
             padding: 0;
         }
 
-        .noSidebarCell #appContainer .slds-scope {
-            position: absolute;
-        }
-
         html body.sfdcBody {
             padding: 0;
         }
     </style>
 
-    <div id="appContainer"></div>
+    <div id="appContainer"/>
     <script type="text/javascript">
       var namespace = '{!JSENCODE(namespace)}';
       var docuSignAdmin = {!IsCurrentUserDocuSignAdmin};

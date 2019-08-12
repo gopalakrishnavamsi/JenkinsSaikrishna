@@ -338,7 +338,7 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_generateUploadToken_nonDocuSignUser() {
+	static void test_generateUploadToken_nonDocuSignNegotiateUser() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
@@ -364,7 +364,7 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_generateDownloadToken_nonDocuSignUser() {
+	static void test_generateDownloadToken_nonDocuSignNegotiateUser() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
@@ -390,7 +390,7 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_generateUploadNewVersionToken_nonDocuSignUser() {
+	static void test_generateUploadNewVersionToken_nonDocuSignNegotiateUser() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
@@ -574,12 +574,37 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_getAgreementShareLink_nonDocuSignUser() {
+	static void test_getAgreementShareLink_nonDocuSignNegotiateUser() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected getAgreementShareLink to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_compareAgreements_success() {
+		NegotiateAPIMock.success();
+		System.runAs(UserMock.createDocuSignNegotiator(true)) {
+			Test.startTest();
+			String result = AgreementsController.compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
+			Test.stopTest();
+			System.assertNotEquals(result, null);
+		}
+	}
+
+	@IsTest
+	static void test_compareAgreements_nonDocuSignNegotiateUser() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				String result = AgreementsController.compareAgreements(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+				throw new AssertException('Expected compareAgreements to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
 			}

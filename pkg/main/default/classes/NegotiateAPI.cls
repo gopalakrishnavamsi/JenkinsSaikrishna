@@ -509,9 +509,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
-	//Generate TaskID for comparing 2 agreements
+	//Generate Task UUID for comparing two agreement versions
+	//originalDocumentHref -> the url for the current version of the agreement
+	//compareVersionHref -> the url for the version of the agreement which is to be compared with the current version of the agreement
 	public UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
-
 		final RestAPI.Response response = post(
 			getBaseUrl(),
 			new List<String> {
@@ -583,7 +584,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success') {
+		while (status != 'Success' && count < 25) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -1418,4 +1419,3 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 }
-

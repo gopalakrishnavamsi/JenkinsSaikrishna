@@ -383,7 +383,6 @@
           }
         );
     }));
-
     return preview;
   },
 

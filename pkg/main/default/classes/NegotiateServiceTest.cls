@@ -124,6 +124,41 @@ private class NegotiateServiceTest {
 	}
 
 	@IsTest
+	static void test_compareAgreements_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			UUID result = NegotiateService.compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(NegotiateAPIMock.COMPARE_TASK_ID, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_compareAgreements_failure() {
+		NegotiateAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			Boolean hasError = false;
+			try {
+				UUID result = NegotiateService.compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
+			} catch (APIException ex) {
+				hasError = true;
+			}
+			Test.stopTest();
+
+			System.assertEquals(hasError, true);
+		}
+	}
+
+	@IsTest
 	static void test_sendForExternalReview_success() {
 		NegotiateAPIMock.success();
 
@@ -142,6 +177,41 @@ private class NegotiateServiceTest {
 			System.assertEquals('Waiting', testTaskStatus.status);
 			System.assertEquals(Label.ExternalReviewSuccess, testTaskStatus.message);
 
+		}
+	}
+
+	@IsTest
+	static void test_getCompareUrl_success() {
+		NegotiateAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			String result = NegotiateService.getCompareUrl(NegotiateAPIMock.COMPARE_TASK_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(true, result.contains(String.valueOf(NegotiateAPIMock.COMPARE_TASK_ID)));
+
+		}
+	}
+
+	@IsTest
+	static void test_getCompareUrl_failure() {
+		NegotiateAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			Boolean hasError = false;
+			try {
+				String result = NegotiateService.getCompareUrl(NegotiateAPIMock.COMPARE_TASK_ID);
+			} catch (APIException ex) {
+				hasError = true;
+			}
+			Test.stopTest();
+
+			System.assertEquals(hasError, true);
 		}
 	}
 
