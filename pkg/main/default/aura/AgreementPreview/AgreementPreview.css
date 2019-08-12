@@ -3,18 +3,12 @@
     padding: 0.1rem;
 }
 
-.THIS .fullContainer {
-    width: t(fullViewPortWidth);
-}
-
 .THIS .documentContainer {
-    width: t(fullViewPortWidth);
     height: t(ninetyPercentViewPortHeight);
     background-color: t(colorBackground);
 }
 
 .THIS .toolbarContainer {
-    width: t(fullViewPortWidth);
     min-height: t(heightHeader);
     background-color: t(colorBackgroundAgreementPreviewHeader);
     border-bottom: 2.5px solid #194BA0;

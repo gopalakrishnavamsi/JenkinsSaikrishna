@@ -323,6 +323,7 @@
     showHistoryView,
     auth
   ) {
+    var componentHelper = this;
     if (!agreementId || !documentUrl || !agreementName || !auth) throw 'Missing Parameter';
     var preview = new SpringCM.Widgets.Preview(auth.baseOptions);
     preview.render('#agreementDocumentView');
@@ -356,11 +357,56 @@
       });
     }
 
-    this.registerEvent('closeWindow', function () {
+    this.registerEvent('closeWindow', $A.getCallback(function () {
       $A.get('e.force:refreshView').fire();
+    }));
+
+    this.registerEvent('viewCompareDocumentPreview', $A.getCallback(function (event) {
+      componentHelper.fireCompareAgreements(component, componentHelper, preview, event.detail.originalDocumentHref, event.detail.compareVersionHref);
+    }));
+
+    this.registerEvent('viewDocumentPreview', $A.getCallback(function () {
+      var uiHelper = component.get('v.uiHelper');
+      component.set('v.loading', true);
+      componentHelper.getResourceToken(component.get('v.agreement').id.value, component, uiHelper)
+        .then(function (token) {
+            preview.renderDocumentPreview({
+              url: token,
+              hasPdfPreview: true,
+            });
+            component.set('v.loading', false);
+          }
+        )
+        .catch(function (error) {
+            uiHelper.showToast(error, 'error');
+            component.set('v.loading', false);
+          }
+        );
+    }));
+    return preview;
+  },
+
+  fireCompareAgreements: function (component, helper, preview, originalDocumentHref, compareVersionHref) {
+    var compareAction = component.get('c.compareAgreements');
+    compareAction.setParams({
+      originalDocumentHref: originalDocumentHref,
+      compareVersionHref: compareVersionHref
     });
 
-    return preview;
+    compareAction.setCallback(this, $A.getCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        preview.renderDocumentPreview({
+          url: response.getReturnValue(),
+          hasPdfPreview: true,
+        });
+      } else if (state === 'ERROR') {
+        helper.showToast(component, response.getError()[0].message, 'error');
+      }
+      component.set('v.loading', false);
+    }));
+    component.set('v.loading', true);
+    $A.enqueueAction(compareAction);
   },
 
   externalReviewSenderView: function (component, widget, inProgress) {

@@ -1,4 +1,5 @@
 public with sharing class AgreementsController extends Controller {
+
 	public AgreementsController() {
 	}
 
@@ -130,6 +131,16 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static String compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
+		try {
+			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
+			return NegotiateService.getCompareUrl(compareTaskId).toExternalForm();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to initiate compare Agreements');
+		}
+	}
+
+	@AuraEnabled
 	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
 		try {
 			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId, false);
@@ -225,5 +236,4 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to Add Agreement in Salesforce');
 		}
 	}
-
 }

@@ -1,2 +1,2 @@
-<aura:event type="COMPONENT" description="Show hide component">    
+<aura:event type="COMPONENT" description="Show hide component">
 </aura:event>
