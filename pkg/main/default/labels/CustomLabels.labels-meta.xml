@@ -55,7 +55,7 @@
 		<protected>true</protected>
 		<shortDescription>Account Provisioning Failed</shortDescription>
 		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support:
-			https://support.docusign.com/.
+		https://support.docusign.com/.
 		</value>
 	</labels>
 	<labels>
@@ -88,9 +88,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Add Layout Info</shortDescription>
-		<value>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders
-			from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.
-		</value>
+		<value>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</value>
 	</labels>
 	<labels>
 		<fullName>AddRecipient</fullName>
@@ -131,7 +129,7 @@
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign details</shortDescription>
 		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to
-			the list below. Each new user will automatically be added to the DocuSign account.
+		the list below. Each new user will automatically be added to the DocuSign account.
 		</value>
 	</labels>
 	<labels>
@@ -709,7 +707,7 @@
 		<protected>true</protected>
 		<shortDescription>Cannot remove self</shortDescription>
 		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to
-			administer DocuSign for Salesforce.
+		administer DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -855,9 +853,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Location Body</shortDescription>
-		<value>Choosing a location for your object folder keeps your document organized. Later, you can customize
-			Salesforce to view your CLM folder contents from within Salesforce.
-		</value>
+		<value>Choosing a location for your object folder keeps your document organized. Later, you can customize Salesforce to view your CLM folder contents from within Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>ChooseLocationTitle</fullName>
@@ -873,9 +869,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Object Info</shortDescription>
-		<value>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object
-			at a time.
-		</value>
+		<value>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object at a time.</value>
 	</labels>
 	<labels>
 		<fullName>ChristmasIsland</fullName>
@@ -991,9 +985,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Configure Button Info</shortDescription>
-		<value>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking
-			the custom button opens the affiliated Document Generation form.
-		</value>
+		<value>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking the custom button opens the affiliated Document Generation form.</value>
 	</labels>
 	<labels>
 		<fullName>ConfigureButtons</fullName>
@@ -1025,9 +1017,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Configure Object Page Layout Info</shortDescription>
-		<value>To see your folders in DocuSign CLM or Salesforce you&apos;ll have to configure your object page&apos;s
-			layout. Then, add a custom section for DocuSign CLM to that layout.
-		</value>
+		<value>To see your folders in DocuSign CLM or Salesforce you&apos;ll have to configure your object page&apos;s layout. Then, add a custom section for DocuSign CLM to that layout.</value>
 	</labels>
 	<labels>
 		<fullName>ConfirmEdits</fullName>
@@ -1438,9 +1428,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Modal Body for Mapped objects</shortDescription>
-		<value>The edits you&apos;re making to this mapped object will affect future instances. They may not change
-			existing objects.Are you sure you want to edit this object.
-		</value>
+		<value>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</value>
 	</labels>
 	<labels>
 		<fullName>Editor</fullName>
@@ -1623,7 +1611,7 @@
 		<protected>true</protected>
 		<shortDescription>Envelopes must be sent</shortDescription>
 		<value>All envelopes must be in &#39;sent&#39; or &#39;created&#39; state with a valid DocuSign ID to create
-			associated status records.
+		associated status records.
 		</value>
 	</labels>
 	<labels>
@@ -1693,7 +1681,7 @@
 		<protected>true</protected>
 		<shortDescription>Signers Required to Meet 21 CFR Part 11</shortDescription>
 		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
-			required, non-conditional Signature or Initials tab.
+		required, non-conditional Signature or Initials tab.
 		</value>
 	</labels>
 	<labels>
@@ -2036,9 +2024,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to
-			common questions to DocuSign Agreements.
-		</value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
 	</labels>
 	<labels>
 		<fullName>HelpSection1</fullName>
@@ -2047,10 +2033,9 @@
 		<protected>true</protected>
 		<shortDescription>Help section 1</shortDescription>
 		<value>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with
-			DocuSign
-			button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
-			objects: Accounts, Contacts, Opportunities, Cases, and Leads.
+		DocuSign
+		button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
+		objects: Accounts, Contacts, Opportunities, Cases, and Leads.
 		</value>
 	</labels>
 	<labels>
@@ -2060,10 +2045,8 @@
 		<protected>true</protected>
 		<shortDescription>Help section 2</shortDescription>
 		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
-			the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot;
-			target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
-			documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot;
-			target=&quot;_blank&quot;&gt;here&lt;/a&gt;
+		the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
+		documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;
 		</value>
 	</labels>
 	<labels>
@@ -2211,15 +2194,15 @@
 		<protected>true</protected>
 		<shortDescription>Invalid User Settings</shortDescription>
 		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
-			used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
-			user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
-			Send
-			Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
-			setting may be accessed by
-			logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
-			Administration console. Unless all of those settings are enabled, the integration will not function
-			properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
-			contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
+		used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
+		user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
+		Send
+		Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
+		setting may be accessed by
+		logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
+		Administration console. Unless all of those settings are enabled, the integration will not function
+		properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
+		contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
 		</value>
 	</labels>
 	<labels>
@@ -2237,7 +2220,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid Correction State</shortDescription>
 		<value>Correction permission must be turned on and envelope must be in &#39;sent&#39; or &#39;delivered&#39;
-			state to allow correction.
+		state to allow correction.
 		</value>
 	</labels>
 	<labels>
@@ -2295,7 +2278,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid File Extension</shortDescription>
 		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-			extension unknown to DocuSign.
+		extension unknown to DocuSign.
 		</value>
 	</labels>
 	<labels>
@@ -2345,7 +2328,7 @@
 		<protected>true</protected>
 		<shortDescription>Invalid related contact</shortDescription>
 		<value>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column
-			mappings.
+		mappings.
 		</value>
 	</labels>
 	<labels>
@@ -2809,9 +2792,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Map Objects summary</shortDescription>
-		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using
-			Salesforce data.
-		</value>
+		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</value>
 	</labels>
 	<labels>
 		<fullName>MappedObjects</fullName>
@@ -2966,7 +2947,7 @@
 		<protected>true</protected>
 		<shortDescription>Multiple_Accounts_Message</shortDescription>
 		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would
-			like to connect with your Salesforce organization.
+		like to connect with your Salesforce organization.
 		</value>
 	</labels>
 	<labels>
@@ -2976,7 +2957,7 @@
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
 		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and
-			have granted your consent to DocuSign for Salesforce.
+		have granted your consent to DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -3224,8 +3205,7 @@
 		<protected>true</protected>
 		<shortDescription>Non-US consent messsage</shortDescription>
 		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-			and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a
-			target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
+		and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
 		</value>
 	</labels>
 	<labels>
@@ -3302,9 +3282,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Object Folder Body</shortDescription>
-		<value>Every instance of a mapped object will have a dedicated folder in DocuSign CLM. That&apos;s where you&apos;ll
-			find the documents generated by using that object&apos;s data.
-		</value>
+		<value>Every instance of a mapped object will have a dedicated folder in DocuSign CLM. That&apos;s where you&apos;ll find the documents generated by using that object&apos;s data.</value>
 	</labels>
 	<labels>
 		<fullName>ObjectFolderName</fullName>
@@ -3611,7 +3589,7 @@
 		<protected>true</protected>
 		<shortDescription>Empty List</shortDescription>
 		<value>Custom field &#39;{0}&#39; is not configured correctly for your account: a required list field does not
-			have any options. Please contact your DocuSign administrator to correct the custom field.
+		have any options. Please contact your DocuSign administrator to correct the custom field.
 		</value>
 	</labels>
 	<labels>
@@ -4172,9 +4150,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Support info</shortDescription>
-		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot;
-			target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
-			to common questions, and display system performance information.
+		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
+		to common questions, and display system performance information.
 		</value>
 	</labels>
 	<labels>
@@ -4192,9 +4169,8 @@
 		<protected>true</protected>
 		<shortDescription>Support preparation</shortDescription>
 		<value>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be
-			sure to
-			have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot;
-			target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
+		sure to
+		have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
 		</value>
 	</labels>
 	<labels>
@@ -4325,9 +4301,8 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade
-			your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
+		your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -4336,8 +4311,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires in One Day</shortDescription>
-		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -4346,8 +4320,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Soon</shortDescription>
-		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -4356,8 +4329,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Today</shortDescription>
-		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot;
-			target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
+		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -4375,7 +4347,7 @@
 		<protected>true</protected>
 		<shortDescription>Trial instructions</shortDescription>
 		<value>You will receive email with instructions on how to activate your account. You will then be able to log in
-			using your credentials.
+		using your credentials.
 		</value>
 	</labels>
 	<labels>
@@ -4451,8 +4423,8 @@
 		<protected>true</protected>
 		<shortDescription>US consent message</shortDescription>
 		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-			and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy
-			Policy&lt;/a&gt;.
+		and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy
+		Policy&lt;/a&gt;.
 		</value>
 	</labels>
 	<labels>
@@ -4491,7 +4463,7 @@
 		<protected>true</protected>
 		<shortDescription>Unauthorized user</shortDescription>
 		<value>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant
-			access.
+		access.
 		</value>
 	</labels>
 	<labels>
@@ -4750,9 +4722,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>SalesforceFileCopyComplete</shortDescription>
-		<value>The file below has been copied from Salesforce files, imported to DocuSign Agreements, and now can be
-			sent for negotiation, approval or signature.
-		</value>
+		<value>The file below has been copied from Salesforce files, imported to DocuSign Agreements, and now can be sent for negotiation, approval or signature.</value>
 	</labels>
 	<labels>
 		<fullName>SendForExternalReview</fullName>
@@ -4839,7 +4809,7 @@
 		<protected>true</protected>
 		<shortDescription>Use system sender help</shortDescription>
 		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes.
-			The sender in this case will be the configured DocuSign administrator.
+		The sender in this case will be the configured DocuSign administrator.
 		</value>
 	</labels>
 	<labels>
@@ -5167,7 +5137,7 @@
 		<protected>true</protected>
 		<shortDescription>Gen API error</shortDescription>
 		<value>[{0}] {1}
-			Reference ID: {2}
+		Reference ID: {2}
 		</value>
 	</labels>
 	<labels>
@@ -5344,9 +5314,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DeleteAgreementMessage</shortDescription>
-		<value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous
-			versions, or ability to view redlines.
-		</value>
+		<value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</value>
 	</labels>
 	<labels>
 		<fullName>DeleteButtonLabel</fullName>
@@ -5367,9 +5335,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadMessage</shortDescription>
-		<value>Uploading a file will create a new version of this document and update the agreement's activity
-			timeline.
-		</value>
+		<value>Uploading a file will create a new version of this document and update the agreement's activity timeline.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementName</fullName>
@@ -5397,9 +5363,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Expired trial account message</shortDescription>
-		<value>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials.
-			Please logout and login again after you upgrade your account by selecting DocuSign Setup.
-		</value>
+		<value>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup.</value>
 	</labels>
 	<!-- new labels for Gen -->
 	<labels>
@@ -5484,9 +5448,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>WhatYouWillNeedStep1Info</shortDescription>
-		<value>You’ll copy and paste anchor text into your files to dynamically insert Salesforce data and DocuSign
-			fields.
-		</value>
+		<value>You’ll copy and paste anchor text into your files to dynamically insert Salesforce data and DocuSign fields.</value>
 	</labels>
 	<labels>
 		<fullName>WhatYouWillNeedStep2Title</fullName>
@@ -5500,8 +5462,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>WhatYouWillNeedStep2Info</shortDescription>
-		<value>You’ll need to have at least one Salesforce data source and the fields you want added to your document.
-		</value>
+		<value>You’ll need to have at least one Salesforce data source and the fields you want added to your document.</value>
 	</labels>
 	<labels>
 		<fullName>WhatYouWillNeedStep3Title</fullName>
@@ -5573,9 +5534,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Name Object Folder Body</shortDescription>
-		<value>We recommend that you always name the folder after a field associated with the mapped Salesforce object.
-			That way the folder will update when your object data updates.
-		</value>
+		<value>We recommend that you always name the folder after a field associated with the mapped Salesforce object. That way the folder will update when your object data updates.</value>
 	</labels>
 	<labels>
 		<fullName>NameObjectFolderTitle</fullName>
@@ -5604,114 +5563,77 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>StartingObjectGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main
-			data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating
-			documents. For example, if you choose Opportunity, users can pull data from an Opportunity and related
-			objects, like Account.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating documents.  For example, if you choose Opportunity, users can  pull data from an Opportunity and related objects, like Account.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>StartingObjectGuidance3</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>StartingObjectGuidance3</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Need Help?&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Find
-			out more about template configurations in the &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;DocuSign
-			Support Center&lt;/a&gt;.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Need Help?&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Find out more about template configurations in the &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;DocuSign Support Center&lt;/a&gt;.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>MergeFieldsGuidance1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>MergeFieldsGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add Salesforce
-			fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce fields allow you to dynamically populate information on
-			your document directly from Salesforce. For example, if you selected Account as your main data source, you
-			may want to pull Account Name or Billing Address. Be sure to copy and paste the corresponding anchor text
-			into your Word templates. Decide formatting and conditional options in the dropdown menu.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add Salesforce fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce fields allow you to dynamically populate information on your document directly from Salesforce. For example, if you selected Account as your main data source, you may want to pull Account Name or Billing Address. Be sure to copy and paste the corresponding anchor text into your Word templates. Decide formatting and conditional options in the dropdown menu.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>MergeFieldsGuidance2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>MergeFieldsGuidance2</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add DocuSign fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;You
-			can also have DocuSign fields, like signature, automatically prepared for recipients. Be sure to copy and
-			paste the corresponding anchor text into your Word templates.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Add DocuSign fields&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;You can also have DocuSign fields, like signature, automatically prepared for recipients. Be sure to copy and paste the corresponding anchor text into your Word templates.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>ImportTemplatesGuidance1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ImportTemplatesGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word
-			templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For
-			each template, you can choose a suffix option for generated documents . You can also decide if users should
-			generate a Word document or a PDF.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For each template, you can choose a suffix option for generated documents . You can also decide if users should generate a Word document or a PDF.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>ImportTemplatesGuidance2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ImportTemplatesGuidance2</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk
-			document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded multiple Word templates with
-			this configuration, you can choose if all documents should be generated every time. By default, users can
-			select which ones they want to generate. However, if your users need to generate all documents, then select
-			&lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded  multiple Word templates with this configuration, you can choose if all documents should be generated every time.  By default, users can select which ones they want to generate. However, if your users need to generate all documents, then select &lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>PreviewGuidance1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>PreviewGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Test your templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choose
-			data sources from Salesforce and click &lt;strong&gt;Preview&lt;/strong&gt; to generate example documents.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Test your templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choose data sources from Salesforce and click &lt;strong&gt;Preview&lt;/strong&gt; to generate example documents.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>PreviewGuidance2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>PreviewGuidance2</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Review and update&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Check
-			your documents in Word to confirm text placement and formatting.You can update your templates by going back
-			to any previous step in this configuration wizard without losing your progress.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Review and update&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Check your documents in Word to confirm text placement and formatting.You can update your templates by going back to any previous step in this configuration wizard without losing your progress.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>PublishGuidance1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>PublishGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine your
-			button label&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Give your button a descriptive label, such as &lt;strong&gt;Generate
-			Sales Order.&lt;/strong&gt;&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine your button label&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Give your button a descriptive label, such as &lt;strong&gt;Generate Sales Order.&lt;/strong&gt;&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>PublishGuidance2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>PublishGuidance2</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts
-			and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where your button should appear and select to
-			deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t
-			want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;.
-			Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;
-		</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where  your button should appear and select to deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;. Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>ErrorMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ErrorMessage</shortDescription>
-		<value>Error message:</value>
+		<value>Error message: </value>
 	</labels>
 	<labels>
 		<fullName>UnknownError</fullName>
@@ -5767,9 +5689,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>SalesforceFieldsMsg</shortDescription>
-		<value>Select the Salesforce data fields Then copy and paste the anchor text where you want them to appear your
-			Word templates.
-		</value>
+		<value>Select the Salesforce data fields Then copy and paste the anchor text where you want them to appear your Word templates.</value>
 	</labels>
 	<labels>
 		<fullName>AddMergeFields</fullName>
@@ -5790,9 +5710,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DocusignFieldsMsg</shortDescription>
-		<value>Select DocuSign fields for each signer, then copy and paste the corresponding anchor text in the
-			appropriate locations in your Word template(s).
-		</value>
+		<value>Select DocuSign fields for each signer, then copy and paste the corresponding anchor text in the appropriate locations in your Word template(s).</value>
 	</labels>
 	<labels>
 		<fullName>SignerText</fullName>
@@ -6171,9 +6089,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>FileTooLarge</shortDescription>
-		<value>This supports file sizes up to 3mb only. If you want to upload larger files please do it through the
-			files related list of DocuSign Gen Templates.
-		</value>
+		<value>This supports file sizes up to 3mb only. If you want to upload larger files please do it through the files related list of DocuSign Gen Templates.</value>
 	</labels>
 	<labels>
 		<fullName>Preview</fullName>
@@ -6201,17 +6117,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GeneratorComeBackMsg</shortDescription>
-		<value>It’s taking a little while to generate your file(s). If you’d prefer to check back later, you’ll find the
-			files under the Files tab in Salesforce.
-		</value>
+		<value>It’s taking a little while to generate your file(s). If you’d prefer to check back later, you’ll find the files under the Files tab in Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>GeneratorTooLongMsg</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GeneratorTooLongMsg</shortDescription>
-		<value>Taking too long to generate. Please check this record at a later time to view the generated file(s).
-		</value>
+		<value>Taking too long to generate. Please check this record at a later time to view the generated file(s).</value>
 	</labels>
 	<labels>
 		<fullName>SelectAnOptionNoDash</fullName>
@@ -6260,9 +6173,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>FailedInitiateDocGeneration</shortDescription>
-		<value>Failed to initiate document generation. Please try again later or contact your administrator for
-			assistance.
-		</value>
+		<value>Failed to initiate document generation. Please try again later or contact your administrator for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>GeneratorBannerErrorMsg</fullName>
@@ -6304,10 +6215,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>PublishMsg</shortDescription>
-		<value>Let users generate documents from this template configuration with a custom button. You can also choose
-			to place the button on specific page layouts for your main data source. If you add a custom button and make
-			changes to this template configuration, you don’t need to add the button again.
-		</value>
+		<value>Let users generate documents from this template configuration with a custom button. You can also choose to place the button on specific page layouts for your main data source. If you add a custom button and make changes to this template configuration, you don’t need to add the button again.</value>
 	</labels>
 	<labels>
 		<fullName>ButtonLabel</fullName>
@@ -6373,7 +6281,7 @@
 		<protected>true</protected>
 		<shortDescription>MissingDocuSignGenAuthorizationSettings</shortDescription>
 		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for
-			assistance.
+		assistance.
 		</value>
 	</labels>
 	<labels>
@@ -6452,7 +6360,7 @@
 		<protected>true</protected>
 		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
 		<value>Agreement external review on behalf of has failed.</value>
-	</labels>
+    </labels>
 	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
@@ -6571,7 +6479,7 @@
 		<protected>true</protected>
 		<shortDescription>ExternalReviewProcessing</shortDescription>
 		<value>Your request for sending your document for external review is still in progress. Check the Agreements
-			space after some time.
+		space after some time.
 		</value>
 	</labels>
 	<labels>
@@ -6594,7 +6502,7 @@
 		<protected>true</protected>
 		<shortDescription>InternalApprovalProcessing</shortDescription>
 		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements
-			space after some time.
+		space after some time.
 		</value>
 	</labels>
 	<labels>
@@ -6805,9 +6713,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFailureEmailBody</shortDescription>
-		<value>There was a problem with your review request and it was not sent. The issue should resolve itself if you
-			resend the request.
-		</value>
+		<value>There was a problem with your review request and it was not sent. The issue should resolve itself if you resend the request.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewFailureEmailHeader</fullName>
@@ -6828,9 +6734,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExpiredReviewSenderEmailBody_1</shortDescription>
-		<value>The review request for {0} has expired. If you still want someone review this, you will need to send a
-			new review request
-		</value>
+		<value>The review request for {0} has expired. If you still want someone review this, you will need to send a new review request</value>
 	</labels>
 	<labels>
 		<fullName>ExpiredReviewSenderEmailSubject</fullName>
@@ -6944,7 +6848,7 @@
 		<protected>true</protected>
 		<shortDescription>Authorize DocuSign instructions</shortDescription>
 		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.
-			Click the &quot;Authorize&quot; button to continue.
+		Click the &quot;Authorize&quot; button to continue.
 		</value>
 	</labels>
 	<labels>
@@ -7135,7 +7039,7 @@
 		<protected>true</protected>
 		<shortDescription>ApprovalFailureEmailBodyText</shortDescription>
 		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if
-			you resend the request.
+		you resend the request.
 		</value>
 	</labels>
 	<labels>
@@ -7179,7 +7083,7 @@
 		<protected>true</protected>
 		<shortDescription>AgreementShareLinkMessage</shortDescription>
 		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit
-			this agreement.
+		this agreement.
 		</value>
 	</labels>
 	<labels>
@@ -7230,9 +7134,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Organize And Search Documents Body</shortDescription>
-		<value>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes
-			to every document to keep things organized.
-		</value>
+		<value>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</value>
 	</labels>
 	<labels>
 		<fullName>OrganizeAndSearchDocumentsTitle</fullName>
@@ -7264,9 +7166,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Pick a Field Body</shortDescription>
-		<value>Once you have set a location for your object folder, you&apos;ll be able to browse for and select one or
-			more fields to create a dynamic name for your new folder.
-		</value>
+		<value>Once you have set a location for your object folder, you&apos;ll be able to browse for and select one or more fields to create a dynamic name for your new folder.</value>
 	</labels>
 	<labels>
 		<fullName>PickAFieldTitle</fullName>
@@ -7282,10 +7182,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Pick Object Body</shortDescription>
-		<value>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re
-			creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping
-			process.
-		</value>
+		<value>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping process.</value>
 	</labels>
 	<labels>
 		<fullName>PickObjectTitle</fullName>
@@ -7301,9 +7198,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Pick Specific Object Body</shortDescription>
-		<value>You can pick any standard or custom Salesforce object to map. Every organization will have different
-			needs and objects, but Account and Opportunity are good examples.
-		</value>
+		<value>You can pick any standard or custom Salesforce object to map. Every organization will have different needs and objects, but Account and Opportunity are good examples.</value>
 	</labels>
 	<labels>
 		<fullName>PickSpecificObjectTitle</fullName>
@@ -7327,10 +7222,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Pre-set Object Mappings Body</shortDescription>
-		<value>We&apos;ve already mapped &apos;Accounts&apos; and &apos;Opportunities&apos; to your DocuSign CLM. This
-			will help you have time and focus on other objects. Don&apos;t need them? Click &apos;Remove&apos; to get
-			rid of any objects.
-		</value>
+		<value>We&apos;ve already mapped &apos;Accounts&apos; and &apos;Opportunities&apos; to your DocuSign CLM. This will help you have time and focus on other objects. Don&apos;t need them? Click &apos;Remove&apos; to get rid of any objects.</value>
 	</labels>
 	<labels>
 		<fullName>RemoveMapping</fullName>
@@ -7346,9 +7238,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Remove Modal Body</shortDescription>
-		<value>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign
-			CLM. Are you sure you want to remove this object from your mapping?
-		</value>
+		<value>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
 	</labels>
 	<labels>
 		<fullName>RunReportsAndAnalyticsBody</fullName>
@@ -7356,9 +7246,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Run Reports And Analytics Body</shortDescription>
-		<value>Generate detailed charts and reports on your documents, attributes and workflows. These will let you
-			track account activity and performance.
-		</value>
+		<value>Generate detailed charts and reports on your documents, attributes and workflows. These will let you track account activity and performance.</value>
 	</labels>
 	<labels>
 		<fullName>RunReportsAndAnalyticsTitle</fullName>
@@ -7382,9 +7270,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Share And Collaborate Body</shortDescription>
-		<value>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to
-			capture feedback and readline important documents when negotiating.
-		</value>
+		<value>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and readline important documents when negotiating.</value>
 	</labels>
 	<labels>
 		<fullName>ShareAndCollaborateTitle</fullName>
@@ -7408,9 +7294,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Track Document Status And Activity Body</shortDescription>
-		<value>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long
-			approvals are taking, and control how your document get reviewed.
-		</value>
+		<value>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your document get reviewed.</value>
 	</labels>
 	<labels>
 		<fullName>TrackDocumentStatusAndActivityTitle</fullName>
@@ -7489,9 +7373,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Location Info</shortDescription>
-		<value>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create
-			will be independent of other mappings.
-		</value>
+		<value>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create will be independent of other mappings.</value>
 	</labels>
 	<labels>
 		<fullName>ChooseLocationTitleHelpText</fullName>
@@ -7499,9 +7381,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Location Title Help Text</shortDescription>
-		<value>All the instances of the object type {0} will each have a folder that will live where you see the blue
-			folder in the hierarchy.
-		</value>
+		<value>All the instances of the object type {0} will each have a folder that will live where you see the blue folder in the hierarchy.</value>
 	</labels>
 	<labels>
 		<fullName>ComponentCreationFailed</fullName>
@@ -7573,9 +7453,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Select Folder Help Body</shortDescription>
-		<value>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos;
-			folder
-		</value>
+		<value>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos; folder</value>
 	</labels>
 	<labels>
 		<fullName>SelectObjectHelpBody</fullName>
@@ -7623,9 +7501,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement 2</shortDescription>
-		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view
-			from inside of Salesforce.
-		</value>
+		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidTrialProduct_1</fullName>
@@ -7649,9 +7525,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>eSignature enabled help</shortDescription>
-		<value>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature
-			functionality in this package may be disabled.
-		</value>
+		<value>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidPermissionSet_1</fullName>
