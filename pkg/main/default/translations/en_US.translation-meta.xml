@@ -4113,6 +4113,14 @@
 		<label>Inactive</label>
 		<name>Inactive</name>
 	</customLabels>
+	<customLabels>
+		<label>Failed to trigger document comparison task.</label>
+		<name>FailedToTriggerDocumentComparisonTask</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid input parameters for comparing Agreement versions.</label>
+		<name>InvalidInputsAgreementComparison</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

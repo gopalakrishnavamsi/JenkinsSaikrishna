@@ -7711,4 +7711,18 @@
 		<shortDescription>Inactive</shortDescription>
 		<value>Inactive</value>
 	</labels>
+	<labels>
+		<fullName>FailedToTriggerDocumentComparisonTask</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FailedToTriggerDocumentComparisonTask</shortDescription>
+		<value>Failed to trigger document comparison task.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidInputsAgreementComparison</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InvalidInputsAgreementComparison</shortDescription>
+		<value>Invalid input parameters for comparing Agreement versions.</value>
+	</labels>
 </CustomLabels>

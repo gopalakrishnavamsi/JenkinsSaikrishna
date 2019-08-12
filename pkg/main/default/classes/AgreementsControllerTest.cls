@@ -594,7 +594,7 @@ private class AgreementsControllerTest {
 			Test.startTest();
 			String result = AgreementsController.compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
 			Test.stopTest();
-			System.assertNotEquals(result, null);
+			System.assertEquals('https://account-hqtest3.dev.docusign.net/managed_token/v1/233d8ee7-1135-4d63-9163-c532c4e2571a', result);
 		}
 	}
 
@@ -611,5 +611,4 @@ private class AgreementsControllerTest {
 			Test.stopTest();
 		}
 	}
-
 }

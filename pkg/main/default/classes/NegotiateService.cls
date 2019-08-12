@@ -4,6 +4,10 @@
 public with sharing class NegotiateService {
 	@TestVisible
 	private static final NegotiateService.Database DB = new NegotiateService.Database();
+	public static final String TASK_SUCCESS = 'Success';
+	public static final String TASK_WAITING = 'Waiting';
+	public static final String TASK_EXECUTING = 'Executing';
+	public static final String TASK_PROCESSING = 'Processing';
 
 	public class NegotiateRecipient {
 		public String name { get; private set; }
@@ -233,9 +237,9 @@ public with sharing class NegotiateService {
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		UUID taskId = NegotiateAPI.getInstance().createAgreementInEOSFolder(sfContentVersionId, folderId, documentName);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
-		if (taskStatus.status.equals('Success')) {
+		if (taskStatus.status.equals(TASK_SUCCESS)) {
 			taskStatus.message = Label.AgreementImportSuccessful;
-		} else if (taskStatus.status.equals('Processing')) {
+		} else if (taskStatus.status.equals(TASK_PROCESSING)) {
 			taskStatus.message = Label.AgreementImportProcessing;
 		} else {
 			taskStatus.message = Label.AgreementImportFailed;
@@ -245,11 +249,20 @@ public with sharing class NegotiateService {
 
 	public static UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
 		Permissions.verifyIsDocuSignNegotiator();
+		//validate inputs
+		if (String.isBlank(originalDocumentHref) || String.isBlank(compareVersionHref)) {
+			throw new APIException(System.Label.InvalidInputsAgreementComparison);
+		}
 		UUID returnValue;
 		UUID taskId = NegotiateAPI.getInstance().compareAgreements(originalDocumentHref, compareVersionHref);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getCompareAgreementsStatus(taskId);
-		if (taskStatus.status.equals('Success')) {
+		//successfully processed agreement comparison task
+		if (taskStatus.status.equals(TASK_SUCCESS)) {
 			returnValue = taskId;
+		}
+		//throw exception if status is not equal to success
+		else {
+			throw new APIException(System.Label.FailedToTriggerDocumentComparisonTask);
 		}
 		return returnValue;
 	}
@@ -258,9 +271,9 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().exportAgreementToSalesforce(sourceObjectId, documentId);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(taskId);
-		if (taskStatus.status.equals('Success')) {
+		if (taskStatus.status.equals(TASK_SUCCESS)) {
 			taskStatus.message = Label.AgreementExportSuccessful;
-		} else if (taskStatus.status.equals('Processing')) {
+		} else if (taskStatus.status.equals(TASK_PROCESSING)) {
 			taskStatus.message = Label.AgreementExportProcessing;
 		} else {
 			taskStatus.message = Label.AgreementExportFailed;
@@ -294,9 +307,9 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, sourceId, documentsIds, reviewers, subject, body, expiresInNumberOfDays);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
-		if (taskStatus.status.equals('Waiting')) {
+		if (taskStatus.status.equals(TASK_WAITING)) {
 			taskStatus.message = Label.ExternalReviewSuccess;
-		} else if (taskStatus.status.equals('Executing')) {
+		} else if (taskStatus.status.equals(TASK_EXECUTING)) {
 			taskStatus.message = Label.ExternalReviewProcessing;
 		} else {
 			taskStatus.message = Label.ExternalReviewFailed;
@@ -308,9 +321,9 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body, isSequential);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
-		if (taskStatus.status.equals('Waiting')) {
+		if (taskStatus.status.equals(TASK_WAITING)) {
 			taskStatus.message = Label.InternalApprovalSuccess;
-		} else if (taskStatus.status.equals('Executing')) {
+		} else if (taskStatus.status.equals(TASK_EXECUTING)) {
 			taskStatus.message = Label.InternalApprovalProcessing;
 		} else {
 			taskStatus.message = Label.InternalApprovalFailed;
@@ -375,8 +388,8 @@ public with sharing class NegotiateService {
 		return ResourceTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
 	}
 
-	public static String getCompareUrl(final UUID compareTaskId) {
+	public static Url getCompareUrl(final UUID compareTaskId) {
 		Permissions.verifyIsDocuSignNegotiator();
-		return ResourceTokenAPI.getInstance().getCompareUrl(compareTaskId).toExternalForm();
+		return ResourceTokenAPI.getInstance().getCompareUrl(compareTaskId);
 	}
 }

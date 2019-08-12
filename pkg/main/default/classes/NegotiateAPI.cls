@@ -18,6 +18,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
 	public static final Integer BUFFER_SOQL_LIMIT = 5;
+	public static final Integer API_RETRY_LIMIT = 25;
 
 	@TestVisible private Set<String> userEmails = new Set<String>();
 	@TestVisible private Set<String> contactEmails = new Set<String>();
@@ -556,7 +557,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' && count < 10) {
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -584,7 +585,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' && count < 25) {
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -612,7 +613,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' && count < 10) {
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -839,7 +840,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Waiting' && status != 'Failed' && count < 10) {
+		while (status != 'Waiting' && status != 'Failed' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
