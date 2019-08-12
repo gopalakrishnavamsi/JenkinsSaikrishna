@@ -113,7 +113,6 @@ public with sharing class ResourceTokenAPI extends DocuSignAPI {
 		}
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		System.Debug(LoggingLevel.INFO, 'Request Body from Test class ' + body);
 		return new Url(
 			(String)body.get('secret_uri')
 		);
