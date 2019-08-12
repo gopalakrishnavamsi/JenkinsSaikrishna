@@ -7,12 +7,16 @@ This is the new DocuSign for Salesforce base package. This is a lighter version 
 ## Development Notes
 Salesforce DX is used to build, test, and deploy this project.
 1. [Install and configure Salesforce DX](./doc/sfdx.md).
+
 2. Create a Developer scratch org or an Enterprise scratch org depending upon your use case.
 - Developer scratch org: `sfdx force:org:create -f ./etc/developerScratch.json -s -a dfsle-scratch-org`. This org will allow creation of only 2 salesforce standard users associated with the scratch org.
 - Enterprise scratch org: `sfdx force:org:create -f ./etc/enterpriseScratch -s -a dfsle-scratch-org`. This org will allow creation 10 salesforce standard users associated with the scratch org.
 - Scratch orgs persist for 7 days by default. Use the `-d` parameter to set a custom expiration time. Customize aliases associated with scratch orgs in the command by changing `dfsle-scratch-org` to the desired value. 
+
 3. Push the source to your scratch org: `sfdx force:source:push`.
+
 4. Run post-install scripts in your scratch org: `sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org`.
+
 5. To complete OAuth flows, you must create a password for your scratch org user: `sfdx force:user:password:generate -u dfsle-scratch-org`. Note the password returned by this command. If necessary, you can view the generated password later via `sfdx force:user:display -u dfsle-scratch-org`.
 
 Once you have completed the initial scratch org setup, you can sync any local changes with that org using the `sfdx force:source:push`.
