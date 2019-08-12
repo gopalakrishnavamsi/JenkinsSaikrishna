@@ -681,13 +681,13 @@
       if (state === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result === true) {
-          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewSucess'), 'success');
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSucess'), 'success');
           helper.reloadPreview(component);
         } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewFailed'), 'error');
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
         }
       } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewFailed'), 'error');
+        helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
       }
 
     });

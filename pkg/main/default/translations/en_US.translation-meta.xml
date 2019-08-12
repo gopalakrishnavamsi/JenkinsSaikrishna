@@ -4115,11 +4115,11 @@
 	</customLabels>
 	<customLabels>
 		<label>Agreement external review on behalf of completed.</label>
-		<name>AgreementExternalReviewSucess</name>
+		<name>AgreementExternalReviewOnBehalfOfSucess</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement review has been failed. Please try again.</label>
-		<name>AgreementExternalReviewFailed</name>
+		<label>Agreement external review on behalf of has failed.</label>
+		<name>AgreementExternalReviewOnBehalfOfFailed</name>
 	</customLabels>
 	<customLabels>
 		<label>Failed to trigger document comparison task.</label>

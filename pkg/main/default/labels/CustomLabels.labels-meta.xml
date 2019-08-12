@@ -6348,18 +6348,18 @@
 		<value>Agreement Export failed. Please try again.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementExternalReviewSucess</fullName>
+		<fullName>AgreementExternalReviewOnBehalfOfSucess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>AgreementExternalReviewSucess</shortDescription>
+		<shortDescription>AgreementExternalReviewOnBehalfOfSucess</shortDescription>
 		<value>Agreement external review on behalf of completed.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementExternalReviewFailed</fullName>
+		<fullName>AgreementExternalReviewOnBehalfOfFailed</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>AgreementExternalReviewFailed</shortDescription>
-		<value>Agreement review has been failed. Please try again.</value>
+		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
+		<value>Agreement external review on behalf of has failed.</value>
    </labels>
 	<labels>
 		<fullName>RequiredField</fullName>
