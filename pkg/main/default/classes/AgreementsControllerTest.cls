@@ -613,27 +613,24 @@ private class AgreementsControllerTest {
 	}
 
 	@isTest
-	static void test_externalReviewOnBehalfOfRequest_Success(){
+	static void test_externalReviewOnBehalfOfRequest_Success() {
      	NegotiateAPIMock.success();
      	User user = UserMock.createDocuSignAdministrator();
      	System.runAs(user) {
      		Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
-			  Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest(
-			  	'Test Comment',NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(),String.valueof(NegotiateAPIMock.DOCUMENT_ID)
-			  );
+				Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
 			Test.stopTest();
 		    System.assertEquals(isExternalReviewCompleted, true);
 		}
  	}
 
 	@isTest
-	static void test_externalReviewOnBehalfOfRequest_Failure(){
+	static void test_externalReviewOnBehalfOfRequest_Failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(),String.valueof(NegotiateAPIMock.DOCUMENT_ID)
-			   );
+				AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
 				throw new AssertException('Expected externalreview on behalf of to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
