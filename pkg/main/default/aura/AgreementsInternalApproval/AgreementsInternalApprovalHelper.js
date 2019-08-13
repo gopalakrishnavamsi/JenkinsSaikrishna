@@ -1,5 +1,9 @@
 ({
   onInit: function (component, event, helper) {
+    //set current user Id
+    var currentUserId = $A.get('$SObjectType.CurrentUser.Id');
+    component.set('v.currentUserId',currentUserId);
+
     //initialize recipients
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
