@@ -1,65 +1,62 @@
 @IsTest
 private class ProvisioningAPITest {
 
+	class TestAPI extends ProvisioningAPI {
+
+		public TestAPI(
+			final Url baseUrl,
+			final UUID accountId,
+			final String accessToken) {
+
+			super(
+				baseUrl,
+				String.format('/test/v1/provision/accounts/{0}', new List<Object> { accountId }),
+				accessToken);
+		}
+	}
+
 	@IsTest
-	static void test_getInstance_default() {
+	static void test_getBaseUrl() {
 		System.runAs(UserMock.createDocuSignUser()) {
+			Url baseUrl = new Url('https://test.docusign.net/');
+			UUID accountId = UUID.randomUUID();
+			String accessToken = 'unit.test';
+			TestAPI client = new TestAPI(baseUrl, accountId, accessToken);
+
 			Test.startTest();
-			ProvisioningAPI result1 = ProvisioningAPI.getInstance();
-			ProvisioningAPI result2 = ProvisioningAPI.getInstance();
+			Url result = client.getBaseUrl();
 			Test.stopTest();
 
-			System.assertNotEquals(null, result1);
-			System.assert(result1 === result2);
+			System.assertNotEquals(null, result);
+			System.assertEquals(String.format('https://test.docusign.net/test/v1/provision/accounts/{0}',
+				new List<Object> { accountId }), result.toExternalForm());
 		}
 	}
 
 	@IsTest
-	static void test_getInstance_setup_valid() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+	static void test_getDefaultHeaders() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Url baseUrl = new Url('https://test.docusign.net/');
+			UUID accountId = UUID.randomUUID();
+			String accessToken = 'unit.test';
+			TestAPI client = new TestAPI(baseUrl, accountId, accessToken);
+
 			Test.startTest();
-			ProvisioningAPI result1 = ProvisioningAPI.getInstance(
-				new Url('https://test.docusign.com'), UUID.randomUUID(), 'test');
-			ProvisioningAPI result2 = ProvisioningAPI.getInstance(
-				new Url('https://test.docusign.com'), UUID.randomUUID(), 'test');
+			Map<String, String> result = client.getDefaultHeaders();
 			Test.stopTest();
 
-			System.assertNotEquals(null, result1);
-			System.assertNotEquals(null, result2);
-			System.assert(result1 !== result2);
-		}
-	}
-
-	@IsTest
-	static void test_getInstance_setup_invalid() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				ProvisioningAPI.getInstance(null, UUID.randomUUID(), 'test');
-				throw new AssertException('Expected getInstance to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
-			}
-			try {
-				ProvisioningAPI.getInstance(new Url('https://test.docusign.com'), null, 'test');
-				throw new AssertException('Expected getInstance to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
-			}
-			try {
-				ProvisioningAPI.getInstance(new Url('https://invalid.url'), UUID.randomUUID(), 'test');
-				throw new AssertException('Expected getInstance to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
+			System.assertEquals('application/json', result.get('Content-Type'));
+			System.assertEquals('application/json', result.get('Accept'));
+			System.assertEquals('Bearer ' + accessToken, result.get('Authorization'));
 		}
 	}
 
 	@IsTest
 	static void test_getError() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			ProvisioningAPI client = ProvisioningAPI.getInstance();
+			ProductAPI client = ProductAPI.getInstance();
 
 			HttpResponse r1 = new HttpResponse();
 			r1.setStatusCode(200);
@@ -82,75 +79,6 @@ private class ProvisioningAPITest {
 			System.assertEquals(422, e3.code);
 			System.assertEquals('UNIT_TEST', e3.description);
 			System.assert(!(e3 instanceof ProvisioningAPI.Error));
-		}
-	}
-
-	@IsTest
-	static void test_getProducts_success() {
-		ProvisioningAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			List<Product> result = ProvisioningAPI.getInstance().getProducts();
-			Test.stopTest();
-
-			System.assertEquals(3, Collection.size(result));
-			System.assertNotEquals(null, result[0]);
-			System.assert(result[0] instanceof GenProduct);
-			System.assertNotEquals(null, ((GenProduct)result[0]).apiBaseUrl);
-			System.assertNotEquals(null, ((GenProduct)result[0]).authBaseUrl);
-			System.assertNotEquals(null, result[1]);
-			System.assert(result[1] instanceof NegotiateProduct);
-			System.assertNotEquals(null, ((NegotiateProduct)result[1]).apiBaseUrl);
-			System.assertNotEquals(null, ((NegotiateProduct)result[1]).authBaseUrl);
-			System.assertNotEquals(null, result[2]);
-			System.assert(result[2] instanceof ClmProduct);
-			System.assertNotEquals(null, ((ClmProduct)result[2]).adminUrl);
-			System.assertNotEquals(null, ((ClmProduct)result[2]).authBaseUrl);
-			System.assertNotEquals(null, ((ClmProduct)result[2]).landingPageUrl);
-		}
-	}
-
-	@IsTest
-	static void test_getProducts_failure() {
-		ProvisioningAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				ProvisioningAPI.getInstance().getProducts();
-				throw new AssertException('Expected getProducts to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-				System.assert(ex.error instanceof ProvisioningAPI.Error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_activateProduct_success() {
-		ProvisioningAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Product result = ProvisioningAPI.getInstance().activateProduct(ProvisioningAPI.PRODUCT_NEGOTIATE, true);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_activateProduct_failure() {
-		ProvisioningAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				ProvisioningAPI.getInstance().activateProduct('p1', false);
-				throw new AssertException('Expected activateProduct to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-				System.assert(ex.error instanceof ProvisioningAPI.Error);
-			}
-			Test.stopTest();
 		}
 	}
 }

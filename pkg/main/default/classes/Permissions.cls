@@ -19,15 +19,23 @@ public with sharing class Permissions {
 	private static Id dsClmUserPermissionSetId = null;
 	private static Id dsClmViewerPermissionSetId = null;
 
-	// Permission set (a.k.a. role) names
-	public static final String DOCUSIGN_ADMINISTRATOR = 'docusign_administrator';
-	public static final String DOCUSIGN_USER = 'docusign_user';
-	public static final String DOCUSIGN_SENDER = 'docusign_sender';
-	public static final String DOCUSIGN_GENERATOR = 'docusign_generator';
-	public static final String DOCUSIGN_NEGOTIATOR = 'docusign_negotiator';
-	public static final String CLM_ADMINISTRATOR = 'clm_administrator';
-	public static final String CLM_USER = 'clm_user';
-	public static final String CLM_VIEWER = 'clm_viewer';
+	// Permission set names
+	@TestVisible
+	private static final String DOCUSIGN_ADMINISTRATOR = 'docusign_administrator';
+	@TestVisible
+	private static final String DOCUSIGN_USER = 'docusign_user';
+	@TestVisible
+	private static final String DOCUSIGN_SENDER = 'docusign_sender';
+	@TestVisible
+	private static final String DOCUSIGN_GENERATOR = 'docusign_generator';
+	@TestVisible
+	private static final String DOCUSIGN_NEGOTIATOR = 'docusign_negotiator';
+	@TestVisible
+	private static final String CLM_ADMINISTRATOR = 'clm_administrator';
+	@TestVisible
+	private static final String CLM_USER = 'clm_user';
+	@TestVisible
+	private static final String CLM_VIEWER = 'clm_viewer';
 	@TestVisible
 	private static final Set<String> VALID_PERMISSION_SETS = new Set<String> {
 		DOCUSIGN_ADMINISTRATOR, DOCUSIGN_USER, DOCUSIGN_SENDER,
@@ -1196,13 +1204,102 @@ public with sharing class Permissions {
 		return result;
 	}
 
-	public static Boolean replacePermissionSets(
+	@TestVisible
+	private static Set<String> getESignaturePermissionSets(final Set<String> roles) {
+		Set<String> result = new Set<String>();
+		if (roles != null) {
+			for (String r : roles) {
+				if (r == ESignatureProduct.ROLE_ADMINISTRATOR) {
+					result.add(DOCUSIGN_ADMINISTRATOR);
+				} else if (r == ESignatureProduct.ROLE_USER) {
+					result.add(DOCUSIGN_USER);
+				} else if (r == ESignatureProduct.ROLE_SENDER) {
+					result.add(DOCUSIGN_SENDER);
+				} else {
+					throw new DocuSignException(Label.UnsupportedProductRoles);
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Set<String> getGenPermissionSets(final Set<String> roles) {
+		Set<String> result = new Set<String>();
+		if (roles != null) {
+			for (String r : roles) {
+				if (r == GenProduct.ROLE_GENERATOR) {
+					result.add(DOCUSIGN_GENERATOR);
+				} else {
+					throw new DocuSignException(Label.UnsupportedProductRoles);
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Set<String> getNegotiatePermissionSets(final Set<String> roles) {
+		Set<String> result = new Set<String>();
+		if (roles != null) {
+			for (String r : roles) {
+				if (r == NegotiateProduct.ROLE_NEGOTIATOR) {
+					result.add(DOCUSIGN_NEGOTIATOR);
+				} else {
+					throw new DocuSignException(Label.UnsupportedProductRoles);
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Set<String> getClmPermissionSets(final Set<String> roles) {
+		Set<String> result = new Set<String>();
+		if (roles != null) {
+			for (String r : roles) {
+				if (r == ClmProduct.ROLE_ADMINISTRATOR) {
+					result.add(CLM_ADMINISTRATOR);
+				} else if (r == ClmProduct.ROLE_USER) {
+					result.add(CLM_USER);
+				} else if (r == ClmProduct.ROLE_VIEWER) {
+					result.add(CLM_VIEWER);
+				} else {
+					throw new DocuSignException(Label.UnsupportedProductRoles);
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Set<String> getPermissionSetNames(final Map<String, Set<String>> productRoles) {
+		Set<String> result = new Set<String>();
+		if (productRoles != null) {
+			for (String p : productRoles.keySet()) {
+				if (p == Product.ESIGNATURE) {
+					result.addAll(getESignaturePermissionSets(productRoles.get(p)));
+				} else if (p == Product.GEN) {
+					result.addAll(getGenPermissionSets(productRoles.get(p)));
+				} else if (p == Product.NEGOTIATE) {
+					result.addAll(getNegotiatePermissionSets(productRoles.get(p)));
+				} else if (p == Product.CLM) {
+					result.addAll(getClmPermissionSets(productRoles.get(p)));
+				} else {
+					throw new DocuSignException(Label.UnsupportedProducts);
+				}
+			}
+		}
+		return result;
+	}
+
+	public static Boolean replaceRoles(
 		final Set<Id> userIds,
-		final Set<String> permissionSetNames) {
+		final Map<String, Set<String>> productRoles) {
 
 		// Ensure current user does not lose admin permissions
 		Set<Id> uIds = verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit);
 		return DB.deletePermissionSetAssignments(uIds, new Set<Id>(getPermissionSetMap().values()))
-			&& DB.upsertPermissionSetAssignments(uIds, getPermissionSetIds(permissionSetNames));
+			&& DB.upsertPermissionSetAssignments(uIds, getPermissionSetIds(getPermissionSetNames(productRoles)));
 	}
 }

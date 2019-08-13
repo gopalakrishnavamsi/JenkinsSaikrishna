@@ -236,4 +236,13 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to Add Agreement in Salesforce');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean externalReviewOnBehalfOfRequest(final String comment, final String newVersionUrl, final String documentId) {
+		try {
+			return NegotiateService.externalReviewCompleteOnBehalf(comment, newVersionUrl != '' ? new Url(newVersionUrl) : null, UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to complete External Review Request');
+		}
+	}
 }

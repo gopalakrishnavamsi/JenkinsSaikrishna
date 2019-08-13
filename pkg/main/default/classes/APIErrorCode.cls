@@ -30,4 +30,5 @@ public class APIErrorCode {
 	public static final Integer INVALID_RECIPIENT = 1016;
 	public static final Integer CONSENT_REQUIRED = 1017;
 	public static final Integer INVALID_GRANT = 1018;
+	public static final Integer INVALID_OPERATION = 1019;
 }

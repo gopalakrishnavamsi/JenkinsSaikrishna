@@ -4114,12 +4114,60 @@
 		<name>Inactive</name>
 	</customLabels>
 	<customLabels>
+		<label>Sender</label>
+		<name>Sender</name>
+	</customLabels>
+	<customLabels>
+		<label>Generator</label>
+		<name>Generator</name>
+	</customLabels>
+	<customLabels>
+		<label>Negotiator</label>
+		<name>Negotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>Administrator</label>
+		<name>Administrator</name>
+	</customLabels>
+	<customLabels>
+		<label>User</label>
+		<name>User</name>
+	</customLabels>
+	<customLabels>
+		<label>Viewer</label>
+		<name>Viewer</name>
+	</customLabels>
+	<customLabels>
+		<label>Role managed by DocuSign for Salesforce</label>
+		<name>ProductRoleDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>One or more products are unsupported.</label>
+		<name>UnsupportedProducts</name>
+	</customLabels>
+	<customLabels>
+		<label>One or more product roles are unsupported.</label>
+		<name>UnsupportedProductRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid product role.</label>
+		<name>InvalidProductRole</name>
+	</customLabels>
+	<customLabels>
 		<label>Failed to trigger document comparison task.</label>
 		<name>FailedToTriggerDocumentComparisonTask</name>
 	</customLabels>
 	<customLabels>
 		<label>Invalid input parameters for comparing Agreement versions.</label>
 		<name>InvalidInputsAgreementComparison</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement external review on behalf of completed.</label>
+		<name>AgreementExternalReviewOnBehalfOfSucess</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement external review on behalf of has failed.</label>
+		<name>AgreementExternalReviewOnBehalfOfFailed</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

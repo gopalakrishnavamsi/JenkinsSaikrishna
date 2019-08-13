@@ -6348,6 +6348,20 @@
 		<value>Agreement Export failed. Please try again.</value>
 	</labels>
 	<labels>
+		<fullName>AgreementExternalReviewOnBehalfOfSucess</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExternalReviewOnBehalfOfSucess</shortDescription>
+		<value>Agreement external review on behalf of completed.</value>
+	</labels>
+	<labels>
+		<fullName>AgreementExternalReviewOnBehalfOfFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
+		<value>Agreement external review on behalf of has failed.</value>
+	</labels>
+	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7710,6 +7724,76 @@
 		<protected>true</protected>
 		<shortDescription>Inactive</shortDescription>
 		<value>Inactive</value>
+	</labels>
+	<labels>
+		<fullName>Sender</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sender</shortDescription>
+		<value>Sender</value>
+	</labels>
+	<labels>
+		<fullName>Generator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Generator</shortDescription>
+		<value>Generator</value>
+	</labels>
+	<labels>
+		<fullName>Negotiator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiator</shortDescription>
+		<value>Negotiator</value>
+	</labels>
+	<labels>
+		<fullName>Administrator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Administrator</shortDescription>
+		<value>Administrator</value>
+	</labels>
+	<labels>
+		<fullName>User</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>User</shortDescription>
+		<value>User</value>
+	</labels>
+	<labels>
+		<fullName>Viewer</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Viewer</shortDescription>
+		<value>Viewer</value>
+	</labels>
+	<labels>
+		<fullName>ProductRoleDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Role Description</shortDescription>
+		<value>Role managed by DocuSign for Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>UnsupportedProducts</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unsupported products</shortDescription>
+		<value>One or more products are unsupported.</value>
+	</labels>
+	<labels>
+		<fullName>UnsupportedProductRoles</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unsupported product roles</shortDescription>
+		<value>One or more product roles are unsupported.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidProductRole</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid product role</shortDescription>
+		<value>Invalid product role.</value>
 	</labels>
 	<labels>
 		<fullName>FailedToTriggerDocumentComparisonTask</fullName>

@@ -1743,19 +1743,154 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_replacePermissionSets_empty() {
+	static void test_getESignaturePermissionSets_success() {
 		Test.startTest();
-		System.assert(!Permissions.replacePermissionSets(null, null));
-		System.assert(!Permissions.replacePermissionSets(new Set<Id>(), new Set<String>()));
-		System.assert(!Permissions.replacePermissionSets(null, new Set<String> { Permissions.CLM_VIEWER }));
-		System.assert(!Permissions.replacePermissionSets(new Set<Id>(), new Set<String> { Permissions.CLM_VIEWER }));
-		System.assert(!Permissions.replacePermissionSets(new Set<Id> { UserInfo.getUserId() }, null));
-		System.assert(!Permissions.replacePermissionSets(new Set<Id> { UserInfo.getUserId() }, new Set<String>()));
+		Set<String> result1 = Permissions.getESignaturePermissionSets(new Set<String> {
+			ESignatureProduct.ROLE_ADMINISTRATOR, ESignatureProduct.ROLE_USER, ESignatureProduct.ROLE_SENDER
+		});
+		Set<String> result2 = Permissions.getESignaturePermissionSets(null);
+		Test.stopTest();
+
+		System.assertEquals(new Set<String> {
+			Permissions.DOCUSIGN_SENDER, Permissions.DOCUSIGN_USER, Permissions.DOCUSIGN_ADMINISTRATOR
+		}, result1);
+		System.assertEquals(new Set<String>(), result2);
+	}
+
+	@IsTest
+	static void test_getESignaturePermissionSets_failure() {
+		Test.startTest();
+		try {
+			Permissions.getESignaturePermissionSets(new Set<String> { GenProduct.ROLE_GENERATOR });
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProductRoles, ex.getMessage());
+		}
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_replacePermissionSets_non_clm() {
+	static void test_getGenPermissionSets_success() {
+		Test.startTest();
+		Set<String> result1 = Permissions.getGenPermissionSets(new Set<String> {
+			GenProduct.ROLE_GENERATOR
+		});
+		Set<String> result2 = Permissions.getGenPermissionSets(null);
+		Test.stopTest();
+
+		System.assertEquals(new Set<String> {
+			Permissions.DOCUSIGN_GENERATOR
+		}, result1);
+		System.assertEquals(new Set<String>(), result2);
+	}
+
+	@IsTest
+	static void test_getGenPermissionSets_failure() {
+		Test.startTest();
+		try {
+			Permissions.getGenPermissionSets(new Set<String> { NegotiateProduct.ROLE_NEGOTIATOR });
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProductRoles, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getNegotiatePermissionSets_success() {
+		Test.startTest();
+		Set<String> result1 = Permissions.getNegotiatePermissionSets(new Set<String> {
+			NegotiateProduct.ROLE_NEGOTIATOR
+		});
+		Set<String> result2 = Permissions.getNegotiatePermissionSets(null);
+		Test.stopTest();
+
+		System.assertEquals(new Set<String> {
+			Permissions.DOCUSIGN_NEGOTIATOR
+		}, result1);
+		System.assertEquals(new Set<String>(), result2);
+	}
+
+	@IsTest
+	static void test_getNegotiatePermissionSets_failure() {
+		Test.startTest();
+		try {
+			Permissions.getNegotiatePermissionSets(new Set<String> { ClmProduct.ROLE_ADMINISTRATOR });
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProductRoles, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getClmPermissionSets_success() {
+		Test.startTest();
+		Set<String> result1 = Permissions.getClmPermissionSets(new Set<String> {
+			ClmProduct.ROLE_ADMINISTRATOR, ClmProduct.ROLE_USER, ClmProduct.ROLE_VIEWER
+		});
+		Set<String> result2 = Permissions.getClmPermissionSets(null);
+		Test.stopTest();
+
+		System.assertEquals(new Set<String> {
+			Permissions.CLM_VIEWER, Permissions.CLM_USER, Permissions.CLM_ADMINISTRATOR
+		}, result1);
+		System.assertEquals(new Set<String>(), result2);
+	}
+
+	@IsTest
+	static void test_getClmPermissionSets_failure() {
+		Test.startTest();
+		try {
+			Permissions.getClmPermissionSets(new Set<String> { ESignatureProduct.ROLE_SENDER });
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProductRoles, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getPermissionSetNames_success() {
+		Test.startTest();
+		Set<String> result = Permissions.getPermissionSetNames(new Map<String, Set<String>> {
+			Product.ESIGNATURE => new Set<String> { ESignatureProduct.ROLE_USER },
+			Product.GEN => new Set<String> { GenProduct.ROLE_GENERATOR }
+		});
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, result.size());
+	}
+
+	@IsTest
+	static void test_getPermissionSetNames_failure() {
+		Test.startTest();
+		try {
+			Permissions.getPermissionSetNames(new Map<String, Set<String>> {
+				'foo' => new Set<String> { 'bar' }
+			});
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProducts, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_replaceRoles_empty() {
+		Test.startTest();
+		System.assert(!Permissions.replaceRoles(null, null));
+		System.assert(!Permissions.replaceRoles(new Set<Id>(), new Map<String, Set<String>>()));
+		System.assert(!Permissions.replaceRoles(null, new Map<String, Set<String>> { Product.CLM => new Set<String> { Permissions.CLM_VIEWER } }));
+		System.assert(!Permissions.replaceRoles(new Set<Id>(), new Map<String, Set<String>> { Product.CLM => new Set<String> { Permissions.CLM_VIEWER } }));
+		System.assert(!Permissions.replaceRoles(new Set<Id> { UserInfo.getUserId() }, null));
+		System.assert(!Permissions.replaceRoles(new Set<Id> { UserInfo.getUserId() }, new Map<String, Set<String>>()));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_replaceRoles_non_clm() {
 		User dsAdmin = UserMock.createDocuSignAdministrator(false);
 		User dsUser = UserMock.createDocuSignAdministrator(false);
 		User dsSender = UserMock.createDocuSignAdministrator(false);
@@ -1765,11 +1900,15 @@ private class PermissionsTest {
 
 		System.runAs(UserMock.getAdministrator()) {
 			Test.startTest();
-			System.assert(Permissions.replacePermissionSets(new Set<Id> {
+			System.assert(Permissions.replaceRoles(new Set<Id> {
 				dsAdmin.Id, dsUser.Id, dsSender.Id, dsGenerator.Id, dsNegotiator.Id, nonDSUser.Id
-			}, new Set<String> {
-				Permissions.DOCUSIGN_USER,
-				Permissions.DOCUSIGN_NEGOTIATOR
+			}, new Map<String, Set<String>> {
+				Product.ESIGNATURE => new Set<String> {
+					ESignatureProduct.ROLE_USER
+				},
+				Product.NEGOTIATE => new Set<String> {
+					NegotiateProduct.ROLE_NEGOTIATOR
+				}
 			}));
 			Test.stopTest();
 		}
@@ -1807,7 +1946,7 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_replacePermissionSets_clm() {
+	static void test_replaceRoles_clm() {
 		User clmAdmin = UserMock.createClmAdministrator(false);
 		User clmSub = UserMock.createClmUser(false);
 		User clmGuest = UserMock.createClmViewer(false);
@@ -1815,11 +1954,13 @@ private class PermissionsTest {
 
 		System.runAs(UserMock.getAdministrator()) {
 			Test.startTest();
-			System.assert(Permissions.replacePermissionSets(new Set<Id> {
+			System.assert(Permissions.replaceRoles(new Set<Id> {
 				clmAdmin.Id, clmSub.Id, clmGuest.Id, nonClmUser.Id
-			}, new Set<String> {
-				Permissions.CLM_VIEWER,
-				Permissions.CLM_USER
+			}, new Map<String, Set<String>> {
+				Product.CLM => new Set<String> {
+					ClmProduct.ROLE_VIEWER,
+					ClmProduct.ROLE_USER
+				}
 			}));
 			Test.stopTest();
 		}
@@ -1864,15 +2005,18 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_replacePermissionSets_filter_not_current_user() {
+	static void test_replaceRoles_filter_not_current_user() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			User u1 = UserMock.createDocuSignAdministrator(false);
 			User u2 = UserMock.createClmUser(false);
 
 			Test.startTest();
-			System.assert(Permissions.replacePermissionSets(
+			System.assert(Permissions.replaceRoles(
 				new Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id },
-				new Set<String> { Permissions.DOCUSIGN_NEGOTIATOR, Permissions.CLM_VIEWER }));
+				new Map<String, Set<String>> {
+					Product.NEGOTIATE => new Set<String> { NegotiateProduct.ROLE_NEGOTIATOR },
+					Product.CLM => new Set<String> { ClmProduct.ROLE_VIEWER }
+				}));
 			Test.stopTest();
 
 			System.assertEquals(1, Collection.size([

@@ -1,5 +1,9 @@
 public class ESignatureProduct extends Product {
 
+	public static final String ROLE_ADMINISTRATOR = 'Administrator';
+	public static final String ROLE_USER = 'User';
+	public static final String ROLE_SENDER = 'Sender';
+
 	public enum Feature { MergeFields, Templates, SigningGroups, SmsAuthentication, BulkSending }
 
 	public Set<Feature> features { get; private set; }
