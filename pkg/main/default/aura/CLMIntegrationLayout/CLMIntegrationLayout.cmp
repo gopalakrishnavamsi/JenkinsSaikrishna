@@ -1,10 +1,10 @@
-<aura:component extends="c:CLMUtility">
+<aura:component extends="c:CLMUtility" controller="CLMApexUtility">
     <ltng:require scripts="{!$Resource.navUtils}" />
 
     <!--handler-->
     <aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}" />
     <aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}" />
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
     <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"  action="{!c.onSecondaryButtonClick}" />
     
@@ -49,8 +49,8 @@
         <aura:if isTrue="{!v.showTrouble}">
             <lightning:layoutItem size="12" padding="around-small">
                 <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required" buttonName="{!$Label.c.ConfigureLayouts}"
-                           showIcon="true" secondButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
-                           summary="{!$Label.c.ConfigureObjectPageLayoutInfo}"/>
+                    showIcon="true" secondButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
+                    summary="{!$Label.c.ConfigureObjectPageLayoutInfo}" />
             </lightning:layoutItem>
         </aura:if>
         <aura:if isTrue="{!v.showHelp}">
