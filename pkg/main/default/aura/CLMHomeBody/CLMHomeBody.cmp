@@ -1,4 +1,4 @@
-<aura:component extends="c:CLMUtility">
+<aura:component extends="c:CLMUtility" controller="CLMApexUtility">
     <ltng:require scripts="{!$Resource.navUtils}" />
 
     <!--event handlers-->
