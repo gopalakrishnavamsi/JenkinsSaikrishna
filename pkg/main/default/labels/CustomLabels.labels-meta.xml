@@ -6360,7 +6360,7 @@
 		<protected>true</protected>
 		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
 		<value>Agreement external review on behalf of has failed.</value>
-    </labels>
+	</labels>
 	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
