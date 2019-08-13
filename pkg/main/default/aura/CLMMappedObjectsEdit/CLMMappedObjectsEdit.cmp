@@ -1,78 +1,77 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!--component dependencys-->
-    
+
     <aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMMappingObjectNaming" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMFolderExample" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMSelectingFields" type="COMPONENT"/>
-    	
+
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
     <aura:registerEvent name="CLMPathEvent" type="c:CLMPathEvent" />
-    <aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+    <aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
     <aura:registerEvent name="CLMModelFooterButtonPrimaryBtn_disable" type="c:strike_evt"/>
     <aura:registerEvent name="CLMModelFooterButtonPrimaryBtn_enable" type="c:strike_evt"/>
     <!--event handler-->
-    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />    
+    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}"/>
     <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
-                  action="{!c.handleConfirm}" />
-    <aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-    <aura:handler name="CLMMappingObjectEvent_UpdateName" event="c:CLMMappingObjectEvent" action="{!c.updateTextFromModel}" />
+                  action="{!c.handleConfirm}"/>
+    <aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
+    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
+    <aura:handler name="CLMMappingObjectEvent_UpdateName" event="c:CLMMappingObjectEvent"
+                  action="{!c.updateTextFromModel}"/>
     <!--place holder attributes-->
-    <aura:attribute name="title" type="String" default="{!$Label.c.MapEditObjectsTitle}" />
-    <aura:attribute name="titleHelpText" type="String" default="{!$Label.c.MapEditObjectsTitleHelpText}" />
+    <aura:attribute name="title" type="String" default="{!$Label.c.MapEditObjectsTitle}"/>
+    <aura:attribute name="titleHelpText" type="String" default="{!$Label.c.MapEditObjectsTitleHelpText}"/>
     <aura:attribute name="currentStep" type="String" default="1" />
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
     <!--internal attributes-->
     <aura:attribute name="allObjects" type="List" access="private" />
     <aura:attribute name="allObjectsList" type="List" access="private" />
-    
-    <aura:attribute name="allObjectFields" type="List" access="private" />
-    <aura:attribute name="allObjectFieldsList" type="List" access="private" />
-    
-    <aura:attribute name="SelectedObjDetails" type="Object" access="private" />
-   
-    
-    <aura:attribute name="SelectedObjFieldName" default="" type="String" access="private" />
-    
-    <aura:attribute name="SelectedFolderParentExample" type="String" default="Other Sources" access="private" />
-    <aura:attribute name="SelectedFolderExample" default="Salesforce" type="String" access="private" />
-    
-    <aura:attribute name="clmFolderTree" type="List"  access='private'/>
-    <aura:attribute name="pathInCLM" default="" type="String" access="private" />
-    
-    
-    <aura:attribute name="isAddSubfolder" type="Boolean" default="true" access="private" />
-    <aura:attribute name="isRenamefolder" type="Boolean" default="true" access="private" />
-    <aura:attribute name="isDeletefolder" type="Boolean" default="true" access="private" />
-  
-    
-     <!--model attributes-->
-    <aura:attribute name="modelValueHolder"  type="Object" access="private" />
-    <aura:attribute name="modelTitleText" type="String" access="private" />
-    <aura:attribute name="modelbody" type="Aura.Component[]" default="" />
-    <aura:attribute name="modelSecondaryButtonText" type="String" access="private" />
-    <aura:attribute name="modelPrimaryButtonText" type="String" access="private" />
-    <aura:attribute name="showModal" type="Boolean" default="false" access="private" />
-    <aura:attribute name="isRemove" type="Boolean" default="false" access="private" />		
+
+    <aura:attribute name="allObjectFields" type="List" access="private"/>
+    <aura:attribute name="allObjectFieldsList" type="List" access="private"/>
+
+    <aura:attribute name="SelectedObjDetails" type="Object" access="private"/>
+
+
+    <aura:attribute name="SelectedObjFieldName" default="" type="String" access="private"/>
+
+    <aura:attribute name="SelectedFolderParentExample" type="String" default="Other Sources" access="private"/>
+    <aura:attribute name="SelectedFolderExample" default="Salesforce" type="String" access="private"/>
+
+    <aura:attribute name="clmFolderTree" type="List" access='private'/>
+    <aura:attribute name="pathInCLM" default="" type="String" access="private"/>
+
+
+    <aura:attribute name="isAddSubfolder" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isRenamefolder" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isDeletefolder" type="Boolean" default="true" access="private"/>
+
+
+    <!--model attributes-->
+    <aura:attribute name="modelValueHolder" type="Object" access="private"/>
+    <aura:attribute name="modelTitleText" type="String" access="private"/>
+    <aura:attribute name="modelbody" type="Aura.Component[]" default=""/>
+    <aura:attribute name="modelSecondaryButtonText" type="String" access="private"/>
+    <aura:attribute name="modelPrimaryButtonText" type="String" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isRemove" type="Boolean" default="false" access="private"/>
     <aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]"/>
     <!--child components-->
     <aura:if isTrue="{!v.showModal}">
-        <c:strike_modal aura:id="popupModel" 
-                        footerButtons="{!v.strikeModelFooterButtons}" 
-                        body="{!v.modelbody}" 
+        <c:strike_modal aura:id="popupModel"
+                        footerButtons="{!v.strikeModelFooterButtons}"
+                        body="{!v.modelbody}"
                         title="{!v.modelTitleText}"
                         size="large"
-                        primaryButtonLabel="{!v.modelPrimaryButtonText}" 
-                        secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
+                        primaryButtonLabel="{!v.modelPrimaryButtonText}"
+                        secondaryButtonLabel="{!v.modelSecondaryButtonText}"/>
     </aura:if>
-    
-    
-    
-    
+
+
     <div class="slds-card__body  slds-p-left_x-large slds-p-right_x-large">
         <div class="slds-border_top">
             <lightning:layout multipleRows="true">
@@ -95,20 +94,26 @@
                             </div>
                         </aura:if>
                         <aura:if isTrue="{!v.currentStep=='2'}">
-                            <lightning:input onchange="{!c.validateFieldSelection}" name="fileName" label="{!$Label.c.SelectFieldToNameTheFolder}" value="{!v.SelectedObjFieldName}" />
+                            <lightning:input onchange="{!c.validateFieldSelection}" name="fileName"
+                                             label="{!$Label.c.SelectFieldToNameTheFolder}"
+                                             value="{!v.SelectedObjFieldName}"/>
                             <div class="slds-grid">
                                 <div>
-                                    <lightning:button variant="base" label="{!$Label.c.WhyAmISelectingFields}" title="{!$Label.c.WhyAmISelectingFields}" onclick="{!c.openWhyExample}"/>
+                                    <lightning:button variant="base" label="{!$Label.c.WhyAmISelectingFields}"
+                                                      title="{!$Label.c.WhyAmISelectingFields}"
+                                                      onclick="{!c.openWhyExample}"/>
                                 </div>
                                 <aura:if isTrue="{!if(empty(v.SelectedObjFieldName),'false','true')}">
                                     <div class="slds-col_bump-left">
-                                        <lightning:button variant="base" label="{!$Label.c.SeeExample}" title="{!$Label.c.SeeExample}" onclick="{!c.openSeeExample}" />
+                                        <lightning:button variant="base" label="{!$Label.c.SeeExample}"
+                                                          title="{!$Label.c.SeeExample}" onclick="{!c.openSeeExample}"/>
                                     </div>
                                 </aura:if>
                             </div>
                         </aura:if>
                         <aura:if isTrue="{!v.currentStep=='3'}">
-                            <b>{!$Label.c.PathInDocuSignCLM}</b><span class="slds-p-left_medium blue-text-color">{!v.pathInCLM}</span>
+                            <b>{!$Label.c.PathInDocuSignCLM}</b><span
+                                class="slds-p-left_medium blue-text-color">{!v.pathInCLM}</span>
                         </aura:if>
                         
                     </div>
@@ -120,11 +125,12 @@
                             <aura:if isTrue="{!v.currentStep=='1'}">
                                 <ul class="slds-tree" role="tree">
                                     <aura:iteration items="{!v.allObjectsList}" var="data">
-                                        <li aria-level="1" id="{!data.name}" role="treeitem" tabindex="{! data.selected ? '0':'-1'}" onclick="{!c.onObjSelection}">
+                                        <li aria-level="1" id="{!data.name}" role="treeitem"
+                                            tabindex="{! data.selected ? '0':'-1'}" onclick="{!c.onObjSelection}">
                                             <div class="{! data.selected ? 'ds-blue-icon slds-tree__item':'slds-tree__item'}">
                                                 <lightning:icon size="x-small" iconName="{! data.selected ? 'utility:check':'utility:open_folder'}" alternativeText="open_folder" />
                                                 <span class="slds-p-left_small slds-has-flexi-truncate">
-                                                    {!data.label}
+                                                        {!data.label}
                                                 </span>
                                             </div>
                                         </li>
@@ -134,35 +140,50 @@
                             <aura:if isTrue="{!v.currentStep=='2'}">
                                 <div class="slds-box slds-p-around_none">
                                     <div class="slds-p-bottom_small" onkeyup="{! c.handleSearchField }">
-                                        <lightning:input aura:id="search-field" placeholder="Search Fields" type="search" variant="label-hidden" />
+                                        <lightning:input aura:id="search-field" placeholder="Search Fields"
+                                                         type="search" variant="label-hidden"/>
                                     </div>
                                     <ul class="slds-tree" role="tree">
                                         <aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
-                                            <li  aria-expanded="{!objectData.selected}" aria-level="1" id="{!objectData.name}" role="treeitem" onclick="{!c.onObjFolderSelection}">
+                                            <li aria-expanded="{!objectData.selected}" aria-level="1"
+                                                id="{!objectData.name}" role="treeitem"
+                                                onclick="{!c.onObjFolderSelection}">
                                                 <div class="slds-tree__item">
-                                                    <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="{!objectData.selected?'utility:down':'utility:right'}" alternativeText="open" />
-                                                    <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                    <lightning:icon size="x-small" class="slds-p-left_xx-small"
+                                                                    iconName="{!objectData.selected?'utility:down':'utility:right'}"
+                                                                    alternativeText="open"/>
+                                                    <lightning:icon size="x-small" class="slds-p-left_xx-small"
+                                                                    iconName="utility:open_folder"
+                                                                    alternativeText="open_folder"/>
                                                     <span class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
-                                                        {!objectData.label} 
+                                                            {!objectData.label}
                                                     </span>
                                                 </div>
                                                 <ul role="group" class="slds-p-left_medium">
                                                     <aura:iteration items="{!objectData.fields}" var="fieldData">
-                                                        <li class="ds-parent-hover" aria-level="2"  id="{!fieldData.name}" role="treeitem" onclick="{!c.onObjFieldSelection}">
+                                                        <li class="ds-parent-hover" aria-level="2"
+                                                            id="{!fieldData.name}" role="treeitem"
+                                                            onclick="{!c.onObjFieldSelection}">
                                                             <div class="slds-grid slds-tree__item">
-                                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:topic2" alternativeText="open_folder" />
+                                                                <lightning:icon size="x-small"
+                                                                                class="slds-p-left_xx-small"
+                                                                                iconName="utility:topic2"
+                                                                                alternativeText="open_folder"/>
                                                                 <span class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
-                                                                    {!fieldData.label} 
+                                                                        {!fieldData.label}
                                                                 </span>
                                                                 <div class="slds-col_bump-left ds-hover slds-p-right_small">
-                                                                    <lightning:button variant="base" class="ds-no-extra-height" label="Click to add" title="Click to add" />
+                                                                    <lightning:button variant="base"
+                                                                                      class="ds-no-extra-height"
+                                                                                      label="Click to add"
+                                                                                      title="Click to add"/>
                                                                 </div>
                                                             </div>
                                                         </li>
                                                     </aura:iteration>
                                                 </ul>
                                             </li>
-                                            
+
                                         </aura:iteration>
                                     </ul>
                                 </div>
@@ -170,25 +191,36 @@
                             <aura:if isTrue="{!v.currentStep=='3'}">
                                 <div class="slds-grid slds-m-around_x-small ">
                                     <div class="slds-col_bump-left">
-                                      
-                                            <lightning:button label="Add Subfolder" onclick="{!c.addSubfolder}" iconName="utility:add" iconPosition="right" disabled="{!v.isAddSubfolder}" />
-                                            <lightning:button label="Rename" onclick="{!c.renameSubfolder}" iconName="utility:edit" iconPosition="right" disabled="{!v.isRenamefolder}"/> 
-                                            <lightning:button label="Delete" onclick="{!c.deleteSubfolder}" iconName="utility:delete" iconPosition="right" variant="destructive" disabled="{!v.isDeletefolder}" />
-                                      
+
+                                        <lightning:button label="Add Subfolder" onclick="{!c.addSubfolder}"
+                                                          iconName="utility:add" iconPosition="right"
+                                                          disabled="{!v.isAddSubfolder}"/>
+                                        <lightning:button label="Rename" onclick="{!c.renameSubfolder}"
+                                                          iconName="utility:edit" iconPosition="right"
+                                                          disabled="{!v.isRenamefolder}"/>
+                                        <lightning:button label="Delete" onclick="{!c.deleteSubfolder}"
+                                                          iconName="utility:delete" iconPosition="right"
+                                                          variant="destructive" disabled="{!v.isDeletefolder}"/>
+
                                     </div>
                                 </div>
                                 <div class="slds-grid">
                                     <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none">
                                         <div class="slds-p-around_medium slds-border_bottom">
-                                            {!$Label.c.YourDocuSignCLMFolders}
+                                                {!$Label.c.YourDocuSignCLMFolders}
                                         </div>
                                         <ul class="slds-tree slds-p-around_medium" role="tree">
                                             <aura:iteration items="{!v.clmFolderTree}" var="tree">
-                                                <li aria-expanded="true" aria-level="{!tree.level}" class="{!tree.selected?'ds-greay-background':''}" tabindex="{!tree.selected?'0':'-1'}" data-id="{!tree.id}" data-value="{!tree.type}"  onclick="{!c.onCLMfolderSelection}">
+                                                <li aria-expanded="true" aria-level="{!tree.level}"
+                                                    class="{!tree.selected?'ds-greay-background':''}"
+                                                    tabindex="{!tree.selected?'0':'-1'}" data-id="{!tree.id}"
+                                                    data-value="{!tree.type}" onclick="{!c.onCLMfolderSelection}">
                                                     <div class="{!tree.level==1?'ds-gray-folder slds-tree__item':tree.type=='tail'?'ds-blue-folder slds-tree__item':'ds-yellow-folder slds-tree__item'}">
-                                                        <lightning:icon size="x-small" class="slds-p-right_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                        <lightning:icon size="x-small" class="slds-p-right_xx-small"
+                                                                        iconName="utility:open_folder"
+                                                                        alternativeText="open_folder"/>
                                                         <span title="{!tree.name}" class=" slds-has-flexi-truncate">
-                                                            {!tree.name}
+                                                                {!tree.name}
                                                         </span>
                                                     </div>
                                                 </li>
@@ -197,22 +229,25 @@
                                     </div>
                                     <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none ">
                                         <div class="slds-p-around_medium slds-border_bottom">
-                                            {!v.SelectedFolderParentExample}&nbsp;{!$Label.c.FolderContents}
+                                        {!v.SelectedFolderParentExample}&nbsp;{!$Label.c.FolderContents}
                                         </div>
                                         <ul class="slds-tree slds-p-around_medium" role="tree">
-                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
+                                                id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
                                                 <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     {!v.SelectedFolderExample} Object 1
                                                 </span>
                                             </li>
-                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
+                                                id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
                                                 <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     {!v.SelectedFolderExample} Object 2
                                                 </span>
                                             </li>
-                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1" id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
+                                            <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
+                                                id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
                                                 <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     {!v.SelectedFolderExample} Object n
@@ -226,7 +261,7 @@
                                                 </div>
                                                 <div>
                                                     <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
-                                                        {!$Label.c.CaseFolderContentsHelp}
+                                                            {!$Label.c.CaseFolderContentsHelp}
                                                     </span>
                                                 </div>
                                             </li>
@@ -244,11 +279,13 @@
     <footer class="slds-modal__footer">
         <aura:if isTrue="{!v.currentStep=='1'}">
             <lightning:button label="Cancel" title="Cancel" onclick="{! c.back }" />
-            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!!v.SelectedObjDetails}" />
+            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }"
+                              disabled="{!!v.SelectedObjDetails}"/>
         </aura:if>
         <aura:if isTrue="{!v.currentStep=='2'}">
             <lightning:button label="Back" title="Back" onclick="{! c.back }" />
-            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }" disabled="{!if(empty(v.SelectedObjFieldName),'true','false')}" />
+            <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.gotNextStep }"
+                              disabled="{!if(empty(v.SelectedObjFieldName),'true','false')}"/>
         </aura:if>
         <aura:if isTrue="{!v.currentStep=='3'}">
             <lightning:button label="Back" title="Back" onclick="{! c.back }" />

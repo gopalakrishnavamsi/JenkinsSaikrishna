@@ -7638,7 +7638,9 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Case Folder Contents Helptext</shortDescription>
-		<value>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</value>
+		<value>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New
+			Account 1&apos;) will each have folder of their own in DocuSign CLM.
+		</value>
 	</labels>
 	<labels>
 		<fullName>WhyAmISelectingFields</fullName>
@@ -7688,7 +7690,7 @@
 		<shortDescription>Select field to name your folder</shortDescription>
 		<value>Select a field below to name your folder</value>
 	</labels>
-	<labels>		
+	<labels>
 		<fullName>MaximumBatchSizeExceeded_2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7777,6 +7779,20 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid product role</shortDescription>
-		<value>Invalid product role</value>
+		<value>Invalid product role.</value>
+	</labels>
+	<labels>
+		<fullName>FailedToTriggerDocumentComparisonTask</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FailedToTriggerDocumentComparisonTask</shortDescription>
+		<value>Failed to trigger document comparison task.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidInputsAgreementComparison</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InvalidInputsAgreementComparison</shortDescription>
+		<value>Invalid input parameters for comparing Agreement versions.</value>
 	</labels>
 </CustomLabels>

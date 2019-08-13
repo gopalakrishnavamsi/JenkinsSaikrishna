@@ -106,7 +106,7 @@ private class AccountProductsTest {
 
 		System.assertNotEquals(null, result);
 	}
-	
+
 	static AccountProducts newAccountProducts(final Map<String, Product> products) {
 		return new AccountProducts(products, null, null, false);
 	}

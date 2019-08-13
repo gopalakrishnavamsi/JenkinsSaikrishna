@@ -716,4 +716,5 @@ public with sharing class GenService {
 		Permissions.verifyIsDocuSignUser();
 		return DB.deleteContentDocument(contentVersionId);
 	}
+
 }

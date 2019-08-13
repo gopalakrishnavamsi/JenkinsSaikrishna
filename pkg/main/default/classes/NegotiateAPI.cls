@@ -4,6 +4,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_DOCUMENTS = 'documents';
 	public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
 	public static final String PATH_AGREEMENT_IN_SALESFORCE = 'salesforcecontentdocumentexporttasks';
+	public static final String PATH_AGREEMENT_COMPARE = 'documentcomparetasks';
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
 	public static final String PATH_HISTORY_ITEMS = 'historyitems';
@@ -17,6 +18,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
 	public static final Integer BUFFER_SOQL_LIMIT = 5;
+	public static final Integer API_RETRY_LIMIT = 25;
 
 	@TestVisible private Set<String> userEmails = new Set<String>();
 	@TestVisible private Set<String> contactEmails = new Set<String>();
@@ -508,6 +510,31 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	//Generate Task UUID for comparing two agreement versions
+	//originalDocumentHref -> the url for the current version of the agreement
+	//compareVersionHref -> the url for the version of the agreement which is to be compared with the current version of the agreement
+	public UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_AGREEMENT_COMPARE
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'OriginalDocument' => new APIDocument(originalDocumentHref),
+				'RevisedDocument' => new APIDocument(compareVersionHref)
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to trigger document comparison: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
 	@TestVisible
 	public class TaskStatus {
 		@AuraEnabled
@@ -530,7 +557,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' && count < 10) {
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -552,13 +579,41 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return result;
 	}
 
+	public NegotiateAPI.TaskStatus getCompareAgreementsStatus(final UUID taskId) {
+		String status = '';
+		Long count = 0;
+		UUID agreementId;
+		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
+
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
+
+			final RestAPI.Response response = get(
+				getBaseUrl(),
+				new List<Object> {
+					PATH_AGREEMENT_COMPARE, taskId
+				},
+				QueryString.empty,
+				getDefaultHeaders(),
+				RestAPI.defaultTimeout);
+			if (response.hasError) {
+				this.log.error('Failed to get status of comparison of Agreements - ' + taskId + ': ' + response.error);
+				throw new APIException(response.error);
+			}
+			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
+			status = result.status;
+			count += 1;
+		}
+
+		return result;
+	}
+
 	public NegotiateAPI.TaskStatus getExportAgreementToSalesforceStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
 		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Success' && count < 10) {
+		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -785,7 +840,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
-		while (status != 'Waiting' && status != 'Failed' && count < 10) {
+		while (status != 'Waiting' && status != 'Failed' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
 				getBaseUrl(),
@@ -1365,4 +1420,3 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 }
-

@@ -1,11 +1,13 @@
 .THIS .ds-click-pointer{
  color:   #006dcc        
 }
+
 .THIS .ds-crumb-item-pointer:before,
-.THIS .ds-crumb-item-pointer:before{
+.THIS .ds-crumb-item-pointer:before {
     top: -2px;
 }
-.THIS .ds-crumb-item-pointer span{
+
+.THIS .ds-crumb-item-pointer span {
     position: relative;
-    top:-2px;
+    top: -2px;
 }

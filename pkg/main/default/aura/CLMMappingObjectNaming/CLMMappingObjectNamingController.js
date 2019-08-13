@@ -3,7 +3,10 @@
     var SelectedObjDetails = component.get('v.selectedObjDetails');
     if (SelectedObjDetails && SelectedObjDetails.name) {
 
-      helper.callServer(component, 'c.getAllObjectFields', { apiName: SelectedObjDetails.name, isChild: false }, function (result) {
+      helper.callServer(component, 'c.getAllObjectFields', {
+        apiName: SelectedObjDetails.name,
+        isChild: false
+      }, function (result) {
         var allFields = [];
         allFields.push({
           name: SelectedObjDetails.name,
@@ -56,7 +59,10 @@
 
         folderData.selected = !folderData.selected;
         if (folderData.fields.length === 0 && folderData.selected === true) {
-          helper.callServer(component, 'c.getAllObjectFields', { apiName: folderData.name, isChild: true }, function (result) {
+          helper.callServer(component, 'c.getAllObjectFields', {
+            apiName: folderData.name,
+            isChild: true
+          }, function (result) {
             var allObjectFiledsListtemp = component.get('v.allObjectFiledsList');
             allObjectFiledsListtemp[index].fields = result;
             component.set('v.allObjectFileds', allObjectFiledsListtemp);
@@ -80,8 +86,7 @@
 
     if (folderName) {
       folderName += '{!' + SelectedObjDetails.label + '.' + label + '}';
-    }
-    else {
+    } else {
       folderName = '{!' + SelectedObjDetails.label + '.' + label + '}';
     }
 
@@ -92,7 +97,6 @@
   onchangeName: function (component, event, helper) {
     var queryTerm = component.find('search-fileName').get('v.value');
     helper.passModelText(component, queryTerm, helper);
-
 
 
   }
