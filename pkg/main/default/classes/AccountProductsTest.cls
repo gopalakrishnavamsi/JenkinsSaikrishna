@@ -656,4 +656,164 @@ private class AccountProductsTest {
 			System.assertNotEquals(null, AccountSettings__c.getInstance().ProductsCheckFrequency__c);
 		}
 	}
+
+	@IsTest
+	static void test_getRoles_empty() {
+		Test.startTest();
+		try {
+			AccountProducts.getRoles(null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AccountProducts.getRoles(new Set<String>());
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getRoles_unsupported_products() {
+		Test.startTest();
+		try {
+			AccountProducts.getRoles(new Set<String> { 'foo' });
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProducts, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_getRoles_uncached() {
+		RoleAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignSender()) {
+			ProductRoleSettings__c pr1 = new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.GEN, GenProduct.ROLE_GENERATOR),
+				IsAdministrator__c = false,
+				ProductName__c = Product.GEN,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = GenProduct.ROLE_GENERATOR);
+			insert pr1;
+
+			Test.startTest();
+			Map<String, List<Product.Role>> result = AccountProducts.getRoles(new Set<String> {
+				Product.GEN, Product.NEGOTIATE, Product.ESIGNATURE, Product.CLM
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<String> {
+				Product.GEN, Product.NEGOTIATE, Product.ESIGNATURE, Product.CLM
+			}, result.keySet());
+			System.assertNotEquals(null, result.get(Product.ESIGNATURE));
+			System.assertEquals(3, result.get(Product.ESIGNATURE).size());
+			System.assertNotEquals(null, result.get(Product.GEN));
+			System.assertEquals(1, result.get(Product.GEN).size());
+			System.assertNotEquals(null, result.get(Product.NEGOTIATE));
+			System.assertEquals(1, result.get(Product.NEGOTIATE).size());
+			System.assertNotEquals(null, result.get(Product.CLM));
+			System.assertEquals(3, result.get(Product.CLM).size());
+
+			for (String p : result.keySet()) {
+				for (Product.Role pr : result.get(p)) {
+					System.assert(Product.isValidRole(pr));
+				}
+			}
+
+			Map<String, ProductRoleSettings__c> pss = ProductRoleSettings__c.getAll();
+			System.assertNotEquals(null, pss);
+			System.assertEquals(8, pss.size());
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_USER)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.GEN, GenProduct.ROLE_GENERATOR)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.NEGOTIATE, NegotiateProduct.ROLE_NEGOTIATOR)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_ADMINISTRATOR)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_USER)));
+			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_VIEWER)));
+		}
+	}
+
+	@IsTest
+	static void test_getRoles_cached() {
+		insert new List<ProductRoleSettings__c> {
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR),
+				IsAdministrator__c = true,
+				ProductName__c = Product.ESIGNATURE,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ESignatureProduct.ROLE_ADMINISTRATOR),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_USER),
+				IsAdministrator__c = false,
+				ProductName__c = Product.ESIGNATURE,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ESignatureProduct.ROLE_USER),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER),
+				IsAdministrator__c = false,
+				ProductName__c = Product.ESIGNATURE,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ESignatureProduct.ROLE_SENDER),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.GEN, GenProduct.ROLE_GENERATOR),
+				IsAdministrator__c = false,
+				ProductName__c = Product.GEN,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = GenProduct.ROLE_GENERATOR),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.NEGOTIATE, NegotiateProduct.ROLE_NEGOTIATOR),
+				IsAdministrator__c = false,
+				ProductName__c = Product.NEGOTIATE,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = NegotiateProduct.ROLE_NEGOTIATOR),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_ADMINISTRATOR),
+				IsAdministrator__c = true,
+				ProductName__c = Product.CLM,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ClmProduct.ROLE_ADMINISTRATOR),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_USER),
+				IsAdministrator__c = false,
+				ProductName__c = Product.CLM,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ClmProduct.ROLE_USER),
+			new ProductRoleSettings__c(
+				Name = AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_VIEWER),
+				IsAdministrator__c = false,
+				ProductName__c = Product.CLM,
+				RoleId__c = UUID.randomUUID().toString(),
+				RoleName__c = ClmProduct.ROLE_VIEWER)
+		};
+
+		Test.startTest();
+		Map<String, List<Product.Role>> result = AccountProducts.getRoles(new Set<String> {
+			Product.GEN, Product.NEGOTIATE, Product.CLM, Product.ESIGNATURE
+		});
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new Set<String> {
+			Product.GEN, Product.NEGOTIATE, Product.ESIGNATURE, Product.CLM
+		}, result.keySet());
+		System.assertNotEquals(null, result.get(Product.ESIGNATURE));
+		System.assertEquals(3, result.get(Product.ESIGNATURE).size());
+		System.assertNotEquals(null, result.get(Product.GEN));
+		System.assertEquals(1, result.get(Product.GEN).size());
+		System.assertNotEquals(null, result.get(Product.NEGOTIATE));
+		System.assertEquals(1, result.get(Product.NEGOTIATE).size());
+		System.assertNotEquals(null, result.get(Product.CLM));
+		System.assertEquals(3, result.get(Product.CLM).size());
+
+		for (String p : result.keySet()) {
+			for (Product.Role pr : result.get(p)) {
+				System.assert(Product.isValidRole(pr));
+			}
+		}
+	}
 }

@@ -18,8 +18,23 @@ public abstract class Product {
 	 * DocuSign CLM product name.
 	 */
 	public static final String CLM = 'clm';
-	private static final Set<String> VALID_PRODUCTS = new Set<String> {
-		ESIGNATURE, GEN, NEGOTIATE, CLM
+	private static final Map<String, Set<String>> VALID_PRODUCT_ROLES = new Map<String, Set<String>> {
+		ESIGNATURE => new Set<String> {
+			ESignatureProduct.ROLE_ADMINISTRATOR.toLowerCase(),
+			ESignatureProduct.ROLE_USER.toLowerCase(),
+			ESignatureProduct.ROLE_SENDER.toLowerCase()
+		},
+		GEN => new Set<String> {
+			GenProduct.ROLE_GENERATOR.toLowerCase()
+		},
+		NEGOTIATE => new Set<String> {
+			NegotiateProduct.ROLE_NEGOTIATOR.toLowerCase()
+		},
+		CLM => new Set<String> {
+			ClmProduct.ROLE_ADMINISTRATOR.toLowerCase(),
+			ClmProduct.ROLE_USER.toLowerCase(),
+			ClmProduct.ROLE_VIEWER.toLowerCase()
+		}
 	};
 
 	/**
@@ -89,8 +104,24 @@ public abstract class Product {
 		this.trialExpires = trialExpires;
 	}
 
-	public static Boolean isValidProduct(final String productName) {
-		return String.isNotBlank(productName) && VALID_PRODUCTS.contains(productName.toLowerCase());
+	public static String getRoleLabel(final String role) {
+		switch on (role == null ? '' : role.toLowerCase()) {
+			when 'administrator' {
+				return Label.Administrator;
+			} when 'user' {
+				return Label.User;
+			} when 'viewer' {
+				return Label.Viewer;
+			} when 'negotiator' {
+				return Label.Negotiator;
+			} when 'generator' {
+				return Label.Generator;
+			} when 'sender' {
+				return Label.Sender;
+			} when else {
+				return role;
+			}
+		}
 	}
 
 	/**
@@ -103,11 +134,6 @@ public abstract class Product {
 		@AuraEnabled
 		public UUID id { get; private set; }
 		/**
-		 * The DocuSign ID of the group corresponding to the role.
-		 */
-		@AuraEnabled
-		public Long groupId { get; private set; }
-		/**
 		 * The product of the role.
 		 */
 		@AuraEnabled
@@ -116,7 +142,7 @@ public abstract class Product {
 		 * The name of the role.
 		 */
 		@AuraEnabled
-		public String name { get; private set; }
+		public String role { get; private set; }
 		/**
 		 * The localized label of the role, if it exists.
 		 */
@@ -132,26 +158,43 @@ public abstract class Product {
 		 * Constructs a product role.
 		 *
 		 * @param id The DocuSign ID of the role.
-		 * @param groupId The DocuSign ID of the group corresponding to the role.
 		 * @param product The product of the role.
-		 * @param name The name of the role.
+		 * @param role The name of the role.
 		 * @param label The localized label of the role, if it exists.
 		 * @param isAdministrator Whether the role is an administrator role.
 		 */
 		public Role(
 			final UUID id,
-			final Long groupId,
 			final String product,
-			final String name,
+			final String role,
 			final String label,
 			final Boolean isAdministrator) {
 
 			this.id = id;
-			this.groupId = groupId;
 			this.product = product;
-			this.name = name;
+			this.role = role;
 			this.label = label;
 			this.isAdministrator = isAdministrator;
 		}
+	}
+
+	public static Boolean isValidProduct(final String product) {
+		return String.isNotBlank(product)
+			&& VALID_PRODUCT_ROLES.containsKey(product.toLowerCase());
+	}
+
+	public static Boolean isValidRole(
+		final String product,
+		final String role) {
+
+		return isValidProduct(product)
+			&& String.isNotBlank(role)
+			&& VALID_PRODUCT_ROLES.get(product.toLowerCase()).contains(role.toLowerCase());
+	}
+
+	public static Boolean isValidRole(final Product.Role role) {
+		return role != null
+			&& UUID.isNotEmpty(role.id)
+			&& isValidRole(role.product, role.role);
 	}
 }

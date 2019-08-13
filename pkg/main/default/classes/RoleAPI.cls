@@ -35,24 +35,6 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			'Guest' => ClmProduct.ROLE_VIEWER
 		}
 	};
-	private static final Map<String, Set<String>> PRODUCT_ROLE_MAP = new Map<String, Set<String>> {
-		Product.ESIGNATURE => new Set<String> {
-			ESignatureProduct.ROLE_ADMINISTRATOR,
-			ESignatureProduct.ROLE_USER,
-			ESignatureProduct.ROLE_SENDER
-		},
-		Product.GEN => new Set<String> {
-			GenProduct.ROLE_GENERATOR
-		},
-		Product.NEGOTIATE => new Set<String> {
-			NegotiateProduct.ROLE_NEGOTIATOR
-		},
-		Product.CLM => new Set<String> {
-			ClmProduct.ROLE_ADMINISTRATOR,
-			ClmProduct.ROLE_USER,
-			ClmProduct.ROLE_VIEWER
-		}
-	};
 
 	private RoleAPI(
 		final Url baseUrl,
@@ -81,36 +63,17 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		public String source_product_name;
 		public Boolean is_admin;
 
-		public APIGroup(final Product.Role role) {
-			if (role != null) {
+		public APIGroup(
+			final Product.Role role,
+			final String groupId) {
+
+			if (role != null && String.isNotBlank(groupId)) {
 				this.ds_group_id = String.valueOf(role.id);
-				this.group_id = String.valueOf(role.groupId);
-				this.group_name = role.name;
+				this.group_id = groupId;
+				this.group_name = role.role;
 				this.description = Label.ProductRoleDescription;
 				this.source_product_name = role.product;
 				this.is_admin = role.isAdministrator == true;
-			}
-		}
-
-		@TestVisible
-		private String getRoleLabel() {
-			String role = this.group_name == null ? '' : this.group_name.toLowerCase();
-			switch on role {
-				when 'administrator' {
-					return Label.Administrator;
-				} when 'user' {
-					return Label.User;
-				} when 'viewer' {
-					return Label.Viewer;
-				} when 'negotiator' {
-					return Label.Negotiator;
-				} when 'generator' {
-					return Label.Generator;
-				} when 'sender' {
-					return Label.Sender;
-				} when else {
-					return this.group_name;
-				}
 			}
 		}
 
@@ -125,10 +88,9 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 			return new Product.Role(
 				UUID.tryParse(this.ds_group_id),
-				this.group_id == null ? null : Long.valueOf(this.group_id),
 				this.source_product_name.toLowerCase(),
 				this.group_name,
-				getRoleLabel(),
+				Product.getRoleLabel(this.group_name),
 				this.is_admin == true);
 		}
 
@@ -136,7 +98,6 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			if (groupRoles == null
 				|| String.isBlank(this.source_product_name)
 				|| String.isBlank(this.group_name)
-				|| String.isBlank(this.group_id)
 				|| !groupRoles.containsKey(this.group_name)) {
 
 				// Only add groups to which we have a role mapped
@@ -147,10 +108,9 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 			return new Product.Role(
 				UUID.tryParse(this.ds_group_id),
-				this.group_id == null ? null : Long.valueOf(this.group_id),
 				this.source_product_name.toLowerCase(),
 				groupRoles.get(this.group_name),
-				getRoleLabel(),
+				Product.getRoleLabel(this.group_name),
 				this.is_admin == true);
 		}
 	}
@@ -159,12 +119,12 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	private class APIGroups {
 		public List<APIGroup> groups;
 
-		public List<Product.Role> toExternalForm(final Map<String, String> groupRoles) {
-			List<Product.Role> result = new List<Product.Role>();
+		public Map<String, Product.Role> toExternalForm(final Map<String, String> groupRoles) {
+			Map<String, Product.Role> result = new Map<String, Product.Role>();
 			if (this.groups != null) {
 				for (APIGroup g : this.groups) {
 					Product.Role r = g.toExternalForm(groupRoles);
-					if (r != null) result.add(r);
+					if (r != null) result.put(g.group_id, r);
 				}
 			}
 			return result;
@@ -179,11 +139,11 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
 		if (Collection.isEmpty(products)) return result;
 
-		for (String product : products) {
-			if (PRODUCT_ROLE_MAP.containsKey(product)) {
-				result.put(product, new List<Product.Role>());
+		for (String p : products) {
+			if (Product.isValidProduct(p)) {
+				result.put(p.toLowerCase(), new List<Product.Role>());
 			} else {
-				this.log.warn('Unsupported product: ' + product);
+				this.log.warn('Unsupported product: ' + p);
 			}
 		}
 
@@ -194,21 +154,18 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			result.get(Product.ESIGNATURE).addAll(new List<Product.Role> {
 				new Product.Role(
 					ESIGNATURE_ADMINISTRATOR_ID,
-					-1L,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_ADMINISTRATOR,
 					Label.Administrator,
 					true),
 				new Product.Role(
 					ESIGNATURE_USER_ID,
-					-1L,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_USER,
 					Label.User,
 					false),
 				new Product.Role(
 					ESIGNATURE_SENDER_ID,
-					-1L,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_SENDER,
 					Label.Sender,
@@ -232,11 +189,11 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		APIGroups gs = ((APIGroups)JSON.deserialize(response.body, APIGroups.class));
 		if (gs != null && gs.groups != null) {
 			for (APIGroup g : gs.groups) {
-				String product = g.source_product_name == null ? '' : g.source_product_name.toLowerCase();
+				String p = g.source_product_name == null ? '' : g.source_product_name.toLowerCase();
 				// Only add if it's in the product role whitelist.
-				if (result.containsKey(product) && PRODUCT_ROLE_MAP.get(product).contains(g.group_name)) {
+				if (result.containsKey(p) && Product.isValidRole(p, g.group_name)) {
 					Product.Role r = g.toExternalForm();
-					if (r != null) result.get(product).add(r);
+					if (r != null) result.get(p).add(r);
 				}
 			}
 		}
@@ -247,14 +204,15 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	@TestVisible
 	private Product.Role createAccountRole(
 		final Product.Role role,
+		final String groupId,
 		final Integer timeout) {
 
-		if (role == null) return null;
+		if (role == null || String.isBlank(groupId)) return null;
 
 		RestAPI.Response response = this.post(
 			new List<Object> { 'dsgroups' },
 			QueryString.empty,
-			JSON.serialize(new APIGroup(role)),
+			JSON.serialize(new APIGroup(role, groupId)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to create account role: ' + response.error);
@@ -265,11 +223,11 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	}
 
 	@TestVisible
-	private List<Product.Role> getProductRoles(
+	private Map<String, Product.Role> getProductRoles(
 		final String product,
 		final Integer timeout) {
 
-		if (String.isBlank(product)) return new List<Product.Role>();
+		if (String.isBlank(product)) return new Map<String, Product.Role>();
 
 		RestAPI.Response response = this.get(
 			new List<Object> { 'products', product, 'groups' },
@@ -281,7 +239,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		}
 
 		return ((APIGroups)JSON.deserialize(response.body, APIGroups.class))
-			.toExternalForm(PRODUCT_GROUP_ROLE_MAP.get(product));
+			.toExternalForm(PRODUCT_GROUP_ROLE_MAP.get(product.toLowerCase()));
 	}
 
 	private static Set<String> getRoleDifference(
@@ -292,7 +250,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 		Set<String> crs = new Set<String>();
 		for (Product.Role r : currentRoles) {
-			if (r != null && r.name != null) crs.add(r.name);
+			if (r != null && r.role != null) crs.add(r.role);
 		}
 
 		return Collection.difference(expectedRoles, crs);
@@ -315,7 +273,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 		// Read any existing account roles.
 		Map<String, List<Product.Role>> result = this.getAccountRoles(products, timeout);
-		List<Product.Role> toCreate = new List<Product.Role>();
+		Map<String, Product.Role> toCreate = new Map<String, Product.Role>();
 		for (String product : result.keySet()) {
 			Set<String> expectedRoles = new Set<String>(PRODUCT_GROUP_ROLE_MAP.get(product).values());
 			List<Product.Role> currentRoles = result.get(product);
@@ -323,17 +281,20 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 			// Find product groups for roles that do not already exist on the account.
 			if (Collection.isNotEmpty(missingRoles)) {
-				for (Product.Role pr : this.getProductRoles(product, timeout)) {
-					if (pr != null && missingRoles.contains(pr.name)) {
-						toCreate.add(pr);
+				Map<String, Product.Role> prs = this.getProductRoles(product, timeout);
+				for (String groupId : prs.keySet()) {
+					Product.Role pr = prs.get(groupId);
+					if (pr != null && missingRoles.contains(pr.role)) {
+						toCreate.put(groupId, pr);
 					}
 				}
 			}
 		}
 
 		// Create account groups that don't already exist
-		for (Product.Role r : toCreate) {
-			result.get(r.product).add(this.createAccountRole(r, timeout));
+		for (String groupId : toCreate.keySet()) {
+			Product.Role pr = toCreate.get(groupId);
+			result.get(pr.product).add(this.createAccountRole(pr, groupId, timeout));
 		}
 
 		return result;

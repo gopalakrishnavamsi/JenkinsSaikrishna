@@ -4137,6 +4137,18 @@
 		<label>Role managed by DocuSign for Salesforce</label>
 		<name>ProductRoleDescription</name>
 	</customLabels>
+	<customLabels>
+		<label>One or more products are unsupported.</label>
+		<name>UnsupportedProducts</name>
+	</customLabels>
+	<customLabels>
+		<label>One or more product roles are unsupported.</label>
+		<name>UnsupportedProductRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid product role</label>
+		<name>InvalidProductRole</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

@@ -247,7 +247,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Set<String>());
+			}, new Map<String, Set<String>>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -281,7 +281,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Set<String>());
+			}, new Map<String, Set<String>>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -318,7 +318,12 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR, Permissions.DOCUSIGN_SENDER });
+			}, new Map<String, Set<String>> {
+				Product.ESIGNATURE => new Set<String> {
+					ESignatureProduct.ROLE_ADMINISTRATOR,
+					ESignatureProduct.ROLE_SENDER
+				}
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -549,10 +554,14 @@ private class UserServiceTest {
 			User u1 = UserMock.createClmAdministrator(false);
 			User u2 = UserMock.createDocuSignNegotiator(false);
 			User u3 = UserMock.createDocuSignSender(false);
-			
+
 			Test.startTest();
 			System.assert(UserService.updateUserRoles(new Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id, u3.Id },
-				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.CLM_VIEWER }));
+				new Map<String, Set<String>> {
+					Product.ESIGNATURE => new Set<String> { ESignatureProduct.ROLE_ADMINISTRATOR },
+					Product.GEN => new Set<String> { GenProduct.ROLE_GENERATOR },
+					Product.CLM => new Set<String> { ClmProduct.ROLE_VIEWER }
+				}));
 			Test.stopTest();
 
 			Set<String> psas = new Set<String>();
@@ -564,12 +573,15 @@ private class UserServiceTest {
 			]) {
 				psas.add(psa.AssigneeId + ':' + psa.PermissionSetId);
 			}
-			System.assertEquals(7, psas.size());
+			System.assertEquals(10, psas.size());
 			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
 			System.assert(psas.contains(u1.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
 			System.assert(psas.contains(u1.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
 			System.assert(psas.contains(u2.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
 			System.assert(psas.contains(u2.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
 			System.assert(psas.contains(u3.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
 			System.assert(psas.contains(u3.Id + ':' + Permissions.getClmViewerPermissionSetId()));
 		}
@@ -680,6 +692,56 @@ private class UserServiceTest {
 					ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRoles_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				UserService.getRoles(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRoles_undefined_argument() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				UserService.getRoles(null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				UserService.getRoles(new Set<String>());
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRoles_success() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Set<String> products = new Set<String> { Product.GEN, Product.NEGOTIATE };
+
+			Test.startTest();
+			Map<String, Set<String>> result = UserService.getRoles(products);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(products, result.keySet());
 		}
 	}
 }

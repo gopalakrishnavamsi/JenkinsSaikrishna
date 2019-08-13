@@ -75,35 +75,35 @@ public class RoleAPIMock extends OAuthTokenMock {
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
 				gs.groups = new List<RoleAPI.APIGroup>();
 				if (endpoint.contains('/clm/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '0';
 					g.group_name = 'Super Administrator';
 					g.description = 'Administrators!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '1';
 					g.group_name = 'Full Subscriber';
 					g.description = 'Users!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '2';
 					g.group_name = 'Guest';
 					g.description = 'Viewers!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '22';
 					g.group_name = 'Other Admin';
 					g.description = 'should ignore';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '33';
 					g.group_name = 'Other User';
 					g.description = 'should ignore';
@@ -111,7 +111,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else if (endpoint.contains('/gen/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '3';
 					g.group_name = 'Generator'; // TODO: Use final name when available
 					g.description = 'Generators!';
@@ -119,7 +119,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else if (endpoint.contains('/negotiate/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '4';
 					g.group_name = 'Negotiator'; // TODO: Use final name when available
 					g.description = 'Negotiator!';
@@ -127,7 +127,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '55';
 					g.group_name = 'Other';
 					g.description = 'should ignore';
@@ -141,7 +141,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				response.setStatus('OK');
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
 				gs.groups = new List<RoleAPI.APIGroup>();
-				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '0';
 				g.group_name = ClmProduct.ROLE_ADMINISTRATOR;
@@ -149,7 +149,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '1';
 				g.group_name = ClmProduct.ROLE_USER;
@@ -157,7 +157,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '2';
 				g.group_name = ClmProduct.ROLE_VIEWER;
@@ -165,7 +165,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '3';
 				g.group_name = GenProduct.ROLE_GENERATOR;
@@ -173,7 +173,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'gen';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '4';
 				g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
@@ -181,7 +181,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'negotiate';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '22';
 				g.group_name = 'Other Admins';
@@ -189,7 +189,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '33';
 				g.group_name = 'Other Users';
@@ -197,7 +197,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '44';
 				g.group_name = 'Others';

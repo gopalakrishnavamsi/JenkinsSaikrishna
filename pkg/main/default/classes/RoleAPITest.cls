@@ -15,42 +15,6 @@ private class RoleAPITest {
 	}
 
 	@IsTest
-	static void test_getRoleLabel() {
-		Test.startTest();
-		RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
-		g.group_name = null;
-		System.assertEquals(null, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = 'foo';
-		System.assertEquals('foo', g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ESignatureProduct.ROLE_ADMINISTRATOR;
-		System.assertEquals(Label.Administrator, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ESignatureProduct.ROLE_USER;
-		System.assertEquals(Label.User, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ESignatureProduct.ROLE_SENDER;
-		System.assertEquals(Label.Sender, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = GenProduct.ROLE_GENERATOR;
-		System.assertEquals(Label.Generator, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
-		System.assertEquals(Label.Negotiator, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ClmProduct.ROLE_ADMINISTRATOR;
-		System.assertEquals(Label.Administrator, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ClmProduct.ROLE_USER;
-		System.assertEquals(Label.User, g.getRoleLabel());
-		g = new RoleAPI.APIGroup(null);
-		g.group_name = ClmProduct.ROLE_VIEWER;
-		System.assertEquals(Label.Viewer, g.getRoleLabel());
-		Test.stopTest();
-	}
-
-	@IsTest
 	static void test_getAccountRoles_empty_products() {
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
@@ -158,11 +122,22 @@ private class RoleAPITest {
 	@IsTest
 	static void test_createAccountRole_undefined() {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
+			Product.Role pr = new Product.Role(
+				UUID.randomUUID(),
+				Product.GEN,
+				GenProduct.ROLE_GENERATOR,
+				Label.Generator,
+				false);
+
 			Test.startTest();
-			Product.Role result = RoleAPI.getInstance().createAccountRole(null, 30000);
+			Product.Role result1 = RoleAPI.getInstance().createAccountRole(null, '1234', 30000);
+			Product.Role result2 = RoleAPI.getInstance().createAccountRole(pr, null, 30000);
+			Product.Role result3 = RoleAPI.getInstance().createAccountRole(pr, ' ', 30000);
 			Test.stopTest();
 
-			System.assertEquals(null, result);
+			System.assertEquals(null, result1);
+			System.assertEquals(null, result2);
+			System.assertEquals(null, result3);
 		}
 	}
 
@@ -173,7 +148,6 @@ private class RoleAPITest {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Product.Role r = new Product.Role(
 				null,
-				TestUtils.randomInteger(100000),
 				UUID.randomUUID().toString(),
 				UUID.randomUUID().toString(),
 				UUID.randomUUID().toString(),
@@ -181,7 +155,7 @@ private class RoleAPITest {
 
 			Test.startTest();
 			try {
-				RoleAPI.getInstance().createAccountRole(r, 30000);
+				RoleAPI.getInstance().createAccountRole(r, '1234', 30000);
 				throw new AssertException('Expected failure');
 			} catch (APIException ex) {
 				System.assertEquals(APIError.badRequest, ex.error);
@@ -198,22 +172,20 @@ private class RoleAPITest {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Product.Role r = new Product.Role(
 				null,
-				TestUtils.randomInteger(100000),
 				UUID.randomUUID().toString(),
 				UUID.randomUUID().toString(),
 				UUID.randomUUID().toString(),
 				false);
 
 			Test.startTest();
-			Product.Role result = RoleAPI.getInstance().createAccountRole(r, 30000);
+			Product.Role result = RoleAPI.getInstance().createAccountRole(r, '1234', 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.id);
-			System.assertEquals(r.groupId, result.groupId);
 			System.assertEquals(r.product, result.product);
-			System.assertEquals(r.name, result.name);
-			System.assertEquals(r.name, result.label);
+			System.assertEquals(r.role, result.role);
+			System.assertEquals(r.role, result.label);
 			System.assertEquals(r.isAdministrator, result.isAdministrator);
 		}
 	}
@@ -222,7 +194,7 @@ private class RoleAPITest {
 	static void test_getProductRoles_undefined_product() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
-			List<Product.Role> result = RoleAPI.getInstance().getProductRoles(null, 30000);
+			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(null, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -253,10 +225,11 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
-			List<Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.GEN, 30000);
+			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.GEN, 30000);
 			Test.stopTest();
 
-			System.assertEquals(1, Collection.size(result));
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
 		}
 	}
 
@@ -266,10 +239,11 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			List<Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.NEGOTIATE, 30000);
+			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.NEGOTIATE, 30000);
 			Test.stopTest();
 
-			System.assertEquals(1, Collection.size(result));
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
 		}
 	}
 
@@ -279,10 +253,11 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
-			List<Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.CLM, 30000);
+			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.CLM, 30000);
 			Test.stopTest();
 
-			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result);
+			System.assertEquals(3, result.size());
 		}
 	}
 
@@ -292,7 +267,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			List<Product.Role> result = RoleAPI.getInstance().getProductRoles('other', 30000);
+			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles('other', 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -352,35 +327,35 @@ private class RoleAPITest {
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
 				gs.groups = new List<RoleAPI.APIGroup>();
 				if (endpoint.contains('/clm/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '0';
 					g.group_name = 'Super Administrator';
 					g.description = 'Administrators!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '1';
 					g.group_name = 'Full Subscriber';
 					g.description = 'Users!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '2';
 					g.group_name = 'Guest';
 					g.description = 'Viewers!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '22';
 					g.group_name = 'Other Admin';
 					g.description = 'should ignore';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-					g = new RoleAPI.APIGroup(null);
+					g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '33';
 					g.group_name = 'Other User';
 					g.description = 'should ignore';
@@ -388,7 +363,7 @@ private class RoleAPITest {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else if (endpoint.contains('/gen/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '3';
 					g.group_name = 'Generator'; // TODO: Use final name when available
 					g.description = 'Generators!';
@@ -396,7 +371,7 @@ private class RoleAPITest {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else if (endpoint.contains('/negotiate/')) {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '4';
 					g.group_name = 'Negotiator'; // TODO: Use final name when available
 					g.description = 'Negotiator!';
@@ -404,7 +379,7 @@ private class RoleAPITest {
 					g.is_admin = true;
 					gs.groups.add(g);
 				} else {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '55';
 					g.group_name = 'Other';
 					g.description = 'should ignore';
@@ -418,7 +393,7 @@ private class RoleAPITest {
 				response.setStatus('OK');
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
 				gs.groups = new List<RoleAPI.APIGroup>();
-				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null);
+				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '0';
 				g.group_name = ClmProduct.ROLE_ADMINISTRATOR;
@@ -426,7 +401,7 @@ private class RoleAPITest {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '2';
 				g.group_name = ClmProduct.ROLE_VIEWER;
@@ -434,7 +409,7 @@ private class RoleAPITest {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '4';
 				g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
@@ -442,7 +417,7 @@ private class RoleAPITest {
 				g.source_product_name = 'negotiate';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '22';
 				g.group_name = 'Other Admins';
@@ -450,7 +425,7 @@ private class RoleAPITest {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '33';
 				g.group_name = 'Other Users';
@@ -458,7 +433,7 @@ private class RoleAPITest {
 				g.source_product_name = 'clm';
 				g.is_admin = true;
 				gs.groups.add(g);
-				g = new RoleAPI.APIGroup(null);
+				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
 				g.group_id = '44';
 				g.group_name = 'Others';
@@ -489,11 +464,11 @@ private class RoleAPITest {
 			System.assertEquals(1, Collection.size(result.get(Product.GEN)));
 			System.assertNotEquals(null, result.get(Product.GEN)[0]);
 			System.assertNotEquals(null, result.get(Product.GEN)[0].id);
-			System.assertEquals(GenProduct.ROLE_GENERATOR, result.get(Product.GEN)[0].name);
+			System.assertEquals(GenProduct.ROLE_GENERATOR, result.get(Product.GEN)[0].role);
 			System.assertEquals(1, Collection.size(result.get(Product.NEGOTIATE)));
 			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0]);
 			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0].id);
-			System.assertEquals(NegotiateProduct.ROLE_NEGOTIATOR, result.get(Product.NEGOTIATE)[0].name);
+			System.assertEquals(NegotiateProduct.ROLE_NEGOTIATOR, result.get(Product.NEGOTIATE)[0].role);
 			System.assertEquals(3, Collection.size(result.get(Product.CLM)));
 			System.assertNotEquals(null, result.get(Product.CLM)[0]);
 			System.assertNotEquals(null, result.get(Product.CLM)[0].id);
@@ -506,7 +481,7 @@ private class RoleAPITest {
 					ClmProduct.ROLE_USER, ClmProduct.ROLE_ADMINISTRATOR, ClmProduct.ROLE_VIEWER
 				},
 				new Set<String> {
-					result.get(Product.CLM)[0].name, result.get(Product.CLM)[1].name, result.get(Product.CLM)[2].name
+					result.get(Product.CLM)[0].role, result.get(Product.CLM)[1].role, result.get(Product.CLM)[2].role
 				});
 		}
 	}

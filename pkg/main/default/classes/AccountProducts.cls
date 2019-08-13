@@ -8,7 +8,7 @@ public with sharing class AccountProducts {
 	@TestVisible
 	private static AccountProducts self = null;
 	private static final Integer DEFAULT_CHECK_FREQUENCY_MIN = 60; // 1 hour
-	private static final Set<String> validProductTrials = new Set<String> { Product.GEN, Product.NEGOTIATE };
+	private static final Set<String> VALID_PRODUCT_TRIALS = new Set<String> { Product.GEN, Product.NEGOTIATE };
 
 	@TestVisible
 	private static final Integer FLAG_MERGE_FIELDS = 1;
@@ -231,6 +231,64 @@ public with sharing class AccountProducts {
 			upsert toUpsert;
 			return products;
 		}
+
+		private Product.Role convert(final ProductRoleSettings__c pr) {
+			if (pr == null) return null;
+
+			return new Product.Role(
+				UUID.tryParse(pr.RoleId__c),
+				pr.ProductName__c,
+				pr.RoleName__c,
+				Product.getRoleLabel(pr.RoleName__c),
+				pr.IsAdministrator__c == true);
+		}
+
+		@TestVisible
+		private String getProductRoleKey(
+			final String product,
+			final String role) {
+
+			return (product == null ? '' : product.toLowerCase()) + ':' + (role == null ? '' : role.toLowerCase());
+		}
+
+		private ProductRoleSettings__c convert(final Product.Role pr) {
+			if (pr == null) return null;
+
+			return new ProductRoleSettings__c(
+				Name = this.getProductRoleKey(pr.product,  pr.role),
+				IsAdministrator__c = pr.isAdministrator == true,
+				ProductName__c = pr.product == null ? null : pr.product.toLowerCase(),
+				RoleId__c = String.valueOf(pr.id),
+				RoleName__c = pr.role == null ? null : pr.role.toLowerCase());
+		}
+
+		public Map<String, List<Product.Role>> queryProductRoles() {
+			Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
+			for (ProductRoleSettings__c pr : ProductRoleSettings__c.getAll().values()) {
+				Product.Role r = convert(pr);
+				if (r != null && String.isNotBlank(r.product)) {
+					if (!result.containsKey(r.product)) {
+						result.put(r.product, new List<Product.Role> { r });
+					} else {
+						result.get(r.product).add(r);
+					}
+				}
+			}
+			return result;
+		}
+
+		public Boolean insertProductRoles(final List<Product.Role> productRoles) {
+			Boolean result = false;
+			if (productRoles != null) {
+				List<ProductRoleSettings__c> toInsert = new List<ProductRoleSettings__c>();
+				for (Product.Role pr : productRoles) {
+					if (pr != null) toInsert.add(convert(pr));
+				}
+				insert toInsert;
+				result = true;
+			}
+			return result;
+		}
 	}
 
 	public Boolean isESignatureTrialExpired() {
@@ -360,7 +418,7 @@ public with sharing class AccountProducts {
 		List<Product> result = new List<Product>();
 		ProductAPI client = ProductAPI.getInstance();
 		for (String pn : productNames) {
-			if (pn == null || !validProductTrials.contains(pn.toLowerCase())) {
+			if (pn == null || !VALID_PRODUCT_TRIALS.contains(pn.toLowerCase())) {
 				throw new DocuSignException(String.format(Label.InvalidTrialProduct_1, new List<String> { pn }));
 			}
 
@@ -411,6 +469,38 @@ public with sharing class AccountProducts {
 				self.checkFrequencyMinutes);
 			self.isDirty = false;
 		}
+		return result;
+	}
+
+	public static Map<String, List<Product.Role>> getRoles(final Set<String> products) {
+		if (Collection.isEmpty(products)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Map<String, List<Product.Role>> cachedRoles = DB.queryProductRoles();
+
+		Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
+		Set<String> missingProducts = new Set<String>();
+		for (String p : products) {
+			if (!Product.isValidProduct(p)) throw new DocuSignException(Label.UnsupportedProducts);
+
+			String pl = p.toLowerCase();
+			if (cachedRoles.containsKey(pl)) {
+				result.put(pl, new List<Product.Role>(cachedRoles.get(pl)));
+			} else {
+				missingProducts.add(pl);
+			}
+		}
+
+		if (Collection.isNotEmpty(missingProducts)) {
+			Map<String, List<Product.Role>> productRoles = RoleAPI.getInstance().getRoles(missingProducts);
+			List<Product.Role> toInsert = new List<Product.Role>();
+			for (String p : productRoles.keySet()) {
+				List<Product.Role> prs = productRoles.get(p);
+				result.put(p, new List<Product.Role>(prs));
+				toInsert.addAll(prs);
+			}
+			DB.insertProductRoles(toInsert);
+		}
+
 		return result;
 	}
 }
