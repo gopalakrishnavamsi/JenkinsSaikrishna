@@ -194,11 +194,14 @@ private class RoleAPITest {
 	static void test_getProductRoles_undefined_product() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
-			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(null, 30000);
+			Map<String, Map<String, Product.Role>> result1 = RoleAPI.getInstance().getProductRoles(null, 30000);
+			Map<String, Map<String, Product.Role>> result2 = RoleAPI.getInstance().getProductRoles(new Set<String>(), 30000);
 			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assert(result.isEmpty());
+			System.assertNotEquals(null, result1);
+			System.assert(result1.isEmpty());
+			System.assertNotEquals(null, result2);
+			System.assert(result2.isEmpty());
 		}
 	}
 
@@ -209,7 +212,7 @@ private class RoleAPITest {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
 			try {
-				RoleAPI.getInstance().getProductRoles(Product.CLM, 30000);
+				RoleAPI.getInstance().getProductRoles(new Set<String> { Product.CLM }, 30000);
 				throw new AssertException('Expected failure');
 			} catch (APIException ex) {
 				System.assertEquals(APIError.badRequest, ex.error);
@@ -220,54 +223,33 @@ private class RoleAPITest {
 	}
 
 	@IsTest
-	static void test_getProductRoles_gen() {
+	static void test_getProductRoles_success() {
 		RoleAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignGenerator()) {
+			Set<String> products = new Set<String> { Product.GEN, Product.NEGOTIATE, Product.CLM };
+
 			Test.startTest();
-			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.GEN, 30000);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-		}
-	}
-
-	@IsTest
-	static void test_getProductRoles_negotiate() {
-		RoleAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			Test.startTest();
-			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.NEGOTIATE, 30000);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-		}
-	}
-
-	@IsTest
-	static void test_getProductRoles_clm() {
-		RoleAPIMock.success();
-
-		System.runAs(UserMock.createClmAdministrator()) {
-			Test.startTest();
-			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles(Product.CLM, 30000);
+			Map<String, Map<String, Product.Role>> result = RoleAPI.getInstance().getProductRoles(products, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(3, result.size());
+			System.assertEquals(products, result.keySet());
+			System.assertNotEquals(null, result.get(Product.GEN));
+			System.assertEquals(1, result.get(Product.GEN).size());
+			System.assertNotEquals(null, result.get(Product.NEGOTIATE));
+			System.assertEquals(1, result.get(Product.NEGOTIATE).size());
+			System.assertNotEquals(null, result.get(Product.CLM));
+			System.assertEquals(3, result.get(Product.CLM).size());
 		}
 	}
 
 	@IsTest
 	static void test_getProductRoles_other() {
-		RoleAPIMock.success();
-
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			Map<String, Product.Role> result = RoleAPI.getInstance().getProductRoles('other', 30000);
+			Map<String, Map<String, Product.Role>> result = RoleAPI.getInstance().getProductRoles(new Set<String> { 'other' }, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -326,7 +308,9 @@ private class RoleAPITest {
 				response.setStatus('OK');
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
 				gs.groups = new List<RoleAPI.APIGroup>();
-				if (endpoint.contains('/clm/')) {
+				String query = new Url(endpoint).getQuery();
+
+				if (query.contains('clm')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '0';
 					g.group_name = 'Super Administrator';
@@ -362,31 +346,37 @@ private class RoleAPITest {
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else if (endpoint.contains('/gen/')) {
+				}
+
+				if (query.contains('gen')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '3';
-					g.group_name = 'Generator'; // TODO: Use final name when available
+					g.group_id = '0';
+					g.group_name = 'Generator';
 					g.description = 'Generators!';
 					g.source_product_name = 'gen';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else if (endpoint.contains('/negotiate/')) {
+				}
+
+				if (query.contains('negotiate')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '4';
-					g.group_name = 'Negotiator'; // TODO: Use final name when available
+					g.group_id = '0';
+					g.group_name = 'Negotiator';
 					g.description = 'Negotiator!';
 					g.source_product_name = 'negotiate';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '55';
-					g.group_name = 'Other';
-					g.description = 'should ignore';
-					g.source_product_name = 'other';
-					g.is_admin = true;
-					gs.groups.add(g);
 				}
+
+				// Return group that should be ignored.
+				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
+				g.group_id = '55';
+				g.group_name = 'Other';
+				g.description = 'should ignore';
+				g.source_product_name = 'other';
+				g.is_admin = true;
+				gs.groups.add(g);
+
 				response.setBody(JSON.serialize(gs));
 			} else if (endpoint.contains('/dsgroups')) { // get account groups
 				response.setStatusCode(200);
@@ -411,7 +401,7 @@ private class RoleAPITest {
 				gs.groups.add(g);
 				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
-				g.group_id = '4';
+				g.group_id = '0';
 				g.group_name = NegotiateProduct.ROLE_NEGOTIATOR;
 				g.description = 'Negotiator!';
 				g.source_product_name = 'negotiate';
@@ -895,7 +885,7 @@ private class RoleAPITest {
 			System.assertNotEquals(null, result.results);
 			System.assertEquals(1, result.results.size());
 			System.assertNotEquals(null, result.results.get(uId));
-			System.assertEquals(APIErrorCode.FAILURE , result.results.get(uId).code);
+			System.assertEquals(APIErrorCode.FAILURE, result.results.get(uId).code);
 			System.assertEquals(Label.UnknownError, result.results.get(uId).description);
 		}
 	}

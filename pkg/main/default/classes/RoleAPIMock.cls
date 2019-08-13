@@ -73,8 +73,9 @@ public class RoleAPIMock extends OAuthTokenMock {
 				response.setStatusCode(200);
 				response.setStatus('OK');
 				RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
+				String query = u.getQuery();
 				gs.groups = new List<RoleAPI.APIGroup>();
-				if (endpoint.contains('/clm/')) {
+				if (query.contains('clm')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '0';
 					g.group_name = 'Super Administrator';
@@ -110,31 +111,37 @@ public class RoleAPIMock extends OAuthTokenMock {
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else if (endpoint.contains('/gen/')) {
+				}
+
+				if (query.contains('gen')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '3';
-					g.group_name = 'Generator'; // TODO: Use final name when available
+					g.group_id = '0';
+					g.group_name = 'Generator';
 					g.description = 'Generators!';
 					g.source_product_name = 'gen';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else if (endpoint.contains('/negotiate/')) {
+				}
+
+				if (query.contains('negotiate')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '4';
-					g.group_name = 'Negotiator'; // TODO: Use final name when available
+					g.group_id = '0';
+					g.group_name = 'Negotiator';
 					g.description = 'Negotiator!';
 					g.source_product_name = 'negotiate';
 					g.is_admin = true;
 					gs.groups.add(g);
-				} else {
-					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '55';
-					g.group_name = 'Other';
-					g.description = 'should ignore';
-					g.source_product_name = 'other';
-					g.is_admin = true;
-					gs.groups.add(g);
 				}
+
+				// Add a group that should be ignored
+				RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
+				g.group_id = '55';
+				g.group_name = 'Other';
+				g.description = 'should ignore';
+				g.source_product_name = 'other';
+				g.is_admin = true;
+				gs.groups.add(g);
+
 				response.setBody(JSON.serialize(gs));
 			} else if (method == 'GET' && endpoint.contains('/dsgroups')) { // get account groups
 				response.setStatusCode(200);
