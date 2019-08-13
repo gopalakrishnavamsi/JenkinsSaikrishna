@@ -54,7 +54,7 @@
         var state = response.getState();
         if(state === 'SUCCESS'){
             var theme = response.getReturnValue();   
-            if (buttonLabel === $A.get('$Label.c.ConfigureLayouts') || $A.get('$Label.c.ConfigureButtons')) {
+            if (buttonLabel === $A.get('$Label.c.ConfigureLayouts') || buttonLabel === $A.get('$Label.c.ConfigureButtons')) {
                 if (theme === 'Theme4d' || theme === 'Theme4t' || theme === 'Theme4u') {
                     window.open($A.get('$Label.c.LEXObjectManagerURL'));
                 } else {          
