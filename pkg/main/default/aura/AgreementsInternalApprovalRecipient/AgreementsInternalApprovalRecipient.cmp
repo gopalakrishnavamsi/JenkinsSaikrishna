@@ -2,7 +2,7 @@
     <!--attributes -->
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
-    <aura:attribute name="currentUserId" type="String"/>
+    <aura:attribute name="currentUserId" type="Id"/>
 
     <!--handlers -->
     <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>

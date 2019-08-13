@@ -1,5 +1,8 @@
 ({
   onInit: function (component, event, helper) {
+    //set current user Id
+    var currentUserId = $A.get('$SObjectType.CurrentUser.Id');
+    component.set('v.currentUserId',currentUserId);
 
     //initialize recipients
     var recipients = component.get('v.recipients');
@@ -14,8 +17,6 @@
     var self = this;
     self.setLoading(component, true);
     var sourceId = self.getSourceId(recipient);
-    var currentUserId = $A.get('$SObjectType.CurrentUser.Id');
-    component.set('v.currentUserId',currentUserId);
     if ($A.util.isEmpty(sourceId)) return;
     var rr = component.get('c.resolveRecipient');
     rr.setParams({

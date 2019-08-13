@@ -14,6 +14,7 @@
     <aura:attribute name="emailSubject" type="String" default="{!$Label.c.InternalApprovalEmailSubject}"
                     access="private"/>
     <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}" access="private"/>
+    <aura:attribute name="currentUserId" type="Id"/>
 
 
     <!-- handlers -->
@@ -92,6 +93,7 @@
                                                 <c:AgreementsInternalApprovalRecipient
                                                         recipient="{!recipient}"
                                                         sourceId="{#recipient.source.id}"
+                                                        currentUserId="{!v.currentUserId}"
                                                 />
                                             </li>
                                             <li>
