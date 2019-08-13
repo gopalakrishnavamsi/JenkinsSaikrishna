@@ -533,6 +533,11 @@ public with sharing class AuthService {
 			c.client.privateKey)).token;
 	}
 
+	@Future
+	private static void clearPermissions(final Set<Id> userIds) {
+		Permissions.clear(userIds);
+	}
+
 	/**
 	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
 	 * so invoke only after confirming with the administrator.
@@ -558,7 +563,8 @@ public with sharing class AuthService {
 			]) {
 				result.add(psa.AssigneeId);
 			}
-			Permissions.clear(result);
+			// This must be done in a @Future context to avoid MIXED_DML errors.
+			clearPermissions(result);
 		}
 		return result;
 	}
