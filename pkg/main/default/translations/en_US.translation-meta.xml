@@ -4121,6 +4121,14 @@
 		<label>Invalid input parameters for comparing Agreement versions.</label>
 		<name>InvalidInputsAgreementComparison</name>
 	</customLabels>
+	<customLabels>
+		<label>Agreement external review on behalf of completed.</label>
+		<name>AgreementExternalReviewOnBehalfOfSucess</name>
+	</customLabels>
+	<customLabels>
+		<label>Agreement external review on behalf of has failed.</label>
+		<name>AgreementExternalReviewOnBehalfOfFailed</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

@@ -78,7 +78,7 @@
 
   baseOptions: function (component, uiHelper, sourceId) {
     var self = this;
-    return new Promise(function (resolve, reject) {
+    return new Promise($A.getCallback(function (resolve, reject) {
       self.getAccessToken(component, uiHelper, sourceId, true)
         .then(function (token) {
           resolve(
@@ -88,32 +88,38 @@
                 return self.getAccessToken(component, uiHelper, sourceId, false);
               },
               uploadApiBaseDomain: token.apiUploadBaseUrl,
-              downloadApiBaseDomain: token.apiDownloadBaseUrl
+              downloadApiBaseDomain: token.apiDownloadBaseUrl,
+              accountId: token.accountId.value
             })
           );
         })
         .catch(function (err) {
           reject(err);
         });
-    });
+    }));
   },
 
   getAccessToken: function (component, uiHelper, sourceId, isSetup) {
-    var action = component.get('c.generateUploadToken');
-    return new Promise(function (resolve, reject) {
-      action.setParams({
-        objectId: sourceId
-      });
-      action.setCallback(this, function (response) {
+    var agreementIdValue = component.get('v.agreement').id.value;
+    var generateUploadAction = component.get('c.generateUploadNewVersionToken');
+    generateUploadAction.setParams({
+      agreementId: agreementIdValue
+    });
+    return new Promise($A.getCallback(function (resolve, reject) {
+
+      generateUploadAction.setCallback(this, $A.getCallback(function (response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
           if (isSetup) resolve(response.getReturnValue());
           else resolve(response.getReturnValue().token);
         }
-        if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
-      });
-      $A.enqueueAction(action);
-    });
+        if (state === 'ERROR') {
+          uiHelper.getErrorMessage(response);
+          reject(uiHelper.getErrorMessage(response));
+        }
+      }));
+      $A.enqueueAction(generateUploadAction);
+    }));
   },
 
   getApprovalWorkItems: function (component, uiHelper) {
@@ -412,6 +418,7 @@
   externalReviewSenderView: function (component, widget, inProgress) {
     var thisComponent = component;
     var self = this;
+    var agreement = component.get('v.agreement');
 
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
 
@@ -419,17 +426,10 @@
       self.externalReviewResendRequest(thisComponent, self, 'ExternalReview');
     }));
 
-    this.registerEvent('externalReviewCompleteOnBehalf', function () {
-      //show the spinner and fade background
-      thisComponent.set('v.loading', true);
+    this.registerEvent('externalReviewCompleteOnBehalf', $A.getCallback(function (event) {
 
-      //capture event.detail.comments and event.detail.response
-
-      //call Apex Action to complete review on behalf of
-
-      //reload preview
-      self.reloadPreview(thisComponent);
-    });
+      self.externalReviewOnBehalfOfRequest(thisComponent, self, event);
+    }));
 
     this.registerEvent('cancelExternalReview', $A.getCallback(function () {
       self.cancelRequest(thisComponent, self, 'ExternalReview');
@@ -440,6 +440,7 @@
       showCompleteExternalReview: inProgress,
       showCancel: inProgress,
       showResendRequest: inProgress,
+      documentUid: agreement.id.value
     });
     return widget;
   },
@@ -657,6 +658,42 @@
       helper.reloadPreview(component);
     });
     $A.enqueueAction(approvalAction);
+  },
+
+  externalReviewOnBehalfOfRequest: function (component, helper, event) {
+
+    var comments = (event.detail && event.detail.comments) ? event.detail.comments : '';
+    var documentHref = (event.detail && event.detail.documentHref) ? event.detail.documentHref : '';
+    var agreement = component.get('v.agreement');
+    var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
+
+    externalReviewOnBehalfOfAction.setParams({
+      comment: comments,
+      newVersionUrl: documentHref,
+      documentId: agreement.id.value
+    });
+
+    component.set('v.loading', true);
+
+    externalReviewOnBehalfOfAction.setCallback(this, function (response) {
+      component.set('v.loading', false);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        if (result === true) {
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSucess'), 'success');
+          helper.reloadPreview(component);
+        } else {
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
+        }
+      } else {
+        helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
+      }
+
+    });
+
+    $A.enqueueAction(externalReviewOnBehalfOfAction);
+
   },
 
   showToast: function (component, message, mode) {
