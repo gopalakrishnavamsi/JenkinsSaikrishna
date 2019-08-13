@@ -108,6 +108,18 @@ private class CollectionTest {
 	}
 
 	@IsTest
+	static void test_difference_String() {
+		Set<String> s1 = new Set<String> { 's1', 's2' };
+		Set<String> s2 = new Set<String> { 's1', 's3' };
+
+		System.assertEquals(new Set<String>(), Collection.difference((Set<String>)null, (Set<String>)null));
+		System.assertEquals(new Set<String>(), Collection.difference(null, s2));
+		System.assertEquals(s1, Collection.difference(s1, null));
+		System.assertEquals(new Set<String> { 's2' }, Collection.difference(s1, s2));
+		System.assertEquals(new Set<String> { 's3' }, Collection.difference(s2, s1));
+	}
+
+	@IsTest
 	static void test_intersection_Id() {
 		Set<Id> s1 = new Set<Id> { '00541000002aMAA', '00541000002aMAB' };
 		Set<Id> s2 = new Set<Id> { '00541000002aMAA', '00541000002aMAC' };

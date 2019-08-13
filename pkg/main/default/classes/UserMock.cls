@@ -151,7 +151,7 @@ global class UserMock {
 	}
 
 	public static User createDocuSignGenerator(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());
@@ -186,7 +186,7 @@ global class UserMock {
 	}
 
 	public static User createDocuSignNegotiator(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());
@@ -221,7 +221,7 @@ global class UserMock {
 	}
 
 	public static User createClmAdministrator(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());
@@ -256,7 +256,7 @@ global class UserMock {
 	}
 
 	public static User createClmUser(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());
@@ -291,7 +291,7 @@ global class UserMock {
 	}
 
 	public static User createClmViewer(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', null, false);
+		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());

@@ -106,6 +106,22 @@ public class Collection {
 		return result;
 	}
 
+	public static Set<String> difference(final Set<String> left, final Set<String> right) {
+		Set<String> result = new Set<String>();
+		if (left != null) {
+			if (right == null) {
+				result.addAll(left);
+			} else {
+				for (String s : left) {
+					if (!right.contains(s)) {
+						result.add(s);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	public static Set<Id> intersection(final Set<Id> left, final Set<Id> right) {
 		Set<Id> result = new Set<Id>();
 		if (left != null && right != null) {

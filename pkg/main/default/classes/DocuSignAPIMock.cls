@@ -4,9 +4,9 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 	private OAuthMock oauthMock;
 	private ApplicationAPIMock applicationMock;
 	private ESignatureAPIMock eSignatureMock;
-	private ProvisioningAPIMock provisioningMock;
+	private ProductAPIMock productMock;
 	private GenAPIMock genMock;
-	private GroupAPIMock groupMock;
+	private RoleAPIMock roleMock;
 	private Boolean success;
 
 	public DocuSignAPIMock(final Boolean success) {
@@ -43,11 +43,11 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return this.eSignatureMock;
 	}
 
-	private ProvisioningAPIMock getProvisioningMock() {
-		if (this.provisioningMock == null) {
-			this.provisioningMock = new ProvisioningAPIMock(this.success);
+	private ProductAPIMock getProvisioningMock() {
+		if (this.productMock == null) {
+			this.productMock = new ProductAPIMock(this.success);
 		}
-		return this.provisioningMock;
+		return this.productMock;
 	}
 
 	private GenAPIMock getGenMock() {
@@ -57,11 +57,11 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return this.genMock;
 	}
 
-	private GroupAPIMock getGroupMock() {
-		if (this.groupMock == null) {
-			this.groupMock = new GroupAPIMock(this.success);
+	private RoleAPIMock getRoleMock() {
+		if (this.roleMock == null) {
+			this.roleMock = new RoleAPIMock(this.success);
 		}
-		return this.groupMock;
+		return this.roleMock;
 	}
 
 	override public HttpResponse getResponse(final HttpRequest request) {
@@ -75,7 +75,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		} else if (path.startsWith('/gen')) {
 			return this.getGenMock().getResponse(request);
 		} else if (path.startsWith('/management')) {
-			return this.getGroupMock().getResponse(request);
+			return this.getRoleMock().getResponse(request);
 		}
 		return this.getESignatureMock().getResponse(request);
 	}

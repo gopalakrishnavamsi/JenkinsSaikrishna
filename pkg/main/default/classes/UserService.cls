@@ -248,6 +248,25 @@ public with sharing class UserService {
 		return DB.queryCurrentUsers(maximumRecords);
 	}
 
+	public static Map<String, Set<String>> getRoles(final Set<String> products) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (Collection.isEmpty(products)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Map<String, Set<String>> result = new Map<String, Set<String>>();
+		Map<String, List<Product.Role>> prs = AccountProducts.getRoles(products);
+		if (prs != null) {
+			for (String p : prs.keySet()) {
+				Set<String> roles = new Set<String>();
+				for (Product.Role pr : prs.get(p)) {
+					roles.add(pr.role);
+				}
+				result.put(p, roles);
+			}
+		}
+		return result;
+	}
+
 	@TestVisible
 	private static List<Account.User> verifyBatchSize(
 		final List<Account.User> users,
@@ -288,7 +307,7 @@ public with sharing class UserService {
  	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @param users A list of users to add.
-	 * @param roles The application roles for the users.
+	 * @param productRoles A map of products to roles to be assigned to the users.
  	 *
 	 * @return The users added. This may be partially successful with details in the returned <code>User.error</code>
 	 * property.
@@ -296,7 +315,7 @@ public with sharing class UserService {
  	 */
 	public static List<Account.User> addUsers(
 		final List<Account.User> users,
-		final Set<String> roles) {
+		final Map<String, Set<String>> productRoles) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -327,7 +346,7 @@ public with sharing class UserService {
 			// FIXME: add user roles via MAGNUM
 
 			Credentials.add(creds);
-			replaceUserRoles(creds.keySet(), roles);
+			Permissions.replaceRoles(creds.keySet(), productRoles);
 
 			return result;
 		} finally {
@@ -357,11 +376,6 @@ public with sharing class UserService {
 			}
 		}
 		return result;
-	}
-
-	@Future
-	private static void clearUserRoles(final Set<Id> userIds) {
-		Permissions.clear(userIds);
 	}
 
 	/**
@@ -401,18 +415,12 @@ public with sharing class UserService {
 		}
 
 		Credentials.clear(userIds);
-		clearUserRoles(userIds);
+		Permissions.clear(userIds);
 
 		return result;
 	}
 
-	@Future
-	private static void replaceUserRoles(
-		final Set<Id> userIds,
-		final Set<String> roles) {
 
-		Permissions.replacePermissionSets(userIds, roles);
-	}
 
 	/**
 	 * Updates application roles for one or more users.
@@ -420,13 +428,13 @@ public with sharing class UserService {
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @param userIds The IDs of the users for which to replace application roles.
-	 * @param roles The new application roles for the users.
+	 * @param productRoles A map of products to roles which will be assigned to the users.
 	 *
 	 * @return Whether or not any user roles were updated.
 	 */
 	public static Boolean updateUserRoles(
 		final Set<Id> userIds,
-		final Set<String> roles) {
+		final Map<String, Set<String>> productRoles) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -436,14 +444,16 @@ public with sharing class UserService {
 
 		// FIXME: Update user groups in MAGNUM API.
 
-		// Update permission sets. This must be done in a @Future context.
-		replaceUserRoles(uIds, roles);
+		// Update permission sets
+		Permissions.replaceRoles(uIds, productRoles);
 
 		// Reset user access tokens and set CanManageAccount__c accordingly.
 		// TODO: Is CLM_ADMINISTRATOR OK here as well?
 		return Credentials.reset(
 			uIds,
-			roles != null && roles.contains(Permissions.DOCUSIGN_ADMINISTRATOR));
+			productRoles != null
+				&& productRoles.containsKey(Product.ESIGNATURE)
+				&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR));
 	}
 
 	/**

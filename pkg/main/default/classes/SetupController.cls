@@ -125,9 +125,11 @@ public with sharing class SetupController extends Controller {
 					canManageAccount == true,
 					null,
 					APIError.none)
-			}, canManageAccount == true
-				? new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR }
-				: new Set<String> { Permissions.DOCUSIGN_USER });
+			}, new Map<String, Set<String>> {
+				Product.ESIGNATURE => new Set<String> {
+					canManageAccount == true ? ESignatureProduct.ROLE_ADMINISTRATOR : ESignatureProduct.ROLE_USER
+				}
+			});
 			if (Collection.isNotEmpty(users) && users[0].hasError) {
 				throw new APIException(users[0].error);
 			}

@@ -5,8 +5,6 @@
 		<visible>false</visible>
 	</applicationVisibilities>
 	<description>Provides access to document negotiation</description>
-	<hasActivationRequired>false</hasActivationRequired>
-	<label>DocuSign Document Negotiator</label>
 	<fieldPermissions>
 		<editable>false</editable>
 		<field>User.Username__c</field>
@@ -22,6 +20,13 @@
 		<field>User.Status__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>User.Provisioned__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<hasActivationRequired>false</hasActivationRequired>
+	<label>DocuSign Document Negotiator</label>
 	<objectPermissions>
 		<allowCreate>true</allowCreate>
 		<allowDelete>true</allowDelete>

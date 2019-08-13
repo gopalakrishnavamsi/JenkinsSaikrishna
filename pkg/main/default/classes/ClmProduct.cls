@@ -1,5 +1,9 @@
 public class ClmProduct extends Product {
 
+	public static final String ROLE_ADMINISTRATOR = 'Administrator';
+	public static final String ROLE_USER = 'User';
+	public static final String ROLE_VIEWER = 'Viewer';
+
 	public transient Url authBaseUrl { get; private set; }
 	public transient Url landingPageUrl { get; private set; }
 	public transient Url adminUrl { get; private set; }

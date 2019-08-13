@@ -533,11 +533,6 @@ public with sharing class AuthService {
 			c.client.privateKey)).token;
 	}
 
-	@Future
-	private static void clearUserRoles(final Set<Id> userIds) {
-		Permissions.clear(userIds);
-	}
-
 	/**
 	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
 	 * so invoke only after confirming with the administrator.
@@ -558,12 +553,12 @@ public with sharing class AuthService {
 			for (PermissionSetAssignment psa : [
 				SELECT AssigneeId
 				FROM PermissionSetAssignment
-				WHERE PermissionSet.Name = :Permissions.DOCUSIGN_SENDER
+				WHERE PermissionSet.Name = 'DocuSign_Sender'
 				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
 			]) {
 				result.add(psa.AssigneeId);
 			}
-			clearUserRoles(result);
+			Permissions.clear(result);
 		}
 		return result;
 	}
