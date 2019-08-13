@@ -619,7 +619,7 @@ private class AgreementsControllerTest {
 		System.runAs(user) {
 			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
-				Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
+			Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
 			Test.stopTest();
 			System.assertEquals(isExternalReviewCompleted, true);
 		}
