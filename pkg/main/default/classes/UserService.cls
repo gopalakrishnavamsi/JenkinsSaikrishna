@@ -378,6 +378,11 @@ public with sharing class UserService {
 		return result;
 	}
 
+	@Future
+	private static void clearPermissions(final Set<Id> userIds) {
+		Permissions.clear(userIds);
+	}
+
 	/**
 	 * Removes one or more users from the current DocuSign account.
 	 * <p>
@@ -415,7 +420,8 @@ public with sharing class UserService {
 		}
 
 		Credentials.clear(userIds);
-		Permissions.clear(userIds);
+		// Clearing permission sets must be done in a @Future context here to avoid mixed DML errors.
+		clearPermissions(userIds);
 
 		return result;
 	}
