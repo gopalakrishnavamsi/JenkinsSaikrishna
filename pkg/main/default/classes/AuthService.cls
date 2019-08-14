@@ -573,6 +573,9 @@ public with sharing class AuthService {
 			]) {
 				result.add(psa.AssigneeId);
 			}
+
+			AccountProducts.clear();
+
 			// This must be done in a @Future context to avoid MIXED_DML errors.
 			clearPermissions(result);
 		}

@@ -828,6 +828,14 @@ private class AuthServiceTest {
 			User u1 = UserMock.createDocuSignUser(false);
 			// Senders are unique in that they do not have DS user credentials.
 			User u2 = UserMock.createDocuSignSender(false);
+			insert new List<ProductSettings__c> {
+				new ProductSettings__c(Name = 'ps1'),
+				new ProductSettings__c(Name = 'ps2')
+			};
+			insert new List<ProductRoleSettings__c> {
+				new ProductRoleSettings__c(Name = 'prs1'),
+				new ProductRoleSettings__c(Name = 'prs2')
+			};
 
 			Test.startTest();
 			AuthService.resetAccount(true);
@@ -854,6 +862,9 @@ private class AuthServiceTest {
 				WHERE AssigneeId = :UserInfo.getUserId()
 				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
 			]));
+
+			System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
+			System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
 		}
 	}
 

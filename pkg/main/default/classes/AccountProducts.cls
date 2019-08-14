@@ -192,6 +192,27 @@ public with sharing class AccountProducts {
 			return productSettings;
 		}
 
+		public List<ProductSettings__c> deleteProductSettings() {
+			List<ProductSettings__c> result = ProductSettings__c.getAll().values();
+			delete result;
+			return result;
+		}
+
+		public List<ProductRoleSettings__c> deleteProductRoleSettings() {
+			List<ProductRoleSettings__c> result = ProductRoleSettings__c.getAll().values();
+			delete result;
+			return result;
+		}
+
+		public List<ProductRoleSettings__c> deleteProductRoleSettings(final Set<String> products) {
+			List<ProductRoleSettings__c> result = new List<ProductRoleSettings__c>();
+			for (ProductRoleSettings__c prs : ProductRoleSettings__c.getAll().values()) {
+				if (prs != null && products.contains(prs.ProductName__c)) result.add(prs);
+			}
+			delete result;
+			return result;
+		}
+
 		private AccountSettings__c upsertAccountSettings(
 			final Datetime lastChecked,
 			final Integer checkFrequencyMinutes) {
@@ -460,9 +481,33 @@ public with sharing class AccountProducts {
 		return this.clm == null ? null : this.clm.landingPageUrl;
 	}
 
+	@TestVisible
+	private static Boolean saveRoles(
+		final Set<String> oldProducts,
+		final Set<String> newProducts) {
+
+		Boolean result = oldProducts != newProducts;
+		if (result) {
+			Set<String> removed = Collection.difference(oldProducts, newProducts);
+			Set<String> added = Collection.difference(newProducts, oldProducts);
+			if (Collection.isNotEmpty(added)) {
+				// If products were added, delete existing roles to invalidate
+				result = Collection.isNotEmpty(DB.deleteProductRoleSettings());
+			} else if (Collection.isNotEmpty(removed)) {
+				// Else just delete the roles for products that were removed
+				result = Collection.isNotEmpty(DB.deleteProductRoleSettings(removed));
+			}
+		}
+		return result;
+	}
+
 	public static Boolean save() {
 		Boolean result = self != null && self.isDirty;
 		if (result) {
+			saveRoles(
+				DB.queryProducts().keySet(),
+				self.products == null ? new Set<String>() : self.products.keySet());
+
 			DB.replaceProducts(
 				self.products == null ? new List<Product>() : self.products.values(),
 				self.lastChecked,
@@ -501,6 +546,13 @@ public with sharing class AccountProducts {
 			DB.insertProductRoles(toInsert);
 		}
 
+		return result;
+	}
+
+	public static Boolean clear() {
+		Boolean result = Collection.isNotEmpty(DB.deleteProductRoleSettings());
+		result |= Collection.isNotEmpty(DB.deleteProductSettings());
+		self = null;
 		return result;
 	}
 }
