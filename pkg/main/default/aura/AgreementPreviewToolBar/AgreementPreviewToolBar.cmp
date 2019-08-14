@@ -32,19 +32,21 @@
                                         onactive="{!c.addToSalesforce}"/>
                     <lightning:menuItem label="{!$Label.c.UploadNewVersion}"
                                         value="{!$Label.c.UploadNewVersion}"
-                                        onactive="{!c.upload}" disabled="{!if(or(v.agreement.status == 'COMPLETED',
-                                                            v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL'), true, false)}"/>
+                                        onactive="{!c.upload}"
+                                        disabled="{!v.agreement.status == 'COMPLETED'
+                                                   || v.agreement.status == 'PENDING REVIEW'
+                                                   || v.agreement.status == 'PENDING APPROVAL'}"/>
                     <lightning:menuItem label="{!$Label.c.Rename}" value="{!$Label.c.Rename}"
                                         onactive="{!c.rename}"
-                                        disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
+                                        disabled="{!v.agreement.status == 'PENDING REVIEW'
+                                                   || v.agreement.status == 'PENDING APPROVAL'
+                                                   || v.agreement.status == 'PENDING SIGNATURE'}"/>
                     <lightning:menuItem label="{!$Label.c.DeleteButtonLabel}"
                                         value="{!$Label.c.DeleteButtonLabel}"
-                                        onactive="{!c.delete}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE'), true, false)}"/>
+                                        onactive="{!c.delete}"
+                                        disabled="{!v.agreement.status == 'PENDING REVIEW'
+                                                  || v.agreement.status == 'PENDING APPROVAL'
+                                                  || v.agreement.status == 'PENDING SIGNATURE'}"/>
                 </lightning:buttonMenu>
                 <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share"
                                       class="slds-p-left_xx-small" menuAlignment="right">
@@ -54,16 +56,17 @@
                                         label="{!$Label.c.agreementsExternalReview}"
                                         value="{!$Label.c.agreementsExternalReview}"
                                         onactive="{!c.externalReview}"
-                                        disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE',
-                                                            v.agreement.status == 'COMPLETED'), true, false)}"/>
+                                        disabled="{!v.agreement.status == 'PENDING REVIEW'
+                                                   || v.agreement.status == 'PENDING APPROVAL'
+                                                   || v.agreement.status == 'PENDING SIGNATURE'
+                                                   || v.agreement.status == 'COMPLETED'}"/>
                     <lightning:menuItem label="{!$Label.c.agreementsInternalApproval}"
                                         value="{!$Label.c.agreementsInternalApproval}"
-                                        onactive="{!c.internalApproval}" disabled="{!if(or(v.agreement.status == 'PENDING REVIEW',
-                                                            v.agreement.status == 'PENDING APPROVAL',
-                                                            v.agreement.status == 'PENDING SIGNATURE',
-                                                            v.agreement.status == 'COMPLETED'), true, false)}"/>
+                                        onactive="{!c.internalApproval}"
+                                        disabled="{!v.agreement.status == 'PENDING REVIEW'
+                                                   || v.agreement.status == 'PENDING APPROVAL'
+                                                   || v.agreement.status == 'PENDING SIGNATURE'
+                                                   || v.agreement.status == 'COMPLETED'}"/>
                 </lightning:buttonMenu>
             </div>
         </div>
