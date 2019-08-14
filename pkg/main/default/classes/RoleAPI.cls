@@ -2,7 +2,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 	private static RoleAPI self;
 
-	// HACK: Use hardcoded, fake IDs for eSignature roles until API supports them
+	// TODO: Use hardcoded, fake IDs for eSignature roles until API supports them.
 	@TestVisible
 	private static final UUID ESIGNATURE_ADMINISTRATOR_ID = UUID.parse('11111111-1111-1111-1111-111111111111');
 	@TestVisible
@@ -22,11 +22,9 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			'Sender' => ESignatureProduct.ROLE_SENDER
 		},
 		Product.GEN => new Map<String, String> {
-			// TODO: Use final Gen API group name
 			'Generator' => GenProduct.ROLE_GENERATOR
 		},
 		Product.NEGOTIATE => new Map<String, String> {
-			// TODO: Use final Negotiate API group name
 			'Negotiator' => NegotiateProduct.ROLE_NEGOTIATOR
 		},
 		Product.CLM => new Map<String, String> {
@@ -94,41 +92,68 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				this.is_admin == true);
 		}
 
-		public Product.Role toExternalForm(final Map<String, String> groupRoles) {
+		public Product.Role toExternalForm(
+			final String productName,
+			final Map<String, String> groupRoles) {
+
 			if (groupRoles == null
-				|| String.isBlank(this.source_product_name)
+				|| String.isBlank(this.group_id)
 				|| String.isBlank(this.group_name)
 				|| !groupRoles.containsKey(this.group_name)) {
 
 				// Only add groups to which we have a role mapped
 				LoggerService.getInstance().warn(String.format('No role mapped to product "{0}" group "{1}" ({2})',
-					new List<Object> { this.source_product_name, this.group_name, this.group_id }));
+					new List<Object> { productName, this.group_name, this.group_id }));
 				return null;
 			}
 
 			return new Product.Role(
 				UUID.tryParse(this.ds_group_id),
-				this.source_product_name.toLowerCase(),
+				productName,
 				groupRoles.get(this.group_name),
 				Product.getRoleLabel(this.group_name),
 				this.is_admin == true);
 		}
 	}
 
+	private static String getProductName(final String product) {
+		return product == null ? '' : product.toLowerCase();
+	}
+
 	@TestVisible
 	private class APIGroups {
 		public List<APIGroup> groups;
 
-		public Map<String, Product.Role> toExternalForm(final Map<String, String> groupRoles) {
-			Map<String, Product.Role> result = new Map<String, Product.Role>();
+		// Returns a map of products -> map of group IDs -> roles
+		public Map<String, Map<String, Product.Role>> toExternalForm(
+			final Map<String, Map<String, String>> productGroupRoles) {
+
+			Map<String, Map<String, Product.Role>> result = new Map<String, Map<String, Product.Role>>();
 			if (this.groups != null) {
 				for (APIGroup g : this.groups) {
-					Product.Role r = g.toExternalForm(groupRoles);
-					if (r != null) result.put(g.group_id, r);
+					String productName = g == null ? '' : getProductName(g.source_product_name);
+					if (Product.isValidProduct(productName)) {
+						if (!result.containsKey(productName)) result.put(productName, new Map<String, Product.Role>());
+
+						Product.Role r = g.toExternalForm(productName, productGroupRoles.get(productName));
+						if (r != null) result.get(productName).put(g.group_id, r);
+					}
 				}
 			}
 			return result;
 		}
+	}
+
+	private static List<String> filterValid(final Set<String> products) {
+		List<String> result = new List<String>();
+
+		if (products != null) {
+			for (String p : products) {
+				if (Product.isValidProduct(p)) result.add(p.toLowerCase());
+			}
+		}
+
+		return result;
 	}
 
 	@TestVisible
@@ -137,19 +162,14 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		final Integer timeout) {
 
 		Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
-		if (Collection.isEmpty(products)) return result;
+		List<String> filteredProducts = filterValid(products);
+		if (Collection.isEmpty(filteredProducts)) return result;
 
-		for (String p : products) {
-			if (Product.isValidProduct(p)) {
-				result.put(p.toLowerCase(), new List<Product.Role>());
-			} else {
-				this.log.warn('Unsupported product: ' + p);
-			}
+		for (String p : filteredProducts) {
+			result.put(p, new List<Product.Role>());
 		}
 
-		if (result.isEmpty()) return result;
-
-		// HACK: Special case for eSignature until full API support (v2?)
+		// TODO: Special case for eSignature until full API support (v2?)
 		if (result.containsKey(Product.ESIGNATURE)) {
 			result.get(Product.ESIGNATURE).addAll(new List<Product.Role> {
 				new Product.Role(
@@ -189,11 +209,11 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		APIGroups gs = ((APIGroups)JSON.deserialize(response.body, APIGroups.class));
 		if (gs != null && gs.groups != null) {
 			for (APIGroup g : gs.groups) {
-				String p = g.source_product_name == null ? '' : g.source_product_name.toLowerCase();
+				String productName = g == null ? '' : getProductName(g.source_product_name);
 				// Only add if it's in the product role whitelist.
-				if (result.containsKey(p) && Product.isValidRole(p, g.group_name)) {
+				if (result.containsKey(productName) && Product.isValidRole(productName, g.group_name)) {
 					Product.Role r = g.toExternalForm();
-					if (r != null) result.get(p).add(r);
+					if (r != null) result.get(productName).add(r);
 				}
 			}
 		}
@@ -223,15 +243,18 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	}
 
 	@TestVisible
-	private Map<String, Product.Role> getProductRoles(
-		final String product,
+	private Map<String, Map<String, Product.Role>> getProductRoles(
+		final Set<String> products,
 		final Integer timeout) {
 
-		if (String.isBlank(product)) return new Map<String, Product.Role>();
+		List<String> filteredProducts = filterValid(products);
+		if (Collection.isEmpty(filteredProducts)) return new Map<String, Map<String, Product.Role>>();
 
 		RestAPI.Response response = this.get(
-			new List<Object> { 'products', product, 'groups' },
-			QueryString.empty,
+			new List<Object> { 'products', 'groups' },
+			new QueryString(new Map<String, String> {
+				'products' => String.join(filteredProducts, ',')
+			}),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get product roles: ' + response.error);
@@ -239,7 +262,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		}
 
 		return ((APIGroups)JSON.deserialize(response.body, APIGroups.class))
-			.toExternalForm(PRODUCT_GROUP_ROLE_MAP.get(product.toLowerCase()));
+			.toExternalForm(PRODUCT_GROUP_ROLE_MAP);
 	}
 
 	private static Set<String> getRoleDifference(
@@ -271,30 +294,45 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		final Set<String> products,
 		final Integer timeout) {
 
+		// Filter out invalid products
+		List<String> filteredProducts = filterValid(products);
+		if (Collection.isEmpty(filteredProducts)) return new Map<String, List<Product.Role>>();
+
 		// Read any existing account roles.
 		Map<String, List<Product.Role>> result = this.getAccountRoles(products, timeout);
-		Map<String, Product.Role> toCreate = new Map<String, Product.Role>();
+
+		// Determine which roles should be on the account.
+		Map<String, Set<String>> missingRoles = new Map<String, Set<String>>();
+		Map<String, Map<String, Product.Role>> productGroupRolesToCreate = new Map<String, Map<String, Product.Role>>();
 		for (String product : result.keySet()) {
 			Set<String> expectedRoles = new Set<String>(PRODUCT_GROUP_ROLE_MAP.get(product).values());
 			List<Product.Role> currentRoles = result.get(product);
-			Set<String> missingRoles = getRoleDifference(expectedRoles, currentRoles);
+			missingRoles.put(product, getRoleDifference(expectedRoles, currentRoles));
+		}
 
-			// Find product groups for roles that do not already exist on the account.
-			if (Collection.isNotEmpty(missingRoles)) {
-				Map<String, Product.Role> prs = this.getProductRoles(product, timeout);
-				for (String groupId : prs.keySet()) {
-					Product.Role pr = prs.get(groupId);
-					if (pr != null && missingRoles.contains(pr.role)) {
-						toCreate.put(groupId, pr);
+		// Find product groups for roles that do not already exist on the account.
+		if (Collection.isNotEmpty(missingRoles)) {
+			Map<String, Map<String, Product.Role>> productGroupRoles = this.getProductRoles(missingRoles.keySet(), timeout);
+			for (String product : productGroupRoles.keySet()) {
+				Map<String, Product.Role> groupRoles = productGroupRoles.get(product);
+				Map<String, Product.Role> groupRolesToCreate = new Map<String, Product.Role>();
+				for (String groupId : groupRoles.keySet()) {
+					Product.Role role = groupRoles.get(groupId);
+					if (role != null && missingRoles.get(product).contains(role.role)) {
+						groupRolesToCreate.put(groupId, role);
 					}
 				}
+				if (!groupRolesToCreate.isEmpty()) productGroupRolesToCreate.put(product, groupRolesToCreate);
 			}
 		}
 
 		// Create account groups that don't already exist
-		for (String groupId : toCreate.keySet()) {
-			Product.Role pr = toCreate.get(groupId);
-			result.get(pr.product).add(this.createAccountRole(pr, groupId, timeout));
+		for (String product : productGroupRolesToCreate.keySet()) {
+			Map<String, Product.Role> groupRolesToCreate = productGroupRolesToCreate.get(product);
+			for (String groupId : groupRolesToCreate.keySet()) {
+				Product.Role role = groupRolesToCreate.get(groupId);
+				result.get(role.product).add(this.createAccountRole(role, groupId, timeout));
+			}
 		}
 
 		return result;
@@ -385,7 +423,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		Map<UUID, APIError> result = new Map<UUID, APIError>();
 		if (UUID.isEmpty(roleId) || Collection.isEmpty(userIds)) return new UserResults(false, result);
 
-		// HACK: No API support for eSignature roles, so just return success here.
+		// TODO: No API support for eSignature roles, so just return success here.
 		if (ESIGNATURE_IDS.contains(roleId)) {
 			for (UUID uId : userIds) {
 				result.put(uId, APIError.none);
@@ -467,7 +505,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		Map<UUID, APIError> result = new Map<UUID, APIError>();
 		if (UUID.isEmpty(roleId) || Collection.isEmpty(userIds)) return new UserResults(false, result);
 
-		// HACK: No API support for eSignature roles, so just return success here.
+		// TODO: No API support for eSignature roles, so just return success here.
 		if (ESIGNATURE_IDS.contains(roleId)) {
 			for (UUID uId : userIds) {
 				result.put(uId, APIError.none);

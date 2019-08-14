@@ -569,12 +569,6 @@ public with sharing class Credentials {
 			return settings;
 		}
 
-		public List<ProductSettings__c> deleteProductSettings() {
-			List<ProductSettings__c> result = ProductSettings__c.getAll().values();
-			delete result;
-			return result;
-		}
-
 		public List<Schema.User> deleteUserCredentials(final List<Schema.User> users) {
 			if (Collection.isNotEmpty(users)) {
 				Permissions.verifyIsUpdateable(Schema.User.getSObjectType(), new List<String> {
@@ -731,7 +725,6 @@ public with sharing class Credentials {
 	public static Set<Id> clear(final Boolean resetUsers) {
 		Set<Id> result = new Set<Id>();
 		DB.deleteAccountCredentials();
-		DB.deleteProductSettings();
 		if (resetUsers) {
 			Boolean isWorking = true;
 			while (isWorking) {

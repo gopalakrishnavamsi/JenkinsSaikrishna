@@ -601,6 +601,57 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
+	static void test_saveRoles_no_change() {
+		insert new List<ProductRoleSettings__c> {
+			new ProductRoleSettings__c(Name = 'prs1', ProductName__c = 'p1'),
+			new ProductRoleSettings__c(Name = 'prs2', ProductName__c = 'p2'),
+			new ProductRoleSettings__c(Name = 'prs3', ProductName__c = 'p2')
+		};
+		Set<String> oldProducts = new Set<String> { 'p1', 'p2' };
+		Set<String> newProducts = new Set<String> { 'p1', 'p2' };
+
+		Test.startTest();
+		System.assert(!AccountProducts.saveRoles(oldProducts, newProducts));
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(ProductRoleSettings__c.getAll().values()));
+	}
+
+	@IsTest
+	static void test_saveRoles_adding() {
+		insert new List<ProductRoleSettings__c> {
+			new ProductRoleSettings__c(Name = 'prs1', ProductName__c = 'p1'),
+			new ProductRoleSettings__c(Name = 'prs2', ProductName__c = 'p2'),
+			new ProductRoleSettings__c(Name = 'prs3', ProductName__c = 'p2')
+		};
+		Set<String> oldProducts = new Set<String> { 'p1', 'p2' };
+		Set<String> newProducts = new Set<String> { 'p2', 'p3' };
+
+		Test.startTest();
+		System.assert(AccountProducts.saveRoles(oldProducts, newProducts));
+		Test.stopTest();
+
+		System.assertEquals(0, Collection.size(ProductRoleSettings__c.getAll().values()));
+	}
+
+	@IsTest
+	static void test_saveRoles_removing() {
+		insert new List<ProductRoleSettings__c> {
+			new ProductRoleSettings__c(Name = 'prs1', ProductName__c = 'p1'),
+			new ProductRoleSettings__c(Name = 'prs2', ProductName__c = 'p2'),
+			new ProductRoleSettings__c(Name = 'prs3', ProductName__c = 'p2')
+		};
+		Set<String> oldProducts = new Set<String> { 'p1', 'p2' };
+		Set<String> newProducts = new Set<String> { 'p2' };
+
+		Test.startTest();
+		System.assert(AccountProducts.saveRoles(oldProducts, newProducts));
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(ProductRoleSettings__c.getAll().values()));
+	}
+
+	@IsTest
 	static void test_save_uninitialized() {
 		Test.startTest();
 		System.assert(!AccountProducts.save());
@@ -815,5 +866,24 @@ private class AccountProductsTest {
 				System.assert(Product.isValidRole(pr));
 			}
 		}
+	}
+
+	@IsTest
+	static void test_clear() {
+		insert new List<ProductSettings__c> {
+			new ProductSettings__c(Name = 'ps1'),
+			new ProductSettings__c(Name = 'ps2')
+		};
+		insert new List<ProductRoleSettings__c> {
+			new ProductRoleSettings__c(Name = 'prs1'),
+			new ProductRoleSettings__c(Name = 'prs2')
+		};
+
+		Test.startTest();
+		System.assert(AccountProducts.clear());
+		Test.stopTest();
+
+		System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
+		System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
 	}
 }

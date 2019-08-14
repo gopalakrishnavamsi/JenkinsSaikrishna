@@ -828,6 +828,14 @@ private class AuthServiceTest {
 			User u1 = UserMock.createDocuSignUser(false);
 			// Senders are unique in that they do not have DS user credentials.
 			User u2 = UserMock.createDocuSignSender(false);
+			insert new List<ProductSettings__c> {
+				new ProductSettings__c(Name = 'ps1'),
+				new ProductSettings__c(Name = 'ps2')
+			};
+			insert new List<ProductRoleSettings__c> {
+				new ProductRoleSettings__c(Name = 'prs1'),
+				new ProductRoleSettings__c(Name = 'prs2')
+			};
 
 			Test.startTest();
 			AuthService.resetAccount(true);
@@ -854,6 +862,9 @@ private class AuthServiceTest {
 				WHERE AssigneeId = :UserInfo.getUserId()
 				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
 			]));
+
+			System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
+			System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
 		}
 	}
 
@@ -1263,10 +1274,10 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_canonicalizeBaseUrl() {
-		System.assertEquals('https://unit.test/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test/')).toExternalForm());
-		System.assertEquals('https://unit.test:999/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test:999')).toExternalForm());
+		System.assertEquals('https://unit.test/', AuthService.canonicalizeBaseUrl(new Url('https://UNIT.test/')).toExternalForm());
+		System.assertEquals('https://unit.test:999/', AuthService.canonicalizeBaseUrl(new Url('https://unit.TEST:999')).toExternalForm());
 		System.assertEquals('https://unit.test/p1/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test/p1/')).toExternalForm());
-		System.assertEquals('https://unit.test:8888/p1/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test:8888/p1')).toExternalForm());
+		System.assertEquals('https://unit.test:8888/p1/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test:8888/P1')).toExternalForm());
 	}
 
 	@IsTest
@@ -1274,13 +1285,13 @@ private class AuthServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				AuthService.save(null, null, null, null, null, null, null, null, null, null, null);
+				AuthService.save(null, null, null, null, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 			}
 			try {
-				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null, null, null, null);
+				AuthService.save(DocuSign.Environment.Invalid, null, null, null, null, null, null, null, null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
@@ -1290,6 +1301,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://bad-docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1304,6 +1316,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://account.testdocusign.net'),
 					new Url('https://bad-docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1318,6 +1331,22 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.evil.com?docusign.net'),
+					new Url('https://auth.test.springcm.com'),
+					new Url('https://api.test.springcm.com'),
+					new Url('https://test.springcm.com/landing'),
+					new Url('https://test.springcm.com/admin'),
+					null, null, null, null);
+				throw new AssertException('Expected save to fail');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+			}
+			try {
+				AuthService.save(
+					DocuSign.Environment.Demo,
+					new Url('https://auth.test.docusign.net'),
+					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://bad-springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1332,6 +1361,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.evil.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1346,6 +1376,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://evil-springcm.com/landing'),
@@ -1360,6 +1391,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Demo,
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1382,6 +1414,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1410,6 +1443,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1438,6 +1472,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1462,6 +1497,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1485,6 +1521,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1511,6 +1548,7 @@ private class AuthServiceTest {
 					DocuSign.Environment.Stage,
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
+					new Url('https://esign.test.docusign.net'),
 					new Url('https://auth.test.springcm.com'),
 					new Url('https://api.test.springcm.com'),
 					new Url('https://test.springcm.com/landing'),
@@ -1548,6 +1586,7 @@ private class AuthServiceTest {
 				DocuSign.Environment.Stage,
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://esign.test.docusign.net'),
 				new Url('https://auth.test.springcm.com'),
 				new Url('https://api.test.springcm.com'),
 				new Url('https://test.springcm.com/landing'),
@@ -1584,6 +1623,7 @@ private class AuthServiceTest {
 				DocuSign.Environment.Stage,
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://esign.test.docusign.net'),
 				null,
 				null,
 				null,
