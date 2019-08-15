@@ -18,7 +18,6 @@
     <aura:attribute name="disableNext" type="Boolean" default="{!false}"/>
 
 
-
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
@@ -79,7 +78,7 @@
                                         ondragstart="{!c.onApproverDrag}"
                                         ondrop="{!c.onApproverDrop}"
                                         ondragover="{!c.allowDrop}"
-                                        >
+                                    >
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
                                             <aura:if isTrue="{!v.showApprovalOrder}">
                                                 <li class="slds-m-top_small slds-m-right_x-small">

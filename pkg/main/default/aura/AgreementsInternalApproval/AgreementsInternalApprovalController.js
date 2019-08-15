@@ -39,8 +39,8 @@
     helper.nextButtonClicked(component, event, helper);
   },
 
-  handlePillCloseEvent: function (component, event, helper) {
-    helper.disableNextButton(component);
+  handlePillCloseEvent: function (component) {
+    component.set('v.disableNext', true);
   },
 
   handleRecipientsChange: function (component, event, helper) {

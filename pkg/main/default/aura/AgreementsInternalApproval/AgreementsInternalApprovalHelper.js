@@ -255,15 +255,15 @@
   handleRecipientsChange: function (component) {
     component.set('v.disableNext', false);
     var rs = component.get('v.recipients');
-    rs.forEach(function (r) {
-      if ($A.util.isUndefinedOrNull(r.name) || $A.util.isEmpty(r.name)) {
-        this.disableNextButton(component);
-      }
-    });
-  },
-
-  disableNextButton: function (component) {
-    component.set('v.disableNext', true);
+    if ($A.util.isUndefinedOrNull(rs)) {
+      component.set('v.disableNext', true);
+    } else {
+      rs.forEach(function (r) {
+        if ($A.util.isUndefinedOrNull(r.name) || $A.util.isEmpty(r.name)) {
+          component.set('v.disableNext', true);
+        }
+      });
+    }
   }
 
 });
