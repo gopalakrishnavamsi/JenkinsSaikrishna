@@ -31,7 +31,7 @@
     helper.fireApplicationEvent(
       component,
       {
-        fromComponent: 'CLMHomeEBody',
+        fromComponent: 'CLMHomeBody',
         toComponent: 'CLMSetupLayout',
         type: 'update',
         tabIndex: '8'
