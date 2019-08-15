@@ -504,10 +504,6 @@ public with sharing class GenService {
 		return DB.cloneTemplate(templateId);
 	}
 
-	public static Gen.File convertToGenFile(final ContentVersion cv) {
-		return DB.convert(cv);
-	}
-
 	public static Gen.Template createBlankTemplate() {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -526,7 +522,9 @@ public with sharing class GenService {
 	}
 
 	public static Gen.Template getTemplate(final Id templateId) {
-		Permissions.verifyIsDocuSignUser(); // TODO: Verify Gen user?
+		if (!Permissions.isDocuSignAdministrator() && !Permissions.isDocuSignGenerator()){
+			throw UnauthorizedException.notDocuSignGenerator();
+		}
 
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 
@@ -545,7 +543,7 @@ public with sharing class GenService {
 		final SObjectType type,
 		final Integer maximumRecords) {
 
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 
 		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
 
@@ -556,7 +554,7 @@ public with sharing class GenService {
 		final Id sourceId,
 		final Gen.Query query) {
 
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 
 		if (sourceId == null || query == null) throw new DocuSignException(Label.UndefinedArgument);
 		if (!Gen.isValidQuery(query)) throw new DocuSignException(Label.InvalidGenQuery);
@@ -597,7 +595,7 @@ public with sharing class GenService {
 		final Boolean isPreview,
 		final List<Id> contentDocumentIds) {
 
-		Permissions.verifyIsDocuSignUser(); // TODO: Verify has Gen license, trial not expired, etc.
+		Permissions.verifyIsDocuSignGenerator();
 
 		if (templateId == null
 			|| sourceId == null
@@ -630,7 +628,7 @@ public with sharing class GenService {
 	}
 
 	public static List<Gen.Job> getJobStatus(final List<UUID> jobIds) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 
 		if (Collection.isEmpty(jobIds)) throw new DocuSignException(Label.UndefinedArgument);
 
@@ -661,7 +659,7 @@ public with sharing class GenService {
 	}
 
 	public static Boolean checkMultiCurrency() {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 		Boolean isMultiCurrencyOrganization = UserInfo.isMultiCurrencyOrganization() ? true : false;
 		return isMultiCurrencyOrganization;
 	}
@@ -682,7 +680,7 @@ public with sharing class GenService {
 		final String title,
 		final String base64Data) {
 
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 
 		if (linkedEntityId == null
 			|| String.isBlank(title)
@@ -700,7 +698,7 @@ public with sharing class GenService {
 		}
 
 		if (result != null) {
-			resultFile = GenService.convertToGenFile(result);
+			resultFile = DB.convert(result);
 		}
 		return resultFile;
 	}
@@ -713,8 +711,7 @@ public with sharing class GenService {
 	 * @return Boolean
 	 */
 	public static Boolean deleteContentDocument(final Id contentVersionId) {
-		Permissions.verifyIsDocuSignUser();
+		Permissions.verifyIsDocuSignGenerator();
 		return DB.deleteContentDocument(contentVersionId);
 	}
-
 }
