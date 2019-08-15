@@ -3646,7 +3646,7 @@
 		<name>CLM</name>
 	</customLabels>
 	<customLabels>
-		<label><!-- CLM - Pick a Field Title --></label>
+		<label>			<!-- CLM - Pick a Field Title --></label>
 		<name>CLM_PickAFieldTitle</name>
 	</customLabels>
 	<customLabels>
@@ -3968,7 +3968,7 @@
 		<name>SelectFieldInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos; folder</label>
+		<label>In your DocuSign CLM, every instance of '{0}' will have its own folder. You can change the location of these folders below.</label>
 		<name>SelectFolderHelpBody</name>
 	</customLabels>
 	<customLabels>
@@ -4168,6 +4168,186 @@
 	<customLabels>
 		<label>Agreement external review on behalf of has failed.</label>
 		<name>AgreementExternalReviewOnBehalfOfFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Viewing object folders in Salesforce</label>
+		<name>ViewObjectFoldersCardTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Customizing and viewing your DocuSign CLM object folders in Salesforce is simple. After object mapping, just add a custom view to your object page layouts in Salesforce.</label>
+		<name>ViewObjectFoldersCardBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Naming Syntax</label>
+		<name>NamingSyntax</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>AccountNameMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Indicates Up</label>
+		<name>IndicatesUp</name>
+	</customLabels>
+	<customLabels>
+		<label>Account 1</label>
+		<name>Account1</name>
+	</customLabels>
+	<customLabels>
+		<label>Syntax</label>
+		<name>Syntax</name>
+	</customLabels>
+	<customLabels>
+		<label>Account Name</label>
+		<name>AccountName</name>
+	</customLabels>
+	<customLabels>
+		<label>Levis</label>
+		<name>Levis</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.name}</label>
+		<name>AccountNameMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Account 2</label>
+		<name>Account2</name>
+	</customLabels>
+	<customLabels>
+		<label>Zara</label>
+		<name>Zara</name>
+	</customLabels>
+	<customLabels>
+		<label>Corresponding Folder in DocuSign CLM</label>
+		<name>CorrespondingFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM</label>
+		<name>DocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Other Sources</label>
+		<name>OtherSources</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce</label>
+		<name>Salesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Accounts</label>
+		<name>Accounts</name>
+	</customLabels>
+	<customLabels>
+		<label>Account Number</label>
+		<name>AccountNumber</name>
+	</customLabels>
+	<customLabels>
+		<label>Account Owner</label>
+		<name>AccountOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>Created By</label>
+		<name>CreatedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>01</label>
+		<name>ZeroOne</name>
+	</customLabels>
+	<customLabels>
+		<label>Strauss</label>
+		<name>Strauss</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.number}</label>
+		<name>AccountNumberMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.owner}</label>
+		<name>AccountOwnerMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>	{!account.created_by}</label>
+		<name>CreatedByMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>02</label>
+		<name>ZeroTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM and Salesforce will use the fields you select to automatically name mapped object folders. The names of the folders will update whenever the content of the field changes. Additionally, DocuSign CLM will create a new folder whenever you add a new object.</label>
+		<name>WhyAmISelectingFieldsBodyPart1</name>
+	</customLabels>
+	<customLabels>
+		<label>This is why we recommend selecting a field instead of typing a static name. Using static name will apply the same name to all your object folders, which can create confusion.</label>
+		<name>WhyAmISelectingFieldsBodyPart2</name>
+	</customLabels>
+	<customLabels>
+		<label>Understand the difference</label>
+		<name>UnderstandTheDifference</name>
+	</customLabels>
+	<customLabels>
+		<label>Static Name</label>
+		<name>StaticName</name>
+	</customLabels>
+	<customLabels>
+		<label>Dynamic name using fields</label>
+		<name>DynamicName</name>
+	</customLabels>
+	<customLabels>
+		<label>Account A</label>
+		<name>AccountA</name>
+	</customLabels>
+	<customLabels>
+		<label>Account B</label>
+		<name>AccountB</name>
+	</customLabels>
+	<customLabels>
+		<label>Account C</label>
+		<name>AccountC</name>
+	</customLabels>
+	<customLabels>
+		<label>Account D</label>
+		<name>AccountD</name>
+	</customLabels>
+	<customLabels>
+		<label>Folder Example</label>
+		<name>FolderExample</name>
+	</customLabels>
+	<customLabels>
+		<label>Confirm</label>
+		<name>Confirm</name>
+	</customLabels>
+	<customLabels>
+		<label>'{0}' object type was successfully mapped to DocuSign CLM.</label>
+		<name>MappingSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Name your sub-folder</label>
+		<name>NameYourSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
+		<name>NameSubFolderSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Name Subfolder</label>
+		<name>NameSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Name your folder</label>
+		<name>NameYourFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
+		<name>NameYourFolderSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Rename Folder</label>
+		<name>RenameFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Folder Location</label>
+		<name>FolderLocation</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

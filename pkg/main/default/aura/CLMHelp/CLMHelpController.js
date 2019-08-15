@@ -20,4 +20,4 @@
     });
     secondaryClicked.fire();
   },
-});
+})

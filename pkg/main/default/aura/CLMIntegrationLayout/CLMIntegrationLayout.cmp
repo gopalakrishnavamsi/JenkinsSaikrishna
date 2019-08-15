@@ -7,7 +7,8 @@
     <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
     <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"  action="{!c.onSecondaryButtonClick}" />
-    
+    <aura:handler event="c:CLMPathEvent" action="{!c.updateUIWithAdditionalHelpCard}" />
+
     <aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent" />
     
     <!--Place holder attributes-->
@@ -19,6 +20,7 @@
     <aura:attribute type="boolean" name="showHelp" default="true" />
     <aura:attribute type="boolean" name="showTrouble" default="true" />
     <aura:attribute type="boolean" name="showPathAndNew" default="false" />
+    <aura:attribute type="boolean" name="showAdditionalHelpCard" default="false"/>
 
     <lightning:layout multipleRows="true">
         <aura:if isTrue="{!!v.showPathAndNew}">
@@ -48,8 +50,8 @@
         </aura:if>
         <aura:if isTrue="{!v.showTrouble}">
             <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required" buttonName="{!$Label.c.ConfigureLayouts}"
-                    showIcon="true" secondButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
+                <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required" secondButtonName="{!$Label.c.ConfigureLayouts}"
+                    showIcon="true" firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
                     summary="{!$Label.c.ConfigureObjectPageLayoutInfo}" />
             </lightning:layoutItem>
         </aura:if>
@@ -57,6 +59,13 @@
             <lightning:layoutItem size="12" padding="around-small">
                 <c:CLMTroubleshoot />
             </lightning:layoutItem>
+        </aura:if>   
+        <aura:if isTrue="{!v.showAdditionalHelpCard}">
+            <lightning:layoutItem size="12" padding="around-small">
+                <c:CLMHelp title="{!$Label.c.ViewObjectFoldersCardTitle}" imageURL="standard:solution" 
+                showIcon="true" showFirstButton="true" firstButtonName="{!$Label.c.LearnMore}" showSecondButton="false"
+                summary="{!$Label.c.ViewObjectFoldersCardBody}" />
+               </lightning:layoutItem>
         </aura:if>
     </lightning:layout>
 </aura:component>

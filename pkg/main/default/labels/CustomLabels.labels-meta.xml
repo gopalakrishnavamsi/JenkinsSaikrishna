@@ -7453,7 +7453,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Select Folder Help Body</shortDescription>
-		<value>For example: if your object has a name field which contains \&apos;Chicago\&apos; we will create a new \&apos;Chicago\&apos; folder</value>
+		<value>In your DocuSign CLM, every instance of '{0}' will have its own folder. You can change the location of these folders below.</value>
 	</labels>
 	<labels>
 		<fullName>SelectObjectHelpBody</fullName>
@@ -7809,4 +7809,372 @@
 		<shortDescription>InvalidInputsAgreementComparison</shortDescription>
 		<value>Invalid input parameters for comparing Agreement versions.</value>
 	</labels>
+	<labels>
+		<fullName>ViewObjectFoldersCardTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Viewing object folders in Salesforce card title</shortDescription>
+		<value>Viewing object folders in Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>ViewObjectFoldersCardBody</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Viewing object folders in Salesforce card body</shortDescription>
+		<value>Customizing and viewing your DocuSign CLM object folders in Salesforce is simple. After object mapping, just add a custom view to your object page layouts in Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>NamingSyntax</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Naming Syntax</shortDescription>
+		<value>Naming Syntax</value>
+	</labels>
+	<labels>
+		<fullName>AccountNameMergeField</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account Name Merge Field</shortDescription>
+		<value>{!Account.Name}</value>
+	</labels>
+	<labels>
+		<fullName>AccountObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account Object</shortDescription>
+		<value>Account Object</value>
+	</labels>
+	<labels>
+		<fullName>IndicatesUp</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Indicates Up</shortDescription>
+		<value>Indicates Up</value>
+	</labels>
+	<labels>
+		<fullName>Account1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account 1</shortDescription>
+		<value>Account 1</value>
+	</labels>
+	<labels>
+		<fullName>Syntax</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Syntax</shortDescription>
+		<value>Syntax</value>
+	</labels>
+	<labels>
+		<fullName>AccountName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account Name</shortDescription>
+		<value>Account Name</value>
+	</labels>
+	<labels>
+		<fullName>Levis</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Levis</shortDescription>
+		<value>Levis</value>
+	</labels>
+	<labels>
+		<fullName>AccountNameMergeFieldLowerCase</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - {!account.name}</shortDescription>
+		<value>{!account.name}</value>
+	</labels>
+	<labels>
+		<fullName>Account2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account 2</shortDescription>
+		<value>Account 2</value>
+	</labels>
+	<labels>
+		<fullName>Zara</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Zara</shortDescription>
+		<value>Zara</value>
+	</labels>
+	<labels>
+		<fullName>CorrespondingFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Corresponding Folder</shortDescription>
+		<value>Corresponding Folder in DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign CLM</shortDescription>
+		<value>DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>OtherSources</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Other Sources</shortDescription>
+		<value>Other Sources</value>
+	</labels>
+	<labels>
+		<fullName>Salesforce</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Salesforce</shortDescription>
+		<value>Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>Accounts</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Accounts</shortDescription>
+		<value>Accounts</value>
+	</labels>
+	<labels>
+		<fullName>AccountNumber</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account Number</shortDescription>
+		<value>Account Number</value>
+	</labels>
+	<labels>
+		<fullName>AccountOwner</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account Owner</shortDescription>
+		<value>Account Owner</value>
+	</labels>
+	<labels>
+		<fullName>CreatedBy</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Created By</shortDescription>
+		<value>Created By</value>
+	</labels>
+	<labels>
+		<fullName>ZeroOne</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - 01</shortDescription>
+		<value>01</value>
+	</labels>
+	<labels>
+		<fullName>Strauss</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Strauss</shortDescription>
+		<value>Strauss</value>
+	</labels>
+	<labels>
+		<fullName>AccountNumberMergeFieldLowerCase</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account number merge field in lower case</shortDescription>
+		<value>{!account.number}</value>
+	</labels>
+	<labels>
+		<fullName>AccountOwnerMergeFieldLowerCase</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account number merge field in lower case</shortDescription>
+		<value>{!account.owner}</value>
+	</labels>
+	<labels>
+		<fullName>CreatedByMergeFieldLowerCase</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account number merge field in lower case</shortDescription>
+		<value>{!account.created_by}</value>
+	</labels>
+	<labels>
+		<fullName>ZeroTwo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - 02</shortDescription>
+		<value>02</value>
+	</labels>
+	<labels>
+		<fullName>WhyAmISelectingFieldsBodyPart1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - WhyAmISelectingFieldsBodyPart1</shortDescription>
+		<value>DocuSign CLM and Salesforce will use the fields you select to automatically name mapped object folders. The names of the folders will update whenever the content of the field changes. Additionally, DocuSign CLM will create a new folder whenever you add a new object.</value>
+	</labels>
+	<labels>
+		<fullName>WhyAmISelectingFieldsBodyPart2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - WhyAmISelectingFieldsBodyPart2</shortDescription>
+		<value>This is why we recommend selecting a field instead of typing a static name. Using static name will apply the same name to all your object folders, which can create confusion.</value>
+	</labels>
+	<labels>
+		<fullName>UnderstandTheDifference</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - UnderstandTheDifference</shortDescription>
+		<value>Understand the difference</value>
+	</labels>
+	<labels>
+		<fullName>StaticName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - StaticName</shortDescription>
+		<value>Static Name</value>
+	</labels>
+	<labels>
+		<fullName>DynamicName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DynamicName</shortDescription>
+		<value>Dynamic Name using fields</value>
+	</labels>
+	<labels>
+		<fullName>AccountA</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account A</shortDescription>
+		<value>Account A</value>
+	</labels>
+	<labels>
+		<fullName>AccountB</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account B</shortDescription>
+		<value>Account B</value>
+	</labels>
+	<labels>
+		<fullName>AccountC</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account C</shortDescription>
+		<value>Account C</value>
+	</labels>
+	<labels>
+		<fullName>AccountD</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Account D</shortDescription>
+		<value>Account D</value>
+	</labels>
+	<labels>
+		<fullName>FolderExample</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Folder Example</shortDescription>
+		<value>Folder Example</value>
+	</labels>
+	<labels>
+		<fullName>Confirm</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Confirm</shortDescription>
+		<value>Confirm</value>
+	</labels>
+	<labels>
+		<fullName>MappingSuccess</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Success</shortDescription>
+		<value>'{0}' object type was successfully mapped to DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>NameYourSubFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name your sub-folder</shortDescription>
+		<value>Name your sub-folder</value>
+	</labels>
+	<labels>
+		<fullName>NameSubFolderSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name your sub-folder summary</shortDescription>
+		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
+	</labels>	
+	<labels>
+		<fullName>NameSubFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name sub-folder</shortDescription>
+		<value>Name Subfolder</value>
+	</labels>
+	<labels>
+		<fullName>NameYourFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name Your Folder</shortDescription>
+		<value>Name your folder</value>
+	</labels>
+	<labels>
+		<fullName>NameYourFolderSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Name Your Folder Summary</shortDescription>
+		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
+	</labels>
+	<labels>
+		<fullName>RenameFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Rename Folder</shortDescription>
+		<value>Rename Folder</value>
+	</labels>
+	<labels>
+		<fullName>FolderLocation</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Folder Location</shortDescription>
+		<value>Folder Location</value>
+	</labels>	
 </CustomLabels>

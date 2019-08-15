@@ -5,10 +5,11 @@
     <aura:attribute name="imageURL" type="String" />
     <aura:attribute name="summary" type="String" />
     <aura:attribute name="title" type="String" />
-    <aura:attribute name="buttonName" type="String" />
+    <aura:attribute name="firstButtonName" type="String" />
     <aura:attribute name="secondButtonName" type="String" />
     <aura:attribute name="showIcon" type="Boolean" default="true" />
     <aura:attribute name="showFirstButton" type="Boolean" default="true" />
+    <aura:attribute name="showSecondButton" type="Boolean" default="true" />
 
     <lightning:card class="slds-m-top_none ">
         <div class="slds-grid">
@@ -36,12 +37,14 @@
                 <div class="slds-p-left_none slds-p-right_medium slds-float_right">
                     <div class="slds-m-top_small ds-button-height">
                         <aura:if isTrue="{!v.showFirstButton}">
-                            <lightning:button label="{!v.secondButtonName}" iconName="utility:new_window"
+                            <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}" iconName="utility:new_window"
                                 iconPosition="right" onclick="{!c.onSecondayButtonClick}"
                                 class="slds-m-right_x-small ds-button-width" />
                         </aura:if>
-                        <lightning:button variant="brand" label="{!v.buttonName}" title="{!v.buttonName}"
-                            onclick="{!c.onPrimaryButtonClick}" class="ds-button-width slds-m-right_small" />
+                        <aura:if isTrue="{!v.showSecondButton}">
+                            <lightning:button variant="brand" label="{!v.secondButtonName}" title="{!v.secondButtonName}"
+                                onclick="{!c.onPrimaryButtonClick}" class="ds-button-width slds-m-right_small" />
+                        </aura:if>                        
                     </div>
                 </div>
             </div>

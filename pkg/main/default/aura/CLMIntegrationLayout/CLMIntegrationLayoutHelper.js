@@ -27,4 +27,4 @@
     ];
     component.set('v.pathValues', defaultPathValues);
   }
-});
+})

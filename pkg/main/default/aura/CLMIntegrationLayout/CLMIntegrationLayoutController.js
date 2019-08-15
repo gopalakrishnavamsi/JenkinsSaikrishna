@@ -75,5 +75,13 @@
       type: 'update',
       tabIndex: '8',
     }, 'CLMNavigationEvent');
+  },
+
+  updateUIWithAdditionalHelpCard: function(component, event) {
+    var navigateTo = event.getParam('navigateTo');
+    if(navigateTo.index === '2' || navigateTo.index === '3') {
+      component.set('v.showAdditionalHelpCard', true);
+    }
   }
-});
+
+})
