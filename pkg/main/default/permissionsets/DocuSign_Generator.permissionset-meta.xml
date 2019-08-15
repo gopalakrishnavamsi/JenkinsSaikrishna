@@ -3,6 +3,46 @@
 	<description>Provides access to document generation</description>
 	<fieldPermissions>
 		<editable>false</editable>
+		<field>GenTemplate__c.HasPreviewedDocuments__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.IsSample__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.ObjectMappings__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.SignerMappings__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.SourceObject__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.UseAllTemplates__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.UseCurrentRecord__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.StepsCompleted__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
 		<field>User.Username__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -23,6 +63,15 @@
 	</fieldPermissions>
 	<hasActivationRequired>false</hasActivationRequired>
 	<label>DocuSign Document Generator</label>
+	<objectPermissions>
+		<allowCreate>false</allowCreate>
+		<allowDelete>false</allowDelete>
+		<allowEdit>false</allowEdit>
+		<allowRead>true</allowRead>
+		<modifyAllRecords>false</modifyAllRecords>
+		<object>GenTemplate__c</object>
+		<viewAllRecords>false</viewAllRecords>
+	</objectPermissions>
 	<pageAccesses>
 		<apexPage>CompleteOAuth</apexPage>
 		<enabled>true</enabled>

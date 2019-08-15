@@ -142,13 +142,13 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getTemplate_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				GenService.getTemplate(null);
 				throw new AssertException('Expected getTemplate to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -156,7 +156,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getTemplate_undefined_id() {
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.getTemplate(null);
@@ -170,7 +170,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getTemplate_success() {
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
@@ -305,13 +305,13 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getRecentRecords_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				GenService.getRecentRecordIds(null, 0);
 				throw new AssertException('Expected getRecentRecordIds to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -319,7 +319,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getRecentRecords_undefined_type() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.getRecentRecordIds(null, 0);
@@ -333,7 +333,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getRecentRecords_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Lead l1 = TestUtils.createLead();
 			Lead l2 = TestUtils.createLead();
 
@@ -348,13 +348,13 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getMergeData_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				GenService.getMergeData(null, null);
 				throw new AssertException('Expected getMergeData to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -362,7 +362,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getMergeData_undefined_argument() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.getMergeData(null, null);
@@ -382,7 +382,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getMergeData_invalid_query() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.getMergeData(UserInfo.getUserId(), new Gen.Query(null, null, null, null));
@@ -402,7 +402,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getMergeData_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Contact c1 = TestUtils.createContact(a.Id);
@@ -478,13 +478,13 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				GenService.queueDocumentGeneration(null, null, null, null, null);
 				throw new AssertException('Expected queueDocumentGeneration to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -492,7 +492,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_undefined_arguments() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.queueDocumentGeneration(null, UserInfo.getUserId(), '<xml/>', false, new List<Id> { UserInfo.getUserId() });
@@ -545,7 +545,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_queueDocumentGeneration_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
@@ -577,7 +577,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_queueDocumentGeneration_preview() {
 		GenAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
@@ -608,7 +608,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_queueDocumentGeneration_source() {
 		GenAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
@@ -638,13 +638,13 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getJobStatus_unauthorized() {
-		System.runAs(UserMock.createUser()) {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
 				GenService.getJobStatus(null);
 				throw new AssertException('Expected getJobStatus to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -652,7 +652,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getJobStatus_invalid_argument() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
 				GenService.getJobStatus(null);
@@ -673,7 +673,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getJobStatus_success() {
 		GenAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator()) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);
 			UUID jobId1 = UUID.randomUUID();
@@ -702,7 +702,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getJobStatus_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator()) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);
 			UUID jobId1 = UUID.randomUUID(), jobId2 = UUID.randomUUID();
@@ -737,7 +737,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_createGenFile_success() {
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Schema.Account a = TestUtils.createAccount();
 			System.assertNotEquals(null, a.Id);
 
@@ -749,4 +749,152 @@ private class GenServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_checkMultiCurrency_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.checkMultiCurrency();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_checkMultiCurrency_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Test.startTest();
+			Boolean result = GenService.checkMultiCurrency();
+			Test.stopTest();
+
+			System.assertEquals(UserInfo.isMultiCurrencyOrganization(), result);
+		}
+	}
+
+	@IsTest
+	static void test_saveFile_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.saveFile(null, null, null, null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveFile_undefined_argument() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Test.startTest();
+			try {
+				GenService.saveFile(UserInfo.getUserId(), null, 'title', 'base64data');
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.saveFile(UserInfo.getUserId(), UserInfo.getUserId(), null, 'base64data');
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.saveFile(UserInfo.getUserId(), UserInfo.getUserId(), ' ', 'base64data');
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.saveFile(UserInfo.getUserId(), UserInfo.getUserId(), 'title', null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.saveFile(UserInfo.getUserId(), UserInfo.getUserId(), 'title', '\r');
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveFile_create() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Schema.Account a = TestUtils.createAccount();
+
+			Test.startTest();
+			Gen.File result = GenService.saveFile(null, a.Id, 'title', EncodingUtil.base64Encode(Blob.valueOf('data')));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.id);
+			System.assertEquals('title', result.title);
+			System.assertNotEquals(null, result.contentDocumentId);
+
+			ContentVersion cv = [SELECT VersionData FROM ContentVersion WHERE Id = :result.id];
+			System.assertNotEquals(null, cv);
+			System.assertNotEquals(null, cv.VersionData);
+			System.assertEquals(EncodingUtil.base64Encode(Blob.valueOf('data')), EncodingUtil.base64Encode(cv.VersionData));
+		}
+	}
+
+	@IsTest
+	static void test_saveFile_update() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			ContentVersion cv = TestUtils.createContentVersion(a.Id);
+
+			Test.startTest();
+			Gen.File result = GenService.saveFile(cv.Id, a.Id, 'title', EncodingUtil.base64Encode(Blob.valueOf('data')));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(cv.Id, result.id);
+			System.assertNotEquals('title', result.title);
+			System.assertEquals(cv.ContentDocumentId, result.contentDocumentId);
+
+//			cv = [SELECT VersionData FROM ContentVersion WHERE Id = :result.id];
+//			System.assertNotEquals(null, cv);
+//			System.assertNotEquals(null, cv.VersionData);
+//			System.assertEquals(EncodingUtil.base64Encode(Blob.valueOf('data')), EncodingUtil.base64Encode(cv.VersionData));
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.deleteContentDocument(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			ContentVersion cv = TestUtils.createContentVersion();
+			System.assertNotEquals(null, cv.ContentDocumentId);
+
+			Test.startTest();
+			System.assert(GenService.deleteContentDocument(cv.Id));
+			Test.stopTest();
+
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id = :cv.Id]));
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
+		}
+	}
 }
