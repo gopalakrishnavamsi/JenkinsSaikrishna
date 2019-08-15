@@ -45,9 +45,5 @@
 
   handleRecipientsChange: function (component, event, helper) {
     helper.handleRecipientsChange(component);
-  },
-
-  handleSearchTermChange: function (component, event, helper) {
-    helper.handleRecipientsChange(component);
   }
 });

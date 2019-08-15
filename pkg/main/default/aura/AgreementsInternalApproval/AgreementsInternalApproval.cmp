@@ -23,7 +23,7 @@
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
     <aura:handler name="strike_evt_pillClosed" event="c:strike_evt" action="{!c.handlePillCloseEvent}"/>
     <aura:handler name="change" value="{!v.recipients}" action="{!c.handleRecipientsChange}"/>
-    <aura:handler name="searchTermChange" event="c:strike_evt" action="{!c.handleSearchTermChange}"/>
+    <aura:handler name="searchTermChange" event="c:strike_evt" action="{!c.handleRecipientsChange}"/>
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>

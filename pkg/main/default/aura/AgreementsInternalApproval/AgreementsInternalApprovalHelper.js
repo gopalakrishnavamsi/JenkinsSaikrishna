@@ -253,16 +253,16 @@
   },
 
   handleRecipientsChange: function (component) {
-    component.set('v.disableNext', false);
     var rs = component.get('v.recipients');
     if ($A.util.isUndefinedOrNull(rs)) {
       component.set('v.disableNext', true);
     } else {
-      rs.forEach(function (r) {
-        if ($A.util.isUndefinedOrNull(r.name) || $A.util.isEmpty(r.name)) {
+      for (var i = 0; i < rs.length; i++) {
+        if ($A.util.isUndefinedOrNull(rs[i].name) || $A.util.isEmpty(rs[i].name)) {
           component.set('v.disableNext', true);
+          break;
         }
-      });
+      }
     }
   }
 
