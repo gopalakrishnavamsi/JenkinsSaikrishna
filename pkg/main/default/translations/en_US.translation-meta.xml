@@ -4349,6 +4349,10 @@
 		<label>Folder Location</label>
 		<name>FolderLocation</name>
 	</customLabels>
+	<customLabels>
+		<label>Folder Name</label>
+		<name>FolderName</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

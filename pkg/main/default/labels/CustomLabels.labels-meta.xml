@@ -8177,4 +8177,12 @@
 		<shortDescription>CLM - Folder Location</shortDescription>
 		<value>Folder Location</value>
 	</labels>	
+	<labels>
+		<fullName>FolderName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Folder Name</shortDescription>
+		<value>Folder Name</value>
+	</labels>
 </CustomLabels>

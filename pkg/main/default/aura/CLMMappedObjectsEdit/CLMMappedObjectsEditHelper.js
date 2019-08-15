@@ -32,7 +32,7 @@
         type: 'update'
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '2');
-      component.set('v.title', SelectedObjDetails.label + ' Folder Name');
+      component.set('v.title', stringUtils.format(SelectedObjDetails.label, $A.get('$Label.c.FolderName')));
       component.set('v.titleHelpText', stringUtils.format($A.get('$Label.c.SelectFolderHelpBody'), SelectedObjDetails.label));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '2' },
@@ -114,4 +114,4 @@
       }, 'CLMPathEvent');
     }
   }
-})
+});
