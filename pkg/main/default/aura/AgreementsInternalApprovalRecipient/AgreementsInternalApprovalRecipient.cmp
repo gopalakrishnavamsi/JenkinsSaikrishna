@@ -6,7 +6,10 @@
 
     <!--handlers -->
     <aura:handler name="change" value="{!v.sourceId}" action="{!c.handleRecipientIdChange}"/>
+    <aura:handler name="change" value="{!v.recipient.name}" action="{!c.handleSearchValueChange}"/>
+
     <aura:registerEvent name="recipientIdChange" type="c:strike_evt"/>
+    <aura:registerEvent name="searchTermChange" type="c:strike_evt"/>
 
     <!-- component body -->
     <div class="slds-grid">
@@ -17,10 +20,11 @@
                              searchField="Name"
                              value="{!v.sourceId}"
                              subtitleField="Email"
-                             filter="{!'dfsle__Username__c != null AND isActive=true AND Id != \''+v.currentUserId+'\''}"
+                             filter="{!'dfsle__Username__c != null AND isActive=true AND dfsle__Status__c=\'Active\' AND Id != \''+v.currentUserId+'\''}"
                              valueLabel="{!v.recipient.name}"
                              isDocuSignAgreementsWorkflow="true"
-                             isDocuSignAgreementsInternalApproval="true"/>
+                             isDocuSignAgreementsInternalApproval="true"
+            />
         </div>
     </div>
 </aura:component>
