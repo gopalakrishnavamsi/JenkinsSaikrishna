@@ -2,7 +2,7 @@
   onInit: function (component, event, helper) {
     //set current user Id
     var currentUserId = $A.get('$SObjectType.CurrentUser.Id');
-    component.set('v.currentUserId',currentUserId);
+    component.set('v.currentUserId', currentUserId);
 
     //initialize recipients
     var recipients = component.get('v.recipients');
@@ -250,6 +250,20 @@
     });
     $A.enqueueAction(action);
 
+  },
+
+  handleRecipientsChange: function (component) {
+    component.set('v.disableNext', false);
+    var rs = component.get('v.recipients');
+    rs.forEach(function (r) {
+      if ($A.util.isUndefinedOrNull(r.name) || $A.util.isEmpty(r.name)) {
+        this.disableNextButton(component);
+      }
+    });
+  },
+
+  disableNextButton: function (component) {
+    component.set('v.disableNext', true);
   }
 
 });

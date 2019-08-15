@@ -1,13 +1,13 @@
 ({
-  onInit: function(component, event, helper) {
+  onInit: function (component, event, helper) {
     helper.onInit(component, event, helper);
   },
 
-  handleRecipientChange: function(component, event, helper) {
+  handleRecipientChange: function (component, event, helper) {
     helper.resolveRecipient(component, event.getParam('data'));
   },
 
-  addRecipient: function(component, event, helper) {
+  addRecipient: function (component, event, helper) {
     helper.addRecipient(component, event, helper);
   },
 
@@ -19,7 +19,7 @@
     helper.onApproverDrag(component, event);
   },
 
-  allowDrop: function(component, event) {
+  allowDrop: function (component, event) {
     event.preventDefault();
   },
 
@@ -31,15 +31,23 @@
     helper.setApprovalOrder(component);
   },
 
-  backButtonClicked: function(component, event, helper) {
+  backButtonClicked: function (component, event, helper) {
     helper.backButtonClicked(component, event, helper);
   },
 
-  nextButtonClicked: function(component, event, helper) {
+  nextButtonClicked: function (component, event, helper) {
     helper.nextButtonClicked(component, event, helper);
   },
 
-  handlePillCloseEvent: function(/*component, event, helper*/) {
-    //TODO: Add the logic for updating the recipients array on this pill handle close event.
+  handlePillCloseEvent: function (component, event, helper) {
+    helper.disableNextButton(component);
+  },
+
+  handleRecipientsChange: function (component, event, helper) {
+    helper.handleRecipientsChange(component);
+  },
+
+  handleSearchTermChange: function (component, event, helper) {
+    helper.handleRecipientsChange(component);
   }
 });
