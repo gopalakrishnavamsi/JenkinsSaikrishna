@@ -21,7 +21,6 @@
     <aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
     <aura:attribute name="tempMappingModelDataHolder" type="object" default="" access="private" />
 
-
     <!--model attributes-->
     <aura:attribute name="modelTitleText" type="String" access="private" />
     <aura:attribute name="modelbodyText" type="String" access="private" />

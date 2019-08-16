@@ -1,0 +1,184 @@
+<aura:component>
+	<aura:attribute name="summary" type="String" default="Description of the section"/>
+    <aura:attribute name="title" type="String" default="Section 1"/>
+    <aura:attribute type="string" name="index" default=""/>
+    <div class="slds-m-left_large slds-text-title_caps">
+        FREQUENTLY ASKED QUESTIONS
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!v.title}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!v.summary}
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large" style="cursor: pointer;" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small" alternativeText="Indicates down"/>
+                        <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevronup" size="x-small" alternativeText="Indicates up"/>
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Expand</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Collapse</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-hide slds-p-around--medium" aura:id="objMapping">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is DocuSign Agreements?</b></span>
+                        <div>
+                            DocuSign Agreements is a Salesforce app that enables you to use your salesforce data to create documents such as conteacts and agreements in DocuSign CLM.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>	
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <!--<b>{!v.title}</b>-->
+                                Section 2
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!v.summary}
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large" style="cursor: pointer;" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small" alternativeText="Indicates down"/>
+                        <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevronup" size="x-small" alternativeText="Indicates up"/>
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Expand</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Collapse</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-hide slds-p-around--medium" aura:id="objMapping">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is DocuSign Agreements?</b></span>
+                        <div>
+                            DocuSign Agreements is a Salesforce app that enables you to use your salesforce data to create documents such as conteacts and agreements in DocuSign CLM.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>	
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <!--<b>{!v.title}</b>-->
+                                Section 3
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!v.summary}
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large" style="cursor: pointer;" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small" alternativeText="Indicates down"/>
+                        <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevronup" size="x-small" alternativeText="Indicates up"/>
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Expand</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                       aura:id="objMapping">Collapse</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-hide slds-p-around--medium" aura:id="objMapping">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is DocuSign Agreements?</b></span>
+                        <div>
+                            DocuSign Agreements is a Salesforce app that enables you to use your salesforce data to create documents such as conteacts and agreements in DocuSign CLM.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>What is this app for?</b></span>
+                        <div>
+                            Salesforce admins will use DocuSign Agreements to set up their Salesforce objects for use in DocuSign CLM. They can also manage and create users.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>	
+    </div>
+</aura:component>

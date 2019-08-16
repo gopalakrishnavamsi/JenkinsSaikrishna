@@ -1,0 +1,178 @@
+<aura:component >
+	<aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}"/>
+    <aura:attribute name="summary" type="String" default="At DocuSign, we're dedicated to your success. We've created a Help page to provide answer to common questions to DocuSign Agreements. "/>
+    <aura:attribute name="title" type="String" default="Having trouble?"/>
+    
+    <div class="slds-box slds-m-around_large">
+        <article class='slds-card slds-grid slds-p-around_xx-large'>
+            <div class='slds-col slds-size_2-of-4 slds-align_absolute-center slds-p-right_x-large'>
+                <img src='{!v.imageURL}' style="height:10rem;width:15rem;" alt='agreementHelp' />
+            </div>
+            <div class='slds-col slds-p-left_large slds-size_2-of-4 slds-grid slds-grid_vertical'>
+                <div class='slds-col slds-m-bottom_medium ds-card-heading'>
+                    <h1><b>DocuSign Agreements Help</b></h1>
+                </div>
+                <div class='slds-col slds-m-bottom_medium'>
+                    This is your one-stop shop for the tools you need to get the most out of DocuSign Agreements. You can browse through FAQs, product documentation, white papers and more.
+                </div>
+                <div class='slds-col slds-size_1-of-2'>
+                    <lightning:button variant='brand'  onclick='{!c.gotoHome}' class="ds-button-width"
+                                      label='Visit FAQ' />
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="slds-m-left_large slds-p-top_medium slds-text-title_caps">
+        RESOURCES AND LEARNING
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>Community</b>
+                            </div>
+                            
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                DocuSign customers ask and answer questions.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="Visit Community"
+                                          title="Visit Community" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+             <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>DocuSign University</b>
+                            </div>
+                            
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                Get started on your learning journey to build your expertise.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="Get Training"
+                                          title="Get Training" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+             <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>Knowledge Market</b>
+                            </div>
+                            
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+								White papers, value studies and tools to drive adoption.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="View Resources"
+                                          title="View Resources" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+        </lightning:card>	
+    </div>
+    
+    <div class="slds-m-left_large slds-p-top_medium slds-text-title_caps">
+        SUPPORT
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid  slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>Support Center</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                DocuSign customers ask and answer questions.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="Get Support"
+                                          title="Get Support" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+             <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>Trust Center</b>
+                            </div>
+                            
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                Security and system performance information.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="Check Status"
+                                          title="Check Status" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+             <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card >
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>Develop Center</b>
+                            </div>
+                            
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+								Learn about our APIs.
+                            </p>
+                        </div>
+                    </lightning:card>                
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" label="Learn More"
+                                          title="Learn More" onclick="{!c.gotoIntegrationHome}" />
+                    </div>
+                </div>
+            </div>
+        </lightning:card>	
+    </div>
+    
+</aura:component>

@@ -1,4 +1,4 @@
-<aura:component extends="c:CLMUtility">
+<aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
     <ltng:require scripts="{!$Resource.stringUtils}" />
     <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
     <aura:attribute name="namespace" type="string" default="c" />  
@@ -6,7 +6,7 @@
     <aura:attribute name="summary" type="String" />
     <aura:attribute name="title" type="String" default="Map Your Salesforce Objects" />
     <aura:attribute name="buttonName" type="String" default="Map Objects" />
-    <aura:attribute name="mappedObjCount" type="String" default="2" />
+    <aura:attribute name="mappedObjCount" type="String" default="0" />
 
     <lightning:card>
         <div class="slds-grid">

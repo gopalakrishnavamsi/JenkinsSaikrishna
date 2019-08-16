@@ -4,7 +4,10 @@
     <aura:attribute name="notificationText" type="String" default="{!$Label.c.PreSetObjMappingsBody}"/>
     <aura:attribute name="isClosable" type="Boolean" default="true" />
     <aura:attribute name="notificationIconSize" type="String" />
-
+    
+    
+	<aura:handler name="CLMScopedNotificationEvent" event="c:CLMScopedNotificationEvent" action="{!c.closeScopedNotification}" /> 
+	
     <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light" role="status">
         <div class="slds-media__figure">
             <span class="slds-icon_container slds-icon-utility-info" title="information">
