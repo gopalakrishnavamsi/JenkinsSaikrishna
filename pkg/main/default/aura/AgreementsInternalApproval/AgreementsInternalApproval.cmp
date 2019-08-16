@@ -15,12 +15,15 @@
                     access="private"/>
     <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}" access="private"/>
     <aura:attribute name="currentUserId" type="Id"/>
+    <aura:attribute name="disableNext" type="Boolean" default="{!false}"/>
 
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
     <aura:handler name="strike_evt_pillClosed" event="c:strike_evt" action="{!c.handlePillCloseEvent}"/>
+    <aura:handler name="change" value="{!v.recipients}" action="{!c.handleRecipientsChange}"/>
+    <aura:handler name="searchTermChange" event="c:strike_evt" action="{!c.handleRecipientsChange}"/>
 
     <!-- events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
@@ -75,7 +78,7 @@
                                         ondragstart="{!c.onApproverDrag}"
                                         ondrop="{!c.onApproverDrop}"
                                         ondragover="{!c.allowDrop}"
-                                        >
+                                    >
                                         <ul class="slds-breadcrumb slds-list_horizontal slds-wrap">
                                             <aura:if isTrue="{!v.showApprovalOrder}">
                                                 <li class="slds-m-top_small slds-m-right_x-small">
@@ -183,7 +186,7 @@
                                   onclick="{!c.backButtonClicked}"
                                   disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
-                                  disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
+                                  disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true) || v.disableNext}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
             </div>
         </aura:set>
