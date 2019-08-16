@@ -11,6 +11,8 @@
       e.setParams({data: r});
       e.fire();
     }
+  },
+  handleSearchValueChange: function (component) {
+    component.getEvent('searchTermChange').fire();
   }
-
 });
