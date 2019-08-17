@@ -1,5 +1,0 @@
-<aura:event type='COMPONENT' description='Help Card Event'>
-    <aura:attribute type='String' name='cardTitle' />
-    <aura:attribute type='String' name='buttonLabel' />
-    <aura:attribute type='String' name='buttonType' />
-</aura:event>
