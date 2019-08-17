@@ -108,10 +108,9 @@
                             </div>
                         </aura:if>
                         <aura:if isTrue="{!v.currentStep=='3'}">
-                            <b>{!$Label.c.PathInDocuSignCLM}</b><span
+                            <b>{!$Label.c.PathInDocuSignCLM}:</b><span
                                 class="slds-p-left_medium blue-text-color"><strong>{!v.pathInCLM}</strong></span>
-                        </aura:if>
-                        
+                        </aura:if>                        
                     </div>
                 </lightning:layoutItem>
                 <lightning:layoutItem size="12">

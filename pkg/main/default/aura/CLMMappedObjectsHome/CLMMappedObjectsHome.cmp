@@ -106,14 +106,14 @@
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-grid slds-grid_align-spread">
                                         <span class="slds-truncate" title="{!data.folderName}">
-                                                {!data.FolderName__c}
+                                                {!if(v.namespace == 'c', data.FolderName__c, data.dfsle__FolderName__c)}
                                         </span>
                                     </span>
                                 </td>
                                 <td class="slds-cell-edit" role="gridcell">
                                     <span class="slds-grid slds-grid_align-spread">
                                         <span class="slds-truncate" title="{!data.path}">
-                                                {!data.Path__c}
+                                                {!if(v.namespace == 'c', data.Path__c, data.dfsle__Path__c)}
                                         </span>
                                     </span>
                                 </td>
