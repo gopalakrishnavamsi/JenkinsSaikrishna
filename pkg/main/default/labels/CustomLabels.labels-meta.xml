@@ -7158,7 +7158,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Path In DocuSign CLM:</shortDescription>
-		<value>Path in DocuSign CLM</value>
+		<value>Path in DocuSign CLM:</value>
 	</labels>
 	<labels>
 		<fullName>PickAFieldBody</fullName>
