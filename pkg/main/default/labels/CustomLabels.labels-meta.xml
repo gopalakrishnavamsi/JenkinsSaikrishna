@@ -8185,4 +8185,12 @@
 		<shortDescription>CLM - Folder Name</shortDescription>
 		<value>Folder Name</value>
 	</labels>
+	<labels>
+		<fullName>CallbackFailed</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Callback Failed</shortDescription>
+		<value>Callback failed.</value>
+	</labels>
 </CustomLabels>
