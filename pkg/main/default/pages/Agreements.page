@@ -1,0 +1,43 @@
+<apex:page id="Sending" controller="AgreementsController" showHeader="true" sidebar="false"
+           title="{!$Label.DocuSignAgreements}">
+
+    <apex:includeLightning/>
+
+    <style type="text/css">
+       /* #ds-sending {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .noSidebarCell #ds-sending {
+            min-height: calc(100vh - 120px);
+        }
+
+        .bodyDiv .outerNoSidebar,
+        .noSidebarCell,
+        .sidebarCell .fixed {
+            padding: 0;
+        }
+
+        .noSidebarCell #ds-sending .slds-scope .ds-sending__footer {
+            position: absolute;
+        }*/
+    </style>
+
+    <div id="ds-agreementspage"></div>
+
+    <script>
+      var _namespace = '{!JSENCODE(namespace)}';
+      var _navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_self');
+      };
+      $Lightning.use(_namespace + ':AgreementsApp', function () {
+        $Lightning.createComponent(_namespace + ':Agreements', {
+          visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sId)}'
+        }, 'ds-agreementspage', function (cmp) {
+          $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
+        });
+      });
+    </script>
+</apex:page>
