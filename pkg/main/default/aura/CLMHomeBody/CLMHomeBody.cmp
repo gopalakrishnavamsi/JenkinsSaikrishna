@@ -17,7 +17,7 @@
                 {!$Label.c.ConfigureObjectPageLayout}
             </div>
             <c:CLMHelp title="{!$Label.c.ViewYourObjectFolders}" secondButtonName="{!$Label.c.ConfigureLayouts}" firstButtonName="{!$Label.c.LearnMore}"
-                showIcon='false'
+                showIcon="false"
                 summary="{!$Label.c.AddLayoutInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">
@@ -25,7 +25,7 @@
                 {!$Label.c.OptimizeDocumentGeneration}
             </div>
             <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" secondButtonName="{!$Label.c.ConfigureButtons}" firstButtonName="{!$Label.c.LearnMore}"
-                showIcon='false'
+                showIcon="false"
                 summary="{!$Label.c.ConfigureButtonInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">
