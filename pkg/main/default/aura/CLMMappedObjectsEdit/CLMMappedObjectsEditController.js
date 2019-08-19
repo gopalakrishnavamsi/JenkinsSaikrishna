@@ -1,17 +1,16 @@
 ({
   onInit: function (component, event, helper) {
-    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     component.set('v.clmFolderTree', [
       {
         level: 1,
-        name: 'Other Sources',
+        name: $A.get('$Label.c.OtherSources'),
         type: 'root',
         selected: false,
         id: 0,
       },
       {
         level: 2,
-        name: 'Salesforce',
+        name: $A.get('$Label.c.Salesforce'),
         type: 'parent',
         selected: false,
         id: 2
@@ -24,24 +23,21 @@
       component.set('v.allObjects', result);
       component.set('v.allObjectsList', result);
     });
-    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     helper.createComponent(component, 'c:CLMModelFooterButton', {
-      primaryButtonLabel: 'Confirm',
-      secondaryButtonLabel: 'Cancel',
+      primaryButtonLabel: $A.get('$Label.c.Confirm'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
       primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'true'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
 
     });
-    //TODO: for DFS-5755, convert hardcoded strings to custom labels
     helper.createComponent(component, 'c:CLMMappingObjectNaming', {
-      title: 'Name',
-      summary: 'Name',
+      title: $A.get('$Label.c.NameLabel'),
+      summary: $A.get('$Label.c.NameLabel'),
     }, function (newCmp) {
       component.set('v.modelbody', newCmp);
     });
-
   },
 
   back: function (component, event, helper) {
@@ -76,7 +72,6 @@
     }
   },
 
-  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   openSeeExample: function (component, event, helper) {
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       showPrimaryButton: 'false',
@@ -87,7 +82,7 @@
     });
     helper.createComponent(component, 'c:CLMFolderExample', {}, function (newCmp) {
       component.set('v.modelbody', newCmp);
-      component.set('v.modelTitleText', 'Folder Example');
+      component.set('v.modelTitleText', $A.get('$Label.c.FolderExample'));
       component.set('v.showModal', 'true');
       var modelComponent = component.find('popupModel');
       setTimeout($A.getCallback(function () {
@@ -96,7 +91,6 @@
     });
   },
 
-  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   openWhyExample: function (component, event, helper) {
     helper.createComponent(component, 'c:CLMModelFooterButton', {
       showPrimaryButton: 'false',
@@ -107,7 +101,7 @@
     });
     helper.createComponent(component, 'c:CLMSelectingFields', {}, function (newCmp) {
       component.set('v.modelbody', newCmp);
-      component.set('v.modelTitleText', 'Why am I selecting fields?');
+      component.set('v.modelTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
       component.set('v.showModal', 'true');
       var modelComponent = component.find('popupModel');
       setTimeout($A.getCallback(function () {
@@ -116,7 +110,6 @@
     });
   },
 
-  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   insertPath: function (component, event, helper) {
     var selectedObjDetails = component.get('v.SelectedObjDetails');
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
@@ -127,7 +120,7 @@
     };
     helper.callServer(component, 'c.setMappedObject', {eosDetails: insertObj}, function (result) {
       if (result) {
-        helper.fireToast(component, stringUtils.format('\'{0}\' object type was successfully mapped to DocuSign CLM.', selectedObjDetails.name), helper.SUCCESS);
+        helper.fireToast(component, stringUtils.format('', selectedObjDetails.name), helper.SUCCESS);
         helper.fireApplicationEvent(component, {
           fromComponent: 'CLMSMappedObjectsEdit',
           toComponent: 'CLMSetupLayout',
@@ -135,7 +128,7 @@
           tabIndex: '3',
         }, 'CLMNavigationEvent');
       } else {
-        helper.fireToast(component, stringUtils.format('\'{0}\' object type was not mapped to DocuSign CLM.', selectedObjDetails.name), 'error');
+        helper.fireToast(component, stringUtils.format($A.get('$Label.c.MappingSuccess'), selectedObjDetails.name), 'error');
       }
     });
   },
@@ -337,7 +330,6 @@
     component.set('v.clmFolderTree', clmFolderTree);
   },
 
-  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   addSubfolder: function (component, event, helper) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var selectedFolder;
@@ -349,22 +341,22 @@
       }
     });
     helper.createComponent(component, 'c:CLMModelFooterButton', {
-      primaryButtonLabel: 'Confirm',
-      secondaryButtonLabel: 'Cancel',
+      primaryButtonLabel: $A.get('$Label.c.Confirm'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
       primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'true'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
     });
     helper.createComponent(component, 'c:CLMMappingObjectNaming', {
-      title: 'Name your sub-folder',
-      summary: 'Type in for a static or add fields to create a variable name for your sub-folder.then click confirm once done',
+      title: $A.get('$Label.c.NameYourSubFolder'),
+      summary: $A.get('$Label.c.NameSubFolderSummary'),
       selectedObjDetails: component.get('v.SelectedObjDetails'),
       buttondisabled: true
     }, function (newCmp) {
       component.set('v.modelbody', newCmp);
     });
-    component.set('v.modelTitleText', 'Name Subfolder');
+    component.set('v.modelTitleText', $A.get('$Label.c.NameSubFolder'));
     component.set('v.showModal', 'true');
     component.set('v.modelValueHolder', {
       buttontype: 'subfolder',
@@ -378,7 +370,6 @@
     }), 5);
   },
 
-  //TODO: for DFS-5755, convert hardcoded strings to custom labels
   renameSubfolder: function (component, event, helper) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var selectedFolder;
@@ -390,23 +381,23 @@
       }
     });
     helper.createComponent(component, 'c:CLMModelFooterButton', {
-      primaryButtonLabel: 'Confirm',
-      secondaryButtonLabel: 'Cancel',
+      primaryButtonLabel: $A.get('$Label.c.Confirm'),
+      secondaryButtonLabel: $A.get('$Label.c.Cancel'),
       primaryButtonVariant: 'brand',
       primaryButtonDisabled: 'false'
     }, function (newCmp) {
       component.set('v.strikeModelFooterButtons', newCmp);
     });
     helper.createComponent(component, 'c:CLMMappingObjectNaming', {
-      title: 'Name your folder',
-      summary: 'Type in for a static or add fields to create a variable name for your sub-folder.then click confirm once done',
+      title: $A.get('$Label.c.NameYourFolder'),
+      summary: $A.get('$Label.c.NameYourFolderSummary'),
       folderName: selectedFolder.name,
       selectedObjDetails: component.get('v.SelectedObjDetails'),
       buttondisabled: false
     }, function (newCmp) {
       component.set('v.modelbody', newCmp);
     });
-    component.set('v.modelTitleText', 'Rename Folder');
+    component.set('v.modelTitleText', $A.get('$Label.c.RenameFolder'));
     component.set('v.showModal', 'true');
     component.set('v.modelValueHolder', {
       buttontype: 'rename',
@@ -464,7 +455,6 @@
       }
     }
   },
-
   handleConfirm: function (component, event, helper) {
     var modelValueHolder = component.get('v.modelValueHolder');
     var clmFolderTree = component.get('v.clmFolderTree');

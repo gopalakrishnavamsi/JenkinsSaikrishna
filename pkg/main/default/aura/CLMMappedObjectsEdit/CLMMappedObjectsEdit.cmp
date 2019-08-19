@@ -1,12 +1,10 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!--component dependencys-->
-
     <aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMMappingObjectNaming" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMFolderExample" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMSelectingFields" type="COMPONENT"/>
-
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
@@ -71,15 +69,13 @@
                         secondaryButtonLabel="{!v.modelSecondaryButtonText}"/>
     </aura:if>
 
-
     <div class="slds-card__body  slds-p-left_x-large slds-p-right_x-large">
         <div class="slds-border_top">
             <lightning:layout multipleRows="true">
                 <lightning:layoutItem size="12">
                     <div class="slds-p-top_medium slds-p-bottom_small ">
                         <span class="medium-fonts-size blue-text-color">
-                            <b>{!v.title} </b>
-                            
+                            <b>{!v.title} </b>                            
                         </span>
                         <span class="blue-help-text position-helptext slds-p-left_xx-small slds-m-top_xxx-small ds-lightning-icon ">
                             <lightning:helptext content="{!v.titleHelpText}" />
@@ -183,7 +179,6 @@
                                                     </aura:iteration>
                                                 </ul>
                                             </li>
-
                                         </aura:iteration>
                                     </ul>
                                 </div>
@@ -201,7 +196,6 @@
                                         <lightning:button label="Delete" onclick="{!c.deleteSubfolder}"
                                                           iconName="utility:delete" iconPosition="right"
                                                           variant="destructive" disabled="{!v.isDeletefolder}"/>
-
                                     </div>
                                 </div>
                                 <div class="slds-grid">
@@ -271,8 +265,7 @@
                             </aura:if>
                         </div>
                     </div>
-                </lightning:layoutItem>
-                
+                </lightning:layoutItem>                
             </lightning:layout>
         </div>
     </div>

@@ -9,6 +9,10 @@
 .THIS .x-medium-fonts-size{
     font-size:1rem
 }
+.THIS .ds-no-extra-height{
+    line-height:0px;
+    box-shadow:none;
+}
 
 .THIS .ds-no-extra-height {
     line-height: 0px;

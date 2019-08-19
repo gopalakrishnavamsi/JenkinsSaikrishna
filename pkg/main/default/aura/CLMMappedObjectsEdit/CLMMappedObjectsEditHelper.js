@@ -32,8 +32,8 @@
         type: 'update'
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '2');
-      component.set('v.title', SelectedObjDetails.name + ' Folder Name');
-      component.set('v.titleHelpText', stringUtils.format($A.get('$Label.c.SelectFolderHelpBody'), SelectedObjDetails.name));
+      component.set('v.title', stringUtils.format(SelectedObjDetails.label, $A.get('$Label.c.FolderName')));
+      component.set('v.titleHelpText', stringUtils.format($A.get('$Label.c.SelectFolderHelpBody'), SelectedObjDetails.label));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '2' },
         fromComponent: 'CLMMappedObjectsEdit',
@@ -87,7 +87,7 @@
         type: 'update'
       }, 'CLMCardModelEvent');
       component.set('v.currentStep', '3');
-      component.set('v.title', stringUtils.format('{0} {1}', SelectedObjDetails.name, 'Folder Location'));
+      component.set('v.title', stringUtils.format('{0} {1}', SelectedObjDetails.name, $A.get('$Label.c.FolderLocation')));
       component.set('v.titleHelpText', stringUtils.format($A.get('$Label.c.ChooseLocationTitleHelpText'), SelectedObjDetails.name));
       helper.fireApplicationEvent(component, {
         navigateTo: { index: '3' },
