@@ -21,7 +21,7 @@
           }
         }
       } else {
-        $A.log('Callback failed.');
+        $A.log($A.get('$Label.c.CallbackFailed'));
       }
     });
     $A.enqueueAction(action);
