@@ -7652,7 +7652,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Case Folder Contents Helptext</shortDescription>
-		<value>This is a logical interpretatation of how all the instances of your mapped object(such as &apos;New
+		<value>This is a logical interpretatation of how all the instances of your mapped object (such as &apos;New
 			Account 1&apos;) will each have folder of their own in DocuSign CLM.
 		</value>
 	</labels>

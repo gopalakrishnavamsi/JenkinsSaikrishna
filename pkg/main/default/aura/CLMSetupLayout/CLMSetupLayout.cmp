@@ -2,6 +2,7 @@
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
     <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
+    <aura:handler event="c:CLMEvent" action="{!c.handleEvent}" />
     <aura:attribute name="sideBar" type="Aura.Component[]" />
     <aura:attribute name="header" type="Aura.Component[]" />
     <aura:attribute name="main" type="Aura.Component[]" />

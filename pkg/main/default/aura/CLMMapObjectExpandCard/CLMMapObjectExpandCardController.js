@@ -12,7 +12,6 @@
       $A.util.toggleClass(acc[cmp], 'slds-hide');
     }
   },
-
   gotoIntegrationHome: function (component, event, helper) {
     helper.fireApplicationEvent(component, {
       fromComponent: 'CLMMapObjectExpand',
@@ -21,4 +20,4 @@
       tabIndex: '3',
     }, 'CLMNavigationEvent');
   }
-});
+})

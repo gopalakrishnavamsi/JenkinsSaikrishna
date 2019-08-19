@@ -7,7 +7,7 @@
             <div class="slds-page-header__col-title">
                 <div class="slds-media">
                     <div class="slds-media__figure">
-                        <lightning:icon iconName="{!v.iconUrl}" size="large" alternativeText="{!v.title}" />
+                        <lightning:icon iconName="{!v.iconUrl}" size="large" alternativeText="{!v.title}"/>
                     </div>
                     <div class="slds-media__body slds-grid slds-grid_vertical">
                         <div class="slds-col">

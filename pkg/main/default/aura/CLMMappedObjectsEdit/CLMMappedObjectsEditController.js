@@ -115,12 +115,12 @@
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
     var insertObj = {
       Name: selectedObjDetails.name,
-      FolderName__c: SelectedObjFieldName,
-      Path__c: component.get('v.pathInCLM'),
     };
+    insertObj[component.get('v.namespace')+'__FolderName__c'] = SelectedObjFieldName;
+    insertObj[component.get('v.namespace')+'__Path__c'] = component.get('v.pathInCLM');  
     helper.callServer(component, 'c.setMappedObject', {eosDetails: insertObj}, function (result) {
       if (result) {
-        helper.fireToast(component, stringUtils.format('', selectedObjDetails.name), helper.SUCCESS);
+        helper.fireToast(component, stringUtils.format($A.get('$Label.c.MappingSuccess'), selectedObjDetails.label), helper.SUCCESS);
         helper.fireApplicationEvent(component, {
           fromComponent: 'CLMSMappedObjectsEdit',
           toComponent: 'CLMSetupLayout',
