@@ -28,7 +28,7 @@
     </div>
 
     <!-- body -->
-    <div class="ds-boxBackground slds-box">
+    <div class="ds-boxBackground slds-box agreementsBody">
         <ul class="slds-has-dividers_bottom-space">
             <li class="slds-item">
                 <div class="slds-grid slds-grid_align-spread  slds-p-bottom_xxx-small">

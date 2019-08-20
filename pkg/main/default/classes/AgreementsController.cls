@@ -1,6 +1,13 @@
 public with sharing class AgreementsController extends Controller {
 
+	public sObject sourceRecord { get;set; }
+	public string sourceObjectName { get; set; }
+
 	public AgreementsController() {
+		Id sourceId = apexpages.currentpage().getparameters().get('sid');
+		if (sourceId <> null) {
+			getSourceDetails(sourceId);
+		}
 	}
 
 	public AgreementsController(final ApexPages.StandardController c) {
@@ -243,6 +250,18 @@ public with sharing class AgreementsController extends Controller {
 			return NegotiateService.externalReviewCompleteOnBehalf(comment, newVersionUrl != '' ? new Url(newVersionUrl) : null, UUID.parse(documentId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to complete External Review Request');
+		}
+	}
+
+	private void getSourceDetails(Id sourceId) {
+		if (sourceId <> null) {
+			String sObjName = sourceId.getSObjectType().getDescribe().getName();
+			sourceObjectName = sObjName.toLowerCase();
+			String queryStr = 'select id,Name from ' + String.escapeSingleQuotes(sObjName) + ' Where id=:sourceId ' ;
+			List<sObject> sourceObjects = Database.query(queryStr);
+			if (sourceObjects != null && !sourceObjects.isEmpty()) {
+				sourceRecord = sourceObjects[0];
+			}
 		}
 	}
 }

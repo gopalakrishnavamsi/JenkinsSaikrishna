@@ -1,5 +1,5 @@
 ({
-  rename: function(component) {
+  rename: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -10,7 +10,7 @@
     }
   },
 
-  delete: function(component) {
+  delete: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -22,7 +22,7 @@
     }
   },
 
-  internalApproval: function(component) {
+  internalApproval: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -34,7 +34,7 @@
     }
   },
 
-  externalReview: function(component) {
+  externalReview: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -46,7 +46,7 @@
     }
   },
 
-  upload: function(component) {
+  upload: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -59,7 +59,7 @@
     }
   },
 
-  share: function(component) {
+  share: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var sourceId = component.get('v.sourceId');
@@ -71,7 +71,7 @@
     }
   },
 
-  download: function(component) {
+  download: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
@@ -82,16 +82,20 @@
     }
   },
 
-  addToSalesforce: function(component) {
+  addToSalesforce: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var sourceId = component.get('v.sourceId');
       var agreement = component.get('v.agreement');
       actions.exportToSalesforce(agreement, sourceId, component);
-    }catch(err){
+    } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
+  },
+
+  backToSourceRecord: function (component) {
+    $A.get('e.force:navigateToSObject').setParams({'recordId': component.get('v.sourceId')}).fire();
   }
 
 });
