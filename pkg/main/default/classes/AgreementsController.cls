@@ -263,6 +263,5 @@ public with sharing class AgreementsController extends Controller {
 				sourceRecord = sourceObjects[0];
 			}
 		}
-
 	}
 }
