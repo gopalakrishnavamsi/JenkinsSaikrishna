@@ -635,7 +635,22 @@ private class AgreementsControllerTest {
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
+			Test.stopTest();
 		}
 	}
 
+	@isTest
+	static void test_getSourceDetails() {
+		System.runAs(UserMock.createUser()) {
+			SObject testSource = (SObject)TestUtils.createAccount();
+			PageReference pageRef = Page.Agreements;
+			Test.setCurrentPage(pageRef);
+			ApexPages.currentPage().getParameters().put('sid', (String)testSource.get('Id'));
+			Test.startTest();
+			AgreementsController controller = new AgreementsController();
+			System.assertEquals(controller.sourceObjectName, 'account');
+			System.assertEquals(controller.sourceRecord.get('Name'), testSource.get('Name'));
+			Test.stopTest();
+		}
+	}
 }

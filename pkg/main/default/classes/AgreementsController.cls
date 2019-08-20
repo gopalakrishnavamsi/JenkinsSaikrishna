@@ -1,11 +1,11 @@
 public with sharing class AgreementsController extends Controller {
 
-	public sObject sourceRecord { get;set; }
+	public sObject sourceRecord { get; set; }
 	public string sourceObjectName { get; set; }
 
 	public AgreementsController() {
 		Id sourceId = apexpages.currentpage().getparameters().get('sid');
-		if (sourceId <> null) {
+		if (sourceId <> null && sourceRecord == null) {
 			getSourceDetails(sourceId);
 		}
 	}
@@ -263,5 +263,6 @@ public with sharing class AgreementsController extends Controller {
 				sourceRecord = sourceObjects[0];
 			}
 		}
+
 	}
 }
