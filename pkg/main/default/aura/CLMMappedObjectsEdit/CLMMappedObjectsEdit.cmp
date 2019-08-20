@@ -1,12 +1,10 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <!--component dependencys-->
-
     <aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMMappingObjectNaming" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMFolderExample" type="COMPONENT"/>
     <aura:dependency resource="markup://c:CLMSelectingFields" type="COMPONENT"/>
-
     <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
@@ -71,15 +69,13 @@
                         secondaryButtonLabel="{!v.modelSecondaryButtonText}"/>
     </aura:if>
 
-
     <div class="slds-card__body  slds-p-left_x-large slds-p-right_x-large">
         <div class="slds-border_top">
             <lightning:layout multipleRows="true">
                 <lightning:layoutItem size="12">
                     <div class="slds-p-top_medium slds-p-bottom_small ">
                         <span class="medium-fonts-size blue-text-color">
-                            <b>{!v.title} </b>
-                            
+                            <b>{!v.title} </b>                            
                         </span>
                         <span class="blue-help-text position-helptext slds-p-left_xx-small slds-m-top_xxx-small ds-lightning-icon ">
                             <lightning:helptext content="{!v.titleHelpText}" />
@@ -112,10 +108,9 @@
                             </div>
                         </aura:if>
                         <aura:if isTrue="{!v.currentStep=='3'}">
-                            <b>{!$Label.c.PathInDocuSignCLM}</b><span
-                                class="slds-p-left_medium blue-text-color">{!v.pathInCLM}</span>
-                        </aura:if>
-                        
+                            <b>{!$Label.c.PathInDocuSignCLM}:</b><span
+                                class="slds-p-left_medium blue-text-color"><strong>{!v.pathInCLM}</strong></span>
+                        </aura:if>                        
                     </div>
                 </lightning:layoutItem>
                 <lightning:layoutItem size="12">
@@ -183,7 +178,6 @@
                                                     </aura:iteration>
                                                 </ul>
                                             </li>
-
                                         </aura:iteration>
                                     </ul>
                                 </div>
@@ -200,8 +194,7 @@
                                                           disabled="{!v.isRenamefolder}"/>
                                         <lightning:button label="Delete" onclick="{!c.deleteSubfolder}"
                                                           iconName="utility:delete" iconPosition="right"
-                                                          variant="destructive" disabled="{!v.isDeletefolder}"/>
-
+                                                          class="slds-button_text-destructive" disabled="{!v.isDeletefolder}"/>
                                     </div>
                                 </div>
                                 <div class="slds-grid">
@@ -242,15 +235,15 @@
                                             <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
                                                 id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
-                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
-                                                    {!v.SelectedFolderExample} Object 2
+                                                <span class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    <img src="{!($Resource.CLMChooseLocationBar)}" alt="troubleImage" />
                                                 </span>
                                             </li>
                                             <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
                                                 id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
-                                                <span title="Other Sources" class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
-                                                    {!v.SelectedFolderExample} Object n
+                                                <span class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    <img src="{!($Resource.CLMChooseLocationBar)}" alt="troubleImage" />
                                                 </span>
                                             </li>
                                         </ul>
@@ -271,8 +264,7 @@
                             </aura:if>
                         </div>
                     </div>
-                </lightning:layoutItem>
-                
+                </lightning:layoutItem>                
             </lightning:layout>
         </div>
     </div>

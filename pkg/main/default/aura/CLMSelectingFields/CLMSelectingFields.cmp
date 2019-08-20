@@ -1,0 +1,44 @@
+<aura:component >
+    <div class="slds-p-around_large ">
+        <div class="slds-border_bottom slds-p-bottom_large"> 
+            <p>
+                {!$Label.c.WhyAmISelectingFieldsBodyPart1}
+            </p>
+            <br/>
+            <p>
+                {!$Label.c.WhyAmISelectingFieldsBodyPart2}
+            </p>
+        </div>
+        <div class="slds-p-top_large slds-p-bottom_large" >
+            <span class="slds-text-heading_medium ds-blue-text-color"><strong>{!$Label.c.UnderstandTheDifference}</strong></span>            
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2 slds-p-right_small" >
+                <strong>
+                    <lightning:textarea name="accName" readonly="true" label="{!$Label.c.StaticName}" placeholder="{!$Label.c.AccountName}"/>
+                </strong>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountName}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountName}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountName}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountName}</label><br/>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-left_small" >
+                <strong>
+                    <lightning:textarea name="accVal"  readonly="true"  label="{!$Label.c.DynamicName}" placeholder="{!$Label.c.AccountNameMergeField}"/>
+                </strong>                
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountA}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountB}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountC}</label><br/>
+                <lightning:icon  size="xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                <label class="slds-form-element__label slds-p-left_small">{!$Label.c.AccountD}</label><br/>                
+            </div>
+        </div>
+    </div>
+</aura:component>

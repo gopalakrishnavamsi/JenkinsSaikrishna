@@ -25,7 +25,17 @@
       }
     );
   },
-  
+    showtoast  :function(component,title,variant){
+        var toast = component.find('toast');
+        if(toast){
+            component.set('v.toastTitleText', title);
+            component.set('v.toastVariant', variant);
+            toast.show();
+            setTimeout($A.getCallback(function () {
+                toast.close();
+            }), 2000); 
+        }
+    },
   updateUi: function (component, index) {
     var helper = this;
     if (index === '1') {
@@ -70,7 +80,7 @@
         iconUrl: 'custom:custom66'
       }, false, 'v.header');
       //main
-      component.set('v.main', '');
+      helper.insertComponent(component, 'c:CLMUserMgmtLayout', false, false, 'v.main');  
     } else if (index === '7') {
       component.set('v.fullLayout', false);
       //header 
@@ -88,7 +98,7 @@
         iconUrl: 'custom:custom66'
       }, false, 'v.header');
       //main
-      component.set('v.main', '');
+       helper.insertComponent(component, 'c:CLMHelpLayout', false, false, 'v.main');
     }
   }
 });
