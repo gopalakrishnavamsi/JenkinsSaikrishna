@@ -40,7 +40,6 @@
           // Prevent rebinding if nothing has changed.
           if (updated) {
             component.set('v.recipients', rs);
-            component.set('v.disableNext', false);
           }
         }
       } else {
@@ -253,17 +252,17 @@
   },
 
   handleRecipientsChange: function (component) {
+    var self = this;
+    component.set('v.disableNext', false);
     var rs = component.get('v.recipients');
-    if ($A.util.isUndefinedOrNull(rs)) {
-      component.set('v.disableNext', true);
-    } else {
-      for (var i = 0; i < rs.length; i++) {
-        if ($A.util.isUndefinedOrNull(rs[i].name) || $A.util.isEmpty(rs[i].name)) {
-          component.set('v.disableNext', true);
-          break;
-        }
-      }
-    }
+    component.set('v.disableNext', (!$A.util.isUndefinedOrNull(rs) && self.isEmptyRecipients(rs)) || $A.util.isUndefinedOrNull(rs));
+  },
+
+  isEmptyRecipients: function (recipients) {
+    var nullIndex = recipients.findIndex(function (item) {
+      return ($A.util.isUndefinedOrNull(item.name) || $A.util.isEmpty(item.name));
+    });
+    return nullIndex > 0;
   }
 
 });
