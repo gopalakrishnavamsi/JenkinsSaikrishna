@@ -78,7 +78,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </lightning:card>
     </div>
@@ -131,7 +130,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </lightning:card>
     </div>
@@ -369,10 +367,6 @@
                     </div>
                 </div>
             </div>
-   
-        
-        
         </lightning:card>
     </div>
-
 </aura:component>

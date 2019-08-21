@@ -21,7 +21,6 @@
       if (type === 'toast') {
         helper.showtoast(component, data.title, data.variant);
       }
-
     }
   }
 });
