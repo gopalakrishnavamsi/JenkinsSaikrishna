@@ -1,0 +1,378 @@
+<aura:component>
+    <aura:attribute name="summary" type="String" default="Description of the section" />
+    <aura:attribute name="title" type="String" default="Section 1" />
+    <aura:attribute type="string" name="index" default="" />
+    <div class="slds-m-left_large slds-text-title_caps">
+        <!--{!$Label.c.FrequentlyAskedQuestions}-->
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                {!$Label.c.UnderstandingDocuSignAgreements}
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.DocuSignAgreementsSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large ds-pointer-enable"  id="objMapping1" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping1" iconName="utility:chevronup"
+                            size="x-small" alternativeText="Indicates up" />
+                        <lightning:icon class="slds-hide" aura:id="objMapping1" iconName="utility:chevrondown"
+                            size="x-small" alternativeText="Indicates down" />
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                        aura:id="objMapping1">{!$Label.c.Collapse}</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                        aura:id="objMapping1">{!$Label.c.Expand}</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-show slds-p-around--medium" aura:id="objMapping1">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhatIsDocuSign}</b></span>
+                        <div>
+                            {!$Label.c.WhatIsDocuSignAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhyDocuSignAgreements}</b></span>
+                        <div>
+                            {!$Label.c.WhyDocuSignAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.DocumentGenerationProcess}</b></span>
+                        <div>
+                            {!$Label.c.DocumentGenerationAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhyOnlyDocuSign}</b></span>
+                        <div>
+                            {!$Label.c.WhyOnlyDocuSignAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhatIsDocuSignCLM}</b></span>
+                        <div>
+                            {!$Label.c.WhatIsDocuSignCLMAns}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </lightning:card>
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                {!$Label.c.InstallationandGetStarted}
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.InstallationSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large ds-pointer-enable"  id="objMapping2" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping2" iconName="utility:chevronup"
+                            size="x-small" alternativeText="Indicates up" />
+                        <lightning:icon class="slds-hide" aura:id="objMapping2" iconName="utility:chevrondown"
+                            size="x-small" alternativeText="Indicates down" />
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                        aura:id="objMapping2">{!$Label.c.Collapse}</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                        aura:id="objMapping2">{!$Label.c.Expand}</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-show slds-p-around--medium" aura:id="objMapping2">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.InstallDocuSignAgreements}</b></span>
+                        <div>
+                            {!$Label.c.InstallAgreementsAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.AuthenticateAgreements}</b></span>
+                        <div>
+                            {!$Label.c.AuthenticateAgreementsAns}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </lightning:card>
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                {!$Label.c.ManagingDocuSignUsers}
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.ManageAddUsers}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large ds-pointer-enable"  id="objMapping3" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping3" iconName="utility:chevronup"
+                            size="x-small" alternativeText="Indicates up" />
+                        <lightning:icon class="slds-hide" aura:id="objMapping3" iconName="utility:chevrondown"
+                            size="x-small" alternativeText="Indicates down" />
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                        aura:id="objMapping3">{!$Label.c.Collapse}</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                        aura:id="objMapping3">{!$Label.c.Expand}</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-show slds-p-around--medium" aura:id="objMapping3">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhatIsAnAdmin}</b></span>
+                        <div>
+                            {!$Label.c.WhatIsAnAdminAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.HowAdminManageUsers}</b></span>
+                        <div>
+                            {!$Label.c.HowAdminManageUsersAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.InstallationFees}</b></span>
+                        <div>
+                            {!$Label.c.InstallationFeesAns}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                {!$Label.c.MappingSalesforceObjects}
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.MappingObjectsSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large ds-pointer-enable"  id="objMapping4" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping4" iconName="utility:chevronup"
+                            size="x-small" alternativeText="Indicates up" />
+                        <lightning:icon class="slds-hide" aura:id="objMapping4" iconName="utility:chevrondown"
+                            size="x-small" alternativeText="Indicates down" />
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                        aura:id="objMapping4">{!$Label.c.Collapse}</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                        aura:id="objMapping4">{!$Label.c.Expand}</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-show slds-p-around--medium" aura:id="objMapping4">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.SalesforceObjectsFields}</b></span>
+                        <div>
+                            {!$Label.c.SalesforceObjectsFieldsAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhatIsObjMapping}</b></span>
+                        <div>
+                            {!$Label.c.WhatIsObjMappingAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhyToMapObject}</b></span>
+                        <div>
+                            {!$Label.c.WhyToMapObjectAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b> {!$Label.c.HowToMapObject}</b></span>
+                        <div>
+                            {!$Label.c.HowToMapObjectAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.RemoveMappedObject}</b></span>
+                        <div>
+                            {!$Label.c.RemoveMappedObjectAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.MappingStandardObjects}</b></span>
+                        <div>
+                            {!$Label.c.MappingStandardObjectsAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.MappingCustomObjects}</b></span>
+                        <div>
+                            {!$Label.c.MappingCustomObjectsAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.CustomObjectFolder}</b></span>
+                        <div>
+                            {!$Label.c.CustomObjectFolderAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.TypeFolderName}</b></span>
+                        <div>
+                            {!$Label.c.TypeFolderNameAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.NeedObjectFolderLocation}</b></span>
+                        <div>
+                            {!$Label.c.NeedObjectFolderLocationAns}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                {!$Label.c.MapObjectFolders}
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.MapObjectFoldersSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+            <div class="slds-m-right_medium slds-m-bottom_large ds-pointer-enable"  id="objMapping5" onclick="{!c.toggleSection}">
+                <section class="slds-clearfix">
+                    <div class="slds-float--right ">
+                        <lightning:icon class="slds-show" aura:id="objMapping5" iconName="utility:chevronup"
+                            size="x-small" alternativeText="Indicates up " />
+                        <lightning:icon class="slds-hide" aura:id="objMapping5" iconName="utility:chevrondown"
+                            size="x-small" alternativeText="Indicates down" />
+                    </div>
+                    <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
+                        aura:id="objMapping5">{!$Label.c.Collapse}</a>
+                    <a href="javascript:void(0)" class="slds-hide slds-float--right slds-m-right_small"
+                        aura:id="objMapping5">{!$Label.c.Expand}</a>
+                </section>
+            </div>
+            <div class="slds-border_top slds-show slds-p-around--medium" aura:id="objMapping5">
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.WhyConfigureLayout}</b></span>
+                        <div>
+                            {!$Label.c.WhyConfigureLayoutAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.AfterMappingObject} </b></span>
+                        <div>
+                            {!$Label.c.AfterMappingObjectAns}
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-p-around_x-small slds-wrap">
+                    <div class=" slds-col slds-size_1-of-1">
+                        <span><b>{!$Label.c.CannotSeeObjectFolder} </b></span>
+                        <div>
+                            {!$Label.c.CannotSeeObjectFolderAns}
+                        </div>
+                    </div>
+                </div>
+            </div>
+   
+        
+        
+        </lightning:card>
+    </div>
+
+</aura:component>

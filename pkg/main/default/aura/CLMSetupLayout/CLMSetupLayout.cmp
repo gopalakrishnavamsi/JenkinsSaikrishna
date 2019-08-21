@@ -1,38 +1,40 @@
 <aura:component implements="force:appHostable">
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-    <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
-    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
-    <aura:handler event="c:CLMEvent" action="{!c.handleEvent}" />
-    <aura:attribute name="sideBar" type="Aura.Component[]" />
-    <aura:attribute name="header" type="Aura.Component[]" />
-    <aura:attribute name="main" type="Aura.Component[]" />
-    <aura:attribute name="fullLayout" type="Boolean" default="false" />
-    <aura:attribute name="toastTitleText" type="String" access="private" />
-    <aura:attribute name="toastVariant" type="String" access="private" />
+  <ltng:require scripts="{!$Resource.stringUtils}" />
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+  <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
+  <aura:handler event="c:CLMEvent" action="{!c.handleEvent}" />
+  <aura:attribute name="sideBar" type="Aura.Component[]" />
+  <aura:attribute name="header" type="Aura.Component[]" />
+  <aura:attribute name="main" type="Aura.Component[]" />
+  <aura:attribute name="fullLayout" type="Boolean" default="false" />
+  <aura:attribute name="toastTitleText" type="String" access="private" />
+  <aura:attribute name="toastVariant" type="String" access="private" />
+  <aura:attribute name="isCenter" type="Boolean" default="true" access="private" />
 
-    <c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}" />
-    <lightning:layout>
-        <lightning:layoutItem size="2" class="slds-theme_default slds-m-right_small">
-            <!--left side bar-->
-            {!v.sideBar}
+  <c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}" />
+  <lightning:layout>
+    <lightning:layoutItem size="2" class="slds-theme_default slds-m-right_small">
+      <!--left side bar-->
+      {!v.sideBar}
+    </lightning:layoutItem>
+    <lightning:layoutItem flexibility="grow">
+      <lightning:layout multipleRows="true">
+        <aura:if isTrue="{!!v.fullLayout}">
+          <lightning:layoutItem size="12" class="slds-p-bottom_small">
+            <!--header-->
+            {!v.header}
+          </lightning:layoutItem>
+        </aura:if>
+        <lightning:layoutItem flexibility="grow" size="12">
+          <!-- Main -->
+          <div
+            class="{!v.fullLayout?'slds-box ds-gray-color slds-theme_default':v.isCenter?'slds-box  slds-theme_default':'slds-theme_default'}">
+            <div class="{!v.isCenter?'slds-p-left_xx-large slds-p-right_xx-large':''}">
+              {!v.main}
+            </div>
+          </div>
         </lightning:layoutItem>
-        <lightning:layoutItem flexibility="grow">
-            <lightning:layout multipleRows="true">
-                <aura:if isTrue="{!!v.fullLayout}">
-                    <lightning:layoutItem size="12" class="slds-p-bottom_small">
-                        <!--header-->
-                        {!v.header}
-                    </lightning:layoutItem>
-                </aura:if>
-                <lightning:layoutItem flexibility="grow" size="12">
-                    <!-- Main -->
-                    <div class="{!v.fullLayout?'slds-box ds-gray-color slds-theme_default':'slds-box  slds-theme_default'}">
-                        <div class="slds-p-left_xx-large slds-p-right_xx-large">
-                            {!v.main}
-                        </div>
-                    </div>
-                </lightning:layoutItem>
-            </lightning:layout>
-        </lightning:layoutItem>
-    </lightning:layout>
+      </lightning:layout>
+    </lightning:layoutItem>
+  </lightning:layout>
 </aura:component>
