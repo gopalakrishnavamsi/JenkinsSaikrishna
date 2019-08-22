@@ -24,7 +24,6 @@
             </div>
         </article>
     </div>
-
     <div class="slds-m-left_large slds-p-top_medium slds-text-title_caps">
         {!$Label.c.SUPPORT}
     </div>
@@ -111,7 +110,6 @@
                             <div class="slds-p-left_medium ds-card-heading">
                                 <b>{!$Label.c.DocuSignUniversityTitle}</b>
                             </div>
-
                         </aura:set>
                         <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
                             <p>

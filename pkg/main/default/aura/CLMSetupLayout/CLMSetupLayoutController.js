@@ -12,6 +12,7 @@
       helper.updateUi(component, tabIndex);
     }
   },
+  
   handleEvent: function (component, event, helper) {
     var fromComponent = event.getParam('fromComponent');
     var toComponent = event.getParam('toComponent');
@@ -21,7 +22,6 @@
       if (type === 'toast') {
         helper.showtoast(component, data.title, data.variant);
       }
-
     }
   }
 });

@@ -75,7 +75,7 @@
                         <span class="medium-fonts-size blue-text-color">
                             <b>{!v.title} </b>
                         </span>
-                        <span class=" ">
+                        <span>
                             <lightning:helptext content="{!v.titleHelpText}" />
                         </span>
                     </div>
@@ -145,7 +145,7 @@
                                                 class="{! data.selected ? 'ds-blue-icon slds-tree__item':'slds-tree__item'}">
                                                 <lightning:icon size="x-small"
                                                     iconName="{! data.selected ? 'utility:check':'utility:open_folder'}"
-                                                    alternativeText="open_folder" />
+                                                    alternativeText="{!$Label.c.OpenFolder}" />
                                                 <span class="slds-p-left_small slds-has-flexi-truncate">
                                                     {!data.label}
                                                 </span>
@@ -166,7 +166,7 @@
                                                         iconName="{!objectData.selected?'utility:down':'utility:right'}"
                                                         alternativeText="open" />
                                                     <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                        iconName="utility:open_folder" alternativeText="open_folder" />
+                                                        iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                                                     <span
                                                         class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
                                                         {!objectData.label}
@@ -181,7 +181,7 @@
                                                                 <lightning:icon size="x-small"
                                                                     class="slds-p-left_xx-small"
                                                                     iconName="utility:topic2"
-                                                                    alternativeText="open_folder" />
+                                                                    alternativeText="{!$Label.c.OpenFolder}" />
                                                                 <span
                                                                     class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
                                                                     {!fieldData.label}
@@ -218,7 +218,7 @@
                                                         class="{!tree.level==1?'ds-gray-folder slds-tree__item':tree.type=='tail'?'ds-blue-folder slds-tree__item':'ds-yellow-folder slds-tree__item'}">
                                                         <lightning:icon size="x-small" class="slds-p-right_xx-small"
                                                             iconName="utility:open_folder"
-                                                            alternativeText="open_folder" />
+                                                            alternativeText="{!$Label.c.OpenFolder}" />
                                                         <span title="{!tree.name}" class=" slds-has-flexi-truncate">
                                                             {!tree.name}
                                                         </span>
@@ -235,7 +235,7 @@
                                             <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
                                                 id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
                                                 <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                    iconName="utility:open_folder" alternativeText="open_folder" />
+                                                    iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                                                 <span title="Other Sources"
                                                     class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     {!v.SelectedFolderExample} Object 1
@@ -243,14 +243,14 @@
                                             </li>
                                             <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
                                                 id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
-                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                                                 <span class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     <img src="{!($Resource.CLMChooseLocationBar)}" alt="troubleImage" />
                                                 </span>
                                             </li>
                                             <li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
                                                 id="{!v.SelectedFolderExample}" role="treeitem" tabindex="0">
-                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="open_folder" />
+                                                <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                                                 <span class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
                                                     <img src="{!($Resource.CLMChooseLocationBar)}" alt="troubleImage" />
                                                 </span>
@@ -261,7 +261,7 @@
                                                 tabindex="0">
                                                 <div class="ds-blue-folder">
                                                     <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                        iconName="utility:info" alternativeText="open_folder" />
+                                                        iconName="utility:info" alternativeText="{!$Label.c.OpenFolder}" />
                                                 </div>
                                                 <div>
                                                     <span title="Other Sources"

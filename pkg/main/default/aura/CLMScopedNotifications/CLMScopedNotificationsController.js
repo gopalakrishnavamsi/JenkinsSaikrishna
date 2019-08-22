@@ -13,11 +13,7 @@
       }
       else if (type === 'show') {
         component.set('v.isVisible', true);
-
       }
-
     }
-
   },
-
 });

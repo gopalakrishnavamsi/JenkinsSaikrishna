@@ -8,6 +8,5 @@
         <lightning:tab id="faqs" label="{!$Label.c.FAQs}">
             <c:CLMHelpFAQs />
         </lightning:tab>
-
     </lightning:tabset>
 </aura:component>
