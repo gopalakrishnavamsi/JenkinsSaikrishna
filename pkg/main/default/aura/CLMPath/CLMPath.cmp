@@ -2,7 +2,8 @@
     <aura:registerEvent name="CLMPathEvent" type="c:CLMPathEvent" />
     <aura:handler event="c:CLMPathEvent" action="{!c.updateStep}" />
     <aura:attribute name='currentStep' type='String' default='1' />
-    <aura:attribute name='steps' type='List' default='[]' description="Pass data in list and follow format of {label:'desired name',index:'0-9'}" />
+    <aura:attribute name='steps' type='List' default='[]'
+        description="Pass data in list and follow format of {label:'desired name',index:'0-9'}" />
 
     <lightning:progressIndicator currentStep="{!v.currentStep}" type="path" variant="base">
         <aura:iteration items="{!v.steps}" var="step">

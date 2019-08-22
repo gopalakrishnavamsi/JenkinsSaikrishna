@@ -25,7 +25,7 @@
       }, 'CLMPathEvent');
     }
   },
-  
+
   updateStep: function (component, event) {
     var navigateTo = event.getParam('navigateTo');
     var fromComponent = event.getParam('fromComponent');
@@ -44,4 +44,4 @@
       }
     }
   }
-})
+});

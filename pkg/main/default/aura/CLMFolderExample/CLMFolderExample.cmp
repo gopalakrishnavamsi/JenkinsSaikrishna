@@ -1,20 +1,23 @@
 <aura:component>
     <div class="slds-p-around_medium">
         <div class="slds-form-element">
-            <label class="slds-form-element__label" for="textarea-id-01"><strong>{!$Label.c.NamingSyntax}</strong></label>
+            <label class="slds-form-element__label"
+                for="textarea-id-01"><strong>{!$Label.c.NamingSyntax}</strong></label>
             <div class="slds-form-element__control">
-                <textarea id="textarea-id-01" class="slds-textarea" readonly="true" placeholder="{!$Label.c.AccountNameMergeField}"></textarea>
+                <textarea id="textarea-id-01" class="slds-textarea" readonly="true"
+                    placeholder="{!$Label.c.AccountNameMergeField}"></textarea>
             </div>
         </div>
         <div class="slds-grid slds-box slds-p-around_none">
             <div class="slds-col slds-size_1-of-2 slds-border_right">
-                <div class="slds-p-around_small slds-m-left_large ds-blue-text-color" >
+                <div class="slds-p-around_small slds-m-left_large ds-blue-text-color">
                     <strong>{!$Label.c.AccountObject}</strong>
                 </div>
-                <div class="slds-border_top slds-p-around_small">                    
-                    <div class="slds-border_bottom" >
+                <div class="slds-border_top slds-p-around_small">
+                    <div class="slds-border_bottom">
                         <div class="slds-float--left ">
-                            <lightning:icon class="slds-show" aura:id="accountOne" iconName="utility:down" size="x-small" alternativeText="{!$Label.c.IndicatesUp}"/>
+                            <lightning:icon class="slds-show" aura:id="accountOne" iconName="utility:down"
+                                size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
                         </div>
                         <div class="slds-m-left_large">
                             <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
@@ -24,54 +27,77 @@
                             <table class="slds-m-left_x-large">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="ds-th-field"><div class="slds-truncate" title="{!$Label.c.FieldLabel}">{!$Label.c.FieldLabel}</div></th>
-                                        <th scope="col" class="ds-th-value"><div class="slds-truncate" title="{!$Label.c.Value}">{!$Label.c.Value}</div></th>
-                                        <th scope="col" class="ds-th-syntax"><div class="slds-truncate" title="{!$Label.c.Syntax}">{!$Label.c.Syntax}</div></th>
+                                        <th scope="col" class="ds-th-field">
+                                            <div class="slds-truncate" title="{!$Label.c.FieldLabel}">
+                                                {!$Label.c.FieldLabel}</div>
+                                        </th>
+                                        <th scope="col" class="ds-th-value">
+                                            <div class="slds-truncate" title="{!$Label.c.Value}">{!$Label.c.Value}</div>
+                                        </th>
+                                        <th scope="col" class="ds-th-syntax">
+                                            <div class="slds-truncate" title="{!$Label.c.Syntax}">{!$Label.c.Syntax}
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody>                                    
+                                <tbody>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountName}">{!$Label.c.AccountName}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountName}">
+                                                {!$Label.c.AccountName}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Levis}">{!$Label.c.Levis}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Levis}">
+                                                {!$Label.c.Levis}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNameMergeFieldLowerCase}">{!$Label.c.AccountNameMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountNameMergeFieldLowerCase}">
+                                                {!$Label.c.AccountNameMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNumber}">{!$Label.c.AccountNumber}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountNumber}">
+                                                {!$Label.c.AccountNumber}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.ZeroOne}">{!$Label.c.ZeroOne}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.ZeroOne}">
+                                                {!$Label.c.ZeroOne}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNameMergeFieldLowerCase}">{!$Label.c.AccountNumberMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountNameMergeFieldLowerCase}">
+                                                {!$Label.c.AccountNumberMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountOwner}">{!$Label.c.AccountOwner}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountOwner}">
+                                                {!$Label.c.AccountOwner}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">{!$Label.c.Strauss}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">
+                                                {!$Label.c.Strauss}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountOwnerMergeFieldLowerCase}">{!$Label.c.AccountOwnerMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountOwnerMergeFieldLowerCase}">
+                                                {!$Label.c.AccountOwnerMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.CreatedBy}">{!$Label.c.CreatedBy}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.CreatedBy}">
+                                                {!$Label.c.CreatedBy}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">{!$Label.c.Strauss}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">
+                                                {!$Label.c.Strauss}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.CreatedByMergeFieldLowerCase}">{!$Label.c.CreatedByMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate" title="{!$Label.c.CreatedByMergeFieldLowerCase}">
+                                                {!$Label.c.CreatedByMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -87,56 +113,79 @@
                             <table class="slds-m-left_x-large">
                                 <thead>
                                     <tr>
-                                        <th scope="col"><div class="slds-truncate" title="{!$Label.c.FieldLabel}">{!$Label.c.FieldLabel}</div></th>
-                                        <th scope="col"><div class="slds-truncate" title="{!$Label.c.Value}">{!$Label.c.Value}</div></th>
-                                        <th scope="col"><div class="slds-truncate" title="{!$Label.c.Syntax}">{!$Label.c.Syntax}</div></th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="{!$Label.c.FieldLabel}">
+                                                {!$Label.c.FieldLabel}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="{!$Label.c.Value}">{!$Label.c.Value}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="{!$Label.c.Syntax}">{!$Label.c.Syntax}
+                                            </div>
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody>                                    
+                                <tbody>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountName}">{!$Label.c.AccountName}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountName}">
+                                                {!$Label.c.AccountName}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Zara}">{!$Label.c.Zara}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Zara}">
+                                                {!$Label.c.Zara}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNameMergeFieldLowerCase}">{!$Label.c.AccountNameMergeFieldLowerCase}</div>
-                                        </td>
-                                    </tr>       
-                                    <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNumber}">{!$Label.c.AccountNumber}</div>
-                                        </td>
-                                        <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.ZeroTwo}">{!$Label.c.ZeroTwo}</div>
-                                        </td>
-                                        <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountNameMergeFieldLowerCase}">{!$Label.c.AccountNumberMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountNameMergeFieldLowerCase}">
+                                                {!$Label.c.AccountNameMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.AccountOwner}">{!$Label.c.AccountOwner}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountNumber}">
+                                                {!$Label.c.AccountNumber}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">{!$Label.c.Strauss}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.ZeroTwo}">
+                                                {!$Label.c.ZeroTwo}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.AccountOwnerMergeFieldLowerCase}">{!$Label.c.AccountOwnerMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountNameMergeFieldLowerCase}">
+                                                {!$Label.c.AccountNumberMergeFieldLowerCase}</div>
                                         </td>
                                     </tr>
                                     <tr class="slds-p-around--small">
-                                        <td >
-                                            <div class="slds-truncate" title="{!$Label.c.CreatedBy}">{!$Label.c.CreatedBy}</div>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.AccountOwner}">
+                                                {!$Label.c.AccountOwner}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">{!$Label.c.Strauss}</div>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">
+                                                {!$Label.c.Strauss}</div>
                                         </td>
                                         <td>
-                                            <div class="slds-truncate" title="{!$Label.c.CreatedByMergeFieldLowerCase}">{!$Label.c.CreatedByMergeFieldLowerCase}</div>
+                                            <div class="slds-truncate"
+                                                title="{!$Label.c.AccountOwnerMergeFieldLowerCase}">
+                                                {!$Label.c.AccountOwnerMergeFieldLowerCase}</div>
                                         </td>
-                                    </tr>                             
+                                    </tr>
+                                    <tr class="slds-p-around--small">
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.CreatedBy}">
+                                                {!$Label.c.CreatedBy}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate ds-blue-color" title="{!$Label.c.Strauss}">
+                                                {!$Label.c.Strauss}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="{!$Label.c.CreatedByMergeFieldLowerCase}">
+                                                {!$Label.c.CreatedByMergeFieldLowerCase}</div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -144,7 +193,7 @@
                 </div>
             </div>
             <div class="slds-col slds-size_1-of-2">
-                <div class="slds-p-around_small slds-m-left_large slds-border_bottom ds-blue-text-color" >
+                <div class="slds-p-around_small slds-m-left_large slds-border_bottom ds-blue-text-color">
                     <strong>{!$Label.c.CorrespondingFolder}</strong>
                 </div>
                 <div class="slds-p-around_small">

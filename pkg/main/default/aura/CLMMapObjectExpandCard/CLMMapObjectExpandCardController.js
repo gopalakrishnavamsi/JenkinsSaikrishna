@@ -3,6 +3,8 @@
     helper.callServer(component, 'c.getNamespace', false, function (result) {
       component.set('v.namespace', result);
     });
+
+    helper.mappedObjectCount(component, event, helper);
   },
 
   toggleSection: function (component) {
@@ -12,6 +14,7 @@
       $A.util.toggleClass(acc[cmp], 'slds-hide');
     }
   },
+
   gotoIntegrationHome: function (component, event, helper) {
     helper.fireApplicationEvent(component, {
       fromComponent: 'CLMMapObjectExpand',
@@ -20,4 +23,6 @@
       tabIndex: '3',
     }, 'CLMNavigationEvent');
   }
-})
+
+
+});

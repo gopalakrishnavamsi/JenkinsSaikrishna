@@ -1,6 +1,6 @@
 <aura:component>
-    <aura:attribute name="summary" type="String" default="{!$Label.c.SectionDescription}" />
-    <aura:attribute name="title" type="String" default="{!$Label.c.Section1}" />
+    <aura:attribute name="summary" type="String" default="Description of the section" />
+    <aura:attribute name="title" type="String" default="Section 1" />
     <aura:attribute type="string" name="index" default="" />
     <div class="slds-m-left_large slds-text-title_caps">
         <!--{!$Label.c.FrequentlyAskedQuestions}-->
@@ -27,9 +27,9 @@
                 <section class="slds-clearfix">
                     <div class="slds-float--right ">
                         <lightning:icon class="slds-show" aura:id="objMapping1" iconName="utility:chevronup"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
+                            size="x-small" alternativeText="Indicates up" />
                         <lightning:icon class="slds-hide" aura:id="objMapping1" iconName="utility:chevrondown"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesDown}" />
+                            size="x-small" alternativeText="Indicates down" />
                     </div>
                     <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                         aura:id="objMapping1">{!$Label.c.Collapse}</a>
@@ -78,6 +78,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </lightning:card>
     </div>
@@ -103,9 +104,9 @@
                 <section class="slds-clearfix">
                     <div class="slds-float--right ">
                         <lightning:icon class="slds-show" aura:id="objMapping2" iconName="utility:chevronup"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
+                            size="x-small" alternativeText="Indicates up" />
                         <lightning:icon class="slds-hide" aura:id="objMapping2" iconName="utility:chevrondown"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesDown}" />
+                            size="x-small" alternativeText="Indicates down" />
                     </div>
                     <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                         aura:id="objMapping2">{!$Label.c.Collapse}</a>
@@ -130,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </lightning:card>
     </div>
@@ -155,9 +157,9 @@
                 <section class="slds-clearfix">
                     <div class="slds-float--right ">
                         <lightning:icon class="slds-show" aura:id="objMapping3" iconName="utility:chevronup"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
+                            size="x-small" alternativeText="Indicates up" />
                         <lightning:icon class="slds-hide" aura:id="objMapping3" iconName="utility:chevrondown"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesDown}" />
+                            size="x-small" alternativeText="Indicates down" />
                     </div>
                     <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                         aura:id="objMapping3">{!$Label.c.Collapse}</a>
@@ -215,9 +217,9 @@
                 <section class="slds-clearfix">
                     <div class="slds-float--right ">
                         <lightning:icon class="slds-show" aura:id="objMapping4" iconName="utility:chevronup"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
+                            size="x-small" alternativeText="Indicates up" />
                         <lightning:icon class="slds-hide" aura:id="objMapping4" iconName="utility:chevrondown"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesDown}" />
+                            size="x-small" alternativeText="Indicates down" />
                     </div>
                     <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                         aura:id="objMapping4">{!$Label.c.Collapse}</a>
@@ -331,9 +333,9 @@
                 <section class="slds-clearfix">
                     <div class="slds-float--right ">
                         <lightning:icon class="slds-show" aura:id="objMapping5" iconName="utility:chevronup"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
+                            size="x-small" alternativeText="Indicates up " />
                         <lightning:icon class="slds-hide" aura:id="objMapping5" iconName="utility:chevrondown"
-                            size="x-small" alternativeText="{!$Label.c.IndicatesDown}" />
+                            size="x-small" alternativeText="Indicates down" />
                     </div>
                     <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                         aura:id="objMapping5">{!$Label.c.Collapse}</a>
@@ -367,6 +369,10 @@
                     </div>
                 </div>
             </div>
+   
+        
+        
         </lightning:card>
     </div>
+
 </aura:component>

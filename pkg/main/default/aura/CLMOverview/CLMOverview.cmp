@@ -1,16 +1,18 @@
 <aura:component>
     <div class="slds-grid slds-grid_vertical">
         <div class="slds-col slds-m-around_medium">
-            <c:CLMGetStarted/>
+            <c:CLMGetStarted />
         </div>
         <div class="slds-col slds-m-around_medium">
             <div class="slds-p-bottom_small slds-p-top_small textLabel-color">
                 {!$Label.c.DiscoverDocuSignCLM}
             </div>
-            <c:CLMDiscoverDocuSign/>
+            <c:CLMDiscoverDocuSign />
         </div>
         <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot hyperlinkedSummary1="{!$Label.c.DocGenInfo}" hyperlinkedSummary2="{!$Label.c.DocGenInfo2}" hasHyperlink="true" hyperlinkedText="{!$Label.c.DocumentGeneration}" title="{!$Label.c.LearnAboutDocGen}" isGray="true"/>
+            <c:CLMTroubleshoot hyperlinkedSummary1="{!$Label.c.DocGenInfo}"
+                hyperlinkedSummary2="{!$Label.c.DocGenInfo2}" hasHyperlink="true"
+                hyperlinkedText="{!$Label.c.DocumentGeneration}" title="{!$Label.c.LearnAboutDocGen}" isGray="true" />
         </div>
     </div>
 </aura:component>

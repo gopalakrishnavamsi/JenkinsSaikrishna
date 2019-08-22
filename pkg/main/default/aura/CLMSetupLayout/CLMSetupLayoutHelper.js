@@ -25,7 +25,6 @@
       }
     );
   },
-
   showtoast: function (component, title, variant) {
     var toast = component.find('toast');
     if (toast) {
@@ -37,7 +36,6 @@
       }), 2000);
     }
   },
-  
   updateUi: function (component, index) {
     var helper = this;
     if (index === '1') {
@@ -83,6 +81,8 @@
       //main
       component.set('v.main', '');
     } else if (index === '6') {
+
+
       component.set('v.isCenter', false);
       component.set('v.fullLayout', false);
       //header 

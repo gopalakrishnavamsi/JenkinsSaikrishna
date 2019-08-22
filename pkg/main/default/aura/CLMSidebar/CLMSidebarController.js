@@ -9,7 +9,7 @@
       tabIndex: index,
     }, 'CLMNavigationEvent');
   },
-  
+
   updateState: function (component, event) {
     var tabIndex = event.getParam('tabIndex');
     var fromComponent = event.getParam('fromComponent');
@@ -18,4 +18,4 @@
       component.set('v.currentIndex', tabIndex);
     }
   }
-})
+});
