@@ -1,6 +1,12 @@
 public with sharing class AgreementsController extends Controller {
 
+	public Entity sourceEntity { get; set; }
+
 	public AgreementsController() {
+		Id sourceId = apexpages.currentpage().getparameters().get('sId');
+		if (sourceId <> null && sourceEntity == null) {
+			sourceEntity = getSourceDetails(sourceId);
+		}
 	}
 
 	public AgreementsController(final ApexPages.StandardController c) {
@@ -244,5 +250,9 @@ public with sharing class AgreementsController extends Controller {
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to complete External Review Request');
 		}
+	}
+
+	private Entity getSourceDetails(String sourceId) {
+		return Entity.resolve(sourceId);
 	}
 }
