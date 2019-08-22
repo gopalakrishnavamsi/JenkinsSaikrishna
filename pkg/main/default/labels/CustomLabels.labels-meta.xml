@@ -8937,4 +8937,36 @@
 		<shortDescription>CLM - View Resources URL</shortDescription>
 		<value>https://support.docusign.com/knowledgeMarket</value>
 	</labels>
+	<labels>
+		<fullName>IndicatesDown</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Indicates Down</shortDescription>
+		<value>Indicates Down</value>
+	</labels>
+	<labels>
+		<fullName>SectionDescription</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Description of the section</shortDescription>
+		<value>Description of the section</value>
+	</labels>
+	<labels>
+		<fullName>Section1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Section 1</shortDescription>
+		<value>Section1</value>
+	</labels>
+	<labels>
+		<fullName>agreementHelp</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - agreementHelp</shortDescription>
+		<value>agreementHelp</value>
+	</labels>
 </CustomLabels>

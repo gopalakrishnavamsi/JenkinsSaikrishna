@@ -4717,6 +4717,22 @@
 		<label>https://support.docusign.com/knowledgeMarket</label>
 		<name>ViewResourcesURL</name>
 	</customLabels>
+	<customLabels>
+		<label>Indicates Down</label>
+		<name>IndicatesDown</name>
+	</customLabels>
+	<customLabels>
+		<label>Description of the section</label>
+		<name>SectionDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Section 1</label>
+		<name>Section1</name>
+	</customLabels>
+	<customLabels>
+		<label>agreementHelp</label>
+		<name>agreementHelp</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
