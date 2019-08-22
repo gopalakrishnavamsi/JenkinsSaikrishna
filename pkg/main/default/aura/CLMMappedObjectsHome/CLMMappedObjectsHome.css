@@ -15,7 +15,7 @@
     color:#0e2549!important;
 }
 .THIS .ds-white-table-header thead th{
-    background-color:#ffffff!important;
+    background-color:#fafaf9!important;
 }
 .THIS .ds-medium-height{
     height:175px;   
@@ -34,7 +34,6 @@
     max-width:144px;
     height: 100%;
 }
-
-.THIS .ds-thead-width {
-    width: 8.75rem;
+.THIS .ds-thead-width{
+    width:8.75rem;
 }

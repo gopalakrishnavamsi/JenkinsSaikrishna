@@ -2,8 +2,8 @@
     font-size:1.25rem
 }
 
-.THIS .ds-greay-background {
-    background: #eaeaea;
+.THIS .ds-gray-background{
+    background:#eaeaea;
 }
 
 .THIS .x-medium-fonts-size{
@@ -14,11 +14,6 @@
     box-shadow:none;
 }
 
-.THIS .ds-no-extra-height {
-    line-height: 0px;
-    box-shadow: none;
-}
-
 .THIS .blue-text-color{
     color:#0e2549!important;
 }
@@ -27,35 +22,33 @@
     color:#0e2549!important;
 }
 
-.THIS .ds-blue-icon svg {
-    fill: #127ad5;
+.THIS .ds-blue-icon svg{
+    fill:#127ad5;
+}
+.THIS .ds-yellow-folder svg{
+    fill:#ffb75d;
+}
+.THIS .ds-blue-folder svg{
+    fill:#005fb2;
 }
 
-.THIS .ds-yellow-folder svg {
-    fill: #ffb75d;
-}
-
-.THIS .ds-blue-folder svg {
-    fill: #005fb2;
-}
-
-.THIS .ds-gray-folder svg {
-    fill: #b0adab;
+.THIS .ds-gray-folder svg{
+    fill:#b0adab;
 }
 
 .THIS .position-helptext{
     position: absolute;
 }
 
-.THIS .ds-lightning-icon {
+.THIS .ds-lightning-icon{
     margin-top: 0.2rem;
 
 }
 
-.THIS .ds-parent-hover:hover .ds-hover {
-    display: block;
+.THIS .ds-parent-hover:hover .ds-hover{
+    display:block;
 }
 
-.THIS .ds-hover {
-    display: none;
+.THIS .ds-hover{
+    display:none;
 }

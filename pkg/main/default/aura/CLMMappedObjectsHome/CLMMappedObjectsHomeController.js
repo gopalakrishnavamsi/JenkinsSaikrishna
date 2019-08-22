@@ -1,6 +1,18 @@
 ({
   onInit: function (component, event, helper) {
+
     helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
+      var data = result;
+
+
+      if (data.Account && data.Opportunity && Object.values(data).length === 2) {
+        helper.fireApplicationEvent(component, {
+          fromComponent: 'CLMMappedObjectsHome',
+          toComponent: 'CLMScopedNotifications',
+          type: 'show'
+        }, 'CLMEvent');
+      }
+
       component.set('v.mappedObjData', Object.values(result));
     });
     helper.createComponent(component, 'c:CLMModelFooterButton', {
@@ -47,6 +59,7 @@
     }), 5);
     var cmpEvent = component.getEvent('CLMScopedNotificationEvent');
     cmpEvent.fire();
+
   },
 
   remove: function (component, event, helper) {
@@ -90,8 +103,19 @@
       helper.callServer(component, 'c.removeMappedObject', {
         name: objDetails.Name
       }, function () {
+
+
+        helper.fireApplicationEvent(component, {
+          fromComponent: 'CLMMappedObjectsHome',
+          toComponent: 'CLMScopedNotifications',
+          type: 'hide'
+        }, 'CLMEvent');
+
+
+
         helper.fireToast(component, stringUtils.format($A.get('$Label.c.ObjectRemoved'), objDetails.Name), helper.SUCCESS);
         component.getEvent('CLMScopedNotificationEvent').fire();
+
         component.set('v.isRemove', 'false');
         var newObjectList = [];
         mappedObjData.forEach(function (obj) {
@@ -102,9 +126,18 @@
         component.set('v.mappedObjData', newObjectList);
         modelComponent.hide();
       });
-    } else if (data.type === 'edit') {
-      helper.fireToast(component, stringUtils.format($A.get('$Label.c.ObjectEditSuccessful'), objDetails.Name), helper.SUCCESS);
-      modelComponent.hide();
+    }
+    else if (data.type === 'edit') {
+
+      helper.fireApplicationEvent(component, {
+        data: { objDetails: objDetails },
+        componentName: 'CLMCardModel',
+        fromComponent: 'CLMMappedObjectsHome',
+        toComponent: 'CLMIntegrationLayout',
+        type: 'edit'
+      }, 'CLMNavigationEvent');
+
+
     }
     component.set('v.showModal', 'false');
   },
