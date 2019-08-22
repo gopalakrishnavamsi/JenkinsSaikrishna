@@ -1,6 +1,6 @@
 ({
   fireApplicationEvent: function (component, params, eventName) {
-    var appEvent = $A.get('e.'+component.get('v.namespace')+':' + eventName);
+    var appEvent = $A.get('e.' + component.get('v.namespace') + ':' + eventName);
     if (appEvent) {
       appEvent.setParams(params);
       appEvent.fire();

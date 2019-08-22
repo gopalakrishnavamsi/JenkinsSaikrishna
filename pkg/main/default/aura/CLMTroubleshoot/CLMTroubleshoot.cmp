@@ -6,7 +6,7 @@
     <aura:attribute name="hasHyperlink" type="Boolean" default="false" />
     <aura:attribute name="hyperlinkedText" type="String" />
     <aura:attribute name="hyperlinkedSummary1" type="String" />
-    <aura:attribute name="hyperlinkedSummary2" type="String"/>
+    <aura:attribute name="hyperlinkedSummary2" type="String" />
 
     <lightning:card class="{!v.isGray?'slds-m-top_none ds-gray-color':'slds-m-top_none'}">
         <div class="slds-grid">
@@ -20,11 +20,12 @@
                     <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
                         <aura:if isTrue="{!v.hasHyperlink}">
                             <p>
-                                {!v.hyperlinkedSummary1}&nbsp;<span onclick="{!c.navigateToSection}"><a href="javascript:void(0);">{!v.hyperlinkedText}</a>&nbsp;</span>{!v.hyperlinkedSummary2}
+                                {!v.hyperlinkedSummary1}&nbsp;<span onclick="{!c.navigateToSection}"><a
+                                        href="javascript:void(0);">{!v.hyperlinkedText}</a>&nbsp;</span>{!v.hyperlinkedSummary2}
                             </p>
                             <aura:set attribute="else">
                                 <p>
-                                    {!v.summary}>
+                                    {!v.summary}
                                 </p>
                             </aura:set>
                         </aura:if>

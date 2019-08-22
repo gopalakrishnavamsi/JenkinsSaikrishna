@@ -1,19 +1,17 @@
-<aura:component extends="c:CLMUtility">
+<aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
+    <aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+    <aura:registerEvent name="CLMMappingObjectEvent_UpdateName" type="c:CLMMappingObjectEvent" />
 
-    <aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
-    <aura:registerEvent name="CLMMappingObjectEvent_UpdateName" type="c:CLMMappingObjectEvent"/>
+    <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
 
-    <aura:handler name='init' value='{!this}' action='{!c.onInit}'/>
-
-    <aura:attribute type="string" name="title" default=""/>
-    <aura:attribute type="string" name="summary" default=""/>
-    <aura:attribute type="string" name="folderName" default=""/>
-    <aura:attribute name="selectedObjDetails" type="Object"/>
-    <aura:attribute name="buttondisabled" type="Boolean" default="false"/>
+    <aura:attribute type="string" name="title" />
+    <aura:attribute type="string" name="summary" />
+    <aura:attribute type="string" name="folderName" />
+    <aura:attribute name="selectedObjDetails" type="Object" />
+    <aura:attribute name="buttonDisabled" type="Boolean" default="false" />
     <!--internal attributes-->
-
-    <aura:attribute name="allObjectFileds" type="List" access="private"/>
-    <aura:attribute name="allObjectFiledsList" type="List" access="private"/>
+    <aura:attribute name="allObjectFields" type="List" access="private" />
+    <aura:attribute name="allObjectFieldsList" type="List" access="private" />
 
     <lightning:layout multipleRows='true'>
         <lightning:layoutItem size='12' padding="around-small">
@@ -22,52 +20,58 @@
         </lightning:layoutItem>
         <lightning:layoutItem size='12' padding="around-small">
             <lightning:input onchange="{!c.onchangeName}" aura:id="search-fileName" value="{!v.folderName}"
-                             name="fileName" label="{!$Label.c.SelectFieldToNameTheFolder}"/>
+                name="fileName" label="{!$Label.c.SelectFieldToNameTheFolder}" />
         </lightning:layoutItem>
         <lightning:layoutItem size='12' padding="around-small">
+            <div  onkeyup="{! c.handleSearchField }">
+                <lightning:input aura:id="search-field" placeholder="{!$Label.c.SearchFields}" type="search"
+                                 variant="label-hidden" />
+            </div>
             <div class="slds-box slds-p-around_none slds-scrollable_y" style="max-height:500px">
-                <div class="slds-box slds-p-around_none">
-                    <div class="slds-p-bottom_small" onkeyup="{! c.handleSearchField }">
-                        <lightning:input aura:id="search-field" placeholder="Search Fields" type="search"
-                                         variant="label-hidden"/>
-                    </div>
-                    <ul class="slds-tree" role="tree">
-                        <aura:iteration items="{!v.allObjectFiledsList}" var="objectData">
-                            <li aria-expanded="{!objectData.selected}" aria-level="1" id="{!objectData.name}"
-                                role="treeitem" onclick="{!c.onObjFolderSelection}">
-                                <div class="slds-tree__item">
-                                    <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                    iconName="{!objectData.selected?'utility:down':'utility:right'}"
-                                                    alternativeText="open"/>
-                                    <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                    iconName="utility:open_folder" alternativeText="open_folder"/>
-                                    <span class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
-                                            {!objectData.label}
-                                    </span>
-                                </div>
-                                <ul role="group" class="slds-p-left_medium">
-                                    <aura:iteration items="{!objectData.fields}" var="fieldData">
-                                        <li class="ds-parent-hover" aria-level="2" id="{!fieldData.name}"
-                                            role="treeitem" onclick="{!c.onObjFieldSelection}">
-                                            <div class="slds-grid slds-tree__item">
-                                                <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                                iconName="utility:open_folder"
-                                                                alternativeText="open_folder"/>
-                                                <span class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
-                                                        {!fieldData.label}
-                                                </span>
-                                                <div class="slds-col_bump-left ds-hover slds-p-right_small">
-                                                    <lightning:button variant="base" class="ds-no-extra-height"
-                                                                      label="Click to add" title="Click to add"/>
-                                                </div>
+                <ul class="slds-tree" role="tree">
+                    <aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
+                        <li aria-expanded="{!objectData.selected}" aria-level="1"
+                            id="{!objectData.name}" role="treeitem"
+                            onclick="{!c.onObjFolderSelection}">
+                            <div class="slds-tree__item">
+                                <lightning:icon size="x-small" class="slds-p-left_xx-small"
+                                                iconName="{!objectData.selected?'utility:down':'utility:right'}"
+                                                alternativeText="{!$Label.c.OpenFolder}" />
+                                <lightning:icon size="x-small" class="slds-p-left_xx-small"
+                                                iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+                                <span
+                                      class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
+                                    {!objectData.label}
+                                </span>
+                            </div>
+                            <ul role="group" class="slds-p-left_medium">
+                                <aura:iteration items="{!objectData.fields}" var="fieldData">
+                                    <li class="ds-parent-hover" aria-level="2"
+                                        id="{!fieldData.name}" role="treeitem"
+                                        onclick="{!c.onObjFieldSelection}">
+                                        <div class="slds-grid slds-tree__item">
+                                            <lightning:icon size="x-small"
+                                                            class="slds-p-left_xx-small"
+                                                            iconName="utility:topic2"
+                                                            alternativeText="{!$Label.c.OpenFolder}" />
+                                            <span
+                                                  class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
+                                                {!fieldData.label}
+                                            </span>
+                                            <div
+                                                 class="slds-col_bump-left ds-hover slds-p-right_small">
+                                                <lightning:button variant="base"
+                                                                  class="ds-no-extra-height"
+                                                                  label="{!$Label.c.ClickToAdd}"
+                                                                  title="{!$Label.c.ClickToAdd}" />
                                             </div>
-                                        </li>
-                                    </aura:iteration>
-                                </ul>
-                            </li>
-                        </aura:iteration>
-                    </ul>
-                </div>
+                                        </div>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </li>                        
+                    </aura:iteration>
+                </ul>                                           
             </div>
         </lightning:layoutItem>
     </lightning:layout>

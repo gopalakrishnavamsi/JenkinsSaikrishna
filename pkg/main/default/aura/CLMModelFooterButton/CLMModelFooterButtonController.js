@@ -24,7 +24,8 @@
       if (type === 'disable') {
         component.set('v.primaryButtonDisabled', 'true');
 
-      } else if (type === 'enable') {
+      }
+      else if (type === 'enable') {
         component.set('v.primaryButtonDisabled', 'false');
       }
 

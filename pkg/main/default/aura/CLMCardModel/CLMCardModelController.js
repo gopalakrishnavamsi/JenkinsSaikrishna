@@ -19,9 +19,9 @@
           component.set('v.index', index);
         }
         if (body !== undefined) {
-          component.set('v.body', body);
+          component.set('v.main', body);
         }
       }
     }
-  }
-})
+  },
+});

@@ -1,9 +1,10 @@
 <aura:component extends="c:CLMUtility">
     <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
     <aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateStep}" />
-    <aura:attribute name='steps' type='List' default='[]' description="Data input format: {label:'desired name',navigateTo:'repective url',type:'component/url','index':'0'}" />
-	<aura:attribute name="currentStep" type="String" default="1" />
-    
+    <aura:attribute name='steps' type='List' default='[]'
+        description="Data input format: {label:'desired name',navigateTo:'respective url',type:'component/url','index':'0'}" />
+    <aura:attribute name="currentStep" type="String" default="1" />
+
     <nav role="navigation" aria-label="Breadcrumbs" class="slds-p-top_large">
         <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
             <aura:iteration items="{!v.steps}" var="step">
@@ -13,8 +14,9 @@
                             <span class=" slds-p-left_x-small slds-text-heading_x-small slds-text-title_caps ">
                                 {!step.label}
                             </span>
-                            <aura:set attribute="else">                          
-                                <a href="javascript:void(0);" id="{!step.index}" onclick="{!c.goto}" class="slds-text-title_caps ds-click-pointer" >
+                            <aura:set attribute="else">
+                                <a href="javascript:void(0);" id="{!step.index}" onclick="{!c.goto}"
+                                    class="slds-text-title_caps ds-click-pointer">
                                     {!step.label}
                                 </a>
                             </aura:set>

@@ -26,7 +26,8 @@
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-p-right_small">
-                        <strong class="ds-blue-color ds-card-heading">{!$Label.c.TrackDocumentStatusAndActivityTitle}</strong>
+                        <strong
+                            class="ds-blue-color ds-card-heading">{!$Label.c.TrackDocumentStatusAndActivityTitle}</strong>
                         <div>
                             {!$Label.c.TrackDocumentStatusAndActivityBody}
                         </div>
@@ -36,7 +37,8 @@
             <div class="slds-col">
                 <div class="slds-grid slds-p-around_medium">
                     <div class="slds-col slds-size_1-of-2 slds-m-right_small">
-                        <strong class="ds-blue-color ds-card-heading">{!$Label.c.OrganizeAndSearchDocumentsTitle}</strong>
+                        <strong
+                            class="ds-blue-color ds-card-heading">{!$Label.c.OrganizeAndSearchDocumentsTitle}</strong>
                         <div>
                             {!$Label.c.OrganizeAndSearchDocumentsBody}
                         </div>

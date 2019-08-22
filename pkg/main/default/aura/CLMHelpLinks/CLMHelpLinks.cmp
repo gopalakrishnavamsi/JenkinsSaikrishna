@@ -1,0 +1,174 @@
+<aura:component extends="c:CLMUtility">
+    <aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
+    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}" />
+    <aura:attribute name="summary" type="String"
+        default="{!$Label.c.HelpInfoBody}" />
+    <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}" />
+
+    <div class="slds-box slds-m-around_large">
+        <article class="slds-card slds-grid slds-p-around_xx-large">
+            <div class="slds-col slds-size_2-of-4 slds-align_absolute-center slds-p-right_x-large">
+                <img src="{!v.imageURL}" style="height:10rem;width:15rem;" alt="{!$Label.c.agreementHelp}" />
+            </div>
+            <div class="slds-col slds-p-left_large slds-size_2-of-4 slds-grid slds-grid_vertical">
+                <div class="slds-col slds-m-bottom_medium ds-card-heading">
+                    <h1><b>{!$Label.c.DocuSignAgreementsHelp}</b></h1>
+                </div>
+                <div class="slds-col slds-m-bottom_medium">
+                    {!$Label.c.DocuSignAgreementsHelpSummary}
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:button variant="brand" onclick="{!c.gotoFAQs}" class="ds-button-width"
+                        label="{!$Label.c.VisitFAQ}" />
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="slds-m-left_large slds-p-top_medium slds-text-title_caps">
+        {!$Label.c.SUPPORT}
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid  slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.SupportCenterTitle}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.SupportCenterSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="getSupportBtn" label="{!$Label.c.GetSupport}"
+                            title="{!$Label.c.GetSupport}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-top_medium slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.DeveloperCenterTitle}</b>
+                            </div>
+
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.DeveloperCenterSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="learnMoreBtn" label="{!$Label.c.LearnMoreBtn}"
+                            title="{!$Label.c.LearnMoreBtn}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-top_medium">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.TrustCenterTitle}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.TrustCenterSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="checkStatusBtn" label="{!$Label.c.CheckStatusBtn}"
+                            title="{!$Label.c.CheckStatusBtn}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+    <div class="slds-m-left_large slds-p-top_medium slds-text-title_caps">
+        {!$Label.c.MORERESOURCES}
+    </div>
+    <div class="slds-box slds-m-around_large">
+        <lightning:card>
+            <div class="slds-grid slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.DocuSignUniversityTitle}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.DocuSignUniversitySummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="getTrainingBtn" label="{!$Label.c.GetTrainingBtn}"
+                            title="{!$Label.c.GetTrainingBtn}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-bottom_medium slds-border_bottom">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.CommunityTitle}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.CommunitySummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="visitCommunityBtn" label="{!$Label.c.VisitCommunity}"
+                            title="{!$Label.c.VisitCommunity}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-top_medium">
+                <div class="slds-col  slds-size_9-of-12">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div class="slds-p-left_medium ds-card-heading">
+                                <b>{!$Label.c.KnowledgeMarket}</b>
+                            </div>
+                        </aura:set>
+                        <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                            <p>
+                                {!$Label.c.KnowledgeMarketSummary}
+                            </p>
+                        </div>
+                    </lightning:card>
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <div class="slds-float_right slds-p-right_large slds-m-top_small ">
+                        <lightning:button variant="brand" class="ds-button-width" aura:id="viewResourcesBtn" label="{!$Label.c.ViewResourcesBtn}"
+                            title="{!$Label.c.ViewResourcesBtn}" onclick="{!c.navigation}" />
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+</aura:component>

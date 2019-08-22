@@ -9,8 +9,8 @@
     });
     primaryClicked.fire();
   },
-  
-  onSecondayButtonClick: function (component, event) {
+
+  onSecondaryButtonClick: function (component, event) {
     var secondaryClicked = component.getEvent('CLMHelpSecondaryButtonClicked');
     var buttonName = event.getSource().get('v.label');
     secondaryClicked.setParams({
@@ -20,4 +20,4 @@
     });
     secondaryClicked.fire();
   },
-})
+});

@@ -1,6 +1,7 @@
 <apex:page controller="AgreementsController" title="Preview Agreement" sidebar="false" showHeader="true">
     <apex:includeLightning/>
     <apex:slds/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
     <style type="text/css">
         #appContainer {
             background-color: #f7f9fb;
@@ -27,33 +28,25 @@
       var namespace = '{!JSENCODE(namespace)}';
       var docuSignAdmin = {!IsCurrentUserDocuSignAdmin};
       $Lightning.use(namespace + ':AgreementPreviewApp', function () {
-        $Lightning.createComponent(namespace + ':AgreementPreview', 
+        $Lightning.createComponent(namespace + ':AgreementPreview',
           {
             sourceId: '{!JSENCODE($CurrentPage.parameters.sourceId)}',
             agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}',
             currentUserEmail: '{!JSENCODE($User.email)}',
             currentUserDocuSignAdmin: docuSignAdmin
-          }, 
-          'appContainer', 
-          function(component, status, errorMessage) {
-          if (errorMessage) {
-            //FixMe:Need Design
-          }
-          $A.eventService.addHandler({
-                    event: 'force:navigateToSObject',
-                    handler: function (event) {
-                         var myUserContext = "{!$User.UITheme}";
-                        if (myUserContext === 'Theme4t' || myUserContext === 'Theme4d') {
-                            // The Visualforce page is in S1 or Lightning Experience
-                            sforce.one.navigateToSObject(event.getParams().recordId);
-                        } else if (myUserContext === 'Theme3') {
-                            // The Visualforce page is running in Classic
-                            window.parent.location = '/' + event.getParams().recordId;
-                        } else {
-                        }
-                    }
-                });    
-        });
+          },
+          'appContainer',
+          function (component, status, errorMessage) {
+            if (errorMessage) {
+              //FixMe:Need Design
+            }
+            $A.eventService.addHandler({
+              event: 'force:navigateToSObject',
+              handler: function (event) {
+                navUtils.navigateToSObject(event.getParams().recordId);
+              }
+            });
+          });
       });
     </script>
 </apex:page>

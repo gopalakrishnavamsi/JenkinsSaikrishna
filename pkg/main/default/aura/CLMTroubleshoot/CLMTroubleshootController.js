@@ -1,5 +1,5 @@
 ({
-  navigateToSection: function(component, event, helper){
+  navigateToSection: function (component, event, helper) {
     helper.fireApplicationEvent(component, {
       fromComponent: 'CLMTroubleshoot',
       toComponent: 'CLMSetupLayout',
@@ -7,4 +7,4 @@
       tabIndex: '4',
     }, 'CLMNavigationEvent');
   }
-})
+});

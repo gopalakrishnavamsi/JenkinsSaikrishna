@@ -37,14 +37,15 @@
                 <div class="slds-p-left_none slds-p-right_medium slds-float_right">
                     <div class="slds-m-top_small ds-button-height">
                         <aura:if isTrue="{!v.showFirstButton}">
-                            <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}" iconName="utility:new_window"
-                                iconPosition="right" onclick="{!c.onSecondayButtonClick}"
+                            <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
+                                iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
                                 class="slds-m-right_x-small ds-button-width" />
                         </aura:if>
                         <aura:if isTrue="{!v.showSecondButton}">
-                            <lightning:button variant="brand" label="{!v.secondButtonName}" title="{!v.secondButtonName}"
-                                onclick="{!c.onPrimaryButtonClick}" class="ds-button-width slds-m-right_small" />
-                        </aura:if>                        
+                            <lightning:button variant="brand" label="{!v.secondButtonName}"
+                                title="{!v.secondButtonName}" onclick="{!c.onPrimaryButtonClick}"
+                                class="ds-button-width slds-m-right_small" />
+                        </aura:if>
                     </div>
                 </div>
             </div>

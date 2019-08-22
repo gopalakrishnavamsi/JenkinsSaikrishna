@@ -8136,7 +8136,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Name your sub-folder summary</shortDescription>
 		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>NameSubFolder</fullName>
 		<categories>CLM</categories>
@@ -8176,7 +8176,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Folder Location</shortDescription>
 		<value>Folder Location</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>FolderName</fullName>
 		<categories>CLM</categories>
@@ -8192,5 +8192,781 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Callback Failed</shortDescription>
 		<value>Callback failed.</value>
+	</labels>
+	<labels>
+		<fullName>FAQs</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - FAQs</shortDescription>
+		<value>FAQs</value>
+	</labels>
+	<labels>
+		<fullName>MapEdit</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Map Edit</shortDescription>
+		<value>{0} object was successfully edited.</value>
+	</labels>
+	<labels>
+		<fullName>MapError</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Map Error</shortDescription>
+		<value>{0} object type was not mapped to DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>CommunityTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Community Title</shortDescription>
+		<value>Community</value>
+	</labels>
+	<labels>
+		<fullName>CommunitySummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Community Summary</shortDescription>
+		<value>DocuSign customers ask and answer questions.</value>
+	</labels>
+	<labels>
+		<fullName>VisitCommunity</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Visit Community</shortDescription>
+		<value>Visit Community</value>
+	</labels>
+	<labels>
+		<fullName>KnowledgeMarket</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Knowledge Market</shortDescription>
+		<value>Knowledge Market</value>
+	</labels>
+	<labels>
+		<fullName>KnowledgeMarketSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Knowledge Market Summary</shortDescription>
+		<value>White papers, value studies and tools to drive adoption.</value>
+	</labels>
+	<labels>
+		<fullName>ViewResourcesBtn</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - View Resources</shortDescription>
+		<value>View Resources</value>
+	</labels>
+	<labels>
+		<fullName>FrequentlyAskedQuestions</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - FREQUENTLY ASKED QUESTIONS</shortDescription>
+		<value>FREQUENTLY ASKED QUESTIONS</value>
+	</labels>
+	<labels>
+		<fullName>UnderstandingDocuSignAgreements</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Understanding DocuSign Agreements</shortDescription>
+		<value>Understanding DocuSign Agreements</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignAgreementsSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign Agreements Summary</shortDescription>
+		<value>Learn how DocuSign Agreements manages your documents and uses your Salesforce data.</value>
+	</labels>
+	<labels>
+		<fullName>InstallationandGetStarted</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Installation and Getting Started</shortDescription>
+		<value>Installation and Getting Started</value>
+	</labels>
+	<labels>
+		<fullName>InstallationSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Installation Summary</shortDescription>
+		<value>Learn how to get up and running with DocuSign Agreements.</value>
+	</labels>
+	<labels>
+		<fullName>ManagingDocuSignUsers</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Managing DocuSign CLM Users</shortDescription>
+		<value>Managing DocuSign CLM Users</value>
+	</labels>
+	<labels>
+		<fullName>ManageAddUsers</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Add and Manage Users</shortDescription>
+		<value>Learn how to add and manage users.</value>
+	</labels>
+	<labels>
+		<fullName>MappingSalesforceObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Salesforce Objects</shortDescription>
+		<value>Mapping Salesforce Objects</value>
+	</labels>
+	<labels>
+		<fullName>MappingObjectsSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Salesforce Objects Summary</shortDescription>
+		<value>Learn how to map Salesforce Objects from DocuSign Agreements.</value>
+	</labels>
+	<labels>
+		<fullName>MapObjectFolders</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Objects Folders</shortDescription>
+		<value>Managing Object Folders and Layout Configurations</value>
+	</labels>
+	<labels>
+		<fullName>MapObjectFoldersSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Objects Folders Summary</shortDescription>
+		<value>Learn how to get the most out of your object folders and layout configurations.</value>
+	</labels>
+	<labels>
+		<fullName>Collapse</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Collapse</shortDescription>
+		<value>Collapse</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsDocuSign</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What Is DocuSign </shortDescription>
+		<value>What is DocuSign Agreements?</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsDocuSignAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What Is DocuSign Answer</shortDescription>
+		<value>DocuSign Agreements allows you to create contracts and agreements with your Salesforce data.</value>
+	</labels>
+	<labels>
+		<fullName>WhyDocuSignAgreements</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why DocuSign Agreements</shortDescription>
+		<value>Why should I use DocuSign Agreements?</value>
+	</labels>
+	<labels>
+		<fullName>WhyDocuSignAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why DocuSign Answer</shortDescription>
+		<value>DocuSign Agreements uses your Salesforce Data to generate documents. This speeds up document generation and removes the possibility of human error.</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationProcess</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Document Generation Process</shortDescription>
+		<value>How does DocuSign Agreements speed up my document generation process?</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Document Generation Process Answer</shortDescription>
+		<value>By creating a custom button on object page layouts in Salesforce, you'll be able to generate documents by clicking a button, without having to leave Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>WhyOnlyDocuSign</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why Only DocuSign</shortDescription>
+		<value>Why should I use DocuSign Agreements instead of storing my documents in Salesforce?</value>
+	</labels>
+	<labels>
+		<fullName>WhyOnlyDocuSignAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why Only DocuSign Answer</shortDescription>
+		<value>If you store your documents and contracts in Salesforce, they aren't organized and are hard to access when trying to send for review, workflow or signature. DocuSign Agreements keep things organized, even as you generate new content, and without leaving Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsDocuSignCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What Is DocuSign CLM</shortDescription>
+		<value>What is DocuSign CLM?</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsDocuSignCLMAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What Is DocuSign CLM</shortDescription>
+		<value>DocuSign CLM is a secure cloud app for DocuSign Agreements. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign Agreements connects CLM with your Salesforce Org.</value>
+	</labels>
+	<labels>
+		<fullName>InstallDocuSignAgreements</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Install DocuSign Agreements</shortDescription>
+		<value>How do I install DocuSign Agreements in Salesforce?</value>
+	</labels>
+	<labels>
+		<fullName>InstallAgreementsAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Install DocuSign Agreements Answer</shortDescription>
+		<value>Select DocuSign Agreements in Salesforce AppExchange and follow the installation steps. You'll need to be a Salesforce administrator to do this. For more information, visit our Salesforce administrator guide.</value>
+	</labels>
+	<labels>
+		<fullName>AuthenticateAgreements</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Authenticate Agreements</shortDescription>
+		<value>How do I authenticate DocuSign Agreements in Salesforce?</value>
+	</labels>
+	<labels>
+		<fullName>AuthenticateAgreementsAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Authenticate Agreements Answer</shortDescription>
+		<value>Open up DocuSign Agreements from the Salesforce App Launcher, then sign in with your DocuSign and Salesforce credentials. This enables integration between the two orgs.</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsAnAdmin</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Admin</shortDescription>
+		<value>What is an Admin?</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsAnAdminAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Admin Answer</shortDescription>
+		<value>Admins are users with special privileges and responsibilities in DocuSign Agreements. Admins can map objects and manage users.</value>
+	</labels>
+	<labels>
+		<fullName>HowAdminManageUsers</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - How Admin Manage Users</shortDescription>
+		<value>How do Admins add and manage users?</value>
+	</labels>
+	<labels>
+		<fullName>HowAdminManageUsersAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - How Admin Manage Users Answer</shortDescription>
+		<value>Admins can navigate to the User Management page under Administration to add or manage users.</value>
+	</labels>
+	<labels>
+		<fullName>InstallationFees</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Installation Fees</shortDescription>
+		<value>Do I have to pay extra fees per-user after installing the app?</value>
+	</labels>
+	<labels>
+		<fullName>InstallationFeesAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Installation Fees Answer</shortDescription>
+		<value>No. The fees displayed on the AppExchange page show the general cost per-user if they purchased a DocuSign CLM package. There are no extra cost associated with installing any DocuSign apps.</value>
+	</labels>
+	<labels>
+		<fullName>WhyConfigureLayout</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why Configure a Layout</shortDescription>
+		<value>Why should I configure a layout?</value>
+	</labels>
+	<labels>
+		<fullName>WhyConfigureLayoutAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Configure a Layout</shortDescription>
+		<value>Layout configurations will allow you to see your object folders in Salesforce and DocuSign CLM. This will then allow you to use your DocuSign CLM files and folders on linked object pages such as Accounts and Opportunities.</value>
+	</labels>
+	<labels>
+		<fullName>AfterMappingObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What after mapping objects</shortDescription>
+		<value>What happens after I've mapped an object?</value>
+	</labels>
+	<labels>
+		<fullName>AfterMappingObjectAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - After mapping objects</shortDescription>
+		<value>After you finish mapping an object, DocuSign Agreements adds that data to your Visualforce library. But, to see your object folders you'll have to complete another step. That step is editing your Salesforce page layout.</value>
+	</labels>
+	<labels>
+		<fullName>CannotSeeObjectFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Why Cannot See Object Folder </shortDescription>
+		<value>Why can't I see my object folder?</value>
+	</labels>
+	<labels>
+		<fullName>CannotSeeObjectFolderAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Cannot See Object Folder Answer</shortDescription>
+		<value>If you're not seeing mapped objects, you likely need to edit your page layouts in Salesforce. You'll need to be a Salesforce Administrator to do this.</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceObjectsFields</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Salesforce Objects And Fields</shortDescription>
+		<value>What are Salesforce objects and fields?</value>
+	</labels>
+	<labels>
+		<fullName>SalesforceObjectsFieldsAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Salesforce Objects And Fields Answer</shortDescription>
+		<value>Salesforce objects are how Salesforce stores data. Every object has several associated fields containing data. To use objects and fields in DocuSign Agreements, you'll first need to map your objects.</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsObjMapping</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What is object mapping</shortDescription>
+		<value>What is object mapping?</value>
+	</labels>
+	<labels>
+		<fullName>WhatIsObjMappingAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object Mapping Answer</shortDescription>
+		<value>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign Agreements setup walks you through the steps.</value>
+	</labels>
+	<labels>
+		<fullName>WhyToMapObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - What is object mapping</shortDescription>
+		<value>Why should I map my Salesforce objects?</value>
+	</labels>
+	<labels>
+		<fullName>WhyToMapObjectAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object mapping Answer</shortDescription>
+		<value>Mapping your Salesforce objects allows DocuSign Agreements to access data from those objects to generate contracts and agreements. Only DocuSign Agreements Admins can map objects.</value>
+	</labels>
+	<labels>
+		<fullName>HowToMapObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - How to map object</shortDescription>
+		<value>How do I map an Object?</value>
+	</labels>
+	<labels>
+		<fullName>HowToMapObjectAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Object mapping Answer</shortDescription>
+		<value>To map your Salesforce objects, navigate to the CLM Integration page. Then select "Map New ". Follow the prompts to complete setup.</value>
+	</labels>
+	<labels>
+		<fullName>RemoveMappedObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Remove mapped object</shortDescription>
+		<value>Can I remove mapped Objects?</value>
+	</labels>
+	<labels>
+		<fullName>RemoveMappedObjectAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Remove mapped object Answer</shortDescription>
+		<value>You can edit or remove mapped objects from the CLM Integration page. Removing the object will mean you no longer can use the object's data for document generation.</value>
+	</labels>
+	<labels>
+		<fullName>MappingStandardObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Standard Objects</shortDescription>
+		<value>Are there any standard objects I should map?</value>
+	</labels>
+	<labels>
+		<fullName>MappingStandardObjectsAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Standard Objects Answer</shortDescription>
+		<value>Every business is different and has different needs. "Account" and "Opportunity" are examples of standard objects that many businesses will use. DocuSign Agreements maps those objects by default.</value>
+	</labels>
+	<labels>
+		<fullName>MappingCustomObjects</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Custom Objects</shortDescription>
+		<value>Can I map custom objects?</value>
+	</labels>
+	<labels>
+		<fullName>MappingCustomObjectsAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Mapping Custom Objects Answer</shortDescription>
+		<value>You can map custom Salesforce objects into DocuSign CLM with DocuSign Agreements.</value>
+	</labels>
+	<labels>
+		<fullName>CustomObjectFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Custom Object Folder Name</shortDescription>
+		<value>What should I name my Custom Object Folders?</value>
+	</labels>
+	<labels>
+		<fullName>CustomObjectFolderAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Custom Object Folder Name</shortDescription>
+		<value>Naming conventions are set by the merge fields that are used when you map your Salesforce objects. These folders, names will update whenever the contents of the fields changes.</value>
+	</labels>
+	<labels>
+		<fullName>TypeFolderName</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Cannot Type Folder Name</shortDescription>
+		<value>Why can't I just type in a name for my Custom Object Folders?</value>
+	</labels>
+	<labels>
+		<fullName>TypeFolderNameAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Type Folder Name Answer</shortDescription>
+		<value>If you type in a name for those folders, then every instance of that object will have the same folder name. Salesforce doesn't allow duplicate folder names. That's why we recommend selecting a field instead.</value>
+	</labels>
+	<labels>
+		<fullName>NeedObjectFolderLocation</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Need Object Folder Location</shortDescription>
+		<value>Why do I need to choose a location for my object folder?</value>
+	</labels>
+	<labels>
+		<fullName>NeedObjectFolderLocationAns</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Keep Docs organized</shortDescription>
+		<value>Choosing a location for your object folder keeps your documents organized.</value>
+	</labels>
+	<labels>
+		<fullName>Links</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Links</shortDescription>
+		<value>Links</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignAgreementsHelp</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign Agreements Help</shortDescription>
+		<value>DocuSign Agreements Help</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignAgreementsHelpSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign Agreements Help Summary</shortDescription>
+		<value>This is your one-stop shop for the tools you need to get the most out of DocuSign Agreements. You can browse through FAQs, product documentation, white papers and more.</value>
+	</labels>
+	<labels>
+		<fullName>VisitFAQ</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Visit FAQ</shortDescription>
+		<value>Visit FAQ</value>
+	</labels>
+	<labels>
+		<fullName>SUPPORT</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - SUPPORT</shortDescription>
+		<value>SUPPORT</value>
+	</labels>
+	<labels>
+		<fullName>MORERESOURCES</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - MORE RESOURCES</shortDescription>
+		<value>MORE RESOURCES</value>
+	</labels>
+	<labels>
+		<fullName>SupportCenterTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Support Center Title</shortDescription>
+		<value>Support Center</value>
+	</labels>
+	<labels>
+		<fullName>SupportCenterSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Support Center Summary</shortDescription>
+		<value>DocuSign customers ask and answer questions.</value>
+	</labels>
+	<labels>
+		<fullName>GetSupport</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Get Support</shortDescription>
+		<value>Get Support</value>
+	</labels>
+	<labels>
+		<fullName>DeveloperCenterSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Developer Center Summary</shortDescription>
+		<value>Learn about our APIs.</value>
+	</labels>
+	<labels>
+		<fullName>DeveloperCenterTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Developer Center Title</shortDescription>
+		<value>Developer Center</value>
+	</labels>
+	<labels>
+		<fullName>LearnMoreBtn</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Learn More</shortDescription>
+		<value>Learn More</value>
+	</labels>
+	<labels>
+		<fullName>TrustCenterSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Trust Center Summary</shortDescription>
+		<value>Security and system performance information.</value>
+	</labels>
+	<labels>
+		<fullName>TrustCenterTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Trust Center Title</shortDescription>
+		<value>Trust Center</value>
+	</labels>
+	<labels>
+		<fullName>CheckStatusBtn</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Check Status</shortDescription>
+		<value>Check Status</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignUniversitySummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign University Summary</shortDescription>
+		<value>Get started on your learning journey to build your expertise.</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignUniversityTitle</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DocuSign University Title</shortDescription>
+		<value>DocuSign University</value>
+	</labels>
+	<labels>
+		<fullName>GetTrainingBtn</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Get Training</shortDescription>
+		<value>Get Training</value>
+	</labels>
+	<labels>
+		<fullName>ClickToAdd</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Click to add</shortDescription>
+		<value>Click to add</value>
+	</labels>
+	<labels>
+		<fullName>SearchFields</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Search Fields</shortDescription>
+		<value>Search Fields</value>
+	</labels>
+	<labels>
+		<fullName>GetSupportURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Get Support URL</shortDescription>
+		<value>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</value>
+	</labels>
+	<labels>
+		<fullName>LearnMoreURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Learn More URL</shortDescription>
+		<value>https://developers.docusign.com</value>
+	</labels>
+	<labels>
+		<fullName>CheckStatusURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Check Status URL</shortDescription>
+		<value>https://www.docusign.com/trust</value>
+	</labels>
+	<labels>
+		<fullName>GetTrainingURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Get Training URL</shortDescription>
+		<value>https://support.docusign.com/en/docusignuniversity</value>
+	</labels>
+	<labels>
+		<fullName>VisitCommunityURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - VisitCommunityURL</shortDescription>
+		<value>https://support.docusign.com/forum</value>
+	</labels>
+	<labels>
+		<fullName>ViewResourcesURL</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - View Resources URL</shortDescription>
+		<value>https://support.docusign.com/knowledgeMarket</value>
+	</labels>
+	<labels>
+		<fullName>IndicatesDown</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Indicates Down</shortDescription>
+		<value>Indicates Down</value>
+	</labels>
+	<labels>
+		<fullName>SectionDescription</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Description of the section</shortDescription>
+		<value>Description of the section</value>
+	</labels>
+	<labels>
+		<fullName>Section1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Section 1</shortDescription>
+		<value>Section1</value>
+	</labels>
+	<labels>
+		<fullName>agreementHelp</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - agreementHelp</shortDescription>
+		<value>agreementHelp</value>
 	</labels>
 </CustomLabels>
