@@ -3,8 +3,9 @@
 
     <!--event handlers-->
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
-    <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onSecondaryButtonClick}" />
-    
+    <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
+        action="{!c.onSecondaryButtonClick}" />
+
     <div class="slds-grid slds-grid_vertical">
         <div class="slds-col slds-m-around_medium">
             <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
@@ -32,8 +33,8 @@
             <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
                 {!$Label.c.Administration}
             </div>
-            <c:CLMHelp title="{!$Label.c.UserManagement}" secondButtonName="{!$Label.c.Manage}" showIcon="false"
-                showFirstButton="false"
+            <c:CLMHelp title="{!$Label.c.UserManagement}" secondButtonName="{!$Label.c.Manage}"
+                firstButtonName="{!$Label.c.LearnMore}" showIcon="false" showFirstButton="false"
                 summary="{!$Label.c.UserManagementInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">

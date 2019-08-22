@@ -4357,6 +4357,382 @@
 		<label>Callback failed.</label>
 		<name>CallbackFailed</name>
 	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements Help</label>
+		<name>DocuSignAgreementsHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>This is your one-stop shop for the tools you need to get the most out of DocuSign Agreements. You can browse through FAQs, product documentation, white papers and more.</label>
+		<name>DocuSignAgreementsHelpSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Visit FAQ</label>
+		<name>VisitFAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>SUPPORT</label>
+		<name>SUPPORT</name>
+	</customLabels>
+	<customLabels>
+		<label>MORE RESOURCES</label>
+		<name>MORERESOURCES</name>
+	</customLabels>
+	<customLabels>
+		<label>Support Center</label>
+		<name>SupportCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign customers ask and answer questions.</label>
+		<name>SupportCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Support</label>
+		<name>GetSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn about our APIs.</label>
+		<name>DeveloperCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Developer Center</label>
+		<name>DeveloperCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn More</label>
+		<name>LearnMoreBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Security and system performance information.</label>
+		<name>TrustCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Check Status</label>
+		<name>CheckStatusBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Get started on your learning journey to build your expertise.</label>
+		<name>DocuSignUniversitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign University</label>
+		<name>DocuSignUniversityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Training</label>
+		<name>GetTrainingBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Community</label>
+		<name>CommunityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign customers ask and answer questions.</label>
+		<name>CommunitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Visit Community</label>
+		<name>VisitCommunity</name>
+	</customLabels>
+	<customLabels>
+		<label>Knowledge Market</label>
+		<name>KnowledgeMarket</name>
+	</customLabels>
+	<customLabels>
+		<label>White papers, value studies and tools to drive adoption.</label>
+		<name>KnowledgeMarketSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>View Resources</label>
+		<name>ViewResourcesBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>FREQUENTLY ASKED QUESTIONS</label>
+		<name>FrequentlyAskedQuestions</name>
+	</customLabels>
+	<customLabels>
+		<label>Understanding DocuSign Agreements</label>
+		<name>UnderstandingDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how DocuSign Agreements manages your documents and uses your Salesforce data.</label>
+		<name>DocuSignAgreementsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Installation and Getting Started</label>
+		<name>InstallationandGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to get up and running with DocuSign Agreements.</label>
+		<name>InstallationSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Managing DocuSign CLM Users</label>
+		<name>ManagingDocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to add and manage users.</label>
+		<name>ManageAddUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Mapping Salesforce Objects</label>
+		<name>MappingSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to map Salesforce Objects from DocuSign Agreements.</label>
+		<name>MappingObjectsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Managing Object Folders and Layout Configurations</label>
+		<name>MapObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to get the most out of your object folders and layout configurations.</label>
+		<name>MapObjectFoldersSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Collapse</label>
+		<name>Collapse</name>
+	</customLabels>
+	<customLabels>
+		<label>What is DocuSign Agreements?</label>
+		<name>WhatIsDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements allows you to create contracts and agreements with your Salesforce data.</label>
+		<name>WhatIsDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why should I use DocuSign Agreements?</label>
+		<name>WhyDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements uses your Salesforce Data to generate documents. This speeds up document generation and removes the possibility of human error.</label>
+		<name>WhyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>How does DocuSign Agreements speed up my document generation process?</label>
+		<name>DocumentGenerationProcess</name>
+	</customLabels>
+	<customLabels>
+		<label>By creating a custom button on object page layouts in Salesforce, you'll be able to generate documents by clicking a button, without having to leave Salesforce.</label>
+		<name>DocumentGenerationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why should I use DocuSign Agreements instead of storing my documents in Salesforce?</label>
+		<name>WhyOnlyDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>If you store your documents and contracts in Salesforce, they aren't organized and are hard to access when trying to send for review, workflow or signature. DocuSign Agreements keep things organized, even as you generate new content, and without leaving Salesforce.</label>
+		<name>WhyOnlyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What is DocuSign CLM?</label>
+		<name>WhatIsDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM is a secure cloud app for DocuSign Agreements. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign Agreements connects CLM with your Salesforce Org.</label>
+		<name>WhatIsDocuSignCLMAns</name>
+	</customLabels>
+	<customLabels>
+		<label>How do I install DocuSign Agreements in Salesforce?</label>
+		<name>InstallDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Select DocuSign Agreements in Salesforce AppExchange and follow the installation steps. You'll need to be a Salesforce administrator to do this. For more information, visit our Salesforce administrator guide.</label>
+		<name>InstallAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>How do I authenticate DocuSign Agreements in Salesforce?</label>
+		<name>AuthenticateAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Open up DocuSign Agreements from the Salesforce App Launcher, then sign in with your DocuSign and Salesforce credentials. This enables integration between the two orgs.</label>
+		<name>AuthenticateAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What is an Admin?</label>
+		<name>WhatIsAnAdmin</name>
+	</customLabels>
+	<customLabels>
+		<label>Admins are users with special privileges and responsibilities in DocuSign Agreements. Admins can map objects and manage users.</label>
+		<name>WhatIsAnAdminAns</name>
+	</customLabels>
+	<customLabels>
+		<label>How do Admins add and manage users?</label>
+		<name>HowAdminManageUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Admins can navigate to the User Management page under Administration to add or manage users.</label>
+		<name>HowAdminManageUsersAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Do I have to pay extra fees per-user after installing the app?</label>
+		<name>InstallationFees</name>
+	</customLabels>
+	<customLabels>
+		<label>No. The fees displayed on the AppExchange page show the general cost per-user if they purchased a DocuSign CLM package. There are no extra cost associated with installing any DocuSign apps.</label>
+		<name>InstallationFeesAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why should I configure a layout?</label>
+		<name>WhyConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Layout configurations will allow you to see your object folders in Salesforce and DocuSign CLM. This will then allow you to use your DocuSign CLM files and folders on linked object pages such as Accounts and Opportunities.</label>
+		<name>WhyConfigureLayoutAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What happens after I've mapped an object?</label>
+		<name>AfterMappingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>After you finish mapping an object, DocuSign Agreements adds that data to your Visualforce library. But, to see your object folders you'll have to complete another step. That step is editing your Salesforce page layout.</label>
+		<name>AfterMappingObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why can't I see my object folder?</label>
+		<name>CannotSeeObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>If you're not seeing mapped objects, you likely need to edit your page layouts in Salesforce. You'll need to be a Salesforce Administrator to do this.</label>
+		<name>CannotSeeObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What are Salesforce objects and fields?</label>
+		<name>SalesforceObjectsFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce objects are how Salesforce stores data. Every object has several associated fields containing data. To use objects and fields in DocuSign Agreements, you'll first need to map your objects.</label>
+		<name>SalesforceObjectsFieldsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What is object mapping?</label>
+		<name>WhatIsObjMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign Agreements setup walks you through the steps.</label>
+		<name>WhatIsObjMappingAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why should I map my Salesforce objects?</label>
+		<name>WhyToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Mapping your Salesforce objects allows DocuSign Agreements to access data from those objects to generate contracts and agreements. Only DocuSign Agreements Admins can map objects.</label>
+		<name>WhyToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>How do I map an Object?</label>
+		<name>HowToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>To map your Salesforce objects, navigate to the CLM Integration page. Then select "Map New ". Follow the prompts to complete setup.</label>
+		<name>HowToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Can I remove mapped Objects?</label>
+		<name>RemoveMappedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>You can edit or remove mapped objects from the CLM Integration page. Removing the object will mean you no longer can use the object's data for document generation.</label>
+		<name>RemoveMappedObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Are there any standard objects I should map?</label>
+		<name>MappingStandardObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Every business is different and has different needs. "Account" and "Opportunity" are examples of standard objects that many businesses will use. DocuSign Agreements maps those objects by default.</label>
+		<name>MappingStandardObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Can I map custom objects?</label>
+		<name>MappingCustomObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>You can map custom Salesforce objects into DocuSign CLM with DocuSign Agreements.</label>
+		<name>MappingCustomObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>What should I name my Custom Object Folders?</label>
+		<name>CustomObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Naming conventions are set by the merge fields that are used when you map your Salesforce objects. These folders, names will update whenever the contents of the fields changes.</label>
+		<name>CustomObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why can't I just type in a name for my Custom Object Folders?</label>
+		<name>TypeFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>If you type in a name for those folders, then every instance of that object will have the same folder name. Salesforce doesn't allow duplicate folder names. That's why we recommend selecting a field instead.</label>
+		<name>TypeFolderNameAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Why do I need to choose a location for my object folder?</label>
+		<name>NeedObjectFolderLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Choosing a location for your object folder keeps your documents organized.</label>
+		<name>NeedObjectFolderLocationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Links</label>
+		<name>Links</name>
+	</customLabels>
+	<customLabels>
+		<label>FAQs</label>
+		<name>FAQs</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} object was successfully edited.</label>
+		<name>MapEdit</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
+		<name>GetSupportURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://developers.docusign.com</label>
+		<name>LearnMoreURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/trust</label>
+		<name>CheckStatusURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/docusignuniversity</label>
+		<name>GetTrainingURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/forum</label>
+		<name>VisitCommunityURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/knowledgeMarket</label>
+		<name>ViewResourcesURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Indicates Down</label>
+		<name>IndicatesDown</name>
+	</customLabels>
+	<customLabels>
+		<label>Description of the section</label>
+		<name>SectionDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Section 1</label>
+		<name>Section1</name>
+	</customLabels>
+	<customLabels>
+		<label>agreementHelp</label>
+		<name>agreementHelp</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

@@ -1,6 +1,6 @@
 ({
   fireApplicationEvent: function (component, params, eventName) {
-    var appEvent = $A.get('e.'+component.get('v.namespace')+':' + eventName);
+    var appEvent = $A.get('e.' + component.get('v.namespace') + ':' + eventName);
     if (appEvent) {
       appEvent.setParams(params);
       appEvent.fire();
@@ -13,5 +13,17 @@
         toast.close();
       }), 2000);
     }
+  },
+
+  mappedObjectCount: function (component) {
+    var action = component.get('c.getRecordCount');
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var result = response.getReturnValue();
+        component.set('v.mappedObjCount', result);
+      }
+    });
+    $A.enqueueAction(action);
   }
-})
+});

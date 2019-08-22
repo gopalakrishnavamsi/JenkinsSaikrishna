@@ -18,7 +18,13 @@
     ];
     component.set('v.breadCrumbValues', defaultBreadcrumbValues);
   },
-  
+  setBreadcrumbEditObjectValues: function (component) {
+    var editBreadcrumbValues = [
+      { 'label': $A.get('$Label.c.MapYourSalesforceObjects'), navigateTo: 'CLMMappedObjectsHome', type: 'component', 'index': '1' },
+      { 'label': 'Edit Object', navigateTo: '', type: 'component', 'index': '2' }
+    ];
+    component.set('v.breadCrumbValues', editBreadcrumbValues);
+  },
   setPathDefaultValues: function (component) {
     var defaultPathValues = [
       { 'label': $A.get('$Label.c.SelectObject'), 'index': '1' },
@@ -27,4 +33,4 @@
     ];
     component.set('v.pathValues', defaultPathValues);
   }
-})
+});

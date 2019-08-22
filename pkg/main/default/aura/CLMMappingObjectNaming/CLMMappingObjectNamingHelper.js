@@ -1,27 +1,28 @@
 ({
   passModelText: function (component, text, helper) {
-    var buttondisabled = component.get('v.buttondisabled');
-    if (text && buttondisabled === true) {
+    var buttonDisabled = component.get('v.buttonDisabled');
+    if (text && buttonDisabled === true) {
       helper.fireApplicationEvent(component, {
         fromComponent: 'CLMMappingObjectNaming',
         toComponent: 'CLMModelFooterButton',
         type: 'enable'
       }, 'CLMEvent');
-      component.set('v.buttondisabled', false);
-    } else if (!text && buttondisabled === false) {
+      component.set('v.buttonDisabled', false);
+    }
+    else if (!text && buttonDisabled === false) {
       helper.fireApplicationEvent(component, {
         fromComponent: 'CLMMappingObjectNaming',
         toComponent: 'CLMModelFooterButton',
         type: 'disable'
       }, 'CLMEvent');
-      component.set('v.buttondisabled', true);
+      component.set('v.buttonDisabled', true);
     }
     var onchangeValue = component.getEvent('CLMMappingObjectEvent_UpdateName');
     onchangeValue.setParams({
-      'type': helper.ACTIONUPDATE,
+      'type': 'update',
       'fromComponent': 'CLMMappingObjectNaming',
       'toComponent': 'CLMMappedObjectEdit',
-      'data': {'value': text}
+      'data': { 'value': text }
     });
     onchangeValue.fire();
   }
