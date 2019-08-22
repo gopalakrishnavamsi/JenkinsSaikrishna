@@ -23,6 +23,7 @@
                 </ul>
             </div>
             <div class="slds-col slds-p-around_small">
+                <lightning:button label="{!$Label.c.Back}" title="{!$Label.c.Back}" onclick="{!c.backToSourceRecord}"/>
                 <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit"
                                       class="slds-p-left_xx-small"
                                       menuAlignment="right">
