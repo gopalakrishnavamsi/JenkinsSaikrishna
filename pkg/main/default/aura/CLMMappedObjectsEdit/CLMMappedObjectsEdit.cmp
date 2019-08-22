@@ -64,7 +64,6 @@
             secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
     </aura:if>
 
-
     <div class="slds-card__body  slds-is-relative slds-p-left_x-large slds-p-right_x-large">
         <aura:if isTrue="{!v.loader}">
             <lightning:spinner alternativeText="Loading" size="large" />
@@ -199,7 +198,6 @@
                                                     </aura:iteration>
                                                 </ul>
                                             </li>
-
                                         </aura:iteration>
                                     </ul>
                                 </div>
@@ -279,7 +277,6 @@
                         </div>
                     </div>
                 </lightning:layoutItem>
-
             </lightning:layout>
         </div>
     </div>

@@ -1,17 +1,15 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
-
     <aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
     <aura:registerEvent name="CLMMappingObjectEvent_UpdateName" type="c:CLMMappingObjectEvent" />
 
     <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
 
-    <aura:attribute type="string" name="title" default="" />
-    <aura:attribute type="string" name="summary" default="" />
-    <aura:attribute type="string" name="folderName" default="" />
+    <aura:attribute type="string" name="title" />
+    <aura:attribute type="string" name="summary" />
+    <aura:attribute type="string" name="folderName" />
     <aura:attribute name="selectedObjDetails" type="Object" />
     <aura:attribute name="buttonDisabled" type="Boolean" default="false" />
     <!--internal attributes-->
-
     <aura:attribute name="allObjectFields" type="List" access="private" />
     <aura:attribute name="allObjectFieldsList" type="List" access="private" />
 
@@ -38,9 +36,9 @@
                             <div class="slds-tree__item">
                                 <lightning:icon size="x-small" class="slds-p-left_xx-small"
                                                 iconName="{!objectData.selected?'utility:down':'utility:right'}"
-                                                alternativeText="open" />
+                                                alternativeText="{!$Label.c.OpenFolder}" />
                                 <lightning:icon size="x-small" class="slds-p-left_xx-small"
-                                                iconName="utility:open_folder" alternativeText="open_folder" />
+                                                iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                                 <span
                                       class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
                                     {!objectData.label}
@@ -55,7 +53,7 @@
                                             <lightning:icon size="x-small"
                                                             class="slds-p-left_xx-small"
                                                             iconName="utility:topic2"
-                                                            alternativeText="open_folder" />
+                                                            alternativeText="{!$Label.c.OpenFolder}" />
                                             <span
                                                   class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
                                                 {!fieldData.label}
@@ -71,13 +69,9 @@
                                     </li>
                                 </aura:iteration>
                             </ul>
-                        </li>
-                        
+                        </li>                        
                     </aura:iteration>
-                </ul>
-                
-               
-                
+                </ul>                                           
             </div>
         </lightning:layoutItem>
     </lightning:layout>

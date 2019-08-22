@@ -1,39 +1,50 @@
 .THIS .ds-full-size{
    width:40rem;
 }
+
 .THIS .ds-center-image{
     text-align:center;
     padding:4rem;
 }
+
 .THIS .ds-small-fonts-size{
     font-size:1.0rem
 }
+
 .THIS .ds-medium-fonts-size{
     font-size:1.5rem
 }
+
 .THIS .ds-blue-text-color{
-    color:#0e2549!important;
+    color:#0e2549;
 }
+
 .THIS .ds-white-table-header thead th{
-    background-color:#fafaf9!important;
+    background-color:#fafaf9;
 }
+
 .THIS .ds-medium-height{
     height:175px;   
 }
+
 .THIS .ds-image-center{
     margin-left:150%       
 }
+
 .THIS .ds-red-text-color {
     color:red;
 }
+
 .THIS .ds-red-text-color:hover {
     color:red;
 }
+
 .THIS .button-width{
     min-width:142px;
     max-width:144px;
     height: 100%;
 }
+
 .THIS .ds-thead-width{
     width:8.75rem;
 }

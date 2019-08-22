@@ -1,16 +1,17 @@
 ({
   //tree helper
-  sortTree: function(treeData) {
-    treeData.sort(function(a, b) {
+  sortTree: function (treeData) {
+    treeData.sort(function (a, b) {
       return a.level - b.level;
     });
     return treeData;
   },
-  updatePath: function(component) {
+
+  updatePath: function (component) {
     var clmFolderTree = component.get('v.clmFolderTree');
     clmFolderTree = this.sortTree(clmFolderTree);
     var path = '';
-    clmFolderTree.forEach(function(treeData, index) {
+    clmFolderTree.forEach(function (treeData, index) {
       if (treeData.name && index < clmFolderTree.length - 1) {
         path += treeData.name + '/';
       }
@@ -18,10 +19,10 @@
     component.set('v.pathInCLM', path);
   },
 
-  addSObjectToTree: function(component, label) {
+  addSObjectToTree: function (component, label) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var objectIndex = 0;
-    clmFolderTree.forEach(function(treeData, index) {
+    clmFolderTree.forEach(function (treeData, index) {
       if (treeData.type === 'sObject') {
         objectIndex = index;
       }
@@ -30,7 +31,7 @@
       clmFolderTree[objectIndex].name = label;
     } else {
       clmFolderTree = this.sortTree(clmFolderTree);
-      clmFolderTree.forEach(function(treeData, index) {
+      clmFolderTree.forEach(function (treeData, index) {
         if (index >= 2 && treeData.level >= 3) {
           treeData.level = treeData.level + 1;
           treeData.id = treeData.id + 1;
@@ -48,10 +49,11 @@
     }
     return clmFolderTree;
   },
-  addTailFolderToTree: function(component, field) {
+
+  addTailFolderToTree: function (component, field) {
     var clmFolderTree = component.get('v.clmFolderTree');
     var fieldIndex = 0;
-    clmFolderTree.forEach(function(treeData, index) {
+    clmFolderTree.forEach(function (treeData, index) {
       if (treeData.type === 'tail') {
         fieldIndex = index;
       }
@@ -69,8 +71,9 @@
     }
     return clmFolderTree;
   },
+
   //ui helper
-  UpdateUI: function(component, index) {
+  UpdateUI: function (component, index) {
     var helper = this;
     var SelectedObjDetails = component.get('v.SelectedObjDetails');
     var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
@@ -117,7 +120,7 @@
           component,
           'c.getAllObjectFields',
           { apiName: SelectedObjDetails.name, isChild: false },
-          function(result) {
+          function (result) {
             var allFields = [];
             allFields.push({
               name: SelectedObjDetails.name,
@@ -126,7 +129,7 @@
               fields: result
             });
 
-            result.forEach(function(data) {
+            result.forEach(function (data) {
               if (data.hasRelationship) {
                 var isDuplicate = false;
 
@@ -238,10 +241,11 @@
       );
     }
   },
-  showLoader: function(component) {
+
+  showLoader: function (component) {
     component.set('v.loader', true);
   },
-  hideLoader: function(component) {
+  hideLoader: function (component) {
     component.set('v.loader', false);
   }
 });

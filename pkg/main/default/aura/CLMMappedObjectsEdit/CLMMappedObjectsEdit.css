@@ -9,6 +9,7 @@
 .THIS .x-medium-fonts-size{
     font-size:1rem
 }
+
 .THIS .ds-no-extra-height{
     line-height:0px;
     box-shadow:none;
@@ -25,9 +26,11 @@
 .THIS .ds-blue-icon svg{
     fill:#127ad5;
 }
+
 .THIS .ds-yellow-folder svg{
     fill:#ffb75d;
 }
+
 .THIS .ds-blue-folder svg{
     fill:#005fb2;
 }
