@@ -1273,14 +1273,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_canonicalizeBaseUrl() {
-		System.assertEquals('https://unit.test/', AuthService.canonicalizeBaseUrl(new Url('https://UNIT.test/')).toExternalForm());
-		System.assertEquals('https://unit.test:999/', AuthService.canonicalizeBaseUrl(new Url('https://unit.TEST:999')).toExternalForm());
-		System.assertEquals('https://unit.test/p1/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test/p1/')).toExternalForm());
-		System.assertEquals('https://unit.test:8888/p1/', AuthService.canonicalizeBaseUrl(new Url('https://unit.test:8888/P1')).toExternalForm());
-	}
-
-	@IsTest
 	static void test_save_invalid_environment() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();

@@ -79,23 +79,30 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
-					properties.containsKey('merge_uri') ? new Url(properties.get('merge_uri')) : null);
+					properties.containsKey('web_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
+					properties.containsKey('merge_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('merge_uri'))) : null);
 			} else if (this.product_id == PRODUCT_NEGOTIATE) {
 				p = new NegotiateProduct(
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
-					properties.containsKey('merge_uri') ? new Url(properties.get('merge_uri')) : null);
+					properties.containsKey('web_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
+					properties.containsKey('merge_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('merge_uri'))) : null);
 			} else if (this.product_id == PRODUCT_CLM) {
 				p = new ClmProduct(
 					this.provision_status,
 					this.free_trial == true,
 					StringUtils.parseDate(this.expiration_date),
-					properties.containsKey('web_base_uri') ? new Url(properties.get('web_base_uri')) : null,
-					properties.containsKey('landing_page_uri') ? new Url(properties.get('landing_page_uri')) : null,
-					properties.containsKey('admin_uri') ? new Url(properties.get('admin_uri')) : null);
+					properties.containsKey('web_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
+					properties.containsKey('landing_page_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('landing_page_uri'))) : null,
+					properties.containsKey('admin_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('admin_uri'))) : null);
 			}
 			return p;
 		}
