@@ -13,24 +13,14 @@
           });
     
           action.setCallback(this, function(response) {
-            var state = response.getState();
-            if (state === 'SUCCESS') {
+            if (response.getState() === 'SUCCESS') {
               var results = response.getReturnValue();
               component.set('v.config', results);
               component.set('v.templateFiles', results.generated);
               helper.setupData(component);
-            } else if (state === 'ERROR') {
-              var errorMessage = $A.get('$Label.c.ErrorMessage');
-              var errors = response.getError();
-              if (errors) {
-                if (errors[0] && errors[0].message) {
-                  errorMessage += errors[0].message;
-                }
-              } else {
-                errorMessage += $A.get('$Label.c.UnknownError');
-              }
+            } else {
               component.set('v.errType', 'error');
-              component.set('v.errMsg', errorMessage);
+              component.set('v.errMsg', stringUtils.getErrorMessage(response));
             }
           });
           $A.enqueueAction(action);

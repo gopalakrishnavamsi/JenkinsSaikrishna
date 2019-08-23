@@ -73,19 +73,13 @@
         if (objMapping.fieldMappings.length === 0) {
           component.set('v.isLoading', false);
         }
-      }
-
-      if (state === 'ERROR') {
-        // FIXME: errorMessage is constructed but never used. Can use uiHelper.getErrorMessage to do the same.
-        // var errorMessage = $A.get('$Label.c.ErrorMessage');
-        // var errors = response.getError();
-        // if (errors) {
-        //   if (errors[0] && errors[0].message) {
-        //     errorMessage += errors[0].message;
-        //   }
-        // } else {
-        //   errorMessage += $A.get('$Label.c.UnknownError');
-        // }
+      } else {
+        var toastEvent = $A.get('e.force:showToast');
+        toastEvent.setParams({
+          type: 'error',
+          message: stringUtils.getErrorMessage(response)
+        });
+        toastEvent.fire();
         component.set('v.saving', false);
       }
     });

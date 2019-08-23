@@ -75,6 +75,7 @@
   },
 
   getChildFields: function(component) {
+    var self = this;
     var fieldMapping = component.get('v.fieldMapping');
     var action = component.get('c.getMergeFields');
     action.setParams({
@@ -83,8 +84,7 @@
     });
 
     action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var results = response.getReturnValue();
         var objectFields = [];
         var allFields = [];
@@ -110,19 +110,10 @@
 
         component.set('v.allChildObjFields', allFields);
         component.set('v.allChildFieldsByApiName', allFieldsByApiName);
+      } else {
+        self.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      if (state === 'ERROR') {
-        // FIXME: This is a lot of work to get an error message that's never used. Can use uiHelper.getErrorMessage, but need to use it somehow.
-        // var errorMessage = $A.get('$Label.c.ErrorMessage');
-        // var errors = response.getError();
-        // if (errors) {
-        //   if (errors[0] && errors[0].message) {
-        //     errorMessage += errors[0].message;
-        //   }
-        // } else {
-        //   errorMessage += $A.get('$Label.c.UnknownError');
-        // }
-      }
+
       component.getEvent('childLoaded').fire();
     });
 

@@ -8,10 +8,9 @@
       agreementId: agreement.id.value
     });
     limitedAccessToken.setCallback(this, function (response) {
-      var state = response.getState();
-      var result = response.getReturnValue();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         try {
+          var result = response.getReturnValue();
           var options = {
             iconPath: $A.get('$Resource.scmwidgetsspritemap'),
             accessTokenFn: function () {
@@ -40,17 +39,8 @@
           component.set('v.loading', false);
         }
       } else {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
         component.set('v.loading', false);
-        helper.showToast(component, errorMessage, 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
     $A.enqueueAction(limitedAccessToken);

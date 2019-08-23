@@ -1,5 +1,7 @@
 <aura:component controller="GenController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="cvTitleByJobId" type="Object"/>
     <aura:attribute name="lookupObjs" type="Object[]"/>

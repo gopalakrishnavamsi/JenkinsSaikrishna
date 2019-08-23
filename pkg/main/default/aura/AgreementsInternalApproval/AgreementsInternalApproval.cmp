@@ -1,6 +1,8 @@
 <aura:component description="AgreementsInternalApproval"
                 controller="AgreementsController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!-- attributes -->
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="sourceId" type="Id"/>

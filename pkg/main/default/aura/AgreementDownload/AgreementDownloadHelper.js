@@ -36,16 +36,7 @@
           helper.showToast(component, error, 'error');
         }
       } else {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
-        helper.showToast(component, errorMessage, 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
     $A.enqueueAction(limitedAccessToken);
