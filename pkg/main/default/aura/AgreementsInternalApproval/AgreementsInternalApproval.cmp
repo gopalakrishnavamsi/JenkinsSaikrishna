@@ -15,7 +15,7 @@
                     access="private"/>
     <aura:attribute name="emailBody" type="String" default="{!$Label.c.InternalApprovalEmailBody}" access="private"/>
     <aura:attribute name="currentUserId" type="Id"/>
-    <aura:attribute name="disableNext" type="Boolean" default="{!false}"/>
+    <aura:attribute name="disableNext" type="Boolean" default="true"/>
 
 
     <!-- handlers -->
