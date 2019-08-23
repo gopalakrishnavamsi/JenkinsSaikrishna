@@ -1,5 +1,7 @@
 <aura:component description="AgreementsRename" controller="AgreementsController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!-- attributes -->
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>

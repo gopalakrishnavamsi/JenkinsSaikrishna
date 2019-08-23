@@ -578,9 +578,9 @@
         if (result === true) {
           var resendMessage = '';
           if (reviewType === 'ExternalReview') {
-            resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendExternalReviewMessage'));
+            resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendExternalReviewMessage_1'), agreement.name);
           } else {
-            resendMessage = stringUtils.format('{0} {1}', agreement.name, $A.get('$Label.c.AgreementResendInternalApprovalMessage'));
+            resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendInternalApprovalMessage_1'), agreement.name);
           }
           helper.showToast(component, resendMessage, 'success');
         } else {
@@ -612,9 +612,9 @@
         if (result === true) {
           var cancelMessage = '';
           if (reviewType === 'ExternalReview') {
-            cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelExternalReviewMessage'), agreement.name);
+            cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelExternalReviewMessage_1'), agreement.name);
           } else {
-            cancelMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.AgreementCancelInternalApprovalMessage'), agreement.name);
+            cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelInternalApprovalMessage_1'), agreement.name);
           }
           helper.showToast(component, cancelMessage, 'success');
         } else {
@@ -681,7 +681,7 @@
       if (state === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result === true) {
-          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSucess'), 'success');
+          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSuccess'), 'success');
           helper.reloadPreview(component);
         } else {
           helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');

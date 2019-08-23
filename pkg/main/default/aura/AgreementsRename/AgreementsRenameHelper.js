@@ -32,8 +32,7 @@
       if (state === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result === true) {
-          var renameMessage =
-            agreementDetails.name + ' ' + $A.get('$Label.c.AgreementRenamed');
+          var renameMessage = stringUtils.format($A.get('$Label.c.AgreementRenamed_1'), agreementDetails.name);
           self.showToast(component, renameMessage, 'success');
           component.set('v.loading', false);
           self.reloadAgreementsSpace(component);

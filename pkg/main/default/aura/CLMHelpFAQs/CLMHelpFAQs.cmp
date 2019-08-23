@@ -88,7 +88,7 @@
                     <lightning:card>
                         <aura:set attribute="title">
                             <div class="slds-p-left_medium ds-card-heading">
-                                {!$Label.c.InstallationandGetStarted}
+                                {!$Label.c.InstallationAndGetStarted}
                             </div>
                         </aura:set>
                         <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">

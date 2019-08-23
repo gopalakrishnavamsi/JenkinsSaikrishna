@@ -65,7 +65,7 @@
       helper.showToast(
         component,
         'warning',
-        fieldData.label + ' ' + $A.get('$Label.c.FieldPickerFieldExists')
+        stringUtils.format($A.get('$Label.c.FieldPickerFieldExists'), fieldData.label)
       );
       fieldMapping.apiName = component.get('v.previousFieldMappingName');
       component.set('v.fieldMapping', fieldMapping);
