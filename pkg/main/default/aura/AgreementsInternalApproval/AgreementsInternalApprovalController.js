@@ -39,11 +39,11 @@
     helper.nextButtonClicked(component, event, helper);
   },
 
-  handlePillCloseEvent: function (component) {
-    component.set('v.disableNext', true);
+  handlePillCloseEvent: function (component, event, helper) {
+    helper.handlePillCloseEvent(component);
   },
 
   handleRecipientsChange: function (component, event, helper) {
-    helper.handleRecipientsChange(component);
+    helper.handleRecipientsChange(component, event);
   }
 });

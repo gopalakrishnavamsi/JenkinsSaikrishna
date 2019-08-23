@@ -251,18 +251,32 @@
 
   },
 
-  handleRecipientsChange: function (component) {
+  handleRecipientsChange: function (component, event) {
+    event.stopPropagation();
     var self = this;
     component.set('v.disableNext', false);
     var rs = component.get('v.recipients');
-    component.set('v.disableNext', (!$A.util.isUndefinedOrNull(rs) && self.isEmptyRecipients(rs)) || $A.util.isUndefinedOrNull(rs));
+    var isNextButtonDisable = (!$A.util.isUndefinedOrNull(rs) && self.isEmptyRecipients(rs)) || $A.util.isUndefinedOrNull(rs);
+    component.set('v.disableNext', isNextButtonDisable);
   },
 
   isEmptyRecipients: function (recipients) {
     var nullIndex = recipients.findIndex(function (item) {
       return ($A.util.isUndefinedOrNull(item.name) || $A.util.isEmpty(item.name));
     });
-    return nullIndex > 0;
+    return nullIndex >= 0;
+  },
+
+  handlePillCloseEvent: function (component) {
+    var rs = component.get('v.recipients');
+    rs.forEach(function (r) {
+      if ($A.util.isUndefinedOrNull(r.name) || $A.util.isEmpty(r.name)) {
+        r.name = null;
+        r.email = null;
+        r.source = null;
+      }
+    });
+    component.set('v.recipients', rs);
   }
 
 });
