@@ -2,22 +2,12 @@
   checkMultiCurrency: function(component) {
     var action = component.get('c.checkMultiCurrency');
     action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var isMultiCurrency = response.getReturnValue();
         component.set('v.isMultiCurrency', isMultiCurrency);
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
+      } else {
         component.set('v.errType', 'error');
-        component.set('v.errMsg', errorMessage);
+        component.set('v.errMsg', stringUtils.getErrorMessage(response));
       }
     });
     $A.enqueueAction(action);
@@ -207,14 +197,7 @@
                 templateConfig.appendChild(objXML);
                 resolve();
               } else {
-                var errorMessage = $A.get('$Label.c.ErrorMessage');
-                var errors = response.getError();
-                if (errors) {
-                  if (errors[0] && errors[0].message) {
-                    errorMessage += errors[0].message;
-                  }
-                }
-                reject(errorMessage);
+                reject(stringUtils.getErrorMessage(response));
               }
             });
             action.setBackground();

@@ -5568,13 +5568,6 @@
 		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where  your button should appear and select to deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;. Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;</value>
 	</labels>
 	<labels>
-		<fullName>ErrorMessage</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ErrorMessage</shortDescription>
-		<value>Error message: </value>
-	</labels>
-	<labels>
 		<fullName>UnknownError</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

@@ -26,9 +26,7 @@
       documentId: agreementDetails.id.value
     });
     action.setCallback(this, function(response) {
-      var state = response.getState();
-
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result === true) {
           var deleteMessage =
@@ -48,17 +46,8 @@
           self.reloadAgreementsSpace(component);
           self.close(component);
         }
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
-        self.showToast(component, errorMessage, 'error');
+      } else {
+        self.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
       component.set('v.loading', false);
     });

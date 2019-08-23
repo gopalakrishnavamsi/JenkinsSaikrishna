@@ -44,18 +44,10 @@
       if (state === 'SUCCESS') {
         component.set('v.namespace', response.getReturnValue());
         component.set('v.isDocuSignNegotiator', true);
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-            if (errors[0].message === $A.get('$Label.c.MustBeDocuSignNegotiator')) {
-              component.set('v.isDocuSignNegotiator', false);
-            }
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
+      } else {
+        var errorMessage = stringUtils.getErrorMessage(response);
+        if (errorMessage === $A.get('$Label.c.MustBeDocuSignNegotiator')) {
+          component.set('v.isDocuSignNegotiator', false);
         }
         helper.showToast(component, errorMessage, 'error');
       }
@@ -76,17 +68,8 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         component.set('v.agreements', response.getReturnValue());
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
-        helper.showToast(component, errorMessage, 'error');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
       component.set('v.loading', false);
     });

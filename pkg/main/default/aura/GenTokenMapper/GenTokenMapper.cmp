@@ -1,4 +1,6 @@
 <aura:component controller="GenController">
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <aura:attribute name="objMapping" type="Object"/>
     <aura:attribute name="childRelations" type="Object[]"/>
     <aura:attribute name="allFields" type="Object[]"/>

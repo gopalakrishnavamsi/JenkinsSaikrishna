@@ -2773,10 +2773,6 @@
 		<name>PublishGuidance2</name>
 	</customLabels>
 	<customLabels>
-		<label>Error message: </label>
-		<name>ErrorMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>Unknown error</label>
 		<name>UnknownError</name>
 	</customLabels>
