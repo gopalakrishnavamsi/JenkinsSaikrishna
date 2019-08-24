@@ -1,4 +1,6 @@
 <aura:component controller="GenController">
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <aura:attribute name="allFieldMappings" type="Object[]"
                     description="All the field mappings in the current object. Used to prevent duplicates"/>
     <aura:attribute name="parentFieldMapping" type="Object"

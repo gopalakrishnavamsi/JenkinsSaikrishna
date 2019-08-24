@@ -456,9 +456,9 @@ public with sharing class AuthService {
 			settings.SenderProfileId__c = permissionProfileIds == null
 				? null : permissionProfileIds.senderId;
 			settings.ScmAuthBaseUrl__c = scmAuthBaseUrl == null
-				? null : canonicalizeBaseUrl(scmAuthBaseUrl).toExternalForm();
+				? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl).toExternalForm();
 			settings.ScmApiBaseUrl__c = scmApiBaseUrl == null
-				? null : canonicalizeBaseUrl(scmApiBaseUrl).toExternalForm();
+				? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl).toExternalForm();
 			upsert settings;
 
 			return settings;
@@ -467,7 +467,7 @@ public with sharing class AuthService {
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
 		if (api == null) {
-			api = new AuthAPI(canonicalizeBaseUrl(baseUrl));
+			api = new AuthAPI(UrlUtils.canonicalizeBaseUrl(baseUrl));
 		}
 		return api;
 	}
@@ -900,14 +900,6 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
-	private static Url canonicalizeBaseUrl(final Url url) {
-		if (url == null) return null;
-
-		String path = url.getPath().toLowerCase();
-		return new Url('https://' + url.getAuthority().toLowerCase() + (path.endsWith('/') ? path : path + '/'));
-	}
-
-	@TestVisible
 	private static Credentials save(
 		final DocuSign.Environment environment,
 		final Url accountBaseUrl,
@@ -940,11 +932,11 @@ public with sharing class AuthService {
 		}
 
 		// Create remote sites
-		Url aBaseUrl = canonicalizeBaseUrl(accountBaseUrl);
-		Url pBaseUrl = canonicalizeBaseUrl(provisioningBaseUrl);
-		Url eBaseUrl = canonicalizeBaseUrl(eSignatureBaseUrl);
-		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : canonicalizeBaseUrl(scmAuthBaseUrl);
-		Url sApiBaseUrl = scmApiBaseUrl == null ? null : canonicalizeBaseUrl(scmApiBaseUrl);
+		Url aBaseUrl = UrlUtils.canonicalizeBaseUrl(accountBaseUrl);
+		Url pBaseUrl = UrlUtils.canonicalizeBaseUrl(provisioningBaseUrl);
+		Url eBaseUrl = UrlUtils.canonicalizeBaseUrl(eSignatureBaseUrl);
+		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl);
+		Url sApiBaseUrl = scmApiBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl);
 		List<MetadataService.RemoteSite> sites = getRemoteSites(
 			environment,
 			aBaseUrl,
@@ -1088,7 +1080,8 @@ public with sharing class AuthService {
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
 			// Create remote site for eSignature
-			Url eSignatureBaseUrl = canonicalizeBaseUrl(new Url(l.loginInformation.accounts[0].eSignatureBaseUrl));
+			Url eSignatureBaseUrl = UrlUtils.canonicalizeBaseUrl(
+				new Url(l.loginInformation.accounts[0].eSignatureBaseUrl));
 			createRemoteSite(rc.environment, eSignatureBaseUrl);
 
 			try {
@@ -1269,7 +1262,7 @@ public with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
-		Url eSignatureBaseUrl = canonicalizeBaseUrl(new Url(selected.eSignatureBaseUrl));
+		Url eSignatureBaseUrl = UrlUtils.canonicalizeBaseUrl(new Url(selected.eSignatureBaseUrl));
 		createRemoteSite(rc.environment, eSignatureBaseUrl);
 
 		try {

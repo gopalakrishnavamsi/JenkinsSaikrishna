@@ -1,4 +1,6 @@
 <aura:component controller="GenController">
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!-- attributes -->
     <aura:attribute name="templateId" type="Id"/>
     <aura:attribute name="showToast" type="Boolean"/>

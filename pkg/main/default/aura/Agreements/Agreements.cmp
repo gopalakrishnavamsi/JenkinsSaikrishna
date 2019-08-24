@@ -3,6 +3,8 @@
                 implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
                 controller="AgreementsController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!--TODO : Vf page parameter for toast component   -->
 
     <!-- attributes -->

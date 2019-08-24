@@ -18,7 +18,7 @@
 
         <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
             <aura:if isTrue="{!v.isConsentRequired}">
-                {!$Label.c.AuthorizeDocuSignInstructions}
+                <lightning:formattedRichText value="{!$Label.c.AuthorizeDocuSignInstructions}"/>
 
                 <aura:set attribute="else">
                     {!v.userStatusMessage}

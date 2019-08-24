@@ -53,9 +53,31 @@ window.stringUtils = (function () {
       .replace(/&gt;/g, '>');
   };
 
+  /**
+   *
+   * @param response {Response}
+   * @returns {string}
+   */
+  var getErrorMessage = function (response) {
+    var message = '';
+    if (!$A.util.isUndefinedOrNull(response) && !$A.util.isUndefinedOrNull(response.getError)) {
+      var errors = response.getError();
+      message = errors;
+      if (!$A.util.isEmpty(errors)) {
+        message = errors[0].message;
+      }
+    }
+
+    if ($A.util.isEmpty(message)) {
+      message = $A.get('$Label.c.UnknownError');
+    }
+    return message;
+  };
+
   return Object.freeze({
     format: format,
     formatSize: formatSize,
-    unescapeHtml: unescapeHtml
+    unescapeHtml: unescapeHtml,
+    getErrorMessage: getErrorMessage
   });
 }());

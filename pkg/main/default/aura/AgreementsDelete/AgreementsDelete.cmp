@@ -1,5 +1,7 @@
 <aura:component description="DeleteAgreement" controller="AgreementsController">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <!--attributes -->
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>

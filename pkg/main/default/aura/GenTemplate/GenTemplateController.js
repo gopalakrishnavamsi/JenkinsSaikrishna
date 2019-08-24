@@ -21,9 +21,7 @@
     });
 
     action.setCallback(this, function(response) {
-      var state = response.getState();
-
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var results = response.getReturnValue();
         results.allObjects.sort(function(a, b) {
           if (a.label > b.label) {
@@ -57,19 +55,8 @@
           component.set('v.isCompleted', false);
         }
         component.set('v.saving', false);
-      }
-
-      if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
-        component.set('v.errMsg', errorMessage);
+      } else {
+        component.set('v.errMsg', stringUtils.getErrorMessage(response));
         component.set('v.saving', false);
       }
     });

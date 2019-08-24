@@ -8,21 +8,13 @@
     });
 
     action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var layouts = response.getReturnValue();
         if (!$A.util.isEmpty(layouts)) {
           component.set('v.layouts', layouts);
         }
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        }
-        helper.showToast(component, errorMessage, 'error');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
 
@@ -32,21 +24,13 @@
   getGenActionName: function(component, event, helper) {
     var action = component.get('c.getGenActionName');
     action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         var genActionName = response.getReturnValue();
         if (!$A.util.isEmpty(genActionName)) {
           component.set('v.genActionName', genActionName);
         }
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        }
-        helper.showToast(component, errorMessage, 'error');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
 
@@ -107,23 +91,15 @@
     });
 
     action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (response.getState() === 'SUCCESS') {
         component.getEvent('publishedButtons').fire();
         helper.showToast(
           component,
           $A.get('$Label.c.SuccessfullyPublished'),
           'success'
         );
-      } else if (state === 'ERROR') {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        }
-        helper.showToast(component, errorMessage, 'error');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
       component.set('v.creatingButtons', false);
     });

@@ -71,17 +71,8 @@
           component.set('v.loading', false);
         }
       } else {
-        var errorMessage = $A.get('$Label.c.ErrorMessage');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        } else {
-          errorMessage += $A.get('$Label.c.UnknownError');
-        }
         component.set('v.loading', false);
-        helper.showToast(component, errorMessage, 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
     $A.enqueueAction(limitedAccessToken);
@@ -109,8 +100,7 @@
         documentName: selectedFile.name + '.' + selectedFile.extension
       });
       action.setCallback(this, function(response) {
-        var state = response.getState();
-        if (state === 'SUCCESS') {
+        if (response.getState() === 'SUCCESS') {
           var result = response.getReturnValue();
           if (result.status === 'Success') {
             //TODO: return uploaded file from Controller
@@ -130,17 +120,8 @@
             helper.reloadAgreementsSpace(component);
             helper.close(component);
           }
-        } else if (state === 'ERROR') {
-          var errorMessage = $A.get('$Label.c.ErrorMessage');
-          var errors = response.getError();
-          if (errors) {
-            if (errors[0] && errors[0].message) {
-              errorMessage += errors[0].message;
-            }
-          } else {
-            errorMessage += $A.get('$Label.c.UnknownError');
-          }
-          helper.showToast(component, errorMessage, 'error');
+        } else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
         }
         component.set('v.loading', false);
       });
