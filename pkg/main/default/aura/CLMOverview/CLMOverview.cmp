@@ -1,5 +1,10 @@
 <aura:component>
+    <aura:attribute name="login" type="Object"/>
+
     <div class="slds-grid slds-grid_vertical">
+        <div class="slds-col slds-m-around_medium">
+            <c:SetupAccount login="{!v.login}"/>
+        </div>
         <div class="slds-col slds-m-around_medium">
             <c:CLMGetStarted />
         </div>

@@ -1,0 +1,48 @@
+.THIS.ds-login-component {
+    background: white;
+    width: 100%;
+    min-height: 650px;
+}
+
+.THIS .ds-unifiedApp-login-path-header {
+    color: t(colorTextActionLabelActive);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-cursor_not-allowed > a,
+.THIS .ds-cursor_not-allowed > a:hover,
+.THIS .ds-cursor_not-allowed::before,
+.THIS .ds-cursor_not-allowed::after {
+    cursor: not-allowed;
+}
+
+.THIS .ds-login-illustration img {
+    max-width: 240px;
+    width: auto;
+    max-height: 180px;
+    height: auto;
+}
+
+.THIS .ds-loginToDocuSign-text {
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-regular-text {
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-bold-text {
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-account-selection-radioGroup {
+    max-height: 140px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.THIS .ds-button-left-margin {
+    margin-left: 0.5rem !important;
+}

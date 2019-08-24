@@ -1,4 +1,5 @@
-<apex:page id="CompleteSpringOAuth" controller="SetupController" title="{!$Label.DocuSign}">
+<apex:page id="CompleteSpringOAuth" controller="SetupController" title="{!$Label.DocuSign}" showHeader="false"
+           sideBar="false">
     <c:Loading/>
     <script>
       function endOAuth(event, result) {

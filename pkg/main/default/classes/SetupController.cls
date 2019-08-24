@@ -9,11 +9,13 @@ public with sharing class SetupController extends Controller {
 
 			if (Credentials.isAccountValid()) {
 				Credentials c = Credentials.getInstance();
+				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				// TODO: Handle trial accounts
 				return new LoginInformation(
 					c.user.id,
 					c.user.name,
 					c.account.email,
+					settings.IsPlatformAuthorized__c,
 					new List<LoginInformation.Account> {
 						new LoginInformation.Account(
 							c.account.id,
@@ -28,6 +30,7 @@ public with sharing class SetupController extends Controller {
 					null,
 					UserInfo.getName(),
 					UserInfo.getUserEmail(),
+					false,
 					null);
 			}
 		} catch (Exception ex) {
@@ -96,6 +99,7 @@ public with sharing class SetupController extends Controller {
 				null,
 				UserInfo.getName(),
 				UserInfo.getUserEmail(),
+				false,
 				new List<LoginInformation.Account>());
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to log out of DocuSign.');
@@ -201,6 +205,49 @@ public with sharing class SetupController extends Controller {
 			return Collection.size(ps) == 2;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Negotiate Trial.');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean doPlatformAuthorizationSettingsExist() {
+		try {
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			return (settings != null && String.isNotBlank(settings.ScmAuthBaseUrl__c)) ? true : false;
+
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
+		}
+	}
+
+	@AuraEnabled
+	public static List<String> getProductsOnAccount() {
+		try {
+			List<String> products = new List<String>();
+			List<ProductSettings__c> productSettings = ProductSettings__c.getall().values();
+			if (!productSettings.isEmpty()) {
+				for (ProductSettings__c product : productSettings) {
+					products.add(product.Name);
+				}
+			}
+			return products;
+
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean updatePlatformAuth() {
+		try {
+			Boolean result;
+			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+			settings.IsPlatformAuthorized__c = true;
+			update settings;
+			result = true;
+			return result;
+
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
 		}
 	}
 }

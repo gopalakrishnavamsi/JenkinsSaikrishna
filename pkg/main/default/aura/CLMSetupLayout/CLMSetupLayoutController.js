@@ -23,5 +23,9 @@
         helper.showtoast(component, data.title, data.variant);
       }
     }
+  },
+
+  triggerLogout: function (component) {
+    component.destroy();
   }
 });

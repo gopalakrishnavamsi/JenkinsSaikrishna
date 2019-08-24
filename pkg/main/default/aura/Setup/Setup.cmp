@@ -1,82 +1,30 @@
-<aura:component controller="SetupController"
-                extends="c:RootContainer">
+<aura:component controller="SetupController">
 
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
     <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
-
-    <aura:attribute name="login" type="Object" access="private"/>
-    <aura:attribute name="steps" type="Object[]" access="private"/>
-    <aura:attribute name="isLoggedIn" type="Boolean" access="private"/>
-    <aura:attribute name="isUserStepComplete" type="Boolean" access="private"/>
+    <aura:attribute name="showSetupComponent" type="Object" required="true"/>
+    <aura:attribute name="showSetupSpinner" type="Object" required="true"/>
+    <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="isLoggedIn" type="Boolean"/>
+    <aura:attribute name="uiHelper" type="Object"/>
+    <aura:attribute name="isPlatformAuthorized" type="Boolean"/>
+    <aura:attribute name="products" type="String[]"/>
     <aura:attribute name="isTrial" type="Boolean" access="private"/>
     <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
-    <aura:attribute name="progressionStatus" type="String" access="private"/>
-    <aura:attribute name="completedCounter" type="Integer" access="private"/>
-    <aura:attribute name="currentStep" type="String" access="private" default="landing"/>
-    <aura:attribute name="shouldShowNextSteps" type="Boolean" access="private" default="{!false}"/>
-    <aura:attribute name="showNextSteps" type="Boolean" access="private" default="{!false}"/>
-    <aura:attribute name="message" type="String" access="private"/>
-    <aura:attribute name="mode" type="String" access="private"/>
-    <aura:attribute name="nextStep" type="String" access="private"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
-    <aura:handler name="loginEvent" event="c:LoginEvent" action="{!c.handleLoginEvent}"/>
+    <ltng:require scripts="{!join(',',$Resource.stringUtils, $Resource.uiHelper)}"
+                  afterScriptsLoaded="{!c.onInitialize}"/>
 
-    <div class="slds-scope">
-        <div class="slds-grid slds-grid_vertical">
-            <!-- Landing -->
-            <div aura:id="landingDiv" class="{!'slds-col' + if(v.currentStep == 'landing', '', ' slds-hide')}">
-                <c:SetupWizard aura:id="landing"
-                               steps="{!v.steps}"
-                               progressionStatus="{!v.progressionStatus}"
-                               completedCounter="{!v.completedCounter}"
-                               isTrialExpired="{!v.isTrialExpired}"
-                               showNextSteps="{!v.showNextSteps}"
-                               landingButtonClicked="{!c.goToNextStep}"
-                               rowButtonClicked="{!c.handleStepChange}"/>
-            </div>
-            <!--/Landing -->
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
+    <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
+    <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadSetup}"/>
 
-            <!-- Sections -->
-            <aura:if isTrue="{!v.currentStep == 'setupAccount'}">
-                <div class="{!'slds-col' + if(v.currentStep == 'setupAccount', '', ' slds-hide')}">
-                    <c:SetupAccount aura:id="setupAccount"
-                                    login="{!v.login}"
-                                    isLoggedIn="{!v.isLoggedIn}"
-                                    isTrial="{!v.isTrial}"
-                                    isTrialExpired="{!v.isTrialExpired}"
-                                    nextStep="{!v.nextStep}"
-                                    beginOAuth="{!v.beginOAuth}"
-                                    beginSpringOAuth="{!v.beginSpringOAuth}"
-                                    exitClicked="{!c.handleStepChange}"
-                                    finishClicked="{!c.goToNextStep}"/>
-                </div>
-            </aura:if>
+    <div aura:id="setupContent" id="ds-setup"></div>
 
-            <aura:if isTrue="{!v.currentStep == 'setupUsers'}">
-                <div class="{!'slds-col' + if(v.currentStep == 'setupUsers', '', ' slds-hide')}">
-                    <c:SetupUsers aura:id="setupUsers"
-                                  nextStep="{!v.nextStep}"
-                                  exitClicked="{!c.handleStepChange}"
-                                  finishClicked="{!c.goToNextStep}"/>
-                </div>
-            </aura:if>
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
+             visualforce="true"/>
 
-            <aura:if isTrue="{!v.currentStep == 'setupLayouts'}">
-                <div class="{!'slds-col' + if(v.currentStep == 'setupLayouts', '', ' slds-hide')}">
-                    <c:SetupLayouts aura:id="setupLayouts"
-                                  nextStep="{!v.nextStep}"
-                                  exitClicked="{!c.handleStepChange}"
-                                  finishClicked="{!c.goToNextStep}"/>
-                </div>
-            </aura:if>
-
-            <aura:if isTrue="{!v.currentStep == 'settings'}">
-                <div class="{!'slds-col' + if(v.currentStep == 'settings', '', ' slds-hide')}">
-                    <c:Settings aura:id="settings"
-                                exitClicked="{!c.handleStepChange}"/>
-                </div>
-            </aura:if>
-        </div>
-    </div>
 </aura:component>
