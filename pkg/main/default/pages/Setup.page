@@ -1,38 +1,46 @@
-<apex:page sidebar="false" showHeader="true" controller="SetupController" title="{!$Label.DocuSign}">
+<apex:page sidebar="false" showHeader="true" controller="SetupController" title="DocuSign Unified App Setup">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <apex:includeLightning/>
     <apex:slds/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
-        #ds-setup {
-            min-height: 100vh;
-            background-color: #f7f9fb;
-            position: relative;
-        }
-
-        .noSidebarCell #ds-setup {
-            min-height: calc(100vh - 120px);
-        }
-
         .bodyDiv .outerNoSidebar,
         .noSidebarCell,
         .sidebarCell .fixed {
             padding: 0;
         }
 
-        .noSidebarCell #ds-setup .slds-scope .strike-wizard__footer {
-            position: absolute;
+        .noSidebarCell #ds-spinner {
+            height: calc(100vh - 165px);
         }
+
+        .ds-blue-brand {
+            background: rgb(176, 196, 223);
+            background-image: url(/_slds/images/themes/lightning_blue/lightning_blue_background.png);
+            background-repeat: repeat-x;
+        }
+
     </style>
 
-    <div id="ds-setup"></div>
+    <div id="ds-pageContent" style="display: none;" class="ds-blue-brand">
+        <div id="ds-unifiedAppSetupSection"></div>
+    </div>
 
-    <script>
+    <div id="ds-spinner">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
       var navigateToURL = function (event) {
+
         var url = event.getParam('url');
         window.open(url, '_blank');
       };
-
       function showError(component, message) {
         var evt = component.getEvent('toastEvent');
         evt.setParams({
@@ -104,13 +112,17 @@
               var top = (screen.height / 2) - (height / 2);
 
               var w = window.open(stringUtils.unescapeHtml(result), 'oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
-              w.addEventListener('unload', function () {
-                var evt = component.getEvent('loadingEvent');
-                evt.setParams({
-                  isLoading: false
-                });
-                evt.fire();
-              });
+
+              var closeTimer = setInterval(function () {
+                if (w.closed) {
+                  clearInterval(closeTimer);
+                  var evt = component.getEvent('loadingEvent');
+                  evt.setParams({
+                    isLoading: false
+                  });
+                  evt.fire();
+                }
+              }, 500);
 
             } else {
               showError(component, event.message);
@@ -121,14 +133,30 @@
         }
       }
 
-      var namespace = '{!JSENCODE(namespace)}';
-      $Lightning.use(namespace + ':SetupApp', function () {
-        $Lightning.createComponent(namespace + ':Setup', {
-          beginOAuth: beginOAuth, beginSpringOAuth: beginSpringOAuth
-        }, 'ds-setup', function () {
+      function showSetupComponent() {
+        document.getElementById('ds-spinner').style.display = 'none';
+        document.getElementById('ds-pageContent').style.display = 'block';
+      }
+
+      function showSetupSpinner() {
+        document.getElementById('ds-spinner').style.display = 'block';
+        document.getElementById('ds-pageContent').style.display = 'none';
+      }
+
+      $Lightning.use('{!JSENCODE(namespace)}:SetupApp', function () {
+        $Lightning.createComponent('{!JSENCODE(namespace)}:Setup', {
+          beginOAuth: beginOAuth,
+          beginSpringOAuth: beginSpringOAuth,
+          showSetupComponent: showSetupComponent,
+          showSetupSpinner: showSetupSpinner
+        }, 'ds-unifiedAppSetupSection', function (component, status, errorMessage) {
+          //TODO: add the logic for handling component instantiation errors
+          if (null == errorMessage) {
+          }
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });
     </script>
-</apex:page>
 
+    </html>
+</apex:page>
