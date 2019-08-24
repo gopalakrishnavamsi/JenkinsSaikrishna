@@ -1424,7 +1424,7 @@ private class AuthServiceTest {
 						UUID.randomUUID(),
 						UUID.randomUUID().toString(),
 						UUID.randomUUID().toString(),
-						null),
+						false, null),
 					new LoginInformation.Account(
 						UUID.randomUUID(),
 						TestUtils.randomInteger(100000),
@@ -1453,7 +1453,7 @@ private class AuthServiceTest {
 						UUID.randomUUID(),
 						UUID.randomUUID().toString(),
 						UUID.randomUUID().toString(),
-						null),
+						false, null),
 					new LoginInformation.Account(
 						UUID.randomUUID(),
 						TestUtils.randomInteger(100000),
@@ -1506,7 +1506,7 @@ private class AuthServiceTest {
 					new LoginInformation(
 						UUID.randomUUID(),
 						UUID.randomUUID().toString(),
-						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString(), false,
 						null),
 					null,
 					new Credentials.AccessToken(
@@ -1530,7 +1530,7 @@ private class AuthServiceTest {
 					new LoginInformation(
 						UUID.randomUUID(),
 						UUID.randomUUID().toString(),
-						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString(), false,
 						null),
 					new LoginInformation.Account(
 						UUID.randomUUID(),
@@ -1557,7 +1557,7 @@ private class AuthServiceTest {
 					new LoginInformation(
 						UUID.randomUUID(),
 						UUID.randomUUID().toString(),
-						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString(), false,
 						null),
 					new LoginInformation.Account(
 						UUID.randomUUID(),
@@ -1595,7 +1595,7 @@ private class AuthServiceTest {
 				new LoginInformation(
 					UUID.randomUUID(),
 					UUID.randomUUID().toString(),
-					UUID.randomUUID().toString(),
+					UUID.randomUUID().toString(), false,
 					null),
 				new LoginInformation.Account(
 					UUID.randomUUID(),
@@ -1632,7 +1632,7 @@ private class AuthServiceTest {
 				new LoginInformation(
 					UUID.randomUUID(),
 					UUID.randomUUID().toString(),
-					UUID.randomUUID().toString(),
+					UUID.randomUUID().toString(), false,
 					null),
 				new LoginInformation.Account(
 					UUID.randomUUID(),
