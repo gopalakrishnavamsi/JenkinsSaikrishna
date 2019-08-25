@@ -54,8 +54,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Account Provisioning Failed</shortDescription>
-		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support:
-		https://support.docusign.com/.
+		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support: https://support.docusign.com/.
 		</value>
 	</labels>
 	<labels>
@@ -128,8 +127,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign details</shortDescription>
-		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to
-		the list below. Each new user will automatically be added to the DocuSign account.
+		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.
 		</value>
 	</labels>
 	<labels>
@@ -706,8 +704,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Cannot remove self</shortDescription>
-		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to
-		administer DocuSign for Salesforce.
+		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.
 		</value>
 	</labels>
 	<labels>
@@ -1056,7 +1053,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Connect DocuSign to Salesforce</shortDescription>
-		<value>Connect your DocuSign account to this Salesforce organization</value>
+		<value>Connect DocuSign to Salesforce</value>
 	</labels>
 	<labels>
 		<fullName>ConnectDocuSignUser</fullName>
@@ -1498,7 +1495,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Email subject is required</shortDescription>
-		<value>An email subject is required and must be less than 100 characters in length.</value>
+		<value>An email subject is required and must be no greater than 100 characters in length.</value>
 	</labels>
 	<labels>
 		<fullName>EmptySigningGroup</fullName>
@@ -1610,8 +1607,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Envelopes must be sent</shortDescription>
-		<value>All envelopes must be in &#39;sent&#39; or &#39;created&#39; state with a valid DocuSign ID to create
-		associated status records.
+		<value>All envelopes must be in &#39;sent&#39; or &#39;created&#39; state with a valid DocuSign ID to create associated status records.
 		</value>
 	</labels>
 	<labels>
@@ -1680,9 +1676,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Signers Required to Meet 21 CFR Part 11</shortDescription>
-		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one
-		required, non-conditional Signature or Initials tab.
-		</value>
+		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one required, non-conditional Signature or Initials tab.</value>
 	</labels>
 	<labels>
 		<fullName>FalklandIslands</fullName>
@@ -2032,11 +2026,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Help section 1</shortDescription>
-		<value>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with
-		DocuSign
-		button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard
-		objects: Accounts, Contacts, Opportunities, Cases, and Leads.
-		</value>
+		<value>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</value>
 	</labels>
 	<labels>
 		<fullName>HelpSection2</fullName>
@@ -2044,10 +2034,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Help section 2</shortDescription>
-		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding
-		the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and
-		documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;
-		</value>
+		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -2193,17 +2180,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid User Settings</shortDescription>
-		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are
-		used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO
-		user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can
-		Send
-		Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these
-		setting may be accessed by
-		logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the
-		Administration console. Unless all of those settings are enabled, the integration will not function
-		properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please
-		contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.
-		</value>
+		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidChatterText</fullName>
@@ -2219,9 +2196,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid Correction State</shortDescription>
-		<value>Correction permission must be turned on and envelope must be in &#39;sent&#39; or &#39;delivered&#39;
-		state to allow correction.
-		</value>
+		<value>Correction permission must be turned on and envelope must be in &#39;sent&#39; or &#39;delivered&#39; state to allow correction.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidDocumentResolver_1</fullName>
@@ -2277,9 +2252,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid File Extension</shortDescription>
-		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an
-		extension unknown to DocuSign.
-		</value>
+		<value>Cannot send envelope. It is likely that a file being submitted is missing a file extension, or has an extension unknown to DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidFileType</fullName>
@@ -2327,9 +2300,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid related contact</shortDescription>
-		<value>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column
-		mappings.
-		</value>
+		<value>Invalid related contact. Exactly one recipient must be defined with a valid table relationship and column mappings.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidSource</fullName>
@@ -2660,12 +2631,12 @@
 		<value>Log In</value>
 	</labels>
 	<labels>
-		<fullName>LogInToExisting</fullName>
+		<fullName>LogInToDocuSignAccount</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Log into existing</shortDescription>
-		<value>Log in to an existing account</value>
+		<shortDescription>LogInToDocuSignAccount</shortDescription>
+		<value>Log in to Your DocuSign Account</value>
 	</labels>
 	<labels>
 		<fullName>LogOut</fullName>
@@ -2946,9 +2917,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Multiple_Accounts_Message</shortDescription>
-		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would
-		like to connect with your Salesforce organization.
-		</value>
+		<value>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce organization.</value>
 	</labels>
 	<labels>
 		<fullName>MustBeActivated</fullName>
@@ -2956,9 +2925,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
-		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and
-		have granted your consent to DocuSign for Salesforce.
-		</value>
+		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and have granted your consent to DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>MustBeAdministrator</fullName>
@@ -3150,12 +3117,12 @@
 		<value>No</value>
 	</labels>
 	<labels>
-		<fullName>NoAccount</fullName>
+		<fullName>SignUpForFree</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>No account</shortDescription>
-		<value>No account? Sign up for free</value>
+		<shortDescription>SignUpForFree</shortDescription>
+		<value>Sign up for free.</value>
 	</labels>
 	<labels>
 		<fullName>NoEnvelopesSent</fullName>
@@ -3195,18 +3162,15 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>No Valid Accounts</shortDescription>
-		<value>Your account must be updated by one of our customer service reps. Please call us at 1-800-379-9973.
-		</value>
+		<value>Your account must be updated by one of our customer service reps. Please call us at 1-800-379-9973.</value>
 	</labels>
 	<labels>
 		<fullName>NonUSConsentMessage</fullName>
 		<categories>Setup,Accounts</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Non-US consent messsage</shortDescription>
-		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-		and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.
-		</value>
+		<shortDescription>Non-US consent message</shortDescription>
+		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</value>
 	</labels>
 	<labels>
 		<fullName>None</fullName>
@@ -3588,9 +3552,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Empty List</shortDescription>
-		<value>Custom field &#39;{0}&#39; is not configured correctly for your account: a required list field does not
-		have any options. Please contact your DocuSign administrator to correct the custom field.
-		</value>
+		<value>Custom field &#39;{0}&#39; is not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</value>
 	</labels>
 	<labels>
 		<fullName>Reunion</fullName>
@@ -3699,8 +3661,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Salesforce Organization Storage Limit Exceeded</shortDescription>
-		<value>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.
-		</value>
+		<value>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.</value>
 	</labels>
 	<labels>
 		<fullName>SalesforceUser</fullName>
@@ -3799,7 +3760,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select account option</shortDescription>
-		<value>-- Select an Account --</value>
+		<value>Select an Account</value>
 	</labels>
 	<labels>
 		<fullName>SelectSalesforceUsers</fullName>
@@ -4150,9 +4111,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Support info</shortDescription>
-		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers
-		to common questions, and display system performance information.
-		</value>
+		<value>At DocuSign, we&#39;re dedicated to customer success. We&#39;ve created a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;support center&lt;/a&gt; to help users with DocuSign features, provide answers to common questions, and display system performance information.</value>
 	</labels>
 	<labels>
 		<fullName>SupportPlans</fullName>
@@ -4168,10 +4127,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Support preparation</shortDescription>
-		<value>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be
-		sure to
-		have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.
-		</value>
+		<value>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be sure to have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.</value>
 	</labels>
 	<labels>
 		<fullName>Suriname</fullName>
@@ -4301,9 +4257,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade
-		your account&lt;/a&gt; to continue using DocuSign for Salesforce.
-		</value>
+		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresOneDay</fullName>
@@ -4311,8 +4265,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires in One Day</shortDescription>
-		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
-		</value>
+		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresSoon_1</fullName>
@@ -4320,8 +4273,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Soon</shortDescription>
-		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
-		</value>
+		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpiresToday</fullName>
@@ -4329,8 +4281,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expires Today</shortDescription>
-		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.
-		</value>
+		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TrialExpired_2</fullName>
@@ -4346,9 +4297,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial instructions</shortDescription>
-		<value>You will receive email with instructions on how to activate your account. You will then be able to log in
-		using your credentials.
-		</value>
+		<value>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</value>
 	</labels>
 	<labels>
 		<fullName>TrinidadAndTobago</fullName>
@@ -4422,10 +4371,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>US consent message</shortDescription>
-		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms
-		and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy
-		Policy&lt;/a&gt;.
-		</value>
+		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</value>
 	</labels>
 	<labels>
 		<fullName>USVirginIslands</fullName>
@@ -4462,9 +4408,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Unauthorized user</shortDescription>
-		<value>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant
-		access.
-		</value>
+		<value>You are not currently authorized to use DocuSign. Please contact your DocuSign administrator to grant access.</value>
 	</labels>
 	<labels>
 		<fullName>UndefinedArgument</fullName>
@@ -4808,9 +4752,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Use system sender help</shortDescription>
-		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes.
-		The sender in this case will be the configured DocuSign administrator.
-		</value>
+		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</value>
 	</labels>
 	<labels>
 		<fullName>UserCountryRequired</fullName>
@@ -5136,9 +5078,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Gen API error</shortDescription>
-		<value>[{0}] {1}
-		Reference ID: {2}
-		</value>
+		<value>[{0}] {1} Reference ID: {2}</value>
 	</labels>
 	<labels>
 		<fullName>InvalidGenQuery</fullName>
@@ -5365,7 +5305,6 @@
 		<shortDescription>Expired trial account message</shortDescription>
 		<value>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup.</value>
 	</labels>
-	<!-- new labels for Gen -->
 	<labels>
 		<fullName>Exit</fullName>
 		<language>en_US</language>
@@ -5462,7 +5401,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>WhatYouWillNeedStep2Info</shortDescription>
-		<value>You’ll need to have at least one Salesforce data source and the fields you want added to your document.</value>
+		<value>You’ll need to have at least one Salesforce data source and the fields you want to add to your document.</value>
 	</labels>
 	<labels>
 		<fullName>WhatYouWillNeedStep3Title</fullName>
@@ -5591,14 +5530,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ImportTemplatesGuidance1</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For each template, you can choose a suffix option for generated documents . You can also decide if users should generate a Word document or a PDF.&lt;/p&gt;</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Upload Word templates&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Upload all of the Word templates for this configuration. For each template, you can choose a suffix option for generated documents. You can also decide if users should generate a Word document or a PDF.&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>ImportTemplatesGuidance2</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ImportTemplatesGuidance2</shortDescription>
-		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded  multiple Word templates with this configuration, you can choose if all documents should be generated every time.  By default, users can select which ones they want to generate. However, if your users need to generate all documents, then select &lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;</value>
+		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Determine bulk document creation option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;If you’ve uploaded  multiple Word templates with this configuration, you can choose if all documents should be generated every time. By default, users can select which ones they want to generate. However, if your users need to generate all documents, then select &lt;strong&gt;Bulk Document Creation.&lt;/strong&gt;&lt;/p&gt;</value>
 	</labels>
 	<labels>
 		<fullName>PreviewGuidance1</fullName>
@@ -5627,13 +5566,6 @@
 		<protected>true</protected>
 		<shortDescription>PublishGuidance2</shortDescription>
 		<value>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select page layouts and deployment option&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Decide where  your button should appear and select to deploy as a Detail Page Button (Salesforce Classic) or Quick Action (Lightning Experience). If you don’t want a button on any layout, deselect all layout options before clicking &lt;strong&gt;Create Button&lt;/strong&gt;. Your button will be available in the Salesforce Object Manager setup.&lt;/p&gt;</value>
-	</labels>
-	<labels>
-		<fullName>ErrorMessage</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ErrorMessage</shortDescription>
-		<value>Error message: </value>
 	</labels>
 	<labels>
 		<fullName>UnknownError</fullName>
@@ -5689,7 +5621,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>SalesforceFieldsMsg</shortDescription>
-		<value>Select the Salesforce data fields Then copy and paste the anchor text where you want them to appear your Word templates.</value>
+		<value>Select the Salesforce data fields, then copy and paste the anchor text where you want them to appear your Word templates.</value>
 	</labels>
 	<labels>
 		<fullName>AddMergeFields</fullName>
@@ -5754,7 +5686,6 @@
 		<shortDescription>DateFormat</shortDescription>
 		<value>Date Format</value>
 	</labels>
-
 	<labels>
 		<fullName>DatePreview</fullName>
 		<language>en_US</language>
@@ -5924,11 +5855,11 @@
 		<value>Options</value>
 	</labels>
 	<labels>
-		<fullName>FieldPickerFieldExists</fullName>
+		<fullName>FieldPickerFieldExists_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>FieldPickerFieldExists</shortDescription>
-		<value>already exists as a merge field.</value>
+		<value>{0} already exists as a merge field.</value>
 	</labels>
 	<labels>
 		<fullName>MergeFieldDisplayCurrent</fullName>
@@ -6089,7 +6020,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>FileTooLarge</shortDescription>
-		<value>This supports file sizes up to 3mb only. If you want to upload larger files please do it through the files related list of DocuSign Gen Templates.</value>
+		<value>This supports file sizes up to 3 MB only. If you want to upload larger files please do it through the files related list of DocuSign Gen Templates.</value>
 	</labels>
 	<labels>
 		<fullName>Preview</fullName>
@@ -6245,14 +6176,12 @@
 		<shortDescription>Drafts</shortDescription>
 		<value>drafts</value>
 	</labels>
-	<!-- end of new labels for Gen -->
 	<labels>
 		<fullName>UnableToConnectDocuSignGen</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UnableToConnectDocuSignGen</shortDescription>
-		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.
-		</value>
+		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>SuccessDocuSignGenAuthorization</fullName>
@@ -6280,9 +6209,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>MissingDocuSignGenAuthorizationSettings</shortDescription>
-		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for
-		assistance.
-		</value>
+		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>AuthorizeGen</fullName>
@@ -6348,10 +6275,10 @@
 		<value>Agreement Export failed. Please try again.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementExternalReviewOnBehalfOfSucess</fullName>
+		<fullName>AgreementExternalReviewOnBehalfOfSuccess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>AgreementExternalReviewOnBehalfOfSucess</shortDescription>
+		<shortDescription>AgreementExternalReviewOnBehalfOfSuccess</shortDescription>
 		<value>Agreement external review on behalf of completed.</value>
 	</labels>
 	<labels>
@@ -6390,11 +6317,11 @@
 		<value>Rename</value>
 	</labels>
 	<labels>
-		<fullName>AgreementRenamed</fullName>
+		<fullName>AgreementRenamed_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementRenamed</shortDescription>
-		<value>has been renamed.</value>
+		<value>{0} has been renamed.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementRenameErrorMessage</fullName>
@@ -6418,32 +6345,32 @@
 		<value>There was an error in resending the Agreement. Please try again after some time.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementResendExternalReviewMessage</fullName>
+		<fullName>AgreementResendExternalReviewMessage_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementResendExternalReviewMessage</shortDescription>
-		<value>resend for external review.</value>
+		<value>{0} resent for external review.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementResendInternalApprovalMessage</fullName>
+		<fullName>AgreementResendInternalApprovalMessage_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementResendInternalApprovalMessage</shortDescription>
-		<value>resend for internal approval.</value>
+		<value>{0} resent for internal approval.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementCancelInternalApprovalMessage</fullName>
+		<fullName>AgreementCancelInternalApprovalMessage_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementCancelInternalApprovalMessage</shortDescription>
-		<value>Internal approval canceled for</value>
+		<value>Internal approval canceled for {0}.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementCancelExternalReviewMessage</fullName>
+		<fullName>AgreementCancelExternalReviewMessage_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementCancelExternalReviewMessage</shortDescription>
-		<value>External Review canceled for</value>
+		<value>External Review canceled for {0}.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementCancelErrorMessage</fullName>
@@ -6478,9 +6405,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewProcessing</shortDescription>
-		<value>Your request for sending your document for external review is still in progress. Check the Agreements
-		space after some time.
-		</value>
+		<value>Your request for sending your document for external review is still in progress. Check the Agreements space after some time.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewFailed</fullName>
@@ -6501,9 +6426,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>InternalApprovalProcessing</shortDescription>
-		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements
-		space after some time.
-		</value>
+		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements space after some time.</value>
 	</labels>
 	<labels>
 		<fullName>InternalApprovalFailed</fullName>
@@ -6629,7 +6552,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewSearchMessage</shortDescription>
-		<value>Search your contacts..</value>
+		<value>Search your contacts...</value>
 	</labels>
 	<labels>
 		<fullName>InternalApprovalSearchActorMessage</fullName>
@@ -6847,9 +6770,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Authorize DocuSign instructions</shortDescription>
-		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.
-		Click the &quot;Authorize&quot; button to continue.
-		</value>
+		<value>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.&lt;br/&gt;&lt;br/&gt;Click the &quot;Authorize&quot; button to continue.</value>
 	</labels>
 	<labels>
 		<fullName>AuthorizeButton</fullName>
@@ -7038,9 +6959,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalFailureEmailBodyText</shortDescription>
-		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if
-		you resend the request.
-		</value>
+		<value>There was a problem with your approval request and it was not sent. The issue should resolve itself if you resend the request.</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalFailureEmailHeaderTitleText</fullName>
@@ -7082,9 +7001,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementShareLinkMessage</shortDescription>
-		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit
-		this agreement.
-		</value>
+		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit this agreement.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementShareLinkCopiedMessage</fullName>
@@ -7651,10 +7568,8 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Case Folder Contents Helptext</shortDescription>
-		<value>This is a logical interpretatation of how all the instances of your mapped object (such as &apos;New
-			Account 1&apos;) will each have folder of their own in DocuSign CLM.
-		</value>
+		<shortDescription>Case Folder Contents Help Text</shortDescription>
+		<value>This is a logical interpretation of how all the instances of your mapped object (such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>WhyAmISelectingFields</fullName>
@@ -8143,7 +8058,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Name sub-folder</shortDescription>
-		<value>Name Subfolder</value>
+		<value>Name Sub-Folder</value>
 	</labels>
 	<labels>
 		<fullName>NameYourFolder</fullName>
@@ -8290,7 +8205,7 @@
 		<value>Learn how DocuSign Agreements manages your documents and uses your Salesforce data.</value>
 	</labels>
 	<labels>
-		<fullName>InstallationandGetStarted</fullName>
+		<fullName>InstallationAndGetStarted</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -8968,5 +8883,291 @@
 		<protected>true</protected>
 		<shortDescription>CLM - agreementHelp</shortDescription>
 		<value>agreementHelp</value>
+	</labels>
+	<labels>
+		<fullName>DisablePopUp</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisablePopUp</shortDescription>
+		<value>Disable your browser's pop-up blocker before logging in.</value>
+	</labels>
+	<labels>
+		<fullName>LoginToDocuSign</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LoginToDocuSign</shortDescription>
+		<value>Log in to DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>DontHaveAnAccount</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DontHaveAnAccount</shortDescription>
+		<value>Don't have an account?</value>
+	</labels>
+	<labels>
+		<fullName>NonProductionHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NonProductionHelpText</shortDescription>
+		<value>Only select an alternated DocuSign environment if you are not using a production account.</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignDemo</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSignDemo</shortDescription>
+		<value>DocuSign Demo</value>
+	</labels>
+	<labels>
+		<fullName>DemoHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DemoHelpText</shortDescription>
+		<value>Use this if you're using a DocuSign demo or sandbox account.</value>
+	</labels>
+	<labels>
+		<fullName>LoginToDemo</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LoginToDemo</shortDescription>
+		<value>Log in to Demo Account</value>
+	</labels>
+	<labels>
+		<fullName>TestingEnvironment</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TestingEnvironment</shortDescription>
+		<value>Stage or Testing Environment</value>
+	</labels>
+	<labels>
+		<fullName>TestingEnvironmentHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TestingEnvironmentHelpText</shortDescription>
+		<value>Use this if you're testing or staging account has a custom URL.</value>
+	</labels>
+	<labels>
+		<fullName>AccountSelected</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AccountSelected</shortDescription>
+		<value>DocuSign account selected click Next to proceed to the Authorization step.</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeAccess</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizeAccess</shortDescription>
+		<value>Authorize Access to Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizeHelpText</shortDescription>
+		<value>This access allows us to upload documents to Salesforce and attach them to records where your
+			organization needs them.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizationSettingsNotPresent</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizationSettingsNotPresent</shortDescription>
+		<value>Authorization settings are not present for the selected DocuSign Account. This option will be available
+			once products that require DocuSign systems to access Salesforce are added on the Account.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AllowAccess</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AllowAccess</shortDescription>
+		<value>Allow Access</value>
+	</labels>
+	<labels>
+		<fullName>CompleteSetupAuthorization</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompleteSetupAuthorization</shortDescription>
+		<value>Complete Setup</value>
+	</labels>
+	<labels>
+		<fullName>GetStartedSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GetStartedSetupAccount</shortDescription>
+		<value>Get Started with DocuSign Agreements</value>
+	</labels>
+	<labels>
+		<fullName>ConnectedAccountSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConnectedAccountSetupAccount</shortDescription>
+		<value>Connected Account</value>
+	</labels>
+	<labels>
+		<fullName>DisconnectSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisconnectSetupAccount</shortDescription>
+		<value>Disconnect</value>
+	</labels>
+	<labels>
+		<fullName>TabHome</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHome</shortDescription>
+		<value>Home</value>
+	</labels>
+	<labels>
+		<fullName>ConfigurationSection</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConfigurationSection</shortDescription>
+		<value>Configuration</value>
+	</labels>
+	<labels>
+		<fullName>TabESignature</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabESignature</shortDescription>
+		<value>E-Signature</value>
+	</labels>
+	<labels>
+		<fullName>TabDocumentGeneration</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabDocumentGeneration</shortDescription>
+		<value>Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>TabNegotiation</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabNegotiation</shortDescription>
+		<value>Collaboration and Negotiation</value>
+	</labels>
+	<labels>
+		<fullName>AdministrationSection</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AdministrationSection</shortDescription>
+		<value>Administration</value>
+	</labels>
+	<labels>
+		<fullName>TabUserManagement</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabUserManagement</shortDescription>
+		<value>User Management</value>
+	</labels>
+	<labels>
+		<fullName>TabComponents</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabComponents</shortDescription>
+		<value>Components</value>
+	</labels>
+	<labels>
+		<fullName>TabHelp</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHelp</shortDescription>
+		<value>Help</value>
+	</labels>
+	<labels>
+		<fullName>SetupConfigure</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupConfigure</shortDescription>
+		<value>Configure</value>
+	</labels>
+	<labels>
+		<fullName>SetupGetHelp</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupGetHelp</shortDescription>
+		<value>Get Help</value>
+	</labels>
+	<labels>
+		<fullName>TabESignatureHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabESignatureHelpText</shortDescription>
+		<value>Customize default email messaging, setup reminders and envelope expiration days.</value>
+	</labels>
+	<labels>
+		<fullName>TabDocumentGenerationHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabDocumentGenerationHelpText</shortDescription>
+		<value>In one-click, generate polished, customizable agreements with your Salesforce data.</value>
+	</labels>
+	<labels>
+		<fullName>TabNegotiationHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabNegotiationHelpText</shortDescription>
+		<value>Send agreements for approval internally, and review with third parties with ease.</value>
+	</labels>
+	<labels>
+		<fullName>TabUserManagementHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabUserManagementHelpText</shortDescription>
+		<value>Give your team members access to DocuSign Agreements features.</value>
+	</labels>
+	<labels>
+		<fullName>TabComponentsHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabComponentsHelpText</shortDescription>
+		<value>Customize layouts and experiences by adding buttons and components.</value>
+	</labels>
+	<labels>
+		<fullName>TabHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHelpText</shortDescription>
+		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
+			questions for DocuSign Agreements.
+		</value>
 	</labels>
 </CustomLabels>
