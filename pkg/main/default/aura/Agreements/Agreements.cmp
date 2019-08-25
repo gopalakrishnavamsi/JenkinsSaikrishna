@@ -71,11 +71,7 @@
                     <aura:set attribute="else">
                         <aura:if isTrue="{!v.fetchingOAuthStatus}">
                             <div class="ds-spinner_oauth_container slds-is-relative">
-                                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                                    <div class="slds-spinner__dot-a"></div>
-                                    <div class="slds-spinner__dot-b"></div>
-                                </div>
+                                <c:Loading/>
                             </div>
                         </aura:if>
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"

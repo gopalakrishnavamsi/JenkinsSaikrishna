@@ -27,7 +27,7 @@
     <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
 
     <aura:if isTrue="{!v.tableLoading}">
-        <lightning:spinner class="ds-table-loading-spinner" size="medium" alternativeText="{!$Label.c.Loading}"/>
+        <c:Loading/>
     </aura:if>
 
     <div class="slds-scope">

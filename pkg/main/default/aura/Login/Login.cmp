@@ -73,11 +73,7 @@
                     <aura:if isTrue="{!v.loading}">
                         <!-- spinner -->
                         <div class="slds-col slds-m-top_small slds-size_1-of-1">
-                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                                <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                                <div class="slds-spinner__dot-a"></div>
-                                <div class="slds-spinner__dot-b"></div>
-                            </div>
+                            <c:Loading/>
                         </div>
 
                         <!-- login steps -->
@@ -200,11 +196,6 @@
                                                                     {!$Label.c.AccountSelected}
                                                                 </aura:set>
                                                             </aura:if>
-                                                        </li>
-                                                        <li class="slds-m-top_medium ds-regular-text">
-                                                            <lightning:input aura:id="accountFilter"
-                                                                             variant="label-hidden"
-                                                                             type="search"/>
                                                         </li>
                                                         <li class="slds-m-top_medium ds-regular-text ds-account-selection-radioGroup">
                                                             <lightning:radioGroup name="radioGroup"
