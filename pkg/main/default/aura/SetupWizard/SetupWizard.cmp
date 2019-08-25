@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="slds-col slds-p-bottom_medium">
+                            <div class="slds-col slds-p-bottom_medium slds-m-right_medium">
                                 <lightning:button label="{!$Label.c.SetupGetHelp}"
                                                   onclick="{!c.navigateToHelpTab}"></lightning:button>
                             </div>
