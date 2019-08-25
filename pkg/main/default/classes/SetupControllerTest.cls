@@ -554,5 +554,46 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_doPlatformAuthorizationSettingsExist_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
+			Test.stopTest();
+			System.assertEquals(true, result);
+		}
+	}
+
+	@IsTest
+	static void test_doPlatformAuthorizationSettingsExist_negative() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
+			Test.stopTest();
+			System.assertEquals(false, result);
+		}
+	}
+
+	@IsTest
+	static void test_updatePlatformAuth_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Boolean result = SetupController.updatePlatformAuth();
+			Test.stopTest();
+			System.assertEquals(true, result);
+		}
+	}
+
+	@IsTest
+	static void test_getProductsOnAccount_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			List<String> results = SetupController.getProductsOnAccount();
+			Test.stopTest();
+			System.assertEquals(false, results.isEmpty());
+			System.assertEquals(4, results.size());
+		}
+	}
 }
 
