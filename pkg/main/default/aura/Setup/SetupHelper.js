@@ -75,7 +75,7 @@
             helper.createComponent('setupContent', component, 'c:CLMSetupLayout', {login: component.get('v.login')});
           }
 
-          //Authorized and clm product found. load clm admin interface
+          //Authorized and non clm product found. currently either gen or negotiate
           else if (isPlatformAuthorized && (eSignFound || genFound || negotiateFound)) {
             helper.createComponent('setupContent', component, 'c:SetupWizard', {
               login: component.get('v.login'),
