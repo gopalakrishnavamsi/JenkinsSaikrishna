@@ -25,6 +25,8 @@
         //Invoke logic for rendering either Authentication / Esign / CLM components based on authentication states and account products
         helper.renderSetupView(component, event, helper);
       } else if (state === 'ERROR') {
+        var showSetupComponent = component.get('v.showSetupComponent');
+        showSetupComponent();
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     }));
