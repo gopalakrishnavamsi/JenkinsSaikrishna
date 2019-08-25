@@ -66,7 +66,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                  onclick="{!c.navigateToEsignatureTab}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
@@ -82,7 +83,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                  onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
@@ -99,7 +101,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                  onclick="{!c.navigateToNegotiationTab}"></lightning:button>
                             </div>
                         </div>
                     </div>
@@ -123,7 +126,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                  onclick="{!c.navigateToUserManagementTab}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
@@ -140,7 +144,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                  onclick="{!c.navigateToComponentsTab}"></lightning:button>
                             </div>
                         </div>
                     </div>
@@ -162,7 +167,8 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="{!$Label.c.SetupGetHelp}"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupGetHelp}"
+                                                  onclick="{!c.navigateToHelpTab}"></lightning:button>
                             </div>
                         </div>
                     </div>
