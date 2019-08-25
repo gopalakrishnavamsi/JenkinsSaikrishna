@@ -17,7 +17,7 @@
 
         .ds-blue-brand {
             background: rgb(176, 196, 223);
-            background-image: url(/_slds/images/themes/lightning_blue/lightning_blue_background.png);
+            background-image: url({!URLFOR($Resource.lightningBlueBackground)});
             background-repeat: repeat-x;
         }
 
