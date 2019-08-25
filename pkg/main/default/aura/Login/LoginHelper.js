@@ -1,7 +1,7 @@
 ({
   init: function (component, event, helper) {
     //load the steps for slds-path component
-    var steps = [$A.get('$Label.c.LoginToDocuSign'), $A.get('$Label.c.SelectAccountOption'), $A.get('$Label.c.AuthorizeStep')];
+    var steps = [$A.get('$Label.c.LoginToDocuSign'), $A.get('$Label.c.SelectAccountOption'), $A.get('$Label.c.AuthorizeButton')];
     component.set('v.steps', steps);
 
     //get current login details
