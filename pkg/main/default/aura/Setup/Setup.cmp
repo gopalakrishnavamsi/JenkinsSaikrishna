@@ -6,7 +6,6 @@
     <aura:attribute name="showSetupSpinner" type="Object" required="true"/>
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="isLoggedIn" type="Boolean"/>
-    <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="isPlatformAuthorized" type="Boolean"/>
     <aura:attribute name="products" type="String[]"/>
     <aura:attribute name="isTrial" type="Boolean" access="private"/>
@@ -15,8 +14,7 @@
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
 
-    <ltng:require scripts="{!join(',',$Resource.stringUtils, $Resource.uiHelper)}"
-                  afterScriptsLoaded="{!c.onInitialize}"/>
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>

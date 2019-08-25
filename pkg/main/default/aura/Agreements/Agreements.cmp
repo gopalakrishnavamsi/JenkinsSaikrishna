@@ -5,8 +5,6 @@
 
     <ltng:require scripts="{!$Resource.stringUtils}"/>
 
-    <!--TODO : Vf page parameter for toast component   -->
-
     <!-- attributes -->
     <aura:attribute name="namespace" type="String"/>
     <aura:attribute name="message" type="String"/>

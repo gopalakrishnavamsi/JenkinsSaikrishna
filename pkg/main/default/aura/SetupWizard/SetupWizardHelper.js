@@ -9,47 +9,47 @@
         label: '',
         items: [
           {
-            label: 'Home',
+            label: $A.get('$Label.c.TabHome'),
             name: 'tab_home'
           }
         ]
       },
       {
-        label: 'Configuration',
+        label: $A.get('$Label.c.ConfigurationSection'),
         items: [
           {
-            label: 'eSignature',
+            label: $A.get('$Label.c.TabESignature'),
             name: 'tab_eSignature'
           },
           {
-            label: 'Document Generation',
+            label: $A.get('$Label.c.TabDocumentGeneration'),
             name: 'tab_documentGeneration'
           },
           {
-            label: 'Collaboration and Negotiation',
+            label: $A.get('$Label.c.TabNegotiation'),
             name: 'tab_negotiation'
           }
         ]
       },
       {
-        label: 'Administration',
+        label: $A.get('$Label.c.AdministrationSection'),
         items: [
           {
-            label: 'User Management',
+            label: $A.get('$Label.c.TabUserManagement'),
             name: 'tab_userManagement'
           },
           {
-            label: 'Components',
+            label: $A.get('$Label.c.TabComponents'),
             name: 'tab_components'
           },
           {
-            label: 'Help',
+            label: $A.get('$Label.c.TabHelp'),
             name: 'tab_help'
           }
         ]
       }
     ];
     component.set('v.navigationData', sections);
-  },
+  }
 
 });

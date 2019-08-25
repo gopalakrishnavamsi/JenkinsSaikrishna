@@ -1,7 +1,5 @@
 ({
   getState: function (component, event, helper) {
-    var uiHelper = new UIHelper(null, null);
-    component.set('v.uiHelper', uiHelper);
     var showSetupSpinner = component.get('v.showSetupSpinner');
     showSetupSpinner();
     var getLoginStatus = component.get('c.getLogin');
@@ -27,7 +25,7 @@
         //Invoke logic for rendering either Authentication / Esign / CLM components based on authentication states and account products
         helper.renderSetupView(component, event, helper);
       } else if (state === 'ERROR') {
-        helper.showToast(component, uiHelper.getErrorMessage(response), 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     }));
 
@@ -44,8 +42,7 @@
         {
           beginOAuth: component.get('v.beginOAuth'),
           beginSpringOAuth: component.get('v.beginSpringOAuth'),
-          login: component.get('v.login'),
-          uiHelper: component.get('v.uiHelper')
+          login: component.get('v.login')
         }
       );
     } else {
@@ -81,8 +78,7 @@
             helper.createComponent('setupContent', component, 'c:SetupWizard', {
               login: component.get('v.login'),
               showSetupSpinner: component.get('v.showSetupSpinner'),
-              showSetupComponent: component.get('v.showSetupComponent'),
-              uiHelper: component.get('v.uiHelper')
+              showSetupComponent: component.get('v.showSetupComponent')
             });
           }
 
@@ -95,8 +91,7 @@
             helper.createComponent('setupContent', component, 'c:SetupWizard', {
               login: component.get('v.login'),
               showSetupSpinner: component.get('v.showSetupSpinner'),
-              showSetupComponent: component.get('v.showSetupComponent'),
-              uiHelper: component.get('v.uiHelper')
+              showSetupComponent: component.get('v.showSetupComponent')
             });
           }
 
@@ -106,8 +101,7 @@
               {
                 beginOAuth: component.get('v.beginOAuth'),
                 beginSpringOAuth: component.get('v.beginSpringOAuth'),
-                login: component.get('v.login'),
-                uiHelper: component.get('v.uiHelper')
+                login: component.get('v.login')
               }
             );
           }
@@ -148,14 +142,13 @@
 
   fetchAccountProducts: function (component) {
     var getProductsAction = component.get('c.getProductsOnAccount');
-    var uiHelper = component.get('v.uiHelper');
     return new Promise($A.getCallback(function (resolve, reject) {
       getProductsAction.setCallback(this, $A.getCallback(function (response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
         } else if (state === 'ERROR') {
-          reject(uiHelper.getErrorMessage(response));
+          reject(stringUtils.getErrorMessage(response));
         }
       }));
       $A.enqueueAction(getProductsAction);
@@ -182,7 +175,6 @@
     logoutAction.setParams({
       resetUsers: true
     });
-    var uiHelper = component.get('v.uiHelper');
     return new Promise($A.getCallback(function (resolve, reject) {
       logoutAction.setCallback(this, function (response) {
         var state = response.getState();
@@ -190,7 +182,7 @@
           var loginInformation = response.getReturnValue();
           resolve(loginInformation);
         } else if (state === 'ERROR') {
-          reject(uiHelper.getErrorMessage(response));
+          reject(stringUtils.getErrorMessage(response));
         }
       });
       $A.enqueueAction(logoutAction);

@@ -61,5 +61,4 @@
   gotoLoginStep: function (component, event, helper) {
     helper.goToStep(component, 0);
   }
-
 });

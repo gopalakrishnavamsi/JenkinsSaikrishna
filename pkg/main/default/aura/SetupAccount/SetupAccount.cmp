@@ -1,6 +1,7 @@
 <aura:component description="Account Details">
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
+
     <!--register events -->
     <aura:registerEvent name="logoutEvent" type="c:ReloadEvent"/>
 
@@ -12,20 +13,18 @@
                         <img src="{!$Resource.logo}"/>
                     </div>
                 </li>
-                <li class="ds-getStarted">
-                    Get Started with DocuSign Agreements
-                </li>
+                <li class="ds-getStarted">{!$Label.c.GetStartedSetupAccount}</li>
             </ul>
         </div>
         <div class="slds-col">
             <ul>
-                <li class="ds-regular-text">Connected Account</li>
+                <li class="ds-regular-text">{!$Label.c.ConnectedAccountSetupAccount}</li>
                 <li class="ds-bold-text">
                     {!v.login.accounts[0].name}&nbsp;{!v.login.accounts[0].accountNumber}
                 </li>
                 <li>
-                    <h3 title="Disconnect" class="slds-tile__title slds-truncate">
-                        <a aura:id="disconnect" onclick="{!c.triggerLogout}">Disconnect</a>
+                    <h3 title="{!$Label.c.DisconnectSetupAccount}" class="slds-tile__title slds-truncate">
+                        <a aura:id="disconnect" onclick="{!c.triggerLogout}">{!$Label.c.DisconnectSetupAccount}</a>
                     </h3>
                 </li>
             </ul>

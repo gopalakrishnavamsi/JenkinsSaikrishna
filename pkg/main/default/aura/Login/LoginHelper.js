@@ -1,7 +1,7 @@
 ({
   init: function (component, event, helper) {
     //load the steps for slds-path component
-    var steps = ['Log in to DocuSign', 'Select an Account', 'Authorize'];
+    var steps = [$A.get('$Label.c.LoginToDocuSign'), $A.get('$Label.c.SelectAccountOption'), $A.get('$Label.c.AuthorizeStep')];
     component.set('v.steps', steps);
 
     //get current login details
@@ -80,7 +80,6 @@
   },
 
   checkPlatformAuthorizationSettings: function (component) {
-    var uiHelper = component.get('v.uiHelper');
     var checkAction = component.get('c.doPlatformAuthorizationSettingsExist');
     return new Promise($A.getCallback(function (resolve, reject) {
       checkAction.setCallback(this, $A.getCallback(function (response) {
@@ -88,7 +87,7 @@
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
         } else if (state === 'ERROR') {
-          reject(uiHelper.getErrorMessage(response));
+          reject(stringUtils.getErrorMessage(response));
         }
       }));
       $A.enqueueAction(checkAction);
@@ -116,6 +115,7 @@
       )
       .catch(function (error) {
           helper.showToast(component, error, 'error');
+        component.set('v.loading', false);
         }
       );
   },
@@ -136,10 +136,6 @@
 
     component.set('v.login', loginInformation);
     component.set('v.isLoggedIn', isLoggedIn);
-
-    // TODO: Fix trial accounts
-    component.set('v.isTrial', false);
-    component.set('v.isTrialExpired', false);
 
     var accountOptions = [];
     //single account and settings have been saved
@@ -180,7 +176,6 @@
 
   accountSelected: function (component, event, helper) {
     var isLoggedIn = component.get('v.isLoggedIn');
-    var uiHelper = component.get('v.uiHelper');
 
     if (!isLoggedIn) {
       var setAccountAction = component.get('c.setAccount');
@@ -199,7 +194,7 @@
           component.set('v.loading', false);
           helper.gotoAuthorizationStep(component, helper);
         } else if (state === 'ERROR') {
-          helper.showToast(component, uiHelper.getErrorMessage(response), 'error');
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
         }
       }));
       $A.enqueueAction(setAccountAction);
@@ -210,7 +205,6 @@
   },
 
   logout: function (component) {
-    var uiHelper = component.get('v.uiHelper');
     var logoutAction = component.get('c.logout');
     logoutAction.setParams({
       resetUsers: true
@@ -222,7 +216,7 @@
           var loginInformation = response.getReturnValue();
           resolve(loginInformation);
         } else if (state === 'ERROR') {
-          reject(uiHelper.getErrorMessage(response));
+          reject(stringUtils.getErrorMessage(response));
         }
       });
       $A.enqueueAction(logoutAction);
@@ -252,5 +246,4 @@
     }
     component.set('v.loading', false);
   }
-
 });

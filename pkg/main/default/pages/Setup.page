@@ -37,10 +37,10 @@
 
     <script type="text/javascript">
       var navigateToURL = function (event) {
-
         var url = event.getParam('url');
         window.open(url, '_blank');
       };
+
       function showError(component, message) {
         var evt = component.getEvent('toastEvent');
         evt.setParams({
@@ -86,10 +86,12 @@
               w.focus();
             } else {
               showError(component, event.message);
+              component.set('v.loading', false);
             }
           });
         } catch (err) {
           showError(component, err);
+          component.set('v.loading', false);
         }
       }
 
@@ -126,10 +128,12 @@
 
             } else {
               showError(component, event.message);
+              component.set('v.loading', false);
             }
           });
         } catch (err) {
           showError(component, err);
+          component.set('v.loading', false);
         }
       }
 
@@ -150,9 +154,6 @@
           showSetupComponent: showSetupComponent,
           showSetupSpinner: showSetupSpinner
         }, 'ds-unifiedAppSetupSection', function (component, status, errorMessage) {
-          //TODO: add the logic for handling component instantiation errors
-          if (null == errorMessage) {
-          }
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });
       });

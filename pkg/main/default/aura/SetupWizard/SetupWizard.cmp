@@ -1,11 +1,11 @@
 <aura:component description="SetupWizard" controller="SetupController">
+
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="navigationData" type="Object"/>
     <aura:attribute name="selectedItem" type="String" default="tab_home"/>
     <aura:attribute name="showSetupSpinner" type="Object"/>
     <aura:attribute name="showSetupComponent" type="Object"/>
-    <aura:attribute name="uiHelper" type="Object"/>
 
     <!--register events -->
     <aura:registerEvent name="logoutEvent" type="c:ReloadEvent"/>
@@ -15,8 +15,8 @@
     <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
 
     <div class="slds-grid">
+        <!-- left hand side nav bar -->
         <div class="slds-col slds-large-size_1-of-6 slds-medium-size_1-of-3">
-
             <!-- Navigation items start here -->
             <lightning:verticalNavigation selectedItem="{!v.selectedItem}" onselect="{!c.handleSelect}"
                                           class="ds-admin-sidebar">
@@ -39,11 +39,10 @@
                 </aura:iteration>
             </lightning:verticalNavigation>
             <!-- Navigation items end here -->
-
         </div>
 
+        <!-- center section -->
         <div class="slds-col slds-large-size_5-of-6 slds-medium-size_2-of-3 ds-admin-centerSpace slds-m-around_small">
-
             <!-- Home section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_home'}">
                 <!-- Account Details -->
@@ -52,7 +51,7 @@
                 </div>
                 <!-- Configuration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
-                    <div class="slds-text-title_caps slds-m-bottom_small">Configuration</div>
+                    <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.ConfigurationSection}</div>
                     <div class="slds-box">
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
                             <div class="slds-col">
@@ -61,14 +60,13 @@
                                         <lightning:icon iconName="standard:email_chatter" size="large"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">E-Signature</p>
-                                        <p>Customize default email messaging, setup reminders and envelope expiration
-                                            days.</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabESignature}</p>
+                                        <p>{!$Label.c.TabESignatureHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="Configure"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
@@ -78,14 +76,13 @@
                                         <lightning:icon iconName="standard:contract" size="large"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">Document Generation</p>
-                                        <p>In one-click, generate polished, customizable agreements with your Salesforce
-                                            data.</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration}</p>
+                                        <p>{!$Label.c.TabDocumentGenerationHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="Configure"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
@@ -96,14 +93,13 @@
                                                         class="ds-negotiation-icon-background"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">Collaboration and Negotiation</p>
-                                        <p>Send agreements for approval internally, and review with third parties with
-                                            ease.</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}</p>
+                                        <p>{!$Label.c.TabNegotiationHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="Configure"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
                             </div>
                         </div>
                     </div>
@@ -111,7 +107,7 @@
                 </div>
                 <!-- Administration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
-                    <div class="slds-text-title_caps slds-m-bottom_small">Administration</div>
+                    <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.AdministrationSection}</div>
                     <div class="slds-box">
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
                             <div class="slds-col">
@@ -121,13 +117,13 @@
                                                         class="ds-userManagement-icon-background"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">User Management</p>
-                                        <p>Give your team members access to DocuSign Agreements features.</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabUserManagement}</p>
+                                        <p>{!$Label.c.TabUserManagementHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="Configure"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
@@ -138,13 +134,13 @@
                                                         class="ds-components-icon-background"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">Components</p>
-                                        <p>Customize layouts and experiences by adding buttons and components</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabComponents}</p>
+                                        <p>{!$Label.c.TabComponentsHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="Configure"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupConfigure}"></lightning:button>
                             </div>
                         </div>
                     </div>
@@ -160,14 +156,13 @@
                                         <img src="{!$Resource.HavingTrouble}"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">Having trouble?</p>
-                                        <p>At DocuSign, we are dedicated to your success. We've created a Help page to
-                                            provide answers to common questions for DocuSign Agreements.</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.HavingTrouble}</p>
+                                        <p>{!$Label.c.TabHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="Get Help"></lightning:button>
+                                <lightning:button label="{!$Label.c.SetupGetHelp}"></lightning:button>
                             </div>
                         </div>
                     </div>
@@ -178,19 +173,19 @@
 
             <!-- eSignature section starts here-->
             <aura:if isTrue="{!v.selectedItem == 'tab_eSignature'}">
-                This is eSignature section.
+                <c:SetupEsignature/>
             </aura:if>
             <!-- eSignature ends here-->
 
             <!-- document generation section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_documentGeneration'}">
-                This is document generation section.
+                <c:SetupDocumentGeneration/>
             </aura:if>
             <!-- document generation section ends here-->
 
             <!-- negotiation section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_negotiation'}">
-                This is negotiation section.
+                <c:SetupNegotiation/>
             </aura:if>
             <!-- negotiation section ends here-->
 
@@ -205,13 +200,13 @@
 
             <!-- components section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_components'}">
-                This is components section.
+                <c:SetupComponents/>
             </aura:if>
             <!-- components section ends here -->
 
             <!-- help section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_help'}">
-                This is help section.
+                <c:SetupHelp/>
             </aura:if>
             <!-- help section ends here -->
 

@@ -1,10 +1,10 @@
-<aura:component description="UnifiedAppLogin" controller="SetupController">
+<aura:component description="Login" controller="SetupController">
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
     <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
     <aura:attribute name="steps" type="String[]" access="private"/>
-    <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="isLoggedIn" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isPlatformAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="platformAuthorizationSettingsFound" type="Boolean" default="false" access="private"/>
@@ -16,7 +16,8 @@
     <aura:attribute name="advancedOptionsExpanded" type="Boolean" access="private"/>
     <aura:attribute name="accountOptions" type="List" access="private"/>
     <aura:attribute name="config" type="Object" access="private"/>
-    <aura:attribute name="uiHelper" type="Object"/>
+
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
 
     <!--register events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
@@ -26,7 +27,6 @@
     <aura:registerEvent name="springOauthEvent" type="c:OAuthEvent"/>
 
     <!--register handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
     <aura:handler name="springOauthEvent" event="c:OAuthEvent" action="{!c.handleSpringOAuthEvent}"/>
@@ -37,7 +37,7 @@
                 <div class="slds-col slds-align-middle slds-size_1-of-1">
                     <!--Path Header -->
                     <div class="slds-text-align_center ds-unifiedApp-login-path-header">
-                        Connect DocuSign to Salesforce
+                        {!$Label.c.ConnectDocuSignToSalesforce}
                     </div>
                     <!--Path, Check if additional classes are to be added for spinners and padding according to the Gen template component -->
                     <div class="slds-path slds-p-top_medium">
@@ -82,6 +82,7 @@
 
                         <!-- login steps -->
                         <aura:set attribute="else">
+                            <!-- first step choose environment and enter account credentials -->
                             <aura:if isTrue="{!v.currentStep == 0}">
                                 <!-- Login Chooser -->
                                 <div class="slds-col slds-m-top_small slds-size_1-of-1">
@@ -93,26 +94,19 @@
                                                 </div>
                                                 <div class="slds-media__body slds-m-left_medium slds-m-top_large">
                                                     <ul>
-                                                        <li class="ds-loginToDocuSign-text">Log in to Your DocuSign
-                                                            Account
-                                                        </li>
-                                                        <li class="slds-m-top_xx-small ds-regular-text">Disable your
-                                                            browser's
-                                                            pop-up blocker
-                                                            before logging in.
-                                                        </li>
+                                                        <li class="ds-loginToDocuSign-text">{!$Label.c.LogInToDocuSignAccount}</li>
+                                                        <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.DisablePopUp}</li>
                                                         <li class="slds-m-top_medium">
-                                                            <lightning:button variant="brand" label="Log in to DocuSign"
+                                                            <lightning:button variant="brand"
+                                                                              label="{!$Label.c.LoginToDocuSign}"
                                                                               onclick="{!c.loginToProductionDocuSignEnvironment}"></lightning:button>
                                                         </li>
                                                         <li class="slds-m-top_large">
                                                             <ul class="slds-list_horizontal ds-bold-text">
-                                                                <li>Don't have an account?</li>
+                                                                <li>{!$Label.c.DontHaveAnAccount}</li>
                                                                 <li class="slds-m-left_xxx-small">
-                                                                    <a aura:id="signupLink" onclick="{!c.signUp}">Sign
-                                                                        up
-                                                                        for
-                                                                        free.</a>
+                                                                    <a aura:id="signupLink"
+                                                                       onclick="{!c.signUp}">{!$Label.c.SignUpForFree}</a>
                                                                 </li>
                                                             </ul>
 
@@ -133,34 +127,26 @@
                                                 class="slds-button slds-section__title-action">
                                             <lightning:icon
                                                     iconName="{!v.advancedOptionsExpanded ? 'utility:chevrondown' : 'utility:chevronright'}"
-                                                    size="xx-small"
-                                                    alternativeText="expand advanced options"/>
+                                                    size="xx-small"/>
                                             <span class="slds-section__title_xx-small slds-m-left_xx-small">{!$Label.c.AdvancedOptions}</span>
                                         </button>
                                         <div id="advanced-options"
                                              class="slds-section__content slds-m-top_x-small slds-m-bottom_large">
                                             <ul>
                                                 <li class="ds-regular-text">
-                                                    Only select an alternated DocuSign environment if you are not using
-                                                    a
-                                                    production
-                                                    account.
+                                                    {!$Label.c.NonProductionHelpText}
                                                 </li>
                                                 <li class="slds-m-top_large">
                                                     <div class="slds-grid slds-grid_align-spread slds-p-bottom_large slds-border_bottom">
                                                         <div class="slds-col">
                                                             <ul>
-                                                                <li class="ds-bold-text">DocuSign Demo</li>
-                                                                <li class="ds-regular-text">Use this if you're using a
-                                                                    DocuSign demo
-                                                                    or sandbox
-                                                                    account.
-                                                                </li>
+                                                                <li class="ds-bold-text">{!$Label.c.DocuSignDemo}</li>
+                                                                <li class="ds-regular-text">{!$Label.c.DemoHelpText}</li>
                                                             </ul>
                                                         </div>
                                                         <div class="slds-col">
                                                             <lightning:button variant="neutral"
-                                                                              label="Log in to Demo Account"
+                                                                              label="{!$Label.c.LoginToDemo}"
                                                                               onclick="{!c.loginToDemoDocuSignEnvironment}"></lightning:button>
                                                         </div>
                                                     </div>
@@ -169,14 +155,8 @@
                                                     <div class="slds-grid slds-grid_align-spread">
                                                         <div class="slds-col">
                                                             <ul>
-                                                                <li class="ds-bold-text">Stage or Testing Environment
-                                                                </li>
-                                                                <li class="ds-regular-text">Use this if you're testing
-                                                                    or
-                                                                    staging
-                                                                    account has a
-                                                                    custom URL.
-                                                                </li>
+                                                                <li class="ds-bold-text">{!$Label.c.TestingEnvironment}</li>
+                                                                <li class="ds-regular-text">{!$Label.c.TestingEnvironmentHelpText}</li>
                                                             </ul>
                                                         </div>
                                                         <div class="slds-col">
@@ -188,7 +168,7 @@
                                                                 </li>
                                                                 <li class="slds-m-left_small">
                                                                     <lightning:button variant="neutral"
-                                                                                      label="Log in"
+                                                                                      label="{!$Label.c.LogIn}"
                                                                                       onclick="{!c.loginToOtherDocuSignEnvironment}"></lightning:button>
                                                                 </li>
                                                             </ul>
@@ -201,7 +181,7 @@
                                 </div>
                                 <!-- End of Advanced options -->
                             </aura:if>
-
+                            <!-- second step select account -->
                             <aura:if isTrue="{!v.currentStep == 1}">
                                 <div class="slds-col slds-m-top_small slds-size_1-of-1">
                                     <div class="slds-box">
@@ -217,9 +197,7 @@
                                                             <aura:if isTrue="{!v.multipleAccountsFound}">
                                                                 {!$Label.c.MultipleAccountsMessage}
                                                                 <aura:set attribute="else">
-                                                                    DocuSign account selected click Next to proceed to
-                                                                    the
-                                                                    Authorization step.
+                                                                    {!$Label.c.AccountSelected}
                                                                 </aura:set>
                                                             </aura:if>
                                                         </li>
@@ -239,11 +217,11 @@
                                                             <ul class="slds-list_horizontal">
                                                                 <lightning:button class="slds-theme_brand"
                                                                                   variant="neutral"
-                                                                                  label="Back"
+                                                                                  label="{!$Label.c.Back}"
                                                                                   iconName="utility:chevronleft"
                                                                                   onclick="{!c.gotoLoginStep}"/>
                                                                 <lightning:button
-                                                                        label="{!if(v.multipleAccountsFound, 'Select' ,'Next')}"
+                                                                        label="{!if(v.multipleAccountsFound, $Label.c.Select, $Label.c.Next)}"
                                                                         variant="brand"
                                                                         class="ds-button-left-margin"
                                                                         onclick="{!c.accountSelected}"
@@ -258,7 +236,7 @@
                                     </div>
                                 </div>
                             </aura:if>
-
+                            <!-- third step authorize access to Salesforce -->
                             <aura:if isTrue="{!v.currentStep == 2}">
                                 <div class="slds-col slds-p-top_small slds-size_1-of-1">
                                     <div class="slds-box">
@@ -269,49 +247,36 @@
                                                 </div>
                                                 <div class="slds-media__body slds-m-left_medium slds-m-top_large">
                                                     <ul>
-                                                        <li class="ds-loginToDocuSign-text">Authorize Access to
-                                                            Salesforce
-                                                        </li>
+                                                        <li class="ds-loginToDocuSign-text">{!$Label.c.AuthorizeAccess}</li>
                                                         <aura:if isTrue="{!v.platformAuthorizationSettingsFound}">
-                                                            <li class="slds-m-top_xx-small ds-regular-text">This access
-                                                                allows us to
-                                                                upload documents to Salesforce and attach them to
-                                                                records
-                                                                where your
-                                                                organization needs them.
-                                                            </li>
+                                                            <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizeHelpText}</li>
                                                             <aura:set attribute="else">
-                                                                <li class="slds-m-top_xx-small ds-regular-text">
-                                                                    Authorization settings are
-                                                                    not present for the selected DocuSign Account. This
-                                                                    option will be available once
-                                                                    products that require DocuSign systems to access
-                                                                    Salesforce are added on the Account.
-                                                                </li>
+                                                                <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizationSettingsNotPresent}</li>
                                                             </aura:set>
                                                         </aura:if>
                                                         <li class="slds-m-top_large">
                                                             <ul class="slds-list_horizontal">
                                                                 <lightning:button class="slds-theme_brand"
                                                                                   variant="neutral"
-                                                                                  label="Back"
+                                                                                  label="{!$Label.c.Back}"
                                                                                   iconName="utility:chevronleft"
                                                                                   onclick="{!c.gotoSelectAccountStep}"/>
 
                                                                 <aura:if
                                                                         isTrue="{!v.platformAuthorizationSettingsFound}">
-                                                                    <lightning:button label="Allow Access"
+                                                                    <lightning:button label="{!$Label.c.AllowAccess}"
                                                                                       variant="brand"
                                                                                       class="ds-button-left-margin"
                                                                                       onclick="{!c.completePlatformOAuth}"
                                                                                       disabled="{!not(v.isLoggedIn)}"/>
 
                                                                     <aura:set attribute="else">
-                                                                        <lightning:button label="Complete setup"
-                                                                                          variant="brand"
-                                                                                          class="ds-button-left-margin"
-                                                                                          onclick="{!c.completeSetup}"
-                                                                                          disabled="{!not(v.isLoggedIn)}"/>
+                                                                        <lightning:button
+                                                                                label="{!$Label.c.CompleteSetupAuthorization}"
+                                                                                variant="brand"
+                                                                                class="ds-button-left-margin"
+                                                                                onclick="{!c.completeSetup}"
+                                                                                disabled="{!not(v.isLoggedIn)}"/>
                                                                     </aura:set>
                                                                 </aura:if>
                                                             </ul>
@@ -324,7 +289,6 @@
                                     </div>
                                 </div>
                             </aura:if>
-
                         </aura:set>
                     </aura:if>
                 </div>
