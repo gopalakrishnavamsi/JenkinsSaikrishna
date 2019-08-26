@@ -232,7 +232,7 @@ public with sharing class SetupController extends Controller {
 			return products;
 
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
+			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
 	}
 }
