@@ -593,10 +593,6 @@
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
-		<label>Demo</label>
-		<name>Demo</name>
-	</customLabels>
-	<customLabels>
 		<label>Denmark</label>
 		<name>Denmark</name>
 	</customLabels>
@@ -1639,10 +1635,6 @@
 	<customLabels>
 		<label>Private Message</label>
 		<name>PrivateMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>Production</label>
-		<name>Production</name>
 	</customLabels>
 	<customLabels>
 		<label>Puerto Rico</label>
@@ -3219,10 +3211,6 @@
 	<customLabels>
 		<label>There was an error in canceling the Agreement. Please try again after some time.</label>
 		<name>AgreementCancelErrorMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>HQTEST3</label>
-		<name>HQTEST3</name>
 	</customLabels>
 	<customLabels>
 		<label>Your document has been sent for review and copied to the DocuSign Agreements space.</label>

@@ -110,7 +110,7 @@
           component.set('v.isLoggedIn', false);
           component.set('v.selectedAccountNumber', null);
           var beginOAuth = component.get('v.beginOAuth');
-          beginOAuth(component, component.get('v.environment') || 'Production', component.get('v.otherUrl') || null);
+        beginOAuth(component, component.get('v.environment'), component.get('v.otherUrl') || null);
         }
       )
       .catch(function (error) {

@@ -16,12 +16,12 @@
   },
 
   loginToProductionDocuSignEnvironment: function (component, event, helper) {
-    component.set('v.environment', $A.get('$Label.c.Production'));
+    component.set('v.environment', 'Production');
     helper.beginOAuth(component, event, helper);
   },
 
   loginToDemoDocuSignEnvironment: function (component, event, helper) {
-    component.set('v.environment', $A.get('$Label.c.Demo'));
+    component.set('v.environment', 'Demo');
     helper.beginOAuth(component, event, helper);
   },
 

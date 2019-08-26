@@ -1289,14 +1289,6 @@
 		<value>Delivered</value>
 	</labels>
 	<labels>
-		<fullName>Demo</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Demo</shortDescription>
-		<value>Demo</value>
-	</labels>
-	<labels>
 		<fullName>Denmark</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3443,14 +3435,6 @@
 		<protected>true</protected>
 		<shortDescription>Note</shortDescription>
 		<value>Private Message</value>
-	</labels>
-	<labels>
-		<fullName>Production</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Production</shortDescription>
-		<value>Production</value>
 	</labels>
 	<labels>
 		<fullName>PuertoRico</fullName>
@@ -6385,13 +6369,6 @@
 		<protected>true</protected>
 		<shortDescription>AgreementDeleted</shortDescription>
 		<value>The {0} agreement has been deleted.</value>
-	</labels>
-	<labels>
-		<fullName>HQTEST3</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>HQTEST3</shortDescription>
-		<value>HQTEST3</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewSuccess</fullName>
