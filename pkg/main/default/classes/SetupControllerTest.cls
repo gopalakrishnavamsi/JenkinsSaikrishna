@@ -576,16 +576,6 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_updatePlatformAuth() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			Test.startTest();
-			Boolean result = SetupController.updatePlatformAuth();
-			Test.stopTest();
-			System.assertEquals(true, result);
-		}
-	}
-
-	@IsTest
 	static void test_getProductsOnAccount_positive() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();

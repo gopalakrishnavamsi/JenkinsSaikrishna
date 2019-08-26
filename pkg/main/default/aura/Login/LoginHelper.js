@@ -86,7 +86,7 @@
         var state = response.getState();
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
-        } else if (state === 'ERROR') {
+        } else {
           reject(stringUtils.getErrorMessage(response));
         }
       }));
@@ -193,7 +193,7 @@
           helper.setLoggedIn(component, loginInformation);
           component.set('v.loading', false);
           helper.gotoAuthorizationStep(component, helper);
-        } else if (state === 'ERROR') {
+        } else {
           helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
         }
       }));
@@ -215,7 +215,7 @@
         if (state === 'SUCCESS') {
           var loginInformation = response.getReturnValue();
           resolve(loginInformation);
-        } else if (state === 'ERROR') {
+        } else {
           reject(stringUtils.getErrorMessage(response));
         }
       });

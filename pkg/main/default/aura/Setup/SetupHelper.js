@@ -24,7 +24,7 @@
         component.set('v.isTrialExpired', false);
         //Invoke logic for rendering either Authentication / Esign / CLM components based on authentication states and account products
         helper.renderSetupView(component, event, helper);
-      } else if (state === 'ERROR') {
+      } else {
         var showSetupComponent = component.get('v.showSetupComponent');
         showSetupComponent();
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
@@ -149,7 +149,7 @@
         var state = response.getState();
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
-        } else if (state === 'ERROR') {
+        } else {
           reject(stringUtils.getErrorMessage(response));
         }
       }));
@@ -183,7 +183,7 @@
         if (state === 'SUCCESS') {
           var loginInformation = response.getReturnValue();
           resolve(loginInformation);
-        } else if (state === 'ERROR') {
+        } else {
           reject(stringUtils.getErrorMessage(response));
         }
       });

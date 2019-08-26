@@ -1,4 +1,4 @@
-<apex:page sidebar="false" showHeader="true" controller="SetupController" title="DocuSign Unified App Setup">
+<apex:page sidebar="false" showHeader="true" controller="SetupController" title="{!$Label.SetupPageTitle}">
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <apex:includeLightning/>
     <apex:slds/>

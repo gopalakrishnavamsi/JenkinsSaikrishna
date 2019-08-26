@@ -4657,7 +4657,7 @@
 		<name>DontHaveAnAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Only select an alternated DocuSign environment if you are not using a production account.</label>
+		<label>Only select an alternate DocuSign environment if you are not using a production account.</label>
 		<name>NonProductionHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4673,15 +4673,15 @@
 		<name>LoginToDemo</name>
 	</customLabels>
 	<customLabels>
-		<label>Stage or Testing Environment</label>
+		<label>Stage or Test Environment</label>
 		<name>TestingEnvironment</name>
 	</customLabels>
 	<customLabels>
-		<label>Use this if you're testing or staging account has a custom URL.</label>
+		<label>Use this if you're test or stage account has a custom URL.</label>
 		<name>TestingEnvironmentHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign account selected click Next to proceed to the Authorization step.</label>
+		<label>DocuSign account selected. Click Next to proceed to the Authorization step.</label>
 		<name>AccountSelected</name>
 	</customLabels>
 	<customLabels>
@@ -4765,11 +4765,11 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Customize default email messaging, setup reminders and envelope expiration days.</label>
+		<label>Customize default email messaging, set up reminders and envelope expiration days.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>In one-click, generate polished, customizable agreements with your Salesforce data.</label>
+		<label>In one click, generate polished, customizable agreements with your Salesforce data.</label>
 		<name>TabDocumentGenerationHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4789,6 +4789,10 @@
 			questions for DocuSign Agreements.
 		</label>
 		<name>TabHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Setup</label>
+		<name>SetupPageTitle</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

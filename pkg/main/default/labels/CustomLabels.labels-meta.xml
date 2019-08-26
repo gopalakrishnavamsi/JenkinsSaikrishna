@@ -8914,7 +8914,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>NonProductionHelpText</shortDescription>
-		<value>Only select an alternated DocuSign environment if you are not using a production account.</value>
+		<value>Only select an alternate DocuSign environment if you are not using a production account.</value>
 	</labels>
 	<labels>
 		<fullName>DocuSignDemo</fullName>
@@ -8946,7 +8946,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TestingEnvironment</shortDescription>
-		<value>Stage or Testing Environment</value>
+		<value>Stage or Test Environment</value>
 	</labels>
 	<labels>
 		<fullName>TestingEnvironmentHelpText</fullName>
@@ -8954,7 +8954,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TestingEnvironmentHelpText</shortDescription>
-		<value>Use this if you're testing or staging account has a custom URL.</value>
+		<value>Use this if you're test or stage account has a custom URL.</value>
 	</labels>
 	<labels>
 		<fullName>AccountSelected</fullName>
@@ -8962,7 +8962,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AccountSelected</shortDescription>
-		<value>DocuSign account selected click Next to proceed to the Authorization step.</value>
+		<value>DocuSign account selected. Click Next to proceed to the Authorization step.</value>
 	</labels>
 	<labels>
 		<fullName>AuthorizeAccess</fullName>
@@ -9126,7 +9126,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabESignatureHelpText</shortDescription>
-		<value>Customize default email messaging, setup reminders and envelope expiration days.</value>
+		<value>Customize default email messaging, set up reminders and envelope expiration days.</value>
 	</labels>
 	<labels>
 		<fullName>TabDocumentGenerationHelpText</fullName>
@@ -9134,7 +9134,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabDocumentGenerationHelpText</shortDescription>
-		<value>In one-click, generate polished, customizable agreements with your Salesforce data.</value>
+		<value>In one click, generate polished, customizable agreements with your Salesforce data.</value>
 	</labels>
 	<labels>
 		<fullName>TabNegotiationHelpText</fullName>
@@ -9169,5 +9169,13 @@
 		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
 			questions for DocuSign Agreements.
 		</value>
+	</labels>
+	<labels>
+		<fullName>SetupPageTitle</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupPageTitle</shortDescription>
+		<value>DocuSign Setup</value>
 	</labels>
 </CustomLabels>
