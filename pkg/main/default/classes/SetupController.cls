@@ -220,16 +220,9 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<String> getProductsOnAccount() {
+	public static List<Product> getProductsOnAccount() {
 		try {
-			List<String> products = new List<String>();
-			List<ProductSettings__c> productSettings = ProductSettings__c.getall().values();
-			if (!productSettings.isEmpty()) {
-				for (ProductSettings__c product : productSettings) {
-					products.add(product.Name);
-				}
-			}
-			return products;
+			return AccountProducts.getProducts();
 
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');

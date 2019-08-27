@@ -2042,7 +2042,7 @@ private class AuthServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.success);
-			System.assertEquals(Label.SuccessDocuSignGenAuthorization, result.message);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
 		}
 	}
 
@@ -2097,7 +2097,7 @@ private class AuthServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.success);
-			System.assertEquals(Label.SuccessDocuSignGenAuthorization, result.message);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
 			System.assert(AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
 		}
 	}

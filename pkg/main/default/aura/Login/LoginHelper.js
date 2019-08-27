@@ -19,7 +19,7 @@
       var accountOptions = [];
       component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber);
       accountOptions.push({
-        'label': loginInformation.accounts[0].name + ' - ' + loginInformation.accounts[0].accountNumber,
+        'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), loginInformation.accounts[0].name, loginInformation.accounts[0].accountNumber),
         'value': loginInformation.accounts[0].accountNumber
       });
       component.set('v.multipleAccountsFound', false);
@@ -142,7 +142,7 @@
     if (isLoggedIn) {
       component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber);
       accountOptions.push({
-        'label': loginInformation.accounts[0].name + ' - ' + loginInformation.accounts[0].accountNumber,
+        'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), loginInformation.accounts[0].name, loginInformation.accounts[0].accountNumber),
         'value': loginInformation.accounts[0].accountNumber
       });
       component.set('v.multipleAccountsFound', false);
@@ -157,7 +157,8 @@
           component.set('v.selectedAccountNumber', account.accountNumber);
         }
         accountOptions.push({
-          'label': account.name + ' - ' + account.accountNumber, 'value': account.accountNumber
+          'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), account.name, account.accountNumber),
+          'value': account.accountNumber
         });
       });
       component.set('v.accountOptions', accountOptions);

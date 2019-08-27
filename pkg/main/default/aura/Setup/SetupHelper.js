@@ -59,13 +59,13 @@
           var negotiateFound = false;
           //No valid products on the account handle case here
           component.get('v.products').forEach(function (product) {
-            if (product === 'e_sign') {
+            if (product.name === 'e_sign') {
               eSignFound = true;
-            } else if (product === 'gen') {
+            } else if (product.name === 'gen') {
               genFound = true;
-            } else if (product === 'clm') {
+            } else if (product.name === 'clm') {
               clmFound = true;
-            } else if (product === 'negotiate') {
+            } else if (product.name === 'negotiate') {
               negotiateFound = true;
             }
           });

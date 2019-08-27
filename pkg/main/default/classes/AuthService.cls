@@ -1327,7 +1327,7 @@ public with sharing class AuthService {
 						LoggerService.getInstance().error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
 						results = SpringOAuthLoginInformation.failure(Label.UnableToConnectDocuSignGen);
 					} else {
-						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignGenAuthorization);
+						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignAuthorization);
 					}
 				} else {
 					results = SpringOAuthLoginInformation.failure(Label.MissingDocuSignGenAuthorizationSettings);

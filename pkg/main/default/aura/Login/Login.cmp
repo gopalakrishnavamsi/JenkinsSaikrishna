@@ -158,14 +158,16 @@
                                                         <div class="slds-col">
                                                             <ul class="slds-list_horizontal">
                                                                 <li>
-                                                                    <lightning:input type="text" placeholder="Type Text"
+                                                                    <lightning:input type="text"
+                                                                                     placeholder="{!$Label.c.EnvironmentName}"
                                                                                      variant="label-hidden"
                                                                                      value="{!v.environment}"></lightning:input>
                                                                 </li>
                                                                 <li class="slds-m-left_small">
                                                                     <lightning:button variant="neutral"
                                                                                       label="{!$Label.c.LogIn}"
-                                                                                      onclick="{!c.loginToOtherDocuSignEnvironment}"></lightning:button>
+                                                                                      onclick="{!c.loginToOtherDocuSignEnvironment}"
+                                                                                      disabled="{!(empty(v.environment))}"></lightning:button>
                                                                 </li>
                                                             </ul>
                                                         </div>

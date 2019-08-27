@@ -1,6 +1,10 @@
 <aura:component description="Account Details">
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="accountName" type="String" access="private"/>
+
+    <!-- scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <!--register events -->
     <aura:registerEvent name="logoutEvent" type="c:ReloadEvent"/>
@@ -19,9 +23,7 @@
         <div class="slds-col">
             <ul>
                 <li class="ds-regular-text">{!$Label.c.ConnectedAccountSetupAccount}</li>
-                <li class="ds-bold-text">
-                    {!v.login.accounts[0].name}&nbsp;{!v.login.accounts[0].accountNumber}
-                </li>
+                <li class="ds-bold-text">{!v.accountName}</li>
                 <li>
                     <h3 title="{!$Label.c.DisconnectSetupAccount}" class="slds-tile__title slds-truncate">
                         <a aura:id="disconnect" onclick="{!c.triggerLogout}">{!$Label.c.DisconnectSetupAccount}</a>

@@ -460,7 +460,7 @@ private class SetupControllerTest {
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
 			System.assert(loginInformation.success);
-			System.assertEquals(Label.SuccessDocuSignGenAuthorization, loginInformation.message);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, loginInformation.message);
 			Test.stopTest();
 		}
 	}
@@ -577,23 +577,27 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getProductsOnAccount_positive() {
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
-			List<String> results = SetupController.getProductsOnAccount();
+			List<Product> productsList = SetupController.getProductsOnAccount();
 			Test.stopTest();
-			System.assertEquals(false, results.isEmpty());
-			System.assertEquals(4, results.size());
+			System.assertEquals(false, productsList.isEmpty());
+			System.assertEquals(4, productsList.size());
 		}
 	}
 
 	@IsTest
-	static void test_getProductsOnAccount_negative() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+	static void test_getProductsOnAccount_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
-			List<String> results = SetupController.getProductsOnAccount();
+			try {
+				List<Product> productsList = SetupController.getProductsOnAccount();
+				throw new AssertException('Expected getProducts to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
 			Test.stopTest();
-			System.assertEquals(true, results.isEmpty());
-			System.assertEquals(0, results.size());
 		}
 	}
 }

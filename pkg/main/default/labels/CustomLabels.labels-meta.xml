@@ -6168,11 +6168,11 @@
 		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.</value>
 	</labels>
 	<labels>
-		<fullName>SuccessDocuSignGenAuthorization</fullName>
+		<fullName>SuccessDocuSignAuthorization</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>SuccessDocuSignGenAuthorization</shortDescription>
-		<value>Successfully connected and authorized to DocuSign Gen.</value>
+		<shortDescription>SuccessDocuSignAuthorization</shortDescription>
+		<value>Successfully connected and authorized to DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>SuccessDocuSignGenTrial</fullName>
@@ -9154,5 +9154,13 @@
 		<protected>true</protected>
 		<shortDescription>SetupPageTitle</shortDescription>
 		<value>DocuSign Setup</value>
+	</labels>
+	<labels>
+		<fullName>EnvironmentName</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvironmentName</shortDescription>
+		<value>Environment Name</value>
 	</labels>
 </CustomLabels>

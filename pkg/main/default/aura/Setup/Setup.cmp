@@ -7,7 +7,7 @@
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="isLoggedIn" type="Boolean"/>
     <aura:attribute name="isPlatformAuthorized" type="Boolean"/>
-    <aura:attribute name="products" type="String[]"/>
+    <aura:attribute name="products" type="Product[]"/>
     <aura:attribute name="isTrial" type="Boolean" access="private"/>
     <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
     <aura:attribute name="message" type="String"/>

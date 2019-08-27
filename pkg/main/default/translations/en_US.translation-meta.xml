@@ -3117,8 +3117,8 @@
 		<name>UnableToConnectDocuSignGen</name>
 	</customLabels>
 	<customLabels>
-		<label>Successfully connected and authorized to DocuSign Gen.</label>
-		<name>SuccessDocuSignGenAuthorization</name>
+		<label>Successfully connected and authorized to DocuSign.</label>
+		<name>SuccessDocuSignAuthorization</name>
 	</customLabels>
 	<customLabels>
 		<label>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for assistance.</label>
@@ -4781,6 +4781,10 @@
 	<customLabels>
 		<label>DocuSign Setup</label>
 		<name>SetupPageTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Environment Name</label>
+		<name>EnvironmentName</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
