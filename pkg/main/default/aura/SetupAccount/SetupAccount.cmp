@@ -20,7 +20,7 @@
                 <li class="ds-getStarted">{!$Label.c.GetStartedSetupAccount}</li>
             </ul>
         </div>
-        <div class="slds-col">
+        <div class="slds-col ds-text-align-end">
             <ul>
                 <li class="ds-regular-text">{!$Label.c.ConnectedAccountSetupAccount}</li>
                 <li class="ds-bold-text">{!v.accountName}</li>

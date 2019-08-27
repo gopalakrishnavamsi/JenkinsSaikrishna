@@ -4,3 +4,7 @@
     max-height: 200px;
     height: auto;
 }
+
+.THIS .ds-text-align-end {
+    text-align: end;
+}
