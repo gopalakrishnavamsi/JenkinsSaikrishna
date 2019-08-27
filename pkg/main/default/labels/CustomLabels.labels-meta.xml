@@ -1053,7 +1053,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Connect DocuSign to Salesforce</shortDescription>
-		<value>Connect your DocuSign account to this Salesforce organization</value>
+		<value>Connect DocuSign to Salesforce</value>
 	</labels>
 	<labels>
 		<fullName>ConnectDocuSignUser</fullName>
@@ -1287,14 +1287,6 @@
 		<protected>true</protected>
 		<shortDescription>Delivered</shortDescription>
 		<value>Delivered</value>
-	</labels>
-	<labels>
-		<fullName>Demo</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Demo</shortDescription>
-		<value>Demo</value>
 	</labels>
 	<labels>
 		<fullName>Denmark</fullName>
@@ -2631,12 +2623,12 @@
 		<value>Log In</value>
 	</labels>
 	<labels>
-		<fullName>LogInToExisting</fullName>
+		<fullName>LogInToDocuSignAccount</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Log into existing</shortDescription>
-		<value>Log in to an existing account</value>
+		<shortDescription>LogInToDocuSignAccount</shortDescription>
+		<value>Log in to Your DocuSign Account</value>
 	</labels>
 	<labels>
 		<fullName>LogOut</fullName>
@@ -3117,12 +3109,12 @@
 		<value>No</value>
 	</labels>
 	<labels>
-		<fullName>NoAccount</fullName>
+		<fullName>SignUpForFree</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>No account</shortDescription>
-		<value>No account? Sign up for free</value>
+		<shortDescription>SignUpForFree</shortDescription>
+		<value>Sign up for free.</value>
 	</labels>
 	<labels>
 		<fullName>NoEnvelopesSent</fullName>
@@ -3445,14 +3437,6 @@
 		<value>Private Message</value>
 	</labels>
 	<labels>
-		<fullName>Production</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Production</shortDescription>
-		<value>Production</value>
-	</labels>
-	<labels>
 		<fullName>PuertoRico</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3760,7 +3744,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select account option</shortDescription>
-		<value>-- Select an Account --</value>
+		<value>Select an Account</value>
 	</labels>
 	<labels>
 		<fullName>SelectSalesforceUsers</fullName>
@@ -6184,11 +6168,11 @@
 		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.</value>
 	</labels>
 	<labels>
-		<fullName>SuccessDocuSignGenAuthorization</fullName>
+		<fullName>SuccessDocuSignAuthorization</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>SuccessDocuSignGenAuthorization</shortDescription>
-		<value>Successfully connected and authorized to DocuSign Gen.</value>
+		<shortDescription>SuccessDocuSignAuthorization</shortDescription>
+		<value>Successfully connected and authorized to DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>SuccessDocuSignGenTrial</fullName>
@@ -6385,13 +6369,6 @@
 		<protected>true</protected>
 		<shortDescription>AgreementDeleted</shortDescription>
 		<value>The {0} agreement has been deleted.</value>
-	</labels>
-	<labels>
-		<fullName>HQTEST3</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>HQTEST3</shortDescription>
-		<value>HQTEST3</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewSuccess</fullName>
@@ -8883,5 +8860,307 @@
 		<protected>true</protected>
 		<shortDescription>CLM - agreementHelp</shortDescription>
 		<value>agreementHelp</value>
+	</labels>
+	<labels>
+		<fullName>DisablePopUp</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisablePopUp</shortDescription>
+		<value>Disable your browser's pop-up blocker before logging in.</value>
+	</labels>
+	<labels>
+		<fullName>LoginToDocuSign</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LoginToDocuSign</shortDescription>
+		<value>Log in to DocuSign</value>
+	</labels>
+	<labels>
+		<fullName>DontHaveAnAccount</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DontHaveAnAccount</shortDescription>
+		<value>Don't have an account?</value>
+	</labels>
+	<labels>
+		<fullName>NonProductionHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NonProductionHelpText</shortDescription>
+		<value>Only select an alternate DocuSign environment if you are not using a production account.</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignDemo</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSignDemo</shortDescription>
+		<value>DocuSign Demo</value>
+	</labels>
+	<labels>
+		<fullName>DemoHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DemoHelpText</shortDescription>
+		<value>Use this if you're using a DocuSign demo or sandbox account.</value>
+	</labels>
+	<labels>
+		<fullName>LoginToDemo</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LoginToDemo</shortDescription>
+		<value>Log in to Demo Account</value>
+	</labels>
+	<labels>
+		<fullName>TestingEnvironment</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TestingEnvironment</shortDescription>
+		<value>Stage or Test Environment</value>
+	</labels>
+	<labels>
+		<fullName>TestingEnvironmentHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TestingEnvironmentHelpText</shortDescription>
+		<value>Use this if you're test or stage account has a custom URL.</value>
+	</labels>
+	<labels>
+		<fullName>AccountSelected</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AccountSelected</shortDescription>
+		<value>DocuSign account selected. Click Next to proceed to the Authorization step.</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeAccess</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizeAccess</shortDescription>
+		<value>Authorize Access to Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizeHelpText</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizeHelpText</shortDescription>
+		<value>This access allows us to upload documents to Salesforce and attach them to records where your
+			organization needs them.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AuthorizationSettingsNotPresent</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AuthorizationSettingsNotPresent</shortDescription>
+		<value>Authorization settings are not present for the selected DocuSign Account. This option will be available
+			once products that require DocuSign systems to access Salesforce are added on the Account.
+		</value>
+	</labels>
+	<labels>
+		<fullName>AllowAccess</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AllowAccess</shortDescription>
+		<value>Allow Access</value>
+	</labels>
+	<labels>
+		<fullName>CompleteSetupAuthorization</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompleteSetupAuthorization</shortDescription>
+		<value>Complete Setup</value>
+	</labels>
+	<labels>
+		<fullName>GetStartedSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GetStartedSetupAccount</shortDescription>
+		<value>Get Started with DocuSign Agreements</value>
+	</labels>
+	<labels>
+		<fullName>ConnectedAccountSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConnectedAccountSetupAccount</shortDescription>
+		<value>Connected Account</value>
+	</labels>
+	<labels>
+		<fullName>DisconnectSetupAccount</fullName>
+		<categories>SetupAccount</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisconnectSetupAccount</shortDescription>
+		<value>Disconnect</value>
+	</labels>
+	<labels>
+		<fullName>TabHome</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHome</shortDescription>
+		<value>Home</value>
+	</labels>
+	<labels>
+		<fullName>ConfigurationSection</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConfigurationSection</shortDescription>
+		<value>Configuration</value>
+	</labels>
+	<labels>
+		<fullName>TabESignature</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabESignature</shortDescription>
+		<value>E-Signature</value>
+	</labels>
+	<labels>
+		<fullName>TabDocumentGeneration</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabDocumentGeneration</shortDescription>
+		<value>Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>TabNegotiation</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabNegotiation</shortDescription>
+		<value>Collaboration and Negotiation</value>
+	</labels>
+	<labels>
+		<fullName>AdministrationSection</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AdministrationSection</shortDescription>
+		<value>Administration</value>
+	</labels>
+	<labels>
+		<fullName>TabUserManagement</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabUserManagement</shortDescription>
+		<value>User Management</value>
+	</labels>
+	<labels>
+		<fullName>TabComponents</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabComponents</shortDescription>
+		<value>Components</value>
+	</labels>
+	<labels>
+		<fullName>TabHelp</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHelp</shortDescription>
+		<value>Help</value>
+	</labels>
+	<labels>
+		<fullName>SetupConfigure</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupConfigure</shortDescription>
+		<value>Configure</value>
+	</labels>
+	<labels>
+		<fullName>SetupGetHelp</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupGetHelp</shortDescription>
+		<value>Get Help</value>
+	</labels>
+	<labels>
+		<fullName>TabESignatureHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabESignatureHelpText</shortDescription>
+		<value>Customize default email messaging, set up reminders and envelope expiration days.</value>
+	</labels>
+	<labels>
+		<fullName>TabDocumentGenerationHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabDocumentGenerationHelpText</shortDescription>
+		<value>In one click, generate polished, customizable agreements with your Salesforce data.</value>
+	</labels>
+	<labels>
+		<fullName>TabNegotiationHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabNegotiationHelpText</shortDescription>
+		<value>Send agreements for approval internally, and review with third parties with ease.</value>
+	</labels>
+	<labels>
+		<fullName>TabUserManagementHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabUserManagementHelpText</shortDescription>
+		<value>Give your team members access to DocuSign Agreements features.</value>
+	</labels>
+	<labels>
+		<fullName>TabComponentsHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabComponentsHelpText</shortDescription>
+		<value>Customize layouts and experiences by adding buttons and components.</value>
+	</labels>
+	<labels>
+		<fullName>TabHelpText</fullName>
+		<categories>SetupNavigation</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabHelpText</shortDescription>
+		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
+			questions for DocuSign Agreements.
+		</value>
+	</labels>
+	<labels>
+		<fullName>SetupPageTitle</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SetupPageTitle</shortDescription>
+		<value>DocuSign Setup</value>
+	</labels>
+	<labels>
+		<fullName>EnvironmentName</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvironmentName</shortDescription>
+		<value>Environment Name</value>
 	</labels>
 </CustomLabels>

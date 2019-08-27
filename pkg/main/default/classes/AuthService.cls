@@ -18,6 +18,7 @@ public with sharing class AuthService {
 				UUID.tryParse(this.sub),
 				this.name,
 				this.email,
+				false,
 				dsas);
 		}
 	}
@@ -1287,10 +1288,13 @@ public with sharing class AuthService {
 			AccountProducts.save();
 		}
 
+		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+
 		return new LoginInformation(
 			result.id,
 			result.name,
 			result.email,
+			settings.IsPlatformAuthorized__c,
 			new List<LoginInformation.Account> { selected });
 	}
 
@@ -1323,9 +1327,8 @@ public with sharing class AuthService {
 						LoggerService.getInstance().error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
 						results = SpringOAuthLoginInformation.failure(Label.UnableToConnectDocuSignGen);
 					} else {
-						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignGenAuthorization);
+						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignAuthorization);
 					}
-					//TODO update the custom setting to reflect that Spring OAuth has been completed successfully. To be added after Momentum Beta
 				} else {
 					results = SpringOAuthLoginInformation.failure(Label.MissingDocuSignGenAuthorizationSettings);
 				}

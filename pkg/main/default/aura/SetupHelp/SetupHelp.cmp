@@ -1,0 +1,3 @@
+<aura:component>
+    {!$Label.c.TabHelp}
+</aura:component>

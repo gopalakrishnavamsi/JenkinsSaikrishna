@@ -41,7 +41,7 @@
     if (index === '1') {
       component.set('v.isCenter', true);
       component.set('v.fullLayout', true);
-      helper.insertComponent(component, 'c:CLMOverview', false, false, 'v.main');
+      helper.insertComponent(component, 'c:CLMOverview', {login: component.get('v.login')}, false, 'v.main');
     }
     if (index === '2') {
       component.set('v.isCenter', true);

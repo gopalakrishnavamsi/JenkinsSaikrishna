@@ -469,7 +469,7 @@
 		<name>ConnectDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Connect your DocuSign account to this Salesforce organization</label>
+		<label>Connect DocuSign to Salesforce</label>
 		<name>ConnectDocuSignToSalesforce</name>
 	</customLabels>
 	<customLabels>
@@ -591,10 +591,6 @@
 	<customLabels>
 		<label>Delivered</label>
 		<name>Delivered</name>
-	</customLabels>
-	<customLabels>
-		<label>Demo</label>
-		<name>Demo</name>
 	</customLabels>
 	<customLabels>
 		<label>Denmark</label>
@@ -1249,8 +1245,8 @@
 		<name>LogIn</name>
 	</customLabels>
 	<customLabels>
-		<label>Log in to an existing account</label>
-		<name>LogInToExisting</name>
+		<label>Log in to Your DocuSign Account</label>
+		<name>LogInToDocuSignAccount</name>
 	</customLabels>
 	<customLabels>
 		<label>Log Out</label>
@@ -1489,8 +1485,8 @@
 		<name>No</name>
 	</customLabels>
 	<customLabels>
-		<label>No account? Sign up for free</label>
-		<name>NoAccount</name>
+		<label>Sign up for free.</label>
+		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
 		<label>No envelopes have been sent</label>
@@ -1639,10 +1635,6 @@
 	<customLabels>
 		<label>Private Message</label>
 		<name>PrivateMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>Production</label>
-		<name>Production</name>
 	</customLabels>
 	<customLabels>
 		<label>Puerto Rico</label>
@@ -1805,7 +1797,7 @@
 		<name>SelectCountry</name>
 	</customLabels>
 	<customLabels>
-		<label>-- Select an account --</label>
+		<label>Select an account</label>
 		<name>SelectAccountOption</name>
 	</customLabels>
 	<customLabels>
@@ -3125,8 +3117,8 @@
 		<name>UnableToConnectDocuSignGen</name>
 	</customLabels>
 	<customLabels>
-		<label>Successfully connected and authorized to DocuSign Gen.</label>
-		<name>SuccessDocuSignGenAuthorization</name>
+		<label>Successfully connected and authorized to DocuSign.</label>
+		<name>SuccessDocuSignAuthorization</name>
 	</customLabels>
 	<customLabels>
 		<label>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for assistance.</label>
@@ -3219,10 +3211,6 @@
 	<customLabels>
 		<label>There was an error in canceling the Agreement. Please try again after some time.</label>
 		<name>AgreementCancelErrorMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>HQTEST3</label>
-		<name>HQTEST3</name>
 	</customLabels>
 	<customLabels>
 		<label>Your document has been sent for review and copied to the DocuSign Agreements space.</label>
@@ -4643,6 +4631,160 @@
 	<customLabels>
 		<label>agreementHelp</label>
 		<name>agreementHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Disable your browser's pop-up blocker before logging in.</label>
+		<name>DisablePopUp</name>
+	</customLabels>
+	<customLabels>
+		<label>Log in to DocuSign</label>
+		<name>LoginToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Don't have an account?</label>
+		<name>DontHaveAnAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Only select an alternate DocuSign environment if you are not using a production account.</label>
+		<name>NonProductionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Demo</label>
+		<name>DocuSignDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>Use this if you're using a DocuSign demo or sandbox account.</label>
+		<name>DemoHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Log in to Demo Account</label>
+		<name>LoginToDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>Stage or Test Environment</label>
+		<name>TestingEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>Use this if you're test or stage account has a custom URL.</label>
+		<name>TestingEnvironmentHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign account selected. Click Next to proceed to the Authorization step.</label>
+		<name>AccountSelected</name>
+	</customLabels>
+	<customLabels>
+		<label>Authorize Access to Salesforce</label>
+		<name>AuthorizeAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>This access allows us to upload documents to Salesforce and attach them to records where your
+			organization needs them.
+		</label>
+		<name>AuthorizeHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Authorization settings are not present for the selected DocuSign Account. This option will be available
+			once products that require DocuSign systems to access Salesforce are added on the Account.
+		</label>
+		<name>AuthorizationSettingsNotPresent</name>
+	</customLabels>
+	<customLabels>
+		<label>Allow Access</label>
+		<name>AllowAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Complete Setup</label>
+		<name>CompleteSetupAuthorization</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Started with DocuSign Agreements</label>
+		<name>GetStartedSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Connected Account</label>
+		<name>ConnectedAccountSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Disconnect</label>
+		<name>DisconnectSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Home</label>
+		<name>TabHome</name>
+	</customLabels>
+	<customLabels>
+		<label>Configuration</label>
+		<name>ConfigurationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>E-Signature</label>
+		<name>TabESignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Generation</label>
+		<name>TabDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Collaboration and Negotiation</label>
+		<name>TabNegotiation</name>
+	</customLabels>
+	<customLabels>
+		<label>Administration</label>
+		<name>AdministrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>User Management</label>
+		<name>TabUserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>Components</label>
+		<name>TabComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Help</label>
+		<name>TabHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Configure</label>
+		<name>SetupConfigure</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Help</label>
+		<name>SetupGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Customize default email messaging, set up reminders and envelope expiration days.</label>
+		<name>TabESignatureHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>In one click, generate polished, customizable agreements with your Salesforce data.</label>
+		<name>TabDocumentGenerationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Send agreements for approval internally, and review with third parties with ease.</label>
+		<name>TabNegotiationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Give your team members access to DocuSign Agreements features.</label>
+		<name>TabUserManagementHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Customize layouts and experiences by adding buttons and components.</label>
+		<name>TabComponentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
+			questions for DocuSign Agreements.
+		</label>
+		<name>TabHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Setup</label>
+		<name>SetupPageTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Environment Name</label>
+		<name>EnvironmentName</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

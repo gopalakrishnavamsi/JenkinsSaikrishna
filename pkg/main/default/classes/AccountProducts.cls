@@ -431,6 +431,16 @@ public with sharing class AccountProducts {
 		return self;
 	}
 
+	/**
+	 * Retrieves the products on the account to be used for Setup and Admin management interfaces on the UI
+	 *
+	 * @return A List of Products on the account
+	 */
+	public static List<Product> getProducts() {
+		Permissions.verifyIsDocuSignAdministrator();
+		return AccountProducts.getInstance().products.values();
+	}
+
 	public List<Product> startTrials(final Set<String> productNames) {
 		Permissions.verifyIsDocuSignAdministrator();
 

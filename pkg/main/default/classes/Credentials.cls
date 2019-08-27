@@ -565,6 +565,7 @@ public with sharing class Credentials {
 			settings.ProductsLastChecked__c = null;
 			settings.AdministratorProfileId__c = null;
 			settings.SenderProfileId__c = null;
+			settings.IsPlatformAuthorized__c = false;
 			upsert settings;
 			return settings;
 		}

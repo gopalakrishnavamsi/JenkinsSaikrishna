@@ -460,7 +460,7 @@ private class SetupControllerTest {
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
 			System.assert(loginInformation.success);
-			System.assertEquals(Label.SuccessDocuSignGenAuthorization, loginInformation.message);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, loginInformation.message);
 			Test.stopTest();
 		}
 	}
@@ -551,6 +551,52 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			System.assert(SetupController.addTrialNegotiate());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_doPlatformAuthorizationSettingsExist_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
+			Test.stopTest();
+			System.assertEquals(true, result);
+		}
+	}
+
+	@IsTest
+	static void test_doPlatformAuthorizationSettingsExist_negative() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
+			Test.stopTest();
+			System.assertEquals(false, result);
+		}
+	}
+
+	@IsTest
+	static void test_getProductsOnAccount_positive() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			List<Product> productsList = SetupController.getProductsOnAccount();
+			Test.stopTest();
+			System.assertEquals(false, productsList.isEmpty());
+			System.assertEquals(4, productsList.size());
+		}
+	}
+
+	@IsTest
+	static void test_getProductsOnAccount_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				List<Product> productsList = SetupController.getProductsOnAccount();
+				throw new AssertException('Expected getProducts to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
 			Test.stopTest();
 		}
 	}

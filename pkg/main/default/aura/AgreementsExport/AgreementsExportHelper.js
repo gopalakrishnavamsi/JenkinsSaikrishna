@@ -6,12 +6,12 @@
             sourceId: component.get('v.sourceId'),
             agreementId: agreement && agreement.id ? agreement.id.value : null
         });
-        helper.showToast(component, $A.get('$Label.c.AgreementExportProcessing'), 'success');
+      helper.showToast(component, $A.get('$Label.c.AgreementExportProcessing'), 'success');
         exportSalesforceAction.setCallback(this, function (response) {
-            if (response.getState() === 'SUCCESS') {
-                helper.showToast(component, response.getReturnValue().message, 'success');
+          if (response.getState() === 'SUCCESS') {
+            helper.showToast(component, response.getReturnValue().message, 'success');
             } else {
-                helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
             }
         });
         $A.enqueueAction(exportSalesforceAction);

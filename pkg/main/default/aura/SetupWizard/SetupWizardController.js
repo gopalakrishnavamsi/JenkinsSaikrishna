@@ -1,38 +1,39 @@
 ({
-  initialize: function (component, event, helper) {
-    helper.updateText(component, event);
+  initializeComponent: function (component, event, helper) {
+    helper.initializeComponent(component, event, helper);
   },
 
-  handleButtonClick: function (component) {
-    //When button is pressed, the event is fired which calls the parent function
-    // goToNextSection
-    component.getEvent('landingButtonClicked').fire();
+  handleSelect: function (component, event) {
+    var selected = event.getParam('name');
+    component.set('v.selectedItem', selected);
   },
 
-  handleRowButtonClick: function (component, event) {
-    //When button is pressed, the event is fired which calls the parent function
-    // navigateToSection
-    var section = event.getSource().get('v.value');
-    var navToSection = component.getEvent('rowButtonClicked');
-    navToSection.setParams({
-      section: section
-    });
-    navToSection.fire();
+  navigateToEsignatureTab: function (component) {
+    component.set('v.selectedItem', 'tab_eSignature');
   },
 
-  handleProgressionStatusChange: function (component, event, helper) {
-    helper.updateText(component, component.get('v.steps'));
+  navigateToDocumentGenerationTab: function (component) {
+    component.set('v.selectedItem', 'tab_documentGeneration');
   },
 
-  hideNextSteps: function (component) {
-    component.set('v.showNextSteps', false);
+  navigateToNegotiationTab: function (component) {
+    component.set('v.selectedItem', 'tab_negotiation');
   },
 
-  onClickSettings: function(component) {
-    var navToSection = component.getEvent('rowButtonClicked');
-    navToSection.setParams({
-      section: 'settings'
-    });
-    navToSection.fire();
+  navigateToUserManagementTab: function (component) {
+    component.set('v.selectedItem', 'tab_userManagement');
+  },
+
+  navigateToComponentsTab: function (component) {
+    component.set('v.selectedItem', 'tab_components');
+  },
+
+  navigateToHelpTab: function (component) {
+    component.set('v.selectedItem', 'tab_help');
+  },
+
+  triggerLogout: function (component) {
+    component.destroy();
   }
+
 });

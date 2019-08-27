@@ -21,6 +21,20 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
+	static void test_getProducts_success() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			List<Product> productsList = AccountProducts.getProducts();
+			Test.stopTest();
+
+			System.assertNotEquals(null, productsList);
+			System.assertEquals(4, productsList.size());
+		}
+	}
+
+	@IsTest
 	static void test_getInstance_undefined_arguments() {
 		Test.startTest();
 		try {

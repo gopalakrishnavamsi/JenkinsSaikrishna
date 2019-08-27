@@ -53,6 +53,9 @@ public class LoginInformation {
 	@AuraEnabled
 	public String message { get; private set; }
 
+	@AuraEnabled
+	public Boolean isPlatformAuthorized { get; private set; }
+
 	public LoginInformation(
 		final String status,
 		final String message,
@@ -67,11 +70,13 @@ public class LoginInformation {
 		final UUID id,
 		final String name,
 		final String email,
+		final Boolean isPlatformAuthorized,
 		final List<LoginInformation.Account> accounts) {
 
 		this.id = id;
 		this.name = name;
 		this.email = email;
+		this.isPlatformAuthorized = isPlatformAuthorized;
 		this.accounts = accounts == null ? new List<LoginInformation.Account>() : accounts;
 		if (Collection.isEmpty(this.accounts)) {
 			this.status = STATUS_FAILURE;

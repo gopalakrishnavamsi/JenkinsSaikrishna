@@ -1,6 +1,6 @@
 <aura:component controller="MetadataController">
 
-    <ltng:require scripts="{!$Resource.stringUtils}" />
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
 
     <!-- attributes -->
     <aura:attribute name="config" type="Object"/>

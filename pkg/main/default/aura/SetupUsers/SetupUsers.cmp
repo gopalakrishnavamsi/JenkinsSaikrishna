@@ -26,8 +26,9 @@
         </div>
 
         <!-- Content -->
+        <!--
         <footer class="strike-wizard__footer slds-is-relative">
-            <div class="slds-grid slds-grid_pull-padded">
+            <div class="slds-grid slds-grid_align-center slds-m-top_large">
                 <div class="slds-col slds-no-flex slds-p-horizontal_small">
                     <lightning:button class="slds-button slds-button_neutral"
                                       label="{!$Label.c.Cancel}"
@@ -42,6 +43,7 @@
                 </div>
             </div>
         </footer>
+        -->
         <!-- Exit Modal -->
         <c:strike_modal title="{!$Label.c.SectionModalTitle}"
                         primaryButtonLabel="{!$Label.c.Yes}"

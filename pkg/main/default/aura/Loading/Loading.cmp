@@ -1,14 +1,15 @@
 <aura:component>
     <aura:attribute name="visualforce" type="Boolean" default="false"/>
-    <aura:attribute name="size" type="String" default="large"/>
     <aura:attribute name="alternativeText" type="String" default="{!$Label.c.Loading}"/>
 
     <aura:method name="show" action="{!c.onShow}"/>
     <aura:method name="hide" action="{!c.onHide}"/>
 
-    <lightning:spinner
-            aura:id="ds-spinner"
-            class="{!if(v.visualforce, ' ds-spinner_visualforce', '')}"
-            size="{!v.size}"
-            alternativeText="{!$Label.c.Loading}"/>
+    <div aura:id="ds-spinner" role="status"
+         class="{!'slds-spinner slds-spinner_medium slds-spinner_brand' + if(v.visualforce, ' ds-spinner_visualforce')}">
+        <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+    </div>
+
 </aura:component>

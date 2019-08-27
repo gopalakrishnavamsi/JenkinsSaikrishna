@@ -42,11 +42,7 @@
             <div class="{!'dsImport-spinner_container' + if(v.currentStep == '3', ' dsImport-spinner_setupFileUpload')
                                                        + if(v.currentStep == '2', ' dsImport-spinner_setupSalesforceFiles')
                                                        + if(v.currentStep == '4', ' dsImport-spinner_uploadingAgreement')}">
-                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                    <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                    <div class="slds-spinner__dot-a"></div>
-                    <div class="slds-spinner__dot-b"></div>
-                </div>
+                <c:Loading/>
             </div>
         </aura:if>
 

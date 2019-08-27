@@ -1,271 +1,291 @@
-<aura:component controller="SetupController">
-    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
-
-    <aura:attribute name="login" type="Object" required="true"/>
-    <aura:attribute name="isLoggedIn" type="Boolean" default="false"/>
-    <aura:attribute name="isTrial" type="Boolean" default="false"/>
-    <aura:attribute name="isTrialExpired" type="Boolean" default="false"/>
+<aura:component description="Login" controller="SetupController">
+    <!-- attributes -->
+    <aura:attribute name="login" type="Object"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
     <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
-
-    <aura:attribute name="uiHelper" type="Object" access="private"/>
+    <aura:attribute name="steps" type="String[]" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="isLoggedIn" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isPlatformAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="platformAuthorizationSettingsFound" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="currentStep" type="Integer" access="private"/>
+    <aura:attribute name="isCompleted" type="Boolean" access="private"/>
+    <aura:attribute name="environment" type="String"/>
+    <aura:attribute name="multipleAccountsFound" type="Boolean" default="false" access="private"/>
     <aura:attribute name="selectedAccountNumber" type="Long" access="private"/>
-    <aura:attribute name="helpInfo" type="String" access="private"/>
-    <aura:attribute name="showTrialFields" type="Boolean" access="private"/>
-    <aura:attribute name="signedUpForTrial" type="Boolean" access="private"/>
-    <aura:attribute name="trialAccount" type="Object" access="private"/>
-    <aura:attribute name="userCountryCode" type="String" access="private"/>
-    <aura:attribute name="countries" type="Object[]" access="private"/>
-    <aura:attribute name="marketing" type="Object" access="private"/>
-    <aura:attribute name="marketingOptInEnabled" type="Boolean" access="private" default="{!false}"/>
-    <aura:attribute name="showAccountSelectionModal" type="Boolean" access="private"/>
-    <aura:attribute name="showLogoutModal" type="Boolean" access="private"/>
     <aura:attribute name="advancedOptionsExpanded" type="Boolean" access="private"/>
-    <aura:attribute name="environment" type="String" access="private" default="Production"/>
-    <aura:attribute name="otherUrl" type="String" access="private" default=""/>
+    <aura:attribute name="accountOptions" type="List" access="private"/>
+    <aura:attribute name="config" type="Object" access="private"/>
 
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
+
+    <!--register events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
-    <aura:registerEvent name="loginEvent" type="c:LoginEvent"/>
+    <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
     <aura:registerEvent name="oauthEvent" type="c:OAuthEvent"/>
     <aura:registerEvent name="springOauthEvent" type="c:OAuthEvent"/>
 
-    <aura:handler name="change" value="{!v.userCountryCode}" action="{!c.handleUserCountryChange}"/>
+    <!--register handlers -->
+    <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
     <aura:handler name="springOauthEvent" event="c:OAuthEvent" action="{!c.handleSpringOAuthEvent}"/>
 
-    <div class="slds-scope">
-        <!-- Help Info -->
-        <aura:if isTrue="{!not(empty(v.helpInfo))}">
-            <div class="slds-m-bottom_large">
-                <div class="strike-notify slds-notify slds-notify_toast slds-theme_info" role="alert">
-                    <span class="slds-assistive-text">{!$Label.c.Info}</span>
-                    <span class="slds-icon_container slds-icon-utility-info slds-m-right_small slds-no-flex slds-align-top"
-                          title="{!$Label.c.Info}">
-                        <lightning:icon iconName="utility:info" size="small" variant="inverse"/>
-                    </span>
-                    <div class="slds-notify__content">
-                        <lightning:formattedRichText class="slds-text-longform" value="{!v.helpInfo}"/>
+    <div class="ds-login-component slds-m-bottom_large">
+        <div class="slds-container slds-container_medium slds-container_center">
+            <div class="slds-m-top_small slds-grid slds-grid_vertical">
+                <div class="slds-col slds-align-middle slds-size_1-of-1">
+                    <!--Path Header -->
+                    <div class="slds-text-align_center ds-unifiedApp-login-path-header">
+                        {!$Label.c.ConnectDocuSignToSalesforce}
                     </div>
-                </div>
-            </div>
-        </aura:if>
-        <!-- /Help Info -->
-
-        <div class="ds-login-box slds-box slds-theme_default slds-is-relative">
-            <aura:if isTrue="{!v.isLoggedIn}">
-                <!-- Logged In State -->
-                <div>
-                    <div class="{!'slds-notify slds-notify_alert slds-theme_alert-texture' + if(and(v.isTrial, v.isTrialExpired), ' slds-theme_warning', ' slds-theme_success')}"
-                         role="alert">
-                        <lightning:icon size="x-small" iconName="utility:user" variant="inverse"
-                                        class="slds-m-right_x-small"/>
-                        <aura:if isTrue="{!and(v.isTrial, v.isTrialExpired)}">
-                            <h2>{!format($Label.c.TrialExpired_2, v.login.email, v.selectedAccountNumber)}</h2>
-                            <aura:set attribute="else">
-                                <h2>{!format($Label.c.LoggedInAs_2, v.login.email, v.selectedAccountNumber)}</h2>
-                            </aura:set>
-                        </aura:if>
-                    </div>
-
-                    <aura:if isTrue="{!and(v.isTrial, not(v.isTrialExpired))}">
-                        <p class="slds-m-top_medium"><em>{!v.trialMessage}</em></p>
-                    </aura:if>
-
-                    <div class="slds-text-align_right slds-m-top_medium">
-                        <lightning:button label="{!$Label.c.Upgrade}" variant="neutral"
-                                          class="{!if(v.isTrial, '', 'slds-hide')}"
-                                          onclick="{!c.navigateToUpgrade}"/>
-                        <lightning:button label="{!$Label.c.LogOut}" variant="neutral"
-                                          onclick="{!c.showLogoutModal}"/>
-                        <!-- Show Authorize Gen if Gen OAuth custom setting value is false -->
-                        <lightning:button label="{!$Label.c.AuthorizeGen}" variant="neutral"
-                                          onclick="{!c.loginToSpring}"/>
-                        <lightning:button label="{!$Label.c.TrialGen}" variant="neutral"
-                                          onclick="{!c.addTrialGenProduct}"/>
-                    </div>
-                </div>
-                <!-- /Logged In State -->
-
-                <aura:set attribute="else">
-                    <!-- Logged Out State -->
-                    <div>
-                        <aura:if isTrue="{!v.signedUpForTrial}">
-                            <!-- Signed Up State -->
-                            <div class="ds-border-radius slds-scoped-notification slds-media slds-theme_success"
-                                 role="status">
-                                <div class="slds-media__figure">
-                                    <lightning:icon iconName="utility:success" size="small" variant="inverse"/>
-                                </div>
-                                <div class="slds-media__body">
-                                    <p>{!$Label.c.TrialInstructions}</p>
+                    <!--Path, Check if additional classes are to be added for spinners and padding according to the Gen template component -->
+                    <div class="slds-path slds-p-top_medium">
+                        <div class="slds-grid slds-path__track slds-is-relative">
+                            <div class="slds-grid slds-path__scroller-container">
+                                <div class="slds-path__scroller" role="application">
+                                    <div class="slds-path__scroller_inner">
+                                        <ul class="slds-path__nav" role="tablist">
+                                            <aura:iteration items="{!v.steps}" var="step" indexVar="index">
+                                                <li class="{!'slds-path__item'
+                                                    + if( index gt (v.config.stepsCompleted + 1), ' ds-cursor_not-allowed')
+                                                    + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
+                                                    role="presentation">
+                                                    <a class="slds-path__link" role="tab"
+                                                       tabindex="-1"
+                                                       onclick="{!c.selectStep}" data-step="{!index}">
+                                                <span class="slds-path__stage">
+                                                    <lightning:icon iconName="utility:check" size="x-small"
+                                                                    variant="inverse"/>
+                                                </span>
+                                                        <span class="slds-path__title">{!step}</span>
+                                                    </a>
+                                                </li>
+                                            </aura:iteration>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-m-top_large ">
+                    <aura:if isTrue="{!v.loading}">
+                        <!-- spinner -->
+                        <div class="slds-col slds-m-top_small slds-size_1-of-1">
+                            <c:Loading/>
+                        </div>
 
-                            <div class="slds-m-top_medium slds-text-align_right">
-                                <lightning:button label="{!$Label.c.ContinueToLogIn}" variant="brand"
-                                                  onclick="{!c.continueToLogIn}"/>
-                            </div>
-                            <!-- /Signed Up State -->
+                        <!-- login steps -->
+                        <aura:set attribute="else">
+                            <!-- first step choose environment and enter account credentials -->
+                            <aura:if isTrue="{!v.currentStep == 0}">
+                                <!-- Login Chooser -->
+                                <div class="slds-col slds-m-top_small slds-size_1-of-1">
+                                    <div class="slds-box">
+                                        <div class="ds-login-illustration slds-m-around_medium">
+                                            <div class="slds-media">
+                                                <div class="slds-media__figure">
+                                                    <img src="{!$Resource.LoginStep1}"/>
+                                                </div>
+                                                <div class="slds-media__body slds-m-left_medium slds-m-top_large">
+                                                    <ul>
+                                                        <li class="ds-loginToDocuSign-text">{!$Label.c.LogInToDocuSignAccount}</li>
+                                                        <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.DisablePopUp}</li>
+                                                        <li class="slds-m-top_medium">
+                                                            <lightning:button variant="brand"
+                                                                              label="{!$Label.c.LoginToDocuSign}"
+                                                                              onclick="{!c.loginToProductionDocuSignEnvironment}"></lightning:button>
+                                                        </li>
+                                                        <li class="slds-m-top_large">
+                                                            <ul class="slds-list_horizontal ds-bold-text">
+                                                                <li>{!$Label.c.DontHaveAnAccount}</li>
+                                                                <li class="slds-m-left_xxx-small">
+                                                                    <a aura:id="signupLink"
+                                                                       onclick="{!c.signUp}">{!$Label.c.SignUpForFree}</a>
+                                                                </li>
+                                                            </ul>
 
-                            <aura:set attribute="else">
-                                <div>
-                                    <aura:if isTrue="{!v.showTrialFields}">
-                                        <!-- Trial Fields -->
-                                        <h4 class="slds-text-align_center slds-text-heading_small">{!$Label.c.TryDocuSign}</h4>
-                                        <div class="slds-m-top_small">
-                                            <lightning:input aura:id="trial-input" type="email" label="Email Address"
-                                                             required="true"
-                                                             value="{!v.login.email}"/>
-                                        </div>
-                                        <div class="slds-m-top_x-small">
-                                            <lightning:select aura:id="user-country" label="{!$Label.c.Country}"
-                                                              value="{!v.userCountryCode}"
-                                                              required="true">
-                                                <aura:if isTrue="{!empty(v.userCountryCode)}">
-                                                    <option value=""
-                                                            selected="{!if(empty(v.userCountryCode), 'selected', '')}">{!$Label.c.SelectCountry}</option>
-                                                    <aura:set attribute="else">
-                                                        <option value="">{!$Label.c.SelectCountry}</option>
-                                                    </aura:set>
-                                                </aura:if>
-                                                <aura:iteration items="{!v.countries}" var="country">
-                                                    <option value="{!country.code}"
-                                                            selected="{!if(v.userCountryCode == country.code, 'selected', '')}">{!country.label}</option>
-                                                </aura:iteration>
-                                            </lightning:select>
-                                        </div>
-                                        <aura:if isTrue="{!v.marketingOptInEnabled}">
-                                            <div class="slds-m-top_small slds-grid slds-grid_vertical-align-start">
-                                                <lightning:input aura:id="marketing-opt-in"
-                                                                 type="checkbox"
-                                                                 label="{!$Label.c.MarketingOptIn}"
-                                                                 variant="label-hidden"
-                                                                 checked="{!v.trialAccount.user.marketingOptIn}"/>
-                                                <label for="marketing-opt-in"
-                                                       class="slds-form-element__label">{!$Label.c.MarketingOptIn}</label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </aura:if>
-                                        <div class="slds-m-top_medium">
-                                            <div class="slds-grid slds-gutters_x-small slds-grid_vertical-align-center">
-                                                <div class="slds-col">
-                                                    <small class="slds-text-body_small">
-                                                        <em class="slds-text-color_weak">
-                                                            <aura:if
-                                                                    isTrue="{!v.userCountryCode == 'US'}">
-                                                                <lightning:formattedRichText
-                                                                        value="{!$Label.c.USConsentMessage}"/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Start of Advanced options -->
+                                <div class="slds-col slds-m-top_small slds-size_1-of-1">
+                                    <div class="{! 'slds-section' + (v.advancedOptionsExpanded ? ' slds-is-open' : '')}">
+                                        <button aria-controls="advanced-options"
+                                                aria-expanded="{!v.advancedOptionsExpanded}"
+                                                onclick="{!c.toggleAdvancedOptions}"
+                                                class="slds-button slds-section__title-action">
+                                            <lightning:icon
+                                                    iconName="{!v.advancedOptionsExpanded ? 'utility:chevrondown' : 'utility:chevronright'}"
+                                                    size="xx-small"/>
+                                            <span class="slds-section__title_xx-small slds-m-left_xx-small">{!$Label.c.AdvancedOptions}</span>
+                                        </button>
+                                        <div id="advanced-options"
+                                             class="slds-section__content slds-m-top_x-small slds-m-bottom_large">
+                                            <ul>
+                                                <li class="ds-regular-text">
+                                                    {!$Label.c.NonProductionHelpText}
+                                                </li>
+                                                <li class="slds-m-top_large">
+                                                    <div class="slds-grid slds-grid_align-spread slds-p-bottom_large slds-border_bottom">
+                                                        <div class="slds-col">
+                                                            <ul>
+                                                                <li class="ds-bold-text">{!$Label.c.DocuSignDemo}</li>
+                                                                <li class="ds-regular-text">{!$Label.c.DemoHelpText}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="slds-col">
+                                                            <lightning:button variant="neutral"
+                                                                              label="{!$Label.c.LoginToDemo}"
+                                                                              onclick="{!c.loginToDemoDocuSignEnvironment}"></lightning:button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="slds-m-top_large">
+                                                    <div class="slds-grid slds-grid_align-spread">
+                                                        <div class="slds-col">
+                                                            <ul>
+                                                                <li class="ds-bold-text">{!$Label.c.TestingEnvironment}</li>
+                                                                <li class="ds-regular-text">{!$Label.c.TestingEnvironmentHelpText}</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="slds-col">
+                                                            <ul class="slds-list_horizontal">
+                                                                <li>
+                                                                    <lightning:input type="text"
+                                                                                     placeholder="{!$Label.c.EnvironmentName}"
+                                                                                     variant="label-hidden"
+                                                                                     value="{!v.environment}"></lightning:input>
+                                                                </li>
+                                                                <li class="slds-m-left_small">
+                                                                    <lightning:button variant="neutral"
+                                                                                      label="{!$Label.c.LogIn}"
+                                                                                      onclick="{!c.loginToOtherDocuSignEnvironment}"
+                                                                                      disabled="{!(empty(v.environment))}"></lightning:button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End of Advanced options -->
+                            </aura:if>
+                            <!-- second step select account -->
+                            <aura:if isTrue="{!v.currentStep == 1}">
+                                <div class="slds-col slds-m-top_small slds-size_1-of-1">
+                                    <div class="slds-box">
+                                        <div class="ds-login-illustration slds-m-around_medium">
+                                            <div class="slds-media">
+                                                <div class="slds-media__figure">
+                                                    <img src="{!$Resource.LoginStep2}"/>
+                                                </div>
+                                                <div class="slds-media__body slds-m-left_medium slds-m-top_large">
+                                                    <ul>
+                                                        <li class="ds-loginToDocuSign-text">{!$Label.c.SelectAccount}</li>
+                                                        <li class="slds-m-top_xx-small ds-regular-text">
+                                                            <aura:if isTrue="{!v.multipleAccountsFound}">
+                                                                {!$Label.c.MultipleAccountsMessage}
                                                                 <aura:set attribute="else">
-                                                                    <lightning:formattedRichText
-                                                                            value="{!$Label.c.NonUSConsentMessage}"/>
+                                                                    {!$Label.c.AccountSelected}
                                                                 </aura:set>
                                                             </aura:if>
-                                                        </em>
-                                                    </small>
-                                                </div>
-                                                <div class="slds-col slds-no-flex">
-                                                    <lightning:button aura:id="trial-button"
-                                                                      label="{!$Label.c.GetStarted}" variant="brand"
-                                                                      onclick="{!c.getStarted}"/>
+                                                        </li>
+                                                        <li class="slds-m-top_medium ds-regular-text ds-account-selection-radioGroup">
+                                                            <lightning:radioGroup name="radioGroup"
+                                                                                  variant="label-hidden"
+                                                                                  options="{!v.accountOptions}"
+                                                                                  value="{!v.selectedAccountNumber}"
+                                                                                  type="radio"/>
+                                                        </li>
+                                                        <li class="slds-m-top_large">
+                                                            <ul class="slds-list_horizontal">
+                                                                <lightning:button class="slds-theme_brand"
+                                                                                  variant="neutral"
+                                                                                  label="{!$Label.c.Back}"
+                                                                                  iconName="utility:chevronleft"
+                                                                                  onclick="{!c.gotoLoginStep}"/>
+                                                                <lightning:button
+                                                                        label="{!if(v.multipleAccountsFound, $Label.c.Select, $Label.c.Next)}"
+                                                                        variant="brand"
+                                                                        class="ds-button-left-margin"
+                                                                        onclick="{!c.accountSelected}"
+                                                                        disabled="{!empty(v.selectedAccountNumber)}"/>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
+
                                         </div>
-                                        <!-- /Trial Fields -->
+                                    </div>
+                                </div>
+                            </aura:if>
+                            <!-- third step authorize access to Salesforce -->
+                            <aura:if isTrue="{!v.currentStep == 2}">
+                                <div class="slds-col slds-p-top_small slds-size_1-of-1">
+                                    <div class="slds-box">
+                                        <div class="ds-login-illustration slds-m-around_medium">
+                                            <div class="slds-media">
+                                                <div class="slds-media__figure">
+                                                    <img src="{!$Resource.LoginStep3}"/>
+                                                </div>
+                                                <div class="slds-media__body slds-m-left_medium slds-m-top_large">
+                                                    <ul>
+                                                        <li class="ds-loginToDocuSign-text">{!$Label.c.AuthorizeAccess}</li>
+                                                        <aura:if isTrue="{!v.platformAuthorizationSettingsFound}">
+                                                            <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizeHelpText}</li>
+                                                            <aura:set attribute="else">
+                                                                <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizationSettingsNotPresent}</li>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                        <li class="slds-m-top_large">
+                                                            <ul class="slds-list_horizontal">
+                                                                <lightning:button class="slds-theme_brand"
+                                                                                  variant="neutral"
+                                                                                  label="{!$Label.c.Back}"
+                                                                                  iconName="utility:chevronleft"
+                                                                                  onclick="{!c.gotoSelectAccountStep}"/>
 
-                                        <aura:set attribute="else">
-                                            <!-- Log In Fields -->
-                                            <div class="{! 'slds-section' + (v.advancedOptionsExpanded ? ' slds-is-open' : '')}">
-                                                <button aria-controls="advanced-options"
-                                                        aria-expanded="{!v.advancedOptionsExpanded}"
-                                                        onclick="{!c.toggleAdvancedOptions}"
-                                                        class="slds-button slds-section__title-action">
-                                                    <lightning:icon
-                                                            iconName="{!v.advancedOptionsExpanded ? 'utility:chevrondown' : 'utility:chevronright'}"
-                                                            size="xx-small"
-                                                            alternativeText="expand advanced options"/>
-                                                    <span class="slds-section__title_xx-small">{!$Label.c.AdvancedOptions}</span>
-                                                </button>
-                                                <div id="advanced-options" class="slds-section__content">
-                                                    <lightning:select aura:id="ds-environment"
-                                                                      label="{!$Label.c.Environment}"
-                                                                      value="{!v.environment}">
-                                                        <option value="Production"
-                                                                selected="selected">{!$Label.c.Production}</option>
-                                                        <option value="Demo">{!$Label.c.Demo}</option>
-                                                        <option value="{!$Label.c.HQTEST3}">{!$Label.c.HQTEST3}</option>
-                                                        <option value="Other">{!$Label.c.Other}</option>
-                                                    </lightning:select>
-                                                    <lightning:input aura:id="ds-other-url"
-                                                                     class="{!'slds-p-top_x-small ' + (v.environment == 'Other' ? 'slds-show' : 'slds-hide')}"
-                                                                     label="{!$Label.c.OtherUrl}"
-                                                                     type="url"
-                                                                     value="{!v.otherUrl}"/>
+                                                                <aura:if
+                                                                        isTrue="{!v.platformAuthorizationSettingsFound}">
+                                                                    <lightning:button label="{!$Label.c.AllowAccess}"
+                                                                                      variant="brand"
+                                                                                      class="ds-button-left-margin"
+                                                                                      onclick="{!c.completePlatformOAuth}"
+                                                                                      disabled="{!not(v.isLoggedIn)}"/>
+
+                                                                    <aura:set attribute="else">
+                                                                        <lightning:button
+                                                                                label="{!$Label.c.CompleteSetupAuthorization}"
+                                                                                variant="brand"
+                                                                                class="ds-button-left-margin"
+                                                                                onclick="{!c.completeSetup}"
+                                                                                disabled="{!not(v.isLoggedIn)}"/>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                            <div class="slds-m-top_medium slds-text-align_right">
-                                                <lightning:button aura:id="login-button" label="{!$Label.c.LogIn}"
-                                                                  variant="brand" onclick="{!c.loginToDocuSign}"/>
-                                            </div>
-                                            <!-- /Log In Fields -->
-                                        </aura:set>
-                                    </aura:if>
+
+                                        </div>
+                                    </div>
                                 </div>
-                            </aura:set>
-                        </aura:if>
-                    </div>
-
-                    <!-- Account Selection Modal -->
-                    <c:strike_modal showModal="{!v.showAccountSelectionModal}" title="{!$Label.c.SelectAccount}">
-                        <p class="slds-m-bottom_small">{!$Label.c.MultipleAccountsMessage}</p>
-                        <aura:if isTrue="{!and(v.showAccountSelectionModal, not(empty(v.login.accounts)))}">
-                            <lightning:select value="{!v.selectedAccountNumber}" label="{!$Label.c.Account}">
-                                <option value=""
-                                        selected="selected">{!$Label.c.SelectAccountOption}</option>
-                                <aura:iteration items="{!v.login.accounts}" var="account" indexVar="index">
-                                    <option value="{!account.accountNumber}">{!format($Label.c.AccountDisplay_2, account.name, account.accountNumber)}</option>
-                                </aura:iteration>
-                            </lightning:select>
-                        </aura:if>
-                        <aura:set attribute="footerButtons">
-                            <lightning:button variant="neutral" label="{!$Label.c.Cancel}"
-                                              onclick="{!c.cancelSelectAccount}"/>
-                            <lightning:button variant="brand" label="{!$Label.c.SelectAccount}"
-                                              disabled="{!empty(v.selectedAccountNumber)}"
-                                              onclick="{!c.selectAccount}"/>
-                        </aura:set>
-                    </c:strike_modal>
-                    <!-- /Account Selection Modal -->
-
-                    <!-- /Logged Out State -->
-                </aura:set>
-            </aura:if>
-        </div>
-
-        <aura:if isTrue="{!and(not(v.signedUpForTrial), not(v.isLoggedIn))}">
-            <div class="slds-m-vertical_large slds-text-align_center">
-                <a href="javascript:void(0)" onclick="{!c.swapLogInState}">
-                    <aura:if isTrue="{!v.showTrialFields}">
-                        {!$Label.c.LogInToExisting}
-                        <aura:set attribute="else">
-                            {!$Label.c.NoAccount}
+                            </aura:if>
                         </aura:set>
                     </aura:if>
-                </a>
+                </div>
             </div>
-        </aura:if>
-
-        <!-- Logout Modal -->
-        <c:strike_modal aura:id="modal"
-                        title="{!$Label.c.LogOut}"
-                        variant="error"
-                        showModal="{!v.showLogoutModal}">
-            <p class="slds-text-align_center">{!format($Label.c.LogoutConfirm_1, v.login.email)}</p>
-
-            <aura:set attribute="footerButtons">
-                <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.hideLogoutModal}"/>
-                <lightning:button label="{!$Label.c.LogOut}" variant="brand" onclick="{!c.logoutOfDocuSign}"/>
-            </aura:set>
-        </c:strike_modal>
-        <!-- /Logout Modal -->
+        </div>
     </div>
 </aura:component>
