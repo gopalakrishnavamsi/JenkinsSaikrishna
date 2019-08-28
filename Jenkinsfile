@@ -36,6 +36,6 @@ salesforcePipeline(
   installTasks: installTasks,
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
-  doSonarQube: true
+  doSonarQube: false
 )
 
