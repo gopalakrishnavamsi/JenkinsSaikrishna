@@ -20,9 +20,12 @@ public with sharing class ScmTokenAPI extends ScmAPI {
 
 	public static ScmTokenAPI getInstance() {
 		if (self == null) {
-			Credentials c = Credentials.getInstance();
-			if (c.environment.scmMergeBaseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
-			self = new ScmTokenAPI(c.environment.scmMergeBaseUrl, 'v1', c.account.id);
+			Url baseUrl = AccountProducts.getInstance().getScmMergeBaseUrl();
+			if (baseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
+			self = new ScmTokenAPI(
+				baseUrl,
+				'v1',
+				Credentials.getInstance().account.id);
 		}
 		return self;
 	}

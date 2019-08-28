@@ -171,11 +171,7 @@ private class CredentialsTest {
 					DocuSign.Environment.Production,
 					new Url('https://account.test.docusign.net/'),
 					new Url('https://api.test.docusign.net/'),
-					new Url('https://esign.test.docusign.net/'),
-					new Url('https://web.test.springcm.com/atlas/'),
-					new Url('https://api.test.springcm.com/'),
-					new Url('https://merge.test.springcm.com/gen/'),
-					new Url('https://auth.test.springcm.com/')),
+					new Url('https://esign.test.docusign.net/')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -209,14 +205,6 @@ private class CredentialsTest {
 			System.assertEquals('https://api.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
 			System.assertEquals('https://esign.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmWebBaseUrl);
-			System.assertEquals('https://web.test.springcm.com/atlas/', result1.environment.scmWebBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
-			System.assertEquals('https://api.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmMergeBaseUrl);
-			System.assertEquals('https://merge.test.springcm.com/gen/', result1.environment.scmMergeBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
-			System.assertEquals('https://auth.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -271,11 +259,7 @@ private class CredentialsTest {
 					DocuSign.Environment.Production,
 					new Url('https://account1.test.docusign.net/'),
 					new Url('https://api1.test.docusign.net/'),
-					new Url('https://esign1.test.docusign.net/'),
-					new Url('https://web1.test.springcm.com/atlas/'),
-					new Url('https://api1.test.springcm.com/'),
-					new Url('https://merge1.test.springcm.com/gen/'),
-					new Url('https://auth1.test.springcm.com/')),
+					new Url('https://esign1.test.docusign.net/')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -310,14 +294,6 @@ private class CredentialsTest {
 			System.assertEquals('https://api1.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
 			System.assertEquals('https://esign1.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmWebBaseUrl);
-			System.assertEquals('https://web1.test.springcm.com/atlas/', result1.environment.scmWebBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
-			System.assertEquals('https://api1.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmMergeBaseUrl);
-			System.assertEquals('https://merge1.test.springcm.com/gen/', result1.environment.scmMergeBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
-			System.assertEquals('https://auth1.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);

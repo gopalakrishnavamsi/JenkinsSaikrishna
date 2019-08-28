@@ -27,6 +27,7 @@ public with sharing class AccountProducts {
 	private final Integer checkFrequencyMinutes;
 	@TestVisible
 	private Boolean isDirty;
+	private DocuSign.Environment environment;
 
 	@AuraEnabled
 	public ESignatureProduct eSignature {
@@ -58,11 +59,13 @@ public with sharing class AccountProducts {
 
 	@TestVisible
 	private AccountProducts(
+		final DocuSign.Environment environment,
 		final Map<String, Product> products,
 		final Datetime lastChecked,
 		final Integer checkFrequencyMinutes,
 		final Boolean isDirty) {
 
+		this.environment = environment;
 		this.products = products == null ? new Map<String, Product>() : products;
 		this.lastChecked = lastChecked;
 		this.checkFrequencyMinutes = checkFrequencyMinutes;
@@ -295,7 +298,7 @@ public with sharing class AccountProducts {
 			if (pr == null) return null;
 
 			return new ProductRoleSettings__c(
-				Name = this.getProductRoleKey(pr.product,  pr.role),
+				Name = this.getProductRoleKey(pr.product, pr.role),
 				IsAdministrator__c = pr.isAdministrator == true,
 				ProductName__c = pr.product == null ? null : pr.product.toLowerCase(),
 				RoleId__c = String.valueOf(pr.id),
@@ -361,6 +364,7 @@ public with sharing class AccountProducts {
 		final Map<String, Product> configuredProducts,
 		final Datetime lastChecked,
 		final Integer checkFrequencyMinutes,
+		final DocuSign.Environment environment,
 		final Url provisioningBaseUrl,
 		final Url eSignatureBaseUrl,
 		final UUID accountId,
@@ -389,9 +393,9 @@ public with sharing class AccountProducts {
 					products.put(pp.name, pp);
 				}
 			}
-			result = new AccountProducts(products, Datetime.now(), checkFrequencyMinutes, true);
+			result = new AccountProducts(environment, products, Datetime.now(), checkFrequencyMinutes, true);
 		} else {
-			result = new AccountProducts(configuredProducts, lastChecked, checkFrequencyMinutes, false);
+			result = new AccountProducts(environment, configuredProducts, lastChecked, checkFrequencyMinutes, false);
 		}
 
 		return result;
@@ -410,6 +414,7 @@ public with sharing class AccountProducts {
 				DB.queryProducts(),
 				s.ProductsLastChecked__c,
 				Integer.valueOf(s.ProductsCheckFrequency__c),
+				DocuSign.parseEnvironment(s.Environment__c),
 				c.environment.provisioningBaseUrl,
 				c.environment.eSignatureBaseUrl,
 				c.account.id,
@@ -418,13 +423,15 @@ public with sharing class AccountProducts {
 		return self;
 	}
 
-	public static AccountProducts getInstance(
+	public static AccountProducts initialize(
+		final DocuSign.Environment environment,
 		final Url provisioningBaseUrl,
 		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final String accessToken) {
 
-		if (provisioningBaseUrl == null
+		if (environment == null
+			|| provisioningBaseUrl == null
 			|| eSignatureBaseUrl == null
 			|| UUID.isEmpty(accountId)
 			|| String.isBlank(accessToken)) {
@@ -432,7 +439,8 @@ public with sharing class AccountProducts {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 
-		if (!DocuSign.isValidUrl(provisioningBaseUrl)
+		if (environment == DocuSign.Environment.Invalid
+			|| !DocuSign.isValidUrl(provisioningBaseUrl)
 			|| !DocuSign.isValidUrl(eSignatureBaseUrl)) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
@@ -443,6 +451,7 @@ public with sharing class AccountProducts {
 			DB.queryProducts(),
 			s.ProductsLastChecked__c,
 			Integer.valueOf(s.ProductsCheckFrequency__c),
+			environment,
 			provisioningBaseUrl,
 			eSignatureBaseUrl,
 			accountId,
@@ -540,6 +549,53 @@ public with sharing class AccountProducts {
 		return result;
 	}
 
+	@Future(Callout = true)
+	private static void createRemoteSites(
+		final String environment,
+		final Map<String, String> urls) {
+
+		if (Collection.isNotEmpty(urls)) {
+			DocuSign.Environment dsEnv = DocuSign.parseEnvironment(environment);
+			if (dsEnv == null || dsEnv == DocuSign.Environment.Invalid) throw new DocuSignException(Label.InvalidEnvironment);
+
+			List<MetadataService.RemoteSite> sites = new List<MetadataService.RemoteSite>();
+			for (String key : urls.keySet()) {
+				Url u = new Url(urls.get(key));
+				if (!DocuSign.isValidUrl(u)) throw new DocuSignException(Label.InvalidEnvironment);
+
+				switch on key {
+					when 'scmWebBaseUrl' {
+						sites.add(MetadataService.newRemoteSite(
+							dsEnv,
+							MetadataService.REMOTE_SITE_WEB,
+							Label.ScmWebServiceDescription,
+							new Url('https://' + u.getAuthority())));
+					} when 'scmApiBaseUrl' {
+						sites.add(MetadataService.newRemoteSite(
+							dsEnv,
+							MetadataService.REMOTE_SITE_API,
+							Label.ScmApiServiceDescription,
+							new Url('https://' + u.getAuthority())));
+					} when 'scmMergeBaseUrl' {
+						sites.add(MetadataService.newRemoteSite(
+							dsEnv,
+							MetadataService.REMOTE_SITE_MERGE,
+							Label.GenServiceDescription,
+							new Url('https://' + u.getAuthority())));
+					} when 'scmAuthBaseUrl' {
+						sites.add(MetadataService.newRemoteSite(
+							dsEnv,
+							MetadataService.REMOTE_SITE_AUTH,
+							Label.ScmAuthServiceDescription,
+							new Url('https://' + u.getAuthority())));
+					}
+				}
+			}
+			
+			if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
+		}
+	}
+
 	public static Boolean save() {
 		Boolean result = self != null && self.isDirty;
 		if (result) {
@@ -547,14 +603,30 @@ public with sharing class AccountProducts {
 				DB.queryProducts().keySet(),
 				self.products == null ? new Set<String>() : self.products.keySet());
 
+			Url scmWebBaseUrl = self.getScmWebBaseUrl();
+			Url scmApiBaseUrl = self.getScmApiBaseUrl();
+			Url scmMergeBaseUrl = self.getScmMergeBaseUrl();
+			Url scmAuthBaseUrl = self.getScmAuthBaseUrl();
+
 			DB.replaceProducts(
 				self.products == null ? new List<Product>() : self.products.values(),
-				self.getScmWebBaseUrl(),
-				self.getScmApiBaseUrl(),
-				self.getScmMergeBaseUrl(),
-				self.getScmAuthBaseUrl(),
+				scmWebBaseUrl,
+				scmApiBaseUrl,
+				scmMergeBaseUrl,
+				scmAuthBaseUrl,
 				self.lastChecked,
 				self.checkFrequencyMinutes);
+
+			Map<String, String> urls = new Map<String, String>();
+			if (scmWebBaseUrl != null) urls.put('scmWebBaseUrl', scmWebBaseUrl.toExternalForm());
+			if (scmApiBaseUrl != null) urls.put('scmApiBaseUrl', scmApiBaseUrl.toExternalForm());
+			if (scmMergeBaseUrl != null) urls.put('scmMergeBaseUrl', scmMergeBaseUrl.toExternalForm());
+			if (scmAuthBaseUrl != null) urls.put('scmAuthBaseUrl', scmAuthBaseUrl.toExternalForm());
+
+			createRemoteSites(
+				String.valueOf(self.environment),
+				urls);
+
 			self.isDirty = false;
 		}
 		return result;

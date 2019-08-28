@@ -32,12 +32,12 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
-			Credentials c = Credentials.getInstance();
-			if (c.environment.scmApiBaseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
+			Url baseUrl = AccountProducts.getInstance().getScmApiBaseUrl();
+			if (baseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
 			self = new NegotiateAPI(
-				c.environment.scmApiBaseUrl,
+				baseUrl,
 				'v2',
-				c.account.id);
+				Credentials.getInstance().account.id);
 		}
 		return self;
 	}

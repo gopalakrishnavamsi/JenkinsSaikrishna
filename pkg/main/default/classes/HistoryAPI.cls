@@ -28,9 +28,12 @@ public with sharing class HistoryAPI extends ScmAPI {
 
 	public static HistoryAPI getInstance() {
 		if (self == null) {
-			Credentials c = Credentials.getInstance();
-			if (c.environment.scmMergeBaseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
-			self = new HistoryAPI(c.environment.scmMergeBaseUrl, 'v1', c.account.id);
+			Url baseUrl = AccountProducts.getInstance().getScmMergeBaseUrl();
+			if (baseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
+			self = new HistoryAPI(
+				baseUrl,
+				'v1',
+				Credentials.getInstance().account.id);
 		}
 		return self;
 	}

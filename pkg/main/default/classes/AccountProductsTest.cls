@@ -35,10 +35,22 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_undefined_arguments() {
+	static void test_initialize_undefined_arguments() {
 		Test.startTest();
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				null,
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				null,
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -48,7 +60,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				null,
 				UUID.randomUUID(),
@@ -58,7 +71,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				null,
@@ -68,7 +82,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -81,10 +96,22 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_invalid_environment() {
+	static void test_initialize_invalid_environment() {
 		Test.startTest();
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Invalid,
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			AccountProducts.initialize(
+				DocuSign.Environment.Production,
 				new Url('https://provisioning.test.bad-docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -94,7 +121,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Production,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://example.com/'),
 				UUID.randomUUID(),
@@ -107,11 +135,12 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_setup() {
+	static void test_initialize_setup() {
 		DocuSignAPIMock.success();
 
 		Test.startTest();
-		AccountProducts result = AccountProducts.getInstance(
+		AccountProducts result = AccountProducts.initialize(
+			DocuSign.Environment.HQTEST3,
 			new Url('https://provisioning.test.docusign.net/'),
 			new Url('https://esign.test.docusign.net/'),
 			UUID.randomUUID(),
@@ -122,7 +151,7 @@ private class AccountProductsTest {
 	}
 
 	static AccountProducts newAccountProducts(final Map<String, Product> products) {
-		return new AccountProducts(products, null, null, false);
+		return new AccountProducts(DocuSign.Environment.Production, products, null, null, false);
 	}
 
 	@IsTest
@@ -222,6 +251,7 @@ private class AccountProductsTest {
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addDays(-1),
 				1,
+				DocuSign.Environment.Demo,
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://esign.test.docusign.net'),
 				UUID.randomUUID(),
@@ -248,6 +278,7 @@ private class AccountProductsTest {
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addMinutes(-1),
 				60,
+				DocuSign.Environment.Demo,
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://esign.test.docusign.net'),
 				UUID.randomUUID(),
@@ -701,7 +732,8 @@ private class AccountProductsTest {
 		a.ProductsLastChecked__c = Datetime.now();
 		a.ProductsCheckFrequency__c = 60;
 		insert a;
-		AccountProducts ap = AccountProducts.getInstance(
+		AccountProducts ap = AccountProducts.initialize(
+			DocuSign.Environment.Demo,
 			new Url('https://provisioning.test.docusign.net'),
 			new Url('https://esign.test.docusign.net'),
 			UUID.randomUUID(),
@@ -718,6 +750,7 @@ private class AccountProductsTest {
 	@IsTest
 	static void test_save_dirty() {
 		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignSender()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();

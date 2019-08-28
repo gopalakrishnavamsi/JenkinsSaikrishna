@@ -17,9 +17,12 @@ public with sharing class GenAPI extends ScmAPI {
 
 	public static GenAPI getInstance() {
 		if (self == null) {
-			Credentials c = Credentials.getInstance();
-			if (c.environment.scmMergeBaseUrl == null) throw new DocuSignException(Label.GenNotConfigured);
-			self = new GenAPI(c.environment.scmMergeBaseUrl, 'v1', c.account.id);
+			Url baseUrl = AccountProducts.getInstance().getScmMergeBaseUrl();
+			if (baseUrl == null) throw new DocuSignException(Label.GenNotConfigured);
+			self = new GenAPI(
+				baseUrl,
+				'v1',
+				Credentials.getInstance().account.id);
 		}
 		return self;
 	}

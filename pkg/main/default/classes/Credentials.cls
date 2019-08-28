@@ -65,21 +65,13 @@ public with sharing class Credentials {
 		public Url accountBaseUrl { get; private set; }
 		public Url provisioningBaseUrl { get; private set; }
 		public Url eSignatureBaseUrl { get; private set; }
-		public Url scmWebBaseUrl { get; private set; }
-		public Url scmApiBaseUrl { get; private set; }
-		public Url scmMergeBaseUrl { get; private set; }
-		public Url scmAuthBaseUrl { get; private set; }
 		public Boolean isValid {
 			get {
 				return this.environment != null
 					&& this.environment != DocuSign.Environment.Invalid
 					&& DocuSign.isValidUrl(this.accountBaseUrl)
 					&& DocuSign.isValidUrl(this.provisioningBaseUrl)
-					&& (this.eSignatureBaseUrl == null || DocuSign.isValidUrl(this.eSignatureBaseUrl))
-					&& (this.scmWebBaseUrl == null || DocuSign.isValidUrl(this.scmWebBaseUrl))
-					&& (this.scmApiBaseUrl == null || DocuSign.isValidUrl(this.scmApiBaseUrl))
-					&& (this.scmMergeBaseUrl == null || DocuSign.isValidUrl(this.scmMergeBaseUrl))
-					&& (this.scmAuthBaseUrl == null || DocuSign.isValidUrl(this.scmAuthBaseUrl));
+					&& (this.eSignatureBaseUrl == null || DocuSign.isValidUrl(this.eSignatureBaseUrl));
 			}
 		}
 
@@ -87,20 +79,12 @@ public with sharing class Credentials {
 			final DocuSign.Environment environment,
 			final Url accountBaseUrl,
 			final Url provisioningBaseUrl,
-			final Url eSignatureBaseUrl,
-			final Url scmWebBaseUrl,
-			final Url scmApiBaseUrl,
-			final Url scmMergeBaseUrl,
-			final Url scmAuthBaseUrl) {
+			final Url eSignatureBaseUrl) {
 
 			this.environment = environment;
 			this.accountBaseUrl = accountBaseUrl;
 			this.provisioningBaseUrl = provisioningBaseUrl;
 			this.eSignatureBaseUrl = eSignatureBaseUrl;
-			this.scmWebBaseUrl = scmWebBaseUrl;
-			this.scmApiBaseUrl = scmApiBaseUrl;
-			this.scmMergeBaseUrl = scmMergeBaseUrl;
-			this.scmAuthBaseUrl = scmAuthBaseUrl;
 		}
 	}
 
@@ -227,7 +211,7 @@ public with sharing class Credentials {
 	@TestVisible
 	private static Credentials getInstance(final Id userId, final Boolean validate) {
 		Credentials result = null;
-		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls\
+		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls
 			if (self == null) {
 				result = DB.queryCredentials(userId);
 				if (validate) validate(result);
@@ -254,21 +238,13 @@ public with sharing class Credentials {
 					DocuSign.Environment.Invalid,
 					null,
 					null,
-					null,
-					null,
-					null,
-					null,
 					null);
 			}
 			return new Environment(
 				DocuSign.parseEnvironment(settings.Environment__c),
 				settings.AccountBaseUrl__c == null ? null : new Url(settings.AccountBaseUrl__c),
 				settings.ProvisioningBaseUrl__c == null ? null : new Url(settings.ProvisioningBaseUrl__c),
-				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c),
-				settings.ScmWebBaseUrl__c == null ? null : new Url(settings.ScmWebBaseUrl__c),
-				settings.ScmApiBaseUrl__c == null ? null : new Url(settings.ScmApiBaseUrl__c),
-				settings.ScmMergeBaseUrl__c == null ? null : new Url(settings.ScmMergeBaseUrl__c),
-				settings.ScmAuthBaseUrl__c == null ? null : new Url(settings.ScmAuthBaseUrl__c));
+				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c));
 		}
 
 		private ClientCredentials getClient(final AccountSettings__c settings) {
@@ -363,14 +339,6 @@ public with sharing class Credentials {
 				? null : environment.provisioningBaseUrl.toExternalForm();
 			settings.ESignatureBaseUrl__c = environment.eSignatureBaseUrl == null
 				? null : environment.eSignatureBaseUrl.toExternalForm();
-			settings.ScmWebBaseUrl__c = environment.scmWebBaseUrl == null
-				? null : environment.scmWebBaseUrl.toExternalForm();
-			settings.ScmApiBaseUrl__c = environment.scmApiBaseUrl == null
-				? null : environment.scmApiBaseUrl.toExternalForm();
-			settings.ScmMergeBaseUrl__c = environment.scmMergeBaseUrl == null
-				? null : environment.scmMergeBaseUrl.toExternalForm();
-			settings.ScmAuthBaseUrl__c = environment.scmAuthBaseUrl == null
-				? null : environment.scmAuthBaseUrl.toExternalForm();
 			return settings;
 		}
 
@@ -455,6 +423,7 @@ public with sharing class Credentials {
 			settings.AccessToken4__c = null;
 			settings.AccessToken5__c = null;
 			settings.AccessTokenExpires__c = null;
+			settings.Nonce__c = null;
 
 			return settings;
 		}
