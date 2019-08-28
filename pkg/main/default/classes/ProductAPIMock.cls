@@ -63,7 +63,7 @@ public class ProductAPIMock extends OAuthTokenMock {
 				gen.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
 				gen.activation_properties = new List<ProductAPI.APIProductProperty> {
 					new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
-					new ProductAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
+					new ProductAPI.APIProductProperty('merge_uri', 'https://test.springcm.com/merge'),
 					new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
 				};
 				ProductAPI.APIProduct negotiate = new ProductAPI.APIProduct();
@@ -73,7 +73,7 @@ public class ProductAPIMock extends OAuthTokenMock {
 				negotiate.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
 				negotiate.activation_properties = new List<ProductAPI.APIProductProperty> {
 					new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
-					new ProductAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
+					new ProductAPI.APIProductProperty('merge_uri', 'https://test.springcm.com/merge'),
 					new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
 				};
 				ProductAPI.APIProduct clm = new ProductAPI.APIProduct();
@@ -84,7 +84,8 @@ public class ProductAPIMock extends OAuthTokenMock {
 				clm.activation_properties = new List<ProductAPI.APIProductProperty> {
 					new ProductAPI.APIProductProperty('admin_uri', 'https://test.springcm.com/atlas/Admin/AccountSettings'),
 					new ProductAPI.APIProductProperty('landing_page_uri', 'https://test.springcm.com/atlas/LandingPage'),
-					new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+					new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
+					new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test.springcm.com/')
 				};
 				ps.products = new List<ProductAPI.APIProduct> {
 					eSign, gen, negotiate, clm

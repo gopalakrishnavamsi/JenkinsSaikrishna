@@ -147,23 +147,24 @@ public with sharing class AccountProducts {
 						product.Status__c,
 						product.IsTrial__c == true,
 						product.TrialExpires__c,
-						account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
-						account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c));
+						account == null || account.ScmWebBaseUrl__c == null ? null : new Url(account.ScmWebBaseUrl__c),
+						account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c),
+						account == null || account.ScmMergeBaseUrl__c == null ? null : new Url(account.ScmMergeBaseUrl__c));
 				} when 'negotiate' {
 					result = new NegotiateProduct(
 						product.Status__c,
 						product.IsTrial__c == true,
 						product.TrialExpires__c,
-						account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
-						account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c));
+						account == null || account.ScmWebBaseUrl__c == null ? null : new Url(account.ScmWebBaseUrl__c),
+						account == null || account.ScmApiBaseUrl__c == null ? null : new Url(account.ScmApiBaseUrl__c),
+						account == null || account.ScmMergeBaseUrl__c == null ? null : new Url(account.ScmMergeBaseUrl__c));
 				} when 'clm' {
 					result = new ClmProduct(
 						product.Status__c,
 						product.IsTrial__c == true,
 						product.TrialExpires__c,
-						account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c),
-						account == null || account.ClmLandingPageUrl__c == null ? null : new Url(account.ClmLandingPageUrl__c),
-						account == null || account.ClmAdminUrl__c == null ? null : new Url(account.ClmAdminUrl__c));
+						account == null || account.ScmWebBaseUrl__c == null ? null : new Url(account.ScmWebBaseUrl__c),
+						account == null || account.ScmAuthBaseUrl__c == null ? null : new Url(account.ScmAuthBaseUrl__c));
 				}
 			}
 			return result;
@@ -214,10 +215,18 @@ public with sharing class AccountProducts {
 		}
 
 		private AccountSettings__c upsertAccountSettings(
+			final Url scmWebBaseUrl,
+			final Url scmApiBaseUrl,
+			final Url scmMergeBaseUrl,
+			final Url scmAuthBaseUrl,
 			final Datetime lastChecked,
 			final Integer checkFrequencyMinutes) {
 
 			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+			accountSettings.ScmWebBaseUrl__c = scmWebBaseUrl == null ? null : scmWebBaseUrl.toExternalForm();
+			accountSettings.ScmApiBaseUrl__c = scmApiBaseUrl == null ? null : scmApiBaseUrl.toExternalForm();
+			accountSettings.ScmMergeBaseUrl__c = scmMergeBaseUrl == null ? null : scmMergeBaseUrl.toExternalForm();
+			accountSettings.ScmAuthBaseUrl__c = scmAuthBaseUrl == null ? null : scmAuthBaseUrl.toExternalForm();
 			accountSettings.ProductsLastChecked__c = lastChecked == null ? Datetime.now() : lastChecked;
 			accountSettings.ProductsCheckFrequency__c = checkFrequencyMinutes == null || checkFrequencyMinutes <= 0
 				? DEFAULT_CHECK_FREQUENCY_MIN : checkFrequencyMinutes;
@@ -227,12 +236,22 @@ public with sharing class AccountProducts {
 
 		public List<Product> replaceProducts(
 			final List<Product> products,
+			final Url scmWebBaseUrl,
+			final Url scmApiBaseUrl,
+			final Url scmMergeBaseUrl,
+			final Url scmAuthBaseUrl,
 			final Datetime lastChecked,
 			final Integer checkFrequencyMinutes) {
 
 			if (products != null) {
 				replaceProductSettings(products);
-				upsertAccountSettings(lastChecked, checkFrequencyMinutes);
+				upsertAccountSettings(
+					scmWebBaseUrl,
+					scmApiBaseUrl,
+					scmMergeBaseUrl,
+					scmAuthBaseUrl,
+					lastChecked,
+					checkFrequencyMinutes);
 			}
 			return products;
 		}
@@ -461,14 +480,14 @@ public with sharing class AccountProducts {
 		return DB.upsertProducts(result);
 	}
 
-	public Url getScmAuthBaseUrl() {
+	public Url getScmWebBaseUrl() {
 		Url result = null;
-		if (this.clm != null && this.clm.authBaseUrl != null) {
-			result = this.clm.authBaseUrl;
-		} else if (this.negotiate != null && this.negotiate.authBaseUrl != null) {
-			result = this.negotiate.authBaseUrl;
-		} else if (this.gen != null && this.gen.authBaseUrl != null) {
-			result = this.gen.authBaseUrl;
+		if (this.clm != null && this.clm.webBaseUrl != null) {
+			result = this.clm.webBaseUrl;
+		} else if (this.negotiate != null && this.negotiate.webBaseUrl != null) {
+			result = this.negotiate.webBaseUrl;
+		} else if (this.gen != null && this.gen.webBaseUrl != null) {
+			result = this.gen.webBaseUrl;
 		}
 		return result;
 	}
@@ -483,12 +502,22 @@ public with sharing class AccountProducts {
 		return result;
 	}
 
-	public Url getClmAdminUrl() {
-		return this.clm == null ? null : this.clm.adminUrl;
+	public Url getScmMergeBaseUrl() {
+		Url result = null;
+		if (this.negotiate != null && this.negotiate.mergeBaseUrl != null) {
+			result = this.negotiate.mergeBaseUrl;
+		} else if (this.gen != null && this.gen.mergeBaseUrl != null) {
+			result = this.gen.mergeBaseUrl;
+		}
+		return result;
 	}
 
-	public Url getClmLandingPageUrl() {
-		return this.clm == null ? null : this.clm.landingPageUrl;
+	public Url getScmAuthBaseUrl() {
+		Url result = null;
+		if (this.clm != null && this.clm.authBaseUrl != null) {
+			result = this.clm.authBaseUrl;
+		}
+		return result;
 	}
 
 	@TestVisible
@@ -520,6 +549,10 @@ public with sharing class AccountProducts {
 
 			DB.replaceProducts(
 				self.products == null ? new List<Product>() : self.products.values(),
+				self.getScmWebBaseUrl(),
+				self.getScmApiBaseUrl(),
+				self.getScmMergeBaseUrl(),
+				self.getScmAuthBaseUrl(),
 				self.lastChecked,
 				self.checkFrequencyMinutes);
 			self.isDirty = false;

@@ -18,26 +18,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_database_updateSettings() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			AuthService.PermissionProfileIds ppIds = new AuthService.PermissionProfileIds(1111L, 2222L);
-			Url authUrl = new Url('https://auth.test.springcm.com/');
-			Url apiUrl = new Url('https://api.test.springcm.com/');
-
-			Test.startTest();
-			AccountSettings__c result = AuthService.DB.updateSettings(ppIds, authUrl, apiUrl);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			System.assertEquals(ppIds.administratorId, (Long)s.AdministratorProfileId__c);
-			System.assertEquals(ppIds.senderId, (Long)s.SenderProfileId__c);
-			System.assertEquals(result.ScmAuthBaseUrl__c, authUrl.toExternalForm());
-			System.assertEquals(result.ScmApiBaseUrl__c, apiUrl.toExternalForm());
-		}
-	}
-
-	@IsTest
 	static void test_AuthAPI_constructor() {
 		System.assertNotEquals(null, new AuthService.AuthAPI(new Url('https://account.docusign.com/')));
 		try {
@@ -1256,20 +1236,24 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_getRemoteSites() {
-		System.assertEquals(5, Collection.size(AuthService.getRemoteSites(
+		System.assertEquals(7, Collection.size(AuthService.getRemoteSites(
 			DocuSign.Environment.Production,
 			new Url('https://account.test.docusign.net/'),
 			new Url('https://provisioning.test.docusign.net/'),
 			new Url('https://esign.test.docusign.net/'),
-			new Url('https://auth.test.springcm.com/'),
-			new Url('https://api.test.springcm.com/'))));
-		System.assertEquals(2, Collection.size(AuthService.getRemoteSites(
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com'),
+			new Url('https://merge.test.springcm.com/gen/'),
+			new Url('https://auth.test.springcm.com/'))));
+		System.assertEquals(3, Collection.size(AuthService.getRemoteSites(
 			DocuSign.Environment.Production,
 			new Url('https://bad-docusign.net/'),
 			new Url('https://evil.domain/?q=provisioning.test.docusign.net/'),
 			new Url('https://esign.test.docusign.net/'),
-			new Url('https://evil-springcm.com/'),
-			new Url('https://api.test.springcm.com/'))));
+			new Url('https://evil-springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com'),
+			new Url('https://merge.test.springcm.com/gen/'),
+			new Url('https://evil.com?merge.test.springcm.com/gen/'))));
 	}
 
 	@IsTest
@@ -1294,10 +1278,10 @@ private class AuthServiceTest {
 					new Url('https://bad-docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1309,10 +1293,10 @@ private class AuthServiceTest {
 					new Url('https://account.testdocusign.net'),
 					new Url('https://bad-docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1324,10 +1308,10 @@ private class AuthServiceTest {
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.evil.com?docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1339,10 +1323,10 @@ private class AuthServiceTest {
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://bad-springcm.com'),
+					new Url('https://web.test.bad-springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1354,10 +1338,10 @@ private class AuthServiceTest {
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.evil.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1369,10 +1353,10 @@ private class AuthServiceTest {
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://evil-springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.evil.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1384,10 +1368,10 @@ private class AuthServiceTest {
 					new Url('https://auth.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://evil.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.evil-springcm.com'),
 					null, null, null, null);
 				throw new AssertException('Expected save to fail');
 			} catch (DocuSignException ex) {
@@ -1407,10 +1391,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					null,
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1436,10 +1420,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					'\n ',
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1465,10 +1449,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					null,
 					new LoginInformation.Account(
@@ -1490,10 +1474,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1514,10 +1498,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1541,10 +1525,10 @@ private class AuthServiceTest {
 					new Url('https://account.test.docusign.net'),
 					new Url('https://provisioning.test.docusign.net'),
 					new Url('https://esign.test.docusign.net'),
-					new Url('https://auth.test.springcm.com'),
+					new Url('https://web.test.springcm.com/atlas'),
 					new Url('https://api.test.springcm.com'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin'),
+					new Url('https://merge.test.springcm.com/gen'),
+					new Url('https://auth.test.springcm.com'),
 					UUID.randomUUID().toString(),
 					new LoginInformation(
 						UUID.randomUUID(),
@@ -1579,10 +1563,10 @@ private class AuthServiceTest {
 				new Url('https://account.test.docusign.net'),
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://esign.test.docusign.net'),
-				new Url('https://auth.test.springcm.com'),
+				new Url('https://web.test.springcm.com/atlas'),
 				new Url('https://api.test.springcm.com'),
-				new Url('https://test.springcm.com/landing'),
-				new Url('https://test.springcm.com/admin'),
+				new Url('https://merge.test.springcm.com/gen'),
+				new Url('https://auth.test.springcm.com'),
 				UUID.randomUUID().toString(),
 				new LoginInformation(
 					UUID.randomUUID(),

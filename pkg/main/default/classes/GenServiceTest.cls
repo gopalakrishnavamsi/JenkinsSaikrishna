@@ -526,13 +526,13 @@ private class GenServiceTest {
 
 		private Integer invocations = 0;
 		private final Integer failOnInvocation;
-		private final GenAPIMock successMock;
-		private final GenAPIMock failureMock;
+		private final ScmAPIMock successMock;
+		private final ScmAPIMock failureMock;
 
 		public PartialSuccessMock(final Integer failOnInvocation) {
 			this.failOnInvocation = failOnInvocation;
-			this.successMock = new GenAPIMock(true);
-			this.failureMock = new GenAPIMock(false);
+			this.successMock = new ScmAPIMock(true);
+			this.failureMock = new ScmAPIMock(false);
 		}
 
 		public HttpResponse respond(final HttpRequest request) {
@@ -576,7 +576,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_preview() {
-		GenAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
@@ -607,7 +607,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_source() {
-		GenAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
@@ -672,7 +672,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getJobStatus_success() {
-		GenAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);

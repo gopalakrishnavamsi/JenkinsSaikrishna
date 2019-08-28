@@ -1,5 +1,5 @@
-public with sharing class GenAPI extends DocuSignAPI {
-	public static String PATH_RESOURCETOKEN = 'resourcetokenregistrations';
+public with sharing class GenAPI extends ScmAPI {
+
 	private static GenAPI self = null;
 
 	@TestVisible
@@ -8,7 +8,7 @@ public with sharing class GenAPI extends DocuSignAPI {
 		final String apiVersion,
 		final UUID accountId) {
 
-		super (new Url (baseUrl, String.format('{0}/{1}/',
+		super(new Url(baseUrl, String.format('{0}/{1}/',
 			new List<String> {
 				apiVersion,
 				String.valueOf(accountId)
@@ -18,57 +18,10 @@ public with sharing class GenAPI extends DocuSignAPI {
 	public static GenAPI getInstance() {
 		if (self == null) {
 			Credentials c = Credentials.getInstance();
-			if (c.environment.scmApiBaseUrl != null && c.account.id != null) {
-				self = new GenAPI(c.environment.scmApiBaseUrl, 'v1', c.account.id);
-			} else {
-				throw UnauthorizedException.accountNotConfigured();
-			}
+			if (c.environment.scmMergeBaseUrl == null) throw new DocuSignException(Label.GenNotConfigured);
+			self = new GenAPI(c.environment.scmMergeBaseUrl, 'v1', c.account.id);
 		}
 		return self;
-	}
-
-	public class Error extends APIError {
-		public UUID referenceId { get; private set; }
-
-		public Error(
-			final Integer code,
-			final UUID referenceId,
-			final String description) {
-
-			super(code, description);
-
-			this.referenceId = referenceId;
-		}
-
-		override public String toString() {
-			return String.format(Label.ApiError_3, new List<String> {
-				String.valueOf(this.code),
-				this.description,
-				String.valueOf(this.referenceId)
-			});
-		}
-	}
-
-	@TestVisible
-	override protected virtual APIError getError(final HttpResponse response) {
-		APIError e = APIError.none;
-		Integer statusCode = response.getStatusCode();
-		if (statusCode >= 400) {
-			String body = response.getBody();
-			try {
-				Map<String, Object> error = (Map<String, Object>)((Map<String, Object>)JSON.deserializeUntyped(body))
-					.get('Error');
-				e = new GenAPI.Error(
-					error.containsKey('ErrorCode') ? (Integer)error.get('ErrorCode') : statusCode,
-					UUID.tryParse((String)error.get('ReferenceId')),
-					error.containsKey('UserMessage') ? (String)error.get('UserMessage') : response.getStatus());
-				this.log.warn('Gen API error: ' + e);
-			} catch (Exception ex) {
-				this.log.exception(ex, 'Failed to parse Gen API error. Response body:\n' + body);
-				e = new APIError(statusCode, response.getStatus());
-			}
-		}
-		return e;
 	}
 
 	public Gen.Job queueDocumentGeneration(
@@ -95,11 +48,8 @@ public with sharing class GenAPI extends DocuSignAPI {
 		final String fileName,
 		final Integer timeout) {
 
-		RestAPI.Response response = post(
-			getBaseUrl(),
+		RestAPI.Response response = this.post(
 			new List<Object> { 'sfdocumentxmlmergetasks' },
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'TemplateSfContentVersionId' => fileId,
 				'DataXml' => xmlPayload,
@@ -130,11 +80,8 @@ public with sharing class GenAPI extends DocuSignAPI {
 		final UUID jobId,
 		final Integer timeout) {
 
-		RestAPI.Response response = get(
-			getBaseUrl(),
+		RestAPI.Response response = this.get(
 			new List<Object> { 'sfdocumentxmlmergetasks', jobId },
-			QueryString.empty,
-			getDefaultHeaders(),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to retrieve document generation job status: ' + response.error);

@@ -81,6 +81,8 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 					StringUtils.parseDate(this.expiration_date),
 					properties.containsKey('web_base_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
+					properties.containsKey('api_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('api_base_uri'))) : null,
 					properties.containsKey('merge_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('merge_uri'))) : null);
 			} else if (this.product_id == PRODUCT_NEGOTIATE) {
@@ -90,6 +92,8 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 					StringUtils.parseDate(this.expiration_date),
 					properties.containsKey('web_base_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
+					properties.containsKey('api_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('api_base_uri'))) : null,
 					properties.containsKey('merge_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('merge_uri'))) : null);
 			} else if (this.product_id == PRODUCT_CLM) {
@@ -99,10 +103,8 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 					StringUtils.parseDate(this.expiration_date),
 					properties.containsKey('web_base_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
-					properties.containsKey('landing_page_uri')
-						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('landing_page_uri'))) : null,
-					properties.containsKey('admin_uri')
-						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('admin_uri'))) : null);
+					properties.containsKey('apiauth_base_url')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('apiauth_base_url'))) : null);
 			}
 			return p;
 		}

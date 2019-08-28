@@ -2,11 +2,150 @@
 private class ProductTest {
 
 	@IsTest
+	static void test_GenProduct_invalid_url() {
+		Test.startTest();
+		try {
+			new GenProduct(null, false, null,
+				new Url('https://test.evil-springcm.com/atlas/'),
+				new Url('https://test.springcm.com/gen/'),
+				new Url('https://api.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			new GenProduct(null, false, null,
+				new Url('https://test.springcm.com/atlas/'),
+				new Url('https://evil.com?test.springcm.com/gen/'),
+				new Url('https://api.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			new GenProduct(null, false, null,
+				new Url('https://test.springcm.com/atlas/'),
+				new Url('https://test.springcm.com/gen/'),
+				new Url('https://api.test.evil.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_NegotiateProduct_invalid_url() {
+		Test.startTest();
+		try {
+			new NegotiateProduct(null, false, null,
+				new Url('https://test.evil-springcm.com/atlas/'),
+				new Url('https://test.springcm.com/gen/'),
+				new Url('https://api.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			new NegotiateProduct(null, false, null,
+				new Url('https://test.springcm.com/atlas/'),
+				new Url('https://evil.com?test.springcm.com/gen/'),
+				new Url('https://api.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			new NegotiateProduct(null, false, null,
+				new Url('https://test.springcm.com/atlas/'),
+				new Url('https://test.springcm.com/gen/'),
+				new Url('https://api.test.evil.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_ClmProduct_invalid_url() {
+		Test.startTest();
+		try {
+			new ClmProduct(null, false, null,
+				new Url('https://test.evil-springcm.com/atlas/'),
+				new Url('https://auth.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			new ClmProduct(null, false, null,
+				new Url('https://test.springcm.com/atlas/'),
+				new Url('https://evil.com?auth.test.springcm.com/'));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_GenProduct_canonicalized_url() {
+		Test.startTest();
+		GenProduct result = new GenProduct(null, false, null,
+			new Url('https://test.SpringCM.com/Atlas'),
+			new Url('https://API.test.springcm.com'),
+			new Url('https://test.springcm.com/GEN'));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertNotEquals(null, result.webBaseUrl);
+		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result.apiBaseUrl);
+		System.assertEquals('https://api.test.springcm.com/', result.apiBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result.mergeBaseUrl);
+		System.assertEquals('https://test.springcm.com/gen/', result.mergeBaseUrl.toExternalForm());
+	}
+
+	@IsTest
+	static void test_NegotiateProduct_canonicalized_url() {
+		Test.startTest();
+		NegotiateProduct result = new NegotiateProduct(null, false, null,
+			new Url('https://test.SpringCM.com/Atlas'),
+			new Url('https://API.test.springcm.com'),
+			new Url('https://test.springcm.com/GEN'));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertNotEquals(null, result.webBaseUrl);
+		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result.apiBaseUrl);
+		System.assertEquals('https://api.test.springcm.com/', result.apiBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result.mergeBaseUrl);
+		System.assertEquals('https://test.springcm.com/gen/', result.mergeBaseUrl.toExternalForm());
+	}
+
+	@IsTest
+	static void test_ClmProduct_canonicalized_url() {
+		Test.startTest();
+		ClmProduct result = new ClmProduct(null, false, null,
+			new Url('https://test.SpringCM.com/Atlas'),
+			new Url('https://auth.test.springcm.com'));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertNotEquals(null, result.webBaseUrl);
+		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertNotEquals(null, result.authBaseUrl);
+		System.assertEquals('https://auth.test.springcm.com/', result.authBaseUrl.toExternalForm());
+	}
+
+	@IsTest
 	static void test_isExpired() {
 		Test.startTest();
-		System.assert(!new GenProduct(Product.STATUS_ACTIVE, false, null, null, null).isExpired);
-		System.assert(!new NegotiateProduct(Product.STATUS_EXPIRED, false, Date.today().addDays(1), null, null).isExpired);
-		System.assert(!new ClmProduct(Product.STATUS_PENDING, true, Date.today().addDays(1), null, null, null).isExpired);
+		System.assert(!new GenProduct(Product.STATUS_ACTIVE, false, null, null, null, null).isExpired);
+		System.assert(!new NegotiateProduct(Product.STATUS_EXPIRED, false, Date.today().addDays(1), null, null, null).isExpired);
+		System.assert(!new ClmProduct(Product.STATUS_PENDING, true, Date.today().addDays(1), null, null).isExpired);
 		System.assert(new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null).isExpired);
 		Test.stopTest();
 	}
@@ -14,9 +153,9 @@ private class ProductTest {
 	@IsTest
 	static void test_daysUntilExpires() {
 		Test.startTest();
-		System.assertEquals(0, new GenProduct(Product.STATUS_ACTIVE, false, null, null, null).daysUntilExpires);
-		System.assertEquals(0, new NegotiateProduct(Product.STATUS_EXPIRED, false, Date.today().addDays(1), null, null).daysUntilExpires);
-		System.assertEquals(1, new ClmProduct(Product.STATUS_PENDING, true, Date.today().addDays(1), null, null, null).daysUntilExpires);
+		System.assertEquals(0, new GenProduct(Product.STATUS_ACTIVE, false, null, null, null, null).daysUntilExpires);
+		System.assertEquals(0, new NegotiateProduct(Product.STATUS_EXPIRED, false, Date.today().addDays(1), null, null, null).daysUntilExpires);
+		System.assertEquals(1, new ClmProduct(Product.STATUS_PENDING, true, Date.today().addDays(1), null, null).daysUntilExpires);
 		System.assertEquals(0, new ESignatureProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null).daysUntilExpires);
 		Test.stopTest();
 	}

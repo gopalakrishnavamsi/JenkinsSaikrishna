@@ -407,8 +407,6 @@ public with sharing class AuthService {
 		}
 	}
 
-	@TestVisible
-	private static final AuthService.Database DB = new AuthService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
 	@TestVisible
 	private static final String REMOTE_SITE_ACCOUNT = 'Account';
@@ -417,9 +415,13 @@ public with sharing class AuthService {
 	@TestVisible
 	private static final String REMOTE_SITE_ESIGNATURE = 'eSignature';
 	@TestVisible
-	private static final String REMOTE_SITE_AUTH = 'Auth';
+	private static final String REMOTE_SITE_WEB = 'Web';
 	@TestVisible
 	private static final String REMOTE_SITE_API = 'API';
+	@TestVisible
+	private static final String REMOTE_SITE_MERGE = 'Merge';
+	@TestVisible
+	private static final String REMOTE_SITE_AUTH = 'Auth';
 	@TestVisible
 	private static final String JWT_HEADER;
 	@TestVisible
@@ -440,29 +442,6 @@ public with sharing class AuthService {
 			'typ' => 'JWT',
 			'alg' => 'RS256'
 		})));
-	}
-
-	@TestVisible
-	private class Database {
-
-		public AccountSettings__c updateSettings(
-			final PermissionProfileIds permissionProfileIds,
-			final Url scmAuthBaseUrl,
-			final Url scmApiBaseUrl) {
-
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.AdministratorProfileId__c = permissionProfileIds == null
-				? null : permissionProfileIds.administratorId;
-			settings.SenderProfileId__c = permissionProfileIds == null
-				? null : permissionProfileIds.senderId;
-			settings.ScmAuthBaseUrl__c = scmAuthBaseUrl == null
-				? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl).toExternalForm();
-			settings.ScmApiBaseUrl__c = scmApiBaseUrl == null
-				? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl).toExternalForm();
-			upsert settings;
-
-			return settings;
-		}
 	}
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
@@ -856,8 +835,10 @@ public with sharing class AuthService {
 		final Url accountBaseUrl,
 		final Url provisioningBaseUrl,
 		final Url eSignatureBaseUrl,
-		final Url scmAuthBaseUrl,
-		final Url scmApiBaseUrl) {
+		final Url scmWebBaseUrl,
+		final Url scmApiBaseUrl,
+		final Url scmMergeBaseUrl,
+		final Url scmAuthBaseUrl) {
 
 		List<MetadataService.RemoteSite> sites = new List<MetadataService.RemoteSite>();
 		// FIXME: Creating Account and Provisioning remote sites twice?
@@ -882,19 +863,33 @@ public with sharing class AuthService {
 				Label.ESignatureServiceDescription,
 				new Url('https://' + eSignatureBaseUrl.getAuthority())));
 		}
+		if (DocuSign.isValidUrl(scmWebBaseUrl)) {
+			sites.add(MetadataService.newRemoteSite(
+				environment,
+				REMOTE_SITE_WEB,
+				Label.ScmWebServiceDescription,
+				new Url('https://' + scmWebBaseUrl.getAuthority())));
+		}
+		if (DocuSign.isValidUrl(scmApiBaseUrl)) {
+			sites.add(MetadataService.newRemoteSite(
+				environment,
+				REMOTE_SITE_API,
+				Label.ScmApiServiceDescription,
+				new Url('https://' + scmApiBaseUrl.getAuthority())));
+		}
+		if (DocuSign.isValidUrl(scmMergeBaseUrl)) {
+			sites.add(MetadataService.newRemoteSite(
+				environment,
+				REMOTE_SITE_MERGE,
+				Label.GenServiceDescription,
+				new Url('https://' + scmMergeBaseUrl.getAuthority())));
+		}
 		if (DocuSign.isValidUrl(scmAuthBaseUrl)) {
 			sites.add(MetadataService.newRemoteSite(
 				environment,
 				REMOTE_SITE_AUTH,
 				Label.ScmAuthServiceDescription,
 				new Url('https://' + scmAuthBaseUrl.getAuthority())));
-		}
-		if (DocuSign.isValidUrl(scmApiBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_API,
-				Label.GenServiceDescription,
-				new Url('https://' + scmApiBaseUrl.getAuthority())));
 		}
 		return sites;
 	}
@@ -905,10 +900,10 @@ public with sharing class AuthService {
 		final Url accountBaseUrl,
 		final Url provisioningBaseUrl,
 		final Url eSignatureBaseUrl,
-		final Url scmAuthBaseUrl,
+		final Url scmWebBaseUrl,
 		final Url scmApiBaseUrl,
-		final Url clmAdminUrl,
-		final Url clmLandingPageUrl,
+		final Url scmMergeBaseUrl,
+		final Url scmAuthBaseUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
 		final LoginInformation.Account acct,
@@ -919,10 +914,10 @@ public with sharing class AuthService {
 			|| !DocuSign.isValidUrl(accountBaseUrl)
 			|| !DocuSign.isValidUrl(provisioningBaseUrl)
 			|| !DocuSign.isValidUrl(eSignatureBaseUrl)
-			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))
+			|| (scmWebBaseUrl != null && !DocuSign.isValidUrl(scmWebBaseUrl))
 			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))
-			|| (clmAdminUrl != null && !DocuSign.isValidUrl(clmAdminUrl))
-			|| (clmLandingPageUrl != null && !DocuSign.isValidUrl(clmLandingPageUrl))) {
+			|| (scmMergeBaseUrl != null && !DocuSign.isValidUrl(scmMergeBaseUrl))
+			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
@@ -935,15 +930,19 @@ public with sharing class AuthService {
 		Url aBaseUrl = UrlUtils.canonicalizeBaseUrl(accountBaseUrl);
 		Url pBaseUrl = UrlUtils.canonicalizeBaseUrl(provisioningBaseUrl);
 		Url eBaseUrl = UrlUtils.canonicalizeBaseUrl(eSignatureBaseUrl);
+		Url sWebBaseUrl = scmWebBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmWebBaseUrl);
+		Url sApiBaseUrl = scmWebBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl);
+		Url sMergeBaseUrl = scmMergeBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmMergeBaseUrl);
 		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl);
-		Url sApiBaseUrl = scmApiBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl);
 		List<MetadataService.RemoteSite> sites = getRemoteSites(
 			environment,
 			aBaseUrl,
 			pBaseUrl,
 			eBaseUrl,
-			sAuthBaseUrl,
-			sApiBaseUrl);
+			sWebBaseUrl,
+			sApiBaseUrl,
+			sMergeBaseUrl,
+			sAuthBaseUrl);
 		if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 
 		// Get instance credentials and new access token
@@ -963,10 +962,11 @@ public with sharing class AuthService {
 			instanceCredentials.id,
 			instanceCredentials.privateKey);
 
-		DB.updateSettings(
-			new AuthService.AccountAPI(eSignatureBaseUrl, acct.id, newToken.token).getPermissionProfileIds(),
-			sAuthBaseUrl,
-			sApiBaseUrl);
+		PermissionProfileIds ppIds = new AuthService.AccountAPI(
+			eSignatureBaseUrl,
+			acct.id,
+			newToken.token)
+			.getPermissionProfileIds();
 
 		return Credentials.save(
 			new Credentials.Environment(
@@ -974,17 +974,19 @@ public with sharing class AuthService {
 				aBaseUrl,
 				pBaseUrl,
 				eBaseUrl,
-				scmAuthBaseUrl,
-				scmApiBaseUrl,
-				clmAdminUrl,
-				clmLandingPageUrl),
+				sWebBaseUrl,
+				sApiBaseUrl,
+				sMergeBaseUrl,
+				sAuthBaseUrl),
 			instanceCredentials,
 			new Credentials.AccountCredentials(
 				acct.id,
 				acct.accountNumber,
 				acct.name,
 				loginInfo.email,
-				null),
+				null,
+				ppIds == null ? null : ppIds.administratorId,
+				ppIds == null ? null : ppIds.senderId),
 			new Credentials.UserCredentials(
 				loginInfo.id,
 				loginInfo.name,
@@ -1095,10 +1097,10 @@ public with sharing class AuthService {
 					rc.accountBaseUrl,
 					rc.provisioningBaseUrl,
 					eSignatureBaseUrl,
-					aps.getScmAuthBaseUrl(),
+					aps.getScmWebBaseUrl(),
 					aps.getScmApiBaseUrl(),
-					aps.getClmAdminUrl(),
-					aps.getClmLandingPageUrl(),
+					aps.getScmMergeBaseUrl(),
+					aps.getScmAuthBaseUrl(),
 					rc.clientId,
 					l.loginInformation,
 					l.loginInformation.accounts[0],
@@ -1276,10 +1278,10 @@ public with sharing class AuthService {
 				rc.accountBaseUrl,
 				rc.provisioningBaseUrl,
 				eSignatureBaseUrl,
-				aps.getScmAuthBaseUrl(),
+				aps.getScmWebBaseUrl(),
 				aps.getScmApiBaseUrl(),
-				aps.getClmAdminUrl(),
-				aps.getClmLandingPageUrl(),
+				aps.getScmMergeBaseUrl(),
+				aps.getScmAuthBaseUrl(),
 				rc.clientId,
 				result,
 				selected,
