@@ -4803,6 +4803,18 @@
 		<label>DocuSign Negotiate is not configured for your account.</label>
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen</label>
+		<name>GenBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate</label>
+		<name>NegotiateBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>Unlock</label>
+		<name>UnlockFeatures</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

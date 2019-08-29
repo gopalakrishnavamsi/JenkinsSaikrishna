@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="slds-media__body">
                                         <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration} <span
-                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">DocuSign Gen</span>
+                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.GenBadgeText}</span>
                                         </p>
                                         <p>{!$Label.c.TabDocumentGenerationHelpText}</p>
                                     </div>
@@ -90,7 +90,8 @@
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
                                 <aura:if isTrue="{!empty(v.genProduct)}">
-                                    <lightning:button label="Unlock" iconName="utility:lock" iconPosition="right"
+                                    <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
+                                                      iconPosition="right"
                                                       onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
                                     <aura:set attribute="else">
                                         <lightning:button label="{!$Label.c.SetupConfigure}"
@@ -108,7 +109,7 @@
                                     </div>
                                     <div class="slds-media__body">
                                         <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}<span
-                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">DocuSign Negotiate</span>
+                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.NegotiateBadgeText}</span>
                                         </p>
                                         <p>{!$Label.c.TabNegotiationHelpText}</p>
                                     </div>
@@ -116,7 +117,8 @@
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
                                 <aura:if isTrue="{!empty(v.negotiateProduct)}">
-                                    <lightning:button label="Unlock" iconName="utility:lock" iconPosition="right"
+                                    <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
+                                                      iconPosition="right"
                                                       onclick="{!c.navigateToNegotiationTab}"></lightning:button>
                                     <aura:set attribute="else">
                                         <lightning:button label="{!$Label.c.SetupConfigure}"

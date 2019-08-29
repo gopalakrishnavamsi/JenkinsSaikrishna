@@ -9193,4 +9193,28 @@
 		<shortDescription>Negotiate not configured</shortDescription>
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
+	<labels>
+		<fullName>GenBadgeText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiate not configured</shortDescription>
+		<value>DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateBadgeText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateBadgeText</shortDescription>
+		<value>DocuSign Negotiate</value>
+	</labels>
+	<labels>
+		<fullName>UnlockFeatures</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UnlockFeatures</shortDescription>
+		<value>Unlock</value>
+	</labels>
 </CustomLabels>
