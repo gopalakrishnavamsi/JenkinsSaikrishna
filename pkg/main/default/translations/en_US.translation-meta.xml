@@ -4810,6 +4810,18 @@
 	<customLabels>
 		<label>Viewing object folders in Salesforce</label>
 		<name>ViewingObjectFoldersSummary</name>
+  </customLabels>
+	<customLabels>
+		<label>DocuSign Gen</label>
+		<name>GenBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate</label>
+		<name>NegotiateBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>Unlock</label>
+		<name>UnlockFeatures</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -1,6 +1,14 @@
 <apex:page id="CompleteOAuth" controller="SetupController" title="{!$Label.DocuSign}" showHeader="false"
            sideBar="false">
-    <c:Loading/>
+
+    <apex:slds/>
+
+    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+        <span class="slds-assistive-text">{!$Label.Loading}</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+    </div>
+
     <script>
       function endOAuth(response, loginInformation) {
         var target = (loginInformation !== null && loginInformation.target !== null) ? loginInformation.target : null;

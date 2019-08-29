@@ -1,6 +1,13 @@
 <apex:page id="CompleteSpringOAuth" controller="SetupController" title="{!$Label.DocuSign}" showHeader="false"
            sideBar="false">
-    <c:Loading/>
+    <apex:slds/>
+
+    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+        <span class="slds-assistive-text">{!$Label.Loading}</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+    </div>
+
     <script>
       function endOAuth(event, result) {
         window.opener.endSpringOAuth(event, result);
