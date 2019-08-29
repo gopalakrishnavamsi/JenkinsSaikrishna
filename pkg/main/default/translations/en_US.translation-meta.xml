@@ -4810,7 +4810,7 @@
 	<customLabels>
 		<label>Viewing object folders in Salesforce</label>
 		<name>ViewingObjectFoldersSummary</name>
-  </customLabels>
+	</customLabels>
 	<customLabels>
 		<label>DocuSign Gen</label>
 		<name>GenBadgeText</name>
