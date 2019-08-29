@@ -908,9 +908,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	private class APIUploadDocuments {
 
 		public List<APIExternalReviewOnBehalfOfHref> Items;
-
+		public Integer Total;
 		public APIUploadDocuments(final String href) {
 			this.Items = new List<APIExternalReviewOnBehalfOfHref> { new APIExternalReviewOnBehalfOfHref(href) };
+			this.Total = this.Items != null ? this.Items.size() : 0;
 		}
 	}
 
