@@ -1,38 +1,53 @@
 @IsTest
 public with sharing class NegotiateAPITest {
+	
+	// FIXME: Missing tests for some public methods.
+
+	@IsTest
+	static void test_getInstance() {
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+			Test.startTest();
+			NegotiateAPI result1 = NegotiateAPI.getInstance();
+			NegotiateAPI result2 = NegotiateAPI.getInstance();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result1);
+			System.assert(result1 === result2);
+		}
+	}
 
 	@IsTest
 	static void test_createEOSFolder_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', NegotiateAPIMock.OBJECT_ID, 'Opportunity');
+			UUID result = NegotiateAPI.getInstance().createEOSFolder('Edge Installation', ScmAPIMock.OBJECT_ID, 'Opportunity');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(NegotiateAPIMock.FOLDER_ID, result);
+			System.assertEquals(ScmAPIMock.FOLDER_ID, result);
 
 		}
 	}
 
 	@IsTest
 	static void test_createEOSFolder_failure() {
-		NegotiateAPIMock.failure();
+		ScmAPIMock.failure();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
 			try {
-				NegotiateAPI.getInstance().createEOSFolder('Edge Installation', NegotiateAPIMock.OBJECT_ID, 'Opportunity');
+				NegotiateAPI.getInstance().createEOSFolder('Edge Installation', ScmAPIMock.OBJECT_ID, 'Opportunity');
 				throw new AssertException('Expected createEOSFolder to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
 				System.assertNotEquals(null, ex.error.code);
 				System.assertNotEquals(null, ex.error.description);
-				System.assert(ex.error instanceof NegotiateAPI.Error);
-				System.assert(UUID.isNotEmpty(((NegotiateAPI.Error)ex.error).referenceId));
+				System.assert(ex.error instanceof ScmAPI.Error);
+				System.assert(UUID.isNotEmpty(((ScmAPI.Error)ex.error).referenceId));
 			}
 			Test.stopTest();
 		}
@@ -40,13 +55,13 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_createAgreementInEOSFolder_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().createAgreementInEOSFolder(NegotiateAPIMock.OBJECT_ID,
-				NegotiateAPIMock.FOLDER_ID, 'negotiate.docx');
+			UUID result = NegotiateAPI.getInstance().createAgreementInEOSFolder(ScmAPIMock.OBJECT_ID,
+				ScmAPIMock.FOLDER_ID, 'negotiate.docx');
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			System.assertEquals(UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566'), result);
@@ -55,12 +70,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_exportAgreementToSalesforce_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().exportAgreementToSalesforce(NegotiateAPIMock.SOURCE_OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID);
+			UUID result = NegotiateAPI.getInstance().exportAgreementToSalesforce(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			System.assertEquals(UUID.parse('4682d399-29fe-4085-9e48-126e4ffa0566'), result);
@@ -69,12 +84,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getAgreementInEOSFolderStatus_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(ScmAPIMock.TASK_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -84,12 +99,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getExportAgreementToSalesforceStatus_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(NegotiateAPIMock.TASK_ID);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(ScmAPIMock.TASK_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -101,12 +116,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getAgreementInEOSFolderStatus_success2() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(NegotiateAPIMock.TASK_ID_2);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(ScmAPIMock.TASK_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -116,12 +131,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getExportAgreementToSalesforceStatus_success2() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(NegotiateAPIMock.TASK_ID_2);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getExportAgreementToSalesforceStatus(ScmAPIMock.TASK_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -131,12 +146,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getAgreements_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			List<Agreement> result = NegotiateAPI.getInstance().getAgreements(NegotiateAPIMock.FOLDER_ID);
+			List<Agreement> result = NegotiateAPI.getInstance().getAgreements(ScmAPIMock.FOLDER_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -150,18 +165,18 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_getAreement_success() {
-		NegotiateAPIMock.success();
+	static void test_getAgreement_success() {
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			Agreement agreement = NegotiateAPI.getInstance().getAgreement(NegotiateAPIMock.DOCUMENT_ID_2);
+			Agreement agreement = NegotiateAPI.getInstance().getAgreement(ScmAPIMock.DOCUMENT_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, agreement);
 			System.assertEquals('ServiceDoc1', agreement.name);
 			System.assertEquals('docx', agreement.extension);
-			System.assertEquals(NegotiateAPIMock.DOCUMENT_ID_2, agreement.id);
+			System.assertEquals(ScmAPIMock.DOCUMENT_ID_2, agreement.id);
 			System.assertEquals(160568, agreement.pdfFileSize);
 			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/382bd222-1536-e922-9c1d-3ca82a1e3f41', agreement.href);
 		}
@@ -169,12 +184,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_renameAgreement_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().renameAgreement(NegotiateAPIMock.DOCUMENT_ID, 'docuTestRename.docx');
+			Boolean result = NegotiateAPI.getInstance().renameAgreement(ScmAPIMock.DOCUMENT_ID, 'docuTestRename.docx');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -185,12 +200,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_deleteAgreement_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().deleteAgreement(NegotiateAPIMock.DOCUMENT_ID);
+			Boolean result = NegotiateAPI.getInstance().deleteAgreement(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -202,12 +217,12 @@ public with sharing class NegotiateAPITest {
 	@IsTest
 	static void test_getAgreementVersions_success() {
 
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			List<Agreement> result = NegotiateAPI.getInstance().getAgreementVersions(NegotiateAPIMock.DOCUMENT_ID);
+			List<Agreement> result = NegotiateAPI.getInstance().getAgreementVersions(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -225,14 +240,14 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_sendForApproval_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			UUID result = NegotiateAPI.getInstance().sendForApproval('Test Agreement',
-				NegotiateAPIMock.SOURCE_OBJECT_ID,
-				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT }
+				ScmAPIMock.SOURCE_OBJECT_ID,
+				new List<UUID> { ScmAPIMock.DOCUMENT_ID },
+				new List<Recipient> { Recipient.newBulkRecipient('Test User', 'Test@Test.com', new Entity(UserInfo.getUserId())) }
 				, 'Test subject'
 				, 'Test message body: hello world', true);
 			Test.stopTest();
@@ -243,15 +258,15 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_sendForExternalReview_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
 			UUID result = NegotiateAPI.getInstance().sendForExternalReview('Test Agreement',
-				NegotiateAPIMock.SOURCE_OBJECT_ID,
-				new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-				new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+				ScmAPIMock.SOURCE_OBJECT_ID,
+				new List<UUID> { ScmAPIMock.DOCUMENT_ID },
+				new List<Recipient> { Recipient.newBulkRecipient('Test User', 'Test@Test.com', new Entity(UserInfo.getUserId())) },
 				'Test subject', 'Test message body: hello world',
 				5);
 			Test.stopTest();
@@ -262,7 +277,7 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_sendForApproval_failure() {
-		NegotiateAPIMock.failure();
+		ScmAPIMock.failure();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
@@ -270,9 +285,9 @@ public with sharing class NegotiateAPITest {
 			Boolean hasError = false;
 			try {
 				NegotiateAPI.getInstance().sendForApproval('Test Agreement',
-					NegotiateAPIMock.SOURCE_OBJECT_ID,
-					new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+					ScmAPIMock.SOURCE_OBJECT_ID,
+					new List<UUID> { ScmAPIMock.DOCUMENT_ID },
+					new List<Recipient> { Recipient.newBulkRecipient('Test User', 'Test@Test.com', new Entity(UserInfo.getUserId())) },
 					'Test subject',
 					'Test message body: hello world', true);
 			} catch (APIException ex) {
@@ -286,7 +301,7 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_sendForExternalReview_failure() {
-		NegotiateAPIMock.failure();
+		ScmAPIMock.failure();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
@@ -294,9 +309,9 @@ public with sharing class NegotiateAPITest {
 			Boolean hasError = false;
 			try {
 				NegotiateAPI.getInstance().sendForExternalReview('Test Agreement',
-					NegotiateAPIMock.SOURCE_OBJECT_ID,
-					new List<UUID> { NegotiateAPIMock.DOCUMENT_ID },
-					new List<Recipient> { NegotiateAPIMock.WORKFLOW_RECIPIENT },
+					ScmAPIMock.SOURCE_OBJECT_ID,
+					new List<UUID> { ScmAPIMock.DOCUMENT_ID },
+					new List<Recipient> { Recipient.newBulkRecipient('Test User', 'Test@Test.com', new Entity(UserInfo.getUserId())) },
 					'Test subject',
 					'Test message body: hello world',
 					5);
@@ -309,120 +324,13 @@ public with sharing class NegotiateAPITest {
 		}
 	}
 
-	// Agreement has new history
-	@IsTest
-	static void test_getHistoryItems_success() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.DOCUMENT_ID);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-			System.assertEquals(AgreementHistoryItem.DocumentImportFromSalesforce, result.get(0).historyItemType);
-			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
-			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-		}
-	}
-
-	// Agreement has rename history
-	@IsTest
-	static void test_getHistoryItems_success2() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.DOCUMENT_ID_4);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.TitleChanged, result.get(0).historyItemType);
-			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
-			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-		}
-	}
-
-	// Agreement sent for approval
-	@IsTest
-	static void test_getHistoryItems_success3() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.DOCUMENT_ID_5);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.ApprovalCheckout, result.get(0).historyItemType);
-			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
-			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-			System.assertEquals('Full Sub', result.get(0).recipients.get(0).fullName);
-			System.assertEquals('tgreen+1@springcm.com', result.get(0).recipients.get(0).email);
-			System.assertEquals('For approval', result.get(0).subject);
-			System.assertEquals('Please approve the documents', result.get(0).message);
-		}
-	}
-
-	// Agreement sent for external review
-	@IsTest
-	static void test_getHistoryItems_success4() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			List<AgreementHistoryItem> result = NegotiateAPI.getInstance().getHistoryItems(
-				NegotiateAPIMock.DOCUMENT_ID_6);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-			System.assertEquals(AgreementHistoryItem.ExternalReviewInitiated, result.get(0).historyItemType);
-			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
-			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
-			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-			System.assertEquals('For external review', result.get(0).subject);
-			System.assertEquals('Please review the document', result.get(0).message);
-		}
-	}
-
-	@IsTest
-	static void test_generateLimitedAccessToken_success() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = NegotiateAPI.getInstance().generateLimitedAccessToken(NegotiateAPIMock.DOCUMENT_ID, 'accessToken');
-			Test.stopTest();
-
-			System.assertNotEquals(null, limitedAccessToken);
-			System.assertEquals('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjY4MTg1ZmYxLTRlNTEtNGNlOS1hZjFjLTY4OTgxMjIwMzMxNyJ9.eyJUb2tlblR5cGUiOjUsIklzc3VlSW5zdGFudCI6MTU1ODU2NDgyMywiZXhwIjoxNTU4NTY4NDIzLCJVc2VySWQiOiIzZGVkYWM1My00OGZhLTRkZTYtODk0YS0zNWI0ODAyYWQxMGQiLCJzaXRlaWQiOjEsInNjcCI6WyJzcHJpbmdfY29udGVudCJdLCJhdWQiOiI1NzUxYzI1NS0zM2E0LTRjOGQtYmY1YS0wNjU0YTUwNDE4ODYiLCJpc3MiOiJodHRwczovL2FjY291bnQtZC5kb2N1c2lnbi5jb20vIiwic3ViIjoiM2RlZGFjNTMtNDhmYS00ZGU2LTg5NGEtMzViNDgwMmFkMTBkIiwiYWN0IjoiNTc1MWMyNTUtMzNhNC00YzhkLWJmNWEtMDY1NGE1MDQxODg2IiwiYW1yIjpbImp3dF9iciJdfQ.aBrwKSZ09AqGqCNTE4NsAY-qDhflif94kcMEdq7zosZ7HRSFIggSOdRY8d9cvznGWsCp4hk4eKlihoUaHohMRKMwNW8dsmhPbff1t4Cm5xYEDTOOOrhA5ZC6bKJXBlLB5vhEga0yShMAY7ggbCOqxdCZH9pi3hp_1Z8G_8-7vQAPLfmqJo3tcdtyDXHfpdyJs5-4toxWiFtxX1VZS3I4tVre8w0P1QIpESDv-_-qHaE-4zniddCpg_CCR90ON83ZtBTG0HLQNj52YFAjKs5wm3nQrMC4V9C3vo9uyCSeBa9Lq0AgswFNoSLn7eiviRJB9iwSBx9Vuqx8xsOaKC9CMg', limitedAccessToken.token);
-			System.assertEquals('https://apiuatna11.springcm.com/v2/63d5ccaa-67ff-452b-8e5e-ee2dd94f1a00', limitedAccessToken.apiBaseUrl);
-			System.assertEquals('https://apidownloaduatna11.springcm.com', limitedAccessToken.apiDownLoadBaseUrl);
-			System.assertEquals('https://apiuploaduatna11.springcm.com', limitedAccessToken.apiUploadBaseUrl);
-		}
-	}
-
 	@IsTest
 	static void test_getApprovalWorkItems_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			List<AgreementApprovalWorkItem> approvalWorkItems = NegotiateAPI.getInstance().getApprovalWorkItems(NegotiateAPIMock.APPROVAL_DOCUMENT_ID);
+			List<AgreementApprovalWorkItem> approvalWorkItems = NegotiateAPI.getInstance().getApprovalWorkItems(ScmAPIMock.APPROVAL_DOCUMENT_ID);
 			Test.stopTest();
 			System.assertNotEquals(null, approvalWorkItems);
 			System.assertNotEquals(null, approvalWorkItems[0].workItemUrl);
@@ -435,12 +343,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_resolveApproverDetails_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			String result;
 			Test.startTest();
-			result = NegotiateAPI.getInstance().resolveApproverDetails(NegotiateAPIMock.APPROVER_USER_1);
+			result = NegotiateAPI.getInstance().resolveApproverDetails(ScmAPIMock.APPROVER_USER_1);
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			NegotiateAPI.APIMemberDetails memberResult = (NegotiateAPI.APIMemberDetails)JSON.deserialize(result, NegotiateAPI.APIMemberDetails.class);
@@ -450,88 +358,45 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_cancelApprovalOrExternalReview_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID);
+			Boolean result = NegotiateAPI.getInstance().cancelApprovalOrExternalReview(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(true, result);
-		}
-	}
-
-	@IsTest
-	static void test_populateEmailToUser_success() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToUser(new Set<String> { UserInfo.getUserEmail() });
-			System.assertNotEquals(negotiateAPI.emailToUser, null);
-			System.assertEquals(negotiateAPI.emailToUser.get(UserInfo.getUserEmail()).Id, UserInfo.getUserId());
-		}
-	}
-
-	@IsTest
-	static void test_resendRequest_success() {
-		NegotiateAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			Boolean result = NegotiateAPI.getInstance().resendRequest('https://apiqana11.springcm.com/v2/91845ae6-14b1-4cd1-a53d-e2d63d7d20af/documents/c2cb6ce7-7d7e-e911-9c35-3863bb335c17', 'ExternalReview');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(true, result);
-		}
-	}
-
-	@IsTest
-	static void test_populateEmailToUser_blankInput() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToUser(new Set<String> { '' });
-			System.assert(!negotiateAPI.emailToUser.containsKey(''));
 		}
 	}
 
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
 			Boolean result = NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse('this is the comment',
-				'Approve', NegotiateAPIMock.WORKITEM_ID);
+				'Approve', ScmAPIMock.WORKITEM_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(true, result);
 
-		}
-	}
-
-	@IsTest
-	static void test_populateEmailToUser_randomEmailInput() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToUser(new Set<String> { 'test@test.com' });
-			System.assert(!negotiateAPI.emailToUser.containsKey('test@test.com'));
 		}
 	}
 
 	@IsTest
 	static void test_externalReviewCompleteOnBehalf_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
 			Boolean result = NegotiateAPI.getInstance().externalReviewCompleteOnBehalf('this is the comment',
-				NegotiateAPIMock.DOCUMENT_HREF, NegotiateAPIMock.EXTERNAL_REVIEW_ID);
+				ScmAPIMock.DOCUMENT_HREF, ScmAPIMock.EXTERNAL_REVIEW_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -540,70 +405,40 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_populateEmailToContact_success() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			Contact testContact = new Contact (FirstName = 'test', LastName = 'contact', Email = 'test@test.com');
-			insert testContact;
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToContact(new Set<String> { testContact.Email });
-			System.assertNotEquals(negotiateAPI.emailToContact, null);
-			System.assert(negotiateAPI.emailToContact.containsKey(testContact.Email));
-		}
-	}
-
-	@IsTest
 	static void test_getDocumentReview_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			UUID result = NegotiateAPI.getInstance().getDocumentReview(NegotiateAPIMock.DOCUMENT_ID);
+			UUID result = NegotiateAPI.getInstance().getDocumentReview(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(NegotiateAPIMock.EXTERNAL_REVIEW_ID, result);
-		}
-	}
-
-	@IsTest
-	static void test_populateEmailToContact_randomEmailInput() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToContact(new Set<String> { 'randomInput' });
-			System.assert(!negotiateAPI.emailToContact.containsKey('randomInput'));
-		}
-	}
-
-	@IsTest
-	static void test_populateEmailToContact_blankInput() {
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			NegotiateAPI negotiateAPI = NegotiateAPI.getInstance();
-			negotiateAPI.populateEmailToContact(new Set<String> { '' });
-			System.assert(!negotiateAPI.emailToContact.containsKey(''));
+			System.assertEquals(ScmAPIMock.EXTERNAL_REVIEW_ID, result);
 		}
 	}
 
 	@IsTest
 	static void test_compareAgreements_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			UUID compareTaskID = NegotiateAPI.getInstance().compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
+			UUID compareTaskID = NegotiateAPI.getInstance().compareAgreements(ScmAPIMock.ORIGINAL_DOCUMENT_HREF, ScmAPIMock.COMPARE_VERSION_HREF);
 			System.assertNotEquals(null, compareTaskID);
-			System.assertEquals(NegotiateAPIMock.COMPARE_TASK_ID, compareTaskID);
+			System.assertEquals(ScmAPIMock.COMPARE_TASK_ID, compareTaskID);
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
 	static void test_compareAgreements_failure() {
-		NegotiateAPIMock.failure();
+		ScmAPIMock.failure();
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().compareAgreements('', NegotiateAPIMock.COMPARE_VERSION_HREF);
+				NegotiateAPI.getInstance().compareAgreements('', ScmAPIMock.COMPARE_VERSION_HREF);
 			} catch (APIException ex) {
 				hasError = true;
 			}
@@ -615,12 +450,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getCompareAgreementsStatus_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 
 			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getCompareAgreementsStatus(NegotiateAPIMock.COMPARE_TASK_ID);
+			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getCompareAgreementsStatus(ScmAPIMock.COMPARE_TASK_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -630,12 +465,12 @@ public with sharing class NegotiateAPITest {
 
 	@IsTest
 	static void test_getCompareAgreementsStatus_failure() {
-		NegotiateAPIMock.failure();
+		ScmAPIMock.failure();
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			Boolean hasError = false;
 			try {
-				NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getCompareAgreementsStatus(NegotiateAPIMock.COMPARE_TASK_ID);
+				NegotiateAPI.getInstance().getCompareAgreementsStatus(ScmAPIMock.COMPARE_TASK_ID);
 			} catch (APIException ex) {
 				hasError = true;
 			}

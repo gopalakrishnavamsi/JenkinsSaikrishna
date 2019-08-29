@@ -35,10 +35,22 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_undefined_arguments() {
+	static void test_initialize_undefined_arguments() {
 		Test.startTest();
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				null,
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				null,
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -48,7 +60,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				null,
 				UUID.randomUUID(),
@@ -58,7 +71,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				null,
@@ -68,7 +82,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Stage,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -81,10 +96,22 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_invalid_environment() {
+	static void test_initialize_invalid_environment() {
 		Test.startTest();
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Invalid,
+				new Url('https://provisioning.test.docusign.net/'),
+				new Url('https://esign.test.docusign.net/'),
+				UUID.randomUUID(),
+				'unit.test');
+			throw new AssertException('Expected getInstance to fail');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
+		}
+		try {
+			AccountProducts.initialize(
+				DocuSign.Environment.Production,
 				new Url('https://provisioning.test.bad-docusign.net/'),
 				new Url('https://esign.test.docusign.net/'),
 				UUID.randomUUID(),
@@ -94,7 +121,8 @@ private class AccountProductsTest {
 			System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
 		}
 		try {
-			AccountProducts.getInstance(
+			AccountProducts.initialize(
+				DocuSign.Environment.Production,
 				new Url('https://provisioning.test.docusign.net/'),
 				new Url('https://example.com/'),
 				UUID.randomUUID(),
@@ -107,11 +135,12 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getInstance_setup() {
+	static void test_initialize_setup() {
 		DocuSignAPIMock.success();
 
 		Test.startTest();
-		AccountProducts result = AccountProducts.getInstance(
+		AccountProducts result = AccountProducts.initialize(
+			DocuSign.Environment.HQTEST3,
 			new Url('https://provisioning.test.docusign.net/'),
 			new Url('https://esign.test.docusign.net/'),
 			UUID.randomUUID(),
@@ -122,7 +151,7 @@ private class AccountProductsTest {
 	}
 
 	static AccountProducts newAccountProducts(final Map<String, Product> products) {
-		return new AccountProducts(products, null, null, false);
+		return new AccountProducts(DocuSign.Environment.Production, products, null, null, false);
 	}
 
 	@IsTest
@@ -161,8 +190,8 @@ private class AccountProductsTest {
 	static void test_isGenEnabled() {
 		AccountProducts aps1 = newAccountProducts(null);
 		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
-		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.GEN => new GenProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isGenEnabled());
@@ -176,8 +205,8 @@ private class AccountProductsTest {
 	static void test_isNegotiateEnabled() {
 		AccountProducts aps1 = newAccountProducts(null);
 		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
-		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.NEGOTIATE => new NegotiateProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isNegotiateEnabled());
@@ -191,8 +220,8 @@ private class AccountProductsTest {
 	static void test_isClmEnabled() {
 		AccountProducts aps1 = newAccountProducts(null);
 		AccountProducts aps2 = newAccountProducts(new Map<String, Product>());
-		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null, null) });
-		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null, null) });
+		AccountProducts aps3 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(-1), null, null) });
+		AccountProducts aps4 = newAccountProducts(new Map<String, Product> { Product.CLM => new ClmProduct(Product.STATUS_ACTIVE, true, Date.today().addDays(1), null, null) });
 
 		Test.startTest();
 		System.assert(!aps1.isClmEnabled());
@@ -222,6 +251,7 @@ private class AccountProductsTest {
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addDays(-1),
 				1,
+				DocuSign.Environment.Demo,
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://esign.test.docusign.net'),
 				UUID.randomUUID(),
@@ -248,6 +278,7 @@ private class AccountProductsTest {
 				new Map<String, Product> { Product.ESIGNATURE => esign },
 				Datetime.now().addMinutes(-1),
 				60,
+				DocuSign.Environment.Demo,
 				new Url('https://provisioning.test.docusign.net'),
 				new Url('https://esign.test.docusign.net'),
 				UUID.randomUUID(),
@@ -464,53 +495,61 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
-	static void test_getScmAuthBaseUrl() {
+	static void test_getScmWebBaseUrl() {
 		ClmProduct clm = new ClmProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://test.springcm.com/landing'),
-			new Url('https://test.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://auth.test.springcm.com/'));
 		GenProduct gen = new GenProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 		NegotiateProduct neg = new NegotiateProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 
 		Test.startTest();
-		Url result1 = newAccountProducts(null).getScmAuthBaseUrl();
+		Url result1 = newAccountProducts(null).getScmWebBaseUrl();
 		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
-		}).getScmAuthBaseUrl();
+		}).getScmWebBaseUrl();
 		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
-		}).getScmAuthBaseUrl();
+		}).getScmWebBaseUrl();
 		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
-		}).getScmAuthBaseUrl();
+		}).getScmWebBaseUrl();
 		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
-		}).getScmAuthBaseUrl();
+		}).getScmWebBaseUrl();
 		Test.stopTest();
 
 		System.assertEquals(null, result1);
 		System.assertNotEquals(null, result2);
-		System.assertEquals('https://auth.test.springcm.com', result2.toExternalForm());
+		System.assertEquals('https://web.test.springcm.com/atlas/', result2.toExternalForm());
 		System.assertNotEquals(null, result3);
-		System.assertEquals('https://auth.test.springcm.com', result3.toExternalForm());
+		System.assertEquals('https://web.test.springcm.com/atlas/', result3.toExternalForm());
 		System.assertNotEquals(null, result4);
-		System.assertEquals('https://auth.test.springcm.com', result4.toExternalForm());
+		System.assertEquals('https://web.test.springcm.com/atlas/', result4.toExternalForm());
 		System.assertNotEquals(null, result5);
-		System.assertEquals('https://auth.test.springcm.com', result5.toExternalForm());
+		System.assertEquals('https://web.test.springcm.com/atlas/', result5.toExternalForm());
 	}
 
 	@IsTest
 	static void test_getScmApiBaseUrl() {
 		ClmProduct clm = new ClmProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://test.springcm.com/landing'),
-			new Url('https://test.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://auth.test.springcm.com/'));
 		GenProduct gen = new GenProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 		NegotiateProduct neg = new NegotiateProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 
 		Test.startTest();
 		Url result1 = newAccountProducts(null).getScmApiBaseUrl();
@@ -533,85 +572,94 @@ private class AccountProductsTest {
 		System.assertEquals(null, result1);
 		System.assertEquals(null, result2);
 		System.assertNotEquals(null, result3);
-		System.assertEquals('https://api.test.springcm.com', result3.toExternalForm());
+		System.assertEquals('https://api.test.springcm.com/', result3.toExternalForm());
 		System.assertNotEquals(null, result4);
-		System.assertEquals('https://api.test.springcm.com', result4.toExternalForm());
+		System.assertEquals('https://api.test.springcm.com/', result4.toExternalForm());
 		System.assertNotEquals(null, result5);
-		System.assertEquals('https://api.test.springcm.com', result5.toExternalForm());
+		System.assertEquals('https://api.test.springcm.com/', result5.toExternalForm());
 	}
 
 	@IsTest
-	static void test_getClmAdminUrl() {
+	static void test_getScmMergeBaseUrl() {
 		ClmProduct clm = new ClmProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://test.springcm.com/landing'),
-			new Url('https://test.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://auth.test.springcm.com/'));
 		GenProduct gen = new GenProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 		NegotiateProduct neg = new NegotiateProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 
 		Test.startTest();
-		Url result1 = newAccountProducts(null).getClmAdminUrl();
+		Url result1 = newAccountProducts(null).getScmMergeBaseUrl();
 		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
-		}).getClmAdminUrl();
+		}).getScmMergeBaseUrl();
 		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
-		}).getClmAdminUrl();
+		}).getScmMergeBaseUrl();
 		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
-		}).getClmAdminUrl();
+		}).getScmMergeBaseUrl();
 		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
-		}).getClmAdminUrl();
+		}).getScmMergeBaseUrl();
 		Test.stopTest();
 
 		System.assertEquals(null, result1);
-		System.assertNotEquals(null, result2);
-		System.assertEquals('https://test.springcm.com/admin', result2.toExternalForm());
-		System.assertEquals(null, result3);
-		System.assertEquals(null, result4);
+		System.assertEquals(null, result2);
+		System.assertNotEquals(null, result3);
+		System.assertEquals('https://merge.test.springcm.com/gen/', result3.toExternalForm());
+		System.assertNotEquals(null, result4);
+		System.assertEquals('https://merge.test.springcm.com/gen/', result4.toExternalForm());
 		System.assertNotEquals(null, result5);
-		System.assertEquals('https://test.springcm.com/admin', result5.toExternalForm());
+		System.assertEquals('https://merge.test.springcm.com/gen/', result5.toExternalForm());
 	}
 
 	@IsTest
-	static void test_getClmLandingPageUrl() {
+	static void test_getScmAuthBaseUrl() {
 		ClmProduct clm = new ClmProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://test.springcm.com/landing'),
-			new Url('https://test.springcm.com/admin'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://auth.test.springcm.com/'));
 		GenProduct gen = new GenProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 		NegotiateProduct neg = new NegotiateProduct(Product.STATUS_ACTIVE, false, null,
-			new Url('https://auth.test.springcm.com'), new Url('https://api.test.springcm.com'));
+			new Url('https://web.test.springcm.com/atlas/'),
+			new Url('https://api.test.springcm.com/'),
+			new Url('https://merge.test.springcm.com/gen/'));
 
 		Test.startTest();
-		Url result1 = newAccountProducts(null).getClmLandingPageUrl();
+		Url result1 = newAccountProducts(null).getScmAuthBaseUrl();
 		Url result2 = newAccountProducts(new Map<String, Product> {
 			Product.CLM => clm
-		}).getClmLandingPageUrl();
+		}).getScmAuthBaseUrl();
 		Url result3 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen
-		}).getClmLandingPageUrl();
+		}).getScmAuthBaseUrl();
 		Url result4 = newAccountProducts(new Map<String, Product> {
 			Product.NEGOTIATE => neg
-		}).getClmLandingPageUrl();
+		}).getScmAuthBaseUrl();
 		Url result5 = newAccountProducts(new Map<String, Product> {
 			Product.GEN => gen,
 			Product.NEGOTIATE => neg,
 			Product.CLM => clm
-		}).getClmLandingPageUrl();
+		}).getScmAuthBaseUrl();
 		Test.stopTest();
 
 		System.assertEquals(null, result1);
 		System.assertNotEquals(null, result2);
-		System.assertEquals('https://test.springcm.com/landing', result2.toExternalForm());
+		System.assertEquals('https://auth.test.springcm.com/', result2.toExternalForm());
 		System.assertEquals(null, result3);
 		System.assertEquals(null, result4);
 		System.assertNotEquals(null, result5);
-		System.assertEquals('https://test.springcm.com/landing', result5.toExternalForm());
+		System.assertEquals('https://auth.test.springcm.com/', result5.toExternalForm());
 	}
 
 	@IsTest
@@ -684,7 +732,8 @@ private class AccountProductsTest {
 		a.ProductsLastChecked__c = Datetime.now();
 		a.ProductsCheckFrequency__c = 60;
 		insert a;
-		AccountProducts ap = AccountProducts.getInstance(
+		AccountProducts ap = AccountProducts.initialize(
+			DocuSign.Environment.Demo,
 			new Url('https://provisioning.test.docusign.net'),
 			new Url('https://esign.test.docusign.net'),
 			UUID.randomUUID(),
@@ -701,9 +750,14 @@ private class AccountProductsTest {
 	@IsTest
 	static void test_save_dirty() {
 		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignSender()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ScmWebBaseUrl__c = null;
+			s.ScmApiBaseUrl__c = null;
+			s.ScmMergeBaseUrl__c = null;
+			s.ScmAuthBaseUrl__c = null;
 			s.ProductsLastChecked__c = null;
 			s.ProductsCheckFrequency__c = null;
 			update s;

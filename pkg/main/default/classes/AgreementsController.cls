@@ -3,7 +3,7 @@ public with sharing class AgreementsController extends Controller {
 	public Entity sourceEntity { get; set; }
 
 	public AgreementsController() {
-		Id sourceId = apexpages.currentpage().getparameters().get('sId');
+		Id sourceId = ApexPages.currentPage().getParameters().get('sId');
 		if (sourceId <> null && sourceEntity == null) {
 			sourceEntity = getSourceDetails(sourceId);
 		}
@@ -84,7 +84,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
+	public static Negotiate.LimitedAccessToken generateUploadToken(final Id objectId) {
 		try {
 			return NegotiateService.generateUploadToken(objectId);
 		} catch (Exception ex) {
@@ -93,7 +93,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateService.LimitedAccessToken generateDownloadToken(final String objectId) {
+	public static Negotiate.LimitedAccessToken generateDownloadToken(final String objectId) {
 		try {
 			return NegotiateService.generateDownloadToken(UUID.parse(objectId));
 		} catch (Exception ex) {
@@ -102,7 +102,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static NegotiateService.LimitedAccessToken generateUploadNewVersionToken(final String agreementId) {
+	public static Negotiate.LimitedAccessToken generateUploadNewVersionToken(final String agreementId) {
 		try {
 			return NegotiateService.generateUploadNewVersionToken(UUID.parse(agreementId));
 		} catch (Exception ex) {
@@ -226,7 +226,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final String workItemsId) {
+	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final Boolean itemResponse, final String workItemsId) {
 		try {
 			return NegotiateService.approveOnBehalfOrRecipientResponse(comment, itemResponse, UUID.parse(workItemsId));
 		} catch (Exception ex) {

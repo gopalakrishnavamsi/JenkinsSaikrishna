@@ -9,10 +9,6 @@ public with sharing class NegotiateService {
 	public static final String TASK_EXECUTING = 'Executing';
 	public static final String TASK_PROCESSING = 'Processing';
 
-	public class NegotiateRecipient {
-		public String name { get; private set; }
-	}
-
 	private class Database {
 
 		@TestVisible
@@ -31,46 +27,7 @@ public with sharing class NegotiateService {
 		}
 	}
 
-	public class LimitedAccessToken {
-		@AuraEnabled
-		public String token { get; private set; }
-		@AuraEnabled
-		public String apiBaseUrl { get; private set; }
-		@AuraEnabled
-		public UUID accountId { get; private set; }
-		@AuraEnabled
-		public UUID entityId { get; private set; }
-		@AuraEnabled
-		public String apiUploadBaseUrl { get; private set; }
-		@AuraEnabled
-		public String apiDownloadBaseUrl { get; private set; }
-
-		public LimitedAccessToken(
-			final String token,
-			final String apiBaseUrl,
-			final String apiUploadBaseUrl,
-			final String apiDownloadBaseUrl) {
-
-			this.token = token;
-			this.apiBaseUrl = apiBaseUrl;
-			this.apiUploadBaseUrl = apiUploadBaseUrl != null ? apiUploadBaseUrl.split('/v')[0] : null;
-			this.apiDownloadBaseUrl = apiDownloadBaseUrl != null ? apiDownloadBaseUrl.split('/v')[0] : null;
-			this.accountId = null;
-			this.entityId = null;
-		}
-
-		public LimitedAccessToken withAccountId(UUID accountId) {
-			this.accountId = accountId;
-			return this;
-		}
-
-		public LimitedAccessToken withEntityId(UUID entityId) {
-			this.entityId = entityId;
-			return this;
-		}
-	}
-
-	@future
+	@Future
 	private static void setFolderId(final Id sourceObjectId, final String folderId) {
 		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
 			'FolderId__c', 'SourceObject__c'
@@ -95,9 +52,8 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID folderId = DB.getFolderId(sourceObjectId);
 		List<Agreement> agreements = new List<Agreement>();
-		Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItem = new Map<UUID, List<AgreementHistoryItem>>();
 		if (folderId == null) {
-			String sourceObjectType = sourceObjectId.getSObjectType().getDescribe().getName();
+			String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
 			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
 			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
 			setFolderId(sourceObjectId, folderId.toString());
@@ -107,11 +63,11 @@ public with sharing class NegotiateService {
 			agreements = NegotiateAPI.getInstance().getAgreements(folderId);
 			for (Agreement agreement : agreements) {
 				if (agreement != null) {
-					NegotiateAPI.getHistoryAPIInstance().prepareHistoryItems(agreement.id);
+					HistoryAPI.getInstance().prepareHistoryItems(agreement.id);
 				}
 			}
 			Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItems
-				= NegotiateAPI.getHistoryAPIInstance().processHistoryItems();
+				= HistoryAPI.getInstance().processHistoryItems();
 
 			for (Agreement agreement : agreements) {
 				if (agreement != null) {
@@ -129,7 +85,7 @@ public with sharing class NegotiateService {
 
 	private static Agreement getAgreementData(Agreement agreement, Map<UUID, List<AgreementHistoryItem>> documentIdToHistoryItems) {
 		// add historyItems
-		List<AgreementHistoryItem> agreementHistoryItems = documentIdToHistoryItems.get(agreement.Id);
+		List<AgreementHistoryItem> agreementHistoryItems = documentIdToHistoryItems.get(agreement.id);
 		agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
 		if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
 			agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
@@ -141,7 +97,7 @@ public with sharing class NegotiateService {
 
 	private static Agreement getAgreementData(Agreement agreement) {
 		// add historyItems
-		List<AgreementHistoryItem> agreementHistoryItems = NegotiateAPI.getHistoryAPIInstance().getHistoryItems(agreement.id);
+		List<AgreementHistoryItem> agreementHistoryItems = HistoryAPI.getInstance().getHistoryItems(agreement.id);
 		agreement.withStatus(calculateStatus(agreementHistoryItems)).withHistoryItems(agreementHistoryItems);
 		if (agreementHistoryItems != null && !agreementHistoryItems.isEmpty() && agreementHistoryItems.get(0) != null) {
 			agreement.withModifiedDate(agreementHistoryItems.get(0).historyDate);
@@ -331,26 +287,28 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static NegotiateService.LimitedAccessToken generateUploadToken(final Id objectId) {
+	public static Negotiate.LimitedAccessToken generateUploadToken(final Id objectId) {
 		Permissions.verifyIsDocuSignNegotiator();
-		UUID folderId = DB.getFolderId(objectId);
-		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(folderId, AuthService.getContentAccessToken());
-		return token.withEntityId(folderId)
-			.withAccountId(Credentials.getInstance().account.id);
+
+		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
+			DB.getFolderId(objectId),
+			AuthService.getContentAccessToken());
 	}
 
-	public static NegotiateService.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
+	public static Negotiate.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
 		Permissions.verifyIsDocuSignNegotiator();
-		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
-		return token.withEntityId(agreementId)
-			.withAccountId(Credentials.getInstance().account.id);
+
+		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
+			agreementId,
+			AuthService.getContentAccessToken());
 	}
 
-	public static NegotiateService.LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
+	public static Negotiate.LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
 		Permissions.verifyIsDocuSignNegotiator();
-		NegotiateService.LimitedAccessToken token = NegotiateAPI.getHistoryAPIInstance().generateLimitedAccessToken(agreementId, AuthService.getContentAccessToken());
-		return token.withEntityId(agreementId)
-			.withAccountId(Credentials.getInstance().account.id);
+
+		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
+			agreementId,
+			AuthService.getContentAccessToken());
 	}
 
 	public static List<AgreementApprovalWorkItem> getApprovalWorkItems(final UUID documentId) {
@@ -360,7 +318,7 @@ public with sharing class NegotiateService {
 
 	public static Boolean resendRequest(final String documentHref, final String resendEmailType) {
 		Permissions.verifyIsDocuSignNegotiator();
-		return NegotiateAPI.getHistoryAPIInstance().resendRequest(documentHref, resendEmailType);
+		return HistoryAPI.getInstance().resendRequest(documentHref, resendEmailType);
 	}
 
 	public static Boolean cancelApprovalOrExternalReview(final UUID documentId) {
@@ -368,12 +326,14 @@ public with sharing class NegotiateService {
 		return NegotiateAPI.getInstance().cancelApprovalOrExternalReview(documentId);
 	}
 
-	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final boolean itemResponse, final UUID workItemsId) {
+	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final Boolean itemResponse, final UUID workItemsId) {
 		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsDocuSignNegotiator();
-		if (itemResponse)
-			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId); else
+		if (itemResponse) {
+			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId);
+		} else {
 			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.REJECT, workItemsId);
+		}
 	}
 
 	public static Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID documentId) {
@@ -385,11 +345,11 @@ public with sharing class NegotiateService {
 
 	public static String getResourceToken(final UUID documentID) {
 		Permissions.verifyIsDocuSignNegotiator();
-		return ResourceTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
+		return ScmTokenAPI.getInstance().getResourceToken(documentID).toExternalForm();
 	}
 
 	public static Url getCompareUrl(final UUID compareTaskId) {
 		Permissions.verifyIsDocuSignNegotiator();
-		return ResourceTokenAPI.getInstance().getCompareUrl(compareTaskId);
+		return ScmTokenAPI.getInstance().getCompareUrl(compareTaskId);
 	}
 }

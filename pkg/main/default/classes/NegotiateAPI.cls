@@ -1,5 +1,5 @@
-public with sharing class NegotiateAPI extends DocuSignAPI {
-// TODO: move common logic between GEN and Negotiate to parent class
+public with sharing class NegotiateAPI extends ScmAPI {
+
 	public static final String PATH_FOLDER = 'folders';
 	public static final String PATH_DOCUMENTS = 'documents';
 	public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
@@ -7,31 +7,23 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public static final String PATH_AGREEMENT_COMPARE = 'documentcomparetasks';
 	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
 	public static final String PATH_WORKFLOWS = 'workflows';
-	public static final String PATH_HISTORY_ITEMS = 'historyitems';
-	public static final String PATH_TOKEN_REGISTRATIONS = 'tokenregistrations';
 	public static final String PATH_WORK_ITEMS = 'workitems';
-	public static final String PATH_EMAILS = 'emails';
 	public static final String PATH_LOCK = 'lock';
 	public static final String PATH_REVIEWS = 'reviews';
 	public static final String PATH_MEMBERS = 'members';
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
-	public static final Integer BUFFER_SOQL_LIMIT = 5;
 	public static final Integer API_RETRY_LIMIT = 25;
 
-	@TestVisible private Set<String> userEmails = new Set<String>();
-	@TestVisible private Set<String> contactEmails = new Set<String>();
-	@TestVisible private Map<String, User> emailToUser = new Map<String, User>();
-	@TestVisible private Map<String, Contact> emailToContact = new Map<String, Contact>();
-	@TestVisible private Map<UUID, List<APIHistoryItems>> documentIdToAPIHistoryItems = new Map<UUID, List<APIHistoryItems>>();
 	private static NegotiateAPI self = null;
-	private static NegotiateAPI historySelf = null;
 
-	private NegotiateAPI(final Url baseUrl,
+	private NegotiateAPI(
+		final Url baseUrl,
 		final String apiVersion,
 		final UUID accountId) {
-		super (new Url (baseUrl, String.format('{0}/{1}/',
+
+		super(new Url(baseUrl, String.format('{0}/{1}/',
 			new List<String> {
 				apiVersion,
 				String.valueOf(accountId)
@@ -40,63 +32,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
-			Credentials c = Credentials.getInstance();
-			String negotiateUrl = c.environment.scmApiBaseUrl.toExternalForm().subString(0, c.environment.scmApiBaseUrl.toExternalForm().indexOf(c.environment.scmApiBaseUrl.getPath()) + 1);
-			self = new NegotiateAPI(new Url(negotiateUrl), 'v2', c.account.id);
+			Url baseUrl = AccountProducts.getInstance().getScmApiBaseUrl();
+			if (baseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
+			self = new NegotiateAPI(
+				baseUrl,
+				'v2',
+				Credentials.getInstance().account.id);
 		}
 		return self;
-	}
-
-	public static NegotiateAPI getHistoryAPIInstance() {
-		if (historySelf == null) {
-			Credentials c = Credentials.getInstance();
-			historySelf = new NegotiateAPI(c.environment.scmApiBaseUrl, 'v1', c.account.id);
-		}
-		return historySelf;
-	}
-
-	public class Error extends APIError {
-		public UUID referenceId { get; private set; }
-
-		public Error(
-			final Integer code,
-			final UUID referenceId,
-			final String description) {
-
-			super(code, description);
-
-			this.referenceId = referenceId;
-		}
-
-		override public String toString() {
-			return String.format(Label.ApiError_3, new List<String> {
-				String.valueOf(this.code),
-				this.description,
-				String.valueOf(this.referenceId)
-			});
-		}
-	}
-
-	@TestVisible
-	override protected virtual APIError getError(final HttpResponse response) {
-		APIError e = APIError.none;
-		Integer statusCode = response.getStatusCode();
-		if (statusCode >= 400) {
-			String body = response.getBody();
-			try {
-				Map<String, Object> error = (Map<String, Object>)((Map<String, Object>)JSON.deserializeUntyped(body))
-					.get('Error');
-				e = new NegotiateAPI.Error(
-					error.containsKey('ErrorCode') ? (Integer)error.get('ErrorCode') : statusCode,
-					UUID.tryParse((String)error.get('ReferenceId')),
-					error.containsKey('UserMessage') ? (String)error.get('UserMessage') : response.getStatus());
-				this.log.warn('Negotiate API error: ' + e);
-			} catch (Exception ex) {
-				this.log.exception(ex, 'Failed to parse Negotiate API error. Response body:\n' + body);
-				e = new APIError(statusCode, response.getStatus());
-			}
-		}
-		return e;
 	}
 
 	@TestVisible
@@ -175,7 +118,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private static Map<String, APIEmail> getExternalReviewTemplateEmails(final String documentName, final String customEmailBody, final String customEmailSubject) {
+	private static Map<String, APIEmail> getExternalReviewTemplateEmails(
+		final String documentName,
+		final String customEmailSubject,
+		final String customEmailBody) {
+
 		return new Map<String, APIEmail> {
 			'FailureEmail' => new APIEmail(
 				String.format(Label.ExternalReviewFailureEmailSubject_1, new List<String> { documentName }),
@@ -242,7 +189,7 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 
 		public String toXML() {
-			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name, this.email.subject, this.email.bodyText);
+			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name);
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'AssignTasksInOrder', 'CheckoutDocument', 'RequiresAllToApprove', 'RequiresAllToComplete', 'Approvers', 'Documents', 'Email', 'ApprovalEmail', 'ApprovalOnBehalfEmail', 'RejectOnBehalfEmail', 'CancelEmail', 'RejectEmail', 'FailureEmail', 'DocumentUrl' },
 				new Map<String, Object> {
@@ -267,7 +214,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private static Map<String, APIEmail> getApprovalTemplateEmails(final String documentName, final String customEmailBody, final String customEmailSubject) {
+	private static Map<String, APIEmail> getApprovalTemplateEmails(final String documentName) {
+
 		return new Map<String, APIEmail> {
 			'Email' => new APIEmail(
 				String.format(Label.ReviewAgreementSubject, new List<String> { documentName }),
@@ -389,16 +337,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-// Create EOS folder in SpringCM Space
-	public UUID createEOSFolder(final String objectName, final Id objectId, final String objectType) {
+	// Create EOS folder in SpringCM Space
+	public UUID createEOSFolder(
+		final String objectName,
+		final Id objectId,
+		final String objectType) {
 
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_FOLDER
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
+		RestAPI.Response response = this.post(
+			new List<String> { PATH_FOLDER },
 			JSON.serialize(new Map<String, Object> {
 				'EosInfo' => new EosInfo(objectName, objectId, objectType)
 			}),
@@ -461,16 +407,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-//Create Agreement in EOS folder
-	public UUID createAgreementInEOSFolder(final Id sfContentVersionId, final UUID folderId, final String documentName) {
+	//Create Agreement in EOS folder
+	public UUID createAgreementInEOSFolder(
+		final Id sfContentVersionId,
+		final UUID folderId,
+		final String documentName) {
 
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_AGREEMENT_IN_EOS_FOLDER
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
+		RestAPI.Response response = this.post(
+			new List<String> { PATH_AGREEMENT_IN_EOS_FOLDER },
 			JSON.serialize(new Map<String, Object> {
 				'SfContentVersionId' => sfContentVersionId,
 				'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(folderId)),
@@ -487,15 +431,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	//Add Agreement to Salesforce Files
-	public UUID exportAgreementToSalesforce(final Id sourceId, final UUID documentId) {
+	public UUID exportAgreementToSalesforce(
+		final Id sourceId,
+		final UUID documentId) {
 
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_AGREEMENT_IN_SALESFORCE
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
+		RestAPI.Response response = this.post(
+			new List<String> { PATH_AGREEMENT_IN_SALESFORCE },
 			JSON.serialize(new Map<String, Object> {
 				'SfObjectId' => sourceId,
 				'Document' => new APIDocument(getBaseUrl() + '/' + PATH_DOCUMENTS + '/' + String.valueOf(documentId))
@@ -513,14 +454,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	//Generate Task UUID for comparing two agreement versions
 	//originalDocumentHref -> the url for the current version of the agreement
 	//compareVersionHref -> the url for the version of the agreement which is to be compared with the current version of the agreement
-	public UUID compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_AGREEMENT_COMPARE
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
+	public UUID compareAgreements(
+		final String originalDocumentHref,
+		final String compareVersionHref) {
+
+		RestAPI.Response response = this.post(
+			new List<String> { PATH_AGREEMENT_COMPARE },
 			JSON.serialize(new Map<String, Object> {
 				'OriginalDocument' => new APIDocument(originalDocumentHref),
 				'RevisedDocument' => new APIDocument(compareVersionHref)
@@ -536,6 +475,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
+	private class APIHref {
+		public String href;
+	}
+
+	// FIXME: Leaky abstraction. This should not be directly exposed to the caller.
 	public class TaskStatus {
 		@AuraEnabled
 		public String message;
@@ -551,21 +495,15 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-//Get status of created Agreement in Folder
+	//Get status of created Agreement in Folder
 	public NegotiateAPI.TaskStatus getAgreementInEOSFolderStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
 		while (status != 'Success' && count < API_RETRY_LIMIT) {
-
-			final RestAPI.Response response = get(
-				getBaseUrl(),
-				new List<Object> {
-					PATH_AGREEMENT_IN_EOS_FOLDER, taskId
-				},
-				QueryString.empty,
-				getDefaultHeaders(),
+			RestAPI.Response response = this.get(
+				new List<Object> { PATH_AGREEMENT_IN_EOS_FOLDER, taskId },
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
@@ -582,18 +520,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public NegotiateAPI.TaskStatus getCompareAgreementsStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
-		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
 		while (status != 'Success' && count < API_RETRY_LIMIT) {
-
-			final RestAPI.Response response = get(
-				getBaseUrl(),
+			final RestAPI.Response response = this.get(
 				new List<Object> {
 					PATH_AGREEMENT_COMPARE, taskId
 				},
-				QueryString.empty,
-				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of comparison of Agreements - ' + taskId + ': ' + response.error);
@@ -610,18 +543,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public NegotiateAPI.TaskStatus getExportAgreementToSalesforceStatus(final UUID taskId) {
 		String status = '';
 		Long count = 0;
-		UUID agreementId;
 		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
 
 		while (status != 'Success' && count < API_RETRY_LIMIT) {
 
-			final RestAPI.Response response = get(
-				getBaseUrl(),
+			final RestAPI.Response response = this.get(
 				new List<Object> {
 					PATH_AGREEMENT_IN_SALESFORCE, taskId
 				},
-				QueryString.empty,
-				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of newly exported Agreement to Salesforce - ' + taskId + ': ' + response.error);
@@ -661,12 +590,10 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			queryStrings.put('offset', String.valueOf(offset));
 
 			final RestAPI.Response response = get(
-				getBaseUrl(),
 				new List<Object> {
 					PATH_FOLDER, folderId, PATH_DOCUMENTS
 				},
 				new QueryString(queryStrings),
-				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get Agreements from folderId - ' + folderId + ': ' + response.error);
@@ -685,37 +612,28 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return agreements;
 	}
 
-// get Agreement by id
 	public Agreement getAgreement(final UUID agreementId) {
 
 		final RestAPI.Response response = get(
-			getBaseUrl(),
 			new List<Object> {
 				PATH_DOCUMENTS, agreementId
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to get Agreement  - ' + agreementId + ': ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		return ((APIAgreement)Json.deserialize(response.body, APIAgreement.class)).convertAPIAgreement();
+		return ((APIAgreement)JSON.deserialize(response.body, APIAgreement.class)).convertAPIAgreement();
 
 	}
-
-// Rename Agreement
 
 	public Boolean renameAgreement(final UUID documentId, final String documentName) {
 
 		final RestAPI.Response response = put(
-			getBaseUrl(),
 			new List<Object> {
 				PATH_DOCUMENTS, documentId
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => documentName
 			}),
@@ -729,18 +647,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return body.get('Name') == documentName;
 	}
 
-// Delete Agreement
-
 	public Boolean deleteAgreement(final UUID documentId) {
 
 		final RestAPI.Response response = del(
-			getBaseUrl(),
 			new List<Object> {
 				PATH_DOCUMENTS, documentId
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
-			'',
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to delete Agreement - ' + documentId + ': ' + response.error);
@@ -763,12 +675,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 			queryStrings.put('offset', String.valueOf(offset));
 
 			final RestAPI.Response response = get(
-				getBaseUrl(),
 				new List<Object> {
 					PATH_DOCUMENTS, documentId, PATH_AGREEMENT_VERSIONS
 				},
-				new QueryString(queryStrings),
-				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError && response.statusCode == 404) {
 				this.log.error('Empty Agreement versions for Agreement - ' + documentId + ': ' + response.error);
@@ -788,16 +697,13 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return agreements;
 	}
 
-// Send for Approval
+	// Send for Approval
 	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String message, final Boolean isSequential) {
 
 		RestAPI.Response response = post(
-			getBaseUrl(),
 			new List<String> {
 				PATH_WORKFLOWS
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_Approval_Template',
 				'Params' => new APIApproval(agreementName, sourceId, documentsIds, getAPIApprovers(approvers), subject, message, isSequential).toXML()
@@ -812,15 +718,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
-// Send for External Review
+	// Send for External Review
 	public UUID sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		RestAPI.Response response = post(
-			getBaseUrl(),
 			new List<String> {
 				PATH_WORKFLOWS
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_ExternalReview_Template',
 				'Params' => new APIExternalReview(agreementName, sourceId, expiresInNumberOfDays, documentsIds, getAPIReviewers(reviewers), subject, body).toXML()
@@ -843,12 +746,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		while (status != 'Waiting' && status != 'Failed' && count < API_RETRY_LIMIT) {
 
 			final RestAPI.Response response = get(
-				getBaseUrl(),
 				new List<Object> {
 					PATH_WORKFLOWS, taskId
 				},
-				QueryString.empty,
-				getDefaultHeaders(),
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of Workflow Item - ' + taskId + ': ' + response.error);
@@ -864,334 +764,11 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
-	private class APIHistoryItems {
-		public List<APIHistoryItem> items;
-		public String next;
-	}
-
-	@TestVisible
-	private class APIHistoryItem {
-		public APIData data;
-		public String userEmail;
-		public String actionType;
-		public Datetime createdDate;
-
-		public AgreementHistoryItem convertAPIHistoryItem(Map<String, User> emailToUser, Map<String, Contact> emailToContact) {
-
-			AgreementHistoryItem.Actor actor = new AgreementHistoryItem.Actor(
-				'',
-				'',
-				'');
-			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
-
-			if (this.data != null) {
-
-				String baseURL = Salesforce.baseUrl.toExternalForm() + '/' ;
-
-				if (this.data.actor != null && this.actionType != null) {
-
-					//When Actor is User (Default)
-					//Scenario 1 : When Action Type should map to salesforce  contact however contact is not in salesforce
-					//Scenario 2 : For  All other action type
-					User resolvedUser = emailToUser.containsKey(this.data.actor.emailAddress) ? emailToUser.get(this.data.actor.emailAddress) : null;
-					actor = generateActorFromUser(this.data.actor, resolvedUser, baseURL);
-
-					Boolean isActionTypeMapToSalesforceContact =
-						(this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments)
-							|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedCheckoutCancelled)
-							|| this.actionType.equals(AgreementHistoryItem.ExternalReviewCompletedDocumentCheckin));
-
-					//for action types where external review has been completed the actor should map to Salesforce contact
-					//once DocumentCheckIn action item type provides the correct actor we will update the if condition to include DocumentCheckIn action Item check as well
-					//actor = (isActionTypeMapToSalesforceContact) ? generateActorFromContact(this.data.actor, baseURL) : (Actor)generateActorFromUser(this.data.actor, baseURL);
-					if (isActionTypeMapToSalesforceContact) {
-						Contact resolvedContact = emailToContact.containsKey(this.data.actor.emailAddress) ? emailToContact.get(this.data.actor.emailAddress) : null;
-						actor = generateActorFromContact(this.data.actor, resolvedContact, baseURL);
-					}
-				}
-
-				if (this.data.reviewer != null) {
-					Contact resolvedContact = emailToContact.get(this.data.reviewer.emailAddress);
-					recipients.add(generateActorFromContact(this.data.reviewer, resolvedContact, baseURL));
-				}
-
-				if (this.data.approvers != null && !this.data.approvers.isEmpty()) {
-					for (ApiActor a : this.data.approvers) {
-						User resolvedUser = emailToUser.containsKey(a.emailAddress) ? emailToUser.get(a.emailAddress) : null;
-						recipients.add(generateActorFromUser(a, resolvedUser, baseURL));
-					}
-				}
-			}
-			return new AgreementHistoryItem(
-				this.actionType,
-				UserInfo.getUserEmail(),
-				this.createdDate,
-				this.data.emailSubject,
-				this.data.emailMessage,
-				this.data.documentName,
-				this.data.versionNumber != null ? this.data.versionNumber : null,
-				this.data.documentOldName != null ? this.data.documentOldName : null,
-				this.data.documentName,
-				actor,
-				recipients);
-		}
-
-		@TestVisible
-		private AgreementHistoryItem.Actor generateActorFromContact(NegotiateAPI.APIActor actor, Contact resolvedContact, String baseURL) {
-			return new AgreementHistoryItem.Actor(
-				(resolvedContact != null && resolvedContact.Name != null) ? resolvedContact.Name : '',
-				actor.emailAddress,
-				(resolvedContact != null && resolvedContact.Id != null) ? baseURL + resolvedContact.Id : '');
-		}
-
-		@TestVisible
-		private AgreementHistoryItem.Actor generateActorFromUser(NegotiateAPI.APIActor actor, User resolvedUser, String baseURL) {
-
-			return new AgreementHistoryItem.Actor(
-				actor.fullName,
-				actor.emailAddress,
-				resolvedUser != null ? baseURL + resolvedUser.Id : '');
-		}
-
-		@TestVisible
-		private Set<String> prepareUserEmails(APIData data, Set<String> userEmails) {
-			if (data.actor != null && data.actor.emailAddress != null) {
-				userEmails.add(data.actor.emailAddress);
-			}
-			if (data.approvers != null && !data.approvers.isEmpty()) {
-				for (ApiActor a : this.data.approvers) {
-					if (a.emailAddress == null) {
-						continue;
-					}
-					userEmails.add(a.emailAddress);
-				}
-			}
-			return userEmails;
-		}
-
-		@TestVisible
-		private Set<String> prepareContactEmails(APIData data, Set<String> contactEmails) {
-
-			if (data.actor != null && data.actor.emailAddress != null) {
-				contactEmails.add(data.actor.emailAddress);
-			}
-			if (data.reviewer != null && data.reviewer.emailAddress != null) {
-				contactEmails.add(data.reviewer.emailAddress);
-			}
-			return contactEmails;
-		}
-	}
-
-	@TestVisible
-	private void populateEmailToUser(Set<String> userEmails) {
-		try {
-			Set<String> queryEmails = new Set<String>();
-			for (String userEmail : userEmails) {
-				if (emailToUser.containsKey(userEmail)) {
-					continue;
-				}
-				queryEmails.add(userEmail);
-			}
-			if (queryEmails.size() > 0) {
-				for (User u : [SELECT Id, Email FROM User WHERE email IN :queryEmails and isActive = true]) {
-					emailToUser.put(u.Email, u);
-				}
-			}
-		} Catch (Exception ex) {
-			LoggerService.getInstance().error('Failed to resolve salesforce user in history items ' + ex.getMessage());
-		}
-	}
-
-	@TestVisible
-	private void populateEmailToContact(Set<String> contactEmails) {
-		try {
-			Set<String> queryEmails = new Set<String>();
-			for (String contactEmail : contactEmails) {
-				if (emailToContact.containsKey(contactEmail)) {
-					continue;
-				}
-				queryEmails.add(contactEmail);
-			}
-			if (queryEmails.size() > 0) {
-				for (Contact con : [SELECT Id, Name, Email FROM Contact WHERE Email IN :queryEmails]) {
-					emailToContact.put(con.Email, con);
-				}
-			}
-		} Catch (Exception ex) {
-			LoggerService.getInstance().error('Failed to resolve salesforce contact in history items ' + ex.getMessage());
-		}
-	}
-
-	@TestVisible
-	private class APIActor {
-		public String fullName;
-		public String emailAddress;
-	}
-
-	@TestVisible
 	private class APIUser {
 		public String Email;
 		public String FirstName;
 		public String LastName;
 		public String href;
-	}
-
-	@TestVisible
-	private class APIData {
-		public String documentName;
-		public String documentOldName;
-		public String versionNumber;
-		public String documentUid;
-		public Datetime dueDate;
-		public String emailSubject;
-		public String emailMessage;
-		public APIActor actor;
-		public APIActor reviewer;
-		public List<APIActor> approvers;
-		public APIUser user;
-	}
-
-	public void prepareHistoryItems(final UUID documentId) {
-		Map<String, String> queryStrings = new Map<String, String>();
-		List<NegotiateAPI.APIHistoryItems> resultAPIHistoryItems = new List<NegotiateAPI.APIHistoryItems>();
-		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
-
-		final RestAPI.Response response = get(
-			getBaseUrl(),
-			new List<Object> {
-				PATH_HISTORY_ITEMS, documentId
-			},
-			new QueryString(queryStrings),
-			getDefaultHeaders(),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to get history items for documentId - ' +
-				documentId + response.error);
-			throw new APIException(response.error);
-		}
-		APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
-		for (APIHistoryItem a : result.items) {
-			if (a != null && a.data != null) {
-				userEmails = a.prepareUserEmails(a.data, userEmails);
-				contactEmails = a.prepareContactEmails(a.data, contactEmails);
-			}
-		}
-		resultAPIHistoryItems.add(result);
-		documentIdToAPIHistoryItems.put(documentId, resultAPIHistoryItems);
-	}
-
-	public Map<UUID, List<AgreementHistoryItem>> processHistoryItems() {
-
-		Map<UUID, List<AgreementHistoryItem>> documentIdToAgreementHistoryItems
-			= new Map<UUID, List<AgreementHistoryItem>>();
-		Boolean isQueryEligible = Limits.getQueries() < (Limits.getLimitQueries() - BUFFER_SOQL_LIMIT);
-		if (userEmails != null && userEmails.size() > 0 && isQueryEligible) {
-			populateEmailToUser(userEmails);
-		}
-		if (contactEmails != null && contactEmails.size() > 0 && isQueryEligible) {
-			populateEmailToContact(contactEmails);
-		}
-		for (UUID documentId : documentIdToAPIHistoryItems.keyset()) {
-			documentIdToAgreementHistoryItems.put(documentId, getAgreementHistoryItems(documentId));
-		}
-		return documentIdToAgreementHistoryItems;
-	}
-
-	private List<AgreementHistoryItem> getAgreementHistoryItems(final UUID documentId) {
-		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
-		for (APIHistoryItems apiHistoryItems : documentIdToAPIHistoryItems.get(documentId)) {
-			for (APIHistoryItem a : apiHistoryItems.items) {
-				if (a != null && a.data != null) {
-					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
-				}
-			}
-		}
-		return historyItems;
-	}
-
-	//Get historyItems
-	public List<AgreementHistoryItem> getHistoryItems(final UUID documentId) {
-		List<AgreementHistoryItem> historyItems = new List<AgreementHistoryItem>();
-		Map<String, String> queryStrings = new Map<String, String>();
-		queryStrings.put('limit', String.valueOf(SCM_OFFSET));
-		Long offset = -SCM_OFFSET;
-		String next = '';
-
-		while (next != null) {
-			offset += SCM_OFFSET;
-			queryStrings.put('offset', String.valueOf(offset));
-
-			final RestAPI.Response response = get(
-				getBaseUrl(),
-				new List<Object> {
-					PATH_HISTORY_ITEMS, documentId
-				},
-				new QueryString(queryStrings),
-				getDefaultHeaders(),
-				RestAPI.defaultTimeout);
-			if (response.hasError) {
-				this.log.error('Failed to get history items for documentId - ' +
-					documentId + response.error);
-				throw new APIException(response.error);
-			}
-			APIHistoryItems result = (APIHistoryItems)JSON.deserialize(response.body, APIHistoryItems.class);
-			for (APIHistoryItem a : result.items) {
-				if (a != null && a.data != null) {
-					userEmails = a.prepareUserEmails(a.data, userEmails);
-					contactEmails = a.prepareContactEmails(a.data, contactEmails);
-				}
-			}
-			Boolean isQueryEligible = Limits.getQueries() < (Limits.getLimitQueries() - BUFFER_SOQL_LIMIT);
-			if (userEmails != null && userEmails.size() > 0 && isQueryEligible) {
-				populateEmailToUser(userEmails);
-			}
-			if (contactEmails != null && contactEmails.size() > 0 && isQueryEligible) {
-				populateEmailToContact(contactEmails);
-			}
-			for (APIHistoryItem a : result.items) {
-				if (a != null && a.data != null) {
-					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
-				}
-			}
-			next = result.next;
-		}
-// catch some errors here
-		return historyItems;
-	}
-
-// limited access token
-
-	private class APILimitedAccessToken {
-		public String accessToken;
-		public String expiresIn;
-		public String APIBaseUrl;
-		public String APIUploadBaseUrl;
-		public String APIDownloadBaseUrl;
-
-		public NegotiateService.LimitedAccessToken toExternalForm() {
-			return new NegotiateService.LimitedAccessToken(accessToken, APIBaseUrl, APIUploadBaseUrl, APIDownloadBaseUrl);
-		}
-	}
-
-	public NegotiateService.LimitedAccessToken generateLimitedAccessToken(final UUID objectId, final String accessToken) {
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_TOKEN_REGISTRATIONS
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
-			JSON.serialize(new Map<String, Object> {
-				'objectId' => objectId.value,
-				'accessToken' => accessToken
-			}),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to generate limited access token: ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		return ((APILimitedAccessToken)JSON.deserialize(response.body, APILimitedAccessToken.class)).toExternalForm();
 	}
 
 	// workItems to get Assignee for PreviewWidget
@@ -1276,49 +853,14 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 	// resend approval request and resend external review request
 
-	@TestVisible
-	private class APIHref {
-		public String href;
-
-		public APIHref(final String href) {
-			this.href = href;
-		}
-	}
-
-	public Boolean resendRequest(final String documentHref, final String resendEmailType) {
-
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<String> {
-				PATH_EMAILS
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
-			JSON.serialize(new Map<String, Object> {
-				'Document' => new APIHref(documentHref),
-				'ResendEmailType' => resendEmailType
-			}),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to resend request: ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		return response.statusCode == 200 ;
-	}
-
 	// Cancel Approval or External Review
 
 	public Boolean cancelApprovalOrExternalReview(final UUID documentId) {
 
 		final RestAPI.Response response = del(
-			getBaseUrl(),
 			new List<Object> {
 				PATH_DOCUMENTS, documentId, PATH_LOCK
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
-			'',
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to cancel Approval or External Review for document - ' + documentId + ': ' + response.error);
@@ -1345,12 +887,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public Boolean approveOnBehalfOrRecipientResponse(final String comment, final String itemResponse, final UUID workItemsId) {
 
 		final RestAPI.Response response = put(
-			getBaseUrl(),
 			new List<String> {
 				PATH_WORK_ITEMS, workItemsId.value
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Selected' => new APISelected(comment, itemResponse)
 			}),
@@ -1375,8 +914,8 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 		}
 	}
 
-	private class APIExternalReviewOnBehalfOfHref{
-	    public String Href;
+	private class APIExternalReviewOnBehalfOfHref {
+		public String Href;
 
 		public APIExternalReviewOnBehalfOfHref(final String href) {
 			this.Href = href;
@@ -1384,12 +923,12 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	}
 
 	public Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID externalReviewId) {
-        Map<String, Object> requestParameters = new Map<String, Object>();
-        requestParameters.put('Comment',comments);
+		Map<String, Object> requestParameters = new Map<String, Object>();
+		requestParameters.put('Comment', comments);
 
-        if(newVersionUrl != null){
-        	requestParameters.put('UploadedDocuments', new APIUploadDocuments(newVersionUrl.toExternalForm()));
-        }
+		if (newVersionUrl != null) {
+			requestParameters.put('UploadedDocuments', new APIUploadDocuments(newVersionUrl.toExternalForm()));
+		}
 		final RestAPI.Response response = put(
 			getBaseUrl(),
 			new List<Object> {
@@ -1411,12 +950,9 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 	public UUID getDocumentReview(final UUID documentId) {
 
 		final RestAPI.Response response = get(
-			getBaseUrl(),
 			new List<Object> {
 				PATH_DOCUMENTS, documentId, PATH_REVIEWS
 			},
-			QueryString.empty,
-			getDefaultHeaders(),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
@@ -1425,7 +961,5 @@ public with sharing class NegotiateAPI extends DocuSignAPI {
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
-
 	}
-
 }

@@ -38,7 +38,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2.value);
+				AgreementsController.getAgreement(ScmAPIMock.DOCUMENT_ID_2.value);
 				throw new AssertException('Expected get Agreement to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -49,12 +49,12 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_getAgreement_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 
 			Test.startTest();
-			Agreement agreement = AgreementsController.getAgreement(NegotiateAPIMock.DOCUMENT_ID_2.value);
+			Agreement agreement = AgreementsController.getAgreement(ScmAPIMock.DOCUMENT_ID_2.value);
 			Test.stopTest();
 			System.assertNotEquals(null, agreement);
 		}
@@ -76,7 +76,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_getAgreements_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			List<Agreement> agreements;
@@ -129,7 +129,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_createAgreementInEOSFolder_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
@@ -156,7 +156,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_exportAgreementToSalesforce_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
@@ -183,7 +183,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_renameAgreement_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Boolean testResult;
@@ -210,7 +210,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_deleteAgreement_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Boolean testResult;
@@ -251,7 +251,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.sendForExternalReview('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.sendForExternalReview('Test Agreement', ScmAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
 					'testBody', 8);
@@ -265,12 +265,12 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_sendForExternalReview_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.sendForExternalReview('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.sendForExternalReview('Test Agreement', ScmAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
 				'testBody', 8);
@@ -284,7 +284,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+				AgreementsController.internalApproval('Test Agreement', ScmAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 					'[{"email":"unittest@test.com", "name":"test user"}]',
 					'testSubject',
 					'testBody', true);
@@ -300,23 +300,23 @@ private class AgreementsControllerTest {
 	static void test_redirectToAgreementPreview() {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			String link = AgreementsController.redirectToAgreementPreview(NegotiateAPIMock.OBJECT_ID, NegotiateAPIMock.DOCUMENT_ID.value);
+			String link = AgreementsController.redirectToAgreementPreview(ScmAPIMock.OBJECT_ID, ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, link);
 			System.assertEquals(link.startsWith(Site.getBaseUrl()), true);
-			System.assertEquals(link.contains('sourceId=' + NegotiateAPIMock.OBJECT_ID), true);
-			System.assertEquals(link.contains('agreementId=' + NegotiateAPIMock.DOCUMENT_ID.value), true);
+			System.assertEquals(link.contains('sourceId=' + ScmAPIMock.OBJECT_ID), true);
+			System.assertEquals(link.contains('agreementId=' + ScmAPIMock.DOCUMENT_ID.value), true);
 		}
 	}
 
 	@IsTest
 	static void test_sendForInternalApproval_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			NegotiateAPI.TaskStatus testTaskStatus;
 			Test.startTest();
-			testTaskStatus = AgreementsController.internalApproval('Test Agreement', NegotiateAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
+			testTaskStatus = AgreementsController.internalApproval('Test Agreement', ScmAPIMock.SOURCE_OBJECT_ID, new List<String> { '22222efe-e541-e911-9c1d-3ca82a1e3f41' },
 				'[{"email":"unittest@test.com", "name":"test user"}]',
 				'testSubject',
 				'testBody', true);
@@ -327,11 +327,11 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_generateUploadToken_success() {
-		NegotiateAPIMock.success();
-		SObject configuration = TestUtils.createAgreementConfiguration(NegotiateAPIMock.SOURCE_OBJECT_ID_2, NegotiateAPIMock.FOLDER_ID_2.toString());
+		ScmAPIMock.success();
+		TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(NegotiateAPIMock.SOURCE_OBJECT_ID_2);
+			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -342,7 +342,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.generateUploadToken(NegotiateAPIMock.SOURCE_OBJECT_ID_2);
+				AgreementsController.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
 				throw new AssertException('Expected generate upload token to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -353,11 +353,11 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_generateDownloadToken_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
+			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -368,7 +368,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.generateDownloadToken(NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.generateDownloadToken(ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected generate download token to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -379,11 +379,11 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_generateUploadNewVersionToken_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			NegotiateService.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadNewVersionToken(NegotiateAPIMock.DOCUMENT_ID.value);
+			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -394,7 +394,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.generateUploadNewVersionToken(NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected generate upload new version token to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -405,25 +405,25 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_generateResourceToken_success() {
-		GenAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
+			String result = AgreementsController.generateResourceToken(ScmAPIMock.DOCUMENT_ID.toString());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assert(result.contains(GenAPIMock.DOCUMENT_ID.toString()));
+			System.assert(result.contains(ScmAPIMock.DOCUMENT_ID.toString()));
 		}
 	}
 
 	@IsTest
 	static void test_generateResourceToken_fail() {
-		GenAPIMock.failure();
+		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Boolean hasError = false;
 			Test.startTest();
 			try {
-				String result = AgreementsController.generateResourceToken(GenAPIMock.DOCUMENT_ID.toString());
+				AgreementsController.generateResourceToken(ScmAPIMock.DOCUMENT_ID.toString());
 			} catch (Exception ex) {
 				hasError = true;
 			}
@@ -468,7 +468,7 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_resendRequest_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 
@@ -484,7 +484,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.cancelApprovalOrExternalReview(ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected cancel request to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -495,12 +495,12 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_cancelApprovalOrExternalReview_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 
 			Test.startTest();
-			Boolean result = AgreementsController.cancelApprovalOrExternalReview(NegotiateAPIMock.DOCUMENT_ID.value);
+			Boolean result = AgreementsController.cancelApprovalOrExternalReview(ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assert(result);
 		}
@@ -508,10 +508,10 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_getApprovalWorkItems_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			List<AgreementApprovalWorkItem> approvalWorkItems = AgreementsController.getApprovalWorkItems(String.valueOf(NegotiateAPIMock.APPROVAL_DOCUMENT_ID));
+			List<AgreementApprovalWorkItem> approvalWorkItems = AgreementsController.getApprovalWorkItems(String.valueOf(ScmAPIMock.APPROVAL_DOCUMENT_ID));
 			Test.stopTest();
 			System.assertNotEquals(null, approvalWorkItems);
 			System.assertNotEquals(null, approvalWorkItems[0].workItemUrl);
@@ -527,7 +527,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.getApprovalWorkItems(NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.getApprovalWorkItems(ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected getApprovalWorkItems request to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -538,12 +538,12 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 		User user = UserMock.createDocuSignAdministrator();
 		System.runAs(user) {
 			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
-			Boolean result = AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
+			Boolean result = AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assert(result);
 		}
@@ -554,7 +554,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected approveOnBehalfOrRecipientResponse request to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -567,7 +567,7 @@ private class AgreementsControllerTest {
 	static void test_getAgreementShareLink_success() {
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+			String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(result, null);
 		}
@@ -578,7 +578,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				String result = AgreementsController.getAgreementShareLink(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.getAgreementShareLink(UserInfo.getUserId(), ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected getAgreementShareLink to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -589,12 +589,13 @@ private class AgreementsControllerTest {
 
 	@IsTest
 	static void test_compareAgreements_success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			String result = AgreementsController.compareAgreements(NegotiateAPIMock.ORIGINAL_DOCUMENT_HREF, NegotiateAPIMock.COMPARE_VERSION_HREF);
+			String result = AgreementsController.compareAgreements(ScmAPIMock.ORIGINAL_DOCUMENT_HREF, ScmAPIMock.COMPARE_VERSION_HREF);
 			Test.stopTest();
-			System.assertEquals('https://account-hqtest3.dev.docusign.net/managed_token/v1/233d8ee7-1135-4d63-9163-c532c4e2571a', result);
+
+			System.assert(String.isNotBlank(result));
 		}
 	}
 
@@ -603,7 +604,7 @@ private class AgreementsControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				String result = AgreementsController.compareAgreements(UserInfo.getUserId(), NegotiateAPIMock.DOCUMENT_ID.value);
+				AgreementsController.compareAgreements(UserInfo.getUserId(), ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected compareAgreements to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
@@ -612,25 +613,25 @@ private class AgreementsControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_externalReviewOnBehalfOfRequest_Success() {
-		NegotiateAPIMock.success();
+		ScmAPIMock.success();
 		User user = UserMock.createDocuSignAdministrator();
 		System.runAs(user) {
 			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
 			Test.startTest();
-			Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
+			Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', ScmAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueOf(ScmAPIMock.DOCUMENT_ID));
 			Test.stopTest();
 			System.assertEquals(isExternalReviewCompleted, true);
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_externalReviewOnBehalfOfRequest_Failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', NegotiateAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueof(NegotiateAPIMock.DOCUMENT_ID));
+				AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', ScmAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueOf(ScmAPIMock.DOCUMENT_ID));
 				throw new AssertException('Expected externalreview on behalf of to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -639,7 +640,7 @@ private class AgreementsControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_getSourceDetails() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
@@ -650,7 +651,7 @@ private class AgreementsControllerTest {
 			Test.startTest();
 			AgreementsController controller = new AgreementsController();
 			System.assertEquals(controller.sourceEntity.typeName, testSourceEntity.typeName);
-			System.assertEquals(controller.sourceEntity.Name, testSourceEntity.Name);
+			System.assertEquals(controller.sourceEntity.name, testSourceEntity.name);
 			Test.stopTest();
 		}
 	}
