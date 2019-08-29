@@ -17,7 +17,7 @@
 	</aura:if>
 	<div class="slds-grid slds-p-bottom_medium">
 		<!--section one-->
-		<div class="">
+		<div>
 			<img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.ImageNotFound}" />
 		</div>
 		<div class="slds-col slds-has-flexi-truncate">
