@@ -13,7 +13,7 @@
       fromComponent !== 'CLMIntegrationLayout'
     ) {
       if (
-        navigateTo !== undefined &&
+        $A.util.isUndefinedOrNull(navigateTo) &&
         navigateTo.navigateTo === 'CLMMappedObjectsHome'
       ) {
         component.set('v.showHelp', true);
@@ -99,9 +99,9 @@
             theme === 'Theme4t' ||
             theme === 'Theme4u'
           ) {
-            window.open($A.get('$Label.c.LEXObjectManagerURL'));
+            navUtils.navigateToUrl($A.get('$Label.c.LEXObjectManagerURL'));
           } else {
-            window.open($A.get('$Label.c.ClassicObjectManagerURL'));
+            navUtils.navigateToUrl($A.get('$Label.c.ClassicObjectManagerURL'));
           }
         } else {
           $A.log('Callback failed.');
