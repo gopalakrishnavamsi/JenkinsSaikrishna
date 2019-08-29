@@ -2,15 +2,20 @@
   onInit: function (component, event, helper) {
     helper.setBreadcrumbDefaultValues(component);
     helper.setPathDefaultValues(component);
-
   },
 
   updateFromBreadCrumbUI: function (component, event) {
     var navigateTo = event.getParam('navigateTo');
     var fromComponent = event.getParam('fromComponent');
     var toComponent = event.getParam('toComponent');
-    if ((toComponent === 'CLMIntegrationLayout' || toComponent === 'ANY') && fromComponent !== 'CLMIntegrationLayout') {
-      if (navigateTo !== undefined && navigateTo.navigateTo === 'CLMMappedObjectsHome') {
+    if (
+      (toComponent === 'CLMIntegrationLayout' || toComponent === 'ANY') &&
+      fromComponent !== 'CLMIntegrationLayout'
+    ) {
+      if (
+        navigateTo !== undefined &&
+        navigateTo.navigateTo === 'CLMMappedObjectsHome'
+      ) {
         component.set('v.showHelp', true);
         component.set('v.showTrouble', true);
         component.set('v.showPathAndNew', false);
@@ -25,7 +30,10 @@
     var toComponent = event.getParam('toComponent');
     var type = event.getParam('type');
     var data = event.getParam('data');
-    if (toComponent === 'CLMIntegrationLayout' && fromComponent !== 'CLMIntegrationLayout') {
+    if (
+      toComponent === 'CLMIntegrationLayout' &&
+      fromComponent !== 'CLMIntegrationLayout'
+    ) {
       if (type === 'show' && componentName === 'CLMCardModel') {
         helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {});
         helper.setBreadcrumbDefaultValues(component);
@@ -33,33 +41,40 @@
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
         component.set('v.showObjFolderCard', true);
-        helper.fireApplicationEvent(component, {
-          title: $A.get('$Label.c.SelectObject'),
-          summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
-          index: '1',
-          fromComponent: 'CLMIntegrationLayout',
-          toComponent: 'CLMCardModel',
-          type: 'update'
-        }, 'CLMCardModelEvent');
-
-      }
-      else if (type === 'show' && componentName === 'CLMMappedObjectsHome') {
+        helper.fireApplicationEvent(
+          component,
+          {
+            title: $A.get('$Label.c.SelectObject'),
+            summary: $A
+              .get('$Label.c.SelectObjectHelpBody')
+              .concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
+            index: '1',
+            fromComponent: 'CLMIntegrationLayout',
+            toComponent: 'CLMCardModel',
+            type: 'update'
+          },
+          'CLMCardModelEvent'
+        );
+      } else if (type === 'show' && componentName === 'CLMMappedObjectsHome') {
         component.set('v.showHelp', true);
         component.set('v.showTrouble', true);
         component.set('v.showPathAndNew', false);
         component.set('v.showObjFolderCard', false);
-      }
-      else if (type === 'edit' && componentName === 'CLMCardModel') {
+      } else if (type === 'edit' && componentName === 'CLMCardModel') {
         helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {
-          SelectedObjDetails: data.objDetails
+          SelectedObjDetails: data.objDetails,
+          isEdit: true
         });
         helper.setBreadcrumbEditObjectValues(component);
-
-        helper.fireApplicationEvent(component, {
-          navigateTo: { index: '2' },
-          fromComponent: 'CLMMappedObjectsHome',
-          toComponent: 'CLMBreadcrumbs'
-        }, 'CLMBreadcrumbsEvent');
+        helper.fireApplicationEvent(
+          component,
+          {
+            navigateTo: { index: '2' },
+            fromComponent: 'CLMMappedObjectsHome',
+            toComponent: 'CLMBreadcrumbs'
+          },
+          'CLMBreadcrumbsEvent'
+        );
         component.set('v.showHelp', false);
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
@@ -75,15 +90,20 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         var theme = response.getReturnValue();
-        if (buttonLabel === $A.get('$Label.c.ConfigureLayouts') || buttonLabel === $A.get('$Label.c.ConfigureButtons')) {
-          if (theme === 'Theme4d' || theme === 'Theme4t' || theme === 'Theme4u') {
+        if (
+          buttonLabel === $A.get('$Label.c.ConfigureLayouts') ||
+          buttonLabel === $A.get('$Label.c.ConfigureButtons')
+        ) {
+          if (
+            theme === 'Theme4d' ||
+            theme === 'Theme4t' ||
+            theme === 'Theme4u'
+          ) {
             window.open($A.get('$Label.c.LEXObjectManagerURL'));
-          }
-          else {
+          } else {
             window.open($A.get('$Label.c.ClassicObjectManagerURL'));
           }
-        }
-        else {
+        } else {
           $A.log('Callback failed.');
         }
       }
@@ -91,13 +111,18 @@
   },
 
   onSecondaryButtonClick: function (component, event, helper) {
-    helper.fireApplicationEvent(component, {
-      fromComponent: 'CLMHomeBody',
-      toComponent: 'CLMSetupLayout',
-      type: 'update',
-      tabIndex: '8',
-    }, 'CLMNavigationEvent');
+    helper.fireApplicationEvent(
+      component,
+      {
+        fromComponent: 'CLMHomeBody',
+        toComponent: 'CLMSetupLayout',
+        type: 'update',
+        tabIndex: '8'
+      },
+      'CLMNavigationEvent'
+    );
   },
+
   updateUIWithAdditionalHelpCard: function (component, event) {
     var navigateTo = event.getParam('navigateTo');
     if (navigateTo.index === '2' || navigateTo.index === '3') {
