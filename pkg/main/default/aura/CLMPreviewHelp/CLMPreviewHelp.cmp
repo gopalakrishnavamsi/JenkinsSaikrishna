@@ -1,0 +1,33 @@
+<aura:component>
+	<aura:attribute name="isSubTitle" type="Boolean" default="false" />
+	<aura:attribute name="subTitle" type="String" />
+	<aura:attribute name="imageURL" type="String" />
+	<aura:attribute name="summary" type="String" />
+	<aura:attribute name="isSteps" type="Boolean" default="false" />
+	<aura:attribute name="steps" type="String[]" />
+
+	<div class="slds-grid ">
+		<div class="slds-col slds-size_1-of-2">
+			<div>
+				<aura:if isTrue="{!v.isSubTitle}">
+					<div class="ds-card-heading2"> <b>{!v.subTitle}</b></div>
+				</aura:if>
+				<div class="slds-p-top_medium slds-cell-wrap">
+					{!v.summary}
+					<aura:if isTrue="{!v.isSteps}">
+						<div class="slds-p-top_medium">
+							<aura:iteration items="{!v.steps}" var="item">
+								<div> {!item} </div>
+							</aura:iteration>
+						</div>
+					</aura:if>
+				</div>
+			</div>
+		</div>
+		<div class="slds-col slds-size_1-of-2">
+			<div class="ds-orange-icon slds-form-element__control slds-float_right">
+				<img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.ImageNotFound}" />
+			</div>
+		</div>
+	</div>
+</aura:component>

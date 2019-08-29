@@ -1,0 +1,43 @@
+<aura:component extends="c:CLMUtility">
+	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+
+	<aura:attribute name="isSubTitle" type="Boolean" default="false" />
+	<aura:attribute name="subTitle" type="String" />
+	<aura:attribute name="imageURL" type="String" />
+	<aura:attribute name="summary" type="String" />
+	<aura:attribute name="isLink" type="Boolean" default="false" />
+	<aura:attribute name="link" type="String" />
+	<aura:attribute name="hyperlinkedURI" type="List" access="private" />
+	<aura:attribute name="firstButtonName" type="String" />
+
+	<aura:if isTrue="{!v.isSubTitle}">
+		<div class="slds-text-title_bold slds-p-bottom_medium ds-card-heading2">
+			{!v.subTitle}
+		</div>
+	</aura:if>
+	<div class="slds-grid slds-p-bottom_medium">
+		<!--section one-->
+		<div class="">
+			<img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.ImageNotFound}" />
+		</div>
+		<div class="slds-col slds-has-flexi-truncate">
+			<div class="slds-form-element__control ">
+				<div class="slds-p-horizontal_x-large">{!v.summary}
+					<aura:if isTrue="{!v.isLink}">
+						<div class="slds-p-top_medium ">
+							<span onclick="{!c.navigateToSection}">
+								<a href="javascript:void(0);">{!v.link}</a>&nbsp;
+							</span>
+						</div>
+					</aura:if>
+				</div>
+			</div>
+		</div>
+		<div class="slds-col_bump-right">
+			<span>
+				<lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
+					iconName="utility:new_window" iconPosition="right" class="slds-m-right_x-small" />
+			</span>
+		</div>
+	</div>
+</aura:component>

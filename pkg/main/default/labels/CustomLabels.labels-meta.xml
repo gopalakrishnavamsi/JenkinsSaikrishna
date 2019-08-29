@@ -9163,4 +9163,133 @@
 		<shortDescription>EnvironmentName</shortDescription>
 		<value>Environment Name</value>
 	</labels>
+	<labels>
+		<fullName>ImageNotFound</fullName>
+		<categories></categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Image Alternative Text</shortDescription>
+		<value>Image Not Found</value>
+	</labels>
+	<labels>
+		<fullName>CreatingAgreementsInDocuSignCLM</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreatingAgreementsInDocuSignCLM</shortDescription>
+		<value>Creating Agreements in DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>CreateAndManageDocumentGenerationConfigurations</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageDocumentGenerationConfigurations</shortDescription>
+		<value>Create and manage Document Generation Configurations</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationConfigurations</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationConfigurations</shortDescription>
+		<value>Document Generation Configurations</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationProcessTitle</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationProcess</shortDescription>
+		<value>Document Generation Process</value>
+	</labels>
+	<labels>
+		<fullName>CreateAndManageDocSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageDocSummary</shortDescription>
+		<value>Document Generationis the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>CreateAndManageDocSummary2</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageDocSummary2</shortDescription>
+		<value>You can add a custom button to your Salesforce page layout to trigger a Document Generation configuration URL. Clicking the custom button will open the affiliated Document Generation form.</value>
+	</labels>
+	<labels>
+		<fullName>LearnHowToGenDoc</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowToGenDoc</shortDescription>
+		<value>Learn how to generate documents in DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>LearnHowToAddAButton</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowToAddAButton</shortDescription>
+		<value>Learn how to add a button to a Salesforce Object page</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationConfigurationsSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationConfigurationsSummary</shortDescription>
+		<value>Configurations are one of the principal drivers behind the Document Generation process in DocuSign CLM. A configuration consist of 3 elements:</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationProcessSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationProcessSummary </shortDescription>
+		<value>Using your own templates, you can quickly merge data to create new contracts, agreements or any document and instantly send it through the appropriate downstream business process. Alternatively, you can use the same tool to start a workflow by uploading an existing document such as a third-party agreement.
+		</value>
+	</labels>
+	<labels>
+		<fullName>DocumentStep1</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentStep1</shortDescription>
+		<value>1. MS Word Template Document (.doc or .docx)</value>
+	</labels>
+	<labels>
+		<fullName>DocumentStep2</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription> DocumentStep2  </shortDescription>
+		<value>2. Form configuration file (.xml or CLM native format)</value>
+	</labels>
+	<labels>
+		<fullName>DocumentStep3</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentStep3</shortDescription>
+		<value>3. Mapped Salesforce Object (if pulling data from Salesforce)</value>
+	</labels>
+	<labels>
+		<fullName>OpenObjectManagerButton</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription> OpenObjectManagerButton   </shortDescription>
+		<value>Open Object Manager</value>
+	</labels>
+	<labels>
+		<fullName> OpenDocuSignCLMButton </fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OpenDocuSignCLMButton</shortDescription>
+		<value>Open DocuSign CLM</value>
+	</labels>
 </CustomLabels>
