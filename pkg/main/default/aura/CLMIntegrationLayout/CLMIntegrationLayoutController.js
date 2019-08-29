@@ -83,7 +83,7 @@
     }
   },
 
-  onPrimaryButtonClick: function (component, event) {
+  onPrimaryButtonClick: function (component, event, helper) {    
     var buttonLabel = event.getParam('buttonLabel');
     var action = component.get('c.getCurrentUserExperience');
     action.setCallback(this, function (response) {
@@ -104,7 +104,7 @@
             navUtils.navigateToUrl($A.get('$Label.c.ClassicObjectManagerURL'));
           }
         } else {
-          $A.log('Callback failed.');
+          helper.fireToast(component, $A.get('$Label.c.CallbackFailed'), helper.ERROR);
         }
       }
     });
