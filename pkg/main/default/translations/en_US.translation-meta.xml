@@ -4794,7 +4794,7 @@
 	<customLabels>
 		<label>Environment Name</label>
 		<name>EnvironmentName</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>DocuSign Gen is not configured for your account.</label>
 		<name>GenNotConfigured</name>
@@ -4808,8 +4808,8 @@
 		<name>EditObject</name>
 	</customLabels>
 	<customLabels>
-        <label>Viewing object folders in Salesforce</label>
-        <name>ViewingObjectFoldersSummary</name>
+		<label>Viewing object folders in Salesforce</label>
+		<name>ViewingObjectFoldersSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -15,16 +15,16 @@
 	<aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
 
 	<!--Place holder attributes-->
-	<aura:attribute name="breadCrumbValues" type="List" />
-	<aura:attribute name="pathValues" type="List" />
-	<aura:attribute name="editComponent" type="Aura.Component[]" />
-	<aura:attribute name="isClose" type="Boolean" default="" />
+	<aura:attribute name="breadCrumbValues" type="List" access="private"/>
+	<aura:attribute name="pathValues" type="List" access="private"/>
+	<aura:attribute name="editComponent" type="Aura.Component[]" access="private"/>
+	<aura:attribute name="isClose" type="Boolean" access="private"/>
 
 	<!--ui attributes-->
-	<aura:attribute type="boolean" name="showHelp" default="true" />
-	<aura:attribute type="boolean" name="showTrouble" default="true" />
-	<aura:attribute type="boolean" name="showPathAndNew" default="false" />
-	<aura:attribute type="boolean" name="showObjFolderCard" default="false" />
+	<aura:attribute type="boolean" name="showHelp" default="true" access="private"/>
+	<aura:attribute type="boolean" name="showTrouble" default="true" access="private"/>
+	<aura:attribute type="boolean" name="showPathAndNew" default="false" access="private"/>
+	<aura:attribute type="boolean" name="showObjFolderCard" default="false" access="private"/>
 
 	<lightning:layout multipleRows="true">
 		<aura:if isTrue="{!!v.isClose}">

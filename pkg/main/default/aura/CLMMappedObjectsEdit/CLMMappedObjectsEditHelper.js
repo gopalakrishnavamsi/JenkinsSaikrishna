@@ -156,8 +156,6 @@
 			}
 		} else if (index === '3' && SelectedObjDetails && SelectedObjFieldName) {
 			if (
-				!SelectedObjFieldName ||
-				SelectedObjFieldName.length === 0 ||
 				$A.util.isEmpty(SelectedObjFieldName)
 			) {
 				helper.fireApplicationEvent(

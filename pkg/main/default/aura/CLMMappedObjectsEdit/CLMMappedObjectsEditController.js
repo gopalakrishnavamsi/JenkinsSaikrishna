@@ -4,14 +4,14 @@
 		component.set('v.clmFolderTree', [
 			{
 				level: 1,
-				name: 'Other Sources',
+				name: $A.get('$Label.c.OtherSources'),
 				type: 'root',
 				selected: false,
 				id: 1,
 			},
 			{
 				level: 2,
-				name: 'Salesforce',
+				name: $A.get('$Label.c.Salesforce'),
 				type: 'parent',
 				selected: false,
 				id: 2
@@ -51,7 +51,7 @@
 						if (pathIndex === 0) {
 							clmTree.push({
 								level: 1,
-								name: 'Other Sources',
+								name: $A.get('$Label.c.OtherSources'),
 								type: 'root',
 								selected: false,
 								id: 1,
@@ -149,7 +149,7 @@
 		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			showPrimaryButton: 'false',
 			secondaryButtonVariant: 'brand',
-			secondaryButtonLabel: 'Close'
+			secondaryButtonLabel: $A.get('$Label.c.Close')
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
