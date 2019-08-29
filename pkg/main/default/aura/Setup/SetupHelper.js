@@ -79,6 +79,7 @@
           else if (isPlatformAuthorized && (eSignFound || genFound || negotiateFound)) {
             helper.createComponent('setupContent', component, 'c:SetupWizard', {
               login: component.get('v.login'),
+              products: component.get('v.products'),
               showSetupSpinner: component.get('v.showSetupSpinner'),
               showSetupComponent: component.get('v.showSetupComponent')
             });
@@ -92,6 +93,7 @@
             !negotiateFound) {
             helper.createComponent('setupContent', component, 'c:SetupWizard', {
               login: component.get('v.login'),
+              products: component.get('v.products'),
               showSetupSpinner: component.get('v.showSetupSpinner'),
               showSetupComponent: component.get('v.showSetupComponent')
             });

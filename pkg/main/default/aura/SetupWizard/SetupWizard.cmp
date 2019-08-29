@@ -2,7 +2,11 @@
 
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="products" type="Product[]"/>
     <aura:attribute name="navigationData" type="Object"/>
+    <aura:attribute name="eSignProduct" type="Product"/>
+    <aura:attribute name="genProduct" type="Product"/>
+    <aura:attribute name="negotiateProduct" type="Product"/>
     <aura:attribute name="selectedItem" type="String" default="tab_home"/>
     <aura:attribute name="showSetupSpinner" type="Object"/>
     <aura:attribute name="showSetupComponent" type="Object"/>
@@ -24,14 +28,10 @@
                     <lightning:verticalNavigationSection label="{!section.label}">
                         <aura:iteration items="{!section.items }" var="item">
                             <aura:if isTrue="{!!empty(item.icon)}">
-                                <lightning:verticalNavigationItemIcon
-                                        label="{!item.label}"
-                                        name="{!item.name}"
-                                        iconName="{!item.icon}"/>
+                                <lightning:verticalNavigationItemIcon iconName="{!item.icon}" label="{!item.label}"
+                                                                      name="{!item.name}"/>
                                 <aura:set attribute="else">
-                                    <lightning:verticalNavigationItem
-                                            label="{!item.label}"
-                                            name="{!item.name}"/>
+                                    <lightning:verticalNavigationItem label="{!item.label}" name="{!item.name}"/>
                                 </aura:set>
                             </aura:if>
                         </aura:iteration>
@@ -49,10 +49,14 @@
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
                     <c:SetupAccount login="{!v.login}"/>
                 </div>
+                <!-- Help guide details -->
+                <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
+
+                </div>
                 <!-- Configuration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
                     <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.ConfigurationSection}</div>
-                    <div class="slds-box">
+                    <div class="slds-box ds-white-background">
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
                             <div class="slds-col">
                                 <div class="slds-media slds-media_large">
@@ -77,14 +81,23 @@
                                         <lightning:icon iconName="standard:contract" size="large"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration}</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration} <span
+                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.GenBadgeText}</span>
+                                        </p>
                                         <p>{!$Label.c.TabDocumentGenerationHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"
-                                                  onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
+                                <aura:if isTrue="{!empty(v.genProduct)}">
+                                    <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
+                                                      iconPosition="right"
+                                                      onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
+                                    <aura:set attribute="else">
+                                        <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                          onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
+                                    </aura:set>
+                                </aura:if>
                             </div>
                         </div>
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
@@ -95,14 +108,23 @@
                                                         class="ds-negotiation-icon-background"/>
                                     </div>
                                     <div class="slds-media__body">
-                                        <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}</p>
+                                        <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}<span
+                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.NegotiateBadgeText}</span>
+                                        </p>
                                         <p>{!$Label.c.TabNegotiationHelpText}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"
-                                                  onclick="{!c.navigateToNegotiationTab}"></lightning:button>
+                                <aura:if isTrue="{!empty(v.negotiateProduct)}">
+                                    <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
+                                                      iconPosition="right"
+                                                      onclick="{!c.navigateToNegotiationTab}"></lightning:button>
+                                    <aura:set attribute="else">
+                                        <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                          onclick="{!c.navigateToNegotiationTab}"></lightning:button>
+                                    </aura:set>
+                                </aura:if>
                             </div>
                         </div>
                     </div>
@@ -111,7 +133,7 @@
                 <!-- Administration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
                     <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.AdministrationSection}</div>
-                    <div class="slds-box">
+                    <div class="slds-box ds-white-background">
                         <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
                             <div class="slds-col">
                                 <div class="slds-media slds-media_large">

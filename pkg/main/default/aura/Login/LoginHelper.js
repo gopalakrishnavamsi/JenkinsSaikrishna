@@ -17,10 +17,10 @@
     if (isLoggedIn && !isPlatformAuthorized) {
       //populate the account details
       var accountOptions = [];
-      component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber);
+      component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber.toString());
       accountOptions.push({
         'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), loginInformation.accounts[0].name, loginInformation.accounts[0].accountNumber),
-        'value': loginInformation.accounts[0].accountNumber
+        'value': loginInformation.accounts[0].accountNumber.toString()
       });
       component.set('v.multipleAccountsFound', false);
       component.set('v.accountOptions', accountOptions);
@@ -140,10 +140,10 @@
     var accountOptions = [];
     //single account and settings have been saved
     if (isLoggedIn) {
-      component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber);
+      component.set('v.selectedAccountNumber', loginInformation.accounts[0].accountNumber.toString());
       accountOptions.push({
         'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), loginInformation.accounts[0].name, loginInformation.accounts[0].accountNumber),
-        'value': loginInformation.accounts[0].accountNumber
+        'value': loginInformation.accounts[0].accountNumber.toString()
       });
       component.set('v.multipleAccountsFound', false);
       component.set('v.accountOptions', accountOptions);
@@ -154,11 +154,11 @@
       component.set('v.multipleAccountsFound', true);
       loginInformation.accounts.forEach(function (account) {
         if (account.isDefault) {
-          component.set('v.selectedAccountNumber', account.accountNumber);
+          component.set('v.selectedAccountNumber', account.accountNumber.toString());
         }
         accountOptions.push({
           'label': stringUtils.format($A.get('$Label.c.AccountDisplay_2'), account.name, account.accountNumber),
-          'value': account.accountNumber
+          'value': account.accountNumber.toString()
         });
       });
       component.set('v.accountOptions', accountOptions);
@@ -184,7 +184,7 @@
       setAccountAction.setParams({
         environment: component.get('v.environment'),
         otherUrl: component.get('v.otherUrl'),
-        accountNumber: component.get('v.selectedAccountNumber')
+        accountNumber: parseInt(component.get('v.selectedAccountNumber'), 10)
       });
 
       setAccountAction.setCallback(this, $A.getCallback(function (response) {

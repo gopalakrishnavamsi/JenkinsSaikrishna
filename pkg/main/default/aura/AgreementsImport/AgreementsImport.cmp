@@ -42,7 +42,7 @@
             <div class="{!'dsImport-spinner_container' + if(v.currentStep == '3', ' dsImport-spinner_setupFileUpload')
                                                        + if(v.currentStep == '2', ' dsImport-spinner_setupSalesforceFiles')
                                                        + if(v.currentStep == '4', ' dsImport-spinner_uploadingAgreement')}">
-                <c:Loading/>
+                <c:BlueSpinner/>
             </div>
         </aura:if>
 
