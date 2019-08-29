@@ -205,20 +205,6 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_createRemoteSites_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				MetadataService.createRemoteSites(null);
-				throw new AssertException('Expected createRemoteSites to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_createRemoteSites_invalid_arguments() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();

@@ -522,7 +522,7 @@ public with sharing class GenService {
 	}
 
 	public static Gen.Template getTemplate(final Id templateId) {
-		if (!Permissions.isDocuSignAdministrator() && !Permissions.isDocuSignGenerator()){
+		if (!Permissions.isDocuSignAdministrator() && !Permissions.isDocuSignGenerator()) {
 			throw UnauthorizedException.notDocuSignGenerator();
 		}
 
@@ -617,6 +617,7 @@ public with sharing class GenService {
 					file.generatedFormat,
 					getOutputFileName(file, source, Datetime.now())).withFile(file));
 			} catch (Exception ex) {
+				LoggerService.getInstance().exception(ex, 'Failed to queue document generation');
 				result.add(new Gen.Job(
 					null,
 					file.id,

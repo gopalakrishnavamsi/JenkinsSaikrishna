@@ -1,6 +1,5 @@
 public with sharing class ESignatureProductAPI extends ESignatureAPI {
 
-	private static ESignatureProductAPI self;
 	private final String accessToken;
 	private Map<String, String> defaultHeaders;
 

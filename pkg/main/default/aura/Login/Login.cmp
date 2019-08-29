@@ -12,7 +12,7 @@
     <aura:attribute name="isCompleted" type="Boolean" access="private"/>
     <aura:attribute name="environment" type="String"/>
     <aura:attribute name="multipleAccountsFound" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="selectedAccountNumber" type="Long" access="private"/>
+    <aura:attribute name="selectedAccountNumber" type="String" access="private"/>
     <aura:attribute name="advancedOptionsExpanded" type="Boolean" access="private"/>
     <aura:attribute name="accountOptions" type="List" access="private"/>
     <aura:attribute name="config" type="Object" access="private"/>
@@ -73,7 +73,7 @@
                     <aura:if isTrue="{!v.loading}">
                         <!-- spinner -->
                         <div class="slds-col slds-m-top_small slds-size_1-of-1">
-                            <c:Loading/>
+                            <c:BlueSpinner/>
                         </div>
 
                         <!-- login steps -->

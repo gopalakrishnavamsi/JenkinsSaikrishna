@@ -2526,6 +2526,14 @@
 		<name>ESignatureServiceDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign Web Service</label>
+		<name>ScmWebServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign API Service</label>
+		<name>ScmApiServiceDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Auth Service</label>
 		<name>ScmAuthServiceDescription</name>
 	</customLabels>
@@ -4788,6 +4796,28 @@
 		<name>EnvironmentName</name>
 	</customLabels>
 	<customLabels>
+		<label>Open DocuSign CLM</label>
+		<name>OpenDocuSignCLMButton</name>
+		<label>DocuSign Gen is not configured for your account.</label>
+		<name>GenNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate is not configured for your account.</label>
+		<name>NegotiateNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen</label>
+		<name>GenBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate</label>
+		<name>NegotiateBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>Unlock</label>
+		<name>UnlockFeatures</name>
+	</customLabels>
+	<customLabels>
 		<label>Image Not Found</label>
 		<name>ImageNotFound</name>
 	</customLabels>
@@ -4847,10 +4877,6 @@
 	<customLabels>
 		<label>Open Object Manager</label>
 		<name>OpenObjectManagerButton</name>
-	</customLabels>
-	<customLabels>
-		<label>Open DocuSign CLM</label>
-		<name>OpenDocuSignCLMButton</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

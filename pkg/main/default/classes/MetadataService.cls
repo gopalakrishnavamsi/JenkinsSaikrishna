@@ -3,6 +3,14 @@
  */
 public with sharing class MetadataService {
 
+	public static final String REMOTE_SITE_ACCOUNT = 'Account';
+	public static final String REMOTE_SITE_PROVISIONING = 'Provisioning';
+	public static final String REMOTE_SITE_ESIGNATURE = 'eSignature';
+	public static final String REMOTE_SITE_WEB = 'Web';
+	public static final String REMOTE_SITE_API = 'API';
+	public static final String REMOTE_SITE_MERGE = 'Merge';
+	public static final String REMOTE_SITE_AUTH = 'Auth';
+
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
@@ -222,16 +230,12 @@ public with sharing class MetadataService {
 
 	/**
 	 * Adds one or more Remote Sites to this Salesforce organization. Existing sites are ignored.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @param remoteSites The Remote Sites to create.
 	 *
 	 * @return The API names of the newly-created Remote Sites without namespaces.
 	 */
 	public static List<String> createRemoteSites(final List<RemoteSite> remoteSites) {
-		Permissions.verifyIsDocuSignAdministrator();
-
 		if (Collection.isEmpty(remoteSites)) throw new DocuSignException(Label.UndefinedArgument);
 
 		List<String> result = new List<String>();

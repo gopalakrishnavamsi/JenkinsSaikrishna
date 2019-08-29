@@ -67,17 +67,18 @@ private class ProductAPITest {
 			System.assertEquals(3, Collection.size(result));
 			System.assertNotEquals(null, result[0]);
 			System.assert(result[0] instanceof GenProduct);
+			System.assertNotEquals(null, ((GenProduct)result[0]).webBaseUrl);
 			System.assertNotEquals(null, ((GenProduct)result[0]).apiBaseUrl);
-			System.assertNotEquals(null, ((GenProduct)result[0]).authBaseUrl);
+			System.assertNotEquals(null, ((GenProduct)result[0]).mergeBaseUrl);
 			System.assertNotEquals(null, result[1]);
 			System.assert(result[1] instanceof NegotiateProduct);
+			System.assertNotEquals(null, ((NegotiateProduct)result[1]).webBaseUrl);
 			System.assertNotEquals(null, ((NegotiateProduct)result[1]).apiBaseUrl);
-			System.assertNotEquals(null, ((NegotiateProduct)result[1]).authBaseUrl);
+			System.assertNotEquals(null, ((NegotiateProduct)result[1]).mergeBaseUrl);
 			System.assertNotEquals(null, result[2]);
 			System.assert(result[2] instanceof ClmProduct);
-			System.assertNotEquals(null, ((ClmProduct)result[2]).adminUrl);
+			System.assertNotEquals(null, ((ClmProduct)result[2]).webBaseUrl);
 			System.assertNotEquals(null, ((ClmProduct)result[2]).authBaseUrl);
-			System.assertNotEquals(null, ((ClmProduct)result[2]).landingPageUrl);
 		}
 	}
 

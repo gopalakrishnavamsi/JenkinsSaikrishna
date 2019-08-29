@@ -27,7 +27,7 @@
     <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
 
     <aura:if isTrue="{!v.tableLoading}">
-        <c:Loading/>
+        <c:BlueSpinner/>
     </aura:if>
 
     <div class="slds-scope">

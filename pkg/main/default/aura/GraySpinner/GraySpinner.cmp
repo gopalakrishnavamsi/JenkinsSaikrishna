@@ -1,0 +1,16 @@
+<!-- Gray loading spinner -->
+<aura:component>
+    <aura:attribute name="visualforce" type="Boolean" default="false"/>
+    <aura:attribute name="size" type="String" default="medium"/>
+    <aura:attribute name="alternativeText" type="String" default="{!$Label.c.Loading}"/>
+
+    <aura:method name="show" action="{!c.onShow}"/>
+    <aura:method name="hide" action="{!c.onHide}"/>
+
+    <lightning:spinner
+            aura:id="ds-spinner"
+            class="{!if(v.visualforce, ' ds-spinner_visualforce', '')}"
+            size="{!v.size}"
+            alternativeText="{!$Label.c.Loading}"/>
+</aura:component>
+

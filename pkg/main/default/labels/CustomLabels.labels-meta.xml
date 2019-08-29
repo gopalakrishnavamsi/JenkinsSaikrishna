@@ -5093,6 +5093,20 @@
 		<value>DocuSign ESignature Service</value>
 	</labels>
 	<labels>
+		<fullName>ScmWebServiceDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign Web Service</shortDescription>
+		<value>DocuSign Web Service</value>
+	</labels>
+	<labels>
+		<fullName>ScmApiServiceDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign API Service</shortDescription>
+		<value>DocuSign API Service</value>
+	</labels>
+	<labels>
 		<fullName>ScmAuthServiceDescription</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -9162,6 +9176,46 @@
 		<protected>true</protected>
 		<shortDescription>EnvironmentName</shortDescription>
 		<value>Environment Name</value>
+	</labels>
+	<labels>
+		<fullName>GenNotConfigured</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Gen not configured</shortDescription>
+		<value>DocuSign Gen is not configured for your account.</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateNotConfigured</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiate not configured</shortDescription>
+		<value>DocuSign Negotiate is not configured for your account.</value>
+	</labels>
+	<labels>
+		<fullName>GenBadgeText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiate not configured</shortDescription>
+		<value>DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateBadgeText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateBadgeText</shortDescription>
+		<value>DocuSign Negotiate</value>
+	</labels>
+	<labels>
+		<fullName>UnlockFeatures</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UnlockFeatures</shortDescription>
+		<value>Unlock</value>
 	</labels>
 	<labels>
 		<fullName>ImageNotFound</fullName>
