@@ -18,7 +18,7 @@
 
         <aura:if isTrue="{!v.loading}">
             <div class="slds-is-static">
-                <c:Loading/>
+                <c:BlueSpinner/>
             </div>
         </aura:if>
         <!--modal body -->

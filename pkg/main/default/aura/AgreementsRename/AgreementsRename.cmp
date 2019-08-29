@@ -19,7 +19,7 @@
 
         <aura:if isTrue="{!v.loading}">
             <div class="slds-is-static">
-                <c:Loading/>
+                <c:BlueSpinner/>
             </div>
         </aura:if>
         <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">

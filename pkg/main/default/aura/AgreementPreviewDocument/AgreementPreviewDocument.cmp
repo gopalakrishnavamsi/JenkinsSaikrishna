@@ -23,10 +23,10 @@
     <!-- loading -->
     <aura:if isTrue="{!v.loading}">
         <div class="slds-is-static">
-            <c:Loading/>
+            <c:BlueSpinner/>
         </div>
     </aura:if>
 
     <!--div for loading the Agreement Preview Widget and history Items -->
-    <div class="{!if(v.loading, 'ds-fadeBackground')}" id="agreementDocumentView"/>
+    <div class="{!if(v.loading, 'ds-fadeBackground')}" id="agreementDocumentView"></div>
 </aura:component>

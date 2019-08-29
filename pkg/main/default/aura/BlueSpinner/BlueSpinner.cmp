@@ -1,0 +1,14 @@
+<aura:component description="BlueLightningSpinner">
+    <aura:attribute name="visualforce" type="Boolean" default="false"/>
+    <aura:attribute name="alternativeText" type="String" default="{!$Label.c.Loading}"/>
+
+    <aura:method name="show" action="{!c.onShow}"/>
+    <aura:method name="hide" action="{!c.onHide}"/>
+
+    <div aura:id="ds-spinner" role="status"
+         class="{!'slds-spinner slds-spinner_medium slds-spinner_brand' + if(v.visualforce, ' ds-spinner_visualforce')}">
+        <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+    </div>
+</aura:component>

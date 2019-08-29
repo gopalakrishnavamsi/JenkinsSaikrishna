@@ -10,8 +10,8 @@
         <c:Toast aura:id="ds-toast"
                  visualforce="{!v.visualforce}"/>
 
-        <c:Loading aura:id="ds-loading"
-                   visualforce="{!v.visualforce}"/>
+        <c:GraySpinner aura:id="ds-loading"
+                       visualforce="{!v.visualforce}"/>
 
         {!v.body}
     </div>
