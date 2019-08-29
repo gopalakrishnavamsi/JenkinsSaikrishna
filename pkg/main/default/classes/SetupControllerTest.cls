@@ -482,7 +482,7 @@ private class SetupControllerTest {
 	static void test_completeSpringOAuth_missingSettings() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-			accountSettings.ScmAuthBaseUrl__c = '';
+			accountSettings.ScmWebBaseUrl__c = '';
 			update accountSettings;
 			Test.startTest();
 			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
@@ -592,7 +592,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				List<Product> productsList = SetupController.getProductsOnAccount();
+				SetupController.getProductsOnAccount();
 				throw new AssertException('Expected getProducts to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());

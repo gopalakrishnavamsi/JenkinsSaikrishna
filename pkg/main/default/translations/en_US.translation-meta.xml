@@ -2526,6 +2526,14 @@
 		<name>ESignatureServiceDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign Web Service</label>
+		<name>ScmWebServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign API Service</label>
+		<name>ScmApiServiceDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Auth Service</label>
 		<name>ScmAuthServiceDescription</name>
 	</customLabels>
@@ -4786,6 +4794,14 @@
 	<customLabels>
 		<label>Environment Name</label>
 		<name>EnvironmentName</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen is not configured for your account.</label>
+		<name>GenNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate is not configured for your account.</label>
+		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

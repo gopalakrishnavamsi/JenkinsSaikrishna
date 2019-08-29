@@ -212,7 +212,7 @@ public with sharing class SetupController extends Controller {
 	public static Boolean doPlatformAuthorizationSettingsExist() {
 		try {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			return (settings != null && String.isNotBlank(settings.ScmAuthBaseUrl__c));
+			return (settings != null && String.isNotBlank(settings.ScmWebBaseUrl__c));
 
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');

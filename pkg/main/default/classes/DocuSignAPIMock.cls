@@ -5,7 +5,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 	private ApplicationAPIMock applicationMock;
 	private ESignatureAPIMock eSignatureMock;
 	private ProductAPIMock productMock;
-	private GenAPIMock genMock;
+	private ScmAPIMock scmMock;
 	private RoleAPIMock roleMock;
 	private Boolean success;
 
@@ -50,11 +50,11 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return this.productMock;
 	}
 
-	private GenAPIMock getGenMock() {
-		if (this.genMock == null) {
-			this.genMock = new GenAPIMock(this.success);
+	private ScmAPIMock getScmMock() {
+		if (this.scmMock == null) {
+			this.scmMock = new ScmAPIMock(this.success);
 		}
-		return this.genMock;
+		return this.scmMock;
 	}
 
 	private RoleAPIMock getRoleMock() {
@@ -72,10 +72,10 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 			return this.getApplicationAPIMock().getResponse(request);
 		} else if (path.startsWith('/subscription')) {
 			return this.getProvisioningMock().getResponse(request);
-		} else if (path.startsWith('/gen')) {
-			return this.getGenMock().getResponse(request);
 		} else if (path.startsWith('/management')) {
 			return this.getRoleMock().getResponse(request);
+		} else if (path.startsWith('/gen') || path.startsWith('/v2')) {
+			return this.getScmMock().getResponse(request);
 		}
 		return this.getESignatureMock().getResponse(request);
 	}

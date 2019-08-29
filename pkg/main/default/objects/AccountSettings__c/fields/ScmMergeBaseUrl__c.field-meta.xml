@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-	<fullName>ClmAdminUrl__c</fullName>
+	<fullName>ScmMergeBaseUrl__c</fullName>
 	<deprecated>false</deprecated>
 	<externalId>false</externalId>
-	<label>CLM Admin URL</label>
+	<label>SpringCM Merge Base URL</label>
 	<length>255</length>
 	<required>false</required>
 	<trackTrending>false</trackTrending>

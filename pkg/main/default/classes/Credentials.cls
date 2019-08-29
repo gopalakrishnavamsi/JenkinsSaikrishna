@@ -65,21 +65,13 @@ public with sharing class Credentials {
 		public Url accountBaseUrl { get; private set; }
 		public Url provisioningBaseUrl { get; private set; }
 		public Url eSignatureBaseUrl { get; private set; }
-		public Url scmAuthBaseUrl { get; private set; }
-		public Url scmApiBaseUrl { get; private set; }
-		public Url clmLandingPageUrl { get; private set; }
-		public Url clmAdminUrl { get; private set; }
 		public Boolean isValid {
 			get {
 				return this.environment != null
 					&& this.environment != DocuSign.Environment.Invalid
 					&& DocuSign.isValidUrl(this.accountBaseUrl)
 					&& DocuSign.isValidUrl(this.provisioningBaseUrl)
-					&& (this.eSignatureBaseUrl == null || DocuSign.isValidUrl(this.eSignatureBaseUrl))
-					&& (this.scmAuthBaseUrl == null || DocuSign.isValidUrl(this.scmAuthBaseUrl))
-					&& (this.scmApiBaseUrl == null || DocuSign.isValidUrl(this.scmApiBaseUrl))
-					&& (this.clmLandingPageUrl == null || DocuSign.isValidUrl(this.clmLandingPageUrl))
-					&& (this.clmAdminUrl == null || DocuSign.isValidUrl(this.clmAdminUrl));
+					&& (this.eSignatureBaseUrl == null || DocuSign.isValidUrl(this.eSignatureBaseUrl));
 			}
 		}
 
@@ -87,20 +79,12 @@ public with sharing class Credentials {
 			final DocuSign.Environment environment,
 			final Url accountBaseUrl,
 			final Url provisioningBaseUrl,
-			final Url eSignatureBaseUrl,
-			final Url scmAuthBaseUrl,
-			final Url scmApiBaseUrl,
-			final Url clmLandingPageUrl,
-			final Url clmAdminUrl) {
+			final Url eSignatureBaseUrl) {
 
 			this.environment = environment;
 			this.accountBaseUrl = accountBaseUrl;
 			this.provisioningBaseUrl = provisioningBaseUrl;
 			this.eSignatureBaseUrl = eSignatureBaseUrl;
-			this.scmAuthBaseUrl = scmAuthBaseUrl;
-			this.scmApiBaseUrl = scmApiBaseUrl;
-			this.clmLandingPageUrl = clmLandingPageUrl;
-			this.clmAdminUrl = clmAdminUrl;
 		}
 	}
 
@@ -133,6 +117,8 @@ public with sharing class Credentials {
 		public String name { get; private set; }
 		public String email { get; private set; }
 		public UUID systemSenderId { get; private set; }
+		public Long administratorProfileId { get; private set; }
+		public Long senderProfileId { get; private set; }
 		public Boolean isValid {
 			get {
 				return UUID.isNotEmpty(this.id);
@@ -144,13 +130,17 @@ public with sharing class Credentials {
 			final Long accountNumber,
 			final String name,
 			final String email,
-			final UUID systemSenderId) {
+			final UUID systemSenderId,
+			final Long administratorProfileId,
+			final Long senderProfileId) {
 
 			this.id = id;
 			this.accountNumber = accountNumber;
 			this.name = name;
 			this.email = email;
 			this.systemSenderId = systemSenderId;
+			this.administratorProfileId = administratorProfileId;
+			this.senderProfileId = senderProfileId;
 		}
 	}
 
@@ -221,7 +211,7 @@ public with sharing class Credentials {
 	@TestVisible
 	private static Credentials getInstance(final Id userId, final Boolean validate) {
 		Credentials result = null;
-		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls\
+		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls
 			if (self == null) {
 				result = DB.queryCredentials(userId);
 				if (validate) validate(result);
@@ -248,21 +238,13 @@ public with sharing class Credentials {
 					DocuSign.Environment.Invalid,
 					null,
 					null,
-					null,
-					null,
-					null,
-					null,
 					null);
 			}
 			return new Environment(
 				DocuSign.parseEnvironment(settings.Environment__c),
 				settings.AccountBaseUrl__c == null ? null : new Url(settings.AccountBaseUrl__c),
 				settings.ProvisioningBaseUrl__c == null ? null : new Url(settings.ProvisioningBaseUrl__c),
-				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c),
-				settings.ScmAuthBaseUrl__c == null ? null : new Url(settings.ScmAuthBaseUrl__c),
-				settings.ScmApiBaseUrl__c == null ? null : new Url(settings.ScmApiBaseUrl__c),
-				settings.ClmLandingPageUrl__c == null ? null : new Url(settings.ClmLandingPageUrl__c),
-				settings.ClmAdminUrl__c == null ? null : new Url(settings.ClmAdminUrl__c));
+				settings.ESignatureBaseUrl__c == null ? null : new Url(settings.ESignatureBaseUrl__c));
 		}
 
 		private ClientCredentials getClient(final AccountSettings__c settings) {
@@ -279,14 +261,16 @@ public with sharing class Credentials {
 		}
 
 		private AccountCredentials getAccount(final AccountSettings__c settings) {
-			if (settings == null) return new AccountCredentials(null, null, null, null, null);
+			if (settings == null) return new AccountCredentials(null, null, null, null, null, null, null);
 
 			return new AccountCredentials(
 				UUID.tryParse(settings.AccountId__c),
 				(Long)settings.AccountNumber__c,
 				settings.AccountName__c,
 				settings.Email__c,
-				UUID.tryParse(settings.SystemSenderId__c));
+				UUID.tryParse(settings.SystemSenderId__c),
+				(Long)settings.AdministratorProfileId__c,
+				(Long)settings.SenderProfileId__c);
 		}
 
 		@TestVisible
@@ -355,14 +339,6 @@ public with sharing class Credentials {
 				? null : environment.provisioningBaseUrl.toExternalForm();
 			settings.ESignatureBaseUrl__c = environment.eSignatureBaseUrl == null
 				? null : environment.eSignatureBaseUrl.toExternalForm();
-			settings.ScmAuthBaseUrl__c = environment.scmAuthBaseUrl == null
-				? null : environment.scmAuthBaseUrl.toExternalForm();
-			settings.ScmApiBaseUrl__c = environment.scmApiBaseUrl == null
-				? null : environment.scmApiBaseUrl.toExternalForm();
-			settings.ClmLandingPageUrl__c = environment.clmLandingPageUrl == null
-				? null : environment.clmLandingPageUrl.toExternalForm();
-			settings.ClmAdminUrl__c = environment.clmAdminUrl == null
-				? null : environment.clmAdminUrl.toExternalForm();
 			return settings;
 		}
 
@@ -408,6 +384,8 @@ public with sharing class Credentials {
 			settings.AccountName__c = account.name;
 			settings.Email__c = account.email;
 			settings.SystemSenderId__c = String.valueOf(account.systemSenderId);
+			settings.AdministratorProfileId__c = account.administratorProfileId;
+			settings.SenderProfileId__c = account.senderProfileId;
 			return settings;
 		}
 
@@ -445,6 +423,7 @@ public with sharing class Credentials {
 			settings.AccessToken4__c = null;
 			settings.AccessToken5__c = null;
 			settings.AccessTokenExpires__c = null;
+			settings.Nonce__c = null;
 
 			return settings;
 		}
@@ -553,10 +532,10 @@ public with sharing class Credentials {
 			settings.AccountBaseUrl__c = null;
 			settings.ProvisioningBaseUrl__c = null;
 			settings.ESignatureBaseUrl__c = null;
-			settings.ScmAuthBaseUrl__c = null;
+			settings.ScmWebBaseUrl__c = null;
 			settings.ScmApiBaseUrl__c = null;
-			settings.ClmLandingPageUrl__c = null;
-			settings.ClmAdminUrl__c = null;
+			settings.ScmMergeBaseUrl__c = null;
+			settings.ScmAuthBaseUrl__c = null;
 			settings.AccountId__c = null;
 			settings.AccountNumber__c = null;
 			settings.AccountName__c = null;

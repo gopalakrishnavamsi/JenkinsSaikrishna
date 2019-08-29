@@ -171,11 +171,7 @@ private class CredentialsTest {
 					DocuSign.Environment.Production,
 					new Url('https://account.test.docusign.net/'),
 					new Url('https://api.test.docusign.net/'),
-					new Url('https://esign.test.docusign.net/'),
-					new Url('https://auth.test.springcm.com/'),
-					new Url('https://api.test.springcm.com/'),
-					new Url('https://test.springcm.com/landing'),
-					new Url('https://test.springcm.com/admin')),
+					new Url('https://esign.test.docusign.net/')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -185,7 +181,9 @@ private class CredentialsTest {
 					1111L,
 					accountId.toString(),
 					email,
-					null),
+					null,
+					2222L,
+					3333L),
 				new Credentials.UserCredentials(
 					userId,
 					userId.toString(),
@@ -207,14 +205,6 @@ private class CredentialsTest {
 			System.assertEquals('https://api.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
 			System.assertEquals('https://esign.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
-			System.assertEquals('https://auth.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
-			System.assertEquals('https://api.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
-			System.assertEquals('https://test.springcm.com/landing', result1.environment.clmLandingPageUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.clmAdminUrl);
-			System.assertEquals('https://test.springcm.com/admin', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -227,6 +217,8 @@ private class CredentialsTest {
 			System.assertEquals(accountId.toString(), result1.account.name);
 			System.assertEquals(email, result1.account.email);
 			System.assertEquals(null, result1.account.systemSenderId);
+			System.assertEquals(2222L, result1.account.administratorProfileId);
+			System.assertEquals(3333L, result1.account.senderProfileId);
 
 			System.assertNotEquals(null, result1.user);
 			System.assertEquals(userId, result1.user.id);
@@ -267,11 +259,7 @@ private class CredentialsTest {
 					DocuSign.Environment.Production,
 					new Url('https://account1.test.docusign.net/'),
 					new Url('https://api1.test.docusign.net/'),
-					new Url('https://esign1.test.docusign.net/'),
-					new Url('https://auth1.test.springcm.com/'),
-					new Url('https://api1.test.springcm.com/'),
-					new Url('https://test.springcm.com/landing1'),
-					new Url('https://test.springcm.com/admin1')),
+					new Url('https://esign1.test.docusign.net/')),
 				new Credentials.ClientCredentials(
 					clientId,
 					clientSecret,
@@ -281,7 +269,9 @@ private class CredentialsTest {
 					2222L,
 					accountId.toString(),
 					email,
-					null),
+					null,
+					3333L,
+					4444L),
 				new Credentials.UserCredentials(
 					userId,
 					userId.toString(),
@@ -304,14 +294,6 @@ private class CredentialsTest {
 			System.assertEquals('https://api1.test.docusign.net/', result1.environment.provisioningBaseUrl.toExternalForm());
 			System.assertNotEquals(null, result1.environment.eSignatureBaseUrl);
 			System.assertEquals('https://esign1.test.docusign.net/', result1.environment.eSignatureBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmAuthBaseUrl);
-			System.assertEquals('https://auth1.test.springcm.com/', result1.environment.scmAuthBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.scmApiBaseUrl);
-			System.assertEquals('https://api1.test.springcm.com/', result1.environment.scmApiBaseUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.clmLandingPageUrl);
-			System.assertEquals('https://test.springcm.com/landing1', result1.environment.clmLandingPageUrl.toExternalForm());
-			System.assertNotEquals(null, result1.environment.clmAdminUrl);
-			System.assertEquals('https://test.springcm.com/admin1', result1.environment.clmAdminUrl.toExternalForm());
 
 			System.assertNotEquals(null, result1.client);
 			System.assertEquals(clientId, result1.client.id);
@@ -324,6 +306,8 @@ private class CredentialsTest {
 			System.assertEquals(accountId.toString(), result1.account.name);
 			System.assertEquals(email, result1.account.email);
 			System.assertEquals(null, result1.account.systemSenderId);
+			System.assertEquals(3333L, result1.account.administratorProfileId);
+			System.assertEquals(4444L, result1.account.senderProfileId);
 
 			System.assertNotEquals(null, result1.user);
 			System.assertEquals(userId, result1.user.id);
@@ -350,8 +334,16 @@ private class CredentialsTest {
 
 			Test.startTest();
 			System.assertEquals(new Set<Id>(), Credentials.filterNotCurrentUserId(null));
-			System.assertEquals(new Set<Id> { u1, u2 }, Credentials.filterNotCurrentUserId(new Set<Id> { u1, u2 }));
-			System.assertEquals(new Set<Id> { u1, u2 }, Credentials.filterNotCurrentUserId(new Set<Id> { u0, u1, u2 }));
+			System.assertEquals(new Set<Id> {
+				u1, u2
+			}, Credentials.filterNotCurrentUserId(new Set<Id> {
+				u1, u2
+			}));
+			System.assertEquals(new Set<Id> {
+				u1, u2
+			}, Credentials.filterNotCurrentUserId(new Set<Id> {
+				u0, u1, u2
+			}));
 			Test.stopTest();
 		}
 	}
@@ -374,7 +366,9 @@ private class CredentialsTest {
 				Credentials.verifyMaximumBatchSize(ids, 2);
 				throw new AssertException('Expected verifyMaximumBatchSize to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(String.format(Label.MaximumBatchSizeExceeded_2, new List<Object> { 3, 2 }),
+				System.assertEquals(String.format(Label.MaximumBatchSizeExceeded_2, new List<Object> {
+					3, 2
+				}),
 					ex.getMessage());
 			}
 			Test.stopTest();
@@ -454,8 +448,10 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmWebBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmMergeBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
@@ -519,8 +515,10 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
-			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmWebBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmMergeBaseUrl__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
@@ -571,15 +569,19 @@ private class CredentialsTest {
 			System.assertNotEquals(null, result);
 
 			Test.startTest();
-			Credentials.clear(new Set<Id> { dsu1.Id, dsu3.Id });
+			Credentials.clear(new Set<Id> {
+				dsu1.Id, dsu3.Id
+			});
 			Test.stopTest();
 
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ESignatureBaseUrl__c);
-			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmWebBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmApiBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmMergeBaseUrl__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ScmAuthBaseUrl__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountId__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
@@ -781,11 +783,19 @@ private class CredentialsTest {
 			User u2 = UserMock.createDocuSignUser(false);
 
 			Test.startTest();
-			List<User> result = Credentials.DB.updateUsers(new Set<Id> { u1.Id, u2.Id }, true);
+			List<User> result = Credentials.DB.updateUsers(new Set<Id> {
+				u1.Id, u2.Id
+			}, true);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
-			List<User> users = [SELECT CanManageAccount__c FROM User WHERE Id IN :(NEW List<Id> { u1.Id, u2.Id })];
+			List<User> users = [
+				SELECT CanManageAccount__c
+				FROM User
+				WHERE Id IN :(NEW List<Id> {
+					u1.Id, u2.Id
+				})
+			];
 			System.assertEquals(2, Collection.size(users));
 			System.assert(users[0].CanManageAccount__c);
 			System.assert(users[1].CanManageAccount__c);
@@ -813,10 +823,14 @@ private class CredentialsTest {
 			us2.AccessToken4__c = 'u2_4';
 			us2.AccessToken5__c = 'u2_5';
 			us2.AccessTokenExpires__c = Datetime.now().addHours(-1);
-			update new List<UserSettings__c> { us1, us2 };
+			update new List<UserSettings__c> {
+				us1, us2
+			};
 
 			Test.startTest();
-			List<UserSettings__c> result = Credentials.DB.clearTokens(new Set<Id> { u1.Id, u2.Id });
+			List<UserSettings__c> result = Credentials.DB.clearTokens(new Set<Id> {
+				u1.Id, u2.Id
+			});
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -862,13 +876,23 @@ private class CredentialsTest {
 			us2.AccessToken4__c = 'u2_4';
 			us2.AccessToken5__c = 'u2_5';
 			us2.AccessTokenExpires__c = Datetime.now().addHours(-1);
-			update new List<UserSettings__c> { us1, us2 };
+			update new List<UserSettings__c> {
+				us1, us2
+			};
 
 			Test.startTest();
-			System.assert(Credentials.reset(new Set<Id> { u1.Id, u2.Id }, false));
+			System.assert(Credentials.reset(new Set<Id> {
+				u1.Id, u2.Id
+			}, false));
 			Test.stopTest();
 
-			List<User> users = [SELECT CanManageAccount__c FROM User WHERE Id IN :(NEW Set<Id> { u1.Id, u2.Id })];
+			List<User> users = [
+				SELECT CanManageAccount__c
+				FROM User
+				WHERE Id IN :(NEW Set<Id> {
+					u1.Id, u2.Id
+				})
+			];
 			System.assertEquals(2, Collection.size(users));
 			System.assert(!users[0].CanManageAccount__c);
 			System.assert(!users[1].CanManageAccount__c);

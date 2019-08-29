@@ -2,37 +2,21 @@
 private class GenAPITest {
 
 	@IsTest
-	static void test_getError() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			GenAPI client = GenAPI.getInstance();
+	static void test_getInstance() {
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			GenAPI result1 = GenAPI.getInstance();
+			GenAPI result2 = GenAPI.getInstance();
+			Test.stopTest();
 
-			HttpResponse r1 = new HttpResponse();
-			r1.setStatusCode(200);
-			System.assertEquals(APIError.none, client.getError(r1));
-
-			HttpResponse r2 = new HttpResponse();
-			r2.setStatusCode(401);
-			r2.setBody('{"Error":{"HttpStatusCode":500,"UserMessage":"User","DeveloperMessage":"Developer","ErrorCode":1234,"ReferenceId":"11111111-1111-1111-1111-111111111111"}}');
-			APIError e2 = client.getError(r2);
-			System.assertNotEquals(null, e2);
-			System.assertEquals(1234, e2.code);
-			System.assertEquals('User', e2.description);
-			System.assert(e2 instanceof GenAPI.Error);
-			System.assertEquals(UUID.parse('11111111-1111-1111-1111-111111111111'), ((GenAPI.Error)e2).referenceId);
-
-			HttpResponse r3 = new HttpResponse();
-			r3.setStatusCode(422);
-			r3.setStatus('UNIT_TEST');
-			APIError e3 = client.getError(r3);
-			System.assertEquals(422, e3.code);
-			System.assertEquals('UNIT_TEST', e3.description);
-			System.assert(!(e3 instanceof GenAPI.Error));
+			System.assertNotEquals(null, result1);
+			System.assert(result1 === result2);
 		}
 	}
-
+	
 	@IsTest
 	static void test_queueDocumentGeneration_failure() {
-		GenAPIMock.failure();
+		ScmAPIMock.failure();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -43,8 +27,8 @@ private class GenAPITest {
 				System.assertNotEquals(null, ex.error);
 				System.assertNotEquals(null, ex.error.code);
 				System.assertNotEquals(null, ex.error.description);
-				System.assert(ex.error instanceof GenAPI.Error);
-				System.assert(UUID.isNotEmpty(((GenAPI.Error)ex.error).referenceId));
+				System.assert(ex.error instanceof ScmAPI.Error);
+				System.assert(UUID.isNotEmpty(((ScmAPI.Error)ex.error).referenceId));
 			}
 			Test.stopTest();
 		}
@@ -52,7 +36,7 @@ private class GenAPITest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_success() {
-		GenAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Gen.Job result = GenAPI.getInstance().queueDocumentGeneration(UserInfo.getUserId(),
@@ -71,7 +55,7 @@ private class GenAPITest {
 
 	@IsTest
 	static void test_getJobStatus_failure() {
-		GenAPIMock.failure();
+		ScmAPIMock.failure();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			try {
@@ -81,8 +65,8 @@ private class GenAPITest {
 				System.assertNotEquals(null, ex.error);
 				System.assertNotEquals(null, ex.error.code);
 				System.assertNotEquals(null, ex.error.description);
-				System.assert(ex.error instanceof GenAPI.Error);
-				System.assert(UUID.isNotEmpty(((GenAPI.Error)ex.error).referenceId));
+				System.assert(ex.error instanceof ScmAPI.Error);
+				System.assert(UUID.isNotEmpty(((ScmAPI.Error)ex.error).referenceId));
 			}
 			Test.stopTest();
 		}
@@ -90,7 +74,7 @@ private class GenAPITest {
 
 	@IsTest
 	static void test_getJobStatus_success() {
-		GenAPIMock.success();
+		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			UUID jobId = UUID.randomUUID();
 			ContentVersion cv = TestUtils.createContentVersion();
@@ -108,6 +92,4 @@ private class GenAPITest {
 			System.assertEquals(result.status == 'Success', result.success);
 		}
 	}
-
-
 }

@@ -1,4 +1,3 @@
-
 @IsTest
 private class GenControllerTest {
 
@@ -222,7 +221,7 @@ private class GenControllerTest {
 			Schema.Account a = TestUtils.createAccount();
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Contact c = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr = TestUtils.createOpportunityContactRole(o.Id, c.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c.Id);
 			Gen.Query q = new Gen.Query(
 				'Opportunity',
 				null,
@@ -261,7 +260,7 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_queueDocumentGeneration_success() {
-		GenAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Opportunity o = TestUtils.createOpportunity();
 			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
@@ -297,7 +296,7 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_getJobStatus_success() {
-		GenAPIMock.success();
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
 			List<Gen.Job> result = GenController.getJobStatus(new List<String> {
@@ -373,10 +372,10 @@ private class GenControllerTest {
 			System.assertNotEquals(null, a.Id);
 			ContentVersion testContentVersion = TestUtils.createContentVersion(a.Id);
 			System.assertNotEquals(null, testContentVersion.Id);
-			System.assertNotEquals(null, testContentVersion.title);
+			System.assertNotEquals(null, testContentVersion.Title);
 
 			Test.startTest();
-			Gen.File testGenFile = GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.title, 'Test');
+			Gen.File testGenFile = GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.Title, 'Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, testGenFile);
@@ -390,10 +389,10 @@ private class GenControllerTest {
 			System.assertNotEquals(null, a.Id);
 			ContentVersion testContentVersion = TestUtils.createContentVersion(a.Id);
 			System.assertNotEquals(null, testContentVersion.Id);
-			System.assertNotEquals(null, testContentVersion.title);
+			System.assertNotEquals(null, testContentVersion.Title);
 			Test.startTest();
 			try {
-				GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.title, 'Test');
+				GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.Title, 'Test');
 				throw new AssertException('Expected saveChunk to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());

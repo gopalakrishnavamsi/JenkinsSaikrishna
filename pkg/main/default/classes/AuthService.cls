@@ -407,19 +407,7 @@ public with sharing class AuthService {
 		}
 	}
 
-	@TestVisible
-	private static final AuthService.Database DB = new AuthService.Database();
 	private static final LoggerService LOG = LoggerService.getInstance();
-	@TestVisible
-	private static final String REMOTE_SITE_ACCOUNT = 'Account';
-	@TestVisible
-	private static final String REMOTE_SITE_PROVISIONING = 'Provisioning';
-	@TestVisible
-	private static final String REMOTE_SITE_ESIGNATURE = 'eSignature';
-	@TestVisible
-	private static final String REMOTE_SITE_AUTH = 'Auth';
-	@TestVisible
-	private static final String REMOTE_SITE_API = 'API';
 	@TestVisible
 	private static final String JWT_HEADER;
 	@TestVisible
@@ -431,7 +419,7 @@ public with sharing class AuthService {
 	private static final String SCOPE_CONTENT = 'spring_content';
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
-	private static SpringOAuthAPI springoauth;
+	private static SpringOAuthAPI springOAuth;
 	private static Map<DocuSign.Environment, RootCredentials> rootCredentials
 		= new Map<DocuSign.Environment, RootCredentials>();
 
@@ -440,29 +428,6 @@ public with sharing class AuthService {
 			'typ' => 'JWT',
 			'alg' => 'RS256'
 		})));
-	}
-
-	@TestVisible
-	private class Database {
-
-		public AccountSettings__c updateSettings(
-			final PermissionProfileIds permissionProfileIds,
-			final Url scmAuthBaseUrl,
-			final Url scmApiBaseUrl) {
-
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.AdministratorProfileId__c = permissionProfileIds == null
-				? null : permissionProfileIds.administratorId;
-			settings.SenderProfileId__c = permissionProfileIds == null
-				? null : permissionProfileIds.senderId;
-			settings.ScmAuthBaseUrl__c = scmAuthBaseUrl == null
-				? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl).toExternalForm();
-			settings.ScmApiBaseUrl__c = scmApiBaseUrl == null
-				? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl).toExternalForm();
-			upsert settings;
-
-			return settings;
-		}
 	}
 
 	private static AuthAPI getAuthAPI(final Url baseUrl) {
@@ -851,64 +816,11 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
-	private static List<MetadataService.RemoteSite> getRemoteSites(
-		final DocuSign.Environment environment,
-		final Url accountBaseUrl,
-		final Url provisioningBaseUrl,
-		final Url eSignatureBaseUrl,
-		final Url scmAuthBaseUrl,
-		final Url scmApiBaseUrl) {
-
-		List<MetadataService.RemoteSite> sites = new List<MetadataService.RemoteSite>();
-		// FIXME: Creating Account and Provisioning remote sites twice?
-		if (DocuSign.isValidUrl(accountBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_ACCOUNT,
-				Label.AccountServiceDescription,
-				new Url('https://' + accountBaseUrl.getAuthority())));
-		}
-		if (DocuSign.isValidUrl(provisioningBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_PROVISIONING,
-				Label.ProvisioningServiceDescription,
-				new Url('https://' + provisioningBaseUrl.getAuthority())));
-		}
-		if (DocuSign.isValidUrl(eSignatureBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_ESIGNATURE,
-				Label.ESignatureServiceDescription,
-				new Url('https://' + eSignatureBaseUrl.getAuthority())));
-		}
-		if (DocuSign.isValidUrl(scmAuthBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_AUTH,
-				Label.ScmAuthServiceDescription,
-				new Url('https://' + scmAuthBaseUrl.getAuthority())));
-		}
-		if (DocuSign.isValidUrl(scmApiBaseUrl)) {
-			sites.add(MetadataService.newRemoteSite(
-				environment,
-				REMOTE_SITE_API,
-				Label.GenServiceDescription,
-				new Url('https://' + scmApiBaseUrl.getAuthority())));
-		}
-		return sites;
-	}
-
-	@TestVisible
 	private static Credentials save(
 		final DocuSign.Environment environment,
 		final Url accountBaseUrl,
 		final Url provisioningBaseUrl,
 		final Url eSignatureBaseUrl,
-		final Url scmAuthBaseUrl,
-		final Url scmApiBaseUrl,
-		final Url clmAdminUrl,
-		final Url clmLandingPageUrl,
 		final String rootClientId,
 		final LoginInformation loginInfo,
 		final LoginInformation.Account acct,
@@ -918,11 +830,7 @@ public with sharing class AuthService {
 			|| environment == DocuSign.Environment.Invalid
 			|| !DocuSign.isValidUrl(accountBaseUrl)
 			|| !DocuSign.isValidUrl(provisioningBaseUrl)
-			|| !DocuSign.isValidUrl(eSignatureBaseUrl)
-			|| (scmAuthBaseUrl != null && !DocuSign.isValidUrl(scmAuthBaseUrl))
-			|| (scmApiBaseUrl != null && !DocuSign.isValidUrl(scmApiBaseUrl))
-			|| (clmAdminUrl != null && !DocuSign.isValidUrl(clmAdminUrl))
-			|| (clmLandingPageUrl != null && !DocuSign.isValidUrl(clmLandingPageUrl))) {
+			|| !DocuSign.isValidUrl(eSignatureBaseUrl)) {
 
 			throw new DocuSignException(Label.InvalidEnvironment);
 		}
@@ -931,20 +839,9 @@ public with sharing class AuthService {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 
-		// Create remote sites
 		Url aBaseUrl = UrlUtils.canonicalizeBaseUrl(accountBaseUrl);
 		Url pBaseUrl = UrlUtils.canonicalizeBaseUrl(provisioningBaseUrl);
 		Url eBaseUrl = UrlUtils.canonicalizeBaseUrl(eSignatureBaseUrl);
-		Url sAuthBaseUrl = scmAuthBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmAuthBaseUrl);
-		Url sApiBaseUrl = scmApiBaseUrl == null ? null : UrlUtils.canonicalizeBaseUrl(scmApiBaseUrl);
-		List<MetadataService.RemoteSite> sites = getRemoteSites(
-			environment,
-			aBaseUrl,
-			pBaseUrl,
-			eBaseUrl,
-			sAuthBaseUrl,
-			sApiBaseUrl);
-		if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 
 		// Get instance credentials and new access token
 		Credentials.ClientCredentials instanceCredentials = getAuthAPI(aBaseUrl)
@@ -963,28 +860,27 @@ public with sharing class AuthService {
 			instanceCredentials.id,
 			instanceCredentials.privateKey);
 
-		DB.updateSettings(
-			new AuthService.AccountAPI(eSignatureBaseUrl, acct.id, newToken.token).getPermissionProfileIds(),
-			sAuthBaseUrl,
-			sApiBaseUrl);
+		PermissionProfileIds ppIds = new AuthService.AccountAPI(
+			eBaseUrl,
+			acct.id,
+			newToken.token)
+			.getPermissionProfileIds();
 
 		return Credentials.save(
 			new Credentials.Environment(
 				environment,
 				aBaseUrl,
 				pBaseUrl,
-				eBaseUrl,
-				scmAuthBaseUrl,
-				scmApiBaseUrl,
-				clmAdminUrl,
-				clmLandingPageUrl),
+				eBaseUrl),
 			instanceCredentials,
 			new Credentials.AccountCredentials(
 				acct.id,
 				acct.accountNumber,
 				acct.name,
 				loginInfo.email,
-				null),
+				null,
+				ppIds == null ? null : ppIds.administratorId,
+				ppIds == null ? null : ppIds.senderId),
 			new Credentials.UserCredentials(
 				loginInfo.id,
 				loginInfo.name,
@@ -999,12 +895,12 @@ public with sharing class AuthService {
 		return MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
 			MetadataService.newRemoteSite(
 				rootCredentials.environment,
-				REMOTE_SITE_ACCOUNT,
+				MetadataService.REMOTE_SITE_ACCOUNT,
 				Label.AccountServiceDescription,
 				rootCredentials.accountBaseUrl),
 			MetadataService.newRemoteSite(
 				rootCredentials.environment,
-				REMOTE_SITE_PROVISIONING,
+				MetadataService.REMOTE_SITE_PROVISIONING,
 				Label.AccountServiceDescription,
 				rootCredentials.provisioningBaseUrl)
 		});
@@ -1018,7 +914,7 @@ public with sharing class AuthService {
 		return (String)Collection.head(MetadataService.createRemoteSites(new List<MetadataService.RemoteSite> {
 			MetadataService.newRemoteSite(
 				environment,
-				REMOTE_SITE_ESIGNATURE,
+				MetadataService.REMOTE_SITE_ESIGNATURE,
 				Label.ESignatureServiceDescription,
 				eSignatureBaseUrl)
 		}));
@@ -1085,7 +981,8 @@ public with sharing class AuthService {
 			createRemoteSite(rc.environment, eSignatureBaseUrl);
 
 			try {
-				AccountProducts aps = AccountProducts.getInstance(
+				AccountProducts.initialize(
+					rc.environment,
 					rc.provisioningBaseUrl,
 					eSignatureBaseUrl,
 					l.loginInformation.accounts[0].id,
@@ -1095,10 +992,6 @@ public with sharing class AuthService {
 					rc.accountBaseUrl,
 					rc.provisioningBaseUrl,
 					eSignatureBaseUrl,
-					aps.getScmAuthBaseUrl(),
-					aps.getScmApiBaseUrl(),
-					aps.getClmAdminUrl(),
-					aps.getClmLandingPageUrl(),
 					rc.clientId,
 					l.loginInformation,
 					l.loginInformation.accounts[0],
@@ -1165,25 +1058,17 @@ public with sharing class AuthService {
 		final String state) {
 
 		LoginInformation result = null;
-		UserSettings__c us = UserSettings__c.getInstance();
-		try {
-			State s = decodeState(state, us.Nonce__c);
-			if (s.setup) {
-				Permissions.verifyIsDocuSignAdministrator();
-				result = saveSetupCredentials(authorizationCode, s);
-			} else {
-				Permissions.verifyIsDocuSignUser();
-				saveUserCredentials(authorizationCode, s.baseUrl);
-			}
-			return result == null
-				? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.target)
-				: result.withTarget(s.target);
-		} finally {
-			if (String.isNotBlank(us.Nonce__c)) {
-				us.Nonce__c = null;
-				update us;
-			}
+		State s = decodeState(state, UserSettings__c.getInstance().Nonce__c);
+		if (s.setup) {
+			Permissions.verifyIsDocuSignAdministrator();
+			result = saveSetupCredentials(authorizationCode, s);
+		} else {
+			Permissions.verifyIsDocuSignUser();
+			saveUserCredentials(authorizationCode, s.baseUrl);
 		}
+		return result == null
+			? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.target)
+			: result.withTarget(s.target);
 	}
 
 	/**
@@ -1266,7 +1151,8 @@ public with sharing class AuthService {
 		createRemoteSite(rc.environment, eSignatureBaseUrl);
 
 		try {
-			AccountProducts aps = AccountProducts.getInstance(
+			AccountProducts.initialize(
+				rc.environment,
 				rc.provisioningBaseUrl,
 				eSignatureBaseUrl,
 				selected.id,
@@ -1276,10 +1162,6 @@ public with sharing class AuthService {
 				rc.accountBaseUrl,
 				rc.provisioningBaseUrl,
 				eSignatureBaseUrl,
-				aps.getScmAuthBaseUrl(),
-				aps.getScmApiBaseUrl(),
-				aps.getClmAdminUrl(),
-				aps.getClmLandingPageUrl(),
 				rc.clientId,
 				result,
 				selected,
@@ -1309,8 +1191,8 @@ public with sharing class AuthService {
 		public SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
 			SpringOAuthLoginInformation results;
 			try {
-				Credentials c = Credentials.getInstance();
-				if (c != null && c.environment.scmAuthBaseUrl != null && String.isNotBlank(c.environment.scmAuthBaseUrl.toExternalForm())) {
+				Url u = AccountProducts.getInstance().getScmWebBaseUrl();
+				if (u != null) {
 					Map<String, Object> body = new Map<String, Object> {
 						'code' => authorizationCode,
 						'orgUrl' => Salesforce.baseUrl.toExternalForm()
@@ -1324,18 +1206,21 @@ public with sharing class AuthService {
 						RestAPI.defaultTimeout);
 
 					if (response.hasError) {
-						LoggerService.getInstance().error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
+						this.log.error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
 						results = SpringOAuthLoginInformation.failure(Label.UnableToConnectDocuSignGen);
 					} else {
 						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignAuthorization);
 					}
 				} else {
+					this.log.error('SCM web base URL is not configured');
 					results = SpringOAuthLoginInformation.failure(Label.MissingDocuSignGenAuthorizationSettings);
 				}
 
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to setup SCM to Salesforce OAuth');
 				results = SpringOAuthLoginInformation.failure(ex.getMessage());
+			} finally {
+				AccountProducts.save();
 			}
 			return results;
 		}
@@ -1344,10 +1229,10 @@ public with sharing class AuthService {
 
 	@TestVisible
 	private static SpringOAuthAPI getSpringOAuthAPI(final Url baseUrl) {
-		if (springoauth == null) {
-			springoauth = new SpringOAuthAPI(baseUrl);
+		if (springOAuth == null) {
+			springOAuth = new SpringOAuthAPI(baseUrl);
 		}
-		return springoauth;
+		return springOAuth;
 	}
 
 	/**
@@ -1377,14 +1262,18 @@ public with sharing class AuthService {
 
 	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
 		Permissions.verifyIsDocuSignAdministrator();
-		Credentials c = Credentials.getInstance();
-		SpringOAuthLoginInformation result = getSpringOAuthAPI(c.environment.scmAuthBaseUrl)
-			.completeSpringOAuth(authorizationCode);
-		if (result.success) {
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			settings.IsPlatformAuthorized__c = true;
-			update settings;
+
+		try {
+			SpringOAuthLoginInformation result = getSpringOAuthAPI(AccountProducts.getInstance().getScmWebBaseUrl())
+				.completeSpringOAuth(authorizationCode);
+			if (result.success) {
+				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+				settings.IsPlatformAuthorized__c = true;
+				update settings;
+			}
+			return result;
+		} finally {
+			AccountProducts.save();
 		}
-		return result;
 	}
 }
