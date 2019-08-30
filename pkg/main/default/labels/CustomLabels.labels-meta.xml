@@ -9514,4 +9514,12 @@
 		<shortDescription>Component#2Summary</shortDescription>
 		<value>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</value>
 	</labels>
+	<labels>
+		<fullName>Dashboard</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Dashboard</shortDescription>
+		<value>Dashboard</value>
+	</labels>
 </CustomLabels>

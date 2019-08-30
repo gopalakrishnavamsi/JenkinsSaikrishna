@@ -4963,6 +4963,10 @@
 	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
+	</customLabels>Dashboard
+	<customLabels>
+		<label>Dashboard</label>
+		<name>Dashboard</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

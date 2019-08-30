@@ -1,6 +1,6 @@
 <aura:component>
 	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
-	<aura:attribute name="currentTabId" type="string" default="Dashboard" />
+	<aura:attribute name="currentTabId" type="string" default="{!$Label.c.Dashboard}" />
 	<aura:attribute name="imageURL" type="String" default="{!($Resource.CLMWorkflowDashboard)}" />
 	<aura:attribute name="imageURL1" type="String" default="{!($Resource.CLMWorkflowButton)}" />
 	<aura:attribute name="steps" type="String[]" />
