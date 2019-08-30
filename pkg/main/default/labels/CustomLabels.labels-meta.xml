@@ -563,7 +563,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM Sidebar item - Buttons and Components</shortDescription>
-		<value>Buttons and Components</value>
+		<value>Components</value>
 	</labels>
 	<labels>
 		<fullName>CLM</fullName>
@@ -9347,19 +9347,171 @@
 		<value>Open DocuSign CLM</value>
 	</labels>
 	<labels>
-        <fullName>LearnHowTo</fullName>
-        <categories>CLM</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>LearnHowTo</shortDescription>
-        <value>Learn how to use Workflow Designer in DocuSign CLM</value>
+		<fullName>LearnHowTo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowTo</shortDescription>
+		<value>Learn how to use Workflow Designer in DocuSign CLM</value>
 	</labels>
 	<labels>
-        <fullName>CreateAndManageWorkflows</fullName>
-        <categories>CLM</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>CreateAndManageWorkflows</shortDescription>
-        <value>Create and manage Workflows</value>
-    </labels>
+		<fullName>CreateAndManageWorkflows</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageWorkflows</shortDescription>
+		<value>Create and manage Workflows</value>
+	</labels>
+	<labels>
+		<fullName>AutomateprocessesinDocuSignCLM </fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AutomateprocessesinDocuSignCLM</shortDescription>
+		<value>Automate processes in DocuSign CLM</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowDesigner</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowDesigner</shortDescription>
+		<value>Workflow Designer</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowSteps</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps</shortDescription>
+		<value>Workflow Steps</value>
+	</labels>
+	<labels>
+		<fullName>CreateAndManageSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageSummary</shortDescription>
+		<value>Workflow links together sub-processes to standardize multiple processes thereby automating recurring tasks, reducing human and cutting down operating costs. This tool is available in DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowDesignerSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowDesignerSummary</shortDescription>
+		<value>Workflow designer is a canvas where you can connect steps that represent various process activities. These steps are like elements of a flowchart and help you engineer your workflow. You can leverage the individual workflow steps, customize the activities that are part of each step, and further automate by using C# expressions where steps properties allow.</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowStepsSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowStepsSummary</shortDescription>
+		<value>There are five different types of pre-defined steps:</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowSteps1</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps1</shortDescription>
+		<value>1. Automated Document Management Steps</value>
+	</labels>
+	<labels>
+		<fullName> WorkflowSteps2 </fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps2</shortDescription>
+		<value>2. Human Steps</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowSteps3</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps3</shortDescription>
+		<value>3. Engine Steps</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowSteps4</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps4</shortDescription>
+		<value>4. Integration Steps</value>
+	</labels>
+	<labels>
+		<fullName>WorkflowSteps5</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>WorkflowSteps5</shortDescription>
+		<value>5. Scheduling and Communication Steps</value>
+	</labels>
+	<labels>
+		<fullName>CustomWorkflowButtonSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CustomWorkflowButtonSummary</shortDescription>
+		<value>You can add custom button to your Salesforce page layout to for an advanced workflow. Clicking the custom button will trigger the advanced workflow.</value>
+	</labels>
+	<labels>
+		<fullName>AddComponentsByConfiguringYourLayouts</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddComponentsByConfiguringYourLayouts</shortDescription>
+		<value>Add Components by configuring your layouts</value>
+	</labels>
+	<labels>
+		<fullName>FolderPortalViewYourObjectFolders</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FolderPortalViewYourObjectFolders</shortDescription>
+		<value>Folder Portal - View your object folders</value>
+	</labels>
+	<labels>
+		<fullName>Component2</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Component#2</shortDescription>
+		<value>Component #2</value>
+	</labels>
+	<labels>
+		<fullName>FolderPortalSummary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FolderPortalSummary</shortDescription>
+		<value>Folder portal lets you view and work on your object folders from Salesforce. Once you have mapped your Salesforce objects, you can customize your Salesforce object page layout by adding a view.</value>
+	</labels>
+	<labels>
+		<fullName>LearnHowToConfigureYourLayouts</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowToConfigureYourLayouts</shortDescription>
+		<value>Learn how to configure your layouts</value>
+	</labels>
+	<labels>
+		<fullName>LearnHowTPlaceComponentsIntoYourLayouts</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowTPlaceComponentsIntoYourLayouts</shortDescription>
+		<value>Learn how to place components into your layouts</value>
+	</labels>
+	<labels>
+		<fullName>Component2Summary</fullName>
+		<categories>CLM, Post Install</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Component#2Summary</shortDescription>
+		<value>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</value>
+	</labels>
 </CustomLabels>

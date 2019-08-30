@@ -81,11 +81,17 @@
 			//header 
 			helper.insertComponent(component, 'c:CLMPageHeader', {
 				title: $A.get('$Label.c.Workflow'),
-				iconUrl: 'custom:custom66',
+				iconUrl: 'standard:campaign',
 				sectionTitle: $A.get('$Label.c.CLM')
 			}, false, 'v.header');
 			//main
-			component.set('v.main', '');
+			helper.insertComponent(
+				component,
+				'c:CLMWorkFlowLayout',
+				false,
+				false,
+				'v.main'
+			);
 		} else if (index === '6') {
 			component.set('v.isCenter', false);
 			component.set('v.fullLayout', false);
@@ -103,11 +109,17 @@
 			//header 
 			helper.insertComponent(component, 'c:CLMPageHeader', {
 				title: $A.get('$Label.c.ButtonsAndComponents'),
-				iconUrl: 'custom:custom66',
+				iconUrl: 'standard:canvas',
 				sectionTitle: $A.get('$Label.c.Administration')
 			}, false, 'v.header');
 			//main
-			component.set('v.main', '');
+			helper.insertComponent(
+				component,
+				'c:CLMComponentsLayout',
+				false,
+				false,
+				'v.main'
+			);
 		} else if (index === '8') {
 			component.set('v.isCenter', true);
 			component.set('v.fullLayout', false);

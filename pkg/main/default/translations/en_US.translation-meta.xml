@@ -3550,7 +3550,7 @@
 		<name>AutomateYourProcessesTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Buttons and Components</label>
+		<label>Components</label>
 		<name>ButtonsAndComponents</name>
 	</customLabels>
 	<customLabels>
@@ -4881,13 +4881,89 @@
 		<name>OpenObjectManagerButton</name>
 	</customLabels>
 	<customLabels>
-        <label>Learn how to use Workflow Designer in DocuSign CLM</label>
-        <name>LearnHowTo</name>
-    </customLabels>
+		<label>Learn how to use Workflow Designer in DocuSign CLM</label>
+		<name>LearnHowTo</name>
+	</customLabels>
 	<customLabels>
-        <label>Create and manage Workflows</label>
-        <name>CreateAndManageWorkflows</name>
-    </customLabels>
+		<label>Create and manage Workflows</label>
+		<name>CreateAndManageWorkflows</name>
+	</customLabels>
+	<customLabels>
+		<label>Automate processes in DocuSign CLM</label>
+		<name>AutomateprocessesinDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Designer</label>
+		<name>WorkflowDesigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Steps</label>
+		<name>WorkflowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow links together sub-processes to standardize multiple processes thereby automating recurring tasks, reducing human and cutting down operating costs. This tool is available in DocuSign CLM.</label>
+		<name>CreateAndManageSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow designer is a canvas where you can connect steps that represent various process activities. These steps are like elements of a flowchart and help you engineer your workflow. You can leverage the individual workflow steps, customize the activities that are part of each step, and further automate by using C# expressions where steps properties allow.</label>
+		<name>WorkflowDesignerSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>There are five different types of pre-defined steps:</label>
+		<name>WorkflowStepsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Automated Document Management Steps</label>
+		<name>WorkflowSteps1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Human Steps</label>
+		<name>WorkflowSteps2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Engine Steps</label>
+		<name>WorkflowSteps3</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Integration Steps</label>
+		<name>WorkflowSteps4</name>
+	</customLabels>
+	<customLabels>
+		<label>5. Scheduling and Communication Steps</label>
+		<name>WorkflowSteps5</name>
+	</customLabels>
+	<customLabels>
+		<label>You can add custom button to your Salesforce page layout for an advanced workflow. Clicking the custom button will trigger the advanced workflow.</label>
+		<name>CustomWorkflowButtonSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Components by configuring your layouts</label>
+		<name>AddComponentsByConfiguringYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Folder Portal - View your object folders</label>
+		<name>FolderPortalViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Component #2</label>
+		<name>Component2</name>
+	</customLabels>
+	<customLabels>
+		<label>Folder portal lets you view and work on your object folders from Salesforce. Once you have mapped your Salesforce objects, you can customize your Salesforce object page layout by adding a view.</label>
+		<name>FolderPortalSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to configure your layouts</label>
+		<name>LearnHowToConfigureYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to place components into your layouts</label>
+		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
+		<name>Component2Summary</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

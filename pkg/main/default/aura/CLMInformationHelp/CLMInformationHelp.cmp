@@ -7,7 +7,7 @@
 	<aura:attribute name="summary" type="String" />
 	<aura:attribute name="isLink" type="Boolean" default="false" />
 	<aura:attribute name="link" type="String" />
-	<aura:attribute name="hyperlinkedURI" type="List" access="private" />
+	<aura:attribute name="hyperlinkedURI" type="List" />
 	<aura:attribute name="firstButtonName" type="String" />
 
 	<aura:if isTrue="{!v.isSubTitle}">
