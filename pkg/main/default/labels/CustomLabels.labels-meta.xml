@@ -9194,6 +9194,21 @@
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
 	<labels>
+		<fullName>EditObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Edit Object</shortDescription>
+		<value>Edit Object</value>
+	</labels>
+	<labels>
+		<fullName>ViewingObjectFoldersSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Viewing Object Folders Summary</shortDescription>
+		<value>Viewing object folders in Salesforce</value>
+	</labels>
+	<labels>
 		<fullName>GenBadgeText</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -9218,12 +9233,12 @@
 		<value>Unlock</value>
 	</labels>
 	<labels>
-		<fullName>ImageNotFound</fullName>
+		<fullName>InfoIcon</fullName>
 		<categories></categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Image Alternative Text</shortDescription>
-		<value>Image Not Found</value>
+		<value>Info Icon</value>
 	</labels>
 	<labels>
 		<fullName>CreatingAgreementsInDocuSignCLM</fullName>
@@ -9263,7 +9278,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CreateAndManageDocSummary</shortDescription>
-		<value>Document Generationis the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</value>
+		<value>Document Generation is the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>CreateAndManageDocSummary2</fullName>

@@ -13,7 +13,7 @@
 						component.set(body, newComp);
 					}
 				}
-				else if (status === 'ERROR') {
+				else {
 					var toast = component.find('toast');
 					component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName));
 					component.set('v.toastVariant', 'error');
