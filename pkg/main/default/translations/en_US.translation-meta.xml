@@ -4808,6 +4808,14 @@
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customLabels>
+		<label>Edit Object</label>
+		<name>EditObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Viewing object folders in Salesforce</label>
+		<name>ViewingObjectFoldersSummary</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Gen</label>
 		<name>GenBadgeText</name>
 	</customLabels>

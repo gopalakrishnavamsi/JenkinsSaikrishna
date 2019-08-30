@@ -1,76 +1,80 @@
 <aura:component extends="c:CLMUtility" controller="CLMApexUtility">
-    <ltng:require scripts="{!$Resource.navUtils}" />
+	<ltng:require scripts="{!$Resource.navUtils}" />
 
+	<aura:dependency resource="markup://c:CLMMappedObjectsEdit" type="COMPONENT" />
 
-    <aura:dependency resource="markup://c:CLMMappedObjectsEdit" type="COMPONENT" />
+	<!--handler-->
+	<aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}" />
+	<aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}" />
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+	<aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
+	<aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
+		action="{!c.onSecondaryButtonClick}" />
+	<aura:handler event="c:CLMPathEvent" action="{!c.updateUIWithAdditionalHelpCard}" />
+	<aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent" />
+	<aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
 
-    <!--handler-->
-    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}" />
-    <aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}" />
-    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
-    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
-    <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
-        action="{!c.onSecondaryButtonClick}" />
-    <aura:handler event="c:CLMPathEvent" action="{!c.updateUIWithAdditionalHelpCard}" />
-    <aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent" />
-    <aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+	<!--Place holder attributes-->
+	<aura:attribute name="breadCrumbValues" type="List" access="private"/>
+	<aura:attribute name="pathValues" type="List" access="private"/>
+	<aura:attribute name="editComponent" type="Aura.Component[]" access="private"/>
+	<aura:attribute name="isClose" type="Boolean" access="private"/>
 
-    <!--Place holder attributes-->
-    <aura:attribute name="breadCrumbValues" type="List" />
-    <aura:attribute name="pathValues" type="List" />
-    <aura:attribute name="editComponent" type="Aura.Component" />
+	<!--ui attributes-->
+	<aura:attribute type="boolean" name="showHelp" default="true" access="private"/>
+	<aura:attribute type="boolean" name="showTrouble" default="true" access="private"/>
+	<aura:attribute type="boolean" name="showPathAndNew" default="false" access="private"/>
+	<aura:attribute type="boolean" name="showObjFolderCard" default="false" access="private"/>
 
-    <!--ui attributes-->
-    <aura:attribute type="boolean" name="showHelp" default="true" />
-    <aura:attribute type="boolean" name="showTrouble" default="true" />
-    <aura:attribute type="boolean" name="showPathAndNew" default="false" />
-    <aura:attribute type="boolean" name="showObjFolderCard" default="false" />
+	<lightning:layout multipleRows="true">
+		<aura:if isTrue="{!!v.isClose}">
+			<aura:if isTrue="{!!v.showPathAndNew}">
+				<lightning:layoutItem size="12" padding="horizontal-small">
+					<c:CLMScopedNotifications />
+				</lightning:layoutItem>
+			</aura:if>
+		</aura:if>
+		<lightning:layoutItem size="12" padding="around-small">
+			<c:CLMBreadcrumbs steps="{!v.breadCrumbValues}" />
+		</lightning:layoutItem>
 
-    <lightning:layout multipleRows="true">
-        <aura:if isTrue="{!!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="horizontal-small">
-                <c:CLMScopedNotifications />
-            </lightning:layoutItem>
-        </aura:if>
-        <lightning:layoutItem size="12" padding="around-small">
-            <c:CLMBreadcrumbs steps="{!v.breadCrumbValues}" />
-        </lightning:layoutItem>
-        <aura:if isTrue="{!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <div class="slds-p-left_xx-large slds-p-right_xx-large">
-                    <c:CLMPath steps="{!v.pathValues}" />
-                </div>
-            </lightning:layoutItem>
-        </aura:if>
-        <aura:if isTrue="{!!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMMappedObjectsHome />
-            </lightning:layoutItem>
-        </aura:if>
-        <aura:if isTrue="{!v.showPathAndNew}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMCardModel main="{!v.editComponent}" />
-            </lightning:layoutItem>
-        </aura:if>
-        <aura:if isTrue="{!v.showTrouble}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required"
-                    secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true"
-                    firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
-                    summary="{!$Label.c.ConfigureObjectPageLayoutInfo}" />
-            </lightning:layoutItem>
-        </aura:if>
-        <aura:if isTrue="{!v.showHelp}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMTroubleshoot />
-            </lightning:layoutItem>
-        </aura:if>
-        <aura:if isTrue="{!v.showObjFolderCard}">
-            <lightning:layoutItem size="12" padding="around-small">
-                <c:CLMHelp title="{!Label.c.ViewingObjectFoldersInSalesforce}" imageURL="utility:light_bulb"
-                    showIcon="true" firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
-                    showSecondButton="false" summary="{!Label.c.ViewingObjectFoldersSummary}" />
-            </lightning:layoutItem>
-        </aura:if>
-    </lightning:layout>
+		<lightning:layoutItem size="12" padding="around-small">
+			<div
+				class="{!v.showPathAndNew ? 'slds-p-left_xx-large slds-p-right_xx-large':'slds-p-left_xx-large slds-p-right_xx-large slds-hide'}">
+				<c:CLMPath steps="{!v.pathValues}" />
+			</div>
+		</lightning:layoutItem>
+
+		<aura:if isTrue="{!!v.showPathAndNew}">
+			<lightning:layoutItem size="12" padding="around-small">
+				<c:CLMMappedObjectsHome />
+			</lightning:layoutItem>
+		</aura:if>
+		<aura:if isTrue="{!v.showPathAndNew}">
+			<lightning:layoutItem size="12" padding="around-small">
+				<c:CLMCardModel main="{!v.editComponent}" />
+			</lightning:layoutItem>
+		</aura:if>
+		<aura:if isTrue="{!v.showTrouble}">
+			<lightning:layoutItem size="12" padding="around-small">
+				<c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required"
+					secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true"
+					firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
+					summary="{!$Label.c.ConfigureObjectPageLayoutInfo}" />
+			</lightning:layoutItem>
+		</aura:if>
+		<aura:if isTrue="{!v.showHelp}">
+			<lightning:layoutItem size="12" padding="around-small">
+				<c:CLMTroubleshoot imageURL="{!($Resource.CLMHavingTrouble)}" title="{!$Label.c.HavingTrouble}"
+					summary="{!$Label.c.HelpInfoBody}" />
+			</lightning:layoutItem>
+		</aura:if>
+		<aura:if isTrue="{!v.showObjFolderCard}">
+			<lightning:layoutItem size="12" padding="around-small">
+				<c:CLMHelp title="{!$Label.c.ViewingObjectFoldersSummary}" imageURL="standard:solution" showIcon="true"
+					firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" showSecondButton="false"
+					summary="{!$Label.c.ViewObjectFoldersCardBody}" />
+			</lightning:layoutItem>
+		</aura:if>
+	</lightning:layout>
 </aura:component>
