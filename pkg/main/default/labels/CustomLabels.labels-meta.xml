@@ -9346,4 +9346,20 @@
 		<shortDescription>OpenDocuSignCLMButton</shortDescription>
 		<value>Open DocuSign CLM</value>
 	</labels>
+	<labels>
+        <fullName>LearnHowTo</fullName>
+        <categories>CLM</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LearnHowTo</shortDescription>
+        <value>Learn how to use Workflow Designer in DocuSign CLM</value>
+	</labels>
+	<labels>
+        <fullName>CreateAndManageWorkflows</fullName>
+        <categories>CLM</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CreateAndManageWorkflows</shortDescription>
+        <value>Create and manage Workflows</value>
+    </labels>
 </CustomLabels>

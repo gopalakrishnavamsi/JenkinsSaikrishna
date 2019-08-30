@@ -4798,6 +4798,8 @@
 	<customLabels>
 		<label>Open DocuSign CLM</label>
 		<name>OpenDocuSignCLMButton</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Gen is not configured for your account.</label>
 		<name>GenNotConfigured</name>
 	</customLabels>
@@ -4878,6 +4880,14 @@
 		<label>Open Object Manager</label>
 		<name>OpenObjectManagerButton</name>
 	</customLabels>
+	<customLabels>
+        <label>Learn how to use Workflow Designer in DocuSign CLM</label>
+        <name>LearnHowTo</name>
+    </customLabels>
+	<customLabels>
+        <label>Create and manage Workflows</label>
+        <name>CreateAndManageWorkflows</name>
+    </customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
