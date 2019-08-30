@@ -9407,7 +9407,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CreateAndManageSummary</shortDescription>
-		<value>Workflow links together sub-processes to standardize multiple processes thereby automating recurring tasks, reducing human and cutting down operating costs. This tool is available in DocuSign CLM.</value>
+		<value>Workflow links together sub-processes to standardize multiple processes thereby automating recurring tasks, reducing human effort and cutting down operating costs. This tool is available in DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>WorkflowDesignerSummary</fullName>
@@ -9471,7 +9471,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CustomWorkflowButtonSummary</shortDescription>
-		<value>You can add custom button to your Salesforce page layout to for an advanced workflow. Clicking the custom button will trigger the advanced workflow.</value>
+		<value>You can add custom button to your Salesforce page layout for an advanced workflow. Clicking the custom button will trigger the advanced workflow.</value>
 	</labels>
 	<labels>
 		<fullName>AddComponentsByConfiguringYourLayouts</fullName>
