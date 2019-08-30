@@ -4782,9 +4782,7 @@
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
-			questions for DocuSign Agreements.
-		</label>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Agreements.</label>
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4794,6 +4792,10 @@
 	<customLabels>
 		<label>Environment Name</label>
 		<name>EnvironmentName</name>
+	</customLabels>
+	<customLabels>
+		<label>Open DocuSign CLM</label>
+		<name>OpenDocuSignCLMButton</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Gen is not configured for your account.</label>
@@ -4823,6 +4825,74 @@
 		<label>Unlock</label>
 		<name>UnlockFeatures</name>
 	</customLabels>
+	<customLabels>
+		<label>Info Icon</label>
+		<name>InfoIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>Creating Agreements in DocuSign CLM</label>
+		<name>CreatingAgreementsInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Create and manage Document Generation Configurations</label>
+		<name>CreateAndManageDocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Generation Configurations</label>
+		<name>DocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Generation Process</label>
+		<name>DocumentGenerationProcessTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Generation is the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</label>
+		<name>CreateAndManageDocSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>You can add a custom button to your Salesforce page layout to trigger a Document Generation configuration URL. Clicking the custom button will open the affiliated Document Generation form.</label>
+		<name>CreateAndManageDocSummary2</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to generate documents in DocuSign CLM</label>
+		<name>LearnHowToGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to add a button to a Salesforce Object page</label>
+		<name>LearnHowToAddAButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurations are one of the principal drivers behind the Document Generation process in DocuSign CLM. A configuration consist of 3 elements:</label>
+		<name>DocumentGenerationConfigurationsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Using your own templates, you can quickly merge data to create new contracts, agreements or any document and instantly send it through the appropriate downstream business process. Alternatively, you can use the same tool to start a workflow by uploading an existing document such as a third-party agreement.</label>
+		<name>DocumentGenerationProcessSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. MS Word Template Document (.doc or .docx)</label>
+		<name>DocumentStep1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Form configuration file (.xml or CLM native format)</label>
+		<name>DocumentStep2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Mapped Salesforce Object (if pulling data from Salesforce)</label>
+		<name>DocumentStep3</name>
+	</customLabels>
+	<customLabels>
+		<label>Open Object Manager</label>
+		<name>OpenObjectManagerButton</name>
+	</customLabels>
+	<customLabels>
+        <label>Learn how to use Workflow Designer in DocuSign CLM</label>
+        <name>LearnHowTo</name>
+    </customLabels>
+	<customLabels>
+        <label>Create and manage Workflows</label>
+        <name>CreateAndManageWorkflows</name>
+    </customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
