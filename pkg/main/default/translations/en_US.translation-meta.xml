@@ -4782,9 +4782,7 @@
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
-			questions for DocuSign Agreements.
-		</label>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Agreements.</label>
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4828,8 +4826,8 @@
 		<name>UnlockFeatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Image Not Found</label>
-		<name>ImageNotFound</name>
+		<label>Info Icon</label>
+		<name>InfoIcon</name>
 	</customLabels>
 	<customLabels>
 		<label>Creating Agreements in DocuSign CLM</label>
@@ -4868,8 +4866,7 @@
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Using your own templates, you can quickly merge data to create new contracts, agreements or any document and instantly send it through the appropriate downstream business process. Alternatively, you can use the same tool to start a workflow by uploading an existing document such as a third-party agreement.
-		</label>
+		<label>Using your own templates, you can quickly merge data to create new contracts, agreements or any document and instantly send it through the appropriate downstream business process. Alternatively, you can use the same tool to start a workflow by uploading an existing document such as a third-party agreement.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>

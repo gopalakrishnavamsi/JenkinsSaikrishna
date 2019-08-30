@@ -9233,12 +9233,12 @@
 		<value>Unlock</value>
 	</labels>
 	<labels>
-		<fullName>ImageNotFound</fullName>
+		<fullName>InfoIcon</fullName>
 		<categories></categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Image Alternative Text</shortDescription>
-		<value>Image Not Found</value>
+		<value>Info Icon</value>
 	</labels>
 	<labels>
 		<fullName>CreatingAgreementsInDocuSignCLM</fullName>
@@ -9278,7 +9278,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CreateAndManageDocSummary</shortDescription>
-		<value>Document Generationis the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</value>
+		<value>Document Generation is the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>CreateAndManageDocSummary2</fullName>
@@ -9362,19 +9362,19 @@
 		<value>Open DocuSign CLM</value>
 	</labels>
 	<labels>
-        <fullName>LearnHowTo</fullName>
-        <categories>CLM</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>LearnHowTo</shortDescription>
-        <value>Learn how to use Workflow Designer in DocuSign CLM</value>
+		<fullName>LearnHowTo</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnHowTo</shortDescription>
+		<value>Learn how to use Workflow Designer in DocuSign CLM</value>
 	</labels>
 	<labels>
-        <fullName>CreateAndManageWorkflows</fullName>
-        <categories>CLM</categories>
-        <language>en_US</language>
-        <protected>true</protected>
-        <shortDescription>CreateAndManageWorkflows</shortDescription>
-        <value>Create and manage Workflows</value>
-    </labels>
+		<fullName>CreateAndManageWorkflows</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateAndManageWorkflows</shortDescription>
+		<value>Create and manage Workflows</value>
+	</labels>
 </CustomLabels>
