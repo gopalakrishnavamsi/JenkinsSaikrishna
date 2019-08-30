@@ -9194,6 +9194,21 @@
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
 	<labels>
+		<fullName>EditObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Edit Object</shortDescription>
+		<value>Edit Object</value>
+	</labels>
+	<labels>
+		<fullName>ViewingObjectFoldersSummary</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Viewing Object Folders Summary</shortDescription>
+		<value>Viewing object folders in Salesforce</value>
+	</labels>
+	<labels>
 		<fullName>GenBadgeText</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
