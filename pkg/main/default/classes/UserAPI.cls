@@ -128,6 +128,7 @@ public with sharing class UserAPI extends ESignatureAPI {
 				StringUtils.parseDate(this.createdDateTime),
 				isAdmin,
 				null,
+				null,
 				errorExternalForm());
 		}
 	}

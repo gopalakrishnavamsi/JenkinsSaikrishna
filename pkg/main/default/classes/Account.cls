@@ -297,6 +297,11 @@ public class Account {
 		@AuraEnabled
 		public String profile { get; private set; }
 		/**
+		 * The user's assigned application roles.
+		 */
+		@AuraEnabled
+		public Map<String, List<String>> roles { get; private set; }
+		/**
 		 * The error returned by the API for bulk add or remove account member operations.
 		 */
 		@AuraEnabled
@@ -331,6 +336,7 @@ public class Account {
 				null,
 				false,
 				null,
+				null,
 				APIError.none);
 		}
 
@@ -360,6 +366,7 @@ public class Account {
 				null,
 				canManageAccount,
 				null,
+				null,
 				null);
 		}
 
@@ -375,6 +382,7 @@ public class Account {
 		 * @param provisioned Date when the user was provisioned.
 		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
 		 * @param profile The user's Salesforce profile name.
+		 * @param roles The user's assigned application roles.
 		 * @param error The error returned by the API for bulk add or remove account member operations.
 		 */
 		public User(
@@ -387,6 +395,7 @@ public class Account {
 			final Date provisioned,
 			final Boolean canManageAccount,
 			final String profile,
+			final Map<String, List<String>> roles,
 			final APIError error) {
 
 			this.id = id;
@@ -398,6 +407,7 @@ public class Account {
 			this.provisioned = provisioned;
 			this.canManageAccount = canManageAccount;
 			this.profile = profile;
+			this.roles = roles == null ? new Map<String, List<String>>() : roles;
 			this.error = error == null ? APIError.none : error;
 		}
 
@@ -410,6 +420,18 @@ public class Account {
 		 */
 		public User withError(final APIError error) {
 			this.error = error;
+			return this;
+		}
+
+		/**
+		 * Updates a user's <code>roles</code> property.
+		 *
+		 * @param role The new application roles.
+		 *
+		 * @return The user with an updated <code>roles</code> property.
+		 */
+		public User withRoles(final Map<String, List<String>> roles) {
+			this.roles = roles == null ? new Map<String, List<String>>() : roles;
 			return this;
 		}
 	}

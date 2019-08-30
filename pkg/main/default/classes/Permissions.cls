@@ -49,7 +49,70 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
+	private class ProductRole {
+		public String product { get; private set; }
+		public String role { get; private set; }
+
+		public ProductRole(
+			final String product,
+			final String role) {
+
+			this.product = product;
+			this.role = role;
+		}
+	}
+
+	@TestVisible
 	private with sharing class Database {
+
+		private Map<Id, Map<String, List<String>>> queryUserRoles(final Set<Id> userIds) {
+			if (Collection.isEmpty(userIds)) return new Map<Id, Map<String, List<String>>>();
+
+			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+				'Id'
+			});
+			Permissions.verifyIsQueryable(PermissionSet.getSObjectType(), new List<String> {
+				'Name'
+			});
+
+			Map<String, ProductRole> prs = new Map<String, ProductRole> {
+				DOCUSIGN_ADMINISTRATOR => new ProductRole(Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR),
+				DOCUSIGN_USER => new ProductRole(Product.ESIGNATURE, ESignatureProduct.ROLE_USER),
+				DOCUSIGN_SENDER => new ProductRole(Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER),
+				DOCUSIGN_GENERATOR => new ProductRole(Product.GEN, GenProduct.ROLE_GENERATOR),
+				DOCUSIGN_NEGOTIATOR => new ProductRole(Product.NEGOTIATE, NegotiateProduct.ROLE_NEGOTIATOR),
+				CLM_ADMINISTRATOR => new ProductRole(Product.CLM, ClmProduct.ROLE_ADMINISTRATOR),
+				CLM_USER => new ProductRole(Product.CLM, ClmProduct.ROLE_USER),
+				CLM_VIEWER => new ProductRole(Product.CLM, ClmProduct.ROLE_VIEWER)
+			};
+			Map<Id, Map<String, List<String>>> result = new Map<Id, Map<String, List<String>>>();
+			for (PermissionSetAssignment psa : [
+				SELECT AssigneeId, PermissionSet.Name
+				FROM PermissionSetAssignment
+				WHERE AssigneeId IN :userIds
+				AND PermissionSetId IN :getPermissionSetMap().values()
+			]) {
+				if (String.isBlank(psa.PermissionSet.Name)) continue;
+
+				ProductRole pr = prs.get(psa.PermissionSet.Name.toLowerCase());
+				if (pr == null) continue;
+
+				if (result.containsKey(psa.AssigneeId)) {
+					Map<String, List<String>> rs = result.get(psa.AssigneeId);
+					if (rs.containsKey(pr.product)) {
+						rs.get(pr.product).add(pr.role);
+					} else {
+						rs.put(pr.product, new List<String> { pr.role });
+					}
+				} else {
+					result.put(psa.AssigneeId, new Map<String, List<String>> {
+						pr.product => new List<String> { pr.role }
+					});
+				}
+			}
+
+			return result;
+		}
 
 		private Boolean upsertPermissionSetAssignments(
 			final Set<Id> userIds,
@@ -1205,8 +1268,8 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static Set<String> getESignaturePermissionSets(final Set<String> roles) {
-		Set<String> result = new Set<String>();
+	private static List<String> getESignaturePermissionSets(final List<String> roles) {
+		List<String> result = new List<String>();
 		if (roles != null) {
 			for (String r : roles) {
 				if (r == ESignatureProduct.ROLE_ADMINISTRATOR) {
@@ -1224,8 +1287,8 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static Set<String> getGenPermissionSets(final Set<String> roles) {
-		Set<String> result = new Set<String>();
+	private static List<String> getGenPermissionSets(final List<String> roles) {
+		List<String> result = new List<String>();
 		if (roles != null) {
 			for (String r : roles) {
 				if (r == GenProduct.ROLE_GENERATOR) {
@@ -1239,8 +1302,8 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static Set<String> getNegotiatePermissionSets(final Set<String> roles) {
-		Set<String> result = new Set<String>();
+	private static List<String> getNegotiatePermissionSets(final List<String> roles) {
+		List<String> result = new List<String>();
 		if (roles != null) {
 			for (String r : roles) {
 				if (r == NegotiateProduct.ROLE_NEGOTIATOR) {
@@ -1254,8 +1317,8 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static Set<String> getClmPermissionSets(final Set<String> roles) {
-		Set<String> result = new Set<String>();
+	private static List<String> getClmPermissionSets(final List<String> roles) {
+		List<String> result = new List<String>();
 		if (roles != null) {
 			for (String r : roles) {
 				if (r == ClmProduct.ROLE_ADMINISTRATOR) {
@@ -1273,7 +1336,7 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static Set<String> getPermissionSetNames(final Map<String, Set<String>> productRoles) {
+	private static Set<String> getPermissionSetNames(final Map<String, List<String>> productRoles) {
 		Set<String> result = new Set<String>();
 		if (productRoles != null) {
 			for (String p : productRoles.keySet()) {
@@ -1295,11 +1358,15 @@ public with sharing class Permissions {
 
 	public static Boolean replaceRoles(
 		final Set<Id> userIds,
-		final Map<String, Set<String>> productRoles) {
+		final Map<String, List<String>> productRoles) {
 
 		// Ensure current user does not lose admin permissions
 		Set<Id> uIds = verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit);
 		return DB.deletePermissionSetAssignments(uIds, new Set<Id>(getPermissionSetMap().values()))
 			&& DB.upsertPermissionSetAssignments(uIds, getPermissionSetIds(getPermissionSetNames(productRoles)));
+	}
+
+	public static Map<Id, Map<String, List<String>>> getUserRoles(final Set<Id> userIds) {
+		return DB.queryUserRoles(userIds);
 	}
 }

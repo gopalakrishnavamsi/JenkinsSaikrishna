@@ -157,34 +157,34 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	}
 
 	@TestVisible
-	private Map<String, List<Product.Role>> getAccountRoles(
+	private Map<String, Map<UUID, Product.Role>> getAccountRoles(
 		final Set<String> products,
 		final Integer timeout) {
 
-		Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
+		Map<String, Map<UUID, Product.Role>> result = new Map<String, Map<UUID, Product.Role>>();
 		List<String> filteredProducts = filterValid(products);
 		if (Collection.isEmpty(filteredProducts)) return result;
 
 		for (String p : filteredProducts) {
-			result.put(p, new List<Product.Role>());
+			result.put(p, new Map<UUID, Product.Role>());
 		}
 
 		// TODO: Special case for eSignature until full API support (v2?)
 		if (result.containsKey(Product.ESIGNATURE)) {
-			result.get(Product.ESIGNATURE).addAll(new List<Product.Role> {
-				new Product.Role(
+			result.get(Product.ESIGNATURE).putAll(new Map<UUID, Product.Role> {
+				ESIGNATURE_ADMINISTRATOR_ID => new Product.Role(
 					ESIGNATURE_ADMINISTRATOR_ID,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_ADMINISTRATOR,
 					Label.Administrator,
 					true),
-				new Product.Role(
+				ESIGNATURE_USER_ID => new Product.Role(
 					ESIGNATURE_USER_ID,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_USER,
 					Label.User,
 					false),
-				new Product.Role(
+				ESIGNATURE_SENDER_ID => new Product.Role(
 					ESIGNATURE_SENDER_ID,
 					Product.ESIGNATURE,
 					ESignatureProduct.ROLE_SENDER,
@@ -213,7 +213,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				// Only add if it's in the product role whitelist.
 				if (result.containsKey(productName) && Product.isValidRole(productName, g.group_name)) {
 					Product.Role r = g.toExternalForm();
-					if (r != null) result.get(productName).add(r);
+					if (r != null) result.get(productName).put(r.id, r);
 				}
 			}
 		}
@@ -286,28 +286,28 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		3. If any group doesn't exist, read product groups.
 		4. Create each missing account group.
 	 */
-	public Map<String, List<Product.Role>> getRoles(final Set<String> products) {
+	public Map<String, Map<UUID, Product.Role>> getRoles(final Set<String> products) {
 		return this.getRoles(products, RestAPI.defaultTimeout);
 	}
 
-	public Map<String, List<Product.Role>> getRoles(
+	public Map<String, Map<UUID, Product.Role>> getRoles(
 		final Set<String> products,
 		final Integer timeout) {
 
 		// Filter out invalid products
 		List<String> filteredProducts = filterValid(products);
-		if (Collection.isEmpty(filteredProducts)) return new Map<String, List<Product.Role>>();
+		if (Collection.isEmpty(filteredProducts)) return new Map<String, Map<UUID, Product.Role>>();
 
 		// Read any existing account roles.
-		Map<String, List<Product.Role>> result = this.getAccountRoles(products, timeout);
+		Map<String, Map<UUID, Product.Role>> result = this.getAccountRoles(products, timeout);
 
 		// Determine which roles should be on the account.
 		Map<String, Set<String>> missingRoles = new Map<String, Set<String>>();
 		Map<String, Map<String, Product.Role>> productGroupRolesToCreate = new Map<String, Map<String, Product.Role>>();
 		for (String product : result.keySet()) {
 			Set<String> expectedRoles = new Set<String>(PRODUCT_GROUP_ROLE_MAP.get(product).values());
-			List<Product.Role> currentRoles = result.get(product);
-			missingRoles.put(product, getRoleDifference(expectedRoles, currentRoles));
+			Map<UUID, Product.Role> currentRoles = result.get(product);
+			missingRoles.put(product, getRoleDifference(expectedRoles, currentRoles.values()));
 		}
 
 		// Find product groups for roles that do not already exist on the account.
@@ -330,8 +330,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		for (String product : productGroupRolesToCreate.keySet()) {
 			Map<String, Product.Role> groupRolesToCreate = productGroupRolesToCreate.get(product);
 			for (String groupId : groupRolesToCreate.keySet()) {
-				Product.Role role = groupRolesToCreate.get(groupId);
-				result.get(role.product).add(this.createAccountRole(role, groupId, timeout));
+				Product.Role role = this.createAccountRole(groupRolesToCreate.get(groupId), groupId, timeout);
+				result.get(role.product).put(role.id, role);
 			}
 		}
 

@@ -18,7 +18,7 @@ private class RoleAPITest {
 	static void test_getAccountRoles_empty_products() {
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(null, 30000);
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getAccountRoles(null, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -30,7 +30,7 @@ private class RoleAPITest {
 	static void test_getAccountRoles_unsupported_product() {
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getAccountRoles(
 				new Set<String> { 'bad' }, 30000);
 			Test.stopTest();
 
@@ -72,7 +72,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createClmViewer()) {
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getAccountRoles(
 				new Set<String> { Product.CLM }, 30000);
 			Test.stopTest();
 
@@ -91,13 +91,13 @@ private class RoleAPITest {
 			Set<String> products = new Set<String> { Product.ESIGNATURE, Product.GEN, Product.NEGOTIATE, Product.CLM };
 
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getAccountRoles(products, 30000);
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getAccountRoles(products, 30000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(4, result.size());
 			System.assertEquals(products, result.keySet());
-			List<Product.Role> roles = result.get(Product.ESIGNATURE);
+			List<Product.Role> roles = result.get(Product.ESIGNATURE).values();
 			System.assertEquals(3, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
 			System.assertEquals(RoleAPI.ESIGNATURE_ADMINISTRATOR_ID, roles[0].id);
@@ -105,13 +105,13 @@ private class RoleAPITest {
 			System.assertEquals(RoleAPI.ESIGNATURE_USER_ID, roles[1].id);
 			System.assertNotEquals(null, roles[2]);
 			System.assertEquals(RoleAPI.ESIGNATURE_SENDER_ID, roles[2].id);
-			roles = result.get(Product.GEN);
+			roles = result.get(Product.GEN).values();
 			System.assertEquals(1, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
-			roles = result.get(Product.NEGOTIATE);
+			roles = result.get(Product.NEGOTIATE).values();
 			System.assertEquals(1, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
-			roles = result.get(Product.CLM);
+			roles = result.get(Product.CLM).values();
 			System.assertEquals(3, Collection.size(roles));
 			System.assertNotEquals(null, roles[0]);
 			System.assertNotEquals(null, roles[1]);
@@ -261,7 +261,7 @@ private class RoleAPITest {
 	static void test_getRoles_undefined_argument() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getRoles(null);
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getRoles(null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -443,7 +443,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Map<String, List<Product.Role>> result = RoleAPI.getInstance().getRoles(new Set<String> {
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getRoles(new Set<String> {
 				Product.CLM, Product.GEN, Product.NEGOTIATE, 'other'
 			});
 			Test.stopTest();
@@ -451,27 +451,32 @@ private class RoleAPITest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(3, result.size());
 			System.assertEquals(new Set<String> { Product.CLM, Product.GEN, Product.NEGOTIATE }, result.keySet());
-			System.assertEquals(1, Collection.size(result.get(Product.GEN)));
-			System.assertNotEquals(null, result.get(Product.GEN)[0]);
-			System.assertNotEquals(null, result.get(Product.GEN)[0].id);
-			System.assertEquals(GenProduct.ROLE_GENERATOR, result.get(Product.GEN)[0].role);
-			System.assertEquals(1, Collection.size(result.get(Product.NEGOTIATE)));
-			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0]);
-			System.assertNotEquals(null, result.get(Product.NEGOTIATE)[0].id);
-			System.assertEquals(NegotiateProduct.ROLE_NEGOTIATOR, result.get(Product.NEGOTIATE)[0].role);
-			System.assertEquals(3, Collection.size(result.get(Product.CLM)));
-			System.assertNotEquals(null, result.get(Product.CLM)[0]);
-			System.assertNotEquals(null, result.get(Product.CLM)[0].id);
-			System.assertNotEquals(null, result.get(Product.CLM)[1]);
-			System.assertNotEquals(null, result.get(Product.CLM)[1].id);
-			System.assertNotEquals(null, result.get(Product.CLM)[2]);
-			System.assertNotEquals(null, result.get(Product.CLM)[2].id);
+			System.assertNotEquals(null, result.get(Product.GEN));
+			System.assertEquals(1, result.get(Product.GEN).size());
+			System.assertNotEquals(null, result.get(Product.GEN).values()[0]);
+			System.assertNotEquals(null, result.get(Product.GEN).values()[0].id);
+			System.assertEquals(GenProduct.ROLE_GENERATOR, result.get(Product.GEN).values()[0].role);
+			System.assertNotEquals(null, result.get(Product.NEGOTIATE));
+			System.assertEquals(1, result.get(Product.NEGOTIATE).size());
+			System.assertNotEquals(null, result.get(Product.NEGOTIATE).values()[0]);
+			System.assertNotEquals(null, result.get(Product.NEGOTIATE).values()[0].id);
+			System.assertEquals(NegotiateProduct.ROLE_NEGOTIATOR, result.get(Product.NEGOTIATE).values()[0].role);
+			System.assertNotEquals(null, result.get(Product.CLM));
+			System.assertEquals(3, result.get(Product.CLM).size());
+			System.assertNotEquals(null, result.get(Product.CLM).values()[0]);
+			System.assertNotEquals(null, result.get(Product.CLM).values()[0].id);
+			System.assertNotEquals(null, result.get(Product.CLM).values()[1]);
+			System.assertNotEquals(null, result.get(Product.CLM).values()[1].id);
+			System.assertNotEquals(null, result.get(Product.CLM).values()[2]);
+			System.assertNotEquals(null, result.get(Product.CLM).values()[2].id);
 			System.assertEquals(
 				new Set<String> {
 					ClmProduct.ROLE_USER, ClmProduct.ROLE_ADMINISTRATOR, ClmProduct.ROLE_VIEWER
 				},
 				new Set<String> {
-					result.get(Product.CLM)[0].role, result.get(Product.CLM)[1].role, result.get(Product.CLM)[2].role
+					result.get(Product.CLM).values()[0].role,
+					result.get(Product.CLM).values()[1].role,
+					result.get(Product.CLM).values()[2].role
 				});
 		}
 	}
