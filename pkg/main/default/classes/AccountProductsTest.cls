@@ -777,6 +777,35 @@ private class AccountProductsTest {
 	}
 
 	@IsTest
+	static void test_save_newRoles() {
+		UUID r1Id = UUID.randomUUID();
+		UUID r2Id = UUID.randomUUID();
+		List<Product.Role> roles = new List<Product.Role> {
+			new Product.Role(r1Id, Product.ESIGNATURE, ESignatureProduct.ROLE_USER, Label.User, false),
+			new Product.Role(r2Id, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true)
+		};
+
+		Test.startTest();
+		System.assert(!AccountProducts.save());
+		AccountProducts.newRoles = roles;
+		System.assert(AccountProducts.save());
+		Test.stopTest();
+
+		List<ProductRoleSettings__c> prs = ProductRoleSettings__c.getAll().values();
+		System.assertEquals(2, Collection.size(prs));
+		for (ProductRoleSettings__c pr : prs) {
+			if (pr.RoleId__c == String.valueOf(r1Id)) {
+				System.assertEquals(pr.ProductName__c, Product.ESIGNATURE);
+				System.assertEquals(pr.RoleName__c, ESignatureProduct.ROLE_USER.toLowerCase());
+			} else {
+				System.assertEquals(pr.RoleId__c, String.valueOf(r2Id));
+				System.assertEquals(pr.ProductName__c, Product.CLM);
+				System.assertEquals(pr.RoleName__c, ClmProduct.ROLE_ADMINISTRATOR.toLowerCase());
+			}
+		}
+	}
+
+	@IsTest
 	static void test_getRoles_empty() {
 		Test.startTest();
 		try {
@@ -838,25 +867,13 @@ private class AccountProductsTest {
 			System.assertEquals(3, result.get(Product.CLM).size());
 
 			for (String p : result.keySet()) {
-				for (UUID pId: result.get(p).keySet()) {
+				for (UUID pId : result.get(p).keySet()) {
 					System.assert(UUID.isNotEmpty(pId));
 					Product.Role pr = result.get(p).get(pId);
 					System.assert(Product.isValidRole(pr));
 					System.assertEquals(pId, pr.id);
 				}
 			}
-
-			Map<String, ProductRoleSettings__c> pss = ProductRoleSettings__c.getAll();
-			System.assertNotEquals(null, pss);
-			System.assertEquals(8, pss.size());
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_USER)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.GEN, GenProduct.ROLE_GENERATOR)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.NEGOTIATE, NegotiateProduct.ROLE_NEGOTIATOR)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_ADMINISTRATOR)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_USER)));
-			System.assert(pss.containsKey(AccountProducts.DB.getProductRoleKey(Product.CLM, ClmProduct.ROLE_VIEWER)));
 		}
 	}
 

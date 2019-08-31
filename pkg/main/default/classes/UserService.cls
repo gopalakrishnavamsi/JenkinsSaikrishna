@@ -304,20 +304,6 @@ public with sharing class UserService {
 		return userIds;
 	}
 
-	@TestVisible
-	private static Map<UUID, Set<UUID>> getUserRoles(
-		final List<Account.User> users,
-		final Set<UUID> roleIds) {
-
-		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
-		if (Collection.isNotEmpty(users)) {
-			for (Account.User u : users) {
-				if (UUID.isNotEmpty(u.id)) result.put(u.id, roleIds);
-			}
-		}
-		return result;
-	}
-
 	/**
 	 * Adds one or more users as members of the current DocuSign account.
 	 * <p>
@@ -346,6 +332,7 @@ public with sharing class UserService {
 			// Update the username and password for the users
 			List<Account.User> result = new List<Account.User>();
 			Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
+			Set<UUID> userIds = new Set<UUID>();
 			for (Account.User u : UserAPI.getInstance().addUsers(users)) {
 				// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
 				if (u.hasError && u.error.code != APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
@@ -359,17 +346,18 @@ public with sharing class UserService {
 						u.status,
 						u.canManageAccount));
 					result.add(u.withError(null).withRoles(productRoles));
+					if (UUID.isNotEmpty(u.id)) userIds.add(u.Id);
 				}
 			}
 
 			Boolean hasRoles = productRoles != null && !productRoles.isEmpty();
 			if (hasRoles) {
 				// Update user roles in MAGNUM API
-				RoleAPI.getInstance().addRoleUsers(getUserRoles(
-					result,
+				RoleAPI.getInstance().addRoleUsers(getRoleUsers(
 					getRoleIds(
 						AccountProducts.getRoles(productRoles.keySet()),
-						productRoles)));
+						productRoles),
+					userIds));
 			}
 
 			Credentials.add(creds);
@@ -378,6 +366,7 @@ public with sharing class UserService {
 			return result;
 		} finally {
 			Credentials.save();
+			AccountProducts.save();
 		}
 	}
 
@@ -485,13 +474,15 @@ public with sharing class UserService {
 	}
 
 	@TestVisible
-	private static Map<UUID, Set<UUID>> getUserRoles(
-		final Set<UUID> userIds,
-		final Set<UUID> roleIds) {
+	private static Map<UUID, Set<UUID>> getRoleUsers(
+		final Set<UUID> roleIds,
+		final Set<UUID> userIds) {
 
 		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
-		for (UUID uId : userIds) {
-			if (UUID.isNotEmpty(uId)) result.put(uId, roleIds);
+		if (Collection.isNotEmpty(roleIds) && Collection.isNotEmpty(userIds)) {
+			for (UUID rId : roleIds) {
+				if (UUID.isNotEmpty(rId)) result.put(rId, userIds);
+			}
 		}
 		return result;
 	}
@@ -548,42 +539,46 @@ public with sharing class UserService {
 		Set<Id> uIds = verifyBatchSize(userIds, Application.batchLimit);
 		Set<UUID> dsUserIds = DB.getDocuSignUserIds(uIds);
 
-		// Update user groups in MAGNUM API.
-		// Remove other roles first
-		// First, get list of all configured products
-		Set<String> allProducts = new Set<String>();
-		for (Product p : AccountProducts.getProducts()) {
-			allProducts.add(p.name);
+		try {
+			// Update user groups in MAGNUM API.
+			// Remove other roles first
+			// First, get list of all configured products
+			Set<String> allProducts = new Set<String>();
+			for (Product p : AccountProducts.getProducts()) {
+				allProducts.add(p.name);
+			}
+
+			// Next, get list of roles for configured products.
+			Map<String, Map<UUID, Product.Role>> allRoles = AccountProducts.getRoles(allProducts);
+			Set<UUID> allRoleIds = getRoleIds(allRoles);
+
+			// Then, get the role IDs for the ones we want to assign.
+			Set<UUID> newRoleIds = getRoleIds(allRoles, productRoles);
+
+			// Determine which roles need to be removed, if present.
+			RoleAPI client = RoleAPI.getInstance();
+			Map<UUID, Set<UUID>> toRemove = getUserRoleDifference(
+				dsUserIds,
+				allRoleIds,
+				newRoleIds);
+			if (toRemove != null && !toRemove.isEmpty()) client.removeRoleUsers(toRemove);
+
+			// Add new roles
+			// TODO: Return error details for users? Depends on whether we have a design and fallback or retry mechanism.
+			if (Collection.isNotEmpty(newRoleIds)) client.addRoleUsers(getRoleUsers(newRoleIds, dsUserIds));
+
+			// Update permission sets
+			Permissions.replaceRoles(uIds, productRoles);
+
+			// Reset user access tokens and set CanManageAccount__c accordingly.
+			return Credentials.reset(
+				uIds,
+				productRoles != null
+					&& productRoles.containsKey(Product.ESIGNATURE)
+					&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR));
+		} finally {
+			AccountProducts.save();
 		}
-
-		// Next, get list of roles for configured products.
-		Map<String, Map<UUID, Product.Role>> allRoles = AccountProducts.getRoles(allProducts);
-		Set<UUID> allRoleIds = getRoleIds(allRoles);
-
-		// Then, get the role IDs for the ones we want to assign.
-		Set<UUID> newRoleIds = getRoleIds(allRoles, productRoles);
-
-		// Determine which roles need to be removed, if present.
-		RoleAPI client = RoleAPI.getInstance();
-		Map<UUID, Set<UUID>> toRemove = getUserRoleDifference(
-			dsUserIds,
-			allRoleIds,
-			newRoleIds);
-		if (toRemove != null && !toRemove.isEmpty()) client.removeRoleUsers(toRemove);
-
-		// Add new roles
-		// TODO: Return error details for users? Depends on whether we have a design and fallback or retry mechanism.
-		if (Collection.isNotEmpty(newRoleIds)) client.addRoleUsers(getUserRoles(dsUserIds, newRoleIds));
-
-		// Update permission sets
-		Permissions.replaceRoles(uIds, productRoles);
-
-		// Reset user access tokens and set CanManageAccount__c accordingly.
-		return Credentials.reset(
-			uIds,
-			productRoles != null
-				&& productRoles.containsKey(Product.ESIGNATURE)
-				&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR));
 	}
 
 	/**

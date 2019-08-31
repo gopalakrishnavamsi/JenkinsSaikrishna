@@ -206,6 +206,18 @@ private class RoleAPITest {
 	}
 
 	@IsTest
+	static void test_getProductRoles_eSignature() {
+		System.runAs(UserMock.createClmAdministrator()) {
+			Test.startTest();
+			Map<String, Map<String, Product.Role>> result = RoleAPI.getInstance().getProductRoles(new Set<String> { Product.ESIGNATURE }, 30000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isEmpty());
+		}
+	}
+
+	@IsTest
 	static void test_getProductRoles_error() {
 		RoleAPIMock.failure();
 

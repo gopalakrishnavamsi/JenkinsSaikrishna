@@ -248,6 +248,9 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		final Integer timeout) {
 
 		List<String> filteredProducts = filterValid(products);
+		// Remove e_sign product from the list as it's not currently supported by MAGNUM.
+		Integer eSignIndex = filteredProducts.indexOf(Product.ESIGNATURE);
+		if (eSignIndex >= 0) filteredProducts.remove(eSignIndex);
 		if (Collection.isEmpty(filteredProducts)) return new Map<String, Map<String, Product.Role>>();
 
 		RestAPI.Response response = this.get(

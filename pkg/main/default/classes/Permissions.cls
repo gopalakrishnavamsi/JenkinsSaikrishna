@@ -1356,14 +1356,39 @@ public with sharing class Permissions {
 		return result;
 	}
 
+	private class UserRoles {
+		public Set<Id> userIds { get; private set; }
+		public Map<String, List<String>> productRoles { get; private set; }
+
+		public UserRoles(
+			final Set<Id> userIds,
+			final Map<String, List<String>> productRoles) {
+
+			this.userIds = userIds;
+			this.productRoles = productRoles;
+		}
+	}
+
+	@Future
+	private static void replaceRoles(final String rolesJson) {
+		UserRoles urs = (UserRoles)JSON.deserialize(rolesJson, UserRoles.class);
+		if (urs != null && Collection.isNotEmpty(urs.userIds)) {
+			DB.deletePermissionSetAssignments(urs.userIds, new Set<Id>(getPermissionSetMap().values()));
+			DB.upsertPermissionSetAssignments(urs.userIds, getPermissionSetIds(getPermissionSetNames(urs.productRoles)));
+		}
+	}
+
 	public static Boolean replaceRoles(
 		final Set<Id> userIds,
 		final Map<String, List<String>> productRoles) {
 
 		// Ensure current user does not lose admin permissions
 		Set<Id> uIds = verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit);
-		return DB.deletePermissionSetAssignments(uIds, new Set<Id>(getPermissionSetMap().values()))
-			&& DB.upsertPermissionSetAssignments(uIds, getPermissionSetIds(getPermissionSetNames(productRoles)));
+		if (Collection.isNotEmpty(uIds)) {
+			replaceRoles(JSON.serialize(new UserRoles(uIds, productRoles)));
+			return true;
+		}
+		return false;
 	}
 
 	public static Map<Id, Map<String, List<String>>> getUserRoles(final Set<Id> userIds) {

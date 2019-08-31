@@ -28,6 +28,8 @@ public with sharing class AccountProducts {
 	@TestVisible
 	private Boolean isDirty;
 	private DocuSign.Environment environment;
+	@TestVisible
+	private static List<Product.Role> newRoles;
 
 	@AuraEnabled
 	public ESignatureProduct eSignature {
@@ -597,8 +599,14 @@ public with sharing class AccountProducts {
 	}
 
 	public static Boolean save() {
-		Boolean result = self != null && self.isDirty;
-		if (result) {
+		Boolean result = false;
+
+		if (Collection.isNotEmpty(newRoles)) {
+			result = DB.insertProductRoles(newRoles);
+			newRoles.clear();
+		}
+
+		if (self != null && self.isDirty) {
 			saveRoles(
 				DB.queryProducts().keySet(),
 				self.products == null ? new Set<String>() : self.products.keySet());
@@ -628,13 +636,10 @@ public with sharing class AccountProducts {
 				urls);
 
 			self.isDirty = false;
+			result = true;
 		}
-		return result;
-	}
 
-	@Future
-	private static void addRoles(final String rolesJson) {
-		DB.insertProductRoles((List<Product.Role>)JSON.deserialize(rolesJson, List<Product.Role>.class));
+		return result;
 	}
 
 	public static Map<String, Map<UUID, Product.Role>> getRoles(final Set<String> products) {
@@ -661,13 +666,12 @@ public with sharing class AccountProducts {
 
 		if (Collection.isNotEmpty(missingProducts)) {
 			Map<String, Map<UUID, Product.Role>> productRoles = RoleAPI.getInstance().getRoles(missingProducts);
-			List<Product.Role> toInsert = new List<Product.Role>();
+			newRoles = new List<Product.Role>();
 			for (String p : productRoles.keySet()) {
 				Map<UUID, Product.Role> prs = productRoles.get(p);
 				result.put(p, prs);
-				toInsert.addAll(prs.values());
+				newRoles.addAll(prs.values());
 			}
-			addRoles(JSON.serialize(toInsert));
 		}
 
 		return result;

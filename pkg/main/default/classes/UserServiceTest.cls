@@ -532,6 +532,7 @@ private class UserServiceTest {
 	@IsTest
 	static void test_updateUserRoles_success() {
 		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u1 = UserMock.createClmAdministrator(false);
