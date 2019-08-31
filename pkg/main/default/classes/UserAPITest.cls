@@ -89,6 +89,7 @@ private class UserAPITest {
 					null,
 					u1.CanManageAccount__c,
 					null,
+					null,
 					null),
 				new Account.User(
 					null,
@@ -99,6 +100,7 @@ private class UserAPITest {
 					Account.USER_STATUS_PENDING,
 					null,
 					u2.CanManageAccount__c,
+					null,
 					null,
 					null)
 			});
@@ -159,6 +161,7 @@ private class UserAPITest {
 					Date.today(),
 					true,
 					null,
+					null,
 					null)
 			});
 			Test.stopTest();
@@ -203,6 +206,7 @@ private class UserAPITest {
 					Date.today(),
 					true,
 					null,
+					null,
 					null)
 			});
 			Test.stopTest();
@@ -238,6 +242,7 @@ private class UserAPITest {
 						null,
 						true,
 						null,
+						null,
 						null)
 				});
 				throw new AssertException('Expected addUsers to fail');
@@ -272,6 +277,7 @@ private class UserAPITest {
 					Date.today(),
 					true,
 					null,
+					null,
 					null),
 				new Account.User(
 					id2,
@@ -282,6 +288,7 @@ private class UserAPITest {
 					Account.USER_STATUS_PENDING,
 					Date.today(),
 					false,
+					null,
 					null,
 					null)
 			});
@@ -320,6 +327,7 @@ private class UserAPITest {
 						null,
 						null,
 						true,
+						null,
 						null,
 						null)
 				});
@@ -365,6 +373,7 @@ private class UserAPITest {
 					Date.today(),
 					true,
 					null,
+					null,
 					null)
 			});
 			Test.stopTest();
@@ -377,5 +386,26 @@ private class UserAPITest {
 			System.assertEquals(APIErrorCode.UNKNOWN_USER, users[0].error.code);
 			System.assertEquals('Invalid UserId.', users[0].error.description);
 		}
+	}
+
+	@IsTest
+	static void test_APIUser_getStatusExternalForm() {
+		UserAPI.APIUser u1 = new UserAPI.APIUser(new Account.User(UUID.randomUUID(), UserInfo.getUserId()));
+
+		Test.startTest();
+		System.assertEquals(null, u1.getStatusExternalForm());
+		u1.userStatus = 'whatever';
+		System.assertEquals('whatever', u1.getStatusExternalForm());
+		u1.userStatus = 'Active';
+		System.assertEquals(Account.USER_STATUS_ACTIVE, u1.getStatusExternalForm());
+		u1.userStatus = 'ActivationRequired';
+		System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
+		u1.userStatus = 'ACTIVATIONSENT';
+		System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
+		u1.userStatus = 'closed';
+		System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
+		u1.userStatus = 'Disabled';
+		System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
+		Test.stopTest();
 	}
 }

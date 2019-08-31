@@ -591,7 +591,7 @@ public with sharing class AccountProducts {
 					}
 				}
 			}
-			
+
 			if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 		}
 	}
@@ -632,33 +632,42 @@ public with sharing class AccountProducts {
 		return result;
 	}
 
-	public static Map<String, List<Product.Role>> getRoles(final Set<String> products) {
+	@Future
+	private static void addRoles(final String rolesJson) {
+		DB.insertProductRoles((List<Product.Role>)JSON.deserialize(rolesJson, List<Product.Role>.class));
+	}
+
+	public static Map<String, Map<UUID, Product.Role>> getRoles(final Set<String> products) {
 		if (Collection.isEmpty(products)) throw new DocuSignException(Label.UndefinedArgument);
 
 		Map<String, List<Product.Role>> cachedRoles = DB.queryProductRoles();
 
-		Map<String, List<Product.Role>> result = new Map<String, List<Product.Role>>();
+		Map<String, Map<UUID, Product.Role>> result = new Map<String, Map<UUID, Product.Role>>();
 		Set<String> missingProducts = new Set<String>();
 		for (String p : products) {
 			if (!Product.isValidProduct(p)) throw new DocuSignException(Label.UnsupportedProducts);
 
 			String pl = p.toLowerCase();
+			Map<UUID, Product.Role> idsToRoles = new Map<UUID, Product.Role>();
 			if (cachedRoles.containsKey(pl)) {
-				result.put(pl, new List<Product.Role>(cachedRoles.get(pl)));
+				for (Product.Role r : cachedRoles.get(pl)) {
+					if (r != null) idsToRoles.put(r.id, r);
+				}
+				result.put(pl, idsToRoles);
 			} else {
 				missingProducts.add(pl);
 			}
 		}
 
 		if (Collection.isNotEmpty(missingProducts)) {
-			Map<String, List<Product.Role>> productRoles = RoleAPI.getInstance().getRoles(missingProducts);
+			Map<String, Map<UUID, Product.Role>> productRoles = RoleAPI.getInstance().getRoles(missingProducts);
 			List<Product.Role> toInsert = new List<Product.Role>();
 			for (String p : productRoles.keySet()) {
-				List<Product.Role> prs = productRoles.get(p);
-				result.put(p, new List<Product.Role>(prs));
-				toInsert.addAll(prs);
+				Map<UUID, Product.Role> prs = productRoles.get(p);
+				result.put(p, prs);
+				toInsert.addAll(prs.values());
 			}
-			DB.insertProductRoles(toInsert);
+			addRoles(JSON.serialize(toInsert));
 		}
 
 		return result;

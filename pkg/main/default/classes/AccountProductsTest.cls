@@ -819,7 +819,7 @@ private class AccountProductsTest {
 			insert pr1;
 
 			Test.startTest();
-			Map<String, List<Product.Role>> result = AccountProducts.getRoles(new Set<String> {
+			Map<String, Map<UUID, Product.Role>> result = AccountProducts.getRoles(new Set<String> {
 				Product.GEN, Product.NEGOTIATE, Product.ESIGNATURE, Product.CLM
 			});
 			Test.stopTest();
@@ -838,8 +838,11 @@ private class AccountProductsTest {
 			System.assertEquals(3, result.get(Product.CLM).size());
 
 			for (String p : result.keySet()) {
-				for (Product.Role pr : result.get(p)) {
+				for (UUID pId: result.get(p).keySet()) {
+					System.assert(UUID.isNotEmpty(pId));
+					Product.Role pr = result.get(p).get(pId);
 					System.assert(Product.isValidRole(pr));
+					System.assertEquals(pId, pr.id);
 				}
 			}
 
@@ -911,7 +914,7 @@ private class AccountProductsTest {
 		};
 
 		Test.startTest();
-		Map<String, List<Product.Role>> result = AccountProducts.getRoles(new Set<String> {
+		Map<String, Map<UUID, Product.Role>> result = AccountProducts.getRoles(new Set<String> {
 			Product.GEN, Product.NEGOTIATE, Product.CLM, Product.ESIGNATURE
 		});
 		Test.stopTest();
@@ -930,8 +933,11 @@ private class AccountProductsTest {
 		System.assertEquals(3, result.get(Product.CLM).size());
 
 		for (String p : result.keySet()) {
-			for (Product.Role pr : result.get(p)) {
+			for (UUID pId : result.get(p).keySet()) {
+				System.assert(UUID.isNotEmpty(pId));
+				Product.Role pr = result.get(p).get(pId);
 				System.assert(Product.isValidRole(pr));
+				System.assertEquals(pId, pr.id);
 			}
 		}
 	}

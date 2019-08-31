@@ -26,11 +26,12 @@ private class UserServiceTest {
 			UserMock.createDocuSignUser(false);
 
 			Test.startTest();
-			List<Account.User> result = UserService.DB.queryCurrentUsers(2);
+			Map<Id, Account.User> result = UserService.DB.queryCurrentUsers(2);
 			Test.stopTest();
 
-			System.assertEquals(2, Collection.size(result));
-			for (Account.User u : result) {
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+			for (Account.User u : result.values()) {
 				System.assertNotEquals(null, u);
 				System.assertNotEquals(null, u.sourceId);
 				System.assert(u.id != null);
@@ -117,31 +118,6 @@ private class UserServiceTest {
 	}
 
 	@IsTest
-	static void test_getCurrentUsers_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				UserService.getCurrentUsers(null);
-				throw new AssertException('Expected getCurrentUsers to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getCurrentUsers_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			Test.startTest();
-			List<Account.User> result = UserService.getCurrentUsers(1);
-			Test.stopTest();
-
-			System.assertEquals(1, Collection.size(result));
-		}
-	}
-
-	@IsTest
 	static void test_getAvailableUsers_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -196,6 +172,9 @@ private class UserServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assert(result.size() >= 4);
+			for (Account.User u : result) {
+				System.assert(Collection.isNotEmpty(u.roles));
+			}
 		}
 	}
 
@@ -247,7 +226,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Map<String, Set<String>>());
+			}, new Map<String, List<String>>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -281,7 +260,7 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Map<String, Set<String>>());
+			}, new Map<String, List<String>>());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -306,7 +285,7 @@ private class UserServiceTest {
 
 	@IsTest
 	static void test_addUsers_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			String u1Email = 'user1@unit.test';
@@ -318,8 +297,8 @@ private class UserServiceTest {
 			List<Account.User> result = UserService.addUsers(new List<Account.User> {
 				new Account.User(u1.Id, u1Email, 'User', 'One', true),
 				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Map<String, Set<String>> {
-				Product.ESIGNATURE => new Set<String> {
+			}, new Map<String, List<String>> {
+				Product.ESIGNATURE => new List<String> {
 					ESignatureProduct.ROLE_ADMINISTRATOR,
 					ESignatureProduct.ROLE_SENDER
 				}
@@ -484,6 +463,7 @@ private class UserServiceTest {
 					Date.today(),
 					true,
 					null,
+					null,
 					null),
 				new Account.User(
 					ID2,
@@ -494,6 +474,7 @@ private class UserServiceTest {
 					Account.USER_STATUS_PENDING,
 					Date.today(),
 					false,
+					null,
 					null,
 					null)
 			}, true);
@@ -550,6 +531,8 @@ private class UserServiceTest {
 
 	@IsTest
 	static void test_updateUserRoles_success() {
+		DocuSignAPIMock.success();
+
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u1 = UserMock.createClmAdministrator(false);
 			User u2 = UserMock.createDocuSignNegotiator(false);
@@ -557,10 +540,10 @@ private class UserServiceTest {
 
 			Test.startTest();
 			System.assert(UserService.updateUserRoles(new Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id, u3.Id },
-				new Map<String, Set<String>> {
-					Product.ESIGNATURE => new Set<String> { ESignatureProduct.ROLE_ADMINISTRATOR },
-					Product.GEN => new Set<String> { GenProduct.ROLE_GENERATOR },
-					Product.CLM => new Set<String> { ClmProduct.ROLE_VIEWER }
+				new Map<String, List<String>> {
+					Product.ESIGNATURE => new List<String> { ESignatureProduct.ROLE_ADMINISTRATOR },
+					Product.GEN => new List<String> { GenProduct.ROLE_GENERATOR },
+					Product.CLM => new List<String> { ClmProduct.ROLE_VIEWER }
 				}));
 			Test.stopTest();
 
@@ -737,11 +720,97 @@ private class UserServiceTest {
 			Set<String> products = new Set<String> { Product.GEN, Product.NEGOTIATE };
 
 			Test.startTest();
-			Map<String, Set<String>> result = UserService.getRoles(products);
+			Map<String, List<String>> result = UserService.getRoles(products);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(products, result.keySet());
 		}
+	}
+
+	@IsTest
+	static void test_getRoleIds_invalid_product() {
+		UUID clmAdminId = UUID.randomUUID();
+		UUID clmUserId = UUID.randomUUID();
+		UUID clmViewerId = UUID.randomUUID();
+		Map<String, Map<UUID, Product.Role>> accountRoles = new Map<String, Map<UUID, Product.Role>> {
+			Product.CLM => new Map<UUID, Product.Role> {
+				clmAdminId => new Product.Role(clmAdminId, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true),
+				clmUserId => new Product.Role(clmUserId, Product.CLM, ClmProduct.ROLE_USER, Label.User, false),
+				clmViewerId => new Product.Role(clmViewerId, Product.CLM, ClmProduct.ROLE_VIEWER, Label.Viewer, false)
+			}
+		};
+		Map<String, List<String>> targetRoles = new Map<String, List<String>> {
+			Product.CLM => new List<String> { ClmProduct.ROLE_USER },
+			Product.GEN => new List<String> { GenProduct.ROLE_GENERATOR }
+		};
+
+		Test.startTest();
+		try {
+			UserService.getRoleIds(accountRoles, targetRoles);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProducts, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getRoleIds_invalid_role() {
+		UUID clmAdminId = UUID.randomUUID();
+		UUID clmUserId = UUID.randomUUID();
+		UUID clmViewerId = UUID.randomUUID();
+		Map<String, Map<UUID, Product.Role>> accountRoles = new Map<String, Map<UUID, Product.Role>> {
+			Product.CLM => new Map<UUID, Product.Role> {
+				clmAdminId => new Product.Role(clmAdminId, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true),
+				clmUserId => new Product.Role(clmUserId, Product.CLM, ClmProduct.ROLE_USER, Label.User, false),
+				clmViewerId => new Product.Role(clmViewerId, Product.CLM, ClmProduct.ROLE_VIEWER, Label.Viewer, false)
+			}
+		};
+		Map<String, List<String>> targetRoles = new Map<String, List<String>> {
+			Product.CLM => new List<String> { ClmProduct.ROLE_USER, 'bad' }
+		};
+
+		Test.startTest();
+		try {
+			UserService.getRoleIds(accountRoles, targetRoles);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UnsupportedProductRoles, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getRoleIds_success() {
+		UUID clmAdminId = UUID.randomUUID();
+		UUID clmUserId = UUID.randomUUID();
+		UUID clmViewerId = UUID.randomUUID();
+		UUID dsAdminId = UUID.randomUUID();
+		UUID dsUserId = UUID.randomUUID();
+		UUID dsSenderId = UUID.randomUUID();
+
+		Map<String, Map<UUID, Product.Role>> accountRoles = new Map<String, Map<UUID, Product.Role>> {
+			Product.CLM => new Map<UUID, Product.Role> {
+				clmAdminId => new Product.Role(clmAdminId, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true),
+				clmUserId => new Product.Role(clmUserId, Product.CLM, ClmProduct.ROLE_USER, Label.User, false),
+				clmViewerId => new Product.Role(clmViewerId, Product.CLM, ClmProduct.ROLE_VIEWER, Label.Viewer, false)
+			},
+			Product.ESIGNATURE => new Map<UUID, Product.Role> {
+				dsAdminId => new Product.Role(dsAdminId, Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR, Label.Administrator, true),
+				dsUserId => new Product.Role(dsUserId, Product.ESIGNATURE, ESignatureProduct.ROLE_USER, Label.User, false),
+				dsSenderId => new Product.Role(dsSenderId, Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER, Label.Sender, false)
+			}
+		};
+		Map<String, List<String>> targetRoles = new Map<String, List<String>> {
+			Product.CLM => new List<String> { ClmProduct.ROLE_USER, ClmProduct.ROLE_VIEWER },
+			Product.ESIGNATURE => new List<String> { ESignatureProduct.ROLE_USER, ESignatureProduct.ROLE_SENDER }
+		};
+
+		Test.startTest();
+		Set<UUID> result = UserService.getRoleIds(accountRoles, targetRoles);
+		Test.stopTest();
+
+		System.assertEquals(new Set<UUID> { clmUserId, clmViewerId, dsUserId, dsSenderId }, result);
 	}
 }

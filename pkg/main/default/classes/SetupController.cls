@@ -128,9 +128,10 @@ public with sharing class SetupController extends Controller {
 					null,
 					canManageAccount == true,
 					null,
+					null,
 					APIError.none)
-			}, new Map<String, Set<String>> {
-				Product.ESIGNATURE => new Set<String> {
+			}, new Map<String, List<String>> {
+				Product.ESIGNATURE => new List<String> {
 					canManageAccount == true ? ESignatureProduct.ROLE_ADMINISTRATOR : ESignatureProduct.ROLE_USER
 				}
 			});
