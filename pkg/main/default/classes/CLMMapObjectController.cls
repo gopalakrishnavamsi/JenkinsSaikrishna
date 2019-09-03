@@ -24,14 +24,44 @@ public with sharing class CLMMapObjectController {
 	public static Boolean setMappedObject(EOS_Type__c eosDetails) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			insert eosDetails;
+            Map<String,List<String>> pathDetails=parsePath(eosDetails.Path__c);
+            if(pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')){
+                eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
+                eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
+                eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
+                String ObjectName=eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');                
+            }            
+            upsert eosDetails;
 			return true;
 		} catch (Exception e) {
 			throw Controller.wrapException(e.getMessage());
 		}
     }
+    
+    private static Map<String,List<String>> parsePath(String path){
+        Map<String,List<String>> result=new Map<String,List<String>>();
+        List<String> variables=new List<String>();
+        String formatted='';  
+        Integer index=0;
+        for(String folder:path.split('/')){
+            String objName=folder.substringAfter('{!').substringBefore('}');
+            if(String.isNotBlank(objName)){
+                variables.add(objName);
+                formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
+                index++;
+            }
+            else{
+                formatted += folder+'/';
+            }
+        }                
+        result.put('Path',new List<String>{path});
+        result.put('PathFormat',new List<String>{formatted});
+        result.put('Variables',variables);
+        
+        return result;
+    }
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled
 	public static Map<String, EOS_Type__c> getMappedObjectsList() {
 		try {
 			Permissions.verifyIsClmAdministrator();
@@ -55,13 +85,16 @@ public with sharing class CLMMapObjectController {
 	public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-			return MetadataService.getFields(schema.getGlobalDescribe().get(apiName), isChild);
+            SObjectType type = Schema.getGlobalDescribe().get(apiName);
+            List<MergeField> result= new List<MergeField>();
+            result.addAll(MetadataService.getFields(type, isChild));
+            return result;
 		} catch (Exception e) {
 			throw Controller.wrapException(e.getMessage());
         }
     }
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled
 	public static Integer getRecordCount() {
 		try {
 			Permissions.verifyIsClmAdministrator();
@@ -69,5 +102,5 @@ public with sharing class CLMMapObjectController {
 		} catch (Exception e) {
 			throw Controller.wrapException(e.getMessage());
 		}
-	}
+	}      
 }

@@ -412,9 +412,9 @@ public with sharing class AuthService {
 	private static final String JWT_HEADER;
 	@TestVisible
 	private static final String SCOPE_ADMIN = 'account_product_read signature impersonation account_product_activate '
-		+ 'spring_write spring_read manage_app_keys spring_content group_management_read group_management_write';
+		+ 'spring_write spring_read manage_app_keys spring_content group_management_read group_management_write clm_ui';
 	@TestVisible
-	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read spring_content';
+	private static final String SCOPE_USER = 'signature impersonation spring_write spring_read spring_content clm_ui';
 	@TestVisible
 	private static final String SCOPE_CONTENT = 'spring_content';
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
@@ -494,6 +494,44 @@ public with sharing class AuthService {
 			jwtSigningKey);
 		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(jwtToken);
 
+		Credentials.setToken(newToken);
+		return newToken;
+	}
+
+	public static String getAccessTokenWithClmScope() {
+		Credentials c = Credentials.getInstance();
+		return getAccessTokenWithClmScope(
+			c.token,
+			c.environment.accountBaseUrl,
+			c.user.id,
+			c.user.canManageAccount,
+			c.client.id,
+			c.client.privateKey).token;
+	}
+
+	@TestVisible
+	private static Credentials.AccessToken getAccessTokenWithClmScope(
+		final Credentials.AccessToken token,
+		final Url accountBaseUrl,
+		final UUID userId,
+		final Boolean canManageAccount,
+		final String clientId,
+		final Blob jwtSigningKey) {
+
+		if (accountBaseUrl == null || UUID.isEmpty(userId) || String.isBlank(clientId) || jwtSigningKey == null) {
+			throw new DocuSignException(Label.AccountNotConfigured);
+		}
+
+		//if (token != null && token.isValid) return token;
+
+		String jwtToken = generateJwt(
+			accountBaseUrl.getHost(),
+			userId,
+			'clm_ui',
+			clientId,
+			jwtSigningKey);
+            
+		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(jwtToken);
 		Credentials.setToken(newToken);
 		return newToken;
 	}

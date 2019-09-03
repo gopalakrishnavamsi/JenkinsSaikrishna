@@ -57,6 +57,18 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+ 	/**
+	 * Returns  Salesforce object type
+	 * 
+	 * @param recordId Id of record
+	 *
+	 * @return The Salesforce object.
+	 */
+    public static DescribeSObjectResult getObject(Id recordId){
+        if(recordId==null || String.isEmpty(recordId)) throw new DocuSignException(Label.UndefinedArgument);
+        return recordId.getSObjectType().getDescribe();
+    }
+
 	private static List<MergeField> getChildRelationships(final DescribeSObjectResult type) {
 		List<MergeField> result = new List<MergeField>();
 		for (Schema.ChildRelationship cr : type.getChildRelationships()) {
