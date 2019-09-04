@@ -124,8 +124,11 @@
 
     var sortField = event.getParam('fieldName');
     switch (sortField) {
-      case 'Name':
-        sortParams.sortedByLabel = $A.get('$Label.c.NameLabel');
+      case 'FirstName':
+        sortParams.sortedByLabel = $A.get('$Label.c.FirstName');
+        break;
+      case 'LastName':
+        sortParams.sortedByLabel = $A.get('$Label.c.LastName');
         break;
       case 'Email' :
         sortParams.sortedByLabel = $A.get('$Label.c.EmailAddress');
