@@ -1,7 +1,10 @@
-<aura:component>
+<aura:component controller="CLMWorkflowController" extends="c:CLMUtility">
 	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
 	<aura:attribute name="currentTabId" type="string" default="{!$Label.c.Dashboard}" />
+	<aura:attribute name="imageURL" type="String" default="{!($Resource.CLMWorkflowDashboard)}" />
+	<aura:attribute name="imageURL1" type="String" default="{!($Resource.CLMWorkflowButton)}" />
 	<aura:attribute name="steps" type="String[]" />
+	<aura:attribute name="redirectCLM" type="String" />
 	<aura:handler name="init" value="{!this}" action="{!c.init}" />
 
 	<div class="slds-p-around_x-large">
@@ -10,21 +13,21 @@
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.CreateAndManageWorkflows}"
-				imageURL="{!($Resource.CLMWorkflowIllustration1)}" summary="{!$Label.c.CreateAndManageSummary }" isLink="true"
+				imageURL="{!v.imageURL1}" summary="{!$Label.c.CreateAndManageSummary }" isLink="true"
 				link="{!$Label.c.LearnHowTo}" hyperlinkedURI="['tab','8']"
-				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" />
+				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" firstButtonNavigation="{!v.redirectCLM}" />
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMInformationHelp isSubTitle="false" subTitle="{!$Label.c.CreateAndManageWorkflows}"
-				imageURL="{!($Resource.CLMWorkflowIllustration2)}" summary="{!$Label.c.CustomWorkflowButtonSummary}" isLink="true"
+				imageURL="{!v.imageURL1}" summary="{!$Label.c.CustomWorkflowButtonSummary}" isLink="true"
 				link="{!$Label.c.LearnHowToAddAButton}" firstButtonName="{!$Label.c.OpenObjectManagerButton}" />
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" imageURL="{!($Resource.CLMWorkflowIllustration3)}"
+			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" imageURL="{!v.imageURL}"
 				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" />
 		</div>
 		<div class="slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowSteps}" imageURL="{!($Resource.CLMWorkflowIllustration4)}"
+			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowSteps}" imageURL="{!v.imageURL}"
 				summary="{!$Label.c.WorkflowStepsSummary}" isSteps="true" steps="{!v.steps}" />
 		</div>
 		<div class=" slds-p-left_small slds-p-horizontal_medium"></div>
