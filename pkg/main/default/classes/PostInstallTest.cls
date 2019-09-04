@@ -385,4 +385,42 @@ private class PostInstallTest {
 			System.assert(Permissions.isDocuSignAdministrator());
 		}
 	}
+
+	@isTest
+	static void test_createDefaultCLMObjMappings_mappings_do_not_exist() {
+		System.assertEquals(null, EOS_Type__c.getOrgDefaults().Name);
+
+		Test.startTest();
+		PostInstallResults result = PostInstall.createDefaultCLMObjMappings();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@isTest
+	static void test_createDefaultCLMObjMappings_mappings_exist() {
+		EOS_Type__c eos_1 = EOS_Type__c.getOrgDefaults();
+		eos_1.FolderName__c = UUID.randomUUID().toShortString();
+		eos_1.Path__c = UUID.randomUUID().toShortString();
+		eos_1.FolderNameFormat__c = UUID.randomUUID().toShortString();
+		eos_1.Variables__c = UUID.randomUUID().toShortString();
+		eos_1.PathFormat__c = UUID.randomUUID().toShortString();
+		eos_1.Name = UUID.randomUUID().toShortString();
+		insert eos_1;
+
+		EOS_Type__c eos_2 = new EOS_Type__c();
+		eos_2.FolderName__c = UUID.randomUUID().toShortString();
+		eos_2.Path__c = UUID.randomUUID().toShortString();
+		eos_2.FolderNameFormat__c = UUID.randomUUID().toShortString();
+		eos_2.Variables__c = UUID.randomUUID().toShortString();
+		eos_2.PathFormat__c = UUID.randomUUID().toShortString();
+		eos_2.Name = UUID.randomUUID().toShortString();
+		insert eos_2;
+
+		Test.startTest();
+		PostInstallResults result = PostInstall.createDefaultCLMObjMappings();
+		Test.stopTest();
+
+		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
+	}
 }
