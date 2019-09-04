@@ -115,6 +115,8 @@
         }))
         .catch(function (error) {
           helper.showToast(component, error, 'error');
+          var showSetupComponent = component.get('v.showSetupComponent');
+          showSetupComponent();
         });
     }
   },

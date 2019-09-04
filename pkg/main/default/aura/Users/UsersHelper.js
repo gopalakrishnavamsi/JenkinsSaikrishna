@@ -157,7 +157,7 @@
       filterOption.disabled = false;
 
       filters.forEach(function (filter) {
-        if (filter.type == filterOption.label) {
+        if (filter.type === filterOption.label) {
           filterOption.disabled = true;
         }
       });
@@ -182,7 +182,7 @@
       return !$A.util.isEmpty(filter.value) && !$A.util.isEmpty(filter.type);
     });
 
-    if (validFilters.length == 0) {
+    if (validFilters.length === 0) {
       component.set('v.sfUsers', []);
       component.set('v.hasPopulatedFilters', false);
       return;
@@ -612,13 +612,15 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        helper.getUsers(component, event, helper);
         helper.showToast(component, $A.get('$Label.c.UserAddedSuccessfully'), 'success');
+        component.set('v.addUsersLoading', false);
+        component.find('add-users').hide();
+        helper.initializeComponent(component, event, helper);
       } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        component.set('v.addUsersLoading', false);
+        component.find('add-users').hide();
       }
-      component.set('v.addUsersLoading', false);
-      component.find('add-users').hide();
     });
     $A.enqueueAction(action);
   },
@@ -668,13 +670,13 @@
         rolesMap.negotiate = negotiateRoles;
       }
     } else if (component.get('v.context') === 'clm') {
-      var esignRoles = [];
+      var clmEsignRoles = [];
       //If context is e sign then add the default e sign user role
-      esignRoles.push(component.get('v.eSignRole'));
+      clmEsignRoles.push(component.get('v.eSignRole'));
       if (component.get('v.canManageAccount') === true) {
-        esignRoles.push('Administrator');
+        clmEsignRoles.push('Administrator');
       }
-      rolesMap.e_sign = esignRoles;
+      rolesMap.e_sign = clmEsignRoles;
 
       if (!$A.util.isEmpty(component.get('v.clmRole'))) {
         var clmRoles = [];
