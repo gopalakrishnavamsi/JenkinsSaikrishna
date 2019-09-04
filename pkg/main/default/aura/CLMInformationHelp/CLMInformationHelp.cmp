@@ -9,6 +9,7 @@
 	<aura:attribute name="link" type="String" />
 	<aura:attribute name="hyperlinkedURI" type="List" />
 	<aura:attribute name="firstButtonName" type="String" />
+	<aura:attribute name="firstButtonNavigation" type="String" />
 
 	<aura:if isTrue="{!v.isSubTitle}">
 		<div class="slds-text-title_bold slds-p-bottom_medium ds-card-heading2">
@@ -36,7 +37,8 @@
 		<div class="slds-col_bump-right">
 			<span>
 				<lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
-					iconName="utility:new_window" iconPosition="right" class="slds-m-right_x-small" />
+					iconName="utility:new_window" iconPosition="right" class="slds-m-right_x-small"
+					onclick="{!c.buttonClick}" />
 			</span>
 		</div>
 	</div>
