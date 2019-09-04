@@ -28,7 +28,7 @@
 		</aura:if>
 		<aura:if isTrue="{!v.eosDetails.connectionError}">
 			<div class="slds-p-top_large slds-align_absolute-center ds-gray-color">
-				<lightning:icon iconName="utility:warning" size="large"/>
+				<lightning:icon iconName="utility:warning" size="large" />
 			</div>
 			<div class="slds-p-top_large ds-font-size slds-align_absolute-center ds-gray-color">
 				{!$Label.c.CouldNotConnectToCLM}
