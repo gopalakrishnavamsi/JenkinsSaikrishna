@@ -108,6 +108,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static List<Account.User> addUsers(final String users, final String roles) {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			if (users == null || String.isBlank(users)) throw new DocuSignException(Label.UndefinedArgument);
 
@@ -163,6 +164,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled(Cacheable = true)
 	public static List<Profile> getProfiles() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
 				'Id', 'Name'
@@ -175,6 +177,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled(Cacheable = true)
 	public static List<PermissionSet> getPermissionSets() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			Permissions.verifyIsQueryable(PermissionSet.getSObjectType(), new List<String> {
 				'Id', 'Label', 'IsOwnedByProfile', 'Name'
@@ -188,23 +191,22 @@ public with sharing class SetupController extends Controller {
 	//return a list of filtered SF users to be added
 	@AuraEnabled
 	public static List<User> filterSFUsers(String jsonString) {
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
+			'Id', 'FirstName', 'LastName', 'Email', 'ProfileId',
+			Application.namespacePrefix + 'Username__c',
+			Application.namespacePrefix + 'Provisioned__c',
+			Application.namespacePrefix + 'Status__c'
+		});
+
+		Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
+			'Id', 'Name'
+		});
+
+		Permissions.verifyIsQueryable(PermissionSetAssignment.getSObjectType(), new List<String> {
+			'Id', 'PermissionSetId', 'AssigneeId'
+		});
 		try {
-			Permissions.verifyIsDocuSignAdministrator();
-			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
-				'Id', 'FirstName', 'LastName', 'Email', 'ProfileId',
-				Application.namespacePrefix + 'Username__c',
-				Application.namespacePrefix + 'Provisioned__c',
-				Application.namespacePrefix + 'Status__c'
-			});
-
-			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
-				'Id', 'Name'
-			});
-
-			Permissions.verifyIsQueryable(PermissionSetAssignment.getSObjectType(), new List<String> {
-				'Id', 'PermissionSetId', 'AssigneeId'
-			});
-
 			Map<String, Object> parsedRes = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
 			List<Object> filters = (List<Object>)parsedRes.get('filters');
 			String name = '';
@@ -249,6 +251,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static List<Account.User> getUsers() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			return UserService.getUsers(USER_LIMIT);
 		} catch (Exception ex) {
@@ -281,6 +284,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static Boolean doPlatformAuthorizationSettingsExist() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			return (settings != null && String.isNotBlank(settings.ScmWebBaseUrl__c));
@@ -292,6 +296,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static List<Product> getProductsOnAccount() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			return AccountProducts.getProducts();
 
@@ -302,6 +307,7 @@ public with sharing class SetupController extends Controller {
 
 	@AuraEnabled
 	public static String getProductRoles() {
+		Permissions.verifyIsDocuSignAdministrator();
 		try {
 			return JSON.serialize(Product.getValidProductRoles());
 
