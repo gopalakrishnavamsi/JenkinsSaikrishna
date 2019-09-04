@@ -1,5 +1,5 @@
 ({
-	init: function (component, e, helper) {
+	init: function (component, event, helper) {
 		var steps = [];
 		steps.push($A.get('$Label.c.DocumentStep1'));
 		steps.push($A.get('$Label.c.DocumentStep2'));
