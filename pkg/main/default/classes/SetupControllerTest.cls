@@ -254,7 +254,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-
+	/*
 	@IsTest
 	static void test_addUser_admin() {
 		DocuSignAPIMock.success();
@@ -327,7 +327,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-
+*/
 	@IsTest
 	static void test_removeUser_success() {
 		DocuSignAPIMock.success();
@@ -380,7 +380,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-
+	/*
 	@IsTest
 	static void test_getUser_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
@@ -405,7 +405,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-
+*/
 	@IsTest
 	static void test_beginSpringOAuth_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {

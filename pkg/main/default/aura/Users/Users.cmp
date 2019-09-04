@@ -1,169 +1,299 @@
-<aura:component controller="SetupController">
-
-    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-
-    <aura:attribute name="tableLoading" type="Boolean"/>
-    <aura:attribute name="modalLoading" type="Boolean"/>
-
-    <aura:attribute name="uiHelper" type="Object" access="private"/>
-    <aura:attribute name="data" type="Object" access="private"/>
-    <aura:attribute name="formData" type="Object" access="private"/>
-    <aura:attribute name="showAddUserModal" type="Boolean" access="private"/>
-    <aura:attribute name="showRemoveUserModal" type="Boolean" access="private"/>
-    <aura:attribute name="showSuccessToast" type="Boolean" access="private"/>
-    <aura:attribute name="dsUserSearchTerm" type="String" access="private"/>
-
-    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
-
-    <aura:attribute name="lookupValue" type="String" access="private"/>
-    <aura:handler name="change" value="{!v.lookupValue}" action="{!c.removeLookupErrorState}"/>
-
+<aura:component description="Users" controller="SetupController">
+    <aura:attribute name="context" type="String"/>
+    <aura:attribute name="products" type="Product[]"/>
+    <aura:attribute name="userTableLoading" type="Boolean" default="false"/>
+    <aura:attribute name="userSearchTerm" type="String" access="private"/>
     <aura:attribute name="users" type="Account.User[]" access="private"/>
-    <aura:handler name="change" value="{!v.users}" action="{!c.handleUsersChange}"/>
-
     <aura:attribute name="filteredUsers" type="Account.User[]" access="private"/>
+    <aura:attribute name="userSortParams" type="Object" access="private"/>
+    <aura:attribute name="dataRows" type="Object"/>
+    <aura:attribute name="dataColumns" type="List"/>
+    <aura:attribute name="selectedRows" type="List"/>
+    <aura:attribute name="formData" type="Object" access="private"/>
+    <aura:attribute name="currentUserId" type="String" access="private"/>
+
+    <!-- add users attributes -->
+    <aura:attribute name="sfUsers" type="Object[]" access="private"/>
+    <aura:attribute name="addUserColumns" type="Object[]" access="private"/>
+    <aura:attribute name="addUserSortParams" type="Object" access="private"/>
+    <aura:attribute name="filters" type="Object[]" access="private"/>
+    <aura:attribute name="hasPopulatedFilters" type="Boolean" access="private"/>
+    <aura:attribute name="filterOptions" type="Object[]" access="private"/>
+    <aura:attribute name="profiles" type="Object[]" access="private"/>
+    <aura:attribute name="permSets" type="Object[]" access="private"/>
+    <aura:attribute name="searching" type="Boolean" access="private"/>
+    <aura:attribute name="hasSelectedUsers" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="selectedUsersCount" type="Integer" default="0" access="private"/>
+    <aura:attribute name="filterLabel" type="String" access="private"/>
+    <aura:attribute name="addUsersLoading" type="Boolean" default="false"/>
+    <aura:attribute name="addUsersList" type="Account.User[]"/>
+    <!-- end of add user attributes -->
+    <aura:attribute name="canManageAccount" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="eSignRole" type="String" default="User" access="private"/>
+    <aura:attribute name="genRole" type="String" default="" access="private"/>
+    <aura:attribute name="negotiateRole" type="String" default="" access="private"/>
+    <aura:attribute name="clmRole" type="String" default="" access="private"/>
+
+    <!-- scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <!-- end of scripts -->
+
+    <!-- register events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <!-- handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}"/>
+    <aura:handler name="change" value="{!v.users}" action="{!c.handleUsersChange}"/>
     <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
 
-    <aura:if isTrue="{!v.tableLoading}">
-        <c:BlueSpinner/>
-    </aura:if>
-
-    <div class="slds-scope">
-        <div class="slds-scoped-notification slds-box_border slds-theme_shade slds-m-bottom_x-large" role="status">
-            <div class="slds-grid slds-gutters slds-p-around_small">
-                <div class="slds-col">
-                    <h4 class="slds-text-heading_small">{!$Label.c.AddToDocuSign}</h4>
-                    <p class="slds-m-top_x-small">
-                            {!$Label.c.AddToDocuSignDetails}
-                    </p>
+    <!-- Section for managing users -->
+    <div>
+        <div class="slds-p-around_large">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col ds-users-componentHeader">
+                    <aura:if isTrue="{!v.context == 'e_sign'}">
+                        {!$Label.c.DocuSignUsers}
+                    </aura:if>
+                    <aura:if isTrue="{!v.context == 'clm'}">
+                        {!$Label.c.DocuSignCLMUsers}
+                    </aura:if>
                 </div>
+                <!-- Add users button -->
                 <div class="slds-col slds-no-flex">
-                    <lightning:button label="{!$Label.c.AddUser}" variant="brand" onclick="{!c.showAddUserModal}"/>
+                    <div class="slds-button-group">
+                        <lightning:button label="{!$Label.c.AddUser}"
+                                          disabled="{!if(v.userTableLoading, true, false)}"
+                                          onclick="{!c.showAddUsersModal}"/>
+
+                        <lightning:buttonMenu class="slds-button_last" menuAlignment="right"
+                                              disabled="{!if(v.userTableLoading, true, false)}">
+                            <lightning:menuItem label="{!$Label.c.EditPermissions}"
+                                                disabled="{!if(empty(v.selectedRows), true, false)}"
+                                                onactive="{!c.editPermissionsMultipleUsers}"/>
+                            <lightning:menuItem label="{!$Label.c.RemoveAndClose}"
+                                                disabled="{!if(empty(v.selectedRows), true, false)}"
+                                                onactive="{!c.removeAndCloseMultipleUsers}"/>
+                        </lightning:buttonMenu>
+
+                    </div>
+                </div>
+            </div>
+            <div class="slds-clearfix slds-m-top_x-small">
+                <div class="slds-size_2-of-8 slds-float_right">
+                    <lightning:input type="search" placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
+                                     value="{!v.userSearchTerm}" onchange="{!c.handleUsersChange}"
+                                     variant="label-hidden" disabled="{!if(v.userTableLoading, true, false)}"/>
                 </div>
             </div>
         </div>
 
-        <div class="slds-grid slds-grid_vertical-align-center slds-grid_pull-padded slds-m-bottom_medium">
-            <div class="slds-col slds-size_1-of-3 slds-p-horizontal_small">
-                <h3 class="slds-text-heading_medium">{!$Label.c.EnabledInDocuSign}</h3>
+        <aura:if isTrue="{!v.userTableLoading}">
+            <div class="ds-users-spinner-container">
+                <c:BlueSpinner/>
             </div>
-            <div class="slds-col slds-size_2-of-3 slds-p-horizontal_small slds-text-align_right slds-grid slds-gutters_xx-small">
-                <div class="slds-col">
-                    <lightning:input aura:id="searchBy" variant="label-hidden" label="Search By"
-                                     value="{!v.dsUserSearchTerm}"
-                                     class="slds-show_inline-block" type="search"
-                                     onchange="{!c.handleUsersChange}"
-                                     placeholder="{!$Label.c.SearchByName}"/>
-                </div>
-            </div>
-        </div>
 
-        <aura:if isTrue="{!not(empty(v.filteredUsers))}">
-            <c:strike_dataGrid aura:id="table" class="ds-user-table" data="{!v.data}" loadMoreAmount="10"
-                               scrollable="true"/>
             <aura:set attribute="else">
-                <p class="slds-text-color_weak slds-text-align_center slds-m-top_medium">
-                    <em>{!$Label.c.NoSearchResults}</em>
-                </p>
+                <aura:if isTrue="{!not(empty(v.dataRows))}">
+                    <lightning:datatable
+                            columns="{!v.dataColumns}"
+                            data="{!v.dataRows}"
+                            keyField="id"
+                            onrowselection="{!c.handleRowSelection}"
+                            onrowaction="{!c.handleRowAction}"
+                            sortedBy="{!v.userSortParams.sortedBy}"
+                            sortedDirection="{!v.userSortParams.sortedDirection}"
+                            onsort="{!c.sortUserTable}"/>
+
+                    <aura:set attribute="else">
+                        <p class="slds-text-color_weak slds-text-align_center slds-m-top_medium">{!$Label.c.NoSearchResults}</p>
+                    </aura:set>
+                </aura:if>
             </aura:set>
         </aura:if>
 
-        <!-- New User Modal -->
-        <div class="{!if(v.modalLoading, 'ds-pointer-events_none', '')}">
-            <c:strike_modal aura:id="modal"
-                            title="{!$Label.c.AddUser}"
-                            showModal="{!v.showAddUserModal}"
-                            showClose="{!not(v.modalLoading)}"
-                            strike_evt_modalCloseButtonClicked="{!c.cancelAddUser}">
+        <div class="ds-addUsers-modal">
+            <c:strike_modal aura:id="add-users" title="{!$Label.c.AddUser}">
 
-                <div class="slds-p-horizontal_xxx-small slds-p-bottom_x-small slds-is-relative">
-                    <c:strike_lookup aura:id="lookup"
-                                     value="{!v.lookupValue}"
-                                     label="{!$Label.c.SalesforceUser}"
-                                     object="User"
-                                     searchField="Name"
-                                     placeholder="{!$Label.c.SelectUser}"
-                                     iconName="standard:user"
-                                     subtitleField="Email"
-                                     order="Name"
-                                     limit="3"
-                                     loadingMessage="{!$Label.c.Loading}"
-                                     errorMessage="{!$Label.c.FieldError}"
-                                     required="true"/>
+                <aura:if isTrue="{!v.addUsersLoading}">
+                    <div class="ds-add-users-spinner-container">
+                        <c:BlueSpinner/>
+                    </div>
+                </aura:if>
 
-                    <hr class="slds-m-top_large slds-m-bottom_medium"/>
-
-                    <div class="ds-user-form">
-                        <div class="slds-grid slds-gutters slds-wrap">
-                            <aura:if isTrue="{!v.showAddUserModal}">
-                                <!-- Resets lightning:input error states when closed -->
-                                <c:strike_input aura:id="input"
-                                                value="{!v.formData.user.firstName}"
-                                                type="text"
-                                                label="{!$Label.c.FirstName}"
-                                                errorMessage="{!$Label.c.FieldError}"
-                                                required="true"
-                                                class="slds-col slds-size_1-of-2 slds-grow-none"
-                                                disabled="{!empty(v.formData.user)}"
-                                />
-
-                                <c:strike_input aura:id="input"
-                                                value="{!v.formData.user.lastName}"
-                                                type="text"
-                                                label="{!$Label.c.LastName}"
-                                                errorMessage="{!$Label.c.FieldError}"
-                                                required="true"
-                                                class="slds-col slds-size_1-of-2 slds-grow-none"
-                                                disabled="{!empty(v.formData.user)}"
-                                />
-
-                                <c:strike_input aura:id="input"
-                                                value="{!v.formData.user.email}"
-                                                type="email"
-                                                label="{!$Label.c.EmailAddress}"
-                                                errorMessage="{!$Label.c.FieldError}"
-                                                required="true"
-                                                class="slds-col slds-size_1-of-2 slds-grow-none"
-                                                disabled="{!empty(v.formData.user)}"
-                                />
-
-                                <div class="slds-form-element slds-col slds-size_1-of-2 slds-grow-none">
-                                    <div class="slds-form-element__label">&nbsp;</div>
-                                    <c:strike_input aura:id="canManageAccount"
-                                                    type="checkbox"
-                                                    label="{!$Label.c.CanManage}"
-                                                    disabled="{!empty(v.formData.user)}"
-                                    />
-                                </div>
-                            </aura:if>
+                <div class="{!'slds-grid slds-grid_vertical' + if(v.addUsersLoading, ' ds-fadeBackground')}">
+                    <div class="slds-p-vertical_x-small slds-p-horizontal_small slds-shrink-none slds-theme_shade">
+                        <div class="slds-text-title_caps ds-addUsers-sectionTitle">
+                            {!$Label.c.ApplicationRolesLabel}
                         </div>
+                        <div class="slds-grid slds-gutters_x-small slds-m-bottom_large slds-m-top_xx-small">
+                            <aura:iteration items="{!v.products}" var="product" indexVar="productIndex">
+                                <aura:if isTrue="{!and(product.name == 'e_sign', v.context == 'e_sign')}">
+                                    <div class="slds-col">
+                                        <lightning:combobox label="{!$Label.c.TabESignature}" value="{!v.eSignRole}"
+                                                            disabled="true" options="{!product.roles}"/>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!product.name == 'gen'}">
+                                    <div class="slds-col">
+                                        <lightning:combobox label="{!$Label.c.GenBadgeText}"
+                                                            placeholder="{!$Label.c.SelectApplicationRole}"
+                                                            options="{!product.roles}" value="{!v.genRole}"
+                                                            disabled="{!v.addUsersLoading}"/>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!product.name == 'negotiate'}">
+                                    <div class="slds-col">
+                                        <lightning:combobox label="{!$Label.c.NegotiateBadgeText}"
+                                                            placeholder="{!$Label.c.SelectApplicationRole}"
+                                                            options="{!product.roles}" value="{!v.negotiateRole}"
+                                                            disabled="{!v.addUsersLoading}"/>
+                                    </div>
+                                </aura:if>
+                                <aura:if isTrue="{!product.name == 'clm'}">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning:combobox label="{!$Label.c.DocuSignCLM}"
+                                                            placehplaceholder="{!$Label.c.SelectApplicationRole}"
+                                                            options="{!product.roles}" value="{!v.clmRole}"
+                                                            disabled="{!v.addUsersLoading}"/>
+                                    </div>
+                                </aura:if>
+                            </aura:iteration>
+                        </div>
+
+                        <div class="slds-border_bottom"></div>
+                        <aura:if isTrue="{!v.context == 'e_sign'}">
+                            <div class="slds-m-bottom_small slds-m-top_small">
+                                <div class="slds-text-title_caps ds-addUsers-sectionTitle">
+                                    {!$Label.c.ApplicationAccountAccessLabel}
+                                </div>
+                                <div class="slds-grid slds-gutters_x-small slds-m-bottom_small slds-m-top_xx-small">
+                                    <div class="slds-col slds-m-top_xx-small">
+                                        <lightning:input type="checkbox" label="{!$Label.c.CanManage}"
+                                                         checked="{!v.canManageAccount}" value="{!v.canManageAccount}"
+                                                         disabled="{!v.addUsersLoading}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-border_bottom"></div>
+                        </aura:if>
+                    </div>
+
+                    <div class="slds-p-vertical_x-small slds-p-horizontal_small slds-shrink-none slds-theme_shade">
+                        <div class="slds-text-title_caps ds-addUsers-sectionTitle">
+                            {!$Label.c.FilterUsersLabel}
+                        </div>
+
+                        <aura:iteration items="{!v.filters}" var="filter" indexVar="filterIndex">
+                            <div class="slds-grid slds-gutters_x-small slds-m-top_xx-small">
+                                <div class="slds-col">
+                                    <div class="slds-grid slds-gutters_x-small slds-m-bottom_x-small">
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <lightning:select label="{!$Label.c.FilteredByLabel}"
+                                                              class="{!if(not(filterIndex == 0), 'ds-no-label')}"
+                                                              value="{!filter.type}" name="{!filterIndex}"
+                                                              onchange="{!c.filterChanged}"
+                                                              disabled="{!v.addUsersLoading}">
+
+                                                <aura:iteration items="{!v.filterOptions}" var="filterOption">
+                                                    <option disabled="{!filterOption.disabled}">{!filterOption.label}</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <aura:if isTrue="{!filter.type == 'User'}">
+                                                <lightning:input type="text" label="{!$Label.c.Value}"
+                                                                 placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
+                                                                 class="{!if(not(filterIndex == 0), 'ds-no-label')}"
+                                                                 value="{!filter.value}" onchange="{!c.filterUsers}"
+                                                                 disabled="{!v.addUsersLoading}"/>
+                                            </aura:if>
+
+                                            <aura:if isTrue="{!filter.type == 'Profile'}">
+                                                <lightning:select label="{!$Label.c.Value}"
+                                                                  class="{!if(not(filterIndex == 0), 'ds-no-label')}"
+                                                                  value="{!filter.value}" onchange="{!c.filterUsers}"
+                                                                  disabled="{!v.addUsersLoading}">
+                                                    <option value="" selected="selected"
+                                                            disabled="disabled">{!$Label.c.Select}</option>
+                                                    <aura:iteration items="{!v.profiles}" var="profile">
+                                                        <option value="{!profile.Id}">{!profile.Name}</option>
+                                                    </aura:iteration>
+                                                </lightning:select>
+                                            </aura:if>
+
+                                            <aura:if isTrue="{!filter.type == 'Permission Set'}">
+                                                <lightning:select label="{!$Label.c.Value}"
+                                                                  class="{!if(not(filterIndex == 0), 'ds-no-label')}"
+                                                                  value="{!filter.value}" onchange="{!c.filterUsers}"
+                                                                  disabled="{!v.addUsersLoading}">
+                                                    <option value="" selected="selected"
+                                                            disabled="disabled">{!$Label.c.Select}</option>
+                                                    <aura:iteration items="{!v.permSets}" var="permSet">
+                                                        <option value="{!permSet.Id}">{!permSet.Label}</option>
+                                                    </aura:iteration>
+                                                </lightning:select>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </div>
+                                <aura:if isTrue="{!v.filters.length > 1}">
+                                    <div class="slds-col slds-no-flex">
+                                        <aura:if isTrue="{!filterIndex == 0}">
+                                            <div class="slds-form-element__label slds-show">&nbsp;</div>
+                                        </aura:if>
+                                        <lightning:buttonIcon iconName="utility:close" value="{!filterIndex}"
+                                                              class="ds-remove-button slds-m-top_x-small" variant="bare"
+                                                              onclick="{!c.removeFilter}"
+                                                              disabled="{!v.addUsersLoading}"/>
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </aura:iteration>
+
+                        <aura:if isTrue="{!v.filters.length lt v.filterOptions.length}">
+                            <lightning:button label="{!$Label.c.AddFilterLabel}"
+                                              class="slds-m-bottom_medium slds-m-top_xx-small" iconName="utility:add"
+                                              onclick="{!c.addFilter}" disabled="{!v.addUsersLoading}"/>
+                        </aura:if>
+                        <div class="slds-border_bottom slds-m-bottom_small"></div>
+                        <p class="slds-text-color_weak slds-text-body_small">
+                            {!v.sfUsers.length} {! ' ' + $Label.c.UsersLabel + ' '}
+                            &bull; {! ' ' + $Label.c.SortedByLabel + ' '} {!v.addUserSortParams.sortedByLabel}
+                            <aura:if isTrue="{!not(empty(v.filterLabel))}">
+                                &bull; {!$Label.c.FilteredByLabel + ' '} {!v.filterLabel}
+                            </aura:if>
+                            <aura:if isTrue="{!v.selectedUsersCount > 0}">
+                                &bull;
+                                <strong>{!v.selectedUsersCount + ' '}</strong>
+                                {!$Label.c.UsersSelectedLabel}
+                            </aura:if>
+                        </p>
+                    </div>
+                    <div class="slds-scrollable slds-grow">
+                        <lightning:datatable
+                                aura:id="sfUsers"
+                                sortedBy="{!v.addUserSortParams.sortedBy}"
+                                sortedDirection="{!v.addUserSortParams.sortedDirection}"
+                                onsort="{!c.sortAddUsersTable}"
+                                keyField="Id"
+                                data="{!v.sfUsers}"
+                                columns="{!v.addUserColumns}"
+                                onrowselection="{!c.setTotalCount}"
+                                hideCheckboxColumn="false"/>
+
+                        <aura:if isTrue="{!empty(v.sfUsers)}">
+                            <div class="{!'slds-text-heading_small slds-text-color_weak slds-p-around_xx-large slds-text-align_center' + if(v.searching, ' slds-hidden')}">{!if(v.hasPopulatedFilters, $Label.c.NoSearchResults, $Label.c.BeginFilterLabel)}</div>
+                        </aura:if>
                     </div>
                 </div>
 
                 <aura:set attribute="footerButtons">
-                    <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.cancelAddUser}"
-                                      disabled="{!v.modalLoading}"/>
-                    <lightning:button label="{!$Label.c.Add}" aura:id="primaryFooterButton" variant="brand"
-                                      onclick="{!c.validateAddUserForm}" disabled="{!v.modalLoading}"/>
-                </aura:set>
-            </c:strike_modal>
-        </div>
-        <!-- /New User Modal -->
-
-        <!-- Remove User Modal -->
-        <div class="slds-scope">
-            <c:strike_modal aura:id="modal"
-                            title="{!$Label.c.RemoveUser}"
-                            variant="error"
-                            showModal="{!v.showRemoveUserModal}"
-                            strike_evt_modalCloseButtonClicked="{!c.hideRemoveUserModal}">
-                <p class="slds-text-align_center">{!format($Label.c.RemoveUserConfirm_1, v.formData.user.email)}</p>
-
-                <aura:set attribute="footerButtons">
-                    <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.hideRemoveUserModal}"/>
-                    <lightning:button label="{!$Label.c.Remove}" variant="brand" onclick="{!c.removeDocuSignUser}"/>
+                    <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.closeAddUsersModal}"
+                                      disabled="{!v.addUsersLoading}"/>
+                    <lightning:button label="{!$Label.c.AddUser}"
+                                      disabled="{!or(not(v.selectedUsersCount > 0), v.addUsersLoading)}"
+                                      variant="brand" onclick="{!c.handleAddUsers}"/>
                 </aura:set>
             </c:strike_modal>
         </div>
