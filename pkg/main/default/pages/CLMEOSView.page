@@ -1,0 +1,66 @@
+<apex:page controller="CLMEOSViewController">
+	<apex:slds />
+	<style>
+		.ds-main {
+			width: 100%;
+		}
+
+		.ds-font-size {
+			font-size: 1.25rem;
+		}
+
+		.ds-gray-color {
+			background-color: #f2f2f2
+		}
+	</style>
+	<apex:form>
+		<apex:outputPanel rendered="{!AND(mappingExists == false, connectionError == false)}">
+			<div class="slds-scope">
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
+					<svg class="slds-icon" style="fill:#AB7C94;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+					</svg>
+				</div>
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
+					{!SUBSTITUTE($Label.ObjectNotMappedToDocuSignCLM, "{0}", objectType)}
+				</div>
+				<div class="slds-p-bottom_large slds-align_absolute-center ds-gray-color ds-font-size">
+					{!$Label.MapToViewFolders}
+				</div>
+			</div>
+		</apex:outputPanel>
+		<apex:outputPanel rendered="{!AND(mappingExists == false, connectionError == true)}">
+			<div class="slds-scope">
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
+					<svg class="slds-icon" style="fill:#AB7C94;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+						<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+					</svg>
+				</div>
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
+					{!$Label.CouldNotConnectToCLM}
+				</div>
+				<div class="slds-p-bottom_large slds-align_absolute-center ds-gray-color ds-font-size">
+					{!$Label.RefreshToLoadFolders}
+				</div>
+			</div>
+		</apex:outputPanel>
+		<apex:outputPanel rendered="{!mappingExists}">
+			<script>
+				document.addEventListener("DOMContentLoaded", onIframeRender);
+				function onIframeRender() {
+					var iframeWin = document.getElementById("frame");
+					if (iframeWin) {
+						var content = (iframeWin.contentWindow || iframeWin.contentDocument);
+						var contentHeight = Math.max(content.parent.innerHeight || 0, content.parent.outerHeight || 0);
+						var iframeHost = document.getElementById('main');
+						if (iframeHost)
+							iframeHost.style.height = contentHeight + 'px';
+					}
+				}
+			</script>
+			<div class="ds-main" id="main">
+				<iframe id="frame" src="{!hostingUrl}" width="100%" height="100%" frameborder="0" seamless="true" />
+			</div>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>
