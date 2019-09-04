@@ -72,7 +72,10 @@
 
           //Authorized and clm product found. load clm admin interface
           if (isPlatformAuthorized && clmFound) {
-            helper.createComponent('setupContent', component, 'c:CLMSetupLayout', {login: component.get('v.login')});
+            helper.createComponent('setupContent', component, 'c:CLMSetupLayout', {
+              login: component.get('v.login'),
+              products: component.get('v.products')
+            });
           }
 
           //Authorized and non clm product found. currently either gen or negotiate
@@ -138,6 +141,9 @@
     component.set('v.message', message);
     component.set('v.mode', mode);
     component.set('v.showToast', true);
+    window.setTimeout($A.getCallback(function () {
+      component.set('v.showToast', false);
+    }), 5000);
   },
 
   hideToast: function (component) {

@@ -144,7 +144,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add user</shortDescription>
-		<value>Add User</value>
+		<value>Add Users</value>
 	</labels>
 	<labels>
 		<fullName>Admin</fullName>
@@ -601,7 +601,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Can manage</shortDescription>
-		<value>User can manage account</value>
+		<value>Manage DocuSign Account</value>
 	</labels>
 	<labels>
 		<fullName>Canada</fullName>
@@ -9520,6 +9520,174 @@
 		<protected>true</protected>
 		<shortDescription>LearnHowTPlaceComponentsIntoYourLayouts</shortDescription>
 		<value>Learn how to place components into your layouts</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignUsers</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSignUsers</shortDescription>
+		<value>DocuSign Users</value>
+	</labels>
+	<labels>
+		<fullName>DocuSignCLMUsers</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSignCLMUsers</shortDescription>
+		<value>DocuSign CLM for Salesforce Users</value>
+	</labels>
+	<labels>
+		<fullName>EditPermissions</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditPermissions</shortDescription>
+		<value>Edit Permissions</value>
+	</labels>
+	<labels>
+		<fullName>RemoveAndClose</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveAndClose</shortDescription>
+		<value>Remove And Close</value>
+	</labels>
+	<labels>
+		<fullName>AddedDate</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddedDate</shortDescription>
+		<value>Added Date</value>
+	</labels>
+	<labels>
+		<fullName>CLMRole</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLMRole</shortDescription>
+		<value>CLM Role</value>
+	</labels>
+	<labels>
+		<fullName>ProfileLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ProfileLabel</shortDescription>
+		<value>Profile</value>
+	</labels>
+	<labels>
+		<fullName>PermissionSetLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>PermissionSetLabel</shortDescription>
+		<value>Permission Set</value>
+	</labels>
+	<labels>
+		<fullName>FilteredByLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FilteredByLabel</shortDescription>
+		<value>Filtered by</value>
+	</labels>
+	<labels>
+		<fullName>BeginFilterLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>BeginFilterLabel</shortDescription>
+		<value>Begin your search by using the filters above.</value>
+	</labels>
+	<labels>
+		<fullName>UsersSelectedLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UsersSelectedLabel</shortDescription>
+		<value>users selected</value>
+	</labels>
+	<labels>
+		<fullName>UsersLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UsersLabel</shortDescription>
+		<value>users</value>
+	</labels>
+	<labels>
+		<fullName>AddFilterLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddFilterLabel</shortDescription>
+		<value>Add filter</value>
+	</labels>
+	<labels>
+		<fullName>SortedByLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SortedByLabel</shortDescription>
+		<value>Sorted By</value>
+	</labels>
+	<labels>
+		<fullName>CannotCloseCurrentUser</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CannotCloseCurrentUser</shortDescription>
+		<value>The current user cannot be part of removal and closing of users.</value>
+	</labels>
+	<labels>
+		<fullName>CannotEditPermissionsCurrentUser</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CannotEditPermissionsCurrentUser</shortDescription>
+		<value>The current user cannot be part of updates for editing permissions.</value>
+	</labels>
+	<labels>
+		<fullName>SelectApplicationRole</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectApplicationRole</shortDescription>
+		<value>Select Role</value>
+	</labels>
+	<labels>
+		<fullName>FilterUsersLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FilterUsersLabel</shortDescription>
+		<value>Filter Users</value>
+	</labels>
+	<labels>
+		<fullName>ApplicationRolesLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApplicationRolesLabel</shortDescription>
+		<value>Application Roles</value>
+	</labels>
+	<labels>
+		<fullName>ApplicationAccountAccessLabel</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApplicationAccountAccessLabel</shortDescription>
+		<value>DocuSign Account access</value>
+	</labels>
+	<labels>
+		<fullName>UserAddedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UserAddedSuccessfully</shortDescription>
+		<value>Selected users have been added successfully.</value>
 	</labels>
 	<labels>
 		<fullName>Component2Summary</fullName>

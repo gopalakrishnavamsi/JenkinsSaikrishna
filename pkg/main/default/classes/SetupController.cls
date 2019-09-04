@@ -107,38 +107,37 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> addUser(
-		final Id sourceId,
-		final String email,
-		final String firstName,
-		final String lastName,
-		final Boolean canManageAccount) {
-
+	public static List<Account.User> addUsers(final String users, final String roles) {
 		try {
-			if (sourceId == null || String.isBlank(email)) throw new DocuSignException(Label.UndefinedArgument);
+			Permissions.verifyIsDocuSignAdministrator();
+			if (users == null || String.isBlank(users)) throw new DocuSignException(Label.UndefinedArgument);
 
-			List<Account.User> users = UserService.addUsers(new List<Account.User> {
-				new Account.User(
+			List<Account.User> usersList = new List<Account.User>();
+			for (Account.User user : (List<Account.User>)JSON.deserialize(users, List<Account.User>.Class)) {
+				usersList.add(new Account.User(
 					null,
-					sourceId,
-					email,
-					firstName,
-					lastName,
-					null,
-					null,
-					canManageAccount == true,
+					user.sourceId,
+					user.email,
+					user.firstName,
+					user.lastName,
 					null,
 					null,
-					APIError.none)
-			}, new Map<String, List<String>> {
-				Product.ESIGNATURE => new List<String> {
-					canManageAccount == true ? ESignatureProduct.ROLE_ADMINISTRATOR : ESignatureProduct.ROLE_USER
-				}
-			});
-			if (Collection.isNotEmpty(users) && users[0].hasError) {
-				throw new APIException(users[0].error);
+					user.canManageAccount,
+					null,
+					null,
+					APIError.none
+				));
 			}
+
+			Map<String, List<String>> rolesMap = (Map<String, List<String>>)JSON.deserialize(roles, Map<String, List<String>>.class);
+			List<Account.User> updatedUsers = UserService.addUsers(usersList, rolesMap);
+
+			if (Collection.isNotEmpty(updatedUsers) && updatedUsers[0].hasError) {
+				throw new APIException(updatedUsers[0].error);
+			}
+
 			return UserService.getUsers(USER_LIMIT);
+
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
 		}
@@ -165,24 +164,101 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static List<Account.User> getUsers() {
+	public static List<Profile> getProfiles() {
 		try {
-			return UserService.getUsers(USER_LIMIT);
+			Permissions.verifyIsDocuSignAdministrator();
+			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
+				'Id', 'Name'
+			});
+			return [SELECT Id, Name FROM Profile ORDER BY Name LIMIT 50000];
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to read DocuSign account users.');
+			throw Controller.wrapException(ex, 'Failed to get profiles');
 		}
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static User getUser(final Id userId) {
+	public static List<PermissionSet> getPermissionSets() {
 		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			Permissions.verifyIsQueryable(PermissionSet.getSObjectType(), new List<String> {
+				'Id', 'Label', 'IsOwnedByProfile', 'Name'
+			});
+			return [SELECT Id, Label FROM PermissionSet WHERE IsOwnedByProfile = false ORDER BY Name LIMIT 50000];
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get permission sets');
+		}
+	}
+
+	//return a list of filtered SF users to be added
+	@AuraEnabled
+	public static List<User> filterSFUsers(String jsonString) {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			if (jsonString == null || String.isBlank(jsonString)) throw new DocuSignException(Label.UndefinedArgument);
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
-				'Id', 'Email', 'FirstName', 'LastName'
+				'Id', 'FirstName', 'LastName', 'Email', 'ProfileId',
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'Provisioned__c',
+				Application.namespacePrefix + 'Status__c'
 			});
 
-			return [SELECT Id, Email, FirstName, LastName FROM User WHERE Id = :userId LIMIT 1];
+			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
+				'Id', 'Name'
+			});
+
+			Permissions.verifyIsQueryable(PermissionSetAssignment.getSObjectType(), new List<String> {
+				'Id', 'PermissionSetId', 'AssigneeId'
+			});
+
+			Map<String, Object> parsedRes = (Map<String, Object>)JSON.deserializeUntyped(jsonString);
+			List<Object> filters = (List<Object>)parsedRes.get('filters');
+			String name = '';
+			String profileId = '';
+			String permSetId = '';
+
+			String soqlQuery = 'SELECT Id, FirstName, LastName, Email, Profile.Name' +
+				' FROM User' +
+				' WHERE Username__c = null' +
+				' AND Provisioned__c = null' +
+				' AND Status__c = null' +
+				' AND IsActive = true';
+
+			for (Object filter : filters) {
+				Map<String, Object> filterMap = (Map<String, Object>)filter;
+
+				if ((String)filterMap.get('type') == 'User') {
+					name = '%' + String.escapeSingleQuotes((String)filterMap.get('value')) + '%';
+					soqlQuery += ' AND (Name LIKE :name OR Email LIKE :name)';
+				}
+
+				if ((String)filterMap.get('type') == 'Profile') {
+					profileId = String.escapeSingleQuotes((String)filterMap.get('value'));
+					soqlQuery += ' AND ProfileId = :profileId';
+				}
+
+				if ((String)filterMap.get('type') == 'Permission Set') {
+					permSetId = String.escapeSingleQuotes((String)filterMap.get('value'));
+					//use a sub query to determine if these users have the specified perm set
+					soqlQuery += ' AND Id IN (SELECT AssigneeId FROM PermissionSetAssignment WHERE PermissionSetId = :permSetId)';
+				}
+			}
+
+			soqlQuery += ' LIMIT 50';
+
+			return Database.query(soqlQuery);
+
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to read user.');
+			throw Controller.wrapException(ex, 'Failed to filter Salesforce users.');
+		}
+	}
+
+	@AuraEnabled
+	public static List<Account.User> getUsers() {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			return UserService.getUsers(USER_LIMIT);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to read DocuSign account users.');
 		}
 	}
 
@@ -224,6 +300,16 @@ public with sharing class SetupController extends Controller {
 	public static List<Product> getProductsOnAccount() {
 		try {
 			return AccountProducts.getProducts();
+
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Products on account.');
+		}
+	}
+
+	@AuraEnabled
+	public static String getProductRoles() {
+		try {
+			return JSON.serialize(Product.getValidProductRoles());
 
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
