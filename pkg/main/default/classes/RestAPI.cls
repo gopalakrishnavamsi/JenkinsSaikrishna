@@ -122,7 +122,10 @@ public virtual class RestAPI {
 			}
 		}
 		request.setHeader('User-Agent', Application.userAgent);
+		System.Debug('Request Body ' + request.getBody());
+		System.Debug('Request Header ' + request.getHeader('Authorization'));
 		final HttpResponse response = http.send(request);
+		System.Debug('Response Body ' + response.getBody());
 		return new Response(request, response, getError(response));
 	}
 
