@@ -371,36 +371,39 @@ public with sharing class AccountProducts {
 		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final String accessToken) {
+		try {
+			if (configuredProducts == null
+				|| lastChecked == null
+				|| checkFrequencyMinutes == null
+				|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
 
-		AccountProducts result = null;
-		if (configuredProducts == null
-			|| lastChecked == null
-			|| checkFrequencyMinutes == null
-			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
-
-			Map<String, Product> products = new Map<String, Product>();
-			products.put(
-				Product.ESIGNATURE,
-				ESignatureProductAPI.getInstance(eSignatureBaseUrl, accountId, accessToken).getProduct());
-			ProductAPI client = ProductAPI.getInstance(provisioningBaseUrl, accountId, accessToken);
-			for (Product p : client.getProducts()) {
-				if (p != null) {
-					Product pp;
-					if (p.status == Product.STATUS_PENDING) { // Activate any pending products we care about.
-						LoggerService.getInstance().info('Activating product: ' + p.name);
-						pp = client.activateProduct(p.name, false);
-					} else {
-						pp = p;
+				Map<String, Product> products = new Map<String, Product>();
+				products.put(
+					Product.ESIGNATURE,
+					ESignatureProductAPI.getInstance(eSignatureBaseUrl, accountId, accessToken).getProduct());
+				ProductAPI client = ProductAPI.getInstance(provisioningBaseUrl, accountId, accessToken);
+				for (Product p : client.getProducts()) {
+					if (p != null) {
+						Product pp;
+						if (p.status == Product.STATUS_PENDING) { // Activate any pending products we care about.
+							LoggerService.getInstance().info('Activating product: ' + p.name);
+							pp = client.activateProduct(p.name, false);
+						} else {
+							pp = p;
+						}
+						products.put(pp.name, pp);
 					}
-					products.put(pp.name, pp);
 				}
+				return new AccountProducts(environment, products, Datetime.now(), checkFrequencyMinutes, true);
 			}
-			result = new AccountProducts(environment, products, Datetime.now(), checkFrequencyMinutes, true);
-		} else {
-			result = new AccountProducts(environment, configuredProducts, lastChecked, checkFrequencyMinutes, false);
+		} catch (APIException ex) {
+			if (ex.error != null && ((ESignatureAPI.Error)ex.error).docuSignCode.equals('USER_LACKS_PERMISSIONS')) {
+				LoggerService.getInstance().info('Logging Error for USER_LACKS_PERMISSIONS');
+			} else {
+				throw ex;
+			}
 		}
-
-		return result;
+		return new AccountProducts(environment, configuredProducts, lastChecked, checkFrequencyMinutes, false);
 	}
 
 	/**
