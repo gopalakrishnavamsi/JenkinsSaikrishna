@@ -5,7 +5,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsClmAdministrator();
 			return Application.namespace;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get namespace.');
 		}
 	}
 
@@ -16,7 +16,7 @@ public with sharing class CLMMapObjectController {
 			delete EOS_Type__c.getInstance(name);
 			return true;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to delete object mapping.');
 		}
 	}
     
@@ -24,11 +24,40 @@ public with sharing class CLMMapObjectController {
 	public static Boolean setMappedObject(EOS_Type__c eosDetails) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			insert eosDetails;
+            Map<String,List<String>> pathDetails=parsePath(eosDetails.Path__c);
+            if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
+                eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
+                eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
+                eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
+                String ObjectName=eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');                
+            }            
+            upsert eosDetails;
 			return true;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to insert object mapping.');
 		}
+    }
+    
+    private static Map<String,List<String>> parsePath(String path){
+        Map<String,List<String>> result=new Map<String,List<String>>();
+        List<String> variables=new List<String>();
+        String formatted='';  
+        Integer index=0;
+        for (String folder:path.split('/')) {
+            String objName=folder.substringAfter('{!').substringBefore('}');
+            if (String.isNotBlank(objName)){
+                variables.add(objName);
+                formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
+                index++;
+            }
+            else {
+                formatted += folder+'/';
+            }
+        }                
+        result.put('Path',new List<String>{path});
+        result.put('PathFormat',new List<String>{formatted});
+        result.put('Variables',variables);        
+        return result;
     }
 
 	@AuraEnabled(Cacheable=true)
@@ -37,7 +66,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsClmAdministrator();
 			return EOS_Type__c.getAll();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all mapped objects list.');
 		}
 	}
     
@@ -47,7 +76,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsDocuSignAdministrator();
 			return MetadataService.getObjects();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all objects.');
 		}
 	}
 
@@ -55,19 +84,22 @@ public with sharing class CLMMapObjectController {
 	public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-			return MetadataService.getFields(schema.getGlobalDescribe().get(apiName), isChild);
+            SObjectType type = Schema.getGlobalDescribe().get(apiName);
+            List<MergeField> result= new List<MergeField>();
+            result.addAll(MetadataService.getFields(type, isChild));
+            return result;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all object fields list.');
         }
     }
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled
 	public static Integer getRecordCount() {
 		try {
 			Permissions.verifyIsClmAdministrator();
 			return EOS_Type__c.getAll().values().size();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get count of object mappings.');
 		}
-	}
+	}      
 }
