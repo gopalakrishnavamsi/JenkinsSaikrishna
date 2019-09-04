@@ -31,7 +31,8 @@ public class CLMAPIMock extends OAuthTokenMock {
 				response.setStatusCode(200);
 				response.setStatus('OK');
 				response.setBody(JSON.serialize(new map<String,String>{
-					'access_token'=>TestUtils.randomString(40)
+                    'access_token'=>TestUtils.randomString(40),
+                        'Url'=>'https://authqa.springcm.com'
 				}));
 			} else {
 				throw new AssertException('Unexpected OAuth request: ' + method + ' ' + path);
