@@ -197,4 +197,9 @@ public abstract class Product {
 			&& UUID.isNotEmpty(role.id)
 			&& isValidRole(role.product, role.role);
 	}
+
+	public static Map<String, Set<String>> getValidProductRoles() {
+		Permissions.verifyIsDocuSignAdministrator();
+		return VALID_PRODUCT_ROLES;
+	}
 }

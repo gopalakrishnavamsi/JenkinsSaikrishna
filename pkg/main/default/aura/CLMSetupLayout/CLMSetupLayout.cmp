@@ -11,7 +11,7 @@
   <aura:attribute name="toastVariant" type="String" access="private" />
   <aura:attribute name="isCenter" type="Boolean" default="true" access="private" />
   <aura:attribute name="login" type="Object"/>
-
+  <aura:attribute name="products" type="Product[]"/>
   <!--register events -->
   <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
 
