@@ -5053,6 +5053,22 @@
 		<label>Dashboard</label>
 		<name>Dashboard</name>
 	</customLabels>
+	<customLabels>
+		<label>You haven't mapped the '{0}' object to DocuSign CLM.</label>
+		<name>ObjectNotMappedToDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Map the object to view the folders on this page.</label>
+		<name>MapToViewFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>We couldn't connect to DocuSign CLM.</label>
+		<name>CouldNotConnectToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>You can refresh the page to retry or contact your Salesforce admin.</label>
+		<name>RefreshToLoadFolders</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
