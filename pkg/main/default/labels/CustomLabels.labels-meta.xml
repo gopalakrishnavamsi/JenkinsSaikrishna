@@ -9537,4 +9537,36 @@
 		<shortDescription>CLM - Dashboard</shortDescription>
 		<value>Dashboard</value>
 	</labels>
+	<labels>
+		<fullName>ObjectNotMappedToDocuSignCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - ObjectNotMappedToDocuSignCLM</shortDescription>
+		<value>You haven't mapped the '{0}' object to DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>MapToViewFolders</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - MapToViewFolders</shortDescription>
+		<value>Map the object to view the folders on this page.</value>
+	</labels>
+	<labels>
+		<fullName>CouldNotConnectToCLM</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - CouldNotConnectToCLM</shortDescription>
+		<value>We couldn't connect to DocuSign CLM.</value>
+	</labels>
+	<labels>
+		<fullName>RefreshToLoadFolders</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - RefreshToLoadFolders</shortDescription>
+		<value>You can refresh the page to retry or contact your Salesforce admin.</value>
+	</labels>
 </CustomLabels>
