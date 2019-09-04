@@ -10,7 +10,7 @@
 			if (state === 'SUCCESS') {
 				component.set('v.eosDetails', response.getReturnValue());
 			} else {
-				var errors = response.getError();
+				var errors = stringUtils.getErrorMessage(response);
 				if (errors && errors[0] && errors[0].message) {
 					helper.fireToast(component, errors[0].message, helper.ERROR);
 				}

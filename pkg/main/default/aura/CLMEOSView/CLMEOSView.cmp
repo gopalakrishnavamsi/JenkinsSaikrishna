@@ -7,7 +7,6 @@
 	<aura:attribute name="src" type="String" default="" />
 	<aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}" />
 	<aura:attribute name="showIframe" type="Boolean" />
-	<aura:attribute name="v.errorMessage" type="Boolean" />
 	<div>
 		<aura:if isTrue="{!v.eosDetails.mappingExists}">
 			<div class="ds-main" style="{!'height:'+v.frameHeight+'px;'}">
