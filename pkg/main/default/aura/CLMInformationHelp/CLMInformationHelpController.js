@@ -1,4 +1,10 @@
 ({
+	buttonClick: function (component) {
+		var link = component.get('v.firstButtonNavigation');
+		if (link)
+			window.open(link);
+	},
+	
 	navigateToSection: function (component, event, helper) {
 		var uri = component.get('v.hyperlinkedURI');
 		if (uri[0] === 'tab') {
