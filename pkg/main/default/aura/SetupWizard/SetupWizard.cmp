@@ -42,7 +42,7 @@
         </div>
 
         <!-- center section -->
-        <div class="slds-col slds-large-size_5-of-6 slds-medium-size_2-of-3 ds-admin-centerSpace slds-m-around_small">
+        <div class="{!'slds-col slds-large-size_5-of-6 slds-medium-size_2-of-3 slds-m-around_small' + if(v.selectedItem == 'tab_home', ' ds-home-centerSpace', ' ds-setupSection-heading')}">
             <!-- Home section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_home'}">
                 <!-- Account Details -->
@@ -196,6 +196,9 @@
                     </div>
 
                 </div>
+
+                <div class="slds-p-top_large slds-p-bottom_large">
+                </div>
             </aura:if>
             <!-- Home section ends here -->
 
@@ -219,10 +222,13 @@
 
             <!-- user management section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_userManagement'}">
-                <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
-                    <c:SetupUsers/>
+                <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}"
+                                      sectionHeader="{!$Label.c.TabUserManagement}"
+                                      headerIconName="standard:avatar"/>
+                <!-- Section for managing users -->
+                <div class="ds-userManagement-section slds-m-top_x-large">
+                    <c:SetupUsers products="{!v.products}" context='e_sign'/>
                 </div>
-
             </aura:if>
             <!-- user management section ends here -->
 
@@ -237,9 +243,6 @@
                 <c:SetupHelp/>
             </aura:if>
             <!-- help section ends here -->
-
-            <div class="slds-p-top_large slds-p-bottom_large">
-            </div>
         </div>
     </div>
 

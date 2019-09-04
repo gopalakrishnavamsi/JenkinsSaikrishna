@@ -1,89 +1,6 @@
 ({
-  onInitialize: function (component, event, helper) {
-    component.set('v.uiHelper', new UIHelper(function () {
-      return component.getEvent('loadingEvent');
-    }, function () {
-      return component.getEvent('toastEvent');
-    }));
-    helper.getUsers(component, helper);
-  },
-
-  showAddUserModal: function (component) {
-    component.set('v.showAddUserModal', true);
-    window.setTimeout($A.getCallback(function () {
-      component.find('lookup').focus();
-    }), 1);
-  },
-
-  cancelAddUser: function (component) {
-    component.set('v.showAddUserModal', false);
-    component.set('v.lookupValue', null);
-    component.find('lookup').set('v.error', false);
-    component.find('lookup').set('v.errorMessage', $A.get('$Label.c.FieldError'));
-    component.set('v.formData', {});
-  },
-
-  showRemoveUser: function (component, event) {
-    var index = event.getSource().get('v.value');
-    var user = component.find('table').get('v.data').rows[index];
-    component.set('v.formData.user', user);
-    component.set('v.showRemoveUserModal', true);
-  },
-
-  hideRemoveUserModal: function (component) {
-    component.set('v.showRemoveUserModal', false);
-  },
-
-  removeDocuSignUser: function (component, event, helper) {
-    helper.removeUser(component, event, helper);
-  },
-
-  validateAddUserForm: function (component, event, helper) {
-    event.stopPropagation();
-
-    var lookup = component.find('lookup');
-    var inputs = component.find('input');
-    var valid = true;
-
-    inputs = Array.isArray(inputs) ? inputs : [inputs]; // Safety first
-
-    if ($A.util.isEmpty(lookup.get('v.value'))) {
-      valid = false;
-      lookup.set('v.error', true);
-    } else {
-      lookup.set('v.error', false);
-    }
-
-    inputs.forEach(function (input) {
-      // Force error states from inputs
-      if (input.focus) input.focus();
-      if (input.blur) input.blur();
-
-      if ($A.util.isEmpty(input.get('v.value'))) {
-        valid = false;
-      }
-    });
-
-    if (valid) {
-      helper.createUser(component, event, helper);
-    }
-  },
-
-  removeLookupErrorState: function (component, event, helper) {
-    var lookup = component.find('lookup');
-    lookup.set('v.error', false);
-    lookup.set('v.errorMessage', $A.get('$Label.c.FieldError'));
-    component.set('v.formData', {});
-
-    if (typeof(lookup) !== 'undefined') {
-      lookup.set('v.error', false);
-      if (component.get('v.showAddUserModal') && lookup.get('v.value')) {
-        var userId = lookup.get('v.value');
-        helper.getUser(component, userId);
-      } else {
-        component.find('primaryFooterButton').set('v.disabled', false);
-      }
-    }
+  initializeComponent: function (component, event, helper) {
+    helper.initializeComponent(component, event, helper);
   },
 
   handleFilteredUsersChange: function (component, event, helper) {
@@ -91,11 +8,139 @@
   },
 
   handleUsersChange: function (component, event, helper) {
-    var name = component.get('v.dsUserSearchTerm');
-    if ($A.util.isEmpty(name)) {
+    var userSearchTerm = component.get('v.userSearchTerm');
+    if ($A.util.isEmpty(userSearchTerm)) {
       helper.resetUsersTable(component);
     } else {
-      helper.searchTable(component, name);
+      helper.searchTable(component, userSearchTerm);
     }
+  },
+
+  handleRowAction: function (component, event, helper) {
+    var action = event.getParam('action');
+    var row = event.getParam('row');
+
+    switch (action.name) {
+      case 'edit_permissions':
+        //TODO: Implement edit permissions single row here
+        break;
+      case 'remove_close':
+        helper.removeAndCloseSingleUser(component, row, helper);
+        break;
+    }
+  },
+
+  handleRowSelection: function (component, event) {
+    var selectedRows = event.getParam('selectedRows');
+    component.set('v.selectedRows', selectedRows);
+  },
+
+  editPermissionsMultipleUsers: function (component, event, helper) {
+    helper.editPermissionsMultipleUsers(component, event, helper);
+  },
+
+  removeAndCloseMultipleUsers: function (component, event, helper) {
+    helper.removeAndCloseMultipleUsers(component, event, helper);
+  },
+
+  showAddUsersModal: function (component, event, helper) {
+    helper.clearAddUserModalData(component, event, helper);
+    component.find('add-users').show();
+  },
+
+  closeAddUsersModal: function (component) {
+    component.find('add-users').hide();
+  },
+
+  sortUserTable: function (component, event, helper) {
+    var users = component.get('v.filteredUsers');
+    var sortParams = component.get('v.userSortParams');
+    sortParams.sortedDirection = event.getParam('sortDirection');
+    sortParams.sortedBy = event.getParam('fieldName');
+    helper.sortData(component, users, sortParams);
+    component.set('v.userSortParams', sortParams);
+    component.set('v.filteredUsers', users);
+  },
+
+  addFilter: function (component, event, helper) {
+    var filterOptions = component.get('v.filterOptions');
+    var filters = component.get('v.filters');
+    for (var i = 0; i < filterOptions.length; i++) {
+      var filterOption = filterOptions[i];
+      if (!filterOption.disabled) {
+        filterOption.disabled = true;
+        filters.push({
+          type: filterOption.label,
+          value: ''
+        });
+        break;
+      }
+    }
+    component.set('v.filterOptions', filterOptions);
+    component.set('v.filters', filters);
+    helper.buildFilterLabel(component);
+  },
+
+  filterChanged: function (component, event, helper) {
+    var index = event.getSource().get('v.name');
+    var filters = component.get('v.filters');
+    filters[index].value = '';
+
+    helper.updateFilterOptionsState(component);
+    component.set('v.filters', filters);
+
+    helper.filterSFUsers(component, event, helper);
+    helper.buildFilterLabel(component);
+  },
+
+  filterUsers: function (component, event, helper) {
+    clearTimeout(component.filterUserTimeout);
+    component.filterUserTimeout = setTimeout($A.getCallback(function () {
+      helper.filterSFUsers(component, event, helper);
+    }), 200);
+  },
+
+  removeFilter: function (component, event, helper) {
+    var index = event.getSource().get('v.value');
+    var filters = component.get('v.filters');
+    filters.splice(index, 1);
+    component.set('v.filters', filters);
+    helper.updateFilterOptionsState(component);
+    helper.filterSFUsers(component, event, helper);
+    helper.buildFilterLabel(component);
+  },
+
+  setTotalCount: function (component, event) {
+    component.set('v.selectedUsersCount', event.getParam('selectedRows').length);
+  },
+
+  sortAddUsersTable: function (component, event, helper) {
+    var sfUsers = component.get('v.sfUsers');
+    var sortParams = component.get('v.addUserSortParams');
+
+    sortParams.sortedDirection = event.getParam('sortDirection');
+    sortParams.sortedBy = event.getParam('fieldName');
+    helper.sortData(component, sfUsers, sortParams);
+
+    var sortField = event.getParam('fieldName');
+    switch (sortField) {
+      case 'Name':
+        sortParams.sortedByLabel = $A.get('$Label.c.NameLabel');
+        break;
+      case 'Email' :
+        sortParams.sortedByLabel = $A.get('$Label.c.EmailAddress');
+        break;
+      case 'ProfileName' :
+        sortParams.sortedByLabel = $A.get('$Label.c.ProfileLabel');
+        break;
+    }
+
+    component.set('v.sfUsers', sfUsers);
+    component.set('v.addUserSortParams', sortParams);
+  },
+
+  handleAddUsers: function (component, event, helper) {
+    helper.invokeAddUsers(component, event, helper);
   }
+
 });

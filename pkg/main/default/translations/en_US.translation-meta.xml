@@ -66,7 +66,7 @@
 		<name>AddToDocuSignDetails</name>
 	</customLabels>
 	<customLabels>
-		<label>Add User</label>
+		<label>Add Users</label>
 		<name>AddUser</name>
 	</customLabels>
 	<customLabels>
@@ -282,7 +282,7 @@
 		<name>Cameroon</name>
 	</customLabels>
 	<customLabels>
-		<label>User can manage account</label>
+		<label>Manage DocuSign Account</label>
 		<name>CanManage</name>
 	</customLabels>
 	<customLabels>
@@ -4964,6 +4964,86 @@
 	<customLabels>
 		<label>Learn how to place components into your layouts</label>
 		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Users</label>
+		<name>DocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce users</label>
+		<name>DocuSignCLMUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit Permissions</label>
+		<name>EditPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove and Close</label>
+		<name>RemoveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Added Date</label>
+		<name>AddedDate</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM Role</label>
+		<name>CLMRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Profile</label>
+		<name>ProfileLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Permission Set</label>
+		<name>PermissionSetLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Filtered by</label>
+		<name>FilteredByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Begin your search by using the filters above.</label>
+		<name>BeginFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>users selected</label>
+		<name>UsersSelectedLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>users</label>
+		<name>UsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Sorted By</label>
+		<name>SortedByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>The current user cannot be part of removal and closing of users.</label>
+		<name>CannotCloseCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>The current user cannot be part of updates for editing permissions.</label>
+		<name>CannotEditPermissionsCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Role</label>
+		<name>SelectApplicationRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Filter Users</label>
+		<name>FilterUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Application Roles</label>
+		<name>ApplicationRolesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Account access</label>
+		<name>ApplicationAccountAccessLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Selected users have been added successfully.</label>
+		<name>UserAddedSuccessfully</name>
 	</customLabels>
 	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>

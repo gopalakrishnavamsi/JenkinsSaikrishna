@@ -1,0 +1,10 @@
+.THIS .ds-sectionHeader {
+    color: t(colorTextActionLabelActive);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-userManagement-icon-background {
+    background: #ee7fae;
+}
+
