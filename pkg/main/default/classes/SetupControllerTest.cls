@@ -254,46 +254,47 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-	/*
-	@IsTest
-	static void test_addUser_admin() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			User u = UserMock.createUser();
-
-			Test.startTest();
-			List<Account.User> result = SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, true);
-			Test.stopTest();
-
-			System.assert(Collection.isNotEmpty(result));
-		}
-	}
 
 	@IsTest
-	static void test_addUser_non_admin() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			User u = UserMock.createUser();
-
-			Test.startTest();
-			List<Account.User> result = SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
-			Test.stopTest();
-
-			System.assert(Collection.isNotEmpty(result));
-		}
-	}
-
-	@IsTest
-	static void test_addUser_failure() {
+	static void test_addUsers_unAuthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SetupController.addUser(UserInfo.getUserId(), 'u@unit.test', null, null, false);
-				throw new AssertException('Expected addUser to fail');
+				SetupController.addUsers('', '');
+				throw new AssertException('Expected addUsers to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addUsers_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u = UserMock.createUser();
+			String userJson = '[{"sourceId":"' + u.Id + '","email":"' + u.Email + '","firstName":"' + u.FirstName + '","lastName":"' + u.LastName + '","canManageAccount":true}]';
+			String rolesJson = '{"e_sign":["User","Administrator"]}';
+			Test.startTest();
+			List<Account.User> result = SetupController.addUsers(userJson, rolesJson);
+			Test.stopTest();
+			System.assert(Collection.isNotEmpty(result));
+		}
+	}
+
+	@IsTest
+	static void test_addUsers_invalidInputs() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			String userJson = '';
+			String rolesJson = '{"e_sign":["User","Administrator"]}';
+			try {
+				SetupController.addUsers(userJson, rolesJson);
+				throw new AssertException('Expected addUsers to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
 		}
 	}
 
@@ -311,23 +312,22 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_addUser_api_failure() {
+	static void test_addUsers_api_failure() {
 		Test.setMock(HttpCalloutMock.class, new UserFailureMock());
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
-
-			Test.startTest();
+			String userJson = '[{"sourceId":"' + u.Id + '","email":"' + u.Email + '","firstName":"' + u.FirstName + '","lastName":"' + u.LastName + '","canManageAccount":true}]';
+			String rolesJson = '{"e_sign":["User","Administrator"]}';
 			try {
-				SetupController.addUser(u.Id, u.Email, u.FirstName, u.LastName, false);
+				SetupController.addUsers(userJson, rolesJson);
 				throw new AssertException('Expected addUser to fail');
 			} catch (AuraHandledException ex) {
 				System.assertNotEquals(null, ex.getMessage());
 			}
-			Test.stopTest();
 		}
 	}
-*/
+
 	@IsTest
 	static void test_removeUser_success() {
 		DocuSignAPIMock.success();
@@ -380,32 +380,7 @@ private class SetupControllerTest {
 			Test.stopTest();
 		}
 	}
-	/*
-	@IsTest
-	static void test_getUser_success() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			User result = SetupController.getUser(UserInfo.getUserId());
-			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_getUser_failure() {
-		System.runAs(UserMock.createRestrictedUser()) { // Unauthorized
-			Test.startTest();
-			try {
-				SetupController.getUser(null);
-				throw new AssertException('Expected getUser to fail');
-			} catch (AuraHandledException ex) {
-				System.assert(String.isNotBlank(ex.getMessage()));
-			}
-			Test.stopTest();
-		}
-	}
-*/
 	@IsTest
 	static void test_beginSpringOAuth_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
@@ -598,6 +573,137 @@ private class SetupControllerTest {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getProductRoles_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			String productRoles = SetupController.getProductRoles();
+			Test.stopTest();
+			Map<String, List<String>> productRolesMap = (Map<String, List<String>>)JSON.deserialize(productRoles, Map<String, List<String>>.class);
+			System.assertEquals(true, String.isNotBlank(productRoles));
+			System.assertEquals(4, productRolesMap.size());
+			System.assertEquals(1, productRolesMap.get('gen').size());
+			System.assertEquals(1, productRolesMap.get('negotiate').size());
+			System.assertEquals(3, productRolesMap.get('clm').size());
+			System.assertEquals(3, productRolesMap.get('e_sign').size());
+		}
+	}
+
+	@IsTest
+	static void test_getProductRoles_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getProductsOnAccount();
+				throw new AssertException('Expected getProductRoles to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getProfiles_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			List<Profile> profiles = SetupController.getProfiles();
+			Test.stopTest();
+			System.assertEquals(false, profiles.isEmpty());
+		}
+	}
+
+	@IsTest
+	static void test_getProfiles_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getProfiles();
+				throw new AssertException('Expected getProfiles to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getPermissionSets_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			List<PermissionSet> permissionSets = SetupController.getPermissionSets();
+			Test.stopTest();
+			System.assertEquals(false, permissionSets.isEmpty());
+		}
+	}
+
+	@IsTest
+	static void test_getPermissionSets_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getPermissionSets();
+				throw new AssertException('Expected getPermissionSets to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_filterSFUsers_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.filterSFUsers('testString');
+				throw new AssertException('Expected filterSFUsers to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_filterSFUsers_nullInput() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			try {
+				SetupController.filterSFUsers(null);
+				throw new AssertException('Expected filterSFUsers to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_filterSFUsers_blankInput() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			try {
+				SetupController.filterSFUsers('');
+				throw new AssertException('Expected filterSFUsers to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_filterSFUsers_validInput() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			String filterString = '{"filters":[{"type":"User","value":"test"},{"type":"Profile","value":"test"},{"type":"Permission Set","value":"test"}]}';
+			Test.startTest();
+			List<User> filteredUserList = SetupController.filterSFUsers(filterString);
+			Test.stopTest();
+			System.assertEquals(0, filteredUserList.size());
 		}
 	}
 }

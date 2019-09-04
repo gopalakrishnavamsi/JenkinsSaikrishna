@@ -194,6 +194,7 @@ public with sharing class SetupController extends Controller {
 	public static List<User> filterSFUsers(String jsonString) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
+			if (jsonString == null || String.isBlank(jsonString)) throw new DocuSignException(Label.UndefinedArgument);
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
 				'Id', 'FirstName', 'LastName', 'Email', 'ProfileId',
 				Application.namespacePrefix + 'Username__c',
