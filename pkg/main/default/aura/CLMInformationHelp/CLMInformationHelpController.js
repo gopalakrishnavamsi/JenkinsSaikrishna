@@ -1,5 +1,5 @@
 ({
-	buttonClick: function (component, event, helper) {
+	buttonClick: function (component) {
 		var link = component.get('v.firstButtonNavigation');
 		if (link)
 			window.open(link);
