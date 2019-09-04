@@ -5,7 +5,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsClmAdministrator();
 			return Application.namespace;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get namespace.');
 		}
 	}
 
@@ -16,7 +16,7 @@ public with sharing class CLMMapObjectController {
 			delete EOS_Type__c.getInstance(name);
 			return true;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to delete object mapping.');
 		}
 	}
     
@@ -25,7 +25,7 @@ public with sharing class CLMMapObjectController {
 		try {
 			Permissions.verifyIsClmAdministrator();
             Map<String,List<String>> pathDetails=parsePath(eosDetails.Path__c);
-            if(pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')){
+            if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
                 eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
                 eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
                 eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
@@ -34,7 +34,7 @@ public with sharing class CLMMapObjectController {
             upsert eosDetails;
 			return true;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to insert object mapping.');
 		}
     }
     
@@ -43,31 +43,30 @@ public with sharing class CLMMapObjectController {
         List<String> variables=new List<String>();
         String formatted='';  
         Integer index=0;
-        for(String folder:path.split('/')){
+        for (String folder:path.split('/')) {
             String objName=folder.substringAfter('{!').substringBefore('}');
-            if(String.isNotBlank(objName)){
+            if (String.isNotBlank(objName)){
                 variables.add(objName);
                 formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
                 index++;
             }
-            else{
+            else {
                 formatted += folder+'/';
             }
         }                
         result.put('Path',new List<String>{path});
         result.put('PathFormat',new List<String>{formatted});
-        result.put('Variables',variables);
-        
+        result.put('Variables',variables);        
         return result;
     }
 
-	@AuraEnabled
+	@AuraEnabled(Cacheable=true)
 	public static Map<String, EOS_Type__c> getMappedObjectsList() {
 		try {
 			Permissions.verifyIsClmAdministrator();
 			return EOS_Type__c.getAll();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all mapped objects list.');
 		}
 	}
     
@@ -77,7 +76,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsDocuSignAdministrator();
 			return MetadataService.getObjects();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all objects.');
 		}
 	}
 
@@ -90,7 +89,7 @@ public with sharing class CLMMapObjectController {
             result.addAll(MetadataService.getFields(type, isChild));
             return result;
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get all object fields list.');
         }
     }
 
@@ -100,7 +99,7 @@ public with sharing class CLMMapObjectController {
 			Permissions.verifyIsClmAdministrator();
 			return EOS_Type__c.getAll().values().size();
 		} catch (Exception e) {
-			throw Controller.wrapException(e.getMessage());
+			throw Controller.wrapException(e, 'Failed to get count of object mappings.');
 		}
 	}      
 }

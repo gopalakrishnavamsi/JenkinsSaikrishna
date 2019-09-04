@@ -498,44 +498,6 @@ public with sharing class AuthService {
 		return newToken;
 	}
 
-	public static String getAccessTokenWithClmScope() {
-		Credentials c = Credentials.getInstance();
-		return getAccessTokenWithClmScope(
-			c.token,
-			c.environment.accountBaseUrl,
-			c.user.id,
-			c.user.canManageAccount,
-			c.client.id,
-			c.client.privateKey).token;
-	}
-
-	@TestVisible
-	private static Credentials.AccessToken getAccessTokenWithClmScope(
-		final Credentials.AccessToken token,
-		final Url accountBaseUrl,
-		final UUID userId,
-		final Boolean canManageAccount,
-		final String clientId,
-		final Blob jwtSigningKey) {
-
-		if (accountBaseUrl == null || UUID.isEmpty(userId) || String.isBlank(clientId) || jwtSigningKey == null) {
-			throw new DocuSignException(Label.AccountNotConfigured);
-		}
-
-		//if (token != null && token.isValid) return token;
-
-		String jwtToken = generateJwt(
-			accountBaseUrl.getHost(),
-			userId,
-			'clm_ui',
-			clientId,
-			jwtSigningKey);
-            
-		Credentials.AccessToken newToken = getAuthAPI(accountBaseUrl).exchangeJwt(jwtToken);
-		Credentials.setToken(newToken);
-		return newToken;
-	}
-
 	public static String getContentAccessToken() {
 		Permissions.verifyIsDocuSignNegotiator();
 		Credentials c = Credentials.getInstance();
