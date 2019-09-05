@@ -1274,28 +1274,8 @@
 		<name>Password</name>
 	</customLabels>
 	<customLabels>
-		<label>Peru</label>
-		<name>Peru</name>
-	</customLabels>
-	<customLabels>
-		<label>Philippines</label>
-		<name>Philippines</name>
-	</customLabels>
-	<customLabels>
-		<label>Pitcairn</label>
-		<name>Pitcairn</name>
-	</customLabels>
-	<customLabels>
 		<label>Placeholder recipient must have a role.</label>
 		<name>PlaceholderRecipientMustHaveRole</name>
-	</customLabels>
-	<customLabels>
-		<label>Poland</label>
-		<name>Poland</name>
-	</customLabels>
-	<customLabels>
-		<label>Portugal</label>
-		<name>Portugal</name>
 	</customLabels>
 	<customLabels>
 		<label>Portuguese (Brazilian)</label>
@@ -1316,10 +1296,6 @@
 	<customLabels>
 		<label>Private Message</label>
 		<name>PrivateMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>Qatar</label>
-		<name>Qatar</name>
 	</customLabels>
 	<customLabels>
 		<label>Radio Button</label>
@@ -1354,20 +1330,8 @@
 		<name>RequiredEmptyList_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Reunion</label>
-		<name>Reunion</name>
-	</customLabels>
-	<customLabels>
-		<label>Romania</label>
-		<name>Romania</name>
-	</customLabels>
-	<customLabels>
 		<label>Russian</label>
 		<name>Russian</name>
-	</customLabels>
-	<customLabels>
-		<label>Rwanda</label>
-		<name>Rwanda</name>
 	</customLabels>
 	<customLabels>
 		<label>Unexpected response from Salesforce API.</label>
@@ -1376,10 +1340,6 @@
 	<customLabels>
 		<label>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.</label>
 		<name>SalesforceOrgStorageLimitExceeded</name>
-	</customLabels>
-	<customLabels>
-		<label>Samoa</label>
-		<name>Samoa</name>
 	</customLabels>
 	<customLabels>
 		<label>Save</label>
@@ -1410,20 +1370,12 @@
 		<name>SelectAccountOption</name>
 	</customLabels>
 	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>
-		<name>SelectSalesforceUsers</name>
-	</customLabels>
-	<customLabels>
 		<label>Send automatic reminders</label>
 		<name>SendAutomaticReminders</name>
 	</customLabels>
 	<customLabels>
 		<label>Send Envelope</label>
 		<name>SendEnvelope</name>
-	</customLabels>
-	<customLabels>
-		<label>Senegal</label>
-		<name>Senegal</name>
 	</customLabels>
 	<customLabels>
 		<label>Sent</label>
@@ -1434,16 +1386,8 @@
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Serbia</label>
-		<name>Serbia</name>
-	</customLabels>
-	<customLabels>
 		<label>Successfully saved settings.</label>
 		<name>SettingsSaved</name>
-	</customLabels>
-	<customLabels>
-		<label>Seychelles</label>
-		<name>Seychelles</name>
 	</customLabels>
 	<customLabels>
 		<label>Show</label>
@@ -1466,10 +1410,6 @@
 		<name>SignHereOptional</name>
 	</customLabels>
 	<customLabels>
-		<label>Sign in or start a trial</label>
-		<name>SignInOrStartTrial</name>
-	</customLabels>
-	<customLabels>
 		<label>Signed</label>
 		<name>Signed</name>
 	</customLabels>
@@ -1488,26 +1428,6 @@
 	<customLabels>
 		<label>Signing Groups are not enabled for your account.</label>
 		<name>SigningGroupsProhibited</name>
-	</customLabels>
-	<customLabels>
-		<label>Singapore</label>
-		<name>Singapore</name>
-	</customLabels>
-	<customLabels>
-		<label>Slovakia</label>
-		<name>Slovakia</name>
-	</customLabels>
-	<customLabels>
-		<label>Slovenia</label>
-		<name>Slovenia</name>
-	</customLabels>
-	<customLabels>
-		<label>Somalia</label>
-		<name>Somalia</name>
-	</customLabels>
-	<customLabels>
-		<label>Spain</label>
-		<name>Spain</name>
 	</customLabels>
 	<customLabels>
 		<label>Spanish</label>
@@ -1542,10 +1462,6 @@
 		<name>Subject</name>
 	</customLabels>
 	<customLabels>
-		<label>Sudan</label>
-		<name>Sudan</name>
-	</customLabels>
-	<customLabels>
 		<label>Support Center</label>
 		<name>SupportCenter</name>
 	</customLabels>
@@ -1562,38 +1478,6 @@
 		<name>SupportPrep</name>
 	</customLabels>
 	<customLabels>
-		<label>Suriname</label>
-		<name>Suriname</name>
-	</customLabels>
-	<customLabels>
-		<label>Swaziland</label>
-		<name>Swaziland</name>
-	</customLabels>
-	<customLabels>
-		<label>Sweden</label>
-		<name>Sweden</name>
-	</customLabels>
-	<customLabels>
-		<label>Switzerland</label>
-		<name>Switzerland</name>
-	</customLabels>
-	<customLabels>
-		<label>Syria</label>
-		<name>Syria</name>
-	</customLabels>
-	<customLabels>
-		<label>Taiwan</label>
-		<name>Taiwan</name>
-	</customLabels>
-	<customLabels>
-		<label>Tajikistan</label>
-		<name>Tajikistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Tanzania</label>
-		<name>Tanzania</name>
-	</customLabels>
-	<customLabels>
 		<label>Template Roles</label>
 		<name>TemplateRoles</name>
 	</customLabels>
@@ -1602,24 +1486,8 @@
 		<name>TextField</name>
 	</customLabels>
 	<customLabels>
-		<label>Thailand</label>
-		<name>Thailand</name>
-	</customLabels>
-	<customLabels>
 		<label>Title</label>
 		<name>Title</name>
-	</customLabels>
-	<customLabels>
-		<label>Togo</label>
-		<name>Togo</name>
-	</customLabels>
-	<customLabels>
-		<label>Tokelau</label>
-		<name>Tokelau</name>
-	</customLabels>
-	<customLabels>
-		<label>Tonga</label>
-		<name>Tonga</name>
 	</customLabels>
 	<customLabels>
 		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
@@ -1630,32 +1498,8 @@
 		<name>TrustCenter</name>
 	</customLabels>
 	<customLabels>
-		<label>Tunisia</label>
-		<name>Tunisia</name>
-	</customLabels>
-	<customLabels>
-		<label>Turkey</label>
-		<name>Turkey</name>
-	</customLabels>
-	<customLabels>
-		<label>Turkmenistan</label>
-		<name>Turkmenistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Tuvalu</label>
-		<name>Tuvalu</name>
-	</customLabels>
-	<customLabels>
 		<label>Type</label>
 		<name>Type</name>
-	</customLabels>
-	<customLabels>
-		<label>Uganda</label>
-		<name>Uganda</name>
-	</customLabels>
-	<customLabels>
-		<label>Ukraine</label>
-		<name>Ukraine</name>
 	</customLabels>
 	<customLabels>
 		<label>Sorry, you do not have access to this page.</label>
@@ -1724,10 +1568,6 @@
 	<customLabels>
 		<label>Unrecognized language code.</label>
 		<name>UnrecognizedLanguageCode</name>
-	</customLabels>
-	<customLabels>
-		<label>Upgrade Account</label>
-		<name>Upgrade</name>
 	</customLabels>
 	<customLabels>
 		<label>Upload</label>
@@ -1810,10 +1650,6 @@
 		<name>SuccessDownloadingFile</name>
 	</customLabels>
 	<customLabels>
-		<label>Uruguay</label>
-		<name>Uruguay</name>
-	</customLabels>
-	<customLabels>
 		<label>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</label>
 		<name>UseSystemSenderHelp</name>
 	</customLabels>
@@ -1830,10 +1666,6 @@
 		<name>UserNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Uzbekistan</label>
-		<name>Uzbekistan</name>
-	</customLabels>
-	<customLabels>
 		<label>Value</label>
 		<name>Value</name>
 	</customLabels>
@@ -1844,14 +1676,6 @@
 	<customLabels>
 		<label>Vatican</label>
 		<name>Vatican</name>
-	</customLabels>
-	<customLabels>
-		<label>Venezuela</label>
-		<name>Venezuela</name>
-	</customLabels>
-	<customLabels>
-		<label>Vietnam</label>
-		<name>Vietnam</name>
 	</customLabels>
 	<customLabels>
 		<label>View All</label>
@@ -1870,20 +1694,8 @@
 		<name>WillReceive_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Yemen</label>
-		<name>Yemen</name>
-	</customLabels>
-	<customLabels>
 		<label>Yes</label>
 		<name>Yes</name>
-	</customLabels>
-	<customLabels>
-		<label>Zambia</label>
-		<name>Zambia</name>
-	</customLabels>
-	<customLabels>
-		<label>Zimbabwe</label>
-		<name>Zimbabwe</name>
 	</customLabels>
 	<customLabels>
 		<label>{0} ({1})</label>
@@ -2188,10 +2000,6 @@
 	<customLabels>
 		<label>DocuSign Gen Template</label>
 		<name>TemplateConfiguration</name>
-	</customLabels>
-	<customLabels>
-		<label>Saving...</label>
-		<name>Saving</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating documents.  For example, if you choose Opportunity, users can  pull data from an Opportunity and related objects, like Account.&lt;/p&gt;</label>
@@ -3314,10 +3122,6 @@
 		<name>ShowSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>topic2</label>
-		<name>Topic2</name>
-	</customLabels>
-	<customLabels>
 		<label>Your Salesforce Objects</label>
 		<name>YourSalesforceObjects</name>
 	</customLabels>
@@ -3432,14 +3236,6 @@
 	<customLabels>
 		<label>Maximum batch size exceeded: {0} > {1}</label>
 		<name>MaximumBatchSizeExceeded_2</name>
-	</customLabels>
-	<customLabels>
-		<label>Pending</label>
-		<name>Pending</name>
-	</customLabels>
-	<customLabels>
-		<label>Inactive</label>
-		<name>Inactive</name>
 	</customLabels>
 	<customLabels>
 		<label>Sender</label>
