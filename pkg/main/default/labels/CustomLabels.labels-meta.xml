@@ -25,14 +25,6 @@
 		<value>Account</value>
 	</labels>
 	<labels>
-		<fullName>AccountAlreadyExists</fullName>
-		<categories>Errors,AccountAPI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DocuSign Account Already Exists</shortDescription>
-		<value>A DocuSign account already exists for this username.</value>
-	</labels>
-	<labels>
 		<fullName>AccountInSessionSigningMustBeEnabled</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
@@ -49,15 +41,6 @@
 		<value>DocuSign has not yet been configured for this account.</value>
 	</labels>
 	<labels>
-		<fullName>AccountProvisioningFailed</fullName>
-		<categories>Errors,AccountAPI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Account Provisioning Failed</shortDescription>
-		<value>An error occurred while provisioning DocuSign account. Please contact DocuSign Support: https://support.docusign.com/.
-		</value>
-	</labels>
-	<labels>
 		<fullName>Active</fullName>
 		<categories>Users</categories>
 		<language>en_US</language>
@@ -72,14 +55,6 @@
 		<protected>true</protected>
 		<shortDescription>Add</shortDescription>
 		<value>Add</value>
-	</labels>
-	<labels>
-		<fullName>AddDocuSignButtons</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add_DocuSign_Buttons</shortDescription>
-		<value>Add DocuSign buttons and components to page layouts</value>
 	</labels>
 	<labels>
 		<fullName>AddLayoutInfo</fullName>
@@ -120,15 +95,6 @@
 		<protected>true</protected>
 		<shortDescription>Add to DocuSign</shortDescription>
 		<value>Add to DocuSign</value>
-	</labels>
-	<labels>
-		<fullName>AddToDocuSignDetails</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add to DocuSign details</shortDescription>
-		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.
-		</value>
 	</labels>
 	<labels>
 		<fullName>AddToSalesforce</fullName>
@@ -186,13 +152,6 @@
 		<value>Specify Recipients</value>
 	</labels>
 	<labels>
-		<fullName>AlandIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AlandIslands</shortDescription>
-		<value>Aland Islands</value>
-	</labels>
-	<labels>
 		<fullName>Albania</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -205,14 +164,6 @@
 		<protected>true</protected>
 		<shortDescription>Algeria</shortDescription>
 		<value>Algeria</value>
-	</labels>
-	<labels>
-		<fullName>AllSet</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>All_Set</shortDescription>
-		<value>You&#39;re all set! You can edit the sections below to update your configuration.</value>
 	</labels>
 	<labels>
 		<fullName>AllValuesMustNotBeBlank</fullName>
@@ -229,21 +180,6 @@
 		<protected>true</protected>
 		<shortDescription>Already Complete</shortDescription>
 		<value>Already complete</value>
-	</labels>
-	<labels>
-		<fullName>AlreadyMember_1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Already DocuSign user</shortDescription>
-		<value>{0} is already a DocuSign user</value>
-	</labels>
-	<labels>
-		<fullName>AmericanSamoa</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AmericanSamoa</shortDescription>
-		<value>American Samoa</value>
 	</labels>
 	<labels>
 		<fullName>Andorra</fullName>
@@ -272,13 +208,6 @@
 		<protected>true</protected>
 		<shortDescription>Antarctica</shortDescription>
 		<value>Antarctica</value>
-	</labels>
-	<labels>
-		<fullName>AntiguaAndBarbuda</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AntiguaAndBarbuda</shortDescription>
-		<value>Antigua and Barbuda</value>
 	</labels>
 	<labels>
 		<fullName>Approve</fullName>
@@ -480,13 +409,6 @@
 		<value>Bolivia</value>
 	</labels>
 	<labels>
-		<fullName>BosniaAndHerzegovina</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>BosniaAndHerzegovina</shortDescription>
-		<value>Bosnia and Herzegovina</value>
-	</labels>
-	<labels>
 		<fullName>Botswana</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -494,32 +416,11 @@
 		<value>Botswana</value>
 	</labels>
 	<labels>
-		<fullName>BouvetIsland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>BouvetIsland</shortDescription>
-		<value>Bouvet Island</value>
-	</labels>
-	<labels>
 		<fullName>Brazil</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Brazil</shortDescription>
 		<value>Brazil</value>
-	</labels>
-	<labels>
-		<fullName>BritishIndiaOceanTerritory</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>BritishIndiaOceanTerritory</shortDescription>
-		<value>British Indian Ocean Territory</value>
-	</labels>
-	<labels>
-		<fullName>BritishVirginIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>VirginIslandsBritish</shortDescription>
-		<value>British Virgin Islands</value>
 	</labels>
 	<labels>
 		<fullName>Brunei</fullName>
@@ -544,13 +445,6 @@
 		<value>Bulk list not found.</value>
 	</labels>
 	<labels>
-		<fullName>BurkinaFaso</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>BurkinaFaso</shortDescription>
-		<value>Burkina Faso</value>
-	</labels>
-	<labels>
 		<fullName>Burundi</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -572,14 +466,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Sidebar Item</shortDescription>
 		<value>CLM</value>
-	</labels>
-	<labels>
-		<fullName>CLM_PickAFieldTitle</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Pick a Field Title</shortDescription>
-		<value>How do I pick a field?</value>
 	</labels>
 	<labels>
 		<fullName>Cambodia</fullName>
@@ -756,40 +642,12 @@
 		<value>Void is only available if the envelope status is &#39;sent&#39; or &#39;delivered&#39;.</value>
 	</labels>
 	<labels>
-		<fullName>CapeVerde</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CapeVerde</shortDescription>
-		<value>Cape Verde</value>
-	</labels>
-	<labels>
 		<fullName>CarbonCopy</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Carbon Copy</shortDescription>
 		<value>Receives a Copy</value>
-	</labels>
-	<labels>
-		<fullName>CaribbeanNetherlands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CaribbeanNetherlands</shortDescription>
-		<value>Caribbean Netherlands</value>
-	</labels>
-	<labels>
-		<fullName>CaymanIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CaymanIslands</shortDescription>
-		<value>Cayman Islands</value>
-	</labels>
-	<labels>
-		<fullName>CentralAfricanRepublic</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CentralAfricanRepublic</shortDescription>
-		<value>Central African Republic</value>
 	</labels>
 	<labels>
 		<fullName>CertifiedDelivery</fullName>
@@ -861,21 +719,6 @@
 		<value>Why do I need to choose a location?</value>
 	</labels>
 	<labels>
-		<fullName>ChooseObjectInfo</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Choose Object Info</shortDescription>
-		<value>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object at a time.</value>
-	</labels>
-	<labels>
-		<fullName>ChristmasIsland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ChristmasIsland</shortDescription>
-		<value>Christmas Island</value>
-	</labels>
-	<labels>
 		<fullName>ClassicObjectManagerURL</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -898,13 +741,6 @@
 		<protected>true</protected>
 		<shortDescription>Closed</shortDescription>
 		<value>Closed</value>
-	</labels>
-	<labels>
-		<fullName>CocosKeelingIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CocosKeelingIslands</shortDescription>
-		<value>Cocos (Keeling) Islands</value>
 	</labels>
 	<labels>
 		<fullName>Colombia</fullName>
@@ -937,44 +773,12 @@
 		<value>Company</value>
 	</labels>
 	<labels>
-		<fullName>CompanyRequired</fullName>
-		<categories>Errors,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Must Specify Company</shortDescription>
-		<value>Company name is required.</value>
-	</labels>
-	<labels>
-		<fullName>CompleteConnection</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Complete section below</shortDescription>
-		<value>Complete the section below to set up connection.</value>
-	</labels>
-	<labels>
-		<fullName>CompleteSetup</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Complete section below</shortDescription>
-		<value>Complete the sections below to set up DocuSign for Salesforce Essentials.</value>
-	</labels>
-	<labels>
 		<fullName>Completed</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Completed</shortDescription>
 		<value>Completed</value>
-	</labels>
-	<labels>
-		<fullName>ConfigurationError</fullName>
-		<categories>Errors</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ConfigurationError</shortDescription>
-		<value>DocuSign is not configured correctly. Please contact your system administrator for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>ConfigureButtonInfo</fullName>
@@ -1025,20 +829,6 @@
 		<value>Confirm Edits</value>
 	</labels>
 	<labels>
-		<fullName>CongoBrazzaville</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CongoBrazzaville</shortDescription>
-		<value>Congo (Brazzaville)</value>
-	</labels>
-	<labels>
-		<fullName>CongoKinshasa</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CongoKinshasa</shortDescription>
-		<value>Congo (Kinshasa)</value>
-	</labels>
-	<labels>
 		<fullName>ConnectDocuSign</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -1054,22 +844,6 @@
 		<protected>true</protected>
 		<shortDescription>Connect DocuSign to Salesforce</shortDescription>
 		<value>Connect DocuSign to Salesforce</value>
-	</labels>
-	<labels>
-		<fullName>ConnectDocuSignUser</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Connect DocuSign user</shortDescription>
-		<value>Create users in DocuSign based on the users in this Salesforce organization</value>
-	</labels>
-	<labels>
-		<fullName>ConnectToDocuSign</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Connect to DocuSign</shortDescription>
-		<value>Connect Salesforce to DocuSign</value>
 	</labels>
 	<labels>
 		<fullName>ContactSupport</fullName>
@@ -1102,44 +876,6 @@
 		<protected>true</protected>
 		<shortDescription>Continue</shortDescription>
 		<value>Continue</value>
-	</labels>
-	<labels>
-		<fullName>ContinueSetup</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Continue setup</shortDescription>
-		<value>Continue Setup</value>
-	</labels>
-	<labels>
-		<fullName>ContinueToLogIn</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Continue to log in</shortDescription>
-		<value>Continue to Log In</value>
-	</labels>
-	<labels>
-		<fullName>ContinueToSetup</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Continue to Setup</shortDescription>
-		<value>Continue to Setup</value>
-	</labels>
-	<labels>
-		<fullName>CookIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CookIslands</shortDescription>
-		<value>Cook Islands</value>
-	</labels>
-	<labels>
-		<fullName>CostaRica</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CostaRica</shortDescription>
-		<value>Costa Rica</value>
 	</labels>
 	<labels>
 		<fullName>Country</fullName>
@@ -1180,13 +916,6 @@
 		<value>Cuba</value>
 	</labels>
 	<labels>
-		<fullName>Curacao</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Curacao</shortDescription>
-		<value>Curaçao</value>
-	</labels>
-	<labels>
 		<fullName>CurrentChatterLanguageSettings</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
@@ -1216,13 +945,6 @@
 		<protected>true</protected>
 		<shortDescription>Cyprus</shortDescription>
 		<value>Cyprus</value>
-	</labels>
-	<labels>
-		<fullName>CzechRepublic</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CzechRepublic</shortDescription>
-		<value>Czech Republic</value>
 	</labels>
 	<labels>
 		<fullName>DateSigned</fullName>
@@ -1366,13 +1088,6 @@
 		<value>Dominica</value>
 	</labels>
 	<labels>
-		<fullName>DominicanRepublic</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DominicanRepublic</shortDescription>
-		<value>Dominican Republic</value>
-	</labels>
-	<labels>
 		<fullName>Done</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -1435,13 +1150,6 @@
 		<value>Egypt</value>
 	</labels>
 	<labels>
-		<fullName>ElSalvador</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ElSalvador</shortDescription>
-		<value>El Salvador</value>
-	</labels>
-	<labels>
 		<fullName>EmailAddress</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
@@ -1498,28 +1206,12 @@
 		<value>Cannot send envelope. Signing Group has no members.</value>
 	</labels>
 	<labels>
-		<fullName>EnableSalesforceUsers</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Enable Salesforce users</shortDescription>
-		<value>Enable Salesforce users in DocuSign</value>
-	</labels>
-	<labels>
 		<fullName>Enabled</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Enabled</shortDescription>
 		<value>Enabled</value>
-	</labels>
-	<labels>
-		<fullName>EnabledInDocuSign</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Enabled in DocuSign</shortDescription>
-		<value>Enabled in DocuSign</value>
 	</labels>
 	<labels>
 		<fullName>EncryptedFields_2</fullName>
@@ -1611,13 +1303,6 @@
 		<value>Environment</value>
 	</labels>
 	<labels>
-		<fullName>EquatorialGuinea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>EquatorialGuinea</shortDescription>
-		<value>Equatorial Guinea</value>
-	</labels>
-	<labels>
 		<fullName>Eritrea</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -1671,49 +1356,11 @@
 		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one required, non-conditional Signature or Initials tab.</value>
 	</labels>
 	<labels>
-		<fullName>FalklandIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>FalklandIslands</shortDescription>
-		<value>Falkland Islands</value>
-	</labels>
-	<labels>
-		<fullName>FaroeIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>FaroeIslands</shortDescription>
-		<value>Faroe Islands</value>
-	</labels>
-	<labels>
-		<fullName>FieldError</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Field error</shortDescription>
-		<value>Complete this field</value>
-	</labels>
-	<labels>
 		<fullName>Fiji</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Fiji</shortDescription>
 		<value>Fiji</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimit</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>File size limit</shortDescription>
-		<value>File size limit is 4MB.</value>
-	</labels>
-	<labels>
-		<fullName>FileSizeLimitReached</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>File size limit reached</shortDescription>
-		<value>This file exceeds the maximum size limit</value>
 	</labels>
 	<labels>
 		<fullName>FileSizeLimitReached_2</fullName>
@@ -1784,27 +1431,6 @@
 		<protected>true</protected>
 		<shortDescription>French</shortDescription>
 		<value>French</value>
-	</labels>
-	<labels>
-		<fullName>FrenchGuiana</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>FrenchGuiana</shortDescription>
-		<value>French Guiana</value>
-	</labels>
-	<labels>
-		<fullName>FrenchPolynesia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>FrenchPolynesia</shortDescription>
-		<value>French Polynesia</value>
-	</labels>
-	<labels>
-		<fullName>FrenchSouthernTerritories</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>FrenchSouthernTerritories</shortDescription>
-		<value>French Southern Territories</value>
 	</labels>
 	<labels>
 		<fullName>FullName</fullName>
@@ -1929,13 +1555,6 @@
 		<value>Guinea</value>
 	</labels>
 	<labels>
-		<fullName>GuineaBissau</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>GuineaBissau</shortDescription>
-		<value>Guinea-Bissau</value>
-	</labels>
-	<labels>
 		<fullName>Guyana</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -1990,13 +1609,6 @@
 		<value>Having trouble?</value>
 	</labels>
 	<labels>
-		<fullName>HeardandMcDonaldIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>HeardandMcDonaldIslands</shortDescription>
-		<value>Heard Island and McDonald Islands</value>
-	</labels>
-	<labels>
 		<fullName>Help</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -2011,22 +1623,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
 		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
-	</labels>
-	<labels>
-		<fullName>HelpSection1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Help section 1</shortDescription>
-		<value>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</value>
-	</labels>
-	<labels>
-		<fullName>HelpSection2</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Help section 2</shortDescription>
-		<value>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -2060,13 +1656,6 @@
 		<value>Honduras</value>
 	</labels>
 	<labels>
-		<fullName>HongKong</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>HongKong</shortDescription>
-		<value>Hong Kong S.A.R. China</value>
-	</labels>
-	<labels>
 		<fullName>Hungary</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -2079,14 +1668,6 @@
 		<protected>true</protected>
 		<shortDescription>Iceland</shortDescription>
 		<value>Iceland</value>
-	</labels>
-	<labels>
-		<fullName>InPersonSigner</fullName>
-		<categories>Sending</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>In Person Signer</shortDescription>
-		<value>In Person Signer</value>
 	</labels>
 	<labels>
 		<fullName>India</fullName>
@@ -2199,14 +1780,6 @@
 		<value>Invalid document resolver: {0}.</value>
 	</labels>
 	<labels>
-		<fullName>InvalidEmail</fullName>
-		<categories>Errors</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Invalid Email Address</shortDescription>
-		<value>The email address is invalid.</value>
-	</labels>
-	<labels>
 		<fullName>InvalidEmailSettings</fullName>
 		<categories>Errors,Validation</categories>
 		<language>en_US</language>
@@ -2311,14 +1884,6 @@
 		<value>DocuSign status not found or invalid.</value>
 	</labels>
 	<labels>
-		<fullName>InvalidTrialAccount</fullName>
-		<categories>Errors,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Invalid Trial Account</shortDescription>
-		<value>The trial account is invalid.</value>
-	</labels>
-	<labels>
 		<fullName>InvalidType</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
@@ -2380,13 +1945,6 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</value>
 	</labels>
 	<labels>
-		<fullName>IsleOfMan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>IsleOfMan</shortDescription>
-		<value>Isle of Man</value>
-	</labels>
-	<labels>
 		<fullName>Israel</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -2407,13 +1965,6 @@
 		<protected>true</protected>
 		<shortDescription>Italy</shortDescription>
 		<value>Italy</value>
-	</labels>
-	<labels>
-		<fullName>IvoryCoast</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>IvoryCoast</shortDescription>
-		<value>Ivory Coast</value>
 	</labels>
 	<labels>
 		<fullName>Jamaica</fullName>
@@ -2501,14 +2052,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - LEX Object Manager URL</shortDescription>
 		<value>/lightning/setup/ObjectManager/home</value>
-	</labels>
-	<labels>
-		<fullName>LandingProgress_2</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Landing Progress</shortDescription>
-		<value>{0} out of {1} sections completed</value>
 	</labels>
 	<labels>
 		<fullName>Language</fullName>
@@ -2631,30 +2174,6 @@
 		<value>Log in to Your DocuSign Account</value>
 	</labels>
 	<labels>
-		<fullName>LogOut</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Log out</shortDescription>
-		<value>Log Out</value>
-	</labels>
-	<labels>
-		<fullName>LoggedInAs_2</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Logged in as</shortDescription>
-		<value>Logged in as {0} ({1})</value>
-	</labels>
-	<labels>
-		<fullName>LogoutConfirm_1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Logout confirm</shortDescription>
-		<value>Are you sure you want to log {0} out of DocuSign?</value>
-	</labels>
-	<labels>
 		<fullName>Luxembourg</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -2726,14 +2245,6 @@
 		<value>Manage</value>
 	</labels>
 	<labels>
-		<fullName>ManageUsers</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Manage users</shortDescription>
-		<value>Manage Users</value>
-	</labels>
-	<labels>
 		<fullName>MapNew</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -2766,29 +2277,6 @@
 		<value>Mapped Objects</value>
 	</labels>
 	<labels>
-		<fullName>MarketingOptIn</fullName>
-		<categories>Setup,Accounts</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Marketing opt-in</shortDescription>
-		<value>I agree to receive marketing communications and promotional offers from DocuSign.</value>
-	</labels>
-	<labels>
-		<fullName>MarketingPreferenceRequired</fullName>
-		<categories>Errors,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Must select marketing preference</shortDescription>
-		<value>Marketing preference selection is required.</value>
-	</labels>
-	<labels>
-		<fullName>MarshallIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>MarshallIslands</shortDescription>
-		<value>Marshall Islands</value>
-	</labels>
-	<labels>
 		<fullName>Martinique</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -2815,22 +2303,6 @@
 		<protected>true</protected>
 		<shortDescription>Mayotte</shortDescription>
 		<value>Mayotte</value>
-	</labels>
-	<labels>
-		<fullName>MemberAdded_1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DocuSign member added</shortDescription>
-		<value>{0} has been added</value>
-	</labels>
-	<labels>
-		<fullName>MemberRemoved_1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DocuSign member removed</shortDescription>
-		<value>{0} has been removed</value>
 	</labels>
 	<labels>
 		<fullName>Message</fullName>
@@ -3043,34 +2515,12 @@
 		<value>Netherlands</value>
 	</labels>
 	<labels>
-		<fullName>NewCaledonia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>NewCaledonia</shortDescription>
-		<value>New Caledonia</value>
-	</labels>
-	<labels>
-		<fullName>NewZealand</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>NewZealand</shortDescription>
-		<value>New Zealand</value>
-	</labels>
-	<labels>
 		<fullName>Next</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Next</shortDescription>
 		<value>Next</value>
-	</labels>
-	<labels>
-		<fullName>NextSteps</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Next steps</shortDescription>
-		<value>Next Steps</value>
 	</labels>
 	<labels>
 		<fullName>Nicaragua</fullName>
@@ -3157,41 +2607,12 @@
 		<value>Your account must be updated by one of our customer service reps. Please call us at 1-800-379-9973.</value>
 	</labels>
 	<labels>
-		<fullName>NonUSConsentMessage</fullName>
-		<categories>Setup,Accounts</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Non-US consent message</shortDescription>
-		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</value>
-	</labels>
-	<labels>
 		<fullName>None</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>None</shortDescription>
 		<value>None</value>
-	</labels>
-	<labels>
-		<fullName>NorfolkIsland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>NorfolkIsland</shortDescription>
-		<value>Norfolk Island</value>
-	</labels>
-	<labels>
-		<fullName>NorthKorea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>NorthKorea</shortDescription>
-		<value>North Korea</value>
-	</labels>
-	<labels>
-		<fullName>NorthernMarianaIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>NorthernMarianaIslands</shortDescription>
-		<value>Northern Mariana Islands</value>
 	</labels>
 	<labels>
 		<fullName>Norway</fullName>
@@ -3215,14 +2636,6 @@
 		<protected>true</protected>
 		<shortDescription>Note</shortDescription>
 		<value>Note</value>
-	</labels>
-	<labels>
-		<fullName>NothingToRemove</fullName>
-		<categories>Errors</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Nothing to remove</shortDescription>
-		<value>Nothing to remove</value>
 	</labels>
 	<labels>
 		<fullName>NullApiResponse</fullName>
@@ -3257,14 +2670,6 @@
 		<value>What is an Object Folder?</value>
 	</labels>
 	<labels>
-		<fullName>ObjectManagerURL</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - LEX Object Manager URL</shortDescription>
-		<value>/lightning/setup/ObjectManager/home</value>
-	</labels>
-	<labels>
 		<fullName>ObjectMapping</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -3288,14 +2693,6 @@
 		<value>Other</value>
 	</labels>
 	<labels>
-		<fullName>OtherUrl</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Other URL</shortDescription>
-		<value>Other URL</value>
-	</labels>
-	<labels>
 		<fullName>Pakistan</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3310,25 +2707,11 @@
 		<value>Palau</value>
 	</labels>
 	<labels>
-		<fullName>PalestinianTerritory</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>PalestinianTerritory</shortDescription>
-		<value>Palestinian Territory</value>
-	</labels>
-	<labels>
 		<fullName>Panama</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Panama</shortDescription>
 		<value>Panama</value>
-	</labels>
-	<labels>
-		<fullName>PapuaNewGuinea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>PapuaNewGuinea</shortDescription>
-		<value>Papua New Guinea</value>
 	</labels>
 	<labels>
 		<fullName>Paraguay</fullName>
@@ -3373,14 +2756,6 @@
 		<protected>true</protected>
 		<shortDescription>Placeholder role required</shortDescription>
 		<value>Placeholder recipient must have a role.</value>
-	</labels>
-	<labels>
-		<fullName>PleaseLogIn</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Please log in</shortDescription>
-		<value>Please log in to your account</value>
 	</labels>
 	<labels>
 		<fullName>Poland</fullName>
@@ -3437,13 +2812,6 @@
 		<value>Private Message</value>
 	</labels>
 	<labels>
-		<fullName>PuertoRico</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>PuertoRico</shortDescription>
-		<value>Puerto Rico</value>
-	</labels>
-	<labels>
 		<fullName>Qatar</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3491,36 +2859,12 @@
 		<value>Reminders</value>
 	</labels>
 	<labels>
-		<fullName>RemoteSiteMissing_1</fullName>
-		<categories>API</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Remote Site Missing</shortDescription>
-		<value>Remote site is not authorized: {0}.</value>
-	</labels>
-	<labels>
 		<fullName>Remove</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Remove</shortDescription>
 		<value>Remove</value>
-	</labels>
-	<labels>
-		<fullName>RemoveUser</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Remove user</shortDescription>
-		<value>Remove User</value>
-	</labels>
-	<labels>
-		<fullName>RemoveUserConfirm_1</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Remove user confirmation</shortDescription>
-		<value>Are you sure you want to remove {0} from this DocuSign account?</value>
 	</labels>
 	<labels>
 		<fullName>RequiredCustomField_1</fullName>
@@ -3561,67 +2905,11 @@
 		<value>Russian</value>
 	</labels>
 	<labels>
-		<fullName>RussianFederation</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>RussianFederation</shortDescription>
-		<value>Russian Federation</value>
-	</labels>
-	<labels>
 		<fullName>Rwanda</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Rwanda</shortDescription>
 		<value>Rwanda</value>
-	</labels>
-	<labels>
-		<fullName>SaintBarthelemy</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintBarthelemy</shortDescription>
-		<value>Saint Barthélemy</value>
-	</labels>
-	<labels>
-		<fullName>SaintHelena</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintHelena</shortDescription>
-		<value>Saint Helena</value>
-	</labels>
-	<labels>
-		<fullName>SaintKittsAndNevis</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintKittsAndNevis</shortDescription>
-		<value>Saint Kitts and Nevis</value>
-	</labels>
-	<labels>
-		<fullName>SaintLucia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintLucia</shortDescription>
-		<value>Saint Lucia</value>
-	</labels>
-	<labels>
-		<fullName>SaintMartinFrance</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintMartinFrance</shortDescription>
-		<value>Saint-Martin (French Part)</value>
-	</labels>
-	<labels>
-		<fullName>SaintPierreAndMiquelon</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintPierreAndMiquelon</shortDescription>
-		<value>Saint Pierre and Miquelon</value>
-	</labels>
-	<labels>
-		<fullName>SaintVincentAndTheGrenadines</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaintVincentAndTheGrenadines</shortDescription>
-		<value>Saint Vincent and the Grenadines</value>
 	</labels>
 	<labels>
 		<fullName>SalesforceApiErrorUnexpectedResponse</fullName>
@@ -3632,14 +2920,6 @@
 		<value>Unexpected response from Salesforce API.</value>
 	</labels>
 	<labels>
-		<fullName>SalesforceApiError_1</fullName>
-		<categories>API</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Salesforce API Error</shortDescription>
-		<value>An error occurred when invoking a Salesforce API: {0}.</value>
-	</labels>
-	<labels>
 		<fullName>SalesforceOrgStorageLimitExceeded</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
@@ -3648,40 +2928,11 @@
 		<value>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.</value>
 	</labels>
 	<labels>
-		<fullName>SalesforceUser</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Salesforce user</shortDescription>
-		<value>Salesforce User</value>
-	</labels>
-	<labels>
 		<fullName>Samoa</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Samoa</shortDescription>
 		<value>Samoa</value>
-	</labels>
-	<labels>
-		<fullName>SanMarino</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SanMarino</shortDescription>
-		<value>San Marino</value>
-	</labels>
-	<labels>
-		<fullName>SaoTomeAndPrincipe</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaoTomeAndPrincipe</shortDescription>
-		<value>Sao Tome and Principe</value>
-	</labels>
-	<labels>
-		<fullName>SaudiArabia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SaudiArabia</shortDescription>
-		<value>Saudi Arabia</value>
 	</labels>
 	<labels>
 		<fullName>Save</fullName>
@@ -3732,13 +2983,6 @@
 		<value>Select Account</value>
 	</labels>
 	<labels>
-		<fullName>SelectCountry</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Select country</shortDescription>
-		<value>-- Select a country --</value>
-	</labels>
-	<labels>
 		<fullName>SelectAccountOption</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -3753,14 +2997,6 @@
 		<protected>true</protected>
 		<shortDescription>Select Salesforce users</shortDescription>
 		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
-	</labels>
-	<labels>
-		<fullName>SelectUser</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Select user</shortDescription>
-		<value>Select a user</value>
 	</labels>
 	<labels>
 		<fullName>SendAutomaticReminders</fullName>
@@ -3848,13 +3084,6 @@
 		<value>Show More</value>
 	</labels>
 	<labels>
-		<fullName>SierraLeone</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SierraLeone</shortDescription>
-		<value>Sierra Leone</value>
-	</labels>
-	<labels>
 		<fullName>SignHere</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
@@ -3926,13 +3155,6 @@
 		<value>Singapore</value>
 	</labels>
 	<labels>
-		<fullName>SintMaarten</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SintMaarten</shortDescription>
-		<value>Sint Maarten</value>
-	</labels>
-	<labels>
 		<fullName>Slovakia</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3947,54 +3169,11 @@
 		<value>Slovenia</value>
 	</labels>
 	<labels>
-		<fullName>SolomonIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SolomonIslands</shortDescription>
-		<value>Solomon Islands</value>
-	</labels>
-	<labels>
 		<fullName>Somalia</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Somalia</shortDescription>
 		<value>Somalia</value>
-	</labels>
-	<labels>
-		<fullName>SomethingWrong</fullName>
-		<categories>General</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Something went wrong</shortDescription>
-		<value>Something went wrong. Please try again.</value>
-	</labels>
-	<labels>
-		<fullName>SouthAfrica</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SouthAfrica</shortDescription>
-		<value>South Africa</value>
-	</labels>
-	<labels>
-		<fullName>SouthGeorgiaAndTheSouthSandwichIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SouthGeorgiaAndTheSouthSandwichIslands</shortDescription>
-		<value>South Georgia and the South Sandwich Islands</value>
-	</labels>
-	<labels>
-		<fullName>SouthKorea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SouthKorea</shortDescription>
-		<value>South Korea</value>
-	</labels>
-	<labels>
-		<fullName>SouthSudan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SouthSudan</shortDescription>
-		<value>South Sudan</value>
 	</labels>
 	<labels>
 		<fullName>Spain</fullName>
@@ -4010,13 +3189,6 @@
 		<protected>true</protected>
 		<shortDescription>Spanish</shortDescription>
 		<value>Spanish</value>
-	</labels>
-	<labels>
-		<fullName>SriLanka</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SriLanka</shortDescription>
-		<value>Sri Lanka</value>
 	</labels>
 	<labels>
 		<fullName>Status</fullName>
@@ -4121,13 +3293,6 @@
 		<value>Suriname</value>
 	</labels>
 	<labels>
-		<fullName>SvalbardAndJanMayen</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SvalbardAndJanMayen</shortDescription>
-		<value>Svalbard and Jan Mayen</value>
-	</labels>
-	<labels>
 		<fullName>Swaziland</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4200,13 +3365,6 @@
 		<value>Thailand</value>
 	</labels>
 	<labels>
-		<fullName>TimorLeste</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>TimorLeste</shortDescription>
-		<value>Timor-Leste</value>
-	</labels>
-	<labels>
 		<fullName>Title</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
@@ -4244,67 +3402,12 @@
 		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
 	</labels>
 	<labels>
-		<fullName>TrialAccountExpiresOneDay</fullName>
-		<categories>Warnings,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Trial Account Expires in One Day</shortDescription>
-		<value>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
-	</labels>
-	<labels>
-		<fullName>TrialAccountExpiresSoon_1</fullName>
-		<categories>Warnings,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Trial Account Expires Soon</shortDescription>
-		<value>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
-	</labels>
-	<labels>
-		<fullName>TrialAccountExpiresToday</fullName>
-		<categories>Warnings,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Trial Account Expires Today</shortDescription>
-		<value>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
-	</labels>
-	<labels>
-		<fullName>TrialExpired_2</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Trial expired</shortDescription>
-		<value>Trial for {0} ({1}) has expired</value>
-	</labels>
-	<labels>
-		<fullName>TrialInstructions</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Trial instructions</shortDescription>
-		<value>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</value>
-	</labels>
-	<labels>
-		<fullName>TrinidadAndTobago</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>TrinidadAndTobago</shortDescription>
-		<value>Trinidad and Tobago</value>
-	</labels>
-	<labels>
 		<fullName>TrustCenter</fullName>
 		<categories>Support</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trust Center</shortDescription>
 		<value>Trust Center</value>
-	</labels>
-	<labels>
-		<fullName>TryDocuSign</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Try DocuSign</shortDescription>
-		<value>Try DocuSign free for 30 days</value>
 	</labels>
 	<labels>
 		<fullName>Tunisia</fullName>
@@ -4328,13 +3431,6 @@
 		<value>Turkmenistan</value>
 	</labels>
 	<labels>
-		<fullName>TurksAndCaicoIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>TurksAndCaicoIslands</shortDescription>
-		<value>Turks and Caicos Islands</value>
-	</labels>
-	<labels>
 		<fullName>Tuvalu</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4348,21 +3444,6 @@
 		<protected>true</protected>
 		<shortDescription>Type</shortDescription>
 		<value>Type</value>
-	</labels>
-	<labels>
-		<fullName>USConsentMessage</fullName>
-		<categories>Setup,Accounts</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>US consent message</shortDescription>
-		<value>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</value>
-	</labels>
-	<labels>
-		<fullName>USVirginIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>VirginIslandsUS</shortDescription>
-		<value>U.S. Virgin Islands</value>
 	</labels>
 	<labels>
 		<fullName>Uganda</fullName>
@@ -4491,34 +3572,6 @@
 		<value>No users defined.</value>
 	</labels>
 	<labels>
-		<fullName>UnitedArabEmirates</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>UnitedArabEmirates</shortDescription>
-		<value>United Arab Emirates</value>
-	</labels>
-	<labels>
-		<fullName>UnitedKingdom</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>UnitedKingdom</shortDescription>
-		<value>United Kingdom</value>
-	</labels>
-	<labels>
-		<fullName>UnitedStates</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>UnitedStates</shortDescription>
-		<value>United States</value>
-	</labels>
-	<labels>
-		<fullName>UnitedStatesMinorOutlyingIslands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>UnitedStatesMinorOutlyingIslands</shortDescription>
-		<value>United States Minor Outlying Islands</value>
-	</labels>
-	<labels>
 		<fullName>Unknown</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -4551,14 +3604,6 @@
 		<value>Upgrade Account</value>
 	</labels>
 	<labels>
-		<fullName>UpgradeNow</fullName>
-		<categories>Support</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upgrade now</shortDescription>
-		<value>Upgrade Now</value>
-	</labels>
-	<labels>
 		<fullName>Upload</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
@@ -4573,14 +3618,6 @@
 		<protected>true</protected>
 		<shortDescription>Upload file</shortDescription>
 		<value>Upload File</value>
-	</labels>
-	<labels>
-		<fullName>UploadSuccessful</fullName>
-		<categories>Files</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upload successful</shortDescription>
-		<value>File was uploaded successfully</value>
 	</labels>
 	<labels>
 		<fullName>ImportFiles</fullName>
@@ -4695,13 +3732,6 @@
 		<value>Collect signatures for this agreement with DocuSign.</value>
 	</labels>
 	<labels>
-		<fullName>ErrorUploadingFile</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Error Uploading File</shortDescription>
-		<value>Error Uploading File</value>
-	</labels>
-	<labels>
 		<fullName>ErrorDownloadingFile</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4723,28 +3753,12 @@
 		<value>Uruguay</value>
 	</labels>
 	<labels>
-		<fullName>UseSystemSender</fullName>
-		<categories>Settings,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Use system sender</shortDescription>
-		<value>Use system sender</value>
-	</labels>
-	<labels>
 		<fullName>UseSystemSenderHelp</fullName>
 		<categories>Help,Settings,Account</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Use system sender help</shortDescription>
 		<value>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</value>
-	</labels>
-	<labels>
-		<fullName>UserCountryRequired</fullName>
-		<categories>Errors,Account</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Must select country</shortDescription>
-		<value>Country selection is required.</value>
 	</labels>
 	<labels>
 		<fullName>UserMustBeProvided</fullName>
@@ -4769,14 +3783,6 @@
 		<protected>true</protected>
 		<shortDescription>User not found</shortDescription>
 		<value>User not found</value>
-	</labels>
-	<labels>
-		<fullName>UsernameNotAllowed</fullName>
-		<categories>Errors,AccountAPI</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Username not Allowed</shortDescription>
-		<value>The email address is not allowed because it belongs to a restricted domain.</value>
 	</labels>
 	<labels>
 		<fullName>Uzbekistan</fullName>
@@ -4836,20 +3842,6 @@
 		<protected>true</protected>
 		<shortDescription>Voided</shortDescription>
 		<value>Voided</value>
-	</labels>
-	<labels>
-		<fullName>WallisAndFutuna</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>WallisAndFutuna</shortDescription>
-		<value>Wallis and Futuna</value>
-	</labels>
-	<labels>
-		<fullName>WesternSahara</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>WesternSahara</shortDescription>
-		<value>Western Sahara</value>
 	</labels>
 	<labels>
 		<fullName>WillNotReceive_2</fullName>
@@ -5079,13 +4071,6 @@
 		<value>DocuSign Account Service</value>
 	</labels>
 	<labels>
-		<fullName>ProvisioningServiceDescription</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>DocuSign Provisioning Service</shortDescription>
-		<value>DocuSign Provisioning Service</value>
-	</labels>
-	<labels>
 		<fullName>ESignatureServiceDescription</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -5189,13 +4174,6 @@
 		<protected>true</protected>
 		<shortDescription>All Objects</shortDescription>
 		<value>All Objects</value>
-	</labels>
-	<labels>
-		<fullName>AddToLayouts</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add to Layouts</shortDescription>
-		<value>Add DocuSign buttons and status to your Salesforce layouts</value>
 	</labels>
 	<labels>
 		<fullName>NoLayoutsForSelectedObject</fullName>
@@ -5316,13 +4294,6 @@
 		<protected>true</protected>
 		<shortDescription>StepsForSuccess</shortDescription>
 		<value>STEPS FOR SUCCESS</value>
-	</labels>
-	<labels>
-		<fullName>InvalidFormMsg</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>InvalidFormMsg</shortDescription>
-		<value>Please update invalid form entries and try again</value>
 	</labels>
 	<labels>
 		<fullName>CancelModalTitle</fullName>
@@ -6189,39 +5160,11 @@
 		<value>Successfully connected and authorized to DocuSign.</value>
 	</labels>
 	<labels>
-		<fullName>SuccessDocuSignGenTrial</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SuccessDocuSignGenTrial</shortDescription>
-		<value>Successfully started DocuSign Gen Trial.</value>
-	</labels>
-	<labels>
-		<fullName>ErrorDocuSignGenTrial</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ErrorDocuSignGenTrial</shortDescription>
-		<value>Unable to start DocuSign Gen Trial. Please contact DocuSign Gen Support for assistance.</value>
-	</labels>
-	<labels>
 		<fullName>MissingDocuSignGenAuthorizationSettings</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>MissingDocuSignGenAuthorizationSettings</shortDescription>
 		<value>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for assistance.</value>
-	</labels>
-	<labels>
-		<fullName>AuthorizeGen</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AuthorizeGen</shortDescription>
-		<value>Authorize Gen</value>
-	</labels>
-	<labels>
-		<fullName>TrialGen</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>TrialGen</shortDescription>
-		<value>Start Your Gen Trial</value>
 	</labels>
 	<labels>
 		<fullName>Modified</fullName>
@@ -6743,13 +5686,6 @@
 		<value>Review for {0} canceled.</value>
 	</labels>
 	<labels>
-		<fullName>InvalidOrigin</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Invalid Salesforce event origin</shortDescription>
-		<value>Invalid Salesforce event origin.</value>
-	</labels>
-	<labels>
 		<fullName>InvalidTarget</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -6986,13 +5922,6 @@
 		<protected>true</protected>
 		<shortDescription>AgreementApprovalError</shortDescription>
 		<value>Error while submitting Approval response.</value>
-	</labels>
-	<labels>
-		<fullName>AgreementShareLinkMessage</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AgreementShareLinkMessage</shortDescription>
-		<value>Users with permission to access your DocuSign Agreements can use this link to view, download and edit this agreement.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementShareLinkCopiedMessage</fullName>
@@ -7443,14 +6372,6 @@
 		<value>Invalid permission set: {0}</value>
 	</labels>
 	<labels>
-		<fullName>CaseFolderContents</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Case Folder Contents</shortDescription>
-		<value>Case Folder Contents</value>
-	</labels>
-	<labels>
 		<fullName>CreateDefaultCLMObjMappings</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
@@ -7695,13 +6616,6 @@
 		<value>One or more product roles are unsupported.</value>
 	</labels>
 	<labels>
-		<fullName>InvalidProductRole</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Invalid product role</shortDescription>
-		<value>Invalid product role.</value>
-	</labels>
-	<labels>
 		<fullName>FailedToTriggerDocumentComparisonTask</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7714,14 +6628,6 @@
 		<protected>true</protected>
 		<shortDescription>InvalidInputsAgreementComparison</shortDescription>
 		<value>Invalid input parameters for comparing Agreement versions.</value>
-	</labels>
-	<labels>
-		<fullName>ViewObjectFoldersCardTitle</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Viewing object folders in Salesforce card title</shortDescription>
-		<value>Viewing object folders in Salesforce</value>
 	</labels>
 	<labels>
 		<fullName>ViewObjectFoldersCardBody</fullName>
@@ -8060,14 +6966,6 @@
 		<value>Name your folder</value>
 	</labels>
 	<labels>
-		<fullName>NameYourFolderSummary</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Name Your Folder Summary</shortDescription>
-		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
-	</labels>
-	<labels>
 		<fullName>RenameFolder</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -8106,14 +7004,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - FAQs</shortDescription>
 		<value>FAQs</value>
-	</labels>
-	<labels>
-		<fullName>MapEdit</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Map Edit</shortDescription>
-		<value>{0} object was successfully edited.</value>
 	</labels>
 	<labels>
 		<fullName>MapError</fullName>
