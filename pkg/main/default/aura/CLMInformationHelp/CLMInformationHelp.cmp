@@ -1,6 +1,7 @@
-<aura:component extends="c:CLMUtility">
+<aura:component extends="c:CLMUtility" controller="CLMApexUtility">
 	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
-
+    <ltng:require scripts="{!$Resource.navUtils}" />
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
 	<aura:attribute name="isSubTitle" type="Boolean" default="false" />
 	<aura:attribute name="subTitle" type="String" />
 	<aura:attribute name="imageURL" type="String" />
