@@ -1,5 +1,5 @@
 ({
-	buttonClick: function (component) {
+	buttonClick: function (component, event, helper) {
 		var link = component.get('v.firstButtonNavigation');
 		var buttonName = component.get('v.firstButtonName');
 		if (buttonName === $A.get('$Label.c.OpenObjectManagerButton')) {
