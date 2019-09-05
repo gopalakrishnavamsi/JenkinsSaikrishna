@@ -1820,8 +1820,7 @@
 		<value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
 	</labels>
 	<labels>
-		<fullName>
-      MesMessage</fullName>
+		<fullName>PrivateMessage</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
