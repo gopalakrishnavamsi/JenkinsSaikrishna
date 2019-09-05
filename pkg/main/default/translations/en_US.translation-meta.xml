@@ -1610,6 +1610,10 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Text Field</label>
+		<name>TextField</name>
+	</customLabels>
+	<customLabels>
 		<label>Thailand</label>
 		<name>Thailand</name>
 	</customLabels>
