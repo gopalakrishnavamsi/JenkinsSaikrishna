@@ -34,10 +34,6 @@
 		<name>Add</name>
 	</customLabels>
 	<customLabels>
-		<label>Add DocuSign buttons and components to page layouts</label>
-		<name>AddDocuSignButtons</name>
-	</customLabels>
-	<customLabels>
 		<label>Add Recipient</label>
 		<name>AddRecipient</name>
 	</customLabels>
@@ -390,10 +386,6 @@
 		<name>ContinueLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Continue to Setup</label>
-		<name>ContinueToSetup</name>
-	</customLabels>
-	<customLabels>
 		<label>Country</label>
 		<name>Country</name>
 	</customLabels>
@@ -540,10 +532,6 @@
 	<customLabels>
 		<label>Cannot send envelope. Signing Group has no members.</label>
 		<name>EmptySigningGroup</name>
-	</customLabels>
-	<customLabels>
-		<label>Enable Salesforce users in DocuSign</label>
-		<name>EnableSalesforceUsers</name>
 	</customLabels>
 	<customLabels>
 		<label>Enabled</label>

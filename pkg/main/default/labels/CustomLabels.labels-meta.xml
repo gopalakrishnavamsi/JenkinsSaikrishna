@@ -57,14 +57,6 @@
 		<value>Add</value>
 	</labels>
 	<labels>
-		<fullName>AddDocuSignButtons</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add_DocuSign_Buttons</shortDescription>
-		<value>Add DocuSign buttons and components to page layouts</value>
-	</labels>
-	<labels>
 		<fullName>AddLayoutInfo</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -886,14 +878,6 @@
 		<value>Continue</value>
 	</labels>
 	<labels>
-		<fullName>ContinueToSetup</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Continue to Setup</shortDescription>
-		<value>Continue to Setup</value>
-	</labels>
-	<labels>
 		<fullName>Country</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -1220,14 +1204,6 @@
 		<protected>true</protected>
 		<shortDescription>Signing Group Has no Members</shortDescription>
 		<value>Cannot send envelope. Signing Group has no members.</value>
-	</labels>
-	<labels>
-		<fullName>EnableSalesforceUsers</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Enable Salesforce users</shortDescription>
-		<value>Enable Salesforce users in DocuSign</value>
 	</labels>
 	<labels>
 		<fullName>Enabled</fullName>
