@@ -13,7 +13,9 @@ public with sharing class CLMAPI extends DocuSignAPI {
 	private static final String POST_REQ_PATH_DOC_GEN = 'Admin/DocLauncherConfig';
 	private static final String POST_REQ_PATH_WORKFLOW = 'workflow';
 	//TODO: Replace AUTH_BASE_URL with appropriate value from custom setting
-	private static String AUTH_BASE_URL = 'https://authqa.springcm.com';
+	private static String AUTH_BASE_URL; 
+    //TODO: Only for demo. Remove before Security review.
+    private static String RESOURCE_URL;
 
 	private CLMAPI(final Url baseUrl, final String api, final String apiVersion) {
 		super(new Url (baseUrl, String.format('/{0}/{1}/',
@@ -26,15 +28,30 @@ public with sharing class CLMAPI extends DocuSignAPI {
 	public static CLMAPI getInstance() {
 		if (self == null) {
 			//TODO: replace authBaseUrl with appropriate custom setting value
+			setDynamicEndpointUrls();
 			Url authBaseUrl = new Url(AUTH_BASE_URL);
 			self = new CLMAPI(authBaseUrl, API, API_VERSION);
 		}
 		return self;
 	}
 
-	private static Url getResourceAuthUrl() {
+    //TODO: Only for demo. Remove this method after SpringCM API returns right URLs
+    private static void setDynamicEndpointUrls() {
+        Credentials c = Credentials.getInstance();
+        if(c.environment.environment == DocuSign.Environment.Demo) {
+        	AUTH_BASE_URL = 'https://authuat.springcm.com';   
+            RESOURCE_URL = 'https://uatna11.springcm.com/atlas/';
+        } else {
+            AUTH_BASE_URL = 'https://authqa.springcm.com';
+            RESOURCE_URL = 'https://qana11.springcm.com/atlas/';
+        }
+        MetadataService.newRemoteSite(c.environment.environment, 'AUTH', 'SpringCM authentication endpoint', new Url(AUTH_BASE_URL));
+        MetadataService.newRemoteSite(c.environment.environment, 'RESOURCE', 'SpringCM resource endpoint', new Url(RESOURCE_URL));
+    }
+	
+    private static Url getResourceAuthUrl() {
 		//TODO: replace hardcoded string with appropriate auth url
-		return new Url('https://qana11.springcm.com/atlas/');
+		return new Url(RESOURCE_URL);
 	}
 
 	public Url getClmUrl(CLMService.SubstitutedParams eosValues) {
@@ -82,9 +99,9 @@ public with sharing class CLMAPI extends DocuSignAPI {
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return new Url(String.valueOf(body.get('Url')));
 	}
-
+        
 	public Url getWorkflowUrl() {
-		Credentials c = Credentials.getInstance();
+		Credentials c = Credentials.getInstance();        
 		accountId = c.account.Id;
 		QueryString queryParams =  new QueryString(new Map<String, String> {AID => String.valueOf(c.account.accountNumber)});
 		String spec = String.format('{0}?{1}', new List<String> {POST_REQ_PATH_WORKFLOW, queryParams.toString()});

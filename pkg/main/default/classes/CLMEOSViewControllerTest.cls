@@ -26,7 +26,7 @@ private class CLMEOSViewControllerTest {
             Test.stopTest();
         }        
     }    			 
-
+    
     @IsTest
     static void test_constructor_apiError() {
         DocuSignAPIMock.failure();
@@ -47,7 +47,7 @@ private class CLMEOSViewControllerTest {
             Test.stopTest();
         }        
     }
-
+    
     @IsTest
     static void test_constructor_inValid() {
         System.runAs(UserMock.createClmUser()) {            
@@ -114,5 +114,33 @@ private class CLMEOSViewControllerTest {
             system.assertNotEquals(null, result.eosUrl);
             Test.stopTest();              
         }
-    }              
+    }
+    
+    //TODO:Remove this test method after the corresponding method is removed from CLMAPI.cls
+    @IsTest
+    static void test_setDynamicEndpointUrls_demo(){
+        System.runAs(UserMock.createClmUser()){
+            AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+            accountSettings.Environment__c = 'Demo';
+            update accountSettings;
+            Test.startTest();
+            System.assertNotEquals(null, CLMAPI.getInstance().getBaseUrl());
+            System.assertEquals('https://authuat.springcm.com/api/v1/', CLMAPI.getInstance().getBaseUrl().toExternalForm());            
+            Test.stopTest();
+        }
+    }
+
+    //TODO:Remove this test method after the corresponding method is removed from CLMAPI.cls
+    @IsTest
+    static void test_setDynamicEndpointUrls_hqtest3(){
+        System.runAs(UserMock.createClmUser()){
+            AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+            accountSettings.Environment__c = 'HQTEST3';
+            update accountSettings;
+            Test.startTest();
+            System.assertNotEquals(null, CLMAPI.getInstance().getBaseUrl());
+            System.assertEquals('https://authqa.springcm.com/api/v1/', CLMAPI.getInstance().getBaseUrl().toExternalForm());            
+            Test.stopTest();
+        }        
+    }    
 }
