@@ -26,10 +26,6 @@
 		<name>AccountNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>Active</label>
-		<name>Active</name>
-	</customLabels>
-	<customLabels>
 		<label>Add</label>
 		<name>Add</name>
 	</customLabels>
@@ -38,16 +34,8 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>Add the Send with DocuSign button and the Envelope Status component to your page layouts.</label>
-		<name>AddSendWithDocuSign</name>
-	</customLabels>
-	<customLabels>
 		<label>Add Template</label>
 		<name>AddTemplate</name>
-	</customLabels>
-	<customLabels>
-		<label>Add to DocuSign</label>
-		<name>AddToDocuSign</name>
 	</customLabels>
 	<customLabels>
 		<label>Add Users</label>
@@ -62,20 +50,8 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Afghanistan</label>
-		<name>Afghanistan</name>
-	</customLabels>
-	<customLabels>
 		<label>Specify Recipients</label>
 		<name>Agent</name>
-	</customLabels>
-	<customLabels>
-		<label>Albania</label>
-		<name>Albania</name>
-	</customLabels>
-	<customLabels>
-		<label>Algeria</label>
-		<name>Algeria</name>
 	</customLabels>
 	<customLabels>
 		<label>All values must not be blank.</label>
@@ -86,36 +62,8 @@
 		<name>AlreadyComplete</name>
 	</customLabels>
 	<customLabels>
-		<label>Andorra</label>
-		<name>Andorra</name>
-	</customLabels>
-	<customLabels>
-		<label>Angola</label>
-		<name>Angola</name>
-	</customLabels>
-	<customLabels>
-		<label>Anguilla</label>
-		<name>Anguilla</name>
-	</customLabels>
-	<customLabels>
-		<label>Antarctica</label>
-		<name>Antarctica</name>
-	</customLabels>
-	<customLabels>
 		<label>Approve</label>
 		<name>Approve</name>
-	</customLabels>
-	<customLabels>
-		<label>Argentina</label>
-		<name>Argentina</name>
-	</customLabels>
-	<customLabels>
-		<label>Armenia</label>
-		<name>Armenia</name>
-	</customLabels>
-	<customLabels>
-		<label>Aruba</label>
-		<name>Aruba</name>
 	</customLabels>
 	<customLabels>
 		<label>Assign DocuSign Administrator permission set</label>
@@ -134,104 +82,16 @@
 		<name>AtLeastOneRecipientIsRequired</name>
 	</customLabels>
 	<customLabels>
-		<label>Australia</label>
-		<name>Australia</name>
-	</customLabels>
-	<customLabels>
-		<label>Austria</label>
-		<name>Austria</name>
-	</customLabels>
-	<customLabels>
-		<label>Azerbaijan</label>
-		<name>Azerbaijan</name>
-	</customLabels>
-	<customLabels>
 		<label>Back</label>
 		<name>Back</name>
-	</customLabels>
-	<customLabels>
-		<label>Bahamas</label>
-		<name>Bahamas</name>
-	</customLabels>
-	<customLabels>
-		<label>Bahrain</label>
-		<name>Bahrain</name>
-	</customLabels>
-	<customLabels>
-		<label>Bangladesh</label>
-		<name>Bangladesh</name>
-	</customLabels>
-	<customLabels>
-		<label>Barbados</label>
-		<name>Barbados</name>
-	</customLabels>
-	<customLabels>
-		<label>Belarus</label>
-		<name>Belarus</name>
-	</customLabels>
-	<customLabels>
-		<label>Belgium</label>
-		<name>Belgium</name>
-	</customLabels>
-	<customLabels>
-		<label>Belize</label>
-		<name>Belize</name>
-	</customLabels>
-	<customLabels>
-		<label>Benin</label>
-		<name>Benin</name>
-	</customLabels>
-	<customLabels>
-		<label>Bermuda</label>
-		<name>Bermuda</name>
-	</customLabels>
-	<customLabels>
-		<label>Bhutan</label>
-		<name>Bhutan</name>
-	</customLabels>
-	<customLabels>
-		<label>Bolivia</label>
-		<name>Bolivia</name>
-	</customLabels>
-	<customLabels>
-		<label>Botswana</label>
-		<name>Botswana</name>
-	</customLabels>
-	<customLabels>
-		<label>Brazil</label>
-		<name>Brazil</name>
-	</customLabels>
-	<customLabels>
-		<label>Brunei</label>
-		<name>Brunei</name>
-	</customLabels>
-	<customLabels>
-		<label>Bulgaria</label>
-		<name>Bulgaria</name>
 	</customLabels>
 	<customLabels>
 		<label>Bulk list not found.</label>
 		<name>BulkListNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Burundi</label>
-		<name>Burundi</name>
-	</customLabels>
-	<customLabels>
-		<label>Cambodia</label>
-		<name>Cambodia</name>
-	</customLabels>
-	<customLabels>
-		<label>Cameroon</label>
-		<name>Cameroon</name>
-	</customLabels>
-	<customLabels>
 		<label>Manage DocuSign Account</label>
 		<name>CanManage</name>
-	</customLabels>
-	<customLabels>
-		<label>Canada</label>
-		<name>Canada</name>
 	</customLabels>
 	<customLabels>
 		<label>Cancel</label>
@@ -314,20 +174,8 @@
 		<name>CertifiedDelivery</name>
 	</customLabels>
 	<customLabels>
-		<label>Chad</label>
-		<name>Chad</name>
-	</customLabels>
-	<customLabels>
 		<label>Checkbox</label>
 		<name>Checkbox</name>
-	</customLabels>
-	<customLabels>
-		<label>Chile</label>
-		<name>Chile</name>
-	</customLabels>
-	<customLabels>
-		<label>China</label>
-		<name>China</name>
 	</customLabels>
 	<customLabels>
 		<label>Chinese (Simplified)</label>
@@ -338,20 +186,8 @@
 		<name>Close</name>
 	</customLabels>
 	<customLabels>
-		<label>Closed</label>
-		<name>Closed</name>
-	</customLabels>
-	<customLabels>
-		<label>Colombia</label>
-		<name>Colombia</name>
-	</customLabels>
-	<customLabels>
 		<label>Community</label>
 		<name>Community</name>
-	</customLabels>
-	<customLabels>
-		<label>Comoros</label>
-		<name>Comoros</name>
 	</customLabels>
 	<customLabels>
 		<label>Company</label>
@@ -386,24 +222,12 @@
 		<name>ContinueLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Country</label>
-		<name>Country</name>
-	</customLabels>
-	<customLabels>
 		<label>Create default recipient roles</label>
 		<name>CreateDefaultRecipientRoles</name>
 	</customLabels>
 	<customLabels>
 		<label>Created</label>
 		<name>Created</name>
-	</customLabels>
-	<customLabels>
-		<label>Croatia</label>
-		<name>Croatia</name>
-	</customLabels>
-	<customLabels>
-		<label>Cuba</label>
-		<name>Cuba</name>
 	</customLabels>
 	<customLabels>
 		<label>--- Current Settings ---</label>
@@ -416,10 +240,6 @@
 	<customLabels>
 		<label>Custom Email Subject</label>
 		<name>CustomEmailSubject</name>
-	</customLabels>
-	<customLabels>
-		<label>Cyprus</label>
-		<name>Cyprus</name>
 	</customLabels>
 	<customLabels>
 		<label>Date Signed</label>
@@ -454,16 +274,8 @@
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
-		<label>Denmark</label>
-		<name>Denmark</name>
-	</customLabels>
-	<customLabels>
 		<label>Disabled</label>
 		<name>Disabled</name>
-	</customLabels>
-	<customLabels>
-		<label>Djibouti</label>
-		<name>Djibouti</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign</label>
@@ -472,10 +284,6 @@
 	<customLabels>
 		<label>DocuSign Template</label>
 		<name>DocuSignTemplate</name>
-	</customLabels>
-	<customLabels>
-		<label>Dominica</label>
-		<name>Dominica</name>
 	</customLabels>
 	<customLabels>
 		<label>Done</label>
@@ -490,20 +298,12 @@
 		<name>Dutch</name>
 	</customLabels>
 	<customLabels>
-		<label>Ecuador</label>
-		<name>Ecuador</name>
-	</customLabels>
-	<customLabels>
 		<label>Edit</label>
 		<name>Edit</name>
 	</customLabels>
 	<customLabels>
 		<label>Allow to Edit</label>
 		<name>Editor</name>
-	</customLabels>
-	<customLabels>
-		<label>Egypt</label>
-		<name>Egypt</name>
 	</customLabels>
 	<customLabels>
 		<label>Email Address</label>
@@ -582,18 +382,6 @@
 		<name>Environment</name>
 	</customLabels>
 	<customLabels>
-		<label>Eritrea</label>
-		<name>Eritrea</name>
-	</customLabels>
-	<customLabels>
-		<label>Estonia</label>
-		<name>Estonia</name>
-	</customLabels>
-	<customLabels>
-		<label>Ethiopia</label>
-		<name>Ethiopia</name>
-	</customLabels>
-	<customLabels>
 		<label>Expand</label>
 		<name>Expand</name>
 	</customLabels>
@@ -610,10 +398,6 @@
 		<name>Failed21CFRPart11</name>
 	</customLabels>
 	<customLabels>
-		<label>Fiji</label>
-		<name>Fiji</name>
-	</customLabels>
-	<customLabels>
 		<label>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</label>
 		<name>FileSizeLimitReached_2</name>
 	</customLabels>
@@ -624,10 +408,6 @@
 	<customLabels>
 		<label>Finish</label>
 		<name>Finish</name>
-	</customLabels>
-	<customLabels>
-		<label>Finland</label>
-		<name>Finland</name>
 	</customLabels>
 	<customLabels>
 		<label>First Name</label>
@@ -642,10 +422,6 @@
 		<name>Formula</name>
 	</customLabels>
 	<customLabels>
-		<label>France</label>
-		<name>France</name>
-	</customLabels>
-	<customLabels>
 		<label>French</label>
 		<name>French</name>
 	</customLabels>
@@ -654,76 +430,12 @@
 		<name>FullName</name>
 	</customLabels>
 	<customLabels>
-		<label>Gabon</label>
-		<name>Gabon</name>
-	</customLabels>
-	<customLabels>
-		<label>Gambia</label>
-		<name>Gambia</name>
-	</customLabels>
-	<customLabels>
-		<label>Georgia</label>
-		<name>Georgia</name>
-	</customLabels>
-	<customLabels>
 		<label>German</label>
 		<name>German</name>
 	</customLabels>
 	<customLabels>
-		<label>Germany</label>
-		<name>Germany</name>
-	</customLabels>
-	<customLabels>
 		<label>Get Started</label>
 		<name>GetStarted</name>
-	</customLabels>
-	<customLabels>
-		<label>Ghana</label>
-		<name>Ghana</name>
-	</customLabels>
-	<customLabels>
-		<label>Gibraltar</label>
-		<name>Gibraltar</name>
-	</customLabels>
-	<customLabels>
-		<label>Greece</label>
-		<name>Greece</name>
-	</customLabels>
-	<customLabels>
-		<label>Greenland</label>
-		<name>Greenland</name>
-	</customLabels>
-	<customLabels>
-		<label>Grenada</label>
-		<name>Grenada</name>
-	</customLabels>
-	<customLabels>
-		<label>Guadeloupe</label>
-		<name>Guadeloupe</name>
-	</customLabels>
-	<customLabels>
-		<label>Guam</label>
-		<name>Guam</name>
-	</customLabels>
-	<customLabels>
-		<label>Guatemala</label>
-		<name>Guatemala</name>
-	</customLabels>
-	<customLabels>
-		<label>Guernsey</label>
-		<name>Guernsey</name>
-	</customLabels>
-	<customLabels>
-		<label>Guinea</label>
-		<name>Guinea</name>
-	</customLabels>
-	<customLabels>
-		<label>Guyana</label>
-		<name>Guyana</name>
-	</customLabels>
-	<customLabels>
-		<label>Haiti</label>
-		<name>Haiti</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</label>
@@ -752,26 +464,6 @@
 	<customLabels>
 		<label>Hide</label>
 		<name>Hide</name>
-	</customLabels>
-	<customLabels>
-		<label>Honduras</label>
-		<name>Honduras</name>
-	</customLabels>
-	<customLabels>
-		<label>Hungary</label>
-		<name>Hungary</name>
-	</customLabels>
-	<customLabels>
-		<label>Iceland</label>
-		<name>Iceland</name>
-	</customLabels>
-	<customLabels>
-		<label>India</label>
-		<name>India</name>
-	</customLabels>
-	<customLabels>
-		<label>Indonesia</label>
-		<name>Indonesia</name>
 	</customLabels>
 	<customLabels>
 		<label>Info</label>
@@ -886,36 +578,12 @@
 		<name>InvalidUsernameOrPassword</name>
 	</customLabels>
 	<customLabels>
-		<label>Iran</label>
-		<name>Iran</name>
-	</customLabels>
-	<customLabels>
-		<label>Iraq</label>
-		<name>Iraq</name>
-	</customLabels>
-	<customLabels>
-		<label>Ireland</label>
-		<name>Ireland</name>
-	</customLabels>
-	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</label>
 		<name>IsQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Israel</label>
-		<name>Israel</name>
-	</customLabels>
-	<customLabels>
 		<label>Italian</label>
 		<name>Italian</name>
-	</customLabels>
-	<customLabels>
-		<label>Italy</label>
-		<name>Italy</name>
-	</customLabels>
-	<customLabels>
-		<label>Jamaica</label>
-		<name>Jamaica</name>
 	</customLabels>
 	<customLabels>
 		<label>Japan</label>
@@ -926,44 +594,12 @@
 		<name>Japanese</name>
 	</customLabels>
 	<customLabels>
-		<label>Jersey</label>
-		<name>Jersey</name>
-	</customLabels>
-	<customLabels>
-		<label>Jordan</label>
-		<name>Jordan</name>
-	</customLabels>
-	<customLabels>
-		<label>Kazakhstan</label>
-		<name>Kazakhstan</name>
-	</customLabels>
-	<customLabels>
-		<label>Kenya</label>
-		<name>Kenya</name>
-	</customLabels>
-	<customLabels>
-		<label>Kiribati</label>
-		<name>Kiribati</name>
-	</customLabels>
-	<customLabels>
 		<label>Korean</label>
 		<name>Korean</name>
 	</customLabels>
 	<customLabels>
-		<label>Kuwait</label>
-		<name>Kuwait</name>
-	</customLabels>
-	<customLabels>
-		<label>Kyrgyzstan</label>
-		<name>Kyrgyzstan</name>
-	</customLabels>
-	<customLabels>
 		<label>Language</label>
 		<name>Language</name>
-	</customLabels>
-	<customLabels>
-		<label>Laos</label>
-		<name>Laos</name>
 	</customLabels>
 	<customLabels>
 		<label>Last Name</label>
@@ -972,34 +608,6 @@
 	<customLabels>
 		<label>Last Status Update</label>
 		<name>LastStatusUpdate</name>
-	</customLabels>
-	<customLabels>
-		<label>Latvia</label>
-		<name>Latvia</name>
-	</customLabels>
-	<customLabels>
-		<label>Lebanon</label>
-		<name>Lebanon</name>
-	</customLabels>
-	<customLabels>
-		<label>Lesotho</label>
-		<name>Lesotho</name>
-	</customLabels>
-	<customLabels>
-		<label>Liberia</label>
-		<name>Liberia</name>
-	</customLabels>
-	<customLabels>
-		<label>Libya</label>
-		<name>Libya</name>
-	</customLabels>
-	<customLabels>
-		<label>Liechtenstein</label>
-		<name>Liechtenstein</name>
-	</customLabels>
-	<customLabels>
-		<label>Lithuania</label>
-		<name>Lithuania</name>
 	</customLabels>
 	<customLabels>
 		<label>Loading...</label>
@@ -1014,96 +622,8 @@
 		<name>LogInToDocuSignAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Luxembourg</label>
-		<name>Luxembourg</name>
-	</customLabels>
-	<customLabels>
-		<label>Macau S.A.R China</label>
-		<name>Macau</name>
-	</customLabels>
-	<customLabels>
-		<label>Macedonia</label>
-		<name>Macedonia</name>
-	</customLabels>
-	<customLabels>
-		<label>Madagascar</label>
-		<name>Madagascar</name>
-	</customLabels>
-	<customLabels>
-		<label>Malawi</label>
-		<name>Malawi</name>
-	</customLabels>
-	<customLabels>
-		<label>Malaysia</label>
-		<name>Malaysia</name>
-	</customLabels>
-	<customLabels>
-		<label>Maldives</label>
-		<name>Maldives</name>
-	</customLabels>
-	<customLabels>
-		<label>Mali</label>
-		<name>Mali</name>
-	</customLabels>
-	<customLabels>
-		<label>Malta</label>
-		<name>Malta</name>
-	</customLabels>
-	<customLabels>
-		<label>Martinique</label>
-		<name>Martinique</name>
-	</customLabels>
-	<customLabels>
-		<label>Mauritania</label>
-		<name>Mauritania</name>
-	</customLabels>
-	<customLabels>
-		<label>Mauritius</label>
-		<name>Mauritius</name>
-	</customLabels>
-	<customLabels>
-		<label>Mayotte</label>
-		<name>Mayotte</name>
-	</customLabels>
-	<customLabels>
 		<label>Message</label>
 		<name>Message</name>
-	</customLabels>
-	<customLabels>
-		<label>Mexico</label>
-		<name>Mexico</name>
-	</customLabels>
-	<customLabels>
-		<label>Micronesia</label>
-		<name>Micronesia</name>
-	</customLabels>
-	<customLabels>
-		<label>Moldova</label>
-		<name>Moldova</name>
-	</customLabels>
-	<customLabels>
-		<label>Monaco</label>
-		<name>Monaco</name>
-	</customLabels>
-	<customLabels>
-		<label>Mongolia</label>
-		<name>Mongolia</name>
-	</customLabels>
-	<customLabels>
-		<label>Montenegro</label>
-		<name>Montenegro</name>
-	</customLabels>
-	<customLabels>
-		<label>Montserrat</label>
-		<name>Montserrat</name>
-	</customLabels>
-	<customLabels>
-		<label>Morocco</label>
-		<name>Morocco</name>
-	</customLabels>
-	<customLabels>
-		<label>Mozambique</label>
-		<name>Mozambique</name>
 	</customLabels>
 	<customLabels>
 		<label>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce organization.</label>
@@ -1154,48 +674,12 @@
 		<name>MyPersonalContent</name>
 	</customLabels>
 	<customLabels>
-		<label>Myanmar</label>
-		<name>Myanmar</name>
-	</customLabels>
-	<customLabels>
 		<label>Company name is required.</label>
 		<name>NameRequired</name>
 	</customLabels>
 	<customLabels>
-		<label>Namibia</label>
-		<name>Namibia</name>
-	</customLabels>
-	<customLabels>
-		<label>Nauru</label>
-		<name>Nauru</name>
-	</customLabels>
-	<customLabels>
-		<label>Nepal</label>
-		<name>Nepal</name>
-	</customLabels>
-	<customLabels>
-		<label>Netherlands</label>
-		<name>Netherlands</name>
-	</customLabels>
-	<customLabels>
 		<label>Next</label>
 		<name>Next</name>
-	</customLabels>
-	<customLabels>
-		<label>Nicaragua</label>
-		<name>Nicaragua</name>
-	</customLabels>
-	<customLabels>
-		<label>Niger</label>
-		<name>Niger</name>
-	</customLabels>
-	<customLabels>
-		<label>Nigeria</label>
-		<name>Nigeria</name>
-	</customLabels>
-	<customLabels>
-		<label>Niue</label>
-		<name>Niue</name>
 	</customLabels>
 	<customLabels>
 		<label>No</label>
@@ -1230,10 +714,6 @@
 		<name>None</name>
 	</customLabels>
 	<customLabels>
-		<label>Norway</label>
-		<name>Norway</name>
-	</customLabels>
-	<customLabels>
 		<label>Not the owner of the envelope</label>
 		<name>NotEnvelopeOwner</name>
 	</customLabels>
@@ -1246,32 +726,8 @@
 		<name>NullApiResponse</name>
 	</customLabels>
 	<customLabels>
-		<label>Oman</label>
-		<name>Oman</name>
-	</customLabels>
-	<customLabels>
 		<label>Other</label>
 		<name>Other</name>
-	</customLabels>
-	<customLabels>
-		<label>Pakistan</label>
-		<name>Pakistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Palau</label>
-		<name>Palau</name>
-	</customLabels>
-	<customLabels>
-		<label>Panama</label>
-		<name>Panama</name>
-	</customLabels>
-	<customLabels>
-		<label>Paraguay</label>
-		<name>Paraguay</name>
-	</customLabels>
-	<customLabels>
-		<label>Password</label>
-		<name>Password</name>
 	</customLabels>
 	<customLabels>
 		<label>Peru</label>
