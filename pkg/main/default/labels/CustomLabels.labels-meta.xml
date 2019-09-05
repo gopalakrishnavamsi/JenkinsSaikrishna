@@ -1780,47 +1780,12 @@
 		<value>Other</value>
 	</labels>
 	<labels>
-		<fullName>Peru</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Peru</shortDescription>
-		<value>Peru</value>
-	</labels>
-	<labels>
-		<fullName>Philippines</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Philippines</shortDescription>
-		<value>Philippines</value>
-	</labels>
-	<labels>
-		<fullName>Pitcairn</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Pitcairn</shortDescription>
-		<value>Pitcairn</value>
-	</labels>
-	<labels>
 		<fullName>PlaceholderRecipientMustHaveRole</fullName>
 		<categories>Errors,Envelope</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Placeholder role required</shortDescription>
 		<value>Placeholder recipient must have a role.</value>
-	</labels>
-	<labels>
-		<fullName>Poland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Poland</shortDescription>
-		<value>Poland</value>
-	</labels>
-	<labels>
-		<fullName>Portugal</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Portugal</shortDescription>
-		<value>Portugal</value>
 	</labels>
 	<labels>
 		<fullName>PortugueseBrazilian</fullName>
@@ -1861,13 +1826,6 @@
 		<protected>true</protected>
 		<shortDescription>Note</shortDescription>
 		<value>Private Message</value>
-	</labels>
-	<labels>
-		<fullName>Qatar</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Qatar</shortDescription>
-		<value>Qatar</value>
 	</labels>
 	<labels>
 		<fullName>RadioButton</fullName>
@@ -1934,33 +1892,12 @@
 		<value>Custom field &#39;{0}&#39; is not configured correctly for your account: a required list field does not have any options. Please contact your DocuSign administrator to correct the custom field.</value>
 	</labels>
 	<labels>
-		<fullName>Reunion</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Reunion</shortDescription>
-		<value>Reunion</value>
-	</labels>
-	<labels>
-		<fullName>Romania</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Romania</shortDescription>
-		<value>Romania</value>
-	</labels>
-	<labels>
 		<fullName>Russian</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Russian</shortDescription>
 		<value>Russian</value>
-	</labels>
-	<labels>
-		<fullName>Rwanda</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Rwanda</shortDescription>
-		<value>Rwanda</value>
 	</labels>
 	<labels>
 		<fullName>SalesforceApiErrorUnexpectedResponse</fullName>
@@ -1977,13 +1914,6 @@
 		<protected>true</protected>
 		<shortDescription>Salesforce Organization Storage Limit Exceeded</shortDescription>
 		<value>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.</value>
-	</labels>
-	<labels>
-		<fullName>Samoa</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Samoa</shortDescription>
-		<value>Samoa</value>
 	</labels>
 	<labels>
 		<fullName>Save</fullName>
@@ -2042,14 +1972,6 @@
 		<value>Select an Account</value>
 	</labels>
 	<labels>
-		<fullName>SelectSalesforceUsers</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Select Salesforce users</shortDescription>
-		<value>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</value>
-	</labels>
-	<labels>
 		<fullName>SendAutomaticReminders</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
@@ -2064,13 +1986,6 @@
 		<protected>true</protected>
 		<shortDescription>Send envelope</shortDescription>
 		<value>Send Envelope</value>
-	</labels>
-	<labels>
-		<fullName>Senegal</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Senegal</shortDescription>
-		<value>Senegal</value>
 	</labels>
 	<labels>
 		<fullName>Sent</fullName>
@@ -2089,26 +2004,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</value>
 	</labels>
 	<labels>
-		<fullName>Serbia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Serbia</shortDescription>
-		<value>Serbia</value>
-	</labels>
-	<labels>
 		<fullName>SettingsSaved</fullName>
 		<categories>Settings</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Settings saved</shortDescription>
 		<value>Successfully saved settings.</value>
-	</labels>
-	<labels>
-		<fullName>Seychelles</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Seychelles</shortDescription>
-		<value>Seychelles</value>
 	</labels>
 	<labels>
 		<fullName>Show</fullName>
@@ -2151,14 +2052,6 @@
 		<value>Sign Here Optional</value>
 	</labels>
 	<labels>
-		<fullName>SignInOrStartTrial</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Sign in or start a trial</shortDescription>
-		<value>Sign in or start a trial</value>
-	</labels>
-	<labels>
 		<fullName>Signed</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
@@ -2197,41 +2090,6 @@
 		<protected>true</protected>
 		<shortDescription>Signing Groups prohibited</shortDescription>
 		<value>Signing Groups are not enabled for your account.</value>
-	</labels>
-	<labels>
-		<fullName>Singapore</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Singapore</shortDescription>
-		<value>Singapore</value>
-	</labels>
-	<labels>
-		<fullName>Slovakia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Slovakia</shortDescription>
-		<value>Slovakia</value>
-	</labels>
-	<labels>
-		<fullName>Slovenia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Slovenia</shortDescription>
-		<value>Slovenia</value>
-	</labels>
-	<labels>
-		<fullName>Somalia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Somalia</shortDescription>
-		<value>Somalia</value>
-	</labels>
-	<labels>
-		<fullName>Spain</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Spain</shortDescription>
-		<value>Spain</value>
 	</labels>
 	<labels>
 		<fullName>Spanish</fullName>
@@ -2298,13 +2156,6 @@
 		<value>Subject</value>
 	</labels>
 	<labels>
-		<fullName>Sudan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Sudan</shortDescription>
-		<value>Sudan</value>
-	</labels>
-	<labels>
 		<fullName>SupportCenter</fullName>
 		<categories>Support</categories>
 		<language>en_US</language>
@@ -2337,62 +2188,6 @@
 		<value>If you can&#39;t find what you&#39;re looking for, you can always contact support directly. Please be sure to have &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;these items&lt;/a&gt; prepared to get your answers faster.</value>
 	</labels>
 	<labels>
-		<fullName>Suriname</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Suriname</shortDescription>
-		<value>Suriname</value>
-	</labels>
-	<labels>
-		<fullName>Swaziland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Swaziland</shortDescription>
-		<value>Swaziland</value>
-	</labels>
-	<labels>
-		<fullName>Sweden</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Sweden</shortDescription>
-		<value>Sweden</value>
-	</labels>
-	<labels>
-		<fullName>Switzerland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Switzerland</shortDescription>
-		<value>Switzerland</value>
-	</labels>
-	<labels>
-		<fullName>Syria</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Syria</shortDescription>
-		<value>Syria</value>
-	</labels>
-	<labels>
-		<fullName>Taiwan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Taiwan</shortDescription>
-		<value>Taiwan</value>
-	</labels>
-	<labels>
-		<fullName>Tajikistan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tajikistan</shortDescription>
-		<value>Tajikistan</value>
-	</labels>
-	<labels>
-		<fullName>Tanzania</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tanzania</shortDescription>
-		<value>Tanzania</value>
-	</labels>
-	<labels>
 		<fullName>TemplateRoles</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
@@ -2409,40 +2204,12 @@
 		<value>Text Field</value>
 	</labels>
 	<labels>
-		<fullName>Thailand</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Thailand</shortDescription>
-		<value>Thailand</value>
-	</labels>
-	<labels>
 		<fullName>Title</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Title</shortDescription>
 		<value>Title</value>
-	</labels>
-	<labels>
-		<fullName>Togo</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Togo</shortDescription>
-		<value>Togo</value>
-	</labels>
-	<labels>
-		<fullName>Tokelau</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tokelau</shortDescription>
-		<value>Tokelau</value>
-	</labels>
-	<labels>
-		<fullName>Tonga</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tonga</shortDescription>
-		<value>Tonga</value>
 	</labels>
 	<labels>
 		<fullName>TrialAccountExpired</fullName>
@@ -2461,54 +2228,12 @@
 		<value>Trust Center</value>
 	</labels>
 	<labels>
-		<fullName>Tunisia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tunisia</shortDescription>
-		<value>Tunisia</value>
-	</labels>
-	<labels>
-		<fullName>Turkey</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Turkey</shortDescription>
-		<value>Turkey</value>
-	</labels>
-	<labels>
-		<fullName>Turkmenistan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Turkmenistan</shortDescription>
-		<value>Turkmenistan</value>
-	</labels>
-	<labels>
-		<fullName>Tuvalu</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Tuvalu</shortDescription>
-		<value>Tuvalu</value>
-	</labels>
-	<labels>
 		<fullName>Type</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Type</shortDescription>
 		<value>Type</value>
-	</labels>
-	<labels>
-		<fullName>Uganda</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Uganda</shortDescription>
-		<value>Uganda</value>
-	</labels>
-	<labels>
-		<fullName>Ukraine</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Ukraine</shortDescription>
-		<value>Ukraine</value>
 	</labels>
 	<labels>
 		<fullName>UnauthorizedPageAccess</fullName>
@@ -2645,14 +2370,6 @@
 		<protected>true</protected>
 		<shortDescription>Unrecognized Language Code</shortDescription>
 		<value>Unrecognized language code.</value>
-	</labels>
-	<labels>
-		<fullName>Upgrade</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Upgrade</shortDescription>
-		<value>Upgrade Account</value>
 	</labels>
 	<labels>
 		<fullName>Upload</fullName>
@@ -2797,13 +2514,6 @@
 		<value>Successfully downloaded</value>
 	</labels>
 	<labels>
-		<fullName>Uruguay</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Uruguay</shortDescription>
-		<value>Uruguay</value>
-	</labels>
-	<labels>
 		<fullName>UseSystemSenderHelp</fullName>
 		<categories>Help,Settings,Account</categories>
 		<language>en_US</language>
@@ -2836,47 +2546,12 @@
 		<value>User not found</value>
 	</labels>
 	<labels>
-		<fullName>Uzbekistan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Uzbekistan</shortDescription>
-		<value>Uzbekistan</value>
-	</labels>
-	<labels>
 		<fullName>Value</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Value</shortDescription>
 		<value>Value</value>
-	</labels>
-	<labels>
-		<fullName>Vanuatu</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Vanuatu</shortDescription>
-		<value>Vanuatu</value>
-	</labels>
-	<labels>
-		<fullName>Vatican</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Vatican</shortDescription>
-		<value>Vatican</value>
-	</labels>
-	<labels>
-		<fullName>Venezuela</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Venezuela</shortDescription>
-		<value>Venezuela</value>
-	</labels>
-	<labels>
-		<fullName>Vietnam</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Vietnam</shortDescription>
-		<value>Vietnam</value>
 	</labels>
 	<labels>
 		<fullName>ViewAll</fullName>
@@ -2911,33 +2586,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will receive the envelope soon</value>
 	</labels>
 	<labels>
-		<fullName>Yemen</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Yemen</shortDescription>
-		<value>Yemen</value>
-	</labels>
-	<labels>
 		<fullName>Yes</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Yes</shortDescription>
 		<value>Yes</value>
-	</labels>
-	<labels>
-		<fullName>Zambia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Zambia</shortDescription>
-		<value>Zambia</value>
-	</labels>
-	<labels>
-		<fullName>Zimbabwe</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Zimbabwe</shortDescription>
-		<value>Zimbabwe</value>
 	</labels>
 	<labels>
 		<fullName>AccountDisplay_2</fullName>
@@ -3509,13 +3163,6 @@
 		<protected>true</protected>
 		<shortDescription>aTemplateConfiguration</shortDescription>
 		<value>DocuSign Gen Template</value>
-	</labels>
-	<labels>
-		<fullName>Saving</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>saving</shortDescription>
-		<value>Saving...</value>
 	</labels>
 	<labels>
 		<fullName>StartingObjectGuidance1</fullName>
@@ -4652,13 +4299,6 @@
 		<value>Your review request has expired</value>
 	</labels>
 	<labels>
-		<fullName>ExpiredReviewSenderEmailHeader</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ExpiredReviewSenderEmailHeader</shortDescription>
-		<value>Your review request has expired</value>
-	</labels>
-	<labels>
 		<fullName>OpenAgreementButton</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -5360,14 +5000,6 @@
 		<value>Show Steps</value>
 	</labels>
 	<labels>
-		<fullName>Topic2</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Topic2</shortDescription>
-		<value>topic2</value>
-	</labels>
-	<labels>
 		<fullName>YourSalesforceObjects</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -5588,20 +5220,6 @@
 		<protected>true</protected>
 		<shortDescription>Maximum batch size exceeded</shortDescription>
 		<value>Maximum batch size exceeded: {0} > {1}</value>
-	</labels>
-	<labels>
-		<fullName>Pending</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Pending</shortDescription>
-		<value>Pending</value>
-	</labels>
-	<labels>
-		<fullName>Inactive</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Inactive</shortDescription>
-		<value>Inactive</value>
 	</labels>
 	<labels>
 		<fullName>Sender</fullName>
@@ -7295,7 +6913,7 @@
 		<value>Open Object Manager</value>
 	</labels>
 	<labels>
-		<fullName> OpenDocuSignCLMButton </fullName>
+		<fullName>OpenDocuSignCLMButton</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7319,7 +6937,7 @@
 		<value>Create and manage Workflows</value>
 	</labels>
 	<labels>
-		<fullName>AutomateprocessesinDocuSignCLM </fullName>
+		<fullName>AutomateprocessesinDocuSignCLM</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -7375,7 +6993,7 @@
 		<value>1. Automated Document Management Steps</value>
 	</labels>
 	<labels>
-		<fullName> WorkflowSteps2 </fullName>
+		<fullName>WorkflowSteps2</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
 		<protected>true</protected>
