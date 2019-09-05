@@ -73,28 +73,12 @@
 		<value>Add Recipient</value>
 	</labels>
 	<labels>
-		<fullName>AddSendWithDocuSign</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add Send with DocuSign</shortDescription>
-		<value>Add the Send with DocuSign button and the Envelope Status component to your page layouts.</value>
-	</labels>
-	<labels>
 		<fullName>AddTemplate</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add Template</shortDescription>
 		<value>Add Template</value>
-	</labels>
-	<labels>
-		<fullName>AddToDocuSign</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Add to DocuSign</shortDescription>
-		<value>Add to DocuSign</value>
 	</labels>
 	<labels>
 		<fullName>AddToSalesforce</fullName>
@@ -137,33 +121,12 @@
 		<value>Advanced Options</value>
 	</labels>
 	<labels>
-		<fullName>Afghanistan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Afghanistan</shortDescription>
-		<value>Afghanistan</value>
-	</labels>
-	<labels>
 		<fullName>Agent</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Agent</shortDescription>
 		<value>Specify Recipients</value>
-	</labels>
-	<labels>
-		<fullName>Albania</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Albania</shortDescription>
-		<value>Albania</value>
-	</labels>
-	<labels>
-		<fullName>Algeria</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Algeria</shortDescription>
-		<value>Algeria</value>
 	</labels>
 	<labels>
 		<fullName>AllValuesMustNotBeBlank</fullName>
@@ -182,61 +145,12 @@
 		<value>Already complete</value>
 	</labels>
 	<labels>
-		<fullName>Andorra</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Andorra</shortDescription>
-		<value>Andorra</value>
-	</labels>
-	<labels>
-		<fullName>Angola</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Angola</shortDescription>
-		<value>Angola</value>
-	</labels>
-	<labels>
-		<fullName>Anguilla</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Anguilla</shortDescription>
-		<value>Anguilla</value>
-	</labels>
-	<labels>
-		<fullName>Antarctica</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Antarctica</shortDescription>
-		<value>Antarctica</value>
-	</labels>
-	<labels>
 		<fullName>Approve</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Approve</shortDescription>
 		<value>Approve</value>
-	</labels>
-	<labels>
-		<fullName>Argentina</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Argentina</shortDescription>
-		<value>Argentina</value>
-	</labels>
-	<labels>
-		<fullName>Armenia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Armenia</shortDescription>
-		<value>Armenia</value>
-	</labels>
-	<labels>
-		<fullName>Aruba</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Aruba</shortDescription>
-		<value>Aruba</value>
 	</labels>
 	<labels>
 		<fullName>AssignAdminPermissionSet</fullName>
@@ -271,20 +185,6 @@
 		<value>At least one recipient is required.</value>
 	</labels>
 	<labels>
-		<fullName>Australia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Australia</shortDescription>
-		<value>Australia</value>
-	</labels>
-	<labels>
-		<fullName>Austria</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Austria</shortDescription>
-		<value>Austria</value>
-	</labels>
-	<labels>
 		<fullName>AutomateDocumentGeneration</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -317,13 +217,6 @@
 		<value>Automate your processes</value>
 	</labels>
 	<labels>
-		<fullName>Azerbaijan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Azerbaijan</shortDescription>
-		<value>Azerbaijan</value>
-	</labels>
-	<labels>
 		<fullName>Back</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -332,124 +225,12 @@
 		<value>Back</value>
 	</labels>
 	<labels>
-		<fullName>Bahamas</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bahamas</shortDescription>
-		<value>Bahamas</value>
-	</labels>
-	<labels>
-		<fullName>Bahrain</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bahrain</shortDescription>
-		<value>Bahrain</value>
-	</labels>
-	<labels>
-		<fullName>Bangladesh</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bangladesh</shortDescription>
-		<value>Bangladesh</value>
-	</labels>
-	<labels>
-		<fullName>Barbados</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Barbados</shortDescription>
-		<value>Barbados</value>
-	</labels>
-	<labels>
-		<fullName>Belarus</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Belarus</shortDescription>
-		<value>Belarus</value>
-	</labels>
-	<labels>
-		<fullName>Belgium</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Belgium</shortDescription>
-		<value>Belgium</value>
-	</labels>
-	<labels>
-		<fullName>Belize</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Belize</shortDescription>
-		<value>Belize</value>
-	</labels>
-	<labels>
-		<fullName>Benin</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Benin</shortDescription>
-		<value>Benin</value>
-	</labels>
-	<labels>
-		<fullName>Bermuda</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bermuda</shortDescription>
-		<value>Bermuda</value>
-	</labels>
-	<labels>
-		<fullName>Bhutan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bhutan</shortDescription>
-		<value>Bhutan</value>
-	</labels>
-	<labels>
-		<fullName>Bolivia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bolivia</shortDescription>
-		<value>Bolivia</value>
-	</labels>
-	<labels>
-		<fullName>Botswana</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Botswana</shortDescription>
-		<value>Botswana</value>
-	</labels>
-	<labels>
-		<fullName>Brazil</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Brazil</shortDescription>
-		<value>Brazil</value>
-	</labels>
-	<labels>
-		<fullName>Brunei</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Brunei</shortDescription>
-		<value>Brunei</value>
-	</labels>
-	<labels>
-		<fullName>Bulgaria</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Bulgaria</shortDescription>
-		<value>Bulgaria</value>
-	</labels>
-	<labels>
 		<fullName>BulkListNotFound</fullName>
 		<categories>Errors,BulkSend</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Bulk list not found</shortDescription>
 		<value>Bulk list not found.</value>
-	</labels>
-	<labels>
-		<fullName>Burundi</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Burundi</shortDescription>
-		<value>Burundi</value>
 	</labels>
 	<labels>
 		<fullName>ButtonsAndComponents</fullName>
@@ -468,33 +249,12 @@
 		<value>CLM</value>
 	</labels>
 	<labels>
-		<fullName>Cambodia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Cambodia</shortDescription>
-		<value>Cambodia</value>
-	</labels>
-	<labels>
-		<fullName>Cameroon</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Cameroon</shortDescription>
-		<value>Cameroon</value>
-	</labels>
-	<labels>
 		<fullName>CanManage</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Can manage</shortDescription>
 		<value>Manage DocuSign Account</value>
-	</labels>
-	<labels>
-		<fullName>Canada</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Canada</shortDescription>
-		<value>Canada</value>
 	</labels>
 	<labels>
 		<fullName>Cancel</fullName>
@@ -658,33 +418,12 @@
 		<value>Needs to View</value>
 	</labels>
 	<labels>
-		<fullName>Chad</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Chad</shortDescription>
-		<value>Chad</value>
-	</labels>
-	<labels>
 		<fullName>Checkbox</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Checkbox</shortDescription>
 		<value>Checkbox</value>
-	</labels>
-	<labels>
-		<fullName>Chile</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Chile</shortDescription>
-		<value>Chile</value>
-	</labels>
-	<labels>
-		<fullName>China</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>China</shortDescription>
-		<value>China</value>
 	</labels>
 	<labels>
 		<fullName>ChineseSimplified</fullName>
@@ -735,21 +474,6 @@
 		<value>Close</value>
 	</labels>
 	<labels>
-		<fullName>Closed</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Closed</shortDescription>
-		<value>Closed</value>
-	</labels>
-	<labels>
-		<fullName>Colombia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Colombia</shortDescription>
-		<value>Colombia</value>
-	</labels>
-	<labels>
 		<fullName>Community</fullName>
 		<categories>Support</categories>
 		<language>en_US</language>
@@ -757,13 +481,7 @@
 		<shortDescription>Community</shortDescription>
 		<value>Community</value>
 	</labels>
-	<labels>
-		<fullName>Comoros</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Comoros</shortDescription>
-		<value>Comoros</value>
-	</labels>
+
 	<labels>
 		<fullName>Company</fullName>
 		<categories>CustomTab</categories>
@@ -878,14 +596,6 @@
 		<value>Continue</value>
 	</labels>
 	<labels>
-		<fullName>Country</fullName>
-		<categories>General</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Country</shortDescription>
-		<value>Country</value>
-	</labels>
-	<labels>
 		<fullName>CreateDefaultRecipientRoles</fullName>
 		<categories>PostInstall</categories>
 		<language>en_US</language>
@@ -900,20 +610,6 @@
 		<protected>true</protected>
 		<shortDescription>Created</shortDescription>
 		<value>Created</value>
-	</labels>
-	<labels>
-		<fullName>Croatia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Croatia</shortDescription>
-		<value>Croatia</value>
-	</labels>
-	<labels>
-		<fullName>Cuba</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Cuba</shortDescription>
-		<value>Cuba</value>
 	</labels>
 	<labels>
 		<fullName>CurrentChatterLanguageSettings</fullName>
@@ -938,13 +634,6 @@
 		<protected>true</protected>
 		<shortDescription>Custom Email Subject</shortDescription>
 		<value>Custom Email Subject</value>
-	</labels>
-	<labels>
-		<fullName>Cyprus</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Cyprus</shortDescription>
-		<value>Cyprus</value>
 	</labels>
 	<labels>
 		<fullName>DateSigned</fullName>
@@ -1011,13 +700,6 @@
 		<value>Delivered</value>
 	</labels>
 	<labels>
-		<fullName>Denmark</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Denmark</shortDescription>
-		<value>Denmark</value>
-	</labels>
-	<labels>
 		<fullName>Disabled</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -1032,13 +714,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Discover DocuSign CLM</shortDescription>
 		<value>DISCOVER DOCUSIGN CLM</value>
-	</labels>
-	<labels>
-		<fullName>Djibouti</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Djibouti</shortDescription>
-		<value>Djibouti</value>
 	</labels>
 	<labels>
 		<fullName>DocGenInfo</fullName>
@@ -1081,13 +756,6 @@
 		<value>DocuSign Agreements integrates your Salesforce data smoothly into DocuSign CLM.</value>
 	</labels>
 	<labels>
-		<fullName>Dominica</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Dominica</shortDescription>
-		<value>Dominica</value>
-	</labels>
-	<labels>
 		<fullName>Done</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -1112,13 +780,6 @@
 		<value>Dutch</value>
 	</labels>
 	<labels>
-		<fullName>Ecuador</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Ecuador</shortDescription>
-		<value>Ecuador</value>
-	</labels>
-	<labels>
 		<fullName>Edit</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -1141,13 +802,6 @@
 		<protected>true</protected>
 		<shortDescription>Editor</shortDescription>
 		<value>Allow to Edit</value>
-	</labels>
-	<labels>
-		<fullName>Egypt</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Egypt</shortDescription>
-		<value>Egypt</value>
 	</labels>
 	<labels>
 		<fullName>EmailAddress</fullName>
@@ -1303,27 +957,6 @@
 		<value>Environment</value>
 	</labels>
 	<labels>
-		<fullName>Eritrea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Eritrea</shortDescription>
-		<value>Eritrea</value>
-	</labels>
-	<labels>
-		<fullName>Estonia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Estonia</shortDescription>
-		<value>Estonia</value>
-	</labels>
-	<labels>
-		<fullName>Ethiopia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Ethiopia</shortDescription>
-		<value>Ethiopia</value>
-	</labels>
-	<labels>
 		<fullName>Expand</fullName>
 		<categories>UI</categories>
 		<language>en_US</language>
@@ -1356,13 +989,6 @@
 		<value>Cannot send envelope. Signers that are required to meet 21 CFR part 11 compliance must have at least one required, non-conditional Signature or Initials tab.</value>
 	</labels>
 	<labels>
-		<fullName>Fiji</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Fiji</shortDescription>
-		<value>Fiji</value>
-	</labels>
-	<labels>
 		<fullName>FileSizeLimitReached_2</fullName>
 		<categories>Files</categories>
 		<language>en_US</language>
@@ -1385,13 +1011,6 @@
 		<protected>true</protected>
 		<shortDescription>Finish</shortDescription>
 		<value>Finish</value>
-	</labels>
-	<labels>
-		<fullName>Finland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Finland</shortDescription>
-		<value>Finland</value>
 	</labels>
 	<labels>
 		<fullName>FirstName</fullName>
@@ -1418,13 +1037,6 @@
 		<value>Formula</value>
 	</labels>
 	<labels>
-		<fullName>France</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>France</shortDescription>
-		<value>France</value>
-	</labels>
-	<labels>
 		<fullName>French</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
@@ -1441,27 +1053,6 @@
 		<value>Full Name</value>
 	</labels>
 	<labels>
-		<fullName>Gabon</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Gabon</shortDescription>
-		<value>Gabon</value>
-	</labels>
-	<labels>
-		<fullName>Gambia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Gambia</shortDescription>
-		<value>Gambia</value>
-	</labels>
-	<labels>
-		<fullName>Georgia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Georgia</shortDescription>
-		<value>Georgia</value>
-	</labels>
-	<labels>
 		<fullName>German</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
@@ -1470,103 +1061,12 @@
 		<value>German</value>
 	</labels>
 	<labels>
-		<fullName>Germany</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Germany</shortDescription>
-		<value>Germany</value>
-	</labels>
-	<labels>
 		<fullName>GetStarted</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Get started</shortDescription>
 		<value>Get Started</value>
-	</labels>
-	<labels>
-		<fullName>Ghana</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Ghana</shortDescription>
-		<value>Ghana</value>
-	</labels>
-	<labels>
-		<fullName>Gibraltar</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Gibraltar</shortDescription>
-		<value>Gibraltar</value>
-	</labels>
-	<labels>
-		<fullName>Greece</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Greece</shortDescription>
-		<value>Greece</value>
-	</labels>
-	<labels>
-		<fullName>Greenland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Greenland</shortDescription>
-		<value>Greenland</value>
-	</labels>
-	<labels>
-		<fullName>Grenada</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Grenada</shortDescription>
-		<value>Grenada</value>
-	</labels>
-	<labels>
-		<fullName>Guadeloupe</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guadeloupe</shortDescription>
-		<value>Guadeloupe</value>
-	</labels>
-	<labels>
-		<fullName>Guam</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guam</shortDescription>
-		<value>Guam</value>
-	</labels>
-	<labels>
-		<fullName>Guatemala</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guatemala</shortDescription>
-		<value>Guatemala</value>
-	</labels>
-	<labels>
-		<fullName>Guernsey</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guernsey</shortDescription>
-		<value>Guernsey</value>
-	</labels>
-	<labels>
-		<fullName>Guinea</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guinea</shortDescription>
-		<value>Guinea</value>
-	</labels>
-	<labels>
-		<fullName>Guyana</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Guyana</shortDescription>
-		<value>Guyana</value>
-	</labels>
-	<labels>
-		<fullName>Haiti</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Haiti</shortDescription>
-		<value>Haiti</value>
 	</labels>
 	<labels>
 		<fullName>HasCompleted_2</fullName>
@@ -1647,41 +1147,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Sidebar Item Home</shortDescription>
 		<value>Home</value>
-	</labels>
-	<labels>
-		<fullName>Honduras</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Honduras</shortDescription>
-		<value>Honduras</value>
-	</labels>
-	<labels>
-		<fullName>Hungary</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Hungary</shortDescription>
-		<value>Hungary</value>
-	</labels>
-	<labels>
-		<fullName>Iceland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Iceland</shortDescription>
-		<value>Iceland</value>
-	</labels>
-	<labels>
-		<fullName>India</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>India</shortDescription>
-		<value>India</value>
-	</labels>
-	<labels>
-		<fullName>Indonesia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Indonesia</shortDescription>
-		<value>Indonesia</value>
 	</labels>
 	<labels>
 		<fullName>Info</fullName>
@@ -1916,27 +1381,6 @@
 		<value>Invalid username or password.</value>
 	</labels>
 	<labels>
-		<fullName>Iran</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Iran</shortDescription>
-		<value>Iran</value>
-	</labels>
-	<labels>
-		<fullName>Iraq</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Iraq</shortDescription>
-		<value>Iraq</value>
-	</labels>
-	<labels>
-		<fullName>Ireland</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Ireland</shortDescription>
-		<value>Ireland</value>
-	</labels>
-	<labels>
 		<fullName>IsQueued_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
@@ -1945,33 +1389,12 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</value>
 	</labels>
 	<labels>
-		<fullName>Israel</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Israel</shortDescription>
-		<value>Israel</value>
-	</labels>
-	<labels>
 		<fullName>Italian</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Italian</shortDescription>
 		<value>Italian</value>
-	</labels>
-	<labels>
-		<fullName>Italy</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Italy</shortDescription>
-		<value>Italy</value>
-	</labels>
-	<labels>
-		<fullName>Jamaica</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Jamaica</shortDescription>
-		<value>Jamaica</value>
 	</labels>
 	<labels>
 		<fullName>Japan</fullName>
@@ -1989,61 +1412,12 @@
 		<value>Japanese</value>
 	</labels>
 	<labels>
-		<fullName>Jersey</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Jersey</shortDescription>
-		<value>Jersey</value>
-	</labels>
-	<labels>
-		<fullName>Jordan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Jordan</shortDescription>
-		<value>Jordan</value>
-	</labels>
-	<labels>
-		<fullName>Kazakhstan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Kazakhstan</shortDescription>
-		<value>Kazakhstan</value>
-	</labels>
-	<labels>
-		<fullName>Kenya</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Kenya</shortDescription>
-		<value>Kenya</value>
-	</labels>
-	<labels>
-		<fullName>Kiribati</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Kiribati</shortDescription>
-		<value>Kiribati</value>
-	</labels>
-	<labels>
 		<fullName>Korean</fullName>
 		<categories>Localization</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Korean</shortDescription>
 		<value>Korean</value>
-	</labels>
-	<labels>
-		<fullName>Kuwait</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Kuwait</shortDescription>
-		<value>Kuwait</value>
-	</labels>
-	<labels>
-		<fullName>Kyrgyzstan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Kyrgyzstan</shortDescription>
-		<value>Kyrgyzstan</value>
 	</labels>
 	<labels>
 		<fullName>LEXObjectManagerURL</fullName>
@@ -2062,13 +1436,6 @@
 		<value>Language</value>
 	</labels>
 	<labels>
-		<fullName>Laos</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Laos</shortDescription>
-		<value>Laos</value>
-	</labels>
-	<labels>
 		<fullName>LastName</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>
@@ -2085,13 +1452,6 @@
 		<value>Last Status Update</value>
 	</labels>
 	<labels>
-		<fullName>Latvia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Latvia</shortDescription>
-		<value>Latvia</value>
-	</labels>
-	<labels>
 		<fullName>LearnAboutDocGen</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -2106,48 +1466,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Learn More</shortDescription>
 		<value>Learn More</value>
-	</labels>
-	<labels>
-		<fullName>Lebanon</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Lebanon</shortDescription>
-		<value>Lebanon</value>
-	</labels>
-	<labels>
-		<fullName>Lesotho</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Lesotho</shortDescription>
-		<value>Lesotho</value>
-	</labels>
-	<labels>
-		<fullName>Liberia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Liberia</shortDescription>
-		<value>Liberia</value>
-	</labels>
-	<labels>
-		<fullName>Libya</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Libya</shortDescription>
-		<value>Libya</value>
-	</labels>
-	<labels>
-		<fullName>Liechtenstein</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Liechtenstein</shortDescription>
-		<value>Liechtenstein</value>
-	</labels>
-	<labels>
-		<fullName>Lithuania</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Lithuania</shortDescription>
-		<value>Lithuania</value>
 	</labels>
 	<labels>
 		<fullName>Loading</fullName>
@@ -2172,69 +1490,6 @@
 		<protected>true</protected>
 		<shortDescription>LogInToDocuSignAccount</shortDescription>
 		<value>Log in to Your DocuSign Account</value>
-	</labels>
-	<labels>
-		<fullName>Luxembourg</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Luxembourg</shortDescription>
-		<value>Luxembourg</value>
-	</labels>
-	<labels>
-		<fullName>Macau</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Macau</shortDescription>
-		<value>Macau S.A.R China</value>
-	</labels>
-	<labels>
-		<fullName>Macedonia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Macedonia</shortDescription>
-		<value>Macedonia</value>
-	</labels>
-	<labels>
-		<fullName>Madagascar</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Madagascar</shortDescription>
-		<value>Madagascar</value>
-	</labels>
-	<labels>
-		<fullName>Malawi</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Malawi</shortDescription>
-		<value>Malawi</value>
-	</labels>
-	<labels>
-		<fullName>Malaysia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Malaysia</shortDescription>
-		<value>Malaysia</value>
-	</labels>
-	<labels>
-		<fullName>Maldives</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Maldives</shortDescription>
-		<value>Maldives</value>
-	</labels>
-	<labels>
-		<fullName>Mali</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mali</shortDescription>
-		<value>Mali</value>
-	</labels>
-	<labels>
-		<fullName>Malta</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Malta</shortDescription>
-		<value>Malta</value>
 	</labels>
 	<labels>
 		<fullName>Manage</fullName>
@@ -2277,103 +1532,12 @@
 		<value>Mapped Objects</value>
 	</labels>
 	<labels>
-		<fullName>Martinique</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Martinique</shortDescription>
-		<value>Martinique</value>
-	</labels>
-	<labels>
-		<fullName>Mauritania</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mauritania</shortDescription>
-		<value>Mauritania</value>
-	</labels>
-	<labels>
-		<fullName>Mauritius</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mauritius</shortDescription>
-		<value>Mauritius</value>
-	</labels>
-	<labels>
-		<fullName>Mayotte</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mayotte</shortDescription>
-		<value>Mayotte</value>
-	</labels>
-	<labels>
 		<fullName>Message</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Message</shortDescription>
 		<value>Message</value>
-	</labels>
-	<labels>
-		<fullName>Mexico</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mexico</shortDescription>
-		<value>Mexico</value>
-	</labels>
-	<labels>
-		<fullName>Micronesia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Micronesia</shortDescription>
-		<value>Micronesia</value>
-	</labels>
-	<labels>
-		<fullName>Moldova</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Moldova</shortDescription>
-		<value>Moldova</value>
-	</labels>
-	<labels>
-		<fullName>Monaco</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Monaco</shortDescription>
-		<value>Monaco</value>
-	</labels>
-	<labels>
-		<fullName>Mongolia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mongolia</shortDescription>
-		<value>Mongolia</value>
-	</labels>
-	<labels>
-		<fullName>Montenegro</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Montenegro</shortDescription>
-		<value>Montenegro</value>
-	</labels>
-	<labels>
-		<fullName>Montserrat</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Montserrat</shortDescription>
-		<value>Montserrat</value>
-	</labels>
-	<labels>
-		<fullName>Morocco</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Morocco</shortDescription>
-		<value>Morocco</value>
-	</labels>
-	<labels>
-		<fullName>Mozambique</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Mozambique</shortDescription>
-		<value>Mozambique</value>
 	</labels>
 	<labels>
 		<fullName>MultipleAccountsMessage</fullName>
@@ -2472,13 +1636,6 @@
 		<value>My Personal Content</value>
 	</labels>
 	<labels>
-		<fullName>Myanmar</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Myanmar</shortDescription>
-		<value>Myanmar</value>
-	</labels>
-	<labels>
 		<fullName>NameRequired</fullName>
 		<categories>Errors,Account</categories>
 		<language>en_US</language>
@@ -2487,68 +1644,12 @@
 		<value>Full name is required.</value>
 	</labels>
 	<labels>
-		<fullName>Namibia</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Namibia</shortDescription>
-		<value>Namibia</value>
-	</labels>
-	<labels>
-		<fullName>Nauru</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Nauru</shortDescription>
-		<value>Nauru</value>
-	</labels>
-	<labels>
-		<fullName>Nepal</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Nepal</shortDescription>
-		<value>Nepal</value>
-	</labels>
-	<labels>
-		<fullName>Netherlands</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Netherlands</shortDescription>
-		<value>Netherlands</value>
-	</labels>
-	<labels>
 		<fullName>Next</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Next</shortDescription>
 		<value>Next</value>
-	</labels>
-	<labels>
-		<fullName>Nicaragua</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Nicaragua</shortDescription>
-		<value>Nicaragua</value>
-	</labels>
-	<labels>
-		<fullName>Niger</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Niger</shortDescription>
-		<value>Niger</value>
-	</labels>
-	<labels>
-		<fullName>Nigeria</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Nigeria</shortDescription>
-		<value>Nigeria</value>
-	</labels>
-	<labels>
-		<fullName>Niue</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Niue</shortDescription>
-		<value>Niue</value>
 	</labels>
 	<labels>
 		<fullName>No</fullName>
@@ -2615,13 +1716,6 @@
 		<value>None</value>
 	</labels>
 	<labels>
-		<fullName>Norway</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Norway</shortDescription>
-		<value>Norway</value>
-	</labels>
-	<labels>
 		<fullName>NotEnvelopeOwner</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
@@ -2678,55 +1772,12 @@
 		<value>OBJECT MAPPING</value>
 	</labels>
 	<labels>
-		<fullName>Oman</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Oman</shortDescription>
-		<value>Oman</value>
-	</labels>
-	<labels>
 		<fullName>Other</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Other</shortDescription>
 		<value>Other</value>
-	</labels>
-	<labels>
-		<fullName>Pakistan</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Pakistan</shortDescription>
-		<value>Pakistan</value>
-	</labels>
-	<labels>
-		<fullName>Palau</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Palau</shortDescription>
-		<value>Palau</value>
-	</labels>
-	<labels>
-		<fullName>Panama</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Panama</shortDescription>
-		<value>Panama</value>
-	</labels>
-	<labels>
-		<fullName>Paraguay</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Paraguay</shortDescription>
-		<value>Paraguay</value>
-	</labels>
-	<labels>
-		<fullName>Password</fullName>
-		<categories>Setup</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Password</shortDescription>
-		<value>Password</value>
 	</labels>
 	<labels>
 		<fullName>PlaceholderRecipientMustHaveRole</fullName>
@@ -2769,7 +1820,8 @@
 		<value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
 	</labels>
 	<labels>
-		<fullName>PrivateMessage</fullName>
+		<fullName>
+      MesMessage</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
 		<protected>true</protected>
