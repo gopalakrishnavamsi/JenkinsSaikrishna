@@ -1122,7 +1122,9 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to
+			common questions to DocuSign Applications.
+		</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -1817,7 +1819,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Post-install email subject</shortDescription>
-		<value>DocuSign for Salesforce Essentials post-install script results from {0}</value>
+		<value>DocuSign Apps Launcher post-install script results from {0}</value>
 	</labels>
 	<labels>
 		<fullName>PrivateMessage</fullName>
@@ -2900,7 +2902,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DocuSignAgreements</shortDescription>
-		<value>DocuSign Agreements</value>
+		<value>DocuSign Files</value>
 	</labels>
 	<labels>
 		<fullName>ImportButtonLabel</fullName>
@@ -2914,7 +2916,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>NoAgreements</shortDescription>
-		<value>No agreements yet.</value>
+		<value>No DocuSign Files.</value>
 	</labels>
 	<labels>
 		<fullName>CreateAgreementsIllustration</fullName>
@@ -6564,7 +6566,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GetStartedSetupAccount</shortDescription>
-		<value>Get Started with DocuSign Agreements</value>
+		<value>Get Started with DocuSign</value>
 	</labels>
 	<labels>
 		<fullName>ConnectedAccountSetupAccount</fullName>
@@ -6700,7 +6702,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabUserManagementHelpText</shortDescription>
-		<value>Give your team members access to DocuSign Agreements features.</value>
+		<value>Give your team members access to DocuSign features.</value>
 	</labels>
 	<labels>
 		<fullName>TabComponentsHelpText</fullName>
@@ -6717,7 +6719,7 @@
 		<protected>true</protected>
 		<shortDescription>TabHelpText</shortDescription>
 		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
-			questions for DocuSign Agreements.
+			questions for DocuSign Applications.
 		</value>
 	</labels>
 	<labels>
