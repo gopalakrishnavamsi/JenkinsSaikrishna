@@ -41,6 +41,7 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static Configuration getConfiguration(final Id templateId) {
 		try {
+			Permissions.verifyIsDocuSignGenerator();
 			return new Configuration(
 				templateId == null
 					? GenService.createBlankTemplate()
