@@ -6566,7 +6566,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GetStartedSetupAccount</shortDescription>
-		<value>Get Started with DocuSign</value>
+		<value>Get Started with DocuSign Applications</value>
 	</labels>
 	<labels>
 		<fullName>ConnectedAccountSetupAccount</fullName>
