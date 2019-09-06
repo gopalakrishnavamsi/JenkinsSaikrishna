@@ -2322,9 +2322,7 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to
-			common questions to DocuSign Applications.
-		</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</label>
 		<name>HelpInfoBody</name>
 	</customLabels>
 	<customLabels>
@@ -3432,9 +3430,7 @@
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
-			questions for DocuSign Applications.
-		</label>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Applications.</label>
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>

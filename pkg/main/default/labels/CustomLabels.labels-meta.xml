@@ -1122,9 +1122,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to
-			common questions to DocuSign Applications.
-		</value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -6718,9 +6716,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabHelpText</shortDescription>
-		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common
-			questions for DocuSign Applications.
-		</value>
+		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Applications.</value>
 	</labels>
 	<labels>
 		<fullName>SetupPageTitle</fullName>
