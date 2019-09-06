@@ -746,7 +746,7 @@
 		<name>PostInstallEmailBody_4</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign for Salesforce Essentials post-install script results from {0}</label>
+		<label>DocuSign Apps Launcher post-install script results from {0}</label>
 		<name>PostInstallEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
@@ -1314,7 +1314,7 @@
 		<name>NoLayoutsForSelectedObject</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Agreements</label>
+		<label>DocuSign Files</label>
 		<name>DocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
@@ -2322,7 +2322,7 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</label>
 		<name>HelpInfoBody</name>
 	</customLabels>
 	<customLabels>
@@ -3354,7 +3354,7 @@
 		<name>CompleteSetupAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Get Started with DocuSign Agreements</label>
+		<label>Get Started with DocuSign Applications</label>
 		<name>GetStartedSetupAccount</name>
 	</customLabels>
 	<customLabels>
@@ -3422,7 +3422,7 @@
 		<name>TabNegotiationHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your team members access to DocuSign Agreements features.</label>
+		<label>Give your team members access to DocuSign Applications.</label>
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3430,7 +3430,7 @@
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Agreements.</label>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Applications.</label>
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>

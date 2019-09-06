@@ -34,7 +34,7 @@
 
 .THIS .dsImport-spinner_uploadingAgreement::after {
     position: absolute;
-    content: 'Uploading to DocuSign Agreements';
+    content: 'Uploading to DocuSign Files';
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
