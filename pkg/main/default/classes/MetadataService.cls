@@ -106,6 +106,21 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+    public static List<MergeField> getFields(final DescribeSObjectResult type) {
+        List<MergeField> result = new List<MergeField>();
+        if (MergeObject.isValid(type)) {
+            for (SObjectField f : type.fields.getMap().values()) {
+                DescribeFieldResult field = f.getDescribe();
+                if (MergeField.isValid(field)) {
+                    if (!field.getReferenceTo().isEmpty()) {                        
+                        result.add(MergeField.forField(field, ''));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
 	@TestVisible
 	private static String getErrorMessage(final MetadataAPI.SaveResult saveResult) {
 		if (saveResult == null || Collection.isEmpty(saveResult.errors)) {

@@ -34,7 +34,11 @@ public with sharing class CLMMapObjectController {
             upsert eosDetails;
 			return true;
 		} catch (Exception e) {
-			throw Controller.wrapException(e, 'Failed to insert object mapping.');
+            if(e.getMessage().contains('There is already an item in this list')) {
+				throw Controller.wrapException(e, 'This object is already mapped.');
+			} else {
+				throw Controller.wrapException(e, 'Failed to insert object mapping.');
+			}
 		}
     }
     
@@ -87,6 +91,7 @@ public with sharing class CLMMapObjectController {
             SObjectType type = Schema.getGlobalDescribe().get(apiName);
             List<MergeField> result= new List<MergeField>();
             result.addAll(MetadataService.getFields(type, isChild));
+			result.addAll(MetadataService.getFields(type.getDescribe()));
             return result;
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get all object fields list.');

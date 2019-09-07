@@ -93,13 +93,14 @@
 					selected: false,
 					id: clmTree.length + 1
 				});
+                debugger;
 				component.set('v.clmFolderTree', clmTree);
 				helper.updatePath(component);
 				helper.UpdateUI(component, '2');
 			}
 			helper.hideLoader(component);
 		});
-		helper.createComponent(component, 'c:CLMModelFooterButton', {
+		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -107,7 +108,7 @@
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameLabel'),
 			summary: $A.get('$Label.c.NameLabel'),
 		}, function (newCmp) {
@@ -146,14 +147,14 @@
 	},
 
 	openSeeExample: function (component, event, helper) {
-		helper.createComponent(component, 'c:CLMModelFooterButton', {
+		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
 			showPrimaryButton: 'false',
 			secondaryButtonVariant: 'brand',
 			secondaryButtonLabel: $A.get('$Label.c.Close')
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'c:CLMFolderExample', {}, function (newCmp) {
+		helper.createComponent(component, 'dfsle:CLMFolderExample', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 			component.set('v.modelTitleText', $A.get('$Label.c.FolderExample'));
 			component.set('v.showModal', 'true');
@@ -165,14 +166,14 @@
 	},
 
 	openWhyExample: function (component, event, helper) {
-		helper.createComponent(component, 'c:CLMModelFooterButton', {
+		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
 			showPrimaryButton: 'false',
 			secondaryButtonVariant: 'brand',
 			secondaryButtonLabel: $A.get('$Label.c.Close')
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'c:CLMSelectingFields', {}, function (newCmp) {
+		helper.createComponent(component, 'dfsle:CLMSelectingFields', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 			component.set('v.modelTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
 			component.set('v.showModal', 'true');
@@ -186,36 +187,71 @@
 	insertPath: function (component, event, helper) {
 		var selectedObjDetails = component.get('v.SelectedObjDetails');
 		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
-		selectedObjDetails.Name = selectedObjDetails.name;
+		var path = component.get('v.pathInCLM').split('Other Sources').pop();
+        selectedObjDetails.Name = selectedObjDetails.name;
 		if (component.get('v.namespace') === 'c') {
 			selectedObjDetails.FolderName__c = SelectedObjFieldName;
-			selectedObjDetails.Path__c = component.get('v.pathInCLM');
+			selectedObjDetails.Path__c = path;
 		}
 		else {
 			selectedObjDetails[component.get('v.namespace') + '__FolderName__c'] = SelectedObjFieldName;
-			selectedObjDetails[component.get('v.namespace') + '__Path__c'] = component.get('v.pathInCLM');
-		}
+			selectedObjDetails[component.get('v.namespace') + '__Path__c'] = path;
+		}        
+		var label = selectedObjDetails.label;
 		delete selectedObjDetails.name;
 		delete selectedObjDetails.label;
 		delete selectedObjDetails.selected;
-		helper.callServer(component, 'c.setMappedObject', { eosDetails: selectedObjDetails }, function (result) {
-			if (result) {
-				var toastTitle = $A.get('$Label.c.MappingSuccess');
-				if (selectedObjDetails.Id) {
-					toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+		if (component.get('v.isEdit')) {
+			component.set('v.modelValueHolder', {
+				buttonType: 'confirm',
+				selectedObjDetails: selectedObjDetails,
+				label: label
+			});
+			helper.createComponent(
+				component,
+				'dfsle:CLMModelFooterButton',
+				{
+					primaryButtonLabel: $A.get('$Label.c.Confirm'),
+					secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+					primaryButtonVariant: 'brand',
+					primaryButtonDisabled: 'false'
+				},
+				function (newCmp) {
+					component.set('v.strikeModelFooterButtons', newCmp);
 				}
-				helper.fireToast(component, stringUtils.format(toastTitle, selectedObjDetails.label), helper.SUCCESS);
-				helper.fireApplicationEvent(component, {
-					fromComponent: 'CLMMappedObjectsEdit',
-					toComponent: 'CLMSetupLayout',
-					type: 'update',
-					tabIndex: '3',
-				}, 'CLMNavigationEvent');
-			}
-			else {
-				helper.fireToast(component, stringUtils.format($A.get('$Label.c.MapError'), selectedObjDetails.label), 'error');
-			}
-		});
+			);
+			var modelTitleText = $A.get('$Label.c.ConfirmEdits');
+			var modelbodyText = $A.get('$Label.c.EditModalBody');
+			component.set('v.modelTitleText', modelTitleText);
+			component.set('v.modalBodyText', modelbodyText);
+			component.set('v.showModal', 'true');
+			var modelComponent = component.find('popupModel');
+			setTimeout(
+				$A.getCallback(function () {
+					modelComponent.show();
+				}),
+				5
+			);
+		} else {
+			helper.callServer(component, 'c.setMappedObject', { eosDetails: selectedObjDetails }, function (result) {
+				if (result) {
+					var toastTitle = $A.get('$Label.c.MappingSuccess');
+					if (selectedObjDetails.Id) {
+						toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+					}
+					helper.fireToast(component, stringUtils.format(toastTitle, label), helper.SUCCESS);
+					helper.fireApplicationEvent(component, {
+						fromComponent: 'CLMMappedObjectsEdit',
+						toComponent: 'CLMSetupLayout',
+						type: 'update',
+						tabIndex: '3',
+					}, 'CLMNavigationEvent');
+				}
+				else {
+					helper.fireToast(component, stringUtils.format($A.get('$Label.c.MapError'), label), 'error');
+				}
+			});
+		}
 	},
 
 	//Step 1
@@ -243,25 +279,37 @@
 		if (!selectedObjDetails) {
 			selectedObjDetails = {};
 		}
-		allObjects.forEach(function (data) {
-			if (data.name === name) {
-				data.selected = true;
-				selectedObjDetails.label = data.label;
-				selectedObjDetails.name = data.name;
-				selectedObjDetails.selected = true;
+		var isSelected = false;
+		allObjects.forEach(function (allData) {
+			if (allData.name === name) {
+				isSelected = !allData.selected;
+				allData.selected = isSelected;
+				if (allData.selected) {
+					selectedObjDetails.label = allData.label;
+					selectedObjDetails.name = allData.name;
+					selectedObjDetails.selected = true;
+				} else {
+					selectedObjDetails = undefined;
+				}
 			} else {
-				data.selected = false;
+				allData.selected = false;
 			}
 		});
-		allObjectsList.forEach(function (data) {
-			if (data.name === name) {
-				data.selected = true;
+		allObjectsList.forEach(function (listData) {
+			if (listData.name === name) {
+				listData.selected = isSelected;
 			} else {
-				data.selected = false;
+				listData.selected = false;
 			}
 		});
-		component.set('v.clmFolderTree', helper.addSObjectToTree(component, selectedObjDetails.label));
+		if (selectedObjDetails) {
+			component.set(
+				'v.clmFolderTree',
+				helper.addSObjectToTree(component, selectedObjDetails.label)
+			);
+		}
 		component.set('v.SelectedObjDetails', selectedObjDetails);
+		component.set('v.SelectedObjFieldName', '');
 		component.set('v.allObjects', allObjects);
 		component.set('v.allObjectsList', allObjectsList);
 	},
@@ -309,16 +357,18 @@
 
 	onObjFieldSelection: function (component, event, helper) {
 		var label = event.currentTarget.id;
+		var object = event.currentTarget.dataset.obj;
 		event.stopPropagation();
-		var SelectedObjDetails = component.get('v.SelectedObjDetails');
 		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
 		if (SelectedObjFieldName) {
-			SelectedObjFieldName += '{!' + SelectedObjDetails.label + '.' + label + '}';
+			SelectedObjFieldName += '{!' + object + '.' + label + '}';
+		} else {
+			SelectedObjFieldName = '{!' + object + '.' + label + '}';
 		}
-		else {
-			SelectedObjFieldName = '{!' + SelectedObjDetails.label + '.' + label + '}';
-		}
-		component.set('v.clmFolderTree', helper.addTailFolderToTree(component, SelectedObjFieldName));
+		component.set(
+			'v.clmFolderTree',
+			helper.addTailFolderToTree(component, SelectedObjFieldName)
+		);
 		component.set('v.SelectedObjFieldName', SelectedObjFieldName);
 	},
 
@@ -373,13 +423,14 @@
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var selectedFolder;
 		var selectedFolderIndex;
+		var selectedObjFieldName = component.get('v.SelectedObjFieldName');
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.selected) {
 				selectedFolder = treeData;
 				selectedFolderIndex = treeIndex;
 			}
 		});
-		helper.createComponent(component, 'c:CLMModelFooterButton', {
+		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -387,10 +438,11 @@
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourSubFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
 			selectedObjDetails: component.get('v.SelectedObjDetails'),
+			selectedFolderName: [selectedObjFieldName],
 			buttonDisabled: true
 		}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
@@ -413,13 +465,14 @@
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var selectedFolder;
 		var selectedFolderIndex;
+		var selectedObjFieldName = component.get('v.SelectedObjFieldName');
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.selected) {
 				selectedFolder = treeData;
 				selectedFolderIndex = treeIndex;
 			}
 		});
-		helper.createComponent(component, 'c:CLMModelFooterButton', {
+		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -428,9 +481,10 @@
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
 		var selectedObjDetails = component.get('v.SelectedObjDetails');
-		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
+			selectedFolderName: [selectedObjFieldName],
 			folderName: selectedFolder.name,
 			selectedObjDetails: selectedObjDetails,
 			buttonDisabled: false
@@ -443,7 +497,8 @@
 			buttonType: 'rename',
 			selectedFolder: selectedFolder,
 			selectedFolderIndex: selectedFolderIndex,
-			buttonDisabled: false
+			buttonDisabled: false,
+			folderName: selectedFolder.name
 		});
 		var modelComponent = component.find('popupModel');
 		setTimeout($A.getCallback(function () {
@@ -498,21 +553,23 @@
 	handleConfirm: function (component, event, helper) {
 		var modelValueHolder = component.get('v.modelValueHolder');
 		var clmFolderTree = component.get('v.clmFolderTree');
+		component.set('v.modalBodyText');
 		if (modelValueHolder.buttonType === 'rename') {
-			clmFolderTree[modelValueHolder.selectedFolderIndex].name = modelValueHolder.folderName;
+			clmFolderTree[modelValueHolder.selectedFolderIndex].name =
+				modelValueHolder.folderName;
 			component.set('v.clmFolderTree', clmFolderTree);
 			component.set('v.showModal', 'false');
 			helper.updatePath(component);
-		}
-		else if (modelValueHolder.buttonType === 'subFolder') {
+		} else if (modelValueHolder.buttonType === 'subFolder') {
 			clmFolderTree = helper.sortTree(clmFolderTree);
-
 			clmFolderTree.forEach(function (treeData) {
-				if (treeData.level > clmFolderTree[modelValueHolder.selectedFolderIndex].level) {
+				if (
+					treeData.level >
+					clmFolderTree[modelValueHolder.selectedFolderIndex].level
+				) {
 					treeData.level = treeData.level + 1;
 					treeData.id = treeData.level + 1;
-				}
-				else {
+				} else {
 					treeData.id = treeData.level;
 				}
 			});
@@ -527,6 +584,43 @@
 			component.set('v.clmFolderTree', clmFolderTree);
 			component.set('v.showModal', 'false');
 			helper.updatePath(component);
+		} else if (modelValueHolder.buttonType === 'confirm') {
+			var selectedObjDetails = modelValueHolder.selectedObjDetails;
+			var label = modelValueHolder.label;
+			helper.callServer(
+				component,
+				'c.setMappedObject',
+				{ eosDetails: selectedObjDetails },
+				function (result) {
+					if (result) {
+						var toastTitle = $A.get('$Label.c.MappingSuccess');
+						if (selectedObjDetails.Id) {
+							toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+						}
+						helper.fireToast(
+							component,
+							stringUtils.format(toastTitle, label),
+							helper.SUCCESS
+						);
+						helper.fireApplicationEvent(
+							component,
+							{
+								fromComponent: 'CLMMappedObjectsEdit',
+								toComponent: 'CLMSetupLayout',
+								type: 'update',
+								tabIndex: '3'
+							},
+							'CLMNavigationEvent'
+						);
+					} else {
+						helper.fireToast(
+							component,
+							stringUtils.format($A.get('$Label.c.MapError'), label),
+							helper.ERROR
+						);
+					}
+				}
+			);
 		}
 	},
 
