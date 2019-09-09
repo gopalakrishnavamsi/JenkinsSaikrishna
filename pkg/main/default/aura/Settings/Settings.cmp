@@ -1,4 +1,4 @@
-<aura:component description="DocuSign for Salesforce Essentials - Settings" controller="SettingsController">
+<aura:component description="DocuSign Apps Launcher - Settings" controller="SettingsController">
 
     <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
 
