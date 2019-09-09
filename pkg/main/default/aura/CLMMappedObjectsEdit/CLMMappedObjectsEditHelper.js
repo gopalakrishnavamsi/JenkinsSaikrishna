@@ -129,9 +129,9 @@
 						});
 						result.forEach(function (data) {
 							if (data.hasRelationship) {
-                if (data.label.includes(' ID')) {
-                  data.label = data.label.replace(/ ID/, '');
-                }
+								if (data.label.includes(' ID')) {
+									data.label = data.label.replace(/ ID/, '');
+								}
 								var isDuplicate = false;
 
 								for (var i = 0, j = allFields.length; i < j; i++) {
@@ -143,8 +143,8 @@
 								if (!isDuplicate) {
 									allFields.push({
 										name: data.relatesTo,
-                    label: data.label,
-                    relationship: data.name,
+										label: data.label,
+										relationship: data.name,
 										selected: false,
 										fields: []
 									});

@@ -93,7 +93,6 @@
 					selected: false,
 					id: clmTree.length + 1
 				});
-                debugger;
 				component.set('v.clmFolderTree', clmTree);
 				helper.updatePath(component);
 				helper.UpdateUI(component, '2');
@@ -188,7 +187,7 @@
 		var selectedObjDetails = component.get('v.SelectedObjDetails');
 		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
 		var path = component.get('v.pathInCLM').split('Other Sources').pop();
-        selectedObjDetails.Name = selectedObjDetails.name;
+		selectedObjDetails.Name = selectedObjDetails.name;
 		if (component.get('v.namespace') === 'c') {
 			selectedObjDetails.FolderName__c = SelectedObjFieldName;
 			selectedObjDetails.Path__c = path;
@@ -196,7 +195,7 @@
 		else {
 			selectedObjDetails[component.get('v.namespace') + '__FolderName__c'] = SelectedObjFieldName;
 			selectedObjDetails[component.get('v.namespace') + '__Path__c'] = path;
-		}        
+		}
 		var label = selectedObjDetails.label;
 		delete selectedObjDetails.name;
 		delete selectedObjDetails.label;
