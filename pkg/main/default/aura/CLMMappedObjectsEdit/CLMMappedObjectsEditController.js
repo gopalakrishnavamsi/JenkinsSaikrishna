@@ -99,7 +99,7 @@
 			}
 			helper.hideLoader(component);
 		});
-		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
+		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -107,7 +107,7 @@
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameLabel'),
 			summary: $A.get('$Label.c.NameLabel'),
 		}, function (newCmp) {
@@ -146,14 +146,14 @@
 	},
 
 	openSeeExample: function (component, event, helper) {
-		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
+		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			showPrimaryButton: 'false',
 			secondaryButtonVariant: 'brand',
 			secondaryButtonLabel: $A.get('$Label.c.Close')
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'dfsle:CLMFolderExample', {}, function (newCmp) {
+		helper.createComponent(component, 'c:CLMFolderExample', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 			component.set('v.modelTitleText', $A.get('$Label.c.FolderExample'));
 			component.set('v.showModal', 'true');
@@ -165,14 +165,14 @@
 	},
 
 	openWhyExample: function (component, event, helper) {
-		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
+		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			showPrimaryButton: 'false',
 			secondaryButtonVariant: 'brand',
 			secondaryButtonLabel: $A.get('$Label.c.Close')
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'dfsle:CLMSelectingFields', {}, function (newCmp) {
+		helper.createComponent(component, 'c:CLMSelectingFields', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 			component.set('v.modelTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
 			component.set('v.showModal', 'true');
@@ -208,7 +208,7 @@
 			});
 			helper.createComponent(
 				component,
-				'dfsle:CLMModelFooterButton',
+				'c:CLMModelFooterButton',
 				{
 					primaryButtonLabel: $A.get('$Label.c.Confirm'),
 					secondaryButtonLabel: $A.get('$Label.c.Cancel'),
@@ -429,7 +429,7 @@
 				selectedFolderIndex = treeIndex;
 			}
 		});
-		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
+		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -437,7 +437,7 @@
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourSubFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
 			selectedObjDetails: component.get('v.SelectedObjDetails'),
@@ -471,7 +471,7 @@
 				selectedFolderIndex = treeIndex;
 			}
 		});
-		helper.createComponent(component, 'dfsle:CLMModelFooterButton', {
+		helper.createComponent(component, 'c:CLMModelFooterButton', {
 			primaryButtonLabel: $A.get('$Label.c.Confirm'),
 			secondaryButtonLabel: $A.get('$Label.c.Cancel'),
 			primaryButtonVariant: 'brand',
@@ -480,7 +480,7 @@
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
 		var selectedObjDetails = component.get('v.SelectedObjDetails');
-		helper.createComponent(component, 'dfsle:CLMMappingObjectNaming', {
+		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
 			selectedFolderName: [selectedObjFieldName],
