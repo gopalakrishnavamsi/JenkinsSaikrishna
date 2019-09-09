@@ -1,13 +1,13 @@
 ({
 	onInit: function (component, event, helper) {
-		var SelectedObjDetails = component.get('v.selectedObjDetails');
-		if (SelectedObjDetails && SelectedObjDetails.name) {
-			helper.callServer(component, 'c.getAllObjectFields', { apiName: SelectedObjDetails.name, isChild: false }, function (result) {
+		var selectedObjDetails = component.get('v.selectedObjDetails');
+		if (selectedObjDetails && selectedObjDetails.name) {
+			helper.callServer(component, 'c.getAllObjectFields', { apiName: selectedObjDetails.name, isChild: false }, function (result) {
 				var allFields = [];
 				allFields.push({
-					name: SelectedObjDetails.name,
-					label: SelectedObjDetails.label,
-					relationship: SelectedObjDetails.name,
+					name: selectedObjDetails.name,
+					label: selectedObjDetails.label,
+					relationship: selectedObjDetails.name,
 					selected: true,
 					fields: result,
 				});

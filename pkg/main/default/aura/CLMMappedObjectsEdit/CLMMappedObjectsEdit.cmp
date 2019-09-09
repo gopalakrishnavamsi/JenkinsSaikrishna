@@ -15,7 +15,7 @@
 	<aura:registerEvent name="CLMModelFooterButtonPrimaryBtn_disable" type="c:strike_evt" />
 	<aura:registerEvent name="CLMModelFooterButtonPrimaryBtn_enable" type="c:strike_evt" />
 	<!--event handler-->
-	<aura:handler name='init' value='{!this}' action='{!c.onInit}' />
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
 	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
 	<aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt" action="{!c.handleConfirm}" />
 	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
@@ -28,7 +28,7 @@
 	<aura:attribute name="currentStep" type="String" default="1" />
 	<aura:attribute name="isEdit" type="Boolean" default="false" />
 
-	<aura:attribute name="SelectedObjDetails" type="Object" />
+	<aura:attribute name="selectedObjDetails" type="Object" />
 	<!--internal attributes-->
 	<aura:attribute name="allObjects" type="List" access="private" />
 	<aura:attribute name="allObjectsList" type="List" access="private" />
@@ -36,9 +36,9 @@
 	<aura:attribute name="allObjectFields" type="List" access="private" />
 	<aura:attribute name="allObjectFieldsList" type="List" access="private" />
 
-	<aura:attribute name="SelectedObjFieldName" default="" type="String" access="private" />
+	<aura:attribute name="selectedObjFieldName" default="" type="String" access="private" />
 
-	<aura:attribute name="SelectedFolderParentExample" type="String" default="Other Sources" access="private" />
+	<aura:attribute name="selectedFolderParentExample" type="String" default="Other Sources" access="private" />
 	<aura:attribute name="SelectedFolderExample" default="Salesforce" type="String" access="private" />
 
 	<aura:attribute name="clmFolderTree" type="List" access="private" />
@@ -49,12 +49,12 @@
 	<aura:attribute name="isDeleteFolder" type="Boolean" default="true" access="private" />
 	<aura:attribute name="loader" type="Boolean" default="false" access="private" />
 
-	<!--model attributes-->
-	<aura:attribute name="modelValueHolder" type="Object" access="private" />
-	<aura:attribute name="modelTitleText" type="String" access="private" />
+	<!--modal attributes-->
+	<aura:attribute name="modalValueHolder" type="Object" access="private" />
+	<aura:attribute name="modalTitleText" type="String" access="private" />
 	<aura:attribute name="modalBody" type="Aura.Component[]" default="" />
-	<aura:attribute name="modelSecondaryButtonText" type="String" access="private" />
-	<aura:attribute name="modelPrimaryButtonText" type="String" access="private" />
+	<aura:attribute name="modalSecondaryButtonText" type="String" access="private" />
+	<aura:attribute name="modalPrimaryButtonText" type="String" access="private" />
 	<aura:attribute name="showModal" type="Boolean" default="false" access="private" />
 	<aura:attribute name="isRemove" type="Boolean" default="false" access="private" />
 	<aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]" />
@@ -63,8 +63,8 @@
 	<!--child components-->
 	<aura:if isTrue="{!v.showModal}">
 		<c:strike_modal aura:id="popupModel" footerButtons="{!v.strikeModelFooterButtons}"
-			body="{!v.modalBodyText ? v.modalBodyText : v.modalBody}" title="{!v.modelTitleText}" size="large"
-			primaryButtonLabel="{!v.modelPrimaryButtonText}" secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
+			body="{!v.modalBodyText ? v.modalBodyText : v.modalBody}" title="{!v.modalTitleText}" size="large"
+			primaryButtonLabel="{!v.modalPrimaryButtonText}" secondaryButtonLabel="{!v.modalSecondaryButtonText}" />
 	</aura:if>
 
 	<div class="slds-card__body slds-is-relative slds-p-left_x-large slds-p-right_x-large">
@@ -93,13 +93,13 @@
 						</aura:if>
 						<aura:if isTrue="{!v.currentStep=='2'}">
 							<lightning:input onchange="{!c.validateFieldSelection}" name="fileName"
-								label="{!$Label.c.SelectFieldToNameTheFolder}" value="{!v.SelectedObjFieldName}" />
+								label="{!$Label.c.SelectFieldToNameTheFolder}" value="{!v.selectedObjFieldName}" />
 							<div class="slds-grid">
 								<div>
 									<lightning:button variant="base" label="{!$Label.c.WhyAmISelectingFields}"
 										title="{!$Label.c.WhyAmISelectingFields}" onclick="{!c.openWhyExample}" />
 								</div>
-								<aura:if isTrue="{!if(empty(v.SelectedObjFieldName),'false','true')}">
+								<aura:if isTrue="{!if(empty(v.selectedObjFieldName),'false','true')}">
 									<div class="slds-col_bump-left">
 										<lightning:button variant="base" label="{!$Label.c.SeeExample}"
 											title="{!$Label.c.SeeExample}" onclick="{!c.openSeeExample}" />
@@ -230,7 +230,7 @@
 									</div>
 									<div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none ">
 										<div class="slds-p-around_medium slds-border_bottom">
-											{!v.SelectedFolderParentExample}&nbsp;{!$Label.c.FolderContents}
+											{!v.selectedFolderParentExample}&nbsp;{!$Label.c.FolderContents}
 										</div>
 										<ul class="slds-tree slds-p-around_medium" role="tree">
 											<li class="slds-p-bottom_x-small" aria-expanded="true" aria-level="1"
@@ -295,7 +295,7 @@
 		<aura:if isTrue="{!v.currentStep=='1'}">
 			<lightning:button label="{!$Label.c.Cancel}" title="{!$Label.c.Cancel}" onclick="{! c.back }" />
 			<lightning:button variant="brand" label="{!$Label.c.Next}" title="{!$Label.c.Next}"
-				onclick="{! c.gotNextStep }" disabled="{!!v.SelectedObjDetails}" />
+				onclick="{! c.gotNextStep }" disabled="{!!v.selectedObjDetails}" />
 		</aura:if>
 		<aura:if isTrue="{!v.currentStep=='2'}">
 			<aura:if isTrue="{!v.isEdit}">
@@ -305,7 +305,7 @@
 				</aura:set>
 			</aura:if>
 			<lightning:button variant="brand" label="{!$Label.c.Next}" title="{!$Label.c.Next}"
-				onclick="{! c.gotNextStep }" disabled="{!if(empty(v.SelectedObjFieldName),'true','false')}" />
+				onclick="{! c.gotNextStep }" disabled="{!if(empty(v.selectedObjFieldName),'true','false')}" />
 		</aura:if>
 		<aura:if isTrue="{!v.currentStep=='3'}">
 			<lightning:button label="{!$Label.c.Back}" title="{!$Label.c.Back}" onclick="{! c.back }" />

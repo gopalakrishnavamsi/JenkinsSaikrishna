@@ -52,7 +52,7 @@
 		return clmFolderTree;
 	},
 
-	addTailFolderToTree: function (component, field) {
+	addLeafFolderToTree: function (component, field) {
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var fieldIndex = 0;
 		clmFolderTree.forEach(function (treeData, index) {
@@ -77,9 +77,9 @@
 	//ui helper
 	UpdateUI: function (component, index) {
 		var helper = this;
-		var SelectedObjDetails = component.get('v.SelectedObjDetails');
-		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
-		if (index === '2' && SelectedObjDetails) {
+		var selectedObjDetails = component.get('v.selectedObjDetails');
+		var selectedObjFieldName = component.get('v.selectedObjFieldName');
+		if (index === '2' && selectedObjDetails) {
 			helper.fireApplicationEvent(
 				component,
 				{
@@ -96,7 +96,7 @@
 			component.set(
 				'v.title',
 				stringUtils.format('{0} {1}',
-					SelectedObjDetails.label,
+					selectedObjDetails.label,
 					$A.get('$Label.c.FolderName')
 				)
 			);
@@ -104,7 +104,7 @@
 				'v.titleHelpText',
 				stringUtils.format(
 					$A.get('$Label.c.SelectFolderHelpBody'),
-					SelectedObjDetails.label
+					selectedObjDetails.label
 				)
 			);
 			helper.fireApplicationEvent(
@@ -116,17 +116,17 @@
 				},
 				'CLMPathEvent'
 			);
-			if (SelectedObjDetails.name) {
+			if (selectedObjDetails.name) {
 				helper.showLoader(component);
 				helper.callServer(
 					component,
 					'c.getAllObjectFields',
-					{ apiName: SelectedObjDetails.name, isChild: false },
+					{ apiName: selectedObjDetails.name, isChild: false },
 					function (result) {
 						var allFields = [];
 						allFields.push({
-							name: SelectedObjDetails.name,
-							label: SelectedObjDetails.label,
+							name: selectedObjDetails.name,
+							label: selectedObjDetails.label,
 							selected: true,
 							fields: result
 						});
@@ -161,9 +161,9 @@
 					}
 				);
 			}
-		} else if (index === '3' && SelectedObjDetails && SelectedObjFieldName) {
+		} else if (index === '3' && selectedObjDetails && selectedObjFieldName) {
 			if (
-				$A.util.isEmpty(SelectedObjFieldName)
+				$A.util.isEmpty(selectedObjFieldName)
 			) {
 				helper.fireApplicationEvent(
 					component,
@@ -193,7 +193,7 @@
 				'v.title',
 				stringUtils.format(
 					'{0} {1}',
-					SelectedObjDetails.label,
+					selectedObjDetails.label,
 					$A.get('$Label.c.FolderLocation')
 				)
 			);
@@ -201,7 +201,7 @@
 				'v.titleHelpText',
 				stringUtils.format(
 					$A.get('$Label.c.ChooseLocationTitleHelpText'),
-					SelectedObjDetails.label
+					selectedObjDetails.label
 				)
 			);
 			helper.fireApplicationEvent(
