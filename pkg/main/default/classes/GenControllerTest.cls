@@ -43,7 +43,7 @@ private class GenControllerTest {
 				GenController.getConfiguration(null);
 				throw new AssertException('Expected getConfiguration to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}

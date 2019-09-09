@@ -56,6 +56,10 @@
         }
         component.set('v.saving', false);
       } else {
+        var errorMessage = stringUtils.getErrorMessage(response);
+        if(errorMessage === $A.get('$Label.c.MustBeDocuSignGenerator')){
+          component.set('v.isDocuSignGenerator', false);
+        }
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
         component.set('v.saving', false);
       }

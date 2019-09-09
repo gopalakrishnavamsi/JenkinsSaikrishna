@@ -23,6 +23,7 @@
     <aura:attribute name="saving" type="Boolean" default="{!false}"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isDocuSignGenerator" type="Boolean" default="true"/>
 
     <!-- handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
@@ -72,13 +73,8 @@
         </div>
         <!-- /Page Header -->
 
-
-        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
-
-
         <!-- Saving Spinner -->
-        <div class="{!'ds-path__spinner_container' + if(not(v.saving)||!v.fetchingOAuthStatus, ' slds-hide')}">
+        <div class="{!'ds-path__spinner_container' + if(not(v.saving) ,' slds-hide')}">
             <div class="ds-image-spinner slds-spinner_container slds-is-fixed">
                 <div role="status" class="slds-spinner slds-spinner_large">
                     <span class="slds-assistive-text">{!$Label.c.Loading}</span>
@@ -88,7 +84,7 @@
             <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak"></div>
         </div>
         <!-- /Saving Spinner -->
-        <aura:if isTrue="{!v.isAuthorized}">
+        <aura:if isTrue="{!and(v.isAuthorized , v.isDocuSignGenerator)}">
             <div class="slds-container slds-container_x-large slds-container_center slds-p-around_x-large">
                 <!-- Path -->
                 <div class="ds-path slds-path slds-card slds-is-expanded slds-p-horizontal_medium slds-p-top_small">
@@ -196,8 +192,11 @@
                 </div>
                 <!-- /Path -->
             </div>
+            <aura:set attribute="else">
+                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                        fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+            </aura:set>
         </aura:if>
-
 
     </aura:if>
     <!-- What You Will Need Modal -->

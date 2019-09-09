@@ -26,7 +26,6 @@ public with sharing class NegotiateService {
 			}
 		}
 	}
-
 	@Future
 	private static void setFolderId(final Id sourceObjectId, final String folderId) {
 		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
