@@ -1,248 +1,689 @@
 ({
-  setLoading: function(component, isLoading) {
-    component.set('v.modalLoading', isLoading === true);
-    component.get('v.uiHelper').setLoading(isLoading === true);
+  initializeComponent: function (component, event, helper) {
+    helper.setCurrentUser(component);
+    helper.setProductRoles(component, event, helper);
+    helper.getProfiles(component, event, helper);
+    helper.getPermissionSets(component, event, helper);
+    helper.setSortParams(component);
+    helper.setAddUserColumns(component);
+    helper.setFilterOptions(component);
+    helper.setFilters(component);
+    helper.buildFilterLabel(component);
+    helper.getUsers(component, event, helper);
   },
 
-  getUsers: function(component) {
-    var uiHelper = component.get('v.uiHelper');
-    uiHelper.hideToast();
-    component.set('v.tableLoading', true);
-
-    var getUsers = component.get('c.getUsers');
-    getUsers.setCallback(this, function(response) {
-      if (response.getState() === 'SUCCESS') {
-        component.set('v.users', response.getReturnValue());
-      } else {
-        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
-      }
-      component.set('v.tableLoading', false);
-    });
-
-    $A.enqueueAction(getUsers);
+  setCurrentUser: function (component) {
+    component.set('v.currentUserId', $A.get('$SObjectType.CurrentUser.Id'));
   },
 
-  buildUsersTable: function(component) {
-    component.set('v.tableLoading', true);
-    var filteredUsers = component.get('v.filteredUsers');
-    var userRows = [];
+  capitalizeRoles: function (role) {
+    if (!$A.util.isUndefinedOrNull(role)) {
+      return role.charAt(0).toUpperCase() + role.slice(1);
+    }
+  },
 
-    var checkIcon = {
-      type: 'lightning:icon',
-      attributes: {
-        iconName: 'utility:check',
-        size: 'x-small',
-        class: 'slds-m-left_small'
-      }
+  setProductRoles: function (component, event, helper) {
+    component.set('v.userTableLoading', true);
+    helper.invokeGetProductRoles(component)
+      .then($A.getCallback(function (response) {
+        if (!$A.util.isUndefinedOrNull(response)) {
+          var productRoles = JSON.parse(response);
+          var productsWithRoles = [];
+          component.get('v.products').forEach(function (product) {
+            var roles = [];
+            if (product.name === 'e_sign' && product.status === 'active') {
+              roles.push({'label': $A.get('$Label.c.None'), 'value': ''});
+              productRoles.e_sign.forEach(function (role) {
+                roles.push(
+                  {'label': helper.capitalizeRoles(role), 'value': helper.capitalizeRoles(role)}
+                );
+              });
+              product.roles = roles;
+            } else if (product.name === 'gen' && product.status === 'active') {
+              roles.push({'label': $A.get('$Label.c.None'), 'value': ''});
+              productRoles.gen.forEach(function (role) {
+                roles.push(
+                  {'label': helper.capitalizeRoles(role), 'value': helper.capitalizeRoles(role)}
+                );
+              });
+              product.roles = roles;
+            } else if (product.name === 'negotiate' && product.status === 'active') {
+              roles.push({'label': $A.get('$Label.c.None'), 'value': ''});
+              productRoles.negotiate.forEach(function (role) {
+                roles.push(
+                  {'label': helper.capitalizeRoles(role), 'value': helper.capitalizeRoles(role)}
+                );
+              });
+              product.roles = roles;
+            } else if (product.name === 'clm' && product.status === 'active') {
+              roles.push({'label': $A.get('$Label.c.None'), 'value': ''});
+              productRoles.clm.forEach(function (role) {
+                roles.push(
+                  {'label': helper.capitalizeRoles(role), 'value': helper.capitalizeRoles(role)}
+                );
+              });
+              product.roles = roles;
+            }
+            productsWithRoles.push(product);
+          });
+          if (!$A.util.isEmpty(productsWithRoles)) {
+            component.set('v.products', productsWithRoles);
+          }
+        }
+      }))
+      .catch(function (error) {
+        helper.showToast(component, error, 'error');
+      })
+      .finally(function () {
+        component.set('v.userTableLoading', false);
+      });
+  },
+
+
+  setSortParams: function (component) {
+    var userSortParams = {
+      sortedBy: 'name',
+      sortedDirection: 'desc'
     };
 
-    var currentUserId = $A.get('$SObjectType.CurrentUser.Id');
-    filteredUsers.forEach(function(user, index) {
-      // CurrentUser.Id uses 15-character Id and API returns 18-character version. T.I.S.
-      var allowRemove = user.sourceId.indexOf(currentUserId) !== 0;
-      userRows.push({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        name: user.name,
-        email: user.email,
-        admin: user.canManageAccount ? checkIcon : null,
-        remove: {
-          type: 'lightning:buttonIcon',
-          attributes: {
-            value: index,
-            iconName: 'utility:close',
-            onclick: allowRemove
-              ? component.getReference('c.showRemoveUser')
-              : null,
-            size: 'medium',
-            variant: 'bare',
-            class: allowRemove ? 'ds-remove' : 'ds-remove-disabled'
-          }
+    var addUserSortParams = {
+      sortedBy: 'name',
+      sortedByLabel: $A.get('$Label.c.NameLabel'),
+      sortedDirection: 'asc'
+    };
+
+    component.set('v.userSortParams', userSortParams);
+    component.set('v.addUserSortParams', addUserSortParams);
+  },
+
+  setAddUserColumns: function (component) {
+    component.set('v.addUserColumns',
+      [
+        {
+          label: $A.get('$Label.c.FirstName'),
+          fieldName: 'FirstName',
+          type: 'text',
+          sortable: true
         },
-        sourceId: user.sourceId
+        {
+          label: $A.get('$Label.c.LastName'),
+          fieldName: 'LastName',
+          type: 'text',
+          sortable: true
+        },
+        {
+          label: $A.get('$Label.c.EmailAddress'),
+          fieldName: 'Email',
+          type: 'text',
+          sortable: true
+        },
+        {
+          label: $A.get('$Label.c.ProfileLabel'),
+          fieldName: 'ProfileName',
+          type: 'text',
+          sortable: true
+        }
+      ]);
+  },
+
+  setFilterOptions: function (component) {
+    component.set('v.filterOptions', [{
+      disabled: true,
+      label: $A.get('$Label.c.User')
+    },
+      {
+        disabled: false,
+        label: $A.get('$Label.c.ProfileLabel')
+      },
+      {
+        disabled: false,
+        label: $A.get('$Label.c.PermissionSetLabel')
+      }
+    ]);
+  },
+
+  setFilters: function (component) {
+    component.set('v.filters', [{
+      type: 'User',
+      value: ''
+    }]);
+  },
+
+  updateFilterOptionsState: function (component) {
+    var filters = component.get('v.filters');
+    var filterOptions = component.get('v.filterOptions');
+
+    filterOptions.forEach(function (filterOption) {
+      filterOption.disabled = false;
+
+      filters.forEach(function (filter) {
+        if (filter.type === filterOption.label) {
+          filterOption.disabled = true;
+        }
       });
     });
 
-    var data = {
-      columns: [
-        {
-          sortable: true,
-          label: $A.get('$Label.c.SalesforceUser'),
-          dataType: 'STRING',
-          name: 'name'
-        },
-        {
-          sortable: true,
-          label: $A.get('$Label.c.EmailAddress'),
-          dataType: 'STRING',
-          name: 'email'
-        },
-        {
-          sortable: true,
-          label: $A.get('$Label.c.Admin'),
-          dataType: 'COMPONENT',
-          name: 'admin'
-        },
-        {
-          sortable: false,
-          label: $A.get('$Label.c.Remove'),
-          dataType: 'COMPONENT',
-          name: 'remove'
-        }
-      ],
-      rows: userRows
-    };
-
-    component.set('v.data', data);
-    component.set('v.tableLoading', false);
-    component.set('v.formData', {});
+    component.set('v.filterOptions', filterOptions);
   },
 
-  getUser: function(component, userId) {
-    var uiHelper = component.get('v.uiHelper');
-    component.set('v.modalLoading', true);
-    var users = component.get('v.users');
-
-    uiHelper.invokeAction(
-      component.get('c.getUser'),
-      { userId: userId },
-      function(user) {
-        if ($A.util.isEmpty(user)) {
-          uiHelper.showToast($A.get('$Label.c.UserNotFound'), 'error');
-        } else {
-          var userMatches = users.filter(function(u) {
-            return u.sourceId.indexOf(user.Id) === 0;
-          });
-          if ($A.util.isEmpty(userMatches)) {
-            component.set('v.lookupError', false);
-            component.find('primaryFooterButton').set('v.disabled', false);
-            component.set('v.formData', {
-              user: {
-                email: user.Email,
-                firstName: user.FirstName,
-                lastName: user.LastName,
-                sourceId: user.Id
-              }
-            });
-          } else {
-            component.set('v.lookupError', true);
-            component.find('primaryFooterButton').set('v.disabled', true);
-            component.find('lookup').set('v.error', true);
-            component
-              .find('lookup')
-              .set(
-                'v.errorMessage',
-                stringUtils.format(
-                  $A.get('$Label.c.AlreadyMember_1'),
-                  user.Email
-                )
-              );
-            component.set('v.formData', {});
-          }
-        }
-      },
-      null,
-      function() {
-        component.set('v.modalLoading', false);
-      }
-    );
-  },
-
-  searchTable: function(component, name) {
-    var users = component.get('v.users');
-
-    var filteredUsers = users.filter(function(user) {
-      return user.name.toUpperCase().match(name.toUpperCase());
+  buildFilterLabel: function (component) {
+    var filters = component.get('v.filters');
+    var filterLabels = filters.map(function (filter) {
+      return filter.type;
     });
 
-    if (!$A.util.isEmpty(filteredUsers)) {
-      component.set('v.filteredUsers', filteredUsers);
+    var filterLabel = filterLabels.join(', ');
+    component.set('v.filterLabel', filterLabel);
+  },
+
+  filterSFUsers: function (component, event, helper) {
+    var filters = component.get('v.filters');
+    var validFilters = filters.filter(function (filter) {
+      return !$A.util.isEmpty(filter.value) && !$A.util.isEmpty(filter.type);
+    });
+
+    if (validFilters.length === 0) {
+      component.set('v.sfUsers', []);
+      component.set('v.hasPopulatedFilters', false);
+      return;
+    } else {
+      component.set('v.hasPopulatedFilters', true);
+    }
+
+    var action = component.get('c.filterSFUsers');
+    var params = {filters: validFilters};
+
+    action.setParams({
+      jsonString: JSON.stringify(params)
+    });
+
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var sfUsers = response.getReturnValue();
+        sfUsers.forEach(function (sfUser) {
+          if (sfUser.Profile) {
+            //lightning data tables can't drill down into multi level objects
+            sfUser.ProfileName = sfUser.Profile.Name;
+          }
+        });
+        component.set('v.sfUsers', sfUsers);
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+      component.set('v.searching', false);
+    });
+
+    component.set('v.searching', true);
+    $A.enqueueAction(action);
+  },
+
+  getUsers: function (component, event, helper) {
+    component.set('v.userTableLoading', true);
+    helper.invokeGetUsers(component)
+      .then($A.getCallback(function (response) {
+        component.set('v.users', response);
+      }))
+      .catch(function (error) {
+        helper.showToast(component, error, 'error');
+      })
+      .finally(function () {
+        component.set('v.userTableLoading', false);
+      });
+  },
+
+  getProfiles: function (component, event, helper) {
+    component.set('v.userTableLoading', true);
+    helper.invokeGetProfiles(component)
+      .then($A.getCallback(function (response) {
+        component.set('v.profiles', response);
+      }))
+      .catch(function (error) {
+        helper.showToast(component, error, 'error');
+      })
+      .finally(function () {
+        component.set('v.userTableLoading', false);
+      });
+  },
+
+  getPermissionSets: function (component, event, helper) {
+    component.set('v.userTableLoading', true);
+    helper.invokeGetPermissionSets(component)
+      .then($A.getCallback(function (response) {
+        component.set('v.permSets', response);
+      }))
+      .catch(function (error) {
+        helper.showToast(component, error, 'error');
+      })
+      .finally(function () {
+        component.set('v.userTableLoading', false);
+      });
+  },
+
+  invokeGetProductRoles: function (component) {
+    var invokeGetProductRoles = component.get('c.getProductRoles');
+    return new Promise($A.getCallback(function (resolve, reject) {
+      invokeGetProductRoles.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(response.getReturnValue());
+        } else {
+          reject(stringUtils.getErrorMessage(response));
+        }
+      });
+      $A.enqueueAction(invokeGetProductRoles);
+    }));
+  },
+
+  //returns a promise which resolves to the response of the getUsers AuraEnabled Apex method
+  invokeGetUsers: function (component) {
+    var invokeGetUsers = component.get('c.getUsers');
+    return new Promise($A.getCallback(function (resolve, reject) {
+      invokeGetUsers.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(response.getReturnValue());
+        } else {
+          reject(stringUtils.getErrorMessage(response));
+        }
+      });
+      $A.enqueueAction(invokeGetUsers);
+    }));
+  },
+
+  //returns a promise which resolves to the response of the getProfiles AuraEnabled Apex method
+  invokeGetProfiles: function (component) {
+    var invokeGetProfiles = component.get('c.getProfiles');
+    return new Promise($A.getCallback(function (resolve, reject) {
+      invokeGetProfiles.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(response.getReturnValue());
+        } else {
+          reject(stringUtils.getErrorMessage(response));
+        }
+      });
+      $A.enqueueAction(invokeGetProfiles);
+    }));
+  },
+
+  //returns a promise which resolves to the response of the getPermissionSets AuraEnabled Apex method
+  invokeGetPermissionSets: function (component) {
+    var invokeGetPermissionSets = component.get('c.getPermissionSets');
+    return new Promise($A.getCallback(function (resolve, reject) {
+      invokeGetPermissionSets.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(response.getReturnValue());
+        } else {
+          reject(stringUtils.getErrorMessage(response));
+        }
+      });
+      $A.enqueueAction(invokeGetPermissionSets);
+    }));
+  },
+
+  resetUsersTable: function (component) {
+    component.set('v.filteredUsers', component.get('v.users'));
+  },
+
+  searchTable: function (component, userSearchTerm) {
+    var users = component.get('v.users');
+
+    //Get users filtered on name
+    var filteredUsersByName = users.filter(function (user) {
+      return user.name.toUpperCase().match(userSearchTerm.toUpperCase());
+    });
+
+    //Get users filtered on email
+    var filteredUsersByEmail = users.filter(function (user) {
+      return user.email.toUpperCase().match(userSearchTerm.toUpperCase());
+    });
+
+    if (!$A.util.isEmpty(filteredUsersByName)) {
+      component.set('v.filteredUsers', filteredUsersByName);
+    } else if (!$A.util.isEmpty(filteredUsersByEmail)) {
+      component.set('v.filteredUsers', filteredUsersByEmail);
     } else {
       component.set('v.filteredUsers', []);
     }
   },
 
-  createUser: function(component) {
-    var uiHelper = component.get('v.uiHelper');
-    uiHelper.hideToast();
-    component.set('v.showAddUserModal', false);
+  buildUsersTable: function (component, event, helper) {
     component.set('v.tableLoading', true);
+    if (component.get('v.context') === 'e_sign') {
+      helper.setEsignContextColumns(component);
+    } else if (component.get('v.context') === 'clm') {
+      helper.setCLMContextColumns(component);
+    }
 
-    var addUser = component.get('c.addUser');
-    var user = component.get('v.formData.user');
+    var filteredUsers = component.get('v.filteredUsers');
+    var userRows = [];
 
-    addUser.setParams({
-      sourceId: user.sourceId,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      canManageAccount: !!component.find('canManageAccount').get('v.checked')
+    filteredUsers.forEach(function (user) {
+      userRows.push({
+        id: user.id.value,
+        name: user.name,
+        email: user.email,
+        //TODO setup user status right now is being returned as blank from getUsers. Added a check currently so that if the status is blank
+        // but the id and canManageAccount are valid indicates this as the setup user and the status is shown as Active
+        status: !$A.util.isUndefinedOrNull(user.status) ? user.status.toString()
+          : ($A.util.isUndefinedOrNull(user.status) && !($A.util.isUndefinedOrNull(user.id) && user.canManageAccount)) ? 'Active' : '',
+        admin: user.canManageAccount,
+        eSignatureRole: (!$A.util.isUndefinedOrNull(user.roles)
+          && !$A.util.isUndefinedOrNull(user.roles.e_sign)
+          && !$A.util.isEmpty(user.roles.e_sign)) ? helper.formatRole(user.roles.e_sign) : null,
+        documentGenerationRole: (!$A.util.isUndefinedOrNull(user.roles)
+          && !$A.util.isUndefinedOrNull(user.roles.gen)
+          && !$A.util.isEmpty(user.roles.gen)) ? helper.formatRole(user.roles.gen) : null,
+        negotiationRole: (!$A.util.isUndefinedOrNull(user.roles)
+          && !$A.util.isUndefinedOrNull(user.roles.negotiate)
+          && !$A.util.isEmpty(user.roles.negotiate)) ? helper.formatRole(user.roles.negotiate) : null,
+        clmRole: (!$A.util.isUndefinedOrNull(user.roles)
+          && !$A.util.isUndefinedOrNull(user.roles.clm)
+          && !$A.util.isEmpty(user.roles.clm)) ? helper.formatRole(user.roles.clm) : null,
+
+        provisioned: user.provisioned,
+        sourceId: user.sourceId,
+      });
     });
 
-    addUser.setCallback(this, function(response) {
-      var status = response.getState();
-      if (status === 'SUCCESS') {
-        component.set('v.users', response.getReturnValue());
-        component.set('v.lookupValue', null);
-        component.set('v.formData', {});
-        uiHelper.showToast(
-          stringUtils.format($A.get('$Label.c.MemberAdded_1'), user.email),
-          'success'
-        );
-      } else {
-        uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
-      }
-      component.set('v.tableLoading', false);
-    });
-    $A.enqueueAction(addUser);
+    component.set('v.dataRows', userRows);
+    component.set('v.tableLoading', false);
+    component.set('v.formData', {});
   },
 
-  removeUser: function(component) {
-    var uiHelper = component.get('v.uiHelper');
-    uiHelper.hideToast();
-    component.set('v.showRemoveUserModal', false);
+  setEsignContextColumns: function (component) {
+    var actions = [
+      {label: $A.get('$Label.c.EditPermissions'), name: 'edit_permissions'},
+      {label: $A.get('$Label.c.RemoveAndClose'), name: 'remove_close'}
+    ];
 
-    var user = component.get('v.formData.user');
-    if ($A.util.isEmpty(user)) {
-      uiHelper.showToast($A.get('$Label.c.NothingToRemove'), 'error');
-    } else {
-      setTimeout(
-        $A.getCallback(function() {
-          component.set('v.tableLoading', true);
-          var removeFromDocuSign = component.get('c.removeUser');
+    //Set the columns for the data table
+    component.set('v.dataColumns', [
+      {
+        sortable: true,
+        label: $A.get('$Label.c.NameLabel'),
+        type: 'text',
+        fieldName: 'name'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.EmailAddress'),
+        type: 'text',
+        fieldName: 'email'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.Status'),
+        type: 'text',
+        fieldName: 'status'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.Admin'),
+        type: 'boolean',
+        fieldName: 'admin'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.TabESignature'),
+        type: 'text',
+        fieldName: 'eSignatureRole'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.TabDocumentGeneration'),
+        type: 'text',
+        fieldName: 'documentGenerationRole'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.TabNegotiation'),
+        type: 'text',
+        fieldName: 'negotiationRole'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.AddedDate'),
+        type: 'date',
+        fieldName: 'provisioned'
+      },
+      {
+        type: 'action',
+        typeAttributes: {
+          rowActions: actions
+        }
+      }
+    ]);
+  },
 
-          removeFromDocuSign.setParams({
-            sourceId: user.sourceId,
-            id: user.id ? user.id.value : ''
-          });
+  setCLMContextColumns: function (component) {
+    var actions = [
+      {label: $A.get('$Label.c.EditPermissions'), name: 'edit_permissions'},
+      {label: $A.get('$Label.c.RemoveAndClose'), name: 'remove_close'}
+    ];
 
-          removeFromDocuSign.setCallback(this, function(response) {
-            var status = response.getState();
-            if (status === 'SUCCESS') {
-              component.set('v.users', response.getReturnValue());
-              component.set('v.lookupValue', null);
-              component.set('v.formData', {});
-              uiHelper.showToast(
-                stringUtils.format(
-                  $A.get('$Label.c.MemberRemoved_1'),
-                  user.email
-                ),
-                'success'
-              );
-            } else {
-              uiHelper.showToast(uiHelper.getErrorMessage(response), 'error');
-            }
-            component.set('v.tableLoading', false);
-          });
-          $A.enqueueAction(removeFromDocuSign);
-        }),
-        300
-      );
+    //Set the columns for the data table
+    component.set('v.dataColumns', [
+      {
+        sortable: true,
+        label: $A.get('$Label.c.NameLabel'),
+        type: 'text',
+        fieldName: 'name'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.EmailAddress'),
+        type: 'text',
+        fieldName: 'email'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.Status'),
+        type: 'text',
+        fieldName: 'status'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.Admin'),
+        type: 'boolean',
+        fieldName: 'admin'
+      },
+      {
+        sortable: false,
+        label: $A.get('$Label.c.CLMRole'),
+        type: 'text',
+        fieldName: 'clmRole'
+      },
+      {
+        sortable: true,
+        label: $A.get('$Label.c.AddedDate'),
+        type: 'date',
+        fieldName: 'provisioned'
+      },
+      {
+        type: 'action',
+        typeAttributes: {
+          rowActions: actions
+        }
+      }
+    ]);
+  },
+
+  sortData: function (component, data, sortParams) {
+    var reverse = sortParams.sortedDirection !== 'asc';
+    var sortFunction = this.sortBy(sortParams.sortedBy, reverse);
+    data.sort(sortFunction);
+  },
+
+  sortBy: function (field, reverse, primer) {
+    var key = primer ?
+      function (x) {
+        return primer(x[field]);
+      } :
+      function (x) {
+        return x[field];
+      };
+    reverse = !reverse ? 1 : -1;
+    return function (a, b) {
+      return a = key(a) ? key(a) : '', b = key(b) ? key(b) : '', reverse * ((a > b) - (b > a));
+    };
+  },
+
+  removeAndCloseSingleUser: function (component, row, helper) {
+    //Current user should not be able to close themselves
+    if (row.sourceId.toString() === component.get('v.currentUserId')) {
+      helper.showToast(component, $A.get('$Label.c.CannotCloseCurrentUser'), 'error');
+      return;
     }
   },
 
-  resetUsersTable: function(component) {
-    component.set('v.filteredUsers', component.get('v.users'));
+  editPermissionsMultipleUsers: function (component, event, helper) {
+    component.get('v.selectedRows').forEach(function (row) {
+      //Current user should not be part of editing permissions in bulk
+      if (row.sourceId.toString() === component.get('v.currentUserId')) {
+        helper.showToast(component, $A.get('$Label.c.CannotEditPermissionsCurrentUser'), 'error');
+        return;
+      }
+    });
+  },
+
+  removeAndCloseMultipleUsers: function (component, event, helper) {
+    component.get('v.selectedRows').forEach(function (row) {
+      //Current user should not be a part of removing and closing users in bulk
+      if (row.sourceId.toString() === component.get('v.currentUserId')) {
+        helper.showToast(component, $A.get('$Label.c.CannotCloseCurrentUser'), 'error');
+        return;
+      }
+    });
+  },
+
+  formatRole: function (roles) {
+    var formattedRole;
+    roles.forEach(function (role) {
+      if ($A.util.isUndefinedOrNull(formattedRole)) {
+        formattedRole = role;
+      } else {
+        formattedRole += ', ' + role;
+      }
+    });
+    return formattedRole;
+  },
+
+  showToast: function (component, message, mode) {
+    var fireToastEvent = component.getEvent('toastEvent');
+    fireToastEvent.setParams({
+      show: true,
+      message: message,
+      mode: mode
+    });
+    fireToastEvent.fire();
+  },
+
+  clearAddUserModalData: function (component, event, helper) {
+    component.set('v.sfUsers', []);
+    component.set('v.addUserSortParams', {
+      sortedBy: 'Name',
+      sortedByLabel: $A.get('$Label.c.NameLabel'),
+      sortedDirection: 'asc'
+    });
+    component.set('v.filters', [{
+      type: 'User',
+      value: ''
+    }]);
+    component.set('v.canManageAccount', false);
+    component.set('v.genRole', '');
+    component.set('v.negotiateRole', '');
+    component.set('v.clmRole', '');
+    helper.setFilterOptions(component);
+  },
+
+  invokeAddUsers: function (component, event, helper) {
+    component.set('v.addUsersLoading', true);
+    var usersToAdd = helper.prepareUsersList(component);
+    var rolesMap = helper.prepareRolesMap(component);
+    var action = component.get('c.addUsers');
+    action.setParams({
+      users: JSON.stringify(usersToAdd),
+      roles: JSON.stringify(rolesMap)
+    });
+
+    action.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        helper.showToast(component, $A.get('$Label.c.UserAddedSuccessfully'), 'success');
+        component.set('v.addUsersLoading', false);
+        component.find('add-users').hide();
+        helper.initializeComponent(component, event, helper);
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        component.set('v.addUsersLoading', false);
+        component.find('add-users').hide();
+      }
+    });
+    $A.enqueueAction(action);
+  },
+
+  prepareUsersList: function (component) {
+    var usersListToAdd = [];
+    component.find('sfUsers').getSelectedRows().forEach(function (row) {
+      var userInstance = {};
+      //sourceId
+      userInstance.sourceId = !$A.util.isUndefinedOrNull(row.Id) ? row.Id : '';
+      //email
+      userInstance.email = !$A.util.isUndefinedOrNull(row.Email) ? row.Email : '';
+      //firstName
+      userInstance.firstName = !$A.util.isUndefinedOrNull(row.FirstName) ? row.FirstName : '';
+      //lastName
+      userInstance.lastName = !$A.util.isUndefinedOrNull(row.LastName) ? row.LastName : '';
+      //canManageAccount
+      if (component.get('v.context') === 'e_sign') {
+        userInstance.canManageAccount = component.get('v.canManageAccount');
+      } else if (component.get('v.context') === 'clm') {
+        userInstance.canManageAccount = component.get('v.clmRole') === 'Administrator';
+      }
+      usersListToAdd.push(userInstance);
+    });
+    return usersListToAdd;
+  },
+
+  prepareRolesMap: function (component) {
+    var rolesMap = {};
+    if (component.get('v.context') === 'e_sign') {
+      var esignRoles = [];
+      //If context is e sign then add the default e sign user role
+      esignRoles.push(component.get('v.eSignRole'));
+      if (component.get('v.canManageAccount') === true) {
+        esignRoles.push('Administrator');
+      }
+      rolesMap.e_sign = esignRoles;
+
+      if (!$A.util.isEmpty(component.get('v.genRole'))) {
+        var genRoles = [];
+        genRoles.push(component.get('v.genRole'));
+        rolesMap.gen = genRoles;
+      }
+      if (!$A.util.isEmpty(component.get('v.negotiateRole'))) {
+        var negotiateRoles = [];
+        negotiateRoles.push(component.get('v.negotiateRole'));
+        rolesMap.negotiate = negotiateRoles;
+      }
+    } else if (component.get('v.context') === 'clm') {
+      var clmEsignRoles = [];
+      //If context is e sign then add the default e sign user role
+      clmEsignRoles.push(component.get('v.eSignRole'));
+      if (component.get('v.canManageAccount') === true) {
+        clmEsignRoles.push('Administrator');
+      }
+      rolesMap.e_sign = clmEsignRoles;
+
+      if (!$A.util.isEmpty(component.get('v.clmRole'))) {
+        var clmRoles = [];
+        clmRoles.push(component.get('v.clmRole'));
+        rolesMap.clm = clmRoles;
+      }
+    }
+    return rolesMap;
   }
 });

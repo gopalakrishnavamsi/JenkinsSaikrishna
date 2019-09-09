@@ -1,58 +1,58 @@
 <aura:component extends="c:CLMUtility">
-    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
-    <aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
-    <aura:attribute name="currentIndex" type="string" default="1" />
+	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+	<aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}" />
+	<aura:attribute name="currentIndex" type="string" default="2" />
 
-    <nav class="slds-nav-vertical" aria-label="Sub page">
-        <div class="slds-nav-vertical__section">
-            <div id="folder-header" class="slds-text-title_caps slds-nav-vertical__title ">&nbsp;</div>
-            <ul aria-describedby="entity-header">
-                <li id='1' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='1'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Overview}</a>
-                </li>
-                <li id='2' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='2'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action" index="2">{!$Label.c.Home}</a>
-                </li>
-            </ul>
-        </div>
-        <div class="slds-nav-vertical__section">
-            <div id="entity-header"
-                class="slds-text-title_caps slds-nav-vertical__title ds-font-size slds-p-left_x-large">{!$Label.c.CLM}
-            </div>
-            <ul aria-describedby="entity-header">
-                <li id='3' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='3'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Integration}</a>
-                </li>
-                <li id='4' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='4'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.DocumentGeneration}</a>
-                </li>
-                <li id='5' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='5'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Workflow}</a>
-                </li>
-            </ul>
-        </div>
-        <div class="slds-nav-vertical__section">
-            <div id="folder-header" class="slds-text-title_caps slds-nav-vertical__title fontSize slds-p-left_x-large">
-                {!$Label.c.Administration}</div>
-            <ul aria-describedby="folder-header">
-                <li id='6' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='6'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.UserManagement}</a>
-                </li>
-                <li id='7' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='7'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.ButtonsAndComponents}</a>
-                </li>
-                <li id='8' onclick="{!c.fireComponentEvent}"
-                    class="{!v.currentIndex=='8'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
-                    <a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Help}</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+	<nav class="slds-nav-vertical" aria-label="Sub page">
+		<div class="slds-nav-vertical__section">
+			<div id="folder-header" class="slds-text-title_caps slds-nav-vertical__title ">&nbsp;</div>
+			<ul aria-describedby="entity-header">
+				<li id='1' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='1'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Overview}</a>
+				</li>
+				<li id='2' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='2'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action" index="2">{!$Label.c.Home}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="slds-nav-vertical__section">
+			<div id="entity-header"
+				class="slds-text-title_caps slds-nav-vertical__title ds-font-size slds-p-left_x-large">{!$Label.c.CLM}
+			</div>
+			<ul aria-describedby="entity-header">
+				<li id='3' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='3'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Integration}</a>
+				</li>
+				<li id='4' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='4'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.DocumentGeneration}</a>
+				</li>
+				<li id='5' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='5'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Workflow}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="slds-nav-vertical__section">
+			<div id="folder-header" class="slds-text-title_caps slds-nav-vertical__title fontSize slds-p-left_x-large">
+				{!$Label.c.Administration}</div>
+			<ul aria-describedby="folder-header">
+				<li id='6' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='6'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.UserManagement}</a>
+				</li>
+				<li id='7' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='7'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.ButtonsAndComponents}</a>
+				</li>
+				<li id='8' onclick="{!c.fireComponentEvent}"
+					class="{!v.currentIndex=='8'?'slds-nav-vertical__item ds-is-active':'slds-nav-vertical__item'}">
+					<a href="javascript:void(0);" class="slds-nav-vertical__action">{!$Label.c.Help}</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 </aura:component>

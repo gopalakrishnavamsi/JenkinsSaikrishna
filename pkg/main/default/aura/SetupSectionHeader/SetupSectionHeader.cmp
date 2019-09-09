@@ -1,0 +1,18 @@
+<aura:component description="SetupSectionHeader">
+    <aura:attribute name="sectionCategory" type="String"/>
+    <aura:attribute name="sectionHeader" type="String"/>
+    <aura:attribute name="headerIconName" type="String"/>
+
+    <div class="slds-m-around_small">
+        <div class="slds-media">
+            <div class="slds-media__figure">
+                <lightning:icon iconName="{!v.headerIconName}" size="large"
+                                class="{!if(v.sectionHeader == $Label.c.TabUserManagement, 'ds-userManagement-icon-background')}"/>
+            </div>
+            <div class="slds-media__body slds-media__body slds-m-top_xx-small">
+                <p class="slds-text-title_caps">{!v.sectionCategory}</p>
+                <p class="ds-sectionHeader">{!v.sectionHeader}</p>
+            </div>
+        </div>
+    </div>
+</aura:component>

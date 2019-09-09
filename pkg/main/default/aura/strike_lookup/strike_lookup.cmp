@@ -66,9 +66,9 @@ License: BSD 3-Clause License
     <aura:attribute name="isMobile" type="Boolean" default="{!false}" description="Determines if the user is in Salesforce1" access="private"/>
     <aura:attribute name="isDocuSignGenPreview" type="Boolean" default="{!false}" description="If set to true indicates the component is called from DocuSign Gen Preview component"/>
     <aura:attribute name="isDocuSignAgreementsWorkflow" type="Boolean" default="{!false}"
-                    description="If set to true indicates the component is called from DocuSign Agreements External Review or Internal Approval Screens"/>
+                    description="If set to true indicates the component is called from DocuSign Files External Review or Internal Approval Screens"/>
     <aura:attribute name="isDocuSignAgreementsInternalApproval" type="Boolean" default="{!false}"
-                    description="If set to true indicates the component is called from DocuSign Agreements Internal Approval screen"/>
+                    description="If set to true indicates the component is called from DocuSign Files Internal Approval screen"/>
 
     <!-- Event registration and handlers -->
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>

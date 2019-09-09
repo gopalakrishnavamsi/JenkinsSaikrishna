@@ -1,6 +1,7 @@
-<aura:component>
+<aura:component controller="CLMDocumentGenerationController" extends="c:CLMUtility">
 	<aura:attribute name="steps" type="String[]" />
 	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+	<aura:attribute name="redirectCLM" type="String" />
 
 	<div class="slds-p-around_small">
 		<div class="ds-card-heading ">
@@ -8,23 +9,26 @@
 		</div>
 		<div class="slds-p-top_medium ">
 			<c:CLMInformationHelp isSubTitle="true"
-				subTitle="{!$Label.c.CreateAndManageDocumentGenerationConfigurations}" imageURL="{!($Resource.CLMDocGen1)}"
-				summary="{!$Label.c.CreateAndManageDocSummary}" isLink="true" link="{!$Label.c.LearnHowToGenDoc}"
-				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" />
+				subTitle="{!$Label.c.CreateAndManageDocumentGenerationConfigurations}"
+				imageURL="{!($Resource.CLMDocGen1)}" summary="{!$Label.c.CreateAndManageDocSummary}" isLink="true"
+				link="{!$Label.c.LearnHowToGenDoc}" firstButtonName="{!$Label.c.OpenDocuSignCLMButton}"
+				firstButtonNavigation="{!v.redirectCLM}" hyperlinkedURI="['tab','8']" />
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMInformationHelp isSubTitle="false" subTitle="{!$Label.c.CreateAndManageWorkflows}"
 				imageURL="{!($Resource.CLMDocGen2)}" summary="{!$Label.c.CreateAndManageDocSummary2}" isLink="true"
-				link="{!$Label.c.LearnHowToAddAButton}" firstButtonName="{!$Label.c.OpenObjectManagerButton}" />
+				link="{!$Label.c.LearnHowToAddAButton}" firstButtonName="{!$Label.c.OpenObjectManagerButton}"
+				hyperlinkedURI="['tab','8']" />
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationConfigurations}"
-				imageURL="{!($Resource.CLMDocGen3)}" summary="{!$Label.c.DocumentGenerationConfigurationsSummary}" isSteps="true"
-				steps="{!v.steps}" />
+				imageURL="{!($Resource.CLMDocGen3)}" summary="{!$Label.c.DocumentGenerationConfigurationsSummary}"
+				isSteps="true" steps="{!v.steps}" />
 		</div>
 		<div class="slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationProcessTitle}" imageURL="{!($Resource.CLMDocGen4)}"
-				summary="{!$Label.c.DocumentGenerationProcessSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" />
+			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationProcessTitle}"
+				imageURL="{!($Resource.CLMDocGen4)}" summary="{!$Label.c.DocumentGenerationProcessSummary}"
+				isSteps="false" steps="{!$Label.c.LearnHowTo}" />
 		</div>
 	</div>
 </aura:component>

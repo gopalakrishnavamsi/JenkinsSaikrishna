@@ -24,9 +24,19 @@
     min-height: 880px;
 }
 
-.THIS .ds-admin-centerSpace {
+.THIS .ds-home-centerSpace {
     background: rgb(249, 249, 250);
     flex: unset;
+}
+
+.THIS .ds-userManagement-section {
+    background: rgb(255, 255, 255);
+}
+
+.THIS .ds-setupSection-heading {
+    background: rgb(243, 242, 242);
+    flex: unset;
+    max-height: 80px;
 }
 
 .THIS .ds-configuration-detail {
