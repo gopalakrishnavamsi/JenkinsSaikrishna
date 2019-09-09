@@ -102,7 +102,10 @@
 				sectionTitle: $A.get('$Label.c.Administration')
 			}, false, 'v.header');
 			//main
-			helper.insertComponent(component, 'c:CLMUserMgmtLayout', false, false, 'v.main');
+			helper.insertComponent(component, 'c:SetupUsers', {
+				products: component.get('v.products'),
+				context: 'clm'
+			}, false, 'v.main');
 		} else if (index === '7') {
 			component.set('v.isCenter', true);
 			component.set('v.fullLayout', false);

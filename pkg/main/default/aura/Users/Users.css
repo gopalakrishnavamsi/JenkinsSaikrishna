@@ -1,0 +1,32 @@
+.THIS .ds-users-componentHeader {
+    color: t(colorTextActionLabelActive);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-users-spinner-container {
+    position: relative;
+    top: 100px;
+}
+
+.THIS .ds-add-users-spinner-container {
+    position: relative;
+    top: 200px;
+}
+
+.THIS .ds-fadeBackground {
+    opacity: 0.2;
+}
+
+.THIS .ds-no-label .slds-form-element__label, .THIS .ds-no-label .slds-form-element__legend {
+    display: none;
+}
+
+.THIS .ds-addUsers-sectionTitle, .THIS .slds-modal__header {
+    color: t(colorTextLink);
+}
+
+.THIS .ds-addUsers-modal .slds-modal__content {
+    padding: 0;
+}
+

@@ -18,10 +18,6 @@
 		<name>Account</name>
 	</customLabels>
 	<customLabels>
-		<label>A DocuSign account already exists for this username.</label>
-		<name>AccountAlreadyExists</name>
-	</customLabels>
-	<customLabels>
 		<label>Cannot send envelope. Please ensure that the DocuSign account has In Session signing enabled.</label>
 		<name>AccountInSessionSigningMustBeEnabled</name>
 	</customLabels>
@@ -30,43 +26,19 @@
 		<name>AccountNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>An error occurred while provisioning DocuSign account. Please contact DocuSign Support: https://support.docusign.com/.</label>
-		<name>AccountProvisioningFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>Active</label>
-		<name>Active</name>
-	</customLabels>
-	<customLabels>
 		<label>Add</label>
 		<name>Add</name>
-	</customLabels>
-	<customLabels>
-		<label>Add DocuSign buttons and components to page layouts</label>
-		<name>AddDocuSignButtons</name>
 	</customLabels>
 	<customLabels>
 		<label>Add Recipient</label>
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>Add the Send with DocuSign button and the Envelope Status component to your page layouts.</label>
-		<name>AddSendWithDocuSign</name>
-	</customLabels>
-	<customLabels>
 		<label>Add Template</label>
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>Add to DocuSign</label>
-		<name>AddToDocuSign</name>
-	</customLabels>
-	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials by adding them to the list below. Each new user will automatically be added to the DocuSign account.</label>
-		<name>AddToDocuSignDetails</name>
-	</customLabels>
-	<customLabels>
-		<label>Add User</label>
+		<label>Add Users</label>
 		<name>AddUser</name>
 	</customLabels>
 	<customLabels>
@@ -78,28 +50,8 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Afghanistan</label>
-		<name>Afghanistan</name>
-	</customLabels>
-	<customLabels>
 		<label>Specify Recipients</label>
 		<name>Agent</name>
-	</customLabels>
-	<customLabels>
-		<label>Aland Islands</label>
-		<name>AlandIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Albania</label>
-		<name>Albania</name>
-	</customLabels>
-	<customLabels>
-		<label>Algeria</label>
-		<name>Algeria</name>
-	</customLabels>
-	<customLabels>
-		<label>You&#39;re all set! You can edit the sections below to update your configuration.</label>
-		<name>AllSet</name>
 	</customLabels>
 	<customLabels>
 		<label>All values must not be blank.</label>
@@ -110,48 +62,8 @@
 		<name>AlreadyComplete</name>
 	</customLabels>
 	<customLabels>
-		<label>{0} is already a DocuSign user</label>
-		<name>AlreadyMember_1</name>
-	</customLabels>
-	<customLabels>
-		<label>American Samoa</label>
-		<name>AmericanSamoa</name>
-	</customLabels>
-	<customLabels>
-		<label>Andorra</label>
-		<name>Andorra</name>
-	</customLabels>
-	<customLabels>
-		<label>Angola</label>
-		<name>Angola</name>
-	</customLabels>
-	<customLabels>
-		<label>Anguilla</label>
-		<name>Anguilla</name>
-	</customLabels>
-	<customLabels>
-		<label>Antarctica</label>
-		<name>Antarctica</name>
-	</customLabels>
-	<customLabels>
-		<label>Antigua and Barbuda</label>
-		<name>AntiguaAndBarbuda</name>
-	</customLabels>
-	<customLabels>
 		<label>Approve</label>
 		<name>Approve</name>
-	</customLabels>
-	<customLabels>
-		<label>Argentina</label>
-		<name>Argentina</name>
-	</customLabels>
-	<customLabels>
-		<label>Armenia</label>
-		<name>Armenia</name>
-	</customLabels>
-	<customLabels>
-		<label>Aruba</label>
-		<name>Aruba</name>
 	</customLabels>
 	<customLabels>
 		<label>Assign DocuSign Administrator permission set</label>
@@ -170,124 +82,16 @@
 		<name>AtLeastOneRecipientIsRequired</name>
 	</customLabels>
 	<customLabels>
-		<label>Australia</label>
-		<name>Australia</name>
-	</customLabels>
-	<customLabels>
-		<label>Austria</label>
-		<name>Austria</name>
-	</customLabels>
-	<customLabels>
-		<label>Azerbaijan</label>
-		<name>Azerbaijan</name>
-	</customLabels>
-	<customLabels>
 		<label>Back</label>
 		<name>Back</name>
-	</customLabels>
-	<customLabels>
-		<label>Bahamas</label>
-		<name>Bahamas</name>
-	</customLabels>
-	<customLabels>
-		<label>Bahrain</label>
-		<name>Bahrain</name>
-	</customLabels>
-	<customLabels>
-		<label>Bangladesh</label>
-		<name>Bangladesh</name>
-	</customLabels>
-	<customLabels>
-		<label>Barbados</label>
-		<name>Barbados</name>
-	</customLabels>
-	<customLabels>
-		<label>Belarus</label>
-		<name>Belarus</name>
-	</customLabels>
-	<customLabels>
-		<label>Belgium</label>
-		<name>Belgium</name>
-	</customLabels>
-	<customLabels>
-		<label>Belize</label>
-		<name>Belize</name>
-	</customLabels>
-	<customLabels>
-		<label>Benin</label>
-		<name>Benin</name>
-	</customLabels>
-	<customLabels>
-		<label>Bermuda</label>
-		<name>Bermuda</name>
-	</customLabels>
-	<customLabels>
-		<label>Bhutan</label>
-		<name>Bhutan</name>
-	</customLabels>
-	<customLabels>
-		<label>Bolivia</label>
-		<name>Bolivia</name>
-	</customLabels>
-	<customLabels>
-		<label>Bosnia and Herzegovina</label>
-		<name>BosniaAndHerzegovina</name>
-	</customLabels>
-	<customLabels>
-		<label>Botswana</label>
-		<name>Botswana</name>
-	</customLabels>
-	<customLabels>
-		<label>Bouvet Island</label>
-		<name>BouvetIsland</name>
-	</customLabels>
-	<customLabels>
-		<label>Brazil</label>
-		<name>Brazil</name>
-	</customLabels>
-	<customLabels>
-		<label>British Indian Ocean Territory</label>
-		<name>BritishIndiaOceanTerritory</name>
-	</customLabels>
-	<customLabels>
-		<label>British Virgin Islands</label>
-		<name>BritishVirginIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Brunei</label>
-		<name>Brunei</name>
-	</customLabels>
-	<customLabels>
-		<label>Bulgaria</label>
-		<name>Bulgaria</name>
 	</customLabels>
 	<customLabels>
 		<label>Bulk list not found.</label>
 		<name>BulkListNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Burkina Faso</label>
-		<name>BurkinaFaso</name>
-	</customLabels>
-	<customLabels>
-		<label>Burundi</label>
-		<name>Burundi</name>
-	</customLabels>
-	<customLabels>
-		<label>Cambodia</label>
-		<name>Cambodia</name>
-	</customLabels>
-	<customLabels>
-		<label>Cameroon</label>
-		<name>Cameroon</name>
-	</customLabels>
-	<customLabels>
-		<label>User can manage account</label>
+		<label>Manage DocuSign Account</label>
 		<name>CanManage</name>
-	</customLabels>
-	<customLabels>
-		<label>Canada</label>
-		<name>Canada</name>
 	</customLabels>
 	<customLabels>
 		<label>Cancel</label>
@@ -362,108 +166,36 @@
 		<name>CannotVoidEnvelope</name>
 	</customLabels>
 	<customLabels>
-		<label>Cape Verde</label>
-		<name>CapeVerde</name>
-	</customLabels>
-	<customLabels>
 		<label>Receives a Copy</label>
 		<name>CarbonCopy</name>
-	</customLabels>
-	<customLabels>
-		<label>Caribbean Netherlands</label>
-		<name>CaribbeanNetherlands</name>
-	</customLabels>
-	<customLabels>
-		<label>Cayman Islands</label>
-		<name>CaymanIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Central African Republic</label>
-		<name>CentralAfricanRepublic</name>
 	</customLabels>
 	<customLabels>
 		<label>Needs to View</label>
 		<name>CertifiedDelivery</name>
 	</customLabels>
 	<customLabels>
-		<label>Chad</label>
-		<name>Chad</name>
-	</customLabels>
-	<customLabels>
 		<label>Checkbox</label>
 		<name>Checkbox</name>
-	</customLabels>
-	<customLabels>
-		<label>Chile</label>
-		<name>Chile</name>
-	</customLabels>
-	<customLabels>
-		<label>China</label>
-		<name>China</name>
 	</customLabels>
 	<customLabels>
 		<label>Chinese (Simplified)</label>
 		<name>ChineseSimplified</name>
 	</customLabels>
 	<customLabels>
-		<label>Christmas Island</label>
-		<name>ChristmasIsland</name>
-	</customLabels>
-	<customLabels>
 		<label>Close</label>
 		<name>Close</name>
-	</customLabels>
-	<customLabels>
-		<label>Closed</label>
-		<name>Closed</name>
-	</customLabels>
-	<customLabels>
-		<label>Cocos (Keeling) Islands</label>
-		<name>CocosKeelingIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Colombia</label>
-		<name>Colombia</name>
 	</customLabels>
 	<customLabels>
 		<label>Community</label>
 		<name>Community</name>
 	</customLabels>
 	<customLabels>
-		<label>Comoros</label>
-		<name>Comoros</name>
-	</customLabels>
-	<customLabels>
 		<label>Company</label>
 		<name>Company</name>
 	</customLabels>
 	<customLabels>
-		<label>Company name is required.</label>
-		<name>CompanyRequired</name>
-	</customLabels>
-	<customLabels>
-		<label>Complete the section below to set up connection.</label>
-		<name>CompleteConnection</name>
-	</customLabels>
-	<customLabels>
-		<label>Complete the sections below to set up DocuSign for Salesforce Essentials.</label>
-		<name>CompleteSetup</name>
-	</customLabels>
-	<customLabels>
 		<label>Completed</label>
 		<name>Completed</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign is not configured correctly. Please contact your system administrator for assistance.</label>
-		<name>ConfigurationError</name>
-	</customLabels>
-	<customLabels>
-		<label>Congo (Brazzaville)</label>
-		<name>CongoBrazzaville</name>
-	</customLabels>
-	<customLabels>
-		<label>Congo (Kinshasa)</label>
-		<name>CongoKinshasa</name>
 	</customLabels>
 	<customLabels>
 		<label>Connect DocuSign to your Salesforce organization by logging in to your account or starting a trial.</label>
@@ -472,14 +204,6 @@
 	<customLabels>
 		<label>Connect DocuSign to Salesforce</label>
 		<name>ConnectDocuSignToSalesforce</name>
-	</customLabels>
-	<customLabels>
-		<label>Create users in DocuSign based on the users in this Salesforce organization</label>
-		<name>ConnectDocuSignUser</name>
-	</customLabels>
-	<customLabels>
-		<label>Connect Salesforce to DocuSign</label>
-		<name>ConnectToDocuSign</name>
 	</customLabels>
 	<customLabels>
 		<label>Contact Support</label>
@@ -498,48 +222,12 @@
 		<name>ContinueLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Continue Setup</label>
-		<name>ContinueSetup</name>
-	</customLabels>
-	<customLabels>
-		<label>Continue to Log In</label>
-		<name>ContinueToLogIn</name>
-	</customLabels>
-	<customLabels>
-		<label>Continue to Setup</label>
-		<name>ContinueToSetup</name>
-	</customLabels>
-	<customLabels>
-		<label>Cook Islands</label>
-		<name>CookIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Costa Rica</label>
-		<name>CostaRica</name>
-	</customLabels>
-	<customLabels>
-		<label>Country</label>
-		<name>Country</name>
-	</customLabels>
-	<customLabels>
 		<label>Create default recipient roles</label>
 		<name>CreateDefaultRecipientRoles</name>
 	</customLabels>
 	<customLabels>
 		<label>Created</label>
 		<name>Created</name>
-	</customLabels>
-	<customLabels>
-		<label>Croatia</label>
-		<name>Croatia</name>
-	</customLabels>
-	<customLabels>
-		<label>Cuba</label>
-		<name>Cuba</name>
-	</customLabels>
-	<customLabels>
-		<label>Curaçao</label>
-		<name>Curacao</name>
 	</customLabels>
 	<customLabels>
 		<label>--- Current Settings ---</label>
@@ -552,14 +240,6 @@
 	<customLabels>
 		<label>Custom Email Subject</label>
 		<name>CustomEmailSubject</name>
-	</customLabels>
-	<customLabels>
-		<label>Cyprus</label>
-		<name>Cyprus</name>
-	</customLabels>
-	<customLabels>
-		<label>Czech Republic</label>
-		<name>CzechRepublic</name>
 	</customLabels>
 	<customLabels>
 		<label>Date Signed</label>
@@ -594,16 +274,8 @@
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
-		<label>Denmark</label>
-		<name>Denmark</name>
-	</customLabels>
-	<customLabels>
 		<label>Disabled</label>
 		<name>Disabled</name>
-	</customLabels>
-	<customLabels>
-		<label>Djibouti</label>
-		<name>Djibouti</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign</label>
@@ -612,14 +284,6 @@
 	<customLabels>
 		<label>DocuSign Template</label>
 		<name>DocuSignTemplate</name>
-	</customLabels>
-	<customLabels>
-		<label>Dominica</label>
-		<name>Dominica</name>
-	</customLabels>
-	<customLabels>
-		<label>Dominican Republic</label>
-		<name>DominicanRepublic</name>
 	</customLabels>
 	<customLabels>
 		<label>Done</label>
@@ -634,24 +298,12 @@
 		<name>Dutch</name>
 	</customLabels>
 	<customLabels>
-		<label>Ecuador</label>
-		<name>Ecuador</name>
-	</customLabels>
-	<customLabels>
 		<label>Edit</label>
 		<name>Edit</name>
 	</customLabels>
 	<customLabels>
 		<label>Allow to Edit</label>
 		<name>Editor</name>
-	</customLabels>
-	<customLabels>
-		<label>Egypt</label>
-		<name>Egypt</name>
-	</customLabels>
-	<customLabels>
-		<label>El Salvador</label>
-		<name>ElSalvador</name>
 	</customLabels>
 	<customLabels>
 		<label>Email Address</label>
@@ -682,16 +334,8 @@
 		<name>EmptySigningGroup</name>
 	</customLabels>
 	<customLabels>
-		<label>Enable Salesforce users in DocuSign</label>
-		<name>EnableSalesforceUsers</name>
-	</customLabels>
-	<customLabels>
 		<label>Enabled</label>
 		<name>Enabled</name>
-	</customLabels>
-	<customLabels>
-		<label>Enabled in DocuSign</label>
-		<name>EnabledInDocuSign</name>
 	</customLabels>
 	<customLabels>
 		<label>Object {0} has encrypted fields: {1}</label>
@@ -738,22 +382,6 @@
 		<name>Environment</name>
 	</customLabels>
 	<customLabels>
-		<label>Equatorial Guinea</label>
-		<name>EquatorialGuinea</name>
-	</customLabels>
-	<customLabels>
-		<label>Eritrea</label>
-		<name>Eritrea</name>
-	</customLabels>
-	<customLabels>
-		<label>Estonia</label>
-		<name>Estonia</name>
-	</customLabels>
-	<customLabels>
-		<label>Ethiopia</label>
-		<name>Ethiopia</name>
-	</customLabels>
-	<customLabels>
 		<label>Expand</label>
 		<name>Expand</name>
 	</customLabels>
@@ -770,30 +398,6 @@
 		<name>Failed21CFRPart11</name>
 	</customLabels>
 	<customLabels>
-		<label>Falkland Islands</label>
-		<name>FalklandIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Faroe Islands</label>
-		<name>FaroeIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Complete this field</label>
-		<name>FieldError</name>
-	</customLabels>
-	<customLabels>
-		<label>Fiji</label>
-		<name>Fiji</name>
-	</customLabels>
-	<customLabels>
-		<label>File size limit is 4MB.</label>
-		<name>FileSizeLimit</name>
-	</customLabels>
-	<customLabels>
-		<label>This file exceeds the maximum size limit</label>
-		<name>FileSizeLimitReached</name>
-	</customLabels>
-	<customLabels>
 		<label>This file exceeds the maximum size limit of {0}. The selected file size: {1}.</label>
 		<name>FileSizeLimitReached_2</name>
 	</customLabels>
@@ -804,10 +408,6 @@
 	<customLabels>
 		<label>Finish</label>
 		<name>Finish</name>
-	</customLabels>
-	<customLabels>
-		<label>Finland</label>
-		<name>Finland</name>
 	</customLabels>
 	<customLabels>
 		<label>First Name</label>
@@ -822,104 +422,20 @@
 		<name>Formula</name>
 	</customLabels>
 	<customLabels>
-		<label>France</label>
-		<name>France</name>
-	</customLabels>
-	<customLabels>
 		<label>French</label>
 		<name>French</name>
-	</customLabels>
-	<customLabels>
-		<label>French Guiana</label>
-		<name>FrenchGuiana</name>
-	</customLabels>
-	<customLabels>
-		<label>French Polynesia</label>
-		<name>FrenchPolynesia</name>
-	</customLabels>
-	<customLabels>
-		<label>French Southern Territories</label>
-		<name>FrenchSouthernTerritories</name>
 	</customLabels>
 	<customLabels>
 		<label>Full Name</label>
 		<name>FullName</name>
 	</customLabels>
 	<customLabels>
-		<label>Gabon</label>
-		<name>Gabon</name>
-	</customLabels>
-	<customLabels>
-		<label>Gambia</label>
-		<name>Gambia</name>
-	</customLabels>
-	<customLabels>
-		<label>Georgia</label>
-		<name>Georgia</name>
-	</customLabels>
-	<customLabels>
 		<label>German</label>
 		<name>German</name>
 	</customLabels>
 	<customLabels>
-		<label>Germany</label>
-		<name>Germany</name>
-	</customLabels>
-	<customLabels>
 		<label>Get Started</label>
 		<name>GetStarted</name>
-	</customLabels>
-	<customLabels>
-		<label>Ghana</label>
-		<name>Ghana</name>
-	</customLabels>
-	<customLabels>
-		<label>Gibraltar</label>
-		<name>Gibraltar</name>
-	</customLabels>
-	<customLabels>
-		<label>Greece</label>
-		<name>Greece</name>
-	</customLabels>
-	<customLabels>
-		<label>Greenland</label>
-		<name>Greenland</name>
-	</customLabels>
-	<customLabels>
-		<label>Grenada</label>
-		<name>Grenada</name>
-	</customLabels>
-	<customLabels>
-		<label>Guadeloupe</label>
-		<name>Guadeloupe</name>
-	</customLabels>
-	<customLabels>
-		<label>Guam</label>
-		<name>Guam</name>
-	</customLabels>
-	<customLabels>
-		<label>Guatemala</label>
-		<name>Guatemala</name>
-	</customLabels>
-	<customLabels>
-		<label>Guernsey</label>
-		<name>Guernsey</name>
-	</customLabels>
-	<customLabels>
-		<label>Guinea</label>
-		<name>Guinea</name>
-	</customLabels>
-	<customLabels>
-		<label>Guinea-Bissau</label>
-		<name>GuineaBissau</name>
-	</customLabels>
-	<customLabels>
-		<label>Guyana</label>
-		<name>Guyana</name>
-	</customLabels>
-	<customLabels>
-		<label>Haiti</label>
-		<name>Haiti</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has completed the envelope</label>
@@ -942,52 +458,12 @@
 		<name>HavingTrouble</name>
 	</customLabels>
 	<customLabels>
-		<label>Heard Island and McDonald Islands</label>
-		<name>HeardandMcDonaldIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Now that you&#39;ve completed setting up DocuSign for Salesforce, you will need to add the Send with DocuSign button to your &lt;a href=&quot;https://help.salesforce.com/articleView?id=customize_layout.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;page layouts&lt;/a&gt;. This button is available for the following standard objects: Accounts, Contacts, Opportunities, Cases, and Leads.</label>
-		<name>HelpSection1</name>
-	</customLabels>
-	<customLabels>
-		<label>Additionally, you can track the status of all envelopes related to the aforementioned objects by adding the Envelope Status component to your layouts using the &lt;a href=&quot;https://help.salesforce.com/articleView?id=lightning_app_builder_overview.htm&amp;type=5&quot; target=&quot;_blank&quot;&gt;Lightning App Builder&lt;/a&gt;. &lt;/br&gt;For more detailed steps and documentation, click &lt;a href=&quot;https://docs.docusign.com/supportdocs/pdf/dfs-essentials.pdf&quot; target=&quot;_blank&quot;&gt;here&lt;/a&gt;</label>
-		<name>HelpSection2</name>
-	</customLabels>
-	<customLabels>
 		<label>Helpful Links</label>
 		<name>HelpfulLinks</name>
 	</customLabels>
 	<customLabels>
 		<label>Hide</label>
 		<name>Hide</name>
-	</customLabels>
-	<customLabels>
-		<label>Honduras</label>
-		<name>Honduras</name>
-	</customLabels>
-	<customLabels>
-		<label>Hong Kong S.A.R. China</label>
-		<name>HongKong</name>
-	</customLabels>
-	<customLabels>
-		<label>Hungary</label>
-		<name>Hungary</name>
-	</customLabels>
-	<customLabels>
-		<label>Iceland</label>
-		<name>Iceland</name>
-	</customLabels>
-	<customLabels>
-		<label>In Person Signer</label>
-		<name>InPersonSigner</name>
-	</customLabels>
-	<customLabels>
-		<label>India</label>
-		<name>India</name>
-	</customLabels>
-	<customLabels>
-		<label>Indonesia</label>
-		<name>Indonesia</name>
 	</customLabels>
 	<customLabels>
 		<label>Info</label>
@@ -1032,10 +508,6 @@
 	<customLabels>
 		<label>Invalid document resolver: {0}.</label>
 		<name>InvalidDocumentResolver_1</name>
-	</customLabels>
-	<customLabels>
-		<label>The email address is invalid.</label>
-		<name>InvalidEmail</name>
 	</customLabels>
 	<customLabels>
 		<label>Email settings are invalid. All values must not be blank.</label>
@@ -1090,10 +562,6 @@
 		<name>InvalidStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>The trial account is invalid.</label>
-		<name>InvalidTrialAccount</name>
-	</customLabels>
-	<customLabels>
 		<label>Invalid type.</label>
 		<name>InvalidType</name>
 	</customLabels>
@@ -1110,44 +578,12 @@
 		<name>InvalidUsernameOrPassword</name>
 	</customLabels>
 	<customLabels>
-		<label>Iran</label>
-		<name>Iran</name>
-	</customLabels>
-	<customLabels>
-		<label>Iraq</label>
-		<name>Iraq</name>
-	</customLabels>
-	<customLabels>
-		<label>Ireland</label>
-		<name>Ireland</name>
-	</customLabels>
-	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; is queued to receive the envelope</label>
 		<name>IsQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Isle of Man</label>
-		<name>IsleOfMan</name>
-	</customLabels>
-	<customLabels>
-		<label>Israel</label>
-		<name>Israel</name>
-	</customLabels>
-	<customLabels>
 		<label>Italian</label>
 		<name>Italian</name>
-	</customLabels>
-	<customLabels>
-		<label>Italy</label>
-		<name>Italy</name>
-	</customLabels>
-	<customLabels>
-		<label>Ivory Coast</label>
-		<name>IvoryCoast</name>
-	</customLabels>
-	<customLabels>
-		<label>Jamaica</label>
-		<name>Jamaica</name>
 	</customLabels>
 	<customLabels>
 		<label>Japan</label>
@@ -1158,48 +594,12 @@
 		<name>Japanese</name>
 	</customLabels>
 	<customLabels>
-		<label>Jersey</label>
-		<name>Jersey</name>
-	</customLabels>
-	<customLabels>
-		<label>Jordan</label>
-		<name>Jordan</name>
-	</customLabels>
-	<customLabels>
-		<label>Kazakhstan</label>
-		<name>Kazakhstan</name>
-	</customLabels>
-	<customLabels>
-		<label>Kenya</label>
-		<name>Kenya</name>
-	</customLabels>
-	<customLabels>
-		<label>Kiribati</label>
-		<name>Kiribati</name>
-	</customLabels>
-	<customLabels>
 		<label>Korean</label>
 		<name>Korean</name>
 	</customLabels>
 	<customLabels>
-		<label>Kuwait</label>
-		<name>Kuwait</name>
-	</customLabels>
-	<customLabels>
-		<label>Kyrgyzstan</label>
-		<name>Kyrgyzstan</name>
-	</customLabels>
-	<customLabels>
-		<label>{0} out of {1} sections completed</label>
-		<name>LandingProgress_2</name>
-	</customLabels>
-	<customLabels>
 		<label>Language</label>
 		<name>Language</name>
-	</customLabels>
-	<customLabels>
-		<label>Laos</label>
-		<name>Laos</name>
 	</customLabels>
 	<customLabels>
 		<label>Last Name</label>
@@ -1208,34 +608,6 @@
 	<customLabels>
 		<label>Last Status Update</label>
 		<name>LastStatusUpdate</name>
-	</customLabels>
-	<customLabels>
-		<label>Latvia</label>
-		<name>Latvia</name>
-	</customLabels>
-	<customLabels>
-		<label>Lebanon</label>
-		<name>Lebanon</name>
-	</customLabels>
-	<customLabels>
-		<label>Lesotho</label>
-		<name>Lesotho</name>
-	</customLabels>
-	<customLabels>
-		<label>Liberia</label>
-		<name>Liberia</name>
-	</customLabels>
-	<customLabels>
-		<label>Libya</label>
-		<name>Libya</name>
-	</customLabels>
-	<customLabels>
-		<label>Liechtenstein</label>
-		<name>Liechtenstein</name>
-	</customLabels>
-	<customLabels>
-		<label>Lithuania</label>
-		<name>Lithuania</name>
 	</customLabels>
 	<customLabels>
 		<label>Loading...</label>
@@ -1250,132 +622,8 @@
 		<name>LogInToDocuSignAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Log Out</label>
-		<name>LogOut</name>
-	</customLabels>
-	<customLabels>
-		<label>Logged in as {0} ({1})</label>
-		<name>LoggedInAs_2</name>
-	</customLabels>
-	<customLabels>
-		<label>Are you sure you want to log {0} out of DocuSign?</label>
-		<name>LogoutConfirm_1</name>
-	</customLabels>
-	<customLabels>
-		<label>Luxembourg</label>
-		<name>Luxembourg</name>
-	</customLabels>
-	<customLabels>
-		<label>Macau S.A.R China</label>
-		<name>Macau</name>
-	</customLabels>
-	<customLabels>
-		<label>Macedonia</label>
-		<name>Macedonia</name>
-	</customLabels>
-	<customLabels>
-		<label>Madagascar</label>
-		<name>Madagascar</name>
-	</customLabels>
-	<customLabels>
-		<label>Malawi</label>
-		<name>Malawi</name>
-	</customLabels>
-	<customLabels>
-		<label>Malaysia</label>
-		<name>Malaysia</name>
-	</customLabels>
-	<customLabels>
-		<label>Maldives</label>
-		<name>Maldives</name>
-	</customLabels>
-	<customLabels>
-		<label>Mali</label>
-		<name>Mali</name>
-	</customLabels>
-	<customLabels>
-		<label>Malta</label>
-		<name>Malta</name>
-	</customLabels>
-	<customLabels>
-		<label>Manage Users</label>
-		<name>ManageUsers</name>
-	</customLabels>
-	<customLabels>
-		<label>I agree to receive marketing communications and promotional offers from DocuSign.</label>
-		<name>MarketingOptIn</name>
-	</customLabels>
-	<customLabels>
-		<label>Marketing preference selection is required.</label>
-		<name>MarketingPreferenceRequired</name>
-	</customLabels>
-	<customLabels>
-		<label>Marshall Islands</label>
-		<name>MarshallIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Martinique</label>
-		<name>Martinique</name>
-	</customLabels>
-	<customLabels>
-		<label>Mauritania</label>
-		<name>Mauritania</name>
-	</customLabels>
-	<customLabels>
-		<label>Mauritius</label>
-		<name>Mauritius</name>
-	</customLabels>
-	<customLabels>
-		<label>Mayotte</label>
-		<name>Mayotte</name>
-	</customLabels>
-	<customLabels>
-		<label>{0} has been added</label>
-		<name>MemberAdded_1</name>
-	</customLabels>
-	<customLabels>
-		<label>{0} has been removed</label>
-		<name>MemberRemoved_1</name>
-	</customLabels>
-	<customLabels>
 		<label>Message</label>
 		<name>Message</name>
-	</customLabels>
-	<customLabels>
-		<label>Mexico</label>
-		<name>Mexico</name>
-	</customLabels>
-	<customLabels>
-		<label>Micronesia</label>
-		<name>Micronesia</name>
-	</customLabels>
-	<customLabels>
-		<label>Moldova</label>
-		<name>Moldova</name>
-	</customLabels>
-	<customLabels>
-		<label>Monaco</label>
-		<name>Monaco</name>
-	</customLabels>
-	<customLabels>
-		<label>Mongolia</label>
-		<name>Mongolia</name>
-	</customLabels>
-	<customLabels>
-		<label>Montenegro</label>
-		<name>Montenegro</name>
-	</customLabels>
-	<customLabels>
-		<label>Montserrat</label>
-		<name>Montserrat</name>
-	</customLabels>
-	<customLabels>
-		<label>Morocco</label>
-		<name>Morocco</name>
-	</customLabels>
-	<customLabels>
-		<label>Mozambique</label>
-		<name>Mozambique</name>
 	</customLabels>
 	<customLabels>
 		<label>Multiple accounts are associated with the credentials you provided. Please select the account you would like to connect with your Salesforce organization.</label>
@@ -1426,60 +674,12 @@
 		<name>MyPersonalContent</name>
 	</customLabels>
 	<customLabels>
-		<label>Myanmar</label>
-		<name>Myanmar</name>
-	</customLabels>
-	<customLabels>
 		<label>Company name is required.</label>
 		<name>NameRequired</name>
 	</customLabels>
 	<customLabels>
-		<label>Namibia</label>
-		<name>Namibia</name>
-	</customLabels>
-	<customLabels>
-		<label>Nauru</label>
-		<name>Nauru</name>
-	</customLabels>
-	<customLabels>
-		<label>Nepal</label>
-		<name>Nepal</name>
-	</customLabels>
-	<customLabels>
-		<label>Netherlands</label>
-		<name>Netherlands</name>
-	</customLabels>
-	<customLabels>
-		<label>New Caledonia</label>
-		<name>NewCaledonia</name>
-	</customLabels>
-	<customLabels>
-		<label>New Zealand</label>
-		<name>NewZealand</name>
-	</customLabels>
-	<customLabels>
 		<label>Next</label>
 		<name>Next</name>
-	</customLabels>
-	<customLabels>
-		<label>Next Steps</label>
-		<name>NextSteps</name>
-	</customLabels>
-	<customLabels>
-		<label>Nicaragua</label>
-		<name>Nicaragua</name>
-	</customLabels>
-	<customLabels>
-		<label>Niger</label>
-		<name>Niger</name>
-	</customLabels>
-	<customLabels>
-		<label>Nigeria</label>
-		<name>Nigeria</name>
-	</customLabels>
-	<customLabels>
-		<label>Niue</label>
-		<name>Niue</name>
 	</customLabels>
 	<customLabels>
 		<label>No</label>
@@ -1510,28 +710,8 @@
 		<name>NoValidAccounts</name>
 	</customLabels>
 	<customLabels>
-		<label>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and acknowledge that your data will be used as described in the DocuSign &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</label>
-		<name>NonUSConsentMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>None</label>
 		<name>None</name>
-	</customLabels>
-	<customLabels>
-		<label>Norfolk Island</label>
-		<name>NorfolkIsland</name>
-	</customLabels>
-	<customLabels>
-		<label>North Korea</label>
-		<name>NorthKorea</name>
-	</customLabels>
-	<customLabels>
-		<label>Northern Mariana Islands</label>
-		<name>NorthernMarianaIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Norway</label>
-		<name>Norway</name>
 	</customLabels>
 	<customLabels>
 		<label>Not the owner of the envelope</label>
@@ -1542,80 +722,16 @@
 		<name>Note</name>
 	</customLabels>
 	<customLabels>
-		<label>Nothing to remove</label>
-		<name>NothingToRemove</name>
-	</customLabels>
-	<customLabels>
 		<label>No response received from API.</label>
 		<name>NullApiResponse</name>
-	</customLabels>
-	<customLabels>
-		<label>Oman</label>
-		<name>Oman</name>
 	</customLabels>
 	<customLabels>
 		<label>Other</label>
 		<name>Other</name>
 	</customLabels>
 	<customLabels>
-		<label>Other URL</label>
-		<name>OtherUrl</name>
-	</customLabels>
-	<customLabels>
-		<label>Pakistan</label>
-		<name>Pakistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Palau</label>
-		<name>Palau</name>
-	</customLabels>
-	<customLabels>
-		<label>Palestinian Territory</label>
-		<name>PalestinianTerritory</name>
-	</customLabels>
-	<customLabels>
-		<label>Panama</label>
-		<name>Panama</name>
-	</customLabels>
-	<customLabels>
-		<label>Papua New Guinea</label>
-		<name>PapuaNewGuinea</name>
-	</customLabels>
-	<customLabels>
-		<label>Paraguay</label>
-		<name>Paraguay</name>
-	</customLabels>
-	<customLabels>
-		<label>Password</label>
-		<name>Password</name>
-	</customLabels>
-	<customLabels>
-		<label>Peru</label>
-		<name>Peru</name>
-	</customLabels>
-	<customLabels>
-		<label>Philippines</label>
-		<name>Philippines</name>
-	</customLabels>
-	<customLabels>
-		<label>Pitcairn</label>
-		<name>Pitcairn</name>
-	</customLabels>
-	<customLabels>
 		<label>Placeholder recipient must have a role.</label>
 		<name>PlaceholderRecipientMustHaveRole</name>
-	</customLabels>
-	<customLabels>
-		<label>Please log in to your account</label>
-		<name>PleaseLogIn</name>
-	</customLabels>
-	<customLabels>
-		<label>Poland</label>
-		<name>Poland</name>
-	</customLabels>
-	<customLabels>
-		<label>Portugal</label>
-		<name>Portugal</name>
 	</customLabels>
 	<customLabels>
 		<label>Portuguese (Brazilian)</label>
@@ -1630,20 +746,12 @@
 		<name>PostInstallEmailBody_4</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign for Salesforce Essentials post-install script results from {0}</label>
+		<label>DocuSign Apps Launcher post-install script results from {0}</label>
 		<name>PostInstallEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
 		<label>Private Message</label>
 		<name>PrivateMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>Puerto Rico</label>
-		<name>PuertoRico</name>
-	</customLabels>
-	<customLabels>
-		<label>Qatar</label>
-		<name>Qatar</name>
 	</customLabels>
 	<customLabels>
 		<label>Radio Button</label>
@@ -1666,20 +774,8 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
-		<label>Remote site is not authorized: {0}.</label>
-		<name>RemoteSiteMissing_1</name>
-	</customLabels>
-	<customLabels>
 		<label>Remove</label>
 		<name>Remove</name>
-	</customLabels>
-	<customLabels>
-		<label>Remove User</label>
-		<name>RemoveUser</name>
-	</customLabels>
-	<customLabels>
-		<label>Are you sure you want to remove {0} from this DocuSign account?</label>
-		<name>RemoveUserConfirm_1</name>
 	</customLabels>
 	<customLabels>
 		<label>Required custom field &#39;{0}&#39; value is missing.</label>
@@ -1690,84 +786,16 @@
 		<name>RequiredEmptyList_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Reunion</label>
-		<name>Reunion</name>
-	</customLabels>
-	<customLabels>
-		<label>Romania</label>
-		<name>Romania</name>
-	</customLabels>
-	<customLabels>
 		<label>Russian</label>
 		<name>Russian</name>
-	</customLabels>
-	<customLabels>
-		<label>Russian Federation</label>
-		<name>RussianFederation</name>
-	</customLabels>
-	<customLabels>
-		<label>Rwanda</label>
-		<name>Rwanda</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Barthélemy</label>
-		<name>SaintBarthelemy</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Helena</label>
-		<name>SaintHelena</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Kitts and Nevis</label>
-		<name>SaintKittsAndNevis</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Lucia</label>
-		<name>SaintLucia</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint-Martin (French Part)</label>
-		<name>SaintMartinFrance</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Pierre and Miquelon</label>
-		<name>SaintPierreAndMiquelon</name>
-	</customLabels>
-	<customLabels>
-		<label>Saint Vincent and the Grenadines</label>
-		<name>SaintVincentAndTheGrenadines</name>
 	</customLabels>
 	<customLabels>
 		<label>Unexpected response from Salesforce API.</label>
 		<name>SalesforceApiErrorUnexpectedResponse</name>
 	</customLabels>
 	<customLabels>
-		<label>An error occurred when invoking a Salesforce API: {0}.</label>
-		<name>SalesforceApiError_1</name>
-	</customLabels>
-	<customLabels>
 		<label>This Salesforce organization’s storage limit has been exceeded. Contact your system administrator.</label>
 		<name>SalesforceOrgStorageLimitExceeded</name>
-	</customLabels>
-	<customLabels>
-		<label>Salesforce User</label>
-		<name>SalesforceUser</name>
-	</customLabels>
-	<customLabels>
-		<label>Samoa</label>
-		<name>Samoa</name>
-	</customLabels>
-	<customLabels>
-		<label>San Marino</label>
-		<name>SanMarino</name>
-	</customLabels>
-	<customLabels>
-		<label>Sao Tome and Principe</label>
-		<name>SaoTomeAndPrincipe</name>
-	</customLabels>
-	<customLabels>
-		<label>Saudi Arabia</label>
-		<name>SaudiArabia</name>
 	</customLabels>
 	<customLabels>
 		<label>Save</label>
@@ -1794,20 +822,8 @@
 		<name>SelectAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>-- Select a country --</label>
-		<name>SelectCountry</name>
-	</customLabels>
-	<customLabels>
 		<label>Select an account</label>
 		<name>SelectAccountOption</name>
-	</customLabels>
-	<customLabels>
-		<label>Select which Salesforce users will have access to DocuSign for Salesforce Essentials.</label>
-		<name>SelectSalesforceUsers</name>
-	</customLabels>
-	<customLabels>
-		<label>Select a user</label>
-		<name>SelectUser</name>
 	</customLabels>
 	<customLabels>
 		<label>Send automatic reminders</label>
@@ -1818,10 +834,6 @@
 		<name>SendEnvelope</name>
 	</customLabels>
 	<customLabels>
-		<label>Senegal</label>
-		<name>Senegal</name>
-	</customLabels>
-	<customLabels>
 		<label>Sent</label>
 		<name>Sent</name>
 	</customLabels>
@@ -1830,16 +842,8 @@
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Serbia</label>
-		<name>Serbia</name>
-	</customLabels>
-	<customLabels>
 		<label>Successfully saved settings.</label>
 		<name>SettingsSaved</name>
-	</customLabels>
-	<customLabels>
-		<label>Seychelles</label>
-		<name>Seychelles</name>
 	</customLabels>
 	<customLabels>
 		<label>Show</label>
@@ -1854,20 +858,12 @@
 		<name>ShowMore</name>
 	</customLabels>
 	<customLabels>
-		<label>Sierra Leone</label>
-		<name>SierraLeone</name>
-	</customLabels>
-	<customLabels>
 		<label>Sign Here</label>
 		<name>SignHere</name>
 	</customLabels>
 	<customLabels>
 		<label>Sign Here Optional</label>
 		<name>SignHereOptional</name>
-	</customLabels>
-	<customLabels>
-		<label>Sign in or start a trial</label>
-		<name>SignInOrStartTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>Signed</label>
@@ -1890,60 +886,8 @@
 		<name>SigningGroupsProhibited</name>
 	</customLabels>
 	<customLabels>
-		<label>Singapore</label>
-		<name>Singapore</name>
-	</customLabels>
-	<customLabels>
-		<label>Sint Maarten</label>
-		<name>SintMaarten</name>
-	</customLabels>
-	<customLabels>
-		<label>Slovakia</label>
-		<name>Slovakia</name>
-	</customLabels>
-	<customLabels>
-		<label>Slovenia</label>
-		<name>Slovenia</name>
-	</customLabels>
-	<customLabels>
-		<label>Solomon Islands</label>
-		<name>SolomonIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Somalia</label>
-		<name>Somalia</name>
-	</customLabels>
-	<customLabels>
-		<label>Something went wrong. Please try again.</label>
-		<name>SomethingWrong</name>
-	</customLabels>
-	<customLabels>
-		<label>South Africa</label>
-		<name>SouthAfrica</name>
-	</customLabels>
-	<customLabels>
-		<label>South Georgia and the South Sandwich Islands</label>
-		<name>SouthGeorgiaAndTheSouthSandwichIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>South Korea</label>
-		<name>SouthKorea</name>
-	</customLabels>
-	<customLabels>
-		<label>South Sudan</label>
-		<name>SouthSudan</name>
-	</customLabels>
-	<customLabels>
-		<label>Spain</label>
-		<name>Spain</name>
-	</customLabels>
-	<customLabels>
 		<label>Spanish</label>
 		<name>Spanish</name>
-	</customLabels>
-	<customLabels>
-		<label>Sri Lanka</label>
-		<name>SriLanka</name>
 	</customLabels>
 	<customLabels>
 		<label>Status</label>
@@ -1974,10 +918,6 @@
 		<name>Subject</name>
 	</customLabels>
 	<customLabels>
-		<label>Sudan</label>
-		<name>Sudan</name>
-	</customLabels>
-	<customLabels>
 		<label>Support Center</label>
 		<name>SupportCenter</name>
 	</customLabels>
@@ -1994,42 +934,6 @@
 		<name>SupportPrep</name>
 	</customLabels>
 	<customLabels>
-		<label>Suriname</label>
-		<name>Suriname</name>
-	</customLabels>
-	<customLabels>
-		<label>Svalbard and Jan Mayen</label>
-		<name>SvalbardAndJanMayen</name>
-	</customLabels>
-	<customLabels>
-		<label>Swaziland</label>
-		<name>Swaziland</name>
-	</customLabels>
-	<customLabels>
-		<label>Sweden</label>
-		<name>Sweden</name>
-	</customLabels>
-	<customLabels>
-		<label>Switzerland</label>
-		<name>Switzerland</name>
-	</customLabels>
-	<customLabels>
-		<label>Syria</label>
-		<name>Syria</name>
-	</customLabels>
-	<customLabels>
-		<label>Taiwan</label>
-		<name>Taiwan</name>
-	</customLabels>
-	<customLabels>
-		<label>Tajikistan</label>
-		<name>Tajikistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Tanzania</label>
-		<name>Tanzania</name>
-	</customLabels>
-	<customLabels>
 		<label>Template Roles</label>
 		<name>TemplateRoles</name>
 	</customLabels>
@@ -2038,104 +942,20 @@
 		<name>TextField</name>
 	</customLabels>
 	<customLabels>
-		<label>Thailand</label>
-		<name>Thailand</name>
-	</customLabels>
-	<customLabels>
-		<label>Timor-Leste</label>
-		<name>TimorLeste</name>
-	</customLabels>
-	<customLabels>
 		<label>Title</label>
 		<name>Title</name>
-	</customLabels>
-	<customLabels>
-		<label>Togo</label>
-		<name>Togo</name>
-	</customLabels>
-	<customLabels>
-		<label>Tokelau</label>
-		<name>Tokelau</name>
-	</customLabels>
-	<customLabels>
-		<label>Tonga</label>
-		<name>Tonga</name>
 	</customLabels>
 	<customLabels>
 		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
-		<label>You have one day remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
-		<name>TrialAccountExpiresOneDay</name>
-	</customLabels>
-	<customLabels>
-		<label>You have {0} days remaining on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
-		<name>TrialAccountExpiresSoon_1</name>
-	</customLabels>
-	<customLabels>
-		<label>Today is last day on your trial. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
-		<name>TrialAccountExpiresToday</name>
-	</customLabels>
-	<customLabels>
-		<label>Trial for {0} ({1}) has expired</label>
-		<name>TrialExpired_2</name>
-	</customLabels>
-	<customLabels>
-		<label>You will receive email with instructions on how to activate your account. You will then be able to log in using your credentials.</label>
-		<name>TrialInstructions</name>
-	</customLabels>
-	<customLabels>
-		<label>Trinidad and Tobago</label>
-		<name>TrinidadAndTobago</name>
-	</customLabels>
-	<customLabels>
 		<label>Trust Center</label>
 		<name>TrustCenter</name>
 	</customLabels>
 	<customLabels>
-		<label>Try DocuSign free for 30 days</label>
-		<name>TryDocuSign</name>
-	</customLabels>
-	<customLabels>
-		<label>Tunisia</label>
-		<name>Tunisia</name>
-	</customLabels>
-	<customLabels>
-		<label>Turkey</label>
-		<name>Turkey</name>
-	</customLabels>
-	<customLabels>
-		<label>Turkmenistan</label>
-		<name>Turkmenistan</name>
-	</customLabels>
-	<customLabels>
-		<label>Turks and Caicos Islands</label>
-		<name>TurksAndCaicoIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Tuvalu</label>
-		<name>Tuvalu</name>
-	</customLabels>
-	<customLabels>
 		<label>Type</label>
 		<name>Type</name>
-	</customLabels>
-	<customLabels>
-		<label>By clicking the &#39;Get Started&#39; button, you accept the &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/terms-and-conditions/web&quot;&gt;Terms and Conditions&lt;/a&gt; and &lt;a target=&quot;_blank&quot; href=&quot;https://www.docusign.com/company/privacy-policy&quot;&gt;Privacy Policy&lt;/a&gt;.</label>
-		<name>USConsentMessage</name>
-	</customLabels>
-	<customLabels>
-		<label>U.S. Virgin Islands</label>
-		<name>USVirginIslands</name>
-	</customLabels>
-	<customLabels>
-		<label>Uganda</label>
-		<name>Uganda</name>
-	</customLabels>
-	<customLabels>
-		<label>Ukraine</label>
-		<name>Ukraine</name>
 	</customLabels>
 	<customLabels>
 		<label>Sorry, you do not have access to this page.</label>
@@ -2194,22 +1014,6 @@
 		<name>UndefinedUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>United Arab Emirates</label>
-		<name>UnitedArabEmirates</name>
-	</customLabels>
-	<customLabels>
-		<label>United Kingdom</label>
-		<name>UnitedKingdom</name>
-	</customLabels>
-	<customLabels>
-		<label>United States</label>
-		<name>UnitedStates</name>
-	</customLabels>
-	<customLabels>
-		<label>United States Minor Outlying Islands</label>
-		<name>UnitedStatesMinorOutlyingIslands</name>
-	</customLabels>
-	<customLabels>
 		<label>Unknown</label>
 		<name>Unknown</name>
 	</customLabels>
@@ -2222,24 +1026,12 @@
 		<name>UnrecognizedLanguageCode</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgrade Account</label>
-		<name>Upgrade</name>
-	</customLabels>
-	<customLabels>
-		<label>Upgrade Now</label>
-		<name>UpgradeNow</name>
-	</customLabels>
-	<customLabels>
 		<label>Upload</label>
 		<name>Upload</name>
 	</customLabels>
 	<customLabels>
 		<label>Upload File</label>
 		<name>UploadFile</name>
-	</customLabels>
-	<customLabels>
-		<label>File was uploaded successfully</label>
-		<name>UploadSuccessful</name>
 	</customLabels>
 	<customLabels>
 		<label>Import Files</label>
@@ -2306,10 +1098,6 @@
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Error Uploading File</label>
-		<name>ErrorUploadingFile</name>
-	</customLabels>
-	<customLabels>
 		<label>Error Downloading File</label>
 		<name>ErrorDownloadingFile</name>
 	</customLabels>
@@ -2318,20 +1106,8 @@
 		<name>SuccessDownloadingFile</name>
 	</customLabels>
 	<customLabels>
-		<label>Uruguay</label>
-		<name>Uruguay</name>
-	</customLabels>
-	<customLabels>
-		<label>Use system sender</label>
-		<name>UseSystemSender</name>
-	</customLabels>
-	<customLabels>
 		<label>When enabled, this allows users who are not members of the DocuSign account to send and sign envelopes. The sender in this case will be the configured DocuSign administrator.</label>
 		<name>UseSystemSenderHelp</name>
-	</customLabels>
-	<customLabels>
-		<label>Country selection is required.</label>
-		<name>UserCountryRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforce user must be provided.</label>
@@ -2346,32 +1122,8 @@
 		<name>UserNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>The email address is not allowed because it belongs to a restricted domain.</label>
-		<name>UsernameNotAllowed</name>
-	</customLabels>
-	<customLabels>
-		<label>Uzbekistan</label>
-		<name>Uzbekistan</name>
-	</customLabels>
-	<customLabels>
 		<label>Value</label>
 		<name>Value</name>
-	</customLabels>
-	<customLabels>
-		<label>Vanuatu</label>
-		<name>Vanuatu</name>
-	</customLabels>
-	<customLabels>
-		<label>Vatican</label>
-		<name>Vatican</name>
-	</customLabels>
-	<customLabels>
-		<label>Venezuela</label>
-		<name>Venezuela</name>
-	</customLabels>
-	<customLabels>
-		<label>Vietnam</label>
-		<name>Vietnam</name>
 	</customLabels>
 	<customLabels>
 		<label>View All</label>
@@ -2382,14 +1134,6 @@
 		<name>Voided</name>
 	</customLabels>
 	<customLabels>
-		<label>Wallis and Futuna</label>
-		<name>WallisAndFutuna</name>
-	</customLabels>
-	<customLabels>
-		<label>Western Sahara</label>
-		<name>WesternSahara</name>
-	</customLabels>
-	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; will not receive the envelope</label>
 		<name>WillNotReceive_2</name>
 	</customLabels>
@@ -2398,20 +1142,8 @@
 		<name>WillReceive_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Yemen</label>
-		<name>Yemen</name>
-	</customLabels>
-	<customLabels>
 		<label>Yes</label>
 		<name>Yes</name>
-	</customLabels>
-	<customLabels>
-		<label>Zambia</label>
-		<name>Zambia</name>
-	</customLabels>
-	<customLabels>
-		<label>Zimbabwe</label>
-		<name>Zimbabwe</name>
 	</customLabels>
 	<customLabels>
 		<label>{0} ({1})</label>
@@ -2518,10 +1250,6 @@
 		<name>AccountServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Provisioning Service</label>
-		<name>ProvisioningServiceDescription</name>
-	</customLabels>
-	<customLabels>
 		<label>DocuSign ESignature Service</label>
 		<name>ESignatureServiceDescription</name>
 	</customLabels>
@@ -2582,15 +1310,11 @@
 		<name>AllObjects</name>
 	</customLabels>
 	<customLabels>
-		<label>Add DocuSign buttons and status to your Salesforce layouts</label>
-		<name>AddToLayouts</name>
-	</customLabels>
-	<customLabels>
 		<label>No layouts are associated with the selected object</label>
 		<name>NoLayoutsForSelectedObject</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Agreements</label>
+		<label>DocuSign Files</label>
 		<name>DocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
@@ -2648,10 +1372,6 @@
 	<customLabels>
 		<label>STEPS FOR SUCCESS</label>
 		<name>StepsForSuccess</name>
-	</customLabels>
-	<customLabels>
-		<label>Please update invalid form entries and try again</label>
-		<name>InvalidFormMsg</name>
 	</customLabels>
 	<customLabels>
 		<label>Do you want to save changes?</label>
@@ -2728,10 +1448,6 @@
 	<customLabels>
 		<label>DocuSign Gen Template</label>
 		<name>TemplateConfiguration</name>
-	</customLabels>
-	<customLabels>
-		<label>Saving...</label>
-		<name>Saving</name>
 	</customLabels>
 	<customLabels>
 		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Select your main data source&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Select the data source where your users will begin generating documents.  For example, if you choose Opportunity, users can  pull data from an Opportunity and related objects, like Account.&lt;/p&gt;</label>
@@ -3134,22 +1850,6 @@
 		<name>MissingDocuSignGenAuthorizationSettings</name>
 	</customLabels>
 	<customLabels>
-		<label>Authorize Gen</label>
-		<name>AuthorizeGen</name>
-	</customLabels>
-	<customLabels>
-		<label>Start Your Gen Trial</label>
-		<name>TrialGen</name>
-	</customLabels>
-	<customLabels>
-		<label>Successfully started DocuSign Gen Trial.</label>
-		<name>SuccessDocuSignGenTrial</name>
-	</customLabels>
-	<customLabels>
-		<label>Unable to start DocuSign Gen Trial. Please contact DocuSign Gen Support for assistance.</label>
-		<name>ErrorDocuSignGenTrial</name>
-	</customLabels>
-	<customLabels>
 		<label>Modified</label>
 		<name>Modified</name>
 	</customLabels>
@@ -3354,10 +2054,6 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Invalid Salesforce event origin.</label>
-		<name>InvalidOrigin</name>
-	</customLabels>
-	<customLabels>
 		<label>Invalid Salesforce event target.</label>
 		<name>InvalidTarget</name>
 	</customLabels>
@@ -3494,10 +2190,6 @@
 		<name>AgreementApprovalError</name>
 	</customLabels>
 	<customLabels>
-		<label>Users with permission to access your DocuSign Agreements can use this link to view, download and edit this agreement.</label>
-		<name>AgreementShareLinkMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>Link Copied!</label>
 		<name>AgreementShareLinkCopiedMessage</name>
 	</customLabels>
@@ -3558,10 +2250,6 @@
 		<name>CLM</name>
 	</customLabels>
 	<customLabels>
-		<label>How do I pick a field?</label>
-		<name>CLM_PickAFieldTitle</name>
-	</customLabels>
-	<customLabels>
 		<label>Choose Location</label>
 		<name>ChooseLocation</name>
 	</customLabels>
@@ -3572,10 +2260,6 @@
 	<customLabels>
 		<label>Why do I need to choose a location?</label>
 		<name>ChooseLocationTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>Choose the Salesforce object you want to be the source for your documents.You&apos;ll choose one object at a time.</label>
-		<name>ChooseObjectInfo</name>
 	</customLabels>
 	<customLabels>
 		<label>/ui/setup/Setup?setupid=Customize</label>
@@ -3638,7 +2322,7 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</label>
 		<name>HelpInfoBody</name>
 	</customLabels>
 	<customLabels>
@@ -3704,10 +2388,6 @@
 	<customLabels>
 		<label>What is an Object Folder?</label>
 		<name>ObjectFolderTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>/lightning/setup/ObjectManager/home</label>
-		<name>ObjectManagerURL</name>
 	</customLabels>
 	<customLabels>
 		<label>OBJECT MAPPING</label>
@@ -3890,10 +2570,6 @@
 		<name>ShowSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>topic2</label>
-		<name>Topic2</name>
-	</customLabels>
-	<customLabels>
 		<label>Your Salesforce Objects</label>
 		<name>YourSalesforceObjects</name>
 	</customLabels>
@@ -3932,10 +2608,6 @@
 	<customLabels>
 		<label>This is a logical interpretation of how all the instances of your mapped object(such as &apos;New Account 1&apos;) will each have folder of their own in DocuSign CLM.</label>
 		<name>CaseFolderContentsHelp</name>
-	</customLabels>
-	<customLabels>
-		<label>Case Folder Contents</label>
-		<name>CaseFolderContents</name>
 	</customLabels>
 	<customLabels>
 		<label>Create Default CLM Object Mappings</label>
@@ -4014,14 +2686,6 @@
 		<name>MaximumBatchSizeExceeded_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Pending</label>
-		<name>Pending</name>
-	</customLabels>
-	<customLabels>
-		<label>Inactive</label>
-		<name>Inactive</name>
-	</customLabels>
-	<customLabels>
 		<label>Sender</label>
 		<name>Sender</name>
 	</customLabels>
@@ -4058,10 +2722,6 @@
 		<name>UnsupportedProductRoles</name>
 	</customLabels>
 	<customLabels>
-		<label>Invalid product role.</label>
-		<name>InvalidProductRole</name>
-	</customLabels>
-	<customLabels>
 		<label>Failed to trigger document comparison task.</label>
 		<name>FailedToTriggerDocumentComparisonTask</name>
 	</customLabels>
@@ -4076,10 +2736,6 @@
 	<customLabels>
 		<label>Agreement external review on behalf of has failed.</label>
 		<name>AgreementExternalReviewOnBehalfOfFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>Viewing object folders in Salesforce</label>
-		<name>ViewObjectFoldersCardTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>Customizing and viewing your DocuSign CLM object folders in Salesforce is simple. After object mapping, just add a custom view to your object page layouts in Salesforce.</label>
@@ -4244,10 +2900,6 @@
 	<customLabels>
 		<label>Name your folder</label>
 		<name>NameYourFolder</name>
-	</customLabels>
-	<customLabels>
-		<label>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
-		<name>NameYourFolderSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Rename Folder</label>
@@ -4598,10 +3250,6 @@
 		<name>FAQs</name>
 	</customLabels>
 	<customLabels>
-		<label>{0} object was successfully edited.</label>
-		<name>MapEdit</name>
-	</customLabels>
-	<customLabels>
 		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
 		<name>GetSupportURL</name>
 	</customLabels>
@@ -4706,7 +3354,7 @@
 		<name>CompleteSetupAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Get Started with DocuSign Agreements</label>
+		<label>Get Started with DocuSign Applications</label>
 		<name>GetStartedSetupAccount</name>
 	</customLabels>
 	<customLabels>
@@ -4774,7 +3422,7 @@
 		<name>TabNegotiationHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your team members access to DocuSign Agreements features.</label>
+		<label>Give your team members access to DocuSign Applications.</label>
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4782,7 +3430,7 @@
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Agreements.</label>
+		<label>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Applications.</label>
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -4966,12 +3614,108 @@
 		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign Users</label>
+		<name>DocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce users</label>
+		<name>DocuSignCLMUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit Permissions</label>
+		<name>EditPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove and Close</label>
+		<name>RemoveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Added Date</label>
+		<name>AddedDate</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM Role</label>
+		<name>CLMRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Profile</label>
+		<name>ProfileLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Permission Set</label>
+		<name>PermissionSetLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Filtered by</label>
+		<name>FilteredByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Begin your search by using the filters above.</label>
+		<name>BeginFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>users selected</label>
+		<name>UsersSelectedLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>users</label>
+		<name>UsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Sorted By</label>
+		<name>SortedByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>The current user cannot be part of removal and closing of users.</label>
+		<name>CannotCloseCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>The current user cannot be part of updates for editing permissions.</label>
+		<name>CannotEditPermissionsCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Role</label>
+		<name>SelectApplicationRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Filter Users</label>
+		<name>FilterUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Application Roles</label>
+		<name>ApplicationRolesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Account access</label>
+		<name>ApplicationAccountAccessLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Selected users have been added successfully.</label>
+		<name>UserAddedSuccessfully</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>
+	</customLabels>
+	<customLabels>
+		<label>You haven't mapped the '{0}' object to DocuSign CLM.</label>
+		<name>ObjectNotMappedToDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Map the object to view the folders on this page.</label>
+		<name>MapToViewFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>We couldn't connect to DocuSign CLM.</label>
+		<name>CouldNotConnectToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>You can refresh the page to retry or contact your Salesforce admin.</label>
+		<name>RefreshToLoadFolders</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
