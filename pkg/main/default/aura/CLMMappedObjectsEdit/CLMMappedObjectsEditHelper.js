@@ -13,6 +13,9 @@
 		var path = '';
 		clmFolderTree.forEach(function (treeData, index) {
 			if (treeData.name && index < clmFolderTree.length - 1) {
+				if (index === 0) {
+					path += '/' + treeData.name + '/';
+				}
 				path += treeData.name + '/';
 			}
 		});
