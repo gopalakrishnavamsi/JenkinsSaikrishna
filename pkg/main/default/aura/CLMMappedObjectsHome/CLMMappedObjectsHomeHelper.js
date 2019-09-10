@@ -63,12 +63,12 @@
 				component.set('v.isRemove', 'true');
 			}
 		);
-		var modelTitle = $A.get('$Label.c.RemoveMapping');
-		var modelBody = $A.get('$Label.c.RemoveModalBody');
-		component.set('v.modelTitleText', modelTitle);
-		component.set('v.modalBodyText', modelBody);
-		component.set('v.modelPrimaryButtonText', 'Remove');
-		component.set('v.modelSecondaryButtonText', 'Cancel');
+		var modalTitle = $A.get('$Label.c.RemoveMapping');
+		var modalBody = $A.get('$Label.c.RemoveModalBody');
+		component.set('v.modalTitleText', modalTitle);
+		component.set('v.modalBodyText', modalBody);
+		component.set('v.modalPrimaryButtonText', 'Remove');
+		component.set('v.modalSecondaryButtonText', 'Cancel');
 		component.set('v.showModal', 'true');
 		var modelComponent = component.find('popupModal');
 		setTimeout(
