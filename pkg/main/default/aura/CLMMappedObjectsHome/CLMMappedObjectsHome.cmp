@@ -1,138 +1,79 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
-    <ltng:require scripts="{!$Resource.stringUtils}" />
+	<ltng:require scripts="{!$Resource.stringUtils}" />
 
-    <!--component dependencies-->
-    <aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT" />
+	<!--component dependencies-->
+	<aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT" />
 
-    <!--event fire-->
-    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
-    <aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
-    <aura:registerEvent name="CLMScopedNotificationEvent" type="c:CLMScopedNotificationEvent" />
-    <aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
-    <!--event handlers-->
-    <aura:handler name='init' value='{!this}' action='{!c.onInit}' />
-    <aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
-        action="{!c.editMappingModelHandler}" />
-    <aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-    <aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
+	<!--event fire-->
+	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
+	<aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
+	<aura:registerEvent name="CLMScopedNotificationEvent" type="c:CLMScopedNotificationEvent" />
+	<aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+	<!--event handlers-->
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+	<aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
+		action="{!c.removeMappingModalHandler}" />
+	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
+	<aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
+	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
 
-    <!--data attributes internal -->
-    <aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
-    <aura:attribute name="tempMappingModelDataHolder" type="object" default="" access="private" />
+	<!--data attributes internal -->
+	<aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
+	<aura:attribute name="tempMappingModelDataHolder" type="object" default="" access="private" />
 
-    <!--model attributes-->
-    <aura:attribute name="modelTitleText" type="String" access="private" />
-    <aura:attribute name="modelbodyText" type="String" access="private" />
-    <aura:attribute name="modelSecondaryButtonText" type="String" access="private" />
-    <aura:attribute name="modelPrimaryButtonText" type="String" access="private" />
-    <aura:attribute name="showModal" type="Boolean" default="false" access="private" />
-    <aura:attribute name="isRemove" type="Boolean" default="false" access="private" />
-    <aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]" />
-    <!--child components-->
-    <aura:if isTrue="{!v.showModal}">
-        <aura:if isTrue="{!v.isRemove}">
-            <c:strike_modal aura:id="popupModel" footerButtons="{!v.strikeModelFooterButtons}" body="{!v.modelbodyText}"
-                title="{!v.modelTitleText}" primaryButtonLabel="{!v.modelPrimaryButtonText}"
-                secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
-            <aura:set attribute="else">
-                <c:strike_modal aura:id="popupModel" body="{!v.modelbodyText}" title="{!v.modelTitleText}"
-                    primaryButtonLabel="{!v.modelPrimaryButtonText}"
-                    secondaryButtonLabel="{!v.modelSecondaryButtonText}" />
-            </aura:set>
-        </aura:if>
-    </aura:if>
-    <lightning:card>
-        <aura:set attribute="title">
-            <div class="slds-m-left_medium  slds-m-top_large  slds-m-bottom_large slds-text-heading_medium">
-                <b class="ds-blue-text-color">{!$Label.c.MappedObjects}</b>
-            </div>
-        </aura:set>
-        <aura:set attribute="actions">
-            <div class="slds-m-right_large slds-m-top_large">
-                <lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoNew}"
-                    label="{!$Label.c.MapNew}" />
-            </div>
-        </aura:set>
-        <div class="ds-white-table-header slds-table_edit_container ">
-            <table aria-multiselectable="true"
-                class="{!v.mappedObjData.length==0?'slds-table ds-medium-height slds-table_fixed-layout slds-table_bordered':'slds-table slds-table_bordered slds-table_fixed-layout'}"
-                role="grid">
-                <thead>
-                    <tr class="slds-line-height_reset">
-                        <th aria-label="{!$Label.c.SalesforceObject}" aria-sort="none" class="ds-thead-width"
-                            scope="col">
-                            <span class="slds-truncate"
-                                title="{!$Label.c.SalesforceObject}">{!$Label.c.SalesforceObject}</span>
-                        </th>
-                        <th aria-label="{!$Label.c.ObjectFolderName}" aria-sort="none" class="ds-thead-width"
-                            scope="col">
-                            <span class="slds-truncate"
-                                title="{!$Label.c.ObjectFolderName}">{!$Label.c.ObjectFolderName}</span>
-                        </th>
-                        <th aria-label="{!$Label.c.PathInDocuSignCLM}" aria-sort="none" class="ds-thead-width"
-                            scope="col">
-                            <span class="slds-truncate"
-                                title="{!$Label.c.PathInDocuSignCLM}">{!$Label.c.PathInDocuSignCLM}</span>
-                        </th>
-                        <th aria-label="Action" aria-sort="none" class="ds-thead-width" scope="col">
-                            <span class="slds-truncate" title="Action"> </span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <aura:if isTrue="{!v.mappedObjData.length==0}">
-                            <tr aria-selected="false">
-                                <td class="ds-center-image" colspan="2">
-                                    <img src="{!($Resource.CLMNoMappedObjects)}" alt="troubleImage" />
-                                </td>
-                                <td colspan="2">
-                                    <div class="ds-small-fonts-size slds-truncate">
-                                        {!$Label.c.NoMappedObjectsFound}
-                                    </div>
-                                </td>
-                            </tr>
-                        </aura:if>
-                        <aura:iteration items="{!v.mappedObjData}" var="data">
-                            <tr aria-selected="false">
-                                <td class="slds-cell-edit" role="gridcell">
-                                    <span class="slds-truncate" title="{!data.objectName}">
-                                            {!data.Name}
-                                    </span>
-                                </td>
-                                <td class="slds-cell-edit" role="gridcell">
-                                    <span class="slds-grid slds-grid_align-spread">
-                                        <span class="slds-truncate" title="{!data.folderName}">
-                                                {!if(v.namespace == 'c', data.FolderName__c, data.dfsle__FolderName__c)}
-                                        </span>
-                                    </span>
-                                </td>
-                                <td class="slds-cell-edit" role="gridcell">
-                                    <span class="slds-grid slds-grid_align-spread">
-                                        <span class="slds-truncate" title="{!data.path}">
-                                                {!if(v.namespace == 'c', data.Path__c, data.dfsle__Path__c)}
-                                        </span>
-                                    </span>
-                                </td>
-                                <td class="slds-cell-edit" role="gridcell">
-                                    <span class="slds-grid slds-grid_align-spread">
-                                        <span class="slds-truncate" title="{!data.path}">
-                                            {!data.Path__c}
-                                        </span>
-                                    </span>
-                                </td>
-                                <td class="slds-cell-edit" role="gridcell">
-                                    <span class="slds-grid slds-grid_align-end">
-                                        <lightning:button value="{!data.Id}" label="Edit" title="Edit"
-                                            onclick="{!c.edit}" />
-                                        <lightning:button value="{!data.Id}" class="ds-red-text-color" label="Remove"
-                                            title="{!$Label.c.Remove}" onclick="{!c.remove}" />
-                                    </span>
-                                </td>
-                            </tr>
-                        </aura:iteration>
-                </tbody>
-            </table>
-        </div>
-    </lightning:card>
+	<!--modal attributes-->
+	<aura:attribute name="modalTitleText" type="String" access="private" />
+	<aura:attribute name="modalBodyText" type="String" access="private" />
+	<aura:attribute name="modalSecondaryButtonText" type="String" access="private" />
+	<aura:attribute name="modalPrimaryButtonText" type="String" access="private" />
+	<aura:attribute name="showModal" type="Boolean" default="false" access="private" />
+	<aura:attribute name="isRemove" type="Boolean" default="false" access="private" />
+	<aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]" />
+
+	<!--Datatable Attributes-->
+
+	<aura:attribute name="mapColumns" type="List" access="private" />
+	<aura:attribute name="displayData" type="List" access="private" />
+	<aura:attribute name="sortedDirection" type="String" default="" access="private" />
+	<aura:attribute name="sortedBy" type="String" default="" access="private" />
+	<aura:attribute name="sortedByColumn" type="String" default="" access="private" />
+
+	<!--child components-->
+	<aura:if isTrue="{!v.showModal}">
+		<aura:if isTrue="{!v.isRemove}">
+			<c:strike_modal aura:id="popupModal" footerButtons="{!v.strikeModelFooterButtons}" body="{!v.modalBodyText}"
+				title="{!v.modalTitleText}" primaryButtonLabel="{!v.modalPrimaryButtonText}"
+				secondaryButtonLabel="{!v.modalSecondaryButtonText}" />
+			<aura:set attribute="else">
+				<c:strike_modal aura:id="popupModal" body="{!v.modalBodyText}" title="{!v.modalTitleText}"
+					primaryButtonLabel="{!v.modalPrimaryButtonText}"
+					secondaryButtonLabel="{!v.modalSecondaryButtonText}" />
+			</aura:set>
+		</aura:if>
+	</aura:if>
+	<div>
+		<div class="ds-no-margin ">
+			<lightning:card>
+				<aura:set attribute="title">
+					<div class="slds-m-top_large slds-m-bottom_large slds-text-heading_medium">
+						<b class="ds-blue-text-color">{!$Label.c.MappedObjects}</b>
+					</div>
+				</aura:set>
+				<aura:set attribute="actions">
+					<div class="slds-m-right_large slds-m-top_large">
+						<lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoNew}"
+							label="{!$Label.c.MapNew}" />
+					</div>
+				</aura:set>
+				<div class="slds-grid slds-border_top slds-p-top_none">
+					<div class="slds-col slds-is-relative slds-size_12-of-12">
+						<lightning:datatable class="ds-separator " aura:id="userTable" keyField="Id"
+							hideCheckboxColumn="true" columns="{!v.mapColumns}" data="{!v.mappedObjData}"
+							onrowaction="{! c.handleRowAction }" sortedDirection="{!v.sortedDirection}"
+							onsort="{!c.updateColumnSorting}" sortedBy="{!v.sortedBy}" />
+					</div>
+				</div>
+			</lightning:card>
+		</div>
+	</div>
 </aura:component>
