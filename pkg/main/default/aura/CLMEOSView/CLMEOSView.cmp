@@ -1,48 +1,48 @@
 <aura:component extends="c:CLMUtility" controller="CLMEOSViewController"
 	implements="force:hasRecordId,flexipage:availableForRecordHome,force:hasSObjectName" access="global">
 	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
-	<aura:attribute name="eosDetails" type="Object" />
-	<aura:attribute name="recordId" type="String" />
-	<aura:attribute name="frameHeight" type="String" default="400" />
-	<aura:attribute name="src" type="String" default="" />
-	<aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}" />
+	<aura:attribute name="eosDetails" type="Object"/>
+	<aura:attribute name="recordId" type="String"/>
+	<aura:attribute name="frameHeight" type="String" default="400"/>
+	<aura:attribute name="src" type="String" default=""/>
+	<aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
 	<aura:attribute name="renderPage" type="Boolean" default="false"/>
 	<ltng:require scripts="{!$Resource.stringUtils}"/>
 	<div>
-        <aura:if isTrue="{!v.renderPage}">
-            <aura:if isTrue="{!v.eosDetails.mappingExists}">
-                <div class="ds-main" style="{!'height:'+v.frameHeight+'px;'}">
-                    <iframe aura:id="frame" src="{!v.eosDetails.eosUrl}" width="100%" height="100%" frameborder="0"
-                            seamless="true" />
-                </div>
-            </aura:if>
-            <aura:if isTrue="{!!v.eosDetails.mappingExists}">
-                <div class="slds-p-top_large slds-align_absolute-center ds-gray-color">
-                    <lightning:icon iconName="utility:warning" size="large" />
-                </div>
-                <div class="slds-p-top_large ds-font-size slds-align_absolute-center ds-gray-color">
-                    {!format($Label.c.ObjectNotMappedToDocuSignCLM, v.sobjecttype)}
-                </div>
-                <div class="slds-p-bottom_large ds-font-size slds-align_absolute-center ds-gray-color">
-                    {!$Label.c.MapToViewFolders}
-                </div>
-            </aura:if>
-            <aura:if isTrue="{!v.eosDetails.connectionError}">
-                <div class="slds-p-top_large slds-align_absolute-center ds-gray-color">
-                    <lightning:icon iconName="utility:warning" size="large" />
-                </div>
-                <div class="slds-p-top_large ds-font-size slds-align_absolute-center ds-gray-color">
-                    {!$Label.c.CouldNotConnectToCLM}
-                </div>
-                <div class="slds-p-bottom_large ds-font-size slds-align_absolute-center ds-gray-color">
-                    {!$Label.c.RefreshToLoadFolders}
-                </div>                
-            </aura:if>
-            <aura:set attribute="else">
-                <div class="slds-is-relative ds-loadingContainer">
-                	<c:BlueSpinner/>
-                </div>
-            </aura:set>
-        </aura:if>
+		<aura:if isTrue="{!v.renderPage}">
+			<aura:if isTrue="{!v.eosDetails.mappingExists}">
+				<div class="ds-main" style="{!'height:'+v.frameHeight+'px;'}">
+					<iframe aura:id="frame" src="{!v.eosDetails.eosUrl}" width="100%" height="100%" frameborder="0"
+						seamless="true" />
+				</div>
+			</aura:if>
+			<aura:if isTrue="{!!v.eosDetails.mappingExists}">
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color">
+					<lightning:icon iconName="utility:warning" size="large" />
+				</div>
+				<div class="slds-p-top_large ds-font-size slds-align_absolute-center ds-gray-color">
+					{!format($Label.c.ObjectNotMappedToDocuSignCLM, v.sobjecttype)}
+				</div>
+				<div class="slds-p-bottom_large ds-font-size slds-align_absolute-center ds-gray-color">
+					{!$Label.c.MapToViewFolders}
+				</div>
+			</aura:if>
+			<aura:if isTrue="{!v.eosDetails.connectionError}">
+				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color">
+					<lightning:icon iconName="utility:warning" size="large" />
+				</div>
+				<div class="slds-p-top_large ds-font-size slds-align_absolute-center ds-gray-color">
+					{!$Label.c.CouldNotConnectToCLM}
+				</div>
+				<div class="slds-p-bottom_large ds-font-size slds-align_absolute-center ds-gray-color">
+					{!$Label.c.RefreshToLoadFolders}
+				</div>
+			</aura:if>
+			<aura:set attribute="else">
+				<div class="slds-is-relative ds-loadingContainer">
+					<c:BlueSpinner />
+				</div>
+			</aura:set>
+		</aura:if>
 	</div>
 </aura:component>
