@@ -3717,6 +3717,18 @@
 		<label>You can refresh the page to retry or contact your Salesforce admin.</label>
 		<name>RefreshToLoadFolders</name>
 	</customLabels>
+	<customLabels>
+		<label>Search Object</label>
+		<name>SearchObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Subfolder</label>
+		<name>AddSubfolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Example Folder Image</label>
+		<name>ExampleFolderImage</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
