@@ -46,7 +46,7 @@
 
 	remove: function (component, row, helper) {
 		var id = row.Id;
-		component.set('v.tempMappingModelDataHolder', {
+		component.set('v.tempMappingModalDataHolder', {
 			id: id,
 			type: 'remove'
 		});
@@ -67,8 +67,8 @@
 		var modalBody = $A.get('$Label.c.RemoveModalBody');
 		component.set('v.modalTitleText', modalTitle);
 		component.set('v.modalBodyText', modalBody);
-		component.set('v.modalPrimaryButtonText', 'Remove');
-		component.set('v.modalSecondaryButtonText', 'Cancel');
+		component.set('v.modalPrimaryButtonText', $A.get('$Label.c.Remove'));
+		component.set('v.modalSecondaryButtonText', $A.get('$Label.c.Cancel'));
 		component.set('v.showModal', 'true');
 		var modelComponent = component.find('popupModal');
 		setTimeout(

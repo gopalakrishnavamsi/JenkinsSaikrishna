@@ -87,7 +87,7 @@
 	},
 
 	removeMappingModalHandler: function (component, event, helper) {
-		var data = component.get('v.tempMappingModelDataHolder');
+		var data = component.get('v.tempMappingModalDataHolder');
 		var modalComponent = component.find('popupModal');
 		var mappedObjData = component.get('v.mappedObjData');
 		var objDetails;

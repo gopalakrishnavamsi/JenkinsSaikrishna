@@ -19,7 +19,7 @@
 
 	<!--data attributes internal -->
 	<aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
-	<aura:attribute name="tempMappingModelDataHolder" type="object" default="" access="private" />
+	<aura:attribute name="tempMappingModalDataHolder" type="object" default="" access="private" />
 
 	<!--modal attributes-->
 	<aura:attribute name="modalTitleText" type="String" access="private" />
