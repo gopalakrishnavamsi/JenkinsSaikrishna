@@ -34,11 +34,7 @@ public with sharing class CLMMapObjectController {
             upsert eosDetails;
 			return true;
 		} catch (Exception e) {
-            if(e.getMessage().contains('There is already an item in this list')) {
-				throw Controller.wrapException(e, 'This object is already mapped.');
-			} else {
-				throw Controller.wrapException(e, 'Failed to insert object mapping.');
-			}
+				throw Controller.wrapException(e, 'Failed to insert object mapping.');			
 		}
     }
     
