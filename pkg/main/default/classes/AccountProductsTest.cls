@@ -235,7 +235,7 @@ private class AccountProductsTest {
 	static void test_resolveProducts_update() {
 		DocuSignAPIMock.success();
 
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 			accountSettings.ProductsLastChecked__c = null;
 			update accountSettings;
@@ -752,7 +752,7 @@ private class AccountProductsTest {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 
-		System.runAs(UserMock.createDocuSignSender()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.ScmWebBaseUrl__c = null;
 			s.ScmApiBaseUrl__c = null;

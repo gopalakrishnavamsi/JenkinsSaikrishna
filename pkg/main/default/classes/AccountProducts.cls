@@ -373,10 +373,10 @@ public with sharing class AccountProducts {
 		final String accessToken) {
 
 		AccountProducts result = null;
-		if (configuredProducts == null
+		if (Permissions.isDocuSignAdministrator() && (configuredProducts == null
 			|| lastChecked == null
 			|| checkFrequencyMinutes == null
-			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now()) {
+			|| lastChecked.addMinutes(checkFrequencyMinutes) <= Datetime.now())) {
 
 			Map<String, Product> products = new Map<String, Product>();
 			products.put(
