@@ -7294,4 +7294,28 @@
 		<shortDescription>CLM - RefreshToLoadFolders</shortDescription>
 		<value>You can refresh the page to retry or contact your Salesforce admin.</value>
 	</labels>
+	<labels>
+		<fullName>SearchObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - SearchObject</shortDescription>
+		<value>Search Object</value>
+	</labels>
+	<labels>
+		<fullName>AddSubfolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - AddSubfolder</shortDescription>
+		<value>Add Subfolder</value>
+	</labels>
+	<labels>
+		<fullName>ExampleFolderImage</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - ExampleFolderImage</shortDescription>
+		<value>Example Folder Image</value>
+	</labels>	
 </CustomLabels>

@@ -17,7 +17,7 @@
 				id: 2
 			}
 		]);
-		var selectedObjDetails = component.get('v.SelectedObjDetails');
+		var selectedObjDetails = component.get('v.selectedObjDetails');
 		helper.callServer(component, 'c.getAllObjects', false, function (result) {
 			result.forEach(function (data) {
 				if (selectedObjDetails && selectedObjDetails.Name === data.name) {
@@ -33,17 +33,17 @@
 			component.set('v.allObjects', result);
 			component.set('v.allObjectsList', result);
 			if (selectedObjDetails && selectedObjDetails.Id) {
-				component.set('v.SelectedObjDetails', selectedObjDetails);
+				component.set('v.selectedObjDetails', selectedObjDetails);
 				var path = '', folderName = '';
 				if (component.get('v.namespace') === 'c') {
 					folderName = selectedObjDetails.FolderName__c;
-					component.set('v.SelectedObjFieldName', folderName);
+					component.set('v.selectedObjFieldName', folderName);
 					path = selectedObjDetails.Path__c.split('/');
 				}
 				else {
 					folderName = selectedObjDetails[component.get('v.namespace') + '__FolderName__c'];
 					path = selectedObjDetails[component.get('v.namespace') + '__Path__c'].split('/');
-					component.set('v.SelectedObjFieldName', folderName);
+					component.set('v.selectedObjFieldName', folderName);
 				}
 				var clmTree = [];
 				path.forEach(function (pathValue, pathIndex) {
@@ -155,7 +155,7 @@
 		});
 		helper.createComponent(component, 'c:CLMFolderExample', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
-			component.set('v.modelTitleText', $A.get('$Label.c.FolderExample'));
+			component.set('v.modalTitleText', $A.get('$Label.c.FolderExample'));
 			component.set('v.showModal', 'true');
 			var modelComponent = component.find('popupModel');
 			setTimeout($A.getCallback(function () {
@@ -174,7 +174,7 @@
 		});
 		helper.createComponent(component, 'c:CLMSelectingFields', {}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
-			component.set('v.modelTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
+			component.set('v.modalTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
 			component.set('v.showModal', 'true');
 			var modelComponent = component.find('popupModel');
 			setTimeout($A.getCallback(function () {
@@ -184,38 +184,73 @@
 	},
 
 	insertPath: function (component, event, helper) {
-		var selectedObjDetails = component.get('v.SelectedObjDetails');
-		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
+		var selectedObjDetails = component.get('v.selectedObjDetails');
+		var selectedObjFieldName = component.get('v.selectedObjFieldName');
+		var path = component.get('v.pathInCLM').split('Other Sources').pop();
 		selectedObjDetails.Name = selectedObjDetails.name;
 		if (component.get('v.namespace') === 'c') {
-			selectedObjDetails.FolderName__c = SelectedObjFieldName;
-			selectedObjDetails.Path__c = component.get('v.pathInCLM');
+			selectedObjDetails.FolderName__c = selectedObjFieldName;
+			selectedObjDetails.Path__c = path;
 		}
 		else {
-			selectedObjDetails[component.get('v.namespace') + '__FolderName__c'] = SelectedObjFieldName;
-			selectedObjDetails[component.get('v.namespace') + '__Path__c'] = component.get('v.pathInCLM');
+			selectedObjDetails[component.get('v.namespace') + '__FolderName__c'] = selectedObjFieldName;
+			selectedObjDetails[component.get('v.namespace') + '__Path__c'] = path;
 		}
+		var label = selectedObjDetails.label;
 		delete selectedObjDetails.name;
 		delete selectedObjDetails.label;
 		delete selectedObjDetails.selected;
-		helper.callServer(component, 'c.setMappedObject', { eosDetails: selectedObjDetails }, function (result) {
-			if (result) {
-				var toastTitle = $A.get('$Label.c.MappingSuccess');
-				if (selectedObjDetails.Id) {
-					toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+		if (component.get('v.isEdit')) {
+			component.set('v.modalValueHolder', {
+				buttonType: 'confirm',
+				selectedObjDetails: selectedObjDetails,
+				label: label
+			});
+			helper.createComponent(
+				component,
+				'c:CLMModelFooterButton',
+				{
+					primaryButtonLabel: $A.get('$Label.c.Confirm'),
+					secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+					primaryButtonVariant: 'brand',
+					primaryButtonDisabled: 'false'
+				},
+				function (newCmp) {
+					component.set('v.strikeModelFooterButtons', newCmp);
 				}
-				helper.fireToast(component, stringUtils.format(toastTitle, selectedObjDetails.label), helper.SUCCESS);
-				helper.fireApplicationEvent(component, {
-					fromComponent: 'CLMMappedObjectsEdit',
-					toComponent: 'CLMSetupLayout',
-					type: 'update',
-					tabIndex: '3',
-				}, 'CLMNavigationEvent');
-			}
-			else {
-				helper.fireToast(component, stringUtils.format($A.get('$Label.c.MapError'), selectedObjDetails.label), 'error');
-			}
-		});
+			);
+			var modalTitleText = $A.get('$Label.c.ConfirmEdits');
+			var modelbodyText = $A.get('$Label.c.EditModalBody');
+			component.set('v.modalTitleText', modalTitleText);
+			component.set('v.modalBodyText', modelbodyText);
+			component.set('v.showModal', 'true');
+			var modelComponent = component.find('popupModel');
+			setTimeout(
+				$A.getCallback(function () {
+					modelComponent.show();
+				}),
+				5
+			);
+		} else {
+			helper.callServer(component, 'c.setMappedObject', { eosDetails: selectedObjDetails }, function (result) {
+				if (result) {
+					var toastTitle = $A.get('$Label.c.MappingSuccess');
+					if (selectedObjDetails.Id) {
+						toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+					}
+					helper.fireToast(component, stringUtils.format(toastTitle, label), helper.SUCCESS);
+					helper.fireApplicationEvent(component, {
+						fromComponent: 'CLMMappedObjectsEdit',
+						toComponent: 'CLMSetupLayout',
+						type: 'update',
+						tabIndex: '3',
+					}, 'CLMNavigationEvent');
+				}
+				else {
+					helper.fireToast(component, stringUtils.format($A.get('$Label.c.MapError'), label), 'error');
+				}
+			});
+		}
 	},
 
 	//Step 1
@@ -239,29 +274,41 @@
 		var name = event.currentTarget.id;
 		var allObjects = component.get('v.allObjects');
 		var allObjectsList = component.get('v.allObjectsList');
-		var selectedObjDetails = component.get('v.SelectedObjDetails');
+		var selectedObjDetails = component.get('v.selectedObjDetails');
 		if (!selectedObjDetails) {
 			selectedObjDetails = {};
 		}
-		allObjects.forEach(function (data) {
-			if (data.name === name) {
-				data.selected = true;
-				selectedObjDetails.label = data.label;
-				selectedObjDetails.name = data.name;
-				selectedObjDetails.selected = true;
+		var isSelected = false;
+		allObjects.forEach(function (allData) {
+			if (allData.name === name) {
+				isSelected = !allData.selected;
+				allData.selected = isSelected;
+				if (allData.selected) {
+					selectedObjDetails.label = allData.label;
+					selectedObjDetails.name = allData.name;
+					selectedObjDetails.selected = true;
+				} else {
+					selectedObjDetails = undefined;
+				}
 			} else {
-				data.selected = false;
+				allData.selected = false;
 			}
 		});
-		allObjectsList.forEach(function (data) {
-			if (data.name === name) {
-				data.selected = true;
+		allObjectsList.forEach(function (listData) {
+			if (listData.name === name) {
+				listData.selected = isSelected;
 			} else {
-				data.selected = false;
+				listData.selected = false;
 			}
 		});
-		component.set('v.clmFolderTree', helper.addSObjectToTree(component, selectedObjDetails.label));
-		component.set('v.SelectedObjDetails', selectedObjDetails);
+		if (selectedObjDetails) {
+			component.set(
+				'v.clmFolderTree',
+				helper.addSObjectToTree(component, selectedObjDetails.label)
+			);
+		}
+		component.set('v.selectedObjDetails', selectedObjDetails);
+		component.set('v.selectedObjFieldName', '');
 		component.set('v.allObjects', allObjects);
 		component.set('v.allObjectsList', allObjectsList);
 	},
@@ -309,28 +356,30 @@
 
 	onObjFieldSelection: function (component, event, helper) {
 		var label = event.currentTarget.id;
+		var object = event.currentTarget.dataset.obj;
 		event.stopPropagation();
-		var SelectedObjDetails = component.get('v.SelectedObjDetails');
-		var SelectedObjFieldName = component.get('v.SelectedObjFieldName');
-		if (SelectedObjFieldName) {
-			SelectedObjFieldName += '{!' + SelectedObjDetails.label + '.' + label + '}';
+		var selectedObjFieldName = component.get('v.selectedObjFieldName');
+		if (selectedObjFieldName) {
+			selectedObjFieldName += '{!' + object + '.' + label + '}';
+		} else {
+			selectedObjFieldName = '{!' + object + '.' + label + '}';
 		}
-		else {
-			SelectedObjFieldName = '{!' + SelectedObjDetails.label + '.' + label + '}';
-		}
-		component.set('v.clmFolderTree', helper.addTailFolderToTree(component, SelectedObjFieldName));
-		component.set('v.SelectedObjFieldName', SelectedObjFieldName);
+		component.set(
+			'v.clmFolderTree',
+			helper.addLeafFolderToTree(component, selectedObjFieldName)
+		);
+		component.set('v.selectedObjFieldName', selectedObjFieldName);
 	},
 
 	validateFieldSelection: function (component, event, helper) {
 		var value = event.getSource().get('v.value');
 		if (!value) {
-			component.set('v.SelectedObjFieldName', '');
+			component.set('v.selectedObjFieldName', '');
 		}
 		else {
-			component.set('v.SelectedObjFieldName', value);
+			component.set('v.selectedObjFieldName', value);
 		}
-		component.set('v.clmFolderTree', helper.addTailFolderToTree(component, value));
+		component.set('v.clmFolderTree', helper.addLeafFolderToTree(component, value));
 	},
 
 	//Step 3
@@ -358,7 +407,7 @@
 				}
 
 				if (treeIndex + 1 <= clmFolderTree.length - 1) {
-					component.set('v.SelectedFolderParentExample', clmFolderTree[treeIndex].name);
+					component.set('v.selectedFolderParentExample', clmFolderTree[treeIndex].name);
 					component.set('v.SelectedFolderExample', clmFolderTree[treeIndex + 1].name);
 				}
 			}
@@ -373,6 +422,7 @@
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var selectedFolder;
 		var selectedFolderIndex;
+		var selectedObjFieldName = component.get('v.selectedObjFieldName');
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.selected) {
 				selectedFolder = treeData;
@@ -390,14 +440,15 @@
 		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourSubFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
-			selectedObjDetails: component.get('v.SelectedObjDetails'),
+			selectedObjDetails: component.get('v.selectedObjDetails'),
+			selectedFolderName: [selectedObjFieldName],
 			buttonDisabled: true
 		}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 		});
-		component.set('v.modelTitleText', $A.get('$Label.c.NameSubFolder'));
+		component.set('v.modalTitleText', $A.get('$Label.c.NameSubFolder'));
 		component.set('v.showModal', 'true');
-		component.set('v.modelValueHolder', {
+		component.set('v.modalValueHolder', {
 			buttonType: 'subFolder',
 			selectedFolder: selectedFolder,
 			selectedFolderIndex: selectedFolderIndex,
@@ -413,6 +464,7 @@
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var selectedFolder;
 		var selectedFolderIndex;
+		var selectedObjFieldName = component.get('v.selectedObjFieldName');
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.selected) {
 				selectedFolder = treeData;
@@ -427,23 +479,25 @@
 		}, function (newCmp) {
 			component.set('v.strikeModelFooterButtons', newCmp);
 		});
-		var selectedObjDetails = component.get('v.SelectedObjDetails');
+		var selectedObjDetails = component.get('v.selectedObjDetails');
 		helper.createComponent(component, 'c:CLMMappingObjectNaming', {
 			title: $A.get('$Label.c.NameYourFolder'),
 			summary: $A.get('$Label.c.NameSubFolderSummary'),
+			selectedFolderName: [selectedObjFieldName],
 			folderName: selectedFolder.name,
 			selectedObjDetails: selectedObjDetails,
 			buttonDisabled: false
 		}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 		});
-		component.set('v.modelTitleText', $A.get('$Label.c.RenameFolder'));
+		component.set('v.modalTitleText', $A.get('$Label.c.RenameFolder'));
 		component.set('v.showModal', 'true');
-		component.set('v.modelValueHolder', {
+		component.set('v.modalValueHolder', {
 			buttonType: 'rename',
 			selectedFolder: selectedFolder,
 			selectedFolderIndex: selectedFolderIndex,
-			buttonDisabled: false
+			buttonDisabled: false,
+			folderName: selectedFolder.name
 		});
 		var modelComponent = component.find('popupModel');
 		setTimeout($A.getCallback(function () {
@@ -477,9 +531,9 @@
 		var data = event.getParam('data');
 		if (toComponent === 'CLMMappedObjectEdit' && fromComponent !== 'CLMMappedObjectEdit') {
 			if (type === 'update') {
-				var modelValueHolder = component.get('v.modelValueHolder');
-				modelValueHolder.folderName = data.value;
-				component.set('v.modelValueHolder', modelValueHolder);
+				var modalValueHolder = component.get('v.modalValueHolder');
+				modalValueHolder.folderName = data.value;
+				component.set('v.modalValueHolder', modalValueHolder);
 			}
 		}
 	},
@@ -496,42 +550,81 @@
 	},
 
 	handleConfirm: function (component, event, helper) {
-		var modelValueHolder = component.get('v.modelValueHolder');
+		var modalValueHolder = component.get('v.modalValueHolder');
 		var clmFolderTree = component.get('v.clmFolderTree');
-		if (modelValueHolder.buttonType === 'rename') {
-			clmFolderTree[modelValueHolder.selectedFolderIndex].name = modelValueHolder.folderName;
+		component.set('v.modalBodyText');
+		if (modalValueHolder.buttonType === 'rename') {
+			clmFolderTree[modalValueHolder.selectedFolderIndex].name =
+				modalValueHolder.folderName;
 			component.set('v.clmFolderTree', clmFolderTree);
 			component.set('v.showModal', 'false');
 			helper.updatePath(component);
-		}
-		else if (modelValueHolder.buttonType === 'subFolder') {
+		} else if (modalValueHolder.buttonType === 'subFolder') {
 			clmFolderTree = helper.sortTree(clmFolderTree);
-
 			clmFolderTree.forEach(function (treeData) {
-				if (treeData.level > clmFolderTree[modelValueHolder.selectedFolderIndex].level) {
+				if (
+					treeData.level >
+					clmFolderTree[modalValueHolder.selectedFolderIndex].level
+				) {
 					treeData.level = treeData.level + 1;
 					treeData.id = treeData.level + 1;
-				}
-				else {
+				} else {
 					treeData.id = treeData.level;
 				}
 			});
 			clmFolderTree.push({
-				level: clmFolderTree[modelValueHolder.selectedFolderIndex].level + 1,
-				name: modelValueHolder.folderName,
+				level: clmFolderTree[modalValueHolder.selectedFolderIndex].level + 1,
+				name: modalValueHolder.folderName,
 				type: 'folder',
 				selected: false,
-				id: clmFolderTree[modelValueHolder.selectedFolderIndex].level + 1
+				id: clmFolderTree[modalValueHolder.selectedFolderIndex].level + 1
 			});
 			clmFolderTree = helper.sortTree(clmFolderTree);
 			component.set('v.clmFolderTree', clmFolderTree);
 			component.set('v.showModal', 'false');
 			helper.updatePath(component);
+		} else if (modalValueHolder.buttonType === 'confirm') {
+			var selectedObjDetails = modalValueHolder.selectedObjDetails;
+			var label = modalValueHolder.label;
+			helper.callServer(
+				component,
+				'c.setMappedObject',
+				{ eosDetails: selectedObjDetails },
+				function (result) {
+					if (result) {
+						var toastTitle = $A.get('$Label.c.MappingSuccess');
+						if (selectedObjDetails.Id) {
+							toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
+						}
+						helper.fireToast(
+							component,
+							stringUtils.format(toastTitle, label),
+							helper.SUCCESS
+						);
+						helper.fireApplicationEvent(
+							component,
+							{
+								fromComponent: 'CLMMappedObjectsEdit',
+								toComponent: 'CLMSetupLayout',
+								type: 'update',
+								tabIndex: '3'
+							},
+							'CLMNavigationEvent'
+						);
+					} else {
+						helper.fireToast(
+							component,
+							stringUtils.format($A.get('$Label.c.MapError'), label),
+							helper.ERROR
+						);
+					}
+				}
+			);
 		}
 	},
 
 	closeModal: function (component) {
 		component.set('v.showModal', 'false');
-		component.set('v.modelValueHolder', {});
+		component.set('v.modalValueHolder', {});
 	}
 });
