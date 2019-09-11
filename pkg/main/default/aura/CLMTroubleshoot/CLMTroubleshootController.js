@@ -1,16 +1,14 @@
 ({
 	navigateToSection: function (component, event, helper) {
-		var tabIndex, eventHandlerComponent;
+		var tabIndex;
 		if (component.get('v.hyperlinkedText') === $A.get('$Label.c.DocumentGeneration')) {
-			tabIndex = 4;
-			eventHandlerComponent = 'CLMSetupLayout';
+			tabIndex = '4';
 		} else {
-			tabIndex = 8;
-			eventHandlerComponent = 'CLMHelpLayout'
+			tabIndex = '8';
 		}
 		helper.fireApplicationEvent(component, {
 			fromComponent: 'CLMTroubleshoot',
-			toComponent: eventHandlerComponent,
+			toComponent: 'CLMSetupLayout',
 			type: 'update',
 			tabIndex: tabIndex,
 		}, 'CLMNavigationEvent');

@@ -38,7 +38,9 @@
                 summary="{!$Label.c.UserManagementInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot isGray="true" />
+            <c:CLMTroubleshoot imageURL="{!($Resource.CLMHavingTrouble)}" title="{!$Label.c.HavingTrouble}"
+                hyperlinkedSummary1="{!$Label.c.HelpInfoBodyPart1}" hyperlinkedSummary2="{!$Label.c.HelpInfoBodyPart2}"
+                hasHyperlink="true" hyperlinkedText="{!$Label.c.Help}" isGray="true" />
         </div>
     </div>
 </aura:component>
