@@ -1,18 +1,18 @@
 <aura:component extends="c:CLMUtility" controller="CLMApexUtility">
-	<ltng:require scripts="{!$Resource.navUtils}" />
+	<ltng:require scripts="{!$Resource.navUtils}"/>
 
-	<aura:dependency resource="markup://c:CLMMappedObjectsEdit" type="COMPONENT" />
+	<aura:dependency resource="markup://c:CLMMappedObjectsEdit" type="COMPONENT"/>
 
 	<!--handler-->
-	<aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}" />
-	<aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}" />
-	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
-	<aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
+	<aura:handler event="c:CLMNavigationEvent" action="{!c.updateUI}"/>
+	<aura:handler event="c:CLMBreadcrumbsEvent" action="{!c.updateFromBreadCrumbUI}"/>
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+	<aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>
 	<aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
-		action="{!c.onSecondaryButtonClick}" />
-	<aura:handler event="c:CLMPathEvent" action="{!c.updateUIWithAdditionalHelpCard}" />
-	<aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent" />
-	<aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+		action="{!c.onSecondaryButtonClick}"/>
+	<aura:handler event="c:CLMPathEvent" action="{!c.updateUIWithAdditionalHelpCard}"/>
+	<aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent"/>
+	<aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
 
 	<!--Place holder attributes-->
 	<aura:attribute name="breadCrumbValues" type="List" access="private"/>

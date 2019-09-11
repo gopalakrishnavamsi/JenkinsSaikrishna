@@ -16,6 +16,8 @@
 	<aura:registerEvent name="CLMModelFooterButtonPrimaryBtn_enable" type="c:strike_evt" />
 	<!--event handler-->
 	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+
+
 	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
 	<aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt" action="{!c.handleConfirm}" />
 	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
@@ -109,7 +111,7 @@
 						</aura:if>
 						<aura:if isTrue="{!v.currentStep=='3'}">
 							<b>{!$Label.c.PathInDocuSignCLM}:</b><span
-								class="slds-p-left_medium blue-text-color"><strong>{!v.pathInCLM}</strong></span>
+								class="slds-p-left_medium blue-text-color"><strong>{!$Label.c.OtherSources}{!v.pathInCLM}</strong></span>
 						</aura:if>
 					</div>
 				</lightning:layoutItem>
