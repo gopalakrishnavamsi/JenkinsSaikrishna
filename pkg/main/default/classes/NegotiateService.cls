@@ -327,7 +327,6 @@ public with sharing class NegotiateService {
 	}
 
 	public static Boolean approveOnBehalfOrRecipientResponse(final String comment, final Boolean itemResponse, final UUID workItemsId) {
-		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsDocuSignNegotiator();
 		if (itemResponse) {
 			return NegotiateAPI.getInstance().approveOnBehalfOrRecipientResponse(comment, NegotiateAPI.APPROVE, workItemsId);
