@@ -2894,7 +2894,7 @@
 		<name>NameYourSubFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
+		<label>Type in for a static name or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
 		<name>NameSubFolderSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3736,6 +3736,10 @@
 	<customLabels>
 		<label>email</label>
 		<name>Email</name>
+	</customLabels>
+	<customLabels>
+		<label>Type in or select a field below to name the subfolder</label>
+		<name>SelectFieldToNameTheSubFolder</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

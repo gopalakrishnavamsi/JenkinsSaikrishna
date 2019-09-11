@@ -5632,7 +5632,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Name your sub-folder summary</shortDescription>
-		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
+		<value>Type in for a static name or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
 	</labels>
 	<labels>
 		<fullName>NameSubFolder</fullName>
@@ -7341,5 +7341,13 @@
 		<protected>true</protected>
 		<shortDescription>Email</shortDescription>
 		<value>email</value>
+	</labels>
+	<labels>
+		<fullName>SelectFieldToNameTheSubFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Type in or select a field below to name the subfolder</shortDescription>
+		<value>Type in or select a field below to name the subfolder</value>
 	</labels>
 </CustomLabels>

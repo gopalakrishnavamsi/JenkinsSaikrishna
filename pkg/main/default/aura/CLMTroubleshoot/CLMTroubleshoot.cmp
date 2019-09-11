@@ -8,16 +8,16 @@
     <aura:attribute name="hyperlinkedSummary1" type="String" />
     <aura:attribute name="hyperlinkedSummary2" type="String" />
 
-    <lightning:card class="{!v.isGray?'slds-m-top_none ds-gray-color':'slds-m-top_none'}">
-        <div class="slds-grid">
-            <div class="slds-col slds-size_9-of-12">
-                <lightning:card class="{!v.isGray?'ds-gray-color':''}">
+    <lightning:card class="{!v.isGray ? 'slds-m-top_none ds-gray-color' : 'slds-m-top_none'}">
+        <div class="{!v.isGray ? 'slds-grid ds-gray-color' : 'slds-grid'}">
+            <div class="{!v.isGray ? 'ds-gray-color slds-col slds-size_9-of-12' : 'slds-col slds-size_9-of-12'}">
+                <lightning:card class="{!v.isGray ? 'ds-gray-color' : ''}">
                     <aura:set attribute="title">
-                        <div class="slds-p-left_medium ds-card-heading">
+                        <div class="{!v.isGray ? 'ds-gray-color slds-p-left_medium ds-card-heading' : 'slds-p-left_medium ds-card-heading'}">
                             <b>{!v.title}</b>
                         </div>
                     </aura:set>
-                    <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                    <div class="{!v.isGray ? 'ds-gray-color slds-m-left_large slds-m-right-x_small slds-p-left_x-small' : 'slds-m-left_large slds-m-right-x_small slds-p-left_x-small'}">
                         <aura:if isTrue="{!v.hasHyperlink}">
                             <p>
                                 {!v.hyperlinkedSummary1}&nbsp;<span onclick="{!c.navigateToSection}"><a
