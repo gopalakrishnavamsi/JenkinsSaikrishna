@@ -1,17 +1,17 @@
 ({
-  getAgreementDetails: function(component) {
+  getAgreementDetails: function (component) {
     var agreementId = component.get('v.agreementId');
     var action = component.get('c.getNameSpace');
     var uiHelper = new UIHelper(
-      function() {
+      function () {
         return component.getEvent('loadingEvent');
       },
-      function() {
+      function () {
         return component.getEvent('toastEvent');
       }
     );
     component.set('v.uiHelper', uiHelper);
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
         var manager = new AgreementActionManager(
@@ -20,14 +20,14 @@
         );
         manager
           .getAgreement(component, agreementId)
-          .then(function(agreement) {
+          .then(function (agreement) {
             component.set('v.agreement', agreement);
             component.set('v.agreementActionManager', manager);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             uiHelper.showToast(error, uiHelper.ToastMode.ERROR);
           });
-      } else if (state === 'ERROR') {
+      } else {
         uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
         component.set('v.showToolBarAndPreview', false);
       }
@@ -36,21 +36,21 @@
     $A.enqueueAction(action);
   },
 
-  showToast: function(component, message, mode) {
+  showToast: function (component, message, mode) {
     component.set('v.message', message);
     component.set('v.mode', mode);
     component.set('v.showToast', true);
   },
 
-  hideToast: function(component) {
+  hideToast: function (component) {
     component.find('toast').close();
   },
 
-  loadingEvent: function(component, event) {
+  loadingEvent: function (component, event) {
     var params = event.getParams();
     if (params && params.isLoading === true) {
       setTimeout(
-        $A.getCallback(function() {
+        $A.getCallback(function () {
           window.location.reload();
         }),
         2000
@@ -58,10 +58,10 @@
     }
   },
 
-  reLoadingEvent: function(component) {
+  reLoadingEvent: function (component) {
     var isAgreementDeleted = component.get('v.isAgreementDeleted');
     if (isAgreementDeleted) {
-       $A.get('e.force:navigateToSObject').setParams({'recordId': component.get('v.sourceId')}).fire();
+      $A.get('e.force:navigateToSObject').setParams({'recordId': component.get('v.sourceId')}).fire();
     } else {
       setTimeout(
         $A.getCallback(function () {
@@ -73,13 +73,13 @@
 
   },
 
-  toastEvent: function(component, event, helper) {
+  toastEvent: function (component, event, helper) {
     var params = event.getParams();
     if (params && params.show === true) {
       helper.showToast(component, params.message, params.mode);
       if (params.mode === 'success') {
         setTimeout(
-          $A.getCallback(function() {
+          $A.getCallback(function () {
             helper.hideToast(component);
           }),
           3000
