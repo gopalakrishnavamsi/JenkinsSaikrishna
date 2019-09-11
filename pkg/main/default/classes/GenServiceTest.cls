@@ -44,7 +44,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_clone_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id>{adminUser.Id});
 			GenTemplate__c t = TestUtils.createGenTemplate(Contact.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(t.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(t.Id);

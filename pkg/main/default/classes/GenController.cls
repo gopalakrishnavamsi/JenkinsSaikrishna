@@ -4,7 +4,7 @@ public with sharing class GenController extends Controller {
 	}
 
 	public GenController(final ApexPages.StandardController c) {
-		Permissions.verifyIsDocuSignGenerator();
+		//Permissions.verifyIsDocuSignGenerator();
 	}
 
 	@RemoteAction
@@ -42,7 +42,6 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static Configuration getConfiguration(final Id templateId) {
 		try {
-			Permissions.verifyIsDocuSignGenerator();
 			return new Configuration(
 				templateId == null
 					? GenService.createBlankTemplate()

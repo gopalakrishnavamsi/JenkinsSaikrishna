@@ -498,7 +498,7 @@ public with sharing class GenService {
 
 	public static Gen.Template clone(final Id templateId) {
 		Permissions.verifyIsDocuSignAdministrator();
-
+		Permissions.verifyIsDocuSignGenerator();
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 
 		return DB.cloneTemplate(templateId);
@@ -506,7 +506,7 @@ public with sharing class GenService {
 
 	public static Gen.Template createBlankTemplate() {
 		Permissions.verifyIsDocuSignAdministrator();
-
+		Permissions.verifyIsDocuSignGenerator();
 		return DB.insertTemplate(new Gen.Template(
 			null,
 			Label.Untitled,
@@ -533,7 +533,7 @@ public with sharing class GenService {
 
 	public static Gen.Template saveTemplate(final Gen.Template template) {
 		Permissions.verifyIsDocuSignAdministrator();
-
+		Permissions.verifyIsDocuSignGenerator();
 		if (template == null) throw new DocuSignException(Label.UndefinedArgument);
 
 		return DB.updateTemplate(template);
