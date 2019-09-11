@@ -449,9 +449,7 @@ private class NegotiateServiceTest {
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
 		DocuSignAPIMock.success();
-		User user = UserMock.createDocuSignAdministrator();
-		System.runAs(user) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
+		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			Boolean result = NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
 				ScmAPIMock.WORKITEM_ID);
@@ -460,6 +458,26 @@ private class NegotiateServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(true, result);
 
+		}
+	}
+
+	@IsTest
+	static void test_approveOnBehalfOrRecipientResponse_failure() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Boolean hasError = false;
+			String errorMessage = '';
+			Test.startTest();
+			try {
+				 NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
+					ScmAPIMock.WORKITEM_ID);
+			} catch (Exception ex) {
+				hasError = true;
+				errorMessage = ex.getMessage();
+			}
+			Test.stopTest();
+			System.assertEquals(hasError, true);
+			System.assertEquals(errorMessage, Label.MustBeDocuSignNegotiator);
 		}
 	}
 

@@ -62,7 +62,7 @@
 				component.set('v.showObjFolderCard', false);
 			} else if (type === 'edit' && componentName === 'CLMCardModel') {
 				helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {
-					SelectedObjDetails: data.objDetails,
+					selectedObjDetails: data.objDetails,
 					isEdit: true
 				});
 				helper.setBreadcrumbEditObjectValues(component);
