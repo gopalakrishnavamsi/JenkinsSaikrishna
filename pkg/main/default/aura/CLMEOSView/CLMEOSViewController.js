@@ -10,8 +10,9 @@
 			if (state === 'SUCCESS') {
 				component.set('v.eosDetails', response.getReturnValue());
 			} else {
-        helper.fireToast(component, stringUtils.getErrorMessage(response), helper.ERROR);
+				helper.fireToast(component, stringUtils.getErrorMessage(response), helper.ERROR);
 			}
+			component.set('v.renderPage', true);
 		});
 		$A.enqueueAction(action);
 	}
