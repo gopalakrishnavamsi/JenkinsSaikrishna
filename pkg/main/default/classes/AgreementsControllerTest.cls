@@ -557,7 +557,7 @@ private class AgreementsControllerTest {
 				AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, ScmAPIMock.DOCUMENT_ID.value);
 				throw new AssertException('Expected approveOnBehalfOrRecipientResponse request to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
