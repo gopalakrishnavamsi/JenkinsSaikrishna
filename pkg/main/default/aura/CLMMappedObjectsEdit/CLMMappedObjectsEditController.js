@@ -1,20 +1,14 @@
 ({
+
 	onInit: function (component, event, helper) {
 		helper.showLoader(component);
 		component.set('v.clmFolderTree', [
 			{
 				level: 1,
-				name: $A.get('$Label.c.OtherSources'),
-				type: 'root',
-				selected: false,
-				id: 1,
-			},
-			{
-				level: 2,
 				name: $A.get('$Label.c.Salesforce'),
 				type: 'parent',
 				selected: false,
-				id: 2
+				id: 1
 			}
 		]);
 		var selectedObjDetails = component.get('v.selectedObjDetails');
@@ -45,25 +39,21 @@
 					path = selectedObjDetails[component.get('v.namespace') + '__Path__c'].split('/');
 					component.set('v.selectedObjFieldName', folderName);
 				}
+				path = path.filter(function (el) {
+					if (el) {
+						return el;
+					}
+				});
 				var clmTree = [];
 				path.forEach(function (pathValue, pathIndex) {
 					if (pathValue) {
 						if (pathIndex === 0) {
 							clmTree.push({
 								level: 1,
-								name: $A.get('$Label.c.OtherSources'),
-								type: 'root',
-								selected: false,
-								id: 1,
-							});
-						}
-						else if (pathIndex === 1) {
-							clmTree.push({
-								level: 2,
 								name: pathValue,
 								type: 'parent',
 								selected: false,
-								id: 2
+								id: 1
 							});
 						}
 						else if (pathValue === selectedObjDetails.name) {
@@ -93,6 +83,7 @@
 					selected: false,
 					id: clmTree.length + 1
 				});
+
 				component.set('v.clmFolderTree', clmTree);
 				helper.updatePath(component);
 				helper.UpdateUI(component, '2');
@@ -113,6 +104,8 @@
 		}, function (newCmp) {
 			component.set('v.modalBody', newCmp);
 		});
+
+
 	},
 
 	back: function (component, event, helper) {
@@ -231,7 +224,8 @@
 				}),
 				5
 			);
-		} else {
+		}
+		else {
 			helper.callServer(component, 'c.setMappedObject', { eosDetails: selectedObjDetails }, function (result) {
 				if (result) {
 					var toastTitle = $A.get('$Label.c.MappingSuccess');
@@ -311,6 +305,7 @@
 		component.set('v.selectedObjFieldName', '');
 		component.set('v.allObjects', allObjects);
 		component.set('v.allObjectsList', allObjectsList);
+
 	},
 
 	//Step 2
@@ -369,6 +364,7 @@
 			helper.addLeafFolderToTree(component, selectedObjFieldName)
 		);
 		component.set('v.selectedObjFieldName', selectedObjFieldName);
+
 	},
 
 	validateFieldSelection: function (component, event, helper) {
@@ -390,12 +386,7 @@
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.id === index) {
 				treeData.selected = true;
-				if (treeData.type === 'root') {
-					component.set('v.isDeleteFolder', true);
-					component.set('v.isAddSubFolder', false);
-					component.set('v.isRenameFolder', true);
-				}
-				else if (treeData.type === 'tail') {
+				if (treeData.type === 'tail') {
 					component.set('v.isDeleteFolder', true);
 					component.set('v.isAddSubFolder', true);
 					component.set('v.isRenameFolder', true);
@@ -416,6 +407,7 @@
 			}
 		});
 		component.set('v.clmFolderTree', clmFolderTree);
+
 	},
 
 	addSubFolder: function (component, event, helper) {

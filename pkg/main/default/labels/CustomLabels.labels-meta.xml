@@ -7317,5 +7317,13 @@
 		<protected>true</protected>
 		<shortDescription>CLM - ExampleFolderImage</shortDescription>
 		<value>Example Folder Image</value>
-	</labels>	
+	</labels>
+	<labels>
+		<fullName>Email</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Email</shortDescription>
+		<value>email</value>
+	</labels>
 </CustomLabels>
