@@ -4782,7 +4782,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Remove Modal Body</shortDescription>
-		<value>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
+		<value>Once you remove an object mapping. You will no longer be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
 	</labels>
 	<labels>
 		<fullName>RunReportsAndAnalyticsBody</fullName>

@@ -2458,7 +2458,7 @@
 		<name>RemoveMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</label>
+		<label>Once you remove an object mapping. You will no longer be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</label>
 		<name>RemoveModalBody</name>
 	</customLabels>
 	<customLabels>
