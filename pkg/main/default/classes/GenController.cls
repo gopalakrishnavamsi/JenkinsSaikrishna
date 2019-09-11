@@ -4,7 +4,6 @@ public with sharing class GenController extends Controller {
 	}
 
 	public GenController(final ApexPages.StandardController c) {
-		//Permissions.verifyIsDocuSignGenerator();
 	}
 
 	@RemoteAction
