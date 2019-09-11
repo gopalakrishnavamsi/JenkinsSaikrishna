@@ -2624,13 +2624,9 @@
 	<customLabels>
 		<label>{!Account.Name}</label>
 		<name>DefaultAccountFolderName</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
-		<label>/Salesforce/Accounts/</label>
-		<name>DefaultAccountObjectMappingPath</name>
-	</customLabels>
-	<customLabels>
-		<label>/Salesforce/Accounts</label>
+		<label>/Salesforce/Account/</label>
 		<name>DefaultAccountPathFormat</name>
 	</customLabels>
 	<customLabels>
@@ -2646,11 +2642,11 @@
 		<name>DefaultOpportunityFolderName</name>
 	</customLabels>
 	<customLabels>
-		<label>/Salesforce/Accounts/{!Account.Name}/Opportunities</label>
+		<label>/Salesforce/Account/{!Account.Name}/Opportunity</label>
 		<name>DefaultOpportunityObjectMappingPath</name>
 	</customLabels>
 	<customLabels>
-		<label>/Salesforce/Accounts/{0}/Opportunities</label>
+		<label>/Salesforce/Account/{0}/Opportunity</label>
 		<name>DefaultOpportunityPathFormat</name>
 	</customLabels>
 	<customLabels>

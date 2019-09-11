@@ -5092,7 +5092,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Account Object Mapping Path</shortDescription>
-		<value>/Salesforce/Accounts/</value>
+		<value>/Salesforce/Account/</value>
 	</labels>
 	<labels>
 		<fullName>DefaultAccountPathFormat</fullName>
@@ -5100,7 +5100,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Account Path Format</shortDescription>
-		<value>/Salesforce/Accounts</value>
+		<value>/Salesforce/Account</value>
 	</labels>
 	<labels>
 		<fullName>DefaultAccountVariables</fullName>
@@ -5132,7 +5132,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Opportunity Object Mapping Path</shortDescription>
-		<value>/Salesforce/Accounts/{!Account.Name}/Opportunities</value>
+		<value>/Salesforce/Account/{!Account.Name}/Opportunity</value>
 	</labels>
 	<labels>
 		<fullName>DefaultOpportunityPathFormat</fullName>
@@ -5140,7 +5140,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Opportunity Path Format</shortDescription>
-		<value>/Salesforce/Accounts/{0}/Opportunities</value>
+		<value>/Salesforce/Account/{0}/Opportunity</value>
 	</labels>
 	<labels>
 		<fullName>DefaultOpportunityVariables</fullName>
