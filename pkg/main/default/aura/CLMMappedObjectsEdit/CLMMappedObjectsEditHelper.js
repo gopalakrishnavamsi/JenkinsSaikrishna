@@ -6,16 +6,12 @@
 		});
 		return treeData;
 	},
-
 	updatePath: function (component) {
 		var clmFolderTree = component.get('v.clmFolderTree');
 		clmFolderTree = this.sortTree(clmFolderTree);
-		var path = '';
+		var path = '/';
 		clmFolderTree.forEach(function (treeData, index) {
 			if (treeData.name && index < clmFolderTree.length - 1) {
-				if (index === 0) {
-					path += '/' + treeData.name + '/';
-				}
 				path += treeData.name + '/';
 			}
 		});
@@ -41,11 +37,11 @@
 				}
 			});
 			clmFolderTree.push({
-				level: 3,
+				level: 2,
 				name: label,
 				type: 'sObject',
 				selected: false,
-				id: 3
+				id: 2
 			});
 			clmFolderTree = this.sortTree(clmFolderTree);
 		}
@@ -64,11 +60,11 @@
 			clmFolderTree[fieldIndex].name = field;
 		} else {
 			clmFolderTree.push({
-				level: 4,
+				level: 3,
 				name: field,
 				type: 'tail',
 				selected: false,
-				id: 4
+				id: 3
 			});
 		}
 		return clmFolderTree;
@@ -95,7 +91,8 @@
 			component.set('v.currentStep', '2');
 			component.set(
 				'v.title',
-				stringUtils.format('{0} {1}',
+				stringUtils.format(
+					'{0} {1}',
 					selectedObjDetails.label,
 					$A.get('$Label.c.FolderName')
 				)
@@ -162,9 +159,7 @@
 				);
 			}
 		} else if (index === '3' && selectedObjDetails && selectedObjFieldName) {
-			if (
-				$A.util.isEmpty(selectedObjFieldName)
-			) {
+			if ($A.util.isEmpty(selectedObjFieldName)) {
 				helper.fireApplicationEvent(
 					component,
 					{

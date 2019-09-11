@@ -3729,6 +3729,10 @@
 		<label>Example Folder Image</label>
 		<name>ExampleFolderImage</name>
 	</customLabels>
+	<customLabels>
+		<label>email</label>
+		<name>Email</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
