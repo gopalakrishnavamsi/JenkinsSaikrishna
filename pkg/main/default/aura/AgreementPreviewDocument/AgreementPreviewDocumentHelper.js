@@ -1,11 +1,11 @@
 ({
   onLoad: function (component, event, helper) {
     var agreement = component.get('v.agreement');
-    helper.fetchAgreementVersions(component);
+    helper.setAgreementVersions(component);
     helper.loadWidget(component, agreement, agreement.href);
   },
 
-  fetchAgreementVersions: function (component) {
+  setAgreementVersions: function (component) {
     var agreementVersions = [];
     var agreement = component.get('v.agreement');
     //set original version
@@ -106,15 +106,15 @@
       agreementId: agreementIdValue
     });
     return new Promise($A.getCallback(function (resolve, reject) {
-
       generateUploadAction.setCallback(this, $A.getCallback(function (response) {
         var state = response.getState();
         if (state === 'SUCCESS') {
-          if (isSetup) resolve(response.getReturnValue());
-          else resolve(response.getReturnValue().token);
-        }
-        if (state === 'ERROR') {
-          uiHelper.getErrorMessage(response);
+          if (isSetup) {
+            resolve(response.getReturnValue());
+          } else {
+            resolve(response.getReturnValue().token);
+          }
+        } else {
           reject(uiHelper.getErrorMessage(response));
         }
       }));
@@ -122,36 +122,8 @@
     }));
   },
 
-  getApprovalWorkItems: function (component, uiHelper) {
-    var action = component.get('c.getApprovalWorkItems');
-    var agreementId = component.get('v.agreement').id.value;
-    var agreementStatus = component.get('v.agreement').status.toLowerCase();
-    return new Promise(function (resolve, reject) {
-      //Fetching approval workItems only if the current agreement status is pending approval
-      if (agreementStatus === 'pending approval') {
-        action.setParams({
-          agreementId: agreementId
-        });
-        action.setCallback(this, function (response) {
-          var state = response.getState();
-          if (state === 'SUCCESS') {
-            component.set('v.approvalWorkItems', response.getReturnValue());
-            resolve();
-          }
-          if (state === 'ERROR') reject(uiHelper.getErrorMessage(response));
-        });
-        $A.enqueueAction(action);
-      }
-      //resolving the promise directly since we do not need to fetch approval workitems for agreements that are not pending approval
-      else {
-        resolve();
-      }
-    });
-  },
-
   getResourceToken: function (agreementId, component, uiHelper) {
     var action = component.get('c.generateResourceToken');
-
     return new Promise(function (resolve, reject) {
       action.setParams({
         agreementId: agreementId
@@ -160,13 +132,39 @@
         var state = response.getState();
         if (state === 'SUCCESS') {
           resolve(response.getReturnValue());
-        }
-        if (state === 'ERROR') {
-          uiHelper.getErrorMessage(response);
+        } else {
           reject(uiHelper.getErrorMessage(response));
         }
       });
       $A.enqueueAction(action);
+    });
+  },
+
+  getApprovalWorkItems: function (component, uiHelper) {
+    var getWorkItemsAction = component.get('c.getApprovalWorkItems');
+    var agreementId = component.get('v.agreement').id.value;
+    var agreementStatus = component.get('v.agreement').status.toLowerCase();
+    return new Promise(function (resolve, reject) {
+      //Fetching approval workItems only if the current agreement status is pending approval
+      if (agreementStatus === 'pending approval') {
+        getWorkItemsAction.setParams({
+          agreementId: agreementId
+        });
+        getWorkItemsAction.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            component.set('v.approvalWorkItems', response.getReturnValue());
+            resolve();
+          } else {
+            reject(uiHelper.getErrorMessage(response));
+          }
+        });
+        $A.enqueueAction(getWorkItemsAction);
+      }
+      //resolving the promise directly since we do not need to fetch approval workitems for agreements that are not pending approval
+      else {
+        resolve();
+      }
     });
   },
 
@@ -380,19 +378,21 @@
               url: token,
               hasPdfPreview: true,
             });
-            component.set('v.loading', false);
           }
         )
         .catch(function (error) {
             uiHelper.showToast(error, 'error');
-            component.set('v.loading', false);
           }
-        );
+        )
+        .finally(function () {
+          component.set('v.loading', false);
+        });
     }));
     return preview;
   },
 
   fireCompareAgreements: function (component, helper, preview, originalDocumentHref, compareVersionHref) {
+    component.set('v.loading', true);
     var compareAction = component.get('c.compareAgreements');
     compareAction.setParams({
       originalDocumentHref: originalDocumentHref,
@@ -400,18 +400,17 @@
     });
 
     compareAction.setCallback(this, $A.getCallback(function (response) {
+      component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
         preview.renderDocumentPreview({
           url: response.getReturnValue(),
           hasPdfPreview: true,
         });
-      } else if (state === 'ERROR') {
-        helper.showToast(component, response.getError()[0].message, 'error');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      component.set('v.loading', false);
     }));
-    component.set('v.loading', true);
     $A.enqueueAction(compareAction);
   },
 
@@ -564,32 +563,26 @@
     var agreement = component.get('v.agreement');
 
     var resendAction = component.get('c.resendRequest');
-
     resendAction.setParams({
       documentHref: agreement.href,
       resendEmailType: reviewType
     });
 
     resendAction.setCallback(this, function (response) {
-      component.set('v.loading', true);
+      component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
-        var result = response.getReturnValue();
-        if (result === true) {
-          var resendMessage = '';
-          if (reviewType === 'ExternalReview') {
-            resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendExternalReviewMessage_1'), agreement.name);
-          } else {
-            resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendInternalApprovalMessage_1'), agreement.name);
-          }
-          helper.showToast(component, resendMessage, 'success');
+        var resendMessage = '';
+        if (reviewType === 'ExternalReview') {
+          resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendExternalReviewMessage_1'), agreement.name);
         } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementResendErrorMessage'), 'error');
+          resendMessage = stringUtils.format($A.get('$Label.c.AgreementResendInternalApprovalMessage_1'), agreement.name);
         }
+        helper.showToast(component, resendMessage, 'success');
+        helper.reloadPreview(component);
       } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementResendErrorMessage'), 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      helper.reloadPreview(component);
     });
     $A.enqueueAction(resendAction);
   },
@@ -598,40 +591,34 @@
     component.set('v.loading', true);
     var agreement = component.get('v.agreement');
 
-    var resendAction = component.get('c.cancelApprovalOrExternalReview');
-
-    resendAction.setParams({
-      documentId: agreement.id.value,
+    var cancelAction = component.get('c.cancelApprovalOrExternalReview');
+    cancelAction.setParams({
+      documentId: agreement.id.value
     });
 
-    resendAction.setCallback(this, function (response) {
-      component.set('v.loading', true);
+    cancelAction.setCallback(this, function (response) {
+      component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
-        var result = response.getReturnValue();
-        if (result === true) {
-          var cancelMessage = '';
-          if (reviewType === 'ExternalReview') {
-            cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelExternalReviewMessage_1'), agreement.name);
-          } else {
-            cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelInternalApprovalMessage_1'), agreement.name);
-          }
-          helper.showToast(component, cancelMessage, 'success');
+        var cancelMessage = '';
+        if (reviewType === 'ExternalReview') {
+          cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelExternalReviewMessage_1'), agreement.name);
         } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementCancelErrorMessage'), 'error');
+          cancelMessage = stringUtils.format($A.get('$Label.c.AgreementCancelInternalApprovalMessage_1'), agreement.name);
         }
+        helper.showToast(component, cancelMessage, 'success');
+        helper.reloadPreview(component);
       } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementCancelErrorMessage'), 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      helper.reloadPreview(component);
     });
-    $A.enqueueAction(resendAction);
+    $A.enqueueAction(cancelAction);
   },
 
   completeInternalApproval: function (component, helper, approvalResponseType, approvalResponseComments, approvalWorkItemId) {
     component.set('v.loading', true);
-    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
 
+    var approvalAction = component.get('c.approveOnBehalfOrRecipientResponse');
     approvalAction.setParams({
       comment: approvalResponseComments,
       itemResponse: approvalResponseType,
@@ -639,61 +626,47 @@
     });
 
     approvalAction.setCallback(this, function (response) {
-      component.set('v.loading', true);
+      component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
-        var result = response.getReturnValue();
-        if (result === true) {
-          if (approvalResponseType === true) {
-            helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
-          } else {
-            helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
-          }
+        if (approvalResponseType === true) {
+          helper.showToast(component, $A.get('$Label.c.AgreementApprovalResponseSuccess'), 'success');
         } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+          helper.showToast(component, $A.get('$Label.c.AgreementRejectionResponseSuccess'), 'success');
         }
+        helper.reloadPreview(component);
       } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementApprovalError'), 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      helper.reloadPreview(component);
     });
     $A.enqueueAction(approvalAction);
   },
 
   externalReviewOnBehalfOfRequest: function (component, helper, event) {
+    component.set('v.loading', true);
 
     var comments = (event.detail && event.detail.comments) ? event.detail.comments : '';
     var documentHref = (event.detail && event.detail.documentHref) ? event.detail.documentHref : '';
     var agreement = component.get('v.agreement');
-    var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
 
+    var externalReviewOnBehalfOfAction = component.get('c.externalReviewOnBehalfOfRequest');
     externalReviewOnBehalfOfAction.setParams({
       comment: comments,
       newVersionUrl: documentHref,
       documentId: agreement.id.value
     });
 
-    component.set('v.loading', true);
-
     externalReviewOnBehalfOfAction.setCallback(this, function (response) {
       component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
-        var result = response.getReturnValue();
-        if (result === true) {
-          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSuccess'), 'success');
-          helper.reloadPreview(component);
-        } else {
-          helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
-        }
+        helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfSuccess'), 'success');
+        helper.reloadPreview(component);
       } else {
-        helper.showToast(component, $A.get('$Label.c.AgreementExternalReviewOnBehalfOfFailed'), 'error');
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-
     });
-
     $A.enqueueAction(externalReviewOnBehalfOfAction);
-
   },
 
   showToast: function (component, message, mode) {
