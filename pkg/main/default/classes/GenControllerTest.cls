@@ -23,7 +23,9 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_clone_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
 
 			Test.startTest();
@@ -51,7 +53,9 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_getConfiguration_blank_template() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			Test.startTest();
 			GenController.Configuration result = GenController.getConfiguration(null);
 			Test.stopTest();
@@ -133,7 +137,9 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_saveTemplate_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			Gen.Template gt = createGenTemplate();
 
 			Test.startTest();
