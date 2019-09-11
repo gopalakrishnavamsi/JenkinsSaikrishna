@@ -192,144 +192,142 @@
                 </div>
                 <!-- /Path -->
             </div>
-            <aura:set attribute="else">
-                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                        fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
-            </aura:set>
+
+
         </aura:if>
-
-    </aura:if>
-    <!-- What You Will Need Modal -->
-    <c:strike_modal aura:id="whatYouWillNeedModal" title="What you will Need" showModal="{!v.showWhatYouWillNeedModal}"
-                    showHeader="false">
-        <div class="slds-p-horizontal_xx-large slds-p-bottom_x-small">
-            <div class="slds-text-align_center">
-                <div class="slds-text-heading_medium slds-p-around_x-small">
-                    <b>{!$Label.c.WhatYouWillNeed}</b>
+        <!-- What You Will Need Modal -->
+        <c:strike_modal aura:id="whatYouWillNeedModal" title="What you will Need"
+                        showModal="{!v.showWhatYouWillNeedModal}"
+                        showHeader="false">
+            <div class="slds-p-horizontal_xx-large slds-p-bottom_x-small">
+                <div class="slds-text-align_center">
+                    <div class="slds-text-heading_medium slds-p-around_x-small">
+                        <b>{!$Label.c.WhatYouWillNeed}</b>
+                    </div>
+                    <div class="slds-text-body_regular slds-p-bottom_x-small">
+                        {!$Label.c.WhatYouWillNeedInfo}
+                    </div>
                 </div>
-                <div class="slds-text-body_regular slds-p-bottom_x-small">
-                    {!$Label.c.WhatYouWillNeedInfo}
-                </div>
-            </div>
-            <ul class="slds-p-top_x-small">
-                <li class="slds-item slds-p-top_x-small">
-                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
-                        <div class="slds-media">
-                            <div class="slds-media__figure">
-                                <lightning:icon iconName="doctype:word" size="medium"/>
-                            </div>
-                            <div class="slds-media__body">
-                                <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.WhatYouWillNeedStep1Title}</b>
+                <ul class="slds-p-top_x-small">
+                    <li class="slds-item slds-p-top_x-small">
+                        <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <lightning:icon iconName="doctype:word" size="medium"/>
                                 </div>
-                                <p>
-                                <div class="slds-text-body_regular">
-                                    {!$Label.c.WhatYouWillNeedStep1Info}
+                                <div class="slds-media__body">
+                                    <div class="slds-text-heading_small">
+                                        <b>{!$Label.c.WhatYouWillNeedStep1Title}</b>
+                                    </div>
+                                    <p>
+                                    <div class="slds-text-body_regular">
+                                        {!$Label.c.WhatYouWillNeedStep1Info}
+                                    </div>
+                                    </p>
                                 </div>
-                                </p>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <div class="ds-modal-content-spacing"/>
-                <li class="slds-item slds-p-top_x-small">
-                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
-                        <div class="slds-media">
-                            <div class="slds-media__figure">
-                                <img class="slds-is-relative slds-icon" src="{!$Resource.salesforcelogo}"/>
-                            </div>
-                            <div class="slds-media__body">
-                                <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.WhatYouWillNeedStep2Title}</b>
+                    </li>
+                    <div class="ds-modal-content-spacing"/>
+                    <li class="slds-item slds-p-top_x-small">
+                        <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <img class="slds-is-relative slds-icon" src="{!$Resource.salesforcelogo}"/>
                                 </div>
-                                <p>
-                                <div class="slds-text-body_regular">
-                                    {!$Label.c.WhatYouWillNeedStep2Info}
+                                <div class="slds-media__body">
+                                    <div class="slds-text-heading_small">
+                                        <b>{!$Label.c.WhatYouWillNeedStep2Title}</b>
+                                    </div>
+                                    <p>
+                                    <div class="slds-text-body_regular">
+                                        {!$Label.c.WhatYouWillNeedStep2Info}
+                                    </div>
+                                    </p>
                                 </div>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <div class="ds-modal-content-spacing"/>
-                <li class="slds-item slds-p-top_x-small">
-                    <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
-                        <div class="slds-media">
-                            <div class="slds-media__figure">
-                                <img class="slds-is-relative slds-icon" src="{!$Resource.docusignfields}"/>
-                            </div>
-                            <div class="slds-media__body">
-                                <div class="slds-text-heading_small">
-                                    <b>{!$Label.c.WhatYouWillNeedStep3Title}</b>
-                                </div>
-                                <p>
-                                <div class="slds-text-body_regular">
-                                    {!$Label.c.WhatYouWillNeedStep3Info}
-                                </div>
-                                </p>
                             </div>
                         </div>
+                    </li>
+                    <div class="ds-modal-content-spacing"/>
+                    <li class="slds-item slds-p-top_x-small">
+                        <div class="slds-p-top_x-small slds-p-bottom_x-small slds-has-flexi-truncate">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <img class="slds-is-relative slds-icon" src="{!$Resource.docusignfields}"/>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="slds-text-heading_small">
+                                        <b>{!$Label.c.WhatYouWillNeedStep3Title}</b>
+                                    </div>
+                                    <p>
+                                    <div class="slds-text-body_regular">
+                                        {!$Label.c.WhatYouWillNeedStep3Info}
+                                    </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <aura:set attribute="footerButtons">
+                <div class="slds-grid slds-grid_align-spread">
+                    <div class="slds-col">
+                        <lightning:input type="checkbox" label="{!$Label.c.DontShowThisAgain}"
+                                         aura:id="dontShowAgainCheckBox"
+                                         onchange="{!c.updateWhatYouWillNeedModalSettings}">
+                        </lightning:input>
                     </div>
-                </li>
-            </ul>
-        </div>
-        <aura:set attribute="footerButtons">
-            <div class="slds-grid slds-grid_align-spread">
-                <div class="slds-col">
-                    <lightning:input type="checkbox" label="{!$Label.c.DontShowThisAgain}"
-                                     aura:id="dontShowAgainCheckBox"
-                                     onchange="{!c.updateWhatYouWillNeedModalSettings}">
-                    </lightning:input>
+                    <div class="slds-col">
+                        <lightning:button label="{!$Label.c.ContinueLabel}" variant="brand"
+                                          onclick="{!c.closeWhatYouWillNeedModal}"/>
+                    </div>
                 </div>
-                <div class="slds-col">
-                    <lightning:button label="{!$Label.c.ContinueLabel}" variant="brand"
-                                      onclick="{!c.closeWhatYouWillNeedModal}"/>
+            </aura:set>
+        </c:strike_modal>
+        <!-- What You Will Need Modal -->
+
+        <!-- Edit Modal -->
+        <c:strike_modal aura:id="edit-modal" title="{!$Label.c.EditModalTitle}" primaryButtonLabel="{!$Label.c.Save}"
+                        strike_evt_modalPrimaryButtonClicked="{!c.saveDetails}">
+            <div class="slds-form_stacked">
+                <lightning:input label="{!$Label.c.NameLabel}" aura:id="record-name-input" maxlength="80"/>
+            </div>
+        </c:strike_modal>
+        <!-- /Edit Modal -->
+
+        <!-- Cancel Modal -->
+        <c:strike_modal aura:id="exitModal" title="{!$Label.c.CancelModalTitle}">
+            <p class="slds-text-align_center">
+                {!$Label.c.CancelModalMessage}
+            </p>
+            <aura:set attribute="footerButtons">
+                <lightning:button label="{!$Label.c.DontSave}" onclick="{!c.goToRecord}"/>
+                <lightning:button label="{!$Label.c.Save}" variant="brand" onclick="{!c.saveAndNavigate}"/>
+            </aura:set>
+        </c:strike_modal>
+        <!-- /Cancel Modal -->
+
+        <!-- Toast -->
+        <div aura:id="copy-toast" class="{!'ds-toast slds-notify_container' + if(v.showToast, ' ds-toast_shown')}">
+            <div class="{!'slds-notify slds-notify_toast slds-theme_' + v.toastVariant}" role="status">
+                <lightning:icon iconName="{!'utility:' + v.toastVariant}" variant="inverse"
+                                class="slds-m-right_small slds-no-flex slds-align-top"
+                                size="small"/>
+                <div class="slds-notify__content">
+                    <h3 class="slds-text-heading_small">{!v.toastMsg}</h3>
                 </div>
+
+                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse"
+                        title="{!$Label.c.Close}"
+                        onclick="{!c.hideToast}">
+                    <lightning:buttonIcon class="ds-icon-fix" iconName="utility:close"
+                                          alternativeText="{!$Label.c.Close}"
+                                          size="large" variant="bare-inverse"/>
+                    <span class="slds-assistive-text">{!$Label.c.Close}</span>
+                </button>
             </div>
-        </aura:set>
-    </c:strike_modal>
-    <!-- What You Will Need Modal -->
-
-    <!-- Edit Modal -->
-    <c:strike_modal aura:id="edit-modal" title="{!$Label.c.EditModalTitle}" primaryButtonLabel="{!$Label.c.Save}"
-                    strike_evt_modalPrimaryButtonClicked="{!c.saveDetails}">
-        <div class="slds-form_stacked">
-            <lightning:input label="{!$Label.c.NameLabel}" aura:id="record-name-input" maxlength="80"/>
         </div>
-    </c:strike_modal>
-    <!-- /Edit Modal -->
-
-    <!-- Cancel Modal -->
-    <c:strike_modal aura:id="exitModal" title="{!$Label.c.CancelModalTitle}">
-        <p class="slds-text-align_center">
-            {!$Label.c.CancelModalMessage}
-        </p>
-        <aura:set attribute="footerButtons">
-            <lightning:button label="{!$Label.c.DontSave}" onclick="{!c.goToRecord}"/>
-            <lightning:button label="{!$Label.c.Save}" variant="brand" onclick="{!c.saveAndNavigate}"/>
-        </aura:set>
-    </c:strike_modal>
-    <!-- /Cancel Modal -->
-
-    <!-- Toast -->
-    <div aura:id="copy-toast" class="{!'ds-toast slds-notify_container' + if(v.showToast, ' ds-toast_shown')}">
-        <div class="{!'slds-notify slds-notify_toast slds-theme_' + v.toastVariant}" role="status">
-            <lightning:icon iconName="{!'utility:' + v.toastVariant}" variant="inverse"
-                            class="slds-m-right_small slds-no-flex slds-align-top"
-                            size="small"/>
-            <div class="slds-notify__content">
-                <h3 class="slds-text-heading_small">{!v.toastMsg}</h3>
-            </div>
-
-            <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse"
-                    title="{!$Label.c.Close}"
-                    onclick="{!c.hideToast}">
-                <lightning:buttonIcon class="ds-icon-fix" iconName="utility:close" alternativeText="{!$Label.c.Close}"
-                                      size="large" variant="bare-inverse"/>
-                <span class="slds-assistive-text">{!$Label.c.Close}</span>
-            </button>
-        </div>
-    </div>
-    <!-- /Toast -->
+        <!-- /Toast -->
 
 </aura:component>
