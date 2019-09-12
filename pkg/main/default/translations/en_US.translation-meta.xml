@@ -3733,6 +3733,102 @@
 		<label>email</label>
 		<name>Email</name>
 	</customLabels>
+	<customLabels>
+		<label>Active</label>
+		<name>Active</name>
+	</customLabels>
+	<customLabels>
+		<label>DontShowThisAgain</label>
+		<name>DontShowThisAgain</name>
+	</customLabels>
+	<customLabels>
+		<label>ViewDocumentButton</label>
+		<name>ViewDocumentButton</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailBody</label>
+		<name>ExternalReviewFailureEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailHeader</label>
+		<name>ExternalReviewFailureEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailSubject_1</label>
+		<name>ExternalReviewFailureEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewSenderEmailBody_1</label>
+		<name>ExpiredReviewSenderEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewSenderEmailSubject</label>
+		<name>ExpiredReviewSenderEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Open Agreement</label>
+		<name>OpenAgreementButton</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailSubject_1</label>
+		<name>CompletedReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailHeader</label>
+		<name>CompletedReviewEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailBody_1</label>
+		<name>CompletedReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewReviewerEmailBody_1</label>
+		<name>ExpiredReviewReviewerEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewReviewerEmailSubject</label>
+		<name>ExpiredReviewReviewerEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewHeader_1</label>
+		<name>ExpiredReviewHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailBody_1</label>
+		<name>CanceledReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailSubject_1</label>
+		<name>CanceledReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailHeader_1</label>
+		<name>CanceledReviewEmailHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Folder Contents</label>
+		<name>FolderContents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Account Object</label>
+		<name>AccountObject</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Map Error</label>
+		<name>MapError</name>
+	</customLabels>
+	<customLabels>
+		<label>Click to add</label>
+		<name>ClickToAdd</name>
+	</customLabels>
+	<customLabels>
+		<label>Search Fields</label>
+		<name>SearchFields</name>
+	</customLabels>
+	<customLabels>
+		<label>AddFilterLabel</label>
+		<name>AddFilterLabel</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
