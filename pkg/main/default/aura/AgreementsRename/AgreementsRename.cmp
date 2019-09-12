@@ -22,14 +22,14 @@
                 <c:BlueSpinner/>
             </div>
         </aura:if>
-        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground') + if(empty)}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"
                                      value="{!v.agreementDetails.name}"
                                      maxlength="255"
                                      messageWhenValueMissing="{!$Label.c.RequiredField}"
-                                     pattern="^[^&#060;&#062;&#166;&#124;:&#34;\.\/\\;&#063;&#042;]*$"
+                                     pattern="^(&#063;&#033;\s)([^&#060;&#062;&#166;&#124;:&#34;\.\/\\;&#063;&#042;])*$"
                                      messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
                                      required="true"
                                      disabled="{!v.loading}" onchange="{!c.onNameChange}"/>
