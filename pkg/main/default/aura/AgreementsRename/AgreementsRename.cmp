@@ -22,7 +22,7 @@
                 <c:BlueSpinner/>
             </div>
         </aura:if>
-        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground') + if(empty)}">
+        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <lightning:input aura:id="renameTextField" label="{!$Label.c.AgreementName}"
