@@ -1,12 +1,12 @@
 <aura:component extends="c:CLMUtility">
-    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}" />
-    <aura:attribute name="summary" type="String" default="{!$Label.c.HelpInfoBody}" />
-    <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}" />
-    <aura:attribute name="isGray" type="Boolean" default="false" />
-    <aura:attribute name="hasHyperlink" type="Boolean" default="false" />
-    <aura:attribute name="hyperlinkedText" type="String" />
-    <aura:attribute name="hyperlinkedSummary1" type="String" />
-    <aura:attribute name="hyperlinkedSummary2" type="String" />
+    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}"/>
+    <aura:attribute name="summary" type="String" default="{!$Label.c.HelpInfoBody}"/>
+    <aura:attribute name="title" type="String" default="{!$Label.c.HavingTrouble}"/>
+    <aura:attribute name="isGray" type="Boolean" default="false"/>
+    <aura:attribute name="hasHyperlink" type="Boolean" default="false"/>
+    <aura:attribute name="hyperlinkedText" type="String"/>
+    <aura:attribute name="hyperlinkedSummary1" type="String"/>
+    <aura:attribute name="hyperlinkedSummary2" type="String"/>
 
     <lightning:card class="{!v.isGray ? 'slds-m-top_none ds-gray-color' : 'slds-m-top_none'}">
         <div class="{!v.isGray ? 'slds-grid ds-gray-color' : 'slds-grid'}">

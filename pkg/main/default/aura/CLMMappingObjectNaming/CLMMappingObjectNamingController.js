@@ -107,7 +107,7 @@
 	closePopUp: function (component) {
 		component.set('v.showPopup', false);
 	},
-	
+
 	openWhyExample: function (component) {
 		component.set('v.showPopup', true);
 	}
