@@ -30,7 +30,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_clone_undefined_id() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			Test.startTest();
 			try {
 				GenService.clone(null);
@@ -44,7 +46,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_clone_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			GenTemplate__c t = TestUtils.createGenTemplate(Contact.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(t.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(t.Id);
@@ -106,7 +110,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_createBlankTemplate_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			Test.startTest();
 			Gen.Template result = GenService.createBlankTemplate();
 			Test.stopTest();
@@ -232,7 +238,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveTemplate_undefined_template() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			Test.startTest();
 			try {
 				GenService.saveTemplate(null);
@@ -246,7 +254,9 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveTemplate_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			GenTemplate__c gtt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			gtt.Name = TestUtils.randomString(12);
 			gtt.SourceObject__c = 'Opportunity';

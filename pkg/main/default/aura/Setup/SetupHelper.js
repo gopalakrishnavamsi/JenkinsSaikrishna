@@ -114,6 +114,8 @@
           }
         }))
         .catch(function (error) {
+          var showSetupComponent = component.get('v.showSetupComponent');
+          showSetupComponent();
           helper.showToast(component, error, 'error');
         });
     }

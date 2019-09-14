@@ -24,7 +24,7 @@
     var self = this;
     action.setParams({
       documentId: agreementDetails.id.value,
-      documentName: agreementDetails.name + '.' + agreementDetails.extension
+      documentName: agreementDetails.name.trim() + '.' + agreementDetails.extension
     });
     action.setCallback(this, function(response) {
       if (response.getState() === 'SUCCESS') {
