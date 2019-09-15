@@ -2218,7 +2218,7 @@
 		<name>OriginalVersion</name>
 	</customLabels>
 	<customLabels>
-		<label>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</label>
+		<label>Once you have mapped your Salesforce objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</label>
 		<name>AddLayoutInfo</name>
 	</customLabels>
 	<customLabels>
@@ -2230,11 +2230,11 @@
 		<name>AutomateDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>Save time with contract generation by merging your data into custom template.</label>
+		<label>Save time with contract generation by merging your data into custom templates.</label>
 		<name>AutomateDocumentGenerationBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Automates tasks, route contracts, and reduce human error with DocuSign CLM&apos;s workflow.</label>
+		<label>Automate tasks, route contracts and reduce human error with DocuSign CLM&apos;s workflows.</label>
 		<name>AutomateYourProcessesBody</name>
 	</customLabels>
 	<customLabels>
@@ -2254,7 +2254,7 @@
 		<name>ChooseLocation</name>
 	</customLabels>
 	<customLabels>
-		<label>Choosing a location for your object folder keeps your document organized. Later, you can customize Salesforce to view your CLM folder contents from within Salesforce.</label>
+		<label>Choosing a location for your object folder keeps your document organized. Later, you can customize layouts to view your CLM folder contents from within Salesforce.</label>
 		<name>ChooseLocationBody</name>
 	</customLabels>
 	<customLabels>
@@ -2322,8 +2322,16 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</label>
 		<name>HelpInfoBody</name>
+	</customLabels>
+	<customLabels>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a</label>
+		<name>HelpInfoBodyPart1</name>
+	</customLabels>
+	<customLabels>
+		<label>page to provide answer to common questions to DocuSign Agreements.</label>
+		<name>HelpInfoBodyPart2</name>
 	</customLabels>
 	<customLabels>
 		<label>Home</label>
@@ -2366,7 +2374,7 @@
 		<name>NameObjectFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>We recommend that you always name the folder after a field associated with the mapped Salesforce object. That way the folder will update when your object data updates.</label>
+		<label>We recommend that you always name the folder after a field associated with your mapped Salesforce object. That way the folder will update when your object data updates.</label>
 		<name>NameObjectFolderBody</name>
 	</customLabels>
 	<customLabels>
@@ -2398,7 +2406,7 @@
 		<name>OptimizeDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</label>
+		<label>DocuSign CLM keeps your contracts in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</label>
 		<name>OrganizeAndSearchDocumentsBody</name>
 	</customLabels>
 	<customLabels>
@@ -2422,7 +2430,7 @@
 		<name>PickAFieldTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping process.</label>
+		<label>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the CLM object mapping process.</label>
 		<name>PickObjectBody</name>
 	</customLabels>
 	<customLabels>
@@ -2450,7 +2458,7 @@
 		<name>RemoveMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</label>
+		<label>Once you remove an object mapping. You will no longer be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</label>
 		<name>RemoveModalBody</name>
 	</customLabels>
 	<customLabels>
@@ -2462,7 +2470,7 @@
 		<name>RunReportsAndAnalyticsTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</label>
+		<label>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generate documents using your Salesforce data.</label>
 		<name>MapObjectsSummary</name>
 	</customLabels>
 	<customLabels>
@@ -2470,7 +2478,7 @@
 		<name>SelectObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and readline important documents when negotiating.</label>
+		<label>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and redline important documents when negotiating.</label>
 		<name>ShareAndCollaborateBody</name>
 	</customLabels>
 	<customLabels>
@@ -2482,7 +2490,7 @@
 		<name>SpeedUpDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your document get reviewed.</label>
+		<label>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your documents get reviewed.</label>
 		<name>TrackDocumentStatusAndActivityBody</name>
 	</customLabels>
 	<customLabels>
@@ -2618,11 +2626,7 @@
 		<name>DefaultAccountFolderName</name>
 	</customLabels>
 	<customLabels>
-		<label>/Salesforce/Accounts/</label>
-		<name>DefaultAccountObjectMappingPath</name>
-	</customLabels>
-	<customLabels>
-		<label>/Salesforce/Accounts</label>
+		<label>/Salesforce/Account/</label>
 		<name>DefaultAccountPathFormat</name>
 	</customLabels>
 	<customLabels>
@@ -2638,11 +2642,11 @@
 		<name>DefaultOpportunityFolderName</name>
 	</customLabels>
 	<customLabels>
-		<label>/Salesforce/Accounts/{!Account.Name}/Opportunities</label>
+		<label>/Salesforce/Account/{!Account.Name}/Opportunity</label>
 		<name>DefaultOpportunityObjectMappingPath</name>
 	</customLabels>
 	<customLabels>
-		<label>/Salesforce/Accounts/{0}/Opportunities</label>
+		<label>/Salesforce/Account/{0}/Opportunity</label>
 		<name>DefaultOpportunityPathFormat</name>
 	</customLabels>
 	<customLabels>
@@ -2890,7 +2894,7 @@
 		<name>NameYourSubFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
+		<label>Type in for a static name or add fields to create a variable name for your sub-folder. Then click confirm once done.</label>
 		<name>NameSubFolderSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3732,6 +3736,106 @@
 	<customLabels>
 		<label>email</label>
 		<name>Email</name>
+	</customLabels>
+	<customLabels>
+		<label>Type in or select a field below to name the subfolder</label>
+		<name>SelectFieldToNameTheSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Active</label>
+		<name>Active</name>
+	</customLabels>
+	<customLabels>
+		<label>DontShowThisAgain</label>
+		<name>DontShowThisAgain</name>
+	</customLabels>
+	<customLabels>
+		<label>ViewDocumentButton</label>
+		<name>ViewDocumentButton</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailBody</label>
+		<name>ExternalReviewFailureEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailHeader</label>
+		<name>ExternalReviewFailureEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>ExternalReviewFailureEmailSubject_1</label>
+		<name>ExternalReviewFailureEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewSenderEmailBody_1</label>
+		<name>ExpiredReviewSenderEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewSenderEmailSubject</label>
+		<name>ExpiredReviewSenderEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Open Agreement</label>
+		<name>OpenAgreementButton</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailSubject_1</label>
+		<name>CompletedReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailHeader</label>
+		<name>CompletedReviewEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>CompletedReviewEmailBody_1</label>
+		<name>CompletedReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewReviewerEmailBody_1</label>
+		<name>ExpiredReviewReviewerEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewReviewerEmailSubject</label>
+		<name>ExpiredReviewReviewerEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>ExpiredReviewHeader_1</label>
+		<name>ExpiredReviewHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailBody_1</label>
+		<name>CanceledReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailSubject_1</label>
+		<name>CanceledReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CanceledReviewEmailHeader_1</label>
+		<name>CanceledReviewEmailHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Folder Contents</label>
+		<name>FolderContents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Account Object</label>
+		<name>AccountObject</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Map Error</label>
+		<name>MapError</name>
+	</customLabels>
+	<customLabels>
+		<label>Click to add</label>
+		<name>ClickToAdd</name>
+	</customLabels>
+	<customLabels>
+		<label>Search Fields</label>
+		<name>SearchFields</name>
+	</customLabels>
+	<customLabels>
+		<label>AddFilterLabel</label>
+		<name>AddFilterLabel</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

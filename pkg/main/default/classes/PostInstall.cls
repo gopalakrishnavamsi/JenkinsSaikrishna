@@ -194,7 +194,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	private static void insertDefaultCLMObjMappings() {
 		EOS_Type__c eos_Account = new EOS_Type__c();
 		eos_Account.FolderName__c = Label.DefaultAccountFolderName;
-		eos_Account.Path__c = Label.DefaultAccountObjectMappingPath;
+		eos_Account.Path__c = Label.DefaultAccountPathFormat;
 		eos_Account.FolderNameFormat__c = Label.DefaultFolderNameFormat;
 		eos_Account.Variables__c = Label.DefaultAccountVariables;
 		eos_Account.PathFormat__c = Label.DefaultAccountPathFormat;

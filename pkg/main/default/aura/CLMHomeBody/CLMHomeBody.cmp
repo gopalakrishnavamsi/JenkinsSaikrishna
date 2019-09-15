@@ -1,10 +1,10 @@
 <aura:component extends="c:CLMUtility" controller="CLMApexUtility">
-    <ltng:require scripts="{!$Resource.navUtils}" />
+    <ltng:require scripts="{!$Resource.navUtils}"/>
 
     <!--event handlers-->
-    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}" />
+    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>
     <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
-        action="{!c.onSecondaryButtonClick}" />
+        action="{!c.onSecondaryButtonClick}"/>
 
     <div class="slds-grid slds-grid_vertical">
         <div class="slds-col slds-m-around_medium">
@@ -38,7 +38,9 @@
                 summary="{!$Label.c.UserManagementInfo}" />
         </div>
         <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot isGray="true" />
+            <c:CLMTroubleshoot imageURL="{!($Resource.CLMHavingTrouble)}" title="{!$Label.c.HavingTrouble}"
+                hyperlinkedSummary1="{!$Label.c.HelpInfoBodyPart1}" hyperlinkedSummary2="{!$Label.c.HelpInfoBodyPart2}"
+                hasHyperlink="true" hyperlinkedText="{!$Label.c.Help}" isGray="true" />
         </div>
     </div>
 </aura:component>

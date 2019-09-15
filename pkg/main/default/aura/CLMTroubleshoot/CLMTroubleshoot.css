@@ -1,8 +1,8 @@
-.THIS .ds-card-heading{
-    color:t(colorTextLinkActive);
-    font-size:1.25rem;
+.THIS .ds-card-heading {
+	color: t(colorTextLinkActive);
+	font-size: 1.25rem;
 }
-.THIS .ds-gray-color {   
-    background-color: #FAFAFB;
-    border-radius: t(borderRadiusMedium);    
+.THIS .ds-gray-color {
+	background-color: t(colorBackground) !important;
+	border-radius: t(borderRadiusMedium);
 }

@@ -62,7 +62,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Add Layout Info</shortDescription>
-		<value>Once you have mapped your Salesforce Objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</value>
+		<value>Once you have mapped your Salesforce objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</value>
 	</labels>
 	<labels>
 		<fullName>AddRecipient</fullName>
@@ -198,7 +198,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Automate Document Generation Body</shortDescription>
-		<value>Save time with contract generation by merging your data into custom template.</value>
+		<value>Save time with contract generation by merging your data into custom templates.</value>
 	</labels>
 	<labels>
 		<fullName>AutomateYourProcessesBody</fullName>
@@ -206,7 +206,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Automate Your Processes Body</shortDescription>
-		<value>Automates tasks, route contracts, and reduce human error with DocuSign CLM&apos;s workflow.</value>
+		<value>Automate tasks, route contracts and reduce human error with DocuSign CLM&apos;s workflows.</value>
 	</labels>
 	<labels>
 		<fullName>AutomateYourProcessesTitle</fullName>
@@ -447,7 +447,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Location Body</shortDescription>
-		<value>Choosing a location for your object folder keeps your document organized. Later, you can customize Salesforce to view your CLM folder contents from within Salesforce.</value>
+		<value>Choosing a location for your object folder keeps your document organized. Later, you can customize layouts to view your CLM folder contents from within Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>ChooseLocationTitle</fullName>
@@ -1122,7 +1122,23 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Applications.</value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
+	</labels>
+	<labels>
+		<fullName>HelpInfoBodyPart1</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Help Info Body</shortDescription>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a </value>
+	</labels>
+	<labels>
+		<fullName>HelpInfoBodyPart2</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Help Info Body 2</shortDescription>
+		<value>page to provide answer to common questions to DocuSign Agreements.</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -1521,7 +1537,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Map Objects summary</shortDescription>
-		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generates documents using Salesforce data.</value>
+		<value>Map Salesforce objects to DocuSign CLM first. Then you can create templates and generate documents using your Salesforce data.</value>
 	</labels>
 	<labels>
 		<fullName>MappedObjects</fullName>
@@ -3147,7 +3163,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Name Object Folder Body</shortDescription>
-		<value>We recommend that you always name the folder after a field associated with the mapped Salesforce object. That way the folder will update when your object data updates.</value>
+		<value>We recommend that you always name the folder after a field associated with your mapped Salesforce object. That way the folder will update when your object data updates.</value>
 	</labels>
 	<labels>
 		<fullName>NameObjectFolderTitle</fullName>
@@ -4662,7 +4678,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Organize And Search Documents Body</shortDescription>
-		<value>DocuSign CLM keeps your contract in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</value>
+		<value>DocuSign CLM keeps your contracts in one place. With advanced settings, you can add or import attributes to every document to keep things organized.</value>
 	</labels>
 	<labels>
 		<fullName>OrganizeAndSearchDocumentsTitle</fullName>
@@ -4710,7 +4726,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Pick Object Body</shortDescription>
-		<value>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the DocuSign CLM object mapping process.</value>
+		<value>Salesforce has 1000s of objects, but you only need few important ones to source your data from when you&apos;re creating contracts. Picking those important objects one at a time will start the CLM object mapping process.</value>
 	</labels>
 	<labels>
 		<fullName>PickObjectTitle</fullName>
@@ -4766,7 +4782,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Remove Modal Body</shortDescription>
-		<value>Once you remove an object mapping. You will no linger be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
+		<value>Once you remove an object mapping. You will no longer be able to use that object&apos;s data in DocuSign CLM. Are you sure you want to remove this object from your mapping?</value>
 	</labels>
 	<labels>
 		<fullName>RunReportsAndAnalyticsBody</fullName>
@@ -4798,7 +4814,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Share And Collaborate Body</shortDescription>
-		<value>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and readline important documents when negotiating.</value>
+		<value>Collaborate with confidence thanks to DocuSign CLM&apos;s versioning capabilities. You&apos;ll be able to capture feedback and redline important documents when negotiating.</value>
 	</labels>
 	<labels>
 		<fullName>ShareAndCollaborateTitle</fullName>
@@ -4822,7 +4838,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Track Document Status And Activity Body</shortDescription>
-		<value>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your document get reviewed.</value>
+		<value>You&apos;ll be able to track every document through the contract lifecycle. Assign tasks, track how long approvals are taking, and control how your documents get reviewed.</value>
 	</labels>
 	<labels>
 		<fullName>TrackDocumentStatusAndActivityTitle</fullName>
@@ -5076,7 +5092,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Account Object Mapping Path</shortDescription>
-		<value>/Salesforce/Accounts/</value>
+		<value>/Salesforce/Account/</value>
 	</labels>
 	<labels>
 		<fullName>DefaultAccountPathFormat</fullName>
@@ -5084,7 +5100,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Account Path Format</shortDescription>
-		<value>/Salesforce/Accounts</value>
+		<value>/Salesforce/Account</value>
 	</labels>
 	<labels>
 		<fullName>DefaultAccountVariables</fullName>
@@ -5116,7 +5132,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Opportunity Object Mapping Path</shortDescription>
-		<value>/Salesforce/Accounts/{!Account.Name}/Opportunities</value>
+		<value>/Salesforce/Account/{!Account.Name}/Opportunity</value>
 	</labels>
 	<labels>
 		<fullName>DefaultOpportunityPathFormat</fullName>
@@ -5124,7 +5140,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Default Opportunity Path Format</shortDescription>
-		<value>/Salesforce/Accounts/{0}/Opportunities</value>
+		<value>/Salesforce/Account/{0}/Opportunity</value>
 	</labels>
 	<labels>
 		<fullName>DefaultOpportunityVariables</fullName>
@@ -5616,7 +5632,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Name your sub-folder summary</shortDescription>
-		<value>Type in for a static or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
+		<value>Type in for a static name or add fields to create a variable name for your sub-folder. Then click confirm once done.</value>
 	</labels>
 	<labels>
 		<fullName>NameSubFolder</fullName>
@@ -7325,5 +7341,13 @@
 		<protected>true</protected>
 		<shortDescription>Email</shortDescription>
 		<value>email</value>
+	</labels>
+	<labels>
+		<fullName>SelectFieldToNameTheSubFolder</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Type in or select a field below to name the subfolder</shortDescription>
+		<value>Type in or select a field below to name the subfolder</value>
 	</labels>
 </CustomLabels>
