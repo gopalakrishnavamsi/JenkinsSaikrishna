@@ -52,5 +52,9 @@
 
   removeFocusCatcher: function(component, event) {
     event.currentTarget.remove();
+  },
+
+  sendForSignature: function(component,event, helper) {
+    helper.sendForSignature(component)
   }
 });

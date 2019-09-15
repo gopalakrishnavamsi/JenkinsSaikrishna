@@ -539,5 +539,21 @@
     });
 
     $A.enqueueAction(action);
+  },
+
+  sendForSignature: function(component) {
+    var sendForSignatureAction = component.get('c.getSendForSignatureLink');
+    sendForSignatureAction.setParams({
+      sourceId: component.get('v.recordId')
+    });
+    sendForSignatureAction.setCallback(this, function(response) {
+      if (response.getState() === 'SUCCESS') {
+       navUtils.navigateToUrl(response.getReturnValue());
+      } else {
+        component.set('v.errType', 'error');
+        component.set('v.errMsg', stringUtils.getErrorMessage(response));
+      }
+    });
+    $A.enqueueAction(sendForSignatureAction);
   }
 });

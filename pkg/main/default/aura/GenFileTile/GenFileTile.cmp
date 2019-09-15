@@ -7,20 +7,22 @@
 
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
-    <div class="slds-box slds-box_small slds-theme_shade slds-text-align_left slds-is-relative">
-        <div class="slds-media slds-media_center">
-            <div class="slds-media__figure">
-                <!-- File Icon -->
-                <c:IconByFileExtension extension="{!v.file.extension}"/>
-                <!-- /File Icon -->
-            </div>
-            <div class="slds-media__content slds-has-flexi-truncate">
-                <p class="slds-truncate" title="{!v.file.title}">
-                    <a href="javascript:void(0)" onclick="{!c.previewFile}">{!v.file.title}</a>
-                </p>
-                <p class="slds-text-body__small slds-text-color_weak">{!v.fileSize} &bull; {!v.file.extension}</p>
-            </div>
-        </div>
+        <li class="slds-item slds-p-vertical_small">
+            <article class="slds-tile slds-media">
+                <div class="slds-media__figure">
+                    <c:IconByFileExtension extension="{!v.file.extension}"/>
+                    <!-- /File Icon -->
+                </div>
+                <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="{!v.file.title}">
+                        <a href="javascript:void(0)" onclick="{!c.previewFile}">{!v.file.title}</a>
+                    </h3>
+                    <div class="slds-tile__detail slds-truncate">
+                        {!v.fileSize} • {!v.file.extension}
+                    </div>
+                </div>
+            </article>
+        </li>
         <aura:if isTrue="{!v.isEdit}">
             <div class="slds-grid slds-gutters_x-small slds-m-top_small">
                 <div class="slds-col">
@@ -42,6 +44,5 @@
                 </div>
             </div>
         </aura:if>
-    </div>
 
 </aura:component>

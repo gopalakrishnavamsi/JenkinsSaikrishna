@@ -16,6 +16,10 @@
     position: relative;
 }
 
+.THIS .dsSalesforceFileSelction_container {
+    max-height: 300px;
+}
+
 .THIS .dsImport-spinner_setupFileUpload::after {
     position: absolute;
     content: 'Setting up Upload Widget';

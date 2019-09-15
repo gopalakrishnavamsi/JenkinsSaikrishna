@@ -1,7 +1,6 @@
 <aura:component controller="GenController">
 
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-
+    <ltng:require scripts="{!join(',',$Resource.stringUtils,$Resource.navUtils)}"/>
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="cvTitleByJobId" type="Object"/>
     <aura:attribute name="lookupObjs" type="Object[]"/>
@@ -28,7 +27,7 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
-   
+
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
 
@@ -53,7 +52,7 @@
         </aura:if>
 
           <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/> 
+                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
 
         <aura:if isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
             <aura:if isTrue="{!or(v.isLoading, v.isGenerating)}">
@@ -66,8 +65,8 @@
                             <aura:if isTrue="{!v.isPreview}">
                                 {!$Label.c.GeneratorComeBackMsg}
                                 <aura:set attribute="else">
-									{!$Label.c.GeneratorTooLongMsg}
-								</aura:set>
+                                    {!$Label.c.GeneratorTooLongMsg}
+                                </aura:set>
                             </aura:if>
                         </div>
                     </aura:if>
@@ -141,49 +140,56 @@
                 </aura:if>
 
                 <aura:if isTrue="{!v.finishedGenerating}">
-                    <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-box')}">
-                        <div class="slds-notify_container slds-is-static">
-                            <div class="{!'ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
-                                 role="alert">
-                                <lightning:icon iconName="{!'utility:' + v.bannerState}" variant="inverse" size="small"
-                                                class="slds-m-right_small slds-no-flex slds-align-top"/>
-                                <div class="slds-notify__content">
-                                    <h2 class="slds-text-heading_small">{!v.bannerMsg}</h2>
+                    <div class="ds-genModal">
+                        <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-modal_container')}">
+                            <div class="slds-notify_container slds-is-static">
+                                <div class="{!'ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
+                                     role="alert">
+                                    <lightning:icon iconName="{!'utility:' + v.bannerState}" variant="inverse"
+                                                    size="small"
+                                                    class="slds-m-right_small slds-no-flex slds-align-top"/>
+                                    <div class="slds-notify__content">
+                                        <h2 class="slds-text-heading_small">{!v.bannerMsg}</h2>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <p class="{!'slds-m-top_x-small slds-grid slds-grid_align-center'+if(v.isPreview, ' slds-hide', '')}">The files below have been successfully generated and can now
+                                be sent for signature</p>
+                            <div class="slds-modal__content slds-has-flexi-truncate ds-genFileContent slds-box">
+                                <!-- File -->
+                                <aura:iteration items="{!v.generatedFiles}" var="file">
+                                    <ul class="slds-has-dividers_bottom-space">
+                                        <aura:if isTrue="{!not(empty(file))}">
+                                            <c:GenFileTile file="{!file}" isEdit="{!false}" isClassic="{!v.isClassic}"/>
+                                        </aura:if>
+                                    </ul>
+                                </aura:iteration>
+                                <!-- /File -->
 
-                        <div
-                                class="slds-grid slds-wrap slds-grid_align-center slds-m-top_small slds-grid_pull-padded-x-small">
-                            <!-- File -->
-                            <aura:iteration items="{!v.generatedFiles}" var="file">
-                                <div
-                                        class="ds-generated-file slds-col slds-p-horizontal_x-small slds-m-vertical_x-small">
-                                    <aura:if isTrue="{!not(empty(file))}">
-                                        <c:GenFileTile file="{!file}" isEdit="{!false}" isClassic="{!v.isClassic}"/>
-                                    </aura:if>
-                                </div>
-                            </aura:iteration>
-                            <!-- /File -->
-                        </div>
-
-                        <!-- Failed Files -->
-                        <aura:if isTrue="{!not(empty(v.failedFiles))}">
-                            <div class="slds-m-top_small slds-text-align_left">
-                                <lightning:icon class="ds-icon-fix slds-m-right_xx-small" iconName="utility:warning"
-                                                variant="warning" size="x-small"/>
-                                {!$Label.c.GenerateFileFailMsg}
-                                <ul class="slds-list_dotted">
-                                    <aura:iteration items="{!v.failedFiles}" var="failedFile">
-                                        <li class="slds-item slds-m-top_xx-small">
-                                            <p><strong>{!failedFile.title}</strong></p>
-                                            <p>{!failedFile.message}</p>
-                                        </li>
-                                    </aura:iteration>
-                                </ul>
+                                <!-- Failed Files -->
+                                <aura:if isTrue="{!not(empty(v.failedFiles))}">
+                                    <div class="slds-m-top_small slds-text-align_left">
+                                        <lightning:icon class="ds-icon-fix slds-m-right_xx-small"
+                                                        iconName="utility:warning"
+                                                        variant="warning" size="x-small"/>
+                                        {!$Label.c.GenerateFileFailMsg}
+                                        <ul class="slds-list_dotted">
+                                            <aura:iteration items="{!v.failedFiles}" var="failedFile">
+                                                <li class="slds-item slds-m-top_xx-small">
+                                                    <p><strong>{!failedFile.title}</strong></p>
+                                                    <p>{!failedFile.message}</p>
+                                                </li>
+                                            </aura:iteration>
+                                        </ul>
+                                    </div>
+                                </aura:if>
+                                <!-- /Failed Files -->
                             </div>
-                        </aura:if>
-                        <!-- /Failed Files -->
+                            <div class="{!'slds-modal__footer ds-genFooter'+if(v.isPreview, ' slds-hide', '')}">
+                                <lightning:button class="slds-button slds-button_brand" label="Send for signature"
+                                                  onclick="{!c.sendForSignature}"/>
+                            </div>
+                        </div>
                     </div>
                 </aura:if>
             </aura:if>

@@ -94,7 +94,7 @@
                 </aura:if>
 
                 <aura:if isTrue="{!and(v.currentStep == '2', not(v.loading))}">
-                    <div class="slds-col slds-p-horizontal_large">
+                    <div class="slds-col slds-p-horizontal_large dsSalesforceFileSelction_container slds-m-bottom_small">
                         <div class=" slds-text-align_center">
                             {!$Label.c.ChooseSalesforceFiles2}
                         </div>

@@ -159,4 +159,17 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get job status.');
 		}
 	}
+
+	@AuraEnabled
+	public static String getSendForSignatureLink(final Id sourceId) {
+		if (sourceId == null || String.isBlank(sourceId)) throw new DocuSignException(Label.UndefinedArgument);
+		try {
+			Permissions.verifyIsDocuSignUser();
+			ApexPages.PageReference sendingPath = Page.Sending;
+			sendingPath.getParameters().put('sId', StringUtils.encode(sourceId));
+			return new Url(Salesforce.baseUrl, sendingPath.getUrl()).toExternalForm();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate url');
+		}
+	}
 }

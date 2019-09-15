@@ -3785,7 +3785,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GeneratorBannerSuccessMsg</shortDescription>
-		<value>Successfully generated your document</value>
+		<value>New Documents Generated</value>
 	</labels>
 	<labels>
 		<fullName>GeneratorCompletionErrorMsg</fullName>

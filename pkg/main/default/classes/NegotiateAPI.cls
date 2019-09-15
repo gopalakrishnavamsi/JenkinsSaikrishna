@@ -570,8 +570,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			PageReference previewPath = Page.AgreementPreview;
 			previewPath.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
 			previewPath.getParameters().put('agreementId', EncodingUtil.urlEncode(documentId.value, StringUtils.ENCODING));
-
-			return new Url(Salesforce.baseUrl, previewPath.getUrl()).toExternalForm().replace('&', '&amp;');
+			return new Url(Salesforce.baseUrl, previewPath.getUrl()).toExternalForm();
 		} catch (Exception ex) {
 			throw new APIException('Failed to generate Document deep link: ' + ex.getMessage());
 		}
