@@ -3698,6 +3698,10 @@
 		<name>UserAddedSuccessfully</name>
 	</customLabels>
 	<customLabels>
+		<label>Users have been removed and closed successfully.</label>
+		<name>UserClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
