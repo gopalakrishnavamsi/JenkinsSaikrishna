@@ -103,4 +103,12 @@
 		var queryTerm = component.find('search-fileName').get('v.value');
 		helper.passModelText(component, queryTerm, helper);
 	},
+
+	closePopUp: function (component) {
+		component.set('v.showPopup', false);
+	},
+
+	openWhyExample: function (component) {
+		component.set('v.showPopup', true);
+	}
 });
