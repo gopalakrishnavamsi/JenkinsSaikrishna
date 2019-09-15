@@ -13,19 +13,14 @@
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
-    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
-    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
 
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
-    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onInitialize}"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadSetup}"/>
 
     <div aura:id="setupContent" id="ds-setup"></div>
-    <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                            fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
     <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
              visualforce="true"/>
 
