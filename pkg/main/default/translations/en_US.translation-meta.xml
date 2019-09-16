@@ -3714,8 +3714,12 @@
 		<name>UsersAddedSuccessfully</name>
 	</customLabels>
 	<customLabels>
-		<label>Users have been removed and closed successfully.</label>
-		<name>UsersClosedSuccessfully</name>
+		<label>{0} has been removed and closed successfully.</label>
+		<name>SingleUserClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} users have been removed and closed successfully.</label>
+		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
@@ -3854,7 +3858,7 @@
 		<name>SearchFields</name>
 	</customLabels>
 	<customLabels>
-		<label>AddFilterLabel</label>
+		<label>Add filter</label>
 		<name>AddFilterLabel</name>
 	</customLabels>
 	<customPageWebLinks>

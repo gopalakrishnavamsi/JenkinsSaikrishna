@@ -7295,12 +7295,20 @@
 		<value>Selected users have been added successfully.</value>
 	</labels>
 	<labels>
-		<fullName>UsersClosedSuccessfully</fullName>
+		<fullName>SingleUserClosedSuccessfully</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UsersClosedSuccessfully</shortDescription>
-		<value>Users have been removed and closed successfully.</value>
+		<value>{0} has been removed and closed successfully.</value>
+	</labels>
+	<labels>
+		<fullName>MultipleUsersClosedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MultipleUsersClosedSuccessfully</shortDescription>
+		<value>{0} users have been removed and closed successfully.</value>
 	</labels>
 	<labels>
 		<fullName>Component2Summary</fullName>
