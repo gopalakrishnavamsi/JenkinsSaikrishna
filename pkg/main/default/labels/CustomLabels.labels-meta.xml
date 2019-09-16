@@ -4460,7 +4460,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalEmailHeaderTitleText</fullName>
@@ -4488,7 +4488,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalOnBehalfEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalOnBehalfEmailHeaderTitleText</fullName>
@@ -4516,7 +4516,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>RejectOnBehalfEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>RejectOnBehalfEmailHeaderTitleText</fullName>
@@ -4565,7 +4565,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalRejectEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalRejectEmailHeaderTitleText</fullName>
@@ -7287,19 +7287,19 @@
 		<value>Are you sure you want to bulk remove {0} Users from DocuSign?</value>
 	</labels>
 	<labels>
-		<fullName>UserAddedSuccessfully</fullName>
+		<fullName>UsersAddedSuccessfully</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>UserAddedSuccessfully</shortDescription>
+		<shortDescription>UsersAddedSuccessfully</shortDescription>
 		<value>Selected users have been added successfully.</value>
 	</labels>
 	<labels>
-		<fullName>UserClosedSuccessfully</fullName>
+		<fullName>UsersClosedSuccessfully</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>UserClosedSuccessfully</shortDescription>
+		<shortDescription>UsersClosedSuccessfully</shortDescription>
 		<value>Users have been removed and closed successfully.</value>
 	</labels>
 	<labels>

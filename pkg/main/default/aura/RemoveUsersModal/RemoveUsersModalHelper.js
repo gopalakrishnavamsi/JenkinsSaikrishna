@@ -27,7 +27,7 @@
     removeUsersAction.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        helper.showToast(component, $A.get('$Label.c.UserClosedSuccessfully'), 'success');
+        helper.showToast(component, $A.get('$Label.c.UsersClosedSuccessfully'), 'success');
         component.set('v.loading', false);
         helper.reloadUsers(component);
         helper.close(component);

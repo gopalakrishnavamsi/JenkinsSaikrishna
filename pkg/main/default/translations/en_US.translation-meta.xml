@@ -2091,7 +2091,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailBodyText</name>
-		<label>Approve Comments</label>
+		<label>Approval Comments</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailHeaderTitleText</name>
@@ -2107,7 +2107,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalOnBehalfEmailBodyText</name>
-		<label>Approve Comments</label>
+		<label>Approval Comments</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
@@ -2123,7 +2123,7 @@
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailBodyText</name>
-		<label>Approve Comments</label>
+		<label>Approval Comments</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailHeaderTitleText</name>
@@ -2151,7 +2151,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailBodyText</name>
-		<label>Approve Comments</label>
+		<label>Approval Comments</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailHeaderTitleText</name>
@@ -3711,11 +3711,11 @@
 	</customLabels>
 	<customLabels>
 		<label>Selected users have been added successfully.</label>
-		<name>UserAddedSuccessfully</name>
+		<name>UsersAddedSuccessfully</name>
 	</customLabels>
 	<customLabels>
 		<label>Users have been removed and closed successfully.</label>
-		<name>UserClosedSuccessfully</name>
+		<name>UsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
@@ -3766,31 +3766,31 @@
 		<name>Active</name>
 	</customLabels>
 	<customLabels>
-		<label>DontShowThisAgain</label>
+		<label>Don't show this again</label>
 		<name>DontShowThisAgain</name>
 	</customLabels>
 	<customLabels>
-		<label>ViewDocumentButton</label>
+		<label>VIEW DOCUMENT</label>
 		<name>ViewDocumentButton</name>
 	</customLabels>
 	<customLabels>
-		<label>ExternalReviewFailureEmailBody</label>
+		<label>There was a problem with your review request and it was not sent. The issue should resolve itself if you resend the request.</label>
 		<name>ExternalReviewFailureEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>ExternalReviewFailureEmailHeader</label>
+		<label>External Review Failed</label>
 		<name>ExternalReviewFailureEmailHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>ExternalReviewFailureEmailSubject_1</label>
+		<label>We could not send your review request for {0}</label>
 		<name>ExternalReviewFailureEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>ExpiredReviewSenderEmailBody_1</label>
+		<label>The review request for {0} has expired. If you still want someone review this, you will need to send a new review request</label>
 		<name>ExpiredReviewSenderEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>ExpiredReviewSenderEmailSubject</label>
+		<label>Your review request has expired</label>
 		<name>ExpiredReviewSenderEmailSubject</name>
 	</customLabels>
 	<customLabels>
@@ -3798,39 +3798,39 @@
 		<name>OpenAgreementButton</name>
 	</customLabels>
 	<customLabels>
-		<label>CompletedReviewEmailSubject_1</label>
+		<label>Review completed for {0}</label>
 		<name>CompletedReviewEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CompletedReviewEmailHeader</label>
+		<label>Review Complete</label>
 		<name>CompletedReviewEmailHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>CompletedReviewEmailBody_1</label>
+		<label>The review request for {0} has been completed. There is nothing you need to do.</label>
 		<name>CompletedReviewEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>ExpiredReviewReviewerEmailBody_1</label>
+		<label>The review request for {0} has expired. There is nothing you need to do.</label>
 		<name>ExpiredReviewReviewerEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>ExpiredReviewReviewerEmailSubject</label>
+		<label>Your review request has expired</label>
 		<name>ExpiredReviewReviewerEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>ExpiredReviewHeader_1</label>
+		<label>Review request for {0} has expired.</label>
 		<name>ExpiredReviewHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CanceledReviewEmailBody_1</label>
+		<label>Review request for {0} has been canceled. There is nothing you need to do.</label>
 		<name>CanceledReviewEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CanceledReviewEmailSubject_1</label>
+		<label>Review for {0} has been canceled.</label>
 		<name>CanceledReviewEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CanceledReviewEmailHeader_1</label>
+		<label>Review for {0} canceled.</label>
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
