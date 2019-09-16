@@ -7255,12 +7255,52 @@
 		<value>DocuSign Account access</value>
 	</labels>
 	<labels>
+		<fullName>RemoveSingleUserTitle</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveSingleUserTitle</shortDescription>
+		<value>Remove {0}</value>
+	</labels>
+	<labels>
+		<fullName>RemoveBulkUsersTitle</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveBulkUsersTitle</shortDescription>
+		<value>Bulk Remove {0} Users</value>
+	</labels>
+	<labels>
+		<fullName>RemoveSingleUserMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveSingleUserMessage</shortDescription>
+		<value>Are you sure you want to remove {0} from DocuSign?</value>
+	</labels>
+	<labels>
+		<fullName>RemoveBulkUsersMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveBulkUsersMessage</shortDescription>
+		<value>Are you sure you want to bulk remove {0} Users from DocuSign?</value>
+	</labels>
+	<labels>
 		<fullName>UserAddedSuccessfully</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UserAddedSuccessfully</shortDescription>
 		<value>Selected users have been added successfully.</value>
+	</labels>
+	<labels>
+		<fullName>UserClosedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UserClosedSuccessfully</shortDescription>
+		<value>Users have been removed and closed successfully.</value>
 	</labels>
 	<labels>
 		<fullName>Component2Summary</fullName>
