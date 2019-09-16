@@ -1,0 +1,45 @@
+<aura:component description="RemoveUsers" controller="SetupController">
+
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
+    <!--attributes -->
+    <aura:attribute name="modalTitle" type="String"/>
+    <aura:attribute name="modalMessage" type="String"/>
+    <aura:attribute name="userRemovalJson" type="String"/>
+    <aura:attribute name="showModal" type="Boolean"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+
+    <!-- events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="reloadUsersEvent" type="c:ReloadEvent"/>
+
+    <!--component body -->
+    <c:strike_modal aura:id="removeUserModal"
+                    title="{!v.modalTitle}"
+                    showModal="{!v.showModal}">
+
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <c:BlueSpinner size="small"/>
+            </div>
+        </aura:if>
+        <!--modal body -->
+        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col">
+                    <div class="slds-text-align_center">
+                        {!v.modalMessage}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
+                              label="{!$Label.c.Cancel}" disabled="{!v.loading}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.removeClicked}"
+                              label="{!$Label.c.Remove}" disabled="{!v.loading}"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>

@@ -3694,8 +3694,28 @@
 		<name>ApplicationAccountAccessLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>Remove {0}</label>
+		<name>RemoveSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Bulk Remove {0} Users</label>
+		<name>RemoveBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to remove {0} from DocuSign?</label>
+		<name>RemoveSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to bulk remove {0} Users from DocuSign?</label>
+		<name>RemoveBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Selected users have been added successfully.</label>
 		<name>UserAddedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>Users have been removed and closed successfully.</label>
+		<name>UserClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
