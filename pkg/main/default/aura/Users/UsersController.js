@@ -25,7 +25,7 @@
         //TODO: Implement edit permissions single row here
         break;
       case 'remove_close':
-        helper.removeAndCloseSingleUser(component, row, helper);
+        helper.removeAndCloseSingleUser(component, event, helper, row);
         break;
     }
   },
@@ -144,6 +144,10 @@
 
   handleAddUsers: function (component, event, helper) {
     helper.invokeAddUsers(component, event, helper);
+  },
+
+  handleReloadUsers: function (component, event, helper) {
+    helper.initializeComponent(component, event, helper);
   }
 
 });

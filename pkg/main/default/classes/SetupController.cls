@@ -144,18 +144,20 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Account.User> removeUser(
-		final Id sourceId,
-		final String id) {
-
+	public static List<Account.User> removeUsers(final String usersToRemove) {
 		try {
-			if (sourceId == null || String.isBlank(id)) throw new DocuSignException(Label.UndefinedArgument);
+			Permissions.verifyIsDocuSignAdministrator();
+			if (usersToRemove == null || String.isBlank(usersToRemove)) throw new DocuSignException(Label.UndefinedArgument);
 
-			UserService.removeUsers(new List<Account.User> {
-				new Account.User(
-					UUID.parse(id),
-					sourceId)
-			}, true);
+			List<Account.User> usersToRemoveList = new List<Account.User>();
+			List<Map<String, String>> usersToRemoveDeserializedList = (List<Map<String, String>>)JSON.deserialize(usersToRemove, List<Map<String, String>>.class);
+			for (Map<String, String> userToRemoveMapping : usersToRemoveDeserializedList) {
+				usersToRemoveList.add(new Account.User(
+					UUID.parse(userToRemoveMapping.get('id')),
+					userToRemoveMapping.get('sourceId')
+				));
+			}
+			UserService.removeUsers(usersToRemoveList, true);
 
 			return UserService.getUsers(USER_LIMIT);
 		} catch (Exception ex) {
