@@ -621,7 +621,7 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        helper.showToast(component, $A.get('$Label.c.UserAddedSuccessfully'), 'success');
+        helper.showToast(component, $A.get('$Label.c.UsersAddedSuccessfully'), 'success');
         component.set('v.addUsersLoading', false);
         component.find('add-users').hide();
         helper.initializeComponent(component, event, helper);
