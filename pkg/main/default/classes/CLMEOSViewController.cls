@@ -7,7 +7,7 @@ public with sharing class CLMEOSViewController {
     //Constructor called from VF page - CLMEOSView.page
     public CLMEOSViewController() {
         try {
-            Permissions.isClmViewer();
+            Permissions.verifyIsClmViewer();
             hostingUrl = '';
             Id sid = System.currentPageReference().getParameters().get('sid');
             if (sid != NULL) {
@@ -58,7 +58,7 @@ public with sharing class CLMEOSViewController {
     }
     
     private static EOSUrlResult fetchUrl(Id recordId) {
-            Permissions.isClmViewer();            
+            Permissions.verifyIsClmViewer();            
             EOSUrlResult eosResult;
             EOS_Type__c config = CLMService.getCurrentMappingConfig(recordId);  
             if (config==null) {
