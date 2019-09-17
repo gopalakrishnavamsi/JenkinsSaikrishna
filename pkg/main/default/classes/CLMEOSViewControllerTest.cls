@@ -9,7 +9,7 @@ private class CLMEOSViewControllerTest {
     @IsTest
     static void test_constructor_valid() {
         DocuSignAPIMock.success();
-        System.runAs(UserMock.createClmUser()) {            
+        System.runAs(UserMock.createClmViewer()) {            
             EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
             eos.FolderName__c = '{!Account.Name}';
             eos.Path__c = 'Salesforce/Account/{!Account.Phone}/';
@@ -30,7 +30,7 @@ private class CLMEOSViewControllerTest {
     @IsTest
     static void test_constructor_apiError() {
         DocuSignAPIMock.failure();
-        System.runAs(UserMock.createClmUser()) {            
+        System.runAs(UserMock.createClmViewer()) {            
             EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
             eos.FolderName__c = '{!Account.Name}';
             eos.Path__c = 'Salesforce/Account/{!Account.Phone}/';
@@ -50,7 +50,7 @@ private class CLMEOSViewControllerTest {
     
     @IsTest
     static void test_constructor_inValid() {
-        System.runAs(UserMock.createClmUser()) {            
+        System.runAs(UserMock.createClmViewer()) {            
             Test.startTest();
             Id contactId = [SELECT Id FROM Contact  LIMIT 1].Id;
             Test.setCurrentPageReference(new PageReference('Page.CLMEOSView')); 
@@ -88,7 +88,7 @@ private class CLMEOSViewControllerTest {
     
     @IsTest
     static void test_getEOSUrl_authorized_mapping_does_not_exist() {
-        System.runAs(UserMock.createClmUser()) {            
+        System.runAs(UserMock.createClmViewer()) {            
             Test.startTest();            
             Id acctId = [SELECT Id FROM Account WHERE Name='UNIT TEST' LIMIT 1].Id;
             CLMEOSViewController.EOSUrlResult result = CLMEOSViewController.getEOSUrl(acctId);
@@ -100,7 +100,7 @@ private class CLMEOSViewControllerTest {
     @IsTest
     static void test_getEOSUrl_authorized_mapping_exists() {
         DocuSignAPIMock.success();
-        System.runAs(UserMock.createClmUser()) {            
+        System.runAs(UserMock.createClmViewer()) {            
             Id contactId = [SELECT Id FROM Contact  LIMIT 1].Id;
             EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
             eos.FolderName__c = '{!Contact.LastName}';
@@ -119,7 +119,7 @@ private class CLMEOSViewControllerTest {
     //TODO:Remove this test method after the corresponding method is removed from CLMAPI.cls
     @IsTest
     static void test_setDynamicEndpointUrls_demo(){
-        System.runAs(UserMock.createClmUser()){
+        System.runAs(UserMock.createClmViewer()){
             AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
             accountSettings.Environment__c = 'Demo';
             update accountSettings;
@@ -133,7 +133,7 @@ private class CLMEOSViewControllerTest {
     //TODO:Remove this test method after the corresponding method is removed from CLMAPI.cls
     @IsTest
     static void test_setDynamicEndpointUrls_hqtest3(){
-        System.runAs(UserMock.createClmUser()){
+        System.runAs(UserMock.createClmViewer()){
             AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
             accountSettings.Environment__c = 'HQTEST3';
             update accountSettings;

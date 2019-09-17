@@ -11,7 +11,7 @@ public with sharing class CLMApexUtility {
     @AuraEnabled(Cacheable=true)
     public static String getNamespace(){
 		try {
-            Permissions.verifyIsClmAdministrator();
+            Permissions.verifyIsClmViewer();
 			return Application.namespace;
 		} catch (Exception e) {
 			throw Controller.wrapException(e.getMessage());
