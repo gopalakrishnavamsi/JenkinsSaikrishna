@@ -38,7 +38,7 @@ public with sharing class CLMEOSViewController {
         	return fetchUrl(recordId);    
         } catch (Exception ex) {
             LoggerService.getInstance().exception(ex, 'Failed to fetch clm Url');
-            return new EOSUrlResult(true,false,null);
+            return new EOSUrlResult(true,true,null);
         }                            
     }
     
