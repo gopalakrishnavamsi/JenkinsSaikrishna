@@ -531,12 +531,16 @@
     };
   },
 
-  removeAndCloseSingleUser: function (component, row, helper) {
+  removeAndCloseSingleUser: function (component, event, helper, row) {
     //Current user should not be able to close themselves
     if (row.sourceId.toString() === component.get('v.currentUserId')) {
       helper.showToast(component, $A.get('$Label.c.CannotCloseCurrentUser'), 'error');
       return;
     }
+    //Invoke the remove User helper method to Remove and Close the user
+    var usersToRemove = [];
+    usersToRemove.push(row);
+    helper.createRemoveUsersModal(component, event, helper, usersToRemove);
   },
 
   editPermissionsMultipleUsers: function (component, event, helper) {
@@ -550,13 +554,18 @@
   },
 
   removeAndCloseMultipleUsers: function (component, event, helper) {
+    var currentUserSelected = false;
     component.get('v.selectedRows').forEach(function (row) {
       //Current user should not be a part of removing and closing users in bulk
       if (row.sourceId.toString() === component.get('v.currentUserId')) {
-        helper.showToast(component, $A.get('$Label.c.CannotCloseCurrentUser'), 'error');
-        return;
+        currentUserSelected = true;
       }
     });
+    if (currentUserSelected === true) {
+      helper.showToast(component, $A.get('$Label.c.CannotCloseCurrentUser'), 'error');
+    } else {
+      helper.createRemoveUsersModal(component, event, helper, component.get('v.selectedRows'));
+    }
   },
 
   formatRole: function (roles) {
@@ -612,7 +621,7 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        helper.showToast(component, $A.get('$Label.c.UserAddedSuccessfully'), 'success');
+        helper.showToast(component, $A.get('$Label.c.UsersAddedSuccessfully'), 'success');
         component.set('v.addUsersLoading', false);
         component.find('add-users').hide();
         helper.initializeComponent(component, event, helper);
@@ -685,5 +694,36 @@
       }
     }
     return rolesMap;
+  },
+
+  createRemoveUsersModal: function (component, event, helper, usersToRemove) {
+    var modalTitle, modalMessage;
+    if (!$A.util.isUndefinedOrNull(usersToRemove) && (!$A.util.isEmpty(usersToRemove))) {
+      if (usersToRemove.length === 1) {
+        modalTitle = stringUtils.format($A.get('$Label.c.RemoveSingleUserTitle'), usersToRemove[0].name);
+        modalMessage = stringUtils.format($A.get('$Label.c.RemoveSingleUserMessage'), usersToRemove[0].name);
+      } else {
+        modalTitle = stringUtils.format($A.get('$Label.c.RemoveBulkUsersTitle'), usersToRemove.length);
+        modalMessage = stringUtils.format($A.get('$Label.c.RemoveBulkUsersMessage'), usersToRemove.length);
+      }
+      $A.createComponent('c:RemoveUsersModal',
+        {
+          modalTitle: modalTitle,
+          modalMessage: modalMessage,
+          userRemovalJson: JSON.stringify(usersToRemove),
+          showModal: true
+        },
+        $A.getCallback(function (componentBody) {
+            if (component.isValid()) {
+              var targetCmp = component.find('removeModalContent');
+              var body = targetCmp.get('v.body');
+              targetCmp.set('v.body', []);
+              body.push(componentBody);
+              targetCmp.set('v.body', body);
+            }
+          }
+        ));
+    }
   }
+
 });

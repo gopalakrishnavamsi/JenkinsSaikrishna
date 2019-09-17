@@ -45,6 +45,7 @@
     <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}"/>
     <aura:handler name="change" value="{!v.users}" action="{!c.handleUsersChange}"/>
     <aura:handler name="change" value="{!v.filteredUsers}" action="{!c.handleFilteredUsersChange}"/>
+    <aura:handler name="reloadUsersEvent" event="c:ReloadEvent" action="{!c.handleReloadUsers}"/>
 
     <!-- Section for managing users -->
     <div>
@@ -297,6 +298,9 @@
                 </aura:set>
             </c:strike_modal>
         </div>
-        <!-- /Remove User Modal -->
+        <!-- Remove User Modal -->
+        <!-- placeholder div for remove user modal -->
+        <div aura:id="removeModalContent"/>
+
     </div>
 </aura:component>

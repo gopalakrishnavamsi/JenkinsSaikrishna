@@ -4460,7 +4460,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalEmailHeaderTitleText</fullName>
@@ -4488,7 +4488,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalOnBehalfEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalOnBehalfEmailHeaderTitleText</fullName>
@@ -4516,7 +4516,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>RejectOnBehalfEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>RejectOnBehalfEmailHeaderTitleText</fullName>
@@ -4565,7 +4565,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalRejectEmailBodyText</shortDescription>
-		<value>Approve Comments</value>
+		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalRejectEmailHeaderTitleText</fullName>
@@ -7255,12 +7255,60 @@
 		<value>DocuSign Account access</value>
 	</labels>
 	<labels>
-		<fullName>UserAddedSuccessfully</fullName>
+		<fullName>RemoveSingleUserTitle</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>UserAddedSuccessfully</shortDescription>
+		<shortDescription>RemoveSingleUserTitle</shortDescription>
+		<value>Remove {0}</value>
+	</labels>
+	<labels>
+		<fullName>RemoveBulkUsersTitle</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveBulkUsersTitle</shortDescription>
+		<value>Bulk Remove {0} Users</value>
+	</labels>
+	<labels>
+		<fullName>RemoveSingleUserMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveSingleUserMessage</shortDescription>
+		<value>Are you sure you want to remove {0} from DocuSign?</value>
+	</labels>
+	<labels>
+		<fullName>RemoveBulkUsersMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RemoveBulkUsersMessage</shortDescription>
+		<value>Are you sure you want to bulk remove {0} Users from DocuSign?</value>
+	</labels>
+	<labels>
+		<fullName>UsersAddedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UsersAddedSuccessfully</shortDescription>
 		<value>Selected users have been added successfully.</value>
+	</labels>
+	<labels>
+		<fullName>SingleUserClosedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UsersClosedSuccessfully</shortDescription>
+		<value>{0} has been removed and closed successfully.</value>
+	</labels>
+	<labels>
+		<fullName>MultipleUsersClosedSuccessfully</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MultipleUsersClosedSuccessfully</shortDescription>
+		<value>{0} users have been removed and closed successfully.</value>
 	</labels>
 	<labels>
 		<fullName>Component2Summary</fullName>

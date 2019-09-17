@@ -329,13 +329,14 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_removeUser_success() {
+	static void test_removeUsers_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createDocuSignUser(false);
 
 			Test.startTest();
-			List<Account.User> result = SetupController.removeUser(u.Id, u.Username__c);
+			String userRemovalJson = '[{"id":"' + u.Username__c + '","name":"Test AdminUser","email":"testAdmin@unitTest.com","status":"Active","admin":true,"eSignatureRole":"Administrator","documentGenerationRole":"Generator","negotiationRole":null,"clmRole":null,"provisioned":"2019-09-15","sourceId":"' + u.Id + '"}]';
+			List<Account.User> result = SetupController.removeUsers(userRemovalJson);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));
@@ -343,16 +344,31 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_removeUser_failure() {
+	static void test_removeUsers_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SetupController.removeUser(UserInfo.getUserId(), UUID.randomUUID().toString());
+				String userRemovalJson = '[{"id":"' + UUID.randomUUID().toString() + '","name":"Test AdminUser","email":"testAdmin@unitTest.com","status":"Active","admin":true,"eSignatureRole":"Administrator","documentGenerationRole":"Generator","negotiationRole":null,"clmRole":null,"provisioned":"2019-09-15","sourceId":"' + UserInfo.getUserId() + '"}]';
+				SetupController.removeUsers(userRemovalJson);
 				throw new AssertException('Expected removeUser to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeUsers_invalidInputs() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			String userRemovalJson = '';
+			try {
+				SetupController.removeUsers(userRemovalJson);
+				throw new AssertException('Expected addUsers to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
 		}
 	}
 
