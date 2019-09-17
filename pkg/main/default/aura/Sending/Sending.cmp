@@ -1,6 +1,6 @@
 <aura:component controller="SendingController"
                 extends="c:RootContainer"
-                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+                implements="force:lightningQuickActionWithoutHeader">
 
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <ltng:require scripts="{!$Resource.navUtils}"/>
@@ -13,6 +13,7 @@
     <aura:attribute name="defaultEmailSubject" type="String" access="private"/>
     <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
     <aura:attribute name="documents" type="Object[]" access="private"/>
+    <aura:attribute name="selectedDocumentIds" type="String[]"/>
     <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
     <aura:attribute name="template" type="Object" access="private"/>
     <aura:attribute name="recipients" type="Object[]"/>
@@ -22,7 +23,7 @@
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
-
+    <aura:attribute name="recordId" type="String" access="global"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>

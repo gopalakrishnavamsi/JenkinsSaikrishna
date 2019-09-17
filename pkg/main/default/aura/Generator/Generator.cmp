@@ -25,6 +25,7 @@
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="isSendForSignature" type="Boolean" default="false"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
@@ -32,7 +33,6 @@
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
 
     <aura:method name="generateDocs" action="{!c.generateDocs}" access="global"/>
-
 
     <div class="slds-scope slds-is-relative">
         <aura:if isTrue="{!and(not(v.isClassic), not(v.isPreview))}">
@@ -51,10 +51,12 @@
             </div>
         </aura:if>
 
-          <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+        <div aura:id="genSendingModal"/>
 
-        <aura:if isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
+        <aura:if
+                isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
             <aura:if isTrue="{!or(v.isLoading, v.isGenerating)}">
                 <div
                         class="{!'ds-generator-spinner_container' + if(v.isGenerating, ' ds-spinner_generating-container' + if(and(not(v.isPreview), v.isClassic), ' slds-box slds-is-relative'))}">
@@ -78,8 +80,8 @@
                     <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-box')}">
                         <aura:if
                                 isTrue="{!not(and(v.config.objectMappings.length == 1, v.config.useCurrentRecord, v.config.useAllTemplates ))}">
-							{!v.body}
-						</aura:if>
+                            {!v.body}
+                        </aura:if>
                         <div
                                 class="{!'slds-text-align_left slds-form_stacked' + if(and(v.config.useCurrentRecord, not(v.isPreview)), ' slds-hide', '')}">
                             <c:strike_lookup aura:id="recordLookup" value="{!v.recordId}"
@@ -110,20 +112,36 @@
                                 <div class="slds-form-element">
                                     <div class="slds-form-element__label">{!$Label.c.Templates}</div>
                                     <!-- Template -->
-                                    <aura:iteration items="{!v.templateFiles}" var="file">
-                                        <div class="slds-grid slds-gutters_direct-xx-small slds-m-bottom_small">
-                                            <div class="slds-col slds-no-flex">
-                                                <lightning:input type="checkbox" label="{!$Label.c.Select}"
-                                                                 checked="{!file.isChecked}"
-                                                                 class="ds-checkbox_large slds-no-label"
-                                                                 onchange="{!c.checkRemaingFiles}"/>
-                                            </div>
-                                            <div class="slds-col slds-grow slds-has-flexi-truncate">
-                                                <c:GenFileTile file="{!file}" isEdit="false"
-                                                               isClassic="{!v.isClassic}"/>
-                                            </div>
-                                        </div>
-                                    </aura:iteration>
+                                    <ul>
+                                        <aura:iteration items="{!v.templateFiles}" var="file">
+                                            <li class="slds-item slds-p-vertical_small">
+                                                <article class="slds-tile slds-media slds-media_center">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:input name="{!file.title}"
+                                                                         type="checkbox" checked="{!file.isChecked}"
+                                                                         label="{!$Label.c.Select}"
+                                                                         onchange="{!c.checkRemaingFiles}"
+                                                                         class="ds-no-label"/>
+                                                    </div>
+                                                    <div class="slds-media__figure">
+                                                        <c:IconByFileExtension extension="{!file.extension}"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <h3 class="slds-tile__title slds-truncate"
+                                                            title="{!file.title}">
+                                                            <a href="javascript:void(0)"
+                                                               data-fileId="{!file.contentDocumentId}"
+                                                               onclick="{!c.previewFile}">{!file.title}</a>
+                                                        </h3>
+                                                        <div class="slds-tile__detail slds-truncate ds-genFileText">
+                                                            {!file.formattedSize} • {!file.extension}
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </li>
+                                            <div class="ds-fileSpacing"/>
+                                        </aura:iteration>
+                                    </ul>
                                     <!-- /Template -->
                                 </div>
                             </div>
@@ -139,10 +157,11 @@
                     </aura:if>
                 </aura:if>
 
-                <aura:if isTrue="{!v.finishedGenerating}">
-                    <div class="ds-genModal">
+                <aura:if isTrue="{!and(v.finishedGenerating,not(v.isSendForSignature))}">
+                    <div class="ds-genFileModal">
                         <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-modal_container')}">
-                            <div class="slds-notify_container slds-is-static">
+                            <!--Header-->
+                            <div class="slds-notify_container slds-is-static ds-genFileHeader">
                                 <div class="{!'ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
                                      role="alert">
                                     <lightning:icon iconName="{!'utility:' + v.bannerState}" variant="inverse"
@@ -153,17 +172,56 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="{!'slds-m-top_x-small slds-grid slds-grid_align-center'+if(v.isPreview, ' slds-hide', '')}">The files below have been successfully generated and can now
+                            <!--Header-->
+                            <p class="{!'slds-m-top_large slds-grid slds-grid_align-center'+if(v.isPreview, ' slds-hide', '')}">
+                                The files below have been successfully generated and can now
                                 be sent for signature</p>
                             <div class="slds-modal__content slds-has-flexi-truncate ds-genFileContent slds-box">
                                 <!-- File -->
-                                <aura:iteration items="{!v.generatedFiles}" var="file">
-                                    <ul class="slds-has-dividers_bottom-space">
+                                <ul class="slds-m-top_small">
+                                    <aura:iteration items="{!v.generatedFiles}" var="file" indexVar="documentIndex">
                                         <aura:if isTrue="{!not(empty(file))}">
-                                            <c:GenFileTile file="{!file}" isEdit="{!false}" isClassic="{!v.isClassic}"/>
+                                            <div class="{!if(and(v.generatedFiles.length gt 0, documentIndex lt v.generatedFiles.length-1),'slds-has-divider_bottom-space','')}">
+                                                <li class="slds-item">
+                                                    <article class="slds-tile slds-media">
+                                                        <div class="{!if(v.isPreview, 'slds-hide', 'slds-media__figure')}">
+                                                            <lightning:input aura:id="gen-file-checkbox"
+                                                                             name="{!file.title}"
+                                                                             type="checkbox" checked="{!file.isChecked}"
+                                                                             value="{!documentIndex}"
+                                                                             label="{!$Label.c.Select}"
+                                                                             class="ds-no-label"/>
+                                                        </div>
+                                                        <div class="slds-media__figure">
+                                                            <c:IconByFileExtension extension="{!file.extension}"/>
+                                                        </div>
+                                                        <div class="slds-media__body">
+                                                            <h3 class="slds-tile__title slds-truncate"
+                                                                title="{!file.title}">
+                                                                <a href="javascript:void(0)"
+                                                                   data-fileId="{!file.contentDocumentId}"
+                                                                   onclick="{!c.previewFile}">{!file.title}</a>
+                                                            </h3>
+                                                            <div class="slds-tile__detail slds-truncate ds-genFileText">
+                                                                {!file.formattedSize} • {!file.extension}
+                                                            </div>
+                                                            <h3 class="slds-tile__title slds-truncate"
+                                                                title="Preview">
+                                                                <a href="javascript:void(0)"
+                                                                   data-fileId="{!file.contentDocumentId}"
+                                                                   onclick="{!c.previewFile}">Preview</a>
+                                                                <span class="slds-tile__detail slds-truncate ds-genFileText"> or </span>
+                                                                <a href="javascript:void(0)"
+                                                                   data-fileId="{!file.contentDocumentId}"
+                                                                   onclick="{!c.downloadFile}">Download</a>
+                                                            </h3>
+                                                        </div>
+                                                    </article>
+                                                </li>
+                                            </div>
                                         </aura:if>
-                                    </ul>
-                                </aura:iteration>
+                                    </aura:iteration>
+                                </ul>
                                 <!-- /File -->
 
                                 <!-- Failed Files -->
@@ -185,10 +243,15 @@
                                 </aura:if>
                                 <!-- /Failed Files -->
                             </div>
-                            <div class="{!'slds-modal__footer ds-genFooter'+if(v.isPreview, ' slds-hide', '')}">
-                                <lightning:button class="slds-button slds-button_brand" label="Send for signature"
+                            <!-- Footer -->
+                            <div class="{!'slds-modal__footer ds-genFileFooter'+if(v.isPreview, ' slds-hide', '')}">
+                                <lightning:button class="slds-button slds-button_brand"
+                                                  label="{!$Label.c.SendForSignature}"
                                                   onclick="{!c.sendForSignature}"/>
+                                <lightning:button class="slds-float_left" variant="neutral" label="{!$Label.c.Back}"
+                                                  onclick="{!c.goBack}"/>
                             </div>
+                            <!-- Footer -->
                         </div>
                     </div>
                 </aura:if>

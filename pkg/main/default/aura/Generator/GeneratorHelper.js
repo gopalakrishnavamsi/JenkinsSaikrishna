@@ -1,7 +1,7 @@
 ({
-  checkMultiCurrency: function(component) {
+  checkMultiCurrency: function (component) {
     var action = component.get('c.checkMultiCurrency');
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var isMultiCurrency = response.getReturnValue();
         component.set('v.isMultiCurrency', isMultiCurrency);
@@ -13,7 +13,7 @@
     $A.enqueueAction(action);
   },
 
-  setupData: function(component) {
+  setupData: function (component) {
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
     var templateFiles = component.get('v.templateFiles');
@@ -26,12 +26,12 @@
       component.set('v.errType', 'warning');
     }
 
-    templateFiles.forEach(function(file) {
-      file.isChecked = true;
+    templateFiles.forEach(function (file) {
+      helper.addDocumentProperties(file, true);
     });
     component.set('v.templateFiles', templateFiles);
 
-    config.objectMappings.forEach(function(objMapping) {
+    config.objectMappings.forEach(function (objMapping) {
       var lookupObj = {
         apiName: objMapping.apiName,
         label: objMapping.label
@@ -44,11 +44,11 @@
     //Preview Mode
     if (isPreview) {
       helper.getRecentRecords(component).then(
-        function() {
+        function () {
           component.set('v.isLoading', false);
           component.set('v.lookupObjs', lookupObjs);
         },
-        function() {
+        function () {
           component.set('v.isLoading', false);
         }
       );
@@ -64,22 +64,22 @@
     }
   },
 
-  getRecentRecords: function(component) {
+  getRecentRecords: function (component) {
     return new Promise(
-      $A.getCallback(function(parentResolve, parentReject) {
+      $A.getCallback(function (parentResolve, parentReject) {
         var lookupObjs = component.get('v.lookupObjs');
         var promises = [];
 
-        lookupObjs.forEach(function(lookup, index) {
+        lookupObjs.forEach(function (lookup, index) {
           var promise = new Promise(
-            $A.getCallback(function(resolve, reject) {
+            $A.getCallback(function (resolve, reject) {
               var action = component.get('c.getLatestRecordId');
 
               action.setParams({
                 sObjectType: lookup.apiName
               });
 
-              action.setCallback(this, function(response) {
+              action.setCallback(this, function (response) {
                 var state = response.getState();
                 if (state === 'SUCCESS') {
                   lookup.value = response.getReturnValue();
@@ -102,12 +102,12 @@
 
         Promise.all(promises)
           .then(
-            $A.getCallback(function() {
+            $A.getCallback(function () {
               parentResolve();
             })
           )
           .catch(
-            $A.getCallback(function() {
+            $A.getCallback(function () {
               parentReject();
             })
           );
@@ -115,14 +115,14 @@
     );
   },
 
-  getRecordData: function(component) {
+  getRecordData: function (component) {
     var helper = this;
     var lookups = component.find('recordLookup');
     lookups = Array.isArray(lookups) ? lookups : [lookups];
     var missingLookup = false;
     var objIds = [];
 
-    lookups.forEach(function(lookup) {
+    lookups.forEach(function (lookup) {
       if ($A.util.isEmpty(lookup.get('v.value'))) {
         lookup.showError();
         missingLookup = true;
@@ -144,21 +144,21 @@
 
     xmlRoot.appendChild(templateConfig);
 
-    config.objectMappings.forEach(function(objMap, index) {
+    config.objectMappings.forEach(function (objMap, index) {
       if (!$A.util.isEmpty(objMap.fieldMappings)) {
         var promise = new Promise(
-          $A.getCallback(function(resolve, reject) {
+          $A.getCallback(function (resolve, reject) {
             var action = component.get('c.getMergeData');
             var currentFieldMappings = objMap.fieldMappings;
             var fields = [];
             var children = [];
 
-            currentFieldMappings.forEach(function(object) {
+            currentFieldMappings.forEach(function (object) {
               if (!object.isChildRelation) {
                 fields.push(object.apiName);
               } else {
                 var childrenFields = [];
-                object.childFieldMappings.forEach(function(obj) {
+                object.childFieldMappings.forEach(function (obj) {
                   childrenFields.push(obj.apiName);
                 });
                 var childrenObject = {
@@ -183,7 +183,7 @@
               queryJson: jsonString
             });
 
-            action.setCallback(this, function(response) {
+            action.setCallback(this, function (response) {
               var state = response.getState();
               if (state === 'SUCCESS') {
                 var results = response.getReturnValue();
@@ -211,7 +211,7 @@
 
     Promise.all(objPromises)
       .then(
-        $A.getCallback(function() {
+        $A.getCallback(function () {
           //preview might hit the back button before we're done so
           //if its not valid just do nothing so an error message doesn't show up.
           if (component.isValid()) {
@@ -220,7 +220,7 @@
         })
       )
       .catch(
-        $A.getCallback(function() {
+        $A.getCallback(function () {
           component.set(
             'v.errMsg',
             $A.get('$Label.c.FailedInitiateDocGeneration')
@@ -231,7 +231,7 @@
       );
   },
 
-  generateXML: function(xmlRoot, recordData, objMap, isChild, component) {
+  generateXML: function (xmlRoot, recordData, objMap, isChild, component) {
     var helper = this;
     var objRoot = xmlRoot.createElement(objMap.label.replace(/\s/g, '_'));
     var fieldMappings = isChild
@@ -239,7 +239,7 @@
       : objMap.fieldMappings;
     var seenFields = []; //prevent duplicate node names;
 
-    fieldMappings.forEach(function(fieldMap) {
+    fieldMappings.forEach(function (fieldMap) {
       var apiName = fieldMap.apiName;
       var fieldNode = null;
       var dateFormat = null;
@@ -249,7 +249,7 @@
         //label is childRelationName
         if (recordData[fieldMap.label]) {
           var childRecords = recordData[fieldMap.label];
-          childRecords.forEach(function(childRecord) {
+          childRecords.forEach(function (childRecord) {
             var childXML = helper.generateXML(
               xmlRoot,
               childRecord,
@@ -367,7 +367,7 @@
     return objRoot;
   },
 
-  generateDocuments: function(component, startingRecordId, xmlRoot) {
+  generateDocuments: function (component, startingRecordId, xmlRoot) {
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
     var serializer = new XMLSerializer();
@@ -376,7 +376,7 @@
     var templateFiles = component.get('v.templateFiles');
     var selectedTemplateFiles = [];
 
-    templateFiles.forEach(function(templateFile) {
+    templateFiles.forEach(function (templateFile) {
       if (templateFile.isChecked) {
         selectedTemplateFiles.push(templateFile.contentDocumentId);
       }
@@ -391,7 +391,7 @@
       contentDocumentIds: selectedTemplateFiles
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
         var results = response.getReturnValue();
@@ -400,9 +400,9 @@
         var failedJobs = [];
         var files = [];
 
-        results.forEach(function(object) {
+        results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            var failedJobDetail = { message: object.message, cv: object.file };
+            var failedJobDetail = {message: object.message, cv: object.file};
             failedJobs.push(failedJobDetail);
           } else {
             jobIds.push(object.id.value);
@@ -436,7 +436,7 @@
     $A.enqueueAction(action);
   },
 
-  completionPoll: function(component, jobIds, remainingJobIds, runCount) {
+  completionPoll: function (component, jobIds, remainingJobIds, runCount) {
     //30s polling
     if (runCount === 16) {
       component.set('v.showTakingTooLongMessage', true);
@@ -454,7 +454,7 @@
       jobIds: remainingJobIds
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       var state = response.getState();
 
       if (state === 'SUCCESS') {
@@ -462,9 +462,9 @@
         var finishedJobs = [];
         var failedJobs = [];
 
-        results.forEach(function(object) {
+        results.forEach(function (object) {
           if (object.status === 'Success') {
-            finishedJobs.push({ cv: object.file, jobId: object.id.value });
+            finishedJobs.push({cv: object.file, jobId: object.id.value});
           } else if (object.status === 'Failure') {
             failedJobs.push({
               jobId: object.id.value,
@@ -473,14 +473,14 @@
           }
         });
 
-        finishedJobs.forEach(function(finishedJob) {
+        finishedJobs.forEach(function (finishedJob) {
           var jobIndex = jobIds.indexOf(finishedJob.jobId);
           var remainingJobIndex = remainingJobIds.indexOf(finishedJob.jobId);
           generatedFiles[jobIndex] = finishedJob.cv;
           remainingJobIds.splice(remainingJobIndex, 1);
         });
 
-        failedJobs.forEach(function(failedJob) {
+        failedJobs.forEach(function (failedJob) {
           var remainingJobIndex = remainingJobIds.indexOf(failedJob.jobId);
           var templateTitle = cvTitleByJobId[failedJob.jobId];
           remainingJobIds.splice(remainingJobIndex, 1);
@@ -490,7 +490,7 @@
 
         if (remainingJobIds.length > 0) {
           setTimeout(
-            $A.getCallback(function() {
+            $A.getCallback(function () {
               helper.completionPoll(
                 component,
                 jobIds,
@@ -505,6 +505,12 @@
           component.set('v.isGenerating', false);
           component.getEvent('generatedDocs').fire();
 
+          if (!$A.util.isEmpty(generatedFiles)) {
+            generatedFiles.forEach(function (d) {
+              helper.addDocumentProperties(d, true);
+            });
+          }
+
           component.set('v.generatedFiles', generatedFiles);
           component.set('v.failedFiles', failedFiles);
 
@@ -516,9 +522,6 @@
             );
           } else {
             var bannerMsg = $A.get('$Label.c.GeneratorBannerSuccessMsg');
-            // FIXME: No concatenation for localizable strings.
-            bannerMsg += generatedFiles.length > 1 ? 's!' : '!';
-
             component.set('v.bannerState', 'success');
             component.set('v.bannerMsg', bannerMsg);
           }
@@ -541,19 +544,52 @@
     $A.enqueueAction(action);
   },
 
-  sendForSignature: function(component) {
-    var sendForSignatureAction = component.get('c.getSendForSignatureLink');
-    sendForSignatureAction.setParams({
-      sourceId: component.get('v.recordId')
-    });
-    sendForSignatureAction.setCallback(this, function(response) {
-      if (response.getState() === 'SUCCESS') {
-       navUtils.navigateToUrl(response.getReturnValue());
+  sendForSignature: function (component) {
+
+    return new Promise($A.getCallback(function (resolve, reject) {
+      var generatedFiles = component.get('v.generatedFiles');
+      var generatedFileIds = [];
+      generatedFiles.forEach(function (generatedFile) {
+        if (generatedFile.isChecked) {
+          generatedFileIds.push(generatedFile.id);
+        }
+      });
+      if (generatedFileIds.length > 0) {
+        resolve(generatedFileIds);
       } else {
-        component.set('v.errType', 'error');
-        component.set('v.errMsg', stringUtils.getErrorMessage(response));
+        reject();
       }
-    });
-    $A.enqueueAction(sendForSignatureAction);
+    })).then(
+      $A.getCallback(function (fileIds) {
+        $A.createComponent(
+          'c:Sending',
+          {
+            recordId: component.get('v.recordId'),
+            visualforce: true,
+            selectedDocumentIds: fileIds
+          },
+          function (componentBody) {
+            if (component.isValid()) {
+              var targetCmp = component.find('genSendingModal');
+              var body = targetCmp.get('v.body');
+              targetCmp.set('v.body', []);
+              body.push(componentBody);
+              targetCmp.set('v.body', body);
+              component.set('v.isSendForSignature', true);
+              targetCmp.set('v.disableNext', false);
+            }
+          }
+        );
+      })
+    );
+
+  },
+
+  addDocumentProperties: function (doc, selected) {
+    if (doc) {
+      doc.isChecked = selected;
+      doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
+    }
+    return doc;
   }
 });
