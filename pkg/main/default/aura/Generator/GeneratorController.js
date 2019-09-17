@@ -24,6 +24,8 @@
           }
         });
         $A.enqueueAction(action);
+
+        helper.canSendForSignature(component);
       } else {
         component.set('v.isLoading', true);
         // TODO: Verify has Gen license, trial not expired, etc.

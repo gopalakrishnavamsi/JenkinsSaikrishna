@@ -547,42 +547,50 @@
   sendForSignature: function (component) {
 
     return new Promise($A.getCallback(function (resolve, reject) {
-      var generatedFiles = component.get('v.generatedFiles');
-      var generatedFileIds = [];
-      generatedFiles.forEach(function (generatedFile) {
-        if (generatedFile.isChecked) {
-          generatedFileIds.push(generatedFile.id);
+
+      var canSendForSignature = component.get('c.canSendForSignature');
+      canSendForSignature.setCallback(this, function (response) {
+        if (response.getState() === 'SUCCESS') {
+          var generatedFiles = component.get('v.generatedFiles');
+          var generatedFileIds = [];
+          generatedFiles.forEach(function (generatedFile) {
+            if (generatedFile.isChecked) {
+              generatedFileIds.push(generatedFile.id);
+            }
+          });
+          resolve(generatedFileIds);
+        } else {
+          reject(generatedFileIds);
+          component.set('v.errType', 'error');
+          component.set('v.errMsg', stringUtils.getErrorMessage(response));
         }
       });
-      if (generatedFileIds.length > 0) {
-        resolve(generatedFileIds);
-      } else {
-        reject();
-      }
+      $A.enqueueAction(canSendForSignature);
     })).then(
       $A.getCallback(function (fileIds) {
-        $A.createComponent(
-          'c:Sending',
-          {
-            recordId: component.get('v.recordId'),
-            visualforce: true,
-            selectedDocumentIds: fileIds
-          },
-          function (componentBody) {
-            if (component.isValid()) {
-              var targetCmp = component.find('genSendingModal');
-              var body = targetCmp.get('v.body');
-              targetCmp.set('v.body', []);
-              body.push(componentBody);
-              targetCmp.set('v.body', body);
-              component.set('v.isSendForSignature', true);
-              targetCmp.set('v.disableNext', false);
+        if (!$A.util.isEmpty(fileIds)) {
+          $A.createComponent(
+            'c:Sending',
+            {
+              recordId: component.get('v.recordId'),
+              visualforce: true,
+              selectedDocumentIds: fileIds
+            },
+            function (componentBody) {
+              if (component.isValid()) {
+                var targetCmp = component.find('genSendingModal');
+                var body = targetCmp.get('v.body');
+                targetCmp.set('v.body', []);
+                body.push(componentBody);
+                targetCmp.set('v.body', body);
+                component.set('v.isSendForSignature', true);
+                targetCmp.set('v.disableNext', false);
+              }
             }
-          }
-        );
+          );
+        }
       })
     );
-
   },
 
   addDocumentProperties: function (doc, selected) {
@@ -591,5 +599,18 @@
       doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
     }
     return doc;
+  },
+
+  canSendForSignature: function (component) {
+    var canSendForSignature = component.get('c.canSendForSignature');
+    canSendForSignature.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        component.set('v.canSendForSignature', 'error');
+      } else {
+        component.set('v.errType', 'error');
+        component.set('v.errMsg', stringUtils.getErrorMessage(response));
+      }
+    });
+    $A.enqueueAction(canSendForSignature);
   }
 });

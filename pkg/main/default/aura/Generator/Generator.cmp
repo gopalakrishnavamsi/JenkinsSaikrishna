@@ -25,7 +25,8 @@
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
-    <aura:attribute name="isSendForSignature" type="Boolean" default="false"/>
+    <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
@@ -157,7 +158,7 @@
                     </aura:if>
                 </aura:if>
 
-                <aura:if isTrue="{!and(v.finishedGenerating,not(v.isSendForSignature))}">
+                <aura:if isTrue="{!and(v.finishedGenerating,not(v.isSendForSignatureInvoked))}">
                     <div class="ds-genFileModal">
                         <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-modal_container')}">
                             <!--Header-->
@@ -247,7 +248,8 @@
                             <div class="{!'slds-modal__footer ds-genFileFooter'+if(v.isPreview, ' slds-hide', '')}">
                                 <lightning:button class="slds-button slds-button_brand"
                                                   label="{!$Label.c.SendForSignature}"
-                                                  onclick="{!c.sendForSignature}"/>
+                                                  onclick="{!c.sendForSignature}"
+                                                  disabled="{!not(v.canSendForSignature)}"/>
                                 <lightning:button class="slds-float_left" variant="neutral" label="{!$Label.c.Back}"
                                                   onclick="{!c.goBack}"/>
                             </div>
