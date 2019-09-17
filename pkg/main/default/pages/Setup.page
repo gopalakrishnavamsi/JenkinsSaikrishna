@@ -5,22 +5,27 @@
     <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
-        .bodyDiv .outerNoSidebar,
-        .noSidebarCell,
-        .sidebarCell .fixed {
+        /* CSS to override default padding applied in Lightning Experience */
+        html body.sfdcBody {
             padding: 0;
         }
 
+        /* CSS to override default padding applied in Classic Experience */
+        .bodyDiv .outerNoSidebar, .noSidebarCell, .sidebarCell .fixed {
+            padding: 0;
+        }
+
+        /* CSS for positioning the spinner container */
         .noSidebarCell #ds-spinner {
             height: calc(100vh - 165px);
         }
 
+        /* CSS for background image */
         .ds-blue-brand {
             background: rgb(176, 196, 223);
             background-image: url({!URLFOR($Resource.lightningBlueBackground)});
             background-repeat: repeat-x;
         }
-
     </style>
 
     <div id="ds-pageContent" style="display: none;" class="ds-blue-brand">

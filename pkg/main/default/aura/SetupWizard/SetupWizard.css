@@ -27,6 +27,7 @@
 .THIS .ds-home-centerSpace {
     background: rgb(249, 249, 250);
     flex: unset;
+    border-radius: .1rem;
 }
 
 .THIS .ds-userManagement-section {
