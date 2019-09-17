@@ -546,7 +546,7 @@
 
   sendForSignature: function (component) {
 
-    return new Promise($A.getCallback(function (resolve, reject) {
+    return new Promise($A.getCallback(function (resolve) {
 
       var canSendForSignature = component.get('c.canSendForSignature');
       canSendForSignature.setCallback(this, function (response) {
@@ -560,9 +560,8 @@
           });
           resolve(generatedFileIds);
         } else {
-          reject(generatedFileIds);
-          component.set('v.errType', 'error');
-          component.set('v.errMsg', stringUtils.getErrorMessage(response));
+          component.set('v.bannerState', 'error');
+          component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
         }
       });
       $A.enqueueAction(canSendForSignature);
@@ -570,7 +569,7 @@
       $A.getCallback(function (fileIds) {
         if (!$A.util.isEmpty(fileIds)) {
           $A.createComponent(
-            'c:Sending',
+            'dfsle:Sending',
             {
               recordId: component.get('v.recordId'),
               visualforce: true,
@@ -583,7 +582,7 @@
                 targetCmp.set('v.body', []);
                 body.push(componentBody);
                 targetCmp.set('v.body', body);
-                component.set('v.isSendForSignature', true);
+                component.set('v.isSendForSignatureInvoked', true);
                 targetCmp.set('v.disableNext', false);
               }
             }

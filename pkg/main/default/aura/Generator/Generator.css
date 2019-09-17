@@ -58,7 +58,6 @@
 }
 
 .THIS .ds-genFileHeader {
-    padding: 0.5rem;
     background-color: rgb(4, 132, 75)
 }
 
@@ -73,5 +72,9 @@
 
 .THIS .ds-fileSpacing {
     border-bottom: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-bannerContainer {
+    padding: 1rem;
 }
 

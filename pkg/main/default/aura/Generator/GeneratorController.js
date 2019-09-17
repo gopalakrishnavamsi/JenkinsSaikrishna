@@ -66,9 +66,7 @@
 
   previewFile: function (component, event) {
     var fileId = event.currentTarget.getAttribute('data-fileId');
-
     var isClassic = component.get('v.isClassic');
-
     if (isClassic) {
       window.open('/' + fileId, '_blank');
     } else {
@@ -83,6 +81,7 @@
       }
     }
   },
+
   downloadFile: function (component, event) {
     var fileId = event.currentTarget.getAttribute('data-fileId');
     navUtils.navigateToUrl('/sfc/servlet.shepherd/document/download/' + fileId);

@@ -116,8 +116,8 @@
                                         </div>
                                         <div class="slds-media__body">
                                             <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
-                                            {!file.name}
-                                        </h3>
+                                                {!file.name}
+                                            </h3>
                                             <div class="slds-truncate slds-text-color_weak fileDetails">
                                                 {!file.formattedSize} • {!file.extension}
                                             </div>
@@ -159,7 +159,7 @@
                         <div class="slds-grid slds-grid_vertical">
                             <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.createExternalReviewComponent}">
                                 <a
-                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                        class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
                                             <lightning:icon iconName="utility:answer"/>
@@ -168,14 +168,14 @@
                                     <div class="slds-media__body slds-p-around_xx-small">
                                         <h2 class="slds-truncate visualPickerHeading"
                                             title="{!$Label.c.SendForExternalReview}">
-                                           {!$Label.c.SendForExternalReview}</h2>
+                                            {!$Label.c.SendForExternalReview}</h2>
                                         <p class="">{!$Label.c.NegotiateCompare}</p>
                                     </div>
                                 </a>
                             </div>
                             <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.createInternalApprovalComponent}">
                                 <a
-                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                        class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
                                             <lightning:icon iconName="utility:approval"/>
@@ -189,7 +189,8 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.createSalesforceFilesAndSendForSignature}">
+                            <div class="slds-col slds-p-bottom_xx-small"
+                                 onclick="{!c.createSalesforceFilesAndSendForSignature}">
                                 <a onclick=""
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">

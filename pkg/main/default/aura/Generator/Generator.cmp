@@ -163,7 +163,7 @@
                         <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-modal_container')}">
                             <!--Header-->
                             <div class="slds-notify_container slds-is-static ds-genFileHeader">
-                                <div class="{!'ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
+                                <div class="{!'ds-bannerContainer ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
                                      role="alert">
                                     <lightning:icon iconName="{!'utility:' + v.bannerState}" variant="inverse"
                                                     size="small"
