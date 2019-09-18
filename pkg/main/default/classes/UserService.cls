@@ -462,13 +462,8 @@ public with sharing class UserService {
 		final Set<UUID> newRoleIds) {
 
 		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
-		if (Collection.isNotEmpty(userIds)) {
-			Set<UUID> diff = Collection.difference(allRoleIds, newRoleIds);
-			if (Collection.isNotEmpty(diff)) {
-				for (UUID uId : userIds) {
-					if (UUID.isNotEmpty(uId)) result.put(uId, diff);
-				}
-			}
+		for (UUID roleId : Collection.difference(allRoleIds, newRoleIds)) {
+			result.put(roleId, userIds);
 		}
 		return result;
 	}

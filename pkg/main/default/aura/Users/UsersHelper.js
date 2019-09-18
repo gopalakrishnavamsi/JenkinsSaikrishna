@@ -543,13 +543,35 @@
     helper.createRemoveUsersModal(component, event, helper, usersToRemove);
   },
 
-  editPermissionsMultipleUsers: function (component, event, helper) {
-    component.get('v.selectedRows').forEach(function (row) {
+  setEditUserModalData: function (component, event, helper, isBulkEdit, usersToEdit) {
+    if (isBulkEdit) {
+      component.set('v.canManageAccount', false);
+      component.set('v.genRole', '');
+      component.set('v.negotiateRole', '');
+      component.set('v.clmRole', '');
+      component.set('v.editUserModalTitle', stringUtils.format($A.get('$Label.c.EditBulkUsersTitle'), usersToEdit.length));
+    } else {
+      component.set('v.canManageAccount', usersToEdit[0].admin);
+      component.set('v.genRole', !$A.util.isUndefinedOrNull(usersToEdit[0].documentGenerationRole) ? usersToEdit[0].documentGenerationRole : '');
+      component.set('v.negotiateRole', !$A.util.isUndefinedOrNull(usersToEdit[0].negotiationRole) ? usersToEdit[0].negotiationRole : '');
+      component.set('v.clmRole', !$A.util.isUndefinedOrNull(usersToEdit[0].clmRole) ? usersToEdit[0].clmRole : '');
+      component.set('v.editUserModalTitle', stringUtils.format($A.get('$Label.c.EditSingleUserTitle'), usersToEdit[0].name));
+    }
+  },
+
+  editUserPermissions: function (component, event, helper, usersToEdit) {
+    var currentUserSelected = false;
+    usersToEdit.forEach(function (row) {
       //Current user should not be part of editing permissions in bulk
       if (row.sourceId.toString() === component.get('v.currentUserId')) {
-        helper.showToast(component, $A.get('$Label.c.CannotEditPermissionsCurrentUser'), 'error');
-        return;
+        currentUserSelected = true;
       }
+      if (currentUserSelected === true) {
+        helper.showToast(component, $A.get('$Label.c.CannotEditPermissionsCurrentUser'), 'error');
+      } else {
+        component.find('edit-permissions').show();
+      }
+
     });
   },
 
@@ -724,6 +746,46 @@
           }
         ));
     }
-  }
+  },
 
+  invokeEditUserPermissions: function (component, event, helper) {
+    component.set('v.editUsersLoading', true);
+    var usersIdsToEdit = [];
+    var usersToEdit = [];
+    var modalMessage;
+    component.get('v.usersToEdit').forEach(function (user) {
+      usersIdsToEdit.push(user.sourceId);
+      usersToEdit.push(user);
+    });
+
+    if (!$A.util.isEmpty(usersToEdit)) {
+      if (usersToEdit.length === 1) {
+        modalMessage = stringUtils.format($A.get('$Label.c.EditSingleUserMessage'), usersToEdit[0].name);
+      } else {
+        modalMessage = stringUtils.format($A.get('$Label.c.EditBulkUsersMessage'), usersToEdit.length);
+      }
+    }
+    var rolesMap = helper.prepareRolesMap(component);
+    var editPermissionsAction = component.get('c.editUserPermissions');
+
+    editPermissionsAction.setParams({
+      usersIdsToEdit: JSON.stringify(usersIdsToEdit),
+      roles: JSON.stringify(rolesMap)
+    });
+
+    editPermissionsAction.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        helper.showToast(component, modalMessage, 'success');
+        component.set('v.editUsersLoading', false);
+        component.find('edit-permissions').hide();
+        helper.initializeComponent(component, event, helper);
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        component.set('v.editUsersLoading', false);
+        component.find('edit-permissions').hide();
+      }
+    });
+    $A.enqueueAction(editPermissionsAction);
+  }
 });

@@ -7311,6 +7311,46 @@
 		<value>{0} users have been removed and closed successfully.</value>
 	</labels>
 	<labels>
+		<fullName>EditSingleUserTitle</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditSingleUserTitle</shortDescription>
+		<value>Edit permissions for {0}</value>
+	</labels>
+	<labels>
+		<fullName>EditBulkUsersTitle</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditBulkUsersTitle</shortDescription>
+		<value>Edit permissions for {0} users</value>
+	</labels>
+	<labels>
+		<fullName>EditSingleUserMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditSingleUserMessage</shortDescription>
+		<value>Successfully edited permissions for {0}.</value>
+	</labels>
+	<labels>
+		<fullName>EditBulkUsersMessage</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EditBulkUsersMessage</shortDescription>
+		<value>Successfully edited permissions for {0} users.</value>
+	</labels>
+	<labels>
+		<fullName>Apply</fullName>
+		<categories>UserManagement</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Apply</shortDescription>
+		<value>Apply</value>
+	</labels>
+	<labels>
 		<fullName>Component2Summary</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
