@@ -569,7 +569,7 @@
       $A.getCallback(function (fileIds) {
         if (!$A.util.isEmpty(fileIds)) {
           $A.createComponent(
-            'dfsle:Sending',
+            'c:Sending',
             {
               recordId: component.get('v.recordId'),
               visualforce: true,
