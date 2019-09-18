@@ -165,6 +165,22 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static List<Account.User> editUserPermissions(final String usersIdsToEdit, final String roles) {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			if (usersIdsToEdit == null || String.isBlank(usersIdsToEdit)) throw new DocuSignException(Label.UndefinedArgument);
+			if (roles == null || String.isBlank(roles)) throw new DocuSignException(Label.UndefinedArgument);
+
+			Map<String, List<String>> rolesMap = (Map<String, List<String>>)JSON.deserialize(roles, Map<String, List<String>>.class);
+			Set<Id> userIdSet = (Set<Id>)JSON.deserialize(usersIdsToEdit, Set<Id>.class);
+			UserService.updateUserRoles(userIdSet, rolesMap);
+			return UserService.getUsers(USER_LIMIT);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to edit permissions for users.');
+		}
+	}
+
 	@AuraEnabled(Cacheable = true)
 	public static List<Profile> getProfiles() {
 		try {

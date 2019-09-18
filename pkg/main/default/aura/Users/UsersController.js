@@ -22,7 +22,11 @@
 
     switch (action.name) {
       case 'edit_permissions':
-        //TODO: Implement edit permissions single row here
+        var usersToEdit = [];
+        usersToEdit.push(row);
+        component.set('v.usersToEdit', usersToEdit);
+        helper.setEditUserModalData(component, event, helper, false, usersToEdit);
+        helper.editUserPermissions(component, event, helper, usersToEdit);
         break;
       case 'remove_close':
         helper.removeAndCloseSingleUser(component, event, helper, row);
@@ -36,7 +40,9 @@
   },
 
   editPermissionsMultipleUsers: function (component, event, helper) {
-    helper.editPermissionsMultipleUsers(component, event, helper);
+    component.set('v.usersToEdit', component.get('v.selectedRows'));
+    helper.setEditUserModalData(component, event, helper, true, component.get('v.selectedRows'));
+    helper.editUserPermissions(component, event, helper, component.get('v.selectedRows'));
   },
 
   removeAndCloseMultipleUsers: function (component, event, helper) {
@@ -50,6 +56,10 @@
 
   closeAddUsersModal: function (component) {
     component.find('add-users').hide();
+  },
+
+  closeEditPermissionsModal: function (component) {
+    component.find('edit-permissions').hide();
   },
 
   sortUserTable: function (component, event, helper) {
@@ -144,6 +154,10 @@
 
   handleAddUsers: function (component, event, helper) {
     helper.invokeAddUsers(component, event, helper);
+  },
+
+  handleEditUserPermissions: function (component, event, helper) {
+    helper.invokeEditUserPermissions(component, event, helper);
   },
 
   handleReloadUsers: function (component, event, helper) {
