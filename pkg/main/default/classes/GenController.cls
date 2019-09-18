@@ -163,9 +163,10 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static boolean canSendForSignature() {
 		try {
-			return Permissions.isDocuSignUser();
+			Permissions.verifyIsDocuSignUser();
+			return true;
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to verify docusign user permission');
+			throw Controller.wrapException(ex, 'Failed to verify docusign user');
 		}
 	}
 }
