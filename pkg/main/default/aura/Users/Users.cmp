@@ -304,8 +304,9 @@
             </c:strike_modal>
         </div>
 
+        <!-- start of edit permissions modal -->
         <div class="ds-editPermissions-modal">
-            <c:strike_modal aura:id="edit-permissions" title="{!v.editUserModalTitle}" size="small">
+            <c:strike_modal aura:id="edit-permissions" title="{!v.editUserModalTitle}">
                 <aura:if isTrue="{!v.editUsersLoading}">
                     <div class="ds-edit-users-spinner-container">
                         <c:BlueSpinner/>
@@ -379,6 +380,7 @@
             </c:strike_modal>
 
         </div>
+        <!-- end of edit permissions modal -->
         <!-- Remove User Modal -->
         <!-- placeholder div for remove user modal -->
         <div aura:id="removeModalContent"/>
