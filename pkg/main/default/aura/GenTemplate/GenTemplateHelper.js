@@ -18,11 +18,13 @@
       var getConfigAction = helper.getConfiguration(component);
       getConfigAction.then(
         $A.getCallback(function (results) {
+          component.set('v.saving', false);
           component.set('v.config', results.template);
           helper.saveTemplate(component);
         })
       );
     } else {
+      component.set('v.saving', false);
       helper.saveTemplate(component);
     }
   },
@@ -78,6 +80,7 @@
   },
 
   initSetup: function (component) {
+    component.set('v.saving', true);
     var helper = this;
     var steps = component.get('v.steps');
     steps = [
@@ -129,6 +132,7 @@
   },
 
   getConfiguration: function (component) {
+    component.set('v.saving', true);
     return new Promise(
       $A.getCallback(function (resolve) {
         var templateId = component.get('v.templateId');
@@ -141,13 +145,13 @@
         });
 
         getConfigAction.setCallback(this, function (response) {
+          component.set('v.saving', false);
           var state = response.getState();
           if (state === 'SUCCESS') {
             var results = response.getReturnValue();
             resolve(results);
           } else {
             component.set('v.errMsg', stringUtils.getErrorMessage(response));
-            component.set('v.saving', false);
           }
         });
         $A.enqueueAction(getConfigAction);
@@ -171,7 +175,6 @@
       component.set('v.saving', false);
       if (state !== 'SUCCESS') {
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
-        component.set('v.saving', false);
       }
     });
     $A.enqueueAction(action);
