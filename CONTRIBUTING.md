@@ -9,7 +9,7 @@
 4. Ensure commit(s) build successfully via CI integration.
     - If you break the build, you get the skull.
 5. Fill out entire PR form with accurate information.
-6. If security-related, be sure to include @john-heasman or a security team member as a code reviewer.
+6. If security-related, be sure to include @morgan-roman or a security team member as a code reviewer.
 
 ## Apex Style guide
 As Apex is very similar to Java in syntax, we adhere to the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
