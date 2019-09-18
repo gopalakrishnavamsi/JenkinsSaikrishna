@@ -117,6 +117,7 @@
             </aura:set>
         </aura:if>
 
+        <!-- start of add users modal -->
         <div class="ds-addUsers-modal">
             <c:strike_modal aura:id="add-users" title="{!$Label.c.AddUser}">
 
@@ -303,6 +304,7 @@
                 </aura:set>
             </c:strike_modal>
         </div>
+        <!-- end of add users modal -->
 
         <!-- start of edit permissions modal -->
         <div class="ds-editPermissions-modal">
@@ -378,9 +380,9 @@
                                       variant="brand" onclick="{!c.handleEditUserPermissions}"/>
                 </aura:set>
             </c:strike_modal>
-
         </div>
         <!-- end of edit permissions modal -->
+
         <!-- Remove User Modal -->
         <!-- placeholder div for remove user modal -->
         <div aura:id="removeModalContent"/>
