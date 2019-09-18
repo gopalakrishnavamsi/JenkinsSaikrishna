@@ -159,4 +159,14 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get job status.');
 		}
 	}
+
+	@AuraEnabled
+	public static boolean canSendForSignature() {
+		try {
+			Permissions.verifyIsDocuSignUser();
+			return true;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to verify docusign user');
+		}
+	}
 }
