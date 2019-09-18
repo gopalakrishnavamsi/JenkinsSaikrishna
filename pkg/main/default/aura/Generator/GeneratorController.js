@@ -24,7 +24,6 @@
           }
         });
         $A.enqueueAction(action);
-
         helper.canSendForSignature(component);
       } else {
         component.set('v.isLoading', true);
@@ -66,24 +65,11 @@
 
   previewFile: function (component, event) {
     var fileId = event.currentTarget.getAttribute('data-fileId');
-    var isClassic = component.get('v.isClassic');
-    if (isClassic) {
-      window.open('/' + fileId, '_blank');
-    } else {
-      var openEvt = $A.get('e.lightning:openFiles');
-      //safety check
-      if ($A.util.isEmpty(openEvt)) {
-        window.open('/' + fileId, '_blank');
-      } else {
-        openEvt.fire({
-          recordIds: [fileId],
-        });
-      }
-    }
+    navUtils.navigateToUrl('/' + fileId);
   },
 
   downloadFile: function (component, event) {
     var fileId = event.currentTarget.getAttribute('data-fileId');
-    navUtils.navigateToUrl('/sfc/servlet.shepherd/document/download/' + fileId);
+    navUtils.navigateToUrl($A.get('$Label.c.DocumentPreviewLink') + fileId);
   }
 });

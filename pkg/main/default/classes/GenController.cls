@@ -164,9 +164,9 @@ public with sharing class GenController extends Controller {
 	public static boolean canSendForSignature() {
 		try {
 			Permissions.verifyIsDocuSignUser();
+			return true;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate url');
 		}
-		return false;
 	}
 }
