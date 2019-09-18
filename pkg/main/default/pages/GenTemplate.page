@@ -1,6 +1,7 @@
 <apex:page sidebar="false" showHeader="true" standardController="GenTemplate__c" title="{!$Label.DocuSign}"
            extensions="GenController">
     <apex:includeLightning/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:slds/>
     <style type="text/css">
         #lightning {
@@ -55,7 +56,10 @@
           window.location.href = '/' + recordId;
         }
       };
-
+      var _navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_self');
+      };
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':GenTemplateApp', function () {
         $Lightning.createComponent(ns + ':GenTemplate', {
@@ -67,6 +71,7 @@
             // TODO: handle error?
           }
           $A.eventService.addHandler({'event': 'force:navigateToSObject', 'handler': navigate});
+          $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });
       });
     </script>

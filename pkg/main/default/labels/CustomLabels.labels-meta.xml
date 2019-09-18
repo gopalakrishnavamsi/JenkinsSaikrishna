@@ -3801,7 +3801,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GeneratorBannerSuccessMsg</shortDescription>
-		<value>Successfully generated your document</value>
+		<value>New Documents Generated</value>
 	</labels>
 	<labels>
 		<fullName>GeneratorCompletionErrorMsg</fullName>
@@ -7397,5 +7397,19 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Type in or select a field below to name the subfolder</shortDescription>
 		<value>Type in or select a field below to name the subfolder</value>
+	</labels>
+	<labels>
+		<fullName>DocumentPreviewLink</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentPreviewLink</shortDescription>
+		<value>/sfc/servlet.shepherd/document/download/</value>
+	</labels>
+	<labels>
+		<fullName>GenSendSignatureMsg</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenSendSignatureMsg</shortDescription>
+		<value>The files below have been successfully generated and can now be sent for signature</value>
 	</labels>
 </CustomLabels>

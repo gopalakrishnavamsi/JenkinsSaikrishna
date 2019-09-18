@@ -39,9 +39,9 @@
                     successHeader="{!if(and(v.currentStep == '4', not(v.loading)), true,false)}">
 
         <aura:if isTrue="{!v.loading}">
-            <div class="{!'dsImport-spinner_container' + if(v.currentStep == '3', ' dsImport-spinner_setupFileUpload')
-                                                       + if(v.currentStep == '2', ' dsImport-spinner_setupSalesforceFiles')
-                                                       + if(v.currentStep == '4', ' dsImport-spinner_uploadingAgreement')}">
+            <div class="{!'ds-import-spinner_container' + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
+                                                       + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
+                                                       + if(v.currentStep == '4', ' ds-import-spinner_uploadingAgreement')}">
                 <c:BlueSpinner/>
             </div>
         </aura:if>
@@ -94,13 +94,13 @@
                 </aura:if>
 
                 <aura:if isTrue="{!and(v.currentStep == '2', not(v.loading))}">
-                    <div class="slds-col slds-p-horizontal_large">
+                    <div class="slds-col slds-p-horizontal_large ds-salesForceFileSelction_container slds-m-bottom_small">
                         <div class=" slds-text-align_center">
                             {!$Label.c.ChooseSalesforceFiles2}
                         </div>
-                        <ul class="slds-p-top_small">
+                        <ul class="slds-m-top_small">
                             <aura:iteration items="{!v.salesforceFiles}" var="file" indexVar="fileIndex">
-                                <li class="slds-item slds-p-vertical_small">
+                                <li class="slds-item slds-p-vertical_small slds-m-top_small">
                                     <article class="slds-tile slds-media slds-media_center">
                                         <div class="slds-media__figure">
                                             <lightning:input type="checkbox" aura:id="file-checkbox" label="Select"
@@ -116,8 +116,8 @@
                                         </div>
                                         <div class="slds-media__body">
                                             <h3 class="slds-truncate ds-fileDetails" title="{!file.name}">
-                                            {!file.name}
-                                        </h3>
+                                                {!file.name}
+                                            </h3>
                                             <div class="slds-truncate slds-text-color_weak fileDetails">
                                                 {!file.formattedSize} • {!file.extension}
                                             </div>
@@ -159,7 +159,7 @@
                         <div class="slds-grid slds-grid_vertical">
                             <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.createExternalReviewComponent}">
                                 <a
-                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                        class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
                                             <lightning:icon iconName="utility:answer"/>
@@ -168,14 +168,14 @@
                                     <div class="slds-media__body slds-p-around_xx-small">
                                         <h2 class="slds-truncate visualPickerHeading"
                                             title="{!$Label.c.SendForExternalReview}">
-                                           {!$Label.c.SendForExternalReview}</h2>
+                                            {!$Label.c.SendForExternalReview}</h2>
                                         <p class="">{!$Label.c.NegotiateCompare}</p>
                                     </div>
                                 </a>
                             </div>
                             <div class="slds-col slds-p-bottom_xx-small" onclick="{!c.createInternalApprovalComponent}">
                                 <a
-                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                                        class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
                                             <lightning:icon iconName="utility:approval"/>
@@ -189,7 +189,8 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="slds-col slds-p-bottom_xx-small">
+                            <div class="slds-col slds-p-bottom_xx-small"
+                                 onclick="{!c.createSalesforceFilesAndSendForSignature}">
                                 <a onclick=""
                                    class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">

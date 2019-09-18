@@ -1802,7 +1802,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Successfully generated your document</label>
+		<label>New Documents Generated</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -3860,6 +3860,14 @@
 	<customLabels>
 		<label>Add filter</label>
 		<name>AddFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>/sfc/servlet.shepherd/document/download/</label>
+		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>The files below have been successfully generated and can now be sent for signature</label>
+		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
