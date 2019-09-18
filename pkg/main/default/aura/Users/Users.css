@@ -4,7 +4,7 @@
     font-weight: t(fontWeightBold);
 }
 
-.THIS .ds-users-spinner-container {
+.THIS .ds-users-spinner-container, .THIS .ds-edit-users-spinner-container {
     position: relative;
     top: 100px;
 }
@@ -30,3 +30,6 @@
     padding: 0;
 }
 
+.THIS .ds-editPermissions-modal-content {
+    min-height: 220px;
+}

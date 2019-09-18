@@ -398,6 +398,70 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
+	static void test_editUserPermissions_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
+			Test.startTest();
+			try {
+				String userIdsToEdit = '["' + UserInfo.getUserId() + '"]';
+				String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+				SetupController.editUserPermissions(userIdsToEdit, roles);
+				throw new AssertException('Expected editUserPermissions to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_editUserPermissions_invalidUserIds() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				String userIdsToEdit = '';
+				String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+				SetupController.editUserPermissions(userIdsToEdit, roles);
+				throw new AssertException('Expected editUserPermissions to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_editUserPermissions_success() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			User u1 = UserMock.createClmAdministrator(false);
+			User u2 = UserMock.createDocuSignNegotiator(false);
+			String userIdsToEdit = '["' + u1.Id + '", "' + u2.Id + '"]';
+			String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+			Test.startTest();
+			List<Account.User> result = SetupController.editUserPermissions(userIdsToEdit, roles);
+			Test.stopTest();
+			System.assert(Collection.isNotEmpty(result));
+		}
+	}
+
+	@IsTest
+	static void test_editUserPermissions_invalidRoles() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				String userIdsToEdit = '["' + UserInfo.getUserId() + '"]';
+				String roles = '';
+				SetupController.editUserPermissions(userIdsToEdit, roles);
+				throw new AssertException('Expected editUserPermissions to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_beginSpringOAuth_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
