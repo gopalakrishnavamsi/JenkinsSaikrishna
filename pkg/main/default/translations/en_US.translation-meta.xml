@@ -3722,6 +3722,26 @@
 		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
+		<label>Edit permissions for {0}</label>
+		<name>EditSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit permissions for {0} users</label>
+		<name>EditBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully edited permissions for {0}.</label>
+		<name>EditSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully edited permissions for {0} users.</label>
+		<name>EditBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Apply</label>
+		<name>Apply</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
