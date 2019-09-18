@@ -26,7 +26,7 @@ public class CLMApexUtilityTest {
 
 	 @isTest
 	public static void getNamespace_authorized() {
-		System.runAs(UserMock.createClmAdministrator()) {
+		System.runAs(UserMock.createClmViewer()) {
 			Test.startTest();
 			String result = CLMApexUtility.getNamespace();
 			Test.stopTest();

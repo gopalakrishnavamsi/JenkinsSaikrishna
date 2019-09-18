@@ -10,7 +10,7 @@
 	<ltng:require scripts="{!$Resource.stringUtils}"/>
 	<div>
 		<aura:if isTrue="{!v.renderPage}">
-			<aura:if isTrue="{!v.eosDetails.mappingExists}">
+			<aura:if isTrue="{!and(v.eosDetails.mappingExists, !v.eosDetails.connectionError)}">
 				<div class="ds-main" style="{!'height:'+v.frameHeight+'px;'}">
 					<iframe aura:id="frame" src="{!v.eosDetails.eosUrl}" width="100%" height="100%" frameborder="0"
 						seamless="true" />
