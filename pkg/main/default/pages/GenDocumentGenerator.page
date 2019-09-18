@@ -1,6 +1,7 @@
 <apex:page sidebar="false" showHeader="true" controller="GenController" title="Generate Documents">
     <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <apex:includeLightning/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:slds/>
     <style type="text/css">
         .noSidebarCell #content {
@@ -77,6 +78,19 @@
 
 
     <script type="text/javascript">
+      var navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_blank');
+      };
+      var navigateToSObject = function (event) {
+        var recordId = event.getParam('recordId');
+        if (typeof sforce != 'undefined') {
+          sforce.one.navigateToSObject(recordId);
+        } else {
+          window.open('/' + recordId, '_blank');
+        }
+      };
+
       $Lightning.use('{!JSENCODE(namespace)}:GenDocumentGeneratorApp', function () {
         $Lightning.createComponent('{!JSENCODE(namespace)}:Generator', {
           templateId: '{!JSENCODE($CurrentPage.parameters.templateId)}',
@@ -87,6 +101,8 @@
           if (null == errorMessage) {
             document.getElementById('spinner').style.display = 'none';
             document.getElementById('content').style.display = 'block';
+            $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
+            $A.eventService.addHandler({'event': 'force:navigateToSObject', 'handler': navigateToSObject});
           }
         });
       });

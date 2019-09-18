@@ -11,12 +11,16 @@
     opacity: 0.2;
 }
 
-.THIS .dsImport-spinner_container {
+.THIS .ds-import-spinner_container {
     min-height: 20vh;
     position: relative;
 }
 
-.THIS .dsImport-spinner_setupFileUpload::after {
+.THIS .ds-salesForceFileSelction_container {
+    max-height: 300px;
+}
+
+.THIS .ds-import-spinner_setupFileUpload::after {
     position: absolute;
     content: 'Setting up Upload Widget';
     width: 100%;
@@ -24,7 +28,7 @@
     top: calc(50% + 3em);
 }
 
-.THIS .dsImport-spinner_setupSalesforceFiles::after {
+.THIS .ds-import-spinner_setupSalesforceFiles::after {
     position: absolute;
     content: 'Fetching Salesforce files';
     width: 100%;
@@ -32,7 +36,7 @@
     top: calc(50% + 3em);
 }
 
-.THIS .dsImport-spinner_uploadingAgreement::after {
+.THIS .ds-import-spinner_uploadingAgreement::after {
     position: absolute;
     content: 'Uploading to DocuSign Files';
     width: 100%;

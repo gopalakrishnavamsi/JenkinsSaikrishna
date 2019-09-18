@@ -1,30 +1,45 @@
 ({
-  createEnvelope: function(component, sourceId) {
+  createEnvelope: function (component, sourceId) {
     var self = this;
+    var selectedDocumentIds = component.get('v.selectedDocumentIds');
+    var updated = false;
     this.invokeAction(
       component,
       component.get('c.createDraftEnvelope'),
       {
         sourceId: sourceId
       },
-      function(result) {
+      function (result) {
         // Add front-end properties to documents
         if (!$A.util.isEmpty(result.documents)) {
-          result.documents.forEach(function(d) {
-            self.addDocumentProperties(d, false);
+          result.documents.forEach(function (d) {
+            var isFileSelected = selectedDocumentIds.indexOf(d.sourceId) >= 0;
+            self.addDocumentProperties(d, isFileSelected);
+            if (isFileSelected) {
+              updated = true;
+            }
           });
         }
+
+        result.documents.sort(function (a, b) {
+          if (!a['selected'] && b['selected'])
+            return 1;
+          if (a['selected'] && !b['selected'])
+            return -1;
+          return a['selected'] - b['selected'];
+        });
+
         if (!$A.util.isEmpty(result.recipients)) {
-          result.recipients.forEach(function(r) {
+          result.recipients.forEach(function (r) {
             r = self.addRecipientProperties(r);
             r.role = {}; // TODO: Roles only apply to templates for now.
           });
         }
         if (!$A.util.isEmpty(result.templates)) {
-          result.templates.forEach(function(template) {
+          result.templates.forEach(function (template) {
             template.selected = false;
             if (!$A.util.isEmpty(template.recipients)) {
-              template.recipients.forEach(function(r) {
+              template.recipients.forEach(function (r) {
                 self.addRecipientProperties(r);
                 r.templateId = template.id.value;
               });
@@ -52,11 +67,15 @@
           'v.isEmailLocalizationEnabled',
           !$A.util.isEmpty(result.emailLocalizations)
         );
+        if (updated) {
+          component.set('v.disableNext', false);
+          self.handleFilesChange(component);
+        }
       }
     );
   },
 
-  setReminders: function(notifications, remindAfterDays, remindFrequencyDays) {
+  setReminders: function (notifications, remindAfterDays, remindFrequencyDays) {
     if ($A.util.isEmpty(notifications)) {
       notifications = {};
     }
@@ -75,7 +94,7 @@
   },
 
   // TODO: Validate expiry assumptions. Does NDSE force expiration after 120 days?
-  setExpiration: function(notifications, expireAfterDays, expireWarnDays) {
+  setExpiration: function (notifications, expireAfterDays, expireWarnDays) {
     if ($A.util.isEmpty(notifications)) {
       notifications = {};
     }
@@ -91,7 +110,7 @@
     return notifications;
   },
 
-  getExpirationDate: function(expireAfterDays) {
+  getExpirationDate: function (expireAfterDays) {
     if ($A.util.isUndefinedOrNull(expireAfterDays)) {
       return null;
     }
@@ -102,7 +121,7 @@
     return expirationDate.toLocaleDateString();
   },
 
-  addDocumentProperties: function(doc, selected) {
+  addDocumentProperties: function (doc, selected) {
     if (doc) {
       doc.selected = selected === true;
       doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
@@ -113,7 +132,7 @@
     return doc;
   },
 
-  addRecipientProperties: function(recipient) {
+  addRecipientProperties: function (recipient) {
     if (recipient) {
       recipient.templateId = null;
       if ($A.util.isUndefinedOrNull(recipient.emailSettings)) {
@@ -126,19 +145,19 @@
     return recipient;
   },
 
-  enforceArray: function(results) {
+  enforceArray: function (results) {
     return Array.isArray(results) ? results : [results];
   },
 
-  resetNotificationSettings: function(notifications) {
+  resetNotificationSettings: function (notifications) {
     return this.setExpiration(this.setReminders(notifications), 120);
   },
 
-  updateTemplate: function(component, templateId) {
+  updateTemplate: function (component, templateId) {
     var self = this;
     var availableTemplates = component.get('v.availableTemplates');
 
-    availableTemplates.forEach(function(t) {
+    availableTemplates.forEach(function (t) {
       if (t.id.value === templateId) {
         var envelope = component.get('v.envelope');
         if (t.notifications !== null) {
@@ -167,7 +186,7 @@
         component.set('v.template', t);
       } else {
         t.selected = false;
-        t.recipients.forEach(function(tr) {
+        t.recipients.forEach(function (tr) {
           tr.source = {};
         });
       }
@@ -178,7 +197,7 @@
     component.set('v.availableTemplates', availableTemplates);
   },
 
-  newRecipient: function(recipient) {
+  newRecipient: function (recipient) {
     // TODO: Override all properties with customizations
     var isDefined = !$A.util.isUndefinedOrNull(recipient);
     return {
@@ -195,7 +214,7 @@
     };
   },
 
-  getSourceId: function(x) {
+  getSourceId: function (x) {
     if ($A.util.isUndefinedOrNull(x)) return null;
 
     var sourceId = null;
@@ -210,7 +229,7 @@
     return sourceId;
   },
 
-  getValidity: function(component) {
+  getValidity: function (component) {
     switch (component.get('v.activeStep')) {
       case 0:
         return !!(
@@ -226,7 +245,7 @@
     }
   },
 
-  handleUploadFinished: function(component) {
+  handleUploadFinished: function (component) {
     var self = this;
     this.invokeAction(
       component,
@@ -234,10 +253,10 @@
       {
         sourceId: component.get('v.recordId')
       },
-      function(docs) {
+      function (docs) {
         var existingDocuments = component.get('v.documents');
-        docs.forEach(function(doc) {
-          var alreadyAttached = existingDocuments.filter(function(d) {
+        docs.forEach(function (doc) {
+          var alreadyAttached = existingDocuments.filter(function (d) {
             return d.sourceId.match(doc.sourceId);
           });
           // if filter returns no match then this file doesn't already exist
@@ -253,7 +272,7 @@
     );
   },
 
-  handleFilesChange: function(component) {
+  handleFilesChange: function (component) {
     var fileCheckboxes = this.enforceArray(component.find('file-checkbox'));
 
     for (var i = 0; i < fileCheckboxes.length; i++) {
@@ -266,11 +285,11 @@
     component.set('v.filesSelected', false);
   },
 
-  getDocumentsForSending: function(documents, template) {
+  getDocumentsForSending: function (documents, template) {
     var sequence = 1;
     var docs = [];
     if (!$A.util.isEmpty(documents)) {
-      documents.forEach(function(d) {
+      documents.forEach(function (d) {
         if (d.selected) {
           docs.push({
             sequence: sequence++,
@@ -298,12 +317,12 @@
     return docs;
   },
 
-  getRecipientsForSending: function(recipients, hasDocuments, defaultRoles) {
+  getRecipientsForSending: function (recipients, hasDocuments, defaultRoles) {
     var self = this;
     var rs = [];
     var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
-      recipients.forEach(function(r) {
+      recipients.forEach(function (r) {
         if (
           self.isValidRecipient(r) &&
           (!$A.util.isEmpty(r.templateId) || hasDocuments)
@@ -321,15 +340,15 @@
     return rs;
   },
 
-  isRoleDefined: function(role) {
+  isRoleDefined: function (role) {
     return !$A.util.isUndefinedOrNull(role) && !$A.util.isEmpty(role.name);
   },
 
-  getNextRole: function(defaultRoles) {
+  getNextRole: function (defaultRoles) {
     return $A.util.isEmpty(defaultRoles) ? null : defaultRoles.shift();
   },
 
-  tagEnvelope: function(component, envelope) {
+  tagEnvelope: function (component, envelope) {
     this.setLoading(component, true);
     var self = this;
     var sendEnvelope = component.get('c.sendEnvelope');
@@ -337,13 +356,13 @@
       // HACK: Stringify-ing JSON to work around @AuraEnabled method limitations.
       envelopeJson: JSON.stringify(envelope)
     });
-    sendEnvelope.setCallback(self, function(response1) {
+    sendEnvelope.setCallback(self, function (response1) {
       if (response1.getState() === 'SUCCESS') {
         var getTaggerUrl = component.get('c.getTaggerUrl');
         getTaggerUrl.setParams({
           envelopeJson: JSON.stringify(response1.getReturnValue())
         });
-        getTaggerUrl.setCallback(self, function(response2) {
+        getTaggerUrl.setCallback(self, function (response2) {
           if (response1.getState() === 'SUCCESS') {
             navUtils.navigateToUrl(response2.getReturnValue());
           } else {
@@ -358,11 +377,11 @@
     $A.enqueueAction(sendEnvelope);
   },
 
-  valueOrElse: function(value, orElse) {
+  valueOrElse: function (value, orElse) {
     return $A.util.isEmpty(value) ? orElse : value;
   },
 
-  mergeTemplateRecipient: function(templateRecipient, recipient) {
+  mergeTemplateRecipient: function (templateRecipient, recipient) {
     if ($A.util.isUndefinedOrNull(templateRecipient)) return recipient;
     if ($A.util.isUndefinedOrNull(recipient)) return templateRecipient;
 
@@ -434,7 +453,7 @@
     };
   },
 
-  isValidRecipient: function(recipient) {
+  isValidRecipient: function (recipient) {
     return (
       !$A.util.isUndefinedOrNull(recipient) &&
       ((!$A.util.isEmpty(recipient.name) &&
@@ -447,10 +466,10 @@
     );
   },
 
-  resetRecipients: function(recipients) {
+  resetRecipients: function (recipients) {
     var rs = [];
     if (!$A.util.isEmpty(recipients)) {
-      recipients.forEach(function(r) {
+      recipients.forEach(function (r) {
         if ($A.util.isEmpty(r.templateId)) {
           rs.push(r);
         } else if (!$A.util.isUndefinedOrNull(r.original)) {
@@ -462,7 +481,7 @@
     return rs;
   },
 
-  getRecipients: function(recipients, template) {
+  getRecipients: function (recipients, template) {
     var self = this;
     var rs = [];
     var ri = 0;
@@ -472,7 +491,7 @@
         !$A.util.isEmpty(template.recipients)
       ) {
         // Add or merge template recipients
-        template.recipients.forEach(function(tr) {
+        template.recipients.forEach(function (tr) {
           if (ri < recipients.length && !self.isValidRecipient(tr)) {
             rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
           } else {
@@ -489,7 +508,7 @@
     return rs;
   },
 
-  resolveRecipient: function(component, recipient) {
+  resolveRecipient: function (component, recipient) {
     var self = this;
     var sourceId = self.getSourceId(recipient);
     this.invokeAction(
@@ -498,11 +517,11 @@
       {
         sourceId: sourceId
       },
-      function(result) {
+      function (result) {
         if (!$A.util.isUndefinedOrNull(result)) {
           var updated = false;
           var rs = component.get('v.recipients');
-          rs.forEach(function(r) {
+          rs.forEach(function (r) {
             // Update name, email, phone, full source for new recipient
             if (self.getSourceId(r) === sourceId) {
               r.name = result.name;

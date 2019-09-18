@@ -18,47 +18,15 @@
     transform: translate(-50%, calc(-50% - 25px)) rotate(90deg);
 }
 
-.THIS.slds-scope .ds-checkbox_large [type="checkbox"] + .slds-checkbox__label .slds-checkbox_faux {
-    width: t(spacingLarge);
-    height: t(spacingLarge);
-    box-shadow: 0 0 3px 3px t(colorBackground) inset;
-    background-color: #fdfdfd;
-    margin: 0;
-}
-
-.THIS.slds-scope .ds-checkbox_large [type="checkbox"]:checked + .slds-checkbox__label .slds-checkbox_faux:after {
-    width: t(spacingMedium);
-    height: t(spacingXSmall);
-    border-bottom-width: 4px;
-    border-left-width: 4px;
-    top: 44%;
-}
-
-.THIS.slds-scope .ds-radio_large [type="radio"] + .slds-radio__label .slds-radio_faux {
-    width: t(spacingLarge);
-    height: t(spacingLarge);
-    box-shadow: 0 0 3px 3px t(colorBackground) inset;
-    background-color: #fdfdfd;
-    margin: 0;
-}
-
-.THIS.slds-scope .ds-radio_large [type="radio"]:checked + .slds-radio__label .slds-radio_faux:after {
-    width: t(spacingMedium);
-    height: t(spacingMedium);
-}
-
-.THIS.slds-scope .ds-checkbox_large .slds-form-element__label,
-.THIS.slds-scope .ds-radio_large .slds-form-element__label {
+.THIS .ds-no-label .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
+.THIS .ds-no-label lightning-input .slds-form-element__label {
     display: none;
 }
 
-.THIS.slds-scope .ds-checkbox_large.slds-no-label.slds-form-element .slds-checkbox .slds-checkbox_faux,
-.THIS.slds-scope .ds-radio_large.slds-no-label.slds-form-element .slds-radio .slds-radio_faux {
-    margin-right: 0;
-}
-
-.THIS .ds-no-label .slds-form-element__label {
-    display: none;
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox--faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux {
+    margin: 0;
 }
 
 .THIS .scrollable {
@@ -71,5 +39,46 @@
 
 .THIS .ds-generated-file {
     max-width: 44%;
-
 }
+
+.THIS .ds-genFileFooter {
+    border-top: 0px;
+    padding: 1rem;
+}
+
+.THIS .ds-genFileModal {
+    border-radius: .25rem;
+    border: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-genFileContent {
+    padding: 1rem;
+    margin: 2rem;
+    max-height: 100vh;
+}
+
+.THIS .ds-genFileHeader {
+    background-color: rgb(4, 132, 75)
+}
+
+.THIS .ds-genFileText {
+    opacity: 0.7;
+}
+
+.THIS.ds-cursor_pointer,
+.THIS .ds-cursor_pointer {
+    cursor: pointer;
+}
+
+.THIS .ds-fileSpacing {
+    border-bottom: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-bannerContainer {
+    padding: 1rem;
+}
+
+.THIS .ds-sending {
+    max-height: 65vh !important;
+}
+
