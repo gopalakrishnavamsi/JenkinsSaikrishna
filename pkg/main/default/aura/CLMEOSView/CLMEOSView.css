@@ -1,17 +1,17 @@
 .THIS .ds-main {
-  width: 100%;
+	width: 100%;
 }
 
 .THIS .ds-gray-color {
-  background-color: t(colorBackground);
-  border-radius: t(borderRadiusMedium);
+	background-color: t(colorBackground);
+	border-radius: t(borderRadiusMedium);
 }
 
 .THIS .ds-font-size {
-  color: t(colorTextLinkActive);
-  font-size: 1.25rem;
+	color: t(colorTextLinkActive);
+	font-size: 1.25rem;
 }
 
 .THIS .ds-loadingContainer {
-  z-index: 100;
+	z-index: 100;
 }

@@ -7,7 +7,7 @@ public with sharing class CLMEOSViewController {
     //Constructor called from VF page - CLMEOSView.page
     public CLMEOSViewController() {
         try {
-            Permissions.verifyIsClmUser();
+            Permissions.verifyIsClmViewer();
             hostingUrl = '';
             Id sid = System.currentPageReference().getParameters().get('sid');
             if (sid != NULL) {
@@ -38,7 +38,7 @@ public with sharing class CLMEOSViewController {
         	return fetchUrl(recordId);    
         } catch (Exception ex) {
             LoggerService.getInstance().exception(ex, 'Failed to fetch clm Url');
-            return new EOSUrlResult(true,false,null);
+            return new EOSUrlResult(true,true,null);
         }                            
     }
     
@@ -58,7 +58,7 @@ public with sharing class CLMEOSViewController {
     }
     
     private static EOSUrlResult fetchUrl(Id recordId) {
-            Permissions.verifyIsClmUser();            
+            Permissions.verifyIsClmViewer();            
             EOSUrlResult eosResult;
             EOS_Type__c config = CLMService.getCurrentMappingConfig(recordId);  
             if (config==null) {
