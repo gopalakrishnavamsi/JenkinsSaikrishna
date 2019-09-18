@@ -92,7 +92,6 @@
     ];
     component.set('v.steps', steps);
     var templateId = component.get('v.templateId');
-
     var getConfigAction = helper.getConfiguration(component);
     getConfigAction.then(
       $A.getCallback(function (results) {
@@ -118,7 +117,6 @@
         if ($A.util.isEmpty(templateId)) {
           component.set('v.templateId', results.template.id);
         }
-
         if (results.template.stepsCompleted >= steps.length) {
           component.set('v.currentStep', 0);
           component.set('v.isCompleted', true);
@@ -143,7 +141,6 @@
         getConfigAction.setParams({
           templateId: templateId
         });
-
         getConfigAction.setCallback(this, function (response) {
           component.set('v.saving', false);
           var state = response.getState();
