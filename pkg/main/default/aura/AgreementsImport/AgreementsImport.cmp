@@ -39,9 +39,9 @@
                     successHeader="{!if(and(v.currentStep == '4', not(v.loading)), true,false)}">
 
         <aura:if isTrue="{!v.loading}">
-            <div class="{!'dsImport-spinner_container' + if(v.currentStep == '3', ' dsImport-spinner_setupFileUpload')
-                                                       + if(v.currentStep == '2', ' dsImport-spinner_setupSalesforceFiles')
-                                                       + if(v.currentStep == '4', ' dsImport-spinner_uploadingAgreement')}">
+            <div class="{!'ds-import-spinner_container' + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
+                                                       + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
+                                                       + if(v.currentStep == '4', ' ds-import-spinner_uploadingAgreement')}">
                 <c:BlueSpinner/>
             </div>
         </aura:if>
@@ -94,7 +94,7 @@
                 </aura:if>
 
                 <aura:if isTrue="{!and(v.currentStep == '2', not(v.loading))}">
-                    <div class="slds-col slds-p-horizontal_large dsSalesforceFileSelction_container slds-m-bottom_small">
+                    <div class="slds-col slds-p-horizontal_large ds-salesForceFileSelction_container slds-m-bottom_small">
                         <div class=" slds-text-align_center">
                             {!$Label.c.ChooseSalesforceFiles2}
                         </div>
