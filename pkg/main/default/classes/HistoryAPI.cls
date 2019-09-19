@@ -73,12 +73,12 @@ public with sharing class HistoryAPI extends ScmAPI {
 		public Datetime createdDate;
 
 		public AgreementHistoryItem convertAPIHistoryItem(Map<String, User> emailToUser, Map<String, Contact> emailToContact) {
-
 			AgreementHistoryItem.Actor actor = new AgreementHistoryItem.Actor(
 				'',
 				'',
 				'');
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
+			String previewUrl = '';
 
 			if (this.data != null) {
 
@@ -90,6 +90,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 					//Scenario 1 : When Action Type should map to salesforce  contact however contact is not in salesforce
 					//Scenario 2 : For  All other action type
 					User resolvedUser = emailToUser.containsKey(this.data.actor.emailAddress) ? emailToUser.get(this.data.actor.emailAddress) : null;
+					previewUrl = resolvedUser != null ? NegotiateService.getAgreementPreviewLink(resolvedUser.Id, this.data.documentUid, false) : '';
 					actor = generateActorFromUser(this.data.actor, resolvedUser, baseURL);
 
 					Boolean isActionTypeMapToSalesforceContact =
@@ -129,7 +130,8 @@ public with sharing class HistoryAPI extends ScmAPI {
 				this.data.documentOldName != null ? this.data.documentOldName : null,
 				this.data.documentName,
 				actor,
-				recipients);
+				recipients,
+				previewUrl);
 		}
 
 		@TestVisible
