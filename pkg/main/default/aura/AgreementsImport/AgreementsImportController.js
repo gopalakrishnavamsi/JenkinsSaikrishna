@@ -91,4 +91,8 @@
     );
   },
 
+  navigateToSendForSignature: function (component,event,helper) {
+    helper.navigateToSendForSignature(component);
+  }
+
 });

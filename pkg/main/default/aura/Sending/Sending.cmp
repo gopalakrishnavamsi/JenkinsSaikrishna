@@ -23,6 +23,7 @@
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="files" type="String" access="public"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>

@@ -169,4 +169,22 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to verify docusign user');
 		}
 	}
+
+	@AuraEnabled
+	public static String getSendingDeepLink(final Id sourceId, final List<String> fileIds) {
+		try {
+
+			PageReference sendingPath = Page.Sending;
+			if (sourceId != null) {
+				sendingPath.getParameters().put('sId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
+			}
+			if (fileIds != null && fileIds.size() > 0) {
+				String salesforceFileIdsInCommaSeparated = fileIds.size() > 1 ? String.join(fileIds, ',') : fileIds[0];
+				sendingPath.getParameters().put('files', EncodingUtil.urlEncode(salesforceFileIdsInCommaSeparated, StringUtils.ENCODING));
+			}
+			return new Url(Salesforce.baseUrl, sendingPath.getUrl()).toExternalForm();
+		} catch (Exception ex) {
+			throw new APIException('Failed to generate sending deep link: ' + ex.getMessage());
+		}
+	}
 }

@@ -1,22 +1,22 @@
 ({
-  initialize: function(component) {
+  initialize: function (component) {
     component.set('v.currentStep', '1');
     component.set('v.disableSalesforceFileImport', true);
   },
 
-  fetchSalesforceFiles: function(component, event, helper) {
+  fetchSalesforceFiles: function (component, event, helper) {
     component.set('v.currentStep', '2');
     component.set('v.loading', true);
     var getSalesforceFiles = component.get('c.getLinkedDocuments');
     getSalesforceFiles.setParams({
       sourceId: component.get('v.recordId')
     });
-    getSalesforceFiles.setCallback(this, function(response) {
+    getSalesforceFiles.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         // Add front-end properties to documents
         if (!$A.util.isEmpty(result)) {
-          result.forEach(function(d) {
+          result.forEach(function (d) {
             helper.addDocumentProperties(d, false);
           });
         }
@@ -30,7 +30,7 @@
     $A.enqueueAction(getSalesforceFiles);
   },
 
-  setupFileUploadWidget: function(component, event, helper) {
+  setupFileUploadWidget: function (component, event, helper) {
     component.set('v.currentStep', '3');
     component.set('v.loading', true);
     var sourceId = component.get('v.recordId');
@@ -38,16 +38,16 @@
     limitedAccessToken.setParams({
       objectId: sourceId
     });
-    limitedAccessToken.setCallback(this, function(response) {
+    limitedAccessToken.setCallback(this, function (response) {
       var state = response.getState();
       var result = response.getReturnValue();
       if (state === 'SUCCESS') {
         try {
           var options = {
             iconPath: $A.get('$Resource.scmwidgetsspritemap'),
-            accessTokenFn: function() {
-              return new Promise(function(resolve, reject) {
-                limitedAccessToken.setCallback(this, function(response2) {
+            accessTokenFn: function () {
+              return new Promise(function (resolve, reject) {
+                limitedAccessToken.setCallback(this, function (response2) {
                   var state2 = response2.getState();
                   if (state2 === 'SUCCESS') {
                     resolve(response2.getReturnValue().token);
@@ -78,14 +78,14 @@
     $A.enqueueAction(limitedAccessToken);
   },
 
-  importSalesforceFile: function(component, event, helper) {
+  importSalesforceFile: function (component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
 
     //get selected file
     var salesforceFiles = component.get('v.salesforceFiles');
     var selectedFile;
-    salesforceFiles.forEach(function(file) {
+    salesforceFiles.forEach(function (file) {
       if (file.selected) {
         selectedFile = file;
       }
@@ -99,7 +99,7 @@
         sourceObjectId: recordId,
         documentName: selectedFile.name + '.' + selectedFile.extension
       });
-      action.setCallback(this, function(response) {
+      action.setCallback(this, function (response) {
         if (response.getState() === 'SUCCESS') {
           var result = response.getReturnValue();
           if (result.status === 'Success') {
@@ -145,7 +145,7 @@
     $A.enqueueAction(action);
   },
 
-  importFileFromPc: function(component, event, helper) {
+  importFileFromPc: function (component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
     var widget = component.get('v.widget');
@@ -153,7 +153,7 @@
     try {
       widget
         .uploadNewDocument(folderId.value)
-        .then(function(response) {
+        .then(function (response) {
           var importedFile = {
             name: response.Name,
             formattedSize: response.NativeFileSize
@@ -164,7 +164,7 @@
           helper.displayCreatedAgreement(component, importedFile);
           helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), component);
         })
-        .catch(function() {
+        .catch(function () {
           helper.showToast(component, 'Error Uploading File', 'error');
           helper.completeImport(component, event, helper);
         });
@@ -178,30 +178,30 @@
     return documentHref.substring(documentHref.lastIndexOf('/') + 1);
   },
 
-  displayCreatedAgreement: function(component, importedFile) {
+  displayCreatedAgreement: function (component, importedFile) {
     component.set('v.importedFile', importedFile);
     component.set('v.loading', false);
   },
 
-  setSelectedFiles: function(component, selectedValue) {
+  setSelectedFiles: function (component, selectedValue) {
     var salesforceFiles = component.get('v.salesforceFiles');
-    salesforceFiles.forEach(function(file) {
+    salesforceFiles.forEach(function (file) {
       file.selected = file.sourceId === selectedValue;
     });
     component.set('v.salesforceFiles', salesforceFiles);
     component.set('v.disableSalesforceFileImport', false);
   },
 
-  completeImport: function(component, event, helper) {
+  completeImport: function (component, event, helper) {
     helper.reloadAgreementsSpace(component);
     helper.close(component);
   },
 
-  close: function(component) {
+  close: function (component) {
     component.destroy();
   },
 
-  showToast: function(component, message, mode) {
+  showToast: function (component, message, mode) {
     var fireToastEvent = component.getEvent('toastEvent');
     fireToastEvent.setParams({
       show: true,
@@ -211,7 +211,7 @@
     fireToastEvent.fire();
   },
 
-  reloadAgreementsSpace: function(component) {
+  reloadAgreementsSpace: function (component) {
     var reloadEvent = component.getEvent('loadingEvent');
     reloadEvent.setParams({
       isLoading: true
@@ -219,7 +219,7 @@
     reloadEvent.fire();
   },
 
-  addDocumentProperties: function(doc, selected) {
+  addDocumentProperties: function (doc, selected) {
     if (doc) {
       doc.selected = selected;
       doc.formattedSize = doc.size ? stringUtils.formatSize(doc.size) : '';
@@ -228,5 +228,42 @@
         : '';
     }
     return doc;
+  },
+
+  navigateToSendForSignature: function (component) {
+    var helper = this;
+    return new Promise($A.getCallback(function (resolve) {
+      var saveAsSalesforceFileAction = component.get('c.exportAgreementToSalesforce');
+      saveAsSalesforceFileAction.setParams({
+        sourceId: component.get('v.recordId'),
+        agreementId: component.get('v.agreementDetails').id.value
+      });
+      saveAsSalesforceFileAction.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve();
+        } else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        }
+      });
+      $A.enqueueAction(saveAsSalesforceFileAction);
+    })).then(
+      $A.getCallback(function () {
+        var sendingAction = component.get('c.getSendingDeepLink');
+        var sourceId = component.get('v.recordId');
+        sendingAction.setParams({
+          sourceId: sourceId
+        });
+        sendingAction.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            navUtils.navigateToUrl(response.getReturnValue());
+          } else {
+            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+          }
+        });
+        $A.enqueueAction(sendingAction);
+      })
+    );
   }
 });
