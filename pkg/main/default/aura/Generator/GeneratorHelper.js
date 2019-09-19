@@ -24,7 +24,7 @@
     if ($A.util.isUndefinedOrNull(templateFiles) || templateFiles.length === 0) {
       component.set('v.errMsg', $A.get('$Label.c.NoDocForTemplateMsg'));
       component.set('v.errType', 'warning');
-    }else {
+    } else {
 
       templateFiles.forEach(function (file) {
         helper.addDocumentProperties(file, true);
@@ -559,23 +559,21 @@
       resolve(generatedFileIds);
     })).then(
       $A.getCallback(function (fileIds) {
-        if (!$A.util.isEmpty(fileIds)) {
-          var sendingAction = component.get('c.getSendingDeepLink');
-          var sourceId = component.get('v.recordId');
-          sendingAction.setParams({
-            sourceId: sourceId,
-            fileIds: fileIds.join()
-          });
-          sendingAction.setCallback(this, function (response) {
-            var state = response.getState();
-            if (state === 'SUCCESS') {
-              navUtils.navigateToUrl(response.getReturnValue());
-            } else {
-              helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-            }
-          });
-          $A.enqueueAction(sendingAction);
-        }
+        var sendingAction = component.get('c.getSendingDeepLink');
+        var sourceId = component.get('v.recordId');
+        sendingAction.setParams({
+          sourceId: sourceId,
+          fileIds: !$A.util.isEmpty(fileIds) ? fileIds.join() : ''
+        });
+        sendingAction.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            navUtils.navigateToUrl(response.getReturnValue());
+          } else {
+            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+          }
+        });
+        $A.enqueueAction(sendingAction);
       })
     );
   },

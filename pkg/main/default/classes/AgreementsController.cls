@@ -257,17 +257,11 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId,final String fileTitle) {
+	public static String getSendingDeepLink(final Id sourceId) {
 		try {
-			List<Id> salesforceFileIds = new List<Id>(DocumentService.queryLinkedDocumentIdsByTitle(sourceId,fileTitle));
-
 			PageReference sendingPath = Page.Sending;
-			if(sourceId != null) {
+			if (sourceId != null) {
 				sendingPath.getParameters().put('sId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			}
-			if(salesforceFileIds != null && salesforceFileIds.size() >  0) {
-				String salesforceFileIdsInCommaSeparated = salesforceFileIds.size()> 1 ? String.join(salesforceFileIds,',') : salesforceFileIds[0];
-				sendingPath.getParameters().put('files', EncodingUtil.urlEncode(salesforceFileIdsInCommaSeparated, StringUtils.ENCODING));
 			}
 			return new Url(Salesforce.baseUrl, sendingPath.getUrl()).toExternalForm();
 		} catch (Exception ex) {
