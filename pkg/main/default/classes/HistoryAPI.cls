@@ -72,7 +72,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 		public String actionType;
 		public Datetime createdDate;
 
-		public AgreementHistoryItem convertAPIHistoryItem(Map<String, User> emailToUser, Map<String, Contact> emailToContact) {
+		public AgreementHistoryItem convertAPIHistoryItem(final UUID documentId, Map<String, User> emailToUser, Map<String, Contact> emailToContact) {
 			AgreementHistoryItem.Actor actor = new AgreementHistoryItem.Actor(
 				'',
 				'',
@@ -90,7 +90,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 					//Scenario 1 : When Action Type should map to salesforce  contact however contact is not in salesforce
 					//Scenario 2 : For  All other action type
 					User resolvedUser = emailToUser.containsKey(this.data.actor.emailAddress) ? emailToUser.get(this.data.actor.emailAddress) : null;
-					previewUrl = resolvedUser != null ? NegotiateService.getAgreementPreviewLink(resolvedUser.Id, this.data.documentUid, false) : '';
+					previewUrl = resolvedUser != null ? NegotiateService.getAgreementPreviewLink(resolvedUser.Id, documentId.toString(), false) : '';
 					actor = generateActorFromUser(this.data.actor, resolvedUser, baseURL);
 
 					Boolean isActionTypeMapToSalesforceContact =
@@ -281,7 +281,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 		for (APIHistoryItems apiHistoryItems : documentIdToAPIHistoryItems.get(documentId)) {
 			for (APIHistoryItem a : apiHistoryItems.items) {
 				if (a != null && a.data != null) {
-					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
+					historyItems.add(a.convertAPIHistoryItem(documentId, emailToUser, emailToContact));
 				}
 			}
 		}
@@ -330,7 +330,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 			}
 			for (APIHistoryItem a : result.items) {
 				if (a != null && a.data != null) {
-					historyItems.add(a.convertAPIHistoryItem(emailToUser, emailToContact));
+					historyItems.add(a.convertAPIHistoryItem(documentId, emailToUser, emailToContact));
 				}
 			}
 			next = result.next;
