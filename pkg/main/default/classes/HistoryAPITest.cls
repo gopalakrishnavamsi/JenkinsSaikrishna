@@ -178,6 +178,23 @@ private class HistoryAPITest {
 		}
 	}
 
+    // Agreement maps to Salesforce contact
+	@IsTest
+	static void test_getHistoryItems_success5() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+			Test.startTest();
+			List<AgreementHistoryItem> result = HistoryAPI.getInstance().getHistoryItems(ScmAPIMock.DOCUMENT_ID_7);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+			System.assertEquals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments, result.get(0).historyItemType);
+			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
+		}
+	}
+
 	@IsTest
 	static void test_resendRequest_failure() {
 		ScmAPIMock.failure();
