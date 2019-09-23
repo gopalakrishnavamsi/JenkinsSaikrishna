@@ -587,7 +587,7 @@
   isEsignEnabled: function (component) {
     var helper = this;
     var isEsignEnabledAction = component.get('c.isEsignEnabled');
-    isEsignEnabledAction.setCallback(function (response) {
+    isEsignEnabledAction.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
         var canSendForSignature = response.getReturnValue();
