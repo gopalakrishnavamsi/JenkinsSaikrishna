@@ -17,11 +17,11 @@
 
   <c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}" />
   <lightning:layout>
-    <lightning:layoutItem size="2" class="slds-theme_default slds-m-right_small">
+    <lightning:layoutItem size="2" class="slds-theme_default">
       <!--left side bar-->
       {!v.sideBar}
     </lightning:layoutItem>
-    <lightning:layoutItem flexibility="grow">
+    <lightning:layoutItem flexibility="grow" class="slds-m-around_medium">
       <lightning:layout multipleRows="true">
         <aura:if isTrue="{!!v.fullLayout}">
           <lightning:layoutItem size="12" class="slds-p-bottom_small">
