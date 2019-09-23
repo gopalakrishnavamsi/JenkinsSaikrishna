@@ -259,7 +259,7 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String getSendingDeepLink(final Id sourceId, String fileIdsInCommaSeparated) {
 		try {
-			return EnvelopeService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
+			return FileService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get deep link');
 		}

@@ -24,7 +24,7 @@ private class AccountProductsTest {
 	static void test_getProducts_success() {
 		DocuSignAPIMock.success();
 
-		System.runAs(UserMock.createDocuSignAdministrator()) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			List<Product> productsList = AccountProducts.getProducts();
 			Test.stopTest();
@@ -980,7 +980,6 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_isEsignEnabled() {
-		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			Boolean isEsignEnabled = AccountProducts.isEsignEnabled();

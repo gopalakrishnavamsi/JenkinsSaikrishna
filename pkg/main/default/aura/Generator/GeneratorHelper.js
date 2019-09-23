@@ -29,17 +29,15 @@
         helper.addDocumentProperties(file, true);
       });
       component.set('v.templateFiles', templateFiles);
+      config.objectMappings.forEach(function (objMapping) {
+        var lookupObj = {
+          apiName: objMapping.apiName,
+          label: objMapping.label
+        };
+        lookupObjs.push(lookupObj);
+      });
+      component.set('v.lookupObjs', lookupObjs);
     }
-
-    config.objectMappings.forEach(function (objMapping) {
-      var lookupObj = {
-        apiName: objMapping.apiName,
-        label: objMapping.label
-      };
-
-      lookupObjs.push(lookupObj);
-    });
-    component.set('v.lookupObjs', lookupObjs);
 
     //Preview Mode
     if (isPreview) {

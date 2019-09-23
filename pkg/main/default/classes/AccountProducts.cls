@@ -469,7 +469,6 @@ public with sharing class AccountProducts {
 	 * @return A List of Products on the account
 	 */
 	public static List<Product> getProducts() {
-		Permissions.verifyIsDocuSignAdministrator();
 		return AccountProducts.getInstance().products.values();
 	}
 
@@ -689,16 +688,12 @@ public with sharing class AccountProducts {
 	public static boolean isEsignEnabled() {
 		Permissions.verifyIsDocuSignUser();
 		Boolean isEnabled = false;
-		for (Product product : getAccountProducts()) {
+		for (Product product : getProducts()) {
 			if (product.Name == ESIGN) {
 				isEnabled = true;
 				Break;
 			}
 		}
 		return isEnabled;
-	}
-
-	private static List<Product> getAccountProducts() {
-		return AccountProducts.getInstance().products.values();
 	}
 }

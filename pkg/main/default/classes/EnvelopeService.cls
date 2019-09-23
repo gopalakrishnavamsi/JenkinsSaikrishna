@@ -791,29 +791,4 @@ global with sharing class EnvelopeService {
 			Credentials.save();
 		}
 	}
-
-	/**
-	 * Retrieves a esign deeplink URL.
-	 * The caller must be the a docusign user
-	 *
-	 * @param sourceId source record id
-	 * @param fileIds file/contentdocumentid list
-	 *
-	 * @return sending deeplink url
-	 */
-	public static Url getSendingDeepLink(Id sourceId, String fileIdsInCommaSeparated) {
-		try {
-			Permissions.verifyIsDocuSignUser();
-			PageReference sendingPath = Page.Sending;
-			if (sourceId != null) {
-				sendingPath.getParameters().put('sId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			}
-			if (fileIdsInCommaSeparated != null) {
-				sendingPath.getParameters().put('files', EncodingUtil.urlEncode(fileIdsInCommaSeparated, StringUtils.ENCODING));
-			}
-			return new Url(Salesforce.baseUrl, sendingPath.getUrl());
-		} catch (Exception ex) {
-			throw new APIException('Failed to generate sending deep link: ' + ex.getMessage());
-		}
-	}
 }
