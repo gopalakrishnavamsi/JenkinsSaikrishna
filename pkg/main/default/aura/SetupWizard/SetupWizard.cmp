@@ -28,8 +28,14 @@
                     <lightning:verticalNavigationSection label="{!section.label}">
                         <aura:iteration items="{!section.items }" var="item">
                             <aura:if isTrue="{!!empty(item.icon)}">
-                                <lightning:verticalNavigationItemIcon iconName="{!item.icon}" label="{!item.label}"
-                                                                      name="{!item.name}"/>
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                    <div>
+                                        <lightning:verticalNavigationItem label="{!item.label}" name="{!item.name}"/>
+                                    </div>
+                                    <div class="slds-m-right_small">
+                                        <lightning:icon size="x-small" iconName="{!item.icon}"/>
+                                    </div>
+                                </div>
                                 <aura:set attribute="else">
                                     <lightning:verticalNavigationItem label="{!item.label}" name="{!item.name}"/>
                                 </aura:set>
