@@ -161,30 +161,20 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static boolean canSendForSignature() {
+	public static String getSendingDeepLink(final Id sourceId, final String fileIdsInCommaSeparated) {
 		try {
-			Permissions.verifyIsDocuSignUser();
-			return true;
+			return EnvelopeService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to verify docusign user');
+			throw Controller.wrapException(ex, 'Failed to get deep link');
 		}
 	}
 
 	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId, final List<String> fileIds) {
+	public static boolean isEsignEnabled() {
 		try {
-
-			PageReference sendingPath = Page.Sending;
-			if (sourceId != null) {
-				sendingPath.getParameters().put('sId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			}
-			if (fileIds != null && fileIds.size() > 0) {
-				String salesforceFileIdsInCommaSeparated = fileIds.size() > 1 ? String.join(fileIds, ',') : fileIds[0];
-				sendingPath.getParameters().put('files', EncodingUtil.urlEncode(salesforceFileIdsInCommaSeparated, StringUtils.ENCODING));
-			}
-			return new Url(Salesforce.baseUrl, sendingPath.getUrl()).toExternalForm();
+			return AccountProducts.isEsignEnabled();
 		} catch (Exception ex) {
-			throw new APIException('Failed to generate sending deep link: ' + ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
 		}
 	}
 }

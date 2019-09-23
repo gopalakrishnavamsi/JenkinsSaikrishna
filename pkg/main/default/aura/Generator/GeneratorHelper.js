@@ -25,22 +25,21 @@
       component.set('v.errMsg', $A.get('$Label.c.NoDocForTemplateMsg'));
       component.set('v.errType', 'warning');
     } else {
-
       templateFiles.forEach(function (file) {
         helper.addDocumentProperties(file, true);
       });
       component.set('v.templateFiles', templateFiles);
-
-      config.objectMappings.forEach(function (objMapping) {
-        var lookupObj = {
-          apiName: objMapping.apiName,
-          label: objMapping.label
-        };
-
-        lookupObjs.push(lookupObj);
-      });
-      component.set('v.lookupObjs', lookupObjs);
     }
+
+    config.objectMappings.forEach(function (objMapping) {
+      var lookupObj = {
+        apiName: objMapping.apiName,
+        label: objMapping.label
+      };
+
+      lookupObjs.push(lookupObj);
+    });
+    component.set('v.lookupObjs', lookupObjs);
 
     //Preview Mode
     if (isPreview) {
@@ -59,7 +58,6 @@
         config.useCurrentRecord &&
         config.useAllTemplates
       ) {
-        helper.canSendForSignature(component);
         helper.getRecordData(component);
       }
       component.set('v.isLoading', false);
@@ -563,7 +561,7 @@
         var sourceId = component.get('v.recordId');
         sendingAction.setParams({
           sourceId: sourceId,
-          fileIds: !$A.util.isEmpty(fileIds) ? fileIds.join() : ''
+          fileIdsInCommaSeparated: !$A.util.isEmpty(fileIds) ? fileIds.join(',') : ''
         });
         sendingAction.setCallback(this, function (response) {
           var state = response.getState();
@@ -586,17 +584,18 @@
     return doc;
   },
 
-  canSendForSignature: function (component) {
-    var canSendForSignature = component.get('c.canSendForSignature');
-    canSendForSignature.setCallback(this, function (response) {
-      if (response.getState() === 'SUCCESS') {
-        component.set('v.canSendForSignature', true);
+  isEsignEnabled: function (component) {
+    var helper = this;
+    var isEsignEnabledAction = component.get('c.isEsignEnabled');
+    isEsignEnabledAction.setCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var canSendForSignature = response.getReturnValue();
+        component.set('v.canSendForSignature', canSendForSignature);
       } else {
-        component.set('v.errType', 'error');
-        component.set('v.errMsg', stringUtils.getErrorMessage(response));
-        component.set('v.canSendForSignature', false);
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
-    $A.enqueueAction(canSendForSignature);
+    $A.enqueueAction(isEsignEnabledAction);
   }
 });

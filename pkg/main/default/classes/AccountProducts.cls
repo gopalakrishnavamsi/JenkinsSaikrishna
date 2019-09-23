@@ -30,6 +30,8 @@ public with sharing class AccountProducts {
 	private DocuSign.Environment environment;
 	@TestVisible
 	private static List<Product.Role> newRoles;
+	@TestVisible
+	private static final String ESIGN = Product.ESIGNATURE;
 
 	@AuraEnabled
 	public ESignatureProduct eSignature {
@@ -682,5 +684,21 @@ public with sharing class AccountProducts {
 		result |= Collection.isNotEmpty(DB.deleteProductSettings());
 		self = null;
 		return result;
+	}
+
+	public static boolean isEsignEnabled() {
+		Permissions.verifyIsDocuSignUser();
+		Boolean isEnabled = false;
+		for (Product product : getAccountProducts()) {
+			if (product.Name == ESIGN) {
+				isEnabled = true;
+				Break;
+			}
+		}
+		return isEnabled;
+	}
+
+	private static List<Product> getAccountProducts() {
+		return AccountProducts.getInstance().products.values();
 	}
 }

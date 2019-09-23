@@ -13,7 +13,6 @@
     <aura:attribute name="defaultEmailSubject" type="String" access="private"/>
     <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
     <aura:attribute name="documents" type="Object[]" access="private"/>
-    <aura:attribute name="selectedDocumentIds" type="String[]"/>
     <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
     <aura:attribute name="template" type="Object" access="private"/>
     <aura:attribute name="recipients" type="Object[]"/>

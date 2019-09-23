@@ -7452,4 +7452,11 @@
 		<shortDescription>GenSendSignatureMsg</shortDescription>
 		<value>The files below have been successfully generated and can now be sent for signature</value>
 	</labels>
+	<labels>
+		<fullName>SendingForSignature</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SendingForSignature</shortDescription>
+		<value>Sending for signature</value>
+	</labels>
 </CustomLabels>

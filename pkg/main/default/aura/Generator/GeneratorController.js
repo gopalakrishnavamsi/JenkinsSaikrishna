@@ -4,6 +4,7 @@
     if (isAuthorized) {
       var config = component.get('v.config');
       helper.checkMultiCurrency(component);
+      helper.isEsignEnabled(component);
 
       if ($A.util.isEmpty(config)) {
         var action = component.get('c.getTemplate');

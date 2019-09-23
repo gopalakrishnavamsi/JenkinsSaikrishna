@@ -81,6 +81,7 @@
   importSalesforceFile: function (component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
+    component.set('v.canSendForSignature', true);
 
     //get selected file
     var salesforceFiles = component.get('v.salesforceFiles');
@@ -232,38 +233,56 @@
 
   navigateToSendForSignature: function (component) {
     var helper = this;
-    return new Promise($A.getCallback(function (resolve) {
-      var saveAsSalesforceFileAction = component.get('c.exportAgreementToSalesforce');
-      saveAsSalesforceFileAction.setParams({
-        sourceId: component.get('v.recordId'),
-        agreementId: component.get('v.agreementDetails').id.value
-      });
-      saveAsSalesforceFileAction.setCallback(this, function (response) {
-        var state = response.getState();
-        if (state === 'SUCCESS') {
-          resolve();
-        } else {
-          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-        }
-      });
-      $A.enqueueAction(saveAsSalesforceFileAction);
-    })).then(
-      $A.getCallback(function () {
-        var sendingAction = component.get('c.getSendingDeepLink');
-        var sourceId = component.get('v.recordId');
-        sendingAction.setParams({
-          sourceId: sourceId
-        });
-        sendingAction.setCallback(this, function (response) {
-          var state = response.getState();
-          if (state === 'SUCCESS') {
-            navUtils.navigateToUrl(response.getReturnValue());
-          } else {
-            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-          }
-        });
-        $A.enqueueAction(sendingAction);
-      })
-    );
+    component.set('v.isSendingForSignature', true);
+    var salesforceFiles = component.get('v.salesforceFiles');
+    var selectedFileId;
+    salesforceFiles.forEach(function (file) {
+      if (file.selected) {
+        selectedFileId = file.sourceId;
+      }
+    });
+    var isSalesforceFileAvailable = !$A.util.isUndefinedOrNull(selectedFileId);
+    if (isSalesforceFileAvailable) {
+      helper.sendForSignature(component, selectedFileId);
+    }else{
+      component.set('v.canSendForSignature', false);
+      component.set('v.isSendingForSignature', false);
+    }
+  },
+
+  sendForSignature: function (component, selectedFileId) {
+    var helper = this;
+    component.set('v.loading', true);
+    var sendingAction = component.get('c.getSendingDeepLink');
+    var sourceId = component.get('v.recordId');
+    sendingAction.setParams({
+      sourceId: sourceId,
+      fileIdsInCommaSeparated: selectedFileId
+    });
+    sendingAction.setCallback(this, function (response) {
+      component.set('v.loading', false);
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        navUtils.navigateToUrl(response.getReturnValue());
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+    });
+    $A.enqueueAction(sendingAction);
+  },
+
+  isEsignEnabled: function (component) {
+    var helper = this;
+    var isEsignEnabledAction = component.get('c.isEsignEnabled');
+    isEsignEnabledAction.setCallback(this, $A.getCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var canSendForSignature = response.getReturnValue();
+        component.set('v.canSendForSignature', canSendForSignature);
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+    }));
+    $A.enqueueAction(isEsignEnabledAction);
   }
 });

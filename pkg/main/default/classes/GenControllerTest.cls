@@ -407,26 +407,4 @@ private class GenControllerTest {
 		}
 	}
 
-	@IsTest
-	static void canSendForSignature_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Boolean canSendForSignature = false;
-			Test.startTest();
-			canSendForSignature = GenController.canSendForSignature();
-			Test.stopTest();
-			System.assertEquals(canSendForSignature, true);
-		}
-	}
-
-	@IsTest
-	static void canSendForSignature_failure() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			try {
-				GenController.canSendForSignature();
-				throw new AssertException('Expected saveChunk to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-		}
-	}
 }

@@ -257,15 +257,20 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId) {
+	public static String getSendingDeepLink(final Id sourceId, String fileIdsInCommaSeparated) {
 		try {
-			PageReference sendingPath = Page.Sending;
-			if (sourceId != null) {
-				sendingPath.getParameters().put('sId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			}
-			return new Url(Salesforce.baseUrl, sendingPath.getUrl()).toExternalForm();
+			return EnvelopeService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
 		} catch (Exception ex) {
-			throw new APIException('Failed to generate sending deep link: ' + ex.getMessage());
+			throw Controller.wrapException(ex, 'Failed to get deep link');
+		}
+	}
+
+	@AuraEnabled
+	public static boolean isEsignEnabled() {
+		try {
+			return AccountProducts.isEsignEnabled();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
 		}
 	}
 }
