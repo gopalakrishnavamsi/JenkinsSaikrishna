@@ -469,6 +469,7 @@ public with sharing class AccountProducts {
 	 * @return A List of Products on the account
 	 */
 	public static List<Product> getProducts() {
+		Permissions.verifyIsDocuSignUser();
 		return AccountProducts.getInstance().products.values();
 	}
 
