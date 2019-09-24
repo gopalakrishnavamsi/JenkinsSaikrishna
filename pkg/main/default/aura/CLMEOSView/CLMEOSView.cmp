@@ -6,16 +6,15 @@
 	<aura:attribute name="src" type="String" default=""/>
 	<aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
 	<aura:attribute name="renderPage" type="Boolean" default="false"/>
-    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
-                    
-    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
-    
+	<aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+	<aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
+
+	<aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+
 	<ltng:require scripts="{!$Resource.stringUtils}"/>
-    <div>
-    <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>        
-    </div>
+	<div>
+		<c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+	</div>
 	<div>
 		<aura:if isTrue="{!and(v.renderPage, v.isAuthorized)}">
 			<aura:if isTrue="{!and(v.eosDetails.mappingExists, !v.eosDetails.connectionError)}">
@@ -47,11 +46,11 @@
 				</div>
 			</aura:if>
 			<aura:set attribute="else">
-                <aura:if isTrue="{!v.isAuthorized}">
-                    <div aura:id="loadingSpinner" class="slds-is-relative ds-loadingContainer">
+				<aura:if isTrue="{!v.isAuthorized}">
+					<div aura:id="loadingSpinner" class="slds-is-relative ds-loadingContainer">
 						<c:BlueSpinner />
 					</div>
-                </aura:if>				
+				</aura:if>
 			</aura:set>
 		</aura:if>
 	</div>
