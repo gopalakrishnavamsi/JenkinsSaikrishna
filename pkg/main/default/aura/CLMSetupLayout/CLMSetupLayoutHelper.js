@@ -18,9 +18,6 @@
 					component.set('v.toastTitleText', stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName));
 					component.set('v.toastVariant', 'error');
 					toast.show();
-					setTimeout($A.getCallback(function () {
-						toast.close();
-					}), 2000);
 				}
 			}
 		);
@@ -31,9 +28,11 @@
 			component.set('v.toastTitleText', title);
 			component.set('v.toastVariant', variant);
 			toast.show();
-			setTimeout($A.getCallback(function () {
-				toast.close();
-			}), 2000);
+			if (variant === 'success') {
+				setTimeout($A.getCallback(function () {
+					toast.close();
+				}), 3000);
+			}
 		}
 	},
 	updateUi: function (component, index) {
