@@ -115,7 +115,7 @@ public with sharing class FileService {
 	 *
 	 * @return sending deeplink url
 	 */
-	public static Url getSendingDeepLink(Id sourceId, String fileIdsInCommaSeparated) {
+	public static Url getSendingDeepLink(final Id sourceId, final String fileIdsInCommaSeparated) {
 		try {
 			Permissions.verifyIsDocuSignUser();
 			PageReference sendingPath = Page.Sending;
