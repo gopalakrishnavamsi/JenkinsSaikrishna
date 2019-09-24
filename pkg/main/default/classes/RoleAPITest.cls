@@ -165,6 +165,45 @@ private class RoleAPITest {
 		}
 	}
 
+	class UnexpectedResponseMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(201);
+			response.setStatus('CREATED');
+			response.setHeader('Content-Type', 'application/json');
+			response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+			RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.source_product_name = 'whatever';
+			g.group_id = '88';
+			g.group_name = 'some group';
+			g.is_admin = false;
+			response.setBody(JSON.serialize(g));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createAccountRole_unexpected_response() {
+		Test.setMock(HttpCalloutMock.class, new UnexpectedResponseMock());
+
+		System.runAs(UserMock.createClmViewer()) {
+			Product.Role r = new Product.Role(
+				null,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				false);
+
+			Test.startTest();
+			Product.Role result = RoleAPI.getInstance().createAccountRole(r, '1234', 30000);
+			Test.stopTest();
+
+			System.assertEquals(null, result);
+		}
+	}
+
 	@IsTest
 	static void test_createAccountRole_success() {
 		RoleAPIMock.success();
@@ -312,7 +351,7 @@ private class RoleAPITest {
 				} else { // add account dsgroups
 					RoleAPI.APIGroup g = (RoleAPI.APIGroup)JSON.deserialize(request.getBody(), RoleAPI.APIGroup.class);
 					g.ds_group_id = UUID.randomUUID().toString();
-					response.setBody(JSON.serialize(g));
+					response.setBody(JSON.serialize(new Map<String, Object> { 'group' => g }));
 
 				}
 			} else if (endpoint.contains('/products/')) { // get product groups
@@ -331,14 +370,14 @@ private class RoleAPITest {
 					g.is_admin = true;
 					gs.groups.add(g);
 					g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '1';
+					g.group_id = '2';
 					g.group_name = 'Full Subscriber';
 					g.description = 'Users!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
 					g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '2';
+					g.group_id = '99';
 					g.group_name = 'Guest';
 					g.description = 'Viewers!';
 					g.source_product_name = 'clm';
