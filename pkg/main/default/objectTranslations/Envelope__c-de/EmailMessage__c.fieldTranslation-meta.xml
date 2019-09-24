@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Bearbeiten Sie den E-Mail-Nachrichtentext (max. 2.000 Zeichen). Der Text wird dem DocuSign-Empfänger
+			angezeigt, der die Dokumente zum Signieren erhält.
+		</help>
+    <label>E-Mail-Nachricht</label>
+    <name>EmailMessage__c</name>
+</CustomFieldTranslation>

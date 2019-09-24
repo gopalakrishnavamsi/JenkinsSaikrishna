@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>DocuSign受信者に署名を依頼する通知メールの本文に表示されるメッセージを2,000文字以下で編集します。
+		</help>
+    <label>メールメッセージ</label>
+    <name>EmailMessage__c</name>
+</CustomFieldTranslation>

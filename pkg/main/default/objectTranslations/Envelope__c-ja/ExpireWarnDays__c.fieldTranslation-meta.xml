@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>期限切れの何日前に警告メールを送信するかを指定します。このメールは、トランザクションを完了していない受信者にのみ送信されます。
+		</help>
+    <label>警告の送信 - 期限切れまでの残存日数</label>
+    <name>ExpireWarnDays__c</name>
+</CustomFieldTranslation>
