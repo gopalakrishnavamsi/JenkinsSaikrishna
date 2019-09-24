@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/label -->
+	<label>生成ファイルの名前</label>
+	<name>GeneratedFileName__c</name>
+</CustomFieldTranslation>
