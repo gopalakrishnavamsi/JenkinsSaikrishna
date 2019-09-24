@@ -255,22 +255,4 @@ public with sharing class AgreementsController extends Controller {
 	private Entity getSourceDetails(String sourceId) {
 		return Entity.resolve(sourceId);
 	}
-
-	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId, String fileIdsInCommaSeparated) {
-		try {
-			return FileService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get deep link');
-		}
-	}
-
-	@AuraEnabled
-	public static boolean isEsignEnabled() {
-		try {
-			return AccountProducts.isEsignEnabled();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
-		}
-	}
 }

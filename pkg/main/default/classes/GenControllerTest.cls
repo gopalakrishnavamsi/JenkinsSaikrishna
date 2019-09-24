@@ -440,5 +440,4 @@ private class GenControllerTest {
 			System.assert(isEsignEnabled);
 		}
 	}
-
 }

@@ -465,6 +465,7 @@ public with sharing class AccountProducts {
 
 	/**
 	 * Retrieves the products on the account to be used for Setup and Admin management interfaces on the UI
+	 * Also this function is referred in isEsignEnabled which verifies e_sign product is added to account before allowing user to use the feature.
 	 *
 	 * @return A List of Products on the account
 	 */
