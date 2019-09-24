@@ -1,0 +1,3874 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- smartling.translate_paths = Translations/customApplications/label, Translations/customLabels/label, Translations/customPageWebLinks/label, Translations/customTabs/label -->
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customApplications>
+		<label>DocuSign</label>
+		<name>DocuSignForSalesforceCore</name>
+	</customApplications>
+	<customLabels>
+		<label>Accès par authentification</label>
+		<name>AccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Code d’accès</label>
+		<name>AccessCode</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte</label>
+		<name>Account</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Veuillez vous assurer que l’option Signature en cours de session est activée pour le compte DocuSign.</label>
+		<name>AccountInSessionSigningMustBeEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign n’a pas encore été configuré pour ce compte.</label>
+		<name>AccountNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter</label>
+		<name>Add</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un destinataire</label>
+		<name>AddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un modèle</label>
+		<name>AddTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter les utilisateurs</label>
+		<name>AddUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Administration</label>
+		<name>Admin</name>
+	</customLabels>
+	<customLabels>
+		<label>Options avancées</label>
+		<name>AdvancedOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Spécifie les destinataires</label>
+		<name>Agent</name>
+	</customLabels>
+	<customLabels>
+		<label>Toutes les valeurs doivent être renseignées.</label>
+		<name>AllValuesMustNotBeBlank</name>
+	</customLabels>
+	<customLabels>
+		<label>Déjà complété</label>
+		<name>AlreadyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>Approuver</label>
+		<name>Approve</name>
+	</customLabels>
+	<customLabels>
+		<label>Attribuer l’ensemble d’autorisations Administrateur DocuSign</label>
+		<name>AssignAdminPermissionSet</name>
+	</customLabels>
+	<customLabels>
+		<label>Au moins un document est requis.</label>
+		<name>AtLeastOneDocumentIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Au moins une enveloppe est requise.</label>
+		<name>AtLeastOneEnvelopeIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Au moins un destinataire est requis.</label>
+		<name>AtLeastOneRecipientIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Retour</label>
+		<name>Back</name>
+	</customLabels>
+	<customLabels>
+		<label>Liste groupée non trouvée.</label>
+		<name>BulkListNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Gérer le compte DocuSign</label>
+		<name>CanManage</name>
+	</customLabels>
+	<customLabels>
+		<label>Annuler</label>
+		<name>Cancel</name>
+	</customLabels>
+	<customLabels>
+		<label>Annulé</label>
+		<name>Canceled</name>
+	</customLabels>
+	<customLabels>
+		<label>La correction n’est disponible que si l’état de l’enveloppe est « Envoyée » ou « Remise ».</label>
+		<name>CannotCorrectEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer est non autorisé pour les champs {0} : {1}</label>
+		<name>CannotCreateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer est non autorisé pour l’objet :</label>
+		<name>CannotCreateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de créer un statut.</label>
+		<name>CannotCreateStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Supprimer est non autorisé pour l’objet :</label>
+		<name>CannotDeleteObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de filtrer {0} sur les champs : {1}</label>
+		<name>CannotFilterFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Interroger est non autorisé pour les champs {0} : {1}</label>
+		<name>CannotQueryFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Interroger est non autorisé pour l’objet :</label>
+		<name>CannotQueryObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de lire le contenu des documents : {0}</label>
+		<name>CannotReadDocumentContent_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous ne pouvez pas retirer votre nom de la liste des utilisateurs DocuSign actifs. Si vous procédez néanmoins à cette opération, vous ne serez plus administrateur DocuSign pour Salesforce.</label>
+		<name>CannotRemoveSelf</name>
+	</customLabels>
+	<customLabels>
+		<label>L’enveloppe ne peut être renvoyée. Elle n’est pas à l’état « Envoyée » ou « Remise ».</label>
+		<name>CannotResendEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de résoudre le type de document {0}.</label>
+		<name>CannotResolveDocumentType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de résoudre la source du destinataire {0}.</label>
+		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La mise à jour est non autorisée pour les champs {0} : {1}</label>
+		<name>CannotUpdateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>La mise à jour est non autorisée pour l’objet :</label>
+		<name>CannotUpdateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>L’option Invalider n’est disponible que si l’état de l’enveloppe est « Envoyée » ou « Remise ».</label>
+		<name>CannotVoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Reçoit une copie</label>
+		<name>CarbonCopy</name>
+	</customLabels>
+	<customLabels>
+		<label>Doit consulter</label>
+		<name>CertifiedDelivery</name>
+	</customLabels>
+	<customLabels>
+		<label>Case à cocher</label>
+		<name>Checkbox</name>
+	</customLabels>
+	<customLabels>
+		<label>Chinois (simplifié)</label>
+		<name>ChineseSimplified</name>
+	</customLabels>
+	<customLabels>
+		<label>Fermer</label>
+		<name>Close</name>
+	</customLabels>
+	<customLabels>
+		<label>Communauté</label>
+		<name>Community</name>
+	</customLabels>
+	<customLabels>
+		<label>Société</label>
+		<name>Company</name>
+	</customLabels>
+	<customLabels>
+		<label>Signée</label>
+		<name>Completed</name>
+	</customLabels>
+	<customLabels>
+		<label>Connectez DocuSign à votre organisation Salesforce en vous identifiant sur votre compte ou en commençant une version d’évaluation.</label>
+		<name>ConnectDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Connecter DocuSign à Salesforce</label>
+		<name>ConnectDocuSignToSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Contacter l’assistance</label>
+		<name>ContactSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>Ce type de contenu n’est pas pris en charge.</label>
+		<name>ContentTypeNotSupported</name>
+	</customLabels>
+	<customLabels>
+		<label>Continuer et baliser</label>
+		<name>ContinueAndTag</name>
+	</customLabels>
+	<customLabels>
+		<label>Continuer</label>
+		<name>ContinueLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer des rôles de destinataires par défaut</label>
+		<name>CreateDefaultRecipientRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Créée</label>
+		<name>Created</name>
+	</customLabels>
+	<customLabels>
+		<label>--- Paramètres actuels ---</label>
+		<name>CurrentChatterLanguageSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Message électronique personnalisé</label>
+		<name>CustomEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Objet personnalisé de l’e‑mail</label>
+		<name>CustomEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Date de signature</label>
+		<name>DateSigned</name>
+	</customLabels>
+	<customLabels>
+		<label>jours jusqu’à expiration de l’enveloppe</label>
+		<name>DaysBeforeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>jours pour avertir les signataires avant l’expiration</label>
+		<name>DaysBeforeExpiresWarn</name>
+	</customLabels>
+	<customLabels>
+		<label>Jours avant l’envoi du premier rappel</label>
+		<name>DaysBeforeFirstReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>Jours entre les rappels</label>
+		<name>DaysBetweenReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Refuser</label>
+		<name>Decline</name>
+	</customLabels>
+	<customLabels>
+		<label>Refusé</label>
+		<name>Declined</name>
+	</customLabels>
+	<customLabels>
+		<label>Remise</label>
+		<name>Delivered</name>
+	</customLabels>
+	<customLabels>
+		<label>Désactivé</label>
+		<name>Disabled</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign</label>
+		<name>DocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèle DocuSign</label>
+		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Terminé</label>
+		<name>Done</name>
+	</customLabels>
+	<customLabels>
+		<label>Liste déroulante</label>
+		<name>DropDown</name>
+	</customLabels>
+	<customLabels>
+		<label>Néerlandais</label>
+		<name>Dutch</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier</label>
+		<name>Edit</name>
+	</customLabels>
+	<customLabels>
+		<label>Autorise à modifier</label>
+		<name>Editor</name>
+	</customLabels>
+	<customLabels>
+		<label>Adresse e‑mail</label>
+		<name>EmailAddress</name>
+	</customLabels>
+	<customLabels>
+		<label>Les e‑mails personnalisés configurés à l’étape précédente remplacent ces paramètres.</label>
+		<name>EmailHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Message électronique</label>
+		<name>EmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Le message de l’e‑mail est limité à 2 000 caractères.</label>
+		<name>EmailMessageTooLarge</name>
+	</customLabels>
+	<customLabels>
+		<label>Une adresse e‑mail est obligatoire</label>
+		<name>EmailRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Un objet d’e‑mail est obligatoire et ne doit pas dépasser 100 caractères.</label>
+		<name>EmailSubjectRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Le groupe de signature n’a pas de membres.</label>
+		<name>EmptySigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Activé</label>
+		<name>Enabled</name>
+	</customLabels>
+	<customLabels>
+		<label>L’objet {0} contient des champs chiffrés : {1}</label>
+		<name>EncryptedFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Anglais</label>
+		<name>English</name>
+	</customLabels>
+	<customLabels>
+		<label>L’enveloppe expire</label>
+		<name>EnvelopeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>(L’enveloppe expirera le &lt;strong&gt;{0}&lt;/strong&gt; )</label>
+		<name>EnvelopeExpiresOn_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Identifiant de l’enveloppe</label>
+		<name>EnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>Cette enveloppe est verrouillée. Une correction de l’enveloppe est déjà en cours.</label>
+		<name>EnvelopeLockedCorrectionInProgress</name>
+	</customLabels>
+	<customLabels>
+		<label>Enveloppe non trouvée.</label>
+		<name>EnvelopeNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez aucun droit sur l’enveloppe ou elle n’existe pas.</label>
+		<name>EnvelopeNotFoundOrUnauthorized</name>
+	</customLabels>
+	<customLabels>
+		<label>Statut de l’enveloppe DocuSign</label>
+		<name>EnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Toutes les enveloppes doivent avoir l’état « envoyée » ou « créée » avec un identifiant DocuSign valide pour créer des enregistrements d’état associés.</label>
+		<name>EnvelopesMustBeSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Environnement</label>
+		<name>Environment</name>
+	</customLabels>
+	<customLabels>
+		<label>Développer</label>
+		<name>Expand</name>
+	</customLabels>
+	<customLabels>
+		<label>Expiration</label>
+		<name>Expiration</name>
+	</customLabels>
+	<customLabels>
+		<label>Expire</label>
+		<name>Expires</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Les signataires devant se conformer à la règlementation 21 CFR Part 11 doivent disposer d’au moins un onglet de signature ou de paraphe obligatoire et non conditionnel.</label>
+		<name>Failed21CFRPart11</name>
+	</customLabels>
+	<customLabels>
+		<label>La taille de ce fichier est supérieure à la limite de taille maximum de {0}. La taille du fichier sélectionné : {1}.</label>
+		<name>FileSizeLimitReached_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Fichiers</label>
+		<name>Files</name>
+	</customLabels>
+	<customLabels>
+		<label>Terminer</label>
+		<name>Finish</name>
+	</customLabels>
+	<customLabels>
+		<label>Prénom</label>
+		<name>FirstName</name>
+	</customLabels>
+	<customLabels>
+		<label>pour</label>
+		<name>ForLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Formule</label>
+		<name>Formula</name>
+	</customLabels>
+	<customLabels>
+		<label>Français</label>
+		<name>French</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom complet</label>
+		<name>FullName</name>
+	</customLabels>
+	<customLabels>
+		<label>Allemand</label>
+		<name>German</name>
+	</customLabels>
+	<customLabels>
+		<label>Commencer</label>
+		<name>GetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; a complété l’enveloppe</label>
+		<name>HasCompleted_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; a refusé de signer</label>
+		<name>HasDeclined_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; a signé l’enveloppe</label>
+		<name>HasSigned_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; a consulté l’enveloppe</label>
+		<name>HasViewed_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Avez‑vous des problèmes ?</label>
+		<name>HavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>Liens utiles</label>
+		<name>HelpfulLinks</name>
+	</customLabels>
+	<customLabels>
+		<label>Masquer</label>
+		<name>Hide</name>
+	</customLabels>
+	<customLabels>
+		<label>Informations</label>
+		<name>Info</name>
+	</customLabels>
+	<customLabels>
+		<label>Parapher ici</label>
+		<name>InitialHere</name>
+	</customLabels>
+	<customLabels>
+		<label>Parapher ici (facultatif)</label>
+		<name>InitialHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialiser les paramètres du compte</label>
+		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialiser les paramètres Chatter</label>
+		<name>InitializeChatterSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Initialiser les paramètres d’enveloppes</label>
+		<name>InitializeEnvelopeSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Met à jour les destinataires</label>
+		<name>Intermediary</name>
+	</customLabels>
+	<customLabels>
+		<label>Il peut y avoir un un problème avec un ou plusieurs paramètres de votre compte DocuSign. L’utilisateur dont les identifiants sont utilisés pour activer l’intégration entre DocuSign pour Salesforce et DocuSign (parfois appelé utilisateur SOBO) doit posséder toutes les autorisations suivantes (indicateurs sélectionnés) : « Peut gérer le compte », « Peut envoyer une enveloppe », « Peut envoyer de la part de » et « Accès API à l’échelle du compte ». Tous ces paramètres sont accessibles en ouvrant une session directement sur DocuSign. Cliquez sur Préférences et sélectionnez la zone Autorisations de la console Administration. L’intégration ne fonctionnera pas correctement si tous ces paramètres ne sont pas activés. Vous devez commencer par vérifier ces paramètres même si le problème peut avoir une autre cause. Veuillez contacter votre administrateur DocuSign pour vérifier si des paramètres ont été récemment modifiés dans DocuSign.</label>
+		<name>InvalidAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Le texte Chatter n’est pas valide. Toutes les valeurs doivent être renseignées.</label>
+		<name>InvalidChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>L’autorisation de correction doit être activée et l’état de l’enveloppe doit \&apos;Envoyé\&apos; ou \&apos;Livré\&apos; pour que les corrections soient autorisées.</label>
+		<name>InvalidCorrectionState</name>
+	</customLabels>
+	<customLabels>
+		<label>Résolveur de documents non valide : {0}.</label>
+		<name>InvalidDocumentResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Les paramètres d’e‑mail ne sont pas valides. Toutes les valeurs doivent être renseignées.</label>
+		<name>InvalidEmailSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Résolveur d’entités non valide : {0}.</label>
+		<name>InvalidEntityResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>L’enveloppe n’est pas valide.</label>
+		<name>InvalidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Environnement DocuSign non valide.</label>
+		<name>InvalidEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Il est probable qu&apos;il manque une extension à l’un des fichiers en cours d’envoi, ou que son extension ne soit pas reconnue par DocuSign.</label>
+		<name>InvalidFileExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>Type de fichier pas pris en charge.</label>
+		<name>InvalidFileType</name>
+	</customLabels>
+	<customLabels>
+		<label>Paramètres de rappel et d’expiration non valides Les valeurs, si définies, doivent être non négatives.</label>
+		<name>InvalidNotificationSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Résolveur de destinataires non valide : {0}.</label>
+		<name>InvalidRecipientResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La séquence de destinataire a changé depuis que l’enveloppe a été créée.</label>
+		<name>InvalidRecipientSequence</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Nom d’utilisateur du destinataire n’est pas valide.</label>
+		<name>InvalidRecipientUsername</name>
+	</customLabels>
+	<customLabels>
+		<label>Contact associé non valide. Un seul destinataire doit être défini avec une relation de table valide et les mappages de colonnes.</label>
+		<name>InvalidRelatedContact</name>
+	</customLabels>
+	<customLabels>
+		<label>La source n’est pas valide.</label>
+		<name>InvalidSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Le statut  DocuSign n’est pas trouvé ou n’est pas valide.</label>
+		<name>InvalidStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Type non valide.</label>
+		<name>InvalidType</name>
+	</customLabels>
+	<customLabels>
+		<label>UUID non valide.</label>
+		<name>InvalidUUID</name>
+	</customLabels>
+	<customLabels>
+		<label>Paramètre non valide dans l’URL de la page.</label>
+		<name>InvalidUrlParameter</name>
+	</customLabels>
+	<customLabels>
+		<label>Mot de passe ou nom d’utilisateur non valides</label>
+		<name>InvalidUsernameOrPassword</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; est dans la file d’attente pour recevoir l’enveloppe.</label>
+		<name>IsQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Italien</label>
+		<name>Italian</name>
+	</customLabels>
+	<customLabels>
+		<label>Japon</label>
+		<name>Japan</name>
+	</customLabels>
+	<customLabels>
+		<label>Japonais</label>
+		<name>Japanese</name>
+	</customLabels>
+	<customLabels>
+		<label>Coréen</label>
+		<name>Korean</name>
+	</customLabels>
+	<customLabels>
+		<label>Langue</label>
+		<name>Language</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom</label>
+		<name>LastName</name>
+	</customLabels>
+	<customLabels>
+		<label>Mise à jour du dernier statut</label>
+		<name>LastStatusUpdate</name>
+	</customLabels>
+	<customLabels>
+		<label>Chargement…</label>
+		<name>Loading</name>
+	</customLabels>
+	<customLabels>
+		<label>Connexion</label>
+		<name>LogIn</name>
+	</customLabels>
+	<customLabels>
+		<label>S’identifier sur votre compte DocuSign</label>
+		<name>LogInToDocuSignAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Message</label>
+		<name>Message</name>
+	</customLabels>
+	<customLabels>
+		<label>Plusieurs comptes sont associés aux identifiants que vous avez fournis. Veuillez sélectionner le compte que vous souhaitez connecter à votre organisation Salesforce.</label>
+		<name>MultipleAccountsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Veuillez vérifier que l’accès à DocuSign vous a été accordé, que vos paramètres de compte sont corrects et que vous avez répondu à tous les e‑mails d’activation.</label>
+		<name>MustBeActivated</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’administrateur pour effectuer cette opération</label>
+		<name>MustBeAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’administrateur DocuSign pour effectuer cette opération</label>
+		<name>MustBeDocuSignAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’expéditeur DocuSign pour effectuer cette opération</label>
+		<name>MustBeDocuSignSender</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’utilisateur DocuSign pour effectuer cette opération</label>
+		<name>MustBeDocuSignUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations de producteur DocuSign pour effectuer cette opération</label>
+		<name>MustBeDocuSignGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations de négociateur DocuSign pour effectuer cette opération</label>
+		<name>MustBeDocuSignNegotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’administrateur CLM DocuSign pour effectuer cette opération.</label>
+		<name>MustBeClmAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’utilisateur CLM DocuSign pour effectuer cette opération</label>
+		<name>MustBeClmUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’observateur CLM DocuSign pour effectuer cette opération.</label>
+		<name>MustBeClmViewer</name>
+	</customLabels>
+	<customLabels>
+		<label>Mon contenu personnel</label>
+		<name>MyPersonalContent</name>
+	</customLabels>
+	<customLabels>
+		<label>Un nom de société est requis.</label>
+		<name>NameRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Suivant</label>
+		<name>Next</name>
+	</customLabels>
+	<customLabels>
+		<label>Non</label>
+		<name>No</name>
+	</customLabels>
+	<customLabels>
+		<label>S’inscrire gratuitement.</label>
+		<name>SignUpForFree</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucune enveloppe n’a été envoyée</label>
+		<name>NoEnvelopesSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun fichier joint</label>
+		<name>NoFilesAttached</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun rôle</label>
+		<name>NoRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre recherche n’a donné aucun résultat</label>
+		<name>NoSearchResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre compte doit être mis à jour par l’un de nos représentants du service client. Veuillez nous appeler au 1-800-379-9973.</label>
+		<name>NoValidAccounts</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun</label>
+		<name>None</name>
+	</customLabels>
+	<customLabels>
+		<label>N’est pas le propriétaire de l’enveloppe</label>
+		<name>NotEnvelopeOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>Remarque</label>
+		<name>Note</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucune réponse reçue de l’API.</label>
+		<name>NullApiResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>Autre</label>
+		<name>Other</name>
+	</customLabels>
+	<customLabels>
+		<label>Les destinataires d’espaces réservés doivent avoir un rôle.</label>
+		<name>PlaceholderRecipientMustHaveRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Portugais (Brésilien)</label>
+		<name>PortugueseBrazilian</name>
+	</customLabels>
+	<customLabels>
+		<label>Les critères du script de post‑installation ne sont pas remplis</label>
+		<name>PostInstallCriteriaNotMet</name>
+	</customLabels>
+	<customLabels>
+		<label>Organisation : {0}\nMise à niveau de : {1}\nMise à niveau vers : {2}\n{3}</label>
+		<name>PostInstallEmailBody_4</name>
+	</customLabels>
+	<customLabels>
+		<label>Résultats du script de post‑installation de DocuSign Apps Launcher de {0}</label>
+		<name>PostInstallEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Message privé</label>
+		<name>PrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Bouton radio</label>
+		<name>RadioButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Raison</label>
+		<name>Reason</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible d’envoyer l’enveloppe. Les paramètres du compte indiquent que le destinataire doit être un utilisateur DocuSign actif.</label>
+		<name>RecipientMustBeUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Destinataires</label>
+		<name>Recipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Rappels</label>
+		<name>Reminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Retirer</label>
+		<name>Remove</name>
+	</customLabels>
+	<customLabels>
+		<label>La valeur du champ personnalisé « {0} » est manquante.</label>
+		<name>RequiredCustomField_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Le champ personnalisé « {0} »n’est pas configuré correctement pour votre compte : un champ de liste obligatoire ne contient aucune option. Veuillez contacter votre administrateur Docusign afin de corriger la configuration du champ personnalisé.</label>
+		<name>RequiredEmptyList_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Russe</label>
+		<name>Russian</name>
+	</customLabels>
+	<customLabels>
+		<label>Réponse inattendue de l’API Salesforce.</label>
+		<name>SalesforceApiErrorUnexpectedResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>La limite de stockage de cette organisation Salesforce est dépassée. Contactez votre administrateur système.</label>
+		<name>SalesforceOrgStorageLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>Enregistrer</label>
+		<name>Save</name>
+	</customLabels>
+	<customLabels>
+		<label>Recherche par nom</label>
+		<name>SearchByName</name>
+	</customLabels>
+	<customLabels>
+		<label>Êtes‑vous sûr de vouloir quitter ?</label>
+		<name>SectionModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Les modifications non enregistrées seront perdues si vous quittez l’assistant d’installation.</label>
+		<name>SectionModalWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner</label>
+		<name>Select</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner le compte</label>
+		<name>SelectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner un compte</label>
+		<name>SelectAccountOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer des rappels automatiques</label>
+		<name>SendAutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer l’enveloppe</label>
+		<name>SendEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyé</label>
+		<name>Sent</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; a envoyé une enveloppe</label>
+		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Paramètres enregistrés avec succès.</label>
+		<name>SettingsSaved</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher</label>
+		<name>Show</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher moins</label>
+		<name>ShowLess</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher plus</label>
+		<name>ShowMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Signer ici</label>
+		<name>SignHere</name>
+	</customLabels>
+	<customLabels>
+		<label>Signer ici (facultatif)</label>
+		<name>SignHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>Signé</label>
+		<name>Signed</name>
+	</customLabels>
+	<customLabels>
+		<label>Doit signer</label>
+		<name>Signer</name>
+	</customLabels>
+	<customLabels>
+		<label>Pièce jointe du signataire</label>
+		<name>SignerAttachment</name>
+	</customLabels>
+	<customLabels>
+		<label>Le groupe de signature n’existe pas.</label>
+		<name>SigningGroupNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Les Groupes de signature ne sont pas activés pour votre compte.</label>
+		<name>SigningGroupsProhibited</name>
+	</customLabels>
+	<customLabels>
+		<label>Espagnol</label>
+		<name>Spanish</name>
+	</customLabels>
+	<customLabels>
+		<label>État</label>
+		<name>Status</name>
+	</customLabels>
+	<customLabels>
+		<label>État DocuSign non trouvé pour l’enveloppe {0}.</label>
+		<name>StatusNotFound_1</name>
+	</customLabels>
+	<customLabels>
+		<label>ÉCHEC</label>
+		<name>StepFailure</name>
+	</customLabels>
+	<customLabels>
+		<label>PASSÉ OUTRE</label>
+		<name>StepSkipped</name>
+	</customLabels>
+	<customLabels>
+		<label>SUCCÈS</label>
+		<name>StepSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>INCONNU</label>
+		<name>StepUnknown</name>
+	</customLabels>
+	<customLabels>
+		<label>Objet</label>
+		<name>Subject</name>
+	</customLabels>
+	<customLabels>
+		<label>Centre d&apos;assistance</label>
+		<name>SupportCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>Chez DocuSign, nous sommes dévoués au succès de nos clients. Nous avons créé un &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;centre d’assistance&lt;/a&gt; pour aider les utilisateurs sur les fonctionnalités de DocuSign, pour fournir des réponses aux questions courantes et pour afficher des informations diverses sur les performances du système.</label>
+		<name>SupportInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Forfaits d’assistance</label>
+		<name>SupportPlans</name>
+	</customLabels>
+	<customLabels>
+		<label>Si vous ne trouvez pas ce que vous cherchez, vous pouvez toujours contacter directement l’assistance. Veuillez vous assurer d’avoir &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;ces éléments&lt;/a&gt; avec vous pour obtenir vos réponses plus rapidement.</label>
+		<name>SupportPrep</name>
+	</customLabels>
+	<customLabels>
+		<label>Rôles de modèles</label>
+		<name>TemplateRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Champ de texte</label>
+		<name>TextField</name>
+	</customLabels>
+	<customLabels>
+		<label>Fonction</label>
+		<name>Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre essai gratuit est terminé. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Mettez à niveau votre compte&lt;/a&gt; pour continuer à utiliser DocuSign pour Salesforce</label>
+		<name>TrialAccountExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>Type</label>
+		<name>Type</name>
+	</customLabels>
+	<customLabels>
+		<label>Désolé, vous n’avez pas accès à cette page.</label>
+		<name>UnauthorizedPageAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’êtes actuellement pas autorisé à utiliser DocuSign. Veuillez contacter votre administrateur DocuSign pour que l’accès vous soit accordé.</label>
+		<name>UnauthorizedUser</name>
+	</customLabels>
+	<customLabels>
+		<label>L’argument n’est pas défini.</label>
+		<name>UndefinedArgument</name>
+	</customLabels>
+	<customLabels>
+		<label>La liste groupée n’est pas définie.</label>
+		<name>UndefinedBulkList</name>
+	</customLabels>
+	<customLabels>
+		<label>Le texte Chatter n’est pas défini.</label>
+		<name>UndefinedChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>L’identifiant de l’enveloppe DocuSign n’est pas défini.</label>
+		<name>UndefinedDocuSignEnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>Document n’est pas défini.</label>
+		<name>UndefinedDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>L’enveloppe n’est pas définie.</label>
+		<name>UndefinedEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Identifiant non défini</label>
+		<name>UndefinedId</name>
+	</customLabels>
+	<customLabels>
+		<label>Le destinataire n’est pas défini.</label>
+		<name>UndefinedRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Groupe de signature non défini.</label>
+		<name>UndefinedSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>--</label>
+		<name>UndefinedString</name>
+	</customLabels>
+	<customLabels>
+		<label>Type non défini</label>
+		<name>UndefinedType</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun utilisateur défini.</label>
+		<name>UndefinedUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Inconnu</label>
+		<name>Unknown</name>
+	</customLabels>
+	<customLabels>
+		<label>Le destinataire que vous avez identifié n’est pas le destinataire valide de l’enveloppe spécifiée.</label>
+		<name>UnknownEnvelopeRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Code de langue non reconnue.</label>
+		<name>UnrecognizedLanguageCode</name>
+	</customLabels>
+	<customLabels>
+		<label>Charger</label>
+		<name>Upload</name>
+	</customLabels>
+	<customLabels>
+		<label>Charger un fichier</label>
+		<name>UploadFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Importer des fichiers</label>
+		<name>ImportFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner un fichier</label>
+		<name>SelectFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Nouvel accord créé</label>
+		<name>NewAgreementCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>Commencez par choisir une source pour importer vos fichiers.</label>
+		<name>ChooseFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisissez parmi les fichiers Salesforce</label>
+		<name>ChooseSalesforceFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez l’un des fichiers associés à cet enregistrement.</label>
+		<name>SelectAssociatedFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Charger depuis un PC</label>
+		<name>UploadFromPC</name>
+	</customLabels>
+	<customLabels>
+		<label>Charger un document directement à partir d’un ordinateur.</label>
+		<name>UploadFromComputer</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisissez dans cet enregistrement Salesforce, l’un des fichiers disponibles.</label>
+		<name>ChooseSalesforceFiles2</name>
+	</customLabels>
+	<customLabels>
+		<label>Le fichier ci‑dessous a été copié à partir de fichiers Salesforce, importé dans DocuSign Agreements et peut maintenant être envoyé pour négociation, autorisation ou pour signature.</label>
+		<name>SalesforceFileCopyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer pour évaluation externe</label>
+		<name>SendForExternalReview</name>
+	</customLabels>
+	<customLabels>
+		<label>Négociez avec un tiers et évaluez les ratures.</label>
+		<name>NegotiateCompare</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer pour autorisation</label>
+		<name>SendForApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>Demandez à vos associés une autorisation ou un retour d’information.</label>
+		<name>RequestApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer pour signature</label>
+		<name>SendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Receuillez avec DocuSign des signatures pour cet accord.</label>
+		<name>CollectSignatures</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur lors du téléchargement du fichier.</label>
+		<name>ErrorDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Téléchargé avec succès</label>
+		<name>SuccessDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Lorsque cette option est activée, les utilisateurs qui ne sont pas membres du compte DocuSign peuvent envoyer et signer des enveloppes. Dans ce cas, l’expéditeur sera configuré comme administrateur DocuSign.</label>
+		<name>UseSystemSenderHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Un nom d’utilisateur Salesforce doit être fourni.</label>
+		<name>UserMustBeProvided</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’êtes pas autorisé à accéder à l’enveloppe.</label>
+		<name>UserNotAuthorizedForEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilisateur non trouvé</label>
+		<name>UserNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Valeur</label>
+		<name>Value</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher tout</label>
+		<name>ViewAll</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalidé</label>
+		<name>Voided</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; ne recevra pas l’enveloppe</label>
+		<name>WillNotReceive_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; recevra l’enveloppe bientôt</label>
+		<name>WillReceive_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Oui</label>
+		<name>Yes</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} ({1})</label>
+		<name>AccountDisplay_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Le jeton d’accès OAuth est trop long ({0} &gt; {1}).</label>
+		<name>AccessTokenTooLong_2</name>
+	</customLabels>
+	<customLabels>
+		<label>La clé RSA est trop longue ({0} &gt; {1}).</label>
+		<name>KeyTooLong_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Script DocuSign de post‑installation version 2</label>
+		<name>PostInstall2</name>
+	</customLabels>
+	<customLabels>
+		<label>État d’autorisation non valide.</label>
+		<name>InvalidAuthState</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez pas accordé ou avez révoqué votre consentement à être personnifié par DocuSign par Salesforce.</label>
+		<name>ConsentRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>Une ou plusieurs des revendications d’autorisation ne sont pas valides.</label>
+		<name>InvalidGrant</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte non trouvé.</label>
+		<name>AccountNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Le compte DocuSign n’est pas valide.</label>
+		<name>InvalidAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Clé de chiffrement non trouvée.</label>
+		<name>KeyNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} : ({1}) {2}</label>
+		<name>MetadataError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>Échec de la mise à jour d’un ou de plusieurs éléments de métadonnées : {0}</label>
+		<name>UpdateMetadataFailure_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer avec DocuSign</label>
+		<name>SendWithDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Une ou plusieurs présentations non trouvées.</label>
+		<name>LayoutsNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Une ou plusieurs présentations ne correspondent pas au type de source fourni.</label>
+		<name>InvalidLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de cloner le modèle</label>
+		<name>FailedToCloneGenTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèle non trouvé.</label>
+		<name>GenTemplateNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} (copie {1})</label>
+		<name>GenTemplateCopyName_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Sans titre</label>
+		<name>Untitled</name>
+	</customLabels>
+	<customLabels>
+		<label>La profondeur maximale de l’objet a été dépassée.</label>
+		<name>MaxObjectDepthExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>Dans la file d’attente</label>
+		<name>Queued</name>
+	</customLabels>
+	<customLabels>
+		<label>Échec</label>
+		<name>Failure</name>
+	</customLabels>
+	<customLabels>
+		<label>Succès</label>
+		<name>Success</name>
+	</customLabels>
+	<customLabels>
+		<label>[{0}] {1} Identifisnt de référence : {2}</label>
+		<name>ApiError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>La requête n’est pas valide.</label>
+		<name>InvalidGenQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>Service de compte DocuSign</label>
+		<name>AccountServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Service DocuSign eSignature</label>
+		<name>ESignatureServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Service web DocuSign</label>
+		<name>ScmWebServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Service API DocuSign</label>
+		<name>ScmApiServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Service d’authentification DocuSign</label>
+		<name>ScmAuthServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Service DocuSign Gen/Negotiate</label>
+		<name>GenServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Expéditeur système</label>
+		<name>SystemSender</name>
+	</customLabels>
+	<customLabels>
+		<label>Bouton Envoyer avec DocuSign</label>
+		<name>SendAction</name>
+	</customLabels>
+	<customLabels>
+		<label>Objet Salesforce</label>
+		<name>SalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>-- Sélectionner un objet Salesforce --</label>
+		<name>SelectSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Publier</label>
+		<name>Publish</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier les présentations</label>
+		<name>ModifyLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Présentation</label>
+		<name>Layout</name>
+	</customLabels>
+	<customLabels>
+		<label>Présentations modifiées avec succès.</label>
+		<name>SuccessfullyModifiedLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Objets couramment utilisés</label>
+		<name>CommonObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Tous les objets</label>
+		<name>AllObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucune présentation n’est associée à l’objet sélectionné</label>
+		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Fichiers DocuSign</label>
+		<name>DocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Importer</label>
+		<name>ImportButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun accord pour le moment.</label>
+		<name>NoAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer un accord</label>
+		<name>CreateAgreementsIllustration</name>
+	</customLabels>
+	<customLabels>
+		<label>Supprimer un accord</label>
+		<name>DeleteAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>En supprimant cet accord, vous n’aurez plus accès au document, à sa traçabilité, à ses versions antérieures, ou à la possibilité d’afficher les ratures.</label>
+		<name>DeleteAgreementMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Supprimer</label>
+		<name>DeleteButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Charger une nouvelle version</label>
+		<name>UploadNewVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>Le chargement d’un fichier créera une nouvelle version de ce document et mettra à jour le calendrier des activités de l’accord.</label>
+		<name>UploadMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom de l’accord</label>
+		<name>AgreementName</name>
+	</customLabels>
+	<customLabels>
+		<label>Version actuelle</label>
+		<name>CurrentVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>Objet de recherche non valide : {0}</label>
+		<name>InvalidSearchObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre essai gratuit est terminé. Mettez à niveau votre compte pour continuer à utiliser DocuSign pour Salesforce Essentials. Veuillez vous déconnecter et vous identifier à nouveau après avoir mis à niveau votre compte en sélectionnant « Configuration DocuSign »</label>
+		<name>ExpiredTrialAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Quitter</label>
+		<name>Exit</name>
+	</customLabels>
+	<customLabels>
+		<label>ÉTAPES POUR RÉUSSIR</label>
+		<name>StepsForSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Voulez‑vous enregistrer les modifications ?</label>
+		<name>CancelModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous perdrez toute modification à l’étape en cours si vous n’enregistrez pas.</label>
+		<name>CancelModalMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne pas enregistrer</label>
+		<name>DontSave</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier les détails</label>
+		<name>EditModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Ce dont vous aurez besoin</label>
+		<name>WhatYouWillNeed</name>
+	</customLabels>
+	<customLabels>
+		<label>Voici quelques éléments nécessaires à la configuration de votre modèle :</label>
+		<name>WhatYouWillNeedInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèles Microsoft Word</label>
+		<name>WhatYouWillNeedStep1Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous copierez et collerez du texte d’ancrage dans vos fichiers pour insérer dynamiquement des données Salesforce et des champs DocuSign.</label>
+		<name>WhatYouWillNeedStep1Info</name>
+	</customLabels>
+	<customLabels>
+		<label>Sources de données et champs Salesforce</label>
+		<name>WhatYouWillNeedStep2Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous aurez au moins besoin d’une source de données Salesforce et des champs que vous souhaitez ajouter à votre document.</label>
+		<name>WhatYouWillNeedStep2Info</name>
+	</customLabels>
+	<customLabels>
+		<label>Champs DocuSign</label>
+		<name>WhatYouWillNeedStep3Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez aussi ajouter des champs DocuSign, tels que la signature ou la date de signature dans vos modèles Word.</label>
+		<name>WhatYouWillNeedStep3Info</name>
+	</customLabels>
+	<customLabels>
+		<label>Source de données</label>
+		<name>AddObjectsStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Champs de données</label>
+		<name>AddMergeFieldsStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèle(s) Word</label>
+		<name>WordTemplatesStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Aperçu</label>
+		<name>PreviewStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Bouton personnalisé</label>
+		<name>PublishStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom</label>
+		<name>NameLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèle DocuSign Gen</label>
+		<name>TemplateConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Sélectionnez votre source de données principale&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Sélectionnez la source de données où vos utilisateurs commenceront à générer des documents. Par exemple, si vous choisissez Opportunité, les utilisateurs peuvent extraire des données à partir d’une opportunité et des objets liés, comme un Compte.&lt;/p&gt;</label>
+		<name>StartingObjectGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Besoin d’aide ?&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Trouvez plus d’informations sur les configurations de modèles dans le &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;Centre d’assistance DocuSign&lt;/a&gt;.&lt;/p&gt;</label>
+		<name>StartingObjectGuidance3</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Ajouter les champs Salesforce&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Les champs Salesforce vous permettent de remplir de manière dynamique sur votre document, des informations directement à partir de Salesforce. Par exemple, si vous avez sélectionné votre compte comme source principale de données, vous pouvez extraire le Nom du compte ou l’Adresse de facturation. Assurez‑vous de copier et de coller dans vos modèles Word le texte d’ancrage correspondant. Décidez des options conditionnelles et de mise en forme à partir du menu déroulant.&lt;/p&gt;</label>
+		<name>MergeFieldsGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Ajouter des champs DocuSign&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Vous pouvez avoir des champs DocuSign, tels que le champ de signature, automatiquement préparés pour les destinataires. Assurez‑vous de copier et de coller le texte d’ancrage correspondant dans vos modèles Word.&lt;/p&gt;</label>
+		<name>MergeFieldsGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Charger des modèles Word&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Chargez tous les modèles Word pour cette configuration. Pour chaque modèle, vous pouvez choisir, parmi les options, un suffixe pour les documents produits. Vous pouvez aussi décider si les utilisateurs peuvent produire un document Word ou un PDF.&lt;/p&gt;</label>
+		<name>ImportTemplatesGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer quelle option de création groupée de documents choisir&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Si vous avez chargé plusieurs modèles Word avec cette configuration, vous pouvez choisir si tous les documents doivent être produits à chaque fois. Par défaut, les utilisateurs peuvent choisir ceux qu’ils veulent produire. Toutefois, si vos utilisateurs doivent produire tous les documents, sélectionnez &lt;strong&gt;Création groupée de documents.&lt;/strong&gt;&lt;/p&gt;</label>
+		<name>ImportTemplatesGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Tester vos modèles&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choisissez les sources de données dans Salesforce, puis cliquez sur &lt;strong&gt;Aperçu&lt;/strong&gt; pour produire des exemples de documents.&lt;/p&gt;</label>
+		<name>PreviewGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Évaluer et mettre à jour&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Vérifiez vos documents dans Word pour confirmer la disposition du texte et le formatage. Vous pouvez mettre à jour vos modèles en retournant à n’importe quelle étape de cet assistant de configuration, sans perdre votre progression.&lt;/p&gt;</label>
+		<name>PreviewGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer l’étiquette de votre bouton&lt;/strong&gt;&lt;/h3&gt; &lt;p&gt;Attribuez à votre bouton une étiquette descriptive, telle que &lt;strong&gt;Produire une commande client.&lt;/strong&gt;&lt;/p&gt;</label>
+		<name>PublishGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Sélectionnez les présentations de page et l’option de déploiement&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Décidez où votre bouton doit apparaître et sélectionnez pour déployer comme bouton de la page de détail (Salesforce Classic) ou Action rapide (expérience Lightning). Si vous ne souhaitez aucun bouton sur une présentation, décochez l’option « Toutes les présentations » avant de cliquer sur &lt;strong&gt;Créer le bouton&lt;/strong&gt;. Votre bouton sera disponible dans la configuration du Gestionnaire d’objets Salesforce.&lt;/p&gt;</label>
+		<name>PublishGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur inconnue</label>
+		<name>UnknownError</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner la source de données</label>
+		<name>AddObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez la source de données Salesforce que vous souhaitez dans vos modèles Word.</label>
+		<name>StartingObjectMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Source de données principale</label>
+		<name>MainDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Objets couramment utilisés</label>
+		<name>CommonlyUsedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Autres objets</label>
+		<name>OtherObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Champs Salesforce</label>
+		<name>SalesforceFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez les champs de données Salesforce, puis copiez et collez le texte d’ancrage à l’endroit où vous souhaitez qu’il apparaisse dans vos modèles Word.</label>
+		<name>SalesforceFieldsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajoutez des champs de données à vos modèles Word</label>
+		<name>AddMergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Champs DocuSign</label>
+		<name>DocusignFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez les champs DocuSign pour chaque signataire, puis copiez et collez dans vos modèles Word, le texte d’ancrage correspondant aux endroits appropriés.</label>
+		<name>DocusignFieldsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Signataire</label>
+		<name>SignerText</name>
+	</customLabels>
+	<customLabels>
+		<label>Champ</label>
+		<name>FieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Texte d’ancrage</label>
+		<name>AnchorText</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un signataire</label>
+		<name>AddSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Options du champ de données</label>
+		<name>MergeFieldOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Format de date</label>
+		<name>DateFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Aperçu de la date</label>
+		<name>DatePreview</name>
+	</customLabels>
+	<customLabels>
+		<label>Région par défaut</label>
+		<name>LocaleDefault</name>
+	</customLabels>
+	<customLabels>
+		<label>Format monétaire</label>
+		<name>CurrencyFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher comme code ISO</label>
+		<name>DisplayAsISO</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher comme code ISO (sans décimales)</label>
+		<name>DisplayAsISONoDecimals</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher comme symbole</label>
+		<name>DisplayAsSymbol</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher comme symbole (sans décimales)</label>
+		<name>DisplaySymbolNoDecimals</name>
+	</customLabels>
+	<customLabels>
+		<label>Option d’affichage</label>
+		<name>DisplaysOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Inclure le contenu supplémentaire si la valeur du champ</label>
+		<name>DisplaysOptionsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Aperçu de la devise</label>
+		<name>CurrencyPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>correspond</label>
+		<name>MatchesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>ne correspond pas</label>
+		<name>DoesNotMatch</name>
+	</customLabels>
+	<customLabels>
+		<label>Exemple : Californie</label>
+		<name>ExampleCalifornia</name>
+	</customLabels>
+	<customLabels>
+		<label>Toujours afficher ce champ dans le document</label>
+		<name>AlwaysDisplayThisField</name>
+	</customLabels>
+	<customLabels>
+		<label>Inclure d’autres contenus si les conditions définies pour ce champ sont remplies</label>
+		<name>IncludeOtherContent</name>
+	</customLabels>
+	<customLabels>
+		<label>Copier</label>
+		<name>Copy</name>
+	</customLabels>
+	<customLabels>
+		<label>Signature</label>
+		<name>Signature</name>
+	</customLabels>
+	<customLabels>
+		<label>Paraphe</label>
+		<name>Initial</name>
+	</customLabels>
+	<customLabels>
+		<label>Paraphe facultatif</label>
+		<name>OptionalInitial</name>
+	</customLabels>
+	<customLabels>
+		<label>Copié dans le presse papier avec succès !</label>
+		<name>SuccessCopyClipboard</name>
+	</customLabels>
+	<customLabels>
+		<label>Récupération des champs ...</label>
+		<name>RetrievingFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Source de données principale</label>
+		<name>StartingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>--Sélectionnez une option--</label>
+		<name>SelectAnOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Options</label>
+		<name>Options</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} existe déjà comme champ de fusion.</label>
+		<name>FieldPickerFieldExists_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher la valeur de ce champ en tant que contenu dans le document</label>
+		<name>MergeFieldDisplayCurrent</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilisez la valeur de ce champ pour inclure de manière conditionnelle d’autres contenus du document.</label>
+		<name>MergeFieldDisplayConditional</name>
+	</customLabels>
+	<customLabels>
+		<label>Relations enfants</label>
+		<name>ChildRelations</name>
+	</customLabels>
+	<customLabels>
+		<label>Chargez vos modèles Word</label>
+		<name>DocumentTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Une fois que vos modèles Word ont votre texte d’ancrage, vous pouvez les charger.</label>
+		<name>ImportTemplatesDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Création groupée de documents</label>
+		<name>BulkDocumentCreation</name>
+	</customLabels>
+	<customLabels>
+		<label>Produisez tous les documents dans cette configuration en un clic</label>
+		<name>BulkDocumentCreationCheckboxInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Chargement en cours</label>
+		<name>Uploading</name>
+	</customLabels>
+	<customLabels>
+		<label>Le fichier a été supprimé avec succès.</label>
+		<name>FileUploadSuccessDeleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Le fichier a été chargé avec succès.</label>
+		<name>FileUploadSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Le fichier n’a pas pu être supprimé. Réessayer.</label>
+		<name>FileUploadFailDeleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Le chargement a échoué. Veuillez réessayer.</label>
+		<name>FileUploadFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Suppression en cours</label>
+		<name>Removing</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom du fichier produit</label>
+		<name>GeneratedFileName</name>
+	</customLabels>
+	<customLabels>
+		<label>Format de fichier</label>
+		<name>FileFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Suffixe de fichier</label>
+		<name>FileSuffix</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom de la source de données principale</label>
+		<name>StartingObjectName</name>
+	</customLabels>
+	<customLabels>
+		<label>Date</label>
+		<name>Date</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom et date de la source de données principale</label>
+		<name>StartingObjectNameAndDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Microsoft Word</label>
+		<name>MicrosoftWord</name>
+	</customLabels>
+	<customLabels>
+		<label>PDF</label>
+		<name>Pdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Pièce jointe</label>
+		<name>Attachment</name>
+	</customLabels>
+	<customLabels>
+		<label>Cela prend en charge les fichiers jusqu’à 3 Mo seulement. Si vous souhaitez charger des fichiers plus volumineux, veuillez le faire via la liste associée de fichiers des modèles DocuSign Gen.</label>
+		<name>FileTooLarge</name>
+	</customLabels>
+	<customLabels>
+		<label>Prévisualisez vos modèles Word</label>
+		<name>Preview</name>
+	</customLabels>
+	<customLabels>
+		<label>Testez vos modèles avec de vraies données Salesforce.</label>
+		<name>PreviewTemplatesInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Testez votre ou vos modèles avec des données réelles de Salesforce.</label>
+		<name>TestYourTemplateMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Cela prend un peu de temps pour produire votre ou vos fichiers. Si vous préférez revenir ultérieurement, vous trouverez les fichiers sous l’onglet Fichiers dans Salesforce.</label>
+		<name>GeneratorComeBackMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Cela prend trop de temps à produire. Veuillez vérifier cet enregistrement ultérieurement pour afficher le(s) fichier(s) produit(s).</label>
+		<name>GeneratorTooLongMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez une option</label>
+		<name>SelectAnOptionNoDash</name>
+	</customLabels>
+	<customLabels>
+		<label>Saisie non valide</label>
+		<name>InvalidInput</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèles</label>
+		<name>Templates</name>
+	</customLabels>
+	<customLabels>
+		<label>Produire</label>
+		<name>Generate</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut produire les fichiers suivants :</label>
+		<name>GenerateFileFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Désolé, il n&apos;y a pas de modèle de documents pour cette configuration.</label>
+		<name>NoDocForTemplateMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Impossible de lancer la génération du document. Veuillez réessayer plus tard ou contacter votre administrateur pour assistance.</label>
+		<name>FailedInitiateDocGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Quelques problèmes sont survenus lors de la génération de votre document</label>
+		<name>GeneratorBannerErrorMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre document a été produit avec succès</label>
+		<name>GeneratorBannerSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut vérifier si la génération du document a été complétée</label>
+		<name>GeneratorCompletionErrorMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Publication…</label>
+		<name>Publishing</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer un bouton personnalisé</label>
+		<name>PublishCustomButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>Avec un bouton personnalisé et à partir de cette configuration de modèle, laissez les utilisateurs produire des documents. Vous pouvez aussi choisir de placer le bouton sur des présentations de page spécifiques à votre source de données principale. Si vous ajoutez un bouton personnalisé et si vous modifiez cette configuration de modèle, vous n’avez pas besoin d’ajouter à nouveau le bouton.</label>
+		<name>PublishMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Étiquette du bouton</label>
+		<name>ButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Présentations de page</label>
+		<name>PageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Bouton créé avec succès !</label>
+		<name>SuccessfullyPublished</name>
+	</customLabels>
+	<customLabels>
+		<label>brouillons</label>
+		<name>Drafts</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut se connecter à DocuSign Gen pour le moment. Veuillez contacter l’assistance DocuSign Gen pour obtenir de l’aide.</label>
+		<name>UnableToConnectDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Connecté avec succès et autorisé sur DocuSign.</label>
+		<name>SuccessDocuSignAuthorization</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut trouver les paramètres pour l’autorisation DocuSign Gen. Veuillez contacter l’assistance de DocuSign Gen pour obtenir de l’aide.</label>
+		<name>MissingDocuSignGenAuthorizationSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifié</label>
+		<name>Modified</name>
+	</customLabels>
+	<customLabels>
+		<label>L’accord a été importé avec succès.</label>
+		<name>AgreementImportSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>Importation de l’accord en cours. Veuillez vérifier la zone « Accords » après un certain temps.</label>
+		<name>AgreementImportProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>L’importation de l’accord a échoué. Veuillez réessayer.</label>
+		<name>AgreementImportFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Ce champ est requis</label>
+		<name>RequiredField</name>
+	</customLabels>
+	<customLabels>
+		<label>Caractères non valides dans le nom.</label>
+		<name>InvalidCharacters</name>
+	</customLabels>
+	<customLabels>
+		<label>Renommer l’accord</label>
+		<name>RenameAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Renommer</label>
+		<name>Rename</name>
+	</customLabels>
+	<customLabels>
+		<label>Une erreur s’est produite lors de la modification du nom de l’accord. Veuillez réessayer après quelque temps.</label>
+		<name>AgreementRenameErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} a été renommé.</label>
+		<name>AgreementRenamed_1</name>
+	</customLabels>
+	<customLabels>
+		<label>L’accord {0} a été supprimé.</label>
+		<name>AgreementDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Une erreur s’est produite lors de la suppression de l’accord. Veuillez réessayer après quelque temps.</label>
+		<name>AgreementDeleteErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Une erreur s’est produite lors du renvoi de l’accord. Veuillez réessayer après quelque temps.</label>
+		<name>AgreementResendErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} renvoyé pour évaluation externe.</label>
+		<name>AgreementResendExternalReviewMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} renvoyé pour évaluation interne.</label>
+		<name>AgreementResendInternalApprovalMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Autorisation interne annulée pour {0}.</label>
+		<name>AgreementCancelInternalApprovalMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation externe annulée pour {0}.</label>
+		<name>AgreementCancelExternalReviewMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Une erreur s’est produite lors de l’annulation de l’accord. Veuillez réessayer après quelque temps.</label>
+		<name>AgreementCancelErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre document a été envoyé pour évaluation et copié dans l’espace DocuSign Agreements.</label>
+		<name>ExternalReviewSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre demande d’envoi de votre document pour évaluation externe est toujours en cours. Vérifiez l’espace « Accords » après un certain temps.</label>
+		<name>ExternalReviewProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>Échec de l’envoi du document pour évaluation externe. Veuillez réessayer après quelque temps.</label>
+		<name>ExternalReviewFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre document a été envoyé pour évaluation interne et copié dans l’espace DocuSign Agreements.</label>
+		<name>InternalApprovalSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre demande d’envoi de votre document pour évaluation interne est toujours en cours. Vérifiez l’espace « Accords » après un certain temps.</label>
+		<name>InternalApprovalProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>Échec de l’envoi du document pour évaluation interne. Veuillez réessayer après quelque temps.</label>
+		<name>InternalApprovalFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Document envoyé pour évaluation</label>
+		<name>ExternalReviewEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Veuillez approuver ce document dès que possible.</label>
+		<name>ExternalReviewEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez un évaluateur</label>
+		<name>ExternalReviewModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisissez un contact Salesforce ou utilisez une adresse e‑mail.</label>
+		<name>ExternalReviewChooseRecipientMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un évaluateur</label>
+		<name>ExternalReviewAddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Définir une échéance</label>
+		<name>ExternalReviewSetDueDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Désactiver l’échéance</label>
+		<name>ExternalReviewDisableDueDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Personnalisez votre message</label>
+		<name>ExternalReviewPersonalizeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifiez l’objet de l’e‑mail et le message que votre destinataire recevra.</label>
+		<name>ExternalReviewEditEmailAndSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom du fichier</label>
+		<name>ExternalReviewFileName</name>
+	</customLabels>
+	<customLabels>
+		<label>Destinataires</label>
+		<name>ExternalReviewRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer</label>
+		<name>Send</name>
+	</customLabels>
+	<customLabels>
+		<label>Télécharger</label>
+		<name>Download</name>
+	</customLabels>
+	<customLabels>
+		<label>Lien de partage</label>
+		<name>AgreementsShareLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation externe</label>
+		<name>AgreementsExternalReview</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation interne</label>
+		<name>AgreementsInternalApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>Rechercher vos contacts…</label>
+		<name>ExternalReviewSearchMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Rechercher par nom ou par e‑mail</label>
+		<name>InternalApprovalSearchActorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Valideurs</label>
+		<name>Approvers</name>
+	</customLabels>
+	<customLabels>
+		<label>Faites savoir aux destinataires ce que vous recherchez.</label>
+		<name>InternalApprovalEmailHelpMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un autre valideur</label>
+		<name>AddAnotherApprover</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter des valideurs</label>
+		<name>AddApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>Définir un ordre d’autorisation</label>
+		<name>SetApprovalOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisissez parmi les utilisateurs Salesforce de votre organisation.</label>
+		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner des valideurs</label>
+		<name>SelectApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>Document pour votre autorisation</label>
+		<name>InternalApprovalEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Veuillez approuver ce document dès que possible.</label>
+		<name>InternalApprovalEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Cible de l’événement Salesforce non valide.</label>
+		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<label>Avant de pouvoir utiliser DocuSign, vous devez autoriser cette application à formuler des demandes en votre nom.
+			Cliquez sur le bouton « Autoriser » pour continuer.</label>
+		<name>AuthorizeDocuSignInstructions</name>
+	</customLabels>
+	<customLabels>
+		<label>Autoriser</label>
+		<name>AuthorizeButton</name>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementButtonText</name>
+		<label>ÉVALUER L’ACCORD</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementSubject</name>
+		<label>Votre autorisation est nécessaire pour {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementBodyText</name>
+		<label>Veuillez approuver les documents.</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementHeaderTitleText</name>
+		<label>Documents que vous devez approuver {0}.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailButtonText</name>
+		<label>OUVRIR L’ACCORD</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailSubject</name>
+		<label>{0} a été approuvé</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailBodyText</name>
+		<label>Commentaires de validation</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailHeaderTitleText</name>
+		<label>Document approuvé {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailButtonText</name>
+		<label>AFFICHER LE DOCUMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailSubject</name>
+		<label>Document approuvé {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailBodyText</name>
+		<label>Commentaires de validation</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
+		<label>Document approuvé {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailButtonText</name>
+		<label>OUVRIR L’ACCORD</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailSubject</name>
+		<label>Autorisation rejetée {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailBodyText</name>
+		<label>Commentaires de validation</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailHeaderTitleText</name>
+		<label>Autorisation rejetée {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailSubject</name>
+		<label>Demande d’autorisation pour {0} annulée</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailBodyText</name>
+		<label>Demande d’autorisation annulée pour {0}. Vous n’avez rien à faire.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailHeaderTitleText</name>
+		<label>Demande d’autorisation annulée</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailButtonText</name>
+		<label>OUVRIR L’ACCORD</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailSubject</name>
+		<label>{0} a été rejeté</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailBodyText</name>
+		<label>Commentaires de validation</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailHeaderTitleText</name>
+		<label>Document rejeté {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailButtonText</name>
+		<label>AFFICHER LE DOCUMENT</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailSubject</name>
+		<label>Échec de l’autorisation</label>
+	</customLabels>
+	<customLabels>
+		<label>Il y a eu un problème avec votre demande d’autorisation et elle n’a pas été envoyée. Le problème devrait se résoudre de lui‑même si vous renvoyez la demande.</label>
+		<name>ApprovalFailureEmailBodyText</name>
+	</customLabels>
+	<customLabels>
+		<label>Il y a eu un problème avec votre demande d’évaluation.</label>
+		<name>ApprovalFailureEmailHeaderTitleText</name>
+	</customLabels>
+	<customLabels>
+		<label>Chargement de l’accord</label>
+		<name>UploadingAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>La réponse pour autoriser l’accord a été soumise avec succès.</label>
+		<name>AgreementApprovalResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>La réponse pour rejeter l’accord a été soumise avec succès.</label>
+		<name>AgreementRejectionResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur lors de l’envoi de la réponse pour autorisation.</label>
+		<name>AgreementApprovalError</name>
+	</customLabels>
+	<customLabels>
+		<label>Lien copié !</label>
+		<name>AgreementShareLinkCopiedMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Copier le lien</label>
+		<name>CopyLinkPrompt</name>
+	</customLabels>
+	<customLabels>
+		<label>Relier</label>
+		<name>LinkLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Lien de partage de l’accord</label>
+		<name>ShareAgreementLinkHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Une nouvelle version de l’accord a été chargée avec succès.</label>
+		<name>UploadNewVersionSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur lors du chargement d’une nouvelle version de l’accord.</label>
+		<name>UploadNewVersionError</name>
+	</customLabels>
+	<customLabels>
+		<label>Original -</label>
+		<name>OriginalVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>Une fois que vous avez mappé vos objets Salesforce, vous pouvez, à partir de Salesforce, afficher et travailler sur les dossiers de vos objets DocuSign CLM. Tout ce qu’il vous reste à faire est de personnaliser la présentation de page de votre objet Salesforce en ajoutant une vue.</label>
+		<name>AddLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>ADMINISTRATION</label>
+		<name>Administration</name>
+	</customLabels>
+	<customLabels>
+		<label>Automatiser la génération de documents</label>
+		<name>AutomateDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Gagnez du temps dans la création de contrats en fusionnant vos données dans des modèles personnalisés.</label>
+		<name>AutomateDocumentGenerationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Automatisez les tâches, acheminez des contrats et réduisez les erreurs humaines grâce aux workflows de DocuSign CLM.</label>
+		<name>AutomateYourProcessesBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Automatisez vos processus</label>
+		<name>AutomateYourProcessesTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Composants</label>
+		<name>ButtonsAndComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM</label>
+		<name>CLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisir un emplacement</label>
+		<name>ChooseLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisir un emplacement pour votre dossier d’objets permet d’organiser votre document. Vous pourrez ensuite personnaliser les présentations pour afficher à partir de Salesforce le contenu de votre dossier CLM.</label>
+		<name>ChooseLocationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi dois‑je choisir un emplacement ?</label>
+		<name>ChooseLocationTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>/ui/setup/Setup?setupid=Customize</label>
+		<name>ClassicObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez créer dans Salesforce un bouton personnalisé pour déclencher une URL de configuration de génération de document. Cliquer sur le bouton personnalisé ouvre le formulaire affilié de génération de documents.</label>
+		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurer les boutons</label>
+		<name>ConfigureButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurer les présentations</label>
+		<name>ConfigureLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>CONFIGURER LA PRÉSENTATION DE PAGE DE L’OBJET</label>
+		<name>ConfigureObjectPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Pour consulter vos dossiers dans DocuSign CLM ou dans Salesforce, vous devrez configurer la présentation de page de votre objet. Ajoutez ensuite à cette présentation une section personnalisée pour DocuSign CLM.</label>
+		<name>ConfigureObjectPageLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Confirmer les modifications</label>
+		<name>ConfirmEdits</name>
+	</customLabels>
+	<customLabels>
+		<label>DÉCOUVREZ DOCUSIGN CLM</label>
+		<name>DiscoverDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM permet à votre entreprise de faire plus, plus rapidement. Nous avons créé une</label>
+		<name>DocGenInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>page pour énumérer les puissantes fonctionnalités de génération de documents de DocuSign CLM.</label>
+		<name>DocGenInfo2</name>
+	</customLabels>
+	<customLabels>
+		<label>Création de documents</label>
+		<name>DocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements intègre délicatement vos données Salesforce dans DocuSign CLM.</label>
+		<name>DocusignAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Cela vous permet d’utiliser vos objets Salesforce pour produire des documents et des contrats que vous pouvez afficher directement depuis Salesforce.</label>
+		<name>DocusignAgreement2</name>
+	</customLabels>
+	<customLabels>
+		<label>Les modifications que vous faites à cet objet mappé auront une incidence sur les instances futures. Elles peuvent ne pas modifier les objets existants. Voulez‑vous vraiment modifier cet objet ?</label>
+		<name>EditModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Aide</label>
+		<name>Help</name>
+	</customLabels>
+	<customLabels>
+		<label>Chez DocuSign, nous sommes attachés à votre réussite. Nous avons créé une page d’aide pour répondre aux questions courantes relatives à DocuSign Agreements.</label>
+		<name>HelpInfoBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Chez DocuSign, nous sommes attachés à votre réussite. Nous avons créé une</label>
+		<name>HelpInfoBodyPart1</name>
+	</customLabels>
+	<customLabels>
+		<label>page d’aide pour répondre aux questions courantes relatives à DocuSign Agreements.</label>
+		<name>HelpInfoBodyPart2</name>
+	</customLabels>
+	<customLabels>
+		<label>Accueil</label>
+		<name>Home</name>
+	</customLabels>
+	<customLabels>
+		<label>Intégration</label>
+		<name>Integration</name>
+	</customLabels>
+	<customLabels>
+		<label>/lightning/setup/ObjectManager/home</label>
+		<name>LEXObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus sur la génération de documents</label>
+		<name>LearnAboutDocGen</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus</label>
+		<name>LearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Gérer</label>
+		<name>Manage</name>
+	</customLabels>
+	<customLabels>
+		<label>NOUVEAU MAPPAGE</label>
+		<name>MapNew</name>
+	</customLabels>
+	<customLabels>
+		<label>MAPPER VOS OBJETS SALESFORCE</label>
+		<name>MapYourSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Objets mappés</label>
+		<name>MappedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez un nom au dossier d’objets</label>
+		<name>NameObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous vous recommandons de toujours donner un nom au dossier selon un champ associé à votre objet Salesforce mappé. Ainsi, le dossier sera mis à jour lorsque vos données d’objet seront mises à jour.</label>
+		<name>NameObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment dois‑je appeler mon dossier d’objets ?</label>
+		<name>NameObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez pas encore d’objets mappés. Mapper un nouvel objet.</label>
+		<name>NoMappedObjectsFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Toute instance d’un objet mappé aura un dossier dédié dans DocuSign CLM. C’est là que vous trouverez les documents produits en utilisant les données de cet objet.</label>
+		<name>ObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom du dossier d’objets</label>
+		<name>ObjectFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est‑ce qu’un dossier d’objets ?</label>
+		<name>ObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>MAPPAGE D’OBJETS</label>
+		<name>ObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>OPTIMISER LA GÉNÉRATION DE DOCUMENTS</label>
+		<name>OptimizeDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM conserve vos contrats au même endroit. Avec les paramètres avancés, vous pouvez ajouter ou importer des attributs à chaque document pour que tout reste organisé.</label>
+		<name>OrganizeAndSearchDocumentsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Organiser et rechercher des documents</label>
+		<name>OrganizeAndSearchDocumentsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Vue d’ensemble</label>
+		<name>Overview</name>
+	</customLabels>
+	<customLabels>
+		<label>Chemin dans DocuSign CLM</label>
+		<name>PathInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Une fois que vous avez défini un emplacement pour votre dossier d’objets, vous pourrez rechercher et sélectionner un ou plusieurs champs afin de créer un nom dynamique pour votre nouveau dossier.</label>
+		<name>PickAFieldBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment choisir un champ ?</label>
+		<name>PickAFieldTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce a des milliers d’objets, mais vous n’avez besoin que de quelques objets importants pour pourvoir vos données lorsque vous créez des contrats. Choisir un à un ces objets importants lancera le processus de mappage d’objets CLM.</label>
+		<name>PickObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi choisir des objets à mapper ?</label>
+		<name>PickObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez choisir à mapper n’importe quel objet Salesforce standard ou personnalisé. Chaque organisation a des objets ou des besoins différents, mais Compte et Opportunités sont de bons exemples.</label>
+		<name>PickSpecificObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Quel objet choisir ?</label>
+		<name>PickSpecificObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous avons mappé 2 objets pour vous</label>
+		<name>PreSetObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous avons déjà mappé « Compte » et « Opportunités » à votre DocuSign CLM. Ceci vous aidera à gagner du temps pour vous concentrer sur les autres objets. Vous n’en avez pas besoin ? Cliquez sur « Retirer » pour vous débarrasser de tous les objets.</label>
+		<name>PreSetObjMappingsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Retirer le mappage</label>
+		<name>RemoveMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Une fois que vous retirez le mappage d’un objet. Vous ne pourrez plus vous servir dans DocuSign CLM des données de cet objet. Êtes‑vous sûr de vouloir retirer cet objet de votre mappage ?</label>
+		<name>RemoveModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Produisez des graphiques et des rapports détaillés sur vos documents, attributs et flux de travail. Ceux‑ci vous permettront de suivre l’activité et les performances de votre compte.</label>
+		<name>RunReportsAndAnalyticsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Exécuter des rapports et des analyses</label>
+		<name>RunReportsAndAnalyticsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Mappez d’abord les objets Salesforce à DocuSign CLM Vous pouvez ensuite créer des modèles et produire des documents en utilisant vos données Salesforce.</label>
+		<name>MapObjectsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner un objet</label>
+		<name>SelectObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Collaborez en toute confiance grâce à la fonctionnalité de gestion de versions de DocuSign CLM. Vous pourrez recueillir des commentaires et annoter les documents importants lors de négociations.</label>
+		<name>ShareAndCollaborateBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Partager et collaborer</label>
+		<name>ShareAndCollaborateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Accélérer la génération de documents</label>
+		<name>SpeedUpDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pourrez suivre chaque document tout au long du cycle de vie du contrat. Attribuez des tâches, suivez combien de temps prennent les autorisations et contrôlez comment vos documents sont passés en revue.</label>
+		<name>TrackDocumentStatusAndActivityBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Suivre le statut et l’activité du document</label>
+		<name>TrackDocumentStatusAndActivityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Gestion des utilisateurs</label>
+		<name>UserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez ajouter, modifier et gérer les utilisateurs DocuSign CLM à partir de Salesforce sans quitter l’application.</label>
+		<name>UserManagementInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher vos dossiers d’objets</label>
+		<name>ViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Bienvenue sur DocuSign Agreements pour Salesforce !</label>
+		<name>WelcomeToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Et ensuite ?</label>
+		<name>WhatsNext</name>
+	</customLabels>
+	<customLabels>
+		<label>Flux de travail</label>
+		<name>Workflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous avons répertorié ci‑dessous tous vos objets Salesforce standard et personnalisés.</label>
+		<name>AllObjectsListed</name>
+	</customLabels>
+	<customLabels>
+		<label>Attribuez avec DocuSign CLM un emplacement facile à trouver où vive votre dossier. Le chemin du dossier que vous créez sera indépendant des autres mappages.</label>
+		<name>ChooseLocationInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Toutes les instances du type d’objet {0} auront chacune un dossier qui vivra où vous voyez le dossier bleu dans la hiérarchie.</label>
+		<name>ChooseLocationTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>La création du composant a échoué : {0}</label>
+		<name>ComponentCreationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Masquer les étapes</label>
+		<name>HideSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Icône d’informations</label>
+		<name>InformationIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucun événement trouvé avec le nom {0}.</label>
+		<name>NoEventFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} objet a été modifié avec succès.</label>
+		<name>ObjectEditSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} objet a été retiré de vos mappages.</label>
+		<name>ObjectRemoved</name>
+	</customLabels>
+	<customLabels>
+		<label>Ouvrir le dossier</label>
+		<name>OpenFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Recherchez et sélectionnez un champ pour donner un nom au dossier que vous venez de créer.</label>
+		<name>SelectFieldInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Dans votre CLM DocuSign, chaque instance de « {0} » aura son propre dossier. Vous pouvez modifier l’emplacement de ces dossiers ci‑dessous.</label>
+		<name>SelectFolderHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisissez l’objet Salesforce que vous souhaitez être la source de vos documents.</label>
+		<name>SelectObjectHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher les étapes</label>
+		<name>ShowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Vos objets Salesforce</label>
+		<name>YourSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut initier d’évaluation pour le produit « {0} »</label>
+		<name>InvalidTrialProduct_1</name>
+	</customLabels>
+	<customLabels>
+		<label>L’accord a été exporté avec succès.</label>
+		<name>AgreementExportSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter à Salesforce</label>
+		<name>AddToSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Exportation de l’accord en cours. Veuillez vérifier la zone « Accords » après un certain temps.</label>
+		<name>AgreementExportProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>L’exportation de l’accord a échoué. Veuillez réessayer.</label>
+		<name>AgreementExportFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignature activée</label>
+		<name>ESignatureEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Ensemble d’autorisation non valide : {0}</label>
+		<name>InvalidPermissionSet_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Si une autre solution de signature électronique telle que DocuSign pour Salesforce doit être utilisée, la fonctionnalité de signature électronique de ce package peut être désactivée.</label>
+		<name>ESignatureEnabledHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Ceci est une interprétation logique de la manière dont toutes les instances de votre objet mappé (tel que « Nouveau compte 1 ») auront chacune leur propre dossier dans DocuSign CLM.</label>
+		<name>CaseFolderContentsHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer des mappages par défaut d’objets CLM</label>
+		<name>CreateDefaultCLMObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>DefaultAccountFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/</label>
+		<name>DefaultAccountPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name</label>
+		<name>DefaultAccountVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>{1}</label>
+		<name>DefaultFolderNameFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Opportunity.Name}</label>
+		<name>DefaultOpportunityFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/{!Account.Name}/Opportunity</label>
+		<name>DefaultOpportunityObjectMappingPath</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/{0}/Opportunity</label>
+		<name>DefaultOpportunityPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name, Opportunity.Name</label>
+		<name>DefaultOpportunityVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>Opportunité</label>
+		<name>Opportunity</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous allez choisir un objet à la fois.</label>
+		<name>SelectObjectHelpBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi sélectionner des champs ?</label>
+		<name>WhyAmISelectingFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous avons répertorié ci‑dessous tous vos objets Salesforce standard et personnalisés.</label>
+		<name>MapEditObjectsTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Voir un exemple</label>
+		<name>SeeExample</name>
+	</customLabels>
+	<customLabels>
+		<label>Vos dossiers DocuSign CLM</label>
+		<name>YourDocuSignCLMFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Vos objets Salesforce</label>
+		<name>MapEditObjectsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez un champ ci‑dessous pour donner un nom à votre dossier.</label>
+		<name>SelectFieldToNameTheFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Taille maximale du lot dépassée : {0} &gt; {1}</label>
+		<name>MaximumBatchSizeExceeded_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Expéditeur</label>
+		<name>Sender</name>
+	</customLabels>
+	<customLabels>
+		<label>Producteur</label>
+		<name>Generator</name>
+	</customLabels>
+	<customLabels>
+		<label>Négociateur</label>
+		<name>Negotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>Administrateur</label>
+		<name>Administrator</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilisateur</label>
+		<name>User</name>
+	</customLabels>
+	<customLabels>
+		<label>Observateur</label>
+		<name>Viewer</name>
+	</customLabels>
+	<customLabels>
+		<label>Rôle géré par DocuSign pour Salesforce</label>
+		<name>ProductRoleDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Un ou plusieurs produits ne sont pas pris en charge.</label>
+		<name>UnsupportedProducts</name>
+	</customLabels>
+	<customLabels>
+		<label>Un ou plusieurs rôles de produit ne sont pas pris en charge.</label>
+		<name>UnsupportedProductRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>Échec du déclenchement de la tâche de comparaison de documents.</label>
+		<name>FailedToTriggerDocumentComparisonTask</name>
+	</customLabels>
+	<customLabels>
+		<label>Paramètres saisis non valides pour comparer les versions de l’accord.</label>
+		<name>InvalidInputsAgreementComparison</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation externe de l’accord « au nom de » complétée</label>
+		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>L’évaluation externe de l’accord « au nom de » a échoué</label>
+		<name>AgreementExternalReviewOnBehalfOfFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Personnaliser et afficher vos dossiers d’objets DocuSign CLM dans Salesforce est simple. Après le mappage des objets, ajoutez simplement dans Salesforce une vue personnalisée à vos présentations de page d’objet.</label>
+		<name>ViewObjectFoldersCardBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Syntaxe de dénomination</label>
+		<name>NamingSyntax</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>AccountNameMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Indique Vers le haut</label>
+		<name>IndicatesUp</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte 1</label>
+		<name>Account1</name>
+	</customLabels>
+	<customLabels>
+		<label>Syntaxe</label>
+		<name>Syntax</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom du compte</label>
+		<name>AccountName</name>
+	</customLabels>
+	<customLabels>
+		<label>Levis</label>
+		<name>Levis</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.name}</label>
+		<name>AccountNameMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte 2</label>
+		<name>Account2</name>
+	</customLabels>
+	<customLabels>
+		<label>Zara</label>
+		<name>Zara</name>
+	</customLabels>
+	<customLabels>
+		<label>Dossier correspondant dans DocuSign CLM</label>
+		<name>CorrespondingFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM</label>
+		<name>DocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Autres sources</label>
+		<name>OtherSources</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce</label>
+		<name>Salesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Comptes</label>
+		<name>Accounts</name>
+	</customLabels>
+	<customLabels>
+		<label>Numéro de compte</label>
+		<name>AccountNumber</name>
+	</customLabels>
+	<customLabels>
+		<label>Propriétaire du compte</label>
+		<name>AccountOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>Créé par</label>
+		<name>CreatedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>01</label>
+		<name>ZeroOne</name>
+	</customLabels>
+	<customLabels>
+		<label>Strauss</label>
+		<name>Strauss</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.number}</label>
+		<name>AccountNumberMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.owner}</label>
+		<name>AccountOwnerMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>	{!account.created_by}</label>
+		<name>CreatedByMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>02</label>
+		<name>ZeroTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM et Salesforce utiliseront les champs sélectionnés pour nommer automatiquement les dossiers d’objets mappés. Les noms des dossiers seront mis à jour chaque fois que le contenu du champ sera modifié. De plus, DocuSign CLM créera un nouveau dossier chaque fois que vous ajouterez un nouvel objet.</label>
+		<name>WhyAmISelectingFieldsBodyPart1</name>
+	</customLabels>
+	<customLabels>
+		<label>C’est pourquoi nous vous recommandons de sélectionner un champ au lieu de saisir un nom statique. Utiliser un nom statique appliquera le même nom à tous vos dossiers d’objets, ce qui peut créer une certaine confusion.</label>
+		<name>WhyAmISelectingFieldsBodyPart2</name>
+	</customLabels>
+	<customLabels>
+		<label>Comprendre la différence</label>
+		<name>UnderstandTheDifference</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom statique</label>
+		<name>StaticName</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom dynamique utilisant les champs</label>
+		<name>DynamicName</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte A</label>
+		<name>AccountA</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte B</label>
+		<name>AccountB</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte C</label>
+		<name>AccountC</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte D</label>
+		<name>AccountD</name>
+	</customLabels>
+	<customLabels>
+		<label>Exemple de dossier</label>
+		<name>FolderExample</name>
+	</customLabels>
+	<customLabels>
+		<label>Confirmer</label>
+		<name>Confirm</name>
+	</customLabels>
+	<customLabels>
+		<label>Le type d’objet « {0} » a été mappé vers DocuSign CLM avec succès.</label>
+		<name>MappingSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez un nom à votre sous‑dossier</label>
+		<name>NameYourSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Saisissez du texte pour un nom statique ou ajoutez des champs pour créer un nom variable pour votre sous‑dossier. Cliquez ensuite sur confirmer une fois terminé.</label>
+		<name>NameSubFolderSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez un nom au sous‑dossier</label>
+		<name>NameSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez un nom à votre dossier</label>
+		<name>NameYourFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Renommer le dossier</label>
+		<name>RenameFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Emplacement du dossier</label>
+		<name>FolderLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom du dossier</label>
+		<name>FolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>Le rappel a échoué.</label>
+		<name>CallbackFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Aide de DocuSign Agreements</label>
+		<name>DocuSignAgreementsHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>C’est votre guichet unique pour tous les outils dont vous avez besoin pour tirer le meilleur de DocuSign Agreements. Vous pouvez parcourir la FAQ, la documentation produit, des livres blancs et plus encore.</label>
+		<name>DocuSignAgreementsHelpSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Visiter la FAQ</label>
+		<name>VisitFAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>ASSISTANCE</label>
+		<name>SUPPORT</name>
+	</customLabels>
+	<customLabels>
+		<label>PLUS DE RESSOURCES</label>
+		<name>MORERESOURCES</name>
+	</customLabels>
+	<customLabels>
+		<label>Centre d&apos;assistance</label>
+		<name>SupportCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Les clients DocuSign échangent leurs questions et leurs réponses.</label>
+		<name>SupportCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Obtenir une assistance</label>
+		<name>GetSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus sur nos API</label>
+		<name>DeveloperCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Centre développeur</label>
+		<name>DeveloperCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus</label>
+		<name>LearnMoreBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Informations sur la sécurité et les performances du système.</label>
+		<name>TrustCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Vérifier le statut</label>
+		<name>CheckStatusBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Commencez votre formation pour forger votre expertise.</label>
+		<name>DocuSignUniversitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign University</label>
+		<name>DocuSignUniversityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Commencer votre formation</label>
+		<name>GetTrainingBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>Communauté</label>
+		<name>CommunityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Les clients DocuSign échangent leurs questions et leurs réponses.</label>
+		<name>CommunitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Visiter la Communauté</label>
+		<name>VisitCommunity</name>
+	</customLabels>
+	<customLabels>
+		<label>Marché de la connaissance</label>
+		<name>KnowledgeMarket</name>
+	</customLabels>
+	<customLabels>
+		<label>Livres blancs, études d’utilité et outils pour favoriser l’adoption.</label>
+		<name>KnowledgeMarketSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Consulter les ressources</label>
+		<name>ViewResourcesBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>FOIRE AUX QUESTIONS</label>
+		<name>FrequentlyAskedQuestions</name>
+	</customLabels>
+	<customLabels>
+		<label>Comprendre DocuSign Agreements</label>
+		<name>UnderstandingDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment DocuSign Agreements gère vos documents et utilise vos données Salesforce.</label>
+		<name>DocuSignAgreementsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Installation et premiers pas</label>
+		<name>InstallationandGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Débutez et familiarisez‑vous avec DocuSign Agreements.</label>
+		<name>InstallationSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Gestion des utilisateurs DocuSign CLM</label>
+		<name>ManagingDocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment ajouter et gérer des utilisateurs.</label>
+		<name>ManageAddUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Mappage d’objets Salesforce</label>
+		<name>MappingSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment mapper des objets Salesforce à partir de DocuSign Agreements.</label>
+		<name>MappingObjectsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Gestion des dossiers d’objets et des configurations de présentations</label>
+		<name>MapObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment exploiter au mieux vos dossiers d’objets et de vos configurations de présentations.</label>
+		<name>MapObjectFoldersSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Réduire</label>
+		<name>Collapse</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est-ce que DocuSign Agreements ?</label>
+		<name>WhatIsDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements vous permet de créer des contrats et des accords avec vos données Salesforce.</label>
+		<name>WhatIsDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi devrais‑je utiliser DocuSign Agreements ?</label>
+		<name>WhyDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Agreements utilise vos données Salesforce pour produire des documents. Cela accélère la creation des documents et élimine toute erreur humaine potentielle.</label>
+		<name>WhyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment DocuSign Agreements accélère‑t‑il le processus de création de documents ?</label>
+		<name>DocumentGenerationProcess</name>
+	</customLabels>
+	<customLabels>
+		<label>En créant dans Salesforce un bouton personnalisé sur les présentations de page d’objet, vous pourrez produire des documents en cliquant juste sur un bouton, sans avoir à quitter Salesforce.</label>
+		<name>DocumentGenerationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi devrais‑je utiliser DocuSign Agreements au lieu de stocker mes documents dans Salesforce ?</label>
+		<name>WhyOnlyDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Si vous stockez vos documents et vos contrats dans Salesforce, ils ne sont pas organisés et sont difficiles à trouver lorsque vous essayez de les envoyer pour signature, évaluation ou dans flux de travail. DocuSign Agreements permet de rester organisé, même lorsque vous produisez de nouveaux contenus, sans même quitter Salesforce.</label>
+		<name>WhyOnlyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est‑ce que DocuSign CLM ?</label>
+		<name>WhatIsDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM est une application cloud sécurisée pour DocuSign Agreements. Il vous permet de produire des documents, de collaborer avec les parties prenantes et d’automatiser vos processus. DocuSign Agreements connecte CLM à votre organisation Salesforce.</label>
+		<name>WhatIsDocuSignCLMAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment installer DocuSign Agreements dans Salesforce ?</label>
+		<name>InstallDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez DocuSign Agreements dans Salesforce AppExchange et suivez les étapes d’installation. Pour ce faire, vous devez être un administrateur Salesforce. Pour plus d’informations, consultez notre guide de l’administrateur Salesforce.</label>
+		<name>InstallAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment authentifier DocuSign Agreements dans Salesforce ?</label>
+		<name>AuthenticateAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>Ouvrez les DocuSign Agreements à partir du lanceur d’applications Salesforce, puis ouvrez une session avec vos identifiants DocuSign et Salesforce. Cela permet l’intégration des deux organisations.</label>
+		<name>AuthenticateAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est‑ce qu’un administrateur ?</label>
+		<name>WhatIsAnAdmin</name>
+	</customLabels>
+	<customLabels>
+		<label>Les administrateurs sont des utilisateurs dotés de privilèges et de responsabilités spécifiques dans DocuSign Agreements. Les administrateurs peuvent mapper des objets et gérer des utilisateurs.</label>
+		<name>WhatIsAnAdminAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment les administrateurs ajoutent et gèrent des utilisateurs ?</label>
+		<name>HowAdminManageUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Pour ajouter ou gérer des utilisateurs, les administrateurs peuvent accéder à la page Gestion des utilisateurs sous Administration.</label>
+		<name>HowAdminManageUsersAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Dois‑je payer des frais supplémentaires par utilisateur après installation de l’application ?</label>
+		<name>InstallationFees</name>
+	</customLabels>
+	<customLabels>
+		<label>Non. Les frais affichés sur la page AppExchange indiquent le coût général par utilisateur si ce dernier a acheté un package DocuSign CLM. Il n’y a aucun coût supplémentaire associé à l’installation d’applications DocuSign.</label>
+		<name>InstallationFeesAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi devrais‑je configurer une présentation ?</label>
+		<name>WhyConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Les configurations de présentation vous permettent d’afficher vos dossiers d’objets dans Salesforce et dans DocuSign CLM. Ceci vous permettra ensuite d’utiliser vos fichiers et vos dossiers DocuSign CLM sur des pages d’objet liées, telles que Comptes et Opportunités.</label>
+		<name>WhyConfigureLayoutAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Que se passe‑t‑il après avoir mappé un objet ?</label>
+		<name>AfterMappingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Après avoir fini de mapper un objet, DocuSign Agreements ajoute ces données à votre bibliothèque Visualforce. Mais, pour voir vos dossiers d’objets, vous devrez effectuer une autre étape. Cette étape consiste à éditer votre présentation de page Salesforce.</label>
+		<name>AfterMappingObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi ne puis‑je pas voir mon dossier d’objets ?</label>
+		<name>CannotSeeObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Si vous ne voyez pas d’objets mappés, vous aurez probablement à modifier vos présentations de page dans Salesforce. Pour ce faire, vous devez être un administrateur Salesforce.</label>
+		<name>CannotSeeObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est ce que les objets et les champs Salesforce ?</label>
+		<name>SalesforceObjectsFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Les objets Salesforce constituent la manière dont Salesforce stocke les données. Chaque objet a plusieurs champs associés contenant des données. Pour utiliser des objets et des champs dans DocuSign Agreements, vous devez d’abord mapper vos objets.</label>
+		<name>SalesforceObjectsFieldsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Qu’est‑ce que le mappage d’objets ?</label>
+		<name>WhatIsObjMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Le mappage d’objets est le processus de connexion des objets de votre organisation Salesforce à DocuSign CLM. L’assistant de configuration de DocuSign Agreements vous guide pas à pas.</label>
+		<name>WhatIsObjMappingAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi devrais‑je mapper mes objets Salesforce ?</label>
+		<name>WhyToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Mapper vos objets Salesforce permet à DocuSign Agreements d’accéder aux données de ces objets pour produire des contrats et des accords. Seuls les administrateurs de DocuSign Agreements peuvent mapper des objets.</label>
+		<name>WhyToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment mapper un objet ?</label>
+		<name>HowToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Pour mapper vos objets Salesforce, allez à la page Intégration CLM. Sélectionnez ensuite « Nouveau mappage ». Suivez les instructions pour terminer la configuration.</label>
+		<name>HowToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Puis‑je retirer des objets mappés ?</label>
+		<name>RemoveMappedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez modifier ou retirer des objets mappés à partir de la page Intégration CLM. Si vous retirez cet objet, vous ne pourrez plus utiliser les données de cet objet pour créer un document.</label>
+		<name>RemoveMappedObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Y a‑t‑il des objets standard que je devrais mapper ?</label>
+		<name>MappingStandardObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Chaque entreprise a des besoins différents. « Compte » et « Opportunité » sont des exemples d’objets standard que de nombreuses entreprises voudrons utiliser. DocuSign Agreements mappe par défaut ces objets.</label>
+		<name>MappingStandardObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Puis‑je mapper des objets personnalisés ?</label>
+		<name>MappingCustomObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez mapper dans DocuSign CLM des objets Salesforce personnalisés avec DocuSign Agreements.</label>
+		<name>MappingCustomObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Comment dois‑je dénommer mes dossiers d’objets personnalisés ?</label>
+		<name>CustomObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Les conventions d’appellation sont définies par les champs de fusion utilisés lorsque vous mappez vos objets Salesforce. Ces dossiers et ces noms seront mis à jour chaque fois que le contenu des champs sera modifié.</label>
+		<name>CustomObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi ne puis‑je pas simplement saisir un nom pour mes dossiers d’objets personnalisés ?</label>
+		<name>TypeFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>Si vous saisissez un nom pour ces dossiers, chaque instance de cet objet aura le même nom de dossier. Salesforce n&apos;autorise pas les noms de dossier en double. C’est pourquoi nous vous recommandons de sélectionner un champ à la place.</label>
+		<name>TypeFolderNameAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Pourquoi dois‑je choisir un emplacement pour mon dossier d’objets ?</label>
+		<name>NeedObjectFolderLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Choisir un emplacement pour votre dossier d’objets permet d’organiser vos documents.</label>
+		<name>NeedObjectFolderLocationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Liens</label>
+		<name>Links</name>
+	</customLabels>
+	<customLabels>
+		<label>FAQ</label>
+		<name>FAQs</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
+		<name>GetSupportURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://developers.docusign.com</label>
+		<name>LearnMoreURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/trust</label>
+		<name>CheckStatusURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/fr/docusignuniversity</label>
+		<name>GetTrainingURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/forum</label>
+		<name>VisitCommunityURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/knowledgeMarket</label>
+		<name>ViewResourcesURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Indique Vers le bas</label>
+		<name>IndicatesDown</name>
+	</customLabels>
+	<customLabels>
+		<label>Description de la section</label>
+		<name>SectionDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Section 1</label>
+		<name>Section1</name>
+	</customLabels>
+	<customLabels>
+		<label>agreementHelp</label>
+		<name>agreementHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Désactivez le bloqueur de pop‑up de votre navigateur avant d’ouvrir une session.</label>
+		<name>DisablePopUp</name>
+	</customLabels>
+	<customLabels>
+		<label>S’identifier sur DocuSign</label>
+		<name>LoginToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez pas encore de compte ?</label>
+		<name>DontHaveAnAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionnez un autre environnement DocuSign uniquement si vous n’utilisez pas de compte de production.</label>
+		<name>NonProductionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Démo</label>
+		<name>DocuSignDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>À utiliser si vous avez un compte DocuSign de démonstration ou de développeur.</label>
+		<name>DemoHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>S’identifier sur un compte Démo</label>
+		<name>LoginToDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>Environnements Test ou Stage</label>
+		<name>TestingEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilisez cette option si votre compte test ou stage a une URL personnalisée.</label>
+		<name>TestingEnvironmentHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte DocuSign sélectionné. Cliquez sur Suivant pour passer à l’étape d’autorisation.</label>
+		<name>AccountSelected</name>
+	</customLabels>
+	<customLabels>
+		<label>Autoriser l’accès à Salesforce</label>
+		<name>AuthorizeAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Cet accès nous permet de charger des documents vers Salesforce et de les joindre aux enregistrements où votre
+			organisation en a besoin.
+		</label>
+		<name>AuthorizeHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Les paramètres d’autorisation ne sont pas présents pour le compte DocuSign sélectionné. Cette option sera disponible
+			une fois que les produits ayant besoin que les systèmes DocuSign accèdent à Salesforce auront été ajoutés au compte.
+		</label>
+		<name>AuthorizationSettingsNotPresent</name>
+	</customLabels>
+	<customLabels>
+		<label>Autoriser l’accès</label>
+		<name>AllowAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Terminer la configuration</label>
+		<name>CompleteSetupAuthorization</name>
+	</customLabels>
+	<customLabels>
+		<label>Débuter avec DocuSign Applications</label>
+		<name>GetStartedSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Compte connecté</label>
+		<name>ConnectedAccountSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Déconnecter</label>
+		<name>DisconnectSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Accueil</label>
+		<name>TabHome</name>
+	</customLabels>
+	<customLabels>
+		<label>Configuration</label>
+		<name>ConfigurationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Signature électronique</label>
+		<name>TabESignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Création de documents</label>
+		<name>TabDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Collaboration et négociation</label>
+		<name>TabNegotiation</name>
+	</customLabels>
+	<customLabels>
+		<label>Administration</label>
+		<name>AdministrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Gestion des utilisateurs</label>
+		<name>TabUserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>Composants</label>
+		<name>TabComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Aide</label>
+		<name>TabHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurer</label>
+		<name>SetupConfigure</name>
+	</customLabels>
+	<customLabels>
+		<label>Obtenir un assistance</label>
+		<name>SetupGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Personnalisez la messagerie par e‑mail par défaut, configurez les rappels et les jours d’expiration des enveloppes.</label>
+		<name>TabESignatureHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>En un clic, produisez des accords sophistiqués et personnalisables avec vos données Salesforce.</label>
+		<name>TabDocumentGenerationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyez en interne des accords pour autorisation et les faire évaluer facilement par des tiers.</label>
+		<name>TabNegotiationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez aux membres de votre équipe l’accès à DocuSign Applications.</label>
+		<name>TabUserManagementHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Personnalisez les présentations et les expériences en ajoutant des boutons et des composants.</label>
+		<name>TabComponentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Chez DocuSign, nous sommes attachés à votre réussite. Nous avons créé une page d’aide pour répondre aux questions courantes relatives à DocuSign Applications.</label>
+		<name>TabHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Configuration DocuSign</label>
+		<name>SetupPageTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Nom de l’environnement</label>
+		<name>EnvironmentName</name>
+	</customLabels>
+	<customLabels>
+		<label>Ouvrir DocuSign CLM</label>
+		<name>OpenDocuSignCLMButton</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen n’est pas configuré dans votre compte.</label>
+		<name>GenNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate n’est pas configuré dans votre compte.</label>
+		<name>NegotiateNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier un objet</label>
+		<name>EditObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Affichage des dossiers d’objets dans Salesforce</label>
+		<name>ViewingObjectFoldersSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen</label>
+		<name>GenBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate</label>
+		<name>NegotiateBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>Déverrouiller</label>
+		<name>UnlockFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>Icône d’information</label>
+		<name>InfoIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer des accords dans DocuSign CLM</label>
+		<name>CreatingAgreementsInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer et gérer des configurations de génération de documents</label>
+		<name>CreateAndManageDocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurations de la génération de documents</label>
+		<name>DocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>Processus de génération de document</label>
+		<name>DocumentGenerationProcessTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>La génération de documents est le principal outil permettant de générer de nouveaux accords ou contrats, en chargeant des documents existants pour lancer de nouveaux flux de travail. Cet outil est disponible dans DocuSign CLM.</label>
+		<name>CreateAndManageDocSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez ajouter à votre présentation de page Salesforce un bouton personnalisé pour déclencher une URL de configuration de génération de document. Cliquer sur le bouton personnalisé ouvrira le formulaire affilié de génération de documents.</label>
+		<name>CreateAndManageDocSummary2</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment générer des documents dans DocuSign CLM</label>
+		<name>LearnHowToGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment ajouter un bouton à une page d’objet Salesforce</label>
+		<name>LearnHowToAddAButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Les configurations sont l’un des principaux moteurs du processus de génération de documents dans DocuSign CLM. Une configuration est composée de 3 éléments :</label>
+		<name>DocumentGenerationConfigurationsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>À l’aide de vos propres modèles, vous pouvez rapidement fusionner des données pour créer de nouveaux accords, contrats ou tout autre document et les envoyer instantanément vers le processus suivant. Vous pouvez aussi utiliser le même outil pour démarrer un flux de travail en chargeant un document existant, tel qu’un accord commercial tiers.</label>
+		<name>DocumentGenerationProcessSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Modèle de document MS Word (.doc ou .docx)</label>
+		<name>DocumentStep1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Fichier de configuration de formulaire (.xml ou format natif CLM)</label>
+		<name>DocumentStep2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Objet Salesforce mappé (si les données sont extraites de Salesforce)</label>
+		<name>DocumentStep3</name>
+	</customLabels>
+	<customLabels>
+		<label>Ouvrir le gestionnaire d’objets</label>
+		<name>OpenObjectManagerButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment utiliser Workflow Designer dans DocuSign CLM</label>
+		<name>LearnHowTo</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer et gérer des workflows</label>
+		<name>CreateAndManageWorkflows</name>
+	</customLabels>
+	<customLabels>
+		<label>Automatiser les processus dans DocuSign CLM</label>
+		<name>AutomateprocessesinDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Designer</label>
+		<name>WorkflowDesigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Étapes du workflow</label>
+		<name>WorkflowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow relie des sous‑processus pour normaliser plusieurs processus, automatisant ainsi les tâches récurrentes, réduisant ainsi les risques d’erreurs humaines et les coûts d’exploitation. Cet outil est disponible dans DocuSign CLM.</label>
+		<name>CreateAndManageSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Designer est un espace où vous pouvez connecter des étapes qui représentent les différentes activités du processus. Ces étapes sont comme les éléments d’un diagramme et vous aident à construire votre workflow. Vous pouvez exploiter les étapes individuelles du workflow, personnaliser les activités associées à chaque étape et les automatiser davantage en utilisant des expressions C# là où les propriétés des étapes le permettent.</label>
+		<name>WorkflowDesignerSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Il existe cinq types d’étapes prédéfinies :</label>
+		<name>WorkflowStepsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Étapes automatisées de gestion des documents</label>
+		<name>WorkflowSteps1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Étapes humaines</label>
+		<name>WorkflowSteps2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Étapes motrices</label>
+		<name>WorkflowSteps3</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Étapes d’intégration</label>
+		<name>WorkflowSteps4</name>
+	</customLabels>
+	<customLabels>
+		<label>5. Étapes planifiées et communication</label>
+		<name>WorkflowSteps5</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez ajouter à votre présentation de page Salesforce un bouton personnalisé pour des flux de travail avancés. Un clic sur le bouton personnalisé déclenchera le flux de travail avancé.</label>
+		<name>CustomWorkflowButtonSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajoutez des composants en configurant vos présentations</label>
+		<name>AddComponentsByConfiguringYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Portail Dossiers - Afficher vos dossiers d’objets</label>
+		<name>FolderPortalViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Composant n° 2</label>
+		<name>Component2</name>
+	</customLabels>
+	<customLabels>
+		<label>Le portail Dossiers vous permet d’afficher et de travailler sur vos dossiers d’objet à partir de Salesforce. Une fois que vous avez mappé vos objets Salesforce, vous pouvez personnaliser la présentation de page de votre objet Salesforce en ajoutant une vue.</label>
+		<name>FolderPortalSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment configurer vos présentations</label>
+		<name>LearnHowToConfigureYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment disposer des composants dans vos présentations</label>
+		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilisateurs DocuSign</label>
+		<name>DocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM pour les utilisateurs Salesforce</label>
+		<name>DocuSignCLMUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier les autorisations</label>
+		<name>EditPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Retirer et Fermer</label>
+		<name>RemoveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Date de l’ajout</label>
+		<name>AddedDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Rôle CLM</label>
+		<name>CLMRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Profil</label>
+		<name>ProfileLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Ensemble d’autorisations</label>
+		<name>PermissionSetLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Filtré par</label>
+		<name>FilteredByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Démarrez votre recherche en utilisant les filtres ci‑dessus.</label>
+		<name>BeginFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>utilisateurs sélectionnés</label>
+		<name>UsersSelectedLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>utilisateur(s)</label>
+		<name>UsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Trié par</label>
+		<name>SortedByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>L’utilisateur actuel ne peut pas participer à la suppression et à la fermeture des utilisateurs.</label>
+		<name>CannotCloseCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>L’utilisateur actuel ne peut pas participer aux mises à jour pour modifier des autorisations.</label>
+		<name>CannotEditPermissionsCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner un rôle</label>
+		<name>SelectApplicationRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Filtrer les utilisateurs</label>
+		<name>FilterUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Rôles de l’application</label>
+		<name>ApplicationRolesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Accès au compte DocuSign</label>
+		<name>ApplicationAccountAccessLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Retirer {0}</label>
+		<name>RemoveSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Fermer d’un coup {0} utilisateurs</label>
+		<name>RemoveBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Êtes‑vous sûr de vouloir retirer {0} de DocuSign ?</label>
+		<name>RemoveSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Êtes‑vous sûr de vouloir retirer {0} utilisateurs d’un coup de ce compte DocuSign ?</label>
+		<name>RemoveBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Les utilisateurs sélectionnés ont été ajoutés avec succès.</label>
+		<name>UsersAddedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} a été retiré et fermé avec succès.</label>
+		<name>SingleUserClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} utilisateurs ont été retirés et fermés avec succès.</label>
+		<name>MultipleUsersClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
+		<name>Component2Summary</name>
+	</customLabels>
+	<customLabels>
+		<label>Tableau de bord</label>
+		<name>Dashboard</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez pas mappé l’objet « {0} » à DocuSign CLM.</label>
+		<name>ObjectNotMappedToDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Mappez l’objet pour afficher les dossiers de cette page.</label>
+		<name>MapToViewFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous n’avons pas pu nous connecter à DocuSign CLM.</label>
+		<name>CouldNotConnectToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous pouvez actualiser la page pour réessayer ou contacter votre administrateur Salesforce.</label>
+		<name>RefreshToLoadFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Rechercher un objet</label>
+		<name>SearchObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un sous‑dossier</label>
+		<name>AddSubfolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Image d’exemple de dossier</label>
+		<name>ExampleFolderImage</name>
+	</customLabels>
+	<customLabels>
+		<label>e‑mail</label>
+		<name>Email</name>
+	</customLabels>
+	<customLabels>
+		<label>Saisissez ou sélectionnez un champ ci‑dessous pour donner un nom au sous‑dossier</label>
+		<name>SelectFieldToNameTheSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Actif</label>
+		<name>Active</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne plus afficher</label>
+		<name>DontShowThisAgain</name>
+	</customLabels>
+	<customLabels>
+		<label>AFFICHER LE DOCUMENT</label>
+		<name>ViewDocumentButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Il y a eu un problème avec votre demande d’évaluation et elle n’a pas été envoyée. Le problème devrait se résoudre de lui‑même si
+			vous renvoyez la demande.</label>
+		<name>ExternalReviewFailureEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>L’évaluation externe a échoué</label>
+		<name>ExternalReviewFailureEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Nous n’avons pas pu envoyer votre demande d’évaluation pour {0}.</label>
+		<name>ExternalReviewFailureEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La demande d’évaluation pour {0} a expiré. Si vous voulez encore que quelqu’un vérifie cela, vous devrez envoyer une nouvelle demande d’évaluation.</label>
+		<name>ExpiredReviewSenderEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre demande d’évaluation a expiré</label>
+		<name>ExpiredReviewSenderEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Ouvrir l’accord</label>
+		<name>OpenAgreementButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation pour {0} complétée</label>
+		<name>CompletedReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation complétée</label>
+		<name>CompletedReviewEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>La demande d’évaluation pour {0} a été complétée. Vous n’avez rien à faire.</label>
+		<name>CompletedReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La demande d’évaluation pour {0} a expiré. Vous n’avez rien à faire.</label>
+		<name>ExpiredReviewReviewerEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre demande d’évaluation a expiré</label>
+		<name>ExpiredReviewReviewerEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>La demande d’évaluation pour {0} a expiré.</label>
+		<name>ExpiredReviewHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La demande d’évaluation pour {0} a été annulée. Vous n’avez rien à faire.</label>
+		<name>CanceledReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>L’évaluation pour {0} a été annulée.</label>
+		<name>CanceledReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluation pour {0} annulée.</label>
+		<name>CanceledReviewEmailHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Contenus du dossier</label>
+		<name>FolderContents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Objet de compte</label>
+		<name>AccountObject</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM - Erreur de mapping</label>
+		<name>MapError</name>
+	</customLabels>
+	<customLabels>
+		<label>Cliquez pour ajouter</label>
+		<name>ClickToAdd</name>
+	</customLabels>
+	<customLabels>
+		<label>Champs de recherches</label>
+		<name>SearchFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un filtre</label>
+		<name>AddFilterLabel</name>
+	</customLabels>
+	<customPageWebLinks>
+		<label>Configuration DocuSign</label>
+		<name>Setup</name>
+	</customPageWebLinks>
+	<customTabs>
+		<label>Configuration DocuSign</label>
+		<name>Setup</name>
+	</customTabs>
+</Translations>
