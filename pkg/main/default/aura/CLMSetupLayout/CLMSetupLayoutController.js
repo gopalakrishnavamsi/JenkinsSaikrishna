@@ -1,5 +1,5 @@
 ({
-  onInit: function (component, event, helper) {
+  onChangeIsAuthorized: function (component, event, helper) {
     helper.insertComponent(component, 'c:CLMSidebar', false, false, 'v.sideBar');
     helper.updateUi(component, '2');
   },
