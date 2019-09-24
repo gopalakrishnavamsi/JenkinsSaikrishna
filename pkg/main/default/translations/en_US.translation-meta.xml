@@ -3858,15 +3858,15 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Folder Contents</label>
+		<label>Folder Contents</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Account Object</label>
+		<label>Account Object</label>
 		<name>AccountObject</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Map Error</label>
+		<label>{0} object type was not mapped to DocuSign CLM.</label>
 		<name>MapError</name>
 	</customLabels>
 	<customLabels>
