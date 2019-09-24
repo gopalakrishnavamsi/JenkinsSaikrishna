@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Ändern Sie den standardmäßig eingestellten Text im E-Mail-Betreff. Die Betreffzeile wird dem DocuSign-Empfänger
+			angezeigt, der die Dokumente zum Signieren erhält.
+		</help>
+    <label>E-Mail-Betreff</label>
+    <name>EmailSubject__c</name>
+</CustomFieldTranslation>
