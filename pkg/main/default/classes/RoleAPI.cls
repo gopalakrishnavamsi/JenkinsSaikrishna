@@ -22,15 +22,15 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			'Sender' => ESignatureProduct.ROLE_SENDER
 		},
 		Product.GEN => new Map<String, String> {
-			'Generator' => GenProduct.ROLE_GENERATOR
+			'0' => GenProduct.ROLE_GENERATOR
 		},
 		Product.NEGOTIATE => new Map<String, String> {
-			'Negotiator' => NegotiateProduct.ROLE_NEGOTIATOR
+			'0' => NegotiateProduct.ROLE_NEGOTIATOR
 		},
 		Product.CLM => new Map<String, String> {
-			'Super Administrator' => ClmProduct.ROLE_ADMINISTRATOR,
-			'Full Subscriber' => ClmProduct.ROLE_USER,
-			'Guest' => ClmProduct.ROLE_VIEWER
+			'0' => ClmProduct.ROLE_ADMINISTRATOR,
+			'2' => ClmProduct.ROLE_USER,
+			'99' => ClmProduct.ROLE_VIEWER
 		}
 	};
 
@@ -98,8 +98,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 			if (groupRoles == null
 				|| String.isBlank(this.group_id)
-				|| String.isBlank(this.group_name)
-				|| !groupRoles.containsKey(this.group_name)) {
+				|| !groupRoles.containsKey(this.group_id)) {
 
 				// Only add groups to which we have a role mapped
 				LoggerService.getInstance().warn(String.format('No role mapped to product "{0}" group "{1}" ({2})',
@@ -107,11 +106,12 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 				return null;
 			}
 
+			String role = groupRoles.get(this.group_id);
 			return new Product.Role(
 				UUID.tryParse(this.ds_group_id),
 				productName,
-				groupRoles.get(this.group_name),
-				Product.getRoleLabel(this.group_name),
+				role,
+				Product.getRoleLabel(role),
 				this.is_admin == true);
 		}
 	}
@@ -239,7 +239,17 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			throw new APIException(response.error);
 		}
 
-		return ((APIGroup)JSON.deserialize(response.body, APIGroup.class)).toExternalForm();
+		// Cannot deserialize directly to object due to 'group' property (reserved keyword).
+		Product.Role result = null;
+		Map<String, Object> newGroup = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		if (newGroup != null && newGroup.containsKey('group')) {
+			result = ((APIGroup)JSON.deserialize(
+				JSON.serialize(newGroup.get('group')),
+				APIGroup.class)).toExternalForm();
+		} else {
+			this.log.error('Unexpected response when creating account role:\n' + response.body);
+		}
+		return result;
 	}
 
 	@TestVisible
@@ -334,6 +344,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			Map<String, Product.Role> groupRolesToCreate = productGroupRolesToCreate.get(product);
 			for (String groupId : groupRolesToCreate.keySet()) {
 				Product.Role role = this.createAccountRole(groupRolesToCreate.get(groupId), groupId, timeout);
+				if (role == null || !result.containsKey(role.product)) throw new DocuSignException(Label.UnsupportedProductRoles);
 				result.get(role.product).put(role.id, role);
 			}
 		}
