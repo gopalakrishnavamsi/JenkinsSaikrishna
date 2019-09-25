@@ -9,5 +9,5 @@
         <plural>true</plural>
         <value>DocuSign-Empfängerstatus</value>
     </caseValues>
-    <gender>Feminine</gender>
+    <gender>Masculine</gender>
 </CustomObjectTranslation>
