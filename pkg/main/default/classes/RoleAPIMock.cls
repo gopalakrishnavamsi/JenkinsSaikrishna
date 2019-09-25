@@ -60,8 +60,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 				} else { // add account dsgroups
 					RoleAPI.APIGroup g = (RoleAPI.APIGroup)JSON.deserialize(request.getBody(), RoleAPI.APIGroup.class);
 					g.ds_group_id = UUID.randomUUID().toString();
-					response.setBody(JSON.serialize(g));
-
+					response.setBody(JSON.serialize(new Map<String, Object> { 'group' => g }));
 				}
 			} else if (method == 'DELETE') { // remove dsgroup users
 				response.setStatusCode(200);
@@ -78,21 +77,21 @@ public class RoleAPIMock extends OAuthTokenMock {
 				if (query.contains('clm')) {
 					RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
 					g.group_id = '0';
-					g.group_name = 'Super Administrator';
+					g.group_name = 'CLM Administrators!';
 					g.description = 'Administrators!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
 					g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '1';
-					g.group_name = 'Full Subscriber';
+					g.group_id = '2';
+					g.group_name = 'CLM Users!';
 					g.description = 'Users!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
 					gs.groups.add(g);
 					g = new RoleAPI.APIGroup(null, null);
-					g.group_id = '2';
-					g.group_name = 'Guest';
+					g.group_id = '99';
+					g.group_name = 'CLM Viewers!';
 					g.description = 'Viewers!';
 					g.source_product_name = 'clm';
 					g.is_admin = true;
