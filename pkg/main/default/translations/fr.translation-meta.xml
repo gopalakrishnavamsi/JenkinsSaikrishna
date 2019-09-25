@@ -1802,7 +1802,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Votre document a été produit avec succès</label>
+		<label>Nouveaux documents produits</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -3723,6 +3723,26 @@
 		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
+		<label>Modifier les autorisations pour {0}</label>
+		<name>EditSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier les autorisations pour {0} utilisateurs</label>
+		<name>EditBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Autorisations modifiées avec succès pour {0}.</label>
+		<name>EditSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Autorisations modifiées avec succès pour {0} utilisateurs.</label>
+		<name>EditBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Appliquer</label>
+		<name>Apply</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
@@ -3840,15 +3860,15 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Contenus du dossier</label>
+		<label>Folder Contents</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Objet de compte</label>
+		<label>Account Object</label>
 		<name>AccountObject</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - Erreur de mapping</label>
+		<label>{0} object type was not mapped to DocuSign CLM.</label>
 		<name>MapError</name>
 	</customLabels>
 	<customLabels>
@@ -3862,6 +3882,14 @@
 	<customLabels>
 		<label>Ajouter un filtre</label>
 		<name>AddFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>/sfc/servlet.shepherd/document/download/</label>
+		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Les fichiers ci‑dessous ont été produits avec succès et peuvent désormais être envoyés à signer</label>
+		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>
