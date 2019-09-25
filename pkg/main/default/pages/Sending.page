@@ -34,7 +34,7 @@
       };
       $Lightning.use(_namespace + ':SendingApp', function () {
         $Lightning.createComponent(_namespace + ':Sending', {
-          visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sId)}'
+          visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sId)}',files:'{!JSENCODE($CurrentPage.parameters.files)}'
         }, 'ds-sending', function (cmp) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });

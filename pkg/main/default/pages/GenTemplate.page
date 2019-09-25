@@ -58,7 +58,7 @@
       };
       var _navigateToURL = function (event) {
         var url = event.getParam('url');
-        window.open(url, '_self');
+        window.open(url, '_blank');
       };
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':GenTemplateApp', function () {

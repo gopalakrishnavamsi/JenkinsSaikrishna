@@ -1,7 +1,7 @@
 ({
   createEnvelope: function (component, sourceId) {
     var self = this;
-    var selectedDocumentIds = component.get('v.selectedDocumentIds');
+    var selectedDocumentIds = decodeURIComponent(component.get('v.files')).split(',');
     var updated = false;
     this.invokeAction(
       component,
