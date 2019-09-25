@@ -1,15 +1,5 @@
 public with sharing class CLMMapObjectController {
 	@AuraEnabled
-    public static String getNamespace(){
-		try {
-			Permissions.verifyIsClmAdministrator();
-			return Application.namespace;
-		} catch (Exception e) {
-			throw Controller.wrapException(e, 'Failed to get namespace.');
-		}
-	}
-
-	@AuraEnabled
 	public static Boolean removeMappedObject(String name) {
 		try {
 			Permissions.verifyIsClmAdministrator();

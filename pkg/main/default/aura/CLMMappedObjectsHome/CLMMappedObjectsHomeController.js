@@ -1,5 +1,5 @@
 ({
-	onInit: function (component, event, helper) {
+	onInit: function (component, event, helper) {				
 		var namespace;
 		helper.callServer(component, 'c.getNamespace', false, function (result) {
 			namespace = result;

@@ -108,6 +108,7 @@
 				helper.fireToast(component, response.getError()[0].message, helper.ERROR);
 			}
 		});
+		$A.enqueueAction(action);
 	},
 
 	onSecondaryButtonClick: function (component, event, helper) {

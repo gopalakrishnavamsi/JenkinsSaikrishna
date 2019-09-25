@@ -1,4 +1,4 @@
-<aura:component implements="force:appHostable">
+<aura:component extends="c:CLMUtility" implements="force:appHostable">
 	<ltng:require scripts="{!$Resource.stringUtils}"/>
 	<aura:handler event="c:CLMNavigationEvent" action="{!c.updateState}"/>
 	<aura:handler event="c:CLMEvent" action="{!c.handleEvent}"/>
@@ -6,24 +6,26 @@
 	<aura:attribute name="header" type="Aura.Component[]"/>
 	<aura:attribute name="main" type="Aura.Component[]"/>
 	<aura:attribute name="fullLayout" type="Boolean" default="false"/>
-	<aura:attribute name="toastTitleText" type="String" access="private"/>
-	<aura:attribute name="toastVariant" type="String" access="private"/>
+	<aura:attribute name="toastTitle" type="String" access="private"/>
+	<aura:attribute name="toastVariantType" type="String" access="private"/>
 	<aura:attribute name="isCenter" type="Boolean" default="true" access="private"/>
 	<aura:attribute name="login" type="Object"/>
 	<aura:attribute name="products" type="Product[]"/>
 	<aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
 	<aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
+	<aura:attribute name="isClmAdmin" type="Boolean" default="false"/>
 										
 	<aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
-	
+	<aura:handler name="change" value="{!v.isClmAdmin}" action="{!c.onChangeIsClmAdmin}"/>
+
 	<!--register events -->
 	<aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
 
-	<c:Toast aura:id="toast" message="{!v.toastTitleText}" mode="{!v.toastVariant}"/>
+	<c:Toast aura:id="toast" message="{!v.toastTitle}" mode="{!v.toastVariantType}"/>
 
 	<c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
 	
-	<aura:if isTrue="{!v.isAuthorized}">	
+	<aura:if isTrue="{!and(v.isAuthorized, v.isClmAdmin)}">	
 		<lightning:layout>
 			<lightning:layoutItem size="2" class="slds-theme_default">
 				<!--left side bar-->

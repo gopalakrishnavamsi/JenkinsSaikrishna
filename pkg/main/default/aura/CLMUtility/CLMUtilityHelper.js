@@ -17,7 +17,7 @@
       });
   },
 
-  callServer: function (component, serverMethod, params, callback, errorCallback) {
+  callServer: function (component, serverMethod, params, callback) {
     var _self = this;
     var action = component.get(serverMethod);
     if (params) {
@@ -26,15 +26,14 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        callback.call(this, response.getReturnValue());
+        if (callback) {
+          callback.call(this, response.getReturnValue());
+        }
       } else if (state === 'ERROR') {
         var errors = response.getError();
-
         if (errors && errors[0] && errors[0].message) {
           _self.fireToast(component, errors[0].message, this.ERROR);
         }
-        errorCallback.call(this, response.getError());
-
       }
     });
     $A.enqueueAction(action);
@@ -74,4 +73,19 @@
     }, 'CLMEvent');
   },
 
+  fetchNamespace: function (component) {
+    var _self = this;
+    _self.callServer(component, 'c.getNamespace', false, function (result) {
+      component.set('v.namespace', result);
+    });
+  },
+
+  verifyUserPermissions: function (component) {
+    var _self = this;
+    _self.callServer(component, 'c.verifyIsClmAdmin', false, function (result) {
+      if (result) {
+        component.set('v.isClmAdmin', result);
+      }
+    });
+  }
 });
