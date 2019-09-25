@@ -25,8 +25,8 @@
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
-    <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false"/>
-    <aura:attribute name="canSendForSignature" type="Boolean" default="false"/>
+    <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="{!false}" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
@@ -244,11 +244,12 @@
                             </div>
                             <!-- Footer -->
                             <div class="{!'slds-modal__footer ds-genFileFooter'+if(v.isPreview, ' slds-hide', '')}">
-                                <lightning:button class="slds-button slds-button_brand"
-                                                  label="{!$Label.c.SendForSignature}"
-                                                  onclick="{!c.sendForSignature}"
-                                                  disabled="{!not(v.canSendForSignature)}"/>
-                                <lightning:button class="slds-float_left" variant="neutral" label="{!$Label.c.Back}"
+                                <lightning:button
+                                        class="{!'slds-button slds-button_brand'+if(not(v.canSendForSignature),' slds-hide','')}"
+                                        label="{!$Label.c.SendForSignature}"
+                                        onclick="{!c.sendForSignature}"/>
+                                <lightning:button class="slds-float_left slds-button" variant="neutral"
+                                                  label="{!$Label.c.Back}"
                                                   onclick="{!c.goBack}"/>
                             </div>
                             <!-- Footer -->

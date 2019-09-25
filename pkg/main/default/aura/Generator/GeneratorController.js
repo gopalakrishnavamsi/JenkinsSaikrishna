@@ -4,6 +4,7 @@
     if (isAuthorized) {
       var config = component.get('v.config');
       helper.checkMultiCurrency(component);
+      helper.isEsignEnabled(component);
 
       if ($A.util.isEmpty(config)) {
         var action = component.get('c.getTemplate');
@@ -24,7 +25,6 @@
           }
         });
         $A.enqueueAction(action);
-        helper.canSendForSignature(component);
       } else {
         component.set('v.isLoading', true);
         // TODO: Verify has Gen license, trial not expired, etc.

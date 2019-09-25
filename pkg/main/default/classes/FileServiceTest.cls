@@ -89,4 +89,59 @@ private class FileServiceTest {
 //			System.assertEquals(base64Data1 + base64Data2 + base64Data3, EncodingUtil.base64Encode(result3.VersionData));
 		}
 	}
+
+	@IsTest
+	private static void test_getSendingDeepLink() {
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			String title = UUID.randomUUID().toString();
+			String base64Data1 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data2 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data3 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+
+			ContentVersion result1 = FileService.saveFile(null, a.Id, title, base64Data1);
+			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
+			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
+
+			String fileIdsInCommaSeparated = String.Join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+
+			Test.startTest();
+			Pagereference ref = new PageReference(FileService.getSendingDeepLink(a.Id, fileIdsInCommaSeparated).toExternalForm());
+			Test.stopTest();
+
+			System.assertEquals((Id)ref.getParameters().get('sid'), a.id);
+			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
+		}
+
+	}
+
+	@IsTest
+	private static void test_getSendingDeepLink_Failure() {
+
+		System.runAs(UserMock.createUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			String title = UUID.randomUUID().toString();
+			String base64Data1 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data2 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data3 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+
+			ContentVersion result1 = FileService.saveFile(null, a.Id, title, base64Data1);
+			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
+			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
+
+			String fileIdsInCommaSeparated = String.Join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+			Pagereference ref;
+			Test.startTest();
+			try {
+				ref = new PageReference(FileService.getSendingDeepLink(a.Id, fileIdsInCommaSeparated).toExternalForm());
+				throw new AssertException('Expected getSendingDeepLink to fail');
+			} catch (Exception ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+			System.assertEquals(ref, null);
+		}
+
+	}
 }

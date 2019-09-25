@@ -104,7 +104,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 					WHERE LinkedEntityId IN :linkedEntityIds
 					AND ContentDocument.PublishStatus != 'U'
 					AND ContentDocument.LatestPublishedVersion.ContentSize > 0
-					ORDER BY ContentDocument.LatestPublishedVersion.Title
+					ORDER BY ContentDocument.LatestPublishedVersion.LastModifiedDate DESC
 					LIMIT 100
 				];
 			}

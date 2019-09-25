@@ -44,6 +44,7 @@
 .THIS .ds-genFileFooter {
     border-top: 0px;
     padding: 1rem;
+    height: 4rem;
 }
 
 .THIS .ds-genFileModal {
@@ -77,8 +78,3 @@
 .THIS .ds-bannerContainer {
     padding: 1rem;
 }
-
-.THIS .ds-sending {
-    max-height: 65vh !important;
-}
-
