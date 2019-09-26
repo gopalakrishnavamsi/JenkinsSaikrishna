@@ -44,6 +44,14 @@
     top: calc(50% + 3em);
 }
 
+.THIS .ds-import-spinner_sendingForSignature::after {
+    position: absolute;
+    content: 'Sending for Signature';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
 
 .THIS .ds-no-label .slds-form-element__label,
 .THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
