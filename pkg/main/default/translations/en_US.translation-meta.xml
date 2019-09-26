@@ -3630,15 +3630,11 @@
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your users the power to automatically generate polished, configurable agreements, directly from
-			Salesforce.
-		</label>
+		<label>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
-		<label>Speed up your business processes by quickly generating documents with the Salesforce data you need in the
-			format you want.
-		</label>
+		<label>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</label>
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>

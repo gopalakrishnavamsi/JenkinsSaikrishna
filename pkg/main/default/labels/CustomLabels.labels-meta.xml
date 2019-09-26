@@ -7124,9 +7124,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenMarketingBody1</shortDescription>
-		<value>Give your users the power to automatically generate polished, configurable agreements, directly from
-			Salesforce.
-		</value>
+		<value>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>GenMarketingBody2</fullName>
@@ -7134,9 +7132,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenMarketingBody2</shortDescription>
-		<value>Speed up your business processes by quickly generating documents with the Salesforce data you need in the
-			format you want.
-		</value>
+		<value>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</value>
 	</labels>
 	<labels>
 		<fullName>TryItOut</fullName>
@@ -7221,17 +7217,7 @@
 	<labels>
 		<fullName>VersionControlFeature</fullName>
 		<categories>SetupWizard</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>VersionControlFeature</shortDescription>
-		<value>Streamline version control</value>
-	</labels>
-	<labels>
-		<fullName>RoutingFeature</fullName>
-		<categories>SetupWizard</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>RoutingFeature</shortDescription>
+		<language>en_US</language>Ge
 		<value>Approval routing and notifications</value>
 	</labels>
 	<labels>
