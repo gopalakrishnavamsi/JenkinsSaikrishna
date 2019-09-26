@@ -21,8 +21,8 @@
                         {!$Label.c.GenMarketingBody2}
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-2 ds-marketing-video-section">
-                    <img src="{!$Resource.GenMarketingVideo}"/>
+                <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
+                    <img src="{!$Resource.GenMarketingVideo}" class="ds-marketing-video-image"/>
                 </div>
             </div>
         </div>

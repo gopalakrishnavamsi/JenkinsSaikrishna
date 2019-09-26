@@ -11,8 +11,12 @@
     font-size: t(fontSize3);
 }
 
-.THIS .ds-marketing-video-section {
+.THIS .ds-marketing-video-col {
     text-align: end;
+}
+
+.THIS .ds-marketing-video-image {
+    cursor: pointer;
 }
 
 .THIS .ds-marketing-features-section {
