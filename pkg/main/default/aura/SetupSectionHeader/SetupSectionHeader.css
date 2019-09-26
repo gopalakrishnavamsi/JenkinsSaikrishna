@@ -8,3 +8,11 @@
     background: #ee7fae;
 }
 
+.THIS .ds-trialMessage {
+    font-size: t(fontSize4);
+}
+
+.THIS .ds-trialDaysLeft {
+    font-size: t(fontSize4);
+    background: rgb(255, 255, 255);
+}

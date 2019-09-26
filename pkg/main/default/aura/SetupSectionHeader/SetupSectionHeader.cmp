@@ -2,17 +2,38 @@
     <aura:attribute name="sectionCategory" type="String"/>
     <aura:attribute name="sectionHeader" type="String"/>
     <aura:attribute name="headerIconName" type="String"/>
+    <aura:attribute name="showTrialBar" type="Boolean" default="false"/>
+    <aura:attribute name="trialProductName" type="String"/>
+    <aura:attribute name="trialDaysLeft" type="Integer"/>
+    <aura:attribute name="trialMessage" type="Integer" access="private"/>
+
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.initializeComponent}"/>
 
     <div class="slds-m-around_small">
-        <div class="slds-media">
-            <div class="slds-media__figure">
-                <lightning:icon iconName="{!v.headerIconName}" size="large"
-                                class="{!if(v.sectionHeader == $Label.c.TabUserManagement, 'ds-userManagement-icon-background')}"/>
+        <div class="slds-grid slds-grid_align-spread">
+            <div class="slds-col">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning:icon iconName="{!v.headerIconName}" size="large"
+                                        class="{!if(v.sectionHeader == $Label.c.TabUserManagement, 'ds-userManagement-icon-background')}"/>
+                    </div>
+                    <div class="slds-media__body slds-media__body slds-m-top_xx-small">
+                        <p class="slds-text-title_caps">{!v.sectionCategory}</p>
+                        <p class="ds-sectionHeader">{!v.sectionHeader}</p>
+                    </div>
+                </div>
             </div>
-            <div class="slds-media__body slds-media__body slds-m-top_xx-small">
-                <p class="slds-text-title_caps">{!v.sectionCategory}</p>
-                <p class="ds-sectionHeader">{!v.sectionHeader}</p>
-            </div>
+            <aura:if isTrue="{!v.showTrialBar}">
+                <div class="slds-col">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-left_small slds-m-top_small">
+                        <div class="slds-col slds-m-right_small ds-trialMessage">{!v.trialMessage}</div>
+                        <div class="slds-col slds-p-around_xx-small slds-m-right_small ds-trialDaysLeft">{!v.trialDaysLeft}</div>
+                        <div class="slds-col">
+                            <lightning:button label="{!$Label.c.ViewPricing}" variant="brand"/>
+                        </div>
+                    </div>
+                </div>
+            </aura:if>
         </div>
     </div>
 </aura:component>
