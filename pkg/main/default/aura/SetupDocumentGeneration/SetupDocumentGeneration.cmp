@@ -1,3 +1,16 @@
 <aura:component>
-    {!$Label.c.TabDocumentGeneration}
+    <!-- attributes -->
+    <aura:attribute name="genProduct" type="Product"/>
+
+    <div class="ds-documentGeneration-settings">
+        <aura:if isTrue="{!not(empty(v.genProduct))}">
+            <!-- DocuSign Gen Templates section -->
+            {!$Label.c.TabDocumentGeneration}
+            <!-- Gen Product does not exist. Display Marketing component -->
+            <aura:set attribute="else">
+                <!-- section for enabling trial -->
+                <c:DocumentGenerationMarketing/>
+            </aura:set>
+        </aura:if>
+    </div>
 </aura:component>
