@@ -30,6 +30,8 @@ public with sharing class AccountProducts {
 	private DocuSign.Environment environment;
 	@TestVisible
 	private static List<Product.Role> newRoles;
+	@TestVisible
+	private static final String ESIGN = Product.ESIGNATURE;
 
 	@AuraEnabled
 	public ESignatureProduct eSignature {
@@ -463,11 +465,12 @@ public with sharing class AccountProducts {
 
 	/**
 	 * Retrieves the products on the account to be used for Setup and Admin management interfaces on the UI
+	 * Also this function is referred in isEsignEnabled which verifies e_sign product is added to account before allowing user to use the feature.
 	 *
 	 * @return A List of Products on the account
 	 */
 	public static List<Product> getProducts() {
-		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsDocuSignUser();
 		return AccountProducts.getInstance().products.values();
 	}
 
@@ -682,5 +685,17 @@ public with sharing class AccountProducts {
 		result |= Collection.isNotEmpty(DB.deleteProductSettings());
 		self = null;
 		return result;
+	}
+
+	public static boolean isEsignEnabled() {
+		Permissions.verifyIsDocuSignUser();
+		Boolean isEnabled = false;
+		for (Product product : getProducts()) {
+			if (product.Name == ESIGN) {
+				isEnabled = true;
+				Break;
+			}
+		}
+		return isEnabled;
 	}
 }
