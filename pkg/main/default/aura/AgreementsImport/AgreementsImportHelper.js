@@ -244,8 +244,8 @@
     if (isSalesforceFileAvailable) {
       helper.sendForSignature(component, selectedFileId);
     } else {
-      component.set('v.canSendForSignature', false);
-      component.set('v.isSendingForSignature', false);
+      helper.showToast(component, 'Downloading into salesforce file before sending for signature', 'success');
+      helper.saveAsSalesforceFilesAndSendForSignature(component);
     }
   },
 
@@ -283,5 +283,25 @@
       }
     }));
     $A.enqueueAction(isEsignEnabledAction);
+  },
+
+  saveAsSalesforceFilesAndSendForSignature: function(component){
+    var agreement = component.get('v.agreementDetails');
+    var helper = this;
+    var exportSalesforceAction = component.get('c.exportAgreementToSalesforce');
+    exportSalesforceAction.setParams({
+      sourceId: component.get('v.recordId'),
+      agreementId: agreement && agreement.id ? agreement.id.value : null
+    });
+    helper.showToast(component, $A.get('$Label.c.AgreementExportProcessing'), 'success');
+    exportSalesforceAction.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        helper.showToast(component, response.getReturnValue().message, 'success');
+        helper.sendForSignature(component, '');
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+    });
+    $A.enqueueAction(exportSalesforceAction);
   }
 });
