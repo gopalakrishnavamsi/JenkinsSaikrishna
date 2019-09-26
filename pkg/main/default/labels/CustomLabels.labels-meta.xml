@@ -7220,6 +7220,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>VersionControlFeature</shortDescription>
+		<value>Streamline version control</value>
+	</labels>
+	<labels>
+		<fullName>RoutingFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RoutingFeature</shortDescription>
 		<value>Approval routing and notifications</value>
 	</labels>
 	<labels>
