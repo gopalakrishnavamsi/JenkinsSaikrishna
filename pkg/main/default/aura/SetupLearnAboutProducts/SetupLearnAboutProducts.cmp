@@ -1,0 +1,52 @@
+<aura:component description="SetupLearnAboutProducts">
+
+    <div class="slds-box ds-white-background">
+        <!-- Learn section header -->
+        <div class="slds-grid slds-grid_vertical slds-p-around_medium">
+            <div class="slds-col ds-learn-section-header">
+                {!$Label.c.LearnSectionHeader}
+            </div>
+            <div class="slds-col ds-learn-section-info">
+                {!$Label.c.LearnSectionHelpText}
+            </div>
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-3">
+                <div class="slds-p-around_medium">
+                    <div class="ds-learn-image-tile">
+                        <div class="slds-text-align_center">
+                            <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnEsign}"/>
+                            <div class="slds-m-around_small ds-learn-image-title">
+                                {!$Label.c.LearnEsignLabel}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <div class="slds-p-around_medium">
+                    <div class="ds-learn-image-tile">
+                        <div class="slds-text-align_center">
+                            <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnGen}"/>
+                            <div class="slds-m-around_small ds-learn-image-title">
+                                {!$Label.c.LearnGenLabel}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-3">
+                <div class="slds-p-around_medium">
+                    <div class="ds-learn-image-tile">
+                        <div class="slds-text-align_center">
+                            <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnNegotiate}"/>
+                            <div class="slds-m-around_small ds-learn-image-title">
+                                {!$Label.c.LearnNegotiateLabel}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>
