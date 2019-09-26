@@ -7217,7 +7217,9 @@
 	<labels>
 		<fullName>VersionControlFeature</fullName>
 		<categories>SetupWizard</categories>
-		<language>en_US</language>Ge
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>VersionControlFeature</shortDescription>
 		<value>Approval routing and notifications</value>
 	</labels>
 	<labels>
