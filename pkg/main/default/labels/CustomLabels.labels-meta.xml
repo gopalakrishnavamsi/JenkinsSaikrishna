@@ -7239,6 +7239,46 @@
 		<value>Learn more about pricing</value>
 	</labels>
 	<labels>
+		<fullName>LearnSectionHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnSectionHeader</shortDescription>
+		<value>Learn how to get the most from DocuSign Apps Launcher</value>
+	</labels>
+	<labels>
+		<fullName>LearnSectionHelpText</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnSectionHelpText</shortDescription>
+		<value>Dive deeper and learn more with our help guides.</value>
+	</labels>
+	<labels>
+		<fullName>LearnEsignLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnEsignLabel</shortDescription>
+		<value>Send Envelopes for Signature</value>
+	</labels>
+	<labels>
+		<fullName>LearnGenLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnGenLabel</shortDescription>
+		<value>Generate Polished, Customized Agreements</value>
+	</labels>
+	<labels>
+		<fullName>LearnNegotiateLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnNegotiateLabel</shortDescription>
+		<value>Send Agreements for Review or Approval</value>
+	</labels>
+	<labels>
 		<fullName>DocuSignUsers</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>

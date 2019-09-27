@@ -1,0 +1,26 @@
+.THIS .ds-learn-section-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-learn-section-info {
+    font-size: t(fontSize3);
+    color: rgb(8, 7, 7);
+}
+
+.THIS .ds-learn-image-tile {
+    height: 240px;
+    border: 1px solid rgb(221, 219, 218);
+}
+
+.THIS .ds-learn-image {
+    height: 145px;
+    width: 174px;
+    cursor: pointer;
+}
+
+.THIS .ds-learn-image-title {
+    font-size: t(fontSize5);
+    color: rgb(8, 7, 7);
+}
