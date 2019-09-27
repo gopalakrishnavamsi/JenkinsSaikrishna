@@ -200,6 +200,50 @@ private class HistoryAPITest {
 		}
 	}
 
+	// Agreement approved with comments
+	@IsTest
+	static void test_getHistoryItems_success6() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			List<AgreementHistoryItem> result = HistoryAPI.getInstance().getHistoryItems(ScmAPIMock.DOCUMENT_ID_3);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(4, result.size());
+			System.assertEquals(AgreementHistoryItem.WorkflowApproved, result.get(0).historyItemType);
+			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
+			System.assertEquals('Full Sub', result.get(0).actor.fullName);
+			System.assertEquals('tgreen+1@springcm.com', result.get(0).actor.email);
+			System.assertNotEquals(null, result.get(0).comments);
+			System.assertEquals(null, result.get(0).previewUrl);
+		}
+	}
+
+	// Agreement rejected with comments
+	@IsTest
+	static void test_getHistoryItems_success7() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			List<AgreementHistoryItem> result = HistoryAPI.getInstance().getHistoryItems(ScmAPIMock.DOCUMENT_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
+			System.assertEquals(AgreementHistoryItem.WorkflowRejected, result.get(0).historyItemType);
+			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
+			System.assertEquals('Dimitri Blaiddyd', result.get(0).actor.fullName);
+			System.assertEquals('dimitri.blaiddyd@example.com', result.get(0).actor.email);
+			System.assertNotEquals(null, result.get(0).comments);
+			System.assertEquals(null, result.get(0).previewUrl);
+		}
+	}
+
 	@IsTest
 	static void test_resendRequest_failure() {
 		ScmAPIMock.failure();
