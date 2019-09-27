@@ -1,5 +1,5 @@
 ({
   onInit: function (component, event, helper) {
-    helper.fetchNamespace(component);    
+    helper.fetchNamespace(component);
   }
 });
