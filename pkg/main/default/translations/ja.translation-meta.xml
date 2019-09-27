@@ -1803,7 +1803,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>文書が生成されました</label>
+		<label>新しい文書が生成されました</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -3721,6 +3721,26 @@
 		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
+		<label>{0}の権限を編集</label>
+		<name>EditSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}ユーザーの権限を編集</label>
+		<name>EditBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}の権限が編集されました。</label>
+		<name>EditSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}ユーザーの権限が編集されました。</label>
+		<name>EditBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>適用</label>
+		<name>Apply</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
@@ -3837,15 +3857,15 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - フォルダーの内容</label>
+		<label>Folder Contents</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - 取引先オブジェクト</label>
+		<label>Account Object</label>
 		<name>AccountObject</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM - マッピングエラー</label>
+		<label>{0} object type was not mapped to DocuSign CLM.</label>
 		<name>MapError</name>
 	</customLabels>
 	<customLabels>
@@ -3859,6 +3879,14 @@
 	<customLabels>
 		<label>フィルターの追加</label>
 		<name>AddFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>/sfc/servlet.shepherd/document/download/</label>
+		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>以下のファイルが生成され、署名者に送信できるようになりました</label>
+		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign セットアップ</label>

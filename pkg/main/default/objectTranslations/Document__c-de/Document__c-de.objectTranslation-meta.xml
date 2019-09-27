@@ -9,5 +9,5 @@
         <plural>true</plural>
         <value>DocuSign-Umschlagdokumente</value>
     </caseValues>
-    <gender>Feminine</gender>
+    <gender>Neuter</gender>
 </CustomObjectTranslation>

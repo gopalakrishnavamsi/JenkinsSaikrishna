@@ -1802,7 +1802,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Dokument wurde generiert</label>
+		<label>New Documents Generated</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -3720,6 +3720,26 @@
 		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
+		<label>Edit permissions for {0}</label>
+		<name>EditSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit permissions for {0} users</label>
+		<name>EditBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully edited permissions for {0}.</label>
+		<name>EditSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully edited permissions for {0} users.</label>
+		<name>EditBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Apply</label>
+		<name>Apply</name>
+	</customLabels>
+	<customLabels>
 		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
 		<name>Component2Summary</name>
 	</customLabels>
@@ -3858,6 +3878,14 @@
 	<customLabels>
 		<label>Filter hinzufügen</label>
 		<name>AddFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>/sfc/servlet.shepherd/document/download/</label>
+		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>The files below have been successfully generated and can now be sent for signature</label>
+		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>

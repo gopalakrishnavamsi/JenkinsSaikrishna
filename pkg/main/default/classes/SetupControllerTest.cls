@@ -633,7 +633,7 @@ private class SetupControllerTest {
 	@IsTest
 	static void test_getProductsOnAccount_positive() {
 		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
 			List<Product> productsList = SetupController.getProductsOnAccount();
 			Test.stopTest();
@@ -644,13 +644,13 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getProductsOnAccount_unAuthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				SetupController.getProductsOnAccount();
 				throw new AssertException('Expected getProducts to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -674,13 +674,13 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getProductRoles_unAuthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				SetupController.getProductsOnAccount();
 				throw new AssertException('Expected getProductRoles to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}

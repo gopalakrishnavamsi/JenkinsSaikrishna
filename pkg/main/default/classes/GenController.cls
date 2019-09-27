@@ -161,12 +161,20 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static boolean canSendForSignature() {
+	public static String getSendingDeepLink(final Id sourceId, final String fileIdsInCommaSeparated) {
 		try {
-			Permissions.verifyIsDocuSignUser();
-			return true;
+			return FileService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to verify docusign user');
+			throw Controller.wrapException(ex, 'Failed to get deep link');
+		}
+	}
+
+	@AuraEnabled
+	public static boolean isEsignEnabled() {
+		try {
+			return AccountProducts.isEsignEnabled();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
 		}
 	}
 }
