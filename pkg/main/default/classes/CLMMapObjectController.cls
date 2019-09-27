@@ -28,7 +28,7 @@ public with sharing class CLMMapObjectController {
 		}
 	}
 
-	private static Map<String,List<String> > parsePath(String path){
+	private static Map<String,List<String> > parsePath(String path) {
 		Map<String,List<String> > result=new Map<String,List<String> >();
 		List<String> variables=new List<String>();
 		String formatted='';
