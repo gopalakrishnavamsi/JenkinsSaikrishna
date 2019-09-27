@@ -25,7 +25,7 @@ private class HistoryAPITest {
 			System.assertEquals(client.emailToUser.get(UserInfo.getUserEmail()).Id, UserInfo.getUserId());
 		}
 	}
-	
+
 	@IsTest
 	static void test_populateEmailToUser_blankInput() {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
@@ -43,7 +43,7 @@ private class HistoryAPITest {
 			System.assert(!client.emailToUser.containsKey('test@test.com'));
 		}
 	}
-	
+
 	@IsTest
 	static void test_populateEmailToContact_success() {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
@@ -182,7 +182,7 @@ private class HistoryAPITest {
 		}
 	}
 
-    // Agreement maps to Salesforce contact
+	// Agreement maps to Salesforce contact
 	@IsTest
 	static void test_getHistoryItems_success5() {
 		ScmAPIMock.success();

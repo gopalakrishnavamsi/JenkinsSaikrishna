@@ -103,7 +103,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 					//actor = (isActionTypeMapToSalesforceContact) ? generateActorFromContact(this.data.actor, baseURL) : (Actor)generateActorFromUser(this.data.actor, baseURL);
 					if (isActionTypeMapToSalesforceContact) {
 						Contact resolvedContact = emailToContact.containsKey(this.data.actor.emailAddress) ? emailToContact.get(this.data.actor.emailAddress) : null;
-					    previewUrl = resolvedContact != null ? NegotiateService.getAgreementPreviewLink(resolvedContact.Id, documentId.toString(), false) : null;
+						previewUrl = resolvedContact != null ? NegotiateService.getAgreementPreviewLink(resolvedContact.Id, documentId.toString(), false) : null;
 						actor = generateActorFromContact(this.data.actor, resolvedContact, baseURL);
 					}
 				}
