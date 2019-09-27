@@ -12,7 +12,7 @@
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
     <aura:attribute name="isSendingForSignature" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="canSendForSignature" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}"

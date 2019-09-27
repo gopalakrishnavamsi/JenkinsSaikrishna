@@ -122,6 +122,14 @@
                                                || v.agreementDetails.status == 'PENDING SIGNATURE'
                                                || v.agreementDetails.status == 'COMPLETED'}"/>
 
+                <lightning:menuItem label="{!$Label.c.AgreementsInternalApproval}"
+                                    value="{!$Label.c.AgreementsInternalApproval}"
+                                    onactive="{!c.showInternalApprovalModal}"
+                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
+                                               || v.agreementDetails.status == 'PENDING APPROVAL'
+                                               || v.agreementDetails.status == 'PENDING SIGNATURE'
+                                               || v.agreementDetails.status == 'COMPLETED'}"/>
+
             </lightning:buttonMenu>
             <div class="slds-p-top_x-small">
                 <h3 title="Activity History" class="slds-tile__title slds-truncate">

@@ -109,8 +109,7 @@
               formattedSize: selectedFile.formattedSize,
               extension: selectedFile.extension
             };
-            helper.displayCreatedAgreement(component, importedFile);
-            helper.getAgreementDetails(result.agreementId.value, component);
+            helper.getAgreementDetails(result.agreementId.value, importedFile, component);
           } else if (result.status === 'Processing') {
             helper.showToast(component, result.message, 'warning');
             helper.reloadAgreementsSpace(component);
@@ -129,7 +128,8 @@
     }
   },
 
-  getAgreementDetails: function (agreementId, component) {
+  getAgreementDetails: function (agreementId, importedFile, component) {
+    var helper = this;
     var action = component.get('c.getAgreement');
     action.setParams({
       agreementId: agreementId
@@ -138,6 +138,7 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         component.set('v.agreementDetails', response.getReturnValue());
+        helper.displayCreatedAgreement(component, importedFile);
       } else if (state === 'ERROR') {
         this.showToast(component, 'Failed to get agreement details', 'error');
       }
@@ -161,8 +162,8 @@
               : '',
             extension: 'docx'
           };
-          helper.displayCreatedAgreement(component, importedFile);
-          helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), component);
+
+          helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), importedFile, component);
         })
         .catch(function () {
           helper.showToast(component, 'Error Uploading File', 'error');
@@ -230,8 +231,7 @@
     return doc;
   },
 
-  navigateToSendForSignature: function (component) {
-    var helper = this;
+  navigateToSendForSignature: function (component, event, helper) {
     component.set('v.isSendingForSignature', true);
     var salesforceFiles = component.get('v.salesforceFiles');
     var selectedFileId;
@@ -244,8 +244,7 @@
     if (isSalesforceFileAvailable) {
       helper.sendForSignature(component, selectedFileId);
     } else {
-      helper.showToast(component, 'Downloading into salesforce file before sending for signature', 'success');
-      helper.saveAsSalesforceFilesAndSendForSignature(component);
+      helper.exportFileAndSend(component, event, helper);
     }
   },
 
@@ -259,13 +258,13 @@
       fileIdsInCommaSeparated: selectedFileId
     });
     sendingAction.setCallback(this, function (response) {
-      component.set('v.loading', false);
       var state = response.getState();
       if (state === 'SUCCESS') {
         navUtils.navigateToUrl(response.getReturnValue());
       } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
+      component.set('v.loading', false);
     });
     $A.enqueueAction(sendingAction);
   },
@@ -285,18 +284,18 @@
     $A.enqueueAction(isEsignEnabledAction);
   },
 
-  saveAsSalesforceFilesAndSendForSignature: function(component){
+  exportFileAndSend: function (component, event, helper) {
+    component.set('v.loading', true);
     var agreement = component.get('v.agreementDetails');
-    var helper = this;
+    var sourceId = component.get('v.recordId');
     var exportSalesforceAction = component.get('c.exportAgreementToSalesforce');
     exportSalesforceAction.setParams({
-      sourceId: component.get('v.recordId'),
+      sourceId: sourceId,
       agreementId: agreement && agreement.id ? agreement.id.value : null
     });
-    helper.showToast(component, $A.get('$Label.c.AgreementExportProcessing'), 'success');
     exportSalesforceAction.setCallback(this, function (response) {
+      component.set('v.loading', false);
       if (response.getState() === 'SUCCESS') {
-        helper.showToast(component, response.getReturnValue().message, 'success');
         helper.sendForSignature(component, '');
       } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');

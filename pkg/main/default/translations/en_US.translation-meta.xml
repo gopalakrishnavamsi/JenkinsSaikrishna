@@ -3889,6 +3889,10 @@
 		<label>The files below have been successfully generated and can now be sent for signature</label>
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
+	<customLabels>
+		<label>Sending for Signature</label>
+		<name>SendingForSignature</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

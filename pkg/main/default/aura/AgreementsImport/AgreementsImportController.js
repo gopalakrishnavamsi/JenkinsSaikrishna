@@ -94,7 +94,7 @@
   },
 
   navigateToSendForSignature: function (component, event, helper) {
-    helper.navigateToSendForSignature(component);
+    helper.navigateToSendForSignature(component,event,helper);
   }
 
 });
