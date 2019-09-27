@@ -64,6 +64,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 		public APIActor reviewer;
 		public List<APIActor> approvers;
 		public APIUser user;
+		public String comments;
 	}
 
 	@TestVisible
@@ -131,7 +132,8 @@ public with sharing class HistoryAPI extends ScmAPI {
 				this.data.documentName,
 				actor,
 				recipients,
-				previewUrl);
+				previewUrl,
+				this.data.comments);
 		}
 
 		@TestVisible

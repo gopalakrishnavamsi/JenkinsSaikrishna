@@ -78,6 +78,9 @@ public class AgreementHistoryItem {
     @AuraEnabled
     public String previewUrl;
 
+    @AuraEnabled
+    public String comments;
+
     public AgreementHistoryItem(
             final String historyItemType,
             final String currentUserEmail,
@@ -90,7 +93,8 @@ public class AgreementHistoryItem {
             final String name,
             final AgreementHistoryItem.Actor actor,
             final List<AgreementHistoryItem.Actor> recipients,
-			final String previewUrl
+			final String previewUrl,
+            final String comments
     ) {
         this.historyItemType = historyItemType;
         this.currentUserEmail = currentUserEmail;
@@ -104,6 +108,7 @@ public class AgreementHistoryItem {
         this.actor = actor;
         this.recipients = recipients;
         this.previewUrl = previewUrl;
+        this.comments = comments;
     }
 
 }
