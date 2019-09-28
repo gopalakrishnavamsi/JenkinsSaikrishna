@@ -57,7 +57,7 @@
                 </div>
                 <!-- Help guide details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
-
+                    <c:SetupLearnAboutProducts/>
                 </div>
                 <!-- Configuration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
