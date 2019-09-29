@@ -8,3 +8,8 @@
 .THIS .ds-text-align-end {
     text-align: end;
 }
+
+.THIS .ds-getStarted-helpText {
+    color: rgb(62, 62, 60);
+    font-size: t(fontSize6);
+}

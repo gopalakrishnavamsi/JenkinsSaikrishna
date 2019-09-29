@@ -1,5 +1,5 @@
 ({
-  onInit: function (component, event, helper) {
+  onChangeIsAuthorized: function (component, event, helper) {
     helper.insertComponent(component, 'c:CLMSidebar', false, false, 'v.sideBar');
     helper.updateUi(component, '2');
   },
@@ -12,7 +12,7 @@
       helper.updateUi(component, tabIndex);
     }
   },
-  
+
   handleEvent: function (component, event, helper) {
     var fromComponent = event.getParam('fromComponent');
     var toComponent = event.getParam('toComponent');

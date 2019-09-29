@@ -57,7 +57,7 @@
                 </div>
                 <!-- Help guide details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
-
+                    <c:SetupLearnAboutProducts/>
                 </div>
                 <!-- Configuration details -->
                 <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
@@ -216,7 +216,17 @@
 
             <!-- document generation section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_documentGeneration'}">
-                <c:SetupDocumentGeneration/>
+                <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}"
+                                      sectionHeader="{!$Label.c.TabDocumentGeneration}"
+                                      headerIconName="standard:contract"
+                                      showTrialBar="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), true, false)}"
+                                      trialDaysLeft="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), v.genProduct.daysUntilExpires , 0)}"
+                                      trialProductName="{!$Label.c.GenBadgeText}"/>
+
+                <!-- Section for managing users -->
+                <div class="ds-documentGeneration-section slds-m-top_x-large">
+                    <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
+                </div>
             </aura:if>
             <!-- document generation section ends here-->
 

@@ -20,8 +20,7 @@
 
 .THIS .ds-admin-sidebar {
     background: rgb(255, 255, 255);
-    height: 100%;
-    min-height: 880px;
+    min-height: 1440px;
 }
 
 .THIS .ds-home-centerSpace {
@@ -30,7 +29,7 @@
     border-radius: .1rem;
 }
 
-.THIS .ds-userManagement-section {
+.THIS .ds-userManagement-section, .THIS .ds-documentGeneration-section {
     background: rgb(255, 255, 255);
 }
 

@@ -6580,7 +6580,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GetStartedSetupAccount</shortDescription>
-		<value>Get Started with DocuSign Applications</value>
+		<value>Get Started with DocuSign Apps Launcher</value>
 	</labels>
 	<labels>
 		<fullName>ConnectedAccountSetupAccount</fullName>
@@ -7093,6 +7093,190 @@
 		<protected>true</protected>
 		<shortDescription>LearnHowTPlaceComponentsIntoYourLayouts</shortDescription>
 		<value>Learn how to place components into your layouts</value>
+	</labels>
+	<labels>
+		<fullName>TrialExpirationMessage</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TrialExpirationMessage</shortDescription>
+		<value>Days Left in {0} trial</value>
+	</labels>
+	<labels>
+		<fullName>ViewPricing</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ViewPricing</shortDescription>
+		<value>View Pricing</value>
+	</labels>
+	<labels>
+		<fullName>GenMarketingHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenMarketingHeader</shortDescription>
+		<value>One-Click Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>GenMarketingBody1</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenMarketingBody1</shortDescription>
+		<value>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>GenMarketingBody2</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenMarketingBody2</shortDescription>
+		<value>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</value>
+	</labels>
+	<labels>
+		<fullName>TryItOut</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TryItOut</shortDescription>
+		<value>Try it out</value>
+	</labels>
+	<labels>
+		<fullName>CompareFeatures</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CompareFeatures</shortDescription>
+		<value>Compare Features</value>
+	</labels>
+	<labels>
+		<fullName>FindFeatures</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>FindFeatures</shortDescription>
+		<value>Find the features you need for a faster agreement process.</value>
+	</labels>
+	<labels>
+		<fullName>GenerateWordOrPdfFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenerateWordOrPdfFeature</shortDescription>
+		<value>Generate Microsoft Word or PDF documents</value>
+	</labels>
+	<labels>
+		<fullName>MergeDataFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MergeDataFeature</shortDescription>
+		<value>Merge Salesforce data</value>
+	</labels>
+	<labels>
+		<fullName>ConditionalContentFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ConditionalContentFeature</shortDescription>
+		<value>Customize with conditional content</value>
+	</labels>
+	<labels>
+		<fullName>DynamicPricingFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DynamicPricingFeature</shortDescription>
+		<value>Use your dynamic pricing and data tables</value>
+	</labels>
+	<labels>
+		<fullName>ESignatureCompatibleFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ESignatureCompatibleFeature</shortDescription>
+		<value>Compatible with DocuSign eSignature</value>
+	</labels>
+	<labels>
+		<fullName>ApproversFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ApproversFeature</shortDescription>
+		<value>Make it easy for approvers to sign off on agreements</value>
+	</labels>
+	<labels>
+		<fullName>ExternalReviewFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ExternalReviewFeature</shortDescription>
+		<value>Allow external reviewers to update agreements</value>
+	</labels>
+	<labels>
+		<fullName>VersionControlFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>VersionControlFeature</shortDescription>
+		<value>Streamline version control</value>
+	</labels>
+	<labels>
+		<fullName>RoutingFeature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RoutingFeature</shortDescription>
+		<value>Approval routing and notifications</value>
+	</labels>
+	<labels>
+		<fullName>LearnMoreAboutPricing</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnMoreAboutPricing</shortDescription>
+		<value>Learn more about pricing</value>
+	</labels>
+	<labels>
+		<fullName>LearnSectionHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnSectionHeader</shortDescription>
+		<value>Learn how to get the most from DocuSign Apps Launcher</value>
+	</labels>
+	<labels>
+		<fullName>LearnSectionHelpText</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnSectionHelpText</shortDescription>
+		<value>Dive deeper and learn more with our help guides.</value>
+	</labels>
+	<labels>
+		<fullName>LearnEsignLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnEsignLabel</shortDescription>
+		<value>Send Envelopes for Signature</value>
+	</labels>
+	<labels>
+		<fullName>LearnGenLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnGenLabel</shortDescription>
+		<value>Generate Polished, Customized Agreements</value>
+	</labels>
+	<labels>
+		<fullName>LearnNegotiateLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnNegotiateLabel</shortDescription>
+		<value>Send Agreements for Review or Approval</value>
 	</labels>
 	<labels>
 		<fullName>DocuSignUsers</fullName>
