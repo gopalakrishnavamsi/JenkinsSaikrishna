@@ -7359,6 +7359,30 @@
 		<value>No obligation, no commitment. Let’s get started.</value>
 	</labels>
 	<labels>
+		<fullName>GenTrialStarted</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenTrialStarted</shortDescription>
+		<value>Your DocuSign Gen trial has started</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateTrialStarted</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateTrialStarted</shortDescription>
+		<value>Your DocuSign Negotiate trial has started</value>
+	</labels>
+	<labels>
+		<fullName>CurrentlyOnTrial</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrentlyOnTrial</shortDescription>
+		<value>Currently on Trial</value>
+	</labels>
+	<labels>
 		<fullName>DocuSignUsers</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>

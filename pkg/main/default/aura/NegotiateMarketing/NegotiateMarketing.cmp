@@ -50,8 +50,18 @@
                             {!$Label.c.GenBadgeText}
                         </div>
                         <div class="slds-m-top_small">
-                            <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                              onclick="{!c.showGenTrialModal}"/>
+                            <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == true)}">
+                                <ul class="slds-list_horizontal slds-m-left_x-large">
+                                    <li>
+                                        <lightning:icon size="x-small" iconName="utility:clock"></lightning:icon>
+                                    </li>
+                                    <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyOnTrial}</li>
+                                </ul>
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
+                                                      onclick="{!c.showGenTrialModal}"/>
+                                </aura:set>
+                            </aura:if>
                         </div>
                     </div>
 

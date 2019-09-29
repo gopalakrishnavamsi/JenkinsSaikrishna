@@ -3746,6 +3746,18 @@
 		<name>NegotiateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
+		<label>Your DocuSign Gen trial has started</label>
+		<name>GenTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Negotiate trial has started</label>
+		<name>NegotiateTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Currently on Trial</label>
+		<name>CurrentlyOnTrial</name>
+	</customLabels>
+	<customLabels>
 		<label>No obligation, no commitment. Let’s get started.</label>
 		<name>NoObligation</name>
 	</customLabels>
