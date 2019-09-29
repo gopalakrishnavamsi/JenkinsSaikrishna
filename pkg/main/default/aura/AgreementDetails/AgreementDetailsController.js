@@ -1,5 +1,5 @@
 ({
-  onLoad: function(component, event, helper) {
+  onLoad: function (component, event, helper) {
     helper.initAgreementActionManager(component);
   },
 
@@ -40,7 +40,12 @@
   },
 
   showAddToSalesforceModal: function (component, event, helper) {
-    helper.exportAgreementToSalesforce(component);
+    var sendForEsign = false;
+    helper.exportAgreementToSalesforce(component, sendForEsign);
   },
 
+  sendForSignature: function (component, event, helper) {
+    var sendForEsign = true;
+    helper.exportAgreementToSalesforce(component, sendForEsign);
+  }
 });

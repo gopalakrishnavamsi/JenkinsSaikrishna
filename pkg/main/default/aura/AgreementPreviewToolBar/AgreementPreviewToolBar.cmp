@@ -68,6 +68,9 @@
                                                    || v.agreement.status == 'PENDING APPROVAL'
                                                    || v.agreement.status == 'PENDING SIGNATURE'
                                                    || v.agreement.status == 'COMPLETED'}"/>
+                    <lightning:menuItem label="{!$Label.c.SendForSignature}"
+                                        value="{!$Label.c.SendForSignature}"
+                                        onactive="{!c.sendForSignature}"/>
                 </lightning:buttonMenu>
             </div>
         </div>

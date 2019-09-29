@@ -122,13 +122,9 @@
                                                || v.agreementDetails.status == 'PENDING SIGNATURE'
                                                || v.agreementDetails.status == 'COMPLETED'}"/>
 
-                <lightning:menuItem label="{!$Label.c.AgreementsInternalApproval}"
-                                    value="{!$Label.c.AgreementsInternalApproval}"
-                                    onactive="{!c.showInternalApprovalModal}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'
-                                               || v.agreementDetails.status == 'COMPLETED'}"/>
+                <lightning:menuItem label="{!$Label.c.SendForSignature}"
+                                    value="{!$Label.c.SendForSignature}"
+                                    onactive="{!c.sendForSignature}"/>
 
             </lightning:buttonMenu>
             <div class="slds-p-top_x-small">

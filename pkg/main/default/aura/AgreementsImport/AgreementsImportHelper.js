@@ -109,7 +109,8 @@
               formattedSize: selectedFile.formattedSize,
               extension: selectedFile.extension
             };
-            helper.getAgreementDetails(result.agreementId.value, importedFile, component);
+            helper.displayCreatedAgreement(component, importedFile);
+            helper.getAgreementDetails(result.agreementId.value, component);
           } else if (result.status === 'Processing') {
             helper.showToast(component, result.message, 'warning');
             helper.reloadAgreementsSpace(component);
@@ -128,8 +129,7 @@
     }
   },
 
-  getAgreementDetails: function (agreementId, importedFile, component) {
-    var helper = this;
+  getAgreementDetails: function (agreementId, component) {
     var action = component.get('c.getAgreement');
     action.setParams({
       agreementId: agreementId
@@ -138,7 +138,6 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         component.set('v.agreementDetails', response.getReturnValue());
-        helper.displayCreatedAgreement(component, importedFile);
       } else if (state === 'ERROR') {
         this.showToast(component, 'Failed to get agreement details', 'error');
       }
@@ -155,15 +154,17 @@
       widget
         .uploadNewDocument(folderId.value)
         .then(function (response) {
+          var agreementId = helper.parseAgreementId(response.DownloadDocumentHref);
           var importedFile = {
             name: response.Name,
             formattedSize: response.NativeFileSize
               ? stringUtils.formatSize(response.NativeFileSize)
               : '',
-            extension: 'docx'
+            extension: 'docx',
+            agreementId: agreementId
           };
-
-          helper.getAgreementDetails(helper.parseAgreementId(response.DownloadDocumentHref), importedFile, component);
+          helper.displayCreatedAgreement(component, importedFile);
+          helper.getAgreementDetails(agreementId, component);
         })
         .catch(function () {
           helper.showToast(component, 'Error Uploading File', 'error');
@@ -264,7 +265,6 @@
       } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
-      component.set('v.loading', false);
     });
     $A.enqueueAction(sendingAction);
   },
@@ -286,12 +286,12 @@
 
   exportFileAndSend: function (component, event, helper) {
     component.set('v.loading', true);
-    var agreement = component.get('v.agreementDetails');
+    var agreementId = component.get('v.importedFile').agreementId;
     var sourceId = component.get('v.recordId');
     var exportSalesforceAction = component.get('c.exportAgreementToSalesforce');
     exportSalesforceAction.setParams({
       sourceId: sourceId,
-      agreementId: agreement && agreement.id ? agreement.id.value : null
+      agreementId: agreementId
     });
     exportSalesforceAction.setCallback(this, function (response) {
       component.set('v.loading', false);

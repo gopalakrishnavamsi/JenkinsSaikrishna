@@ -237,7 +237,6 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static NegotiateAPI.TaskStatus exportAgreementToSalesforce(final Id sourceId, final String agreementId) {
 		try {
-			system.debug('**agreementId**'+agreementId);
 			return NegotiateService.exportAgreementToSalesforce(sourceId, UUID.parse(agreementId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to Add Agreement in Salesforce');

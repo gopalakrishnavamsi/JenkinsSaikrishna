@@ -26,6 +26,10 @@
     <div id="appContainer"/>
     <script type="text/javascript">
       var namespace = '{!JSENCODE(namespace)}';
+      var _navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_blank');
+      };
       var docuSignAdmin = {!IsCurrentUserDocuSignAdmin};
       $Lightning.use(namespace + ':AgreementPreviewApp', function () {
         $Lightning.createComponent(namespace + ':AgreementPreview',
@@ -46,6 +50,7 @@
                 navUtils.navigateToSObject(event.getParams().recordId);
               }
             });
+            $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
           });
       });
     </script>

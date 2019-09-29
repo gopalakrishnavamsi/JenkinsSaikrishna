@@ -1,11 +1,11 @@
 ({
-  initAgreementActionManager: function(component) {
+  initAgreementActionManager: function (component) {
     //Saving instance of uiHelper
     var uiHelper = new UIHelper(
-      function() {
+      function () {
         return component.getEvent('loadingEvent');
       },
-      function() {
+      function () {
         return component.getEvent('toastEvent');
       }
     );
@@ -18,7 +18,7 @@
     component.set('v.agreementActionManager', manager);
   },
 
-  createUploadComponent: function(component) {
+  createUploadComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -41,7 +41,7 @@
     }
   },
 
-  createDeleteComponent: function(component) {
+  createDeleteComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -52,7 +52,7 @@
     }
   },
 
-  createInternalApprovalComponent: function(component) {
+  createInternalApprovalComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -64,7 +64,7 @@
     }
   },
 
-  createExternalReviewComponent: function(component) {
+  createExternalReviewComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -76,7 +76,7 @@
     }
   },
 
-  createRenameComponent: function(component) {
+  createRenameComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -87,7 +87,7 @@
     }
   },
 
-  createShareLinkComponent: function(component) {
+  createShareLinkComponent: function (component) {
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreementDetails');
@@ -99,7 +99,7 @@
     }
   },
 
-  showHistoryTimeLine: function(component) {
+  showHistoryTimeLine: function (component) {
     var showTimeLine = component.get('v.showTimeLine');
     if (!showTimeLine) {
       component.set('v.showTimeLine', true);
@@ -109,7 +109,7 @@
       var agreementHistoryItems = component.get('v.agreementHistoryItems');
       var historyItems = [];
       Object.assign(historyItems, agreementHistoryItems);
-      var options = { iconPath: $A.get('$Resource.scmwidgetsspritemap') };
+      var options = {iconPath: $A.get('$Resource.scmwidgetsspritemap')};
       var historyWidget = new SpringCM.Widgets.History(options);
       var historyContainerId =
         '#historyContainer' + component.get('v.agreementIndex');
@@ -120,27 +120,27 @@
     }
   },
 
-  launchAgreementPreview: function(component) {
+  launchAgreementPreview: function (component) {
     var agreement = component.get('v.agreementDetails');
     var action = component.get('c.redirectToAgreementPreview');
     action.setParams({
       sourceId: component.get('v.sourceId'),
       agreementId: agreement && agreement.id ? agreement.id.value : null
     });
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS')
         navUtils.navigateToUrl(response.getReturnValue());
     });
     $A.enqueueAction(action);
   },
 
-  exportAgreementToSalesforce: function(component) {
+  exportAgreementToSalesforce: function (component, sendForEsign) {
     try {
       var actions = component.get('v.agreementActionManager');
       var sourceId = component.get('v.sourceId');
       var agreement = component.get('v.agreementDetails');
-      actions.exportToSalesforce(agreement, sourceId, component);
-    }catch(err){
+      actions.exportToSalesforce(agreement, sourceId, sendForEsign, component);
+    } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
