@@ -7342,9 +7342,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenerateProductTrialHelpInfo</shortDescription>
-		<value>With a single click you’ll be generating polished, configurable, and fully customizable agreements using
-			the Salesforce data you already have.
-		</value>
+		<value>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</value>
 	</labels>
 	<labels>
 		<fullName>NegotiateProductTrialHelpInfo</fullName>
@@ -7352,9 +7350,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>NegotiateProductTrialHelpInfo</shortDescription>
-		<value>You'll speed up every part of your agreement process. From generating documents to negotiating with
-			third-party approvers.
-		</value>
+		<value>You'll speed up every part of your agreement process. From generating documents to negotiating with third-party approvers.</value>
 	</labels>
 	<labels>
 		<fullName>NoObligation</fullName>

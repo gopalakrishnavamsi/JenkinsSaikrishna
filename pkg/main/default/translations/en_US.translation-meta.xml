@@ -3740,15 +3740,11 @@
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using
-			the Salesforce data you already have.
-		</label>
+		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>You'll speed up every part of your agreement process. From generating documents to negotiating with
-			third-party approvers.
-		</label>
+		<label>You'll speed up every part of your agreement process. From generating documents to negotiating with third-party approvers.</label>
 		<name>NegotiateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
