@@ -7135,6 +7135,32 @@
 		<value>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</value>
 	</labels>
 	<labels>
+		<fullName>NegotiateMarketingHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateMarketingHeader</shortDescription>
+		<value>Faster Reviews and Approvals</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateMarketingBody1</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateMarketingBody1</shortDescription>
+		<value>Easily track your negotiations and reviews in Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateMarketingBody2</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateMarketingBody2</shortDescription>
+		<value>Whether with internal or external parties, enjoy version control and redlining for faster and less
+			painful reviews.
+		</value>
+	</labels>
+	<labels>
 		<fullName>TryItOut</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
@@ -7277,6 +7303,66 @@
 		<protected>true</protected>
 		<shortDescription>LearnNegotiateLabel</shortDescription>
 		<value>Send Agreements for Review or Approval</value>
+	</labels>
+	<labels>
+		<fullName>TryDocuSignGen</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TryDocuSignGen</shortDescription>
+		<value>Try DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>TryDocuSignNegotiate</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TryDocuSignNegotiate</shortDescription>
+		<value>Try DocuSign Negotiate</value>
+	</labels>
+	<labels>
+		<fullName>GenerateProductTrialHelpText</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenerateProductTrialHelpText</shortDescription>
+		<value>Generate Documents Free for 30 Days</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateProductTrialHelpText</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateProductTrialHelpText</shortDescription>
+		<value>Generate, Negotiate and Collaborate Free for 30 Days</value>
+	</labels>
+	<labels>
+		<fullName>GenerateProductTrialHelpInfo</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenerateProductTrialHelpInfo</shortDescription>
+		<value>With a single click you’ll be generating polished, configurable, and fully customizable agreements using
+			the Salesforce data you already have.
+		</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateProductTrialHelpInfo</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateProductTrialHelpInfo</shortDescription>
+		<value>You'll speed up every part of your agreement process. From generating documents to negotiating with
+			third-party approvers.
+		</value>
+	</labels>
+	<labels>
+		<fullName>NoObligation</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NoObligation</shortDescription>
+		<value>No obligation, no commitment. Let’s get started.</value>
 	</labels>
 	<labels>
 		<fullName>DocuSignUsers</fullName>
