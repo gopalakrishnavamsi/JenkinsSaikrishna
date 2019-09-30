@@ -1,0 +1,21 @@
+.THIS .ds-productHelp-text {
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+    color: rgb(43, 40, 38);
+}
+
+.THIS .ds-productHelp-info {
+    font-size: t(fontSize3);
+    color: rgb(62, 62, 60);
+}
+
+.THIS .ds-startProductTrial-image {
+    width: 200px;
+    height: 160px;
+}
+
+.THIS .ds-fadeBackground {
+    opacity: 0.2;
+}
+
+

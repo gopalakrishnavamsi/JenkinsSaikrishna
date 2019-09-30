@@ -1,0 +1,87 @@
+.THIS .ds-negotiation-marketing-helpSection {
+    background: rgb(255, 255, 255);
+}
+
+.THIS .ds-marketing-section-header {
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-marketing-section-body {
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-marketing-video-col {
+    text-align: end;
+}
+
+.THIS .ds-marketing-video-image {
+    cursor: pointer;
+}
+
+.THIS .ds-marketing-features-section {
+    background: rgb(243, 242, 242);
+    border-top: 1px solid rgb(243, 242, 242);
+}
+
+.THIS .ds-marketing-features-section-header-row {
+    background: white;
+    border-bottom: 1px solid rgb(243, 242, 242);
+}
+
+.THIS .ds-marketing-features-section-header {
+    font-size: t(fontSize7);
+}
+
+.THIS .ds-marketing-features-section-body {
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-marketing-features-border-right {
+    border-right: 1px solid rgb(243, 242, 242);
+}
+
+.THIS .ds-marketing-features-product-header-section {
+    background: rgb(236, 246, 255);
+    border-top: 3px solid rgb(27, 73, 160);
+}
+
+.THIS .ds-marketing-features-product-header {
+    font-size: t(fontSize6);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-marketing-features-supportedProduct-section {
+    background: white;
+    border-bottom: 1px solid rgb(243, 242, 242);
+}
+
+.THIS .ds-marketing-features-supportedProduct-section-header {
+    font-size: t(fontSize6);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-marketing-supportedProduct-features {
+    background: rgb(250, 250, 250);
+    border-bottom: 1px solid rgb(243, 242, 242);
+}
+
+.THIS .ds-marketing-supportedProduct-features-body {
+    font-size: t(fontSize3);
+    font-weight: t(fontWeightSemiBold);
+}
+
+.THIS .ds-marketing-features-icon {
+    background: rgb(0, 109, 204);
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.THIS .ds-pricing-link {
+    color: rgb(0, 109, 204);
+    font-size: t(fontSize3);
+    font-weight: t(fontWeightBold);
+}
