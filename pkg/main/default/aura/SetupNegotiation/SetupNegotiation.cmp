@@ -1,3 +1,17 @@
 <aura:component>
-    {!$Label.c.TabNegotiation}
+    <!-- attributes -->
+    <aura:attribute name="negotiateProduct" type="Product"/>
+    <aura:attribute name="genProduct" type="Product"/>
+
+    <div class="ds-negotiation-settings">
+        <aura:if isTrue="{!not(empty(v.negotiateProduct))}">
+            <!-- Negotiation configuration section -->
+            {!$Label.c.TabNegotiation}
+            <!-- Negotiate product does not exist. Show the marketing component -->
+            <aura:set attribute="else">
+                <!-- section for enabling trial -->
+                <c:NegotiateMarketing genProduct="{!v.genProduct}"/>
+            </aura:set>
+        </aura:if>
+    </div>
 </aura:component>
