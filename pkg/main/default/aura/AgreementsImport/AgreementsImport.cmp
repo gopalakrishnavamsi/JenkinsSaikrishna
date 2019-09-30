@@ -33,6 +33,7 @@
                     title="{!if(v.currentStep == '1', $Label.c.ImportFiles)
                             +if(v.currentStep == '2', $Label.c.SelectFile)
                             +if(v.currentStep == '3', $Label.c.UploadFile)
+                            +if(and(and(v.currentStep == '4', not(v.loading)),!v.isSendingForSignature), $Label.c.NewAgreementCreated)
                            +if(and(and(v.currentStep == '4', v.loading),!v.isSendingForSignature), $Label.c.UploadingAgreement)
                             +if(and(and(v.currentStep == '4', v.loading),v.isSendingForSignature), $Label.c.SendingForSignature)}"
                     showModal="{!v.showModal}"
@@ -41,9 +42,9 @@
 
         <aura:if isTrue="{!v.loading}">
             <div class="{!'ds-import-spinner_container' + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
-                                                       + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
-     + if(and(v.currentStep == '4', !v.isSendingForSignature), ' ds-import-spinner_uploadingAgreement'
-                                                       + if(and(v.currentStep == '4' , v.isSendingForSignature), ' ds-import-spinner_sendingForSignature'))}">
+                                                        + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
+                                                        + if(and(v.currentStep == '4', !v.isSendingForSignature), ' ds-import-spinner_uploadingAgreement'
+                                                        + if(and(v.currentStep == '4' , v.isSendingForSignature), ' ds-import-spinner_sendingForSignature'))}">
                 <c:BlueSpinner/>
             </div>
         </aura:if>

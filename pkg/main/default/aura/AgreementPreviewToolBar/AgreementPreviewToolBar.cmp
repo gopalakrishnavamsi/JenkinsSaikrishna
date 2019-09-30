@@ -4,6 +4,7 @@
     <aura:attribute name="agreementActionManager" type="Object" access="public"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <aura:attribute name="isAgreementDeleted" type="Boolean" access="public"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false"/>
 
     <div class="toolBarContainer">
         <div class="slds-grid slds-grid_align-spread">
@@ -70,7 +71,8 @@
                                                    || v.agreement.status == 'COMPLETED'}"/>
                     <lightning:menuItem label="{!$Label.c.SendForSignature}"
                                         value="{!$Label.c.SendForSignature}"
-                                        onactive="{!c.sendForSignature}"/>
+                                        onactive="{!c.sendForSignature}"
+                                        class="{!if(!v.canSendForSignature,'slds-hide','')}"/>
                 </lightning:buttonMenu>
             </div>
         </div>

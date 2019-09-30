@@ -1,6 +1,7 @@
 ({
   onLoad: function (component, event, helper) {
     helper.initAgreementActionManager(component);
+    helper.isEsignEnabled(component);
   },
 
   viewAgreement: function (component, event, helper) {
