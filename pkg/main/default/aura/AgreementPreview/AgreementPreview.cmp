@@ -32,7 +32,8 @@
             <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                 <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                            agreementActionManager="{!v.agreementActionManager}"
-                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}" canSendForSignature="{!v.canSendForSignature}"/>
+                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
+                                           canSendForSignature="{!v.canSendForSignature}"/>
             </div>
             <div class="documentContainer">
                 <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
