@@ -1,7 +1,13 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
-    helper.insertComponent(component, 'c:CLMSidebar', false, false, 'v.sideBar');
-    helper.updateUi(component, '2');
+    helper.verifyUserPermissions(component);
+  },
+
+  onChangeIsClmAdmin: function (component, event, helper) {
+    if (component.get('v.isClmAdmin')) {
+      helper.insertComponent(component, 'c:CLMSidebar', false, false, 'v.sideBar');
+      helper.updateUi(component, '2');
+    }
   },
 
   updateState: function (component, event, helper) {
