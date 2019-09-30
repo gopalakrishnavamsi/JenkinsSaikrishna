@@ -1,48 +1,42 @@
 @isTest
 public class CLMApexUtilityTest {
 	@isTest
-	public static void getCurrentUserExperience_authorized(){
-		System.runAs(UserMock.createClmAdministrator()){
+	public static void getCurrentUserExperience() {
+		Test.startTest();
+		String result = CLMApexUtility.getCurrentUserExperience();
+		Test.stopTest();
+		System.assertNotEquals(null, result);
+	}
+
+	@isTest
+	public static void getNamespace() {
+		Test.startTest();
+		String result = CLMApexUtility.getNamespace();
+		Test.stopTest();
+		System.assertNotEquals(null, result);
+	}
+
+	@isTest
+	public static void verifyIsClmAdmin_success() {
+		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
-			String result = CLMApexUtility.getCurrentUserExperience();
+			Boolean result = CLMApexUtility.verifyIsClmAdmin();
 			Test.stopTest();
+			System.assertEquals(true, result);
 			System.assertNotEquals(null, result);
 		}
 	}
 
 	@isTest
-	public static void getCurrentUserExperience_unauthorized(){
-		System.runAs(UserMock.createUser()){
-			Test.startTest();
-			try {
-				String result = CLMApexUtility.getCurrentUserExperience();
-				throw new AssertException('Expected failure when fetching current user experience.');
-			} catch (AuraHandledException ae) {
-				System.assertNotEquals(null, ae);
-			}
-			Test.stopTest();
-		}
-	}
-
-	 @isTest
-	public static void getNamespace_authorized() {
-		System.runAs(UserMock.createClmViewer()) {
-			Test.startTest();
-			String result = CLMApexUtility.getNamespace();
-			Test.stopTest();
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@isTest
-	public static void getNamespace_unauthorized() {
+	public static void verifyIsClmAdmin_failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				CLMApexUtility.getNamespace();
-				throw new AssertException('Expected failure when fetching namespace.');
-			} catch (AuraHandledException ae) {
+				Boolean result = CLMApexUtility.verifyIsClmAdmin();
+				throw new AssertException('Expected Clm Admin check to fail.');
+			} catch (Exception ae) {
 				System.assertNotEquals(null, ae);
+				System.assertEquals(Label.MustBeClmAdministrator, ae.getMessage());
 			}
 			Test.stopTest();
 		}
