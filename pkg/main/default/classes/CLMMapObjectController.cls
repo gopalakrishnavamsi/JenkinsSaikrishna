@@ -1,15 +1,5 @@
 public with sharing class CLMMapObjectController {
 	@AuraEnabled
-    public static String getNamespace(){
-		try {
-			Permissions.verifyIsClmAdministrator();
-			return Application.namespace;
-		} catch (Exception e) {
-			throw Controller.wrapException(e, 'Failed to get namespace.');
-		}
-	}
-
-	@AuraEnabled
 	public static Boolean removeMappedObject(String name) {
 		try {
 			Permissions.verifyIsClmAdministrator();
@@ -19,46 +9,46 @@ public with sharing class CLMMapObjectController {
 			throw Controller.wrapException(e, 'Failed to delete object mapping.');
 		}
 	}
-    
-    @AuraEnabled
+
+	@AuraEnabled
 	public static Boolean setMappedObject(EOS_Type__c eosDetails) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-            Map<String,List<String>> pathDetails=parsePath(eosDetails.Path__c);
-            if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
-                eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
-                eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
-                eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
-                String ObjectName=eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');                
-            }            
-            upsert eosDetails;
+			Map<String,List<String> > pathDetails=parsePath(eosDetails.Path__c);
+			if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
+				eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
+				eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
+				eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
+				String ObjectName=eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
+			}
+			upsert eosDetails;
 			return true;
 		} catch (Exception e) {
-				throw Controller.wrapException(e, 'Failed to insert object mapping.');			
+			throw Controller.wrapException(e, 'Failed to insert object mapping.');
 		}
-    }
-    
-    private static Map<String,List<String>> parsePath(String path){
-        Map<String,List<String>> result=new Map<String,List<String>>();
-        List<String> variables=new List<String>();
-        String formatted='';  
-        Integer index=0;
-        for (String folder:path.split('/')) {
-            String objName=folder.substringAfter('{!').substringBefore('}');
-            if (String.isNotBlank(objName)){
-                variables.add(objName);
-                formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
-                index++;
-            }
-            else {
-                formatted += folder+'/';
-            }
-        }                
-        result.put('Path',new List<String>{path});
-        result.put('PathFormat',new List<String>{formatted});
-        result.put('Variables',variables);        
-        return result;
-    }
+	}
+
+	private static Map<String,List<String> > parsePath(String path) {
+		Map<String,List<String> > result=new Map<String,List<String> >();
+		List<String> variables=new List<String>();
+		String formatted='';
+		Integer index=0;
+		for (String folder:path.split('/')) {
+			String objName=folder.substringAfter('{!').substringBefore('}');
+			if (String.isNotBlank(objName)) {
+				variables.add(objName);
+				formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
+				index++;
+			}
+			else {
+				formatted += folder+'/';
+			}
+		}
+		result.put('Path',new List<String> {path});
+		result.put('PathFormat',new List<String> {formatted});
+		result.put('Variables',variables);
+		return result;
+	}
 
 	@AuraEnabled(Cacheable=true)
 	public static Map<String, EOS_Type__c> getMappedObjectsList() {
@@ -69,8 +59,8 @@ public with sharing class CLMMapObjectController {
 			throw Controller.wrapException(e, 'Failed to get all mapped objects list.');
 		}
 	}
-    
-    @AuraEnabled(Cacheable=true)
+
+	@AuraEnabled(Cacheable=true)
 	public static List<MergeObject> getAllObjects() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
@@ -84,15 +74,15 @@ public with sharing class CLMMapObjectController {
 	public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-            SObjectType type = Schema.getGlobalDescribe().get(apiName);
-            List<MergeField> result= new List<MergeField>();
-            result.addAll(MetadataService.getFields(type, isChild));
+			SObjectType type = Schema.getGlobalDescribe().get(apiName);
+			List<MergeField> result= new List<MergeField>();
+			result.addAll(MetadataService.getFields(type, isChild));
 			result.addAll(MetadataService.getFields(type.getDescribe()));
-            return result;
+			return result;
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get all object fields list.');
-        }
-    }
+		}
+	}
 
 	@AuraEnabled
 	public static Integer getRecordCount() {
@@ -102,5 +92,5 @@ public with sharing class CLMMapObjectController {
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get count of object mappings.');
 		}
-	}      
+	}
 }
