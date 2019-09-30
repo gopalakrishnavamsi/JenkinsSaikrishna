@@ -3690,6 +3690,26 @@
 		<name>LearnMoreAboutPricing</name>
 	</customLabels>
 	<customLabels>
+		<label>Learn how to get the most from DocuSign Apps Launcher</label>
+		<name>LearnSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Dive deeper and learn more with our help guides.</label>
+		<name>LearnSectionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Send Envelopes for Signature</label>
+		<name>LearnEsignLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate Polished, Customized Agreements</label>
+		<name>LearnGenLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Send Agreements for Review or Approval</label>
+		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Users</label>
 		<name>DocuSignUsers</name>
 	</customLabels>

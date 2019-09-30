@@ -17,7 +17,7 @@
                         <img src="{!$Resource.logo}"/>
                     </div>
                 </li>
-                <li class="ds-getStarted">{!$Label.c.GetStartedSetupAccount}</li>
+                <li class="ds-getStarted-helpText">{!$Label.c.GetStartedSetupAccount}</li>
             </ul>
         </div>
         <div class="slds-col ds-text-align-end">
