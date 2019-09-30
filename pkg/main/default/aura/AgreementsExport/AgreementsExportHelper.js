@@ -7,7 +7,7 @@
       sourceId: component.get('v.sourceId'),
       agreementId: agreement && agreement.id ? agreement.id.value : null
     });
-    helper.showToast(component, $A.get('$Label.c.AgreementExportProcessing'), 'success');
+    helper.showToast(component, sendForEsign ? $A.get('$Label.c.SendingForSignature') : $A.get('$Label.c.AgreementExportProcessing'), 'success');
     exportSalesforceAction.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         if (sendForEsign) {
@@ -34,7 +34,6 @@
 
   sendForSignature: function (component, selectedFileId) {
     var helper = this;
-    component.set('v.loading', true);
     var sendingAction = component.get('c.getSendingDeepLink');
     var sourceId = component.get('v.sourceId');
     sendingAction.setParams({

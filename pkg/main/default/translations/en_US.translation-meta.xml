@@ -3982,7 +3982,7 @@
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Sending for Signature</label>
+		<label>Preparing for signature</label>
 		<name>SendingForSignature</name>
 	</customLabels>
 	<customPageWebLinks>
