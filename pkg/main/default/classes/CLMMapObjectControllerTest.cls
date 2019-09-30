@@ -1,6 +1,6 @@
 @isTest
 public class CLMMapObjectControllerTest {
-    @isTest
+	@isTest
 	public static void getMappedObjectsListTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
@@ -22,7 +22,7 @@ public class CLMMapObjectControllerTest {
 			}
 			Test.stopTest();
 		}
-    }
+	}
 
 	@isTest
 	public static void getAllObjectsTest_authorized() {
@@ -57,38 +57,14 @@ public class CLMMapObjectControllerTest {
 			System.assertNotEquals(null, result);
 		}
 	}
-    
-    @isTest
+
+	@isTest
 	public static void getAllObjectFields_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				CLMMapObjectController.getAllObjectFields(null, false);
 				throw new AssertException('Expected failure when fetching all object fields.');
-			} catch (AuraHandledException ae) {
-				System.assertNotEquals(null, ae);
-			}
-			Test.stopTest();
-		}
-	}
-    
-    @isTest
-	public static void getNamespace_authorized() {
-		System.runAs(UserMock.createClmAdministrator()) {
-			Test.startTest();
-			String result = CLMMapObjectController.getNamespace();
-			Test.stopTest();
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@isTest
-	public static void getNamespace_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				CLMMapObjectController.getNamespace();
-				throw new AssertException('Expected failure when fetching namespace.');
 			} catch (AuraHandledException ae) {
 				System.assertNotEquals(null, ae);
 			}
@@ -181,5 +157,5 @@ public class CLMMapObjectControllerTest {
 			}
 			Test.stopTest();
 		}
-    }
+	}
 }
