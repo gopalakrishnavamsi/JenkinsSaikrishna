@@ -10,7 +10,7 @@
     );
   },
 
-  saveData: function (component) {
+  saveData: function (component,isNavigate) {
     var helper = this;
     component.set('v.saving', true);
     var isImportStep = component.get('v.currentStep') === 2;
@@ -20,12 +20,12 @@
         $A.getCallback(function (results) {
           component.set('v.saving', false);
           component.set('v.config', results.template);
-          helper.saveTemplate(component);
+          helper.saveTemplate(component,isNavigate);
         })
       );
     } else {
       component.set('v.saving', false);
-      helper.saveTemplate(component);
+      helper.saveTemplate(component,isNavigate);
     }
   },
 
@@ -49,7 +49,7 @@
             }
           }
 
-          return helper.saveData(component);
+          return helper.saveData(component,false);
         })
       )
       .then(
@@ -61,11 +61,7 @@
 
   goToRecord: function (component) {
     var templateId = component.get('v.templateId');
-    var navEvt = $A.get('e.force:navigateToSObject');
-    navEvt.setParams({
-      recordId: templateId
-    });
-    navEvt.fire();
+    navUtils.navigateToSObject(templateId);
   },
 
   updateShowWhatYouWillNeedModalSettings: function (component) {
@@ -156,7 +152,8 @@
     );
   },
 
-  saveTemplate: function (component) {
+  saveTemplate: function (component,isNavigate) {
+    var helper = this;
     component.set('v.saving', true);
     var config = component.get('v.config');
     if (config.isSample) {
@@ -170,7 +167,11 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       component.set('v.saving', false);
-      if (state !== 'SUCCESS') {
+      if (state === 'SUCCESS') {
+        if(isNavigate){
+          helper.goToRecord(component);
+        }
+      }else{
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
       }
     });
