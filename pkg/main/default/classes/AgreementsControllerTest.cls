@@ -655,4 +655,38 @@ private class AgreementsControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getSendingDeepLink() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Schema.Account a = TestUtils.createAccount();
+			String title = UUID.randomUUID().toString();
+			String base64Data1 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data2 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+			String base64Data3 = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
+
+			ContentVersion result1 = FileService.saveFile(null, a.Id, title, base64Data1);
+			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
+			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
+
+			String fileIdsInCommaSeparated = String.Join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+
+			Test.startTest();
+			Pagereference ref = new PageReference(AgreementsController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
+			Test.stopTest();
+
+			System.assertEquals((Id)ref.getParameters().get('sid'), a.id);
+			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
+		}
+	}
+
+	@IsTest
+	static void test_isEsignEnabled() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			Boolean isEsignEnabled = AgreementsController.isEsignEnabled();
+			Test.stopTest();
+			System.assert(isEsignEnabled);
+		}
+	}
 }

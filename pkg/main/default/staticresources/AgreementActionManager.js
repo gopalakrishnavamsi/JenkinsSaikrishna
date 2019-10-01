@@ -254,6 +254,7 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
 AgreementActionManager.prototype.exportToSalesforce = function(
   agreementDetails,
   sourceId,
+  sendForEsign,
   component
 ) {
   if (this.activeScope) this.activeScope.destroy();
@@ -265,7 +266,8 @@ AgreementActionManager.prototype.exportToSalesforce = function(
     {
       showModal: true,
       sourceId: sourceId,
-      agreementDetails: agreementDetails
+      agreementDetails: agreementDetails,
+      sendForEsign: sendForEsign
     }
   )
     .then(function(modalComponent) {
