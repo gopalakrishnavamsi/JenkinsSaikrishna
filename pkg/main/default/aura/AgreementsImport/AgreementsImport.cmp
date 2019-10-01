@@ -11,11 +11,12 @@
     <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
-
+    <aura:attribute name="isSendingForSignature" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}"
-                  scripts="{!join(',', $Resource.scmwidgetsjs, $Resource.stringUtils)}"/>
+                  scripts="{!join(',',$Resource.scmwidgetsjs, $Resource.stringUtils, $Resource.navUtils)}"/>
 
     <!-- Events -->
     <aura:handler name="init" value="{!this}" action="{!c.initialize}"/>
@@ -32,16 +33,18 @@
                     title="{!if(v.currentStep == '1', $Label.c.ImportFiles)
                             +if(v.currentStep == '2', $Label.c.SelectFile)
                             +if(v.currentStep == '3', $Label.c.UploadFile)
-                            +if(and(v.currentStep == '4', not(v.loading)), $Label.c.NewAgreementCreated)
-                            +if(and(v.currentStep == '4', v.loading), $Label.c.UploadingAgreement)}"
+                            +if(and(and(v.currentStep == '4', not(v.loading)),!v.isSendingForSignature), $Label.c.NewAgreementCreated)
+                           +if(and(and(v.currentStep == '4', v.loading),!v.isSendingForSignature), $Label.c.UploadingAgreement)
+                            +if(and(and(v.currentStep == '4', v.loading),v.isSendingForSignature), $Label.c.SendingForSignature)}"
                     showModal="{!v.showModal}"
                     showFooter="{!if(v.currentStep == '1', false,true)}"
                     successHeader="{!if(and(v.currentStep == '4', not(v.loading)), true,false)}">
 
         <aura:if isTrue="{!v.loading}">
             <div class="{!'ds-import-spinner_container' + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
-                                                       + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
-                                                       + if(v.currentStep == '4', ' ds-import-spinner_uploadingAgreement')}">
+                                                        + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
+                                                        + if(and(v.currentStep == '4', !v.isSendingForSignature), ' ds-import-spinner_uploadingAgreement'
+                                                        + if(and(v.currentStep == '4' , v.isSendingForSignature), ' ds-import-spinner_sendingForSignature'))}">
                 <c:BlueSpinner/>
             </div>
         </aura:if>
@@ -189,10 +192,10 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="slds-col slds-p-bottom_xx-small"
-                                 onclick="{!c.createSalesforceFilesAndSendForSignature}">
-                                <a onclick=""
-                                   class="slds-box slds-box_link slds-box_x-small slds-media">
+                            <div class="{!'slds-col slds-p-bottom_xx-small'+if(!v.canSendForSignature,' slds-hide','')}"
+                                 onclick="{!c.navigateToSendForSignature}">
+                                <a
+                                        class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
                                         <span class="slds-icon slds-icon_medium">
                                             <lightning:icon iconName="utility:edit_form"/>
