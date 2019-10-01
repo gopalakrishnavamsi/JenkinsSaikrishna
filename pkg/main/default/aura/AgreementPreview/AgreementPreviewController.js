@@ -1,5 +1,6 @@
 ({
   onLoad: function (component, event, helper) {
+    helper.isEsignEnabled(component);
     helper.getAgreementDetails(component);
   },
 

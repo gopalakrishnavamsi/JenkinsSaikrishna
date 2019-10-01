@@ -15,6 +15,7 @@
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
     <aura:attribute name="showToolBarAndPreview" type="Boolean" default="true"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"
@@ -31,7 +32,8 @@
             <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                 <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                            agreementActionManager="{!v.agreementActionManager}"
-                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"/>
+                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
+                                           canSendForSignature="{!v.canSendForSignature}"/>
             </div>
             <div class="documentContainer">
                 <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
