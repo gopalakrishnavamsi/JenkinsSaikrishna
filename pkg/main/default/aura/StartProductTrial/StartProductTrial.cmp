@@ -1,0 +1,67 @@
+<aura:component description="StartProductTrial" controller="SetupController">
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
+    <aura:attribute name="modalTitle" type="String"/>
+    <aura:attribute name="showModal" type="Boolean"/>
+    <aura:attribute name="startGenTrial" type="Boolean" default="false"/>
+    <aura:attribute name="startNegotiateTrial" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" access="private"/>
+
+    <!-- events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+
+    <c:strike_modal aura:id="startProductTrialModal"
+                    title="{!v.modalTitle}"
+                    showModal="{!v.showModal}">
+
+        <aura:if isTrue="{!v.loading}">
+            <div class="slds-is-static">
+                <c:BlueSpinner/>
+            </div>
+        </aura:if>
+
+        <!--modal body -->
+        <div class="{!'slds-scope slds-m-top_small slds-p-horizontal_large slds-m-bottom_small' + if(v.loading, ' ds-fadeBackground')}">
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <img src="{!if(v.startGenTrial == true, $Resource.LearnGen)
+                               +if(v.startNegotiateTrial == true, $Resource.LearnNegotiate)}"
+                         class="ds-startProductTrial-image"/>
+                </div>
+                <div class="slds-media__body slds-m-left_small">
+                    <ul>
+                        <li class="ds-productHelp-text">
+                            <aura:if isTrue="{!v.startGenTrial}">
+                                {!$Label.c.GenerateProductTrialHelpText}
+                            </aura:if>
+                            <aura:if isTrue="{!v.startNegotiateTrial}">
+                                {!$Label.c.NegotiateProductTrialHelpText}
+                            </aura:if>
+                        </li>
+                        <li class="slds-m-top_medium ds-productHelp-info">
+                            <aura:if isTrue="{!v.startGenTrial}">
+                                {!$Label.c.GenerateProductTrialHelpInfo}
+                            </aura:if>
+                            <aura:if isTrue="{!v.startNegotiateTrial}">
+                                {!$Label.c.NegotiateProductTrialHelpInfo}
+                            </aura:if>
+                        </li>
+                        <li class="slds-m-top_small ds-productHelp-info">
+                            {!$Label.c.NoObligation}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
+                              label="{!$Label.c.Cancel}" disabled="{!v.loading}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_brand" onclick="{!c.startProductTrial}"
+                              label="{!$Label.c.GetStarted}" disabled="{!v.loading}"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+
+</aura:component>

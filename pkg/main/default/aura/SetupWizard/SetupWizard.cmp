@@ -154,7 +154,7 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                <lightning:button label="{!$Label.c.Manage}"
                                                   onclick="{!c.navigateToUserManagementTab}"></lightning:button>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                <lightning:button label="{!$Label.c.Manage}"
                                                   onclick="{!c.navigateToComponentsTab}"></lightning:button>
                             </div>
                         </div>
@@ -223,7 +223,6 @@
                                       trialDaysLeft="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), v.genProduct.daysUntilExpires , 0)}"
                                       trialProductName="{!$Label.c.GenBadgeText}"/>
 
-                <!-- Section for managing users -->
                 <div class="ds-documentGeneration-section slds-m-top_x-large">
                     <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
                 </div>
@@ -232,7 +231,16 @@
 
             <!-- negotiation section starts here -->
             <aura:if isTrue="{!v.selectedItem == 'tab_negotiation'}">
-                <c:SetupNegotiation/>
+                <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}"
+                                      sectionHeader="{!$Label.c.TabNegotiation}"
+                                      headerIconName="standard:approval"
+                                      showTrialBar="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), true, false)}"
+                                      trialDaysLeft="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), v.negotiateProduct.daysUntilExpires , 0)}"
+                                      trialProductName="{!$Label.c.NegotiateBadgeText}"/>
+
+                <div class="ds-negotiation-section slds-m-top_x-large">
+                    <c:SetupNegotiation genProduct="{!v.genProduct}" negotiateProduct="{!v.negotiateProduct}"/>
+                </div>
             </aura:if>
             <!-- negotiation section ends here-->
 

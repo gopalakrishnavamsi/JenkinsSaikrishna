@@ -5,6 +5,8 @@
   },
 
   setNavigationItems: function (component) {
+    var genProduct = component.get('v.genProduct');
+    var negotiateProduct = component.get('v.negotiateProduct');
 
     var sections = [
       {
@@ -26,12 +28,12 @@
           {
             label: $A.get('$Label.c.TabDocumentGeneration'),
             name: 'tab_documentGeneration',
-            icon: $A.util.isUndefinedOrNull(component.get('v.genProduct')) ? 'utility:lock' : null
+            icon: $A.util.isUndefinedOrNull(genProduct) ? 'utility:lock' : genProduct.isTrial === true ? 'utility:clock' : null
           },
           {
             label: $A.get('$Label.c.TabNegotiation'),
             name: 'tab_negotiation',
-            icon: $A.util.isUndefinedOrNull(component.get('v.negotiateProduct')) ? 'utility:lock' : null
+            icon: $A.util.isUndefinedOrNull(negotiateProduct) ? 'utility:lock' : negotiateProduct.isTrial === true ? 'utility:clock' : null
           }
         ]
       },

@@ -579,6 +579,7 @@ private class SetupControllerTest {
 	@IsTest
 	static void test_addTrialGen_success() {
 		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			System.assert(SetupController.addTrialGen());
@@ -603,6 +604,7 @@ private class SetupControllerTest {
 	@IsTest
 	static void test_addTrialNegotiate_success() {
 		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			System.assert(SetupController.addTrialNegotiate());

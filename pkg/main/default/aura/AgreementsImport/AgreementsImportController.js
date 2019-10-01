@@ -13,10 +13,12 @@
 
   salesforceFileImportTriggered: function (component, event, helper) {
     helper.importSalesforceFile(component, event, helper);
+    helper.isEsignEnabled(component);
   },
 
   pcFileImportTriggered: function (component, event, helper) {
     helper.importFileFromPc(component, event, helper);
+    helper.isEsignEnabled(component);
   },
 
   salesforceFileCheckboxToggle: function (component, event, helper) {
@@ -90,5 +92,9 @@
       }
     );
   },
+
+  navigateToSendForSignature: function (component, event, helper) {
+    helper.navigateToSendForSignature(component, event, helper);
+  }
 
 });

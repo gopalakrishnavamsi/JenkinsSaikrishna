@@ -3638,6 +3638,18 @@
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
+		<label>Faster Reviews and Approvals</label>
+		<name>NegotiateMarketingHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Easily track your negotiations and reviews in Salesforce.</label>
+		<name>NegotiateMarketingBody1</name>
+	</customLabels>
+	<customLabels>
+		<label>Whether with internal or external parties, enjoy version control and redlining for faster and less painful reviews.</label>
+		<name>NegotiateMarketingBody2</name>
+	</customLabels>
+	<customLabels>
 		<label>Try it out</label>
 		<name>TryItOut</name>
 	</customLabels>
@@ -3708,6 +3720,46 @@
 	<customLabels>
 		<label>Send Agreements for Review or Approval</label>
 		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Try DocuSign Gen</label>
+		<name>TryDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Try DocuSign Negotiate</label>
+		<name>TryDocuSignNegotiate</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate Documents Free for 30 Days</label>
+		<name>GenerateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate, Negotiate and Collaborate Free for 30 Days</label>
+		<name>NegotiateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</label>
+		<name>GenerateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>You'll speed up every part of your agreement process. From generating documents to negotiating with third-party approvers.</label>
+		<name>NegotiateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>No obligation, no commitment. Let’s get started.</label>
+		<name>NoObligation</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Gen trial has started</label>
+		<name>GenTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Negotiate trial has started</label>
+		<name>NegotiateTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Currently on Trial</label>
+		<name>CurrentlyOnTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Users</label>
@@ -3980,6 +4032,10 @@
 	<customLabels>
 		<label>The files below have been successfully generated and can now be sent for signature</label>
 		<name>GenSendSignatureMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Preparing for signature</label>
+		<name>SendingForSignature</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

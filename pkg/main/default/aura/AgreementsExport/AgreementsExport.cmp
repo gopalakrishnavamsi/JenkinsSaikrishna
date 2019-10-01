@@ -1,8 +1,10 @@
 <aura:component description="AgreementsExport" controller="AgreementsController">
     <aura:attribute name="sourceId" type="Id"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
+    <aura:attribute name="sendForEsign" type="Boolean" default="false"/>
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <aura:registerEvent name="showLoaderOnly" type="c:strike_evt"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}"
+                  scripts="{!join(',',$Resource.scmwidgetsjs, $Resource.stringUtils, $Resource.navUtils)}"/>
 </aura:component>

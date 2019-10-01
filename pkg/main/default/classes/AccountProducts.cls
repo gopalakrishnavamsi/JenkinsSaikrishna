@@ -490,7 +490,7 @@ public with sharing class AccountProducts {
 			this.products.put(p.name.toLowerCase(), p);
 			result.add(p);
 		}
-
+		this.isDirty = true;
 		return DB.upsertProducts(result);
 	}
 
