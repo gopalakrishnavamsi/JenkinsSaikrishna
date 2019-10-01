@@ -29,6 +29,11 @@
           return a['selected'] - b['selected'];
         });
 
+        if (!updated && !$A.util.isEmpty(result.documents)) {
+          result.documents[0].selected = true;
+          updated = true;
+        }
+
         if (!$A.util.isEmpty(result.recipients)) {
           result.recipients.forEach(function (r) {
             r = self.addRecipientProperties(r);

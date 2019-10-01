@@ -82,20 +82,18 @@
     }
   },
 
-  addToSalesforce: function (component) {
-    try {
-      var actions = component.get('v.agreementActionManager');
-      var sourceId = component.get('v.sourceId');
-      var agreement = component.get('v.agreement');
-      actions.exportToSalesforce(agreement, sourceId, component);
-    } catch (err) {
-      var uiHelper = component.get('v.uiHelper');
-      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
-    }
+  addToSalesforce: function (component, event, helper) {
+    var sendForEsign = false;
+    helper.exportAgreementToSalesforce(component, sendForEsign);
   },
 
   backToSourceRecord: function (component) {
     $A.get('e.force:navigateToSObject').setParams({'recordId': component.get('v.sourceId')}).fire();
+  },
+
+  sendForSignature: function (component, event, helper) {
+    var sendForEsign = true;
+    helper.exportAgreementToSalesforce(component, sendForEsign);
   }
 
 });
