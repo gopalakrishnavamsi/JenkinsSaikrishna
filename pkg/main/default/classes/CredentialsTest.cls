@@ -159,6 +159,9 @@ private class CredentialsTest {
 		UUID userId = UUID.randomUUID();
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			User u = [SELECT Status__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			u.Status__c = null;
+			update u;
 			String token = 'test';
 			Datetime expires = Datetime.now().addHours(1);
 			String clientId = UUID.randomUUID().toString();
@@ -222,11 +225,13 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, result1.user);
 			System.assertEquals(userId, result1.user.id);
-			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c, Status__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			System.assertEquals(uu.Name, result1.user.name);
 			System.assertEquals(uu.Email, result1.user.email);
+			System.assertEquals(Account.USER_STATUS_ACTIVE, uu.Status__c);
+
 			UserSettings__c s = UserSettings__c.getInstance();
 			System.assertEquals(token, s.AccessToken0__c);
 			System.assertEquals(expires, s.AccessTokenExpires__c);
@@ -243,6 +248,9 @@ private class CredentialsTest {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
+			User u = [SELECT Status__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			u.Status__c = null;
+			update u;
 			Credentials baseline = Credentials.getInstance();
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.SystemSenderId__c = userId.toString();
@@ -311,11 +319,12 @@ private class CredentialsTest {
 
 			System.assertNotEquals(null, result1.user);
 			System.assertEquals(userId, result1.user.id);
-			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+			User uu = [SELECT Name, Email, Username__c, CanManageAccount__c, Status__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
 			System.assertEquals(userId.toString(), uu.Username__c);
 			System.assert(uu.CanManageAccount__c);
 			System.assertEquals(uu.Name, result1.user.name);
 			System.assertEquals(uu.Email, result1.user.email);
+			System.assertEquals(Account.USER_STATUS_ACTIVE, uu.Status__c);
 
 			UserSettings__c us = UserSettings__c.getInstance();
 			System.assertEquals(token, us.AccessToken0__c);
