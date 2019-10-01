@@ -20,7 +20,11 @@
             helper.addDocumentProperties(d, false);
           });
         }
-        component.set('v.salesforceFiles', result);
+        var fileSelection = result.filter(function (file) {
+          var fileExtension = file.extension.toLowerCase();
+          return fileExtension === 'pdf' || fileExtension === 'docx';
+        });
+        component.set('v.salesforceFiles', fileSelection);
       } else {
         helper.showToast(component, helper.getErrorMessage(response), 'error');
       }
@@ -59,7 +63,8 @@
               });
             },
             apiBaseDomain: result.apiUploadBaseUrl,
-            accountId: result.accountId.value
+            accountId: result.accountId.value,
+            allowedFileTypes: ['.pdf', '.docx']
           };
           var uploadWidget = new SpringCM.Widgets.Upload(options);
           uploadWidget.render('#upload-wrapper');
