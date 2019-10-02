@@ -33,12 +33,11 @@
         <div class="ds-green-svg slds-float--left slds-p-left_large slds-m-left_small slds-m-bottom_large">
             <lightning:icon iconName="utility:success" size="x-small" alternativeText="Information Icon"/>
             <a href="javascript:void(0)" class="slds-p-left_small " onclick="{!c.gotoIntegrationHome}">
-                {!v.mappedObjCount} mapped objects
+                {!format($Label.c.MappedObjectsPlainText, v.mappedObjCount)}
             </a>
         </div>
         <div class="slds-m-right_medium" style="cursor: pointer;" onclick="{!c.toggleSection}">
             <section class="slds-clearfix">
-
                 <div class="slds-float--right slds-p-right_medium">
                     <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small"
                         alternativeText="Indicates add"/>
@@ -82,30 +81,7 @@
                     </div>
                 </div>
                 <div class="slds-col slds-size_11-of-12">
-                    <strong class="ds-blue-color ds-font-size">{!$Label.c.ChooseLocation}</strong>
-                </div>
-                <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
-                <div class="slds-col slds-size_5-of-12">
-                    <span class="ds-blue-color"><b>{!$Label.c.ChooseLocationTitle}</b></span>
-                    <div>
-                        {!$Label.c.ChooseLocationBody}
-                    </div>
-                </div>
-                <div class="slds-p-left_large slds-col slds-size_5-of-12">
-                    <span class="ds-blue-color"><b>{!$Label.c.ObjectFolderTitle}</b></span>
-                    <div>
-                        {!$Label.c.ObjectFolderBody}
-                    </div>
-                </div>
-            </div>
-            <div class="slds-grid slds-p-around_x-small slds-wrap">
-                <div class="slds-col slds-size_1-of-12">
-                    <div class="slds-p-left_small">
-                        <button class="ds-index-style">3</button>
-                    </div>
-                </div>
-                <div class="slds-col slds-size_11-of-12">
-                    <strong class="ds-font-size ds-blue-color">{!$Label.c.NameObjectFolder}</strong>
+                    <strong class="ds-blue-color ds-font-size">{!$Label.c.NameObjectFolder}</strong>
                 </div>
                 <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
                 <div class="slds-col slds-size_5-of-12">
@@ -118,6 +94,29 @@
                     <span class="ds-blue-color"><b>{!$Label.c.PickAFieldTitle}</b></span>
                     <div>
                         {!$Label.c.PickAFieldBody}
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-p-around_x-small slds-wrap">
+                <div class="slds-col slds-size_1-of-12">
+                    <div class="slds-p-left_small">
+                        <button class="ds-index-style">3</button>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_11-of-12">
+                    <strong class="ds-font-size ds-blue-color">{!$Label.c.ChooseLocation}</strong>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.ChooseLocationTitle}</b></span>
+                    <div>
+                        {!$Label.c.ChooseLocationBody}
+                    </div>
+                </div>
+                <div class="slds-p-left_large slds-col slds-size_5-of-12">
+                    <span class="ds-blue-color"><b>{!$Label.c.ObjectFolderTitle}</b></span>
+                    <div>
+                        {!$Label.c.ObjectFolderBody}
                     </div>
                 </div>
             </div>
