@@ -1,6 +1,8 @@
 ({
-  initializeComponent: function (component, event, helper) {
-    helper.initializeComponent(component, event, helper);
+  onChangeIsAuthorized: function (component, event, helper) {
+    if (component.get('v.isAuthorized')) {
+      helper.initializeComponent(component, event, helper);
+    }
   },
 
   handleSelect: function (component, event) {
