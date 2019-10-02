@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="ds-green-svg slds-float--left slds-p-left_large slds-m-left_small slds-m-bottom_large">
-            <lightning:icon iconName="utility:success" size="x-small" alternativeText="Information Icon"/>
+            <lightning:icon iconName="utility:success" size="x-small" alternativeText="{!$Label.c.InformationIcon}"/>
             <a href="javascript:void(0)" class="slds-p-left_small " onclick="{!c.gotoIntegrationHome}">
                 {!format($Label.c.MappedObjectsPlainText, v.mappedObjCount)}
             </a>
@@ -40,9 +40,9 @@
             <section class="slds-clearfix">
                 <div class="slds-float--right slds-p-right_medium">
                     <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small"
-                        alternativeText="Indicates add"/>
+                        alternativeText="{!$Label.c.IndicatesDown}"/>
                     <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevronup" size="x-small"
-                        alternativeText="Indicates dash"/>
+                        alternativeText="{!$Label.c.IndicatesUp}"/>
                 </div>
                 <a href="javascript:void(0)" class="slds-show slds-float--right slds-m-right_small"
                     aura:id="objMapping">{!$Label.c.ShowSteps}</a>
