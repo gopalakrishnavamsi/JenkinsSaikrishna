@@ -1802,7 +1802,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>New Documents Generated</label>
+		<label>Neue Dokumente generiert</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -3720,23 +3720,23 @@
 		<name>MultipleUsersClosedSuccessfully</name>
 	</customLabels>
 	<customLabels>
-		<label>Edit permissions for {0}</label>
+		<label>Berechtigungen für {0} bearbeiten</label>
 		<name>EditSingleUserTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Edit permissions for {0} users</label>
+		<label>Berechtigungen für {0} Benutzer bearbeiten</label>
 		<name>EditBulkUsersTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Successfully edited permissions for {0}.</label>
+		<label>Berechtigungen für {0} wurden bearbeitet.</label>
 		<name>EditSingleUserMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Successfully edited permissions for {0} users.</label>
+		<label>Berechtigungen für {0} Benutzer wurden bearbeitet.</label>
 		<name>EditBulkUsersMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Apply</label>
+		<label>Anwenden</label>
 		<name>Apply</name>
 	</customLabels>
 	<customLabels>
@@ -3856,15 +3856,15 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM – Ordnerinhalte</label>
+		<label>Folder Contents</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM – Kontoobjekt</label>
+		<label>Account Object</label>
 		<name>AccountObject</name>
 	</customLabels>
 	<customLabels>
-		<label>CLM – Zuordnungsfehler</label>
+		<label>{0} object type was not mapped to DocuSign CLM.</label>
 		<name>MapError</name>
 	</customLabels>
 	<customLabels>
@@ -3884,7 +3884,7 @@
 		<name>DocumentPreviewLink</name>
 	</customLabels>
 	<customLabels>
-		<label>The files below have been successfully generated and can now be sent for signature</label>
+		<label>Die Dateien unten wurden generiert und können nun für das Signieren gesendet werden</label>
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customPageWebLinks>
