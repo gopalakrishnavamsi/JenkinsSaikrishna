@@ -1,67 +1,35 @@
 ({
-  setTokenValue: function(component) {
+  setTokenValue: function (component) {
     var fieldMapping = component.get('v.fieldMapping');
     var objLabel = component.get('v.objLabel').replace(/\s/g, '_');
     var isChild = component.get('v.isChild');
     var token = '';
-    if (
-      $A.util.isEmpty(fieldMapping) ||
-      $A.util.isEmpty(fieldMapping.apiName)
-    ) {
+
+    if ($A.util.isEmpty(fieldMapping) || $A.util.isEmpty(fieldMapping.apiName)) {
       return;
     }
-
     if (fieldMapping.isChildRelation) {
-      token =
-        '<# <TableRow Select="/' +
-        objLabel +
-        '//' +
-        fieldMapping.apiName +
-        '" /> #>';
+      token = '<# <TableRow Select="/' + objLabel + '//' + fieldMapping.label + '" /> #>';
     } else if (fieldMapping.isConditional) {
       if (isChild) {
-        token =
-          '<# <Conditional Select="./' +
-          fieldMapping.apiName +
-          '" ' +
-          fieldMapping.matchType +
-          '="' +
-          fieldMapping.conditionalValue +
+        token = '<# <Conditional Select="./' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue +
           '" /> #> YOUR CONTENT HERE <# <EndConditional/> #>';
       } else {
-        token =
-          '<# <Conditional Select="/' +
-          objLabel +
-          '/' +
-          fieldMapping.apiName +
-          '" ' +
-          fieldMapping.matchType +
-          '="' +
-          fieldMapping.conditionalValue +
+        token = '<# <Conditional Select="/' + objLabel + '/' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue +
           '" /> #> YOUR CONTENT HERE <# <EndConditional/> #>';
       }
     } else if (isChild) {
       token = '<# <Content Select="./' + fieldMapping.apiName + '"/> #>';
     } else if (fieldMapping.dataType === 'RICHTEXT') {
-      token =
-        '<# <RichText Select="/' +
-        objLabel +
-        '/' +
-        fieldMapping.apiName +
-        '"/> #>';
+      token = '<# <RichText Select="/' + objLabel + '/' + fieldMapping.apiName + '"/> #>';
     } else {
-      token =
-        '<# <Content Select="/' +
-        objLabel +
-        '/' +
-        fieldMapping.apiName +
-        '"/> #>';
+      token = '<# <Content Select="/' + objLabel + '/' + fieldMapping.apiName + '"/> #>';
     }
 
     component.set('v.token', token);
   },
 
-  removeChildMapping: function(component, index) {
+  removeChildMapping: function (component, index) {
     var helper = this;
     var parentFieldMapping = component.get('v.parentFieldMapping');
 
@@ -74,7 +42,7 @@
     }
   },
 
-  getChildFields: function(component) {
+  getChildFields: function (component) {
     var self = this;
     var fieldMapping = component.get('v.fieldMapping');
     var action = component.get('c.getMergeFields');
@@ -83,7 +51,7 @@
       isChild: true
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var results = response.getReturnValue();
         var objectFields = [];
@@ -91,7 +59,7 @@
         var allFieldsByApiName = {};
 
         // Modify logic here to allow multiple level nesting in the future
-        results.forEach(function(object) {
+        results.forEach(function (object) {
           if (!object.hasRelationship) {
             objectFields.push(object);
           }
@@ -102,8 +70,8 @@
           label: fieldMapping ? fieldMapping.label : null
         };
 
-        allFields.forEach(function(object) {
-          object.fields.forEach(function(field) {
+        allFields.forEach(function (object) {
+          object.fields.forEach(function (field) {
             allFieldsByApiName[field.name] = field;
           });
         });
@@ -122,7 +90,7 @@
     $A.enqueueAction(action);
   },
 
-  removeMapping: function(component, index) {
+  removeMapping: function (component, index) {
     var evt = component.getEvent('removeMapping');
 
     evt.setParams({
@@ -132,7 +100,7 @@
     evt.fire();
   },
 
-  setConditionalRadio: function(component) {
+  setConditionalRadio: function (component) {
     var mergeFieldDisplayOptions = [
       {
         label: $A.get('$Label.c.MergeFieldDisplayCurrent'),
@@ -147,7 +115,7 @@
     component.set('v.mergeFieldDisplayOptions', mergeFieldDisplayOptions);
   },
 
-  getChildFieldStub: function() {
+  getChildFieldStub: function () {
     return {
       apiName: '',
       dataType: '',
@@ -157,7 +125,7 @@
     };
   },
 
-  showToast: function(component, variant, msg) {
+  showToast: function (component, variant, msg) {
     var evt = component.getEvent('showToast');
 
     evt.setParams({
