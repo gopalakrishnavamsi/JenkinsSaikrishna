@@ -198,57 +198,6 @@ private class UserServiceTest {
 		}
 	}
 
-	class UserExistenceMock extends OAuthTokenMock {
-		override public HttpResponse getResponse(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-
-			if (request.getMethod() == 'POST') {
-				response.setBody('{"newUsers": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","errorDetails": {"errorCode": "USER_ALREADY_EXISTS_IN_ACCOUNT","message": "User already exists"}}]}');
-			} else { // DELETE
-				response.setBody('{"users": [{"userId": "11111111-1111-1111-1111-111111111111","userName": "user1","email": "user1@unit.test","apiPassword":"pw1"},{"userId": "22222222-2222-2222-2222-222222222222","userName": "user2","email": "user2@unit.test","apiPassword":"pw2","errorDetails": {"errorCode": "USER_DOES_NOT_EXIST_IN_SYSTEM","message": "User not found"}}]}');
-			}
-
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_addUsers_already_exists() {
-		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			String u1Email = 'user1@unit.test';
-			String u2Email = 'user2@unit.test';
-			User u1 = UserMock.createUser(UserInfo.getProfileId(), u1Email, null, false);
-			User u2 = UserMock.createUser(UserInfo.getProfileId(), u2Email, null, false);
-
-			Test.startTest();
-			List<Account.User> result = UserService.addUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, new Map<String, List<String>>());
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assert(!result[0].hasError);
-			System.assertEquals(ID1, result[0].id);
-			System.assertEquals(u1.Id, result[0].sourceId);
-			System.assertEquals(ID1.toString(), [SELECT Username__c FROM User WHERE Id = :u1.Id LIMIT 1].Username__c);
-
-			System.assertNotEquals(null, result[1]);
-			System.assert(!result[1].hasError);
-			System.assertEquals(ID2, result[1].id);
-			System.assertEquals(u2.Id, result[1].sourceId);
-			System.assertEquals(ID2.toString(), [SELECT Username__c FROM User WHERE Id = :u2.Id LIMIT 1].Username__c);
-		}
-	}
-
 	@IsTest
 	static void test_addUsers_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new UserPartialSuccessMock());
@@ -341,51 +290,6 @@ private class UserServiceTest {
 				System.assertEquals(Label.CannotRemoveSelf, ex.getMessage());
 			}
 			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_removeUsers_not_found() {
-		Test.setMock(HttpCalloutMock.class, new UserExistenceMock());
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			String u1Email = 'user1@unit.test';
-			String u2Email = 'user2@unit.test';
-			User u1 = UserMock.createUser(UserInfo.getProfileId(), u1Email, UUID.randomUUID(), false);
-			User u2 = UserMock.createUser(UserInfo.getProfileId(), u2Email, UUID.randomUUID(), false);
-			UserSettings__c us1 = UserSettings__c.getInstance(u1.Id);
-			us1.AccessToken0__c = UUID.randomUUID().toString();
-			us1.Nonce__c = UUID.randomUUID().toString();
-			UserSettings__c us2 = UserSettings__c.getInstance(u2.Id);
-			us2.AccessToken0__c = UUID.randomUUID().toString();
-			us2.Nonce__c = UUID.randomUUID().toString();
-			upsert new List<UserSettings__c> { us1, us2 };
-
-			Test.startTest();
-			List<Account.User> result = UserService.removeUsers(new List<Account.User> {
-				new Account.User(u1.Id, u1Email, 'User', 'One', true),
-				new Account.User(u2.Id, u2Email, 'User', 'Two', false)
-			}, true);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assert(!result[0].hasError);
-			System.assertEquals(ID1, result[0].id);
-			System.assertEquals(u1.Id, result[0].sourceId);
-			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).AccessToken0__c);
-			System.assertEquals(null, UserSettings__c.getInstance(u1.Id).Nonce__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u1.Id LIMIT 1].Username__c);
-
-			System.assertNotEquals(null, result[1]);
-			System.assert(!result[1].hasError);
-			System.assertEquals(ID2, result[1].id);
-			System.assertEquals(u2.Id, result[1].sourceId);
-			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).AccessToken0__c);
-			System.assertEquals(null, UserSettings__c.getInstance(u2.Id).Nonce__c);
-			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :u2.Id LIMIT 1].Username__c);
 		}
 	}
 

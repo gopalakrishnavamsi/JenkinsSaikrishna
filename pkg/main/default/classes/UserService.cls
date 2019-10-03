@@ -334,8 +334,8 @@ public with sharing class UserService {
 			Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
 			Set<UUID> userIds = new Set<UUID>();
 			for (Account.User u : UserAPI.getInstance().addUsers(users)) {
-				// Ignore errors when user is already an account member. Something got DFS and DS out of sync.
-				if (u.hasError && u.error.code != APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT) {
+				if (u.hasError) {
+					// Don't update user permissions if there was an error when adding to the account.
 					LOG.warn('Error while adding user ' + u.email + ': ' + u.error);
 					result.add(u);
 				} else {
@@ -346,7 +346,7 @@ public with sharing class UserService {
 						u.status,
 						u.canManageAccount));
 					result.add(u.withError(null).withRoles(productRoles));
-					if (UUID.isNotEmpty(u.id)) userIds.add(u.Id);
+					if (UUID.isNotEmpty(u.id)) userIds.add(u.id);
 				}
 			}
 
@@ -422,13 +422,12 @@ public with sharing class UserService {
 		if (closeMembership) {
 			try {
 				for (Account.User u : UserAPI.getInstance().removeUsers(users)) {
-					// Ignore errors where user is unknown to DS. The user was already removed from the account.
-					if (u.hasError && u.error.code != APIErrorCode.UNKNOWN_USER) {
-						if (u.sourceId != null) userIds.remove(u.sourceId);
-						result.add(u);
-					} else {
-						result.add(u.withError(null));
+					if (u.hasError && String.isNotBlank(u.sourceId)){
+						// Don't clear user credentials if the API returned an error.
+						LOG.warn('Error while removing user ' + u.email + ': ' + u.error);
+						userIds.remove(u.sourceId);
 					}
+					result.add(u);
 				}
 			} finally {
 				Credentials.save();
