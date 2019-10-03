@@ -807,6 +807,21 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				response = MockResponse.created(nu);
 			} else if (request.method == 'DELETE') {
 				response = MockResponse.ok(request.body);
+			} else if (request.method == 'GET') {
+				UUID userId = UUID.tryParse((String)Collection.last(request.path));
+				UserAPI.APIUser apiUser = new UserAPI.APIUser(new Account.User(
+					userId == null ? UUID.randomUUID() : userId,
+					UserInfo.getUserId(),
+					UserInfo.getUserEmail(),
+					UserInfo.getFirstName(),
+					UserInfo.getLastName(),
+					'Active',
+					Date.today().addDays(-1),
+					false,
+					null,
+					null,
+					null));
+				response = MockResponse.ok(apiUser);
 			}
 			return response;
 		}
