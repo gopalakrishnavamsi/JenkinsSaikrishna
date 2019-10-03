@@ -27,17 +27,24 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false" access="private"/>
     <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="canNegotiate" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="canGenarateDocuments" type="Boolean" default="false" access="private"/>
     <aura:attribute name="disableSendForSignature" type="Boolean" default="false" access="private"/>
     <aura:attribute name="disableGenFileReview" type="Boolean" default="false" access="private"/>
     <aura:attribute name="agreementDetails" type="Agreement" access="private"/>
-
-    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
-
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.navigateToSource}"/>
+    <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
 
     <aura:method name="generateDocs" action="{!c.generateDocs}" access="global"/>
+
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
+             visualforce="true"/>
 
     <div aura:id="internalApprovalModal">
     </div>
@@ -261,7 +268,7 @@
                                         onclick="{!c.sendForSignature}"
                                         disabled="{!v.disableSendForSignature}"/>
 
-                                <div class="slds-button-group slds-p-left_xx-small">
+                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.canNegotiate), ' slds-hide', '')}">
                                     <lightning:button label="Send for Review" class="slds-button_brand"
                                                       disabled="{!v.disableGenFileReview}"/>
                                     <lightning:buttonMenu class="slds-button_last" alternativeText="Send for Review"
@@ -274,7 +281,7 @@
                                 </div>
                                 <lightning:button class="slds-float_left slds-button" variant="neutral"
                                                   label="{!$Label.c.Back}"
-                                                  onclick="{!c.navigateToSource}"/>
+                                                  onclick="{!c.goBack}"/>
                             </div>
                             <!-- Footer -->
                         </div>

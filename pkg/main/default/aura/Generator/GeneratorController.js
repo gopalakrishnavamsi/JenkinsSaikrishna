@@ -4,7 +4,7 @@
     if (isAuthorized) {
       var config = component.get('v.config');
       helper.checkMultiCurrency(component);
-      helper.isEsignEnabled(component);
+      helper.getProductsOnAccount(component);
 
       if ($A.util.isEmpty(config)) {
         var action = component.get('c.getTemplate');
@@ -21,7 +21,7 @@
             helper.setupData(component);
           } else {
             component.set('v.errType', 'error');
-            component.set('v.errMsg', stringUtils.getErrorMessage(response));
+            component.set('v.errMsg', stringUtils.getErrorMesDJJJDsage(response));
           }
         });
         $A.enqueueAction(action);
@@ -59,8 +59,8 @@
     helper.sendForSignature(component);
   },
 
-  navigateToSource: function (component) {
-    navUtils.navigateToSObject(component.get('v.recordId'));
+  goBack: function (component, event, helper) {
+    helper.navigateToSource(component);
   },
 
   previewFile: function (component, event) {
@@ -93,5 +93,25 @@
 
   genFileCheckboxToggle: function (component, event, helper) {
     helper.genFileCheckboxToggle(component);
+  },
+
+  handleToastEvent: function (component, event, helper) {
+    var params = event.getParams();
+    if (params && params.show === true) {
+      helper.showToast(component, params.message, params.mode);
+      if (params.mode === 'success') {
+        setTimeout($A.getCallback(function () {
+          helper.hideToast(component);
+        }), 5000);
+      }
+    } else {
+      helper.hideToast(component);
+    }
+  },
+
+  navigateToSource: function (component, event, helper) {
+    window.setTimeout($A.getCallback(function () {
+      helper.navigateToSource(component);
+    }), 1000);
   }
 });

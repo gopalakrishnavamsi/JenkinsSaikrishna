@@ -170,15 +170,6 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static boolean isEsignEnabled() {
-		try {
-			return AccountProducts.isEsignEnabled();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
-		}
-	}
-
-	@AuraEnabled
 	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
 		try {
 			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
@@ -193,6 +184,15 @@ public with sharing class GenController extends Controller {
 			return NegotiateService.getAgreement(UUID.parse(agreementId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get Agreement.');
+		}
+	}
+
+	@AuraEnabled
+	public static List<Product> getProductsOnAccount() {
+		try {
+			return AccountProducts.getProducts();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
 	}
 }

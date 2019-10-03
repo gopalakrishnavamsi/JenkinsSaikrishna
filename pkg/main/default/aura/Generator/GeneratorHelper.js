@@ -396,7 +396,6 @@
         var jobIds = [];
         var cvTitleByJobId = {};
         var failedJobs = [];
-        var files = [];
 
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
@@ -410,10 +409,9 @@
 
         if (!$A.util.isEmpty(jobIds)) {
           var remainingJobIds = jobIds.slice(0);
-          files = new Array(jobIds.length);
         }
 
-        component.set('v.generatedFiles', files);
+        helper.genFileCheckboxToggle(component);
         component.set('v.failedFiles', failedJobs);
         component.set('v.cvTitleByJobId', cvTitleByJobId);
         helper.completionPoll(component, jobIds, remainingJobIds, 0);
@@ -511,6 +509,7 @@
 
           component.set('v.generatedFiles', generatedFiles);
           component.set('v.failedFiles', failedFiles);
+          helper.genFileCheckboxToggle(component);
 
           if (failedFiles.length > 0) {
             component.set('v.bannerState', 'warning');
@@ -543,6 +542,7 @@
   },
 
   sendForSignature: function (component) {
+    var helper = this;
     return new Promise($A.getCallback(function (resolve) {
       var generatedFiles = component.get('v.generatedFiles');
       var generatedFileIds = [];
@@ -565,8 +565,7 @@
           if (state === 'SUCCESS') {
             navUtils.navigateToUrl(response.getReturnValue());
           } else {
-            component.set('v.bannerState', 'error');
-            component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
+            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
           }
         });
         $A.enqueueAction(sendingAction);
@@ -582,52 +581,42 @@
     return doc;
   },
 
-  isEsignEnabled: function (component) {
-    var isEsignEnabledAction = component.get('c.isEsignEnabled');
-    isEsignEnabledAction.setCallback(this, function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var canSendForSignature = response.getReturnValue();
-        component.set('v.canSendForSignature', canSendForSignature);
-      } else {
-        component.set('v.bannerState', 'error');
-        component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
-      }
-    });
-    $A.enqueueAction(isEsignEnabledAction);
-  },
-
   createAgreement: function (component, event, helper) {
     var recordId = component.get('v.recordId');
     return new Promise(
       $A.getCallback(function (resolve) {
-        var generatedFiles = component.get('v.generatedFiles');
-        var selectedFile;
-        generatedFiles.forEach(function (generatedFile) {
-          if (generatedFile.isChecked) {
-            selectedFile = generatedFile;
-          }
-        });
-        if (selectedFile) {
-          var createAgreementAction = component.get('c.createAgreementInEOSFolder');
-          createAgreementAction.setParams({
-            sfContentVersionId: selectedFile.id,
-            sourceObjectId: recordId,
-            documentName: selectedFile.title + '.' + selectedFile.extension
-          });
-          createAgreementAction.setCallback(this, function (response) {
-            if (response.getState() === 'SUCCESS') {
-              var result = response.getReturnValue();
-              if (result.status === 'Success') {
-                resolve(helper.getAgreementDetails(result.agreementId.value, component));
-              }
-            } else {
-              component.set('v.isLoading', false);
-              component.set('v.bannerState', 'error');
-              component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
+        var agreementDetail = component.get('v.agreementDetails');
+        if ($A.util.isUndefinedOrNull(agreementDetail)) {
+          var generatedFiles = component.get('v.generatedFiles');
+          var selectedFile;
+          generatedFiles.forEach(function (generatedFile) {
+            if (generatedFile.isChecked) {
+              selectedFile = generatedFile;
             }
           });
-          $A.enqueueAction(createAgreementAction);
+          if (selectedFile) {
+            var createAgreementAction = component.get('c.createAgreementInEOSFolder');
+            createAgreementAction.setParams({
+              sfContentVersionId: selectedFile.id,
+              sourceObjectId: recordId,
+              documentName: selectedFile.title + '.' + selectedFile.extension
+            });
+            createAgreementAction.setCallback(this, function (response) {
+              if (response.getState() === 'SUCCESS') {
+                var result = response.getReturnValue();
+                if (result.status === 'Success') {
+                  resolve(helper.getAgreementDetails(result.agreementId.value, component));
+                }
+              } else {
+                component.set('v.isLoading', false);
+                helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+              }
+            });
+            $A.enqueueAction(createAgreementAction);
+          }
+        } else {
+          component.set('v.isLoading', false);
+          resolve();
         }
       }));
   },
@@ -677,6 +666,7 @@
   },
 
   getAgreementDetails: function (agreementId, component) {
+    var helper = this;
     return new Promise($A.getCallback(function (resolve) {
       var action = component.get('c.getAgreement');
       action.setParams({
@@ -687,11 +677,9 @@
         var state = response.getState();
         if (state === 'SUCCESS') {
           component.set('v.agreementDetails', response.getReturnValue());
-          component.set('v.bannerState', 'success');
-          component.set('v.bannerMsg', $A.get('$Label.c.NewAgreementCreated'));
           resolve();
-        } else if (state === 'ERROR') {
-          this.showToast(component, 'Failed to get agreement details', 'error');
+        } else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
         }
       });
       $A.enqueueAction(action);
@@ -714,5 +702,44 @@
     if (checkedFiles.length === 1) {
       component.set('v.disableGenFileReview', false);
     }
+  },
+
+  getProductsOnAccount: function (component) {
+    var helper= this;
+    var getProductsAction = component.get('c.getProductsOnAccount');
+    getProductsAction.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var products = response.getReturnValue();
+        products.forEach(function (product) {
+          if (product.name === 'e_sign' && product.status === 'active') {
+            component.set('v.canSendForSignature', true);
+          }
+          if (product.name === 'negotiate' && product.status === 'active') {
+            component.set('v.canNegotiate', true);
+          }
+        });
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+    });
+    $A.enqueueAction(getProductsAction);
+  },
+
+  showToast: function (component, message, mode) {
+    component.set('v.message', message);
+    component.set('v.mode', mode);
+    component.set('v.showToast', true);
+    window.setTimeout($A.getCallback(function () {
+      component.set('v.showToast', false);
+    }), 3000);
+  },
+
+  hideToast: function (component) {
+    component.find('toast').close();
+  },
+
+  navigateToSource: function (component) {
+    navUtils.navigateToSObject(component.get('v.recordId'));
   }
 });
