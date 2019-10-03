@@ -4037,6 +4037,10 @@
 		<label>Preparing for signature</label>
 		<name>SendingForSignature</name>
 	</customLabels>
+	<customLabels>
+		<label>{0} mapped objects</label>
+		<name>MappedObjectsPlainText</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
