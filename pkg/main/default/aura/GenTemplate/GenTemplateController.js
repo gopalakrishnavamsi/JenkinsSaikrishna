@@ -8,7 +8,7 @@
     config.stepsCompleted++;
     component.set('v.config', config);
     component.set('v.isCompleted', true);
-    helper.saveData(component,false);
+    helper.saveData(component, false);
   },
 
   nextStep: function (component, event, helper) {
@@ -50,7 +50,7 @@
   saveAndNavigate: function (component, event, helper) {
     // Save and navigate
     component.find('exitModal').hide();
-    helper.saveData(component,true);
+    helper.saveData(component, true);
   },
 
   showToast: function (component, event) {
@@ -93,7 +93,7 @@
     config.name = component.find('record-name-input').get('v.value');
     component.set('v.config', config);
     component.find('edit-modal').hide();
-    helper.saveData(component,false);
+    helper.saveData(component, false);
   },
 
   closeWhatYouWillNeedModal: function (component, event, helper) {

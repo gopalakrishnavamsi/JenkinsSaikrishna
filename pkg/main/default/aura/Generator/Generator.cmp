@@ -26,14 +26,24 @@
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="canSendForSignature" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="disableSendForSignature" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="disableGenFileReview" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="agreementDetails" type="Agreement" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
+    <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.navigateToSource}"/>
 
     <aura:method name="generateDocs" action="{!c.generateDocs}" access="global"/>
+
+    <div aura:id="internalApprovalModal">
+    </div>
+
+    <div aura:id="externalReviewModal">
+    </div>
 
     <div class="slds-scope slds-is-relative">
         <aura:if isTrue="{!and(not(v.isClassic), not(v.isPreview))}">
@@ -189,7 +199,8 @@
                                                                              type="checkbox" checked="{!file.isChecked}"
                                                                              value="{!documentIndex}"
                                                                              label="{!$Label.c.Select}"
-                                                                             class="ds-no-label"/>
+                                                                             class="ds-no-label"
+                                                                             onchange="{!c.genFileCheckboxToggle}"/>
                                                         </div>
                                                         <div class="slds-media__figure">
                                                             <c:IconByFileExtension extension="{!file.extension}"/>
@@ -247,10 +258,23 @@
                                 <lightning:button
                                         class="{!'slds-button slds-button_brand'+if(not(v.canSendForSignature),' slds-hide','')}"
                                         label="{!$Label.c.SendForSignature}"
-                                        onclick="{!c.sendForSignature}"/>
+                                        onclick="{!c.sendForSignature}"
+                                        disabled="{!v.disableSendForSignature}"/>
+
+                                <div class="slds-button-group slds-p-left_xx-small">
+                                    <lightning:button label="Send for Review" class="slds-button_brand"
+                                                      disabled="{!v.disableGenFileReview}"/>
+                                    <lightning:buttonMenu class="slds-button_last" alternativeText="Send for Review"
+                                                          menuAlignment="right" disabled="{!v.disableGenFileReview}">
+                                        <lightning:menuItem label="External Review" value="External Review"
+                                                            onactive="{!c.externalReview}"/>
+                                        <lightning:menuItem label="Internal Approval" value="Internal Approval"
+                                                            onactive="{!c.internalApproval}"/>
+                                    </lightning:buttonMenu>
+                                </div>
                                 <lightning:button class="slds-float_left slds-button" variant="neutral"
                                                   label="{!$Label.c.Back}"
-                                                  onclick="{!c.goBack}"/>
+                                                  onclick="{!c.navigateToSource}"/>
                             </div>
                             <!-- Footer -->
                         </div>

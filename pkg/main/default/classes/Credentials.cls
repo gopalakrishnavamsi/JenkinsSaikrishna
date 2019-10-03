@@ -406,7 +406,6 @@ public with sharing class Credentials {
 				update new User(
 					Id = userId,
 					Username__c = String.valueOf(user.id),
-					Status__c = user.status,
 					CanManageAccount__c = user.canManageAccount == true,
 					Provisioned__c = Date.today());
 			}

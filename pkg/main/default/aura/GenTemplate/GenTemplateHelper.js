@@ -10,7 +10,7 @@
     );
   },
 
-  saveData: function (component,isNavigate) {
+  saveData: function (component, isNavigate) {
     var helper = this;
     component.set('v.saving', true);
     var isImportStep = component.get('v.currentStep') === 2;
@@ -20,12 +20,12 @@
         $A.getCallback(function (results) {
           component.set('v.saving', false);
           component.set('v.config', results.template);
-          helper.saveTemplate(component,isNavigate);
+          helper.saveTemplate(component, isNavigate);
         })
       );
     } else {
       component.set('v.saving', false);
-      helper.saveTemplate(component,isNavigate);
+      helper.saveTemplate(component, isNavigate);
     }
   },
 
@@ -49,7 +49,7 @@
             }
           }
 
-          return helper.saveData(component,false);
+          return helper.saveData(component, false);
         })
       )
       .then(
@@ -152,7 +152,7 @@
     );
   },
 
-  saveTemplate: function (component,isNavigate) {
+  saveTemplate: function (component, isNavigate) {
     var helper = this;
     component.set('v.saving', true);
     var config = component.get('v.config');
@@ -168,10 +168,10 @@
       var state = response.getState();
       component.set('v.saving', false);
       if (state === 'SUCCESS') {
-        if(isNavigate){
+        if (isNavigate) {
           helper.goToRecord(component);
         }
-      }else{
+      } else {
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
       }
     });

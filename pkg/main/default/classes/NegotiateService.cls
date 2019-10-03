@@ -191,6 +191,13 @@ public with sharing class NegotiateService {
 	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID folderId = DB.getFolderId(sourceObjectId);
+		Boolean isUpdated = false;
+		if (folderId == null) {
+			String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
+			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
+			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
+			isUpdated = true;
+		}
 		UUID taskId = NegotiateAPI.getInstance().createAgreementInEOSFolder(sfContentVersionId, folderId, documentName);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getAgreementInEOSFolderStatus(taskId);
 		if (taskStatus.status.equals(TASK_SUCCESS)) {
@@ -199,6 +206,9 @@ public with sharing class NegotiateService {
 			taskStatus.message = Label.AgreementImportProcessing;
 		} else {
 			taskStatus.message = Label.AgreementImportFailed;
+		}
+		if (isUpdated) {
+			setFolderId(sourceObjectId, folderId.toString());
 		}
 		return taskStatus;
 	}

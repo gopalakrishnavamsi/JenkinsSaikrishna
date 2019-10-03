@@ -177,4 +177,22 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
 		}
 	}
+
+	@AuraEnabled
+	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
+		try {
+			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to create Agreement Folder');
+		}
+	}
+
+	@AuraEnabled
+	public static Agreement getAgreement(final String agreementId) {
+		try {
+			return NegotiateService.getAgreement(UUID.parse(agreementId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Agreement.');
+		}
+	}
 }

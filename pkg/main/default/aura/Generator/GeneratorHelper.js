@@ -543,7 +543,6 @@
   },
 
   sendForSignature: function (component) {
-    var helper = this;
     return new Promise($A.getCallback(function (resolve) {
       var generatedFiles = component.get('v.generatedFiles');
       var generatedFileIds = [];
@@ -566,7 +565,8 @@
           if (state === 'SUCCESS') {
             navUtils.navigateToUrl(response.getReturnValue());
           } else {
-            helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+            component.set('v.bannerState', 'error');
+            component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
           }
         });
         $A.enqueueAction(sendingAction);
@@ -583,7 +583,6 @@
   },
 
   isEsignEnabled: function (component) {
-    var helper = this;
     var isEsignEnabledAction = component.get('c.isEsignEnabled');
     isEsignEnabledAction.setCallback(this, function (response) {
       var state = response.getState();
@@ -591,9 +590,129 @@
         var canSendForSignature = response.getReturnValue();
         component.set('v.canSendForSignature', canSendForSignature);
       } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        component.set('v.bannerState', 'error');
+        component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
       }
     });
     $A.enqueueAction(isEsignEnabledAction);
+  },
+
+  createAgreement: function (component, event, helper) {
+    var recordId = component.get('v.recordId');
+    return new Promise(
+      $A.getCallback(function (resolve) {
+        var generatedFiles = component.get('v.generatedFiles');
+        var selectedFile;
+        generatedFiles.forEach(function (generatedFile) {
+          if (generatedFile.isChecked) {
+            selectedFile = generatedFile;
+          }
+        });
+        if (selectedFile) {
+          var createAgreementAction = component.get('c.createAgreementInEOSFolder');
+          createAgreementAction.setParams({
+            sfContentVersionId: selectedFile.id,
+            sourceObjectId: recordId,
+            documentName: selectedFile.title + '.' + selectedFile.extension
+          });
+          createAgreementAction.setCallback(this, function (response) {
+            if (response.getState() === 'SUCCESS') {
+              var result = response.getReturnValue();
+              if (result.status === 'Success') {
+                resolve(helper.getAgreementDetails(result.agreementId.value, component));
+              }
+            } else {
+              component.set('v.isLoading', false);
+              component.set('v.bannerState', 'error');
+              component.set('v.bannerMsg', stringUtils.getErrorMessage(response));
+            }
+          });
+          $A.enqueueAction(createAgreementAction);
+        }
+      }));
+  },
+
+  createInternalApprovalComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+      'c:AgreementsInternalApproval',
+      {
+        showModal: true,
+        agreementDetails: agreementDetails,
+        sourceId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          component.set('v.showModal', false);
+          var targetCmp = component.find('internalApprovalModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
+  },
+
+  createExternalReviewComponent: function (component) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+      'c:AgreementsExternalReview',
+      {
+        showModal: true,
+        agreementDetails: agreementDetails,
+        sourceId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          component.set('v.showModal', false);
+          var targetCmp = component.find('externalReviewModal');
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
+  },
+
+  getAgreementDetails: function (agreementId, component) {
+    return new Promise($A.getCallback(function (resolve) {
+      var action = component.get('c.getAgreement');
+      action.setParams({
+        agreementId: agreementId
+      });
+      action.setCallback(this, function (response) {
+        component.set('v.isLoading', false);
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          component.set('v.agreementDetails', response.getReturnValue());
+          component.set('v.bannerState', 'success');
+          component.set('v.bannerMsg', $A.get('$Label.c.NewAgreementCreated'));
+          resolve();
+        } else if (state === 'ERROR') {
+          this.showToast(component, 'Failed to get agreement details', 'error');
+        }
+      });
+      $A.enqueueAction(action);
+    }));
+  },
+
+  genFileCheckboxToggle: function (component) {
+    component.set('v.disableSendForSignature', true);
+    component.set('v.disableGenFileReview', true);
+    var generatedFiles = component.get('v.generatedFiles');
+    var checkedFiles = [];
+    generatedFiles.forEach(function (generatedFile) {
+      if (generatedFile.isChecked) {
+        checkedFiles.push(generatedFile);
+      }
+    });
+    if (checkedFiles.length > 0) {
+      component.set('v.disableSendForSignature', false);
+    }
+    if (checkedFiles.length === 1) {
+      component.set('v.disableGenFileReview', false);
+    }
   }
 });

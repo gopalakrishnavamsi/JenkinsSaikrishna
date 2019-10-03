@@ -59,7 +59,7 @@
     helper.sendForSignature(component);
   },
 
-  goBack: function (component) {
+  navigateToSource: function (component) {
     navUtils.navigateToSObject(component.get('v.recordId'));
   },
 
@@ -71,5 +71,27 @@
   downloadFile: function (component, event) {
     var fileId = event.currentTarget.getAttribute('data-fileId');
     navUtils.navigateToUrl($A.get('$Label.c.DocumentPreviewLink') + fileId);
+  },
+
+  internalApproval: function (component, event, helper) {
+    component.set('v.isLoading', true);
+    helper.createAgreement(component, event, helper).then(
+      $A.getCallback(function () {
+        helper.createInternalApprovalComponent(component);
+      })
+    );
+  },
+
+  externalReview: function (component, event, helper) {
+    component.set('v.isLoading', true);
+    helper.createAgreement(component, event, helper).then(
+      $A.getCallback(function () {
+        helper.createExternalReviewComponent(component);
+      })
+    );
+  },
+
+  genFileCheckboxToggle: function (component, event, helper) {
+    helper.genFileCheckboxToggle(component);
   }
 });
