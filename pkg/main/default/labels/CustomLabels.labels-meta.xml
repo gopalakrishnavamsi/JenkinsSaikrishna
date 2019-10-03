@@ -7747,4 +7747,11 @@
 		<shortDescription>SendingForSignature</shortDescription>
 		<value>Preparing for signature</value>
 	</labels>
+	<labels>
+		<fullName>MappedObjectsPlainText</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MappedObjectsPlainText</shortDescription>
+		<value>{0} mapped objects</value>
+	</labels>
 </CustomLabels>
