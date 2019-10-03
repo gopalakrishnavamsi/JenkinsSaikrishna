@@ -16,7 +16,7 @@ public class APIErrorCode {
 	public static final Integer ACCOUNT_LACKS_PERMISSIONS = 1003;
 	public static final Integer USER_ALREADY_EXISTS_IN_ACCOUNT = 1004;
 	public static final Integer UNKNOWN_RECIPIENT = 1005;
-	//public static final Integer SALESFORCE_API_ERROR = 1006;
+	public static final Integer USER_PENDING = 1006;
 	public static final Integer UNKNOWN_USER = 1007;
 	public static final Integer INVALID_RECIPIENT_SEQUENCE = 1008;
 	public static final Integer DATABASE_ERROR = 1009;

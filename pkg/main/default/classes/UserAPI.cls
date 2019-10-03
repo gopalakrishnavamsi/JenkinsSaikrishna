@@ -6,6 +6,7 @@ public with sharing class UserAPI extends ESignatureAPI {
 	private static final String INVALID_USERID = 'INVALID_USERID';
 	private static final String USER_ALREADY_EXISTS_IN_ACCOUNT = 'USER_ALREADY_EXISTS_IN_ACCOUNT';
 	private static final String USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST_IN_SYSTEM';
+	private static final String USER_PENDING = 'USER_AWAITING_ACTIVATION';
 
 	private UserAPI(
 		final Url baseUrl,
@@ -31,6 +32,8 @@ public with sharing class UserAPI extends ESignatureAPI {
 				e = new APIError(APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT, dse.description);
 			} else if (dse.docuSignCode == USER_DOES_NOT_EXIST || dse.docuSignCode == INVALID_USERID) {
 				e = new APIError(APIErrorCode.UNKNOWN_USER, dse.description);
+			} else if (dse.docuSignCode == USER_PENDING) {
+				e = new APIError(APIErrorCode.USER_PENDING, dse.description);
 			}
 		}
 		return e;
@@ -57,7 +60,6 @@ public with sharing class UserAPI extends ESignatureAPI {
 		public List<APISetting> userSettings;
 		public String userStatus;
 		public ErrorDetails errorDetails;
-		public String subscribe;
 		public String createdDateTime;
 
 		public APIUser(final Account.User user) {
@@ -81,6 +83,8 @@ public with sharing class UserAPI extends ESignatureAPI {
 				e = new APIError(APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT, errorDetails.message);
 			} else if (errorDetails.errorCode == USER_DOES_NOT_EXIST || errorDetails.errorCode == INVALID_USERID) {
 				e = new APIError(APIErrorCode.UNKNOWN_USER, errorDetails.message);
+			} else if (errorDetails.errorCode == USER_PENDING) {
+				e = new APIError(APIErrorCode.USER_PENDING, errorDetails.message);
 			} else {
 				e = new APIError(APIErrorCode.BAD_REQUEST, String.format('[{0}] {1}',
 					new List<String> { errorDetails.errorCode, errorDetails.message }));
@@ -146,21 +150,64 @@ public with sharing class UserAPI extends ESignatureAPI {
 			}
 		}
 
-		public List<Account.User> toExternalForm(final List<Account.User> users) {
-			Map<String, Account.User> emailToUsers = new Map<String, Account.User>();
-			for (Account.User u : users) {
-				emailToUsers.put(u.email, u);
-			}
+		public List<Account.User> toExternalForm(final Map<String, Account.User> emailToUsers) {
 			List<Account.User> result = new List<Account.User>();
 			if (this.newUsers != null) {
 				for (UserAPI.APIUser u : this.newUsers) {
-					Account.User original = emailToUsers.get(u.email);
-					result.add(u.toExternalForm(original == null ? null : original == null ? null : original.sourceId,
+					Account.User original = emailToUsers == null ? null : emailToUsers.get(u.email);
+					result.add(u.toExternalForm(
+						original == null ? null : original == null ? null : original.sourceId,
 						original == null ? false : original.canManageAccount));
 				}
 			}
 			return result;
 		}
+	}
+
+	private static Map<String, Account.User> getEmailToUserMap(final List<Account.User> users) {
+		Map<String, Account.User> result = new Map<String, Account.User>();
+		if (Collection.isNotEmpty(users)) {
+			for (Account.User u : users) {
+				result.put(u.email, u);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private Account.User getUser(
+		final Account.User user,
+		final Integer timeout) {
+
+		if (user == null || UUID.isEmpty(user.id)) return null;
+
+		RestAPI.Response response = this.get(
+			new List<Object> { 'users', user.id },
+			QueryString.empty,
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get user: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIUser)JSON.deserialize(response.body, APIUser.class)).toExternalForm(
+			user.sourceId,
+			user.canManageAccount);
+	}
+
+	@TestVisible
+	private List<Account.User> getUsers(
+		final List<Account.User> users,
+		final Integer timeout) {
+
+		List<Account.User> result = new List<Account.User>();
+		if (users != null) {
+			for (Account.User user : users) {
+				Account.User user2 = this.getUser(user, timeout);
+				if (user2 != null) result.add(user2);
+			}
+		}
+		return result;
 	}
 
 	public List<Account.User> addUsers(final List<Account.User> users) {
@@ -178,11 +225,37 @@ public with sharing class UserAPI extends ESignatureAPI {
 			JSON.serialize(new NewUsers(users)),
 			timeout);
 		if (response.hasError) {
-			this.log.error('Failed to add users: ' + response.error.toString());
+			this.log.error('Failed to add users: ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		return ((NewUsers)JSON.deserialize(response.body, NewUsers.class)).toExternalForm(users);
+		List<Account.User> result = new List<Account.User>();
+		List<Account.User> incompleteUsers = new List<Account.User>();
+		Map<String, Account.User> emailToUsers = getEmailToUserMap(users);
+		for (Account.User user : ((NewUsers)JSON.deserialize(response.body, NewUsers.class)).toExternalForm(emailToUsers)) {
+			if (user == null) continue;
+
+			if (user.hasError &&
+				(user.error.code == APIErrorCode.USER_ALREADY_EXISTS_IN_ACCOUNT
+					|| user.error.code == APIErrorCode.USER_PENDING)
+				&& UUID.isNotEmpty(user.id)
+				&& String.isBlank(user.status)) {
+
+				// When the user already exists, query the user record to get status. This API doesn't return status for
+				// errors.
+				incompleteUsers.add(user);
+			} else {
+				result.add(user);
+			}
+		}
+
+		if (!incompleteUsers.isEmpty()) {
+			result.addAll(this.getUsers(
+				incompleteUsers,
+				timeout));
+		}
+
+		return result;
 	}
 
 	// Serialization objects for removeUsers
@@ -232,6 +305,14 @@ public with sharing class UserAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		return ((RemoveUsers)JSON.deserialize(response.body, RemoveUsers.class)).toExternalForm(users);
+		List<Account.User> result = ((RemoveUsers)JSON.deserialize(response.body, RemoveUsers.class))
+			.toExternalForm(users);
+		for (Account.User user : result) {
+			if (user.hasError && user.error.code == APIErrorCode.UNKNOWN_USER) {
+				// Ignore errors where user is unknown to DS. The user was already removed from the account.
+				user = user.withError(null);
+			}
+		}
+		return result;
 	}
 }
