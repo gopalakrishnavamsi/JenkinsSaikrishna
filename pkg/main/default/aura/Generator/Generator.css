@@ -78,3 +78,18 @@
 .THIS .ds-bannerContainer {
     padding: 1rem;
 }
+
+.THIS .ds-genNegotiateButtonMenu > .slds-button {
+    background: #0070d2;
+    color: white;
+}
+
+.THIS .ds-genNegotiateButtonMenu > .slds-button:hover {
+    background: #1B5297;
+}
+
+.THIS .ds-genNegotiateButtonDisabled > .slds-button {
+    background: #C9C7C5;
+    color: white;
+}
+

@@ -1,5 +1,5 @@
 <aura:component controller="GenController">
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
     <!-- attributes -->
     <aura:attribute name="templateId" type="Id"/>
