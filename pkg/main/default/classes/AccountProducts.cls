@@ -687,13 +687,13 @@ public with sharing class AccountProducts {
 		return result;
 	}
 
-	public static boolean isEsignEnabled() {
+	public static Boolean isEsignEnabled() {
 		Permissions.verifyIsDocuSignUser();
 		Boolean isEnabled = false;
 		for (Product product : getProducts()) {
-			if (product.Name == ESIGN) {
+			if (product.name == ESIGN) {
 				isEnabled = true;
-				Break;
+				break;
 			}
 		}
 		return isEnabled;

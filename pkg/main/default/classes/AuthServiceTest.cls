@@ -1234,7 +1234,6 @@ private class AuthServiceTest {
 		}
 	}
 
-
 	@IsTest
 	static void test_save_invalid_environment() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
@@ -1567,6 +1566,43 @@ private class AuthServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
 			System.assertEquals('test message', result.message);
+		}
+	}
+
+	@IsTest
+	static void test_saveSetupCredentials_clm() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			List<PermissionSetAssignment> psas = [
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+			];
+			System.assert(Collection.isEmpty(psas));
+
+			AuthService.State state = new AuthService.State(
+				TestUtils.getOrigin(),
+				DocuSign.Environment.Other,
+				new Url('https://unit.test.docusign.net'),
+				true);
+
+			Test.startTest();
+			LoginInformation result = AuthService.saveSetupCredentials('unit.test', state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			psas = [
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				LIMIT 1
+			];
+			System.assert(Collection.isNotEmpty(psas));
 		}
 	}
 
