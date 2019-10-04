@@ -432,12 +432,66 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_isEsignEnabled() {
+	static void test_getProductsOnAccount() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			Boolean isEsignEnabled = GenController.isEsignEnabled();
+			List<Product> products = GenController.getProductsOnAccount();
 			Test.stopTest();
-			System.assert(isEsignEnabled);
+			System.assert(products != null);
+		}
+	}
+
+	@IsTest
+	static void test_createAgreementInEOSFolder_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.createAgreementInEOSFolder(UserInfo.getUserId(), UserInfo.getUserId(), 'testName');
+				throw new AssertException('Expected createAgreementInEOSFolder to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createAgreementInEOSFolder_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator(true)) {
+			NegotiateAPI.TaskStatus testTaskStatus;
+			Test.startTest();
+			testTaskStatus = GenController.createAgreementInEOSFolder(UserInfo.getUserId(), UserInfo.getUserId(), 'testName');
+			Test.stopTest();
+			System.assertNotEquals(null, testTaskStatus);
+		}
+	}
+
+	@IsTest
+	static void test_getAgreement_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.getAgreement(ScmAPIMock.DOCUMENT_ID_2.value);
+				throw new AssertException('Expected get Agreement to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAgreement_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator(true)) {
+
+			Test.startTest();
+			Agreement agreement = GenController.getAgreement(ScmAPIMock.DOCUMENT_ID_2.value);
+			Test.stopTest();
+			System.assertNotEquals(null, agreement);
 		}
 	}
 }

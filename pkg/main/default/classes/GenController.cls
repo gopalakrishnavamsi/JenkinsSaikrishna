@@ -170,11 +170,29 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static boolean isEsignEnabled() {
+	public static NegotiateAPI.TaskStatus createAgreementInEOSFolder(final Id sfContentVersionId, final Id sourceObjectId, final String documentName) {
 		try {
-			return AccountProducts.isEsignEnabled();
+			return NegotiateService.createAgreementInEOSFolder(sfContentVersionId, sourceObjectId, documentName);
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
+			throw Controller.wrapException(ex, 'Failed to create Agreement Folder');
+		}
+	}
+
+	@AuraEnabled
+	public static Agreement getAgreement(final String agreementId) {
+		try {
+			return NegotiateService.getAgreement(UUID.parse(agreementId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Agreement.');
+		}
+	}
+
+	@AuraEnabled
+	public static List<Product> getProductsOnAccount() {
+		try {
+			return AccountProducts.getProducts();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
 	}
 }

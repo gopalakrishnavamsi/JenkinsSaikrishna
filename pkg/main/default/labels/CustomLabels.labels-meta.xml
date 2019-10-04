@@ -7754,4 +7754,11 @@
 		<shortDescription>MappedObjectsPlainText</shortDescription>
 		<value>{0} mapped objects</value>
 	</labels>
+	<labels>
+		<fullName>SendForReview</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send for Review</shortDescription>
+		<value>Send for Review</value>
+	</labels>
 </CustomLabels>

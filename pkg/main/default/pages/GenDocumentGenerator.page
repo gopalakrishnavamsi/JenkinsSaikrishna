@@ -37,13 +37,14 @@
         </div>
     </div>
 
-    <div id="content" style="display: none;">
+    <div id="content" class="slds-scope">
         <!-- Page Header -->
-        <div class="slds-page-header slds-border_bottom">
-            <div class="slds-page-header__row">
-                <div class="slds-page-header__col-title">
-                    <div class="slds-media slds-media_center">
-                        <div class="slds-media__figure">
+        <div class="slds-container_medium slds-container_center">
+            <div class="slds-page-header slds-m-top_medium">
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-title">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
                                 <span class="slds-icon_container slds-icon-standard-drafts" title="drafts">
                                     <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -51,15 +52,16 @@
                                     </svg>
                                     <span class="slds-assistive-text">{!$Label.Drafts}</span>
                                 </span>
-                        </div>
-                        <div class="slds-media__body">
-                            <div class="slds-page-header__name">
-                                <div class="slds-page-header__name-title">
-                                    <p class="slds-page-header__name-meta">{!$CurrentPage.parameters.recordName}</p>
-                                    <h1>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <p class="slds-page-header__name-meta">{!$CurrentPage.parameters.recordName}</p>
+                                        <h1>
                                         <span class="slds-page-header__title slds-truncate"
                                               title="{!$CurrentPage.parameters.title}"><strong>{!$CurrentPage.parameters.title}</strong></span>
-                                    </h1>
+                                        </h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>
