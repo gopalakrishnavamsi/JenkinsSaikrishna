@@ -1262,6 +1262,8 @@ public with sharing class Permissions {
 				if (psName == CLM_USER && hasClmAdmin) continue;
 
 				result.add(psMap.get(psName));
+				// DFS-6110: Add DS admin permission set for CLM admins.
+				if (psName == CLM_ADMINISTRATOR && !hasDSAdmin) result.add(psMap.get(DOCUSIGN_ADMINISTRATOR));
 			}
 		}
 		return result;

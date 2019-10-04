@@ -1737,7 +1737,7 @@ private class PermissionsTest {
 		});
 		Test.stopTest();
 
-		System.assertEquals(new Set<Id> { Permissions.getClmAdministratorPermissionSetId() }, result1);
+		System.assertEquals(new Set<Id> { Permissions.getClmAdministratorPermissionSetId(), Permissions.getDocuSignAdministratorPermissionSetId() }, result1);
 		System.assertEquals(new Set<Id> { Permissions.getClmUserPermissionSetId() }, result2);
 		System.assertEquals(new Set<Id> { Permissions.getClmViewerPermissionSetId() }, result3);
 	}
