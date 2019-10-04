@@ -957,6 +957,13 @@ public with sharing class AuthService {
 		return new Login(token, li);
 	}
 
+	@Future
+	private static void assignClmAdministratorPermissionSet(final Id userId) {
+		if (String.isBlank(userId)) return;
+
+		Permissions.assignClmAdministratorPermissionSet(new Set<Id> { userId });
+	}
+
 	@TestVisible
 	private static LoginInformation saveSetupCredentials(
 		final String authorizationCode,
@@ -981,7 +988,7 @@ public with sharing class AuthService {
 			createRemoteSite(rc.environment, eSignatureBaseUrl);
 
 			try {
-				AccountProducts.initialize(
+				AccountProducts aps = AccountProducts.initialize(
 					rc.environment,
 					rc.provisioningBaseUrl,
 					eSignatureBaseUrl,
@@ -996,6 +1003,8 @@ public with sharing class AuthService {
 					l.loginInformation,
 					l.loginInformation.accounts[0],
 					l.token);
+				// DFS-6068: Make sure setup user has CLM Administrator role
+				if (aps.isClmEnabled()) assignClmAdministratorPermissionSet(UserInfo.getUserId());
 			} finally {
 				AccountProducts.save();
 			}
