@@ -271,11 +271,11 @@
                                      disabled="{!v.disableGenFileReview}">
                                     <lightning:buttonMenu
                                             class="{!if(v.disableGenFileReview,'ds-genNegotiateButtonDisabled','ds-genNegotiateButtonMenu')}"
-                                            alternativeText="Send for Review" label="Send for Review"
+                                            alternativeText="{!$Label.c.SendForReview}" label="{!$Label.c.SendForReview}"
                                             menuAlignment="right" disabled="{!v.disableGenFileReview}">
-                                        <lightning:menuItem label="External Review" value="External Review"
+                                        <lightning:menuItem label="{!$Label.c.AgreementsExternalReview}" value="{!$Label.c.AgreementsExternalReview}"
                                                             onactive="{!c.externalReview}"/>
-                                        <lightning:menuItem label="Internal Approval" value="Internal Approval"
+                                        <lightning:menuItem label="{!$Label.c.AgreementsInternalApproval}" value="{!$Label.c.AgreementsInternalApproval}"
                                                             onactive="{!c.internalApproval}"/>
                                     </lightning:buttonMenu>
                                 </div>
