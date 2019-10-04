@@ -3920,7 +3920,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExportProcessing</shortDescription>
-		<value>Agreement export in progress. Please check the Agreements space after some time.</value>
+		<value>Agreement export in progress. Please check Notes and Attachments section after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExportFailed</fullName>
