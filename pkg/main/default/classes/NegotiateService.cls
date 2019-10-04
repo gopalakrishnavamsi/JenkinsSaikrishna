@@ -194,7 +194,7 @@ public with sharing class NegotiateService {
 		Boolean isUpdated = false;
 		if (folderId == null) {
 			String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
-			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
+			String sourceObjectName = sourceObjectId;
 			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
 			isUpdated = true;
 		}
