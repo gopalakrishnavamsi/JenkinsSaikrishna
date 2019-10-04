@@ -267,12 +267,12 @@
                                         label="{!$Label.c.SendForSignature}"
                                         onclick="{!c.sendForSignature}"
                                         disabled="{!v.disableSendForSignature}"/>
-
-                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.canNegotiate), ' slds-hide', '')}">
-                                    <lightning:button label="Send for Review" class="slds-button_brand"
-                                                      disabled="{!v.disableGenFileReview}"/>
-                                    <lightning:buttonMenu class="slds-button_last" alternativeText="Send for Review"
-                                                          menuAlignment="right" disabled="{!v.disableGenFileReview}">
+                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.canNegotiate), ' slds-hide', '')}"
+                                     disabled="{!v.disableGenFileReview}">
+                                    <lightning:buttonMenu
+                                            class="{!if(v.disableGenFileReview,'ds-genNegotiateButtonDisabled','ds-genNegotiateButtonMenu')}"
+                                            alternativeText="Send for Review" label="Send for Review"
+                                            menuAlignment="right" disabled="{!v.disableGenFileReview}">
                                         <lightning:menuItem label="External Review" value="External Review"
                                                             onactive="{!c.externalReview}"/>
                                         <lightning:menuItem label="Internal Approval" value="Internal Approval"
