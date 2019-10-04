@@ -21,7 +21,7 @@
             helper.setupData(component);
           } else {
             component.set('v.errType', 'error');
-            component.set('v.errMsg', stringUtils.getErrorMesDJJJDsage(response));
+            component.set('v.errMsg', stringUtils.getErrorMessage(response));
           }
         });
         $A.enqueueAction(action);
