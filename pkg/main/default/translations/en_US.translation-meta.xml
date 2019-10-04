@@ -2594,7 +2594,7 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement export in progress. Please check the Agreements space after some time.</label>
+		<label>Agreement export in progress. Please check Notes and Attachments section after some time.</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
