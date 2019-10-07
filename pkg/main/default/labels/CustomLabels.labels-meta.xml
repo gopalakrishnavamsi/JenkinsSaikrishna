@@ -4109,7 +4109,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewChooseRecipientMessage</shortDescription>
-		<value>Choose a Salesforce contact or use an email address.</value>
+		<value>Choose a Salesforce contact.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewAddRecipient</fullName>

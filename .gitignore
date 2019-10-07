@@ -15,3 +15,4 @@ package-lock.json
 .vscode/settings.json
 lintop.txt
 debug.log
+uncrustify.cfg

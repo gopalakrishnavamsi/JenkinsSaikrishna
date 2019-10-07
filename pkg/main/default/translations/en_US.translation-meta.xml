@@ -1958,7 +1958,7 @@
 		<name>ExternalReviewModalTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Choose a Salesforce contact or use an email address.</label>
+		<label>Choose a Salesforce contact.</label>
 		<name>ExternalReviewChooseRecipientMessage</name>
 	</customLabels>
 	<customLabels>
