@@ -109,7 +109,7 @@ private class HistoryAPITest {
 			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -130,7 +130,7 @@ private class HistoryAPITest {
 			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
 			System.assertEquals('Tyler Green', result.get(0).actor.fullName);
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -155,7 +155,7 @@ private class HistoryAPITest {
 			System.assertEquals('tgreen+1@springcm.com', result.get(0).recipients.get(0).email);
 			System.assertEquals('For approval', result.get(0).subject);
 			System.assertEquals('Please approve the documents', result.get(0).message);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -178,7 +178,7 @@ private class HistoryAPITest {
 			System.assertEquals('tgreen+packageb@springcm.com', result.get(0).actor.email);
 			System.assertEquals('For external review', result.get(0).subject);
 			System.assertEquals('Please review the document', result.get(0).message);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -196,7 +196,7 @@ private class HistoryAPITest {
 			System.assertEquals(2, result.size());
 			System.assertEquals(AgreementHistoryItem.ExternalReviewCompletedDocumentAndComments, result.get(0).historyItemType);
 			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -218,7 +218,7 @@ private class HistoryAPITest {
 			System.assertEquals('Full Sub', result.get(0).actor.fullName);
 			System.assertEquals('tgreen+1@springcm.com', result.get(0).actor.email);
 			System.assertNotEquals(null, result.get(0).comments);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
@@ -240,7 +240,7 @@ private class HistoryAPITest {
 			System.assertEquals('Dimitri Blaiddyd', result.get(0).actor.fullName);
 			System.assertEquals('dimitri.blaiddyd@example.com', result.get(0).actor.email);
 			System.assertNotEquals(null, result.get(0).comments);
-			System.assertEquals(null, result.get(0).previewUrl);
+			System.assertNotEquals(null, result.get(0).previewUrl);
 		}
 	}
 
