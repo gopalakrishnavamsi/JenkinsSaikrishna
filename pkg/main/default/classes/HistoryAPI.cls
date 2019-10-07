@@ -79,7 +79,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 				'',
 				'');
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
-			String previewUrl = null;
+			String previewUrl = NegotiateService.getAgreementPreviewLink(UserInfo.getUserId(), documentId.toString(), false);
 
 			if (this.data != null) {
 				String baseURL = Salesforce.baseUrl.toExternalForm() + '/' ;
@@ -90,7 +90,6 @@ public with sharing class HistoryAPI extends ScmAPI {
 					//Scenario 1 : When Action Type should map to salesforce  contact however contact is not in salesforce
 					//Scenario 2 : For  All other action type
 					User resolvedUser = emailToUser.containsKey(this.data.actor.emailAddress) ? emailToUser.get(this.data.actor.emailAddress) : null;
-					previewUrl = resolvedUser != null ? NegotiateService.getAgreementPreviewLink(resolvedUser.Id, documentId.toString(), false) : null;
 					actor = generateActorFromUser(this.data.actor, resolvedUser, baseURL);
 
 					Boolean isActionTypeMapToSalesforceContact =
@@ -103,7 +102,6 @@ public with sharing class HistoryAPI extends ScmAPI {
 					//actor = (isActionTypeMapToSalesforceContact) ? generateActorFromContact(this.data.actor, baseURL) : (Actor)generateActorFromUser(this.data.actor, baseURL);
 					if (isActionTypeMapToSalesforceContact) {
 						Contact resolvedContact = emailToContact.containsKey(this.data.actor.emailAddress) ? emailToContact.get(this.data.actor.emailAddress) : null;
-						previewUrl = resolvedContact != null ? NegotiateService.getAgreementPreviewLink(resolvedContact.Id, documentId.toString(), false) : null;
 						actor = generateActorFromContact(this.data.actor, resolvedContact, baseURL);
 					}
 				}

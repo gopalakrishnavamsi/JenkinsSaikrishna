@@ -3326,7 +3326,7 @@
 		<name>TestingEnvironment</name>
 	</customLabels>
 	<customLabels>
-		<label>Use this if you're test or stage account has a custom URL.</label>
+		<label>Use this if your test or stage account has a custom URL.</label>
 		<name>TestingEnvironmentHelpText</name>
 	</customLabels>
 	<customLabels>

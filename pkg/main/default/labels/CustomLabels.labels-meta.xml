@@ -6520,7 +6520,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TestingEnvironmentHelpText</shortDescription>
-		<value>Use this if you're test or stage account has a custom URL.</value>
+		<value>Use this if your test or stage account has a custom URL.</value>
 	</labels>
 	<labels>
 		<fullName>AccountSelected</fullName>
