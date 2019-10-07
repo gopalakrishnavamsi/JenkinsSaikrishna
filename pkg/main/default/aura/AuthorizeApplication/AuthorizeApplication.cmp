@@ -9,6 +9,7 @@
     <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="userStatusMessage" type="String" access="private"/>
     <aura:attribute name="eventOrigins" type="String[]" access="private"/>
+    <aura:attribute name="products" type="Product[]"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>

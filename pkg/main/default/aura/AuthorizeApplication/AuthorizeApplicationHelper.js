@@ -4,6 +4,7 @@
 
     var onSuccess = function (authStatus) {
       if (authStatus) {
+        this.getProductsOnAccount(component);
         component.set('v.fetchingOAuthStatus', false);
         component.set('v.isAuthorized', authStatus.isAuthorized);
         component.set('v.isConsentRequired', authStatus.isConsentRequired);
@@ -40,9 +41,10 @@
             component.set('v.isAuthorized', success);
             component.set('v.isConsentRequired', !success);
             if (component.get('v.isAuthorized')) {
+              this.getProductsOnAccount(component);
               $A.util.addClass(component.find('ds-app-auth'), 'slds-hide');
-            }else{
-              $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide'); 
+            } else {
+              $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide');
             }
             event.source.close();
           }
@@ -55,5 +57,30 @@
     };
 
     uiHelper.invokeAction(component.get('c.beginOAuth'), {target: window.location.origin}, openOAuthWindow);
+  },
+
+  getProductsOnAccount: function (component) {
+    var helper = this;
+    var getProductsAction = component.get('c.getProductsOnAccount');
+    getProductsAction.setCallback(this, function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var products = response.getReturnValue();
+        component.set('v.products', products);
+      } else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+    });
+    $A.enqueueAction(getProductsAction);
+  },
+
+  showToast: function (component, message, mode) {
+    var evt = component.getEvent('toastEvent');
+    evt.setParams({
+      show: true,
+      message: message,
+      mode: mode
+    });
+    evt.fire();
   }
 });

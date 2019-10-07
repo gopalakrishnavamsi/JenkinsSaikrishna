@@ -18,6 +18,7 @@
     <aura:attribute name="isDocuSignNegotiator" type="Boolean" default="true"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
@@ -49,7 +50,7 @@
                                         <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
                                         <aura:set attribute="else">
                                             <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
-                                                ({!v.agreements.length})</b></p>
+                                                    ({!v.agreements.length})</b></p>
                                         </aura:set>
                                     </aura:if>
                                 </aura:if>
@@ -79,7 +80,8 @@
                             </div>
                         </aura:if>
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+                                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                                products="{!v.products}"/>
                     </aura:set>
 
                     <aura:if isTrue="{!v.loading}">
@@ -125,7 +127,7 @@
 
                 <aura:if isTrue="{!not(v.isDocuSignNegotiator)}">
                     <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                            {!$Label.c.MustBeDocuSignNegotiator}
+                        {!$Label.c.MustBeDocuSignNegotiator}
                     </div>
                 </aura:if>
             </div>
