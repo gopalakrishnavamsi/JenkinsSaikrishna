@@ -21,6 +21,10 @@
 
   handlePillCloseEvent: function (component, event, helper) {
     helper.initializeRecipients(component);
+  },
+
+  handleDisableDueDate: function (component, event, helper) {
+    helper.setDisableDueDate(component);
   }
 
 });

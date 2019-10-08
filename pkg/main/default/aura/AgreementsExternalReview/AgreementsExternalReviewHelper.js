@@ -1,9 +1,12 @@
 ({
-  initializeComponent: function(component, event, helper) {
+  initializeComponent: function (component, event, helper) {
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
+    var minimumDueDate = new Date();
+    minimumDueDate = new Date(minimumDueDate.setDate(minimumDueDate.getDate() + 1));
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
+    component.set('v.minimumDueDate', minimumDueDate.toISOString().slice(0, 10));
     var dueDateElement = component.find('externalReviewDueDate');
     if (dueDateElement)
       dueDateElement.set(
@@ -14,7 +17,7 @@
       );
   },
 
-  backButtonClicked: function(component, event, helper) {
+  backButtonClicked: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '1') {
       helper.close(component);
@@ -24,9 +27,16 @@
     }
   },
 
-  nextButtonClicked: function(component, event, helper) {
+  nextButtonClicked: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
-    if (currentStep === '1') {
+    var dueDate = component.get('v.dueDate');
+    var minimumDueDate = component.get('v.minimumDueDate');
+    var disableDueDate = component.get('v.disableDueDate');
+    var daysDifference = Math.floor(
+      (Date.parse(dueDate) - Date.parse(minimumDueDate)) / 86400000
+    );
+    var dueDateValidation = disableDueDate || daysDifference >= 0;
+    if (currentStep === '1' && dueDateValidation) {
       component.set('v.currentStep', '2');
     }
     if (currentStep === '2') {
@@ -34,11 +44,11 @@
     }
   },
 
-  reloadAgreementsSpace: function(component) {
-   component.getEvent('reloadEvent').fire();
+  reloadAgreementsSpace: function (component) {
+    component.getEvent('reloadEvent').fire();
   },
 
-  getErrorMessage: function(response) {
+  getErrorMessage: function (response) {
     // TODO: Use uiHelper library.
     var message = '';
     if (response) {
@@ -51,7 +61,7 @@
     return message;
   },
 
-  resolveRecipient: function(component, recipient) {
+  resolveRecipient: function (component, recipient) {
     var self = this;
     var sourceId = self.getSourceId(recipient);
     if ($A.util.isEmpty(sourceId)) return;
@@ -60,13 +70,13 @@
     rr.setParams({
       sourceId: sourceId
     });
-    rr.setCallback(this, function(response) {
+    rr.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         if (!$A.util.isUndefinedOrNull(result)) {
           var updated = false;
           var rs = component.get('v.recipients');
-          rs.forEach(function(r) {
+          rs.forEach(function (r) {
             // Update name, email, phone, full source for new recipient
             if (self.getSourceId(r) === sourceId) {
               r.name = result.name;
@@ -88,7 +98,7 @@
     $A.enqueueAction(rr);
   },
 
-  newRecipient: function(recipient) {
+  newRecipient: function (recipient) {
     var isDefined = !$A.util.isUndefinedOrNull(recipient);
     return {
       name: isDefined ? recipient.name : null,
@@ -97,7 +107,7 @@
     };
   },
 
-  getSourceId: function(x) {
+  getSourceId: function (x) {
     if ($A.util.isUndefinedOrNull(x)) return null;
 
     var sourceId = null;
@@ -112,15 +122,15 @@
     return sourceId;
   },
 
-  show: function(component) {
+  show: function (component) {
     component.find('externalReviewAgreementsModal').show();
   },
 
-  close: function(component) {
+  close: function (component) {
     component.destroy();
   },
 
-  showToast: function(component, message, mode) {
+  showToast: function (component, message, mode) {
     var evt = component.getEvent('toastEvent');
     evt.setParams({
       show: true,
@@ -130,7 +140,7 @@
     evt.fire();
   },
 
-  setDueDateInDays: function(component) {
+  setDueDateInDays: function (component) {
     var dueDate = component.get('v.dueDate'); //date selected by end user
     var dateToday = new Date().toISOString().slice(0, 10); // today's date
     var daysDifference = Math.floor(
@@ -143,9 +153,9 @@
     }
   },
 
-  initializeRecipients: function(component) {
+  initializeRecipients: function (component) {
     var recipients = component.get('v.recipients');
-    recipients.forEach(function(recipient) {
+    recipients.forEach(function (recipient) {
       recipient.name = null;
       recipient.email = null;
       recipient.source = {};
@@ -153,7 +163,7 @@
     component.set('v.recipients', recipients);
   },
 
-  triggerSendForExternalReview: function(component) {
+  triggerSendForExternalReview: function (component) {
     component.set('v.loading', true);
     var self = this;
     var agreementDetails = component.get('v.agreementDetails');
@@ -185,7 +195,7 @@
       expiresInNumberOfDays: requestExpirationDays
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result.status === 'Waiting') {
@@ -207,5 +217,9 @@
       component.set('v.loading', false);
     });
     $A.enqueueAction(action);
+  },
+
+  setDisableDueDate: function (component) {
+    component.set('v.disableDueDate', component.get('v.disableDueDate'));
   }
 });
