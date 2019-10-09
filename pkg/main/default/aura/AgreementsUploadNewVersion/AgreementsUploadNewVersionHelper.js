@@ -87,26 +87,19 @@
       widget
         .uploadNewDocumentVersion(agreement.id.value)
         .then(function () {
-          helper.showToast(
-            component,
-            $A.get('$Label.c.UploadNewVersionSuccess'),
-            'success'
-          );
+          helper.showToast(component, stringUtils.format($A.get('$Label.c.UploadNewVersionSuccess'), agreement.name), 'success');
           helper.reloadAgreementsSpace(component);
           helper.close(component);
 
         })
         .catch(function () {
-          helper.showToast(component,
-            $A.get('$Label.c.UploadNewVersionError'),
-            'error');
+          helper.showToast(component, $A.get('$Label.c.UploadNewVersionError'), 'error');
           helper.close(component);
 
         });
     } catch (error) {
       helper.showToast(component,
-        $A.get('$Label.c.UploadNewVersionError'),
-        'error');
+        $A.get('$Label.c.UploadNewVersionError'), 'error');
       helper.close(component);
     }
   },
@@ -127,10 +120,7 @@
 
   setUploadEvent: function (component) {
     document.addEventListener('springcm:upload:fileChange', function (event) {
-      component.set(
-        'v.hasDocument',
-        event.detail && event.detail.files && event.detail.files.length > 0
-      );
+      component.set('v.hasDocument', event.detail && event.detail.files && event.detail.files.length > 0);
     });
   },
 

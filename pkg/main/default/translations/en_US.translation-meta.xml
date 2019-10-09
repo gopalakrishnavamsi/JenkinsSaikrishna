@@ -2206,7 +2206,7 @@
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>A new version of the agreement has been uploaded successfully.</label>
+		<label>A new version of "{0}" has been uploaded.</label>
 		<name>UploadNewVersionSuccess</name>
 	</customLabels>
 	<customLabels>
@@ -2590,7 +2590,7 @@
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<label>Add To Salesforce</label>
+		<label>Copy to Notes &amp; Attachments</label>
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>

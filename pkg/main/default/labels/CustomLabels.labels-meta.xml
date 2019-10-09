@@ -86,7 +86,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add Agreement to Salesforce</shortDescription>
-		<value>Add To Salesforce</value>
+		<value>Copy to Notes &amp; Attachments</value>
 	</labels>
 	<labels>
 		<fullName>AddUser</fullName>
@@ -4663,7 +4663,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadNewVersionSuccess</shortDescription>
-		<value>A new version of the agreement has been uploaded successfully.</value>
+		<value>A new version of "{0}" has been uploaded.</value>
 	</labels>
 	<labels>
 		<fullName>UploadNewVersionError</fullName>
