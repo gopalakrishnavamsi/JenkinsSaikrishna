@@ -2,13 +2,13 @@
   initializeComponent: function (component, event, helper) {
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
-    var minimumDueDate = new Date();
-    minimumDueDate = new Date(minimumDueDate.setDate(minimumDueDate.getDate() + 1));
+    var now = new Date();
+    var minimumDueDate = new Date(now.valueOf() + 86400 * 1000);
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
     component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
-    var dueDate = new Date(new Date().valueOf() + 86400000 * 30);
+    var dueDate = new Date(now.valueOf() + 86400 * 1000 * 30);
     if (dueDateElement) {
       dueDateElement.set('v.value', helper.getFormattedDate(dueDate));
     }
@@ -209,7 +209,7 @@
   // date format: 'YYYY-MM-DD'
   computeDaysDifference: function (endDate, startDate) {
     return Math.ceil(
-      (Date.parse(endDate) - Date.parse(startDate)) / 86400000
+      (Date.parse(endDate) - Date.parse(startDate)) / (86400 * 1000)
     );
   },
 
