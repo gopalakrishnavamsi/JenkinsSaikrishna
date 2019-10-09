@@ -86,7 +86,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add Agreement to Salesforce</shortDescription>
-		<value>Add To Salesforce</value>
+		<value>Copy to Notes &amp; Attachments</value>
 	</labels>
 	<labels>
 		<fullName>AddUser</fullName>
