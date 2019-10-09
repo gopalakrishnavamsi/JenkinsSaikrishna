@@ -56,7 +56,6 @@
               });
               product.roles = roles;
             } else if (product.name === 'clm' && product.status === 'active') {
-              roles.push({'label': $A.get('$Label.c.None'), 'value': ''});
               productRoles.clm.forEach(function (role) {
                 roles.push(
                   {'label': helper.capitalizeRoles(role), 'value': helper.capitalizeRoles(role)}
@@ -626,7 +625,6 @@
     component.set('v.canManageAccount', false);
     component.set('v.genRole', '');
     component.set('v.negotiateRole', '');
-    component.set('v.clmRole', '');
     helper.setFilterOptions(component);
   },
 
