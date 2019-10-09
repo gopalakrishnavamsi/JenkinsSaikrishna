@@ -166,10 +166,8 @@
     var emailBody = component.get('v.emailBody');
     var requestExpirationDays = component.get('v.requestExpirationDays');
 
-    if (component.get('v.disableDueDate')) {
+    if (component.get('v.disableDueDate') || requestExpirationDays < 0) {
       requestExpirationDays = 0;
-    } else if (requestExpirationDays <= 0) {
-      requestExpirationDays = 1;
     }
 
     var action = component.get('c.sendForExternalReview');
