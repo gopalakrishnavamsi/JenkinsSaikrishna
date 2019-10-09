@@ -1,23 +1,23 @@
 ({
-  showToast: function(component, message, mode) {
+  showToast: function (component, message, mode) {
     component.set('v.message', message);
     component.set('v.mode', mode);
     component.set('v.showToast', true);
   },
 
-  hideToast: function(component) {
+  hideToast: function (component) {
     component.find('toast').close();
   },
 
-  loadAgreements: function(component, event, helper) {
+  loadAgreements: function (component, event, helper) {
     component.set('v.loading', true);
     helper.setNameSpace(component, event, helper);
     helper.getAgreements(component, event, helper);
-    component.set('v.isAgreementLoaded',true) ;
+    component.set('v.isAgreementLoaded', true);
   },
 
-  createImportComponent: function(component) {
-    component.set('v.isAgreementLoaded',false);
+  createImportComponent: function (component) {
+    component.set('v.isAgreementLoaded', false);
     $A.createComponent(
       'c:AgreementsImport',
       {
@@ -36,10 +36,10 @@
     );
   },
 
-  setNameSpace: function(component, event, helper) {
+  setNameSpace: function (component, event, helper) {
     //set the namespace attribute
     var action = component.get('c.getNameSpace');
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
         component.set('v.namespace', response.getReturnValue());
@@ -55,24 +55,29 @@
     $A.enqueueAction(action);
   },
 
-  getAgreements: function(component, event, helper) {
+  getAgreements: function (component, event, helper) {
+    var isNegotiateOnAccount = component.get('v.negotiateProduct');
     component.set('v.loading', true);
-    var recordId = component.get('v.recordId');
-    var action = component.get('c.getAgreements');
+    if (isNegotiateOnAccount) {
+      var recordId = component.get('v.recordId');
+      var action = component.get('c.getAgreements');
 
-    action.setParams({
-      sourceObjectId: recordId
-    });
+      action.setParams({
+        sourceObjectId: recordId
+      });
 
-    action.setCallback(this, function(response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        component.set('v.agreements', response.getReturnValue());
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
+      action.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          component.set('v.agreements', response.getReturnValue());
+        } else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        }
+        component.set('v.loading', false);
+      });
+      $A.enqueueAction(action);
+    } else {
       component.set('v.loading', false);
-    });
-    $A.enqueueAction(action);
+    }
   }
 });

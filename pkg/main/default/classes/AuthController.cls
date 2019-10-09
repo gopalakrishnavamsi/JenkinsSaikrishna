@@ -70,4 +70,13 @@ public with sharing class AuthController {
 			throw Controller.wrapException(ex, 'Failed to initiate user OAuth flow.');
 		}
 	}
+
+	@AuraEnabled
+	public static List<Product> getProductsOnAccount() {
+		try {
+			return AccountProducts.getProducts();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to check Products on account.');
+		}
+	}
 }

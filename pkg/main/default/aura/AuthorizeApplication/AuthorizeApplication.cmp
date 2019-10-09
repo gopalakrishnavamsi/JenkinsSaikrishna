@@ -4,12 +4,14 @@
 
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean"/>
+    <aura:attribute name="eSignProduct" type="Boolean" default="false"/>
+    <aura:attribute name="negotiateProduct" type="Boolean" default="false"/>
+    <aura:attribute name="genProduct" type="Boolean" default="false"/>
 
     <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="userStatusMessage" type="String" access="private"/>
     <aura:attribute name="eventOrigins" type="String[]" access="private"/>
-    <aura:attribute name="products" type="Product[]"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>

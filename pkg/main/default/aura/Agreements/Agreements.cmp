@@ -15,10 +15,12 @@
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="agreements" type="Agreement[]" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isDocuSignNegotiator" type="Boolean" default="true"/>
+    <aura:attribute name="isDocuSignNegotiator" type="Boolean" default="false"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="eSignProduct" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="negotiateProduct" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="genProduct" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
@@ -60,7 +62,7 @@
                     <div class="slds-col slds-p-bottom_xx-small">
                         <lightning:button class="slds-button slds-button_neutral"
                                           onclick="{!c.importAgreements}"
-                                          disabled="{!if(or(or(v.loading, not(v.isAuthorized)), not(v.isDocuSignNegotiator)), true, false)}"
+                                          disabled="{!if(v.loading || not(v.isAuthorized)||not(v.isDocuSignNegotiator) || not(v.negotiateProduct), true, false)}"
                                           label="{!$Label.c.ImportButtonLabel}"></lightning:button>
                     </div>
                 </div>
@@ -68,7 +70,8 @@
 
             <div id="mainContent">
                 <!-- Loading State -->
-                <aura:if isTrue="{!and (v.isAuthorized, v.isDocuSignNegotiator)}">
+                <aura:if
+                        isTrue="{!v.isAuthorized &amp;&amp; v.negotiateProduct &amp;&amp; v.isDocuSignNegotiator}">
                     <aura:set attribute="else">
                         <aura:if isTrue="{!v.fetchingOAuthStatus}">
                             <div class="ds-spinner_oauth_container slds-is-relative">
@@ -81,7 +84,9 @@
                         </aura:if>
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                                 fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-                                                products="{!v.products}"/>
+                                                eSignProduct="{!v.eSignProduct}"
+                                                negotiateProduct="{!v.negotiateProduct}"
+                                                genProduct="{!v.genProduct}"/>
                     </aura:set>
 
                     <aura:if isTrue="{!v.loading}">
@@ -125,9 +130,16 @@
                     </aura:if>
                 </aura:if>
 
-                <aura:if isTrue="{!not(v.isDocuSignNegotiator)}">
+                <aura:if
+                        isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isDocuSignNegotiator)}">
                     <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                         {!$Label.c.MustBeDocuSignNegotiator}
+                    </div>
+                </aura:if>
+                <aura:if
+                        isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.negotiateProduct)}">
+                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                        {!$Label.c.NegotiateNotConfigured}
                     </div>
                 </aura:if>
             </div>
