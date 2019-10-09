@@ -206,10 +206,6 @@
     $A.enqueueAction(action);
   },
 
-  setDisableDueDate: function (component) {
-    component.set('v.disableDueDate', component.get('v.disableDueDate'));
-  },
-
   // date format: 'YYYY-MM-DD'
   computeDaysDifference: function (endDate, startDate) {
     return Math.ceil(

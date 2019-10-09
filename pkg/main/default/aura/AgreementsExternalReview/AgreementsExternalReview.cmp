@@ -89,7 +89,6 @@
                                     <lightning:input type="checkbox"
                                                      label="{!$Label.c.ExternalReviewDisableDueDate}"
                                                      checked="{!v.disableDueDate}"
-                                                     onchange="{!c.handleDisableDueDate}"
                                                      value="{!v.disableDueDate}">
                                     </lightning:input>
                                 </div>
