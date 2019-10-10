@@ -147,4 +147,14 @@ private class AuthControllerTest {
 			System.assert(!result.contains('+'));
 		}
 	}
+
+	@IsTest
+	static void test_getProductsOnAccount() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<Product> products = AuthController.getProductsOnAccount();
+			Test.stopTest();
+			System.assert(products != null);
+		}
+	}
 }

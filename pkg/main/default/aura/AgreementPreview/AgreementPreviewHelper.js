@@ -11,6 +11,7 @@
       }
     );
     component.set('v.uiHelper', uiHelper);
+    component.set('v.loading', true);
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {

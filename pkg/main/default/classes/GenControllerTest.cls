@@ -432,16 +432,6 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_getProductsOnAccount() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			List<Product> products = GenController.getProductsOnAccount();
-			Test.stopTest();
-			System.assert(products != null);
-		}
-	}
-
-	@IsTest
 	static void test_createAgreementInEOSFolder_failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

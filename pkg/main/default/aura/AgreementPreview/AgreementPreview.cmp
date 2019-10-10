@@ -33,22 +33,12 @@
 
     <div class="slds-scope">
         <aura:if isTrue="{!v.isAuthorized}">
-            <aura:if
-                    isTrue="{!not(v.negotiateProduct)}">
+            <aura:if isTrue="{!not(v.negotiateProduct)}">
                 <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                     {!$Label.c.NegotiateNotConfigured}
                 </div>
             </aura:if>
             <aura:set attribute="else">
-                <aura:if isTrue="{!v.fetchingOAuthStatus}">
-                    <div class="ds-spinner_oauth_container slds-is-relative">
-                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                            <span class="slds-assistive-text">{!$Label.c.Loading}</span>
-                            <div class="slds-spinner__dot-a"></div>
-                            <div class="slds-spinner__dot-b"></div>
-                        </div>
-                    </div>
-                </aura:if>
                 <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                         fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
                                         eSignProduct="{!v.eSignProduct}"

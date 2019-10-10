@@ -22,7 +22,9 @@
       'c:AgreementsImport',
       {
         showModal: true,
-        recordId: component.get('v.recordId')
+        recordId: component.get('v.recordId'),
+        eSignProduct: component.get('v.eSignProduct'),
+        negotiateProduct: component.get('v.negotiateProduct')
       },
       function (componentBody) {
         if (component.isValid()) {
