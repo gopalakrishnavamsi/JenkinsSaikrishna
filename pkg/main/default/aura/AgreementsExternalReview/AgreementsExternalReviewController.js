@@ -16,7 +16,7 @@
   },
 
   onDueDateChange: function (component, event, helper) {
-    helper.setDueDateInDays(component);
+    helper.setDueDateInDays(component, event, helper);
   },
 
   handlePillCloseEvent: function (component, event, helper) {

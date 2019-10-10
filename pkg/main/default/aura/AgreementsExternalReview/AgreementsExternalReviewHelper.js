@@ -6,15 +6,12 @@
     minimumDueDate = new Date(minimumDueDate.setDate(minimumDueDate.getDate() + 1));
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
-    component.set('v.minimumDueDate', minimumDueDate.toISOString().slice(0, 10));
+    component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
-    if (dueDateElement)
-      dueDateElement.set(
-        'v.value',
-        new Date(new Date().valueOf() + 86400000 * 30)
-          .toISOString()
-          .slice(0, 10)
-      );
+    var dueDate = new Date(new Date().valueOf() + 86400000 * 30);
+    if (dueDateElement) {
+      dueDateElement.set('v.value', helper.getFormattedDate(dueDate));
+    }
   },
 
   backButtonClicked: function (component, event, helper) {
@@ -32,9 +29,7 @@
     var dueDate = component.get('v.dueDate');
     var minimumDueDate = component.get('v.minimumDueDate');
     var disableDueDate = component.get('v.disableDueDate');
-    var daysDifference = Math.floor(
-      (Date.parse(dueDate) - Date.parse(minimumDueDate)) / 86400000
-    );
+    var daysDifference = helper.computeDaysDifference(dueDate, minimumDueDate);
     var dueDateValidation = disableDueDate || daysDifference >= 0;
     if (currentStep === '1' && dueDateValidation) {
       component.set('v.currentStep', '2');
@@ -140,17 +135,11 @@
     evt.fire();
   },
 
-  setDueDateInDays: function (component) {
+  setDueDateInDays: function (component, event, helper) {
     var dueDate = component.get('v.dueDate'); //date selected by end user
-    var dateToday = new Date().toISOString().slice(0, 10); // today's date
-    var daysDifference = Math.floor(
-      (Date.parse(dueDate) - Date.parse(dateToday)) / 86400000
-    );
-    if (daysDifference && daysDifference >= 0) {
-      component.set('v.requestExpirationDays', daysDifference);
-    } else {
-      component.set('v.requestExpirationDays', 0);
-    }
+    var dateToday = helper.getFormattedDate(new Date()); // today's date
+    var daysDifference = helper.computeDaysDifference(dueDate, dateToday);
+    component.set('v.requestExpirationDays', daysDifference);
   },
 
   initializeRecipients: function (component) {
@@ -175,11 +164,9 @@
 
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
+    var requestExpirationDays = component.get('v.requestExpirationDays');
 
-    var requestExpirationDays;
-    if (!component.get('v.disableDueDate')) {
-      requestExpirationDays = component.get('v.requestExpirationDays');
-    } else {
+    if (component.get('v.disableDueDate') || requestExpirationDays < 0) {
       requestExpirationDays = 0;
     }
 
@@ -221,5 +208,16 @@
 
   setDisableDueDate: function (component) {
     component.set('v.disableDueDate', component.get('v.disableDueDate'));
+  },
+
+  // date format: 'YYYY-MM-DD'
+  computeDaysDifference: function (endDate, startDate) {
+    return Math.ceil(
+      (Date.parse(endDate) - Date.parse(startDate)) / 86400000
+    );
+  },
+
+  getFormattedDate: function (date) {
+    return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
   }
 });
