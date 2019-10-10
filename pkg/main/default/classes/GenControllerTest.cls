@@ -72,7 +72,9 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_getConfiguration_existing_template() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
 
 			Test.startTest();
