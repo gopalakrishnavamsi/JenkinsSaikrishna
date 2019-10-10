@@ -18,6 +18,8 @@
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="showSetupComponent" type="Object"/>
+    <aura:attribute name="showSetupSpinner" type="Object"/>
     <aura:attribute name="eSignProduct" type="Boolean" default="false" access="private"/>
     <aura:attribute name="negotiateProduct" type="Boolean" default="false" access="private"/>
 
@@ -33,19 +35,19 @@
 
     <div class="slds-scope">
         <aura:if isTrue="{!v.isAuthorized}">
-            <aura:if isTrue="{!not(v.negotiateProduct)}">
-                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                    {!$Label.c.NegotiateNotConfigured}
-                </div>
-            </aura:if>
             <aura:set attribute="else">
                 <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                         fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
                                         eSignProduct="{!v.eSignProduct}"
                                         negotiateProduct="{!v.negotiateProduct}"/>
             </aura:set>
-            <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.negotiateProduct}">
-                <div class="fullContainer">
+            <aura:if isTrue="{!not(v.negotiateProduct)}">
+                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                    {!$Label.c.NegotiateNotConfigured}
+                </div>
+            </aura:if>
+            <div class="fullContainer">
+                <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.negotiateProduct}">
                     <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                         <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                                    agreementActionManager="{!v.agreementActionManager}"
@@ -57,14 +59,9 @@
                                                     uiHelper="{!v.uiHelper}"
                                                     currentUserEmail="{!v.currentUserEmail}"
                                                     currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
-                        <aura:if isTrue="{!v.loading}">
-                            <div class="slds-is-relative loadingContainer">
-                                <c:BlueSpinner/>
-                            </div>
-                        </aura:if>
                     </div>
-                </div>
-            </aura:if>
+                </aura:if>
+            </div>
         </aura:if>
         <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
                  visualforce="true"/>

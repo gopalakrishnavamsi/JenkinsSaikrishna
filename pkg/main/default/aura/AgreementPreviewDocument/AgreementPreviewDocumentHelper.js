@@ -1,5 +1,6 @@
 ({
   onLoad: function (component, event, helper) {
+    component.set('v.loading', true);
     var agreement = component.get('v.agreement');
     helper.setAgreementVersions(component);
     helper.loadWidget(component, agreement, agreement.href);
@@ -66,6 +67,7 @@
             isCurrentUserLatestActor,
             isCurrentUserRecipientForApproval
           );
+          component.set('v.loading', false);
           component.set('v.widget', widget);
         })
         .catch(function (err) {

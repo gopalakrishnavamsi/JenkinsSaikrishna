@@ -2,6 +2,9 @@
   onChangeIsAuthorized: function (component, event, helper) {
     if (component.get('v.isAuthorized') && component.get('v.negotiateProduct')) {
       helper.getAgreementDetails(component);
+    } else {
+      var showSetupComponent = component.get('v.showSetupComponent');
+      showSetupComponent();
     }
   },
 

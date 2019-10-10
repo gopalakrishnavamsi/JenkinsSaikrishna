@@ -1,5 +1,7 @@
 ({
   getAgreementDetails: function (component) {
+    var showSetupSpinner = component.get('v.showSetupSpinner');
+    showSetupSpinner();
     var agreementId = component.get('v.agreementId');
     var action = component.get('c.getNameSpace');
     var uiHelper = new UIHelper(
@@ -11,7 +13,6 @@
       }
     );
     component.set('v.uiHelper', uiHelper);
-    component.set('v.loading', true);
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
@@ -24,11 +25,17 @@
           .then(function (agreement) {
             component.set('v.agreement', agreement);
             component.set('v.agreementActionManager', manager);
+            var showSetupComponent = component.get('v.showSetupComponent');
+            showSetupComponent();
           })
           .catch(function (error) {
+            var showSetupComponent = component.get('v.showSetupComponent');
+            showSetupComponent();
             uiHelper.showToast(error, uiHelper.ToastMode.ERROR);
           });
       } else {
+        var showSetupComponent = component.get('v.showSetupComponent');
+        showSetupComponent();
         uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
         component.set('v.showToolBarAndPreview', false);
       }
@@ -58,6 +65,10 @@
           2000
         );
       }
+    }
+    if (params && params.isLoading === false && params.isAuthorizeEvent) {
+      var showSetupComponent = component.get('v.showSetupComponent');
+      showSetupComponent();
     }
   },
 
