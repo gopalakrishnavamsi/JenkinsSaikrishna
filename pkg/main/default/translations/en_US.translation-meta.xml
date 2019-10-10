@@ -2,7 +2,7 @@
 <!-- smartling.translate_paths = Translations/customApplications/label, Translations/customLabels/label, Translations/customPageWebLinks/label, Translations/customTabs/label -->
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
 	<customApplications>
-		<label>DocuSign</label>
+		<label>DocuSign Apps Launcher</label>
 		<name>DocuSignForSalesforceCore</name>
 	</customApplications>
 	<customLabels>
