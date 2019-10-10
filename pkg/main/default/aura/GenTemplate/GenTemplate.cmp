@@ -23,10 +23,10 @@
     <aura:attribute name="saving" type="Boolean" default="{!false}"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isDocuSignGenerator" type="Boolean" default="true"/>
+    <aura:attribute name="genProduct" type="Boolean" default="false" access="private"/>
 
     <!-- handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="showToast" event="c:strike_evt" action="{!c.showToast}"/>
     <aura:handler name="publishedButtons" event="c:strike_evt" action="{!c.publishedButtons}"/>
 
@@ -38,6 +38,11 @@
             <div class="slds-notify__content">
                 <h2 class="slds-text-heading_small">{!v.errMsg}</h2>
             </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.genProduct)}">
+        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+            {!$Label.c.GenNotConfigured}
         </div>
     </aura:if>
     <aura:if isTrue="{!empty(v.errMsg)}">
@@ -84,7 +89,7 @@
             <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak"></div>
         </div>
         <!-- /Saving Spinner -->
-        <aura:if isTrue="{!and(v.isAuthorized , v.isDocuSignGenerator)}">
+        <aura:if isTrue="{!and(v.isAuthorized , v.genProduct)}">
             <div class="slds-container slds-container_x-large slds-container_center slds-p-around_x-large">
                 <!-- Path -->
                 <div class="ds-path slds-path slds-card slds-is-expanded slds-p-horizontal_medium slds-p-top_small">
@@ -192,12 +197,13 @@
                 </div>
                 <!-- /Path -->
             </div>
-            <aura:set attribute="else">
-                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                        fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
-            </aura:set>
         </aura:if>
 
+    </aura:if>
+    <aura:if isTrue="{!not(v.isAuthorized)}">
+        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                genProduct="{!v.genProduct}"/>
     </aura:if>
     <!-- What You Will Need Modal -->
     <c:strike_modal aura:id="whatYouWillNeedModal" title="What you will Need" showModal="{!v.showWhatYouWillNeedModal}"

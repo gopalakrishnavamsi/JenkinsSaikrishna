@@ -17,6 +17,7 @@
             }
             var loadingEvent = component.getEvent('loadingEvent');
             loadingEvent.setParam('isLoading', authStatus.isAuthorized);
+            loadingEvent.setParam('isAuthorizeEvent', true);
             loadingEvent.fire();
           })
         );
@@ -43,14 +44,16 @@
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
             helper.getProductsOnAccount(component, success).then(
               $A.getCallback(function () {
-                component.set('v.isAuthorized', success);
-                component.set('v.isConsentRequired', !success);
-                if (component.get('v.isAuthorized')) {
+                if (success) {
                   $A.util.addClass(component.find('ds-app-auth'), 'slds-hide');
                 } else {
                   $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide');
                 }
-                event.source.close();
+                component.set('v.isAuthorized', success);
+                component.set('v.isConsentRequired', !success);
+                if (event.source) {
+                  event.source.close();
+                }
               })
             );
           }
@@ -83,6 +86,8 @@
                     component.set('v.genProduct', true);
                   } else if (product.name === 'negotiate') {
                     component.set('v.negotiateProduct', true);
+                  } else if (product.name === 'clm') {
+                    component.set('v.clmProduct', true);
                   }
                 });
               }

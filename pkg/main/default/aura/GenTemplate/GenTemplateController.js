@@ -1,5 +1,5 @@
 ({
-  init: function (component, event, helper) {
+  onChangeIsAuthorized: function (component, event, helper) {
     helper.initSetup(component);
   },
 

@@ -522,10 +522,7 @@ public with sharing class GenService {
 	}
 
 	public static Gen.Template getTemplate(final Id templateId) {
-		if (!Permissions.isDocuSignAdministrator() && !Permissions.isDocuSignGenerator()) {
-			throw UnauthorizedException.notDocuSignGenerator();
-		}
-
+		Permissions.verifyIsDocuSignGenerator();
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 
 		return DB.queryTemplate(templateId);

@@ -49,12 +49,14 @@
   loadingEvent: function (component, event) {
     var params = event.getParams();
     if (params && params.isLoading === true) {
-      setTimeout(
-        $A.getCallback(function () {
-          window.location.reload();
-        }),
-        2000
-      );
+      if (!params.isAuthorizeEvent) {
+        setTimeout(
+          $A.getCallback(function () {
+            window.location.reload();
+          }),
+          2000
+        );
+      }
     }
   },
 
@@ -88,20 +90,5 @@
     } else {
       helper.hideToast(component);
     }
-  },
-
-  isEsignEnabled: function (component) {
-    var helper = this;
-    var isEsignEnabledAction = component.get('c.isEsignEnabled');
-    isEsignEnabledAction.setCallback(this, $A.getCallback(function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var canSendForSignature = response.getReturnValue();
-        component.set('v.canSendForSignature', canSendForSignature);
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-    }));
-    $A.enqueueAction(isEsignEnabledAction);
   }
 });

@@ -20,7 +20,6 @@
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
     <aura:attribute name="eSignProduct" type="Boolean" default="false" access="private"/>
     <aura:attribute name="negotiateProduct" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="genProduct" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
@@ -71,7 +70,7 @@
             <div id="mainContent">
                 <!-- Loading State -->
                 <aura:if
-                        isTrue="{!v.isAuthorized &amp;&amp; v.negotiateProduct &amp;&amp; v.isDocuSignNegotiator}">
+                        isTrue="{!v.isAuthorized}">
                     <aura:set attribute="else">
                         <aura:if isTrue="{!v.fetchingOAuthStatus}">
                             <div class="ds-spinner_oauth_container slds-is-relative">
@@ -85,8 +84,7 @@
                         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                                 fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
                                                 eSignProduct="{!v.eSignProduct}"
-                                                negotiateProduct="{!v.negotiateProduct}"
-                                                genProduct="{!v.genProduct}"/>
+                                                negotiateProduct="{!v.negotiateProduct}"/>
                     </aura:set>
 
                     <aura:if isTrue="{!v.loading}">
@@ -99,7 +97,7 @@
                         </div>
                     </aura:if>
 
-                    <aura:if isTrue="{!not(v.loading)}">
+                    <aura:if isTrue="{!not(v.loading) &amp;&amp; v.isDocuSignNegotiator &amp;&amp; v.negotiateProduct}">
                         <div class="{!if(not(v.agreements.length > 0), '', 'slds-hide')}">
                             <li class="slds-item">
                                 <div class="slds-illustration slds-illustration_small slds-p-around_large">
@@ -122,7 +120,8 @@
                                             namespace="{!v.namespace}"
                                             sourceId="{!v.recordId}"
                                             agreementDetails="{!agreementDetails}"
-                                            agreementIndex="{!index}"/>
+                                            agreementIndex="{!index}"
+                                            eSignProduct="{!v.eSignProduct}"/>
                                     <div class="ds-agreements_spacing"/>
                                 </li>
                             </aura:iteration>

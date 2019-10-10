@@ -1,7 +1,8 @@
 ({
-  onLoad: function (component, event, helper) {
-    helper.isEsignEnabled(component);
-    helper.getAgreementDetails(component);
+  onChangeIsAuthorized: function (component, event, helper) {
+    if (component.get('v.isAuthorized') && component.get('v.negotiateProduct')) {
+      helper.getAgreementDetails(component);
+    }
   },
 
   handleToastEvent: function (component, event, helper) {
