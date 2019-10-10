@@ -10,11 +10,11 @@
   },
 
   handleLoadingEvent: function (component, event, helper) {
-    helper.loadingEvent(component, event, helper);
+    helper.loadingEvent(component, event);
   },
 
   handleReloadEvent: function (component, event, helper) {
-    helper.reLoadingEvent(component, event, helper);
+    helper.reLoadingEvent(component);
   }
 
 });

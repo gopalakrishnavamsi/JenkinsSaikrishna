@@ -3458,6 +3458,10 @@
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign Esignature is not configured for your account.</label>
+		<name>EsignNotConfigured</name>
+	</customLabels>
+	<customLabels>
 		<label>Edit Object</label>
 		<name>EditObject</name>
 	</customLabels>

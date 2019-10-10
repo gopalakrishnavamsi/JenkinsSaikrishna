@@ -1,6 +1,6 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
-    if (component.get('v.isAuthorized')) {
+    if (component.get('v.isAuthorized') && component.get('v.eSignProduct')) {
       helper.createEnvelope(component, component.get('v.recordId'));
     }
   },
@@ -83,7 +83,7 @@
       var selectedFileTitles = '';
 
       fileCheckboxes.forEach(function (file) {
-        if (typeof(file) !== 'undefined' && file.get('v.checked')) {
+        if (typeof (file) !== 'undefined' && file.get('v.checked')) {
           selectedFileTitles += ', ' + documents[file.get('v.value')].name;
         }
       });
