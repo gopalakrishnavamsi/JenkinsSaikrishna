@@ -1,20 +1,20 @@
 ({
-  initializeComponent: function(component, event, helper) {
+  initializeComponent: function (component, event, helper) {
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
+    var now = new Date();
+    var minimumDueDate = helper.getDateWithDaysOffset(now, 1);
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
+    component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
-    if (dueDateElement)
-      dueDateElement.set(
-        'v.value',
-        new Date(new Date().valueOf() + 86400000 * 30)
-          .toISOString()
-          .slice(0, 10)
-      );
+    var dueDate = helper.getDateWithDaysOffset(now, 30);
+    if (dueDateElement) {
+      dueDateElement.set('v.value', helper.getFormattedDate(dueDate));
+    }
   },
 
-  backButtonClicked: function(component, event, helper) {
+  backButtonClicked: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
     if (currentStep === '1') {
       helper.close(component);
@@ -24,21 +24,27 @@
     }
   },
 
-  nextButtonClicked: function(component, event, helper) {
+  nextButtonClicked: function (component, event, helper) {
     var currentStep = component.get('v.currentStep');
-    if (currentStep === '1') {
-      component.set('v.currentStep', '2');
-    }
-    if (currentStep === '2') {
-      helper.triggerSendForExternalReview(component);
+    var dueDate = component.get('v.dueDate');
+    var minimumDueDate = component.get('v.minimumDueDate');
+    var daysDifference = helper.computeDaysDifference(dueDate, minimumDueDate);
+    var dueDateIsValid = daysDifference >= 0;
+
+    if (dueDateIsValid) {
+      if (currentStep === '1') {
+        component.set('v.currentStep', '2');
+      } else if (currentStep === '2') {
+        helper.triggerSendForExternalReview(component);
+      }
     }
   },
 
-  reloadAgreementsSpace: function(component) {
-   component.getEvent('reloadEvent').fire();
+  reloadAgreementsSpace: function (component) {
+    component.getEvent('reloadEvent').fire();
   },
 
-  getErrorMessage: function(response) {
+  getErrorMessage: function (response) {
     // TODO: Use uiHelper library.
     var message = '';
     if (response) {
@@ -51,7 +57,7 @@
     return message;
   },
 
-  resolveRecipient: function(component, recipient) {
+  resolveRecipient: function (component, recipient) {
     var self = this;
     var sourceId = self.getSourceId(recipient);
     if ($A.util.isEmpty(sourceId)) return;
@@ -60,13 +66,13 @@
     rr.setParams({
       sourceId: sourceId
     });
-    rr.setCallback(this, function(response) {
+    rr.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         if (!$A.util.isUndefinedOrNull(result)) {
           var updated = false;
           var rs = component.get('v.recipients');
-          rs.forEach(function(r) {
+          rs.forEach(function (r) {
             // Update name, email, phone, full source for new recipient
             if (self.getSourceId(r) === sourceId) {
               r.name = result.name;
@@ -88,7 +94,7 @@
     $A.enqueueAction(rr);
   },
 
-  newRecipient: function(recipient) {
+  newRecipient: function (recipient) {
     var isDefined = !$A.util.isUndefinedOrNull(recipient);
     return {
       name: isDefined ? recipient.name : null,
@@ -97,7 +103,7 @@
     };
   },
 
-  getSourceId: function(x) {
+  getSourceId: function (x) {
     if ($A.util.isUndefinedOrNull(x)) return null;
 
     var sourceId = null;
@@ -112,15 +118,15 @@
     return sourceId;
   },
 
-  show: function(component) {
+  show: function (component) {
     component.find('externalReviewAgreementsModal').show();
   },
 
-  close: function(component) {
+  close: function (component) {
     component.destroy();
   },
 
-  showToast: function(component, message, mode) {
+  showToast: function (component, message, mode) {
     var evt = component.getEvent('toastEvent');
     evt.setParams({
       show: true,
@@ -130,22 +136,16 @@
     evt.fire();
   },
 
-  setDueDateInDays: function(component) {
+  setDueDateInDays: function (component, event, helper) {
     var dueDate = component.get('v.dueDate'); //date selected by end user
-    var dateToday = new Date().toISOString().slice(0, 10); // today's date
-    var daysDifference = Math.floor(
-      (Date.parse(dueDate) - Date.parse(dateToday)) / 86400000
-    );
-    if (daysDifference && daysDifference >= 0) {
-      component.set('v.requestExpirationDays', daysDifference);
-    } else {
-      component.set('v.requestExpirationDays', 0);
-    }
+    var dateToday = helper.getFormattedDate(new Date()); // today's date
+    var daysDifference = helper.computeDaysDifference(dueDate, dateToday);
+    component.set('v.requestExpirationDays', daysDifference);
   },
 
-  initializeRecipients: function(component) {
+  initializeRecipients: function (component) {
     var recipients = component.get('v.recipients');
-    recipients.forEach(function(recipient) {
+    recipients.forEach(function (recipient) {
       recipient.name = null;
       recipient.email = null;
       recipient.source = {};
@@ -153,7 +153,7 @@
     component.set('v.recipients', recipients);
   },
 
-  triggerSendForExternalReview: function(component) {
+  triggerSendForExternalReview: function (component) {
     component.set('v.loading', true);
     var self = this;
     var agreementDetails = component.get('v.agreementDetails');
@@ -165,14 +165,7 @@
 
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
-
-    var requestExpirationDays;
-    if (!component.get('v.disableDueDate')) {
-      requestExpirationDays = component.get('v.requestExpirationDays');
-    } else {
-      requestExpirationDays = 0;
-    }
-
+    var requestExpirationDays = component.get('v.requestExpirationDays');
     var action = component.get('c.sendForExternalReview');
 
     action.setParams({
@@ -185,7 +178,7 @@
       expiresInNumberOfDays: requestExpirationDays
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
         if (result.status === 'Waiting') {
@@ -207,5 +200,21 @@
       component.set('v.loading', false);
     });
     $A.enqueueAction(action);
+  },
+
+  computeDaysDifference: function (endDate, startDate) {
+    return Math.ceil(
+      (Date.parse(endDate) - Date.parse(startDate)) / (86400 * 1000)
+    );
+  },
+
+  // add or subtract days from given date
+  getDateWithDaysOffset: function (date, days) {
+    return new Date(date.valueOf() + 86400 * 1000 * days);
+  },
+
+  // output date format: 'YYYY-MM-DD'
+  getFormattedDate: function (date) {
+    return date.toISOString().slice(0, 10);
   }
 });

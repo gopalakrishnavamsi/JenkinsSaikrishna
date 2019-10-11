@@ -1971,10 +1971,6 @@
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
-		<label>期日設定を無効にする</label>
-		<name>ExternalReviewDisableDueDate</name>
-	</customLabels>
-	<customLabels>
 		<label>メッセージのカスタマイズ</label>
 		<name>ExternalReviewPersonalizeMessage</name>
 	</customLabels>
