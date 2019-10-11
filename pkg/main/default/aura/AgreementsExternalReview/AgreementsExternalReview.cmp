@@ -10,8 +10,8 @@
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="recipients" type="Recipient[]"/>
     <aura:attribute name="currentStep" type="String" access="private"/>
-    <aura:attribute name="disableDueDate" type="Boolean" access="private"/>
     <aura:attribute name="dueDate" type="Date" access="private"/>
+    <aura:attribute name="minimumDueDate" type="Date" access="private"/>
     <aura:attribute name="requestExpirationDays" type="Integer" access="private"/>
     <aura:attribute name="emailSubject" type="String"
                     default="{!$Label.c.ExternalReviewEmailSubject}" access="private"/>
@@ -79,12 +79,9 @@
                                 <div class="slds-size_4-of-7 slds-col">
                                     <lightning:input aura:id="externalReviewDueDate" type="date"
                                                      label="{!$Label.c.ExternalReviewSetDueDate}"
-                                                     name="date" disabled="{!v.disableDueDate}" value="{!v.dueDate}"/>
-                                </div>
-                                <div class="slds-size_3-of-7 slds-p-left--x-small slds-col slds-p-bottom--x-small">
-                                    <lightning:input type="checkbox" label="{!$Label.c.ExternalReviewDisableDueDate}"
-                                                     checked="{!v.disableDueDate}"
-                                                     value="{!v.disableDueDate}"></lightning:input>
+                                                     name="date"
+                                                     value="{!v.dueDate}"
+                                                     min="{!v.minimumDueDate}"/>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +153,7 @@
                                   onclick="{!c.backButtonClicked}"
                                   disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
                 <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
-                                  disabled="{!if(and(v.recipients[0].name != null, not(v.loading)), false, true)}"
+                                  disabled="{!if(v.recipients[0].name == null || v.loading || lessthanorequal(v.requestExpirationDays, 0), true, false)}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
             </div>
         </aura:set>
