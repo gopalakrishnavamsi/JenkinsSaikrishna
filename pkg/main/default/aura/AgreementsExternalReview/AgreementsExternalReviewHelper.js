@@ -3,12 +3,12 @@
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
     var now = new Date();
-    var minimumDueDate = new Date(now.valueOf() + 86400 * 1000);
+    var minimumDueDate = helper.getDateWithDaysOffset(now, 1);
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
     component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
-    var dueDate = new Date(now.valueOf() + 86400 * 1000 * 30);
+    var dueDate = helper.getDateWithDaysOffset(now, 30);
     if (dueDateElement) {
       dueDateElement.set('v.value', helper.getFormattedDate(dueDate));
     }
@@ -206,14 +206,19 @@
     $A.enqueueAction(action);
   },
 
-  // date format: 'YYYY-MM-DD'
   computeDaysDifference: function (endDate, startDate) {
     return Math.ceil(
       (Date.parse(endDate) - Date.parse(startDate)) / (86400 * 1000)
     );
   },
 
+  // add or subtract days from given date
+  getDateWithDaysOffset: function (date, days) {
+    return new Date(date.valueOf() + 86400 * 1000 * days);
+  },
+
+  // output date format: 'YYYY-MM-DD'
   getFormattedDate: function (date) {
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    return date.toISOString().slice(0, 10);
   }
 });
