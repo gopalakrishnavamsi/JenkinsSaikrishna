@@ -1970,10 +1970,6 @@
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
-		<label>Fälligkeitsdatum deaktivieren</label>
-		<name>ExternalReviewDisableDueDate</name>
-	</customLabels>
-	<customLabels>
 		<label>Nachricht personalisieren</label>
 		<name>ExternalReviewPersonalizeMessage</name>
 	</customLabels>
@@ -2920,15 +2916,7 @@
 	<customLabels>
 		<label>Fehler beim Rückruf.</label>
 		<name>CallbackFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign Agreements – Hilfe</label>
-		<name>DocuSignAgreementsHelp</name>
-	</customLabels>
-	<customLabels>
-		<label>Hier finden Sie alles rund um DocuSign Agreements. Lesen Sie beispielsweise FAQs, Produktdokumentationen und Whitepapers.</label>
-		<name>DocuSignAgreementsHelpSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>FAQs aufrufen</label>
 		<name>VisitFAQ</name>
@@ -3020,19 +3008,11 @@
 	<customLabels>
 		<label>DocuSign Agreements – Grundlagen</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>
-	<customLabels>
-		<label>Mit DocuSign Agreements verwalten Sie Dokumente und nutzen Salesforce-Daten.</label>
-		<name>DocuSignAgreementsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Installieren und los gehts</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>
-	<customLabels>
-		<label>Alles zu den ersten Schritten mit DocuSign Agreements.</label>
-		<name>InstallationSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>DocuSign-CLM-Benutzer verwalten</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3044,11 +3024,7 @@
 	<customLabels>
 		<label>Salesforce-Objekte zuordnen</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>
-	<customLabels>
-		<label>Salesforce-Objekte von DocuSign Agreements zuordnen.</label>
-		<name>MappingObjectsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Objektordner und Layoutkonfigurationen verwalten</label>
 		<name>MapObjectFolders</name>

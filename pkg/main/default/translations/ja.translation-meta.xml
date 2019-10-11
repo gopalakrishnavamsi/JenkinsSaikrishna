@@ -1971,10 +1971,6 @@
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
-		<label>期日設定を無効にする</label>
-		<name>ExternalReviewDisableDueDate</name>
-	</customLabels>
-	<customLabels>
 		<label>メッセージのカスタマイズ</label>
 		<name>ExternalReviewPersonalizeMessage</name>
 	</customLabels>
@@ -2921,15 +2917,7 @@
 	<customLabels>
 		<label>コールバックに失敗しました。</label>
 		<name>CallbackFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign Agreementsのヘルプ</label>
-		<name>DocuSignAgreementsHelp</name>
-	</customLabels>
-	<customLabels>
-		<label>ここでは、DocuSign Agreementsを活用するためのすべての情報を入手できます。FAQ、製品ガイド、ホワイトペーパーなどを参照できます。</label>
-		<name>DocuSignAgreementsHelpSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>FAQの参照</label>
 		<name>VisitFAQ</name>
@@ -3021,19 +3009,11 @@
 	<customLabels>
 		<label>DocuSign Agreementsを理解する</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign Agreementsでどのように文書を管理し、Salesforceデータを使用するかについて説明します。</label>
-		<name>DocuSignAgreementsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>インストールと最初の操作</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign Agreementsをインストールして使用を開始する方法について</label>
-		<name>InstallationSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>DocuSign CLMユーザーの管理</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3045,11 +3025,7 @@
 	<customLabels>
 		<label>Salesforceオブジェクトのマッピング</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign AgreementsでSalesforceオブジェクトをマッピングする方法について</label>
-		<name>MappingObjectsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>オブジェクトフォルダーの管理とレイアウト設定</label>
 		<name>MapObjectFolders</name>

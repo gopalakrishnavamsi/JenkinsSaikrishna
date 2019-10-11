@@ -870,7 +870,7 @@ private class AccountProductsTest {
 				for (UUID pId : result.get(p).keySet()) {
 					System.assert(UUID.isNotEmpty(pId));
 					Product.Role pr = result.get(p).get(pId);
-					System.assert(Product.isValidRole(pr));
+					System.assertNotEquals(null, pr);
 					System.assertEquals(pId, pr.id);
 				}
 			}
@@ -953,7 +953,7 @@ private class AccountProductsTest {
 			for (UUID pId : result.get(p).keySet()) {
 				System.assert(UUID.isNotEmpty(pId));
 				Product.Role pr = result.get(p).get(pId);
-				System.assert(Product.isValidRole(pr));
+				System.assertNotEquals(null, pr);
 				System.assertEquals(pId, pr.id);
 			}
 		}

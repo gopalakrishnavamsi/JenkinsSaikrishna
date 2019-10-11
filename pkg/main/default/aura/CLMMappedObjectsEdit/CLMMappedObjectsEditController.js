@@ -1,6 +1,12 @@
 ({
 
 	onInit: function (component, event, helper) {
+		var defaultPathValues = [
+			{ label: $A.get('$Label.c.SelectObject'), index: '1' },
+			{ label: $A.get('$Label.c.NameObjectFolder'), index: '2' },
+			{ label: $A.get('$Label.c.ChooseLocation'), index: '3' }
+		];
+		component.set('v.pathValues', defaultPathValues);
 		helper.showLoader(component);
 		component.set('v.clmFolderTree', [
 			{
@@ -109,24 +115,18 @@
 	},
 
 	back: function (component, event, helper) {
-		var currentStep = component.get('v.currentStep');
-		if (currentStep === '3') {
-			helper.UpdateUI(component, '2');
-		} else if (currentStep === '2') {
-			helper.UpdateUI(component, '1');
-		} else if (currentStep === '1') {
-			helper.fireApplicationEvent(component, {
-				navigateTo: { index: '1' },
-				fromComponent: 'CLMMappedObjectsEdit',
-				toComponent: 'CLMBreadcrumbs'
-			}, 'CLMBreadcrumbsEvent');
-			helper.fireApplicationEvent(component, {
-				componentName: 'CLMMappedObjectsHome',
-				fromComponent: 'CLMMappedObjectsEdit',
-				toComponent: 'CLMIntegrationLayout',
-				type: 'show'
-			}, 'CLMNavigationEvent');
-		}
+		helper.fireApplicationEvent(component, {
+			fromComponent: 'CLMMappedObjectsHome',
+			toComponent: 'CLMSetupLayout',
+			type: 'update',
+			tabIndex: '3',
+		}, 'CLMNavigationEvent');
+		helper.fireApplicationEvent(component, {
+			componentName: 'CLMMappedObjectsHome',
+			fromComponent: 'CLMMappedObjectsEdit',
+			toComponent: 'CLMIntegrationLayout',
+			type: 'show'
+		}, 'CLMNavigationEvent');
 	},
 
 	gotNextStep: function (component, event, helper) {

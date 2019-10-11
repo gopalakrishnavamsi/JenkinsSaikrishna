@@ -40,6 +40,16 @@
 			},
 			'CLMNavigationEvent'
 		);
+		helper.fireApplicationEvent(
+			component,
+			{
+				fromComponent: 'CLMMappedObjectsHome',
+				toComponent: 'CLMSetupLayout',
+				type: 'update',
+				tabIndex: '3.1'
+			},
+			'CLMNavigationEvent'
+		);
 		var cmpEvent = component.getEvent('CLMScopedNotificationEvent');
 		cmpEvent.fire();
 	},

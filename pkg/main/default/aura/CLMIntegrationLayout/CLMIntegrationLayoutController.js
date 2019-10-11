@@ -1,27 +1,38 @@
 ({
-  onInit: function (component, event, helper) {
-    helper.setBreadcrumbDefaultValues(component);
-    helper.setPathDefaultValues(component);
+  onInit: function (component) {
+    component.set('v.isEmpty', false);
   },
 
-  updateFromBreadCrumbUI: function (component, event) {
-    var navigateTo = event.getParam('navigateTo');
-    var fromComponent = event.getParam('fromComponent');
-    var toComponent = event.getParam('toComponent');
-    if (
-      (toComponent === 'CLMIntegrationLayout' || toComponent === 'ANY') &&
-      fromComponent !== 'CLMIntegrationLayout'
-    ) {
-      if (
-        $A.util.isUndefinedOrNull(navigateTo) &&
-        navigateTo.navigateTo === 'CLMMappedObjectsHome'
-      ) {
-        component.set('v.showHelp', true);
-        component.set('v.showTrouble', true);
-        component.set('v.showPathAndNew', false);
-        component.set('v.showObjFolderCard', false);
-      }
-    }
+  gotoNew: function (component, event, helper) {
+    //fire event to display CLMCardModel
+    helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {});
+    component.set('v.showHelp', false);
+    component.set('v.showTrouble', false);
+    component.set('v.showPathAndNew', true);
+    component.set('v.showObjFolderCard', true);
+    helper.fireApplicationEvent(
+      component,
+      {
+        title: $A.get('$Label.c.SelectObject'),
+        summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
+        index: '1',
+        fromComponent: 'CLMIntegrationLayout',
+        toComponent: 'CLMCardModel',
+        type: 'update'
+      },
+      'CLMCardModelEvent'
+    );
+    //update layout DFS-0000
+    helper.fireApplicationEvent(
+      component,
+      {
+        fromComponent: 'CLMMappedObjectsHome',
+        toComponent: 'CLMSetupLayout',
+        type: 'update',
+        tabIndex: '3.1'
+      },
+      'CLMNavigationEvent'
+    );
   },
 
   updateUI: function (component, event, helper) {
@@ -36,7 +47,6 @@
     ) {
       if (type === 'show' && componentName === 'CLMCardModel') {
         helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {});
-        helper.setBreadcrumbDefaultValues(component);
         component.set('v.showHelp', false);
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
@@ -45,9 +55,7 @@
           component,
           {
             title: $A.get('$Label.c.SelectObject'),
-            summary: $A
-              .get('$Label.c.SelectObjectHelpBody')
-              .concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
+            summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
             index: '1',
             fromComponent: 'CLMIntegrationLayout',
             toComponent: 'CLMCardModel',
@@ -65,20 +73,12 @@
           selectedObjDetails: data.objDetails,
           isEdit: true
         });
-        helper.setBreadcrumbEditObjectValues(component);
-        helper.fireApplicationEvent(
-          component,
-          {
-            navigateTo: { index: '2' },
-            fromComponent: 'CLMMappedObjectsHome',
-            toComponent: 'CLMBreadcrumbs'
-          },
-          'CLMBreadcrumbsEvent'
-        );
         component.set('v.showHelp', false);
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
         component.set('v.showObjFolderCard', true);
+      } else if (type === 'hide' && componentName === 'CLMCardModel') {
+        component.set('v.isEmpty', true);
       }
     }
   },
@@ -122,12 +122,5 @@
       },
       'CLMNavigationEvent'
     );
-  },
-
-  updateUIWithAdditionalHelpCard: function (component, event) {
-    var navigateTo = event.getParam('navigateTo');
-    if (navigateTo.index === '2' || navigateTo.index === '3') {
-      component.set('v.showObjFolderCard', true);
-    }
-  }
+  }  
 });

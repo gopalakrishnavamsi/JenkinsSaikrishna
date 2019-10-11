@@ -53,10 +53,8 @@
   margin-bottom: 0;
 }
 
-.THIS .ds-separator .slds-dropdown:nth-child(3):before {
-  content: '';
-  border-top: 1px solid #dddbda;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  display: block;
+.THIS .ds-separator a {
+  cursor: default !important;
+  text-decoration: none;
+  color: black;
 }

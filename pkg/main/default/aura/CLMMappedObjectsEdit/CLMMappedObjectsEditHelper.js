@@ -76,18 +76,8 @@
 		var selectedObjDetails = component.get('v.selectedObjDetails');
 		var selectedObjFieldName = component.get('v.selectedObjFieldName');
 		if (index === '2' && selectedObjDetails) {
-			helper.fireApplicationEvent(
-				component,
-				{
-					title: $A.get('$Label.c.NameObjectFolder'),
-					summary: $A.get('$Label.c.SelectFieldInfo'),
-					index: '2',
-					fromComponent: 'CLMMappedObjectEdit',
-					toComponent: 'CLMCardModel',
-					type: 'update'
-				},
-				'CLMCardModelEvent'
-			);
+			component.set('v.cardtitle', $A.get('$Label.c.NameObjectFolder'));
+			component.set('v.cardSummary', $A.get('$Label.c.SelectFieldInfo'));
 			component.set('v.currentStep', '2');
 			component.set(
 				'v.title',
@@ -171,18 +161,8 @@
 				);
 				return;
 			}
-			helper.fireApplicationEvent(
-				component,
-				{
-					title: $A.get('$Label.c.ChooseLocation'),
-					summary: $A.get('$Label.c.ChooseLocationInfo'),
-					index: '3',
-					fromComponent: 'CLMMappedObjectEdit',
-					toComponent: 'CLMCardModel',
-					type: 'update'
-				},
-				'CLMCardModelEvent'
-			);
+			component.set('v.cardtitle', $A.get('$Label.c.ChooseLocation'));
+			component.set('v.cardSummary', $A.get('$Label.c.ChooseLocationInfo'));
 			component.set('v.currentStep', '3');
 			component.set(
 				'v.title',
@@ -210,20 +190,8 @@
 			);
 			helper.updatePath(component);
 		} else {
-			helper.fireApplicationEvent(
-				component,
-				{
-					title: $A.get('$Label.c.SelectObject'),
-					summary: $A
-						.get('$Label.c.SelectObjectHelpBody')
-						.concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
-					index: '1',
-					fromComponent: 'CLMMappedObjectEdit',
-					toComponent: 'CLMCardModel',
-					type: 'update'
-				},
-				'CLMCardModelEvent'
-			);
+			component.set('v.cardtitle', $A.get('$Label.c.SelectObject'));
+			component.set('v.cardSummary', $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')));
 			component.set('v.currentStep', '1');
 			component.set('v.title', $A.get('$Label.c.YourSalesforceObjects'));
 			component.set('v.titleHelpText', $A.get('$Label.c.AllObjectsListed'));

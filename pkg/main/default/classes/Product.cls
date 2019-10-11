@@ -183,21 +183,6 @@ public abstract class Product {
 			&& VALID_PRODUCT_ROLES.containsKey(product.toLowerCase());
 	}
 
-	public static Boolean isValidRole(
-		final String product,
-		final String role) {
-
-		return isValidProduct(product)
-			&& String.isNotBlank(role)
-			&& VALID_PRODUCT_ROLES.get(product.toLowerCase()).contains(role.toLowerCase());
-	}
-
-	public static Boolean isValidRole(final Product.Role role) {
-		return role != null
-			&& UUID.isNotEmpty(role.id)
-			&& isValidRole(role.product, role.role);
-	}
-
 	public static Map<String, Set<String>> getValidProductRoles() {
 		Permissions.verifyIsDocuSignAdministrator();
 		return VALID_PRODUCT_ROLES;

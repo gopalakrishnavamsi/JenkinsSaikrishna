@@ -2,3 +2,11 @@
     background-color: #FAFAFB;
     border-radius: t(borderRadiusMedium);        
 }
+
+.THIS .ds-no-margin {
+  margin: 0;
+}
+
+.THIS .ds-round{
+    border-radius:.25rem;
+}

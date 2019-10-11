@@ -1970,10 +1970,6 @@
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
-		<label>Désactiver l’échéance</label>
-		<name>ExternalReviewDisableDueDate</name>
-	</customLabels>
-	<customLabels>
 		<label>Personnalisez votre message</label>
 		<name>ExternalReviewPersonalizeMessage</name>
 	</customLabels>
@@ -2921,15 +2917,7 @@
 	<customLabels>
 		<label>Le rappel a échoué.</label>
 		<name>CallbackFailed</name>
-	</customLabels>
-	<customLabels>
-		<label>Aide de DocuSign Agreements</label>
-		<name>DocuSignAgreementsHelp</name>
-	</customLabels>
-	<customLabels>
-		<label>C’est votre guichet unique pour tous les outils dont vous avez besoin pour tirer le meilleur de DocuSign Agreements. Vous pouvez parcourir la FAQ, la documentation produit, des livres blancs et plus encore.</label>
-		<name>DocuSignAgreementsHelpSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Visiter la FAQ</label>
 		<name>VisitFAQ</name>
@@ -3021,19 +3009,11 @@
 	<customLabels>
 		<label>Comprendre DocuSign Agreements</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>
-	<customLabels>
-		<label>Découvrez comment DocuSign Agreements gère vos documents et utilise vos données Salesforce.</label>
-		<name>DocuSignAgreementsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Installation et premiers pas</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>
-	<customLabels>
-		<label>Débutez et familiarisez‑vous avec DocuSign Agreements.</label>
-		<name>InstallationSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Gestion des utilisateurs DocuSign CLM</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3045,11 +3025,7 @@
 	<customLabels>
 		<label>Mappage d’objets Salesforce</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>
-	<customLabels>
-		<label>Découvrez comment mapper des objets Salesforce à partir de DocuSign Agreements.</label>
-		<name>MappingObjectsSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Gestion des dossiers d’objets et des configurations de présentations</label>
 		<name>MapObjectFolders</name>
