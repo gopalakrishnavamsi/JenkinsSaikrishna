@@ -1,0 +1,34 @@
+.THIS .ds-card-heading {
+  color: t(colorTextDefault);
+  font-size: 1.5rem;
+}
+
+.THIS .ds-medium-fonts-size {
+  font-size: 1rem;
+}
+
+.THIS .ds-fonts-color {
+  color: #0070d2;
+  font-size: 1rem;
+}
+
+.THIS.ds-icon-color svg {
+  fill: #0070d2;
+}
+
+.THIS .ds-box-border{
+    border: 1.5px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-text-color{
+    color: t(colorTextDefault);
+}
+
+.THIS .ds-not-selectable{
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}

@@ -1,0 +1,19 @@
+.THIS .ds-button-width {
+    min-width: 142px;
+    max-width: 144px;
+    height: 100%;
+}
+
+.THIS .medium-fonts-size {
+    font-size: 1.25rem;
+}
+
+.THIS .ds-card-heading {
+    color: t(colorTextLinkActive);
+    font-size: 1.25rem;
+}
+
+.THIS .ds-table-color thead th span,.THIS .ds-table-color:hover thead th span {
+    background-color: t(colorBackground);
+    color: black;
+}

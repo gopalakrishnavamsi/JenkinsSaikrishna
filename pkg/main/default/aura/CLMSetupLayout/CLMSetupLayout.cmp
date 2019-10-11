@@ -9,6 +9,7 @@
     <aura:attribute name="toastTitle" type="String" access="private"/>
     <aura:attribute name="toastVariantType" type="String" access="private"/>
     <aura:attribute name="isCenter" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isSidebar" type="Boolean" default="true" access="private" />
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="products" type="Product[]"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
@@ -27,10 +28,12 @@
     
     <aura:if isTrue="{!and(v.isAuthorized, v.isClmAdmin)}">	
         <lightning:layout>
-            <lightning:layoutItem size="2" class="slds-theme_default">
-                <!--left side bar-->
-                {!v.sideBar}
-            </lightning:layoutItem>
+            <aura:if isTrue="{!v.isSidebar}">
+                <lightning:layoutItem size="2" class="slds-theme_default">
+                    <!--left side bar-->
+                    {!v.sideBar}
+                </lightning:layoutItem>
+            </aura:if>
             <lightning:layoutItem flexibility="grow" class="slds-m-around_medium">
                 <lightning:layout multipleRows="true">
                     <aura:if isTrue="{!!v.fullLayout}">
@@ -39,11 +42,11 @@
                             {!v.header}
                         </lightning:layoutItem>
                     </aura:if>
-                    <lightning:layoutItem flexibility="grow" size="12">
+                    <lightning:layoutItem flexibility="grow" size="12" padding="{!v.isSidebar ? '' : 'around-none'}">
                         <!-- Main -->
                         <div
-                            class="{!v.fullLayout?'slds-box ds-gray-color slds-theme_default':v.isCenter?'slds-box  slds-theme_default':'slds-theme_default'}">
-                            <div class="{!v.isCenter?'slds-p-left_xx-large slds-p-right_xx-large':''}">
+                            class="{!v.fullLayout ? v.isSidebar ? 'slds-box ds-gray-color slds-theme_default':'ds-gray-color ds-round slds-theme_default' : v.isCenter ? 'slds-box  slds-theme_default' : 'ds-round slds-theme_default'}">
+                            <div class="{!v.isCenter ? 'slds-p-left_xx-large slds-p-right_xx-large' : ''}">
                                 {!v.main}
                             </div>
                         </div>

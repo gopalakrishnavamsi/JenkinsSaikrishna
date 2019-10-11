@@ -1,79 +1,82 @@
 <aura:component extends="c:CLMUtility" controller="CLMMapObjectController">
-	<ltng:require scripts="{!$Resource.stringUtils}" />
+	<ltng:require scripts="{!$Resource.stringUtils}"/>
 
 	<!--component dependencies-->
-	<aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT" />
+	<aura:dependency resource="markup://c:CLMModelFooterButton" type="COMPONENT"/>
 
 	<!--event fire-->
-	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent" />
-	<aura:registerEvent name="CLMBreadcrumbsEvent" type="c:CLMBreadcrumbsEvent" />
-	<aura:registerEvent name="CLMScopedNotificationEvent" type="c:CLMScopedNotificationEvent" />
-	<aura:registerEvent name="CLMEvent" type="c:CLMEvent" />
+	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
+	<aura:registerEvent name="CLMScopedNotificationEvent" type="c:CLMScopedNotificationEvent"/>
+	<aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
 	<!--event handlers-->
-	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 	<aura:handler name="strike_evt_modalPrimaryButtonClicked" event="c:strike_evt"
-		action="{!c.removeMappingModalHandler}" />
-	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-	<aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}" />
-	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}" />
+		action="{!c.removeMappingModalHandler}"/>
+	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
+	<aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
+	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}"/>
 
 	<!--data attributes internal -->
-	<aura:attribute name="mappedObjData" type="List" default="[]" access="private" />
-	<aura:attribute name="tempMappingModalDataHolder" type="object" default="" access="private" />
+	<aura:attribute name="mappedObjData" type="List" default="[]" access="private"/>
+	<aura:attribute name="tempMappingModalDataHolder" type="object" default="" access="private"/>
 
 	<!--modal attributes-->
-	<aura:attribute name="modalTitleText" type="String" access="private" />
-	<aura:attribute name="modalBodyText" type="String" access="private" />
-	<aura:attribute name="modalSecondaryButtonText" type="String" access="private" />
-	<aura:attribute name="modalPrimaryButtonText" type="String" access="private" />
-	<aura:attribute name="showModal" type="Boolean" default="false" access="private" />
-	<aura:attribute name="isRemove" type="Boolean" default="false" access="private" />
-	<aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]" />
+	<aura:attribute name="modalTitleText" type="String" access="private"/>
+	<aura:attribute name="modalBodyText" type="String" access="private"/>
+	<aura:attribute name="modalSecondaryButtonText" type="String" access="private"/>
+	<aura:attribute name="modalPrimaryButtonText" type="String" access="private"/>
+	<aura:attribute name="showModal" type="Boolean" default="false" access="private"/>
+	<aura:attribute name="isRemove" type="Boolean" default="false" access="private"/>
+	<aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]"/>
 
 	<!--Datatable Attributes-->
 
-	<aura:attribute name="mapColumns" type="List" access="private" />
-	<aura:attribute name="displayData" type="List" access="private" />
-	<aura:attribute name="sortedDirection" type="String" default="" access="private" />
-	<aura:attribute name="sortedBy" type="String" default="" access="private" />
-	<aura:attribute name="sortedByColumn" type="String" default="" access="private" />
+	<aura:attribute name="mapColumns" type="List" access="private"/>
+	<aura:attribute name="displayData" type="List" access="private"/>
+	<aura:attribute name="sortedDirection" type="String" default="" access="private"/>
+	<aura:attribute name="sortedBy" type="String" default="" access="private"/>
+	<aura:attribute name="sortedByColumn" type="String" default="" access="private"/>
 
 	<!--child components-->
 	<aura:if isTrue="{!v.showModal}">
 		<aura:if isTrue="{!v.isRemove}">
 			<c:strike_modal aura:id="popupModal" footerButtons="{!v.strikeModelFooterButtons}" body="{!v.modalBodyText}"
 				title="{!v.modalTitleText}" primaryButtonLabel="{!v.modalPrimaryButtonText}"
-				secondaryButtonLabel="{!v.modalSecondaryButtonText}" />
+				secondaryButtonLabel="{!v.modalSecondaryButtonText}"/>
 			<aura:set attribute="else">
 				<c:strike_modal aura:id="popupModal" body="{!v.modalBodyText}" title="{!v.modalTitleText}"
 					primaryButtonLabel="{!v.modalPrimaryButtonText}"
-					secondaryButtonLabel="{!v.modalSecondaryButtonText}" />
+					secondaryButtonLabel="{!v.modalSecondaryButtonText}"/>
 			</aura:set>
 		</aura:if>
 	</aura:if>
 	<div>
 		<div class="ds-no-margin ">
-			<lightning:card>
-				<aura:set attribute="title">
-					<div class="slds-m-top_large slds-m-bottom_large slds-text-heading_medium">
-						<b class="ds-blue-text-color">{!$Label.c.MappedObjects}</b>
+			<div>
+				<div class="slds-grid  slds-grid_vertical slds-p-top_none">
+					<div class="slds-col slds-m-around_large">
+						<div class="slds-grid">
+							<div class="slds-col slds-text-heading_medium">
+								<b class="ds-blue-text-color">{!$Label.c.MappedObjects}</b>
+							</div>
+							<div class="slds-col_bump-left">
+								<lightning:button variant="Neutral" class="ds-button-width" onclick="{!c.gotoNew}"
+									label="{!$Label.c.MapNew}"/>
+							</div>
+						</div>
 					</div>
-				</aura:set>
-				<aura:set attribute="actions">
-					<div class="slds-m-right_large slds-m-top_large">
-						<lightning:button variant="brand" class="ds-button-width" onclick="{!c.gotoNew}"
-							label="{!$Label.c.MapNew}" />
+					<div class="slds-m-bottom_large slds-m-left_large ">
+						{!format($Label.c.NoOfUsersMapped, v.mappedObjData.length)} . 
+						{!format($Label.c.ObjectsSortedBy, v.sortedByColumn)}
 					</div>
-				</aura:set>
-				<div class="slds-grid slds-border_top slds-p-top_none">
-					<div class="slds-col slds-is-relative slds-size_12-of-12">
+					<div class="slds-col slds-border_top slds-is-relative ds-table-color">
 						<lightning:datatable class="ds-separator " aura:id="userTable" keyField="Id"
 							hideCheckboxColumn="true" columns="{!v.mapColumns}" data="{!v.mappedObjData}"
 							onrowaction="{! c.handleRowAction }" sortedDirection="{!v.sortedDirection}"
-							onsort="{!c.updateColumnSorting}" sortedBy="{!v.sortedBy}" />
+							onsort="{!c.updateColumnSorting}" sortedBy="{!v.sortedBy}"/>
 					</div>
 				</div>
-			</lightning:card>
+			</div>
 		</div>
 	</div>
 </aura:component>

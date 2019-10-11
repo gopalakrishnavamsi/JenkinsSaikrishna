@@ -1,12 +1,112 @@
-<aura:component>
-    <aura:attribute name="currentTabId" type="string" default="links"/>
-    <aura:handler event="c:CLMEvent" action="{!c.handleEvent}"/>
-    <lightning:tabset selectedTabId="{!v.currentTabId}">
-        <lightning:tab id="links" label="{!$Label.c.Links}">
-            <c:CLMHelpLinks />
-        </lightning:tab>
-        <lightning:tab id="faqs" label="{!$Label.c.FAQs}">
-            <c:CLMHelpFAQs />
-        </lightning:tab>
-    </lightning:tabset>
+<aura:component extends="c:CLMUtility">
+    <ltng:require scripts="{!$Resource.navUtils}" />
+    <aura:attribute name="showFAQSection" type="Boolean" default="false"/>
+    <aura:if isTrue="{!!v.showFAQSection}">
+        <div class="slds-m-bottom_large slds-p-top_medium">
+            <span class="ds-card-heading"><b>{!$Label.c.HelpGuides}</b></span>
+        </div>
+        <div class="slds-m-bottom_large ds-text-color">{!$Label.c.HelpGuidesSummary}</div>
+
+        <div class="slds-grid slds-gutters">
+            <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border"
+                onclick="{!c.showFAQs}">
+                <ul>
+                    <li class="slds-align_absolute-center">
+                        <img src="{!($Resource.CLMHavingTrouble)}" style="height:10rem;width:10rem;"
+                            alt="{!$Label.c.agreementHelp}"/>
+                    </li>
+                    <li class="ds-text-color ds-not-selectable">
+                        <center><strong>{!$Label.c.FrequentlyAskedQuestionsInHelp}</strong></center>
+                    </li>
+                </ul>
+            </div>
+            <div class="slds-box ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="docGenBasics">
+                <ul>
+                    <li class="slds-align_absolute-center">
+                        <img src="{!($Resource.CLMHelpBasics)}" style="height:10rem;width:12rem;"
+                            alt="{!$Label.c.agreementHelp}"/>
+                    </li>
+                    <li class="ds-text-color ds-not-selectable">
+                        <center><strong>{!$Label.c.BasicsOfDocGen}</strong></center>
+                    </li>
+                </ul>
+            </div>
+            <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="addCompToLayouts">
+                <ul>
+                    <li class="slds-align_absolute-center">
+                        <img src="{!($Resource.CLMHelpLayouts)}" style="height:10rem;width:14rem;"
+                            alt="{!$Label.c.agreementHelp}"/>
+                    </li>
+                    <li class="ds-text-color ds-not-selectable">
+                        <center><strong>{!$Label.c.AddComponentsToLayouts}</strong></center>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slds-m-top_large slds-m-bottom_large">
+            <span class="ds-card-heading"><b>{!$Label.c.SUPPORT}</b></span>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:help_center" alternativeText="{!$Label.c.HelpCenterImgAltText}" />
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.SupportCenterTitle}" value="{!$Label.c.GetSupportURL}" />
+                        </b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.SupportCenterSummary}</div>
+            </div>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:insert_tag_field" alternativeText="{!$Label.c.HelpCenterImgAltText}"/>                        
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.DeveloperCenterTitle}"
+                            value="{!$Label.c.LearnMoreURL}"/></b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.DeveloperCenterSummary}</div>
+            </div>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:locker_service_console" alternativeText="{!$Label.c.HelpCenterImgAltText}"/>
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.TrustCenterTitle}"
+                            value="{!$Label.c.CheckStatusURL}"/></b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.TrustCenterSummary}</div>
+            </div>
+        </div>
+
+        <div class="slds-m-top_large slds-m-bottom_large">
+            <span class="ds-card-heading"><b>{!$Label.c.MORERESOURCES}</b></span>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:ribbon" alternativeText="{!$Label.c.HelpCenterImgAltText}"/>
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.DocuSignUniversityTitle}"
+                            value="{!$Label.c.GetTrainingURL}"/></b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.DocuSignUniversitySummary}</div>
+            </div>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:groups" alternativeText="{!$Label.c.HelpCenterImgAltText}"/>
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.CommunityTitle}"
+                            value="{!$Label.c.VisitCommunityURL}"/></b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.CommunitySummary}</div>
+            </div>
+        </div>
+        <div class="slds-grid slds-p-bottom_medium ds-icon-color slds-wrap">
+            <div class="slds-col slds-size_6-of-12">
+                <lightning:icon size="small" iconName="utility:knowledge_base" alternativeText="{!$Label.c.HelpCenterImgAltText}"/>
+                <span class="ds-fonts-color slds-p-left_large"><b>
+                        <lightning:formattedUrl label="{!$Label.c.KnowledgeMarket}"
+                            value="{!$Label.c.ViewResourcesURL}"/></b></span>
+                <div class="slds-p-left_xx-large">{!$Label.c.KnowledgeMarketSummary}</div>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <c:CLMHelpFAQs/>
+        </aura:set>
+    </aura:if>
 </aura:component>

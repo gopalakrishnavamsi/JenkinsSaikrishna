@@ -1,22 +1,29 @@
 <aura:component>
-    <aura:registerEvent name="CLMHelpPrimaryButtonClicked" type="c:CLMHelpCardEvent" />
-    <aura:registerEvent name="CLMHelpSecondaryButtonClicked" type="c:CLMHelpCardEvent" />
+    <aura:registerEvent name="CLMHelpPrimaryButtonClicked" type="c:CLMHelpCardEvent"/>
+    <aura:registerEvent name="CLMHelpSecondaryButtonClicked" type="c:CLMHelpCardEvent"/>
 
-    <aura:attribute name="imageURL" type="String" />
-    <aura:attribute name="summary" type="String" />
-    <aura:attribute name="title" type="String" />
-    <aura:attribute name="firstButtonName" type="String" />
-    <aura:attribute name="secondButtonName" type="String" />
-    <aura:attribute name="showIcon" type="Boolean" default="true" />
-    <aura:attribute name="showFirstButton" type="Boolean" default="true" />
-    <aura:attribute name="showSecondButton" type="Boolean" default="true" />
+    <aura:attribute name="imageURL" type="String"/>
+    <aura:attribute name="isIcon" type="Boolean" default="true"/>
+    <aura:attribute name="summary" type="String"/>
+    <aura:attribute name="title" type="String"/>
+    <aura:attribute name="firstButtonName" type="String"/>
+    <aura:attribute name="secondButtonName" type="String"/>
+    <aura:attribute name="showIcon" type="Boolean" default="true"/>
+    <aura:attribute name="showFirstButton" type="Boolean" default="true"/>
+    <aura:attribute name="showSecondButton" type="Boolean" default="true"/>
+    <aura:attribute name="secondButtonVariant" type="String" default="brand"/>
 
     <lightning:card class="slds-m-top_none ">
         <div class="slds-grid">
             <aura:if isTrue="{!v.showIcon}">
                 <div class="slds-m-top_medium slds-p-left_x-large ">
-                    <lightning:icon iconName="{!v.imageURL}" size="large"
-                        alternativeText="{!$Label.c.InformationIcon}" />
+                    <aura:if isTrue="{!v.isIcon}">
+                        <lightning:icon iconName="{!v.imageURL}" size="large"
+                            alternativeText="{!$Label.c.InformationIcon}"/>
+                        <aura:set attribute="else">
+                            <img src="{!v.imageURL}" alt="{!$Label.c.HavingTroubleImgAltText}" size="large"/>
+                        </aura:set>
+                    </aura:if>
                 </div>
             </aura:if>
             <div class="{! join(' ', 'slds-col slds-size_6-of-12', v.showIcon ? '' : 'slds-p-left_small') }">
@@ -39,12 +46,12 @@
                         <aura:if isTrue="{!v.showFirstButton}">
                             <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
                                 iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
-                                class="slds-m-right_x-small ds-button-width" />
+                                class="slds-m-right_x-small ds-button-width"/>
                         </aura:if>
                         <aura:if isTrue="{!v.showSecondButton}">
-                            <lightning:button variant="brand" label="{!v.secondButtonName}"
+                            <lightning:button variant="{!v.secondButtonVariant}" label="{!v.secondButtonName}"
                                 title="{!v.secondButtonName}" onclick="{!c.onPrimaryButtonClick}"
-                                class="ds-button-width slds-m-right_small" />
+                                class="ds-button-width slds-m-right_small"/>
                         </aura:if>
                     </div>
                 </div>
