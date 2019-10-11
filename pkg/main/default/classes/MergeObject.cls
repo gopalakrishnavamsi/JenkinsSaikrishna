@@ -41,13 +41,13 @@ public class MergeObject implements Comparable {
 	}
 
 	public static MergeObject forType(final SObjectType type) {
-		if (!isValid(type)) throw new DocuSignException(System.Label.InvalidType);
+		if (!isValid(type)) throw new DocuSignException(Label.InvalidType);
 
 		return forType(type.getDescribe());
 	}
 
 	public static MergeObject forType(final DescribeSObjectResult describe) {
-		if (!isValid(describe)) throw new DocuSignException(System.Label.InvalidType);
+		if (!isValid(describe)) throw new DocuSignException(Label.InvalidType);
 
 		return new MergeObject(
 			describe.getSObjectType(),

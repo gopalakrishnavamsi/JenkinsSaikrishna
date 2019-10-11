@@ -217,7 +217,7 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		//validate inputs
 		if (String.isBlank(originalDocumentHref) || String.isBlank(compareVersionHref)) {
-			throw new APIException(System.Label.InvalidInputsAgreementComparison);
+			throw new APIException(Label.InvalidInputsAgreementComparison);
 		}
 		UUID returnValue;
 		UUID taskId = NegotiateAPI.getInstance().compareAgreements(originalDocumentHref, compareVersionHref);
@@ -228,7 +228,7 @@ public with sharing class NegotiateService {
 		}
 		//throw exception if status is not equal to success
 		else {
-			throw new APIException(System.Label.FailedToTriggerDocumentComparisonTask);
+			throw new APIException(Label.FailedToTriggerDocumentComparisonTask);
 		}
 		return returnValue;
 	}

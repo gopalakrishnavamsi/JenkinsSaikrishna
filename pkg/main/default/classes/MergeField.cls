@@ -64,7 +64,7 @@ public class MergeField implements Comparable {
 	}
 
 	public static MergeField forField(final DescribeFieldResult field, final String relationshipName) {
-		if (!isValid(field)) throw new DocuSignException(System.Label.InvalidType);
+		if (!isValid(field)) throw new DocuSignException(Label.InvalidType);
 
 		return new MergeField(
 			field,
@@ -76,7 +76,7 @@ public class MergeField implements Comparable {
 	}
 
 	public static MergeField forChildRelationship(final ChildRelationship childRelationship) {
-		if (!isValid(childRelationship)) throw new DocuSignException(System.Label.InvalidType);
+		if (!isValid(childRelationship)) throw new DocuSignException(Label.InvalidType);
 
 		DescribeSObjectResult typeDesc = childRelationship.getChildSObject().getDescribe();
 		return new MergeField(
