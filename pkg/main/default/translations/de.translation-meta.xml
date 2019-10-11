@@ -1970,10 +1970,6 @@
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
-		<label>Fälligkeitsdatum deaktivieren</label>
-		<name>ExternalReviewDisableDueDate</name>
-	</customLabels>
-	<customLabels>
 		<label>Nachricht personalisieren</label>
 		<name>ExternalReviewPersonalizeMessage</name>
 	</customLabels>
