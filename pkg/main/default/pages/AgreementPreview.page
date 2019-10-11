@@ -32,7 +32,7 @@
         }
     </style>
 
-    <div id="ds-pageContent" style="display: none;" class="ds-blue-brand">
+    <div id="ds-pageContent" class="ds-blue-brand">
         <div id="appContainer"/>
     </div>
 
