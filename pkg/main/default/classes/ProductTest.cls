@@ -189,40 +189,4 @@ private class ProductTest {
 		System.assert(Product.isValidProduct('Negotiate'));
 		Test.stopTest();
 	}
-
-	@IsTest
-	static void test_isValidRole_string() {
-		Test.startTest();
-		System.assert(!Product.isValidRole(null, null));
-		System.assert(!Product.isValidRole('', '  '));
-		System.assert(!Product.isValidRole('whatever', 'whatever'));
-		System.assert(!Product.isValidRole('e_sign', 'generator'));
-		System.assert(Product.isValidRole('CLM', 'Administrator'));
-		System.assert(Product.isValidRole('clm', 'USER'));
-		System.assert(Product.isValidRole('clm', 'viewer'));
-		System.assert(Product.isValidRole('e_Sign', 'administrator'));
-		System.assert(Product.isValidRole('E_SIGN', 'user'));
-		System.assert(Product.isValidRole('e_sign', 'sender'));
-		System.assert(Product.isValidRole('Gen', 'generator'));
-		System.assert(Product.isValidRole('Negotiate', 'negotiator'));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_isValidRole_role() {
-		Test.startTest();
-		System.assert(!Product.isValidRole(null));
-		System.assert(!Product.isValidRole(new Product.Role(null, Product.CLM, ClmProduct.ROLE_USER, '', false)));
-		System.assert(!Product.isValidRole(new Product.Role(UUID.randomUUID(), 'whatever', ClmProduct.ROLE_USER, '', false)));
-		System.assert(!Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.CLM, '', '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.ESIGNATURE, ESignatureProduct.ROLE_ADMINISTRATOR, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.ESIGNATURE, ESignatureProduct.ROLE_USER, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.ESIGNATURE, ESignatureProduct.ROLE_SENDER, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.GEN, GenProduct.ROLE_GENERATOR, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.NEGOTIATE, NegotiateProduct.ROLE_NEGOTIATOR, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.CLM, ClmProduct.ROLE_USER, '', false)));
-		System.assert(Product.isValidRole(new Product.Role(UUID.randomUUID(), Product.CLM, ClmProduct.ROLE_VIEWER, '', false)));
-		Test.stopTest();
-	}
 }

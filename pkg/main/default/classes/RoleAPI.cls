@@ -12,7 +12,6 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	private static final Set<UUID> ESIGNATURE_IDS = new Set<UUID> {
 		ESIGNATURE_ADMINISTRATOR_ID, ESIGNATURE_USER_ID, ESIGNATURE_SENDER_ID
 	};
-
 	// This is a map of product groups to application roles.
 	private static final Map<String, Map<String, String>> PRODUCT_GROUP_ROLE_MAP = new Map<String, Map<String, String>> {
 		Product.ESIGNATURE => new Map<String, String> {
@@ -75,20 +74,20 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			}
 		}
 
-		public Product.Role toExternalForm() {
-			if (String.isBlank(this.source_product_name)
-				|| String.isBlank(this.group_name)
+		public Product.Role toExternalForm(final String role) {
+			if (String.isBlank(role)
+				|| String.isBlank(this.source_product_name)
 				|| String.isBlank(this.group_id)) {
 
-				LoggerService.getInstance().warn('Invalid group for role');
+				LoggerService.getInstance().warn('Invalid group for role ' + role);
 				return null;
 			}
 
 			return new Product.Role(
 				UUID.tryParse(this.ds_group_id),
 				this.source_product_name.toLowerCase(),
-				this.group_name,
-				Product.getRoleLabel(this.group_name),
+				role,
+				Product.getRoleLabel(role),
 				this.is_admin == true);
 		}
 
@@ -156,6 +155,16 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		return result;
 	}
 
+	private String getRoleName(
+		final String productName,
+		final String groupId) {
+
+		if (String.isBlank(productName) || String.isBlank(groupId)) return null;
+
+		Map<String, String> roles = PRODUCT_GROUP_ROLE_MAP.get(productName);
+		return roles == null ? null : roles.get(groupId);
+	}
+
 	@TestVisible
 	private Map<String, Map<UUID, Product.Role>> getAccountRoles(
 		final Set<String> products,
@@ -210,9 +219,10 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		if (gs != null && gs.groups != null) {
 			for (APIGroup g : gs.groups) {
 				String productName = g == null ? '' : getProductName(g.source_product_name);
+				String role = g == null ? null : getRoleName(productName, g.group_id);
 				// Only add if it's in the product role whitelist.
-				if (result.containsKey(productName) && Product.isValidRole(productName, g.group_name)) {
-					Product.Role r = g.toExternalForm();
+				if (result.containsKey(productName) && String.isNotBlank(role)) {
+					Product.Role r = g.toExternalForm(role);
 					if (r != null) result.get(productName).put(r.id, r);
 				}
 			}
@@ -245,7 +255,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		if (newGroup != null && newGroup.containsKey('group')) {
 			result = ((APIGroup)JSON.deserialize(
 				JSON.serialize(newGroup.get('group')),
-				APIGroup.class)).toExternalForm();
+				APIGroup.class)).toExternalForm(role.role);
 		} else {
 			this.log.error('Unexpected response when creating account role:\n' + response.body);
 		}

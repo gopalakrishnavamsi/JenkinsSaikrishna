@@ -83,6 +83,98 @@ private class RoleAPITest {
 		}
 	}
 
+	class NameMismatchMock extends OAuthTokenMock {
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
+			gs.groups = new List<RoleAPI.APIGroup>();
+			RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '0';
+			g.group_name = 'test';
+			g.description = 'Administrators!';
+			g.source_product_name = 'Clm';
+			g.is_admin = true;
+			gs.groups.add(g);
+			g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '2';
+			g.group_name = 'test';
+			g.description = 'Users!';
+			g.source_product_name = 'clm';
+			g.is_admin = false;
+			gs.groups.add(g);
+			g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '99';
+			g.group_name = 'test';
+			g.description = 'Viewers!';
+			g.source_product_name = 'CLM';
+			g.is_admin = false;
+			gs.groups.add(g);
+			g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '22';
+			g.group_name = 'Other Admins';
+			g.description = 'should ignore';
+			g.source_product_name = 'clm';
+			g.is_admin = true;
+			gs.groups.add(g);
+			g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '33';
+			g.group_name = 'Other Users';
+			g.description = 'should ignore';
+			g.source_product_name = 'clm';
+			g.is_admin = true;
+			gs.groups.add(g);
+			g = new RoleAPI.APIGroup(null, null);
+			g.ds_group_id = UUID.randomUUID().toString();
+			g.group_id = '44';
+			g.group_name = 'Others';
+			g.description = 'should ignore';
+			g.source_product_name = 'other';
+			g.is_admin = true;
+			gs.groups.add(g);
+			response.setBody(JSON.serialize(gs));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getAccountRoles_name_mismatch() {
+		Test.setMock(HttpCalloutMock.class, new NameMismatchMock());
+		System.runAs(UserMock.createClmViewer()) {
+			Set<String> products = new Set<String> { Product.CLM };
+
+			Test.startTest();
+			Map<String, Map<UUID, Product.Role>> result = RoleAPI.getInstance().getAccountRoles(products, 10000);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(products, result.keySet());
+			Map<UUID, Product.Role> prs = result.get(Product.CLM);
+			System.assertNotEquals(null, prs);
+			System.assertEquals(3, prs.size());
+			for (UUID roleId : prs.keySet()) {
+				Product.Role pr = prs.get(roleId);
+				System.assertNotEquals(null, pr);
+				System.assertNotEquals(null, pr.id);
+				System.assertEquals(Product.CLM, pr.product);
+				System.assert(String.isNotBlank(pr.label));
+				if (pr.role == ClmProduct.ROLE_ADMINISTRATOR) {
+					System.assert(pr.isAdministrator);
+				} else if (pr.role == ClmProduct.ROLE_USER || pr.role == ClmProduct.ROLE_VIEWER) {
+					System.assert(!pr.isAdministrator);
+				} else {
+					throw new AssertException('Unexpected role: ' + JSON.serialize(pr));
+				}
+			}
+		}
+	}
+
 	@IsTest
 	static void test_getAccountRoles_success() {
 		RoleAPIMock.success();
@@ -162,6 +254,45 @@ private class RoleAPITest {
 				System.assert(ex.error instanceof ProvisioningAPI.Error);
 			}
 			Test.stopTest();
+		}
+	}
+
+	class CreateInvalidGroupMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json');
+			RoleAPI.APIGroup g = new RoleAPI.APIGroup(null, null);
+			g.group_id = '';
+			g.group_name = 'unit test';
+			g.description = 'unit test group';
+			g.source_product_name = null;
+			g.is_admin = true;
+			RoleAPI.APIGroups gs = new RoleAPI.APIGroups();
+			gs.groups = new List<RoleAPI.APIGroup> { g };
+			response.setBody(JSON.serialize(gs));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createAccountGroup_invalid() {
+		Test.setMock(HttpCalloutMock.class, new CreateInvalidGroupMock());
+		System.runAs(UserMock.createClmViewer()) {
+			Product.Role r = new Product.Role(
+				null,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				false);
+
+			Test.startTest();
+			Product.Role result = RoleAPI.getInstance().createAccountRole(r, '1234', 30000);
+			Test.stopTest();
+
+			System.assertEquals(null, result);
 		}
 	}
 
@@ -444,7 +575,7 @@ private class RoleAPITest {
 				gs.groups.add(g);
 				g = new RoleAPI.APIGroup(null, null);
 				g.ds_group_id = UUID.randomUUID().toString();
-				g.group_id = '2';
+				g.group_id = '99';
 				g.group_name = ClmProduct.ROLE_VIEWER;
 				g.description = 'Viewers!';
 				g.source_product_name = 'clm';
