@@ -1,11 +1,14 @@
 public with sharing class ProductAPI extends ProvisioningAPI {
 
 	@TestVisible
-	private static final String PRODUCT_GEN = 'Gen';
+	private static final String PRODUCT_GEN = 'gen';
 	@TestVisible
-	private static final String PRODUCT_NEGOTIATE = 'Negotiate';
+	private static final String PRODUCT_NEGOTIATE = 'negotiate';
+	// DFS-6147: Multiple possible product IDs for CLM. For now, any one of them is valid.
 	@TestVisible
-	private static final String PRODUCT_CLM = 'CLM';
+	private static final Set<String> PRODUCT_CLM_IDS = new Set<String> {
+		'clmsf', 'clmprosf', 'clm', 'clmpro'
+	};
 
 	private static ProductAPI self;
 
@@ -96,7 +99,9 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('api_base_uri'))) : null,
 					properties.containsKey('merge_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('merge_uri'))) : null);
-			} else if (this.product_id == PRODUCT_CLM) {
+			} else if (String.isNotBlank(this.product_id)
+				&& PRODUCT_CLM_IDS.contains(this.product_id.toLowerCase())) {
+
 				p = new ClmProduct(
 					this.provision_status,
 					this.free_trial == true,
@@ -118,10 +123,16 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 
 		public List<Product> toExternalForm() {
 			List<Product> result = new List<Product>();
+			Set<String> productNames = new Set<String>();
 			for (APIProduct p : (this.products == null ? new List<APIProduct>() : this.products)) {
-				if (result != null) {
+				if (p != null) {
 					Product pp = p.toExternalForm();
-					if (pp != null) result.add(pp);
+					// DFS-6147: Multiple CLM products may be returned by the API. Use the first one.
+					String productName = pp == null || String.isBlank(pp.name) ? null : pp.name.toLowerCase();
+					if (String.isNotBlank(productName) && !productNames.contains(productName)) {
+						result.add(pp);
+						productNames.add(productName);
+					}
 				}
 			}
 			return result;
