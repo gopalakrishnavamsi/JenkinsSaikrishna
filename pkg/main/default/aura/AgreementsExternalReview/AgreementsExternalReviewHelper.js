@@ -28,14 +28,15 @@
     var currentStep = component.get('v.currentStep');
     var dueDate = component.get('v.dueDate');
     var minimumDueDate = component.get('v.minimumDueDate');
-    var disableDueDate = component.get('v.disableDueDate');
     var daysDifference = helper.computeDaysDifference(dueDate, minimumDueDate);
-    var dueDateValidation = disableDueDate || daysDifference >= 0;
-    if (currentStep === '1' && dueDateValidation) {
-      component.set('v.currentStep', '2');
-    }
-    if (currentStep === '2') {
-      helper.triggerSendForExternalReview(component);
+    var dueDateIsValid = daysDifference >= 0;
+
+    if (dueDateIsValid) {
+      if (currentStep === '1') {
+        component.set('v.currentStep', '2');
+      } else if (currentStep === '2') {
+        helper.triggerSendForExternalReview(component);
+      }
     }
   },
 
@@ -165,11 +166,6 @@
     var emailSubject = component.get('v.emailSubject');
     var emailBody = component.get('v.emailBody');
     var requestExpirationDays = component.get('v.requestExpirationDays');
-
-    if (component.get('v.disableDueDate') || requestExpirationDays < 0) {
-      requestExpirationDays = 0;
-    }
-
     var action = component.get('c.sendForExternalReview');
 
     action.setParams({
