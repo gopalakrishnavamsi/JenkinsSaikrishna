@@ -5,7 +5,7 @@
     if (!$A.util.isUndefinedOrNull(products)) {
       products.forEach(function (product) {
         if (product.name === 'e_sign') {
-          component.set('v.isEsignEnabled', true);
+          component.set('v.isESignatureEnabled', true);
         } else if (product.name === 'negotiate') {
           component.set('v.isNegotiateEnabled', true);
         } else if (product.name === 'gen') {
@@ -70,8 +70,8 @@
   },
 
   sendForSignature: function (component, event, helper) {
-    var isEsignEnabled = component.get('v.isEsignEnabled');
-    if (isEsignEnabled) {
+    var isESignatureEnabled = component.get('v.isESignatureEnabled');
+    if (isESignatureEnabled) {
       helper.sendForSignature(component);
     }
   },

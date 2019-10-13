@@ -1,7 +1,7 @@
 ({
   createEnvelope: function (component, sourceId) {
     var self = this;
-    if (component.get('v.isEsignEnabled')) {
+    if (component.get('v.isESignatureEnabled')) {
       var selectedDocumentIds = decodeURIComponent(component.get('v.files')).split(',');
       var updated = false;
       this.invokeAction(

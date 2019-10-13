@@ -18,7 +18,7 @@
     <aura:attribute name="isDocuSignNegotiator" type="Boolean" default="false"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isEsignEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
 
@@ -121,7 +121,7 @@
                                             sourceId="{!v.recordId}"
                                             agreementDetails="{!agreementDetails}"
                                             agreementIndex="{!index}"
-                                            isEsignEnabled="{!v.isEsignEnabled}"/>
+                                            isESignatureEnabled="{!v.isESignatureEnabled}"/>
                                     <div class="ds-agreements_spacing"/>
                                 </li>
                             </aura:iteration>

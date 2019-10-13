@@ -3435,7 +3435,7 @@
 	</customLabels>
 	<customLabels>
 		<label>DocuSign eSignature is not configured for your account.</label>
-		<name>EsignNotConfigured</name>
+		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
 		<label>Edit Object</label>

@@ -25,7 +25,7 @@
     <aura:attribute name="files" type="String"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
-    <aura:attribute name="isEsignEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>
@@ -54,9 +54,9 @@
         </header>
 
         <aura:if isTrue="{!v.isAuthorized}">
-            <aura:if isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp;  not(v.isEsignEnabled)}">
+            <aura:if isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp;  not(v.isESignatureEnabled)}">
                 <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                    {!$Label.c.EsignNotConfigured}
+                    {!$Label.c.ESignatureNotConfigured}
                 </div>
             </aura:if>
             <aura:set attribute="else">
@@ -64,7 +64,7 @@
                                         fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
             </aura:set>
 
-            <aura:if isTrue="{!not(v.loading) &amp;&amp;  v.isEsignEnabled}">
+            <aura:if isTrue="{!not(v.loading) &amp;&amp;  v.isESignatureEnabled}">
                 <div class="ds-sending__body slds-scrollable slds-container">
                     <div class="slds-container_center slds-container_medium slds-box">
                         <!-- Files -->

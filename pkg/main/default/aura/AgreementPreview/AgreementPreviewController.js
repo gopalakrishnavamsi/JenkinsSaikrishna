@@ -5,7 +5,7 @@
       var products = component.get('v.products');
       products.forEach(function (product) {
         if (product.name === 'e_sign') {
-          component.set('v.isEsignEnabled', true);
+          component.set('v.isESignatureEnabled', true);
         } else if (product.name === 'negotiate') {
           component.set('v.isNegotiateEnabled', true);
         }

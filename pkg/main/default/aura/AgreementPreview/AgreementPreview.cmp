@@ -20,7 +20,7 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="showSetupComponent" type="Object"/>
     <aura:attribute name="showSetupSpinner" type="Object"/>
-    <aura:attribute name="isEsignEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
 
@@ -52,7 +52,7 @@
                         <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                                    agreementActionManager="{!v.agreementActionManager}"
                                                    uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
-                                                   isEsignEnabled="{!v.isEsignEnabled}"/>
+                                                   isESignatureEnabled="{!v.isESignatureEnabled}"/>
                     </div>
                     <div class="documentContainer">
                         <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}"

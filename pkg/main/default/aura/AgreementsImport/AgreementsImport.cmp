@@ -12,7 +12,7 @@
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
     <aura:attribute name="isSendingForSignature" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isEsignEnabled" type="Boolean" default="false"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false"/>
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
@@ -195,7 +195,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="{!'slds-col slds-p-bottom_xx-small'+if(!v.isEsignEnabled,' slds-hide','')}"
+                            <div class="{!'slds-col slds-p-bottom_xx-small'+if(!v.isESignatureEnabled,' slds-hide','')}"
                                  onclick="{!c.navigateToSendForSignature}">
                                 <a
                                         class="slds-box slds-box_link slds-box_x-small slds-media">

@@ -23,7 +23,7 @@
       {
         showModal: true,
         recordId: component.get('v.recordId'),
-        isEsignEnabled: component.get('v.isEsignEnabled'),
+        isESignatureEnabled: component.get('v.isESignatureEnabled'),
         isNegotiateEnabled: component.get('v.isNegotiateEnabled')
       },
       function (componentBody) {

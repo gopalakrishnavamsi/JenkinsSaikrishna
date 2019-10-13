@@ -5,7 +5,7 @@
       if (!$A.util.isUndefinedOrNull(products)) {
         products.forEach(function (product) {
           if (product.name === 'e_sign') {
-            component.set('v.isEsignEnabled', true);
+            component.set('v.isESignatureEnabled', true);
           }
         });
       }

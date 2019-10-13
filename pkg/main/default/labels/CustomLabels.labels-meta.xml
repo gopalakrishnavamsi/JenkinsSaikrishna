@@ -6720,7 +6720,7 @@
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
 	<labels>
-		<fullName>EsignNotConfigured</fullName>
+		<fullName>ESignatureNotConfigured</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>

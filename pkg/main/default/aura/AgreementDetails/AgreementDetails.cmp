@@ -10,7 +10,7 @@
     <aura:attribute name="agreementActionManager" type="Object"/>
     <aura:attribute name="namespace" type="String"/>
     <aura:attribute name="uiHelper" type="Object"/>
-    <aura:attribute name="isEsignEnabled" type="Boolean" default="false"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils)}"
@@ -126,7 +126,7 @@
                 <lightning:menuItem label="{!$Label.c.SendForSignature}"
                                     value="{!$Label.c.SendForSignature}"
                                     onactive="{!c.sendForSignature}"
-                                    class="{!if(!v.isEsignEnabled,'slds-hide','')}"/>
+                                    class="{!if(!v.isESignatureEnabled,'slds-hide','')}"/>
 
             </lightning:buttonMenu>
             <div class="slds-p-top_x-small">
