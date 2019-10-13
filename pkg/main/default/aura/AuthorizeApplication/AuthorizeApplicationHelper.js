@@ -41,13 +41,13 @@
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
             helper.getProductsOnAccount(component, success).then(
               $A.getCallback(function (products) {
-                if (success) {
-                  component.set('v.products', products);
+                component.set('v.products', products);
+                component.set('v.isAuthorized', success);
+                if (component.get('v.isAuthorized')) {
                   $A.util.addClass(component.find('ds-app-auth'), 'slds-hide');
-                } else {
+                }else{
                   $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide');
                 }
-                component.set('v.isAuthorized', success);
                 component.set('v.isConsentRequired', !success);
                 if (event.source) {
                   event.source.close();

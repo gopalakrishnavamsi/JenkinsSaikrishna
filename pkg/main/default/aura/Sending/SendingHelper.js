@@ -79,8 +79,6 @@
           }
         }
       );
-    }else{
-      this.setLoading(component,false);
     }
   },
 
