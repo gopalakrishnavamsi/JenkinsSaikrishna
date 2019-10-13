@@ -9,17 +9,21 @@ public with sharing class AuthController {
 		public String message { get; private set; }
 		@AuraEnabled
 		public List<String> eventOrigins { get; private set; }
+		@AuraEnabled
+		public List<Product> products { get; private set; }
 
 		public AuthStatus(
 			final Boolean isAuthorized,
 			final Boolean isConsentRequired,
 			final String message,
-			final List<String> eventOrigins) {
+			final List<String> eventOrigins,
+		    final List<Product> products) {
 
 			this.isAuthorized = isAuthorized;
 			this.isConsentRequired = isConsentRequired;
 			this.message = message;
 			this.eventOrigins = eventOrigins;
+			this.products = products;
 		}
 	}
 
@@ -28,10 +32,12 @@ public with sharing class AuthController {
 		Boolean isAuthorized = true;
 		Boolean isConsentRequired = false;
 		String message = null;
+		List<Product> products = new List<Product>();
 
 		try {
 			if (Permissions.isDocuSignUser()) { // Meets minimum requirement for access token
 				AuthService.getAccessToken();
+				products = AccountProducts.getProducts();
 			} else {
 				isAuthorized = false;
 				message = Label.MustBeDocuSignUser;
@@ -59,7 +65,8 @@ public with sharing class AuthController {
 			isAuthorized,
 			isConsentRequired,
 			message,
-			Salesforce.getVisualforceOrigins());
+			Salesforce.getVisualforceOrigins(),
+			products);
 	}
 
 	@AuraEnabled

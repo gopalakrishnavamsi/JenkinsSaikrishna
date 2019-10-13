@@ -56,17 +56,17 @@
 
   loadingEvent: function (component, event) {
     var params = event.getParams();
-    if (params && params.isLoading === true) {
-      if (!params.isAuthorizeEvent) {
-        setTimeout(
-          $A.getCallback(function () {
-            window.location.reload();
-          }),
-          2000
-        );
-      }
+    var isReloadPage = params && params.isLoading && !params.isAuthorizeEvent;
+    var isConsentRequired = params && !params.isLoading && params.isAuthorizeEvent;
+    if (isReloadPage) {
+      setTimeout(
+        $A.getCallback(function () {
+          window.location.reload();
+        }),
+        2000
+      );
     }
-    if (params && params.isLoading === false && params.isAuthorizeEvent) {
+    if (isConsentRequired) {
       var showSetupComponent = component.get('v.showSetupComponent');
       showSetupComponent();
     }

@@ -20,8 +20,9 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="showSetupComponent" type="Object"/>
     <aura:attribute name="showSetupSpinner" type="Object"/>
-    <aura:attribute name="eSignProduct" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="negotiateProduct" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isEsignEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"/>
@@ -38,21 +39,20 @@
             <aura:set attribute="else">
                 <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                         fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-                                        eSignProduct="{!v.eSignProduct}"
-                                        negotiateProduct="{!v.negotiateProduct}"/>
+                                        products="{!v.products}"/>
             </aura:set>
-            <aura:if isTrue="{!not(v.negotiateProduct)}">
+            <aura:if isTrue="{!not(v.isNegotiateEnabled)}">
                 <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                     {!$Label.c.NegotiateNotConfigured}
                 </div>
             </aura:if>
             <div class="fullContainer">
-                <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.negotiateProduct}">
+                <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.isNegotiateEnabled}">
                     <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
                         <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                                    agreementActionManager="{!v.agreementActionManager}"
                                                    uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
-                                                   eSignProduct="{!v.eSignProduct}"/>
+                                                   isEsignEnabled="{!v.isEsignEnabled}"/>
                     </div>
                     <div class="documentContainer">
                         <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}"

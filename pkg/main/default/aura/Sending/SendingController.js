@@ -1,8 +1,16 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
-    if (component.get('v.isAuthorized') && component.get('v.eSignProduct')) {
-      helper.createEnvelope(component, component.get('v.recordId'));
+    if (component.get('v.isAuthorized')) {
+      var products = component.get('v.products');
+      if (!$A.util.isUndefinedOrNull(products)) {
+        products.forEach(function (product) {
+          if (product.name === 'e_sign') {
+            component.set('v.isEsignEnabled', true);
+          }
+        });
+      }
     }
+    helper.createEnvelope(component, component.get('v.recordId'));
   },
 
   setExpirationDate: function (component, event, helper) {

@@ -23,8 +23,8 @@
       {
         showModal: true,
         recordId: component.get('v.recordId'),
-        eSignProduct: component.get('v.eSignProduct'),
-        negotiateProduct: component.get('v.negotiateProduct')
+        isEsignEnabled: component.get('v.isEsignEnabled'),
+        isNegotiateEnabled: component.get('v.isNegotiateEnabled')
       },
       function (componentBody) {
         if (component.isValid()) {
@@ -58,7 +58,7 @@
   },
 
   getAgreements: function (component, event, helper) {
-    var isNegotiateOnAccount = component.get('v.negotiateProduct');
+    var isNegotiateOnAccount = component.get('v.isNegotiateEnabled');
     component.set('v.loading', true);
     if (isNegotiateOnAccount) {
       var recordId = component.get('v.recordId');

@@ -4,10 +4,7 @@
 
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean"/>
-    <aura:attribute name="eSignProduct" type="Boolean" default="false"/>
-    <aura:attribute name="negotiateProduct" type="Boolean" default="false"/>
-    <aura:attribute name="genProduct" type="Boolean" default="false"/>
-    <aura:attribute name="clmProduct" type="Boolean" default="false"/>
+    <aura:attribute name="products" type="Product[]"/>
 
     <aura:attribute name="uiHelper" type="Object" access="private"/>
     <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="{!false}"/>

@@ -6724,8 +6724,8 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Esign not configured</shortDescription>
-		<value>DocuSign Esignature is not configured for your account.</value>
+		<shortDescription>eSign not configured</shortDescription>
+		<value>DocuSign eSignature is not configured for your account.</value>
 	</labels>
 	<labels>
 		<fullName>EditObject</fullName>

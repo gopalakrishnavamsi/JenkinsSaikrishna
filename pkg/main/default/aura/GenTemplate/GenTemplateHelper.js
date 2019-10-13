@@ -77,8 +77,8 @@
 
   initSetup: function (component) {
     var isAuthorized = component.get('v.isAuthorized');
-    var genProduct = component.get('v.genProduct');
-    if (isAuthorized && genProduct) {
+    var isGenEnabled = component.get('v.isGenEnabled');
+    if (isAuthorized && isGenEnabled) {
       component.set('v.saving', true);
       var helper = this;
       var steps = component.get('v.steps');

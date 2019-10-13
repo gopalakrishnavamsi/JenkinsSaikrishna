@@ -1,8 +1,20 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
     var isAuthorized = component.get('v.isAuthorized');
-    var genProduct = component.get('v.genProduct');
-    if (isAuthorized && genProduct) {
+    var products = component.get('v.products');
+    if (!$A.util.isUndefinedOrNull(products)) {
+      products.forEach(function (product) {
+        if (product.name === 'e_sign') {
+          component.set('v.isEsignEnabled', true);
+        } else if (product.name === 'negotiate') {
+          component.set('v.isNegotiateEnabled', true);
+        } else if (product.name === 'gen') {
+          component.set('v.isGenEnabled', true);
+        }
+      });
+    }
+    var isGenEnabled = component.get('v.isGenEnabled');
+    if (isAuthorized && isGenEnabled) {
       var config = component.get('v.config');
       helper.checkMultiCurrency(component);
       if ($A.util.isEmpty(config)) {
@@ -58,8 +70,8 @@
   },
 
   sendForSignature: function (component, event, helper) {
-    var esignProduct = component.get('v.eSignProduct');
-    if (esignProduct) {
+    var isEsignEnabled = component.get('v.isEsignEnabled');
+    if (isEsignEnabled) {
       helper.sendForSignature(component);
     }
   },
@@ -91,8 +103,8 @@
   },
 
   externalReview: function (component, event, helper) {
-    var negotiateProduct = component.get('v.negotiateProduct');
-    if (negotiateProduct) {
+    var isNegotiateEnabled = component.get('v.isNegotiateEnabled');
+    if (isNegotiateEnabled) {
       component.set('v.isLoading', true);
       helper.createAgreement(component, event, helper).then(
         $A.getCallback(function () {

@@ -1,5 +1,13 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
+    var products = component.get('v.products');
+    if (!$A.util.isUndefinedOrNull(products)) {
+      products.forEach(function (product) {
+        if (product.name === 'gen') {
+          component.set('v.isGenEnabled', true);
+        }
+      });
+    }
     helper.initSetup(component);
   },
 

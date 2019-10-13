@@ -6,9 +6,19 @@
       if (!$A.util.isUndefinedOrNull(toastComponent)) {
         $A.util.toggleClass(toastComponent, 'slds-hide');
       }
-      //Make call to load the agreements after successful authorization
-      if (!component.get('v.isAgreementLoaded')) {
-        helper.loadAgreements(component, event, helper);
+      var products = component.get('v.products');
+      if (!$A.util.isUndefinedOrNull(products)) {
+        products.forEach(function (product) {
+          if (product.name === 'e_sign') {
+            component.set('v.isEsignEnabled', true);
+          } else if (product.name === 'negotiate') {
+            component.set('v.isNegotiateEnabled', true);
+          }
+        });
+        //Make call to load the agreements after successful authorization
+        if (!component.get('v.isAgreementLoaded')) {
+          helper.loadAgreements(component, event, helper);
+        }
       }
     }
   },
@@ -37,8 +47,8 @@
       helper.loadAgreements(component, event, helper);
     }
   },
-    
+
   reloadAgreements: function (component, event, helper) {
-     helper.loadAgreements(component, event, helper);
+    helper.loadAgreements(component, event, helper);
   }
 });
