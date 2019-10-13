@@ -4,11 +4,11 @@
     var products = component.get('v.products');
     if (!$A.util.isUndefinedOrNull(products)) {
       products.forEach(function (product) {
-        if (product.name === 'e_sign') {
+        if (product.name === 'e_sign' && product.status === 'active') {
           component.set('v.isESignatureEnabled', true);
-        } else if (product.name === 'negotiate') {
+        } else if (product.name === 'negotiate' && product.status === 'active') {
           component.set('v.isNegotiateEnabled', true);
-        } else if (product.name === 'gen') {
+        } else if (product.name === 'gen' && product.status === 'active') {
           component.set('v.isGenEnabled', true);
         }
       });
@@ -91,8 +91,8 @@
   },
 
   internalApproval: function (component, event, helper) {
-    var negotiateProduct = component.get('v.negotiateProduct');
-    if (negotiateProduct) {
+    var isNegotiateEnabled = component.get('v.isNegotiateEnabled');
+    if (isNegotiateEnabled) {
       component.set('v.isLoading', true);
       helper.createAgreement(component, event, helper).then(
         $A.getCallback(function () {

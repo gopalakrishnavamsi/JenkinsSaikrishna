@@ -9,9 +9,9 @@
       var products = component.get('v.products');
       if (!$A.util.isUndefinedOrNull(products)) {
         products.forEach(function (product) {
-          if (product.name === 'e_sign') {
+          if (product.name === 'e_sign' && product.status === 'active') {
             component.set('v.isESignatureEnabled', true);
-          } else if (product.name === 'negotiate') {
+          } else if (product.name === 'negotiate' && product.status === 'active') {
             component.set('v.isNegotiateEnabled', true);
           }
         });
