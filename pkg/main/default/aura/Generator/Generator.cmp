@@ -76,8 +76,7 @@
 
         </aura:if>
         <div aura:id="genSendingModal"/>
-        <aura:if
-                isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.isGenEnabled)}">
+        <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.isGenEnabled)}">
             <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                 {!$Label.c.GenNotConfigured}
             </div>

@@ -17,7 +17,7 @@ public with sharing class AuthController {
 			final Boolean isConsentRequired,
 			final String message,
 			final List<String> eventOrigins,
-		    final List<Product> products) {
+			final List<Product> products) {
 
 			this.isAuthorized = isAuthorized;
 			this.isConsentRequired = isConsentRequired;

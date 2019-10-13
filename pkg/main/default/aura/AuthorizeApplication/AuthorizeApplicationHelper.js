@@ -4,7 +4,7 @@
     var onSuccess = function (authStatus) {
       if (authStatus) {
         component.set('v.fetchingOAuthStatus', false);
-        if(authStatus.isAuthorized) {
+        if (authStatus.isAuthorized) {
           component.set('v.products', authStatus.products);
         }
         component.set('v.isAuthorized', authStatus.isAuthorized);
@@ -43,12 +43,12 @@
               $A.getCallback(function (products) {
                 component.set('v.products', products);
                 component.set('v.isAuthorized', success);
-                if (component.get('v.isAuthorized')) {
+                component.set('v.isConsentRequired', !success);
+                if (success) {
                   $A.util.addClass(component.find('ds-app-auth'), 'slds-hide');
-                }else{
+                } else {
                   $A.util.removeClass(component.find('ds-app-auth'), 'slds-hide');
                 }
-                component.set('v.isConsentRequired', !success);
                 if (event.source) {
                   event.source.close();
                 }

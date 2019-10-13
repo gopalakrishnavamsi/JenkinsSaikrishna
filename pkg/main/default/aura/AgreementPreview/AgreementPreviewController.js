@@ -35,5 +35,4 @@
   handleReloadEvent: function (component, event, helper) {
     helper.reLoadingEvent(component);
   }
-
 });

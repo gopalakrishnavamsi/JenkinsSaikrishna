@@ -62,7 +62,7 @@
                     <div class="slds-col slds-p-bottom_xx-small">
                         <lightning:button class="slds-button slds-button_neutral"
                                           onclick="{!c.importAgreements}"
-                                          disabled="{!if(v.loading || not(v.isAuthorized)||not(v.isDocuSignNegotiator) || not(v.negotiateProduct), true, false)}"
+                                          disabled="{!if(v.loading || not(v.isAuthorized)||not(v.isDocuSignNegotiator) || not(v.isNegotiateEnabled), true, false)}"
                                           label="{!$Label.c.ImportButtonLabel}"></lightning:button>
                     </div>
                 </div>
@@ -96,7 +96,8 @@
                         </div>
                     </aura:if>
 
-                    <aura:if isTrue="{!not(v.loading) &amp;&amp; v.isDocuSignNegotiator &amp;&amp; v.isNegotiateEnabled}">
+                    <aura:if
+                            isTrue="{!not(v.loading) &amp;&amp; v.isDocuSignNegotiator &amp;&amp; v.isNegotiateEnabled}">
                         <div class="{!if(not(v.agreements.length > 0), '', 'slds-hide')}">
                             <li class="slds-item">
                                 <div class="slds-illustration slds-illustration_small slds-p-around_large">
@@ -128,12 +129,14 @@
                     </aura:if>
                 </aura:if>
 
-                <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isDocuSignNegotiator)}">
+                <aura:if
+                        isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isDocuSignNegotiator)}">
                     <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                         {!$Label.c.MustBeDocuSignNegotiator}
                     </div>
                 </aura:if>
-                <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isNegotiateEnabled)}">
+                <aura:if
+                        isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isNegotiateEnabled)}">
                     <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                         {!$Label.c.NegotiateNotConfigured}
                     </div>
