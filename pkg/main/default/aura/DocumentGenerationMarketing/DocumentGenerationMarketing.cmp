@@ -1,10 +1,10 @@
 <aura:component description="DocumentGenerationMarketing">
     <!--attributes -->
-    <aura:attribute name="docGenFeaturesExpanded" type="Boolean" default="false" access="private" />
-    <aura:attribute name="negotiateFeaturesExpanded" type="Boolean" default="false" access="private" />
-    <aura:attribute name="docGenFeatures" type="String[]" access="private" />
-    <aura:attribute name="negotiateFeatures" type="String[]" access="private" />
-    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitializeComponent}" />
+    <aura:attribute name="docGenFeaturesExpanded" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="negotiateFeaturesExpanded" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="docGenFeatures" type="String[]" access="private"/>
+    <aura:attribute name="negotiateFeatures" type="String[]" access="private"/>
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitializeComponent}"/>
 
     <!-- Start of Gen Marketing Video section-->
     <div class="ds-documentGeneration-marketing">
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
-                        <img src="{!$Resource.GenMarketingVideo}" class="ds-marketing-video-image" />
+                        <img src="{!$Resource.GenMarketingVideo}" class="ds-marketing-video-image"/>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="slds-m-top_small">
                                 <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                    onclick="{!c.showGenTrialModal}" />
+                                    onclick="{!c.showGenTrialModal}"/>
                             </div>
                         </div>
 
@@ -64,7 +64,7 @@
                             </div>
                             <div class="slds-m-top_small">
                                 <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                    onclick="{!c.showNegotiateTrialModal}" />
+                                    onclick="{!c.showNegotiateTrialModal}"/>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                             <div class="slds-media slds-media_center">
                                 <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
                                     <img src="{!if(v.docGenFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
-                                        onclick="{!c.toggleGenFeaturesSection}" />
+                                        onclick="{!c.toggleGenFeaturesSection}"/>
                                 </div>
                                 <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
                                     {!$Label.c.TabDocumentGeneration}
@@ -88,13 +88,13 @@
                     </div>
                     <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
                         <div class="slds-p-around_medium">
-                            <lightning:icon iconName="utility:check" size="small" />
+                            <lightning:icon iconName="utility:check" size="small"/>
                         </div>
 
                     </div>
                     <div class="slds-col slds-size_1-of-4 slds-text-align_center">
                         <div class="slds-p-around_medium">
-                            <lightning:icon iconName="utility:check" size="small" />
+                            <lightning:icon iconName="utility:check" size="small"/>
                         </div>
                     </div>
                 </div>
@@ -111,12 +111,12 @@
                             </div>
                             <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
                                 <div class="slds-p-around_medium">
-                                    <lightning:icon iconName="utility:check" size="small" />
+                                    <lightning:icon iconName="utility:check" size="small"/>
                                 </div>
                             </div>
                             <div class="slds-col slds-size_1-of-4 slds-text-align_center">
                                 <div class="slds-p-around_medium">
-                                    <lightning:icon iconName="utility:check" size="small" />
+                                    <lightning:icon iconName="utility:check" size="small"/>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                             <div class="slds-media slds-media_center">
                                 <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
                                     <img src="{!if(v.negotiateFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
-                                        onclick="{!c.toggleNegotiateFeaturesSection}" />
+                                        onclick="{!c.toggleNegotiateFeaturesSection}"/>
                                 </div>
                                 <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
                                     {!$Label.c.TabNegotiation}
@@ -146,7 +146,7 @@
                     </div>
                     <div class="slds-col slds-size_1-of-4 slds-text-align_center">
                         <div class="slds-p-around_medium">
-                            <lightning:icon iconName="utility:check" size="small" />
+                            <lightning:icon iconName="utility:check" size="small"/>
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
                             </div>
                             <div class="slds-col slds-size_1-of-4 slds-text-align_center">
                                 <div class="slds-p-around_medium">
-                                    <lightning:icon iconName="utility:check" size="small" />
+                                    <lightning:icon iconName="utility:check" size="small"/>
                                 </div>
                             </div>
                         </div>
@@ -191,6 +191,6 @@
     </div>
 
     <!-- modal content for starting trial -->
-    <div aura:id="startProductTrialModal" />
+    <div aura:id="startProductTrialModal"/>
 
 </aura:component>
