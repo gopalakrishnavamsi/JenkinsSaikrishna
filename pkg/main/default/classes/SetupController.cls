@@ -350,13 +350,10 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<GenTemplate__c> getGenTemplates(){
+	public static List<Gen.GenTemplateDisplay> getGenTemplates(){
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate'
-			});
-			return [SELECT Id, Name, SourceObject__c, LastModifiedDate from GenTemplate__c ORDER BY LastModifiedDate desc LIMIT 50000];
+			return GenService.queryGenTemplatesForDisplay();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get url for creating new gen template');
 		}	

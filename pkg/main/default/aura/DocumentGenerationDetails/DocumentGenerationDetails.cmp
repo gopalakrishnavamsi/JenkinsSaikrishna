@@ -1,6 +1,6 @@
 <aura:component controller="SetupController">
     <!-- attributes -->
-    <aura:attribute name="genTemplates" type="GenTemplate__c[]" access="private"/>
+    <aura:attribute name="genTemplates" type="Gen.GenTemplateDisplay[]" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
     <aura:attribute name="data" type="Object" access="private"/>
     <aura:attribute name="columns" type="List" access="private"/>

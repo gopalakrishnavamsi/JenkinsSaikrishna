@@ -126,6 +126,22 @@ public with sharing class GenService {
 			]), queryGeneratedFiles(templateId));
 		}
 
+		public List<Gen.GenTemplateDisplay> queryTemplates() {
+			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
+				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate'
+			});
+			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
+			for (GenTemplate__c template : [SELECT Id, Name, SourceObject__c, LastModifiedDate 
+											FROM GenTemplate__c ORDER BY LastModifiedDate desc LIMIT 50000]) {
+				templatesList.add(new Gen.GenTemplateDisplay(
+										template.Id, 
+										template.Name, 
+										template.SourceObject__c,
+										template.LastModifiedDate));										
+			}
+			return templatesList;
+		}
+
 		private String getCopyName(final String name) {
 			Integer count = [
 				SELECT COUNT()
@@ -714,5 +730,10 @@ public with sharing class GenService {
 	public static Boolean deleteContentDocument(final Id contentVersionId) {
 		Permissions.verifyIsDocuSignGenerator();
 		return DB.deleteContentDocument(contentVersionId);
+	}
+
+	public static List<Gen.GenTemplateDisplay> queryGenTemplatesForDisplay() {
+		Permissions.verifyIsDocuSignGenerator();
+		return DB.queryTemplates();
 	}
 }

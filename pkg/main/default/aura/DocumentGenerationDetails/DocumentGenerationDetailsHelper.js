@@ -11,10 +11,10 @@
           var templateRows = [];
           templates.forEach(function (template) {
             templateRows.push({
-              name: template.Name,
-              sourceObject: $A.util.isUndefinedOrNull(template.dfsle__SourceObject__c) ? null : template.dfsle__SourceObject__c,
-              lastModifiedDate: template.LastModifiedDate,
-              link: '/' + template.Id
+              name: template.name,
+              sourceObject: $A.util.isUndefinedOrNull(template.sourceObject) ? null : template.sourceObject,
+              lastModifiedDate: template.lastModifiedDate,
+              link: '/' + template.id
             });
           });
           component.set('v.data', templateRows);
