@@ -221,7 +221,12 @@
 
                 <!-- eSignature section starts here-->
                 <aura:if isTrue="{!v.selectedItem == 'tab_eSignature'}">
-                    <c:SetupEsignature/>
+                    <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}" 
+                                          sectionHeader="{!$Label.c.TabESignature}" 
+                                          headerIconName="standard:email_chatter"/>
+                    <div class="ds-esignature-section slds-m-top_x-large">
+                        <c:SetupEsignature />
+                    </div>   
                 </aura:if>
                 <!-- eSignature ends here-->
 

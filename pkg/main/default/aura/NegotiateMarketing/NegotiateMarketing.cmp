@@ -1,196 +1,199 @@
 <aura:component description="NegotiateMarketing">
-    <aura:attribute name="genProduct" type="Product"/>
-    <aura:attribute name="docGenFeaturesExpanded" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="negotiateFeaturesExpanded" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="docGenFeatures" type="String[]" access="private"/>
-    <aura:attribute name="negotiateFeatures" type="String[]" access="private"/>
-    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitializeComponent}"/>
+    <aura:attribute name="genProduct" type="Product" />
+    <aura:attribute name="docGenFeaturesExpanded" type="Boolean" default="false" access="private" />
+    <aura:attribute name="negotiateFeaturesExpanded" type="Boolean" default="false" access="private" />
+    <aura:attribute name="docGenFeatures" type="String[]" access="private" />
+    <aura:attribute name="negotiateFeatures" type="String[]" access="private" />
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitializeComponent}" />
 
     <!-- Start of Negotiate Marketing Video section-->
-    <div class="ds-negotiation-marketing-helpSection">
-        <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-p-bottom_xx-large">
-            <div class="slds-grid slds-grid_align-spread">
-                <div class="slds-col slds-size_1-of-2">
-                    <div class="ds-marketing-section-header">
-                        {!$Label.c.NegotiateMarketingHeader}
+    <div class="ds-negotiation-marketing">
+        <div class="ds-negotiation-marketing-helpSection">
+            <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-p-bottom_xx-large">
+                <div class="slds-grid slds-grid_align-spread">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="ds-marketing-section-header">
+                            {!$Label.c.NegotiateMarketingHeader}
+                        </div>
+                        <div class="ds-marketing-section-body slds-m-top_small">
+                            {!$Label.c.NegotiateMarketingBody1}
+                        </div>
+                        <div class="ds-marketing-section-body slds-m-top_small">
+                            {!$Label.c.NegotiateMarketingBody2}
+                        </div>
                     </div>
-                    <div class="ds-marketing-section-body slds-m-top_small">
-                        {!$Label.c.NegotiateMarketingBody1}
+                    <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
+                        <img src="{!$Resource.NegotiateMarketingVideo}" class="ds-marketing-video-image" />
                     </div>
-                    <div class="ds-marketing-section-body slds-m-top_small">
-                        {!$Label.c.NegotiateMarketingBody2}
-                    </div>
-                </div>
-                <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
-                    <img src="{!$Resource.NegotiateMarketingVideo}" class="ds-marketing-video-image"/>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- End of Negotiate Marketing Video section -->
+        <!-- End of Negotiate Marketing Video section -->
 
-    <!-- Start of Negotiate Marketing Features section-->
-    <div class="ds-marketing-features-section">
-        <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-m-bottom_xx-large">
-            <!-- Feature Headers -->
-            <div class="slds-grid slds-grid_align-spread ds-marketing-features-section-header-row">
-                <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                    <div class="slds-p-around_medium">
-                        <div class="ds-marketing-features-section-header">
-                            {!$Label.c.CompareFeatures}
-                        </div>
-                        <div class="ds-marketing-features-section-body slds-m-top_small">
-                            {!$Label.c.FindFeatures}
-                        </div>
-                    </div>
-                </div>
-                <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right ds-marketing-features-product-header-section slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <div class="ds-marketing-features-product-header">
-                            {!$Label.c.GenBadgeText}
-                        </div>
-                        <div class="slds-m-top_small">
-                            <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == true)}">
-                                <ul class="slds-list_horizontal slds-m-left_x-large">
-                                    <li>
-                                        <lightning:icon size="x-small" iconName="utility:clock"></lightning:icon>
-                                    </li>
-                                    <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyOnTrial}</li>
-                                </ul>
-                                <aura:set attribute="else">
-                                    <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                                      onclick="{!c.showGenTrialModal}"/>
-                                </aura:set>
-                            </aura:if>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="slds-col slds-size_1-of-4 ds-marketing-features-product-header-section slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <div class="ds-marketing-features-product-header">
-                            {!$Label.c.NegotiateBadgeText}
-                        </div>
-                        <div class="slds-m-top_small">
-                            <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                              onclick="{!c.showNegotiateTrialModal}"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Feature Headers -->
-
-            <!-- Document Generation features-->
-            <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
-                <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                    <div class="slds-p-around_medium">
-                        <div class="slds-media slds-media_center">
-                            <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
-                                <img src="{!if(v.docGenFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
-                                     onclick="{!c.toggleGenFeaturesSection}"/>
+        <!-- Start of Negotiate Marketing Features section-->
+        <div class="ds-marketing-features-section">
+            <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-m-bottom_xx-large">
+                <!-- Feature Headers -->
+                <div class="slds-grid slds-grid_align-spread ds-marketing-features-section-header-row">
+                    <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                        <div class="slds-p-around_medium">
+                            <div class="ds-marketing-features-section-header">
+                                {!$Label.c.CompareFeatures}
                             </div>
-                            <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
-                                {!$Label.c.TabDocumentGeneration}
+                            <div class="ds-marketing-features-section-body slds-m-top_small">
+                                {!$Label.c.FindFeatures}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right ds-marketing-features-product-header-section slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <div class="ds-marketing-features-product-header">
+                                {!$Label.c.GenBadgeText}
+                            </div>
+                            <div class="slds-m-top_small">
+                                <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == true)}">
+                                    <ul class="slds-list_horizontal slds-m-left_x-large">
+                                        <li>
+                                            <lightning:icon size="x-small" iconName="utility:clock"></lightning:icon>
+                                        </li>
+                                        <li class="slds-m-left_xx-small slds-m-top_xxx-small">
+                                            {!$Label.c.CurrentlyOnTrial}</li>
+                                    </ul>
+                                    <aura:set attribute="else">
+                                        <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
+                                            onclick="{!c.showGenTrialModal}" />
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 ds-marketing-features-product-header-section slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <div class="ds-marketing-features-product-header">
+                                {!$Label.c.NegotiateBadgeText}
+                            </div>
+                            <div class="slds-m-top_small">
+                                <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
+                                    onclick="{!c.showNegotiateTrialModal}" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <lightning:icon iconName="utility:check" size="small"/>
-                    </div>
+                <!-- End of Feature Headers -->
 
-                </div>
-                <div class="slds-col slds-size_1-of-4 slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <lightning:icon iconName="utility:check" size="small"/>
-                    </div>
-                </div>
-            </div>
-
-            <aura:if isTrue="{!v.docGenFeaturesExpanded}">
-                <aura:iteration items="{!v.docGenFeatures}" var="feature">
-                    <div class="slds-grid slds-grid_align-spread ds-marketing-supportedProduct-features">
-                        <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                            <div class="slds-p-around_medium">
-                                <div class="ds-marketing-supportedProduct-features-body slds-m-left_x-large">
-                                    {!feature}
+                <!-- Document Generation features-->
+                <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
+                    <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                        <div class="slds-p-around_medium">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
+                                    <img src="{!if(v.docGenFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
+                                        onclick="{!c.toggleGenFeaturesSection}" />
+                                </div>
+                                <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
+                                    {!$Label.c.TabDocumentGeneration}
                                 </div>
                             </div>
                         </div>
-                        <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
-                            <div class="slds-p-around_medium">
-                                <lightning:icon iconName="utility:check" size="small"/>
-                            </div>
-                        </div>
-                        <div class="slds-col slds-size_1-of-4 slds-text-align_center">
-                            <div class="slds-p-around_medium">
-                                <lightning:icon iconName="utility:check" size="small"/>
-                            </div>
-                        </div>
                     </div>
-                </aura:iteration>
-            </aura:if>
-            <!-- End of Document Generation features-->
+                    <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <lightning:icon iconName="utility:check" size="small" />
+                        </div>
 
-            <!-- Collaboration and Negotiation Features -->
-            <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
-                <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                    <div class="slds-p-around_medium">
-                        <div class="slds-media slds-media_center">
-                            <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
-                                <img src="{!if(v.negotiateFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
-                                     onclick="{!c.toggleNegotiateFeaturesSection}"/>
-                            </div>
-                            <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
-                                {!$Label.c.TabNegotiation}
-                            </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <lightning:icon iconName="utility:check" size="small" />
                         </div>
                     </div>
                 </div>
-                <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
-                    <div class="slds-p-around_medium">
 
-                    </div>
-                </div>
-                <div class="slds-col slds-size_1-of-4 slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <lightning:icon iconName="utility:check" size="small"/>
-                    </div>
-                </div>
-            </div>
-
-            <aura:if isTrue="{!v.negotiateFeaturesExpanded}">
-                <aura:iteration items="{!v.negotiateFeatures}" var="feature">
-                    <div class="slds-grid slds-grid_align-spread ds-marketing-supportedProduct-features">
-                        <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                            <div class="slds-p-around_medium">
-                                <div class="ds-marketing-supportedProduct-features-body slds-m-left_x-large">
-                                    {!feature}
+                <aura:if isTrue="{!v.docGenFeaturesExpanded}">
+                    <aura:iteration items="{!v.docGenFeatures}" var="feature">
+                        <div class="slds-grid slds-grid_align-spread ds-marketing-supportedProduct-features">
+                            <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                                <div class="slds-p-around_medium">
+                                    <div class="ds-marketing-supportedProduct-features-body slds-m-left_x-large">
+                                        {!feature}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
+                                <div class="slds-p-around_medium">
+                                    <lightning:icon iconName="utility:check" size="small" />
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-text-align_center">
+                                <div class="slds-p-around_medium">
+                                    <lightning:icon iconName="utility:check" size="small" />
                                 </div>
                             </div>
                         </div>
-                        <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
-                            <div class="slds-p-around_medium"></div>
-                        </div>
-                        <div class="slds-col slds-size_1-of-4 slds-text-align_center">
-                            <div class="slds-p-around_medium">
-                                <lightning:icon iconName="utility:check" size="small"/>
+                    </aura:iteration>
+                </aura:if>
+                <!-- End of Document Generation features-->
+
+                <!-- Collaboration and Negotiation Features -->
+                <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
+                    <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                        <div class="slds-p-around_medium">
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure ds-marketing-features-icon slds-m-right_x-small">
+                                    <img src="{!if(v.negotiateFeaturesExpanded == true, $Resource.MinusSign, $Resource.PlusSign)}"
+                                        onclick="{!c.toggleNegotiateFeaturesSection}" />
+                                </div>
+                                <div class="slds-media__body ds-marketing-features-supportedProduct-section-header">
+                                    {!$Label.c.TabNegotiation}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </aura:iteration>
-            </aura:if>
-            <!-- End of Collaboration and Negotiation Features -->
+                    <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
+                        <div class="slds-p-around_medium">
 
-            <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
-                <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
-                    <div class="slds-p-around_medium"></div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <lightning:icon iconName="utility:check" size="small" />
+                        </div>
+                    </div>
                 </div>
-                <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right slds-text-align_center">
-                    <div class="slds-p-around_medium">
-                        <div class="ds-pricing-link">
-                            <a aura:id="showPricing">{!$Label.c.LearnMoreAboutPricing}</a>
+
+                <aura:if isTrue="{!v.negotiateFeaturesExpanded}">
+                    <aura:iteration items="{!v.negotiateFeatures}" var="feature">
+                        <div class="slds-grid slds-grid_align-spread ds-marketing-supportedProduct-features">
+                            <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                                <div class="slds-p-around_medium">
+                                    <div class="ds-marketing-supportedProduct-features-body slds-m-left_x-large">
+                                        {!feature}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 ds-marketing-features-border-right slds-text-align_center">
+                                <div class="slds-p-around_medium"></div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-text-align_center">
+                                <div class="slds-p-around_medium">
+                                    <lightning:icon iconName="utility:check" size="small" />
+                                </div>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </aura:if>
+                <!-- End of Collaboration and Negotiation Features -->
+
+                <div class="slds-grid slds-grid_align-spread ds-marketing-features-supportedProduct-section">
+                    <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">
+                        <div class="slds-p-around_medium"></div>
+                    </div>
+                    <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right slds-text-align_center">
+                        <div class="slds-p-around_medium">
+                            <div class="ds-pricing-link">
+                                <a aura:id="showPricing">{!$Label.c.LearnMoreAboutPricing}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -199,5 +202,5 @@
     </div>
 
     <!-- modal content for starting trial -->
-    <div aura:id="startProductTrialModal"/>
+    <div aura:id="startProductTrialModal" />
 </aura:component>
