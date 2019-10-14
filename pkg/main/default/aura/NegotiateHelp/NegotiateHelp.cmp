@@ -1,0 +1,27 @@
+<aura:component description="NegotiateHelp">
+    <!-- attributes -->
+    <aura:attribute name="helpSteps" type="Object[]" access="private"/>
+
+    <!-- handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <!-- component markup -->
+    <div class="slds-p-around_large">
+        <div class="ds-negotiateHelp-header">
+            {!$Label.c.NegotiateHelpHeader}
+        </div>
+        <div class="ds-negotiateHelp-body slds-m-top_medium">
+            {!$Label.c.NegotiateHelpGettingStarted}
+        </div>
+        <div class="ds-negotiateHelp-body slds-m-top_large">
+            <aura:iteration items="{!v.helpSteps}" var="step">
+                <ul class="slds-list_horizontal slds-m-bottom_large">
+                    <li class="ds-negotiateHelp-badgeText">{!step.stepNumber}</li>
+                    <li class="slds-m-left_large">{!step.stepDetail}</li>
+                </ul>
+            </aura:iteration>
+        </div>
+        <lightning:button label="{!$Label.c.GoToDocumentation}"/>
+    </div>
+
+</aura:component>

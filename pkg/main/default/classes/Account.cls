@@ -47,11 +47,6 @@ public class Account {
 				&& this.plan.id == DocuSign.TRIAL_PLAN_ID;
 		}
 	}
-	/**
-	 * The status of the DocuSign account trial.
-	 */
-	@AuraEnabled
-	public TrialStatus trialStatus { get; private set; }
 
 	/**
 	 * Constructs a DocuSign account.
@@ -92,45 +87,6 @@ public class Account {
 	public Account withPlanId(final UUID planId) {
 		this.plan = this.plan.withId(planId);
 		return this;
-	}
-
-	/**
-	 * Updates a DocuSign account's <code>trialStatus</code>.
-	 *
-	 * @param trialStatus The DocuSign account trial status.
-	 *
-	 * @return The DocuSign account with updated <code>trialStatus</code>.
-	 */
-	public Account withTrialStatus(final TrialStatus trialStatus) {
-		this.trialStatus = trialStatus;
-		return this;
-	}
-
-	/**
-	 * Representation of the status of a DocuSign trial account.
-	 */
-	public class TrialStatus {
-		/**
-		 * Whether or not the trial has expired.
-		 */
-		@AuraEnabled
-		public Boolean isExpired { get; private set; }
-		/**
-		 * The trial status message. This may be a friendly warning to upgrade soon.
-		 */
-		@AuraEnabled
-		public String message { get; private set; }
-
-		/**
-		 * Constructs a DocuSign account trial status.
-		 *
-		 * @param isExpired Whether or not the trial has expired.
-		 * @param message The trial status message.
-		 */
-		public TrialStatus(final Boolean isExpired, final String message) {
-			this.isExpired = isExpired;
-			this.message = message;
-		}
 	}
 
 	/**
@@ -300,7 +256,7 @@ public class Account {
 		 * The user's assigned application roles.
 		 */
 		@AuraEnabled
-		public Map<String, List<String>> roles { get; private set; }
+		public Map<String, String> roles { get; private set; }
 		/**
 		 * The error returned by the API for bulk add or remove account member operations.
 		 */
@@ -395,7 +351,7 @@ public class Account {
 			final Date provisioned,
 			final Boolean canManageAccount,
 			final String profile,
-			final Map<String, List<String>> roles,
+			final Map<String, String> roles,
 			final APIError error) {
 
 			this.id = id;
@@ -407,7 +363,7 @@ public class Account {
 			this.provisioned = provisioned;
 			this.canManageAccount = canManageAccount;
 			this.profile = profile;
-			this.roles = roles == null ? new Map<String, List<String>>() : roles;
+			this.roles = roles == null ? new Map<String, String>() : roles;
 			this.error = error == null ? APIError.none : error;
 		}
 
@@ -430,8 +386,20 @@ public class Account {
 		 *
 		 * @return The user with an updated <code>roles</code> property.
 		 */
-		public User withRoles(final Map<String, List<String>> roles) {
-			this.roles = roles == null ? new Map<String, List<String>>() : roles;
+		public User withRoles(final Map<String, String> roles) {
+			this.roles = roles == null ? new Map<String, String>() : roles;
+			return this;
+		}
+
+		/**
+		 * Updates a user's <code>canManageAccount</code> property.
+		 *
+		 * @param canManageAccount Whether or not the user is an administrator for the DocuSign account.
+		 *
+		 * @return The user with an updated <code>canManageAccount</code> property.
+		 */
+		public User withCanManageAccount(final Boolean canManageAccount) {
+			this.canManageAccount = canManageAccount;
 			return this;
 		}
 	}

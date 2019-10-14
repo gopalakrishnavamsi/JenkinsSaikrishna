@@ -1,10 +1,21 @@
 ({
-  getConfiguration: function (component) {
-    component.get('v.uiHelper').invokeAction(component.get('c.getConfiguration'), null, function (configuration) {
-      component.set('v.sendActionName', configuration.sendActionName);
-      component.set('v.commonObjects', configuration.commonObjects);
-      component.set('v.allObjects', configuration.allObjects);
-    });
+  getConfiguration: function (component, event, helper) {
+    component.set('v.loading', true);
+    var getConfigurationAction = component.get('c.getConfiguration');
+    getConfigurationAction.setCallback(this, $A.getCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var configuration = response.getReturnValue();
+        component.set('v.sendActionName', configuration.sendActionName);
+        component.set('v.commonObjects', configuration.commonObjects);
+        component.set('v.allObjects', configuration.allObjects);
+      }
+      else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+      component.set('v.loading', false);
+    }));
+    $A.enqueueAction(getConfigurationAction);
   },
 
   hasSendAction: function (layout) {
@@ -42,12 +53,30 @@
     return result;
   },
 
-  getLayouts: function (component) {
-    var self = this;
-    component.get('v.uiHelper').invokeAction(component.get('c.getLayouts'), {sObjectType: component.get('v.sObjectType')}, function (layouts) {
-      component.set('v.layouts', self.processLayouts(layouts));
-      component.set('v.isDirty', false);
-    });
+  getLayouts: function (component, event, helper) {
+    if ($A.util.isEmpty(component.get('v.sObjectType'))) {
+      component.set('v.layouts', []);
+    }
+    else {
+      component.set('v.loading', true);
+      var getLayoutsAction = component.get('c.getLayouts');
+      getLayoutsAction.setParams({
+        sObjectType: component.get('v.sObjectType')
+      });
+      getLayoutsAction.setCallback(this, $A.getCallback(function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          var layouts = response.getReturnValue();
+          component.set('v.layouts', helper.processLayouts(layouts));
+          component.set('v.isDirty', false);
+        }
+        else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        }
+        component.set('v.loading', false);
+      }));
+      $A.enqueueAction(getLayoutsAction);
+    }
   },
 
   isDirty: function (layouts) {
@@ -86,24 +115,45 @@
     return ls;
   },
 
-  onUpdateComplete: function (component) {
+  onUpdateComplete: function (component, event, helper) {
     component.set('v.isDirty', false);
     component.set('v.layouts', this.processLayouts(component.get('v.layouts')));
-    var uiHelper = component.get('v.uiHelper');
-    uiHelper.showToast($A.get('$Label.c.SuccessfullyModifiedLayouts'), uiHelper.ToastMode.SUCCESS);
+    helper.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
   },
 
-  updateLayouts: function (component) {
-    var self = this;
+  updateLayouts: function (component, event, helper) {
     var layouts = this.getLayoutsToUpdate(component.get('v.layouts'), component.get('v.sendActionName'));
     if ($A.util.isEmpty(layouts)) {
       this.onUpdateComplete(component);
     } else {
-      component.get('v.uiHelper').invokeAction(component.get('c.updateLayouts'), {
-        sObjectType: component.get('v.sObjectType'), layoutsJson: JSON.stringify(layouts), parameters: null
-      }, function () {
-        self.onUpdateComplete(component);
+      component.set('v.loading', true);
+      var updateLayoutsAction = component.get('c.updateLayouts');
+      updateLayoutsAction.setParams({
+        sObjectType: component.get('v.sObjectType'),
+        layoutsJson: JSON.stringify(layouts),
+        parameters: null
       });
+      updateLayoutsAction.setCallback(this, $A.getCallback(function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          helper.onUpdateComplete(component, event, helper);
+        }
+        else {
+          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        }
+        component.set('v.loading', false);
+      }));
+      $A.enqueueAction(updateLayoutsAction);
     }
+  },
+
+  showToast: function (component, message, mode) {
+    var fireToastEvent = component.getEvent('toastEvent');
+    fireToastEvent.setParams({
+      show: true,
+      message: message,
+      mode: mode
+    });
+    fireToastEvent.fire();
   }
 });

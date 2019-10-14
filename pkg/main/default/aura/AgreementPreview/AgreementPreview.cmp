@@ -15,37 +15,55 @@
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
     <aura:attribute name="showToolBarAndPreview" type="Boolean" default="true"/>
-    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="showSetupComponent" type="Object"/>
+    <aura:attribute name="showSetupSpinner" type="Object"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
-                  scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"
-                  afterScriptsLoaded="{!c.onLoad}"/>
+                  scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.handleReloadEvent}"/>
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
     <div class="slds-scope">
-        <div class="{!'fullContainer' + if(not(v.showToolBarAndPreview), ' slds-hide')}">
-            <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
-                <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
-                                           agreementActionManager="{!v.agreementActionManager}"
-                                           uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
-                                           canSendForSignature="{!v.canSendForSignature}"/>
-            </div>
-            <div class="documentContainer">
-                <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}" uiHelper="{!v.uiHelper}"
-                                            currentUserEmail="{!v.currentUserEmail}"
-                                            currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
-                <aura:if isTrue="{!v.loading}">
-                    <div class="slds-is-relative loadingContainer">
-                        <c:BlueSpinner/>
+        <aura:if isTrue="{!v.isAuthorized}">
+            <aura:set attribute="else">
+                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                        fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                        products="{!v.products}"/>
+            </aura:set>
+            <aura:if isTrue="{!not(v.isNegotiateEnabled)}">
+                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                    {!$Label.c.NegotiateNotConfigured}
+                </div>
+            </aura:if>
+            <div class="fullContainer">
+                <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.isNegotiateEnabled}">
+                    <div class="{!'toolbarContainer' + if(or(v.showToast, v.loading) , ' backgroundDisabled')}">
+                        <c:AgreementPreviewToolBar agreement="{!v.agreement}" sourceId="{!v.sourceId}"
+                                                   agreementActionManager="{!v.agreementActionManager}"
+                                                   uiHelper="{!v.uiHelper}" isAgreementDeleted="{!v.isAgreementDeleted}"
+                                                   isESignatureEnabled="{!v.isESignatureEnabled}"/>
+                    </div>
+                    <div class="documentContainer">
+                        <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}"
+                                                    uiHelper="{!v.uiHelper}"
+                                                    currentUserEmail="{!v.currentUserEmail}"
+                                                    currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
                     </div>
                 </aura:if>
             </div>
-        </div>
-        <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}" visualforce="true"/>
+        </aura:if>
+        <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
+                 visualforce="true"/>
     </div>
 </aura:component>

@@ -21,10 +21,40 @@
         html body.sfdcBody {
             padding: 0;
         }
+
+        .noSidebarCell #ds-spinner {
+            height: calc(100vh - 165px);
+        }
+        .ds-blue-brand {
+            background: rgb(176, 196, 223);
+            background-image: url({!URLFOR($Resource.lightningBlueBackground)});
+            background-repeat: repeat-x;
+        }
     </style>
 
-    <div id="appContainer"/>
+    <div id="ds-pageContent" class="ds-blue-brand">
+        <div id="appContainer"/>
+    </div>
+
+    <div id="ds-spinner">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
     <script type="text/javascript">
+
+      function showSetupComponent() {
+        document.getElementById('ds-spinner').style.display = 'none';
+        document.getElementById('ds-pageContent').style.display = 'block';
+      }
+
+      function showSetupSpinner() {
+        document.getElementById('ds-spinner').style.display = 'block';
+        document.getElementById('ds-pageContent').style.display = 'none';
+      }
+
       var namespace = '{!JSENCODE(namespace)}';
       var _navigateToURL = function (event) {
         var url = event.getParam('url');
@@ -37,7 +67,9 @@
             sourceId: '{!JSENCODE($CurrentPage.parameters.sourceId)}',
             agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}',
             currentUserEmail: '{!JSENCODE($User.email)}',
-            currentUserDocuSignAdmin: docuSignAdmin
+            currentUserDocuSignAdmin: docuSignAdmin,
+            showSetupComponent: showSetupComponent,
+            showSetupSpinner: showSetupSpinner
           },
           'appContainer',
           function (component, status, errorMessage) {

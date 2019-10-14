@@ -12,6 +12,7 @@
   onLoading: function (component, event, helper) {
     event.stopPropagation();
     var params = event.getParams();
-    helper.setLoading(component, params && params.isLoading === true);
+    var showloadingSpinner = params && params.isLoading && !params.isAuthorizeEvent;
+    helper.setLoading(component, showloadingSpinner);
   }
 });

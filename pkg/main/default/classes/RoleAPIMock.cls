@@ -5,6 +5,7 @@ public class RoleAPIMock extends OAuthTokenMock {
 		'\\/management\\/([^\\/]+)\\/accounts(\\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|\\d+)(\\/?(.+))?)?');
 
 	private final Boolean success;
+	private ESignatureAPIMock eSignatureMock = null;
 
 	public RoleAPIMock(final Boolean success) {
 		super(!success);
@@ -19,6 +20,13 @@ public class RoleAPIMock extends OAuthTokenMock {
 		return (RoleAPIMock)TestUtils.setMock(new RoleAPIMock(false));
 	}
 
+	private ESignatureAPIMock getESignatureMock() {
+		if (this.eSignatureMock == null) {
+			this.eSignatureMock = new ESignatureAPIMock(this.success);
+		}
+		return this.eSignatureMock;
+	}
+
 	/* Supported routes:
 		- GET /management/v1/accounts/{{account-id}}/products/{{product}}/groups
 		- GET /management/v1/accounts/{{account-id}}/dsgroups
@@ -28,13 +36,14 @@ public class RoleAPIMock extends OAuthTokenMock {
 	 */
 	override public HttpResponse getResponse(final HttpRequest request) {
 		HttpResponse response = new HttpResponse();
-		if (this.success) {
-			String method = request.getMethod();
-			String endpoint = request.getEndpoint();
+		String method = request.getMethod();
+		String endpoint = request.getEndpoint();
+		if (method == 'PUT' && endpoint.endsWith('/users')) {
+			response = getESignatureMock().getResponse(request);
+		} else if (this.success) {
 			Url u = new Url(endpoint);
 			Matcher m = PATH_PATTERN.matcher(u.getPath());
 			if (!m.matches()) throw new AssertException('API request endpoint was not in expected format: ' + u.getPath());
-
 			//String accountId = m.group(2);
 
 			response.setHeader('Content-Type', 'application/json');

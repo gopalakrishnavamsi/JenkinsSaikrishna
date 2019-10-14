@@ -821,7 +821,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers);
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers, 10000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -857,7 +857,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers);
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(roleUsers, 1000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -983,7 +983,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers);
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers, 10000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1019,7 +1019,7 @@ private class RoleAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers);
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().removeRoleUsers(roleUsers, 10000);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1074,6 +1074,366 @@ private class RoleAPITest {
 			System.assertNotEquals(null, result.results.get(uId));
 			System.assertEquals(APIErrorCode.FAILURE, result.results.get(uId).code);
 			System.assertEquals(Label.UnknownError, result.results.get(uId).description);
+		}
+	}
+
+	@IsTest
+	static void test_filterCurrentUser() {
+		User u1 = UserMock.createClmAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+
+			Test.startTest();
+			Map<UUID, Account.User> result = RoleAPI.filterCurrentUser(
+				new Map<UUID, Account.User> {
+					u2Id => new Account.User(u2.Id, u2.Email, u2.FirstName, u2.LastName, u2.CanManageAccount__c),
+					u1Id => new Account.User(u1.Id, u1.Email, u1.FirstName, u1.LastName, u1.CanManageAccount__c),
+					u3Id => new Account.User(u3.Id, u3.Email, u3.FirstName, u3.LastName, u3.CanManageAccount__c)
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { u3Id, u2Id }, result.keySet());
+			System.assertNotEquals(null, result.get(u2Id));
+			System.assertNotEquals(null, result.get(u3Id));
+		}
+	}
+
+	private class TestRoles {
+		public final Map<UUID, Product.Role> roles;
+		public final UUID dsAdminId = RoleAPI.ESIGNATURE_ADMINISTRATOR_ID;
+		public final UUID dsUserId = RoleAPI.ESIGNATURE_USER_ID;
+		public final UUID dsSenderId = RoleAPI.ESIGNATURE_SENDER_ID;
+		public final UUID generatorId = UUID.randomUUID();
+		public final UUID negotiatorId = UUID.randomUUID();
+		public final UUID clmAdminId = UUID.randomUUID();
+		public final UUID clmUserId = UUID.randomUUID();
+		public final UUID clmViewerId = UUID.randomUUID();
+
+		public TestRoles() {
+			this.roles = new Map<UUID, Product.Role> {
+				RoleAPI.ESIGNATURE_ADMINISTRATOR_ID => new Product.Role(
+					UUID.randomUUID(),
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_ADMINISTRATOR,
+					null,
+					true),
+				RoleAPI.ESIGNATURE_USER_ID => new Product.Role(
+					UUID.randomUUID(),
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_USER,
+					null,
+					false),
+				RoleAPI.ESIGNATURE_SENDER_ID => new Product.Role(
+					UUID.randomUUID(),
+					Product.ESIGNATURE,
+					ESignatureProduct.ROLE_SENDER,
+					null,
+					false),
+				generatorId => new Product.Role(
+					generatorId,
+					Product.GEN,
+					GenProduct.ROLE_GENERATOR,
+					null,
+					false),
+				negotiatorId => new Product.Role(
+					negotiatorId,
+					Product.NEGOTIATE,
+					NegotiateProduct.ROLE_NEGOTIATOR,
+					null,
+					false),
+				clmAdminId => new Product.Role(
+					clmAdminId,
+					Product.CLM,
+					ClmProduct.ROLE_ADMINISTRATOR,
+					null,
+					true),
+				clmUserId => new Product.Role(
+					clmUserId,
+					Product.CLM,
+					ClmProduct.ROLE_USER,
+					null,
+					false),
+				clmViewerId => new Product.Role(
+					clmViewerId,
+					Product.CLM,
+					ClmProduct.ROLE_VIEWER,
+					null,
+					false)
+			};
+		}
+	}
+
+	@IsTest
+	static void test_getRolesToRemove() {
+		User u1 = UserMock.createClmAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+			Map<UUID, Product.Role> newRoles = new Map<UUID, Product.Role> {
+				r.clmUserId => r.roles.get(r.clmUserId),
+				r.generatorId => r.roles.get(r.generatorId)
+			};
+			Set<UUID> allUserIds = new Set<UUID> { u1Id, u2Id, u3Id };
+			Set<UUID> filteredUserIds = new Set<UUID> { u2Id, u3Id };
+
+			Test.startTest();
+			Map<UUID, Set<UUID>> result = RoleAPI.getRolesToRemove(
+				allUserIds,
+				filteredUserIds,
+				r.roles,
+				newRoles);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(
+				new Set<UUID> { r.dsAdminId, r.dsUserId, r.dsSenderId, r.negotiatorId, r.clmAdminId, r.clmViewerId },
+				result.keySet());
+			System.assertEquals(filteredUserIds, result.get(r.dsAdminId));
+			System.assertEquals(allUserIds, result.get(r.dsUserId));
+			System.assertEquals(allUserIds, result.get(r.dsSenderId));
+			System.assertEquals(allUserIds, result.get(r.negotiatorId));
+			System.assertEquals(filteredUserIds, result.get(r.clmAdminId));
+			System.assertEquals(allUserIds, result.get(r.clmViewerId));
+		}
+	}
+
+	@IsTest
+	static void test_filterLowerPrivilegedRoles() {
+		TestRoles r = new TestRoles();
+		Map<UUID, Product.Role> roles = new Map<UUID, Product.Role> {
+			r.dsAdminId => r.roles.get(r.dsAdminId),
+			r.dsUserId => r.roles.get(r.dsUserId),
+			r.dsSenderId => r.roles.get(r.dsSenderId),
+			r.clmAdminId => r.roles.get(r.clmAdminId),
+			r.clmUserId => r.roles.get(r.clmUserId),
+			r.clmViewerId => r.roles.get(r.clmViewerId),
+			r.generatorId => r.roles.get(r.generatorId),
+			r.negotiatorId => r.roles.get(r.negotiatorId)
+		};
+
+		Test.startTest();
+		Map<UUID, Product.Role> result = RoleAPI.filterLesserPrivilegedRoles(roles);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new Set<UUID> { r.dsAdminId, r.clmAdminId, r.generatorId, r.negotiatorId }, result.keySet());
+		System.assertNotEquals(null, result.get(r.dsAdminId));
+		System.assertNotEquals(null, result.get(r.clmAdminId));
+		System.assertNotEquals(null, result.get(r.generatorId));
+		System.assertNotEquals(null, result.get(r.negotiatorId));
+	}
+
+	@IsTest
+	static void test_getRolesToAdd() {
+		User u1 = UserMock.createDocuSignAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createDocuSignGenerator(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+			Map<UUID, Product.Role> newRoles = new Map<UUID, Product.Role> {
+				r.dsUserId => r.roles.get(r.dsUserId),
+				r.clmAdminId => r.roles.get(r.clmAdminId),
+				r.generatorId => r.roles.get(r.generatorId),
+				r.negotiatorId => r.roles.get(r.negotiatorId)
+			};
+			Set<UUID> allUserIds = new Set<UUID> { u1Id, u2Id, u3Id };
+			Set<UUID> filteredUserIds = new Set<UUID> { u2Id, u3Id };
+
+			Test.startTest();
+			Map<UUID, Set<UUID>> result = RoleAPI.getRolesToAdd(
+				allUserIds,
+				filteredUserIds,
+				newRoles);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(
+				new Set<UUID> { r.dsUserId, r.clmAdminId, r.generatorId, r.negotiatorId },
+				result.keySet());
+			System.assertEquals(filteredUserIds, result.get(r.dsUserId));
+			System.assertEquals(allUserIds, result.get(r.clmAdminId));
+			System.assertEquals(allUserIds, result.get(r.generatorId));
+			System.assertEquals(allUserIds, result.get(r.negotiatorId));
+		}
+	}
+
+	@IsTest
+	static void test_getUsersToUpdate_administrator() {
+		User u1 = UserMock.createClmAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+
+			Test.startTest();
+			Map<UUID, Account.User> result = RoleAPI.getUsersToUpdate(
+				new Map<UUID, Account.User> {
+					u2Id => new Account.User(u2.Id, u2.Email, u2.FirstName, u2.LastName, u2.CanManageAccount__c),
+					u1Id => new Account.User(u1.Id, u1.Email, u1.FirstName, u1.LastName, u1.CanManageAccount__c),
+					u3Id => new Account.User(u3.Id, u3.Email, u3.FirstName, u3.LastName, u3.CanManageAccount__c)
+				},
+				new Set<UUID> {
+					RoleAPI.ESIGNATURE_USER_ID,
+					RoleAPI.ESIGNATURE_ADMINISTRATOR_ID
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { u3Id, u2Id }, result.keySet());
+			System.assertNotEquals(null, result.get(u2Id));
+			System.assertNotEquals(null, result.get(u3Id));
+		}
+	}
+
+	@IsTest
+	static void test_getUsersToUpdate_user() {
+		User u1 = UserMock.createClmAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+
+			Test.startTest();
+			Map<UUID, Account.User> result = RoleAPI.getUsersToUpdate(
+				new Map<UUID, Account.User> {
+					u1Id => new Account.User(u1Id, u1.Id, u1.Email, u1.FirstName, u1.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u1.CanManageAccount__c, u1.Profile.Name, null, null),
+					u2Id => new Account.User(u2Id, u2.Id, u2.Email, u2.FirstName, u2.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u2.CanManageAccount__c, u2.Profile.Name, null, null),
+					u3Id => new Account.User(u3Id, u3.Id, u3.Email, u3.FirstName, u3.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u3.CanManageAccount__c, u3.Profile.Name, null, null)
+				},
+				new Set<UUID> {
+					RoleAPI.ESIGNATURE_USER_ID
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { u3Id, u2Id }, result.keySet());
+			System.assertNotEquals(null, result.get(u2Id));
+			System.assertNotEquals(null, result.get(u3Id));
+		}
+	}
+
+	@IsTest
+	static void test_addRoleUsers_public() {
+		RoleAPIMock.success();
+		User u1 = UserMock.createDocuSignAdministrator();
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+
+			Test.startTest();
+			Map<UUID, RoleAPI.UserResults> result = RoleAPI.getInstance().addRoleUsers(
+				new Map<UUID, Account.User> {
+					u1Id => new Account.User(u1.Id, u1.Email, u1.FirstName, u1.LastName, u1.CanManageAccount__c),
+					u2Id => new Account.User(u2.Id, u2.Email, u2.FirstName, u2.LastName, u2.CanManageAccount__c),
+					u3Id => new Account.User(u3.Id, u3.Email, u3.FirstName, u3.LastName, u3.CanManageAccount__c)
+				},
+				new Map<UUID, Product.Role> {
+					r.dsAdminId => r.roles.get(r.dsAdminId),
+					r.clmUserId => r.roles.get(r.clmUserId),
+					r.generatorId => r.roles.get(r.generatorId)
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { r.dsAdminId, r.clmUserId, r.generatorId }, result.keySet());
+			System.assertNotEquals(null, result.get(r.dsAdminId));
+			System.assertNotEquals(null, result.get(r.dsAdminId).results);
+			System.assertEquals(new Set<UUID> { u1Id, u2Id, u3Id }, result.get(r.dsAdminId).results.keySet());
+			System.assertNotEquals(null, result.get(r.clmUserId));
+			System.assertNotEquals(null, result.get(r.clmUserId).results);
+			System.assertEquals(new Set<UUID> { u2Id, u3Id }, result.get(r.clmUserId).results.keySet());
+			System.assertNotEquals(null, result.get(r.generatorId));
+			System.assertNotEquals(null, result.get(r.generatorId).results);
+			System.assertEquals(new Set<UUID> { u1Id, u2Id, u3Id }, result.get(r.generatorId).results.keySet());
+		}
+	}
+
+	@IsTest
+	static void test_updateUserRoles_failure() {
+		RoleAPIMock.failure();
+		User u1 = UserMock.createClmAdministrator();
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+
+			Test.startTest();
+			try {
+				RoleAPI.getInstance().updateUserRoles(
+					new Map<UUID, Account.User> {
+						u1Id => new Account.User(u1.Id, u1.Email, u1.FirstName, u1.LastName, u1.CanManageAccount__c),
+						u2Id => new Account.User(u2.Id, u2.Email, u2.FirstName, u2.LastName, u2.CanManageAccount__c),
+						u3Id => new Account.User(u3.Id, u3.Email, u3.FirstName, u3.LastName, u3.CanManageAccount__c)
+					},
+					r.roles,
+					new Map<UUID, Product.Role> {
+						r.dsAdminId => r.roles.get(r.dsAdminId),
+						r.clmUserId => r.roles.get(r.clmUserId),
+						r.generatorId => r.roles.get(r.generatorId)
+					});
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateUserRoles_success() {
+		RoleAPIMock.success();
+		User u1 = UserMock.createClmAdministrator();
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+
+			Test.startTest();
+			Map<UUID, Account.User> result = RoleAPI.getInstance().updateUserRoles(
+				new Map<UUID, Account.User> {
+					u1Id => new Account.User(u1Id, u1.Id, u1.Email, u1.FirstName, u1.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u1.CanManageAccount__c, u1.Profile.Name, null, null),
+					u2Id => new Account.User(u2Id, u2.Id, u2.Email, u2.FirstName, u2.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u2.CanManageAccount__c, u2.Profile.Name, null, null),
+					u3Id => new Account.User(u3Id, u3.Id, u3.Email, u3.FirstName, u3.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u3.CanManageAccount__c, u3.Profile.Name, null, null)
+				},
+				r.roles,
+				new Map<UUID, Product.Role> {
+					r.dsAdminId => r.roles.get(r.dsAdminId),
+					r.clmUserId => r.roles.get(r.clmUserId),
+					r.generatorId => r.roles.get(r.generatorId)
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { u1Id, u2Id, u3Id }, result.keySet());
+			System.assertNotEquals(null, result.get(u1Id));
+			System.assertNotEquals(null, result.get(u2Id));
+			System.assertNotEquals(null, result.get(u3Id));
 		}
 	}
 }

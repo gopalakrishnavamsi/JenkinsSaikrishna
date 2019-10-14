@@ -1,16 +1,11 @@
 ({
   onInitialize: function (component, event, helper) {
-    component.set('v.uiHelper', new UIHelper(function () {
-      return component.getEvent('loadingEvent');
-    }, function () {
-      return component.getEvent('toastEvent');
-    }));
-    helper.getConfiguration(component);
+    helper.getConfiguration(component, event, helper);
   },
 
   onChangeObject: function (component, event, helper) {
     // TODO: If isDirty, confirm before changing
-    helper.getLayouts(component);
+    helper.getLayouts(component, event, helper);
   },
 
   makeDirty: function (component, event, helper) {
@@ -18,6 +13,6 @@
   },
 
   publishActions: function (component, event, helper) {
-    helper.updateLayouts(component);
+    helper.updateLayouts(component, event, helper);
   }
 });

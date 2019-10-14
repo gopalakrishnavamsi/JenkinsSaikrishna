@@ -3651,10 +3651,6 @@
 		<name>CannotCloseCurrentUser</name>
 	</customLabels>
 	<customLabels>
-		<label>L’utilisateur actuel ne peut pas participer aux mises à jour pour modifier des autorisations.</label>
-		<name>CannotEditPermissionsCurrentUser</name>
-	</customLabels>
-	<customLabels>
 		<label>Sélectionner un rôle</label>
 		<name>SelectApplicationRole</name>
 	</customLabels>

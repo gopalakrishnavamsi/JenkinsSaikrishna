@@ -304,4 +304,27 @@ public class Gen {
 			this.genTemplateId = genTemplateId;
 		}
 	}
+
+	public class GenTemplateDisplay {
+		@AuraEnabled
+		public Id id { get; private set; }
+		@AuraEnabled
+		public String name { get; private set; }
+		@AuraEnabled
+		public String sourceObject { get; private set; }
+		@AuraEnabled
+		public Datetime lastModifiedDate { get; private set; }
+
+		public GenTemplateDisplay(
+			final Id id,
+			final String name,
+			final String sourceObject,
+			final Datetime lastModifiedDate) {
+				
+			this.id = id;
+			this.name = name;
+			this.sourceObject = sourceObject;
+			this.lastModifiedDate = lastModifiedDate;
+		}
+	}	
 }

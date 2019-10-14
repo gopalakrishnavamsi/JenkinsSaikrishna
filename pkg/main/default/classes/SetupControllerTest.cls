@@ -275,7 +275,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
 			String userJson = '[{"sourceId":"' + u.Id + '","email":"' + u.Email + '","firstName":"' + u.FirstName + '","lastName":"' + u.LastName + '","canManageAccount":true}]';
-			String rolesJson = '{"e_sign":["User","Administrator"]}';
+			String rolesJson = '{"e_sign":"Administrator"}';
 			Test.startTest();
 			List<Account.User> result = SetupController.addUsers(userJson, rolesJson);
 			Test.stopTest();
@@ -288,7 +288,7 @@ private class SetupControllerTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			String userJson = '';
-			String rolesJson = '{"e_sign":["User","Administrator"]}';
+			String rolesJson = '{"e_sign":"User"}';
 			try {
 				SetupController.addUsers(userJson, rolesJson);
 				throw new AssertException('Expected addUsers to fail');
@@ -318,7 +318,7 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u = UserMock.createUser();
 			String userJson = '[{"sourceId":"' + u.Id + '","email":"' + u.Email + '","firstName":"' + u.FirstName + '","lastName":"' + u.LastName + '","canManageAccount":true}]';
-			String rolesJson = '{"e_sign":["User","Administrator"]}';
+			String rolesJson = '{"e_sign":"User"}';
 			try {
 				SetupController.addUsers(userJson, rolesJson);
 				throw new AssertException('Expected addUser to fail');
@@ -403,7 +403,7 @@ private class SetupControllerTest {
 			Test.startTest();
 			try {
 				String userIdsToEdit = '["' + UserInfo.getUserId() + '"]';
-				String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+				String roles = '{"e_sign":"Administrator","gen":"Generator","negotiate":"Negotiator"}';
 				SetupController.editUserPermissions(userIdsToEdit, roles);
 				throw new AssertException('Expected editUserPermissions to fail');
 			} catch (AuraHandledException ex) {
@@ -419,7 +419,7 @@ private class SetupControllerTest {
 			Test.startTest();
 			try {
 				String userIdsToEdit = '';
-				String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+				String roles = '{"e_sign":"Administrator","gen":"Generator","negotiate":"Negotiator"}';
 				SetupController.editUserPermissions(userIdsToEdit, roles);
 				throw new AssertException('Expected editUserPermissions to fail');
 			} catch (AuraHandledException ex) {
@@ -437,7 +437,7 @@ private class SetupControllerTest {
 			User u1 = UserMock.createClmAdministrator(false);
 			User u2 = UserMock.createDocuSignNegotiator(false);
 			String userIdsToEdit = '["' + u1.Id + '", "' + u2.Id + '"]';
-			String roles = '{"e_sign":["User","Administrator"],"gen":["Generator"],"negotiate":["Negotiator"]}';
+			String roles = '{"e_sign":"Administrator","gen":"Generator","negotiate":"Negotiator"}';
 			Test.startTest();
 			List<Account.User> result = SetupController.editUserPermissions(userIdsToEdit, roles);
 			Test.stopTest();
@@ -786,6 +786,59 @@ private class SetupControllerTest {
 			List<User> filteredUserList = SetupController.filterSFUsers(filterString);
 			Test.stopTest();
 			System.assertEquals(0, filteredUserList.size());
+		}
+	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getNewGenTemplateUrl();
+				throw new AssertException('Expected getNewGenTemplateUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			String gentemplateUrl = SetupController.getNewGenTemplateUrl();
+			Test.stopTest();
+			System.assertNotEquals(null, gentemplateUrl);
+			System.assert(gentemplateUrl.startsWith(Site.getBaseUrl()), true);
+		}
+	}
+
+	@IsTest
+	static void test_getGenTemplates_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getGenTemplates();
+				throw new AssertException('Expected getNewGenTemplateUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getGenTemplates_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate');
+			insert testTemplate;
+			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
+			Test.startTest();
+			templatesList = SetupController.getGenTemplates();
+			Test.stopTest();
+			System.assertEquals(1, templatesList.size());
+			System.assertEquals('TestTemplate', templatesList[0].name);
 		}
 	}
 }

@@ -2859,7 +2859,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Publish</shortDescription>
-		<value>Publish</value>
+		<value>Add Button</value>
 	</labels>
 	<labels>
 		<fullName>ModifyLayouts</fullName>
@@ -3177,7 +3177,7 @@
 		<fullName>TemplateConfiguration</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>aTemplateConfiguration</shortDescription>
+		<shortDescription>TemplateConfiguration</shortDescription>
 		<value>DocuSign Gen Template</value>
 	</labels>
 	<labels>
@@ -6573,7 +6573,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabESignature</shortDescription>
-		<value>E-Signature</value>
+		<value>eSignature</value>
 	</labels>
 	<labels>
 		<fullName>TabDocumentGeneration</fullName>
@@ -6718,6 +6718,14 @@
 		<protected>true</protected>
 		<shortDescription>Negotiate not configured</shortDescription>
 		<value>DocuSign Negotiate is not configured for your account.</value>
+	</labels>
+	<labels>
+		<fullName>ESignatureNotConfigured</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>eSign not configured</shortDescription>
+		<value>DocuSign eSignature is not configured for your account.</value>
 	</labels>
 	<labels>
 		<fullName>EditObject</fullName>
@@ -7336,6 +7344,158 @@
 		<value>Currently on Trial</value>
 	</labels>
 	<labels>
+		<fullName>NegotiateHelpHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpHeader</shortDescription>
+		<value>Start Collaborating and Negotiating</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpGettingStarted</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpGettingStarted</shortDescription>
+		<value>Now you can send a document for review or approval as soon as its generated. To start:</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpText1</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpText1</shortDescription>
+		<value>Create a template in Document Generation</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpText2</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpText2</shortDescription>
+		<value>Generate a document with the template</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpText3</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpText3</shortDescription>
+		<value>Send the document for external review, internal approval, and signing</value>
+	</labels>
+	<labels>
+		<fullName>GoToDocumentation</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GoToDocumentation</shortDescription>
+		<value>Go to Documentation</value>
+	</labels>
+	<labels>
+		<fullName>AddButtonEsignature</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddButtonEsignature</shortDescription>
+		<value>Add a Button to Use eSignature</value>
+	</labels>
+	<labels>
+		<fullName>AddButtonLocation</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddButtonLocation</shortDescription>
+		<value>Button location</value>
+	</labels>
+	<labels>
+		<fullName>AddButtonPosition</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddButtonPosition</shortDescription>
+		<value>Your button will appear next to your other custom buttons in your selected layouts.</value>
+	</labels>
+	<labels>
+		<fullName>AddButtonOrder</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddButtonOrder</shortDescription>
+		<value>You can change the order of the buttons from</value>
+	</labels>
+	<labels>
+		<fullName>AddButtonPath</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddButtonPath</shortDescription>
+		<value>Salesforce Setup > Object Manager > [Object] > Page Layouts.</value>
+	</labels>
+	<labels>
+		<fullName>ChooseObjectFirst</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ChooseObjectFirst</shortDescription>
+		<value>Choose an Object First</value>
+	</labels>
+	<labels>
+		<fullName>ChooseObjectHelpText</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ChooseObjectHelpText</shortDescription>
+		<value>Choose a Salesforce object to see the layouts associated with that object. Pick the layouts where you'd like to add the "Send with DocuSign" button. You'll have to add objects and layouts one at a time.</value>
+	</labels>
+	<labels>
+		<fullName>StartFirstTemplate</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StartFirstTemplate</shortDescription>
+		<value>Ready to Start Your First Template?</value>
+	</labels>
+	<labels>
+		<fullName>CreateTemplateConfiguration</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateTemplateConfiguration</shortDescription>
+		<value>Create a Template Configuration</value>
+	</labels>
+	<labels>
+		<fullName>NotFamiliarWithDocumentGeneration</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NotFamiliarWithDocumentGeneration</shortDescription>
+		<value>Not familiar with Document Generation templates?</value>
+	</labels>
+	<labels>
+		<fullName>GenQuickGuide</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenQuickGuide</shortDescription>
+		<value>Take a look at the &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Quick Guide&lt;/a&gt;</value>
+	</labels>
+	<labels>
+		<fullName>TemplateConfigurationLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TemplateConfigurationLabel</shortDescription>
+		<value>Template Configurations</value>
+	</labels>
+	<labels>
+		<fullName>LastModfiedDateLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LastModfiedDateLabel</shortDescription>
+		<value>Last Modified Date</value>
+	</labels>
+	<labels>
 		<fullName>DocuSignUsers</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>
@@ -7454,14 +7614,6 @@
 		<protected>true</protected>
 		<shortDescription>CannotCloseCurrentUser</shortDescription>
 		<value>The current user cannot be part of removal and closing of users.</value>
-	</labels>
-	<labels>
-		<fullName>CannotEditPermissionsCurrentUser</fullName>
-		<categories>UserManagement</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CannotEditPermissionsCurrentUser</shortDescription>
-		<value>The current user cannot be part of updates for editing permissions.</value>
 	</labels>
 	<labels>
 		<fullName>SelectApplicationRole</fullName>

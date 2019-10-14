@@ -1286,7 +1286,7 @@
 		<name>SelectSalesforceObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Publish</label>
+		<label>Add Button</label>
 		<name>Publish</name>
 	</customLabels>
 	<customLabels>
@@ -3354,7 +3354,7 @@
 		<name>ConfigurationSection</name>
 	</customLabels>
 	<customLabels>
-		<label>E-Signature</label>
+		<label>eSignature</label>
 		<name>TabESignature</name>
 	</customLabels>
 	<customLabels>
@@ -3432,6 +3432,10 @@
 	<customLabels>
 		<label>DocuSign Negotiate is not configured for your account.</label>
 		<name>NegotiateNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign eSignature is not configured for your account.</label>
+		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
 		<label>Edit Object</label>
@@ -3738,6 +3742,82 @@
 		<name>CurrentlyOnTrial</name>
 	</customLabels>
 	<customLabels>
+		<label>Start Collaborating and Negotiating</label>
+		<name>NegotiateHelpHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Now you can send a document for review or approval as soon as its generated. To start:</label>
+		<name>NegotiateHelpGettingStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Create a template in Document Generation</label>
+		<name>NegotiateHelpText1</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate a document with the template</label>
+		<name>NegotiateHelpText2</name>
+	</customLabels>
+	<customLabels>
+		<label>Send the document for external review, internal approval, and signing</label>
+		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to Documentation</label>
+		<name>GoToDocumentation</name>
+	</customLabels>
+	<customLabels>
+		<label>Add a Button to Use eSignature</label>
+		<name>AddButtonEsignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Button location</label>
+		<name>AddButtonLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Your button will appear next to your other custom buttons in your selected layouts.</label>
+		<name>AddButtonPosition</name>
+	</customLabels>
+	<customLabels>
+		<label>You can change the order of the buttons from</label>
+		<name>AddButtonOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce Setup > Object Manager > [Object] > Page Layouts.</label>
+		<name>AddButtonPath</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose an Object First</label>
+		<name>ChooseObjectFirst</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose a Salesforce object to see the layouts associated with that object. Pick the layouts where you'd like to add the "Send with DocuSign" button. You'll have to add objects and layouts one at a time.</label>
+		<name>ChooseObjectHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Ready to Start Your First Template?</label>
+		<name>StartFirstTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Create a Template Configuration</label>
+		<name>CreateTemplateConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Not familiar with Document Generation templates?</label>
+		<name>NotFamiliarWithDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Take a look at the &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Quick Guide&lt;/a&gt;</label>
+		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>Template Configurations</label>
+		<name>TemplateConfigurationLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Last Modfied Date</label>
+		<name>LastModfiedDateLabel</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Users</label>
 		<name>DocuSignUsers</name>
 	</customLabels>
@@ -3792,10 +3872,6 @@
 	<customLabels>
 		<label>The current user cannot be part of removal and closing of users.</label>
 		<name>CannotCloseCurrentUser</name>
-	</customLabels>
-	<customLabels>
-		<label>The current user cannot be part of updates for editing permissions.</label>
-		<name>CannotEditPermissionsCurrentUser</name>
 	</customLabels>
 	<customLabels>
 		<label>Select Role</label>

@@ -1,83 +1,85 @@
 ({
   createEnvelope: function (component, sourceId) {
     var self = this;
-    var selectedDocumentIds = decodeURIComponent(component.get('v.files')).split(',');
-    var updated = false;
-    this.invokeAction(
-      component,
-      component.get('c.createDraftEnvelope'),
-      {
-        sourceId: sourceId
-      },
-      function (result) {
-        // Add front-end properties to documents
-        if (!$A.util.isEmpty(result.documents)) {
-          result.documents.forEach(function (d) {
-            var isFileSelected = selectedDocumentIds.indexOf(d.sourceId) >= 0;
-            self.addDocumentProperties(d, isFileSelected);
-            if (isFileSelected) {
-              updated = true;
-            }
-          });
-        }
+    if (component.get('v.isESignatureEnabled')) {
+      var selectedDocumentIds = decodeURIComponent(component.get('v.files')).split(',');
+      var updated = false;
+      this.invokeAction(
+        component,
+        component.get('c.createDraftEnvelope'),
+        {
+          sourceId: sourceId
+        },
+        function (result) {
+          // Add front-end properties to documents
+          if (!$A.util.isEmpty(result.documents)) {
+            result.documents.forEach(function (d) {
+              var isFileSelected = selectedDocumentIds.indexOf(d.sourceId) >= 0;
+              self.addDocumentProperties(d, isFileSelected);
+              if (isFileSelected) {
+                updated = true;
+              }
+            });
+          }
 
-        result.documents.sort(function (a, b) {
-          if (!a['selected'] && b['selected'])
-            return 1;
-          if (a['selected'] && !b['selected'])
-            return -1;
-          return a['selected'] - b['selected'];
-        });
-
-        if (!updated && !$A.util.isEmpty(result.documents)) {
-          result.documents[0].selected = true;
-          updated = true;
-        }
-
-        if (!$A.util.isEmpty(result.recipients)) {
-          result.recipients.forEach(function (r) {
-            r = self.addRecipientProperties(r);
-            r.role = {}; // TODO: Roles only apply to templates for now.
+          result.documents.sort(function (a, b) {
+            if (!a['selected'] && b['selected'])
+              return 1;
+            if (a['selected'] && !b['selected'])
+              return -1;
+            return a['selected'] - b['selected'];
           });
+
+          if (!updated && !$A.util.isEmpty(result.documents)) {
+            result.documents[0].selected = true;
+            updated = true;
+          }
+
+          if (!$A.util.isEmpty(result.recipients)) {
+            result.recipients.forEach(function (r) {
+              r = self.addRecipientProperties(r);
+              r.role = {}; // TODO: Roles only apply to templates for now.
+            });
+          }
+          if (!$A.util.isEmpty(result.templates)) {
+            result.templates.forEach(function (template) {
+              template.selected = false;
+              if (!$A.util.isEmpty(template.recipients)) {
+                template.recipients.forEach(function (r) {
+                  self.addRecipientProperties(r);
+                  r.templateId = template.id.value;
+                });
+              }
+            });
+          }
+          result.envelope.notifications = self.setExpiration(
+            result.envelope.notifications,
+            result.envelope.notifications.expireAfterDays,
+            result.envelope.notifications.expireWarnDays
+          );
+          component.set(
+            'v.expiresOn',
+            self.getExpirationDate(result.envelope.notifications.expireAfterDays)
+          );
+          component.set('v.envelope', result.envelope);
+          component.set('v.defaultEmailSubject', result.envelope.emailSubject);
+          component.set('v.defaultEmailMessage', result.envelope.emailMessage);
+          component.set('v.availableTemplates', result.templates);
+          component.set('v.documents', result.documents);
+          component.set('v.recipients', result.recipients);
+          component.set('v.defaultRoles', result.defaultRoles);
+          component.set('v.emailLocalizations', result.emailLocalizations);
+          component.set(
+            'v.isEmailLocalizationEnabled',
+            !$A.util.isEmpty(result.emailLocalizations)
+          );
+          if (updated) {
+            component.set('v.disableNext', false);
+            self.handleFilesChange(component);
+          }
         }
-        if (!$A.util.isEmpty(result.templates)) {
-          result.templates.forEach(function (template) {
-            template.selected = false;
-            if (!$A.util.isEmpty(template.recipients)) {
-              template.recipients.forEach(function (r) {
-                self.addRecipientProperties(r);
-                r.templateId = template.id.value;
-              });
-            }
-          });
-        }
-        result.envelope.notifications = self.setExpiration(
-          result.envelope.notifications,
-          result.envelope.notifications.expireAfterDays,
-          result.envelope.notifications.expireWarnDays
-        );
-        component.set(
-          'v.expiresOn',
-          self.getExpirationDate(result.envelope.notifications.expireAfterDays)
-        );
-        component.set('v.envelope', result.envelope);
-        component.set('v.defaultEmailSubject', result.envelope.emailSubject);
-        component.set('v.defaultEmailMessage', result.envelope.emailMessage);
-        component.set('v.availableTemplates', result.templates);
-        component.set('v.documents', result.documents);
-        component.set('v.recipients', result.recipients);
-        component.set('v.defaultRoles', result.defaultRoles);
-        component.set('v.emailLocalizations', result.emailLocalizations);
-        component.set(
-          'v.isEmailLocalizationEnabled',
-          !$A.util.isEmpty(result.emailLocalizations)
-        );
-        if (updated) {
-          component.set('v.disableNext', false);
-          self.handleFilesChange(component);
-        }
-      }
-    );
+      );
+    }
   },
 
   setReminders: function (notifications, remindAfterDays, remindFrequencyDays) {
