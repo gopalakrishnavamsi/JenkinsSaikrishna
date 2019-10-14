@@ -53,7 +53,9 @@
                   event.source.close();
                 }
               })
-            );
+            ).catch(function (err) {
+              uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+            });
           }
         }
       };
@@ -67,9 +69,8 @@
   },
 
   getProductsOnAccount: function (component, isAuthorized) {
-    var helper = this;
     return new Promise(
-      $A.getCallback(function (resolve) {
+      $A.getCallback(function (resolve, reject) {
         if (isAuthorized) {
           var getProductsAction = component.get('c.getProductsOnAccount');
           getProductsAction.setCallback(this, $A.getCallback(function (response) {
@@ -77,8 +78,7 @@
             if (state === 'SUCCESS') {
               resolve(response.getReturnValue());
             } else {
-              helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-              resolve(null);
+              reject(stringUtils.getErrorMessage(response));
             }
           }));
           $A.enqueueAction(getProductsAction);
