@@ -72,7 +72,9 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_getConfiguration_existing_template() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
 			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
 
 			Test.startTest();
@@ -428,16 +430,6 @@ private class GenControllerTest {
 
 			System.assertEquals((Id)ref.getParameters().get('sid'), a.id);
 			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
-		}
-	}
-
-	@IsTest
-	static void test_getProductsOnAccount() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			List<Product> products = GenController.getProductsOnAccount();
-			Test.stopTest();
-			System.assert(products != null);
 		}
 	}
 

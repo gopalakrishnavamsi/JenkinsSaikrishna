@@ -6720,6 +6720,14 @@
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
 	<labels>
+		<fullName>ESignatureNotConfigured</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>eSign not configured</shortDescription>
+		<value>DocuSign eSignature is not configured for your account.</value>
+	</labels>
+	<labels>
 		<fullName>EditObject</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

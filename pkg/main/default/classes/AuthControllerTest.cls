@@ -110,6 +110,7 @@ private class AuthControllerTest {
 
 	@IsTest
 	static void test_getAuthStatus_success() {
+		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			AuthController.AuthStatus result = AuthController.getAuthStatus();
@@ -119,6 +120,7 @@ private class AuthControllerTest {
 			System.assert(result.isAuthorized);
 			System.assert(!result.isConsentRequired);
 			System.assertEquals(null, result.message);
+			System.assertEquals(4, result.products.size());
 		}
 	}
 
@@ -145,6 +147,17 @@ private class AuthControllerTest {
 
 			System.assert(String.isNotBlank(result));
 			System.assert(!result.contains('+'));
+		}
+	}
+
+	@IsTest
+	static void test_getProductsOnAccount() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			List<Product> products = AuthController.getProductsOnAccount();
+			Test.stopTest();
+			System.assertEquals(4, products.size());
 		}
 	}
 }

@@ -2,11 +2,12 @@
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
 
-    <aura:attribute name="isAuthorized" type="Boolean" default="{!false}"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean"/>
+    <aura:attribute name="products" type="Product[]"/>
 
     <aura:attribute name="uiHelper" type="Object" access="private"/>
-    <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="{!false}"/>
+    <aura:attribute name="isConsentRequired" type="Boolean" access="private" default="true"/>
     <aura:attribute name="userStatusMessage" type="String" access="private"/>
     <aura:attribute name="eventOrigins" type="String[]" access="private"/>
 

@@ -704,28 +704,6 @@
     }
   },
 
-  getProductsOnAccount: function (component) {
-    var helper= this;
-    var getProductsAction = component.get('c.getProductsOnAccount');
-    getProductsAction.setCallback(this, function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var products = response.getReturnValue();
-        products.forEach(function (product) {
-          if (product.name === 'e_sign' && product.status === 'active') {
-            component.set('v.canSendForSignature', true);
-          }
-          if (product.name === 'negotiate' && product.status === 'active') {
-            component.set('v.canNegotiate', true);
-          }
-        });
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-    });
-    $A.enqueueAction(getProductsAction);
-  },
-
   showToast: function (component, message, mode) {
     component.set('v.message', message);
     component.set('v.mode', mode);

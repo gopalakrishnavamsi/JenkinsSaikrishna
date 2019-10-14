@@ -23,18 +23,19 @@
     <aura:attribute name="showGenerateButton" type="Boolean" default="{!false}"/>
     <aura:attribute name="disableGenerateButton" type="Boolean" default="{!false}" access="global"/>
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
-    <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
-    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isSendForSignatureInvoked" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="canSendForSignature" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="canNegotiate" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="canGenarateDocuments" type="Boolean" default="false" access="private"/>
     <aura:attribute name="disableSendForSignature" type="Boolean" default="false" access="private"/>
     <aura:attribute name="disableGenFileReview" type="Boolean" default="false" access="private"/>
     <aura:attribute name="agreementDetails" type="Agreement" access="private"/>
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -68,11 +69,18 @@
                 </div>
             </div>
         </aura:if>
+        <aura:if isTrue="{!not(v.isAuthorized)}">
+            <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                    fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                    products="{!v.products}"/>
 
-        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
-                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+        </aura:if>
         <div aura:id="genSendingModal"/>
-
+        <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.isGenEnabled)}">
+            <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                {!$Label.c.GenNotConfigured}
+            </div>
+        </aura:if>
         <aura:if
                 isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
             <aura:if isTrue="{!or(v.isLoading, v.isGenerating)}">
@@ -263,11 +271,11 @@
                             <!-- Footer -->
                             <div class="{!'slds-modal__footer ds-genFileFooter'+if(v.isPreview, ' slds-hide', '')}">
                                 <lightning:button
-                                        class="{!'slds-button slds-button_brand'+if(not(v.canSendForSignature),' slds-hide','')}"
+                                        class="{!'slds-button slds-button_brand'+if(not(v.isESignatureEnabled),' slds-hide','')}"
                                         label="{!$Label.c.SendForSignature}"
                                         onclick="{!c.sendForSignature}"
                                         disabled="{!v.disableSendForSignature}"/>
-                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.canNegotiate), ' slds-hide', '')}"
+                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.isNegotiateEnabled), ' slds-hide', '')}"
                                      disabled="{!v.disableGenFileReview}">
                                     <lightning:buttonMenu
                                             class="{!if(v.disableGenFileReview,'ds-genNegotiateButtonDisabled','ds-genNegotiateButtonMenu')}"

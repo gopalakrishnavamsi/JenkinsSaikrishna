@@ -977,14 +977,4 @@ private class AccountProductsTest {
 		System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
 		System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
 	}
-
-	@IsTest
-	static void test_isEsignEnabled() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			Boolean isEsignEnabled = AccountProducts.isEsignEnabled();
-			Test.stopTest();
-			System.assert(isEsignEnabled);
-		}
-	}
 }

@@ -76,53 +76,57 @@
   },
 
   initSetup: function (component) {
-    component.set('v.saving', true);
-    var helper = this;
-    var steps = component.get('v.steps');
-    steps = [
-      $A.get('$Label.c.AddObjectsStep'),
-      $A.get('$Label.c.AddMergeFieldsStep'),
-      $A.get('$Label.c.WordTemplatesStep'),
-      $A.get('$Label.c.PreviewStep'),
-      $A.get('$Label.c.PublishStep')
-    ];
-    component.set('v.steps', steps);
-    var templateId = component.get('v.templateId');
-    var getConfigAction = helper.getConfiguration(component);
-    getConfigAction.then(
-      $A.getCallback(function (results) {
-        results.allObjects.sort(function (a, b) {
-          if (a.label > b.label) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
-        component.set('v.config', results.template);
-        component.set('v.files', results.template.generated);
-        component.set('v.availableObjects', results.allObjects);
-        component.set('v.commonObjects', results.commonObjects);
-        var labelByApiName = {};
-        results.allObjects.forEach(function (object) {
-          var objectKey = object.name;
-          var objectName = object.label;
-          labelByApiName[objectKey] = objectName;
-        });
-        component.set('v.labelByApiName', labelByApiName);
+    var isAuthorized = component.get('v.isAuthorized');
+    var isGenEnabled = component.get('v.isGenEnabled');
+    if (isAuthorized && isGenEnabled) {
+      component.set('v.saving', true);
+      var helper = this;
+      var steps = component.get('v.steps');
+      steps = [
+        $A.get('$Label.c.AddObjectsStep'),
+        $A.get('$Label.c.AddMergeFieldsStep'),
+        $A.get('$Label.c.WordTemplatesStep'),
+        $A.get('$Label.c.PreviewStep'),
+        $A.get('$Label.c.PublishStep')
+      ];
+      component.set('v.steps', steps);
+      var templateId = component.get('v.templateId');
+      var getConfigAction = helper.getConfiguration(component);
+      getConfigAction.then(
+        $A.getCallback(function (results) {
+          results.allObjects.sort(function (a, b) {
+            if (a.label > b.label) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          component.set('v.config', results.template);
+          component.set('v.files', results.template.generated);
+          component.set('v.availableObjects', results.allObjects);
+          component.set('v.commonObjects', results.commonObjects);
+          var labelByApiName = {};
+          results.allObjects.forEach(function (object) {
+            var objectKey = object.name;
+            var objectName = object.label;
+            labelByApiName[objectKey] = objectName;
+          });
+          component.set('v.labelByApiName', labelByApiName);
 
-        if ($A.util.isEmpty(templateId)) {
-          component.set('v.templateId', results.template.id);
-        }
-        if (results.template.stepsCompleted >= steps.length) {
-          component.set('v.currentStep', 0);
-          component.set('v.isCompleted', true);
-        } else {
-          component.set('v.currentStep', results.template.stepsCompleted);
-          component.set('v.isCompleted', false);
-        }
-        component.set('v.saving', false);
-      })
-    );
+          if ($A.util.isEmpty(templateId)) {
+            component.set('v.templateId', results.template.id);
+          }
+          if (results.template.stepsCompleted >= steps.length) {
+            component.set('v.currentStep', 0);
+            component.set('v.isCompleted', true);
+          } else {
+            component.set('v.currentStep', results.template.stepsCompleted);
+            component.set('v.isCompleted', false);
+          }
+          component.set('v.saving', false);
+        })
+      );
+    }
   },
 
   getConfiguration: function (component) {
