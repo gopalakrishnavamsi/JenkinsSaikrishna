@@ -1,0 +1,47 @@
+.THIS.ds-esignature-setupSection, .THIS .ds-add-button-section {
+    min-height: 1325px;
+}
+
+.THIS .ds-button-location-section {
+    background: rgb(243, 242, 242);
+    min-height: 1325px;
+}
+
+.THIS .ds-add-button-section-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-button-location-section-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-button-location-section-body {
+    color: rgb(8, 7, 7);
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-button-location-section-image {
+    height: 282px;
+    width: 400px;
+}
+
+.THIS .ds-button-location-section-path {
+    color: rgb(8, 7, 7);
+    font-size: t(fontSize3);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-add-button-section-chooseObjectHeader {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize6);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-add-button-section-chooseObjectHelpText {
+    color: rgb(8, 7, 7);
+    font-size: t(fontSize3);
+}

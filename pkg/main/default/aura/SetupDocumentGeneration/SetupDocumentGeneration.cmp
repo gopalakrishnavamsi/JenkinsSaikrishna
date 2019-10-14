@@ -5,7 +5,7 @@
     <div class="ds-documentGeneration-settings">
         <aura:if isTrue="{!not(empty(v.genProduct))}">
             <!-- DocuSign Gen Templates section -->
-            {!$Label.c.TabDocumentGeneration}
+            <c:DocumentGenerationDetails/>
             <!-- Gen Product does not exist. Display Marketing component -->
             <aura:set attribute="else">
                 <!-- section for enabling trial -->

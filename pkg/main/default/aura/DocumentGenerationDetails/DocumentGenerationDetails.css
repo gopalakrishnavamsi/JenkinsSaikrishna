@@ -1,0 +1,28 @@
+.THIS.slds-container_medium {
+    max-width: 40rem;
+}
+
+.THIS .ds-gen-image-section {
+    height: 216px;
+    width: 300px;   
+}
+
+.THIS .ds-gen-noTemplates-section {
+    padding-top: 127px;
+}
+
+.THIS .ds-gen-noTemplates-section-header, .THIS .ds-gen-setup-componentHeader {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-gen-noTemplates-section-body {
+    color: rgb(8, 7, 7);
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-gen-templates-setup-spinner {
+    position: relative;
+    top: 200px;
+}

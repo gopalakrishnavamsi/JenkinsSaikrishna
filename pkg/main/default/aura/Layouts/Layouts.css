@@ -1,0 +1,10 @@
+.THIS .ds-objectLayouts-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize5);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-layouts-spinner {
+    position: relative;
+    top: 150px;
+}

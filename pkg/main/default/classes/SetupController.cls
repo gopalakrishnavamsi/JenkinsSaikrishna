@@ -331,4 +331,24 @@ public with sharing class SetupController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
 	}
+
+	@AuraEnabled
+	public static string getNewGenTemplateUrl(){
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			return GenService.getNewGenTemplateUrl().toExternalForm();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get url for creating new gen template');
+		}	
+	}
+
+	@AuraEnabled
+	public static List<Gen.GenTemplateDisplay> getGenTemplates(){
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			return GenService.queryGenTemplatesForDisplay();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get gen templates');
+		}	
+	}
 }

@@ -6,7 +6,7 @@
     <div class="ds-negotiation-settings">
         <aura:if isTrue="{!not(empty(v.negotiateProduct))}">
             <!-- Negotiation configuration section -->
-            {!$Label.c.TabNegotiation}
+            <c:NegotiateHelp/>
             <!-- Negotiate product does not exist. Show the marketing component -->
             <aura:set attribute="else">
                 <!-- section for enabling trial -->

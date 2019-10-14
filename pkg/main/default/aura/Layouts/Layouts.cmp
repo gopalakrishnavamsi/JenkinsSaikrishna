@@ -1,76 +1,69 @@
 <aura:component controller="MetadataController">
-    <ltng:require scripts="{!$Resource.uiHelper}" afterScriptsLoaded="{!c.onInitialize}"/>
-
+    <!-- attributes -->
     <aura:attribute name="sendActionName" type="String" access="private"/>
     <aura:attribute name="commonObjects" type="Object[]" access="private"/>
     <aura:attribute name="allObjects" type="Object[]" access="private"/>
     <aura:attribute name="sObjectType" type="String" access="private"/>
     <aura:attribute name="layouts" type="Object[]" access="private"/>
     <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
-    <aura:attribute name="uiHelper" type="Object" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
 
+    <!-- import scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
+
+    <!-- Register events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
 
-    <div class="slds-scope slds-box slds-theme_default strike-form_stacked slds-form_stacked slds-is-relative">
-        <lightning:select label="{!$Label.c.SalesforceObject}"
-                          class="slds-text-heading--label slds-m-around--small slds-m-bottom--medium"
-                          value="{!v.sObjectType}"
-                          onchange="{!c.onChangeObject}">
+    <!-- Component markup-->
+    <div>
+        <lightning:select value="{!v.sObjectType}" onchange="{!c.onChangeObject}" variant="label-hidden" disabled="{!v.loading}">
             <option value="" selected="selected">{!$Label.c.SelectSalesforceObject}</option>
             <optgroup label="{!$Label.c.CommonObjects}">
-                <aura:iteration items="{!v.commonObjects}"
-                                var="sObject">
+                <aura:iteration items="{!v.commonObjects}" var="sObject">
                     <option value="{!sObject.name}">{!sObject.label}</option>
                 </aura:iteration>
             </optgroup>
             <optgroup label="{!$Label.c.AllObjects}">
-                <aura:iteration items="{!v.allObjects}"
-                                var="sObject">
+                <aura:iteration items="{!v.allObjects}" var="sObject">
                     <option value="{!sObject.name}">{!sObject.label}</option>
                 </aura:iteration>
             </optgroup>
         </lightning:select>
 
-        <div class="slds-grid slds-gutters slds-m-around--small slds-m-bottom--medium">
-            <aura:if isTrue="{!not(empty(v.layouts))}">
-                <div class="slds-col slds-size--2-of-3 slds-text-heading--label">
-                    {!$Label.c.Layout}
-                </div>
-                <div class="slds-col slds-size--1-of-3 slds-text-heading--label">
-                    {!$Label.c.SendAction}
-                </div>
-                <aura:set attribute="else">
-                    <div class="slds-col slds-text-heading--label slds-text-color_weak">
-                        {!$Label.c.NoLayoutsForSelectedObject}
-                    </div>
-                </aura:set>
-            </aura:if>
-        </div>
-
-        <aura:iteration items="{!v.layouts}" var="layout" indexVar="i">
-            <div class="slds-grid slds-gutters slds-m-around--small">
-                <div class="slds-col slds-size--2-of-3">
-                    {!layout.name}
-                </div>
-                <div class="slds-col slds-size--1-of-3">
-                    <lightning:input type="checkbox-button"
-                                     variant="label-hidden"
-                                     name="{!'action-' + i}"
-                                     label=""
-                                     onchange="{!c.makeDirty}"
-                                     checked="{!layout.hasSendAction}"/>
+        <aura:if isTrue="{!v.loading}">
+            <div class="ds-layouts-spinner">
+                <c:BlueSpinner />
+            </div>
+        <aura:set attribute="else">
+            <div class="slds-grid slds-gutters slds-m-top_medium slds-m-bottom_medium">
+                <aura:if isTrue="{!not(empty(v.layouts))}">
+                    <div class="slds-col ds-objectLayouts-header">{!v.sObjectType} Layouts</div>
+                    <aura:set attribute="else">
+                        <div class="slds-col slds-text-color_weak">
+                            {!$Label.c.NoLayoutsForSelectedObject}
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </div>
+            
+            <aura:iteration items="{!v.layouts}" var="layout" indexVar="i">
+                <ul class="slds-list_horizontal">
+                    <li>
+                        <lightning:input type="checkbox" variant="label-hidden" name="{!'action-' + i}" label=""
+                            onchange="{!c.makeDirty}" checked="{!layout.hasSendAction}" />
+                    </li>
+                    <li class="slds-m-bottom_xx-small">{!layout.name}</li>
+                </ul>
+            </aura:iteration>
+            
+            <div class="slds-grid slds-m-top_medium">
+                <div class="slds-col">
+                    <lightning:button label="{!$Label.c.Publish}" disabled="{!or(not(v.isDirty), v.loading)}"
+                        class="slds-m-top_xx-small" onclick="{!c.publishActions}" variant="brand" />
                 </div>
             </div>
-        </aura:iteration>
-
-        <div class="slds-grid slds-m-around--small">
-            <div class="slds-col">
-                <lightning:button label="{!$Label.c.Publish}"
-                                  disabled="{!not(v.isDirty)}"
-                                  class="slds-m-top_xx-small"
-                                  onclick="{!c.publishActions}"/>
-            </div>
-        </div>
+        </aura:set>
+        </aura:if>
     </div>
+
 </aura:component>

@@ -126,6 +126,22 @@ public with sharing class GenService {
 			]), queryGeneratedFiles(templateId));
 		}
 
+		public List<Gen.GenTemplateDisplay> queryTemplates() {
+			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
+				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate'
+			});
+			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
+			for (GenTemplate__c template : [SELECT Id, Name, SourceObject__c, LastModifiedDate 
+											FROM GenTemplate__c ORDER BY LastModifiedDate desc LIMIT 50000]) {
+				templatesList.add(new Gen.GenTemplateDisplay(
+										template.Id, 
+										template.Name, 
+										template.SourceObject__c,
+										template.LastModifiedDate));										
+			}
+			return templatesList;
+		}
+
 		private String getCopyName(final String name) {
 			Integer count = [
 				SELECT COUNT()
@@ -711,5 +727,27 @@ public with sharing class GenService {
 	public static Boolean deleteContentDocument(final Id contentVersionId) {
 		Permissions.verifyIsDocuSignGenerator();
 		return DB.deleteContentDocument(contentVersionId);
+	}
+
+	public static List<Gen.GenTemplateDisplay> queryGenTemplatesForDisplay() {
+		Permissions.verifyIsDocuSignAdministrator();
+		return DB.queryTemplates();
+	}
+
+	public static Url getNewGenTemplateUrl() {
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
+				'Name', 
+				Application.namespacePrefix + 'SourceObject__c', 
+				Application.namespacePrefix +'ObjectMappings__c', 
+				Application.namespacePrefix +'SignerMappings__c', 
+				Application.namespacePrefix +'UseAllTemplates__c',
+				Application.namespacePrefix +'UseCurrentRecord__c', 
+				Application.namespacePrefix +'HasPreviewedDocuments__c', 
+				Application.namespacePrefix +'StepsCompleted__c', 
+				Application.namespacePrefix +'IsSample__c'
+			});
+		PageReference genTemplatePage = Page.GenTemplate;
+		return new Url(Salesforce.baseUrl, genTemplatePage.getUrl());
 	}
 }

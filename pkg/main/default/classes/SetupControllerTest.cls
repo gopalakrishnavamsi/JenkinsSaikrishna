@@ -788,5 +788,58 @@ private class SetupControllerTest {
 			System.assertEquals(0, filteredUserList.size());
 		}
 	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getNewGenTemplateUrl();
+				throw new AssertException('Expected getNewGenTemplateUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			String gentemplateUrl = SetupController.getNewGenTemplateUrl();
+			Test.stopTest();
+			System.assertNotEquals(null, gentemplateUrl);
+			System.assert(gentemplateUrl.startsWith(Site.getBaseUrl()), true);
+		}
+	}
+
+	@IsTest
+	static void test_getGenTemplates_unAuthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				SetupController.getGenTemplates();
+				throw new AssertException('Expected getNewGenTemplateUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getGenTemplates_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate');
+			insert testTemplate;
+			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
+			Test.startTest();
+			templatesList = SetupController.getGenTemplates();
+			Test.stopTest();
+			System.assertEquals(1, templatesList.size());
+			System.assertEquals('TestTemplate', templatesList[0].name);
+		}
+	}
 }
 

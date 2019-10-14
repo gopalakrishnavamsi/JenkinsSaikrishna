@@ -1,0 +1,20 @@
+.THIS .ds-negotiateHelp-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-negotiateHelp-body {
+    color: rgb(62, 62, 60);
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-negotiateHelp-badgeText {
+    border: 3px solid rgb(221, 219, 218);
+    border-radius: 100%;
+    height: 24px;
+    width: 24px;
+    text-align: center;
+    font-size: t(fontSize2);
+    background-color: rgb(255, 255, 255);
+}
