@@ -113,7 +113,7 @@ public with sharing class SetupController extends Controller {
 			if (users == null || String.isBlank(users)) throw new DocuSignException(Label.UndefinedArgument);
 
 			List<Account.User> usersList = new List<Account.User>();
-			for (Account.User user : (List<Account.User>)JSON.deserialize(users, List<Account.User>.Class)) {
+			for (Account.User user : (List<Account.User>)JSON.deserialize(users, List<Account.User>.class)) {
 				usersList.add(new Account.User(
 					null,
 					user.sourceId,
@@ -129,15 +129,14 @@ public with sharing class SetupController extends Controller {
 				));
 			}
 
-			Map<String, List<String>> rolesMap = (Map<String, List<String>>)JSON.deserialize(roles, Map<String, List<String>>.class);
+			Map<String, String> rolesMap = (Map<String, String>)JSON.deserialize(roles, Map<String, String>.class);
 			List<Account.User> updatedUsers = UserService.addUsers(usersList, rolesMap);
 
 			if (Collection.isNotEmpty(updatedUsers) && updatedUsers[0].hasError) {
 				throw new APIException(updatedUsers[0].error);
 			}
 
-			return UserService.getUsers(USER_LIMIT);
-
+			return updatedUsers;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add DocuSign account users.');
 		}
@@ -172,10 +171,9 @@ public with sharing class SetupController extends Controller {
 			if (usersIdsToEdit == null || String.isBlank(usersIdsToEdit)) throw new DocuSignException(Label.UndefinedArgument);
 			if (roles == null || String.isBlank(roles)) throw new DocuSignException(Label.UndefinedArgument);
 
-			Map<String, List<String>> rolesMap = (Map<String, List<String>>)JSON.deserialize(roles, Map<String, List<String>>.class);
+			Map<String, String> rolesMap = (Map<String, String>)JSON.deserialize(roles, Map<String, String>.class);
 			Set<Id> userIdSet = (Set<Id>)JSON.deserialize(usersIdsToEdit, Set<Id>.class);
-			UserService.updateUserRoles(userIdSet, rolesMap);
-			return UserService.getUsers(USER_LIMIT);
+			return UserService.updateUserRoles(userIdSet, rolesMap);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to edit permissions for users.');
 		}
@@ -201,7 +199,7 @@ public with sharing class SetupController extends Controller {
 			Permissions.verifyIsQueryable(PermissionSet.getSObjectType(), new List<String> {
 				'Id', 'Label', 'IsOwnedByProfile', 'Name'
 			});
-			return [SELECT Id, Label FROM PermissionSet WHERE IsOwnedByProfile = false ORDER BY Name LIMIT 50000];
+			return [SELECT Id, Label FROM PermissionSet WHERE IsOwnedByProfile = FALSE ORDER BY Name LIMIT 50000];
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get permission sets');
 		}

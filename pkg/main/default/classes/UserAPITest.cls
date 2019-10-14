@@ -479,6 +479,92 @@ private class UserAPITest {
 	}
 
 	@IsTest
+	static void test_updateUsers_failure() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			UserAPI client = UserAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.updateUsers(new Map<UUID, Account.User> {
+					UUID.randomUUID() => new Account.User(
+						UUID.randomUUID(),
+						null,
+						'',
+						'',
+						'',
+						null,
+						null,
+						true,
+						null,
+						null,
+						null)
+				});
+				throw new AssertException('Expected updateUsers to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_updateUsers_success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			UserAPI client = UserAPI.getInstance();
+			UUID id1 = UUID.randomUUID(), id2 = UUID.randomUUID();
+
+			Test.startTest();
+			Map<UUID, Account.User> users = client.updateUsers(new Map<UUID, Account.User> {
+				id1 => new Account.User(
+					id1,
+					UserInfo.getUserId(),
+					'user1@test.com',
+					'User',
+					'One',
+					Account.USER_STATUS_ACTIVE,
+					Date.today(),
+					true,
+					null,
+					null,
+					null),
+				id2 => new Account.User(
+					id2,
+					null,
+					'user2@test.com',
+					'User',
+					'Two',
+					Account.USER_STATUS_PENDING,
+					Date.today(),
+					false,
+					null,
+					null,
+					null)
+			});
+			Test.stopTest();
+
+			System.assertNotEquals(null, users);
+			System.assertEquals(2, users.size());
+
+			System.assertNotEquals(null, users.get(id1));
+			System.assertEquals(id1, users.get(id1).id);
+			System.assert(!users.get(id1).hasError);
+
+			System.assertNotEquals(null, users.get(id2));
+			System.assertEquals(id2, users.get(id2).id);
+			System.assert(!users.get(id2).hasError);
+		}
+	}
+
+	@IsTest
 	static void test_removeUsers_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
@@ -623,22 +709,24 @@ private class UserAPITest {
 
 	@IsTest
 	static void test_APIUser_getStatusExternalForm() {
-		UserAPI.APIUser u1 = new UserAPI.APIUser(new Account.User(UUID.randomUUID(), UserInfo.getUserId()));
+		System.runAs(UserMock.createDocuSignUser()) {
+			UserAPI.APIUser u1 = new UserAPI.APIUser(new Account.User(UUID.randomUUID(), UserInfo.getUserId()));
 
-		Test.startTest();
-		System.assertEquals(null, u1.getStatusExternalForm());
-		u1.userStatus = 'whatever';
-		System.assertEquals('whatever', u1.getStatusExternalForm());
-		u1.userStatus = 'Active';
-		System.assertEquals(Account.USER_STATUS_ACTIVE, u1.getStatusExternalForm());
-		u1.userStatus = 'ActivationRequired';
-		System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
-		u1.userStatus = 'ACTIVATIONSENT';
-		System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
-		u1.userStatus = 'closed';
-		System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
-		u1.userStatus = 'Disabled';
-		System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
-		Test.stopTest();
+			Test.startTest();
+			System.assertEquals(null, u1.getStatusExternalForm());
+			u1.userStatus = 'whatever';
+			System.assertEquals('whatever', u1.getStatusExternalForm());
+			u1.userStatus = 'Active';
+			System.assertEquals(Account.USER_STATUS_ACTIVE, u1.getStatusExternalForm());
+			u1.userStatus = 'ActivationRequired';
+			System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
+			u1.userStatus = 'ACTIVATIONSENT';
+			System.assertEquals(Account.USER_STATUS_PENDING, u1.getStatusExternalForm());
+			u1.userStatus = 'closed';
+			System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
+			u1.userStatus = 'Disabled';
+			System.assertEquals(Account.USER_STATUS_INACTIVE, u1.getStatusExternalForm());
+			Test.stopTest();
+		}
 	}
 }
