@@ -3792,10 +3792,6 @@
 		<name>CannotCloseCurrentUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Der aktuelle Benutzer kann nicht für Bearbeitungsberechtigungen aktualisiert werden.</label>
-		<name>CannotEditPermissionsCurrentUser</name>
-	</customLabels>
-	<customLabels>
 		<label>Rolle auswählen</label>
 		<name>SelectApplicationRole</name>
 	</customLabels>

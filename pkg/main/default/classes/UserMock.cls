@@ -221,13 +221,14 @@ global class UserMock {
 	}
 
 	public static User createClmAdministrator(final Boolean createAccountSettings) {
-		User u = createUser(getStandardUserProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), false);
+		User u = createUser(getSystemAdministratorProfileId(), UUID.randomUUID().toString() + '@unit.test', UUID.randomUUID(), true);
 		if (createAccountSettings) {
 			System.runAs(u) {
 				createAccountConfiguration(UUID.randomUUID());
 			}
 		}
 		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
 			Permissions.assignClmAdministratorPermissionSet(new Set<Id> { u.Id });
 		}
 		return u;

@@ -63,10 +63,53 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
+	private static Boolean isRoleSuperseded(
+		final String productName,
+		final String currentRole,
+		final String newRole) {
+
+		if (String.isBlank(currentRole)) return true;
+
+		if (String.isBlank(productName)
+			|| String.isBlank(newRole)
+			|| (productName != Product.ESIGNATURE && productName != Product.CLM)
+			|| currentRole == newRole) {
+
+			return false;
+		}
+
+		if (productName == Product.ESIGNATURE) {
+			if (currentRole == ESignatureProduct.ROLE_SENDER
+				&& (newRole == ESignatureProduct.ROLE_USER
+				|| newRole == ESignatureProduct.ROLE_ADMINISTRATOR)) {
+
+				return true;
+			} else if (currentRole == ESignatureProduct.ROLE_USER
+				&& newRole == ESignatureProduct.ROLE_ADMINISTRATOR) {
+
+				return true;
+			}
+		} else { // CLM
+			if (currentRole == ClmProduct.ROLE_VIEWER
+				&& (newRole == ClmProduct.ROLE_USER
+				|| newRole == ClmProduct.ROLE_ADMINISTRATOR)) {
+
+				return true;
+			} else if (currentRole == ClmProduct.ROLE_USER
+				&& newRole == ClmProduct.ROLE_ADMINISTRATOR) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@TestVisible
 	private with sharing class Database {
 
-		private Map<Id, Map<String, List<String>>> queryUserRoles(final Set<Id> userIds) {
-			if (Collection.isEmpty(userIds)) return new Map<Id, Map<String, List<String>>>();
+		private Map<Id, Map<String, String>> queryUserRoles(final Set<Id> userIds) {
+			if (Collection.isEmpty(userIds)) return new Map<Id, Map<String, String>>();
 
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
 				'Id'
@@ -85,7 +128,7 @@ public with sharing class Permissions {
 				CLM_USER => new ProductRole(Product.CLM, ClmProduct.ROLE_USER),
 				CLM_VIEWER => new ProductRole(Product.CLM, ClmProduct.ROLE_VIEWER)
 			};
-			Map<Id, Map<String, List<String>>> result = new Map<Id, Map<String, List<String>>>();
+			Map<Id, Map<String, String>> result = new Map<Id, Map<String, String>>();
 			for (PermissionSetAssignment psa : [
 				SELECT AssigneeId, PermissionSet.Name
 				FROM PermissionSetAssignment
@@ -98,15 +141,13 @@ public with sharing class Permissions {
 				if (pr == null) continue;
 
 				if (result.containsKey(psa.AssigneeId)) {
-					Map<String, List<String>> rs = result.get(psa.AssigneeId);
-					if (rs.containsKey(pr.product)) {
-						rs.get(pr.product).add(pr.role);
-					} else {
-						rs.put(pr.product, new List<String> { pr.role });
+					String currentRole = result.get(psa.AssigneeId).get(pr.product);
+					if (isRoleSuperseded(pr.product, currentRole, pr.role)) {
+						result.get(psa.AssigneeId).put(pr.product, pr.role);
 					}
 				} else {
-					result.put(psa.AssigneeId, new Map<String, List<String>> {
-						pr.product => new List<String> { pr.role }
+					result.put(psa.AssigneeId, new Map<String, String> {
+						pr.product => pr.role
 					});
 				}
 			}
@@ -216,6 +257,29 @@ public with sharing class Permissions {
 			Set<Id> result = new Set<Id>();
 			for (Envelope__c e : es) {
 				result.add(e.OwnerId);
+			}
+			return result;
+		}
+
+		public Map<Id, Set<Id>> queryUserPermissionSetIds(final Set<Id> userIds) {
+			Map<Id, Set<Id>> result = new Map<Id, Set<Id>>();
+			if (Collection.isNotEmpty(userIds)) {
+				for (PermissionSetAssignment psa : [
+					SELECT AssigneeId, PermissionSetId
+					FROM PermissionSetAssignment
+					WHERE AssigneeId IN :userIds
+					AND PermissionSetId IN :getPermissionSetMap().values()
+				]) {
+					if (result.containsKey(psa.AssigneeId)) {
+						result.get(psa.AssigneeId).add(psa.PermissionSetId);
+					} else {
+						result.put(psa.AssigneeId, new Set<Id> { psa.PermissionSetId });
+					}
+				}
+
+				for (Id userId : Collection.difference(userIds, result.keySet())) {
+					result.put(userId, new Set<Id>());
+				}
 			}
 			return result;
 		}
@@ -659,10 +723,14 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static Set<Id> filterNotCurrentUserId(final Set<Id> userIds) {
-		if (userIds == null) return new Set<Id>();
-
-		userIds.remove(UserInfo.getUserId());
-		return userIds;
+		Id currentUserId = UserInfo.getUserId();
+		Set<Id> result = new Set<Id>();
+		if (userIds != null) {
+			for (Id uId : userIds) {
+				if (uId != currentUserId) result.add(uId);
+			}
+		}
+		return result;
 	}
 
 	@TestVisible
@@ -689,12 +757,21 @@ public with sharing class Permissions {
 	 * @return <code>true</code> if the permission set removals were successful, <code>false</code> otherwise.
 	 */
 	public static Boolean clear(final Set<Id> userIds) {
-		Boolean result = Collection.isNotEmpty(userIds);
-		if (result) {
-			result &= DB.deletePermissionSetAssignments(
-				// Ensure current user does not lose admin permissions
+		Boolean result = false;
+		if (Collection.isNotEmpty(userIds)) {
+			Id currentUserId = UserInfo.getUserId();
+			Boolean hasCurrentUser = userIds.contains(currentUserId);
+			Set<Id> psIds = new Set<Id>(getPermissionSetMap().values());
+			result |= DB.deletePermissionSetAssignments(
 				verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit),
-				new Set<Id>(getPermissionSetMap().values()));
+				psIds);
+			if (hasCurrentUser) { // Ensure current user does not lose admin permissions.
+				psIds.remove(getDocuSignAdministratorPermissionSetId());
+				psIds.remove(getClmAdministratorPermissionSetId());
+				result |= DB.deletePermissionSetAssignments(
+					new Set<Id> { currentUserId },
+					psIds);
+			}
 		}
 		return result;
 	}
@@ -1270,89 +1347,33 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static List<String> getESignaturePermissionSets(final List<String> roles) {
-		List<String> result = new List<String>();
-		if (roles != null) {
-			for (String r : roles) {
-				if (r == ESignatureProduct.ROLE_ADMINISTRATOR) {
-					result.add(DOCUSIGN_ADMINISTRATOR);
-				} else if (r == ESignatureProduct.ROLE_USER) {
-					result.add(DOCUSIGN_USER);
-				} else if (r == ESignatureProduct.ROLE_SENDER) {
-					result.add(DOCUSIGN_SENDER);
-				} else {
-					throw new DocuSignException(Label.UnsupportedProductRoles);
-				}
+	private static Set<String> getPermissionSetNames(final Map<String, String> productRoles) {
+		Map<String, Map<String, String>> psMap = new Map<String, Map<String, String>> {
+			Product.ESIGNATURE => new Map<String, String> {
+				ESignatureProduct.ROLE_ADMINISTRATOR => DOCUSIGN_ADMINISTRATOR,
+				ESignatureProduct.ROLE_USER => DOCUSIGN_USER,
+				ESignatureProduct.ROLE_SENDER => DOCUSIGN_SENDER
+			},
+			Product.GEN => new Map<String, String> {
+				GenProduct.ROLE_GENERATOR => DOCUSIGN_GENERATOR
+			},
+			Product.NEGOTIATE => new Map<String, String> {
+				NegotiateProduct.ROLE_NEGOTIATOR => DOCUSIGN_NEGOTIATOR
+			},
+			Product.CLM => new Map<String, String> {
+				ClmProduct.ROLE_ADMINISTRATOR => CLM_ADMINISTRATOR,
+				ClmProduct.ROLE_USER => CLM_USER,
+				ClmProduct.ROLE_VIEWER => CLM_VIEWER
 			}
-		}
-		return result;
-	}
+		};
 
-	@TestVisible
-	private static List<String> getGenPermissionSets(final List<String> roles) {
-		List<String> result = new List<String>();
-		if (roles != null) {
-			for (String r : roles) {
-				if (r == GenProduct.ROLE_GENERATOR) {
-					result.add(DOCUSIGN_GENERATOR);
-				} else {
-					throw new DocuSignException(Label.UnsupportedProductRoles);
-				}
-			}
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static List<String> getNegotiatePermissionSets(final List<String> roles) {
-		List<String> result = new List<String>();
-		if (roles != null) {
-			for (String r : roles) {
-				if (r == NegotiateProduct.ROLE_NEGOTIATOR) {
-					result.add(DOCUSIGN_NEGOTIATOR);
-				} else {
-					throw new DocuSignException(Label.UnsupportedProductRoles);
-				}
-			}
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static List<String> getClmPermissionSets(final List<String> roles) {
-		List<String> result = new List<String>();
-		if (roles != null) {
-			for (String r : roles) {
-				if (r == ClmProduct.ROLE_ADMINISTRATOR) {
-					result.add(CLM_ADMINISTRATOR);
-				} else if (r == ClmProduct.ROLE_USER) {
-					result.add(CLM_USER);
-				} else if (r == ClmProduct.ROLE_VIEWER) {
-					result.add(CLM_VIEWER);
-				} else {
-					throw new DocuSignException(Label.UnsupportedProductRoles);
-				}
-			}
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static Set<String> getPermissionSetNames(final Map<String, List<String>> productRoles) {
 		Set<String> result = new Set<String>();
 		if (productRoles != null) {
 			for (String p : productRoles.keySet()) {
-				if (p == Product.ESIGNATURE) {
-					result.addAll(getESignaturePermissionSets(productRoles.get(p)));
-				} else if (p == Product.GEN) {
-					result.addAll(getGenPermissionSets(productRoles.get(p)));
-				} else if (p == Product.NEGOTIATE) {
-					result.addAll(getNegotiatePermissionSets(productRoles.get(p)));
-				} else if (p == Product.CLM) {
-					result.addAll(getClmPermissionSets(productRoles.get(p)));
-				} else {
-					throw new DocuSignException(Label.UnsupportedProducts);
-				}
+				if (!psMap.containsKey(p)) throw new DocuSignException(Label.UnsupportedProducts);
+				String psn = psMap.get(p).get(productRoles.get(p));
+				if (String.isBlank(psn)) throw new DocuSignException(Label.UnsupportedProductRoles);
+				result.add(psn);
 			}
 		}
 		return result;
@@ -1360,32 +1381,64 @@ public with sharing class Permissions {
 
 	private class UserRoles {
 		public Set<Id> userIds { get; private set; }
-		public Map<String, List<String>> productRoles { get; private set; }
+		public Map<String, String> productRoles { get; private set; }
 
 		public UserRoles(
 			final Set<Id> userIds,
-			final Map<String, List<String>> productRoles) {
+			final Map<String, String> productRoles) {
 
 			this.userIds = userIds;
 			this.productRoles = productRoles;
 		}
 	}
 
+	@TestVisible
+	private static Boolean updateCurrentUserPermissionSets(final Set<Id> permissionSetIds) {
+		Id currentUserId = UserInfo.getUserId();
+		Set<Id> userIds = new Set<Id> { currentUserId };
+		Set<Id> currentIds = DB.queryUserPermissionSetIds(userIds).get(currentUserId);
+		Set<Id> targetIds = permissionSetIds == null ? new Set<Id>() : permissionSetIds;
+
+		// If target roles do not contain current role and current role is non-admin, remove.
+		Set<Id> toRemove = Collection.difference(currentIds, targetIds);
+		// Do not remove any admin role for current user
+		toRemove.remove(getDocuSignAdministratorPermissionSetId());
+		toRemove.remove(getClmAdministratorPermissionSetId());
+
+		// If current roles do not contain target role, add unless superseded by a more permissive role.
+		Set<Id> toAdd = Collection.difference(targetIds, currentIds);
+		// Do not add any lesser-privileged roles for eSignature or CLM.
+		toAdd.remove(getDocuSignUserPermissionSetId());
+		toAdd.remove(getDocuSignSenderPermissionSetId());
+		toAdd.remove(getClmUserPermissionSetId());
+		toAdd.remove(getClmViewerPermissionSetId());
+
+		Boolean result = DB.deletePermissionSetAssignments(userIds, toRemove);
+		return DB.upsertPermissionSetAssignments(userIds, toAdd) || result;
+	}
+
 	@Future
 	private static void replaceRoles(final String rolesJson) {
 		UserRoles urs = (UserRoles)JSON.deserialize(rolesJson, UserRoles.class);
-		if (urs != null && Collection.isNotEmpty(urs.userIds)) {
-			DB.deletePermissionSetAssignments(urs.userIds, new Set<Id>(getPermissionSetMap().values()));
-			DB.upsertPermissionSetAssignments(urs.userIds, getPermissionSetIds(getPermissionSetNames(urs.productRoles)));
+		if (urs != null && urs.userIds != null) {
+			Set<Id> permissionSetIds = getPermissionSetIds(getPermissionSetNames(urs.productRoles));
+			if (urs.userIds.contains(UserInfo.getUserId())) {
+				updateCurrentUserPermissionSets(permissionSetIds); // special treatment for current user
+			}
+
+			Set<Id> userIds = filterNotCurrentUserId(urs.userIds);
+			if (Collection.isNotEmpty(userIds)) {
+				DB.deletePermissionSetAssignments(userIds, new Set<Id>(getPermissionSetMap().values()));
+				DB.upsertPermissionSetAssignments(userIds, permissionSetIds);
+			}
 		}
 	}
 
 	public static Boolean replaceRoles(
 		final Set<Id> userIds,
-		final Map<String, List<String>> productRoles) {
+		final Map<String, String> productRoles) {
 
-		// Ensure current user does not lose admin permissions
-		Set<Id> uIds = verifyMaximumBatchSize(filterNotCurrentUserId(userIds), Application.batchLimit);
+		Set<Id> uIds = verifyMaximumBatchSize(userIds, Application.batchLimit);
 		if (Collection.isNotEmpty(uIds)) {
 			replaceRoles(JSON.serialize(new UserRoles(uIds, productRoles)));
 			return true;
@@ -1393,7 +1446,7 @@ public with sharing class Permissions {
 		return false;
 	}
 
-	public static Map<Id, Map<String, List<String>>> getUserRoles(final Set<Id> userIds) {
+	public static Map<Id, Map<String, String>> getUserRoles(final Set<Id> userIds) {
 		return DB.queryUserRoles(userIds);
 	}
 }

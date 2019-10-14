@@ -1,4 +1,4 @@
-<aura:component description="RemoveUsers" controller="SetupController">
+<aura:component description="APIUsers" controller="SetupController">
 
     <ltng:require scripts="{!$Resource.stringUtils}"/>
 

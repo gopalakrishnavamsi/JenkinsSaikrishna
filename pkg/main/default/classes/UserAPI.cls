@@ -57,6 +57,7 @@ public with sharing class UserAPI extends ESignatureAPI {
 		public String firstName;
 		public String lastName;
 		public String userName;
+		public String permissionProfileId;
 		public List<APISetting> userSettings;
 		public String userStatus;
 		public ErrorDetails errorDetails;
@@ -68,6 +69,10 @@ public with sharing class UserAPI extends ESignatureAPI {
 			this.firstName = user.firstName;
 			this.lastName = user.lastName;
 			this.userName = user.firstName + ' ' + user.lastName;
+			Credentials c = Credentials.getInstance();
+			this.permissionProfileId = String.valueOf(user.canManageAccount
+				? c.account.administratorProfileId
+				: c.account.senderProfileId);
 			this.userSettings = new List<APISetting> {
 				new APISetting('canManageAccount', String.valueOf(user.canManageAccount)),
 				new APISetting('canSendEnvelope', 'true')
@@ -112,7 +117,12 @@ public with sharing class UserAPI extends ESignatureAPI {
 			return result;
 		}
 
-		public Account.User toExternalForm(final Id sourceId, final Boolean canManageAccount) {
+		public Account.User toExternalForm(
+			final Id sourceId,
+			final String firstName,
+			final String lastName,
+			final Boolean canManageAccount) {
+
 			Boolean isAdmin = canManageAccount;
 			if (this.userSettings != null) {
 				for (APISetting s : this.userSettings) {
@@ -126,8 +136,8 @@ public with sharing class UserAPI extends ESignatureAPI {
 				UUID.tryParse(this.userId),
 				sourceId,
 				this.email,
-				this.firstName,
-				this.lastName,
+				String.isBlank(firstName) ? this.firstName : firstName,
+				String.isBlank(lastName) ? this.lastName : lastName,
 				this.getStatusExternalForm(),
 				StringUtils.parseDate(this.createdDateTime),
 				isAdmin,
@@ -156,7 +166,9 @@ public with sharing class UserAPI extends ESignatureAPI {
 				for (UserAPI.APIUser u : this.newUsers) {
 					Account.User original = emailToUsers == null ? null : emailToUsers.get(u.email);
 					result.add(u.toExternalForm(
-						original == null ? null : original == null ? null : original.sourceId,
+						original == null ? null : original.sourceId,
+						original == null ? null : original.firstName,
+						original == null ? null : original.lastName,
 						original == null ? false : original.canManageAccount));
 				}
 			}
@@ -192,6 +204,8 @@ public with sharing class UserAPI extends ESignatureAPI {
 
 		return ((APIUser)JSON.deserialize(response.body, APIUser.class)).toExternalForm(
 			user.sourceId,
+			user.firstName,
+			user.lastName,
 			user.canManageAccount);
 	}
 
@@ -258,12 +272,12 @@ public with sharing class UserAPI extends ESignatureAPI {
 		return result;
 	}
 
-	// Serialization objects for removeUsers
+	// Serialization objects for updateUsers/removeUsers
 	@TestVisible
-	private class RemoveUsers {
+	private class APIUsers {
 		public List<UserAPI.APIUser> users;
 
-		public RemoveUsers(final List<Account.User> dsUsers) {
+		public APIUsers(final List<Account.User> dsUsers) {
 			this.users = new List<UserAPI.APIUser>();
 			if (dsUsers != null) {
 				for (Account.User u : dsUsers) {
@@ -281,7 +295,10 @@ public with sharing class UserAPI extends ESignatureAPI {
 			if (this.users != null) {
 				for (UserAPI.APIUser u : this.users) {
 					Account.User original = emailToUsers.get(u.email);
-					result.add(u.toExternalForm(original == null ? null : original == null ? null : original.sourceId,
+					result.add(u.toExternalForm(
+						original == null ? null : original.sourceId,
+						original == null ? null : original.firstName,
+						original == null ? null : original.lastName,
 						original == null ? false : original.canManageAccount));
 				}
 			}
@@ -289,23 +306,54 @@ public with sharing class UserAPI extends ESignatureAPI {
 		}
 	}
 
+	public Map<UUID, Account.User> updateUsers(final Map<UUID, Account.User> users) {
+		return this.updateUsers(users, RestAPI.defaultTimeout);
+	}
+
+	public Map<UUID, Account.User> updateUsers(
+		final Map<UUID, Account.User> users,
+		final Integer timeout) {
+
+		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
+
+		final RestAPI.Response response = this.put(
+			new List<Object> { 'users' },
+			JSON.serialize(new APIUsers(users.values())),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to update users: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		Map<UUID, Account.User> result = new Map<UUID, Account.User>();
+		for (Account.User u : ((APIUsers)JSON.deserialize(response.body, APIUsers.class))
+			.toExternalForm(users.values())) {
+
+			if (u != null && UUID.isNotEmpty(u.id)) result.put(u.id, u);
+		}
+		return result;
+	}
+
 	public List<Account.User> removeUsers(final List<Account.User> users) {
 		return this.removeUsers(users, RestAPI.defaultTimeout);
 	}
 
-	public List<Account.User> removeUsers(final List<Account.User> users, final Integer timeout) {
+	public List<Account.User> removeUsers(
+		final List<Account.User> users,
+		final Integer timeout) {
+
 		if (Collection.isEmpty(users)) throw new DocuSignException(Label.UndefinedUsers);
 
 		final RestAPI.Response response = this.del(
 			'users',
-			JSON.serialize(new RemoveUsers(users)),
+			JSON.serialize(new APIUsers(users)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to remove users: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		List<Account.User> result = ((RemoveUsers)JSON.deserialize(response.body, RemoveUsers.class))
+		List<Account.User> result = ((APIUsers)JSON.deserialize(response.body, APIUsers.class))
 			.toExternalForm(users);
 		for (Account.User user : result) {
 			if (user.hasError && user.error.code == APIErrorCode.UNKNOWN_USER) {

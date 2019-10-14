@@ -362,7 +362,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		return result;
 	}
 
-	public class UserResults {
+	@TestVisible
+	private class UserResults {
 		public Boolean success { get; private set; }
 		public Map<UUID, APIError> results;
 
@@ -468,11 +469,27 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		return ((APIAddUserResult)JSON.deserialize(response.body, APIAddUserResult.class)).toExternalForm();
 	}
 
-	public Map<UUID, UserResults> addRoleUsers(final Map<UUID, Set<UUID>> roleUsers) {
-		return this.addRoleUsers(roleUsers, RestAPI.defaultTimeout);
+	public Map<UUID, UserResults> addRoleUsers(
+		final Map<UUID, Account.User> users,
+		final Map<UUID, Product.Role> roles) {
+
+		return this.addRoleUsers(users, roles, RestAPI.defaultTimeout);
 	}
 
 	public Map<UUID, UserResults> addRoleUsers(
+		final Map<UUID, Account.User> users,
+		final Map<UUID, Product.Role> roles,
+		final Integer timeout) {
+
+		if (Collection.isEmpty(users) || Collection.isEmpty(roles)) return new Map<UUID, UserResults>();
+
+		return this.addRoleUsers(
+			getRolesToAdd(users.keySet(), filterCurrentUser(users).keySet(), roles),
+			RestAPI.defaultTimeout);
+	}
+
+	@TestVisible
+	private Map<UUID, UserResults> addRoleUsers(
 		final Map<UUID, Set<UUID>> roleUsers,
 		final Integer timeout) {
 
@@ -551,11 +568,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			.toExternalForm(userIds);
 	}
 
-	public Map<UUID, UserResults> removeRoleUsers(final Map<UUID, Set<UUID>> roleUsers) {
-		return this.removeRoleUsers(roleUsers, RestAPI.defaultTimeout);
-	}
-
-	public Map<UUID, UserResults> removeRoleUsers(
+	@TestVisible
+	private Map<UUID, UserResults> removeRoleUsers(
 		final Map<UUID, Set<UUID>> roleUsers,
 		final Integer timeout) {
 
@@ -564,6 +578,219 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			for (UUID roleId : roleUsers.keySet()) {
 				result.put(roleId, this.removeRoleUsers(roleId, roleUsers.get(roleId), timeout));
 			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<UUID, Account.User> filterCurrentUser(final Map<UUID, Account.User> users) {
+		Map<UUID, Account.User> result = new Map<UUID, Account.User>();
+		if (Collection.isNotEmpty(users)) {
+			Id currentUserId = UserInfo.getUserId();
+			for (UUID uId : users.keySet()) {
+				Account.User u = users.get(uId);
+				if (u != null && u.sourceId != currentUserId) result.put(uId, u);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<UUID, Set<UUID>> getRolesToRemove(
+		final Set<UUID> allUserIds,
+		final Set<UUID> filteredUserIds,
+		final Map<UUID, Product.Role> allRoles,
+		final Map<UUID, Product.Role> newRoles) {
+
+		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
+		if (Collection.isNotEmpty(allUserIds) && Collection.isNotEmpty(allRoles) && newRoles != null) {
+			Boolean hasFilteredUsers = Collection.isNotEmpty(filteredUserIds);
+			for (UUID roleId : Collection.difference(allRoles.keySet(), newRoles.keySet())) {
+				// If is an admin role, use filtered list so as not to remove current user's access.
+				Product.Role role = allRoles.get(roleId);
+				if (role != null) {
+					if (hasFilteredUsers && role.isAdministrator) {
+						result.put(roleId, filteredUserIds);
+					} else {
+						result.put(roleId, allUserIds);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<UUID, Product.Role> filterLesserPrivilegedRoles(final Map<UUID, Product.Role> roles) {
+		Map<UUID, Product.Role> result = new Map<UUID, Product.Role>();
+		if (Collection.isNotEmpty(roles)) {
+			UUID dsAdminId = null, dsUserId = null, dsSenderId = null,
+				clmAdminId = null, clmUserId = null, clmViewerId = null;
+			for (UUID rId : roles.keySet()) {
+				Product.Role r = roles.get(rId);
+				if (r != null && r.product == Product.ESIGNATURE) {
+					if (r.role == ESignatureProduct.ROLE_ADMINISTRATOR) {
+						dsAdminId = rId;
+					} else if (r.role == ESignatureProduct.ROLE_USER) {
+						dsUserId = rId;
+					} else if (r.role == ESignatureProduct.ROLE_SENDER) {
+						dsSenderId = rId;
+					}
+				} else if (r != null && r.product == Product.CLM) {
+					if (r.role == ClmProduct.ROLE_ADMINISTRATOR) {
+						clmAdminId = rId;
+					} else if (r.role == ClmProduct.ROLE_USER) {
+						clmUserId = rId;
+					} else if (r.role == ClmProduct.ROLE_VIEWER) {
+						clmViewerId = rId;
+					}
+				}
+
+				if (r != null) result.put(rId, r);
+			}
+
+			// Don't bother with lesser privileged roles if superseded by a higher privileged one.
+			if (dsSenderId != null && (dsUserId != null || dsAdminId != null)) {
+				result.remove(dsSenderId);
+			}
+
+			if (dsUserId != null && dsAdminId != null) {
+				result.remove(dsUserId);
+			}
+
+			if (clmViewerId != null && (clmUserId != null || clmAdminId != null)) {
+				result.remove(clmViewerId);
+			}
+
+			if (clmUserId != null && clmAdminId != null) {
+				result.remove(clmUserId);
+			}
+		}
+		return result;
+	}
+
+	private static Boolean isLesserPrivilegedRole(final Product.Role role) {
+		return role != null
+			&& (role.product == Product.ESIGNATURE || role.product == Product.CLM)
+			&& !role.isAdministrator;
+	}
+
+	@TestVisible
+	private static Map<UUID, Set<UUID>> getRolesToAdd(
+		final Set<UUID> allUserIds,
+		final Set<UUID> filteredUserIds,
+		final Map<UUID, Product.Role> newRoles) {
+
+		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
+		if (Collection.isNotEmpty(allUserIds) && Collection.isNotEmpty(newRoles)) {
+			// Filter out current user for lesser-privileged roles
+			Boolean hasFilteredUsers = Collection.isNotEmpty(filteredUserIds);
+			for (UUID rId : newRoles.keySet()) {
+				Product.Role r = newRoles.get(rId);
+				if (r != null) {
+					if (hasFilteredUsers && isLesserPrivilegedRole(r)) {
+						result.put(rId, filteredUserIds);
+					} else {
+						result.put(rId, allUserIds);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<UUID, Account.User> getUsersToUpdate(
+		final Map<UUID, Account.User> users,
+		final Set<UUID> newRoleIds) {
+
+		Map<UUID, Account.User> result = new Map<UUID, Account.User>();
+		if (Collection.isNotEmpty(users) && Collection.isNotEmpty(newRoleIds)) {
+			Id currentUserId = UserInfo.getUserId();
+			if (newRoleIds.contains(ESIGNATURE_ADMINISTRATOR_ID)) {
+				for (UUID uId : users.keySet()) {
+					Account.User u = users.get(uId);
+					if (u != null && u.sourceId != currentUserId) result.put(uId, u.withCanManageAccount(true));
+				}
+			} else if (newRoleIds.contains(ESIGNATURE_USER_ID)) {
+				for (UUID uId : users.keySet()) {
+					Account.User u = users.get(uId);
+					if (u != null && u.sourceId != currentUserId) result.put(uId, u.withCanManageAccount(false));
+				}
+			} // else no change
+		}
+		return result;
+	}
+
+	private static Map<UUID, Account.User> updateUserResults(
+		final Map<UUID, Account.User> users,
+		final Map<UUID, Account.User> updatedUsers,
+		final Map<UUID, UserResults> userResults) {
+
+		Map<UUID, Account.User> result = updatedUsers == null ? new Map<UUID, Account.User>() : updatedUsers;
+		if (Collection.isNotEmpty(users) && Collection.isNotEmpty(userResults)) {
+			for (UUID rId : userResults.keySet()) {
+				UserResults ur = userResults.get(rId);
+				if (ur != null && ur.results != null) {
+					for (UUID uId : ur.results.keySet()) {
+						Account.User u = result.get(uId);
+						if (u == null) {
+							u = users.get(uId);
+						}
+						if (u != null) {
+							APIError e = ur.results.get(uId);
+							result.put(uId, e == null || e == APIError.none ? u : u.withError(e));
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public Map<UUID, Account.User> updateUserRoles(
+		final Map<UUID, Account.User> users,
+		final Map<UUID, Product.Role> allRoles,
+		final Map<UUID, Product.Role> newRoles) {
+
+		return this.updateUserRoles(users, allRoles, newRoles, RestAPI.defaultTimeout);
+	}
+
+	public Map<UUID, Account.User> updateUserRoles(
+		final Map<UUID, Account.User> users,
+		final Map<UUID, Product.Role> allRoles,
+		final Map<UUID, Product.Role> newRoles,
+		final Integer timeout) {
+
+		Map<UUID, Account.User> result = new Map<UUID, Account.User>();
+		if (Collection.isNotEmpty(users) && Collection.isNotEmpty(allRoles)) {
+			// Update users via UserAPI if eSign roles have changed, filtering out current user.
+			Map<UUID, Account.User> filteredUsers = filterCurrentUser(users);
+			Map<UUID, Product.Role> filteredRoles = filterLesserPrivilegedRoles(newRoles);
+			Map<UUID, Account.User> toUpdate = getUsersToUpdate(
+				filteredUsers == null ? new Map<UUID, Account.User>() : filteredUsers,
+				filteredRoles == null ? new Set<UUID>() : filteredRoles.keySet());
+			if (Collection.isNotEmpty(toUpdate)) {
+				Map<UUID, Account.User> updatedUsers = UserAPI.getInstance().updateUsers(toUpdate, timeout);
+				if (Collection.isNotEmpty(updatedUsers)) {
+					for (UUID uId : updatedUsers.keySet()) {
+						Account.User u = updatedUsers.get(uId);
+						Account.User uu = users.get(uId);
+						if (u != null && uu != null) {
+							result.put(uId, uu.withError(u.error));
+						}
+					}
+				}
+			}
+
+			// Add/remove roles via MAGNUM
+			Set<UUID> allUserIds = users.keySet();
+			Set<UUID> filteredUserIds = filteredUsers == null ? new Set<UUID>() : filteredUsers.keySet();
+			Map<UUID, Set<UUID>> toRemove = getRolesToRemove(allUserIds, filteredUserIds, allRoles, filteredRoles);
+			Map<UUID, Set<UUID>> toAdd = getRolesToAdd(allUserIds, filteredUserIds, filteredRoles);
+
+			result = updateUserResults(users, result, this.removeRoleUsers(toRemove, timeout));
+			result = updateUserResults(users, result, this.addRoleUsers(toAdd, timeout));
 		}
 		return result;
 	}
