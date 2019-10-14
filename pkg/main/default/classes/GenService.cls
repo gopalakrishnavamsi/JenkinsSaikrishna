@@ -733,7 +733,24 @@ public with sharing class GenService {
 	}
 
 	public static List<Gen.GenTemplateDisplay> queryGenTemplatesForDisplay() {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 		return DB.queryTemplates();
+	}
+
+	public static Url getNewGenTemplateUrl() {
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
+				'Name', 
+				Application.namespacePrefix + 'SourceObject__c', 
+				Application.namespacePrefix +'ObjectMappings__c', 
+				Application.namespacePrefix +'SignerMappings__c', 
+				Application.namespacePrefix +'UseAllTemplates__c',
+				Application.namespacePrefix +'UseCurrentRecord__c', 
+				Application.namespacePrefix +'HasPreviewedDocuments__c', 
+				Application.namespacePrefix +'StepsCompleted__c', 
+				Application.namespacePrefix +'IsSample__c'
+			});
+		PageReference genTemplatePage = Page.GenTemplate;
+		return new Url(Salesforce.baseUrl, genTemplatePage.getUrl());
 	}
 }

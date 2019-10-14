@@ -338,12 +338,7 @@ public with sharing class SetupController extends Controller {
 	public static string getNewGenTemplateUrl(){
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
-			});
-			PageReference genTemplatePage = Page.GenTemplate;
-			return new Url(Salesforce.baseUrl, genTemplatePage.getUrl()).toExternalForm();
+			return GenService.getNewGenTemplateUrl().toExternalForm();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get url for creating new gen template');
 		}	
