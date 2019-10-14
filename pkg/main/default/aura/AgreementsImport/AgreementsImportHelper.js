@@ -274,21 +274,6 @@
     $A.enqueueAction(sendingAction);
   },
 
-  isEsignEnabled: function (component) {
-    var helper = this;
-    var isEsignEnabledAction = component.get('c.isEsignEnabled');
-    isEsignEnabledAction.setCallback(this, $A.getCallback(function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var canSendForSignature = response.getReturnValue();
-        component.set('v.canSendForSignature', canSendForSignature);
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-    }));
-    $A.enqueueAction(isEsignEnabledAction);
-  },
-
   exportFileAndSend: function (component, event, helper) {
     component.set('v.loading', true);
     var agreementId = component.get('v.importedFile').agreementId;

@@ -679,14 +679,4 @@ private class AgreementsControllerTest {
 			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
 		}
 	}
-
-	@IsTest
-	static void test_isEsignEnabled() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			Boolean isEsignEnabled = AgreementsController.isEsignEnabled();
-			Test.stopTest();
-			System.assert(isEsignEnabled);
-		}
-	}
 }

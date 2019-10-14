@@ -1,5 +1,7 @@
 ({
   getAgreementDetails: function (component) {
+    var showSetupSpinner = component.get('v.showSetupSpinner');
+    showSetupSpinner();
     var agreementId = component.get('v.agreementId');
     var action = component.get('c.getNameSpace');
     var uiHelper = new UIHelper(
@@ -23,11 +25,17 @@
           .then(function (agreement) {
             component.set('v.agreement', agreement);
             component.set('v.agreementActionManager', manager);
+            var showSetupComponent = component.get('v.showSetupComponent');
+            showSetupComponent();
           })
           .catch(function (error) {
+            var showSetupComponent = component.get('v.showSetupComponent');
+            showSetupComponent();
             uiHelper.showToast(error, uiHelper.ToastMode.ERROR);
           });
       } else {
+        var showSetupComponent = component.get('v.showSetupComponent');
+        showSetupComponent();
         uiHelper.showToast(uiHelper.getErrorMessage(response), uiHelper.ToastMode.ERROR);
         component.set('v.showToolBarAndPreview', false);
       }
@@ -48,13 +56,19 @@
 
   loadingEvent: function (component, event) {
     var params = event.getParams();
-    if (params && params.isLoading === true) {
+    var isReloadPage = params && params.isLoading && !params.isAuthorizeEvent;
+    var isConsentRequired = params && !params.isLoading && params.isAuthorizeEvent;
+    if (isReloadPage) {
       setTimeout(
         $A.getCallback(function () {
           window.location.reload();
         }),
         2000
       );
+    }
+    if (isConsentRequired) {
+      var showSetupComponent = component.get('v.showSetupComponent');
+      showSetupComponent();
     }
   },
 
@@ -88,20 +102,5 @@
     } else {
       helper.hideToast(component);
     }
-  },
-
-  isEsignEnabled: function (component) {
-    var helper = this;
-    var isEsignEnabledAction = component.get('c.isEsignEnabled');
-    isEsignEnabledAction.setCallback(this, $A.getCallback(function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var canSendForSignature = response.getReturnValue();
-        component.set('v.canSendForSignature', canSendForSignature);
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-    }));
-    $A.enqueueAction(isEsignEnabledAction);
   }
 });

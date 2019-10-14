@@ -264,13 +264,4 @@ public with sharing class AgreementsController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get deep link');
 		}
 	}
-
-	@AuraEnabled
-	public static boolean isEsignEnabled() {
-		try {
-			return AccountProducts.isEsignEnabled();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check esign Products on account.');
-		}
-	}
 }

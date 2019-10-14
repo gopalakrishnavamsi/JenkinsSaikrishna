@@ -1,30 +1,44 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
     var isAuthorized = component.get('v.isAuthorized');
-    if (isAuthorized) {
+    var products = component.get('v.products');
+    if (!$A.util.isUndefinedOrNull(products)) {
+      products.forEach(function (product) {
+        if (product.name === 'e_sign' && product.status === 'active') {
+          component.set('v.isESignatureEnabled', true);
+        } else if (product.name === 'negotiate' && product.status === 'active') {
+          component.set('v.isNegotiateEnabled', true);
+        } else if (product.name === 'gen' && product.status === 'active') {
+          component.set('v.isGenEnabled', true);
+        }
+      });
+    }
+    var isGenEnabled = component.get('v.isGenEnabled');
+    if (isAuthorized && isGenEnabled) {
       var config = component.get('v.config');
       helper.checkMultiCurrency(component);
-      helper.getProductsOnAccount(component);
-
       if ($A.util.isEmpty(config)) {
-        var action = component.get('c.getTemplate');
+        var templateId = component.get('v.templateId');
+        if (!$A.util.isUndefinedOrNull(templateId)) {
+          var action = component.get('c.getTemplate');
 
-        action.setParams({
-          templateId: component.get('v.templateId')
-        });
+          action.setParams({
+            templateId: templateId
+          });
 
-        action.setCallback(this, function (response) {
-          if (response.getState() === 'SUCCESS') {
-            var results = response.getReturnValue();
-            component.set('v.config', results);
-            component.set('v.templateFiles', results.generated);
-            helper.setupData(component);
-          } else {
-            component.set('v.errType', 'error');
-            component.set('v.errMsg', stringUtils.getErrorMessage(response));
-          }
-        });
-        $A.enqueueAction(action);
+          action.setCallback(this, function (response) {
+            if (response.getState() === 'SUCCESS') {
+              var results = response.getReturnValue();
+              component.set('v.config', results);
+              component.set('v.templateFiles', results.generated);
+              helper.setupData(component);
+            } else {
+              component.set('v.errType', 'error');
+              component.set('v.errMsg', stringUtils.getErrorMessage(response));
+            }
+          });
+          $A.enqueueAction(action);
+        }
       } else {
         component.set('v.isLoading', true);
         // TODO: Verify has Gen license, trial not expired, etc.
@@ -56,7 +70,10 @@
   },
 
   sendForSignature: function (component, event, helper) {
-    helper.sendForSignature(component);
+    var isESignatureEnabled = component.get('v.isESignatureEnabled');
+    if (isESignatureEnabled) {
+      helper.sendForSignature(component);
+    }
   },
 
   goBack: function (component, event, helper) {
@@ -74,21 +91,27 @@
   },
 
   internalApproval: function (component, event, helper) {
-    component.set('v.isLoading', true);
-    helper.createAgreement(component, event, helper).then(
-      $A.getCallback(function () {
-        helper.createInternalApprovalComponent(component);
-      })
-    );
+    var isNegotiateEnabled = component.get('v.isNegotiateEnabled');
+    if (isNegotiateEnabled) {
+      component.set('v.isLoading', true);
+      helper.createAgreement(component, event, helper).then(
+        $A.getCallback(function () {
+          helper.createInternalApprovalComponent(component);
+        })
+      );
+    }
   },
 
   externalReview: function (component, event, helper) {
-    component.set('v.isLoading', true);
-    helper.createAgreement(component, event, helper).then(
-      $A.getCallback(function () {
-        helper.createExternalReviewComponent(component);
-      })
-    );
+    var isNegotiateEnabled = component.get('v.isNegotiateEnabled');
+    if (isNegotiateEnabled) {
+      component.set('v.isLoading', true);
+      helper.createAgreement(component, event, helper).then(
+        $A.getCallback(function () {
+          helper.createExternalReviewComponent(component);
+        })
+      );
+    }
   },
 
   genFileCheckboxToggle: function (component, event, helper) {

@@ -21,8 +21,11 @@
     <aura:attribute name="expiresOn" type="Date" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
-    <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="files" type="String"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>
@@ -51,11 +54,17 @@
         </header>
 
         <aura:if isTrue="{!v.isAuthorized}">
+            <aura:if isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp;  not(v.isESignatureEnabled)}">
+                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                    {!$Label.c.ESignatureNotConfigured}
+                </div>
+            </aura:if>
             <aura:set attribute="else">
-                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"/>
+                <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" products="{!v.products}"
+                                        fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
             </aura:set>
 
-            <aura:if isTrue="{!not(v.loading)}">
+            <aura:if isTrue="{!not(v.loading) &amp;&amp;  v.isESignatureEnabled}">
                 <div class="ds-sending__body slds-scrollable slds-container">
                     <div class="slds-container_center slds-container_medium slds-box">
                         <!-- Files -->
@@ -93,8 +102,8 @@
                                             </div>
                                             <div class="slds-media__body">
                                                 <h3 class="slds-tile__title slds-truncate" title="{!doc.name}">
-                                            {!doc.name}
-                                        </h3>
+                                                    {!doc.name}
+                                                </h3>
                                                 <div class="slds-tile__detail slds-truncate">
                                                     {!doc.formattedLastModified} • {!doc.formattedSize}
                                                     • {!doc.extension}
@@ -110,8 +119,8 @@
                                     <li class="slds-item">
                                         <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                                             <div class="slds-col slds-form-element_label slds-m-bottom_none slds-no-flex">
-                                        {!$Label.c.DocuSignTemplate}
-                                    </div>
+                                                {!$Label.c.DocuSignTemplate}
+                                            </div>
                                             <div class="slds-col">
                                                 <lightning:select class="ds-no-label slds-p-left_x-small"
                                                                   onchange="{!c.setTemplate}"

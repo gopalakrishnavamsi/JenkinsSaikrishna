@@ -465,7 +465,6 @@ public with sharing class AccountProducts {
 
 	/**
 	 * Retrieves the products on the account to be used for Setup and Admin management interfaces on the UI
-	 * Also this function is referred in isEsignEnabled which verifies e_sign product is added to account before allowing user to use the feature.
 	 *
 	 * @return A List of Products on the account
 	 */
@@ -685,17 +684,5 @@ public with sharing class AccountProducts {
 		result |= Collection.isNotEmpty(DB.deleteProductSettings());
 		self = null;
 		return result;
-	}
-
-	public static Boolean isEsignEnabled() {
-		Permissions.verifyIsDocuSignUser();
-		Boolean isEnabled = false;
-		for (Product product : getProducts()) {
-			if (product.name == ESIGN) {
-				isEnabled = true;
-				break;
-			}
-		}
-		return isEnabled;
 	}
 }

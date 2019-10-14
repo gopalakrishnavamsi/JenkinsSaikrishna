@@ -186,13 +186,4 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get Agreement.');
 		}
 	}
-
-	@AuraEnabled
-	public static List<Product> getProductsOnAccount() {
-		try {
-			return AccountProducts.getProducts();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check Products on account.');
-		}
-	}
 }
