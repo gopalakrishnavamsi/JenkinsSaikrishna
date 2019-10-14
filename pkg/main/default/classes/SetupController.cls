@@ -350,7 +350,7 @@ public with sharing class SetupController extends Controller {
 			Permissions.verifyIsDocuSignAdministrator();
 			return GenService.queryGenTemplatesForDisplay();
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get url for creating new gen template');
+			throw Controller.wrapException(ex, 'Failed to get gen templates');
 		}	
 	}
 }

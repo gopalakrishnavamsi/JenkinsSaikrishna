@@ -907,4 +907,58 @@ private class GenServiceTest {
 			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
 		}
 	}
+
+	@IsTest
+	static void test_queryGenTemplatesForDisplay_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.queryGenTemplatesForDisplay();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queryGenTemplatesForDisplay_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate');
+			insert testTemplate;
+			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
+			Test.startTest();
+			templatesList = GenService.queryGenTemplatesForDisplay();
+			Test.stopTest();
+			System.assertEquals(1, templatesList.size());
+			System.assertEquals('TestTemplate', templatesList[0].name);
+		}
+	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.getNewGenTemplateUrl();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getNewGenTemplateUrl_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Url gentemplateUrl = GenService.getNewGenTemplateUrl();
+			Test.stopTest();
+			System.assertNotEquals(null, gentemplateUrl);
+			System.assert(gentemplateUrl.toExternalForm().startsWith(Site.getBaseUrl()), true);
+		}
+	}
+
 }
