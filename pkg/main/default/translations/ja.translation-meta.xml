@@ -3793,10 +3793,6 @@
 		<name>CannotCloseCurrentUser</name>
 	</customLabels>
 	<customLabels>
-		<label>権限編集用に更新するユーザーに自分を含めることはできません。</label>
-		<name>CannotEditPermissionsCurrentUser</name>
-	</customLabels>
-	<customLabels>
 		<label>役割の選択</label>
 		<name>SelectApplicationRole</name>
 	</customLabels>

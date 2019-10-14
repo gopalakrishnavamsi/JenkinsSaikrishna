@@ -805,6 +805,8 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					}
 				}
 				response = MockResponse.created(nu);
+			} else if (request.method == 'PUT') {
+				response = MockResponse.ok(request.body);
 			} else if (request.method == 'DELETE') {
 				response = MockResponse.ok(request.body);
 			} else if (request.method == 'GET') {

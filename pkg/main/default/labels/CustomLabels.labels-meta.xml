@@ -7464,14 +7464,6 @@
 		<value>The current user cannot be part of removal and closing of users.</value>
 	</labels>
 	<labels>
-		<fullName>CannotEditPermissionsCurrentUser</fullName>
-		<categories>UserManagement</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CannotEditPermissionsCurrentUser</shortDescription>
-		<value>The current user cannot be part of updates for editing permissions.</value>
-	</labels>
-	<labels>
 		<fullName>SelectApplicationRole</fullName>
 		<categories>UserManagement</categories>
 		<language>en_US</language>

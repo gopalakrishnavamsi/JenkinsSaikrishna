@@ -3798,10 +3798,6 @@
 		<name>CannotCloseCurrentUser</name>
 	</customLabels>
 	<customLabels>
-		<label>The current user cannot be part of updates for editing permissions.</label>
-		<name>CannotEditPermissionsCurrentUser</name>
-	</customLabels>
-	<customLabels>
 		<label>Select Role</label>
 		<name>SelectApplicationRole</name>
 	</customLabels>
