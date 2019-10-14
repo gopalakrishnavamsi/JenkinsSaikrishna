@@ -92,7 +92,7 @@
   },
 
   navigateToSendForSignature: function (component, event, helper) {
-    if (component.get('v.eSignProduct')) {
+    if (component.get('v.isESignatureEnabled')) {
       helper.navigateToSendForSignature(component, event, helper);
     }
   }
