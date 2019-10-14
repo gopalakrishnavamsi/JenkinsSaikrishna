@@ -110,7 +110,7 @@ global with sharing class Entity {
 		if (String.isNotBlank(this.name)) {
 			if (this.parent != null && String.isNotBlank(this.parent.name)) {
 				result += String.format(': {0} {1} {2}', new List<String> {
-					this.name, Label.ForLabel, this.parent.name
+					this.name, System.Label.ForLabel, this.parent.name
 				});
 			} else {
 				result += ': ' + name;
