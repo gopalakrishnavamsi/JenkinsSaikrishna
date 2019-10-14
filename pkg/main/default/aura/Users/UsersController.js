@@ -26,7 +26,7 @@
         usersToEdit.push(row);
         component.set('v.usersToEdit', usersToEdit);
         helper.setEditUserModalData(component, event, helper, false, usersToEdit);
-        helper.editUserPermissions(component, event, helper, usersToEdit);
+        component.find('edit-permissions').show();
         break;
       case 'remove_close':
         helper.removeAndCloseSingleUser(component, event, helper, row);
@@ -42,7 +42,7 @@
   editPermissionsMultipleUsers: function (component, event, helper) {
     component.set('v.usersToEdit', component.get('v.selectedRows'));
     helper.setEditUserModalData(component, event, helper, true, component.get('v.selectedRows'));
-    helper.editUserPermissions(component, event, helper, component.get('v.selectedRows'));
+    component.find('edit-permissions').show();
   },
 
   removeAndCloseMultipleUsers: function (component, event, helper) {

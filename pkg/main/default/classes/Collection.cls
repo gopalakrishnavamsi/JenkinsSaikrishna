@@ -36,7 +36,23 @@ public class Collection {
 		return o == null || o.isEmpty();
 	}
 
+	public static Boolean isEmpty(final Map<Id, Object> o) {
+		return o == null || o.isEmpty();
+	}
+
+	public static Boolean isEmpty(final Map<UUID, Object> o) {
+		return o == null || o.isEmpty();
+	}
+
 	public static Boolean isNotEmpty(final Map<String, Object> o) {
+		return o != null && !o.isEmpty();
+	}
+
+	public static Boolean isNotEmpty(final Map<Id, Object> o) {
+		return o != null && !o.isEmpty();
+	}
+
+	public static Boolean isNotEmpty(final Map<UUID, Object> o) {
 		return o != null && !o.isEmpty();
 	}
 

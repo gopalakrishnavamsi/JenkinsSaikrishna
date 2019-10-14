@@ -179,15 +179,29 @@ public with sharing class UserService {
 			return result;
 		}
 
-		public Set<UUID> getDocuSignUserIds(final Set<Id> userIds) {
+		public Map<UUID, Account.User> queryUsers(final Set<Id> userIds) {
 			Permissions.verifyIsQueryable(User.getSObjectType(), new List<String> {
-				Application.namespacePrefix + 'Username__c'
+				'Id', 'FirstName', 'LastName', 'Email',
+				Application.namespacePrefix + 'CanManageAccount__c',
+				Application.namespacePrefix + 'Status__c',
+				Application.namespacePrefix + 'Username__c',
+				Application.namespacePrefix + 'Provisioned__c'
+			});
+			Permissions.verifyIsQueryable(Profile.getSObjectType(), new List<String> {
+				'Name'
 			});
 
-			Set<UUID> result = new Set<UUID>();
-			for (User u : [SELECT Username__c FROM User WHERE Id IN :userIds LIMIT :Application.batchLimit]) {
-				UUID dsUserId = UUID.tryParse(u.Username__c);
-				if (UUID.isNotEmpty(dsUserId)) result.add(dsUserId);
+			Map<UUID, Account.User> result = new Map<UUID, Account.User>();
+			for (User u : [
+				SELECT Id, FirstName, LastName, Email, Profile.Name,
+					CanManageAccount__c, Status__c, Username__c, Provisioned__c
+				FROM User
+				WHERE Id IN :userIds
+				AND Username__c != NULL
+				LIMIT :Application.batchLimit
+			]) {
+				Account.User au = convert(u);
+				if (au != null && UUID.isNotEmpty(au.id)) result.put(au.id, au);
 			}
 			return result;
 		}
@@ -245,29 +259,10 @@ public with sharing class UserService {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		Map<Id, Account.User> users = DB.queryCurrentUsers(maximumRecords);
-		Map<Id, Map<String, List<String>>> userRoles = Permissions.getUserRoles(users.keySet());
+		Map<Id, Map<String, String>> userRoles = Permissions.getUserRoles(users.keySet());
 		List<Account.User> result = users.values();
 		for (Account.User user : result) {
 			user.withRoles(userRoles.get(user.sourceId));
-		}
-		return result;
-	}
-
-	public static Map<String, List<String>> getRoles(final Set<String> products) {
-		Permissions.verifyIsDocuSignAdministrator();
-
-		if (Collection.isEmpty(products)) throw new DocuSignException(Label.UndefinedArgument);
-
-		Map<String, List<String>> result = new Map<String, List<String>>();
-		Map<String, Map<UUID, Product.Role>> prs = AccountProducts.getRoles(products);
-		if (prs != null) {
-			for (String p : prs.keySet()) {
-				List<String> roles = new List<String>();
-				for (Product.Role pr : prs.get(p).values()) {
-					roles.add(pr.role);
-				}
-				result.put(p, roles);
-			}
 		}
 		return result;
 	}
@@ -320,7 +315,7 @@ public with sharing class UserService {
  	 */
 	public static List<Account.User> addUsers(
 		final List<Account.User> users,
-		final Map<String, List<String>> productRoles) {
+		final Map<String, String> productRoles) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -332,7 +327,7 @@ public with sharing class UserService {
 			// Update the username and password for the users
 			List<Account.User> result = new List<Account.User>();
 			Map<Id, Credentials.UserCredentials> creds = new Map<Id, Credentials.UserCredentials>();
-			Set<UUID> userIds = new Set<UUID>();
+			Map<UUID, Account.User> newUsers = new Map<UUID, Account.User>();
 			for (Account.User u : UserAPI.getInstance().addUsers(users)) {
 				if (u.hasError) {
 					// Don't update user permissions if there was an error when adding to the account.
@@ -345,25 +340,25 @@ public with sharing class UserService {
 						u.email,
 						u.status,
 						u.canManageAccount));
-					result.add(u.withError(null).withRoles(productRoles));
-					if (UUID.isNotEmpty(u.id)) userIds.add(u.id);
+					result.add(u.withError(null));
+					if (UUID.isNotEmpty(u.id)) newUsers.put(u.id, u);
 				}
 			}
 
 			Boolean hasRoles = productRoles != null && !productRoles.isEmpty();
 			if (hasRoles) {
 				// Update user roles in MAGNUM API
-				RoleAPI.getInstance().addRoleUsers(getRoleUsers(
-					getRoleIds(
+				RoleAPI.getInstance().addRoleUsers(
+					newUsers,
+					flattenRoles(
 						AccountProducts.getRoles(productRoles.keySet()),
-						productRoles),
-					userIds));
+						productRoles));
 			}
 
 			Credentials.add(creds);
 			if (hasRoles) Permissions.replaceRoles(creds.keySet(), productRoles);
 
-			return result;
+			return mergeRoles(result, productRoles, productRoles);
 		} finally {
 			Credentials.save();
 			AccountProducts.save();
@@ -422,7 +417,7 @@ public with sharing class UserService {
 		if (closeMembership) {
 			try {
 				for (Account.User u : UserAPI.getInstance().removeUsers(users)) {
-					if (u.hasError && String.isNotBlank(u.sourceId)){
+					if (u.hasError && String.isNotBlank(u.sourceId)) {
 						// Don't clear user credentials if the API returned an error.
 						LOG.warn('Error while removing user ' + u.email + ': ' + u.error);
 						userIds.remove(u.sourceId);
@@ -442,12 +437,38 @@ public with sharing class UserService {
 	}
 
 	@TestVisible
-	private static Set<UUID> getRoleIds(final Map<String, Map<UUID, Product.Role>> accountRoles) {
-		Set<UUID> result = new Set<UUID>();
+	private static Map<UUID, Product.Role> flattenRoles(final Map<String, Map<UUID, Product.Role>> accountRoles) {
+		Map<UUID, Product.Role> result = new Map<UUID, Product.Role>();
 		if (Collection.isNotEmpty(accountRoles)) {
-			for (String p : accountRoles.keySet()) {
-				for (UUID rId : accountRoles.get(p).keySet()) {
-					if (UUID.isNotEmpty(rId)) result.add(rId);
+			for (Map<UUID, Product.Role> prs : accountRoles.values()) {
+				if (prs != null) result.putAll(prs);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Map<UUID, Product.Role> flattenRoles(
+		final Map<String, Map<UUID, Product.Role>> accountRoles,
+		final Map<String, String> targetRoles) {
+
+		Map<UUID, Product.Role> result = new Map<UUID, Product.Role>();
+		if (Collection.isNotEmpty(accountRoles) && Collection.isNotEmpty(targetRoles)) {
+			for (String p : targetRoles.keySet()) {
+				if (!accountRoles.containsKey(p)) throw new DocuSignException(Label.UnsupportedProducts);
+
+				// Filter roles needed. Ugh.
+				String role = targetRoles.get(p);
+				if (String.isNotBlank(role)) {
+					Boolean foundRole = false;
+					for (Product.Role pr : accountRoles.get(p).values()) {
+						if (pr.role == role) {
+							result.put(pr.id, pr);
+							foundRole = true;
+							break;
+						}
+					}
+					if (!foundRole) throw new DocuSignException(Label.UnsupportedProductRoles);
 				}
 			}
 		}
@@ -455,57 +476,36 @@ public with sharing class UserService {
 	}
 
 	@TestVisible
-	private static Map<UUID, Set<UUID>> getUserRoleDifference(
-		final Set<UUID> userIds,
-		final Set<UUID> allRoleIds,
-		final Set<UUID> newRoleIds) {
-
-		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
-		for (UUID roleId : Collection.difference(allRoleIds, newRoleIds)) {
-			result.put(roleId, userIds);
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static Map<UUID, Set<UUID>> getRoleUsers(
-		final Set<UUID> roleIds,
-		final Set<UUID> userIds) {
-
-		Map<UUID, Set<UUID>> result = new Map<UUID, Set<UUID>>();
-		if (Collection.isNotEmpty(roleIds) && Collection.isNotEmpty(userIds)) {
-			for (UUID rId : roleIds) {
-				if (UUID.isNotEmpty(rId)) result.put(rId, userIds);
+	private static Map<String, String> getAdminRoles(final Map<String, String> productRoles) {
+		Map<String, String> result = new Map<String, String>();
+		Map<String, String> roles = productRoles == null ? new Map<String, String>() : productRoles;
+		for (String p : roles.keySet()) {
+			String r = roles.get(p);
+			if (p == Product.ESIGNATURE) {
+				result.put(p, ESignatureProduct.ROLE_ADMINISTRATOR);
+			} else if (p == Product.CLM) {
+				result.put(p, ClmProduct.ROLE_ADMINISTRATOR);
+			} else if (!String.isBlank(r)) {
+				result.put(p, r);
 			}
 		}
 		return result;
 	}
 
 	@TestVisible
-	private static Set<UUID> getRoleIds(
-		final Map<String, Map<UUID, Product.Role>> accountRoles,
-		final Map<String, List<String>> targetRoles) {
+	private static List<Account.User> mergeRoles(
+		final List<Account.User> users,
+		final Map<String, String> adminRoles,
+		final Map<String, String> nonAdminRoles) {
 
-		Set<UUID> result = new Set<UUID>();
-		if (Collection.isNotEmpty(accountRoles)
-			&& Collection.isNotEmpty(targetRoles)) {
-
-			for (String p : targetRoles.keySet()) {
-				if (!accountRoles.containsKey(p)) throw new DocuSignException(Label.UnsupportedProducts);
-
-				// Filter roles needed. Ugh.
-				List<String> roles = targetRoles.get(p);
-				if (Collection.isNotEmpty(roles)) {
-					Integer count = 0;
-					for (String role : roles) {
-						for (Product.Role pr : accountRoles.get(p).values()) {
-							if (pr.role == role) {
-								result.add(pr.id);
-								count++;
-							}
-						}
-					}
-					if (count != roles.size()) throw new DocuSignException(Label.UnsupportedProductRoles);
+		List<Account.User> result = new List<Account.User>();
+		if (Collection.isNotEmpty(users)) {
+			for (Account.User u : users) {
+				if (u.canManageAccount) {
+					// Ensure the user has DS Admin and CLM admin if applicable
+					result.add(u.withRoles(adminRoles));
+				} else {
+					result.add(u.withRoles(nonAdminRoles));
 				}
 			}
 		}
@@ -522,16 +522,17 @@ public with sharing class UserService {
 	 *
 	 * @return Whether or not any user roles were updated.
 	 */
-	public static Boolean updateUserRoles(
+	public static List<Account.User> updateUserRoles(
 		final Set<Id> userIds,
-		final Map<String, List<String>> productRoles) {
+		final Map<String, String> productRoles) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
 		if (Collection.isEmpty(userIds)) throw new DocuSignException(Label.UndefinedArgument);
 
 		Set<Id> uIds = verifyBatchSize(userIds, Application.batchLimit);
-		Set<UUID> dsUserIds = DB.getDocuSignUserIds(uIds);
+		Map<UUID, Account.User> users = DB.queryUsers(uIds);
+		if (Collection.isEmpty(users)) new List<Account.User>();
 
 		try {
 			// Update user groups in MAGNUM API.
@@ -542,34 +543,28 @@ public with sharing class UserService {
 				allProducts.add(p.name);
 			}
 
-			// Next, get list of roles for configured products.
-			Map<String, Map<UUID, Product.Role>> allRoles = AccountProducts.getRoles(allProducts);
-			Set<UUID> allRoleIds = getRoleIds(allRoles);
+			// Next, get all roles for configured products.
+			Map<String, Map<UUID, Product.Role>> accountRoles = AccountProducts.getRoles(allProducts);
+			Map<UUID, Product.Role> allRoles = flattenRoles(accountRoles);
 
-			// Then, get the role IDs for the ones we want to assign.
-			Set<UUID> newRoleIds = getRoleIds(allRoles, productRoles);
+			// Then, get the roles we want to assign.
+			Map<UUID, Product.Role> newRoles = flattenRoles(accountRoles, productRoles);
 
-			// Determine which roles need to be removed, if present.
-			RoleAPI client = RoleAPI.getInstance();
-			Map<UUID, Set<UUID>> toRemove = getUserRoleDifference(
-				dsUserIds,
-				allRoleIds,
-				newRoleIds);
-			if (toRemove != null && !toRemove.isEmpty()) client.removeRoleUsers(toRemove);
-
-			// Add new roles
-			// TODO: Return error details for users? Depends on whether we have a design and fallback or retry mechanism.
-			if (Collection.isNotEmpty(newRoleIds)) client.addRoleUsers(getRoleUsers(newRoleIds, dsUserIds));
+			// TODO: Return error details for users? Depends on whether we have a design and fallback mechanism.
+			RoleAPI.getInstance().updateUserRoles(users, allRoles, newRoles);
 
 			// Update permission sets
 			Permissions.replaceRoles(uIds, productRoles);
 
 			// Reset user access tokens and set CanManageAccount__c accordingly.
-			return Credentials.reset(
+			Credentials.reset(
 				uIds,
 				productRoles != null
 					&& productRoles.containsKey(Product.ESIGNATURE)
 					&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR));
+
+			Map<String, String> adminRoles = getAdminRoles(productRoles);
+			return mergeRoles(users.values(), adminRoles, productRoles);
 		} finally {
 			AccountProducts.save();
 		}
