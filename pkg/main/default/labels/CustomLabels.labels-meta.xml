@@ -4095,7 +4095,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewEmailBody</shortDescription>
-		<value>Please approve this document at your earliest convenience.</value>
+		<value>Please review this document at your earliest convenience.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewModalTitle</fullName>

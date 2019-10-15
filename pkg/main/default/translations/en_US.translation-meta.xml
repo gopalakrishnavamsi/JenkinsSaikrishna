@@ -1950,7 +1950,7 @@
 		<name>ExternalReviewEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Please approve this document at your earliest convenience.</label>
+		<label>Please review this document at your earliest convenience.</label>
 		<name>ExternalReviewEmailBody</name>
 	</customLabels>
 	<customLabels>
