@@ -6,7 +6,7 @@
     <aura:attribute name="lookupObjs" type="Object[]"/>
     <aura:attribute name="failedFiles" type="Object[]"/>
     <aura:attribute name="templateFiles" type="Object[]"/>
-    <aura:attribute name="templateId" type="String"/>
+    <aura:attribute name="templateId" type="String" access="global"/>
     <aura:attribute name="recordId" type="String" access="global"/>
     <aura:attribute name="errMsg" type="String" access="global"/>
     <aura:attribute name="errType" type="String"/>
