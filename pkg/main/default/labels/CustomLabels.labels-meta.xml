@@ -8066,4 +8066,18 @@
 		<shortDescription>CLM - Object Folder Image Example</shortDescription>
 		<value>{0} Object 1</value>
 	</labels>
+	<labels>
+		<fullName>GenTrialExpired</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Your DocuSign Gen trial has expired.</shortDescription>
+		<value>Your DocuSign Gen trial has expired.</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateTrialExpired</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Your DocuSign Negotiate trial has expired.</shortDescription>
+		<value>Your DocuSign Negotiate trial has expired.</value>
+	</labels>
 </CustomLabels>

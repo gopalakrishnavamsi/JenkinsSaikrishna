@@ -4197,6 +4197,14 @@
 		<label>{0} Object 1</label>
 		<name>ObjFolderImgExample</name>
 	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Gen trial has expired.</label>
+		<name>GenTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Negotiate trial has expired.</label>
+		<name>NegotiateTrialExpired</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

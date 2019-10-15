@@ -22,6 +22,7 @@
     <aura:attribute name="showSetupSpinner" type="Object"/>
     <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isNegotiateTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
@@ -42,9 +43,16 @@
                                         products="{!v.products}"/>
             </aura:set>
             <aura:if isTrue="{!not(v.isNegotiateEnabled)}">
-                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                    {!$Label.c.NegotiateNotConfigured}
-                </div>
+                <aura:if isTrue="{!not(v.isNegotiateTrialExpired)}">
+                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                        {!$Label.c.NegotiateNotConfigured}
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!v.isNegotiateTrialExpired}">
+                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                        {!$Label.c.NegotiateTrialExpired}
+                    </div>
+                </aura:if>
             </aura:if>
             <div class="fullContainer">
                 <aura:if isTrue="{!v.showToolBarAndPreview &amp;&amp; v.isNegotiateEnabled}">

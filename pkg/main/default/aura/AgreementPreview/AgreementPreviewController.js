@@ -6,8 +6,9 @@
       products.forEach(function (product) {
         if (product.name === 'e_sign' && product.status === 'active') {
           component.set('v.isESignatureEnabled', true);
-        } else if (product.name === 'negotiate' && product.status === 'active') {
-          component.set('v.isNegotiateEnabled', true);
+        } else if (product.name === 'negotiate') {
+          component.set('v.isNegotiateTrialExpired', product.isExpired);
+          component.set('v.isNegotiateEnabled', product.status === 'active');
         }
       });
       if (component.get('v.isNegotiateEnabled')) {

@@ -24,6 +24,7 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
 
     <!-- handlers -->
@@ -202,9 +203,16 @@
                                 products="{!v.products}"/>
     </aura:if>
     <aura:if isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.isGenEnabled)}">
-        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-            {!$Label.c.GenNotConfigured}
-        </div>
+        <aura:if isTrue="{!not(v.isGenTrialExpired)}">
+            <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                {!$Label.c.GenNotConfigured}
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isGenTrialExpired}">
+            <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                {!$Label.c.GenTrialExpired}
+            </div>
+        </aura:if>
     </aura:if>
     <!-- What You Will Need Modal -->
     <c:strike_modal aura:id="whatYouWillNeedModal" title="What you will Need" showModal="{!v.showWhatYouWillNeedModal}"

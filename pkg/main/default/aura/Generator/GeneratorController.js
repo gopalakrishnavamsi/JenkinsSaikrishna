@@ -8,8 +8,9 @@
           component.set('v.isESignatureEnabled', true);
         } else if (product.name === 'negotiate' && product.status === 'active') {
           component.set('v.isNegotiateEnabled', true);
-        } else if (product.name === 'gen' && product.status === 'active') {
-          component.set('v.isGenEnabled', true);
+        } else if (product.name === 'gen') {
+          component.set('v.isGenEnabled', product.status === 'active');
+          component.set('v.isGenTrialExpired', product.isExpired);
         }
       });
     }

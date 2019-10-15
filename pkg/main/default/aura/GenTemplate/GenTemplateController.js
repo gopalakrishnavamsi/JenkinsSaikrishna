@@ -3,8 +3,9 @@
     var products = component.get('v.products');
     if (!$A.util.isUndefinedOrNull(products)) {
       products.forEach(function (product) {
-        if (product.name === 'gen' && product.status === 'active') {
-          component.set('v.isGenEnabled', true);
+        if (product.name === 'gen') {
+          component.set('v.isGenEnabled', product.status === 'active');
+          component.set('v.isGenTrialExpired', product.isExpired);
         }
       });
     }

@@ -20,6 +20,7 @@
     <aura:attribute name="isAgreementLoaded" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isNegotiateTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
@@ -137,10 +138,19 @@
                 </aura:if>
                 <aura:if
                         isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isNegotiateEnabled)}">
-                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                        {!$Label.c.NegotiateNotConfigured}
-                    </div>
+                    <aura:if isTrue="{!not(v.isNegotiateTrialExpired)}">
+                        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                            {!$Label.c.NegotiateNotConfigured}
+                        </div>
+                    </aura:if>
+                    <aura:if
+                            isTrue="{!v.isNegotiateTrialExpired}">
+                        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                            {!$Label.c.NegotiateTrialExpired}
+                        </div>
+                    </aura:if>
                 </aura:if>
+
             </div>
         </ul>
     </div>
