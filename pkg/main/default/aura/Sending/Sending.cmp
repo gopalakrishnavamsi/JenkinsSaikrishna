@@ -56,15 +56,15 @@
 
         <aura:if isTrue="{!v.isAuthorized}">
             <aura:if isTrue="{!not(v.fetchingOAuthStatus) &amp;&amp;  not(v.isESignatureEnabled)}">
-                <aura:if isTrue="{!not(v.isESignatureTrialExpired)}">
-                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                        {!$Label.c.ESignatureNotConfigured}
-                    </div>
-                </aura:if>
                 <aura:if isTrue="{!v.isESignatureTrialExpired}">
                     <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                         {!$Label.c.TrialAccountExpired}
                     </div>
+                    <aura:set attribute="else">
+                        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                            {!$Label.c.ESignatureNotConfigured}
+                        </div>
+                    </aura:set>
                 </aura:if>
             </aura:if>
             <aura:set attribute="else">

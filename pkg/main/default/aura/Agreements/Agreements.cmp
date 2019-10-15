@@ -129,28 +129,19 @@
                         </div>
                     </aura:if>
                 </aura:if>
-
-                <aura:if
-                        isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isDocuSignNegotiator)}">
-                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                        {!$Label.c.MustBeDocuSignNegotiator}
-                    </div>
-                </aura:if>
                 <aura:if
                         isTrue="{!v.isAuthorized &amp;&amp; not(v.fetchingOAuthStatus) &amp;&amp; not(v.loading) &amp;&amp; not(v.isNegotiateEnabled)}">
-                    <aura:if isTrue="{!not(v.isNegotiateTrialExpired)}">
-                        <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                            {!$Label.c.NegotiateNotConfigured}
-                        </div>
-                    </aura:if>
-                    <aura:if
-                            isTrue="{!v.isNegotiateTrialExpired}">
+                    <aura:if isTrue="{!v.isNegotiateTrialExpired}">
                         <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
                             {!$Label.c.NegotiateTrialExpired}
                         </div>
+                        <aura:set attribute="else">
+                            <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                                {!$Label.c.NegotiateNotConfigured}
+                            </div>
+                        </aura:set>
                     </aura:if>
                 </aura:if>
-
             </div>
         </ul>
     </div>
