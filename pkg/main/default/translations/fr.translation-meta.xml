@@ -1958,7 +1958,7 @@
 		<name>ExternalReviewModalTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Choisissez un contact Salesforce ou utilisez une adresse e‑mail.</label>
+		<label>Choisissez un contact Salesforce.</label>
 		<name>ExternalReviewChooseRecipientMessage</name>
 	</customLabels>
 	<customLabels>
@@ -2591,7 +2591,7 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>Exportation de l’accord en cours. Veuillez vérifier la zone « Accords » après un certain temps.</label>
+		<label>Exportation de l’accord en cours. Veuillez vérifier la section « Notes et pièces jointes » après un certain temps.</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -2917,7 +2917,7 @@
 	<customLabels>
 		<label>Le rappel a échoué.</label>
 		<name>CallbackFailed</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Visiter la FAQ</label>
 		<name>VisitFAQ</name>
@@ -3009,11 +3009,11 @@
 	<customLabels>
 		<label>Comprendre DocuSign Agreements</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Installation et premiers pas</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Gestion des utilisateurs DocuSign CLM</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3025,7 +3025,7 @@
 	<customLabels>
 		<label>Mappage d’objets Salesforce</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Gestion des dossiers d’objets et des configurations de présentations</label>
 		<name>MapObjectFolders</name>
@@ -3335,7 +3335,7 @@
 		<name>CompleteSetupAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Débuter avec DocuSign Applications</label>
+		<label>Débuter avec le lanceur d’applications DocuSign</label>
 		<name>GetStartedSetupAccount</name>
 	</customLabels>
 	<customLabels>
@@ -3595,6 +3595,150 @@
 		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
+		<label>Jours restants de la période d’essai {0}</label>
+		<name>TrialExpirationMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher les tarifs</label>
+		<name>ViewPricing</name>
+	</customLabels>
+	<customLabels>
+		<label>Création de documents en un clic</label>
+		<name>GenMarketingHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Donnez à vos utilisateurs la possibilité de créer automatiquement des accords commerciaux configurables, directement depuis Salesforce.</label>
+		<name>GenMarketingBody1</name>
+	</customLabels>
+	<customLabels>
+		<label>Accélérez vos processus commerciaux en créant rapidement, au format souhaité, des documents avec les données Salesforce dont vous avez besoin.</label>
+		<name>GenMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>Évaluations et autorisations plus rapides</label>
+		<name>NegotiateMarketingHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Suivez facilement dans Salesforce vos négociations et vos évaluations.</label>
+		<name>NegotiateMarketingBody1</name>
+	</customLabels>
+	<customLabels>
+		<label>Que ce soit avec vos parties internes ou externes, profitez des fonctionnalités de raturage et de contrôle de versions pour des évaluations moins pénibles et plus rapides.</label>
+		<name>NegotiateMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>Essayez !</label>
+		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>Comparer les fonctionnalités</label>
+		<name>CompareFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>Trouvez les fonctionnalités dont vous avez besoin pour accélérer le processus d’accords commerciaux.</label>
+		<name>FindFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>Création de documents PDF ou Microsoft Word.</label>
+		<name>GenerateWordOrPdfFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Fusion des données Salesforce</label>
+		<name>MergeDataFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Personnalisation avec du contenu conditionnel</label>
+		<name>ConditionalContentFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Utilise vos tableaux dynamiques de tarifications et de données</label>
+		<name>DynamicPricingFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Compatible avec DocuSign eSignature</label>
+		<name>ESignatureCompatibleFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Pour les décideurs, facilite la signature d’accords</label>
+		<name>ApproversFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Permet aux évaluateurs externes de mettre à jour les accords</label>
+		<name>ExternalReviewFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Rationalise le contrôle de versions</label>
+		<name>VersionControlFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Routage des autorisations et notifications</label>
+		<name>RoutingFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus sur les tarifs</label>
+		<name>LearnMoreAboutPricing</name>
+	</customLabels>
+	<customLabels>
+		<label>Découvrez comment tirer le meilleur du lanceur d’applications DocuSign</label>
+		<name>LearnSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Approfondissez vos connaissances sur le sujet avec nos guides d’aide.</label>
+		<name>LearnSectionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer des enveloppes à signer</label>
+		<name>LearnEsignLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Génère des accords personnalisés et soignés</label>
+		<name>LearnGenLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoi d’accords commerciaux pour évaluation ou autorisation</label>
+		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Essayez DocuSign Gen</label>
+		<name>TryDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Essayez DocuSign Negotiate</label>
+		<name>TryDocuSignNegotiate</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer des documents gratuitement pendant 30 jours</label>
+		<name>GenerateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer, négocier et collaborer gratuitement pendant 30 jours</label>
+		<name>NegotiateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>D’un simple clic, vous créerez des accords soignés, configurables et entièrement personnalisables en utilisant les données de Salesforce dont vous disposez déjà.</label>
+		<name>GenerateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous accélérerez chaque étape du processus d’accords commerciaux. De la création de documents jusqu’à la négociation avec des tiers décideurs.</label>
+		<name>NegotiateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Aucune obligation, aucun engagement. Commençons tout de suite.</label>
+		<name>NoObligation</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre période d’essai de DocuSign Gen a commencé</label>
+		<name>GenTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre période d’essai de DocuSign Negotiate a commencé</label>
+		<name>NegotiateTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Actuellement à l’essai</label>
+		<name>CurrentlyOnTrial</name>
+	</customLabels>
+	<customLabels>
 		<label>Utilisateurs DocuSign</label>
 		<name>DocuSignUsers</name>
 	</customLabels>
@@ -3832,15 +3976,15 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Folder Contents</label>
+		<label>Contenu du dossier</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
-		<label>Account Object</label>
+		<label>Objet de compte</label>
 		<name>AccountObject</name>
 	</customLabels>
 	<customLabels>
-		<label>{0} object type was not mapped to DocuSign CLM.</label>
+		<label>Le type d’objet « {0} » n’a pas été mappé vers DocuSign CLM.</label>
 		<name>MapError</name>
 	</customLabels>
 	<customLabels>
@@ -3862,6 +4006,18 @@
 	<customLabels>
 		<label>Les fichiers ci‑dessous ont été produits avec succès et peuvent désormais être envoyés à signer</label>
 		<name>GenSendSignatureMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Préparation pour signature</label>
+		<name>SendingForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} objets mappés</label>
+		<name>MappedObjectsPlainText</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyer pour révision</label>
+		<name>SendForReview</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>

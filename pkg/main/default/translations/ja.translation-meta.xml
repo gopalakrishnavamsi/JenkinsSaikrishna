@@ -922,7 +922,7 @@
 		<name>SupportCenter</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSignでは、製品をご利用いただくお客様の成功を最優先項目として考えています。&lt;a href=&quot;https://support.docusign.com/jp/home&quot; target=&quot;_blank&quot;&gt;DocuSignサポートセンター&lt;/a&gt;では、DocuSignの機能に関する説明、一般的な問題についての解決策、およびシステムのパフォーマンス情報を提供しています。</label>
+		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。&lt;a href=&quot;https://support.docusign.com/jp/home&quot; target=&quot;_blank&quot;&gt;DocuSignサポートセンター&lt;/a&gt;では、DocuSignの機能に関する説明、一般的な問題についての解決策、およびシステムのパフォーマンス情報を提供しています。</label>
 		<name>SupportInfo</name>
 	</customLabels>
 	<customLabels>
@@ -1959,7 +1959,7 @@
 		<name>ExternalReviewModalTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce取引先責任者を選択するか、メールアドレスを指定します。</label>
+		<label>Salesforce取引先責任者の選択</label>
 		<name>ExternalReviewChooseRecipientMessage</name>
 	</customLabels>
 	<customLabels>
@@ -2591,7 +2591,7 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>契約エクスポートの処理中です。後で［契約］スペースで処理結果を確認してください。</label>
+		<label>契約エクスポートの処理中です。後で［メモ＆添付ファイル］セクションを確認してください。</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -2917,7 +2917,7 @@
 	<customLabels>
 		<label>コールバックに失敗しました。</label>
 		<name>CallbackFailed</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>FAQの参照</label>
 		<name>VisitFAQ</name>
@@ -3009,11 +3009,11 @@
 	<customLabels>
 		<label>DocuSign Agreementsを理解する</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>インストールと最初の操作</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>DocuSign CLMユーザーの管理</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3025,7 +3025,7 @@
 	<customLabels>
 		<label>Salesforceオブジェクトのマッピング</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>オブジェクトフォルダーの管理とレイアウト設定</label>
 		<name>MapObjectFolders</name>
@@ -3333,7 +3333,7 @@
 		<name>CompleteSetupAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Get Started with DocuSign Apps Launcher</label>
+		<label>DocuSignアプリケーションランチャーを使ってみましょう</label>
 		<name>GetStartedSetupAccount</name>
 	</customLabels>
 	<customLabels>
@@ -3593,147 +3593,147 @@
 		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Days Left in {0} trial</label>
+		<label>トライアルの残り: {0}日</label>
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>View Pricing</label>
+		<label>価格の表示</label>
 		<name>ViewPricing</name>
 	</customLabels>
 	<customLabels>
-		<label>One-Click Document Generation</label>
+		<label>ワンクリックでの文書生成</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</label>
+		<label>この製品を使用すると、Salesforce内で洗練された契約文書を自動的に生成できるようになります。</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
-		<label>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</label>
+		<label>Salesforce内のデータを取り込んでさまざまな書式の契約文書をすばやく作成して、業務を効率化できます。</label>
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>Faster Reviews and Approvals</label>
+		<label>迅速なレビューと承認</label>
 		<name>NegotiateMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Easily track your negotiations and reviews in Salesforce.</label>
+		<label>Salesforce内で、文書の変更履歴を簡単に確認できます。</label>
 		<name>NegotiateMarketingBody1</name>
 	</customLabels>
 	<customLabels>
-		<label>Whether with internal or external parties, enjoy version control and redlining for faster and less painful reviews.</label>
+		<label>社内外の担当者との共同作業で文書のバージョン管理や修正を効率的に行えます。</label>
 		<name>NegotiateMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>Try it out</label>
+		<label>使ってみる</label>
 		<name>TryItOut</name>
 	</customLabels>
 	<customLabels>
-		<label>Compare Features</label>
+		<label>機能の比較</label>
 		<name>CompareFeatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Find the features you need for a faster agreement process.</label>
+		<label>迅速な合意形成プロセスに必要なさまざまな機能を使用できます。</label>
 		<name>FindFeatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Microsoft Word or PDF documents</label>
+		<label>Microsoft Word文書またはPDFファイルの生成</label>
 		<name>GenerateWordOrPdfFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Merge Salesforce data</label>
+		<label>Salesforceデータのマージ</label>
 		<name>MergeDataFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Customize with conditional content</label>
+		<label>条件付きコンテンツによるカスタマイズ</label>
 		<name>ConditionalContentFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Use your dynamic pricing and data tables</label>
+		<label>動的な価格表およびデータ表の使用</label>
 		<name>DynamicPricingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Compatible with DocuSign eSignature</label>
+		<label>DocuSign eSignatureに対応</label>
 		<name>ESignatureCompatibleFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Make it easy for approvers to sign off on agreements</label>
+		<label>契約文書を簡単に承認</label>
 		<name>ApproversFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Allow external reviewers to update agreements</label>
+		<label>外部のレビュー担当者による契約文書の更新</label>
 		<name>ExternalReviewFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Streamline version control</label>
+		<label>効率的なバージョン管理</label>
 		<name>VersionControlFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Approval routing and notifications</label>
+		<label>承認のルーティングと通知</label>
 		<name>RoutingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about pricing</label>
+		<label>価格についての詳細</label>
 		<name>LearnMoreAboutPricing</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn how to get the most from DocuSign Apps Launcher</label>
+		<label>DocuSignアプリケーションランチャーを活用する方法について</label>
 		<name>LearnSectionHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Dive deeper and learn more with our help guides.</label>
+		<label>さらに詳しい情報についてはヘルプガイドを参照してください。</label>
 		<name>LearnSectionHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Send Envelopes for Signature</label>
+		<label>署名者へのエンベロープの送信</label>
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Polished, Customized Agreements</label>
+		<label>洗練された契約文書の生成</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Send Agreements for Review or Approval</label>
+		<label>レビューまたは承認担当者への契約文書の送信</label>
 		<name>LearnNegotiateLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Try DocuSign Gen</label>
+		<label>DocuSign Genを使ってみる</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
 	<customLabels>
-		<label>Try DocuSign Negotiate</label>
+		<label>DocuSign Negotiateを使ってみる</label>
 		<name>TryDocuSignNegotiate</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Documents Free for 30 Days</label>
+		<label>文書の生成機能を30日間無料でお試しいただけます</label>
 		<name>GenerateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate, Negotiate and Collaborate Free for 30 Days</label>
+		<label>文書の生成、交渉、共同作業を30日間無料でお試しいただけます</label>
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</label>
+		<label>既存のSalesforceデータを取り込んで、カスタマイズ可能な契約文書をワンクリックで生成できます。</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>You&apos;ll speed up every part of your agreement process. From generating documents to negotiating with third-party approvers.</label>
+		<label>合意形成プロセスのあらゆる局面を効率化できます。文書の生成から、第三者との承認、交渉作業まで。</label>
 		<name>NegotiateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>No obligation, no commitment. Let’s get started.</label>
+		<label>製品のご購入や料金のお支払いは不要です。ぜひお試しください。</label>
 		<name>NoObligation</name>
 	</customLabels>
 	<customLabels>
-		<label>Your DocuSign Gen trial has started</label>
+		<label>DocuSign Genトライアルが開始されました</label>
 		<name>GenTrialStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Your DocuSign Negotiate trial has started</label>
+		<label>DocuSign Negotiateトライアルが開始されました</label>
 		<name>NegotiateTrialStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Currently on Trial</label>
+		<label>現在トライアル中</label>
 		<name>CurrentlyOnTrial</name>
 	</customLabels>
 	<customLabels>
@@ -4005,8 +4005,16 @@
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Preparing for signature</label>
+		<label>署名の準備中</label>
 		<name>SendingForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}件のマッピングオブジェクト</label>
+		<name>MappedObjectsPlainText</name>
+	</customLabels>
+	<customLabels>
+		<label>レビューへの送信</label>
+		<name>SendForReview</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign セットアップ</label>
