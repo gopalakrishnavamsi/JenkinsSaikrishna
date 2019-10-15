@@ -42,7 +42,7 @@ private class EntityTest {
 
 			Test.startTest();
 			System.assertEquals(String.format('{0}: {1} {2} {3}', new List<String> {
-				e1.label, e1.name, System.Label.ForLabel, e1.parent.name
+				e1.label, e1.name, Label.ForLabel, e1.parent.name
 			}), e1.toString());
 			System.assertEquals(String.format('{0}: {1}', new List<String> {
 				e2.label, e2.name
