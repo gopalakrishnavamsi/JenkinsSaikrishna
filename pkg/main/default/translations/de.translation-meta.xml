@@ -18,7 +18,7 @@
 		<name>Account</name>
 	</customLabels>
 	<customLabels>
-		<label>Umschlag kann nicht gesendet werden. Eingebettete Signiersitzungen müssen für das DocuSign-Konto aktiviert sein.</label>
+		<label>Umschlag kann nicht gesendet werden. Eingebettete Signiersitzungen müssen für den DocuSign-Account aktiviert sein.</label>
 		<name>AccountInSessionSigningMustBeEnabled</name>
 	</customLabels>
 	<customLabels>
@@ -90,7 +90,7 @@
 		<name>BulkListNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign-Konto verwalten</label>
+		<label>DocuSign-Account verwalten</label>
 		<name>CanManage</name>
 	</customLabels>
 	<customLabels>
@@ -198,7 +198,7 @@
 		<name>Completed</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign verbinden Sie mit Ihrer Salesforce-Organisation, indem Sie sich beim Konto anmelden oder für ein Testkonto registrieren.</label>
+		<label>DocuSign verbinden Sie mit Ihrer Salesforce-Organisation, indem Sie sich beim Account anmelden oder für einen Probeaccount registrieren.</label>
 		<name>ConnectDocuSign</name>
 	</customLabels>
 	<customLabels>
@@ -494,7 +494,7 @@
 		<name>Intermediary</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit mindestens einer Einstellung in Ihrem DocuSign-Konto könnte es ein Problem geben. Der Benutzer, dessen Anmeldedaten zur Aktivierung der Integration zwischen DocuSign für Salesforce und DocuSign (auch SOBO-Benutzer genannt) verwendet werden, muss über sämtliche der folgenden Berechtigungen verfügen und folgende Flags müssen aktiviert sein: „Darf Konto verwalten“, „Darf Umschlag senden“, „‚Senden im Auftrag von&apos; zulassen“ und „Kontoweiter API-Zugriff“. Auf diese Einstellungen greifen Sie zu, indem Sie sich direkt bei DocuSign anmelden, auf „Einstellungen“ klicken und den Bereich „Berechtigungen“ in der Verwaltungskonsole auswählen. Erst wenn diese Einstellungen aktiviert sind, kann die Integration funktionieren. Selbst wenn das Problem nicht mit diesen Einstellungen in Verbindung steht, sollten diese als erstes überprüft werden. Wenden Sie sich an den DocuSign-Administrator, um herauszufinden, ob kürzlich Änderungen an den Einstellungen in DocuSign vorgenommen wurden.</label>
+		<label>Mit mindestens einer Einstellung in Ihrem DocuSign-Account könnte es ein Problem geben. Der Benutzer, dessen Anmeldedaten zur Aktivierung der Integration zwischen DocuSign für Salesforce und DocuSign (auch SOBO-Benutzer genannt) verwendet werden, muss über sämtliche der folgenden Berechtigungen verfügen und folgende Flags müssen aktiviert sein: „Darf Konto verwalten“, „Darf Umschlag senden“, „‚Senden im Auftrag von&apos; zulassen“ und „Kontoweiter API-Zugriff“. Auf diese Einstellungen greifen Sie zu, indem Sie sich direkt bei DocuSign anmelden, auf „Einstellungen“ klicken und den Bereich „Berechtigungen“ in der Verwaltungskonsole auswählen. Erst wenn diese Einstellungen aktiviert sind, kann die Integration funktionieren. Selbst wenn das Problem nicht mit diesen Einstellungen in Verbindung steht, sollten diese als erstes überprüft werden. Wenden Sie sich an den DocuSign-Administrator, um herauszufinden, ob kürzlich Änderungen an den Einstellungen in DocuSign vorgenommen wurden.</label>
 		<name>InvalidAccountSettings</name>
 	</customLabels>
 	<customLabels>
@@ -618,7 +618,7 @@
 		<name>LogIn</name>
 	</customLabels>
 	<customLabels>
-		<label>Beim DocuSign-Konto anmelden</label>
+		<label>Beim DocuSign-Account anmelden</label>
 		<name>LogInToDocuSignAccount</name>
 	</customLabels>
 	<customLabels>
@@ -626,7 +626,7 @@
 		<name>Message</name>
 	</customLabels>
 	<customLabels>
-		<label>Mehrere Konten sind mit den von Ihnen angegebenen Anmeldedaten verbunden. Wählen Sie das Konto, das Sie mit der Salesforce-Organisation verbinden möchten.</label>
+		<label>Mehrere Accounts sind mit den von Ihnen angegebenen Anmeldedaten verbunden. Wählen Sie den Account, den Sie mit der Salesforce-Organisation verbinden möchten.</label>
 		<name>MultipleAccountsMessage</name>
 	</customLabels>
 	<customLabels>
@@ -762,7 +762,7 @@
 		<name>Reason</name>
 	</customLabels>
 	<customLabels>
-		<label>Umschlag kann nicht gesendet werden. Gemäß der Kontoeinstellungen muss der Empfänger ein aktiver DocuSign-Benutzer sein.</label>
+		<label>Umschlag kann nicht gesendet werden. Gemäß der Accounteinstellungen muss der Empfänger ein aktiver DocuSign-Benutzer sein.</label>
 		<name>RecipientMustBeUser</name>
 	</customLabels>
 	<customLabels>
@@ -782,7 +782,7 @@
 		<name>RequiredCustomField_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Benutzerdefiniertes Feld „{0}“ ist für Ihr Konto falsch konfiguriert: ein erforderliches Feld hat keine Optionen. Wenden Sie sich an den DocuSign-Administrator, damit die Konfiguration des benutzerdefinierten Felds korrigiert wird.</label>
+		<label>Benutzerdefiniertes Feld „{0}“ ist für Ihren Account falsch konfiguriert: ein erforderliches Feld hat keine Optionen. Wenden Sie sich an den DocuSign-Administrator, damit die Konfiguration des benutzerdefinierten Felds korrigiert wird.</label>
 		<name>RequiredEmptyList_1</name>
 	</customLabels>
 	<customLabels>
@@ -818,11 +818,11 @@
 		<name>Select</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto auswählen</label>
+		<label>Account auswählen</label>
 		<name>SelectAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto auswählen</label>
+		<label>Account auswählen</label>
 		<name>SelectAccountOption</name>
 	</customLabels>
 	<customLabels>
@@ -882,7 +882,7 @@
 		<name>SigningGroupNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Für Ihr Konto sind keine Signiergruppen aktiviert.</label>
+		<label>Für Ihren Account sind keine Signiergruppen aktiviert.</label>
 		<name>SigningGroupsProhibited</name>
 	</customLabels>
 	<customLabels>
@@ -946,7 +946,7 @@
 		<name>Title</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihr kostenloses Probekonto ist abgelaufen. Sie möchten auch weiterhin DocuSign für Salesforce nutzen? &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Dann führen Sie ein Konto-Upgrade durch.&lt;/a&gt;</label>
+		<label>Ihr kostenloser Probeaccount ist abgelaufen. Sie möchten auch weiterhin DocuSign für Salesforce nutzen? &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Dann führen Sie ein Account-Upgrade durch.&lt;/a&gt;</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
@@ -1106,7 +1106,7 @@
 		<name>SuccessDownloadingFile</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit dieser Option dürfen Benutzer, die keine Mitglieder des DocuSign-Kontos sind, Umschläge zum Signieren senden und Umschläge signieren. Der Absender ist hierbei dann der konfigurierte DocuSign-Administrator.</label>
+		<label>Mit dieser Option dürfen Benutzer, die keine Mitglieder des DocuSign-Accounts sind, Umschläge zum Signieren senden und Umschläge signieren. Der Absender ist hierbei dann der konfigurierte DocuSign-Administrator.</label>
 		<name>UseSystemSenderHelp</name>
 	</customLabels>
 	<customLabels>
@@ -1174,11 +1174,11 @@
 		<name>InvalidGrant</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto nicht gefunden.</label>
+		<label>Account nicht gefunden.</label>
 		<name>AccountNotFound</name>
 	</customLabels>
 	<customLabels>
-		<label>Ungültiges DocuSign-Konto.</label>
+		<label>Ungültiger DocuSign-Account.</label>
 		<name>InvalidAccount</name>
 	</customLabels>
 	<customLabels>
@@ -1246,7 +1246,7 @@
 		<name>InvalidGenQuery</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign-Kontoservice</label>
+		<label>DocuSign-Accountservice</label>
 		<name>AccountServiceDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1362,7 +1362,7 @@
 		<name>InvalidSearchObject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihr kostenloses Probekonto ist abgelaufen. Sie möchten auch weiterhin DocuSign für Salesforce Essentials nutzen? Dann führen Sie ein Konto-Upgrade durch. Melden Sie sich nach dem Konto-Upgrade ab und wieder an, indem Sie DocuSign-Setup auswählen</label>
+		<label>Ihr kostenloser Probeaccount ist abgelaufen. Sie möchten auch weiterhin DocuSign für Salesforce Essentials nutzen? Dann führen Sie ein Account-Upgrade durch. Melden Sie sich nach dem Account-Upgrade ab und wieder an, indem Sie DocuSign-Setup auswählen</label>
 		<name>ExpiredTrialAccount</name>
 	</customLabels>
 	<customLabels>
@@ -1958,7 +1958,7 @@
 		<name>ExternalReviewModalTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Wählen Sie einen Salesforce-Kontakt oder eine E-Mail-Adresse.</label>
+		<label>Wählen Sie ein Salesforce-Objekt aus.</label>
 		<name>ExternalReviewChooseRecipientMessage</name>
 	</customLabels>
 	<customLabels>
@@ -2166,7 +2166,7 @@
 		<name>ApprovalFailureEmailBodyText</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler bei der Prüfungsanfrage.</label>
+		<label>Fehler bei der Prüfanfrage.</label>
 		<name>ApprovalFailureEmailHeaderTitleText</name>
 	</customLabels>
 	<customLabels>
@@ -2458,7 +2458,7 @@
 		<name>RemoveModalBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Generieren Sie für Dokumente, Attribute und Workflows detaillierte Diagramme und Berichte. Dadurch haben Sie die Aktivitäten und die Leistung des Kontos im Blick.</label>
+		<label>Generieren Sie für Dokumente, Attribute und Workflows detaillierte Diagramme und Berichte. Dadurch haben Sie die Aktivitäten und die Leistung des Accounts im Blick.</label>
 		<name>RunReportsAndAnalyticsBody</name>
 	</customLabels>
 	<customLabels>
@@ -2578,7 +2578,7 @@
 		<name>YourSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
-		<label>Testkonto kann für {0} nicht erstellt werden</label>
+		<label>Probeaccount kann für {0} nicht erstellt werden</label>
 		<name>InvalidTrialProduct_1</name>
 	</customLabels>
 	<customLabels>
@@ -2590,7 +2590,7 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wird noch exportiert. Sie können später hierher zurückkehren und den Status prüfen.</label>
+		<label>Vereinbarung wird noch exportiert. Sie finden sie später im Bereich „Notizen und Anhänge“.</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -2610,7 +2610,7 @@
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Dies ist die logische Interpretation der Instanzen Ihres zugeordneten Objekts (z. B. &apos;Neues Konto 1&apos;), wobei jede davon einen eigenen Ordner für DocuSign CLM hat.</label>
+		<label>Dies ist die logische Interpretation der Instanzen Ihres zugeordneten Objekts (z. B. &apos;Neuer Account 1&apos;), wobei jede davon einen eigenen Ordner für DocuSign CLM hat.</label>
 		<name>CaseFolderContentsHelp</name>
 	</customLabels>
 	<customLabels>
@@ -2754,7 +2754,7 @@
 		<name>IndicatesUp</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto 1</label>
+		<label>Account 1</label>
 		<name>Account1</name>
 	</customLabels>
 	<customLabels>
@@ -2774,7 +2774,7 @@
 		<name>AccountNameMergeFieldLowerCase</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto 2</label>
+		<label>Account 2</label>
 		<name>Account2</name>
 	</customLabels>
 	<customLabels>
@@ -2806,7 +2806,7 @@
 		<name>AccountNumber</name>
 	</customLabels>
 	<customLabels>
-		<label>Kontoinhaber</label>
+		<label>Accountinhaber</label>
 		<name>AccountOwner</name>
 	</customLabels>
 	<customLabels>
@@ -2858,19 +2858,19 @@
 		<name>DynamicName</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto A</label>
+		<label>Account A</label>
 		<name>AccountA</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto B</label>
+		<label>Account B</label>
 		<name>AccountB</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto C</label>
+		<label>Account C</label>
 		<name>AccountC</name>
 	</customLabels>
 	<customLabels>
-		<label>Konto D</label>
+		<label>Account D</label>
 		<name>AccountD</name>
 	</customLabels>
 	<customLabels>
@@ -2916,7 +2916,7 @@
 	<customLabels>
 		<label>Fehler beim Rückruf.</label>
 		<name>CallbackFailed</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>FAQs aufrufen</label>
 		<name>VisitFAQ</name>
@@ -3008,11 +3008,11 @@
 	<customLabels>
 		<label>DocuSign Agreements – Grundlagen</label>
 		<name>UnderstandingDocuSignAgreements</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Installieren und los gehts</label>
 		<name>InstallationandGetStarted</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>DocuSign-CLM-Benutzer verwalten</label>
 		<name>ManagingDocuSignUsers</name>
@@ -3024,7 +3024,7 @@
 	<customLabels>
 		<label>Salesforce-Objekte zuordnen</label>
 		<name>MappingSalesforceObjects</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Objektordner und Layoutkonfigurationen verwalten</label>
 		<name>MapObjectFolders</name>
@@ -3170,7 +3170,7 @@
 		<name>HowToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce-Objekte ordnen Sie zu, indem Sie zuerst die Seite „CLM-Integrationen“ öffnen. Wählen Sie „Neu zuordnen“. Folgen Sie zum Fertigstellen des Setups der Anleitung.</label>
+		<label>Salesforce-Objekte ordnen Sie zu, indem Sie zuerst die Seite mit den CLM-Integrationen öffnen. Wählen Sie „Neu zuordnen“. Folgen Sie zum Fertigstellen des Setups der Anleitung.</label>
 		<name>HowToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3178,7 +3178,7 @@
 		<name>RemoveMappedObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Entfernen und bearbeiten Sie zugeordnete Objekte auf der Seite „CLM-Integrationen“. Wenn Sie ein Objekt entfernen, können die Daten des Objekts nicht mehr für die Dokumentenerstellung verwendet werden.</label>
+		<label>Entfernen und bearbeiten Sie zugeordnete Objekte auf der Seite mit den CLM-Integrationen. Wenn Sie ein Objekt entfernen, können die Daten des Objekts nicht mehr für die Dokumentenerstellung verwendet werden.</label>
 		<name>RemoveMappedObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3278,11 +3278,11 @@
 		<name>LoginToDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Sie haben kein Konto?</label>
+		<label>Sie haben keinen Account?</label>
 		<name>DontHaveAnAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Wählen Sie nur dann eine andere DocuSign-Umgebung aus, wenn Sie kein Produktionskonto verwenden.</label>
+		<label>Wählen Sie nur dann eine andere DocuSign-Umgebung aus, wenn Sie keinen Produktionsaccount verwenden.</label>
 		<name>NonProductionHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3290,11 +3290,11 @@
 		<name>DocuSignDemo</name>
 	</customLabels>
 	<customLabels>
-		<label>Dies ist für ein DocuSign-Demokonto oder Sandbox-Konto.</label>
+		<label>Dies ist für einen DocuSign-Demoaccount oder Sandbox-Account.</label>
 		<name>DemoHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Beim Demokonto anmelden</label>
+		<label>Beim Demoaccount anmelden</label>
 		<name>LoginToDemo</name>
 	</customLabels>
 	<customLabels>
@@ -3302,11 +3302,11 @@
 		<name>TestingEnvironment</name>
 	</customLabels>
 	<customLabels>
-		<label>Dies ist für ein Test- und Stage-Konto mit einer benutzerdefinierten URL.</label>
+		<label>Dies ist für einen Test- und Stage-Account mit einer benutzerdefinierten URL.</label>
 		<name>TestingEnvironmentHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign-Konto ausgewählt. Klicken Sie, um zur Autorisierung zu gelangen, auf „Weiter“.</label>
+		<label>DocuSign-Account ausgewählt. Klicken Sie, um zur Autorisierung zu gelangen, auf „Weiter“.</label>
 		<name>AccountSelected</name>
 	</customLabels>
 	<customLabels>
@@ -3319,7 +3319,7 @@
 		<name>AuthorizeHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Die Autorisierungseinstellungen sind nicht für das ausgewählte DocuSign-Konto verfügbar. Diese Option ist verfügbar, wenn Produkte dem Konto hinzugefügt werden, bei denen DocuSign-Systeme für den Zugriff auf Salesforce erforderlich sind.
+		<label>Die Autorisierungseinstellungen sind nicht für den ausgewählten DocuSign-Account verfügbar. Diese Option ist verfügbar, wenn Produkte dem Account hinzugefügt werden, bei denen DocuSign-Systeme für den Zugriff auf Salesforce erforderlich sind.
 		</label>
 		<name>AuthorizationSettingsNotPresent</name>
 	</customLabels>
@@ -3332,11 +3332,11 @@
 		<name>CompleteSetupAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Get Started with DocuSign Apps Launcher</label>
+		<label>Mit DocuSign Apps Launcher loslegen</label>
 		<name>GetStartedSetupAccount</name>
 	</customLabels>
 	<customLabels>
-		<label>Verbundenes Konto</label>
+		<label>Verbundener Account</label>
 		<name>ConnectedAccountSetupAccount</name>
 	</customLabels>
 	<customLabels>
@@ -3424,11 +3424,11 @@
 		<name>OpenDocuSignCLMButton</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Gen ist für Ihr Konto nicht konfiguriert.</label>
+		<label>DocuSign Gen ist für Ihren Account nicht konfiguriert.</label>
 		<name>GenNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Negotiate ist für Ihr Konto nicht konfiguriert.</label>
+		<label>DocuSign Negotiate ist für Ihren Account nicht konfiguriert.</label>
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customLabels>
@@ -3592,147 +3592,147 @@
 		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Days Left in {0} trial</label>
+		<label>Probeaccount noch {0} Tage gültig</label>
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>View Pricing</label>
+		<label>Preise anzeigen</label>
 		<name>ViewPricing</name>
 	</customLabels>
 	<customLabels>
-		<label>One-Click Document Generation</label>
+		<label>1-Klick-Dokumentenerstellung</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</label>
+		<label>Lassen Sie Ihre Kunden direkt in Salesforce professionelle und konfigurierbare Vereinbarungen automatisch erstellen.</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
-		<label>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</label>
+		<label>Geschäftsunterlagen schnell mit den erforderlichen Salesforce-Daten im gewünschten Format erstellen.</label>
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>Faster Reviews and Approvals</label>
+		<label>Schnelle Prüfungen und Genehmigungen</label>
 		<name>NegotiateMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Easily track your negotiations and reviews in Salesforce.</label>
+		<label>Verfolgen Sie Verhandlungen und Prüfungen in Salesforce ganz einfach nach.</label>
 		<name>NegotiateMarketingBody1</name>
 	</customLabels>
 	<customLabels>
-		<label>Whether with internal or external parties, enjoy version control and redlining for faster and less painful reviews.</label>
+		<label>Behalten Sie interne und externe Prüfungen mit der Versionsverwaltung und den Korrekturmöglichkeiten im Blick.</label>
 		<name>NegotiateMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>Try it out</label>
+		<label>Jetzt ausprobieren</label>
 		<name>TryItOut</name>
 	</customLabels>
 	<customLabels>
-		<label>Compare Features</label>
+		<label>Funktionen vergleichen</label>
 		<name>CompareFeatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Find the features you need for a faster agreement process.</label>
+		<label>Wickeln Sie Geschäfte mit unseren Funktionen schneller ab.</label>
 		<name>FindFeatures</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Microsoft Word or PDF documents</label>
+		<label>Microsoft Word und PDF-Dokumente generieren</label>
 		<name>GenerateWordOrPdfFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Merge Salesforce data</label>
+		<label>Salesforce-Daten zusammenführen</label>
 		<name>MergeDataFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Customize with conditional content</label>
+		<label>Mit bedingten Inhalten anpassen</label>
 		<name>ConditionalContentFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Use your dynamic pricing and data tables</label>
+		<label>Dynamische Preis- und Datentabellen verwenden</label>
 		<name>DynamicPricingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Compatible with DocuSign eSignature</label>
+		<label>Mit DocuSign eSignature kompatibel</label>
 		<name>ESignatureCompatibleFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Make it easy for approvers to sign off on agreements</label>
+		<label>Vereinbarungen schneller genehmigen lassen</label>
 		<name>ApproversFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Allow external reviewers to update agreements</label>
+		<label>Vereinbarungen durch externe Prüfer aktualisieren lassen</label>
 		<name>ExternalReviewFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Streamline version control</label>
+		<label>Versionsverwaltung optimieren</label>
 		<name>VersionControlFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Approval routing and notifications</label>
+		<label>Weiterleitung und Benachrichtigungen für Genehmigungen</label>
 		<name>RoutingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about pricing</label>
+		<label>Preisinformationen</label>
 		<name>LearnMoreAboutPricing</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn how to get the most from DocuSign Apps Launcher</label>
+		<label>Alles rund um den DocuSign Apps Launcher</label>
 		<name>LearnSectionHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Dive deeper and learn more with our help guides.</label>
+		<label>Weiterführende Informationen in unseren Leitfäden.</label>
 		<name>LearnSectionHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Send Envelopes for Signature</label>
+		<label>Signaturen für Unterlagen einholen</label>
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Polished, Customized Agreements</label>
+		<label>Professionelle und anpassbare Vereinbarungen generieren</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Send Agreements for Review or Approval</label>
+		<label>Vereinbarungen zur Prüfung und Genehmigung senden</label>
 		<name>LearnNegotiateLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Try DocuSign Gen</label>
+		<label>DocuSign Gen ausprobieren</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
 	<customLabels>
-		<label>Try DocuSign Negotiate</label>
+		<label>DocuSign Negotiate ausprobieren</label>
 		<name>TryDocuSignNegotiate</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Documents Free for 30 Days</label>
+		<label>Dokumente für 30 Tage kostenlos generieren</label>
 		<name>GenerateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate, Negotiate and Collaborate Free for 30 Days</label>
+		<label>30 Tage kostenlos erstellen, verhandeln und zusammenarbeiten</label>
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</label>
+		<label>Mit einem einzigen Klick erstellen Sie professionelle, konfigurierbare und vollständig anpassbare Vereinbarungen mit Ihren verfügbaren Salesforce-Daten.</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>You&apos;ll speed up every part of your agreement process. From generating documents to negotiating with third-party approvers.</label>
+		<label>Erledigen Sie alles rund um Vereinbarungen schneller: von der Dokumentenerstellung bis hin zu Verhandlungen mit Dritten.</label>
 		<name>NegotiateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>No obligation, no commitment. Let’s get started.</label>
+		<label>Sie gehen keine Verpflichtungen ein. Legen Sie einfach los.</label>
 		<name>NoObligation</name>
 	</customLabels>
 	<customLabels>
-		<label>Your DocuSign Gen trial has started</label>
+		<label>Ihr DocuSign-Gen-Probeaccount wurde erstellt</label>
 		<name>GenTrialStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Your DocuSign Negotiate trial has started</label>
+		<label>Ihr DocuSign-Negotiate-Probeaccount wurde erstellt</label>
 		<name>NegotiateTrialStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Currently on Trial</label>
+		<label>Probeaccount</label>
 		<name>CurrentlyOnTrial</name>
 	</customLabels>
 	<customLabels>
@@ -3804,7 +3804,7 @@
 		<name>ApplicationRolesLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign-Kontozugriff</label>
+		<label>DocuSign-Accuontzugriff</label>
 		<name>ApplicationAccountAccessLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3912,7 +3912,7 @@
 		<name>ViewDocumentButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Senden Ihrer Prüfungsanfrage. Senden Sie die Anfrage erneut.</label>
+		<label>Fehler beim Senden Ihrer Prüfanfrage. Senden Sie die Anfrage erneut.</label>
 		<name>ExternalReviewFailureEmailBody</name>
 	</customLabels>
 	<customLabels>
@@ -3920,15 +3920,15 @@
 		<name>ExternalReviewFailureEmailHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} konnte nicht gesendet werden</label>
+		<label>Prüfanfrage für {0} konnte nicht gesendet werden</label>
 		<name>ExternalReviewFailureEmailSubject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} ist abgelaufen. Wenn Sie immer noch eine Prüfung haben möchten, senden Sie eine neue Anfrage</label>
+		<label>Prüfanfrage für {0} ist abgelaufen. Wenn Sie immer noch eine Prüfung haben möchten, senden Sie eine neue Anfrage</label>
 		<name>ExpiredReviewSenderEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage abgelaufen</label>
+		<label>Prüfanfrage abgelaufen</label>
 		<name>ExpiredReviewSenderEmailSubject</name>
 	</customLabels>
 	<customLabels>
@@ -3944,23 +3944,23 @@
 		<name>CompletedReviewEmailHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} wurde abgeschlossen. Sie müssen gar nichts machen.</label>
+		<label>Prüfanfrage für {0} wurde abgeschlossen. Sie müssen gar nichts machen.</label>
 		<name>CompletedReviewEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} ist abgelaufen. Sie müssen gar nichts machen.</label>
+		<label>Prüfanfrage für {0} ist abgelaufen. Sie müssen gar nichts machen.</label>
 		<name>ExpiredReviewReviewerEmailBody_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage abgelaufen</label>
+		<label>Prüfanfrage abgelaufen</label>
 		<name>ExpiredReviewReviewerEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} ist abgelaufen.</label>
+		<label>Prüfanfrage für {0} ist abgelaufen.</label>
 		<name>ExpiredReviewHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Prüfungsanfrage für {0} wurde abgebrochen. Sie müssen gar nichts machen.</label>
+		<label>Prüfanfrage für {0} wurde abgebrochen. Sie müssen gar nichts machen.</label>
 		<name>CanceledReviewEmailBody_1</name>
 	</customLabels>
 	<customLabels>
@@ -4004,8 +4004,16 @@
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Preparing for signature</label>
+		<label>Signieren vorbereiten</label>
 		<name>SendingForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} zugeordnete Objekte</label>
+		<name>MappedObjectsPlainText</name>
+	</customLabels>
+	<customLabels>
+		<label>Zur Prüfung senden</label>
+		<name>SendForReview</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
