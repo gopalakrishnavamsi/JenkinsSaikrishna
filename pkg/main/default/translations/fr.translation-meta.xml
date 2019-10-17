@@ -2067,14 +2067,6 @@
 		<label>ÉVALUER L’ACCORD</label>
 	</customLabels>
 	<customLabels>
-		<name>ReviewAgreementSubject</name>
-		<label>Votre autorisation est nécessaire pour {0}</label>
-	</customLabels>
-	<customLabels>
-		<name>ReviewAgreementBodyText</name>
-		<label>Veuillez approuver les documents.</label>
-	</customLabels>
-	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
 		<label>Documents que vous devez approuver {0}.</label>
 	</customLabels>

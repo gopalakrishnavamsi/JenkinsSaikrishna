@@ -189,7 +189,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		}
 
 		public String toXML() {
-			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name);
+			Map<String, APIEmail> templateEmails = getApprovalTemplateEmails(this.name, this.email.subject, this.email.bodyText);
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'AssignTasksInOrder', 'CheckoutDocument', 'RequiresAllToApprove', 'RequiresAllToComplete', 'Approvers', 'Documents', 'Email', 'ApprovalEmail', 'ApprovalOnBehalfEmail', 'RejectOnBehalfEmail', 'CancelEmail', 'RejectEmail', 'FailureEmail', 'DocumentUrl' },
 				new Map<String, Object> {
@@ -214,12 +214,15 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	}
 
 	@TestVisible
-	private static Map<String, APIEmail> getApprovalTemplateEmails(final String documentName) {
+	private static Map<String, APIEmail> getApprovalTemplateEmails(
+		final String documentName,
+		final String customEmailSubject,
+		final String customEmailBody) {
 
 		return new Map<String, APIEmail> {
 			'Email' => new APIEmail(
-				String.format(Label.ReviewAgreementSubject, new List<String> { documentName }),
-				Label.ReviewAgreementBodyText,
+				String.format(customEmailSubject, new List<String> { documentName }),
+				customEmailBody,
 				Label.ReviewAgreementButtonText,
 				String.format(Label.ReviewAgreementHeaderTitleText, new List<String> { documentName })
 			),

@@ -4414,20 +4414,6 @@
 		<value>REVIEW AGREEMENT</value>
 	</labels>
 	<labels>
-		<fullName>ReviewAgreementSubject</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ReviewAgreementSubject</shortDescription>
-		<value>Your approval is needed for {0}</value>
-	</labels>
-	<labels>
-		<fullName>ReviewAgreementBodyText</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ReviewAgreementBodyText</shortDescription>
-		<value>Please approve the documents.</value>
-	</labels>
-	<labels>
 		<fullName>ReviewAgreementHeaderTitleText</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

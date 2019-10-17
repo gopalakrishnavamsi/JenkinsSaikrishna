@@ -2066,14 +2066,6 @@
 		<label>REVIEW AGREEMENT</label>
 	</customLabels>
 	<customLabels>
-		<name>ReviewAgreementSubject</name>
-		<label>Your approval is needed for {0}</label>
-	</customLabels>
-	<customLabels>
-		<name>ReviewAgreementBodyText</name>
-		<label>Please approve the documents.</label>
-	</customLabels>
-	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
 		<label>Documents for you to approve {0}.</label>
 	</customLabels>

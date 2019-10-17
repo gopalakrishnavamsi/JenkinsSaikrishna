@@ -2066,14 +2066,6 @@
 		<label>VEREINBARUNG EINSEHEN</label>
 	</customLabels>
 	<customLabels>
-		<name>ReviewAgreementSubject</name>
-		<label>Ihre Genehmigung ist für {0} erforderlich</label>
-	</customLabels>
-	<customLabels>
-		<name>ReviewAgreementBodyText</name>
-		<label>Bitte genehmigen Sie die Dokumente.</label>
-	</customLabels>
-	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
 		<label>Dokumente erfordern Ihre Genehmigung: {0}.</label>
 	</customLabels>
