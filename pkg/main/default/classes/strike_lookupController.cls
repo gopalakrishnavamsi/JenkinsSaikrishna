@@ -7,15 +7,29 @@ GitHub: https://github.com/appiphony/Strike-Components
 License: BSD 3-Clause License
 -------------------------------------------------- */
 public with sharing class strike_lookupController {
-	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String> {
-		'contact', 'lead', 'user' , 'opportunity', 'account', 'case'
-	};//FIXME : Support Arbitrary objects
+	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String>();
+	private static final String CUSTOM_METADATA_SUFFIX = 'mdt';
 
 	private static String safeGetObjectType(final String s) {
+		getAllSobject();
 		if (String.isBlank(s) || !VALID_SEARCH_OBJECTS.contains(s.trim().toLowerCase())) {
 			throw new DocuSignException(String.format(Label.InvalidSearchObject_1, new List<String> { s }));
 		}
 		return s.trim();
+	}
+
+	private static void getAllSobject() {
+		if (VALID_SEARCH_OBJECTS.isEmpty()) {
+			for (Schema.SObjectType objTyp : Schema.getGlobalDescribe().Values()) {
+				Schema.DescribeSObjectResult describeSObjectResultObj = objTyp.getDescribe();
+				if (describeSObjectResultObj.isAccessible() && describeSObjectResultObj.isQueryable() && !describeSObjectResultObj.isDeprecatedAndHidden() && !describeSObjectResultObj.isCustomSetting()) {
+					String name = objTyp.getDescribe().getName();
+					if (!name.startsWithIgnoreCase(Application.namespacePrefix) && !name.endsWithIgnoreCase(CUSTOM_METADATA_SUFFIX)) {
+						VALID_SEARCH_OBJECTS.add(name.toLowercase());
+					}
+				}
+			}
+		}
 	}
 
 	@AuraEnabled
@@ -152,6 +166,7 @@ public with sharing class strike_lookupController {
 
 		String query;
 		String obj = safeGetObjectType((String)jsonMap.get('object'));
+		SObjectType sObjType = Salesforce.getSObjectType(obj);
 		String subtitleFields;
 
 		if (strike_lookupController.fieldNotEmpty(jsonMap, 'subtitleFields')) {
@@ -178,6 +193,7 @@ public with sharing class strike_lookupController {
 			orders.add(String.escapeSingleQuotes((String)jsonMap.get('order')));
 		}
 
+		Permissions.verifyIsQueryable(sObjType, new List<String>(queryFields));
 		query = 'SELECT ' + String.join(new List<String>(queryFields), ', ');
 		query += ' FROM ' + obj;
 
