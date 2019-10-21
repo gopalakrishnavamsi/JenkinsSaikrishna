@@ -3864,7 +3864,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UnableToConnectDocuSignGen</shortDescription>
-		<value>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.</value>
+		<value>Unable to connect to DocuSign at this time. Please contact DocuSign Support for assistance.</value>
 	</labels>
 	<labels>
 		<fullName>SuccessDocuSignAuthorization</fullName>

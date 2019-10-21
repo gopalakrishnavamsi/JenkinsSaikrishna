@@ -1838,7 +1838,7 @@
 		<name>Drafts</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to connect to DocuSign Gen at this time. Please contact DocuSign Gen Support for assistance.</label>
+		<label>Unable to connect to DocuSign at this time. Please contact DocuSign Support for assistance.</label>
 		<name>UnableToConnectDocuSignGen</name>
 	</customLabels>
 	<customLabels>
@@ -1846,7 +1846,7 @@
 		<name>SuccessDocuSignAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to find settings for DocuSign Gen Authorization. Please contact DocuSign Gen Support for assistance.</label>
+		<label>Unable to find settings for DocuSign Authorization. Please contact DocuSign Support for assistance.</label>
 		<name>MissingDocuSignGenAuthorizationSettings</name>
 	</customLabels>
 	<customLabels>
