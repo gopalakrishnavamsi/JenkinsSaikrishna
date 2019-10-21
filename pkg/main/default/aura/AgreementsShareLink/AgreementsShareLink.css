@@ -11,3 +11,8 @@
 .THIS .shareLinkButtonHelpText {
     padding-right: 3.4rem;
 }
+
+.THIS .slds-input {
+    padding-left: 5px;
+    border-color: rgb(221, 219, 218);
+}

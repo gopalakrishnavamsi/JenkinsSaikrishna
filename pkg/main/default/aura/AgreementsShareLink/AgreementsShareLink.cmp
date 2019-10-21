@@ -27,7 +27,7 @@
                                      variant="label-hidden"
                                      label="{!$Label.c.LinkLabel}"
                                      value="{!v.documentUrl}"
-                        />
+                                     readonly="true"/>
                 </div>
                 <div class="slds-large-size_1-of-4">
                     <lightning:button variant="brand"
