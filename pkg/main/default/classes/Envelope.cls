@@ -449,7 +449,8 @@ global class Envelope {
 	}
 
 	/**
-	 * Creates a deep copy of the envelope without its <code>id`, <code>docuSignId`, and <code>sent</code> properties.
+	 * Creates a deep copy of the envelope without its <code>id</code>, <code>docuSignId</code>, and <code>sent</code>
+	 * properties.
 	 *
 	 * @return A copy of the envelope.
 	 */

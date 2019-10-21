@@ -360,7 +360,7 @@ public with sharing class Permissions {
 	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce administrator, <code>false</code>
+	 * @return <code>true</code> if the current user is a DocuSign eSignature administrator, <code>false</code>
 	 * otherwise.
 	 */
 	public static Boolean isDocuSignAdministrator() {
@@ -394,7 +394,7 @@ public with sharing class Permissions {
 	 * Checks whether the current user is assigned the <code>DocuSign User</code> or
 	 * <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce user, <code>false</code>
+	 * @return <code>true</code> if the current user is a DocuSign eSignature user, <code>false</code>
 	 * otherwise.
 	 */
 	public static Boolean isDocuSignUser() {
@@ -427,7 +427,7 @@ public with sharing class Permissions {
 	 * Checks whether the current user is assigned the <code>DocuSign Sender</code>,
 	 * <code>DocuSign User</code>, or <code>DocuSign Administrator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce sender, <code>false</code>
+	 * @return <code>true</code> if the current user is a DocuSign eSignature sender, <code>false</code>
 	 * otherwise.
 	 */
 	public static Boolean isDocuSignSender() {
@@ -460,7 +460,7 @@ public with sharing class Permissions {
 	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Generator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce document generator, <code>false</code>
+	 * @return <code>true</code> if the current user is a DocuSign Gen document generator, <code>false</code>
 	 * otherwise.
 	 */
 	public static Boolean isDocuSignGenerator() {
@@ -491,7 +491,7 @@ public with sharing class Permissions {
 	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Negotiator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce document negotiator,
+	 * @return <code>true</code> if the current user is a DocuSign Negotiate document negotiator,
 	 * <code>false</code> otherwise.
 	 */
 	public static Boolean isDocuSignNegotiator() {
@@ -524,7 +524,7 @@ public with sharing class Permissions {
 	/**
 	 * Checks whether the current user is assigned the <code>CLM Administrator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM administrator,
+	 * @return <code>true</code> if the current user is a DocuSign CLM administrator,
 	 * <code>false</code> otherwise.
 	 */
 	public static Boolean isClmAdministrator() {
@@ -558,7 +558,7 @@ public with sharing class Permissions {
 	 * Checks whether the current user is assigned the <code>CLM User</code> or <code>CLM Administrator</code>
 	 * permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM user,
+	 * @return <code>true</code> if the current user is a DocuSign CLM user,
 	 * <code>false</code> otherwise.
 	 */
 	public static Boolean isClmUser() {
@@ -593,7 +593,7 @@ public with sharing class Permissions {
 	 * Checks whether the current user is assigned the <code>CLM Viewer</code>, <code>CLM User</code>, or
 	 * <code>CLM Administrator</code> permission set.
 	 *
-	 * @return <code>true</code> if the current user is a DocuSign for Salesforce CLM viewer,
+	 * @return <code>true</code> if the current user is a DocuSign CLM viewer,
 	 * <code>false</code> otherwise.
 	 */
 	public static Boolean isClmViewer() {

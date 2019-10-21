@@ -353,20 +353,6 @@ private class SigningServiceTest {
 	}
 
 	@IsTest
-	static void test_getEmbeddedSigningUrl_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				SigningService.getEmbeddedSigningUrl(null, null);
-				throw new AssertException('Expected getEmbeddedSigningUrl to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_getEmbeddedSigningUrl_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 

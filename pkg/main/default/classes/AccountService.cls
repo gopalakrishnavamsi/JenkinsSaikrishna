@@ -1,5 +1,5 @@
 /**
- * Primary interface point for DocuSign for Salesforce account management.
+ * Primary interface point for DocuSign account management.
  */
 global with sharing class AccountService {
 	/**
@@ -21,7 +21,7 @@ global with sharing class AccountService {
 	}
 
 	/**
-	 * Retrieves DocuSign for Salesforce account settings.
+	 * Retrieves DocuSign account settings.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
@@ -34,7 +34,7 @@ global with sharing class AccountService {
 	}
 
 	/**
-	 * Updates DocuSign for Salesforce account settings.
+	 * Updates DocuSign account settings.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *

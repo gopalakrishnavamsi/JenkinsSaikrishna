@@ -4,7 +4,7 @@
         <application>DocuSignForSalesforceCore</application>
         <visible>false</visible>
     </applicationVisibilities>
-    <description>Provides access to the DocuSign for Salesforce application, pages, and objects.</description>
+    <description>Provides access to the DocuSign application, pages, and objects.</description>
     <fieldPermissions>
         <editable>true</editable>
         <field>BulkList__c.DocuSignId__c</field>

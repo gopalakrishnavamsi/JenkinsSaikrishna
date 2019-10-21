@@ -566,12 +566,13 @@ public with sharing class UserService {
 			Map<String, String> adminRoles = getAdminRoles(productRoles);
 			return mergeRoles(users.values(), adminRoles, productRoles);
 		} finally {
+			Credentials.save();
 			AccountProducts.save();
 		}
 	}
 
 	/**
-	 * A DocuSign for Salesforce system sender, i.e. the sender to use when a Salesforce user is not a member of the
+	 * A DocuSign eSignature system sender, i.e. the sender to use when a Salesforce user is not a member of the
 	 * DocuSign account.
 	 */
 	public class SystemSender {
@@ -603,7 +604,7 @@ public with sharing class UserService {
 	}
 
 	/**
-	 * Retrieves a list of users that may be used as the DocuSign for Salesforce system sender.
+	 * Retrieves a list of users that may be used as the DocuSign eSignature system sender.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *

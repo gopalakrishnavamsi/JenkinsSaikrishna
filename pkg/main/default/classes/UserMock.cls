@@ -1,6 +1,6 @@
 /**
- * Test utility methods to mock DocuSign for Salesforce users. Most service operations require either a DocuSign
- * administrator or DocuSign user context.
+ * Test utility methods to mock DocuSign users. Most service operations require either a DocuSign administrator or
+ * DocuSign user context.
  */
 @IsTest
 global class UserMock {
@@ -13,7 +13,7 @@ global class UserMock {
 
 	/**
 	 * Creates a user and assigns the DocuSign Administrator permission set for unit tests. This may be used for
-	 * DocuSign for Salesforce administrative methods.
+	 * DocuSign administrative methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -54,7 +54,7 @@ global class UserMock {
 
 	/**
 	 * Creates a user and assigns the <code>DocuSign User</code> permission set for unit tests. This may be used for
-	 * most DocuSign for Salesforce methods.
+	 * most DocuSign eSignature methods.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -95,7 +95,7 @@ global class UserMock {
 
 	/**
 	 * Creates a user and assigns the <code>DocuSign Sender</code> permission set for unit tests. This may be used for
-	 * DocuSign for Salesforce methods that create, send, or sign envelopes.
+	 * DocuSign eSignature methods that create, send, or sign envelopes.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -130,7 +130,7 @@ global class UserMock {
 
 	/**
 	 * Creates a user and assigns the <code>DocuSign Generator</code> permission set for unit tests. This may be used
-	 * for DocuSign for Salesforce methods that generate documents.
+	 * for DocuSign Gen methods that generate documents.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.
@@ -165,7 +165,7 @@ global class UserMock {
 
 	/**
 	 * Creates a user and assigns the <code>DocuSign Negotiator</code> permission set for unit tests. This may be used
-	 * for DocuSign for Salesforce methods that negotiate documents.
+	 * for DocuSign Negotiate methods that negotiate documents.
 	 * <p>
 	 * This method also creates a test DocuSign account configuration. As such, may only be called once per test method,
 	 * and it may not be combined with any other <code>dfsle.UserMock.create*</code> method.

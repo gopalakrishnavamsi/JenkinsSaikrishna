@@ -1,6 +1,6 @@
 /**
- * This class is the entry point for DocuSign for Salesforce envelope and recipient status management. It provides
- * methods to retrieve and take action upon DocuSign for Salesforce statuses.
+ * This class is the entry point for DocuSign eSignature envelope and recipient status management. It provides
+ * methods to retrieve and take action upon DocuSign eSignature statuses.
  */
 global with sharing class StatusService {
 

@@ -138,7 +138,7 @@
 		<name>CannotReadDocumentContent_1</name>
 	</customLabels>
 	<customLabels>
-		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.</label>
+		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign.</label>
 		<name>CannotRemoveSelf</name>
 	</customLabels>
 	<customLabels>
@@ -494,7 +494,7 @@
 		<name>Intermediary</name>
 	</customLabels>
 	<customLabels>
-		<label>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</label>
+		<label>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</label>
 		<name>InvalidAccountSettings</name>
 	</customLabels>
 	<customLabels>
@@ -946,7 +946,7 @@
 		<name>Title</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</label>
+		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign.</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
@@ -1166,7 +1166,7 @@
 		<name>InvalidAuthState</name>
 	</customLabels>
 	<customLabels>
-		<label>You have not granted or have revoked your consent to be impersonated by DocuSign for Salesforce.</label>
+		<label>You have not granted or have revoked your consent to be impersonated by DocuSign Apps Launcher.</label>
 		<name>ConsentRequired</name>
 	</customLabels>
 	<customLabels>
@@ -1362,7 +1362,7 @@
 		<name>InvalidSearchObject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup</label>
+		<label>Your free trial has ended. Upgrade your account to continue using DocuSign. Please logout and login again after you upgrade your account by selecting DocuSign Setup</label>
 		<name>ExpiredTrialAccount</name>
 	</customLabels>
 	<customLabels>
@@ -2598,7 +2598,7 @@
 		<name>InvalidPermissionSet_1</name>
 	</customLabels>
 	<customLabels>
-		<label>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
+		<label>If another eSignature solution such as DocuSign eSignature for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
@@ -2702,7 +2702,7 @@
 		<name>Viewer</name>
 	</customLabels>
 	<customLabels>
-		<label>Role managed by DocuSign for Salesforce</label>
+		<label>Role managed by DocuSign Apps Launcher</label>
 		<name>ProductRoleDescription</name>
 	</customLabels>
 	<customLabels>

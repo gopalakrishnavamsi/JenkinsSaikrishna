@@ -1,6 +1,6 @@
 /**
- * This class is the entry point for DocuSign for Salesforce envelope recipient management. It provides methods to
- * retrieve Salesforce source recipients and add or remove recipients from an envelope.
+ * This class is the entry point for DocuSign eSignature envelope recipient management. It provides methods to retrieve
+ * Salesforce source recipients.
  */
 global with sharing class RecipientService {
 

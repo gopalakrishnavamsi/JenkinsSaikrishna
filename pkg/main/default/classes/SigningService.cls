@@ -127,8 +127,6 @@ global with sharing class SigningService {
 	/**
 	 * Retrieves the signing URL for embedded recipients. These recipients do not have to click on an email link
 	 * to initiate the signing process. Instead, the signing process is initiated from within a custom application.
-	 * <p>
-	 * The caller must be assigned the <code>DocuSign Sender</code> permission set.
 	 *
 	 * @param envelopeId  The DocuSign envelope ID.
 	 * @param returnUrl Where to redirect after signing.
@@ -138,8 +136,6 @@ global with sharing class SigningService {
 	global static Url getEmbeddedSigningUrl(
 		final UUID envelopeId,
 		final Url returnUrl) {
-
-		Permissions.verifyIsDocuSignSender();
 
 		Url result = null;
 		if (envelopeId != null) {

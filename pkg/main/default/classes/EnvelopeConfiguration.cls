@@ -1,5 +1,5 @@
 /**
- * A DocuSign for Salesforce envelope configuration (formerly custom button).
+ * A DocuSign eSignature envelope configuration (formerly custom button).
  */
 global class EnvelopeConfiguration {
 
@@ -30,8 +30,8 @@ global class EnvelopeConfiguration {
 	 * <ul>
 	 *     <li><code>Prepare</code>: Prepare the envelope. Add or remove documents and recipients and set email and
 	 *     notification options.</li>
-	 *     <li><code>Tag</code>: Bypass DocuSign for Salesforce envelope preparation and go to the DocuSign tagger.</li>
-	 *     <li><code>Send</code>: Bypass DocuSign for Salesforce envelope preparation and the DocuSign tagger, and
+	 *     <li><code>Tag</code>: Bypass DocuSign eSignature envelope preparation and go to the DocuSign tagger.</li>
+	 *     <li><code>Send</code>: Bypass DocuSign eSignature envelope preparation and the DocuSign tagger, and
 	 *     immediately send the envelope.</li>
 	 * </ul>
 	 */
@@ -40,7 +40,7 @@ global class EnvelopeConfiguration {
 	}
 
 	/**
-	 * DocuSign for Salesforce envelope preparation UI element visibility settings.
+	 * DocuSign eSignature envelope preparation UI element visibility settings.
 	 */
 	public class VisibilitySettings {
 		/**
@@ -541,7 +541,7 @@ global class EnvelopeConfiguration {
 	 */
 	public ClickAction action { get; private set; }
 	/**
-	 * Settings that control DocuSign for Salesforce envelope preparation UI element visibility.
+	 * Settings that control DocuSign eSignature envelope preparation UI element visibility.
 	 */
 	public VisibilitySettings visibility { get; private set; }
 	/**
@@ -601,7 +601,7 @@ global class EnvelopeConfiguration {
 	 * @param id The ID of the associated EnvelopeConfiguration__c record.
 	 * @param source The Salesforce source object.
 	 * @param action The action to take upon creating an envelope based on the envelope configuration.
-	 * @param visibility Settings that control DocuSign for Salesforce envelope preparation UI element visibility.
+	 * @param visibility Settings that control DocuSign eSignature envelope preparation UI element visibility.
 	 * @param notifications Envelope notification settings.
 	 * @param email Recipient email settings.
 	 * @param documents Document-related settings.

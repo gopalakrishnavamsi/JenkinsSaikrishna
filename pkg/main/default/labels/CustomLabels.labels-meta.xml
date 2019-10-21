@@ -350,7 +350,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Cannot remove self</shortDescription>
-		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign for Salesforce.
+		<value>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign.
 		</value>
 	</labels>
 	<labels>
@@ -1234,7 +1234,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Invalid User Settings</shortDescription>
-		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between DocuSign for Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</value>
+		<value>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidChatterText</fullName>
@@ -1569,7 +1569,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Must Be Activated</shortDescription>
-		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and have granted your consent to DocuSign for Salesforce.</value>
+		<value>Please verify that you have been granted access to DocuSign, responded to all activation emails, and have granted your consent to DocuSign Apps Launcher.</value>
 	</labels>
 	<labels>
 		<fullName>MustBeAdministrator</fullName>
@@ -2233,7 +2233,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Trial Account Expired</shortDescription>
-		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign for Salesforce.</value>
+		<value>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>TrustCenter</fullName>
@@ -2649,7 +2649,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Consent required</shortDescription>
-		<value>You have not granted or have revoked your consent to be impersonated by DocuSign for Salesforce.</value>
+		<value>You have not granted or have revoked your consent to be impersonated by DocuSign Apps Launcher.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidGrant</fullName>
@@ -3000,7 +3000,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Expired trial account message</shortDescription>
-		<value>Your free trial has ended. Upgrade your account to continue using DocuSign for Salesforce Essentials. Please logout and login again after you upgrade your account by selecting DocuSign Setup.</value>
+		<value>Your free trial has ended. Upgrade your account to continue using DocuSign. Please logout and login again after you upgrade your account by selecting DocuSign Setup.</value>
 	</labels>
 	<labels>
 		<fullName>Exit</fullName>
@@ -5040,7 +5040,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>eSignature enabled help</shortDescription>
-		<value>If another eSignature solution such as DocuSign for Salesforce is to be used, the eSignature functionality in this package may be disabled.</value>
+		<value>If another eSignature solution such as DocuSign eSignature for Salesforce is to be used, the eSignature functionality in this package may be disabled.</value>
 	</labels>
 	<labels>
 		<fullName>InvalidPermissionSet_1</fullName>
@@ -5263,7 +5263,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Role Description</shortDescription>
-		<value>Role managed by DocuSign for Salesforce</value>
+		<value>Role managed by DocuSign Apps Launcher</value>
 	</labels>
 	<labels>
 		<fullName>UnsupportedProducts</fullName>

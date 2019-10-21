@@ -296,7 +296,7 @@ public with sharing class AuthService {
 					'Content-Type' => 'application/json; charset=utf-8'
 				},
 				JSON.serialize(new Map<String, Object> {
-					'name' => 'DocuSign for Salesforce',
+					'name' => 'DocuSign Apps Launcher',
 					'redirect_uris' => uris,
 					'is_client_app' => true
 				}),
@@ -1046,10 +1046,9 @@ public with sharing class AuthService {
 
 	/**
 	 * Attempts login to DocuSign with the supplied credentials. This must be invoked successfully prior to any other
-	 * DocuSign for Salesforce actions. If the login is successful and maps to a single valid
-	 * DocuSign account, DocuSign for Salesforce will be updated with these credentials. If the login is successful and
-	 * maps to valid multiple accounts, those account options are returned to the caller to select the desired account
-	 * in a subsequent call to this method.
+	 * DocuSign actions. If the login is successful and maps to a single valid DocuSign account, no further action is
+	 * necessary. If the login is successful and maps to valid multiple accounts, those account options are returned to
+	 * the caller to select the desired account in a subsequent call to this method.
 	 * <p>
 	 * If setup is not yet complete, the caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 * Otherwise, the caller must be assigned the <code>DocuSign User</code> permission set.
@@ -1059,8 +1058,8 @@ public with sharing class AuthService {
 	 * may not be tampered with.
 	 *
 	 * @return The result of the login. This may succeed with a single account (no additional action is
-	 * required to configure DocuSign for Salesforce), or with multiple accounts in which case the
-	 * <code>setAccount</code> method should be called after the user selects the desired account.
+	 * required), or with multiple accounts in which case the <code>setAccount</code> method should be called after the
+	 * user selects the desired account.
 	 */
 	public static LoginInformation redeemCode(
 		final String authorizationCode,
@@ -1084,7 +1083,6 @@ public with sharing class AuthService {
 	 * Completes a DocuSign OAuth transaction with an error.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
-	 *
 	 *
 	 * @param errorCode The error code returned by the DocuSign account service.
 	 * @param errorMessage The error message returned by the DocuSign account service.

@@ -12,7 +12,7 @@
  * static testMethod void myTest() {
  *   dfsle.ESignatureAPIMock().success();
  *   System.runAs(dfsle.UserMock.createDocuSignUser()) {
- *     // Call DocuSign for Salesforce service methods
+ *     // Call DocuSign service methods
  *   }
  * }
  * </pre>

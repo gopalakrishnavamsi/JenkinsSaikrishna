@@ -1,6 +1,6 @@
 /**
- * This class is the entry point for DocuSign for Salesforce envelope document management. It provides methods to
- * retrieve Salesforce source documents and add or remove documents from an envelope.
+ * This class is the entry point for DocuSign eSignature envelope document management. It provides methods to retrieve
+ * Salesforce source documents.
  */
 global with sharing class DocumentService {
 

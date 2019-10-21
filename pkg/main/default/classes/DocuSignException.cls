@@ -1,5 +1,5 @@
 /**
- * General exceptions that may be raised by DocuSign for Salesforce.
+ * General exceptions that may be raised by DocuSign.
  */
 global class DocuSignException extends Exception {
 

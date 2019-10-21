@@ -49,8 +49,8 @@ public class StringUtils {
 	}
 
 	/**
-	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true`, any
-	 * other non-blank value evaluates to 'false', and blank inputs evaluate to <code>defaultValue</code>.
+	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true</code>, any
+	 * other non-blank value evaluates to <code>false</code>, and blank inputs evaluate to <code>defaultValue</code>.
 	 *
 	 * @param s The input string.
 	 * @param defaultValue The value to use if the input string is blank,
@@ -66,7 +66,8 @@ public class StringUtils {
 	 *
 	 * @param s The input string.
 	 *
-	 * @return The decimal representation of the input string, or <code>null</code> if the input string is blank or otherwise invalid.
+	 * @return The decimal representation of the input string, or <code>null</code> if the input string is blank or
+	 * otherwise invalid.
 	 */
 	public static Decimal parseDecimal(final String s) {
 		try {

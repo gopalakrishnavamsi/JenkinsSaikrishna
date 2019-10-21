@@ -1,5 +1,5 @@
 /**
- * Account-level DocuSign for Salesforce settings.
+ * Account-level DocuSign settings.
  */
 public with sharing class AccountSettings {
 
@@ -11,19 +11,19 @@ public with sharing class AccountSettings {
 	@AuraEnabled
 	public Integer calloutTimeout { get; private set; }
 	/**
-	 * Salesforce entity resolvers. May be extended to resolve Salesforce objects unknown to DocuSign for Salesforce.
+	 * Salesforce entity resolvers. May be extended to resolve Salesforce objects unknown to DocuSign.
 	 */
 	@AuraEnabled
 	public List<String> entityResolvers { get; private set; }
 	/**
 	 * DocuSign envelope document resolvers. May be extended to resolve Salesforce document types unknown to
-	 * DocuSign for Salesforce.
+	 * DocuSign.
 	 */
 	@AuraEnabled
 	public List<String> documentResolvers { get; private set; }
 	/**
 	 * DocuSign envelope recipient resolvers. May be extended to resolve Salesforce recipient types unknown to
-	 * DocuSign for Salesforce.
+	 * DocuSign.
 	 */
 	@AuraEnabled
 	public List<String> recipientResolvers { get; private set; }
@@ -44,7 +44,7 @@ public with sharing class AccountSettings {
 	public UUID systemSenderId { get; private set; }
 	/**
 	 * Whether eSignature functionality is enabled for this package. Set to <code>false</code> if using another
-	 * eSignature product such as DocuSign for Salesforce.
+	 * eSignature product such as DocuSign eSignature for Salesforce.
 	 */
 	@AuraEnabled
 	public Boolean isESignatureEnabled { get; private set; }

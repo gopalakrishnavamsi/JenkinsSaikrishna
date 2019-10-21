@@ -1,5 +1,5 @@
 /**
- * Primary interface point for DocuSign for Salesforce envelope management.
+ * Primary interface point for DocuSign eSignature envelope management.
  * <p>
  * A basic flow would be:
  * <pre>
@@ -532,14 +532,13 @@ global with sharing class EnvelopeService {
 	}
 
 	/**
-	 * Creates a copy of an envelope that can be resent.
+	 * Copies an envelope record.
 	 * <p>
 	 * The caller must be the owner of the original envelope.
 	 *
 	 * @param envelopeId The ID of the envelope.
 	 *
 	 * @return A copy of the envelope.
-	 * @see Envelope.copy for more details.
 	 */
 	public static Envelope copyEnvelope(final Id envelopeId) {
 		// queryEnvelope via getEnvelope verifies ownership
@@ -596,6 +595,8 @@ global with sharing class EnvelopeService {
 
 	/**
 	 * Sends an envelope to DocuSign. This will also create the envelope record in Salesforce if necessary.
+	 * <p>
+	 * This method should be isolated on its own transaction as it involves a callout followed by a DML operation.
 	 * <p>
 	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
 	 * <code>DocuSign Sender</code> permission set.

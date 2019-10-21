@@ -4,7 +4,7 @@
 		<application>DocuSignForSalesforceCore</application>
 		<visible>true</visible>
 	</applicationVisibilities>
-	<description>Provides access to the DocuSign for Salesforce application, pages, and objects and administration
+	<description>Provides access to the DocuSign application, pages, and objects and administration
 		rights to the application settings.
 	</description>
 	<fieldPermissions>

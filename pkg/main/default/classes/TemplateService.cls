@@ -1,5 +1,5 @@
 /**
- * Primary interface point for DocuSign for Salesforce template management.
+ * Primary interface point for DocuSign eSignature template management.
  */
 global with sharing class TemplateService {
 	/**

@@ -463,14 +463,36 @@ global class Recipient implements Comparable {
 	 * @return The newly-created embedded signer.
 	 */
 	global static Recipient newEmbeddedSigner() {
+		return newEmbeddedSigner(
+			UserInfo.getName(),
+			UserInfo.getUserEmail(),
+			UserInfo.getUserId());
+	}
+
+	/**
+	 * Creates an embedded signer recipient. This recipient is expected to sign an envelope within a custom application,
+	 * and will not receive an email requesting signature. The name, email, and ID must match the logged-in user's
+	 * during signing.
+	 *
+	 * @param name The signer's Salesforce user name.
+	 * @param email The signer's Salesforce user email.
+	 * @param sourceId The signer's Salesforce user ID.
+	 *
+	 * @return The newly-created embedded signer.
+	 */
+	global static Recipient newEmbeddedSigner(
+		final String name,
+		final String email,
+		final Id sourceId) {
+
 		return new Recipient(
 			null,
 			TYPE_EMBEDDED_SIGNER,
 			1,
 			1,
 			new Role('Signer 1', 1),
-			UserInfo.getName(),
-			UserInfo.getUserEmail(),
+			name,
+			email,
 			null,
 			null,
 			null,
@@ -479,7 +501,7 @@ global class Recipient implements Comparable {
 			null,
 			null,
 			true,
-			new Entity(UserInfo.getUserId()),
+			new Entity(sourceId),
 			false,
 			false);
 	}
