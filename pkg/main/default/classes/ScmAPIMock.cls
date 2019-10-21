@@ -40,7 +40,8 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		'reviews' => Application.classNamespacePrefix + 'ScmAPIMock.ReviewMock',
 		'workitems' => Application.classNamespacePrefix + 'ScmAPIMock.WorkItemMock',
 		'documents' => Application.classNamespacePrefix + 'ScmAPIMock.DocumentMock',
-		'members' => Application.classNamespacePrefix + 'ScmAPIMock.MemberMock'
+		'members' => Application.classNamespacePrefix + 'ScmAPIMock.MemberMock',
+		'changesecuritytasks' => Application.classNamespacePrefix + 'ScmAPIMock.ChangeSecurityTask'
 	};
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
@@ -99,7 +100,13 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				response = MockResponse.ok('{"Items":[{"Name":"docusignlogerror7-23-18-1.docx","CreatedDate":"2019-03-08T21:35:08.97Z","CreatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","UpdatedDate":"2019-03-08T21:35:08.97Z","UpdatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41"},"HistoryItems":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/historyitems"},"AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"PageCount":5,"Lock":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/lock"},"PreviewUrl":"https://uatna11.springcm.com/atlas/documents/preview.aspx?aid=10250&lduid=ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","Versions":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/versions"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/sharelinks"},"DocumentProcessTrackingActivities":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentprocesstrackingactivities"},"DocumentReminders":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentreminders"},"RelatedDocuments":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/relateddocuments"},"DownloadDocumentHref":"https://apidownloaduatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","NativeFileSize":20557,"PdfFileSize":160453,"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41"}],"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Last":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Total":1}');
+				//Set mock for getting the url of the root folder
+				if (request.path.contains('type')) {
+					response = MockResponse.ok('{"Name":"Other Sources","CreatedDate":"2019-10-03T20:57:32.093Z","CreatedBy":"octdaladmin1@dsxtr.com","UpdatedDate":"2019-10-03T20:57:32.093Z","UpdatedBy":"octdaladmin1@dsxtr.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/81e35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"BrowseDocumentsUrl":"https://uatna11.springcm.com/atlas/Link/Folder/12027/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41","AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"Documents":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/documents"},"Folders":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/folders"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/sharelinks"},"CreateDocumentHref":"https://apiuploaduatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/documents{?name}","Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"}');
+				}
+				else {
+					response = MockResponse.ok('{"Items":[{"Name":"docusignlogerror7-23-18-1.docx","CreatedDate":"2019-03-08T21:35:08.97Z","CreatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","UpdatedDate":"2019-03-08T21:35:08.97Z","UpdatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41"},"HistoryItems":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/historyitems"},"AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"PageCount":5,"Lock":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/lock"},"PreviewUrl":"https://uatna11.springcm.com/atlas/documents/preview.aspx?aid=10250&lduid=ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","Versions":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/versions"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/sharelinks"},"DocumentProcessTrackingActivities":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentprocesstrackingactivities"},"DocumentReminders":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentreminders"},"RelatedDocuments":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/relateddocuments"},"DownloadDocumentHref":"https://apidownloaduatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","NativeFileSize":20557,"PdfFileSize":160453,"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41"}],"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Last":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Total":1}');
+				}
 			} else if (request.method == 'POST') {
 				response = MockResponse.created('{"Href":"https://unit.test/folders/' + FOLDER_ID + '"}');
 			}
@@ -316,6 +323,17 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	public class ChangeSecurityTask implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'POST') {
+				response = MockResponse.created('{"Status" : "Waiting","Security" : {"Roles" : [{"Item" : "FullSubscriber","AccessType" : "ViewEditDelete"}]},"Folder" : {"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/changesecuritytasks/a345e77d-b3bf-4541-be31-3e9c36861e6a}');
+			}
+			return response;
+		}
+	}
+
 	private MockResource getMock(final String resource) {
 		if (MOCKS.containsKey(resource)) return MOCKS.get(resource);
 
@@ -335,8 +353,8 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 	override public HttpResponse getResponse(final HttpRequest request) {
 		MockRequest req = parseRequest(request);
 		MockResponse resp = this.success
-			? getMock(req.resource).respond(req)
-			: getError(req.resource);
+		                    ? getMock(req.resource).respond(req)
+		                    : getError(req.resource);
 		if (resp == null) {
 			resp = MockResponse.notImplemented(req.method, req.resource);
 		}

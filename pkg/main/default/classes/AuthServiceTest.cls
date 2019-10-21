@@ -1988,4 +1988,17 @@ private class AuthServiceTest {
 			].Status__c);
 		}
 	}
+
+	@IsTest
+	static void test_setRootLevelFolderSecurity_success() {
+		ScmAPIMock.success();
+		Boolean executedSuccessfully = false;
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			AuthService.setRootLevelFolderSecurity();
+			executedSuccessfully = true;
+			Test.stopTest();
+			System.assertEquals(true, executedSuccessfully);
+		}
+	}
 }

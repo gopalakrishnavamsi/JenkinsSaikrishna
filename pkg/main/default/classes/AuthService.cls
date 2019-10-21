@@ -1279,10 +1279,17 @@ public with sharing class AuthService {
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				settings.IsPlatformAuthorized__c = true;
 				update settings;
+				//call the springCM API to set the security on root level folder in future context
+				setRootLevelFolderSecurity();
 			}
 			return result;
 		} finally {
 			AccountProducts.save();
 		}
+	}
+
+	@future (callout=true) 
+	public static void setRootLevelFolderSecurity() {
+		NegotiateService.setRootLevelFolderSecurity();
 	}
 }

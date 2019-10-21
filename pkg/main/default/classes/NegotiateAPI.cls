@@ -11,6 +11,12 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public static final String PATH_LOCK = 'lock';
 	public static final String PATH_REVIEWS = 'reviews';
 	public static final String PATH_MEMBERS = 'members';
+	public static final String PATH_TYPE = 'type';
+	public static final String PATH_CHANGE_SECURITY_TASKS = 'changesecuritytasks';
+	public static final String SYSTEM_FOLDER = 'SystemFolder';
+	public static final String OTHER_SOURCES = 'other sources';
+	public static final String FULL_SUBSCRIBER = 'FullSubscriber';
+	public static final String VIEW_EDIT_DELETE = 'ViewEditDelete';
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
@@ -45,9 +51,9 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	@TestVisible
 	private class EosInfo {
 
-		public String name ;
+		public String name;
 		public Id objectId;
-		public String objectType ;
+		public String objectType;
 
 		EosInfo(final String objectName, final Id objectId, final String objectType) {
 			this.name = objectName;
@@ -310,8 +316,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		public APIEmail(final String subject, final String body, final String buttonText, final String headerTitle) {
 			this.subject = subject;
 			this.bodyText = body;
-			this.buttonText = buttonText; //Custom Label
-			this.headerTitleText = headerTitle; //Custom Label
+			this.buttonText = buttonText;//Custom Label
+			this.headerTitleText = headerTitle;//Custom Label
 		}
 	}
 
@@ -402,6 +408,26 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	}
 
 	@TestVisible
+	private class APIRoles {
+		public String item;
+		public String accessType;
+
+		APIRoles(final String item, final String accessType) {
+			this.item = item;
+			this.accessType = accessType;
+		}
+	}
+
+	@TestVisible
+	private class APISecurity {
+		public List<APIRoles> roles;
+
+		APISecurity(final List<APIRoles> roles) {
+			this.roles = roles;
+		}
+	}
+
+	@TestVisible
 	private class APIDocument {
 		public String href;
 
@@ -415,7 +441,6 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final Id sfContentVersionId,
 		final UUID folderId,
 		final String documentName) {
-
 		RestAPI.Response response = this.post(
 			new List<String> { PATH_AGREEMENT_IN_EOS_FOLDER },
 			JSON.serialize(new Map<String, Object> {
@@ -480,6 +505,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	@TestVisible
 	private class APIHref {
 		public String href;
+
+		APIHref(final String href) {
+			this.href = href;
+		}
 	}
 
 	// FIXME: Leaky abstraction. This should not be directly exposed to the caller.
@@ -580,7 +609,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		}
 	}
 
-//Get All Agreements from an EOS folder
+	//Get All Agreements from an EOS folder
 	public List<Agreement> getAgreements(final UUID folderId) {
 		List<Agreement> agreements = new List<Agreement>();
 		Map<String, String> queryStrings = new Map<String, String>();
@@ -662,10 +691,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 200 ;
+		return response.statusCode == 200;
 	}
 
-// Get all the versions of the Agreement
+	// Get all the versions of the Agreement
 	public List<Agreement> getAgreementVersions(final UUID documentId) {
 		List<Agreement> agreements = new List<Agreement>();
 		Map<String, String> queryStrings = new Map<String, String>();
@@ -854,10 +883,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return response.body;
 	}
 
-	// resend approval request and resend external review request
-
+	
 	// Cancel Approval or External Review
-
 	public Boolean cancelApprovalOrExternalReview(final UUID documentId) {
 
 		final RestAPI.Response response = del(
@@ -870,11 +897,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 200 ;
+		return response.statusCode == 200;
 	}
 
 	// approveOnBehalf and recipientResponse
-
 	@TestVisible
 	private class APISelected {
 
@@ -902,11 +928,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 200 ;
+		return response.statusCode == 200;
 	}
 
 	// externalReview complete on behalf
-
 	@TestVisible
 	private class APIUploadDocuments {
 
@@ -947,7 +972,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			throw new APIException(response.error);
 		}
 
-		return response.statusCode == 200 ;
+		return response.statusCode == 200;
 	}
 
 	// get document reviews
@@ -965,5 +990,53 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
+	//Get the href for root level folder on the account
+	public Url getRootLevelFolderUrl() {
+		Map<String, String> queryStrings = new Map<String, String>();
+		queryStrings.put(SYSTEM_FOLDER, OTHER_SOURCES);
+
+		final RestAPI.Response response = get(
+			new List<Object> {
+				PATH_FOLDER, PATH_TYPE
+			},
+			new QueryString(queryStrings),
+			RestAPI.defaultTimeout);
+
+		if (response.hasError) {
+			this.log.error('Failed get the href for root level folder on the account - ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		APIHref result = (APIHref)JSON.deserialize(response.body, APIHref.class);
+		if (String.isNotBlank(result.href)) {
+			return new Url(result.href);
+		} else {
+			return null;
+		}
+	}
+
+	//Set the correct AccessType to move or delete documents on the root folder
+	//This call returns the Url of the asynchronous task that is queued in SpringCM for execution
+	//Currently there is no need to monitoring the task and checking for status
+	public void triggerChangeSecurityTask(final Url rootLevelFolderUrl) {
+		if (rootLevelFolderUrl != null) {
+			List<APIRoles> roles = new List<APIRoles>();
+			roles.add(new APIRoles(FULL_SUBSCRIBER, VIEW_EDIT_DELETE));
+
+			RestAPI.Response response = this.post(
+				new List<String> { PATH_CHANGE_SECURITY_TASKS },
+				JSON.serialize(new Map<String, Object> {
+					'Folder' => new APIHref(rootLevelFolderUrl.toExternalForm()),
+					'Security' => new APISecurity(roles)
+				}),
+				RestAPI.defaultTimeout);
+
+			if (response.hasError) {
+				this.log.error('Failed to trigger change security task: ' + response.error);
+				throw new APIException(response.error);
+			}
+		}
 	}
 }

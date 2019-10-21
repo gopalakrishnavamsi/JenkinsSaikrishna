@@ -479,4 +479,72 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals(hasError, true);
 		}
 	}
+
+	@IsTest
+	static void test_getRootLevelFolderUrl_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+
+			Test.startTest();
+			Url result = NegotiateAPI.getInstance().getRootLevelFolderUrl();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41', result.toExternalForm());
+		}
+	}
+
+	@IsTest
+	static void test_getRootLevelFolderUrl_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Boolean hasError = false;
+			try {
+				NegotiateAPI.getInstance().getRootLevelFolderUrl();
+			} catch (APIException ex) {
+				hasError = true;
+			}
+			Test.stopTest();
+
+			System.assertEquals(hasError, true);
+		}
+	}
+
+	@IsTest
+	static void test_triggerChangeSecurityTask_success() {
+		ScmAPIMock.success();
+
+		Boolean executedSuccessfully = false;
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+
+			Test.startTest();
+			NegotiateAPI.getInstance().triggerChangeSecurityTask(new Url('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41'));
+			executedSuccessfully = true;
+			Test.stopTest();
+
+			System.assertEquals(true, executedSuccessfully);
+		}
+	}
+
+	@IsTest
+	static void test_triggerChangeSecurityTask_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Boolean hasError = false;
+			try {
+				NegotiateAPI.getInstance().triggerChangeSecurityTask(new Url('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41'));
+			} catch (APIException ex) {
+				hasError = true;
+			}
+			Test.stopTest();
+
+			System.assertEquals(hasError, true);
+		}
+	}
+
 }
