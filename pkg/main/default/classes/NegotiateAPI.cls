@@ -20,6 +20,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
 	public static final Long SCM_OFFSET = 20;
+	public static final String SCM_SORT_PROPERTY = 'UpdatedDate';
+	public static final String SCM_SORT_DIRECTION = 'desc';
 	public static final Integer API_RETRY_LIMIT = 25;
 
 	private static NegotiateAPI self = null;
@@ -620,7 +622,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		while (next != null) {
 			offset += SCM_OFFSET;
 			queryStrings.put('offset', String.valueOf(offset));
-
+			queryStrings.put('SortProperty', SCM_SORT_PROPERTY);
+			queryStrings.put('SortDirection', SCM_SORT_DIRECTION);
 			final RestAPI.Response response = get(
 				new List<Object> {
 					PATH_FOLDER, folderId, PATH_DOCUMENTS
@@ -883,7 +886,6 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return response.body;
 	}
 
-	
 	// Cancel Approval or External Review
 	public Boolean cancelApprovalOrExternalReview(final UUID documentId) {
 
