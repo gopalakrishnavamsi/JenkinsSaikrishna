@@ -41,6 +41,7 @@ global with sharing class BulkSendService {
 	private static final SObjectType BULK_STATUS_TYPE = BulkStatus__c.getSObjectType();
 	@TestVisible
 	private static final Long STATUS_POLL_INTERVAL_MS = 60000; // 1 min * 60 sec * 1000 ms
+	private static final String SENDER_TOKEN = 'Apex Toolkit';
 
 	@TestVisible
 	private class Database {
@@ -427,7 +428,10 @@ global with sharing class BulkSendService {
 		try {
 			UUID docuSignId = dsEnvelopeCreated
 				? envelope.docuSignId
-				: EnvelopeAPI.getInstance().createEnvelope(envelope, EnvelopeSettings.getOptions(false));
+				: EnvelopeAPI.getInstance().createEnvelope(
+					envelope,
+					EnvelopeSettings.getOptions(false),
+					SENDER_TOKEN);
 
 			BulkSendAPI api = BulkSendAPI.getInstance();
 			BulkList.Result result = api.sendEnvelope(bls[0].docuSignId, docuSignId);

@@ -1108,8 +1108,8 @@ private class EnvelopeServiceTest {
 			update new List<Envelope__c> { ee1, ee2 };
 
 			Test.startTest();
-			Envelope result1 = EnvelopeService.sendEnvelope(e1, false, false);
-			Envelope result2 = EnvelopeService.sendEnvelope(e2, true, false);
+			Envelope result1 = EnvelopeService.sendEnvelope(e1, false, false, 'Unit Test');
+			Envelope result2 = EnvelopeService.sendEnvelope(e2, true, false, 'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -1169,7 +1169,7 @@ private class EnvelopeServiceTest {
 				.withNotifications(new Notifications(true, 1, 2, true, 3, 4, true));
 
 			Test.startTest();
-			Envelope result = EnvelopeService.sendEnvelope(e1, true, true);
+			Envelope result = EnvelopeService.sendEnvelope(e1, true, true, 'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

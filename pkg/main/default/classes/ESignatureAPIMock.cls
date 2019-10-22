@@ -72,6 +72,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				'service_information',
 				new List<String>(),
 				QueryString.parse(u.getQuery()),
+				request.getHeader('User-Agent'),
 				request.getBody());
 		}
 
@@ -96,6 +97,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			resource,
 			String.isBlank(path) ? new List<String>() : path.split('\\/'),
 			String.isBlank(params) ? QueryString.empty : QueryString.parse(params),
+			request.getHeader('User-Agent'),
 			request.getBody());
 	}
 
@@ -347,6 +349,8 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					vr.url = 'https://unit.test/views/correct';
 					response = MockResponse.ok(vr);
 				} else { // Create envelope
+					System.assertNotEquals(null, request.userAgent, 'User-Agent is null for create envelope.');
+					System.assert(Application.userAgent.length() < request.userAgent.length(), 'User-Agent does not contain sender token');
 					EnvelopeAPI.APIEnvelope e = (EnvelopeAPI.APIEnvelope)JSON.deserialize(
 						request.body, EnvelopeAPI.APIEnvelope.class);
 					if (e != null) {

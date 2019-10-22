@@ -908,7 +908,10 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			UUID result = client.createEnvelope(
+				e2,
+				new Envelope.Options(true, true, true, true),
+				'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -961,7 +964,10 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			UUID result = client.createEnvelope(
+				e2,
+				new Envelope.Options(true, true, true, true),
+				'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1042,7 +1048,10 @@ private class EnvelopeAPITest {
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
-			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, true, true));
+			UUID result = client.createEnvelope(
+				e2,
+				new Envelope.Options(true, true, true, true),
+				'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1072,7 +1081,10 @@ private class EnvelopeAPITest {
 				null, null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			Test.startTest();
-			UUID result = client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
+			UUID result = client.createEnvelope(
+				e2,
+				new Envelope.Options(true, true, false, true),
+				'Unit Test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1089,7 +1101,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(true, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(true, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1106,7 +1121,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(null, new Envelope.Options(true, true, true, true));
+				client.createEnvelope(
+					null,
+					new Envelope.Options(true, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedEnvelope, ex.getMessage());
@@ -1140,7 +1158,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e2, new Envelope.Options(true, true, false, true));
+				client.createEnvelope(
+					e2,
+					new Envelope.Options(true, true, false, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotReadDocumentContent_1,
@@ -1171,7 +1192,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1202,7 +1226,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1233,7 +1260,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1264,7 +1294,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1295,7 +1328,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1326,7 +1362,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1357,7 +1396,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
@@ -1388,7 +1430,10 @@ private class EnvelopeAPITest {
 
 			Test.startTest();
 			try {
-				client.createEnvelope(e, new Envelope.Options(false, true, true, true));
+				client.createEnvelope(
+					e,
+					new Envelope.Options(false, true, true, true),
+					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);

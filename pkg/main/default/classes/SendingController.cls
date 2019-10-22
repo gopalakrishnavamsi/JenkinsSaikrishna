@@ -2,6 +2,8 @@
 // HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
+	private static final String SENDER_TOKEN = 'DocuSign Apps Launcher';
+
 	public SendingController() {
 	}
 
@@ -140,7 +142,8 @@ public with sharing class SendingController extends Controller {
 			Envelope result = EnvelopeService.sendEnvelope(
 				(Envelope)JSON.deserialize(envelopeJson, Envelope.class),
 				false,
-				true);
+				true,
+				SENDER_TOKEN);
 			AccountProducts.save();
 			return result;
 		} catch (Exception ex) {

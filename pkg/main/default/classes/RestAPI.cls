@@ -121,8 +121,10 @@ public virtual class RestAPI {
 				request.setHeader(type, headers.get(type));
 			}
 		}
-		request.setHeader('User-Agent', Application.userAgent);
-		final HttpResponse response = http.send(request);
+		if (String.isBlank(request.getHeader('User-Agent'))) {
+			request.setHeader('User-Agent', Application.userAgent);
+		}
+		HttpResponse response = http.send(request);
 		return new Response(request, response, getError(response));
 	}
 

@@ -1,11 +1,13 @@
 @IsTest
 public class MockRequest {
+
 	public String method { get; private set; }
 	public String apiVersion { get; private set; }
 	public UUID accountId { get; private set; }
 	public String resource { get; private set; }
 	public List<Object> path { get; private set; }
 	public QueryString parameters { get; private set; }
+	public String userAgent { get; private set; }
 	public String body { get; private set; }
 
 	public MockRequest(
@@ -15,6 +17,7 @@ public class MockRequest {
 		final String resource,
 		final List<Object> path,
 		final QueryString parameters,
+		final String userAgent,
 		final String body) {
 
 		this.method = method;
@@ -22,7 +25,8 @@ public class MockRequest {
 		this.accountId = accountId;
 		this.resource = resource;
 		this.path = path;
-		this.parameters = parameters;
+		this.parameters = parameters == null ? QueryString.empty : parameters;
+		this.userAgent = userAgent;
 		this.body = body;
 	}
 }

@@ -1133,28 +1133,38 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private Map<String, String> getCreateHeaders() {
+	private Map<String, String> getCreateHeaders(final String senderToken) {
 		Map<String, String> headers = new Map<String, String>(getDefaultHeaders());
 		// Must append magic header to create envelope calls. This allows DocuSign to reach back into Salesforce to
 		// retrieve documents as SFDC doesn't allow sending big blobs via web service callouts.
 		headers.put('X-DocuSign-ExternalInfo', String.format(
 			'<ExternalInfo><ExternalSessionId>{0}</ExternalSessionId><ExternalUrl>{1}</ExternalUrl></ExternalInfo>',
 			new List<String> { UserInfo.getSessionId(), getExternalUrl() }));
+		headers.put('User-Agent', Application.userAgent + ' ' + senderToken);
 		return headers;
 	}
 
-	public UUID createEnvelope(final Envelope envelope, final Envelope.Options options) {
-		return this.createEnvelope(envelope, options, RestAPI.defaultTimeout);
+	public UUID createEnvelope(
+		final Envelope envelope,
+		final Envelope.Options options,
+		final String senderToken) {
+
+		return this.createEnvelope(envelope, options, senderToken, RestAPI.defaultTimeout);
 	}
 
-	public UUID createEnvelope(final Envelope envelope, final Envelope.Options options, final Integer timeout) {
+	public UUID createEnvelope(
+		final Envelope envelope,
+		final Envelope.Options options,
+		final String senderToken,
+		final Integer timeout) {
+
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
 			options == null || !options.sendNow ? new QueryString('merge_roles_on_draft', 'true') : QueryString.empty,
-			getCreateHeaders(),
+			getCreateHeaders(senderToken),
 			JSON.serialize(new EnvelopeAPI.APIEnvelope(
 				envelope,
 				options != null && options.sendNow,

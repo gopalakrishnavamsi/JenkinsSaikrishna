@@ -81,6 +81,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 			resource,
 			String.isBlank(path) ? new List<String>() : path.split('\\/'),
 			String.isBlank(params) ? QueryString.empty : QueryString.parse(params),
+			request.getHeader('User-Agent'),
 			request.getBody());
 	}
 

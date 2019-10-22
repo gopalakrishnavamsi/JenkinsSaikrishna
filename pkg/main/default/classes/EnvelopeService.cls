@@ -20,6 +20,7 @@ global with sharing class EnvelopeService {
 	private static final SObjectType TYPE_DOCUMENT = Document__c.getSObjectType();
 	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static final LoggerService LOG = LoggerService.getInstance();
+	private static final String SENDER_TOKEN = 'Apex Toolkit';
 
 	public static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
 		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
@@ -607,7 +608,7 @@ global with sharing class EnvelopeService {
 	 * @return The sent envelope.
 	 */
 	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow) {
-		return sendEnvelope(envelope, sendNow, true);
+		return sendEnvelope(envelope, sendNow, true, SENDER_TOKEN);
 	}
 
 	/**
@@ -623,6 +624,8 @@ global with sharing class EnvelopeService {
 	 * @param updateNow Whether to update the envelope record immediately. This update may be deferred if the current
 	 * transaction involves subsequent callouts to avoid errors. To update later, call
 	 * <code>EnvelopeService.markEnvelopeSent</code>.
+	 * @param senderToken The application sending the envelope. This will be appended to the X-DocuSign-SenderToken
+	 * header on the DocuSign create envelope API callout.
 	 *
 	 * @return The sent envelope.
 	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
@@ -630,7 +633,8 @@ global with sharing class EnvelopeService {
 	public static Envelope sendEnvelope(
 		final Envelope envelope,
 		final Boolean sendNow,
-		final Boolean updateNow) {
+		final Boolean updateNow,
+		final String senderToken) {
 
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
@@ -651,7 +655,7 @@ global with sharing class EnvelopeService {
 				null));
 		try {
 			result = result.withDocuSignId(
-				EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow)));
+				EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow), senderToken));
 		} finally {
 			if (updateNow) Credentials.save();
 		}
