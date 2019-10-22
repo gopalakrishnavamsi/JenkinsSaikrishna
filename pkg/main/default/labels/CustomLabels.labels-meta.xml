@@ -2471,7 +2471,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>SalesforceFileCopyComplete</shortDescription>
-		<value>The file below has been copied from Salesforce files, imported to DocuSign Agreements, and now can be sent for negotiation, approval or signature.</value>
+		<value>The file below has been copied from Salesforce files, imported to DocuSign Files, and now can be sent for negotiation, approval or signature.</value>
+	</labels>
+	<labels>
+		<fullName>UploadFileComplete</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UploadFileCopyComplete</shortDescription>
+		<value>The file below has been uploaded, imported to DocuSign Files, and now can be sent for negotiation, approval or signature.</value>
 	</labels>
 	<labels>
 		<fullName>SendForExternalReview</fullName>

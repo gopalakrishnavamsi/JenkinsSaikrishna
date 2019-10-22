@@ -86,6 +86,7 @@
   importSalesforceFile: function (component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
+    component.set('v.uploadCompleteMessage', $A.get('$Label.c.SalesforceFileCopyComplete'));
 
     //get selected file
     var salesforceFiles = component.get('v.salesforceFiles');
@@ -95,7 +96,6 @@
         selectedFile = file;
       }
     });
-
     if (selectedFile) {
       var recordId = component.get('v.recordId');
       var action = component.get('c.createAgreementInEOSFolder');
@@ -153,6 +153,7 @@
   importFileFromPc: function (component, event, helper) {
     component.set('v.currentStep', '4');
     component.set('v.loading', true);
+    component.set('v.uploadCompleteMessage', $A.get('$Label.c.UploadFileComplete'));
     var widget = component.get('v.widget');
     var folderId = component.get('v.entityId');
     try {
