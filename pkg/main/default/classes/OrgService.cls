@@ -1,5 +1,8 @@
-/** Contains global invocable method used by SpringCM platform for SpringCM Salseforce OAuth
+/* Contains global invocable method used by SpringCM platform for SpringCM Salseforce OAuth
  * 	A single class can only have one Invocable method
+ */
+/**
+ * Used internally by DocuSign.
  */
 global with sharing class OrgService {
 
@@ -13,7 +16,7 @@ global with sharing class OrgService {
 		}
 	}
 
-	/**
+	/*
 	 * Used by SpringCM platform during setup of Salesforce SpringCM OAuth in order to validate the DocuSign Account Id
 	 * The method is marked as global and decorated with the InvocableMethod attribute to allow SpringCM platform to invoke this method
 	 *
@@ -22,6 +25,11 @@ global with sharing class OrgService {
 	 * @return returns a List<String> where every entry corresponds to a JSON string having the account id details.
 	 * The size of returned list should be ideally 1
 	 *
+	 */
+	/**
+	 * Used internally by DocuSign.
+	 *
+	 * @return
 	 */
 	@InvocableMethod
 	global static List<String> getOrgSettings() {

@@ -470,7 +470,7 @@ global class Recipient implements Comparable {
 	}
 
 	/**
-	 * Creates an embedded signer recipient. This recipient is expected to sign an envelope within a custom application,
+	 * Creates an embedded signer recipient. This recipient is expected to sign an envelope within a custom application
 	 * and will not receive an email requesting signature. The name, email, and ID must match the logged-in user's
 	 * during signing.
 	 *
