@@ -514,6 +514,10 @@ public with sharing class AuthService {
 		Permissions.clear(userIds);
 	}
 
+	private static void clearFolderConfiguration() {
+		Database.executeBatch(new ClearFolderConfiguration());
+	}
+
 	/**
 	 * Clears all DocuSign account credentials and optionally user credentials as well. This is an irreversible action,
 	 * so invoke only after confirming with the administrator.
@@ -544,6 +548,10 @@ public with sharing class AuthService {
 
 			// This must be done in a @Future context to avoid MIXED_DML errors.
 			clearPermissions(result);
+
+			//Clear SpringCM folder id to Salesforce Object id mapping stored in Agreement configuration object
+			//This will invoke a Batch job to delete all records from the AgreementConfiguration custom object
+			clearFolderConfiguration();
 		}
 		return result;
 	}
