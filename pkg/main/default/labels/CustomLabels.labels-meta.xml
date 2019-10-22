@@ -2979,7 +2979,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadMessage</shortDescription>
-		<value>Uploading a file will create a new version of this document and update the agreement's activity timeline.</value>
+		<value>Uploading a file will create a new version of this document and update the document's activity timeline. You will see the versions listed in descending order, with the newest version on top.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementName</fullName>
@@ -2993,7 +2993,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CurrentVersion</shortDescription>
-		<value>Current Version</value>
+		<value>Date Uploaded</value>
 	</labels>
 	<labels>
 		<fullName>InvalidSearchObject_1</fullName>
@@ -4881,13 +4881,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Sidebar Item Workflow</shortDescription>
 		<value>Workflow</value>
-	</labels>
-	<labels>
-		<fullName>OriginalVersion</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>OriginalVersion</shortDescription>
-		<value>Original -</value>
 	</labels>
 	<labels>
 		<fullName>AllObjectsListed</fullName>

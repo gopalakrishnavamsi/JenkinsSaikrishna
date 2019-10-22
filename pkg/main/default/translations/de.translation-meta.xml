@@ -2202,10 +2202,6 @@
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
-		<label>Original – </label>
-		<name>OriginalVersion</name>
-	</customLabels>
-	<customLabels>
 		<label>Sobald Sie die Salesforce-Objekte zugeordnet haben, können Sie von Salesforce aus die DocuSign-CLM-Objektordner einsehen und bearbeiten. Fügen Sie hierzu einfach dem Seitenlayout des Salesforce-Objekts eine Ansicht hinzu.</label>
 		<name>AddLayoutInfo</name>
 	</customLabels>

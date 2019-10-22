@@ -2,40 +2,7 @@
   onLoad: function (component, event, helper) {
     component.set('v.loading', true);
     var agreement = component.get('v.agreement');
-    helper.setAgreementVersions(component);
     helper.loadWidget(component, agreement, agreement.href);
-  },
-
-  setAgreementVersions: function (component) {
-    var agreementVersions = [];
-    var agreement = component.get('v.agreement');
-    //set original version
-    var originalVersion = {
-      'name': stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-      'currentVersion': $A.get('$Label.c.OriginalVersion'),
-      'createdDate': agreement.createdDate,
-      'extension': agreement.extension
-    };
-
-    //If no versions have been uploaded apart from the original version then display only the original version with details
-    if ($A.util.isEmpty(agreement.versions)) {
-      agreementVersions.push(originalVersion);
-    }
-
-    //If versions exists for an agreement push all the version details
-    else {
-      agreement.versions.forEach(function (versionInformation) {
-        agreementVersions.push({
-          'name': stringUtils.format('{0}{1}{2}', versionInformation.name, '.', versionInformation.extension),
-          'currentVersion': stringUtils.format('{0} {1} ', versionInformation.version, '-'),
-          'createdDate': versionInformation.createdDate,
-          'extension': versionInformation.extension
-        });
-      });
-      //Add original version
-      agreementVersions.push(originalVersion);
-    }
-    component.set('v.agreementVersions', agreementVersions);
   },
 
   loadWidget: function (component, agreement, documentUrl) {

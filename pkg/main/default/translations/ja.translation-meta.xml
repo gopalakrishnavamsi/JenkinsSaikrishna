@@ -2203,10 +2203,6 @@
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
-		<label>オリジナル -</label>
-		<name>OriginalVersion</name>
-	</customLabels>
-	<customLabels>
 		<label>Salesforceオブジェクトをマッピングすると、Salesforceから自分のDocuSign CLMオブジェクトフォルダーにアクセスできるようになります。ただし、Salesforceオブジェクトのページレイアウトにビューを追加してカスタマイズする必要があります。</label>
 		<name>AddLayoutInfo</name>
 	</customLabels>

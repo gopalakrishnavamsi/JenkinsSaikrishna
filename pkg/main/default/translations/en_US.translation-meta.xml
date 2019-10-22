@@ -1350,7 +1350,7 @@
 		<name>UploadNewVersion</name>
 	</customLabels>
 	<customLabels>
-		<label>Uploading a file will create a new version of this document and update the agreement's activity timeline.</label>
+		<label>Uploading a file will create a new version of this document and update the document's activity timeline. You will see the versions listed in descending order, with the newest version on top.</label>
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1358,7 +1358,7 @@
 		<name>AgreementName</name>
 	</customLabels>
 	<customLabels>
-		<label>Current Version</label>
+		<label>Date Uploaded</label>
 		<name>CurrentVersion</name>
 	</customLabels>
 	<customLabels>
@@ -2204,10 +2204,6 @@
 	<customLabels>
 		<label>Error while uploading a new version of the agreement.</label>
 		<name>UploadNewVersionError</name>
-	</customLabels>
-	<customLabels>
-		<label>Original -</label>
-		<name>OriginalVersion</name>
 	</customLabels>
 	<customLabels>
 		<label>Once you have mapped your Salesforce objects, you can view and work on your DocuSign CLM object folders from Salesforce. All you have to do is customize your Salesforce object page layout by adding a view.</label>

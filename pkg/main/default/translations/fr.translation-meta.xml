@@ -2203,10 +2203,6 @@
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
-		<label>Original -</label>
-		<name>OriginalVersion</name>
-	</customLabels>
-	<customLabels>
 		<label>Une fois que vous avez mappé vos objets Salesforce, vous pouvez, à partir de Salesforce, afficher et travailler sur les dossiers de vos objets DocuSign CLM. Tout ce qu’il vous reste à faire est de personnaliser la présentation de page de votre objet Salesforce en ajoutant une vue.</label>
 		<name>AddLayoutInfo</name>
 	</customLabels>
