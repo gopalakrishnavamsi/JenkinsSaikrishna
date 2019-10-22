@@ -3430,6 +3430,10 @@
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign CLM is not configured for your account.</label>
+		<name>CLMNotConfigured</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign eSignature is not configured for your account.</label>
 		<name>ESignatureNotConfigured</name>
 	</customLabels>

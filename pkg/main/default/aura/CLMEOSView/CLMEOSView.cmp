@@ -5,18 +5,21 @@
     <aura:attribute name="frameHeight" type="String" default="400"/>
     <aura:attribute name="src" type="String" default=""/>
     <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
-    <aura:attribute name="renderPage" type="Boolean" default="false" />
+    <aura:attribute name="renderPage" type="Boolean" default="false"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isClmEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <div>
-        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"/>
+        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+            products="{!v.products}"/>
     </div>
     <div>
-        <aura:if isTrue="{!and(v.renderPage, v.isAuthorized)}">
+        <aura:if isTrue="{!and(v.renderPage, and(v.isAuthorized, v.isClmEnabled))}">
             <aura:if isTrue="{!and(v.eosDetails.mappingExists, !v.eosDetails.connectionError)}">
                 <div class="ds-main" style="{!'height:'+v.frameHeight+'px;'}">
                     <iframe aura:id="frame" src="{!v.eosDetails.eosUrl}" width="100%" height="100%" frameborder="0"
@@ -46,9 +49,14 @@
                 </div>
             </aura:if>
             <aura:set attribute="else">
-                <aura:if isTrue="{!v.isAuthorized}">
+                <aura:if isTrue="{!and(v.isAuthorized, !v.renderPage)}">
                     <div aura:id="loadingSpinner" class="slds-is-relative ds-loadingContainer">
                         <c:BlueSpinner/>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!and(v.isAuthorized, !v.isClmEnabled)}">
+                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
+                        {!$Label.c.CLMNotConfigured}
                     </div>
                 </aura:if>
             </aura:set>

@@ -47,7 +47,7 @@
       component.set('v.isSidebar', true);
       component.set('v.isCenter', true);
       component.set('v.fullLayout', true);
-      helper.insertComponent(component, 'c:CLMHomeBody', false, false, 'v.main');
+      helper.insertComponent(component, 'c:CLMHomeBody', { login: component.get('v.login') }, false, 'v.main');
     } else if (index === '3') {
       component.set('v.isSidebar', true);
       component.set('v.isCenter', false);
@@ -55,11 +55,14 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.Integration'),
+        iconColorClass: 'ds-icon-green',
         iconUrl: 'standard:social',
         sectionTitle: $A.get('$Label.c.CLM')
       }, false, 'v.header');
       //main
-      helper.insertComponent(component, 'c:CLMIntegrationLayout', false, false, 'v.main');
+      helper.insertComponent(component, 'c:CLMIntegrationLayout', {
+        isClose: component.get('v.isCloseNotification')
+      }, false, 'v.main');
     } else if (index === '3.1') {
       component.set('v.isCenter', false);
       component.set('v.isSidebar', false);
@@ -71,6 +74,7 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.DocumentGeneration'),
+        iconColorClass: 'ds-icon-green',
         iconUrl: 'standard:contract',
         sectionTitle: $A.get('$Label.c.CLM')
       }, false, 'v.header');
@@ -89,6 +93,7 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.Workflow'),
+        iconColorClass: 'ds-icon-green',
         iconUrl: 'standard:campaign',
         sectionTitle: $A.get('$Label.c.CLM')
       }, false, 'v.header');
@@ -107,7 +112,8 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.UserManagement'),
-        iconUrl: 'custom:custom66',
+        iconColorClass: 'ds-icon-mintLeaf',
+        iconUrl: 'standard:user',
         sectionTitle: $A.get('$Label.c.Administration')
       }, false, 'v.header');
       //main
@@ -122,6 +128,7 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.ButtonsAndComponents'),
+        iconColorClass: 'ds-icon-blue',
         iconUrl: 'standard:canvas',
         sectionTitle: $A.get('$Label.c.Administration')
       }, false, 'v.header');
@@ -140,6 +147,7 @@
       //header 
       helper.insertComponent(component, 'c:CLMPageHeader', {
         title: $A.get('$Label.c.Help'),
+        iconColorClass: 'ds-icon-mintLeaf',
         iconUrl: 'standard:sossession',
         sectionTitle: $A.get('$Label.c.Administration')
       }, false, 'v.header');

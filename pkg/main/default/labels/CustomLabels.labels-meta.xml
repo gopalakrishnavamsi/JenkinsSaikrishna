@@ -6713,6 +6713,14 @@
 		<value>DocuSign Negotiate is not configured for your account.</value>
 	</labels>
 	<labels>
+		<fullName>CLMNotConfigured</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Docusign CLM not configured</shortDescription>
+		<value>DocuSign CLM is not configured for your account.</value>
+	</labels>
+	<labels>
 		<fullName>ESignatureNotConfigured</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
