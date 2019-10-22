@@ -77,27 +77,16 @@
         { type: 'action', typeAttributes: { rowActions: actions } }
       ];
       component.set('v.mapColumns', column);
-      helper.callServer(component, 'c.getMappedObjectsList', false, function (data) {
-        if (data.Account && data.Opportunity && Object.values(data).length === 2) {
-          helper.fireApplicationEvent(component, {
-            fromComponent: 'CLMMappedObjectsHome',
-            toComponent: 'CLMScopedNotifications',
-            type: 'show'
-          }, 'CLMEvent');
-        }
-        if (Object.values(data).length === 0) {
-          helper.fireApplicationEvent(
-            component,
-            {
-              componentName: 'CLMCardModel',
-              fromComponent: 'CLMMappedObjectsHome',
-              toComponent: 'CLMIntegrationLayout',
-              type: 'hide'
-            },
-            'CLMNavigationEvent'
-          );
-        }
-        component.set('v.mappedObjData', Object.values(data));
+      helper.callServer(component, 'c.getScopedNotificationStatus', false, function (result) {
+        var renderNotification = (result) ? 'hide' : 'show';
+        helper.fireApplicationEvent(component, {
+          fromComponent: 'CLMMappedObjectsHome',
+          toComponent: 'CLMScopedNotifications',
+          type: renderNotification
+        }, 'CLMEvent');
+      });
+      helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
+        component.set('v.mappedObjData', Object.values(result));
         component.set('v.sortedByColumn', $A.get('$Label.c.SalesforceObject'));
         component.set('v.sortedBy', 'Name');
         component.set('v.sortedDirection', 'asc');
@@ -241,6 +230,14 @@
     component.set('v.sortedBy', fieldName);
     component.set('v.sortedDirection', sortDirection);
     helper.sortData(component, fieldName, sortDirection);
-  }
+  },
 
+  updateScopedNotification: function (component, event, helper) {
+    var fromComponent = event.getParam('fromComponent');
+    var toComponent = event.getParam('toComponent');
+    var type = event.getParam('type');
+    if (toComponent === 'CLMSetupLayout' && fromComponent !== 'CLMMappedObjectsHome' && type === 'closeNotification') {
+      helper.callServer(component, 'c.setScopedNotificationStatus', false);
+    }
+  }
 });

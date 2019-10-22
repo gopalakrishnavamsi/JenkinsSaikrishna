@@ -1,12 +1,18 @@
 .THIS .ds-card-heading {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
+  color: #000000;
 }
 
 .THIS .ds-card-heading2 {
-  font-size: 1.25rem;
+  font-size: 1rem;
+  color: #000000;
 }
 
 .THIS .ds-myBtn {
   width: 170px;
   height: 30px;
+}
+
+.THIS .ds-card-padding {
+  padding-bottom: 9rem;
 }

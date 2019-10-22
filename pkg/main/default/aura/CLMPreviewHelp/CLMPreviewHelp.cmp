@@ -1,13 +1,15 @@
 <aura:component>
-	<aura:attribute name="isSubTitle" type="Boolean" default="false" />
-	<aura:attribute name="subTitle" type="String" />
-	<aura:attribute name="imageURL" type="String" />
-	<aura:attribute name="summary" type="String" />
-	<aura:attribute name="isSteps" type="Boolean" default="false" />
-	<aura:attribute name="steps" type="String[]" />
+	<aura:attribute name="isSubTitle" type="Boolean" default="false"/>
+	<aura:attribute name="subTitle" type="String"/>
+	<aura:attribute name="imageURL" type="String"/>
+	<aura:attribute name="summary" type="String"/>
+	<aura:attribute name="isSteps" type="Boolean" default="false"/>
+	<aura:attribute name="steps" type="String[]"/>
+	<aura:attribute name="showButton" type="Boolean" default="true"/>
+	<aura:attribute name="buttonLabel" type="String" default=""/>
 
 	<div class="slds-grid ">
-		<div class="slds-col slds-size_1-of-2">
+		<div class="slds-col slds-size_1-of-2 slds-p-top_small">
 			<div>
 				<aura:if isTrue="{!v.isSubTitle}">
 					<div class="ds-card-heading2"> <b>{!v.subTitle}</b></div>
@@ -22,11 +24,17 @@
 						</div>
 					</aura:if>
 				</div>
+				<div class="slds-p-top_medium">
+					<aura:if isTrue="{!v.showButton}">
+						<lightning:button label="{!v.buttonLabel}" title="{!v.buttonLabel}" class="ds-button-width "
+							iconName="utility:new_window" iconPosition="right" onclick="navigateToSection"/>
+					</aura:if>
+				</div>
 			</div>
 		</div>
 		<div class="slds-col slds-size_1-of-2">
-			<div class="ds-orange-icon slds-form-element__control slds-float_right">
-				<img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.InfoIcon}" />
+			<div class="slds-float_right">
+				<img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.InfoIcon}"/>
 			</div>
 		</div>
 	</div>

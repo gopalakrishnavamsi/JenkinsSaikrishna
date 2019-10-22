@@ -1,7 +1,15 @@
-.THIS .ds-text-color{
-    color: t(colorTextDefault);
+.THIS .ds-round {
+    border-radius: .25rem;
 }
 
-.THIS .ds-round{
-    border-radius:.25rem;
+.THIS .ds-icon-green {
+    background-color: #7dc37d;
+}
+
+.THIS .ds-icon-blue {
+    background-color: #a29bfe;
+}
+
+.THIS .ds-icon-mintLeaf {
+    background-color: #00b894;
 }

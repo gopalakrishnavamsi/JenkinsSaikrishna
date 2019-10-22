@@ -15,7 +15,7 @@
     <!--Place holder attributes-->
     <aura:attribute name="isEmpty" type="Boolean" default="false" access="private"/>
     <aura:attribute name="editComponent" type="Aura.Component[]" access="private"/>
-    <aura:attribute name="isClose" type="Boolean" access="private"/>
+    <aura:attribute name="isClose" type="Boolean" access="private" default="false"/>
 
     <!--ui attributes-->
     <aura:attribute type="boolean" name="showHelp" default="true" access="private"/>
@@ -77,8 +77,8 @@
                 </lightning:layoutItem>
             </aura:if>
             <aura:if isTrue="{!v.showHelp}">
-                <lightning:layoutItem size="12" padding="around-large">
-                    <c:CLMHelp title="Learn more about object mapping" imageURL="{!($Resource.CLMHavingTrouble)}"
+                <lightning:layoutItem size="12" class="slds-p-left_large slds-p-right_large">
+                    <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}" imageURL="{!($Resource.CLMHavingTrouble)}"
                         firstButtonName="{!$Label.c.LearnMore}" showIcon="true" isIcon="false" showSecondButton="false"
                         summary="{!$Label.c.MappingObjectsGuideText}" />
                 </lightning:layoutItem>

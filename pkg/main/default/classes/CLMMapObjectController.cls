@@ -1,4 +1,23 @@
 public with sharing class CLMMapObjectController {
+
+	@AuraEnabled
+	public static Boolean getScopedNotificationStatus() {
+		User_Activity__c state=User_Activity__c.getValues('RenderedScopedNotification');
+		return (state==null) ? false : true;
+	}
+
+	@AuraEnabled
+	public static void setScopedNotificationStatus() {
+		try {
+			Permissions.verifyIsClmAdministrator();
+			User_Activity__c newState=new User_Activity__c();
+			newState.Name='RenderedScopedNotification';
+			insert newState;
+		} catch (Exception e) {
+			throw Controller.wrapException(e, 'Failed to update ui state.');
+		}
+	}
+
 	@AuraEnabled
 	public static Boolean removeMappedObject(String name) {
 		try {

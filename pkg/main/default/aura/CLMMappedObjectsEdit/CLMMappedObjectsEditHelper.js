@@ -6,6 +6,7 @@
 		});
 		return treeData;
 	},
+	
 	updatePath: function (component) {
 		var clmFolderTree = component.get('v.clmFolderTree');
 		clmFolderTree = this.sortTree(clmFolderTree);

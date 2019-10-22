@@ -1,12 +1,45 @@
-.THIS .ds-card-heading{
-    color:t(colorTextLinkActive);
-    font-size:1.25rem
+.THIS .ds-card-heading {
+  color: t(colorTextLinkActive);
+  font-size: 1.25rem;
 }
-.THIS .ds-button-width{
-    min-width:142px;
-    max-width:144px;
-    height: 100%;
+.THIS .ds-button-width {
+  min-width: 142px;
+  max-width: 144px;
+  height: 100%;
 }
 .THIS .ds-button-height {
-    height: 35px;
+  height: 35px;
+}
+.THIS .ds-gray-color {
+  background-color: t(colorBackground) !important;
+  border-radius: t(borderRadiusMedium);
+}
+
+.THIS .ds-img-style {
+  height: 7rem;
+  width: 7rem;
+}
+
+.THIS .ds-icon-blue {
+  background-color: #a29bfe;
+}
+
+.THIS .ds-icon-green {
+  background-color: #7dc37d;
+}
+
+.THIS .ds-icon-orange {
+  background-color: #f39c12;
+}
+
+.THIS .ds-icon-darkshy {
+  background-color: #718093;
+}
+
+.THIS .ds-icon-grey {
+  background-color: #fab1a0;
+}
+
+.THIS .ds-icon-pink {
+  background-color: #a29bfe;
 }

@@ -3,17 +3,11 @@
 		<div class="ds-card-heading ">
 			<b>{!$Label.c.AddComponentsByConfiguringYourLayouts}</b>
 		</div>
-		<div class="slds-p-top_medium">
+		<div class="slds-p-top_medium ds-card-padding">
 			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.FolderPortalViewYourObjectFolders}"
-				imageURL="{!($Resource.CLMComponentsTabIllustration1)}" summary="{!$Label.c.FolderPortalSummary}"
-				isLink="true" link="{!$Label.c.LearnHowToConfigureYourLayouts}"
-				firstButtonName="{!$Label.c.OpenObjectManagerButton}" hyperlinkedURI="['tab','8']" />
-		</div>
-		<div class="slds-p-top_medium">
-			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.Component2}"
-				imageURL="{!($Resource.CLMComponentsTabIllustration2)}" summary="{!$Label.c.Component2Summary}"
-				isLink="true" link="{!$Label.c.LearnHowTPlaceComponentsIntoYourLayouts}"
-				firstButtonName="{!$Label.c.OpenObjectManagerButton}" hyperlinkedURI="['tab','8']" />
+				imageURL="{!($Resource.LayoutConfig)}" summary="{!$Label.c.FolderPortalSummary}" isLink="true"
+				link="{!$Label.c.LearnHowToConfigureYourLayouts}" firstButtonName="{!$Label.c.OpenObjectManagerButton}"
+				showIcon="false" hyperlinkedURI="['tab','8']" />
 		</div>
 	</div>
 </aura:component>

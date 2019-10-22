@@ -3,41 +3,48 @@
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
     <aura:attribute name="summary" type="String"/>
-    <aura:attribute name="title" type="String" default="Map Your Salesforce Objects"/>
-    <aura:attribute name="buttonName" type="String" default="Map Objects"/>
+    <aura:attribute name="title" type="String" default="{!$Label.c.MapYourSalesforceObjects}"/>
+    <aura:attribute name="buttonName" type="String" default="{!$Label.c.MapObjects}"/>
     <aura:attribute name="mappedObjCount" type="String" default="0"/>
 
     <lightning:card>
         <div class="slds-grid">
-            <div class="slds-col slds-size_9-of-12">
+            <div class="slds-p-top_medium slds-m-left_small slds-p-left_medium">
+                <lightning:icon iconName="standard:process" size="large" class="ds-icon-purple"/>
+            </div>
+            <div class="slds-col slds-size_8-of-12">
                 <lightning:card>
                     <aura:set attribute="title">
-                        <div class="slds-p-left_medium ds-card-heading">
+                        <div class="slds-m-right_medium slds-p-right_medium ds-card-heading">
                             <b>{!v.title}</b>
                         </div>
                     </aura:set>
-                    <div class="slds-m-left_large slds-m-right-x_small slds-p-left_x-small">
+                    <div class="slds-m-left_medium slds-m-right-x_small">
                         <p>
                             {!$Label.c.MapObjectsSummary}
                         </p>
                     </div>
                 </lightning:card>
             </div>
-            <div class="slds-col slds-size_3-of-12">
+            <div class="slds-col_bump-left">
                 <div class="slds-float_right slds-p-right_large slds-m-top_small ">
-                    <lightning:button variant="brand" class="ds-button-width" label="{!v.buttonName}"
+                    <lightning:button variant="neutral" class="ds-button-width" label="{!v.buttonName}"
                         title="{!v.buttonName}" onclick="{!c.gotoIntegrationHome}"/>
                 </div>
             </div>
         </div>
-        <div class="ds-green-svg slds-float--left slds-p-left_large slds-m-left_small slds-m-bottom_large">
-            <lightning:icon iconName="utility:success" size="x-small" alternativeText="{!$Label.c.InformationIcon}"/>
-            <a href="javascript:void(0)" class="slds-p-left_small " onclick="{!c.gotoIntegrationHome}">
-                {!format($Label.c.MappedObjectsPlainText, v.mappedObjCount)}
-            </a>
+        <div class="slds-p-left_x-large slds-m-left_small">
+            <div class="ds-green-svg slds-float--left slds-p-left_large slds-m-left_large slds-m-bottom_large">
+                <lightning:icon iconName="utility:success" size="x-small"
+                    alternativeText="{!$Label.c.InformationIcon}"/>
+                <a href="javascript:void(0)" class="slds-p-left_small " onclick="{!c.gotoIntegrationHome}">
+                    {!format($Label.c.MappedObjectsPlainText, v.mappedObjCount)}
+                </a>
+            </div>
         </div>
         <div class="slds-m-right_medium" style="cursor: pointer;" onclick="{!c.toggleSection}">
             <section class="slds-clearfix">
+
                 <div class="slds-float--right slds-p-right_medium">
                     <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevrondown" size="x-small"
                         alternativeText="{!$Label.c.IndicatesDown}"/>
@@ -54,7 +61,7 @@
             <div class="slds-grid slds-p-around_x-small slds-wrap">
                 <div class="slds-col slds-size_1-of-12 ">
                     <div class="slds-p-left_small">
-                        <button class="ds-index-style">1</button>
+                        <button class="ds-index-style">{!$Label.c.NumberOne}</button>
                     </div>
                 </div>
                 <div class="slds-col slds-size_11-of-12">
@@ -77,11 +84,11 @@
             <div class="slds-grid slds-p-around_x-small slds-wrap">
                 <div class="slds-col slds-size_1-of-12">
                     <div class="slds-p-left_small">
-                        <button class="ds-index-style">2</button>
+                        <button class="ds-index-style">{!$Label.c.NumberTwo}</button>
                     </div>
                 </div>
                 <div class="slds-col slds-size_11-of-12">
-                    <strong class="ds-blue-color ds-font-size">{!$Label.c.NameObjectFolder}</strong>
+                    <strong class="ds-font-size ds-blue-color">{!$Label.c.NameObjectFolder}</strong>
                 </div>
                 <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
                 <div class="slds-col slds-size_5-of-12">
@@ -100,11 +107,11 @@
             <div class="slds-grid slds-p-around_x-small slds-wrap">
                 <div class="slds-col slds-size_1-of-12">
                     <div class="slds-p-left_small">
-                        <button class="ds-index-style">3</button>
+                        <button class="ds-index-style">{!$Label.c.NumberThree}</button>
                     </div>
                 </div>
                 <div class="slds-col slds-size_11-of-12">
-                    <strong class="ds-font-size ds-blue-color">{!$Label.c.ChooseLocation}</strong>
+                    <strong class="ds-blue-color ds-font-size">{!$Label.c.ChooseLocation}</strong>
                 </div>
                 <div class="slds-p-left_large slds-col slds-size_1-of-12"></div>
                 <div class="slds-col slds-size_5-of-12">
@@ -120,6 +127,22 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="slds-border_top slds-p-bottom_large ">
+            <c:CLMHelp title="{!$Label.c.ViewYourObjectFolders}" secondButtonName="{!$Label.c.ConfigureLayouts}"
+                showFirstButton="false" showIcon="true" imageURL="standard:folder" isIcon="true" iconColorClass="ds-icon-orange"
+                secondButtonVariant="neutral" summary="{!$Label.c.AddLayoutInfo}" isCard="false"/>
+            <span class="slds-p-left_xx-large slds-m-left_xx-large">
+                <a href="javascript:void(0)" onclick="{!c.gotoHelp}">{!$Label.c.HomeConfigureLayout}</a>
+            </span>
+        </div>
+        <div class="slds-border_top slds-p-bottom_large ">
+            <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" secondButtonName="{!$Label.c.ConfigureButtons}"
+                showFirstButton="false" showIcon="true" imageURL="standard:marketing_actions" isIcon="true" iconColorClass="ds-icon-darkshy"
+                secondButtonVariant="neutral" summary="{!$Label.c.ConfigureButtonInfo}" isCard="false"/>
+            <span class="slds-p-left_xx-large slds-m-left_xx-large">
+                <a href="javascript:void(0)" onclick="{!c.gotoHelp}">{!$Label.c.HomeAddButton}</a>
+            </span>
         </div>
     </lightning:card>
 </aura:component>

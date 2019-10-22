@@ -77,12 +77,12 @@
     </aura:if>
 
     <div>
-        <div class="slds-page-header ds-gray-background">
+        <div class="slds-page-header ds-round ds-gray-background">
             <div class="slds-page-header__row">
                 <div class="slds-page-header__col-title">
                     <div class="slds-media">
                         <div class="slds-media__figure">
-                            <lightning:icon iconName="{!v.iconUrl}" size="large"/>
+                            <lightning:icon iconName="{!v.iconUrl}" size="large" class="ds-icon-green"/>
                         </div>
                         <div class="slds-media__body slds-grid slds-grid_vertical">
                             <div class="slds-col">
@@ -358,7 +358,7 @@
             </lightning:layout>
         </div>
     </div>
-    <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large">
+    <div class="slds-p-bottom_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large">
         <aura:if isTrue="{!v.currentStep!='1'}">
             <c:CLMHelp title="{!$Label.c.ViewingObjectFoldersSummary}" imageURL="standard:solution" showIcon="true"
                 firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" showSecondButton="false"

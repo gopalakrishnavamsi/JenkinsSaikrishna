@@ -12,50 +12,44 @@
     <aura:attribute name="showFirstButton" type="Boolean" default="true"/>
     <aura:attribute name="showSecondButton" type="Boolean" default="true"/>
     <aura:attribute name="secondButtonVariant" type="String" default="brand"/>
+    <aura:attribute name="isGray" type="Boolean" default="false"/>
+    <aura:attribute name="isCard" type="Boolean" default="true"/>
+    <aura:attribute name="iconColorClass" default="" type="String"/>
 
-    <lightning:card class="slds-m-top_none ">
-        <div class="slds-grid">
+    <div class="{!v.isCard?'slds-box slds-m-around_medium':'slds-m-around_medium'}">
+        <div class="slds-grid slds-wrap">
             <aura:if isTrue="{!v.showIcon}">
-                <div class="slds-m-top_medium slds-p-left_x-large ">
+                <div class="slds-p-right_large">
                     <aura:if isTrue="{!v.isIcon}">
-                        <lightning:icon iconName="{!v.imageURL}" size="large"
-                            alternativeText="{!$Label.c.InformationIcon}"/>
+                        <div class="slds-p-top_medium slds-p-left_small">
+                            <lightning:icon iconName="{!v.imageURL}" size="large"
+                                alternativeText="{!$Label.c.InformationIcon}" class="{!v.iconColorClass}"/>
+                        </div>
                         <aura:set attribute="else">
-                            <img src="{!v.imageURL}" alt="{!$Label.c.HavingTroubleImgAltText}" size="large"/>
+                            <div class="slds-p-top_small slds-p-left_small ds-img-style">
+                                <img src="{!v.imageURL}" alt="{!$Label.c.HavingTroubleImgAltText}" size="large"/>
+                            </div>
                         </aura:set>
                     </aura:if>
                 </div>
             </aura:if>
-            <div class="{! join(' ', 'slds-col slds-size_6-of-12', v.showIcon ? '' : 'slds-p-left_small') }">
-                <lightning:card>
-                    <aura:set attribute="title">
-                        <div class="ds-card-heading">
-                            <b>{!v.title}</b>
-                        </div>
-                    </aura:set>
-                    <div class="slds-m-left_medium slds-m-right-x_small">
-                        <p>
-                            {!v.summary}
-                        </p>
-                    </div>
-                </lightning:card>
-            </div>
-            <div class="{! v.showIcon ? 'slds-col slds-size_5-of-12' : 'slds-col slds-size_6-of-12'}">
-                <div class="slds-p-left_none slds-p-right_medium slds-float_right">
-                    <div class="slds-m-top_small ds-button-height">
-                        <aura:if isTrue="{!v.showFirstButton}">
-                            <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
-                                iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
-                                class="slds-m-right_x-small ds-button-width"/>
-                        </aura:if>
-                        <aura:if isTrue="{!v.showSecondButton}">
-                            <lightning:button variant="{!v.secondButtonVariant}" label="{!v.secondButtonName}"
-                                title="{!v.secondButtonName}" onclick="{!c.onPrimaryButtonClick}"
-                                class="ds-button-width slds-m-right_small"/>
-                        </aura:if>
-                    </div>
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-p-top_small slds-p-bottom_small">
+                    <div style="font-size:1.25rem;"><strong>{!v.title}</strong></div>
                 </div>
+                <span>{!v.summary}</span>
+            </div>
+            <div class="slds-col_bump-left slds-p-top_small slds-p-right_x-small">
+                <aura:if isTrue="{!v.showFirstButton}">
+                    <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
+                        iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
+                        class="ds-button-width slds-m-right_small"/>
+                </aura:if>
+                <aura:if isTrue="{!v.showSecondButton}">
+                    <lightning:button variant="{!v.secondButtonVariant}" label="{!v.secondButtonName}"
+                        title="{!v.secondButtonName}" onclick="{!c.onPrimaryButtonClick}" class="ds-button-width"/>
+                </aura:if>
             </div>
         </div>
-    </lightning:card>
+    </div>
 </aura:component>

@@ -1,0 +1,394 @@
+<aura:component extends="c:CLMUtility" controller="CLMChecklist">
+
+    <ltng:require scripts="{!$Resource.navUtils}" afterScriptsLoaded="{!c.onLoad}"/>
+
+    <aura:attribute name="progress" type="Integer" default="0" access="private"/>
+    <aura:attribute name="isProgressing" type="Boolean" default="false" access="private"/>    
+    <aura:attribute name="openClass" type="String" default="" access="private"/>
+    <aura:attribute name="step1" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="step2" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="step3" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="step4" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="step5" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="step6" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isComplete" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isFinished" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isStep2Disabled" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isStep3Disabled" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isStep4Disabled" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isStep5Disabled" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isStep6Disabled" type="Boolean" default="true" access="private"/>
+
+    <lightning:card>
+        <aura:if isTrue="{!v.isComplete}">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col slds-align-middle">
+                    <img src="{!($Resource.celebrationImage)}" alt="{!$Label.c.InfoIcon}"/>
+                </div>
+                <div class="slds-col ds-card-heading slds-p-top_large slds-align-middle">
+                    <b>{!$Label.c.CLCreatedAgreement}</b>
+                </div>
+                <div class="slds-col slds-align-middle">
+                    <span>{!$Label.c.CLGeneratedAgreement} </span>
+                </div>
+                <div class="slds-col slds-p-around_large slds-align-middle">
+                    <lightning:button class="ds-button-width" variant="brand" onclick="{!c.handleFinish}"
+                        label="{!$Label.c.GotIt}"/>
+                </div>
+                <div class="slds-col slds-p-bottom_large slds-p-top_large slds-align-middle" style="cursor: pointer;"
+                    onclick="{!c.toggleSection}">
+                    <section class="slds-clearfix">
+                        <div class="slds-float_right">
+                            <lightning:icon class="slds-hide" aura:id="objMapping" iconName="utility:chevrondown"
+                                size="x-small" alternativeText="{!$Label.c.IndicatesDown}"/>
+                            <lightning:icon class="slds-show" aura:id="objMapping" iconName="utility:chevronup"
+                                size="x-small" alternativeText="{!$Label.c.IndicatesUp}"/>
+                        </div>
+                        <a href="javascript:void(0)" class="slds-hide slds-float_right slds-m-right_small"
+                            aura:id="objMapping">{!$Label.c.ShowSteps}</a>
+                        <a href="javascript:void(0)" class="slds-show slds-float_right slds-m-right_small"
+                            aura:id="objMapping">{!$Label.c.HideSteps}</a>
+                    </section>
+                </div>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-grid">
+                    <div class="slds-p-top_medium slds-m-left_x-small slds-p-left_large">
+                        <lightning:icon iconName="custom:custom18" size="large" class="ds-icon-pink"/>
+                    </div>
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning:card>
+                            <aura:set attribute="title">
+                                <div class="slds-m-right_medium slds-p-right_medium ds-card-heading">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <b>{!$Label.c.CreateAgreementSteps}</b>
+                                        <aura:set attribute="else">
+                                            <b>{!$Label.c.CheckListGenerateAgreement}</b>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </aura:set>
+                            <div class="slds-m-left_medium slds-m-right-x_small">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <div class="slds-col">
+                                        <aura:if isTrue="{!v.isFinished}">
+                                            {!$Label.c.CheckListCreateAgreement}
+                                            <aura:set attribute="else">
+                                                {!$Label.c.CheckListFirstAgreement}
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <div class="slds-col slds-p-top_medium">
+                                            {!$Label.c.ChecklistSteps}
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </lightning:card>
+                    </div>
+                    <div class="slds-col_bump-left">
+                        <div class="slds-p-right_large slds-m-top_small ">
+                            <aura:if isTrue="{!!v.isFinished}">
+                                <div class="slds-m-bottom_small">{!format($Label.c.OnboardingProgressPercent,
+                                    v.progress)}</div>
+                                <lightning:progressBar value="{! v.progress }"/>
+                            </aura:if>
+                            <div class="{!!v.isFinished?'slds-m-top_small slds-m-bottom_medium':'slds-m-top_small slds-m-bottom_medium ds-padding-toggle'}"
+                                style="cursor: pointer;" onclick="{!c.toggleSection}">
+                                <section class="slds-clearfix">
+
+                                    <div class="slds-float_right">
+                                        <lightning:icon class="slds-show" aura:id="objMapping"
+                                            iconName="utility:chevrondown" size="x-small"
+                                            alternativeText="Indicates add"/>
+                                        <lightning:icon class="slds-hide" aura:id="objMapping"
+                                            iconName="utility:chevronup" size="x-small"
+                                            alternativeText="Indicates dash"/>
+                                    </div>
+                                    <a href="javascript:void(0)" class="slds-show slds-float_right slds-m-right_small"
+                                        aura:id="objMapping">{!$Label.c.ShowSteps}</a>
+                                    <a href="javascript:void(0)" class="slds-hide slds-float_right slds-m-right_small"
+                                        aura:id="objMapping">{!$Label.c.HideSteps}</a>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+
+        <div class=" slds-hide slds-p-around_medium" aura:id="objMapping">
+            <aura:if isTrue="{!!v.isFinished}">
+                <div class="slds-border_top slds-m-left_medium slds-m-right_medium slds-p-around_small"></div>
+            </aura:if>
+            <div class="slds-grid slds-grid_vertical slds-m-left_medium slds-m-right_medium">
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-m-top_x-small">
+                                <lightning:input type="checkbox" checked="{!v.step1}" name="input1"
+                                    onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div class="slds-col slds-size_8-of-12 slds-p-top_x-small">
+                            <span>{!$Label.c.MapNewObjectsToDocuSign}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-p-top_x-small">
+                            <span>
+                                <aura:if isTrue="{!!v.step1}">
+                                    <a id="step1" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isFinished}">
+                                    <a id="step1" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                            </span>
+                        </div>
+                        <div class="slds-col_bump-left  ds-green" id="step1" onclick="{!c.onNavigate}">
+                            <span>
+                                <aura:if isTrue="{!!v.step1}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        label="{!$Label.c.HomeViewMappings}" title="{!$Label.c.HomeViewMappings}"
+                                        name="step1"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step1}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.HomeViewMappings}" title="{!$Label.c.HomeViewMappings}"
+                                            name="step1"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-p-top_x-small">
+                                <lightning:input type="checkbox" disabled="{!v.isStep2Disabled}" checked="{!v.step2}"
+                                    name="input2" onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div
+                            class="{!v.isStep2Disabled ?' slds-col slds-size_8-of-12 ds-grey' :' slds-col slds-size_8-of-12 slds-p-top_x-small' }">
+                            <span>{!$Label.c.ConfigureObjPageLayout}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-p-top_x-small">
+                            <aura:if isTrue="{!!v.step2}">
+                                <a id="step2" class="{!v.isStep2Disabled ?'ds-grey':''}" href="javascript:void(0)"
+                                    onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isFinished}">
+                                <a id="step2" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col_bump-left ds-green">
+                            <span>
+                                <aura:if isTrue="{!!v.step2}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        disabled="{!v.isStep2Disabled}" label="{!$Label.c.ConfigureLayouts}"
+                                        title="{!$Label.c.ConfigureLayouts}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step2}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.ConfigureLayouts}" title="{!$Label.c.ConfigureLayouts}"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-m-top_x-small">
+                                <lightning:input type="checkbox" disabled="{!v.isStep3Disabled}" checked="{!v.step3}"
+                                    name="input3" onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div
+                            class="{!v.isStep3Disabled ? ' slds-col slds-size_8-of-12 ds-grey' :' slds-col slds-size_8-of-12 slds-m-top_x-small' }">
+                            <span>{!$Label.c.CreateFormUsingObject}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-m-top_x-small">
+                            <span>
+                                <aura:if isTrue="{!!v.step3}">
+                                    <a class="{!v.isStep3Disabled ?'ds-grey':''}" id="step3" href="javascript:void(0)"
+                                        onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isFinished}">
+                                    <a id="step3" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                            </span>
+                        </div>
+                        <div class="slds-col_bump-left ds-green" id="step3" onclick="{!c.onNavigate}">
+                            <span>
+                                <aura:if isTrue="{!!v.step3}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        disabled="{!v.isStep3Disabled}" label="{!$Label.c.GoToCLM}"
+                                        title="{!$Label.c.GoToCLM}" name="step3"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step3}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step3"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-m-top_x-small">
+                                <lightning:input type="checkbox" disabled="{!v.isStep4Disabled}" checked="{!v.step4}"
+                                    name="input4" onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div
+                            class="{!v.isStep4Disabled ?' slds-col slds-size_8-of-12 ds-grey' :' slds-col slds-size_8-of-12 slds-m-top_x-small' }">
+                            <span>{!$Label.c.SetupDocGenTemplate}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-m-top_x-small">
+                            <aura:if isTrue="{!!v.step4}">
+                                <a class="{!v.isStep4Disabled ?'ds-grey':''}" id="step4" href="javascript:void(0)"
+                                    onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isFinished}">
+                                <a id="step4" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col_bump-left ds-green" id="step4" onclick="{!c.onNavigate}">
+                            <span>
+                                <aura:if isTrue="{!!v.step4}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        disabled="{!v.isStep4Disabled}" label="{!$Label.c.GoToCLM}"
+                                        title="{!$Label.c.GoToCLM}" name="step4"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step4}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step4"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-m-top_x-small">
+                                <lightning:input type="checkbox" disabled="{!v.isStep5Disabled}" checked="{!v.step5}"
+                                    name="input5" onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div
+                            class="{!v.isStep5Disabled ?' slds-col slds-size_8-of-12 ds-grey' :' slds-col slds-size_8-of-12 slds-m-top_x-small' }">
+                            <span>{!$Label.c.ConfigureDocGenURL}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-m-top_x-small">
+                            <span>
+                                <aura:if isTrue="{!!v.step5}">
+                                    <a class="{!v.isStep5Disabled ?'ds-grey':''}" id="step5" href="javascript:void(0)"
+                                        onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isFinished}">
+                                    <a id="step5" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                                </aura:if>
+                            </span>
+                        </div>
+                        <div class="slds-col_bump-left ds-green" id="step5" onclick="{!c.onNavigate}">
+                            <span>
+                                <aura:if isTrue="{!!v.step5}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        disabled="{!v.isStep5Disabled}" label="{!$Label.c.GoToCLM}"
+                                        title="{!$Label.c.GoToCLM}" name="step5"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step5}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step5"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_large">
+                    <div class="slds-grid">
+                        <aura:if isTrue="{!!v.isFinished}">
+                            <div class="slds-m-right_medium slds-m-top_x-small">
+                                <lightning:input type="checkbox" disabled="{!v.isStep6Disabled}" checked="{!v.step6}"
+                                    name="input6" onchange="{!c.onChecked}"/>
+                            </div>
+                        </aura:if>
+                        <div
+                            class="{!v.isStep6Disabled ?' slds-col slds-size_8-of-12 ds-grey' :' slds-col slds-size_8-of-12 slds-m-top_x-small' }">
+                            <span>{!$Label.c.SingleClickGenDoc}</span>
+                        </div>
+                        <div class="slds-col_bump-left slds-m-top_x-small">
+                            <aura:if isTrue="{!!v.step6}">
+                                <a class="{!v.isStep6Disabled ?'ds-grey':''}" id="step6" href="javascript:void(0)"
+                                    onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                            <aura:if isTrue="{!v.isFinished}">
+                                <a id="step6" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col_bump-left ds-green" id="step6" onclick="{!c.onNavigate}">
+                            <span>
+                                <aura:if isTrue="{!!v.step6}">
+                                    <lightning:button class="ds-button-width" variant="neutral"
+                                        disabled="{!v.isStep6Disabled}" label="{!$Label.c.CLObjectManager}"
+                                        title="{!$Label.c.CLObjectManager}" name="step6"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step6}">
+                                    <aura:if isTrue="{!v.isFinished}">
+                                        <lightning:button class="ds-button-width" variant="neutral"
+                                            label="{!$Label.c.CLObjectManager}" title="{!$Label.c.CLObjectManager}"
+                                            name="step6"/>
+                                        <aura:set attribute="else">
+                                            <lightning:icon iconName="utility:success" alternativeText="Success!"
+                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                            {!$Label.c.MarkedComplete}
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:if>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

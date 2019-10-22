@@ -15,7 +15,7 @@
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isClmAdmin" type="Boolean" default="false"/>
-    <aura:attribute name="isCloseNotification" type="Boolean" default="false"/>
+    <aura:attribute name="isCloseNotification" type="Boolean" default="false"/>                                        
     <aura:attribute name="isClmEnabled" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>

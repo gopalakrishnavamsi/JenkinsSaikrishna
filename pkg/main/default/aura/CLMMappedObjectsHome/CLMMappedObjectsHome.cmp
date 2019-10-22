@@ -15,6 +15,7 @@
 	<aura:handler name="strike_evt_modalSecondaryButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
 	<aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.closeModal}"/>
 	<aura:handler event="c:CLMPathEvent" action="{!c.updateFromPathUI}"/>
+	<aura:handler event="c:CLMEvent" action="{!c.updateScopedNotification}"/>
 
 	<!--data attributes internal -->
 	<aura:attribute name="mappedObjData" type="List" default="[]" access="private"/>

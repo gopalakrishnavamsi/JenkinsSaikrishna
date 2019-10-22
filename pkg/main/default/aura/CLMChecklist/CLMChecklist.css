@@ -1,0 +1,30 @@
+.THIS .ds-green svg,
+.THIS .ds-green {
+  fill: green;
+  cursor: pointer;
+}
+
+.THIS .ds-card-heading {
+  font-size: 1.25rem;
+}
+
+.THIS .ds-button-width {
+  width: 10rem;
+}
+
+.THIS .ds-grey {
+  color: #d9dbdd;
+  pointer-events: none;
+}
+
+.THIS .ds-icon-padding {
+  padding-right: 7px;
+}
+
+.THIS .ds-padding-toggle {
+  padding-top: 5.5rem;
+}
+
+.THIS .ds-icon-pink {
+  background-color: #00cec9;
+}

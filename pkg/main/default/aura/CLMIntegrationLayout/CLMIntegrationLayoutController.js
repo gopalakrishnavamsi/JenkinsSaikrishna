@@ -22,7 +22,6 @@
       },
       'CLMCardModelEvent'
     );
-    //update layout DFS-0000
     helper.fireApplicationEvent(
       component,
       {

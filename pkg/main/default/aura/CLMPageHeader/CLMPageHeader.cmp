@@ -1,24 +1,29 @@
 <aura:component>
-    <aura:attribute name="title" type="String" default="" />
-    <aura:attribute name="iconUrl" type="String" default="custom:custom66" />
+    
+    <aura:attribute name="title" type="String" default=""/>
+    <aura:attribute name="iconUrl" type="String" default="custom:custom66"/>
     <aura:attribute name="sectionTitle" type="String"/>
+    <aura:attribute name="iconColorClass" default="" type="String"/>
 
-    <div class="slds-page-header ds-round">
-        <div class="slds-page-header__row">
-            <div class="slds-page-header__col-title">
-                <div class="slds-media">
-                    <div class="slds-media__figure">
-                        <lightning:icon iconName="{!v.iconUrl}" size="large" alternativeText="{!v.title}" />
-                    </div>
-                    <div class="slds-media__body slds-grid slds-grid_vertical">
-                        <div class="slds-col">
-                            <span class="slds-truncate ds-text-color">
-                                {!v.sectionTitle}
-                            </span>
+    <div>
+        <div class="slds-page-header ds-round">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="{!v.iconUrl}" size="large" alternativeText="{!v.title}"
+                                class="{!v.iconColorClass}"/>
+                        </div>
+                        <div class="slds-media__body slds-grid slds-grid_vertical">
                             <div class="slds-col">
-                                <span class="slds-truncate slds-text-heading_medium ds-text-color">
-                                    <b>{!v.title}</b>
+                                <span class=" slds-truncate" title="CLM">
+                                    {!v.sectionTitle}
                                 </span>
+                                <div class="slds-col">
+                                    <span class="slds-truncate slds-text-heading_medium">
+                                        <b>{!v.title}</b>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

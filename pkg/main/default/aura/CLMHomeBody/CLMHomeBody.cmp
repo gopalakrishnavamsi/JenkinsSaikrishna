@@ -1,6 +1,8 @@
 <aura:component extends="c:CLMUtility" controller="CLMApexUtility">
     <ltng:require scripts="{!$Resource.navUtils}"/>
-
+    <aura:attribute name="login" type="Object"/>
+    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}"/>
+    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
     <!--event handlers-->
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>
     <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
@@ -8,39 +10,37 @@
 
     <div class="slds-grid slds-grid_vertical">
         <div class="slds-col slds-m-around_medium">
-            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
-                {!$Label.c.ObjectMapping}
+            <c:SetupAccount login="{!v.login}"/>
+            <div class="slds-p-bottom_small slds-p-top_medium ds-textLabel-color">
+                {!$Label.c.HomeGetStarted}
             </div>
-            <c:CLMMapObjectExpandCard />
+            <c:CLMChecklist/>
         </div>
         <div class="slds-col slds-m-around_medium">
             <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
-                {!$Label.c.ConfigureObjectPageLayout}
+                {!$Label.c.CLM}
             </div>
-            <c:CLMHelp title="{!$Label.c.ViewYourObjectFolders}" secondButtonName="{!$Label.c.ConfigureLayouts}" firstButtonName="{!$Label.c.LearnMore}"
-                showIcon="false"
-                summary="{!$Label.c.AddLayoutInfo}" />
+            <c:CLMMapObjectExpandCard/>
         </div>
         <div class="slds-col slds-m-around_medium">
-            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
-                {!$Label.c.OptimizeDocumentGeneration}
-            </div>
-            <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" secondButtonName="{!$Label.c.ConfigureButtons}" firstButtonName="{!$Label.c.LearnMore}"
-                showIcon="false"
-                summary="{!$Label.c.ConfigureButtonInfo}" />
-        </div>
-        <div class="slds-col slds-m-around_medium">
-            <div class="slds-p-bottom_small slds-p-top_small ds-textLabel-color">
+            <div class="slds-p-bottom_small ds-textLabel-color">
                 {!$Label.c.Administration}
             </div>
-            <c:CLMHelp title="{!$Label.c.UserManagement}" secondButtonName="{!$Label.c.Manage}"
-                firstButtonName="{!$Label.c.LearnMore}" showIcon="false" showFirstButton="false"
-                summary="{!$Label.c.UserManagementInfo}" />
+            <lightning:card>
+                <div class="slds-border_bottom slds-p-bottom_small">
+                    <c:CLMHelp title="{!$Label.c.UserManagement}" secondButtonName="{!$Label.c.Manage}"
+                        showFirstButton="false" showIcon="true" imageURL="standard:user" isIcon="true" iconColorClass="ds-icon-green" 
+                        secondButtonVariant="neutral" summary="{!$Label.c.UserManagementInfo}" isCard="false"/>
+                </div>
+                <div class="slds-p-bottom_small">
+                    <c:CLMHelp title="{!$Label.c.HomeComponents}" secondButtonName="{!$Label.c.Manage}"
+                        showFirstButton="false" showIcon="true" imageURL="standard:canvas" isIcon="true" iconColorClass="ds-icon-blue" 
+                        secondButtonVariant="neutral" isCard="false" summary="{!$Label.c.HomeComponentSummary}"/>
+                </div>
+            </lightning:card>
         </div>
-        <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot imageURL="{!($Resource.CLMHavingTrouble)}" title="{!$Label.c.HavingTrouble}"
-                hyperlinkedSummary1="{!$Label.c.HelpInfoBodyPart1}" hyperlinkedSummary2="{!$Label.c.HelpInfoBodyPart2}"
-                hasHyperlink="true" hyperlinkedText="{!$Label.c.Help}" isGray="true" />
-        </div>
+        <c:CLMHelp title="{!$Label.c.HavingTrouble}" secondButtonName="{!$Label.c.HomeGetHelp}" showFirstButton="false"
+            showIcon="true" imageURL="{!($Resource.HavingTroubleOnHome)}" isIcon="false" secondButtonVariant="neutral"
+            summary="{!$Label.c.HomeHavingTrouble}"/>
     </div>
 </aura:component>

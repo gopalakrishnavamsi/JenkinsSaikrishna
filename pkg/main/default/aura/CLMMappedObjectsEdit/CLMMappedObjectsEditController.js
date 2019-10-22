@@ -383,6 +383,13 @@
 		var dataset = JSON.parse(JSON.stringify(event.currentTarget.dataset));
 		var clmFolderTree = component.get('v.clmFolderTree');
 		var index = parseInt(dataset.id);
+		if (dataset.type === 'main') {
+			component.set('v.isDeleteFolder', true);
+			component.set('v.isAddSubFolder', true);
+			component.set('v.isRenameFolder', true);
+			component.set('v.selectedFolderParentExample', $A.get('$Label.c.OtherSources'));
+			component.set('v.SelectedFolderExample', $A.get('$Label.c.Salesforce'));
+		}
 		clmFolderTree.forEach(function (treeData, treeIndex) {
 			if (treeData.id === index) {
 				treeData.selected = true;

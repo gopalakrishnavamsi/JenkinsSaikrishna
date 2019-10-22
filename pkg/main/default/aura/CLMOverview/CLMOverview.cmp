@@ -1,23 +1,23 @@
-<aura:component>
+<aura:component extends="c:CLMUtility">
     <aura:attribute name="login" type="Object"/>
+    <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
+    <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>
 
     <div class="slds-grid slds-grid_vertical">
         <div class="slds-col slds-m-around_medium">
             <c:SetupAccount login="{!v.login}"/>
         </div>
         <div class="slds-col slds-m-around_medium">
-            <c:CLMGetStarted />
+            <c:CLMGetStarted/>
         </div>
         <div class="slds-col slds-m-around_medium">
             <div class="slds-p-bottom_small slds-p-top_small textLabel-color">
                 {!$Label.c.DiscoverDocuSignCLM}
             </div>
-            <c:CLMDiscoverDocuSign />
+            <c:CLMDiscoverDocuSign/>
         </div>
-        <div class="slds-col slds-m-around_medium">
-            <c:CLMTroubleshoot hyperlinkedSummary1="{!$Label.c.DocGenInfo}"
-                hyperlinkedSummary2="{!$Label.c.DocGenInfo2}" hasHyperlink="true"
-                hyperlinkedText="{!$Label.c.DocumentGeneration}" title="{!$Label.c.LearnAboutDocGen}" isGray="true" />
-        </div>
+        <c:CLMHelp title="{!$Label.c.HavingTrouble}" secondButtonName="{!$Label.c.HomeGetHelp}" showFirstButton="false"
+            showIcon="true" imageURL="{!($Resource.HelpCard)}" isIcon="false" secondButtonVariant="neutral"
+            summary="{!$Label.c.HomeHavingTrouble}"/>
     </div>
 </aura:component>

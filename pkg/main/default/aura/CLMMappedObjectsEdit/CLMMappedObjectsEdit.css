@@ -55,3 +55,11 @@
 .THIS .ds-hover{
     display:none;
 }
+
+.THIS .ds-round{
+    border-radius:.25rem;
+}
+
+.THIS .ds-icon-green {
+    background-color: #7dc37d;
+}

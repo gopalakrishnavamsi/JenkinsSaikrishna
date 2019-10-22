@@ -2354,7 +2354,7 @@
 		<name>MapNew</name>
 	</customLabels>
 	<customLabels>
-		<label>MAP YOUR SALESFORCE OBJECTS</label>
+		<label>Map your Salesforce Objects</label>
 		<name>MapYourSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
@@ -3466,23 +3466,23 @@
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Create and manage Document Generation Configurations</label>
+		<label>Generate Documents in CLM Salesforce Data</label>
 		<name>CreateAndManageDocumentGenerationConfigurations</name>
 	</customLabels>
 	<customLabels>
-		<label>Document Generation Configurations</label>
+		<label>Create Document Generation Configurations</label>
 		<name>DocumentGenerationConfigurations</name>
 	</customLabels>
 	<customLabels>
-		<label>Document Generation Process</label>
+		<label>Speed Up Your Processes</label>
 		<name>DocumentGenerationProcessTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Document Generation is the primary tool for generating new agreements or contracts, uploading existing documents to launch new workflows. This tool is available in DocuSign CLM.</label>
+		<label>Document generation lets you simplify creating, uploading and generating new documents. You can configure and manage this in DocuSign CLM.</label>
 		<name>CreateAndManageDocSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>You can add a custom button to your Salesforce page layout to trigger a Document Generation configuration URL. Clicking the custom button will open the affiliated Document Generation form.</label>
+		<label>DocuSign CLM lets you generate documents in one click. To set this up, you'll have to add a button with a document generation configuration URL to your Salesforce page layout.</label>
 		<name>CreateAndManageDocSummary2</name>
 	</customLabels>
 	<customLabels>
@@ -3494,11 +3494,11 @@
 		<name>LearnHowToAddAButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Configurations are one of the principal drivers behind the Document Generation process in DocuSign CLM. A configuration consist of 3 elements:</label>
+		<label>To generate a document you need to set up a Document Generation Configuration. Each configuration consist of three parts:</label>
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Using your own templates, you can quickly merge data to create new contracts, agreements or any document and instantly send it through the appropriate downstream business process. Alternatively, you can use the same tool to start a workflow by uploading an existing document such as a third-party agreement.</label>
+		<label>After it's set up, document generation can take your data from Salesforce and merge it on to a template to generate a new agreement. You can even use creating a document as a trigger to start a new workflow.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3526,7 +3526,7 @@
 		<name>CreateAndManageWorkflows</name>
 	</customLabels>
 	<customLabels>
-		<label>Automate processes in DocuSign CLM</label>
+		<label>Automate Business Process in DocuSign CLM</label>
 		<name>AutomateprocessesinDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
@@ -3538,15 +3538,15 @@
 		<name>WorkflowSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow links together sub-processes to standardize multiple processes thereby automating recurring tasks, reducing human and cutting down operating costs. This tool is available in DocuSign CLM.</label>
+		<label>Workflows automate repetitive tasks, reduce human errors and cut down on operating costs. This tool is available in DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow designer is a canvas where you can connect steps that represent various process activities. These steps are like elements of a flowchart and help you engineer your workflow. You can leverage the individual workflow steps, customize the activities that are part of each step, and further automate by using C# expressions where steps properties allow.</label>
+		<label>Workflow designer is a canvas that let you design and update your workflows. This lets you scale and automate workflows to fit your specific needs.</label>
 		<name>WorkflowDesignerSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>There are five different types of pre-defined steps:</label>
+		<label>To make a workflow you'll have to connect a series of steps. Each step represents a process activity. There are five different types of pre-defined steps:</label>
 		<name>WorkflowStepsSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3570,15 +3570,15 @@
 		<name>WorkflowSteps5</name>
 	</customLabels>
 	<customLabels>
-		<label>You can add custom button to your Salesforce page layout for an advanced workflow. Clicking the custom button will trigger the advanced workflow.</label>
+		<label>You can trigger an advanced workflow with a single button click. Add a button to your Salesforce page layout to enable this action.</label>
 		<name>CustomWorkflowButtonSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Add Components by configuring your layouts</label>
+		<label>Add DocuSign CLM Components to Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Folder Portal - View your object folders</label>
+		<label>Folder Portal - View Your Object Folders by Adding a View</label>
 		<name>FolderPortalViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
@@ -3586,7 +3586,7 @@
 		<name>Component2</name>
 	</customLabels>
 	<customLabels>
-		<label>Folder portal lets you view and work on your object folders from Salesforce. Once you have mapped your Salesforce objects, you can customize your Salesforce object page layout by adding a view.</label>
+		<label>The folder portal component lets you manage your object folders right in Salesforce. To use it, you'll add the folder portal component to your Salesforce object layout after mapping objects.</label>
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
@@ -4198,12 +4198,160 @@
 		<name>ObjFolderImgExample</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/en/guides/Knowledge/Map-Docusign-CLM-Objects</label>
+		<name>MappingGuideURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Add-a-Custom-Button-to-a-Page-Layout-for-DocuSign-for-CLM</label>
+		<name>AddButtonToLayoutURL</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}%</label>
+		<name>OnboardingProgressPercent</name>
+	</customLabels>
+	<customLabels>
 		<label>Your DocuSign Gen trial has expired.</label>
 		<name>GenTrialExpired</name>
 	</customLabels>
 	<customLabels>
 		<label>Your DocuSign Negotiate trial has expired.</label>
 		<name>NegotiateTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about object mapping</label>
+		<name>LearnMoreAboutObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Map Objects</label>
+		<name>MapObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>1</label>
+		<name>NumberOne</name>
+	</customLabels>
+	<customLabels>
+		<label>2</label>
+		<name>NumberTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>3</label>
+		<name>NumberThree</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM empowers your business to do more, faster. We've created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM.</label>
+		<name>DocGenCardText</name>
+	</customLabels>
+	<customLabels>
+		<label>Great! You've Created Your First Agreement With Salesforce Data</label>
+		<name>CLCreatedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>You can always review these steps in the Help section. Look under "Generate an Agreement Using Salesforce Data" to find them.</label>
+		<name>CLGeneratedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Got It</label>
+		<name>GotIt</name>
+	</customLabels>
+	<customLabels>
+		<label>Marked Complete</label>
+		<name>MarkedComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Map new Salesforce objects to DocuSign CLM. You can also use the 'Account' and 'Opportunity' objects that we mapped for you.</label>
+		<name>MapNewObjectsToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Configure your Object page layout and add a folder portal component to see your object folders.</label>
+		<name>ConfigureObjPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Go to DocuSign CLM and create a form using your mapped Salesforce object.</label>
+		<name>CreateFormUsingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Use your created form to set up a document generation template in DocuSign CLM.</label>
+		<name>SetupDocGenTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>5. Copy the document generation configuration URL. Add to it a new button on your Saledforce object page layout.</label>
+		<name>ConfigureDocGenURL</name>
+	</customLabels>
+	<customLabels>
+		<label>6. Use that button to generate documents with a single click.</label>
+		<name>SingleClickGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to CLM</label>
+		<name>GoToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>View Mappings</label>
+		<name>HomeViewMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate Your First Agreement</label>
+		<name>CheckListGenerateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>6 steps</label>
+		<name>ChecklistSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>GET STARTED</label>
+		<name>HomeGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>These steps will help you generate an agreement using Salesforce data.</label>
+		<name>CheckListCreateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Steps to Creating an Agreement</label>
+		<name>CreateAgreementSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Components</label>
+		<name>HomeComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Customize layouts and experiences by adding custom components.</label>
+		<name>HomeComponentSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>We've created a Help page to provide answers to common questions for DocuSign CLM for Salesforce.</label>
+		<name>HomeHavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>Get Help</label>
+		<name>HomeGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to configure a layout in Salesforce</label>
+		<name>HomeConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to add a button on an Object page</label>
+		<name>HomeAddButton</name>
+	</customLabels>
+	<customLabels>
+		<label>These steps will help you generate your first agreement using Salesforce data. Check them off as you finish them.</label>
+		<name>CheckListFirstAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Object Manager</label>
+		<name>CLObjectManager</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to Workflows</label>
+		<name>GoToWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to Document Generation</label>
+		<name>GoToDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Overview Image</label>
+		<name>OverviewImage</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

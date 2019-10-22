@@ -10,24 +10,23 @@
 		<div class="slds-p-top_medium ">
 			<c:CLMInformationHelp isSubTitle="true"
 				subTitle="{!$Label.c.CreateAndManageDocumentGenerationConfigurations}"
-				imageURL="{!($Resource.CLMDocGen1)}" summary="{!$Label.c.CreateAndManageDocSummary}" isLink="true"
-				link="{!$Label.c.LearnHowToGenDoc}" firstButtonName="{!$Label.c.OpenDocuSignCLMButton}"
+				imageURL="{!($Resource.GenerateDocuments)}" summary="{!$Label.c.CreateAndManageDocSummary}"
+				link="{!$Label.c.LearnHowToGenDoc}" firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" isLink="true"
 				firstButtonNavigation="{!v.redirectCLM}" hyperlinkedURI="['tab','8']" />
 		</div>
 		<div class="slds-p-top_medium">
-			<c:CLMInformationHelp isSubTitle="false" subTitle="{!$Label.c.CreateAndManageWorkflows}"
-				imageURL="{!($Resource.CLMDocGen2)}" summary="{!$Label.c.CreateAndManageDocSummary2}" isLink="true"
-				link="{!$Label.c.LearnHowToAddAButton}" firstButtonName="{!$Label.c.OpenObjectManagerButton}"
-				hyperlinkedURI="['tab','8']" />
+			<c:CLMInformationHelp isSubTitle="false" subTitle="" imageURL="{!($Resource.WorkflowButtonConfig)}"
+				summary="{!$Label.c.CreateAndManageDocSummary2}" isLink="true" link="{!$Label.c.LearnHowToAddAButton}"
+				firstButtonName="{!$Label.c.OpenObjectManagerButton}" hyperlinkedURI="['tab','8']" />
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationConfigurations}"
-				imageURL="{!($Resource.CLMDocGen3)}" summary="{!$Label.c.DocumentGenerationConfigurationsSummary}"
-				isSteps="true" steps="{!v.steps}" />
+				buttonLabel="{!$Label.c.GoToDocumentGeneration}" imageURL="{!($Resource.DocGenConfig)}"
+				summary="{!$Label.c.DocumentGenerationConfigurationsSummary}" isSteps="true" steps="{!v.steps}" />
 		</div>
 		<div class="slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationProcessTitle}"
-				imageURL="{!($Resource.CLMDocGen4)}" summary="{!$Label.c.DocumentGenerationProcessSummary}"
+			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.DocumentGenerationProcessTitle}" showButton="false"
+				imageURL="{!($Resource.DocGenProcess)}" summary="{!$Label.c.DocumentGenerationProcessSummary}"
 				isSteps="false" steps="{!$Label.c.LearnHowTo}" />
 		</div>
 	</div>
