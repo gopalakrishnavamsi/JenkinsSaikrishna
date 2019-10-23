@@ -114,7 +114,7 @@ global with sharing class DocumentService {
 	}
 
 	/**
-	 * Converts a list of <code>Document__c</code> objects to their domain object form.
+	 * Converts a list of <code>dfsle__Document__c</code> objects to their domain object form.
 	 * <p>
 	 * <em>This method is intended for DocuSign internal use only.</em>
 	 *
@@ -365,7 +365,7 @@ global with sharing class DocumentService {
 	 * <p>
 	 * For example, to pull in all of an Opportunity's Notes and Attachments related list:
 	 * <pre>
-	 * List<Document> docs = DocumentService.getLinkedDocuments(
+	 * List<dfsle.Document> docs = dfsle.DocumentService.getLinkedDocuments(
 	 * 		ContentVersion.getSObjectType(),
 	 * 		new Set<Id> { myOpportunity.Id },
 	 * 		false);
@@ -397,7 +397,7 @@ global with sharing class DocumentService {
 	/**
 	 * Retrieves a list of Salesforce source documents folders by object type. The current user's personal folder, and
 	 * the documents contained within, is always returned as the first element in the list. The returned folder IDs
-	 * may be used in subsequent calls to <code>DocumentService.getFolderDocuments</code>.
+	 * may be used in subsequent calls to <code>dfsle.DocumentService.getFolderDocuments</code>.
 	 * <p>
 	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
 	 * may be supported via plugins.
@@ -405,7 +405,7 @@ global with sharing class DocumentService {
 	 * @param type The Salesforce object type.
 	 *
 	 * @return A list of document folders.
-	 * @see DocumentService.getFolderDocuments
+	 * @see dfsle.DocumentService.getFolderDocuments
 	 */
 	global static Document.Folders getDocumentFolders(final SObjectType type) {
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
@@ -429,7 +429,7 @@ global with sharing class DocumentService {
 
 	/**
 	 * Retrieves a list of Salesforce source documents by folder IDs. The folder IDs may be retrieved by calling
-	 * <code>DocumentService.getDocumentFolders</code> first.
+	 * <code>dfsle.DocumentService.getDocumentFolders</code> first.
 	 * <p>
 	 * By default, the Salesforce <code>Document</code> and <code>ContentVersion</code> types are supported. More types
 	 * may be supported via plugins.
@@ -438,7 +438,7 @@ global with sharing class DocumentService {
 	 * @param folderIds The folder IDs.
 	 *
 	 * @return A list of documents contained within the target folders.
-	 * @see DocumentService.getDocumentFolders
+	 * @see dfsle.DocumentService.getDocumentFolders
 	 */
 	global static List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
 		if (type == null) throw new DocuSignException(Label.UndefinedType);

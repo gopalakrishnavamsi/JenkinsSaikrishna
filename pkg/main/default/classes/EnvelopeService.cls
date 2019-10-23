@@ -4,11 +4,11 @@
  * A basic flow would be:
  * <pre>
  * // Get an empty envelope definition to begin.
- * Envelope e = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
+ * Envelope e = dfsle.EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
  * // Send envelope and add source documents and recipients
- * e = EnvelopeService.sendEnvelope(e, false);
+ * e = dfsle.EnvelopeService.sendEnvelope(e, false);
  * // Get tagger URL (this must be in a future method or separate transaction to avoid a CalloutException)
- * Url u = EnvelopeService.getSenderViewUrl(e.docuSignId, new Url('https://my.return.url'));
+ * Url u = dfsle.EnvelopeService.getSenderViewUrl(e.docuSignId, new Url('https://my.return.url'));
  * // Host the tagging session with the returned URL
  * </pre>
  */
@@ -439,7 +439,7 @@ global with sharing class EnvelopeService {
 
 	/**
 	 * Creates a DocuSign envelope. This method does not send the envelope; to do so call
-	 * <code>EnvelopeService.sendEnvelope</code>.
+	 * <code>dfsle.EnvelopeService.sendEnvelope</code>.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
@@ -450,7 +450,7 @@ global with sharing class EnvelopeService {
 	 * <code>null</code>.
 	 *
 	 * @return The newly-created envelope.
-	 * @see EnvelopeService.sendEnvelope for details on how to send the created envelope.
+	 * @see dfsle.EnvelopeService.sendEnvelope for details on how to send the created envelope.
 	 */
 	global static Envelope createEnvelope(
 		final Envelope envelope,
@@ -548,14 +548,14 @@ global with sharing class EnvelopeService {
 
 	/**
 	 * Updates envelope notification and email settings. This method does not update the envelope documents or
-	 * recipients; use <code>EnvelopeService.updateEnvelope</code> to update everything.
+	 * recipients; use <code>dfsle.EnvelopeService.updateEnvelope</code> to update everything.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
 	 * @param envelope The envelope to update.
 	 *
 	 * @return The updated envelope.
-	 * @see EnvelopeService.updateEnvelope to update all envelope properties.
+	 * @see dfsle.EnvelopeService.updateEnvelope to update all envelope properties.
 	 */
 	public static Envelope updateEnvelopeNotifications(final Envelope envelope) {
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
@@ -570,7 +570,7 @@ global with sharing class EnvelopeService {
 
 	/**
 	 * Updates an envelope, including documents and recipients. This is a more expensive call than
-	 * <code>EnvelopeService.updateEnvelopeNotifications</code> as it updates and recalculates child entries.
+	 * <code>dfsle.EnvelopeService.updateEnvelopeNotifications</code> as it updates and recalculates child entries.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
@@ -613,22 +613,24 @@ global with sharing class EnvelopeService {
 
 	/**
 	 * Sends an envelope to DocuSign. The envelope may have been previously created via
-	 * <code>EnvelopeService.createEnvelope</code> or <code>EnvelopeService.copyEnvelope</code>, or this method will
-	 * create the requisite Salesforce records.
+	 * <code>dfsle.EnvelopeService.createEnvelope</code> or <code>dfsle.EnvelopeService.copyEnvelope</code>, or this
+	 * method will create the requisite Salesforce records.
 	 * <p>
 	 * If previously created, the caller must be the owner of the envelope. Otherwise the caller must be assigned the
 	 * <code>DocuSign Sender</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
 	 *
 	 * @param envelope The envelope to send.
 	 * @param sendNow Whether to send immediately or save as a draft in DocuSign.
 	 * @param updateNow Whether to update the envelope record immediately. This update may be deferred if the current
 	 * transaction involves subsequent callouts to avoid errors. To update later, call
-	 * <code>EnvelopeService.markEnvelopeSent</code>.
-	 * @param senderToken The application sending the envelope. This will be appended to the X-DocuSign-SenderToken
-	 * header on the DocuSign create envelope API callout.
+	 * <code>dfsle.EnvelopeService.markEnvelopeSent</code>.
+	 * @param senderToken The application sending the envelope. This will be appended to the User-Agent header on the
+	 * DocuSign create envelope API callout.
 	 *
 	 * @return The sent envelope.
-	 * @see EnvelopeService.markEnvelopeSent for deferred updates.
+	 * @see dfsle.EnvelopeService.markEnvelopeSent for deferred updates.
 	 */
 	public static Envelope sendEnvelope(
 		final Envelope envelope,
@@ -677,8 +679,9 @@ global with sharing class EnvelopeService {
 	}
 
 	/**
-	 * Marks an envelope's record as sent. Used for deferred updates from <code>EnvelopeService.sendEnvelope</code>. If
-	 * the envelope was updated immediately after being sent, this method does not need to be called.
+	 * Marks an envelope's record as sent. Used for deferred updates from
+	 * <code>dfsle.EnvelopeService.sendEnvelope</code>. If the envelope was updated immediately after being sent, this
+	 * method does not need to be called.
 	 * <p>
 	 * The caller must be the owner of the envelope.
 	 *
@@ -686,7 +689,7 @@ global with sharing class EnvelopeService {
 	 * @param sendNow Whether the envelope was immediately sent or saved as a draft in DocuSign.
 	 *
 	 * @return <code>true</code> if the update was successful, <code>false</code> otherwise.
-	 * @see EnvelopeService.sendEnvelope for more details.
+	 * @see dfsle.EnvelopeService.sendEnvelope for more details.
 	 */
 	public static Boolean markEnvelopeSent(
 		final Envelope envelope,
@@ -776,7 +779,7 @@ global with sharing class EnvelopeService {
 	 *     at this point assuming the first signer or host is the current user.</li>
 	 *     <li><code>save</code>: The envelope was saved as a draft in DocuSign.</li>
 	 *     <li><code>cancel</code>: The draft was canceled. Delete the envelope via the
-	 *     <code>EnvelopeService.deleteEnvelope</code> method.</li>
+	 *     <code>dfsle.EnvelopeService.deleteEnvelope</code> method.</li>
 	 *     <li><code>error</code>: An error was encountered.</li>
 	 * </ul>
 	 * <p>

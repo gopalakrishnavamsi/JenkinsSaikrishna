@@ -80,7 +80,7 @@ global with sharing class RecipientService {
 	}
 
 	/**
-	 * Converts a list of <code>Recipient__c</code> objects to their domain object form.
+	 * Converts a list of <code>dfsle__Recipient__c</code> objects to their domain object form.
 	 * <p>
 	 * <em>This method is intended for DocuSign internal use only.</em>
 	 *
@@ -141,7 +141,7 @@ global with sharing class RecipientService {
 
 			return new Recipient__c(
 				Envelope__c = envelopeId,
-				Id = r.Id,
+				Id = r.id,
 				Sequence__c = sequence,
 				Type__c = r.type,
 				RoutingOrder__c = r.routingOrder,
@@ -515,8 +515,8 @@ global with sharing class RecipientService {
 	 * By default, the Salesforce <code>Contact</code>, <code>Lead</code>, and <code>User</code> types are supported.
 	 * More types may be supported via plugins.
 	 * <p>
-	 * Search behavior is defined and stored in account settings. See <code>Recipient.SearchBehavior</code> and
-	 * <code>AccountService.Settings</code> for more details.
+	 * Search behavior is defined and stored in account settings. See <code>dfsle.Recipient.SearchBehavior</code> and
+	 * <code>dfsle.AccountService.Settings</code> for more details.
 	 *
 	 * @param type The Salesforce object type.
 	 * @param firstName The first name to match.

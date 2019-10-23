@@ -28,7 +28,7 @@ global class Envelope {
 	global static final String STATUS_COMPLETED = 'completed';
 
 	/**
-	 * The ID of the associated Envelope__c record.
+	 * The ID of the associated dfsle__Envelope__c record.
 	 */
 	@AuraEnabled
 	global Id id { get; private set; }
@@ -58,7 +58,7 @@ global class Envelope {
 	@AuraEnabled
 	global List<Recipient> recipients { get; private set; }
 	/**
-	 * A list of envelope custom fields. These are not persisted via the Envelope__c object.
+	 * A list of envelope custom fields. These are not persisted via the dfsle__Envelope__c object.
 	 */
 	@AuraEnabled
 	global List<CustomField> customFields { get; private set; }
@@ -130,7 +130,7 @@ global class Envelope {
 	/**
 	 * Constructs a DocuSign envelope.
 	 *
-	 * @param id The ID of the associated Envelope__c record.
+	 * @param id The ID of the associated dfsle__Envelope__c record.
 	 * @param name The name of the envelope.
 	 * @param docuSignId The DocuSign ID of the envelope.
 	 * @param envelopeConfigurationId The ID of the configuration (f.k.a custom button) used to create the envelope.
@@ -235,7 +235,7 @@ global class Envelope {
 	 */
 	global class Status implements Comparable {
 		/**
-		 * The ID of the underlying EnvelopeStatus__c record.
+		 * The ID of the underlying dfsle__EnvelopeStatus__c record.
 		 */
 		@AuraEnabled
 		global Id id { get; private set; }
@@ -311,7 +311,7 @@ global class Envelope {
 		/**
 		 * Constructs a DocuSign envelope status.
 		 *
-		 * @param id The ID of the underlying EnvelopeStatus__c record.
+		 * @param id The ID of the underlying dfsle__EnvelopeStatus__c record.
 		 * @param docuSignId The DocuSign envelope ID.
 		 * @param source The Salesforce source entity.
 		 * @param status The current status.
@@ -495,7 +495,7 @@ global class Envelope {
 	/**
 	 * Sets the envelope's <code>id</code> property.
 	 *
-	 * @param id The new ID of the associated Envelope__c record.
+	 * @param id The new ID of the associated dfsle__Envelope__c record.
 	 *
 	 * @return This envelope with the updated <code>id</code> property.
 	 */

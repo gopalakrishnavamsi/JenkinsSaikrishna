@@ -16,7 +16,7 @@ global class Document {
 	global static final String TYPE_DOCUMENT = 'Document';
 
 	/**
-	 * The ID of the associated Document__c record.
+	 * The ID of the associated dfsle__Document__c record.
 	 */
 	@AuraEnabled
 	global Id id { get; private set; }
@@ -70,7 +70,7 @@ global class Document {
 	/**
 	 * Constructs a new DocuSign envelope document.
 	 *
-	 * @param id The ID of the associated Document__c record.
+	 * @param id The ID of the associated dfsle__Document__c record.
 	 * @param type The type of the document.
 	 * @param sequence The ordinal sequence of the document as it appears in an envelope.
 	 * @param name The name of the document.

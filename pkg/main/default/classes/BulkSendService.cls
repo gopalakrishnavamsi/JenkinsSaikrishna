@@ -375,8 +375,8 @@ global with sharing class BulkSendService {
 
 	/**
 	 * Gets a new bulk draft envelope instance with a single bulk recipient placeholder and default email and
-	 * notification settings. This may be further customized via the <code>Envelope.withEmail</code> or
-	 * <code>Envelope.withNotifications</code> methods.
+	 * notification settings. This may be further customized via the <code>dfsle.Envelope.withEmail</code> or
+	 * <code>dfsle.Envelope.withNotifications</code> methods.
 	 * <p>
 	 * Callers must be assigned the <code>DocuSign User</code> permission set.
 	 *

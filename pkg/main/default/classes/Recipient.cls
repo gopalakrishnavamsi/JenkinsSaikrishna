@@ -64,7 +64,7 @@ global class Recipient implements Comparable {
 	global static final String STATUS_CANCELED = 'canceled';
 
 	/**
-	 * The ID of the associated Recipient__c record.
+	 * The ID of the associated dfsle__Recipient__c record.
 	 */
 	@AuraEnabled
 	global Id id { get; private set; }
@@ -166,7 +166,7 @@ global class Recipient implements Comparable {
 	/**
 	 * Constructs a DocuSign envelope recipient.
 	 *
-	 * @param id The ID of the associated Recipient__c record.
+	 * @param id The ID of the associated dfsle__Recipient__c record.
 	 * @param type The type of recipient.
 	 * @param sequence The ordinal sequence of the recipient.
 	 * @param routingOrder The routing order of the recipient.
@@ -705,7 +705,7 @@ global class Recipient implements Comparable {
 	 */
 	global class Status implements Comparable {
 		/**
-		 * The ID of the underlying RecipientStatus__c record.
+		 * The ID of the underlying dfsle__RecipientStatus__c record.
 		 */
 		@AuraEnabled
 		global Id id { get; private set; }
@@ -780,7 +780,7 @@ global class Recipient implements Comparable {
 		 * Constructs a DocuSign recipient status.
 		 *
 		 *
-		 * @param id The ID of the underlying RecipientStatus__c record.
+		 * @param id The ID of the underlying dfsle__RecipientStatus__c record.
 		 * @param source The Salesforce source entity.
 		 * @param sequence The recipient sequence.
 		 * @param type The DocuSign recipient type.

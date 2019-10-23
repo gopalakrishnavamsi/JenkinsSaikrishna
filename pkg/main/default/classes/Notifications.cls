@@ -1,6 +1,6 @@
 /**
-	 * A DocuSign envelope's reminder and expiration settings.
-	 */
+ * A DocuSign envelope's reminder and expiration settings.
+ */
 global class Notifications {
 	/**
 	 * Whether or not to remind recipients to sign.

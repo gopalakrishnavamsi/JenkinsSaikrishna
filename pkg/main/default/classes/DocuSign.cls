@@ -11,7 +11,7 @@ public class DocuSign {
 	 * Possible DocuSign environment targets:
 	 * <ul>
 	 *     <li><code>Invalid</code>: Invalid DocuSign environment</li>
-	 *     <li><code>QA</code>: DocuSign QA envrironment</li>
+	 *     <li><code>QA</code>: DocuSign QA environment</li>
 	 *     <li><code>Stage</code>: DocuSign Stage environment</li>
 	 *     <li><code>Demo</code>: DocuSign Demo environment</li>
 	 *     <li><code>Production</code>: DocuSign Production environment</li>
