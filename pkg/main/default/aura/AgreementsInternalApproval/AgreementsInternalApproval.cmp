@@ -55,9 +55,9 @@
                         <div class="slds-text-body_small">
                             <lightning:input type="checkbox" label="{!$Label.c.SetApprovalOrder}"
                                              onchange="{!c.setApprovalOrder}"
+                                             checked="{!v.showApprovalOrder}"
                                              aura:id="approvalOrderCheckbox"
                                              disabled="{!if(v.recipients.length lt 2, true, false)}"></lightning:input>
-
                         </div>
                         <div class="slds-text-body_small  slds-p-top--medium">
                             <b class="required-textcolor">* </b>{!$Label.c.AddApprovers}
