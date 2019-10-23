@@ -1,3 +1,7 @@
+.THIS {
+    display: flex;
+}
+
 .THIS .ds-getStarted {
     color: t(colorTextActionLabelActive);
     font-size: t(fontSize5);
@@ -18,14 +22,21 @@
     font-weight: t(fontWeightBold);
 }
 
+.THIS .ds-admin-sidebarSection {
+    min-width: 280px;
+}
+
 .THIS .ds-admin-sidebar {
     background: rgb(255, 255, 255);
     min-height: 1440px;
 }
 
+.THIS .ds-home-centerSpaceSection {
+    flex-grow: 1;
+}
+
 .THIS .ds-home-centerSpace {
     background: rgb(249, 249, 250);
-    flex: unset;
     border-radius: .1rem;
 }
 
@@ -35,7 +46,6 @@
 
 .THIS .ds-setupSection-heading {
     background: rgb(243, 242, 242);
-    flex: unset;
     max-height: 80px;
 }
 

@@ -30,7 +30,7 @@
 
             <!-- current user is authorized show the setup wizard -->
             <!-- left hand side nav bar -->
-            <div class="slds-col slds-large-size_1-of-6 slds-medium-size_1-of-3">
+            <div class="ds-admin-sidebarSection">
                 <!-- Navigation items start here -->
                 <lightning:verticalNavigation selectedItem="{!v.selectedItem}" onselect="{!c.handleSelect}"
                                               class="ds-admin-sidebar">
@@ -39,11 +39,11 @@
                             <aura:iteration items="{!section.items }" var="item">
                                 <aura:if isTrue="{!!empty(item.icon)}">
                                     <div class="slds-grid slds-grid_vertical-align-center">
-                                        <div>
+                                        <div class="slds-size_6-of-7">
                                             <lightning:verticalNavigationItem label="{!item.label}"
                                                                               name="{!item.name}"/>
                                         </div>
-                                        <div class="slds-m-right_small">
+                                        <div class="slds-size_1-of-7 slds-m-right_small">
                                             <lightning:icon size="x-small" iconName="{!item.icon}"/>
                                         </div>
                                     </div>
@@ -59,19 +59,19 @@
             </div>
 
             <!-- center section -->
-            <div class="{!'slds-col slds-large-size_5-of-6 slds-medium-size_2-of-3 slds-m-around_small' + if(v.selectedItem == 'tab_home', ' ds-home-centerSpace', ' ds-setupSection-heading')}">
+            <div class="{!'ds-home-centerSpaceSection slds-m-around_small' + if(v.selectedItem == 'tab_home', ' ds-home-centerSpace', ' ds-setupSection-heading')}">
                 <!-- Home section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_home'}">
                     <!-- Account Details -->
-                    <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <c:SetupAccount login="{!v.login}"/>
                     </div>
                     <!-- Help guide details -->
-                    <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <c:SetupLearnAboutProducts/>
                     </div>
                     <!-- Configuration details -->
-                    <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.ConfigurationSection}</div>
                         <div class="slds-box ds-white-background">
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
@@ -148,7 +148,7 @@
 
                     </div>
                     <!-- Administration details -->
-                    <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_large">
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.AdministrationSection}</div>
                         <div class="slds-box ds-white-background">
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
@@ -191,7 +191,7 @@
 
                     </div>
                     <!-- support -->
-                    <div class="slds-m-left_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-right_xx-large slds-m-top_xx-large">
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_xx-large">
                         <div class="slds-box">
                             <div class="slds-grid slds-grid_align-spread slds-m-around_xx-small">
                                 <div class="slds-col slds-size_3-of-4">

@@ -12,6 +12,17 @@
 .THIS .ds-learn-image-tile {
     height: 240px;
     border: 1px solid rgb(221, 219, 218);
+    color: rgb(8, 7, 7);
+}
+
+.THIS .ds-learn-image-tile:hover {
+    cursor: pointer;
+    border: 1px solid rgb(0, 112, 210);
+    color: rgb(0, 109, 204);
+    background-color: #f6fbff;
+    background-image: url(/resource/New_Window);
+    background-position-x: right;
+    background-repeat: no-repeat;
 }
 
 .THIS .ds-learn-image {
@@ -22,5 +33,4 @@
 
 .THIS .ds-learn-image-title {
     font-size: t(fontSize5);
-    color: rgb(8, 7, 7);
 }
