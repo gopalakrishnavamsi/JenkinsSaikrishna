@@ -52,7 +52,7 @@ private class NegotiateServiceTest {
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			System.assertEquals('Success', result.status);
-			System.assertEquals('Agreement has been imported successfully.', result.message);
+			System.assertEquals(Label.AgreementImportSuccessful, result.message);
 		}
 	}
 
@@ -67,7 +67,7 @@ private class NegotiateServiceTest {
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 			System.assertEquals('Success', result.status);
-			System.assertEquals('Agreement has been exported successfully.', result.message);
+			System.assertEquals(Label.AgreementExportSuccessful, result.message);
 		}
 	}
 

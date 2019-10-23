@@ -1122,7 +1122,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</value>
 	</labels>
 	<labels>
 		<fullName>HelpInfoBodyPart1</fullName>
@@ -1130,7 +1130,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a </value>
+		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a</value>
 	</labels>
 	<labels>
 		<fullName>HelpInfoBodyPart2</fullName>
@@ -1138,7 +1138,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body 2</shortDescription>
-		<value>page to provide answer to common questions to DocuSign Agreements.</value>
+		<value>page to provide answers to common questions.</value>
 	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
@@ -2422,7 +2422,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>New Agreement Created</shortDescription>
-		<value>New Agreement Created</value>
+		<value>New Document Added</value>
 	</labels>
 	<labels>
 		<fullName>ChooseFile</fullName>
@@ -2520,7 +2520,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Collect signatures for this agreement with DocuSign.</shortDescription>
-		<value>Collect signatures for this agreement with DocuSign.</value>
+		<value>Collect signatures for this document with DocuSign.</value>
 	</labels>
 	<labels>
 		<fullName>ErrorDownloadingFile</fullName>
@@ -2937,28 +2937,28 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>NoAgreements</shortDescription>
-		<value>No DocuSign Files.</value>
+		<value>Send for Review, Approval or Signature</value>
 	</labels>
 	<labels>
 		<fullName>CreateAgreementsIllustration</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CreateAgreementsIllustration</shortDescription>
-		<value>Create an Agreement</value>
+		<value>Get Started</value>
 	</labels>
 	<labels>
 		<fullName>DeleteAgreement</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DeleteAgreement</shortDescription>
-		<value>Delete Agreement</value>
+		<value>Delete File</value>
 	</labels>
 	<labels>
 		<fullName>DeleteAgreementMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DeleteAgreementMessage</shortDescription>
-		<value>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</value>
+		<value>By deleting this file, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</value>
 	</labels>
 	<labels>
 		<fullName>DeleteButtonLabel</fullName>
@@ -2986,7 +2986,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementName</shortDescription>
-		<value>Agreement Name</value>
+		<value>Document Name</value>
 	</labels>
 	<labels>
 		<fullName>CurrentVersion</fullName>
@@ -3899,56 +3899,56 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementImportSuccessful</shortDescription>
-		<value>Agreement has been imported successfully.</value>
+		<value>Document has been imported successfully.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementImportProcessing</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementImportProcessing</shortDescription>
-		<value>Agreement import in progress. Please check the Agreements space after some time.</value>
+		<value>Document import in progress. Check the DocuSign Files component after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementImportFailed</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementImportFailed</shortDescription>
-		<value>Agreement Import failed. Please try again.</value>
+		<value>Document Import failed. Please try again.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExportSuccessful</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExportSuccessful</shortDescription>
-		<value>Agreement has been exported successfully.</value>
+		<value>Document has been exported successfully.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExportProcessing</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExportProcessing</shortDescription>
-		<value>Agreement export in progress. Please check Notes and Attachments section after some time.</value>
+		<value>Document export in progress. Please check Notes and Attachments section after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExportFailed</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExportFailed</shortDescription>
-		<value>Agreement Export failed. Please try again.</value>
+		<value>Document Export failed. Please try again.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExternalReviewOnBehalfOfSuccess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExternalReviewOnBehalfOfSuccess</shortDescription>
-		<value>Agreement external review on behalf of completed.</value>
+		<value>External review on behalf of completed.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementExternalReviewOnBehalfOfFailed</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
-		<value>Agreement external review on behalf of has failed.</value>
+		<value>External review on behalf of has failed.</value>
 	</labels>
 	<labels>
 		<fullName>RequiredField</fullName>
@@ -3969,7 +3969,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>RenameAgreement</shortDescription>
-		<value>Rename Agreement</value>
+		<value>Rename Document</value>
 	</labels>
 	<labels>
 		<fullName>Rename</fullName>
@@ -3990,21 +3990,21 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementRenameErrorMessage</shortDescription>
-		<value>There was an error in renaming the Agreement. Please try again after some time.</value>
+		<value>There was an error in renaming the document. Please try again after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementDeleteErrorMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementDeleteErrorMessage</shortDescription>
-		<value>There was an error in deleting the Agreement. Please try again after some time.</value>
+		<value>There was an error in deleting the document. Please try again after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementResendErrorMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementResendErrorMessage</shortDescription>
-		<value>There was an error in resending the Agreement. Please try again after some time.</value>
+		<value>There was an error in resending the document. Please try again after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementResendExternalReviewMessage_1</fullName>
@@ -4039,28 +4039,28 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementCancelErrorMessage</shortDescription>
-		<value>There was an error in canceling the Agreement. Please try again after some time.</value>
+		<value>There was an error while cancelling. Please try again after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementDeleted</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementDeleted</shortDescription>
-		<value>The {0} agreement has been deleted.</value>
+		<value>The {0} document has been deleted.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewSuccess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewSuccess</shortDescription>
-		<value>Your document has been sent for review and copied to the DocuSign Agreements space.</value>
+		<value>Your document has been sent for review and copied to DocuSign Files.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewProcessing</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewProcessing</shortDescription>
-		<value>Your request for sending your document for external review is still in progress. Check the Agreements space after some time.</value>
+		<value>Your request for sending your document for external review is still in progress. Check DocuSign Files after some time.</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewFailed</fullName>
@@ -4074,14 +4074,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>InternalApprovalSuccess</shortDescription>
-		<value>Your document has been sent for internal approval and copied to the DocuSign Agreements space.</value>
+		<value>Your document has been sent for internal approval and copied to DocuSign Files.</value>
 	</labels>
 	<labels>
 		<fullName>InternalApprovalProcessing</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>InternalApprovalProcessing</shortDescription>
-		<value>Your request for sending your document for internal approval is still in progress. Check the Agreements space after some time.</value>
+		<value>Your request for sending your document for internal approval is still in progress. Check DocuSign Files after some time.</value>
 	</labels>
 	<labels>
 		<fullName>InternalApprovalFailed</fullName>
@@ -4151,7 +4151,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFileName</shortDescription>
-		<value>File Name</value>
+		<value>Document Name</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewRecipients</fullName>
@@ -4319,7 +4319,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Open Agreement</shortDescription>
-		<value>Open Agreement</value>
+		<value>Open Document</value>
 	</labels>
 	<labels>
 		<fullName>OptimizeDocumentGeneration</fullName>
@@ -4418,7 +4418,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ReviewAgreementButtonText</shortDescription>
-		<value>REVIEW AGREEMENT</value>
+		<value>REVIEW</value>
 	</labels>
 	<labels>
 		<fullName>ReviewAgreementHeaderTitleText</fullName>
@@ -4432,7 +4432,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalEmailButtonText</shortDescription>
-		<value>OPEN AGREEMENT</value>
+		<value>OPEN DOCUMENT</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalEmailSubject</fullName>
@@ -4488,7 +4488,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>RejectOnBehalfEmailButtonText</shortDescription>
-		<value>OPEN AGREEMENT</value>
+		<value>OPEN DOCUMENT</value>
 	</labels>
 	<labels>
 		<fullName>RejectOnBehalfEmailSubject</fullName>
@@ -4537,7 +4537,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApprovalRejectEmailButtonText</shortDescription>
-		<value>OPEN AGREEMENT</value>
+		<value>OPEN DOCUMENT</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalRejectEmailSubject</fullName>
@@ -4593,21 +4593,21 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadingAgreement</shortDescription>
-		<value>Uploading Agreement</value>
+		<value>Uploading Document</value>
 	</labels>
 	<labels>
 		<fullName>AgreementApprovalResponseSuccess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementApprovalResponseSuccess</shortDescription>
-		<value>Response for Agreement approval submitted successfully.</value>
+		<value>Response for approval submitted successfully.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementRejectionResponseSuccess</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>AgreementRejectionResponseSuccess</shortDescription>
-		<value>Response for Agreement rejection submitted successfully.</value>
+		<value>Response for rejection submitted successfully.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementApprovalError</fullName>
@@ -4642,7 +4642,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ShareAgreementLinkHeader</shortDescription>
-		<value>Share Agreement Link</value>
+		<value>Share Link</value>
 	</labels>
 	<labels>
 		<fullName>UploadNewVersionSuccess</fullName>
@@ -4656,7 +4656,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>UploadNewVersionError</shortDescription>
-		<value>Error while uploading a new version of the agreement.</value>
+		<value>Error while uploading a new version of the document.</value>
 	</labels>
 	<labels>
 		<fullName>OrganizeAndSearchDocumentsBody</fullName>
@@ -5290,8 +5290,8 @@
 		<fullName>InvalidInputsAgreementComparison</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>InvalidInputsAgreementComparison</shortDescription>
-		<value>Invalid input parameters for comparing Agreement versions.</value>
+		<shortDescription>InvalidInputsDocumentComparison</shortDescription>
+		<value>Invalid input parameters for comparing document versions.</value>
 	</labels>
 	<labels>
 		<fullName>ViewObjectFoldersCardBody</fullName>
@@ -5802,7 +5802,7 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - What Is DocuSign </shortDescription>
+		<shortDescription>CLM - What Is DocuSign CLM for Salesforce?</shortDescription>
 		<value>What is DocuSign CLM for Salesforce?</value>
 	</labels>
 	<labels>
@@ -5811,7 +5811,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - What Is DocuSign Answer</shortDescription>
-		<value>It's an app that connects your Salesforce data with DocuSign CLM. This lets you use your Salesforce data to create contracts and agreements. DocuSign CLM for Salesforce lets you store and manage those documents.</value>
+		<value>It's an app that connects your Salesforce data with DocuSign CLM. This lets you use your Salesforce data to create business documents. DocuSign CLM for Salesforce lets you store and manage those documents.</value>
 	</labels>
 	<labels>
 		<fullName>WhyDocuSignAgreements</fullName>
@@ -5874,8 +5874,8 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - What Is DocuSign CLM</shortDescription>
-		<value>DocuSign CLM is the secure cloud app for DocuSign CLM for Salesforce. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign CLM for Salesforce connects CLM with your Salesforce org.</value>
+		<shortDescription>CLM - What Is DocuSign CLM?</shortDescription>
+		<value>DocuSign CLM is the secure cloud app for DocuSign CLM for Salesforce. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign CLM for Salesforce connects DocuSign CLM with your Salesforce org.</value>
 	</labels>
 	<labels>
 		<fullName>InstallDocuSignAgreements</fullName>
@@ -5890,15 +5890,15 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - Install DocuSign CLM for Salesforce Answer</shortDescription>
-		<value>First, go to the Salesforce AppExchange. Then search for DocuSign CLM for Salesforce and follow the installation steps. You'll need to be a Salesforce administrator to do this.</value>
+		<shortDescription>CLM - Install DocuSign Apps Launcher Answer</shortDescription>
+		<value>First, go to the Salesforce AppExchange. Then search for the DocuSign Apps Launcher and follow the installation steps. You'll need to be a Salesforce administrator to do this.</value>
 	</labels>
 	<labels>
 		<fullName>AuthenticateAgreements</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - Authenticate Agreements</shortDescription>
+		<shortDescription>CLM - Authenticate</shortDescription>
 		<value>How do I authenticate DocuSign CLM for Salesforce?</value>
 	</labels>
 	<labels>
@@ -5906,8 +5906,8 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - Authenticate Agreements Answer</shortDescription>
-		<value>Open up DocuSign CLM for Salesforce from the Salesforce App Launcher. Then sign in with your DocuSign and Salesforce credentials. This enables integration between the two orgs.</value>
+		<shortDescription>CLM - Authenticate Answer</shortDescription>
+		<value>Open the DocuSign Apps Launcher in Salesforce after installation. Then sign in with your DocuSign CLM-enabled DocuSign login credentials and follow the the prompts to establish the reverse connection with your Salesforce credentials. This enables integration between the two systems.</value>
 	</labels>
 	<labels>
 		<fullName>WhatIsAnAdmin</fullName>
@@ -6035,7 +6035,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Object Mapping Answer</shortDescription>
-		<value>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign CLM setup walks you through the steps.</value>
+		<value>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign Apps Launcher setup walks you through the steps.</value>
 	</labels>
 	<labels>
 		<fullName>WhyToMapObject</fullName>
@@ -6051,7 +6051,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Object mapping Answer</shortDescription>
-		<value>DocuSign CLM for Salesforce needs the data in your objects to generate documents. Mapping your Salesforce objects is how you give acccess to that data. Only DocuSign CLM for Salesforce admins can map objects.</value>
+		<value>DocuSign CLM for Salesforce needs the data in your objects to generate documents. Mapping your Salesforce objects is how you give access to that data. Only DocuSign CLM for Salesforce admins can map objects.</value>
 	</labels>
 	<labels>
 		<fullName>HowToMapObject</fullName>
@@ -6386,8 +6386,8 @@
 		<categories>CLM</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CLM - agreementHelp</shortDescription>
-		<value>agreementHelp</value>
+		<shortDescription>CLM - Help</shortDescription>
+		<value>Help</value>
 	</labels>
 	<labels>
 		<fullName>DisablePopUp</fullName>
@@ -6639,7 +6639,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabDocumentGenerationHelpText</shortDescription>
-		<value>In one click, generate polished, customizable agreements with your Salesforce data.</value>
+		<value>In one click, generate polished, customizable documents with your Salesforce data.</value>
 	</labels>
 	<labels>
 		<fullName>TabNegotiationHelpText</fullName>
@@ -6647,7 +6647,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabNegotiationHelpText</shortDescription>
-		<value>Send agreements for approval internally, and review with third parties with ease.</value>
+		<value>Send documents for approval internally, and review with third parties with ease.</value>
 	</labels>
 	<labels>
 		<fullName>TabUserManagementHelpText</fullName>
@@ -6773,8 +6773,8 @@
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>CreatingAgreementsInDocuSignCLM</shortDescription>
-		<value>Creating Agreements in DocuSign CLM</value>
+		<shortDescription>CreatingDocumentsInDocuSignCLM</shortDescription>
+		<value>Creating Documents in DocuSign CLM</value>
 	</labels>
 	<labels>
 		<fullName>CreateAndManageDocumentGenerationConfigurations</fullName>
@@ -6846,7 +6846,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DocumentGenerationProcessSummary </shortDescription>
-		<value>After it's set up, document generation can take your data from Salesforce and merge it on to a template to generate a new agreement. You can even use creating a document as a trigger to start a new workflow.</value>
+		<value>After it's set up, document generation can take your data from Salesforce and merge it on to a template to generate contracts or any document. You can even use creating a document as a trigger to start a new workflow.</value>
 	</labels>
 	<labels>
 		<fullName>DocumentStep1</fullName>
@@ -7078,7 +7078,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenMarketingBody1</shortDescription>
-		<value>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</value>
+		<value>Give your users the power to automatically generate polished, configurable documents directly from Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>GenMarketingBody2</fullName>
@@ -7182,7 +7182,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ApproversFeature</shortDescription>
-		<value>Make it easy for approvers to sign off on agreements</value>
+		<value>Make it easy for approvers to sign off on documents</value>
 	</labels>
 	<labels>
 		<fullName>ExternalReviewFeature</fullName>
@@ -7190,7 +7190,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>ExternalReviewFeature</shortDescription>
-		<value>Allow external reviewers to update agreements</value>
+		<value>Allow external reviewers to update documents</value>
 	</labels>
 	<labels>
 		<fullName>VersionControlFeature</fullName>
@@ -7246,7 +7246,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>LearnGenLabel</shortDescription>
-		<value>Generate Polished, Customized Agreements</value>
+		<value>Generate Polished, Customized Documents</value>
 	</labels>
 	<labels>
 		<fullName>LearnNegotiateLabel</fullName>
@@ -7254,7 +7254,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>LearnNegotiateLabel</shortDescription>
-		<value>Send Agreements for Review or Approval</value>
+		<value>Send for Review or Approval</value>
 	</labels>
 	<labels>
 		<fullName>TryDocuSignGen</fullName>
@@ -7294,7 +7294,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenerateProductTrialHelpInfo</shortDescription>
-		<value>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</value>
+		<value>With a single click you’ll be generating polished, configurable, and fully customizable documents using the Salesforce data you already have.</value>
 	</labels>
 	<labels>
 		<fullName>NegotiateProductTrialHelpInfo</fullName>
@@ -7830,6 +7830,13 @@
 		<protected>true</protected>
 		<shortDescription>DocumentPreviewLink</shortDescription>
 		<value>/sfc/servlet.shepherd/document/download/</value>
+	</labels>
+	<labels>
+		<fullName>DocumentPreviewPageTitle</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Title for Document Preview Page</shortDescription>
+		<value>Preview</value>
 	</labels>
 	<labels>
 		<fullName>GenSendSignatureMsg</fullName>

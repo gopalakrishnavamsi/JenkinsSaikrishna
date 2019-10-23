@@ -1042,7 +1042,7 @@
 		<name>SelectFile</name>
 	</customLabels>
 	<customLabels>
-		<label>New Agreement Created</label>
+		<label>New Document Added</label>
 		<name>NewAgreementCreated</name>
 	</customLabels>
 	<customLabels>
@@ -1098,7 +1098,7 @@
 		<name>SendForSignature</name>
 	</customLabels>
 	<customLabels>
-		<label>Collect signatures for this agreement with DocuSign.</label>
+		<label>Collect signatures for this document with DocuSign.</label>
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
@@ -1326,19 +1326,19 @@
 		<name>ImportButtonLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>No agreements yet.</label>
+		<label>Send for Review, Approval or Signature</label>
 		<name>NoAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Create an Agreement</label>
+		<label>Get Started</label>
 		<name>CreateAgreementsIllustration</name>
 	</customLabels>
 	<customLabels>
-		<label>Delete Agreement</label>
+		<label>Delete File</label>
 		<name>DeleteAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>By deleting this agreement, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</label>
+		<label>By deleting this file, you'll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</label>
 		<name>DeleteAgreementMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1354,7 +1354,7 @@
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement Name</label>
+		<label>Document Name</label>
 		<name>AgreementName</name>
 	</customLabels>
 	<customLabels>
@@ -1858,15 +1858,15 @@
 		<name>Modified</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement has been imported successfully.</label>
+		<label>Document has been imported successfully.</label>
 		<name>AgreementImportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement import in progress. Please check the Agreements space after some time.</label>
+		<label>Document import in progress. Check the DocuSign Files component after some time.</label>
 		<name>AgreementImportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement Import failed. Please try again.</label>
+		<label>Document Import failed. Please try again.</label>
 		<name>AgreementImportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -1878,7 +1878,7 @@
 		<name>InvalidCharacters</name>
 	</customLabels>
 	<customLabels>
-		<label>Rename Agreement</label>
+		<label>Rename Document</label>
 		<name>RenameAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -1886,7 +1886,7 @@
 		<name>Rename</name>
 	</customLabels>
 	<customLabels>
-		<label>There was an error in renaming the Agreement. Please try again after some time.</label>
+		<label>There was an error in renaming the document. Please try again after some time.</label>
 		<name>AgreementRenameErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1894,15 +1894,15 @@
 		<name>AgreementRenamed_1</name>
 	</customLabels>
 	<customLabels>
-		<label>The {0} agreement has been deleted.</label>
+		<label>The {0} document has been deleted.</label>
 		<name>AgreementDeleted</name>
 	</customLabels>
 	<customLabels>
-		<label>There was an error in deleting the Agreement. Please try again after some time.</label>
+		<label>There was an error in deleting the document. Please try again after some time.</label>
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>There was an error in resending the Agreement. Please try again after some time.</label>
+		<label>There was an error in resending the document. Please try again after some time.</label>
 		<name>AgreementResendErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1922,15 +1922,15 @@
 		<name>AgreementCancelExternalReviewMessage_1</name>
 	</customLabels>
 	<customLabels>
-		<label>There was an error in canceling the Agreement. Please try again after some time.</label>
+		<label>There was an error while cancelling. Please try again after some time.</label>
 		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Your document has been sent for review and copied to the DocuSign Agreements space.</label>
+		<label>Your document has been sent for review and copied to DocuSign Files.</label>
 		<name>ExternalReviewSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Your request for sending your document for external review is still in progress. Check the Agreements space after some time.</label>
+		<label>Your request for sending your document for external review is still in progress. Check DocuSign Files after some time.</label>
 		<name>ExternalReviewProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1938,11 +1938,11 @@
 		<name>ExternalReviewFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>Your document has been sent for internal approval and copied to the DocuSign Agreements space.</label>
+		<label>Your document has been sent for internal approval and copied to DocuSign Files.</label>
 		<name>InternalApprovalSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Your request for sending your document for internal approval is still in progress. Check the Agreements space after some time.</label>
+		<label>Your request for sending your document for internal approval is still in progress. Check DocuSign Files after some time.</label>
 		<name>InternalApprovalProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1970,7 +1970,7 @@
 		<name>ExternalReviewAddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>Set a due Date</label>
+		<label>Set a Due Date</label>
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
@@ -1982,7 +1982,7 @@
 		<name>ExternalReviewEditEmailAndSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>File Name</label>
+		<label>Document Name</label>
 		<name>ExternalReviewFileName</name>
 	</customLabels>
 	<customLabels>
@@ -2067,7 +2067,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementButtonText</name>
-		<label>REVIEW AGREEMENT</label>
+		<label>REVIEW</label>
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
@@ -2075,7 +2075,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailButtonText</name>
-		<label>OPEN AGREEMENT</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailSubject</name>
@@ -2107,7 +2107,7 @@
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailButtonText</name>
-		<label>OPEN AGREEMENT</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
@@ -2135,7 +2135,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailButtonText</name>
-		<label>OPEN AGREEMENT</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
@@ -2166,15 +2166,15 @@
 		<name>ApprovalFailureEmailHeaderTitleText</name>
 	</customLabels>
 	<customLabels>
-		<label>Uploading Agreement</label>
+		<label>Uploading Document</label>
 		<name>UploadingAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Response for Agreement approval submitted successfully.</label>
+		<label>Response for approval submitted successfully.</label>
 		<name>AgreementApprovalResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Response for Agreement rejection submitted successfully.</label>
+		<label>Response for rejection submitted successfully.</label>
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
@@ -2194,7 +2194,7 @@
 		<name>LinkLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Share Agreement Link</label>
+		<label>Share Link</label>
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
 	<customLabels>
@@ -2202,7 +2202,7 @@
 		<name>UploadNewVersionSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Error while uploading a new version of the agreement.</label>
+		<label>Error while uploading a new version of the document.</label>
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
@@ -2310,7 +2310,7 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions to DocuSign Agreements.</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</label>
 		<name>HelpInfoBody</name>
 	</customLabels>
 	<customLabels>
@@ -2318,7 +2318,7 @@
 		<name>HelpInfoBodyPart1</name>
 	</customLabels>
 	<customLabels>
-		<label>page to provide answer to common questions to DocuSign Agreements.</label>
+		<label>page to provide answers to common questions.</label>
 		<name>HelpInfoBodyPart2</name>
 	</customLabels>
 	<customLabels>
@@ -2574,7 +2574,7 @@
 		<name>InvalidTrialProduct_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement has been exported successfully.</label>
+		<label>Document has been exported successfully.</label>
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
@@ -2582,11 +2582,11 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement export in progress. Please check Notes and Attachments section after some time.</label>
+		<label>Document export in progress. Please check Notes and Attachments section after some time.</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement Export failed. Please try again.</label>
+		<label>Document Export failed. Please try again.</label>
 		<name>AgreementExportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -2718,15 +2718,15 @@
 		<name>FailedToTriggerDocumentComparisonTask</name>
 	</customLabels>
 	<customLabels>
-		<label>Invalid input parameters for comparing Agreement versions.</label>
+		<label>Invalid input parameters for comparing document versions.</label>
 		<name>InvalidInputsAgreementComparison</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement external review on behalf of completed.</label>
+		<label>External review on behalf of completed.</label>
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Agreement external review on behalf of has failed.</label>
+		<label>External review on behalf of has failed.</label>
 		<name>AgreementExternalReviewOnBehalfOfFailed</name>
 	</customLabels>
 	<customLabels>
@@ -3030,11 +3030,11 @@
 		<name>Collapse</name>
 	</customLabels>
 	<customLabels>
-		<label>What is DocuSign CLM?</label>
+		<label>What is DocuSign CLM for Salesforce?</label>
 		<name>WhatIsDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>It's an app that connects your Salesforce data with DocuSign CLM. This lets you use your Salesforce data to create contracts and agreements. DocuSign CLM for Salesforce lets you store and manage those documents.</label>
+		<label>It's an app that connects your Salesforce data with DocuSign CLM. This lets you use your Salesforce data to create business documents. DocuSign CLM for Salesforce lets you store and manage those documents.</label>
 		<name>WhatIsDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -3066,7 +3066,7 @@
 		<name>WhatIsDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM is the secure cloud app for DocuSign CLM for Salesforce. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign CLM for Salesforce connects CLM with your Salesforce org.</label>
+		<label>DocuSign CLM is the secure cloud app for DocuSign CLM for Salesforce. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign CLM for Salesforce connects DocuSign CLM with your Salesforce org.</label>
 		<name>WhatIsDocuSignCLMAns</name>
 	</customLabels>
 	<customLabels>
@@ -3074,7 +3074,7 @@
 		<name>InstallDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>First, go to the Salesforce AppExchange. Then search for DocuSign CLM for Salesforce and follow the installation steps. You'll need to be a Salesforce administrator to do this.</label>
+		<label>First, go to the Salesforce AppExchange. Then search for the DocuSign Apps Launcher and follow the installation steps. You'll need to be a Salesforce administrator to do this.</label>
 		<name>InstallAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3082,7 +3082,7 @@
 		<name>AuthenticateAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Open up DocuSign CLM for Salesforce from the Salesforce App Launcher. Then sign in with your DocuSign and Salesforce credentials. This enables integration between the two orgs.</label>
+		<label>Open the DocuSign Apps Launcher in Salesforce after installation. Then sign in with your DocuSign CLM-enabled DocuSign login credentials and follow the the prompts to establish the reverse connection with your Salesforce credentials. This enables integration between the two systems.</label>
 		<name>AuthenticateAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3146,7 +3146,7 @@
 		<name>WhatIsObjMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign CLM setup walks you through the steps.</label>
+		<label>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign Apps Launcher setup walks you through the steps.</label>
 		<name>WhatIsObjMappingAns</name>
 	</customLabels>
 	<customLabels>
@@ -3154,7 +3154,7 @@
 		<name>WhyToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM for Salesforce needs the data in your objects to generate documents. Mapping your Salesforce objects is how you give acccess to that data. Only DocuSign CLM for Salesforce admins can map objects.</label>
+		<label>DocuSign CLM for Salesforce needs the data in your objects to generate documents. Mapping your Salesforce objects is how you give access to that data. Only DocuSign CLM for Salesforce admins can map objects.</label>
 		<name>WhyToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3258,7 +3258,7 @@
 		<name>Section1</name>
 	</customLabels>
 	<customLabels>
-		<label>agreementHelp</label>
+		<label>Help</label>
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
@@ -3386,11 +3386,11 @@
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>In one click, generate polished, customizable agreements with your Salesforce data.</label>
+		<label>In one click, generate polished, customizable documents with your Salesforce data.</label>
 		<name>TabDocumentGenerationHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Send agreements for approval internally, and review with third parties with ease.</label>
+		<label>Send documents for approval internally, and review with third parties with ease.</label>
 		<name>TabNegotiationHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3458,7 +3458,7 @@
 		<name>InfoIcon</name>
 	</customLabels>
 	<customLabels>
-		<label>Creating Agreements in DocuSign CLM</label>
+		<label>Creating Documents in DocuSign CLM</label>
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
@@ -3494,7 +3494,7 @@
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>After it's set up, document generation can take your data from Salesforce and merge it on to a template to generate a new agreement. You can even use creating a document as a trigger to start a new workflow.</label>
+		<label>After it's set up, document generation can take your data from Salesforce and merge it on to a template to generate contracts or any document. You can even use creating a document as a trigger to start a new workflow.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3606,7 +3606,7 @@
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Give your users the power to automatically generate polished, configurable agreements, directly from Salesforce.</label>
+		<label>Give your users the power to automatically generate polished, configurable documents directly from Salesforce.</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
@@ -3658,11 +3658,11 @@
 		<name>ESignatureCompatibleFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Make it easy for approvers to sign off on agreements</label>
+		<label>Make it easy for approvers to sign off on documents</label>
 		<name>ApproversFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Allow external reviewers to update agreements</label>
+		<label>Allow external reviewers to update documents</label>
 		<name>ExternalReviewFeature</name>
 	</customLabels>
 	<customLabels>
@@ -3690,11 +3690,11 @@
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Generate Polished, Customized Agreements</label>
+		<label>Generate Polished, Customized Documents</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Send Agreements for Review or Approval</label>
+		<label>Send for Review or Approval</label>
 		<name>LearnNegotiateLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3714,7 +3714,7 @@
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>With a single click you’ll be generating polished, configurable, and fully customizable agreements using the Salesforce data you already have.</label>
+		<label>With a single click you’ll be generating polished, configurable, and fully customizable documents using the Salesforce data you already have.</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
@@ -3818,7 +3818,7 @@
 		<name>DocuSignUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM for Salesforce users</label>
+		<label>DocuSign CLM for Salesforce Users</label>
 		<name>DocuSignCLMUsers</name>
 	</customLabels>
 	<customLabels>
@@ -4010,7 +4010,7 @@
 		<name>ExpiredReviewSenderEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Open Agreement</label>
+		<label>Open Document</label>
 		<name>OpenAgreementButton</name>
 	</customLabels>
 	<customLabels>
@@ -4076,6 +4076,10 @@
 	<customLabels>
 		<label>/sfc/servlet.shepherd/document/download/</label>
 		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Preview</label>
+		<name>DocumentPreviewPageTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>The files below have been successfully generated and can now be sent for signature</label>

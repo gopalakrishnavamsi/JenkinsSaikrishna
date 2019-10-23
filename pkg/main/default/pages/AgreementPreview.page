@@ -1,4 +1,4 @@
-<apex:page controller="AgreementsController" title="Preview Agreement" sidebar="false" showHeader="true">
+<apex:page controller="AgreementsController" title="{!$Label.DocumentPreviewPageTitle}" sidebar="false" showHeader="true">
     <apex:includeLightning/>
     <apex:slds/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
