@@ -2,7 +2,7 @@
 <!-- smartling.translate_paths = Translations/customApplications/label, Translations/customLabels/label, Translations/customPageWebLinks/label, Translations/customTabs/label -->
 <Translations xmlns="http://soap.sforce.com/2006/04/metadata">
 	<customApplications>
-		<label>DocuSign</label>
+		<label>DocuSign Apps Launcher</label>
 		<name>DocuSignForSalesforceCore</name>
 	</customApplications>
 	<customLabels>
@@ -1286,7 +1286,7 @@
 		<name>SelectSalesforceObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Veröffentlichen</label>
+		<label>Schaltfläche hinzufügen</label>
 		<name>Publish</name>
 	</customLabels>
 	<customLabels>
@@ -1950,7 +1950,7 @@
 		<name>ExternalReviewEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Bitte genehmigen Sie das Dokument umgehend.</label>
+		<label>Bitte prüfen Sie das Dokument so bald wie möglich.</label>
 		<name>ExternalReviewEmailBody</name>
 	</customLabels>
 	<customLabels>
@@ -2194,7 +2194,7 @@
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Neue Vereinbarungsversion wurde hochgeladen.</label>
+		<label>Neue Version von „{0}“ wurde hochgeladen.</label>
 		<name>UploadNewVersionSuccess</name>
 	</customLabels>
 	<customLabels>
@@ -2290,7 +2290,7 @@
 		<name>DocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>Integrieren Sie Ihre Salesforce-Daten mit DocuSign Agreements reibungslos für DocuSign CLM.</label>
+		<label>Integrieren Sie Ihre Salesforce-Daten mit DocuSign CLM für Salesforce reibungslos für DocuSign CLM.</label>
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -2494,7 +2494,7 @@
 		<name>ViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
-		<label>Willkommen bei DocuSign Agreements für Salesforce!</label>
+		<label>Willkommen bei DocuSign CLM für Salesforce!</label>
 		<name>WelcomeToDocuSign</name>
 	</customLabels>
 	<customLabels>
@@ -2574,7 +2574,7 @@
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<label>Zu Salesforce hinzufügen</label>
+		<label>In „Notizen und Anhänge“ kopieren</label>
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
@@ -2778,7 +2778,7 @@
 		<name>DocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Andere Quellen</label>
+		<label>Andere Quellen{0}</label>
 		<name>OtherSources</name>
 	</customLabels>
 	<customLabels>
@@ -2910,11 +2910,11 @@
 		<name>VisitFAQ</name>
 	</customLabels>
 	<customLabels>
-		<label>SUPPORT</label>
+		<label>Support</label>
 		<name>SUPPORT</name>
 	</customLabels>
 	<customLabels>
-		<label>WEITERE RESSOURCEN</label>
+		<label>Weitere Ressourcen</label>
 		<name>MORERESOURCES</name>
 	</customLabels>
 	<customLabels>
@@ -2994,7 +2994,7 @@
 		<name>FrequentlyAskedQuestions</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign Agreements – Grundlagen</label>
+		<label>Überblick: DocuSign CLM für Salesforce</label>
 		<name>UnderstandingDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
@@ -3026,35 +3026,35 @@
 		<name>Collapse</name>
 	</customLabels>
 	<customLabels>
-		<label>Was ist DocuSign Agreements?</label>
+		<label>Was ist DocuSign CLM?</label>
 		<name>WhatIsDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit DocuSign Agreements erstellen Sie Verträge und Vereinbarungen mit Salesforce-Daten.</label>
+		<label>Mit dieser App verbinden Sie Salesforce-Daten mit DocuSign CLM, damit Sie Salesforce-Daten zum Erstellen Ihrer Verträge und Vereinbarungen nutzen können. Speichern und verwalten Sie dann diese Dokumente mit DocuSign CLM für Salesforce.</label>
 		<name>WhatIsDocuSignAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Warum sollte ich DocuSign Agreements nutzen?</label>
+		<label>Warum sollte ich DocuSign CLM für Salesforce nutzen?</label>
 		<name>WhyDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Bei DocuSign Agreements werden zum Generieren von Dokumenten Salesforce-Daten verwendet. Dadurch ist die Dokumentenerstellung schneller und manuelle Fehler werden vermieden.</label>
+		<label>Bei DocuSign CLM für Salesforce werden für das Generieren von Dokumenten Salesforce-Daten verwendet. Dadurch ist die Dokumentenerstellung schneller und manuelle Fehler werden vermieden.</label>
 		<name>WhyDocuSignAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Wie wirkt sich DocuSign Agreements auf die Dokumentenerstellung aus?</label>
+		<label>Wie wirkt sich DocuSign CLM für Salesforce auf die Dokumentenerstellung aus?</label>
 		<name>DocumentGenerationProcess</name>
 	</customLabels>
 	<customLabels>
-		<label>Erstellen Sie in Salesforce eine benutzerdefinierte Schaltfäche für Objektseitenlayouts, damit Sie Dokumente per Klick auf eine Schaltfläche innerhalb von Salesforce generieren können.</label>
+		<label>Erstellen Sie Dokumente in Salesforce per Klick auf eine Schaltfläche. Hierzu richten Sie eine benutzerdefinierte Schaltfläche für Ihre Objektseitenlayouts ein.</label>
 		<name>DocumentGenerationAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Warum sollte ich DocuSign Agreements nutzen, anstatt Dokumente in Salesforce zu speichern?</label>
+		<label>Warum sollte ich diese App nutzen, anstatt Dokumente in Salesforce zu speichern?</label>
 		<name>WhyOnlyDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Dokumente und Verträge werden in Salesforce nicht strukturiert gespeichert und sind schwer für Prüfung, Workflow und Signatur zugänglich. Bei DocuSign Agreements geht es strukturiert zu, auch beim Erstellen von neuen Inhalten, und das alles innerhalb von Salesforce.</label>
+		<label>Dokumente werden in Salesforce nicht strukturiert gespeichert und sind schwer zugänglich. Dadurch werden Prüfungen, Workflows und das Einholen von Signaturen unnötig verzögert. Mit DocuSign CLM für Salesforce hat alles seine Ordnung. Dokumente werden automatisch verwaltet, auch wenn Sie neue Dokumente erstellen. Zudem können Sie direkt in Salesforce auf Ihre Dokumente zugreifen.</label>
 		<name>WhyOnlyDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -3062,23 +3062,23 @@
 		<name>WhatIsDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM ist eine sichere Cloud-App für DocuSign Agreements. Mit DocuSign CLM können Sie Dokumente generieren, mit anderen zusammenarbeiten und Prozesse automatisieren. DocuSign Agreements ist das Verbindungsglied zwischen DocuSign CLM und Ihrer Salesforce-Organisation.</label>
+		<label>DocuSign CLM ist eine sichere Cloud-App für DocuSign CLM für Salesforce. Mit DocuSign CLM können Sie Dokumente generieren, mit anderen zusammenarbeiten und Prozesse automatisieren. DocuSign CLM für Salesforce ist das Verbindungsglied zwischen CLM und Ihrer Salesforce-Organisation.</label>
 		<name>WhatIsDocuSignCLMAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Wie installiere ich DocuSign Agreements in Salesforce?</label>
+		<label>Wie installiere ich DocuSign CLM für Salesforce?</label>
 		<name>InstallDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Wählen Sie DocuSign Agreements in Salesforce AppExchange und folgen Sie der Anleitung. Sie benötigen hierzu Salesforce-Administratorrechte. Weitere Informationen erhalten Sie im Salesforce-Administratorleitfaden.</label>
+		<label>Öffnen Sie zunächst Salesforce AppExchange. Rufen Sie dann DocuSign CLM für Salesforce auf und folgen Sie der Installationsanleitung. Sie benötigen hierzu Salesforce-Administratorrechte.</label>
 		<name>InstallAgreementsAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Wie authentifiziere ich DocuSign Agreements in Salesforce?</label>
+		<label>Wie authentifiziere ich DocuSign CLM für Salesforce?</label>
 		<name>AuthenticateAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Öffnen Sie DocuSign Agreements vom Salesforce App Launcher und melden Sie sich mit Ihren DocuSign- und Salesforce-Anmeldedaten an. Dadurch wird die Integration zwischen den beiden Organisationen aktiviert.</label>
+		<label>Öffnen Sie DocuSign CLM für Salesforce vom Salesforce App Launcher. Melden Sie sich mit Ihren DocuSign- und Salesforce-Anmeldedaten an. Dadurch wird die Integration zwischen den beiden Organisationen aktiviert.</label>
 		<name>AuthenticateAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3086,7 +3086,7 @@
 		<name>WhatIsAnAdmin</name>
 	</customLabels>
 	<customLabels>
-		<label>Admins sind Benutzer mit bestimmten Rechten und Verantwortungen für DocuSign Agreements. Admins können Objekte zuordnen und Benutzer verwalten.</label>
+		<label>Admins sind Benutzer mit bestimmten Rechten und Verantwortungen für DocuSign CLM für Salesforce. Admins ordnen Objekte zu und verwalten Benutzer.</label>
 		<name>WhatIsAnAdminAns</name>
 	</customLabels>
 	<customLabels>
@@ -3094,7 +3094,7 @@
 		<name>HowAdminManageUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Admins können auf der Seite „Benutzerverwaltung“ unter „Verwaltung“ Benutzer hinzufügen und verwalten.</label>
+		<label>Admins fügen auf der Seite „Benutzerverwaltung“ Benutzer hinzu und verwalten sie dort.</label>
 		<name>HowAdminManageUsersAns</name>
 	</customLabels>
 	<customLabels>
@@ -3102,7 +3102,7 @@
 		<name>InstallationFees</name>
 	</customLabels>
 	<customLabels>
-		<label>Nein. Sie sehen die Benutzergebühren bereits auf der AppExchange-Seite beim Kauf des DocuSign-CLM-Pakets. Beim Installieren von DocuSign-Apps fallen keine Zusatzkosten an.</label>
+		<label>Nein. Die Benutzergebühren auf der AppExchange-Seite geben die Kosten pro Benutzer beim Kauf des DocuSign-CLM-Pakets an. Beim Installieren von DocuSign-Apps fallen keine Zusatzkosten an.</label>
 		<name>InstallationFeesAns</name>
 	</customLabels>
 	<customLabels>
@@ -3110,7 +3110,7 @@
 		<name>WhyConfigureLayout</name>
 	</customLabels>
 	<customLabels>
-		<label>Durch Layoutkonfigurationen sehen Sie Ihre Objektordner in Salesforce und bei DocuSign CLM. So können Sie Ihre DocuSign-CLM-Dateien und -Ordner auf verknüpften Objektseiten wie Accounts und Opportunities verwenden.</label>
+		<label>Durch das Konfigurieren eines Layouts sehen Sie Ihre Objektordner in Salesforce und DocuSign CLM. So können Sie Ihre DocuSign-CLM-Dateien und -Ordner auf verknüpften Objektseiten verwenden.</label>
 		<name>WhyConfigureLayoutAns</name>
 	</customLabels>
 	<customLabels>
@@ -3118,7 +3118,7 @@
 		<name>AfterMappingObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Nachdem Sie ein Objekt zugeordnet haben, fügt DocuSign Agreements die Daten zur Visualforce-Bibliothek hinzu. Bevor Sie jedoch Ihre Objektordner sehen können, ist noch ein weiterer Schritt erforderlich. Bearbeiten Sie zuvor noch das Salesforce-Seitenlayout.</label>
+		<label>Mit DocuSign CLM für Salesforce fügen Sie Objektdaten zu Ihrer Visualforce-Bibliothek. Damit Sie Ordner und Dateien des Objekts sehen, fügen Sie sie den relevanten Salesforce-Seitenlayouts hinzu.</label>
 		<name>AfterMappingObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3134,7 +3134,7 @@
 		<name>SalesforceObjectsFields</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit Salesforce-Objekten werden Daten mit Salesforce gespeichert. Jedes Objekt hat mehrere zugeordnete Felder mit Daten. Ordnen Sie Objekte zu, damit Sie Objekte und Felder in DocuSign Agreements nutzen können.</label>
+		<label>Mit Salesforce-Objekten werden Daten mit Salesforce gespeichert. Jedes Objekt hat mehrere zugeordnete Felder mit Daten. Ordnen Sie Objekte zu, damit Sie Objekte und Felder in DocuSign CLM für Salesforce nutzen können.</label>
 		<name>SalesforceObjectsFieldsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3142,7 +3142,7 @@
 		<name>WhatIsObjMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>Die Objektzuordnung ist das Verbinden von Objekten der Salesforce.org mit DocuSign CLM. Beim Setup von DocuSign Agreements werden Sie durch die Anleitung geführt.</label>
+		<label>Die Objektzuordnung ist das Verbinden von Objekten der Salesforce.org mit DocuSign CLM. Beim Setup von DocuSign CLM werden Sie durch die Anleitung geführt.</label>
 		<name>WhatIsObjMappingAns</name>
 	</customLabels>
 	<customLabels>
@@ -3150,7 +3150,7 @@
 		<name>WhyToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Durch das Zuordnen von Salesforce-Objekten kann DocuSign Agreements auf die Daten dieser Objekte zugreifen und so Verträge und Vereinbarungen generieren. Für die Objektzuordnung sind Administratorrechte erforderlich.</label>
+		<label>Bei DocuSign CLM für Salesforce sind zum Generieren von Dokumenten Daten Ihrer Objekte erforderlich. Durch das Zuordnen der Salesforce-Objekte kann auf die Daten zugegriffen werden. Nur Admins von DocuSign CLM für Salesforce können Objekte zuordnen.</label>
 		<name>WhyToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3158,7 +3158,7 @@
 		<name>HowToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce-Objekte ordnen Sie zu, indem Sie zuerst die Seite mit den CLM-Integrationen öffnen. Wählen Sie „Neu zuordnen“. Folgen Sie zum Fertigstellen des Setups der Anleitung.</label>
+		<label>Salesforce-Objekte ordnen Sie zu, indem Sie zuerst die Seite mit den CLM-Integrationen öffnen. Wählen Sie dann „Neu zuordnen“ und folgen Sie zum Fertigstellen des Setups der Anleitung.</label>
 		<name>HowToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3174,7 +3174,7 @@
 		<name>MappingStandardObjects</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihre Anforderungen unterscheiden sich sicherlich von denen anderer Unternehmen. Doch viele Unternehmen verwenden die Standardobjekte Account und Opportunity. In DocuSign Agreements sind diese Objekte standardmäßig zugeordnet.</label>
+		<label>Ihre Anforderungen unterscheiden sich sicherlich von denen anderer Unternehmen. Doch viele Unternehmen verwenden die Standardobjekte Account und Opportunity. In DocuSign CLM für Salesforce sind diese Objekte standardmäßig zugeordnet.</label>
 		<name>MappingStandardObjectsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3182,7 +3182,7 @@
 		<name>MappingCustomObjects</name>
 	</customLabels>
 	<customLabels>
-		<label>Ordnen Sie DocuSign CLM benutzerdefinierte Salesforce-Objekte mit DocuSign Agreements zu.</label>
+		<label>Ordnen Sie benutzerdefinierte Salesforce-Objekte zu. Damit benutzerdefinierte Objekte verwendet werden können, müssen sie zuerst in Salesforce erstellt werden.</label>
 		<name>MappingCustomObjectsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3190,7 +3190,7 @@
 		<name>CustomObjectFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>Die Namenskonventionen werden von den Briefvorlagenfeldern bestimmt, die Sie beim Zuordnen der Salesforce-Objekte verwenden. Die Ordnernamen ändern sich automatisch, wenn sich der Inhalt der Felder ändert.</label>
+		<label>Die Namenskonventionen werden von den Briefvorlagenfeldern der Objekte bestimmt. Initiiert wird dies beim Zuordnen der Salesforce-Objekte. Die Ordnernamen ändern sich automatisch, wenn sich der Inhalt der Felder ändert.</label>
 		<name>CustomObjectFolderAns</name>
 	</customLabels>
 	<customLabels>
@@ -3290,7 +3290,7 @@
 		<name>TestingEnvironment</name>
 	</customLabels>
 	<customLabels>
-		<label>Dies ist für einen Test- und Stage-Account mit einer benutzerdefinierten URL.</label>
+		<label>Dies ist für einen Test- oder Stage-Account mit einer benutzerdefinierten URL.</label>
 		<name>TestingEnvironmentHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3340,7 +3340,7 @@
 		<name>ConfigurationSection</name>
 	</customLabels>
 	<customLabels>
-		<label>E-Signatur</label>
+		<label>eSignature</label>
 		<name>TabESignature</name>
 	</customLabels>
 	<customLabels>
@@ -3418,6 +3418,10 @@
 	<customLabels>
 		<label>DocuSign Negotiate ist für Ihren Account nicht konfiguriert.</label>
 		<name>NegotiateNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign eSignature wurde nicht für das Konto konfiguriert.</label>
+		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
 		<label>Objekt bearbeiten</label>
@@ -3724,6 +3728,82 @@
 		<name>CurrentlyOnTrial</name>
 	</customLabels>
 	<customLabels>
+		<label>Zusammenarbeiten und verhandeln</label>
+		<name>NegotiateHelpHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Senden Sie ein Dokument gleich nach dem Erstellen zur Prüfung oder Genehmigung. So gehts:</label>
+		<name>NegotiateHelpGettingStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlage mit der Dokumentenerstellung erstellen</label>
+		<name>NegotiateHelpText1</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument mit einer Vorlage generieren</label>
+		<name>NegotiateHelpText2</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument zur externen Prüfung, internen Genehmigung und zum Signieren senden</label>
+		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Zur Dokumentation wechseln</label>
+		<name>GoToDocumentation</name>
+	</customLabels>
+	<customLabels>
+		<label>Schaltfläche zum Verwenden von eSignature hinzufügen</label>
+		<name>AddButtonEsignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Position der Schaltfläche</label>
+		<name>AddButtonLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>Die Schaltfläche wird zusammen mit den anderen benutzerdefinierten Schaltflächen in Ihren ausgewählten Layouts angezeigt.</label>
+		<name>AddButtonPosition</name>
+	</customLabels>
+	<customLabels>
+		<label>Die Reihenfolge der Schaltflächen ändern Sie unter</label>
+		<name>AddButtonOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce Setup &gt; Objekt-Manager &gt; [Objekt] &gt; Seitenlayouts.</label>
+		<name>AddButtonPath</name>
+	</customLabels>
+	<customLabels>
+		<label>Zuerst ein Objekt auswählen</label>
+		<name>ChooseObjectFirst</name>
+	</customLabels>
+	<customLabels>
+		<label>Damit Sie sehen, welche Layouts dem Salesforce-Objekt zugeordnet sind, wählen Sie das Objekt aus. Wählen Sie die Layouts, für die Sie die Schaltfläche „Mit DocuSign senden“ hinzufügen möchten. Fügen Sie Objekte und Layouts einzeln hinzu.</label>
+		<name>ChooseObjectHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Möchten Sie die erste Vorlage einrichten?</label>
+		<name>StartFirstTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlagenkonfiguration erstellen</label>
+		<name>CreateTemplateConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Sie haben die Dokumentenerstellung noch nicht für Vorlagen verwendet?</label>
+		<name>NotFamiliarWithDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Hier gehts zum Schnellstartleitfaden&lt;/a&gt;</label>
+		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlagenkonfigurationen</label>
+		<name>TemplateConfigurationLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Zuletzt geändert am</label>
+		<name>LastModfiedDateLabel</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign-Benutzer</label>
 		<name>DocuSignUsers</name>
 	</customLabels>
@@ -3960,7 +4040,7 @@
 		<name>CanceledReviewEmailHeader_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Ordnerinhalte</label>
+		<label>{0} Ordnerinhalte</label>
 		<name>FolderContents</name>
 	</customLabels>
 	<customLabels>
@@ -3996,12 +4076,112 @@
 		<name>SendingForSignature</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign CLM für Salesforce – FAQs</label>
+		<name>DocuSignCLMFAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>Finden Sie Antworten auf häufig gestellte Fragen zu DocuSign CLM für Salesforce. Eine Auflistung der Leitfäden finden Sie auf der Hilfeseite</label>
+		<name>DocuSignCLMFAQSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Leitfäden</label>
+		<name>HelpGuides</name>
+	</customLabels>
+	<customLabels>
+		<label>Hier finden Sie alles rund um DocuSign CLM für Salesforce. Lesen Sie beispielsweise FAQs, Produktdokumentationen und Whitepapers.</label>
+		<name>HelpGuidesSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Häufig gestellte Fragen</label>
+		<name>FrequentlyAskedQuestionsInHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Grundlagen zur Dokumentenerstellung</label>
+		<name>BasicsOfDocGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Komponenten zu Layouts hinzufügen</label>
+		<name>AddComponentsToLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Sie haben keine zugeordneten Objekte?</label>
+		<name>YouHaveNoMappedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Objektzuordnung ist Neuland für Sie?</label>
+		<name>DontKnowObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Hilfe finden Sie auf der Hilfeseite</label>
+		<name>TakeALook</name>
+	</customLabels>
+	<customLabels>
+		<label> {0} zugeordnete Objekte </label>
+		<name>NoOfUsersMapped</name>
+	</customLabels>
+	<customLabels>
+		<label>FAQs</label>
+		<name>FAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>Hinzugefügt am</label>
+		<name>DateAdded</name>
+	</customLabels>
+	<customLabels>
+		<label>Geändert am</label>
+		<name>DateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
+		<name>LearnDocGenBasicsURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Configure-Visualforce-Page-Layouts-Docusign-CLM</label>
+		<name>AddCompToLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>{0} zugeordnete Objekte</label>
 		<name>MappedObjectsPlainText</name>
 	</customLabels>
 	<customLabels>
 		<label>Zur Prüfung senden</label>
 		<name>SendForReview</name>
+	</customLabels>
+	<customLabels>
+		<label>Symbol Probleme?</label>
+		<name>HavingTroubleImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>Symbol Hilfecenter</label>
+		<name>HelpCenterImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>Symbol Keine zugeordneten Objekte</label>
+		<name>NoMappedObjImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>Sortiert nach {0}</label>
+		<name>ObjectsSortedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>Zur Hilfeseite</label>
+		<name>GoToHelpPage</name>
+	</customLabels>
+	<customLabels>
+		<label>Weitere Informationen erhalten Sie im Salesforce-Administratorleitfaden.</label>
+		<name>VisitSalesforceAdminGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/SpringCM-for-Salesforce-Administrator-Guide</label>
+		<name>SalesforceAdminGuideUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>Im Leitfaden erfahren Sie, wie Sie Objekte mit DocuSign CLM für Salesforce zuordnen.</label>
+		<name>MappingObjectsGuideText</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} Objekt 1</label>
+		<name>ObjFolderImgExample</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
