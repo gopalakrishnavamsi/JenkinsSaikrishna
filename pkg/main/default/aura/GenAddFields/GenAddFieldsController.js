@@ -83,6 +83,7 @@
     //html always returns the value as a string so we're going to convert it back to boolean
     var conditionalValue = event.getSource().get('v.value');
     var clonedFieldMapping = component.get('v.clonedFieldMapping');
+    component.set('v.mergeFieldDefaultDisplay', conditionalValue);
     clonedFieldMapping.isConditional = conditionalValue === 'true';
     component.set('v.clonedFieldMapping', clonedFieldMapping);
   },

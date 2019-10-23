@@ -3,6 +3,7 @@
     <aura:attribute name="optionModalParams" type="Object" access="private"/>
     <aura:attribute name="clonedFieldMapping" type="Object" access="private"/>
     <aura:attribute name="mergeFieldDisplayOptions" type="Object[]" access="private"/>
+    <aura:attribute name="mergeFieldDefaultDisplay" type="Boolean" access="private" default="false" />
 
     <aura:attribute name="formattedDate" type="String" access="private"/>
     <aura:attribute name="formattedCurrency" type="String" access="private"/>
@@ -140,7 +141,7 @@
         <div class="slds-m-top_small">
             <lightning:radioGroup name="mergeFieldDisplayOption" label="{!$Label.c.DisplaysOptions}"
                                   options="{!v.mergeFieldDisplayOptions}" type="radio"
-                                  value="{!v.clonedFieldMapping.isConditional}" class="slds-m-top_small"
+                                  value="{!v.mergeFieldDefaultDisplay}" class="slds-m-top_small"
                                   onchange="{!c.convertToBoolean}"/>
 
             <aura:if isTrue="{!v.clonedFieldMapping.isConditional}">
