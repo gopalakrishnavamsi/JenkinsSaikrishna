@@ -21,7 +21,7 @@
   },
   "scripts": {
     "auth": "sfdx force:auth:web:login -a DocuDevHub -d",
-    "buildOrg": "sfdx force:org:create -f ./etc/dev.json -s -a dfsle-scratch-org",
+    "buildOrg": "sfdx force:org:create -f ./etc/developerScratch.json -s -a dfsle-scratch-org -d 30",
     "updateOrg": "sfdx force:source:push",
     "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",

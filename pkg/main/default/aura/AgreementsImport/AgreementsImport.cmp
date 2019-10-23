@@ -8,7 +8,7 @@
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
     <aura:attribute name="importedFile" type="Object"/>
-    <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="disableSalesforceFileImport" type="Boolean" default="true"/>
     <aura:attribute name="widget" type="Object" access="private"/>
     <aura:attribute name="entityId" type="Object" access="private"/>
     <aura:attribute name="isSendingForSignature" type="Boolean" default="false" access="private"/>
@@ -249,7 +249,7 @@
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand"
                                       onclick="{!c.pcFileImportTriggered}"
-                                      label="{!$Label.c.ImportButtonLabel}" disabled="{!v.loading}"></lightning:button>
+                                      label="{!$Label.c.ImportButtonLabel}" disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"></lightning:button>
                 </div>
             </aura:if>
 

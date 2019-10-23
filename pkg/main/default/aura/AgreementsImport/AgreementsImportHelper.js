@@ -71,6 +71,7 @@
           component.set('v.widget', uploadWidget);
           component.set('v.entityId', result.entityId);
           component.set('v.loading', false);
+          this.setHandleUploadEvent(component);
         } catch (error) {
           helper.showToast(component, error, 'error');
           component.set('v.loading', false);
@@ -274,6 +275,12 @@
     });
     $A.enqueueAction(sendingAction);
   },
+
+  setHandleUploadEvent: function (component) {
+    document.addEventListener('springcm:upload:fileChange', function (event) {
+      component.set('v.disableSalesforceFileImport', $A.util.isEmpty(event.detail.files));
+    });
+  },  
 
   exportFileAndSend: function (component, event, helper) {
     component.set('v.loading', true);
