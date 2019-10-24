@@ -138,7 +138,7 @@
 		<name>CannotReadDocumentContent_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous ne pouvez pas retirer votre nom de la liste des utilisateurs DocuSign actifs. Si vous procédez néanmoins à cette opération, vous ne serez plus administrateur DocuSign pour Salesforce.</label>
+		<label>You cannot remove yourself from the active DocuSign users. Doing so will remove your ability to administer DocuSign.</label>
 		<name>CannotRemoveSelf</name>
 	</customLabels>
 	<customLabels>
@@ -494,7 +494,7 @@
 		<name>Intermediary</name>
 	</customLabels>
 	<customLabels>
-		<label>Il peut y avoir un un problème avec un ou plusieurs paramètres de votre compte DocuSign. L’utilisateur dont les identifiants sont utilisés pour activer l’intégration entre DocuSign pour Salesforce et DocuSign (parfois appelé utilisateur SOBO) doit posséder toutes les autorisations suivantes (indicateurs sélectionnés) : « Peut gérer le compte », « Peut envoyer une enveloppe », « Peut envoyer de la part de » et « Accès API à l’échelle du compte ». Tous ces paramètres sont accessibles en ouvrant une session directement sur DocuSign. Cliquez sur Préférences et sélectionnez la zone Autorisations de la console Administration. L’intégration ne fonctionnera pas correctement si tous ces paramètres ne sont pas activés. Vous devez commencer par vérifier ces paramètres même si le problème peut avoir une autre cause. Veuillez contacter votre administrateur DocuSign pour vérifier si des paramètres ont été récemment modifiés dans DocuSign.</label>
+		<label>There may be an issue with one or more settings in your DocuSign account. The user whose credentials are used to enable the integration between Salesforce and DocuSign (sometimes known as the SOBO user) must have all of the following permissions and flags checked; &quot;Can Manage Account&quot;, &quot;Can Send Envelope&quot;, &quot;Allow Send on Behalf Of&quot;, and &quot;API Account Wide Access&quot;. All of these settings may be accessed by logging directly in to DocuSign, clicking Preferences, and selecting the Permissions area of the Administration console. Unless all of those settings are enabled, the integration will not function properly. It is possible the issue is unrelated to these settings, but these must be checked first. Please contact your DocuSign administrator to verify whether any settings have recently changed in DocuSign.</label>
 		<name>InvalidAccountSettings</name>
 	</customLabels>
 	<customLabels>
@@ -922,7 +922,7 @@
 		<name>SupportCenter</name>
 	</customLabels>
 	<customLabels>
-		<label>Chez DocuSign, nous sommes dévoués au succès de nos clients. Nous avons créé un &lt;a href=&quot;https://support.docusign.com/fr/home&quot; target=&quot;_blank&quot;&gt;centre d’assistance&lt;/a&gt; pour aider les utilisateurs sur les fonctionnalités de DocuSign, pour fournir des réponses aux questions courantes et pour afficher des informations diverses sur les performances du système.</label>
+		<label>Chez DocuSign, nous sommes dévoués au succès de nos clients. Nous avons créé un &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;centre d’assistance&lt;/a&gt; pour aider les utilisateurs sur les fonctionnalités de DocuSign, pour fournir des réponses aux questions courantes et pour afficher des informations diverses sur les performances du système.</label>
 		<name>SupportInfo</name>
 	</customLabels>
 	<customLabels>
@@ -946,7 +946,7 @@
 		<name>Title</name>
 	</customLabels>
 	<customLabels>
-		<label>Votre essai gratuit est terminé. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Mettez à niveau votre compte&lt;/a&gt; pour continuer à utiliser DocuSign pour Salesforce</label>
+		<label>Your free trial has ended. &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;Upgrade your account&lt;/a&gt; to continue using DocuSign.</label>
 		<name>TrialAccountExpired</name>
 	</customLabels>
 	<customLabels>
@@ -1070,8 +1070,12 @@
 		<name>ChooseSalesforceFiles2</name>
 	</customLabels>
 	<customLabels>
-		<label>Le fichier ci‑dessous a été copié à partir de fichiers Salesforce, importé dans DocuSign Agreements et peut maintenant être envoyé pour négociation, autorisation ou pour signature.</label>
+		<label>The file below has been copied from Salesforce files, imported to DocuSign Files, and now can be sent for negotiation, approval or signature.</label>
 		<name>SalesforceFileCopyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>The file below has been uploaded, imported to DocuSign Files, and now can be sent for negotiation, approval or signature.</label>
+		<name>UploadFileComplete</name>
 	</customLabels>
 	<customLabels>
 		<label>Envoyer pour évaluation externe</label>
@@ -1166,7 +1170,7 @@
 		<name>InvalidAuthState</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous n’avez pas accordé ou avez révoqué votre consentement à être personnifié par DocuSign par Salesforce.</label>
+		<label>You have not granted or have revoked your consent to be impersonated by DocuSign Apps Launcher.</label>
 		<name>ConsentRequired</name>
 	</customLabels>
 	<customLabels>
@@ -1346,7 +1350,7 @@
 		<name>UploadNewVersion</name>
 	</customLabels>
 	<customLabels>
-		<label>Le chargement d’un fichier créera une nouvelle version de ce document et mettra à jour le calendrier des activités de l’accord.</label>
+		<label>Uploading a file will create a new version of this document and update the document&apos;s activity timeline. You will see the versions listed in descending order, with the newest version on top.</label>
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1354,7 +1358,7 @@
 		<name>AgreementName</name>
 	</customLabels>
 	<customLabels>
-		<label>Version actuelle</label>
+		<label>Date Uploaded</label>
 		<name>CurrentVersion</name>
 	</customLabels>
 	<customLabels>
@@ -1362,7 +1366,7 @@
 		<name>InvalidSearchObject_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Votre essai gratuit est terminé. Mettez à niveau votre compte pour continuer à utiliser DocuSign pour Salesforce Essentials. Veuillez vous déconnecter et vous identifier à nouveau après avoir mis à niveau votre compte en sélectionnant « Configuration DocuSign »</label>
+		<label>Your free trial has ended. Upgrade your account to continue using DocuSign. Please logout and login again after you upgrade your account by selecting DocuSign Setup</label>
 		<name>ExpiredTrialAccount</name>
 	</customLabels>
 	<customLabels>
@@ -1838,7 +1842,7 @@
 		<name>Drafts</name>
 	</customLabels>
 	<customLabels>
-		<label>Ne peut se connecter à DocuSign Gen pour le moment. Veuillez contacter l’assistance DocuSign Gen pour obtenir de l’aide.</label>
+		<label>Unable to connect to DocuSign at this time. Please contact DocuSign Support for assistance.</label>
 		<name>UnableToConnectDocuSignGen</name>
 	</customLabels>
 	<customLabels>
@@ -1846,7 +1850,7 @@
 		<name>SuccessDocuSignAuthorization</name>
 	</customLabels>
 	<customLabels>
-		<label>Ne peut trouver les paramètres pour l’autorisation DocuSign Gen. Veuillez contacter l’assistance de DocuSign Gen pour obtenir de l’aide.</label>
+		<label>Unable to find settings for DocuSign Authorization. Please contact DocuSign Support for assistance.</label>
 		<name>MissingDocuSignGenAuthorizationSettings</name>
 	</customLabels>
 	<customLabels>
@@ -2347,7 +2351,7 @@
 		<name>MapNew</name>
 	</customLabels>
 	<customLabels>
-		<label>MAPPER VOS OBJETS SALESFORCE</label>
+		<label>Map your Salesforce Objects</label>
 		<name>MapYourSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
@@ -2595,7 +2599,7 @@
 		<name>InvalidPermissionSet_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Si une autre solution de signature électronique telle que DocuSign pour Salesforce doit être utilisée, la fonctionnalité de signature électronique de ce package peut être désactivée.</label>
+		<label>If another eSignature solution such as DocuSign eSignature for Salesforce is to be used, the eSignature functionality in this package may be disabled.</label>
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
@@ -2699,7 +2703,7 @@
 		<name>Viewer</name>
 	</customLabels>
 	<customLabels>
-		<label>Rôle géré par DocuSign pour Salesforce</label>
+		<label>Role managed by DocuSign Apps Launcher</label>
 		<name>ProductRoleDescription</name>
 	</customLabels>
 	<customLabels>
@@ -3423,6 +3427,10 @@
 		<name>NegotiateNotConfigured</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign CLM is not configured for your account.</label>
+		<name>CLMNotConfigured</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign eSignature n’est pas configuré pour votre compte.</label>
 		<name>ESignatureNotConfigured</name>
 	</customLabels>
@@ -3455,23 +3463,23 @@
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Créer et gérer des configurations de génération de documents</label>
+		<label>Generate Documents in CLM Salesforce Data</label>
 		<name>CreateAndManageDocumentGenerationConfigurations</name>
 	</customLabels>
 	<customLabels>
-		<label>Configurations de la génération de documents</label>
+		<label>Create Document Generation Configurations</label>
 		<name>DocumentGenerationConfigurations</name>
 	</customLabels>
 	<customLabels>
-		<label>Processus de génération de document</label>
+		<label>Speed Up Your Processes</label>
 		<name>DocumentGenerationProcessTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>La génération de documents est le principal outil permettant de générer de nouveaux accords ou contrats, en chargeant des documents existants pour lancer de nouveaux flux de travail. Cet outil est disponible dans DocuSign CLM.</label>
+		<label>Document generation lets you simplify creating, uploading and generating new documents. You can configure and manage this in DocuSign CLM.</label>
 		<name>CreateAndManageDocSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez ajouter à votre présentation de page Salesforce un bouton personnalisé pour déclencher une URL de configuration de génération de document. Cliquer sur le bouton personnalisé ouvrira le formulaire affilié de génération de documents.</label>
+		<label>DocuSign CLM lets you generate documents in one click. To set this up, you&apos;ll have to add a button with a document generation configuration URL to your Salesforce page layout.</label>
 		<name>CreateAndManageDocSummary2</name>
 	</customLabels>
 	<customLabels>
@@ -3483,11 +3491,11 @@
 		<name>LearnHowToAddAButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Les configurations sont l’un des principaux moteurs du processus de génération de documents dans DocuSign CLM. Une configuration est composée de 3 éléments :</label>
+		<label>To generate a document you need to set up a Document Generation Configuration. Each configuration consist of three parts:</label>
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>À l’aide de vos propres modèles, vous pouvez rapidement fusionner des données pour créer de nouveaux accords, contrats ou tout autre document et les envoyer instantanément vers le processus suivant. Vous pouvez aussi utiliser le même outil pour démarrer un flux de travail en chargeant un document existant, tel qu’un accord commercial tiers.</label>
+		<label>After it&apos;s set up, document generation can take your data from Salesforce and merge it on to a template to generate a new agreement. You can even use creating a document as a trigger to start a new workflow.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3515,7 +3523,7 @@
 		<name>CreateAndManageWorkflows</name>
 	</customLabels>
 	<customLabels>
-		<label>Automatiser les processus dans DocuSign CLM</label>
+		<label>Automate Business Process in DocuSign CLM</label>
 		<name>AutomateprocessesinDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
@@ -3527,15 +3535,15 @@
 		<name>WorkflowSteps</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow relie des sous‑processus pour normaliser plusieurs processus, automatisant ainsi les tâches récurrentes, réduisant ainsi les risques d’erreurs humaines et les coûts d’exploitation. Cet outil est disponible dans DocuSign CLM.</label>
+		<label>Workflows automate repetitive tasks, reduce human errors and cut down on operating costs. This tool is available in DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow Designer est un espace où vous pouvez connecter des étapes qui représentent les différentes activités du processus. Ces étapes sont comme les éléments d’un diagramme et vous aident à construire votre workflow. Vous pouvez exploiter les étapes individuelles du workflow, personnaliser les activités associées à chaque étape et les automatiser davantage en utilisant des expressions C# là où les propriétés des étapes le permettent.</label>
+		<label>Workflow designer is a canvas that let you design and update your workflows. This lets you scale and automate workflows to fit your specific needs.</label>
 		<name>WorkflowDesignerSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Il existe cinq types d’étapes prédéfinies :</label>
+		<label>To make a workflow you&apos;ll have to connect a series of steps. Each step represents a process activity. There are five different types of pre-defined steps:</label>
 		<name>WorkflowStepsSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3559,15 +3567,15 @@
 		<name>WorkflowSteps5</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez ajouter à votre présentation de page Salesforce un bouton personnalisé pour des flux de travail avancés. Un clic sur le bouton personnalisé déclenchera le flux de travail avancé.</label>
+		<label>You can trigger an advanced workflow with a single button click. Add a button to your Salesforce page layout to enable this action.</label>
 		<name>CustomWorkflowButtonSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Ajoutez des composants en configurant vos présentations</label>
+		<label>Add DocuSign CLM Components to Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Portail Dossiers - Afficher vos dossiers d’objets</label>
+		<label>Folder Portal - View Your Object Folders by Adding a View</label>
 		<name>FolderPortalViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
@@ -3575,7 +3583,7 @@
 		<name>Component2</name>
 	</customLabels>
 	<customLabels>
-		<label>Le portail Dossiers vous permet d’afficher et de travailler sur vos dossiers d’objet à partir de Salesforce. Une fois que vous avez mappé vos objets Salesforce, vous pouvez personnaliser la présentation de page de votre objet Salesforce en ajoutant une vue.</label>
+		<label>The folder portal component lets you manage your object folders right in Salesforce. To use it, you&apos;ll add the folder portal component to your Salesforce object layout after mapping objects.</label>
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
@@ -4186,6 +4194,162 @@
 	<customLabels>
 		<label>{0} Objet 1</label>
 		<name>ObjFolderImgExample</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Knowledge/Map-Docusign-CLM-Objects</label>
+		<name>MappingGuideURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Add-a-Custom-Button-to-a-Page-Layout-for-DocuSign-for-CLM</label>
+		<name>AddButtonToLayoutURL</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}%</label>
+		<name>OnboardingProgressPercent</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Gen trial has expired.</label>
+		<name>GenTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Your DocuSign Negotiate trial has expired.</label>
+		<name>NegotiateTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about object mapping</label>
+		<name>LearnMoreAboutObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>Map Objects</label>
+		<name>MapObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>1</label>
+		<name>NumberOne</name>
+	</customLabels>
+	<customLabels>
+		<label>2</label>
+		<name>NumberTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>3</label>
+		<name>NumberThree</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM.</label>
+		<name>DocGenCardText</name>
+	</customLabels>
+	<customLabels>
+		<label>Great! You&apos;ve Created Your First Agreement With Salesforce Data</label>
+		<name>CLCreatedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>You can always review these steps in the Help section. Look under &quot;Generate an Agreement Using Salesforce Data&quot; to find them.</label>
+		<name>CLGeneratedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Got It</label>
+		<name>GotIt</name>
+	</customLabels>
+	<customLabels>
+		<label>Marked Complete</label>
+		<name>MarkedComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Map new Salesforce objects to DocuSign CLM. You can also use the &apos;Account&apos; and &apos;Opportunity&apos; objects that we mapped for you.</label>
+		<name>MapNewObjectsToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Configure your Object page layout and add a folder portal component to see your object folders.</label>
+		<name>ConfigureObjPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Go to DocuSign CLM and create a form using your mapped Salesforce object.</label>
+		<name>CreateFormUsingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Use your created form to set up a document generation template in DocuSign CLM.</label>
+		<name>SetupDocGenTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>5. Copy the document generation configuration URL. Add to it a new button on your Saledforce object page layout.</label>
+		<name>ConfigureDocGenURL</name>
+	</customLabels>
+	<customLabels>
+		<label>6. Use that button to generate documents with a single click.</label>
+		<name>SingleClickGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to CLM</label>
+		<name>GoToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>View Mappings</label>
+		<name>HomeViewMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>Generate Your First Agreement</label>
+		<name>CheckListGenerateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>6 steps</label>
+		<name>ChecklistSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>GET STARTED</label>
+		<name>HomeGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>These steps will help you generate an agreement using Salesforce data.</label>
+		<name>CheckListCreateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Steps to Creating an Agreement</label>
+		<name>CreateAgreementSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Composants</label>
+		<name>HomeComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Customize layouts and experiences by adding custom components.</label>
+		<name>HomeComponentSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>We&apos;ve created a Help page to provide answers to common questions for DocuSign CLM for Salesforce.</label>
+		<name>HomeHavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>Obtenir un assistance</label>
+		<name>HomeGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to configure a layout in Salesforce</label>
+		<name>HomeConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to add a button on an Object page</label>
+		<name>HomeAddButton</name>
+	</customLabels>
+	<customLabels>
+		<label>These steps will help you generate your first agreement using Salesforce data. Check them off as you finish them.</label>
+		<name>CheckListFirstAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>Object Manager</label>
+		<name>CLObjectManager</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to Workflows</label>
+		<name>GoToWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Go to Document Generation</label>
+		<name>GoToDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Overview Image</label>
+		<name>OverviewImage</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>
