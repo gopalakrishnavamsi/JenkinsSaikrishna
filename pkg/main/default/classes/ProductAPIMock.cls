@@ -85,7 +85,7 @@ public class ProductAPIMock extends OAuthTokenMock {
 					new ProductAPI.APIProductProperty('admin_uri', 'https://test.springcm.com/atlas/Admin/AccountSettings'),
 					new ProductAPI.APIProductProperty('landing_page_uri', 'https://test.springcm.com/atlas/LandingPage'),
 					new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
-					new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test.springcm.com/')
+					new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test.springcm.com/')
 				};
 				ps.products = new List<ProductAPI.APIProduct> {
 					eSign, gen, negotiate, clm

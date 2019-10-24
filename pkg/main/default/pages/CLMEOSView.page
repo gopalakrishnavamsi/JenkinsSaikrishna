@@ -1,5 +1,5 @@
 <apex:page controller="CLMEOSViewController">
-	<apex:slds />
+	<apex:slds/>
 	<style>
 		.ds-main {
 			width: 100%;
@@ -40,7 +40,7 @@
 					{!$Label.CouldNotConnectToCLM}
 				</div>
 				<div class="slds-p-bottom_large slds-align_absolute-center ds-gray-color ds-font-size">
-					{!$Label.RefreshToLoadFolders}
+					{!errorMessage}
 				</div>
 			</div>
 		</apex:outputPanel>
@@ -59,7 +59,7 @@
 				}
 			</script>
 			<div class="ds-main" id="main">
-				<iframe id="frame" src="{!hostingUrl}" width="100%" height="100%" frameborder="0" seamless="true" />
+				<iframe id="frame" src="{!hostingUrl}" width="100%" height="100%" frameborder="0" seamless="true"/>
 			</div>
 		</apex:outputPanel>
 	</apex:form>

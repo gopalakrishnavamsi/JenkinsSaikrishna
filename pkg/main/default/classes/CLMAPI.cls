@@ -1,4 +1,4 @@
-public with sharing class CLMAPI extends DocuSignAPI {
+public with sharing class CLMAPI extends ScmAPI {
 	private static final String API = 'api';
 	private static final String API_VERSION = 'v1';
 	private static final String GET_SESSION_URL = 'GetSessionUrl';
@@ -12,46 +12,34 @@ public with sharing class CLMAPI extends DocuSignAPI {
 	private static final String POST_REQ_PATH_FOLDER_VIEW = 'EOS/GetEosInformation.aspx';
 	private static final String POST_REQ_PATH_DOC_GEN = 'Admin/DocLauncherConfig';
 	private static final String POST_REQ_PATH_WORKFLOW = 'workflow';
-	//TODO: Replace AUTH_BASE_URL with appropriate value from custom setting
-	private static String AUTH_BASE_URL; 
-    //TODO: Only for demo. Remove before Security review.
-    private static String RESOURCE_URL;
 
 	private CLMAPI(final Url baseUrl, final String api, final String apiVersion) {
 		super(new Url (baseUrl, String.format('/{0}/{1}/',
-											new List<String> {
-				api,
-				apiVersion
-			})));
+		                                      new List<String> {
+			api,
+			apiVersion
+		})));
 	}
 
 	public static CLMAPI getInstance() {
 		if (self == null) {
-			//TODO: replace authBaseUrl with appropriate custom setting value
-			setDynamicEndpointUrls();
-			Url authBaseUrl = new Url(AUTH_BASE_URL);
-			self = new CLMAPI(authBaseUrl, API, API_VERSION);
+			Url baseUrl = AccountProducts.getInstance().getScmAuthBaseUrl();
+			if (baseUrl == null) {
+				LoggerService.getInstance().error('SCM auth base URL is not configured');
+				throw new DocuSignException(Label.CLMNotConfigured);
+			}
+			self = new CLMAPI(baseUrl, API, API_VERSION);
 		}
 		return self;
 	}
 
-    //TODO: Only for demo. Remove this method after SpringCM API returns right URLs
-    private static void setDynamicEndpointUrls() {
-        Credentials c = Credentials.getInstance();
-        if(c.environment.environment == DocuSign.Environment.Demo) {
-        	AUTH_BASE_URL = 'https://authuat.springcm.com';   
-            RESOURCE_URL = 'https://uatna11.springcm.com/atlas/';
-        } else {
-            AUTH_BASE_URL = 'https://authqa.springcm.com';
-            RESOURCE_URL = 'https://qana11.springcm.com/atlas/';
-        }
-        MetadataService.newRemoteSite(c.environment.environment, 'AUTH', 'SpringCM authentication endpoint', new Url(AUTH_BASE_URL));
-        MetadataService.newRemoteSite(c.environment.environment, 'RESOURCE', 'SpringCM resource endpoint', new Url(RESOURCE_URL));
-    }
-	
-    private static Url getResourceAuthUrl() {
-		//TODO: replace hardcoded string with appropriate auth url
-		return new Url(RESOURCE_URL);
+	private static Url getResourceAuthUrl() {
+		Url resourceUrl = AccountProducts.getInstance().getScmWebBaseUrl();
+		if (resourceUrl == null) {
+			LoggerService.getInstance().error('SCM web base URL is not configured');
+			throw new DocuSignException(Label.MissingDocuSignCLMSettings);
+		}
+		return resourceUrl;
 	}
 
 	public Url getClmUrl(CLMService.SubstitutedParams eosValues) {
@@ -61,13 +49,10 @@ public with sharing class CLMAPI extends DocuSignAPI {
 		Credentials c = Credentials.getInstance();
 		accountId = c.account.Id;
 		final RestAPI.Response response = post(
-			getBaseUrl(),
 			new List<Object> {String.valueOf(accountId), GET_SESSION_URL},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'url' => formattedPostReqUrl.toExternalForm()
-			}),
+			'url' => formattedPostReqUrl.toExternalForm()
+		}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to fetch response: ' + response.error);
@@ -84,13 +69,10 @@ public with sharing class CLMAPI extends DocuSignAPI {
 		String spec = String.format('{0}?{1}', new List<String> {POST_REQ_PATH_DOC_GEN, queryParams.toString()});
 		Url formattedPostReqUrl = new Url(getResourceAuthUrl(), spec);
 		final RestAPI.Response response = post(
-			getBaseUrl(),
 			new List<Object> {String.valueOf(accountId), GET_SESSION_URL},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'url' => formattedPostReqUrl.toExternalForm()
-			}),
+			'url' => formattedPostReqUrl.toExternalForm()
+		}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to fetch response: ' + response.error);
@@ -99,21 +81,18 @@ public with sharing class CLMAPI extends DocuSignAPI {
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return new Url(String.valueOf(body.get('Url')));
 	}
-        
+
 	public Url getWorkflowUrl() {
-		Credentials c = Credentials.getInstance();        
+		Credentials c = Credentials.getInstance();
 		accountId = c.account.Id;
 		QueryString queryParams =  new QueryString(new Map<String, String> {AID => String.valueOf(c.account.accountNumber)});
 		String spec = String.format('{0}?{1}', new List<String> {POST_REQ_PATH_WORKFLOW, queryParams.toString()});
 		Url formattedPostReqUrl = new Url(getResourceAuthUrl(), spec);
 		final RestAPI.Response response = post(
-			getBaseUrl(),
 			new List<Object> {String.valueOf(accountId), GET_SESSION_URL},
-			QueryString.empty,
-			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
-				'url' => formattedPostReqUrl.toExternalForm()
-			}),
+			'url' => formattedPostReqUrl.toExternalForm()
+		}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to fetch response: ' + response.error);

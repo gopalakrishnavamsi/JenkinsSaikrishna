@@ -8232,6 +8232,14 @@
 		<shortDescription>CLM - Generate Document on Single Click </shortDescription>
 		<value>6. Use that button to generate documents with a single click.</value>
 	</labels>
+  <labels>
+		<fullName>MissingDocuSignCLMSettings</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Missing DocuSign CLM Settings</shortDescription>
+		<value>Unable to find DocuSign CLM settings. Please contact DocuSign Support for assistance.</value>
+	</labels>
 	<labels>
 		<fullName>GoToCLM</fullName>
 		<categories>CLM</categories>
@@ -8375,8 +8383,8 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Overview image alt text</shortDescription>
 		<value>Overview Image</value>
-	</labels>
-	<labels>
+	</labels>	
+  <labels>
 		<fullName>FetchingSalesforceFiles</fullName>
 		<categories>DocuSign Files</categories>
 		<language>en_US</language>
@@ -8417,3 +8425,4 @@
 		<value>Authorizing</value>
 	</labels>	
 </CustomLabels>
+

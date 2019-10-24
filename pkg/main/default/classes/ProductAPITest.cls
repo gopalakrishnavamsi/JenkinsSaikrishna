@@ -98,7 +98,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test.springcm.com/')
 			};
 			ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
 			ps.id = UUID.randomUUID().toString();
@@ -141,7 +141,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test.springcm.com/')
 			};
 			ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
 			ps.id = UUID.randomUUID().toString();
@@ -184,7 +184,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test1.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test1.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test1.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test1.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test1.springcm.com/')
 			};
 			ProductAPI.APIProduct p2 = new ProductAPI.APIProduct();
 			p2.product_id = 'clmpro';
@@ -195,7 +195,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test2.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test2.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test2.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test2.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test2.springcm.com/')
 			};
 			ProductAPI.APIProduct p3 = new ProductAPI.APIProduct();
 			p3.product_id = 'clmsf';
@@ -206,7 +206,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test3.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test3.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test3.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test3.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test3.springcm.com/')
 			};
 			ProductAPI.APIProduct p4 = new ProductAPI.APIProduct();
 			p4.product_id = 'clmprosf';
@@ -217,7 +217,7 @@ private class ProductAPITest {
 				new ProductAPI.APIProductProperty('admin_uri', 'https://test4.springcm.com/atlas/Admin/AccountSettings'),
 				new ProductAPI.APIProductProperty('landing_page_uri', 'https://test4.springcm.com/atlas/LandingPage'),
 				new ProductAPI.APIProductProperty('web_base_uri', 'https://test4.springcm.com/atlas/'),
-				new ProductAPI.APIProductProperty('apiauth_base_url', 'https://auth.test4.springcm.com/')
+				new ProductAPI.APIProductProperty('apiauth_base_uri', 'https://auth.test4.springcm.com/')
 			};
 			ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
 			ps.id = UUID.randomUUID().toString();

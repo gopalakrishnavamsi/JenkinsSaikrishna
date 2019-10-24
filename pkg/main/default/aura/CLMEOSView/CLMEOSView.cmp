@@ -45,7 +45,7 @@
                     {!$Label.c.CouldNotConnectToCLM}
                 </div>
                 <div class="slds-p-bottom_large ds-font-size slds-align_absolute-center ds-gray-color">
-                    {!$Label.c.RefreshToLoadFolders}
+                    {!v.eosDetails.errorMessage}
                 </div>
             </aura:if>
             <aura:set attribute="else">

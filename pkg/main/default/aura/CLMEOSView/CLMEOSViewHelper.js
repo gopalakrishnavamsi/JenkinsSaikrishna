@@ -7,7 +7,7 @@
       });
     action.setCallback(this, function (response) {
       var state = response.getState();
-      if (state === 'SUCCESS') {
+      if (state === 'SUCCESS') {        
         component.set('v.eosDetails', response.getReturnValue());
       } else {
         helper.fireToast(component, stringUtils.getErrorMessage(response), helper.ERROR);

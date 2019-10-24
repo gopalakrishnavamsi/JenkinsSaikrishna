@@ -108,8 +108,8 @@ public with sharing class ProductAPI extends ProvisioningAPI {
 					StringUtils.parseDate(this.expiration_date),
 					properties.containsKey('web_base_uri')
 						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('web_base_uri'))) : null,
-					properties.containsKey('apiauth_base_url')
-						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('apiauth_base_url'))) : null);
+					properties.containsKey('apiauth_base_uri')
+						? UrlUtils.canonicalizeBaseUrl(new Url(properties.get('apiauth_base_uri'))) : null);
 			}
 			return p;
 		}

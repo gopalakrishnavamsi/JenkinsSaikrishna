@@ -39,7 +39,7 @@ public class CLMAPIMock extends OAuthTokenMock {
 		} else {
 			response.setStatusCode(400);
 			response.setStatus('BAD_REQUEST');
-			response.setBody('{"error":"unit_test","error_message":"Unit test error"}');
+			response.setBody('{"Error":{"HttpStatusCode":400,"UserMessage":"Test user message","DeveloperMessage":"Test developer message","ErrorCode":1234,"ReferenceId":"' + UUID.randomUUID() + '"}}');
 		}
 		return response;
 	}

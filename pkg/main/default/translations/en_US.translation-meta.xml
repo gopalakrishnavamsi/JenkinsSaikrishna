@@ -4281,6 +4281,10 @@
 		<label>6. Use that button to generate documents with a single click.</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
+  <customLabels>  
+		<label>Unable to find DocuSign CLM settings. Please contact DocuSign Support for assistance.</label>
+		<name>MissingDocuSignCLMSettings</name>
+	</customLabels>
 	<customLabels>
 		<label>Go to CLM</label>
 		<name>GoToCLM</name>
@@ -4352,8 +4356,8 @@
 	<customLabels>
 		<label>Overview Image</label>
 		<name>OverviewImage</name>
-	</customLabels>
-	<customLabels>
+	</customLabels>	  
+  <customLabels>  
 		<label>Fetching Salesforce files</label>
 		<name>FetchingSalesforceFiles</name>	
 	</customLabels>
