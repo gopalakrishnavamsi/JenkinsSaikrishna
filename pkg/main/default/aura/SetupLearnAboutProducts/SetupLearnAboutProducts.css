@@ -21,8 +21,9 @@
     color: rgb(0, 109, 204);
     background-color: #f6fbff;
     background-image: url(/resource/New_Window);
-    background-position-x: right;
     background-repeat: no-repeat;
+    background-position-x: 98.5%;
+    background-position-y: 2%;
 }
 
 .THIS .ds-learn-image {

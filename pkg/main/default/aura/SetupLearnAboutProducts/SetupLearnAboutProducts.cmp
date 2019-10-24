@@ -16,7 +16,7 @@
                     <div class="ds-learn-image-tile">
                         <div class="slds-text-align_center">
                             <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnEsign}"/>
-                            <div class="slds-m-around_small ds-learn-image-title">
+                            <div class="slds-m-top_x-small ds-learn-image-title">
                                 {!$Label.c.LearnEsignLabel}
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                     <div class="ds-learn-image-tile">
                         <div class="slds-text-align_center">
                             <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnGen}"/>
-                            <div class="slds-m-around_small ds-learn-image-title">
+                            <div class="slds-m-top_x-small ds-learn-image-title">
                                 {!$Label.c.LearnGenLabel}
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                     <div class="ds-learn-image-tile">
                         <div class="slds-text-align_center">
                             <img class="slds-m-top_large ds-learn-image" src="{!$Resource.LearnNegotiate}"/>
-                            <div class="slds-m-around_small ds-learn-image-title">
+                            <div class="slds-m-top_x-small ds-learn-image-title">
                                 {!$Label.c.LearnNegotiateLabel}
                             </div>
                         </div>

@@ -37,7 +37,7 @@
 
 .THIS .ds-home-centerSpace {
     background: rgb(249, 249, 250);
-    border-radius: .1rem;
+    border-radius: 4px;
 }
 
 .THIS .ds-userManagement-section, .THIS .ds-documentGeneration-section, .THIS .ds-negotiation-section, .THIS .ds-esignature-section {
@@ -47,6 +47,7 @@
 .THIS .ds-setupSection-heading {
     background: rgb(243, 242, 242);
     max-height: 80px;
+    border-radius: 4px;
 }
 
 .THIS .ds-configuration-detail {
