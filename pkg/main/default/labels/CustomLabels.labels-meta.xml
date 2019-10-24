@@ -2866,7 +2866,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Publish</shortDescription>
-		<value>Add Button</value>
+		<value>Update Layouts</value>
 	</labels>
 	<labels>
 		<fullName>ModifyLayouts</fullName>
