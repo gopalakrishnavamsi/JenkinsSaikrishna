@@ -110,7 +110,7 @@
       case 'input1':
         if (component.get('v.step1') === true) {
           progress += 17;
-          helper.updateState(component, helper.AgreementsSteps[0]);
+          helper.updateState(component, 'InstallChecklistStep1');
           component.set('v.isStep2Disabled', false);
         }
         else {
@@ -120,7 +120,7 @@
       case 'input2':
         if (component.get('v.step2') === true) {
           progress += 17;
-          helper.updateState(component, helper.AgreementsSteps[1]);
+          helper.updateState(component, 'InstallChecklistStep2');
           component.set('v.isStep3Disabled', false);
         }
         else {
@@ -130,7 +130,7 @@
       case 'input3':
         if (component.get('v.step3') === true) {
           progress += 17;
-          helper.updateState(component, helper.AgreementsSteps[2]);
+          helper.updateState(component, 'InstallChecklistStep3');
           component.set('v.isStep4Disabled', false);
         }
         else {
@@ -140,7 +140,7 @@
       case 'input4':
         if (component.get('v.step4') === true) {
           progress += 17;
-          helper.updateState(component, helper.AgreementsSteps[3]);
+          helper.updateState(component, 'InstallChecklistStep4');
           component.set('v.isStep5Disabled', false);
         }
         else {
@@ -150,7 +150,7 @@
       case 'input5':
         if (component.get('v.step5') === true) {
           progress += 17;
-          helper.updateState(component, helper.AgreementsSteps[4]);
+          helper.updateState(component, 'InstallChecklistStep5');
           component.set('v.isStep6Disabled', false);
         }
         else {
@@ -159,7 +159,7 @@
         break;
       case 'input6':
         if (component.get('v.step6') === true) {
-          helper.updateState(component, helper.AgreementsSteps[5]);
+          helper.updateState(component, 'InstallChecklistStep6');
           progress += 17;
         }
         else {

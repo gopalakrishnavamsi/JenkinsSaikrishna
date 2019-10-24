@@ -39,8 +39,8 @@
 
     <aura:attribute name="selectedObjFieldName" default="" type="String" access="private"/>
 
-    <aura:attribute name="selectedFolderParentExample" type="String" default="Other Sources" access="private"/>
-    <aura:attribute name="SelectedFolderExample" default="Salesforce" type="String" access="private"/>
+    <aura:attribute name="selectedFolderParentExample" type="String" default="{!$Label.c.OtherSourcesText}" access="private"/>
+    <aura:attribute name="SelectedFolderExample" default="{!$Label.c.Salesforce}" type="String" access="private"/>
 
     <aura:attribute name="clmFolderTree" type="List" access="private"/>
     <aura:attribute name="pathInCLM" default="" type="String" access="private"/>
@@ -65,9 +65,9 @@
     <aura:attribute name="isRemove" type="Boolean" default="false" access="private"/>
     <aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]"/>
     <aura:attribute name="modalBodyText" type="String" default=""/>
-    <aura:attribute name="headerTitle" type="String" access="private" default="Map New Salesforce Object"/>
+    <aura:attribute name="headerTitle" type="String" access="private" default="{!$Label.c.MapNewSalesforceObject}"/>
     <aura:attribute name="iconUrl" type="String" access="private" default="standard:social"/>
-    <aura:attribute name="sectionTitle" type="String" access="private" default="CLM"/>
+    <aura:attribute name="sectionTitle" type="String" access="private" default="{!$Label.c.CLM}"/>
 
     <!--child components-->
     <aura:if isTrue="{!v.showModal}">
@@ -241,7 +241,7 @@
                                                 </div>
                                                 <ul role="group" class="slds-p-left_medium">
                                                     <aura:iteration items="{!objectData.fields}" var="fieldData">
-                                                        <li data-obj="{!if(objectData.relationship != undefined, objectData.relationship, objectData.name)}"
+                                                        <li data-obj="{!objectData.name}"
                                                             class="ds-parent-hover" aria-level="2"
                                                             id="{!fieldData.name}" role="treeitem"
                                                             onclick="{!c.onObjFieldSelection}">

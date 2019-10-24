@@ -20,21 +20,21 @@ public with sharing class CLMService {
 		return value;
 	}
 
-	private List<SObject> query(String field, String objectName, Id recordId) {
+	private List<SObject> query(String field,String objectName,Id recordId) {
 		List<SObject> result = new List<SObject>();
 		DescribeSObjectResult objDetails = MetadataService.describeSObject(recordId);
 		if (objDetails != null) {
 			if (!field.contains('.')) {
-				Permissions.verifyIsQueryable(objDetails.getSobjectType(), new List<String> { field });
+				Permissions.verifyIsQueryable(objDetails.getSobjectType(), new List<String> {field});
 			} else {
-				string parentObjName = field.split('\\.')[0];
-				string parentfieldName = field.split('\\.')[1].replace('__r', '__c');
-				Permissions.verifyIsQueryable(Schema.getGlobalDescribe().get(parentObjName), new List<String> { parentfieldName });
+				String parentObjName = field.split('\\.')[0].trim();
+				String parentfieldName = field.split('\\.')[1].replace('__r', '__c').trim();
+				Permissions.verifyIsQueryable(Schema.getGlobalDescribe().get(parentObjName), new List<String> {parentfieldName});
 			}
 			result = new List<SObject>();
-			field = field.replace('__c', '__r');
+			field = field.replace('__c', '__r').trim();
 			if (String.isNotEmpty(field) && String.isNotEmpty(objectName) && String.isNotEmpty(recordId))
-				result = Database.query('select ' + String.escapeSingleQuotes(field) + ' from  ' + String.escapeSingleQuotes(objectName) + ' where id = :recordId');
+				result =  Database.query('select ' + String.escapeSingleQuotes(field) + ' from  ' + String.escapeSingleQuotes(objectName.trim()) + ' where id = :recordId');
 		}
 		return result;
 	}
@@ -66,29 +66,29 @@ public with sharing class CLMService {
 		if (Application.namespace.equals('c')) {
 			folderConfig = config.FolderName__c.split('\\.');
 			variablesConfig = config.Variables__c.split(',');
-			pathFormatConfig = config.PathFormat__c;
+			pathFormatConfig = config.PathFormat__c.trim();
 		} else {
 			folderConfig = String.valueOf(config.get(Application.namespacePrefix + 'FolderName__c')).split('\\.');
 			if (!String.isEmpty(String.valueOf(config.get(Application.namespacePrefix + 'Variables__c')))) {
 				variablesConfig = String.valueOf(config.get(Application.namespacePrefix + 'Variables__c')).split(',');
 			}
-			pathFormatConfig = String.valueOf(config.get(Application.namespacePrefix + 'PathFormat__c'));
+			pathFormatConfig = String.valueOf(config.get(Application.namespacePrefix + 'PathFormat__c')).trim();
 		}
 		String parentObject = folderConfig.get(0).substringAfter('{!');
 		String folderApiName = folderConfig.get(1).substringBefore('}');
-		String folderName = serviceInstance.getValue(folderApiName, serviceInstance.query(folderApiName, parentObject, recordId));
+		String folderName = serviceInstance.getValue(folderApiName.trim(),serviceInstance.query(folderApiName.trim(),parentObject.trim(),recordId));
 		List<String> variables = new List<String>();
-		for (String variable : variablesConfig) {
+		for (String variable:variablesConfig) {
 			List<String> variableConfigList = variable.split('\\.');
 			String referenceObjectName = variableConfigList.get(0);
 			String referenceFieldName = variableConfigList.get(1);
 			if (referenceObjectName == parentObject) {
-				variables.add(serviceInstance.getValue(referenceFieldName, serviceInstance.query(referenceFieldName, parentObject, recordId)));
+				variables.add(serviceInstance.getValue(referenceFieldName,serviceInstance.query(referenceFieldName,parentObject,recordId)));
 			} else {
-				variables.add(serviceInstance.getValue(variable, serviceInstance.query(variable, parentObject, recordId)));
+				variables.add(serviceInstance.getValue(variable,serviceInstance.query(variable,parentObject,recordId)));
 			}
 		}
-		subParams = new SubstitutedParams(recordId, folderName, parentObject, String.format(pathFormatConfig, variables));
+		subParams = new SubstitutedParams(recordId, folderName, parentObject, String.format(pathFormatConfig,variables));
 		return subParams;
 	}
 

@@ -8383,7 +8383,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Overview image alt text</shortDescription>
 		<value>Overview Image</value>
-	</labels>	
+	</labels>
   <labels>
 		<fullName>FetchingSalesforceFiles</fullName>
 		<categories>DocuSign Files</categories>
@@ -8423,6 +8423,21 @@
 		<protected>true</protected>
 		<shortDescription>Authorizing</shortDescription>
 		<value>Authorizing</value>
-	</labels>	
+	</labels>
+  	<labels>
+		<fullName>OtherSourcesText</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Other Sources text</shortDescription>
+		<value>Other Sources</value>
+	</labels>
+	<labels>
+		<fullName>MapNewSalesforceObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - MapNewSalesforceObject</shortDescription>
+		<value>Map New Salesforce Object</value>
+	</labels>
 </CustomLabels>
-

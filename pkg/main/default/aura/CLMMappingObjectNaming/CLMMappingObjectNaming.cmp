@@ -57,7 +57,7 @@
 				<lightning:input aura:id="search-field" placeholder="{!$Label.c.SearchFields}" type="search"
 					variant="label-hidden" />
 			</div>
-			<div class="slds-box slds-p-around_none slds-scrollable_y" style="max-height:500px">
+			<div class="slds-p-around_none">
 				<ul class="slds-tree" role="tree">
 					<aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
 						<li aria-expanded="{!objectData.selected}" aria-level="1" id="{!objectData.name}"
@@ -74,7 +74,7 @@
 							</div>
 							<ul role="group" class="slds-p-left_medium">
 								<aura:iteration items="{!objectData.fields}" var="fieldData">
-									<li data-obj="{!objectData.relationship}" class="ds-parent-hover" aria-level="2"
+									<li data-obj="{!objectData.name}" class="ds-parent-hover" aria-level="2"
 										id="{!fieldData.name}" role="treeitem" onclick="{!c.onObjFieldSelection}">
 										<div class="slds-grid slds-tree__item">
 											<lightning:icon size="x-small" class="slds-p-left_xx-small"

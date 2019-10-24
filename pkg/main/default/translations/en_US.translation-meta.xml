@@ -4356,7 +4356,7 @@
 	<customLabels>
 		<label>Overview Image</label>
 		<name>OverviewImage</name>
-	</customLabels>	  
+	</customLabels>
   <customLabels>  
 		<label>Fetching Salesforce files</label>
 		<name>FetchingSalesforceFiles</name>	
@@ -4376,7 +4376,15 @@
 	<customLabels>
 		<label>Authorizing</label>
 		<name>Authorizing</name>
-	</customLabels>		
+	</customLabels>
+  <customLabels>
+		<label>Other Sources</label>
+		<name>OtherSourcesText</name>
+	</customLabels>
+	<customLabels>
+		<label>Map New Salesforce Object</label>
+		<name>MapNewSalesforceObject</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

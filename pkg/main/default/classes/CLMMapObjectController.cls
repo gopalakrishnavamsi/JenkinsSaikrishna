@@ -2,16 +2,16 @@ public with sharing class CLMMapObjectController {
 
 	@AuraEnabled
 	public static Boolean getScopedNotificationStatus() {
-		User_Activity__c state=User_Activity__c.getValues('RenderedScopedNotification');
-		return (state==null) ? false : true;
+		User_Activity__c state = User_Activity__c.getValues('RenderedScopedNotification');
+		return (state == null) ? false : true;
 	}
 
 	@AuraEnabled
 	public static void setScopedNotificationStatus() {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			User_Activity__c newState=new User_Activity__c();
-			newState.Name='RenderedScopedNotification';
+			User_Activity__c newState = new User_Activity__c();
+			newState.Name = 'RenderedScopedNotification';
 			insert newState;
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to update ui state.');
@@ -33,12 +33,12 @@ public with sharing class CLMMapObjectController {
 	public static Boolean setMappedObject(EOS_Type__c eosDetails) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			Map<String,List<String> > pathDetails=parsePath(eosDetails.Path__c);
+			Map<String,List<String> > pathDetails = parsePath(eosDetails.Path__c);
 			if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
-				eosDetails.Variables__c=String.join(pathDetails.get('Variables'),',');
-				eosDetails.PathFormat__c=String.join(pathDetails.get('PathFormat'),'');
-				eosDetails.FolderNameFormat__c='{'+pathDetails.get('Variables').size()+'}';
-				String ObjectName=eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
+				eosDetails.Variables__c = String.join(pathDetails.get('Variables'),',');
+				eosDetails.PathFormat__c = String.join(pathDetails.get('PathFormat'),'');
+				eosDetails.FolderNameFormat__c = '{' + pathDetails.get('Variables').size() + '}';
+				String ObjectName = eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
 			}
 			upsert eosDetails;
 			return true;
@@ -48,19 +48,19 @@ public with sharing class CLMMapObjectController {
 	}
 
 	private static Map<String,List<String> > parsePath(String path) {
-		Map<String,List<String> > result=new Map<String,List<String> >();
-		List<String> variables=new List<String>();
-		String formatted='';
-		Integer index=0;
+		Map<String,List<String> > result = new Map<String,List<String> >();
+		List<String> variables = new List<String>();
+		String formatted = '';
+		Integer index = 0;
 		for (String folder:path.split('/')) {
-			String objName=folder.substringAfter('{!').substringBefore('}');
+			String objName = folder.substringAfter('{!').substringBefore('}');
 			if (String.isNotBlank(objName)) {
 				variables.add(objName);
-				formatted += folder.substringBefore('{!')+'{'+index+'}'+folder.substringAfter('}')+'/';
+				formatted += folder.substringBefore('{!') + '{' + index +'}' + folder.substringAfter('}') + '/';
 				index++;
 			}
 			else {
-				formatted += folder+'/';
+				formatted += folder + '/';
 			}
 		}
 		result.put('Path',new List<String> {path});
@@ -69,7 +69,7 @@ public with sharing class CLMMapObjectController {
 		return result;
 	}
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled(Cacheable = true)
 	public static Map<String, EOS_Type__c> getMappedObjectsList() {
 		try {
 			Permissions.verifyIsClmAdministrator();
@@ -79,7 +79,7 @@ public with sharing class CLMMapObjectController {
 		}
 	}
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled(Cacheable = true)
 	public static List<MergeObject> getAllObjects() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
@@ -89,14 +89,14 @@ public with sharing class CLMMapObjectController {
 		}
 	}
 
-	@AuraEnabled(Cacheable=true)
+	@AuraEnabled(Cacheable = true)
 	public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 			SObjectType type = Schema.getGlobalDescribe().get(apiName);
 			List<MergeField> result= new List<MergeField>();
-			result.addAll(MetadataService.getFields(type, isChild));
 			result.addAll(MetadataService.getFields(type.getDescribe()));
+			result.addAll(MetadataService.getFields(type, isChild));
 			return result;
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get all object fields list.');

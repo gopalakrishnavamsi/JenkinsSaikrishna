@@ -355,9 +355,9 @@
 		event.stopPropagation();
 		var selectedObjFieldName = component.get('v.selectedObjFieldName');
 		if (selectedObjFieldName) {
-			selectedObjFieldName += '{!' + object + '.' + label + '}';
+			selectedObjFieldName += '{!' + object.trim() + '.' + label.trim() + '}';
 		} else {
-			selectedObjFieldName = '{!' + object + '.' + label + '}';
+			selectedObjFieldName = '{!' + object.trim() + '.' + label.trim() + '}';
 		}
 		component.set(
 			'v.clmFolderTree',
@@ -531,7 +531,7 @@
 		if (toComponent === 'CLMMappedObjectEdit' && fromComponent !== 'CLMMappedObjectEdit') {
 			if (type === 'update') {
 				var modalValueHolder = component.get('v.modalValueHolder');
-				modalValueHolder.folderName = data.value;
+				modalValueHolder.folderName = data.value.trim();
 				component.set('v.modalValueHolder', modalValueHolder);
 			}
 		}

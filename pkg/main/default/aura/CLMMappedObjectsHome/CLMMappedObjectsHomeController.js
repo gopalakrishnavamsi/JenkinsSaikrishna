@@ -19,37 +19,25 @@
         {
           label: $A.get('$Label.c.ObjectFolderName'),
           fieldName: folderApiName,
-          type: 'url',
+          type: 'text',
           sortable: true,
           cellAttributes: { alignment: 'left' },
           typeAttributes: {
             label: {
               fieldName: folderApiName
-            },
-            tooltip: {
-              fieldName: folderApiName
-            },
-            title: {
-              fieldName: folderApiName
-            }
+            }            
           }
         },
         {
           label: $A.get('$Label.c.PathInDocuSignCLM'),
           fieldName: pathApiName,
-          type: 'url',
+          type: 'text',
           sortable: true,
           cellAttributes: { alignment: 'left', tooltip: 'actions' },
           typeAttributes: {
             label: {
               fieldName: pathApiName
-            },
-            tooltip: {
-              fieldName: pathApiName
-            },
-            title: {
-              fieldName: pathApiName
-            }
+            }            
           }
         },
         {
