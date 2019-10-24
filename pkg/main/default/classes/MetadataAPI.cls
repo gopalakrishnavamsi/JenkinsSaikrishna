@@ -73,6 +73,7 @@ public class MetadataAPI {
 	public class PasswordPolicies {
 		public String apiOnlyUserHomePageUrl;
 		public String complexity;
+		public Boolean enableSetPasswordInApi;
 		public String expiration;
 		public String historyRestriction;
 		public String lockoutInterval;
@@ -85,6 +86,7 @@ public class MetadataAPI {
 		public String questionRestriction;
 		private String[] apiOnlyUserHomePageUrl_type_info = new String[] { 'apiOnlyUserHomePageUrl', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] complexity_type_info = new String[] { 'complexity', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableSetPasswordInApi_type_info = new String[] { 'enableSetPasswordInApi', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] expiration_type_info = new String[] { 'expiration', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] historyRestriction_type_info = new String[] { 'historyRestriction', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] lockoutInterval_type_info = new String[] { 'lockoutInterval', SOAP_M_URI, null, '0', '1', 'false' };
@@ -96,7 +98,7 @@ public class MetadataAPI {
 		private String[] passwordAssistanceUrl_type_info = new String[] { 'passwordAssistanceUrl', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] questionRestriction_type_info = new String[] { 'questionRestriction', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'apiOnlyUserHomePageUrl', 'complexity', 'expiration', 'historyRestriction', 'lockoutInterval', 'maxLoginAttempts', 'minPasswordLength', 'minimumPasswordLifetime', 'obscureSecretAnswer', 'passwordAssistanceMessage', 'passwordAssistanceUrl', 'questionRestriction' };
+		private String[] field_order_type_info = new String[] { 'apiOnlyUserHomePageUrl', 'complexity', 'enableSetPasswordInApi', 'expiration', 'historyRestriction', 'lockoutInterval', 'maxLoginAttempts', 'minimumPasswordLength', 'minimumPasswordLifetime', 'obscureSecretAnswer', 'passwordAssistanceMessage', 'passwordAssistanceUrl', 'questionRestriction' };
 	}
 	public class LogInfo {
 		public String category;
@@ -309,6 +311,8 @@ public class MetadataAPI {
 		private String[] field_order_type_info = new String[] { 'errors', 'fullName', 'success' };
 	}
 	public class SessionSettings {
+		public Boolean allowUserAuthenticationByCertificate;
+		public Boolean canConfirmEmailChangeInLightningCommunities;
 		public Boolean disableTimeoutWarning;
 		public Boolean enableCSPOnEmail;
 		public Boolean enableCSRFOnGet;
@@ -319,13 +323,18 @@ public class MetadataAPI {
 		public Boolean enableClickjackNonsetupUserHeaderless;
 		public Boolean enableClickjackSetup;
 		public Boolean enableContentSniffingProtection;
+		public Boolean enableLightningLogin;
+		public Boolean enableLightningLoginOnlyWithUserPerm;
 		public Boolean enablePostForSessions;
 		public Boolean enableSMSIdentity;
+		public Boolean enableU2F;
 		public Boolean enableUpgradeInsecureRequests;
 		public Boolean enableXssProtection;
 		public Boolean enforceIpRangesEveryRequest;
 		public Boolean forceLogoutOnSessionTimeout;
 		public Boolean forceRelogin;
+		public Boolean hasRetainedLoginHints;
+		public Boolean hasUserSwitching;
 		public Boolean hstsOnForcecomSites;
 		public Boolean identityConfirmationOnEmailChange;
 		public Boolean identityConfirmationOnTwoFactorRegistrationEnabled;
@@ -340,6 +349,8 @@ public class MetadataAPI {
 		public Boolean requireHttps;
 		public Boolean securityCentralKillSession;
 		public String sessionTimeout;
+		private String[] allowUserAuthenticationByCertificate_type_info = new String[] { 'allowUserAuthenticationByCertificate', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] canConfirmEmailChangeInLightningCommunities_type_info = new String[] { 'canConfirmEmailChangeInLightningCommunities', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] disableTimeoutWarning_type_info = new String[] { 'disableTimeoutWarning', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableCSPOnEmail_type_info = new String[] { 'enableCSPOnEmail', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableCSRFOnGet_type_info = new String[] { 'enableCSRFOnGet', SOAP_M_URI, null, '0', '1', 'false' };
@@ -350,13 +361,18 @@ public class MetadataAPI {
 		private String[] enableClickjackNonsetupUserHeaderless_type_info = new String[] { 'enableClickjackNonsetupUserHeaderless', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableClickjackSetup_type_info = new String[] { 'enableClickjackSetup', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableContentSniffingProtection_type_info = new String[] { 'enableContentSniffingProtection', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableLightningLogin_type_info = new String[] { 'enableLightningLogin', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableLightningLoginOnlyWithUserPerm_type_info = new String[] { 'enableLightningLoginOnlyWithUserPerm', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enablePostForSessions_type_info = new String[] { 'enablePostForSessions', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableSMSIdentity_type_info = new String[] { 'enableSMSIdentity', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableU2F_type_info = new String[] { 'enableU2F', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableUpgradeInsecureRequests_type_info = new String[] { 'enableUpgradeInsecureRequests', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enableXssProtection_type_info = new String[] { 'enableXssProtection', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] enforceIpRangesEveryRequest_type_info = new String[] { 'enforceIpRangesEveryRequest', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] forceLogoutOnSessionTimeout_type_info = new String[] { 'forceLogoutOnSessionTimeout', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] forceRelogin_type_info = new String[] { 'forceRelogin', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] hasRetainedLoginHints_type_info = new String[] { 'hasRetainedLoginHints', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] hasUserSwitching_type_info = new String[] { 'hasUserSwitching', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] hstsOnForcecomSites_type_info = new String[] { 'hstsOnForcecomSites', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] identityConfirmationOnEmailChange_type_info = new String[] { 'identityConfirmationOnEmailChange', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] identityConfirmationOnTwoFactorRegistrationEnabled_type_info = new String[] { 'identityConfirmationOnTwoFactorRegistrationEnabled', SOAP_M_URI, null, '0', '1', 'false' };
@@ -372,7 +388,19 @@ public class MetadataAPI {
 		private String[] securityCentralKillSession_type_info = new String[] { 'securityCentralKillSession', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] sessionTimeout_type_info = new String[] { 'sessionTimeout', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'disableTimeoutWarning', 'enableCSPOnEmail', 'enableCSRFOnGet', 'enableCSRFOnPost', 'enableCacheAndAutocomplete', 'enableClickjackNonsetupSFDC', 'enableClickjackNonsetupUser', 'enableClickjackNonsetupUserHeaderless', 'enableClickjackSetup', 'enableContentSniffingProtection', 'enablePostForSessions', 'enableSMSIdentity', 'enableUpgradeInsecureRequests', 'enableXssProtection', 'enforceIpRangesEveryRequest', 'forceLogoutOnSessionTimeout', 'forceRelogin', 'identityConfirmationOnTwoFactorRegistrationEnabled', 'lockSessionsToDomain', 'lockSessionsToIp', 'logoutUrl', 'requireHttpOnly', 'requireHttps', 'securityCentralKillSession', 'sessionTimeout' };
+		private String[] field_order_type_info = new String[] { 'allowUserAuthenticationByCertificate', 'canConfirmEmailChangeInLightningCommunities', 'disableTimeoutWarning', 'enableCSPOnEmail', 'enableCSRFOnGet', 'enableCSRFOnPost', 'enableCacheAndAutocomplete', 'enableClickjackNonsetupSFDC', 'enableClickjackNonsetupUser', 'enableClickjackNonsetupUserHeaderless', 'enableClickjackSetup', 'enableContentSniffingProtection', 'enableLightningLogin', 'enableLightningLoginOnlyWithUserPerm', 'enablePostForSessions', 'enableSMSIdentity', 'enableU2F', 'enableUpgradeInsecureRequests', 'enableXssProtection', 'enforceIpRangesEveryRequest', 'forceLogoutOnSessionTimeout', 'forceRelogin', 'hasRetainedLoginHints', 'hasUserSwitching', 'hstsOnForcecomSites', 'identityConfirmationOnEmailChange', 'identityConfirmationOnTwoFactorRegistrationEnabled', 'lockSessionsToDomain', 'lockSessionsToIp', 'lockerServiceCSP', 'lockerServiceFrozenRealm', 'logoutUrl', 'redirectionWarning', 'referrerPolicy', 'requireHttpOnly', 'requireHttps', 'securityCentralKillSession', 'sessionTimeout' };
+	}
+	public class SingleSignOnSettings {
+		public Boolean enableForceDelegatedCallout;
+		public Boolean enableMultipleSamlConfigs;
+		public Boolean enableSamlJitProvisioning;
+		public Boolean enableSamlLogin;
+		private String[] enableForceDelegatedCallout_type_info = new String[] { 'enableForceDelegatedCallout', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableMultipleSamlConfigs_type_info = new String[] { 'enableMultipleSamlConfigs', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableSamlJitProvisioning_type_info = new String[] { 'enableSamlJitProvisioning', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableSamlLogin_type_info = new String[] { 'enableSamlLogin', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
+		private String[] field_order_type_info = new String[] { 'enableForceDelegatedCallout', 'enableMultipleSamlConfigs', 'enableSamlJitProvisioning', 'enableSamlLogin' };
 	}
 	public class PrimaryTabComponents {
 		public MetadataAPI.Container[] containers;
@@ -497,16 +525,32 @@ public class MetadataAPI {
 	public class SecuritySettings extends Metadata {
 		public String type = 'SecuritySettings';
 		public String fullName;
+		public Boolean canUsersGrantLoginAccess;
+		public Boolean enableAdminLoginAsAnyUser;
+		public Boolean enableAuditFieldsInactiveOwner;
+		public Boolean enableAuraSecureEvalPref;
+		public Boolean enableRequireHttpsConnection;
+		public Boolean isTLSv12Required;
+		public Boolean isTLSv12RequiredCommunities;
 		public MetadataAPI.NetworkAccess networkAccess;
 		public MetadataAPI.PasswordPolicies passwordPolicies;
 		public MetadataAPI.SessionSettings sessionSettings;
+		public MetadataAPI.SingleSignOnSettings singleSignOnSettings;
+		private String[] canUsersGrantLoginAccess_type_info = new String[] { 'canUsersGrantLoginAccess', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableAdminLoginAsAnyUser_type_info = new String[] { 'enableAdminLoginAsAnyUser', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableAuditFieldsInactiveOwner_type_info = new String[] { 'enableAuditFieldsInactiveOwner', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableAuraSecureEvalPref_type_info = new String[] { 'enableAuraSecureEvalPref', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] enableRequireHttpsConnection_type_info = new String[] { 'enableRequireHttpsConnection', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] isTLSv12Required_type_info = new String[] { 'isTLSv12Required', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] isTLSv12RequiredCommunities_type_info = new String[] { 'isTLSv12RequiredCommunities', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] networkAccess_type_info = new String[] { 'networkAccess', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] passwordPolicies_type_info = new String[] { 'passwordPolicies', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] sessionSettings_type_info = new String[] { 'sessionSettings', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] singleSignOnSettings_type_info = new String[] { 'singleSignOnSettings', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
 		private String[] type_att_info = new String[] { 'xsi:type' };
 		private String[] fullName_type_info = new String[] { 'fullName', 'http://www.w3.org/2001/XMLSchema', 'string', '0', '1', 'false' };
-		private String[] field_order_type_info = new String[] { 'fullName', 'networkAccess', 'passwordPolicies', 'sessionSettings' };
+		private String[] field_order_type_info = new String[] { 'fullName', 'canUsersGrantLoginAccess', 'enableAdminLoginAsAnyUser', 'enableAuditFieldsInactiveOwner', 'enableAuraSecureEvalPref', 'enableRequireHttpsConnection', 'isTLSv12Required', 'isTLSv12RequiredCommunities', 'networkAccess', 'passwordPolicies', 'sessionSettings', 'singleSignOnSettings' };
 	}
 	public class LayoutColumn {
 		public MetadataAPI.LayoutItem[] layoutItems;

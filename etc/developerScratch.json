@@ -3,8 +3,8 @@
   "edition": "Developer",
   "hasSampleData": true,
   "settings": {
-    "orgPreferenceSettings": {
-      "translation": true
+    "languageSettings": {
+      "enableTranslationWorkbench": true
     }
   }
 }

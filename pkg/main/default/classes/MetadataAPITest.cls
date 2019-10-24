@@ -83,6 +83,7 @@ public class MetadataAPITest {
 		new MetadataAPI.CallOptions_element();
 		new MetadataAPI.NetworkAccess();
 		new MetadataAPI.SecuritySettings();
+		new MetadataAPI.SingleSignOnSettings();
 		new MetadataAPI.LayoutColumn();
 		new MetadataAPI.FileProperties();
 		new MetadataAPI.RelatedListItem();

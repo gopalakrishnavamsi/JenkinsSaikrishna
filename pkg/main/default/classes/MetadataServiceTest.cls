@@ -894,4 +894,25 @@ private class MetadataServiceTest {
 		System.assertEquals(new Set<String> { 'test', MetadataAPI.NAMESPACE_PREFIX + 'Envelope__c-test', MetadataAPI.NAMESPACE_PREFIX + 'Envelope__test' },
 			MetadataService.getPossibleActionNames(Envelope__c.getSObjectType(), 'test'));
 	}
+
+	@IsTest
+	static void test_describeSObject_failure() {
+		Test.startTest();
+		try {
+			MetadataService.describeSObject(null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_describeSObject_success() {
+		Test.startTest();
+		DescribeSObjectResult result = MetadataService.describeSObject(UserInfo.getUserId());
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
 }

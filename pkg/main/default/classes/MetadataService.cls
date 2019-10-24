@@ -57,17 +57,17 @@ public with sharing class MetadataService {
 		return result;
 	}
 
- 	/**
-	 * Returns  Salesforce object type
-	 * 
-	 * @param recordId Id of record
+	/**
+	 * Returns Salesforce object description.
+	 *
+	 * @param recordId Id of record.
 	 *
 	 * @return The Salesforce object.
 	 */
-    public static DescribeSObjectResult getObject(Id recordId){
-        if(recordId==null || String.isEmpty(recordId)) throw new DocuSignException(Label.UndefinedArgument);
-        return recordId.getSObjectType().getDescribe();
-    }
+	public static DescribeSObjectResult describeSObject(final Id recordId) {
+		if (recordId == null || String.isEmpty(recordId)) throw new DocuSignException(Label.UndefinedArgument);
+		return recordId.getSobjectType().getDescribe();
+	}
 
 	private static List<MergeField> getChildRelationships(final DescribeSObjectResult type) {
 		List<MergeField> result = new List<MergeField>();
@@ -106,20 +106,20 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-    public static List<MergeField> getFields(final DescribeSObjectResult type) {
-        List<MergeField> result = new List<MergeField>();
-        if (MergeObject.isValid(type)) {
-            for (SObjectField f : type.fields.getMap().values()) {
-                DescribeFieldResult field = f.getDescribe();
-                if (MergeField.isValid(field)) {
-                    if (!field.getReferenceTo().isEmpty()) {                        
-                        result.add(MergeField.forField(field, ''));
-                    }
-                }
-            }
-        }
-        return result;
-    }
+	public static List<MergeField> getFields(final DescribeSObjectResult type) {
+		List<MergeField> result = new List<MergeField>();
+		if (MergeObject.isValid(type)) {
+			for (SObjectField f : type.fields.getMap().values()) {
+				DescribeFieldResult field = f.getDescribe();
+				if (MergeField.isValid(field)) {
+					if (!field.getReferenceTo().isEmpty()) {
+						result.add(MergeField.forField(field, ''));
+					}
+				}
+			}
+		}
+		return result;
+	}
 
 	@TestVisible
 	private static String getErrorMessage(final MetadataAPI.SaveResult saveResult) {
