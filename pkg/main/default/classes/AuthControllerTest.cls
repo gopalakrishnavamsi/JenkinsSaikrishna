@@ -160,4 +160,33 @@ private class AuthControllerTest {
 			System.assertEquals(4, products.size());
 		}
 	}
+
+	@IsTest
+	static void test_getProductsOnAccountFailure() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				List<Product> products = AuthController.getProductsOnAccount();
+				throw new AssertException('Expected getProducts to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_processProductCheckInAccountSetting() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.IsESignatureEnabled__c = false;
+			update s;
+			Test.startTest();
+			List<Product> products = AuthController.getProductsOnAccount();
+			Test.stopTest();
+			System.assertEquals(3, products.size());
+		}
+	}
 }

@@ -37,7 +37,7 @@ public with sharing class AuthController {
 		try {
 			if (Permissions.isDocuSignUser()) { // Meets minimum requirement for access token
 				AuthService.getAccessToken();
-				products = AccountProducts.getProducts();
+				products = processProductCheckInAccountSetting(AccountProducts.getProducts());
 			} else {
 				isAuthorized = false;
 				message = Label.MustBeDocuSignUser;
@@ -81,9 +81,22 @@ public with sharing class AuthController {
 	@AuraEnabled
 	public static List<Product> getProductsOnAccount() {
 		try {
-			return AccountProducts.getProducts();
+			return processProductCheckInAccountSetting(AccountProducts.getProducts());
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
+	}
+
+	private static List<Product> processProductCheckInAccountSetting(List<Product> products) {
+		if (products <> null) {
+			Boolean isESignatureEnabled = AccountSettings.getInstance().isESignatureEnabled;
+			for (Integer i = 0; i < products.size(); i++) {
+				if (products[i].name == Product.ESIGNATURE && products[i].status == Product.STATUS_ACTIVE && !isESignatureEnabled) {
+					products.remove(i);
+					break;
+				}
+			}
+		}
+		return products;
 	}
 }
