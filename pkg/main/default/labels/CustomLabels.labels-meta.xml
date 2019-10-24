@@ -8376,4 +8376,44 @@
 		<shortDescription>CLM - Overview image alt text</shortDescription>
 		<value>Overview Image</value>
 	</labels>
+	<labels>
+		<fullName>FetchingSalesforceFiles</fullName>
+		<categories>DocuSign Files</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Fetching Salesforce files</shortDescription>
+		<value>Fetching Salesforce files</value>
+	</labels>
+	<labels>
+		<fullName>FetchingDocuSignFiles</fullName>
+		<categories>DocuSign Files</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Fetching DocuSign Files</shortDescription>
+		<value>Fetching DocuSign Files</value>
+	</labels>	
+	<labels>
+		<fullName>ImportingToDocuSignFiles</fullName>
+		<categories>DocuSign Files</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Creating a copy and importing to DocuSign Files...</shortDescription>
+		<value>Creating a copy and importing to DocuSign Files...</value>
+	</labels>	
+	<labels>
+		<fullName>SettingUpUploadWidget</fullName>
+		<categories>DocuSign Files</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Setting up Upload Widget</shortDescription>
+		<value>Setting up Upload Widget</value>
+	</labels>	
+	<labels>
+		<fullName>Authorizing</fullName>
+		<categories>Setup</categories>		
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Authorizing</shortDescription>
+		<value>Authorizing</value>
+	</labels>	
 </CustomLabels>

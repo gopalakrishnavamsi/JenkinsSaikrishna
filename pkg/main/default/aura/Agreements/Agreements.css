@@ -14,7 +14,7 @@
 
 .THIS .ds-spinner_oauth_container::after {
     position: absolute;
-    content: 'Authorizing';
+    content: var(--authorizingMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
@@ -27,7 +27,7 @@
 
 .THIS .ds-spinner_container::after {
     position: absolute;
-    content: 'Fetching DocuSign Files';
+    content: var(--fetchingDocuSignFilesMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);

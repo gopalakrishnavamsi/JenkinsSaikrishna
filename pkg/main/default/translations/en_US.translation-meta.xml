@@ -4353,6 +4353,26 @@
 		<label>Overview Image</label>
 		<name>OverviewImage</name>
 	</customLabels>
+	<customLabels>
+		<label>Fetching Salesforce files</label>
+		<name>FetchingSalesforceFiles</name>	
+	</customLabels>
+	<customLabels>
+		<label>Fetching DocuSign Files</label>
+		<name>FetchingDocuSignFiles</name>	
+	</customLabels>	
+	<customLabels>
+		<label>Creating a copy and importing to DocuSign Files...</label>
+		<name>ImportingToDocuSignFiles</name>		
+	</customLabels>	
+	<customLabels>
+		<label>Setting up Upload Widget</label>
+		<name>SettingUpUploadWidget</name>		
+	</customLabels>	
+	<customLabels>
+		<label>Authorizing</label>
+		<name>Authorizing</name>
+	</customLabels>		
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

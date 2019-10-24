@@ -22,7 +22,7 @@
 
 .THIS .ds-import-spinner_setupFileUpload::after {
     position: absolute;
-    content: 'Setting up Upload Widget';
+    content: var(--uploadWidgitInitMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
@@ -30,7 +30,7 @@
 
 .THIS .ds-import-spinner_setupSalesforceFiles::after {
     position: absolute;
-    content: 'Fetching Salesforce files';
+    content: var(--fetchingSalesforceFilesMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
@@ -38,7 +38,7 @@
 
 .THIS .ds-import-spinner_uploadingAgreement::after {
     position: absolute;
-    content: 'Creating a copy and importing to DocuSign Files...';
+    content: var(--importingToDocuSignFilesMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
@@ -46,7 +46,7 @@
 
 .THIS .ds-import-spinner_sendingForSignature::after {
     position: absolute;
-    content: 'Sending for Signature';
+    content: var(--sendForSignatureMessage);
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);

@@ -27,6 +27,16 @@
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadAgreements}"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+    <aura:html tag="style">
+        :root {
+            --uploadWidgitInitMessage: '{!$Label.c.SettingUpUploadWidget}';
+            --fetchingSalesforceFilesMessage: '{!$Label.c.FetchingSalesforceFiles}';
+            --fetchingDocuSignFilesMessage: '{!$Label.c.FetchingDocuSignFiles}';
+            --authorizingMessage: '{!$Label.c.Authorizing}';
+            --importingToDocuSignFilesMessage: '{!$Label.c.ImportingToDocuSignFiles}';
+            --sendForSignatureMessage: '{!$Label.c.SendForSignature}';
+        } 
+    </aura:html>
 
     <div aura:id="importModal">
     </div>
