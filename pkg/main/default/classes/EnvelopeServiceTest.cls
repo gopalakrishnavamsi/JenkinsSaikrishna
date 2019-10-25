@@ -1465,4 +1465,444 @@ private class EnvelopeServiceTest {
 			System.assertNotEquals(null, result);
 		}
 	}
+
+	@IsTest
+	static void test_sendEnvelopes_unauthorized() {
+		System.runAs(UserMock.createAdministrator()) {
+			Test.startTest();
+			try {
+				EnvelopeService.sendEnvelopes(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_undefined_argument() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			Test.startTest();
+			try {
+				EnvelopeService.sendEnvelopes(null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				EnvelopeService.sendEnvelopes(new List<Envelope>());
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_limit_exceeded() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			List<Envelope> es = new List<Envelope>();
+			for (Integer i = 0; i <= EnvelopeService.MULTI_SEND_ENVELOPE_LIMIT; i++) {
+				es.add(new Envelope(null, null, null, null));
+			}
+
+			Test.startTest();
+			try {
+				EnvelopeService.sendEnvelopes(es);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.MultiSendEnvelopeLimitExceeded, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_invalid() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			List<Envelope> es = new List<Envelope> {
+				new Envelope(null, 's1', 'm1', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e1d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e1d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null)
+					}),
+				null,
+				new Envelope(null, 's3', 'm3', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e3d1')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e3r1', 'e3r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e3r2', 'e3r2@unit.test', '2222222', 'r2', null)
+					})
+			};
+
+			Test.startTest();
+			try {
+				EnvelopeService.sendEnvelopes(es);
+				throw new AssertException('Expected failure');
+			} catch (ValidationException ex) {
+				System.assertNotEquals(null, ex.getMessage());
+				System.assert(ex.getMessage().startsWith(Label.InvalidEnvelope));
+				System.assertNotEquals(null, ex.details);
+			}
+			Test.stopTest();
+		}
+	}
+
+	private class PartialSuccessMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			EnvelopeAPI.APIEnvelope e = (EnvelopeAPI.APIEnvelope)JSON.deserialize(request.getBody(), EnvelopeAPI.APIEnvelope.class);
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json');
+			if (e.emailSubject == 's2') {
+				response.setStatusCode(400);
+				response.setStatus('BAD_REQUEST');
+				response.setBody('{"errorCode":"UNIT_TEST","message":"trialexpired"}');
+			} else {
+				response.setStatusCode(201);
+				response.setStatus('CREATED');
+				e.envelopeId = UUID.randomUUID().toString();
+				response.setBody(JSON.serialize(e));
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock());
+		System.runAs(UserMock.createDocuSignSender()) {
+			List<Envelope> es = new List<Envelope> {
+				new Envelope(null, 's1', 'm1', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e1d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e1d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null)
+					}),
+				new Envelope(null, 's2', 'm2', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e2d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e2d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e2r2', 'e2r2@unit.test', '2222222', 'r2', null)
+					}),
+				new Envelope(null, 's3', 'm3', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e3d1')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e3r1', 'e3r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e3r2', 'e3r2@unit.test', '2222222', 'r2', null)
+					})
+			};
+
+			Test.startTest();
+			List<Envelope> result = EnvelopeService.sendEnvelopes(es);
+			Test.stopTest();
+
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].docuSignId);
+			System.assertNotEquals(null, result[0].sent);
+			System.assertEquals(null, result[0].error);
+			System.assertEquals(2, Collection.size(result[0].documents));
+			System.assertEquals(1, Collection.size(result[0].recipients));
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(null, result[1].docuSignId);
+			System.assertEquals(null, result[1].sent);
+			System.assertNotEquals(null, result[1].error);
+			System.assertEquals(APIErrorCode.TRIAL_ACCOUNT_EXPIRED, result[1].error.code);
+			System.assertEquals(2, Collection.size(result[1].documents));
+			System.assertEquals(2, Collection.size(result[1].recipients));
+			System.assertNotEquals(null, result[2]);
+			System.assertNotEquals(null, result[2].docuSignId);
+			System.assertNotEquals(null, result[2].sent);
+			System.assertEquals(null, result[2].error);
+			System.assertEquals(1, Collection.size(result[2].documents));
+			System.assertEquals(2, Collection.size(result[2].recipients));
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignSender()) {
+			List<Envelope> es = new List<Envelope> {
+				new Envelope(null, 's1', 'm1', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e1d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e1d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null)
+					}),
+				new Envelope(null, 's2', 'm2', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e2d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e2d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e2r2', 'e2r2@unit.test', '2222222', 'r2', null)
+					}),
+				new Envelope(null, 's3', 'm3', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e3d1')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e3r1', 'e3r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e3r2', 'e3r2@unit.test', '2222222', 'r2', null)
+					})
+			};
+
+			Test.startTest();
+			List<Envelope> result = EnvelopeService.sendEnvelopes(es);
+			Test.stopTest();
+
+			System.assertEquals(3, result.size());
+			System.assertNotEquals(null, result[0]);
+			System.assertNotEquals(null, result[0].docuSignId);
+			System.assertNotEquals(null, result[0].sent);
+			System.assertEquals(null, result[0].error);
+			System.assertEquals(2, Collection.size(result[0].documents));
+			System.assertEquals(1, Collection.size(result[0].recipients));
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].docuSignId);
+			System.assertNotEquals(null, result[1].sent);
+			System.assertEquals(null, result[1].error);
+			System.assertEquals(2, Collection.size(result[1].documents));
+			System.assertEquals(2, Collection.size(result[1].recipients));
+			System.assertNotEquals(null, result[2]);
+			System.assertNotEquals(null, result[2].docuSignId);
+			System.assertNotEquals(null, result[2].sent);
+			System.assertEquals(null, result[2].error);
+			System.assertEquals(1, Collection.size(result[2].documents));
+			System.assertEquals(2, Collection.size(result[2].recipients));
+		}
+	}
+
+	@IsTest
+	static void test_saveSentEnvelopes_unauthorized() {
+		System.runAs(UserMock.createAdministrator()) {
+			Test.startTest();
+			try {
+				EnvelopeService.saveSentEnvelopes(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveSentEnvelopes_undefined_argument() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			Test.startTest();
+			try {
+				EnvelopeService.saveSentEnvelopes(null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				EnvelopeService.saveSentEnvelopes(new List<Envelope>());
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveSentEnvelopes_invalid() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			List<Envelope> es = new List<Envelope> {
+				new Envelope(null, 's1', 'm1', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e1d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e1d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null)
+					})
+					.withDocuSignId(UUID.randomUUID())
+					.withSent(Datetime.now()),
+				new Envelope(null, 's2', 'm2', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e2d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e2d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e2r2', 'e2r2@unit.test', '2222222', 'r2', null)
+					})
+					.withError(new APIError(APIErrorCode.BAD_REQUEST, 'test error')),
+				new Envelope(null, 's3', 'm3', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e3d1')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e3r1', 'e3r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e3r2', 'e3r2@unit.test', '2222222', 'r2', null)
+					})
+					.withDocuSignId(UUID.randomUUID())
+					.withSent(Datetime.now())
+			};
+
+			Test.startTest();
+			try {
+				EnvelopeService.saveSentEnvelopes(es);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidSentEnvelopes, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_saveSentEnvelopes_success() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			UUID id1 = UUID.randomUUID(), id2 = UUID.randomUUID(), id3 = UUID.randomUUID();
+			List<Envelope> es = new List<Envelope> {
+				new Envelope(null, 's1', 'm1', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e1d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e1d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null)
+					})
+					.withDocuSignId(id1)
+					.withSent(Datetime.now()),
+				new Envelope(null, 's2', 'm2', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e2d1'),
+						Document.fromTemplate(UUID.randomUUID(), 'e2d2')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e2r2', 'e2r2@unit.test', '2222222', 'r2', null)
+					})
+					.withDocuSignId(id2)
+					.withSent(Datetime.now()),
+				new Envelope(null, 's3', 'm3', null)
+					.withDocuments(
+					new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 'e3d1')
+					})
+					.withRecipients(
+					new List<Recipient> {
+						Recipient.fromSource('e3r1', 'e3r1@unit.test', '1111111', 'r1', null),
+						Recipient.fromSource('e3r2', 'e3r2@unit.test', '2222222', 'r2', null)
+					})
+					.withDocuSignId(id3)
+					.withSent(Datetime.now())
+			};
+
+			Test.startTest();
+			List<Envelope> result = EnvelopeService.saveSentEnvelopes(es);
+			Test.stopTest();
+
+			Set<Id> eIds = new Set<Id>();
+			System.assertEquals(3, result.size());
+			for (Envelope e : result) {
+				System.assertNotEquals(null, e);
+				System.assertNotEquals(null, e.id);
+				eIds.add(e.id);
+				if (e.docuSignId == id1) {
+					System.assertEquals('s1', e.emailSubject);
+					System.assertEquals('m1', e.emailMessage);
+					System.assertEquals(2, Collection.size(e.documents));
+					System.assertEquals(1, Collection.size(e.recipients));
+				} else if (e.docuSignId == id2) {
+					System.assertEquals('s2', e.emailSubject);
+					System.assertEquals('m2', e.emailMessage);
+					System.assertEquals(2, Collection.size(e.documents));
+					System.assertEquals(2, Collection.size(e.recipients));
+				} else if (e.docuSignId == id3) {
+					System.assertEquals('s3', e.emailSubject);
+					System.assertEquals('m3', e.emailMessage);
+					System.assertEquals(1, Collection.size(e.documents));
+					System.assertEquals(2, Collection.size(e.recipients));
+				} else {
+					throw new AssertException('Unexpected result: ' + e);
+				}
+
+				for (Document d : e.documents) {
+					System.assertNotEquals(null, d);
+					System.assertNotEquals(null, d.id);
+				}
+
+				for (Recipient r : e.recipients) {
+					System.assertNotEquals(null, r);
+					System.assertNotEquals(null, r.id);
+				}
+			}
+
+			List<Envelope__c> dses = [SELECT DocuSignId__c, Sent__c, EmailSubject__c, EmailMessage__c FROM Envelope__c WHERE Id IN :eIds];
+			System.assertEquals(3, Collection.size(dses));
+			for (Envelope__c e : dses) {
+				System.assertNotEquals(null, e);
+				System.assert(String.isNotBlank(e.DocuSignId__c));
+				System.assertNotEquals(null, e.Sent__c);
+				UUID dsId = UUID.parse(e.DocuSignId__c);
+				if (dsId == id1) {
+					System.assertEquals('s1', e.EmailSubject__c);
+					System.assertEquals('m1', e.EmailMessage__c);
+					System.assertEquals(2, Collection.size([SELECT Id FROM Document__c WHERE Envelope__c = :e.Id]));
+					System.assertEquals(1, Collection.size([SELECT Id FROM Recipient__c WHERE Envelope__c = :e.Id]));
+				} else if (dsId == id2) {
+					System.assertEquals('s2', e.EmailSubject__c);
+					System.assertEquals('m2', e.EmailMessage__c);
+					System.assertEquals(2, Collection.size([SELECT Id FROM Document__c WHERE Envelope__c = :e.Id]));
+					System.assertEquals(2, Collection.size([SELECT Id FROM Recipient__c WHERE Envelope__c = :e.Id]));
+				} else if (dsId == id3) {
+					System.assertEquals('s3', e.EmailSubject__c);
+					System.assertEquals('m3', e.EmailMessage__c);
+					System.assertEquals(1, Collection.size([SELECT Id FROM Document__c WHERE Envelope__c = :e.Id]));
+					System.assertEquals(2, Collection.size([SELECT Id FROM Recipient__c WHERE Envelope__c = :e.Id]));
+				}
+			}
+		}
+	}
 }

@@ -901,4 +901,67 @@ private class DocumentServiceTest {
 			System.assertEquals(3, result.size());
 		}
 	}
+
+	@IsTest
+	static void test_addEnvelopeDocuments_multi_send_unauthorized() {
+		Envelope__c e1, e2, e3;
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			e1 = TestUtils.createEnvelope(a.Id);
+			e2 = TestUtils.createEnvelope(a.Id);
+			e3 = TestUtils.createEnvelope(a.Id);
+		}
+
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Document e1d1 = Document.fromTemplate(UUID.randomUUID(), 'e1d1');
+			Document e1d2 = Document.fromTemplate(UUID.randomUUID(), 'e1d2');
+			Document e3d1 = Document.fromTemplate(UUID.randomUUID(), 'e3d1');
+			Map<Id, List<Document>> ds = new Map<Id, List<Document>> {
+				e1.Id => new List<Document> { e1d1, e1d2 },
+				e2.Id => null,
+				e3.Id => new List<Document> { e3d1 }
+			};
+
+			Test.startTest();
+			try {
+				DocumentService.addEnvelopeDocuments(ds);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addEnvelopeDocuments_multi_send_success() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			Envelope__c e1 = TestUtils.createEnvelope(a.Id);
+			Document e1d1 = Document.fromTemplate(UUID.randomUUID(), 'e1d1');
+			Document e1d2 = Document.fromTemplate(UUID.randomUUID(), 'e1d2');
+			Envelope__c e2 = TestUtils.createEnvelope(a.Id);
+			Envelope__c e3 = TestUtils.createEnvelope(a.Id);
+			Document e3d1 = Document.fromTemplate(UUID.randomUUID(), 'e3d1');
+			Map<Id, List<Document>> ds = new Map<Id, List<Document>> {
+				e1.Id => new List<Document> { e1d1, e1d2 },
+				e2.Id => null,
+				e3.Id => new List<Document> { e3d1 }
+			};
+
+			Test.startTest();
+			Map<Id, List<Document>> result = DocumentService.addEnvelopeDocuments(ds);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<Id> { e1.Id, e3.Id }, result.keySet());
+			System.assertNotEquals(null, result.get(e1.Id)[0]);
+			System.assertNotEquals(null, result.get(e1.Id)[0].id);
+			System.assertNotEquals(null, result.get(e1.Id)[1]);
+			System.assertNotEquals(null, result.get(e1.Id)[1].id);
+			System.assertEquals(1, Collection.size(result.get(e3.Id)));
+			System.assertNotEquals(null, result.get(e3.Id)[0]);
+			System.assertNotEquals(null, result.get(e3.Id)[0].id);
+		}
+	}
 }

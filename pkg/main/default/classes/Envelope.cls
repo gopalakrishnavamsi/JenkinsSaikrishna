@@ -88,6 +88,11 @@ global class Envelope {
 	@AuraEnabled
 	global Datetime sent { get; private set; }
 	/**
+	 * The error returned by the API in multi-send scenarios.
+	 */
+	@AuraEnabled
+	global APIError error { get; private set; }
+	/**
 	 * Read-only property indicating whether the envelope is sent.
 	 */
 	public Boolean isSent {
@@ -638,6 +643,18 @@ global class Envelope {
 	 */
 	public Envelope withSent(final Datetime sent) {
 		this.sent = sent;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope's <code>error</code> property.
+	 *
+	 * @param error The error returned by the API in multi-send scenarios.
+	 *
+	 * @return This envelope with the updated <code>error</code> property.
+	 */
+	public Envelope withError(final APIError error) {
+		this.error = error;
 		return this;
 	}
 

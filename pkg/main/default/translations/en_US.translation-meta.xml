@@ -4317,7 +4317,7 @@
 		<label>6. Use that button to generate documents with a single click.</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
-  <customLabels>  
+  <customLabels>
 		<label>Unable to find DocuSign CLM settings. Please contact DocuSign Support for assistance.</label>
 		<name>MissingDocuSignCLMSettings</name>
 	</customLabels>
@@ -4393,33 +4393,41 @@
 		<label>Overview Image</label>
 		<name>OverviewImage</name>
 	</customLabels>
-  <customLabels>  
+  <customLabels>
 		<label>Fetching Salesforce files</label>
-		<name>FetchingSalesforceFiles</name>	
+		<name>FetchingSalesforceFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Fetching DocuSign Files</label>
-		<name>FetchingDocuSignFiles</name>	
-	</customLabels>	
+		<name>FetchingDocuSignFiles</name>
+	</customLabels>
 	<customLabels>
 		<label>Creating a copy and importing to DocuSign Files...</label>
-		<name>ImportingToDocuSignFiles</name>		
-	</customLabels>	
+		<name>ImportingToDocuSignFiles</name>
+	</customLabels>
 	<customLabels>
 		<label>Setting up Upload Widget</label>
-		<name>SettingUpUploadWidget</name>		
-	</customLabels>	
+		<name>SettingUpUploadWidget</name>
+	</customLabels>
 	<customLabels>
 		<label>Authorizing</label>
 		<name>Authorizing</name>
 	</customLabels>
-  <customLabels>
+	<customLabels>
 		<label>Other Sources</label>
 		<name>OtherSourcesText</name>
 	</customLabels>
 	<customLabels>
 		<label>Map New Salesforce Object</label>
 		<name>MapNewSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope transaction limit exceeded.</label>
+		<name>MultiSendEnvelopeLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>One or more envelopes was not sent successfully.</label>
+		<name>InvalidSentEnvelopes</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

@@ -21,6 +21,8 @@ global with sharing class EnvelopeService {
 	private static final SObjectType TYPE_RECIPIENT = Recipient__c.getSObjectType();
 	private static final LoggerService LOG = LoggerService.getInstance();
 	private static final String SENDER_TOKEN = 'Apex Toolkit';
+	@TestVisible
+	private static final Integer MULTI_SEND_ENVELOPE_LIMIT = 100;
 
 	public static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
 		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
@@ -216,6 +218,32 @@ global with sharing class EnvelopeService {
 				.withDocuments(envelope.documents)
 				.withRecipients(envelope.recipients)
 				.withCustomFields(envelope.customFields);
+		}
+
+		public List<Envelope> insertSentEnvelopes(final List<Envelope> envelopes) {
+			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
+				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
+				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
+				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
+			});
+
+			List<Envelope> result = new List<Envelope>();
+			if (Collection.isNotEmpty(envelopes)) {
+				List<Envelope__c> es = new List<Envelope__c>();
+				Map<String, Envelope> dses = new Map<String, Envelope>();
+				for (Envelope e : envelopes) {
+					if (e != null && UUID.isNotEmpty(e.docuSignId)) {
+						es.add(convert(e));
+						dses.put(e.docuSignId.toString(), e);
+					}
+				}
+				insert es;
+
+				for (Envelope__c e : es) {
+					if (dses.containsKey(e.DocuSignId__c)) result.add(dses.get(e.DocuSignId__c).withId(e.Id));
+				}
+			}
+			return result;
 		}
 
 		public Envelope updateEnvelope2(final Envelope envelope, final Boolean sendNow) {
@@ -607,7 +635,10 @@ global with sharing class EnvelopeService {
 	 *
 	 * @return The sent envelope.
 	 */
-	global static Envelope sendEnvelope(final Envelope envelope, final Boolean sendNow) {
+	global static Envelope sendEnvelope(
+		final Envelope envelope,
+		final Boolean sendNow) {
+
 		return sendEnvelope(envelope, sendNow, true, SENDER_TOKEN);
 	}
 
@@ -708,6 +739,130 @@ global with sharing class EnvelopeService {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Immediately sends one or more DocuSign envelopes.
+	 * <p>
+	 * This method involves web service callouts to DocuSign, but no subsequent DML. It is intended for scenarios where
+	 * multiple envelopes are sent in a single transaction or whenever else DML should be deferred. At the end of the
+	 * transaction, <code>dfsle.EnvelopeService.saveSentEnvelopes</code> should be called. Otherwise the associated
+	 * envelope and status records will not be created.
+	 * <p>
+	 * This call is limited to 100 envelopes at a time, and subject to hourly API and Salesforce Governor limits.
+	 * <p>
+	 * Every envelope must be valid or else a <code>ValidationException</code> will be thrown and no envelopes will be
+	 * sent. If all envelopes pass validation, any API error for an envelope will be logged on the <code>error</code>
+	 * property. Only successfully sent ones may be saved with <code>dfsle.EnvelopeService.saveSentEnvelopes</code>.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code>, <code>DocuSign User</code>, or
+	 * <code>DocuSign Sender</code> permission set.
+	 *
+	 * @param envelopes The envelopes to send.
+	 *
+	 * @return The sent envelope.
+	 * @see dfsle.EnvelopeService.saveSentEnvelopes to complete the transaction.
+	 */
+	global static List<Envelope> sendEnvelopes(final List<Envelope> envelopes) {
+		Permissions.verifyIsDocuSignSender();
+
+		if (Collection.isEmpty(envelopes)) throw new DocuSignException(Label.UndefinedArgument);
+		if (envelopes.size() > MULTI_SEND_ENVELOPE_LIMIT) throw new DocuSignException(Label.MultiSendEnvelopeLimitExceeded);
+
+		List<Envelope> result = new List<Envelope>();
+		ValidationResult vr = new ValidationResult();
+		for (Envelope e : envelopes) {
+			ValidationResult vr2 = validate(e, true);
+			if (vr.isValid && vr2.isValid) { // Prepare envelope for sending only if there are no validation errors.
+				result.add(replaceUserTags(e)
+					.withRecipients(RecipientService.prepareRecipients(
+						e.recipients,
+						null,
+						null)));
+			} else { // Invalid envelope, skip preparation
+				vr.add(vr2);
+			}
+		}
+		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
+
+		Envelope.Options options = EnvelopeSettings.getOptions(true);
+		EnvelopeAPI client = EnvelopeAPI.getInstance();
+		for (Envelope e : result) {
+			try {
+				e = e.withDocuSignId(client.createEnvelope(e, options, SENDER_TOKEN))
+					.withSent(Datetime.now());
+			} catch (APIException ex) {
+				LOG.exception(ex, 'Failed to send envelope');
+				e = e.withError(ex.error);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Completes a transaction initiated by <code>dfsle.EnvelopeService.sendEnvelopes</code>. This will create envelope
+	 * and status records for each sent envelope.
+	 * <p>
+	 * Each envelope must have valid <code>docuSignId</code> and <code>sent<code> properties and an empty
+	 * <code>error</code> property, otherwise an exception will be thrown and no envelopes will be saved. Any invalid
+	 * envelopes should be filtered out prior to calling this method.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code>, <code>DocuSign User</code>, or
+	 * <code>DocuSign Sender</code> permission set.
+	 *
+	 * @param envelopes The sent envelopes.
+	 *
+	 * @return The sent envelopes with updated record IDs.
+	 * @see dfsle.EnvelopeService.sendEnvelopes to initiate the transaction.
+	 */
+	global static List<Envelope> saveSentEnvelopes(final List<Envelope> envelopes) {
+		Permissions.verifyIsDocuSignSender();
+
+		if (Collection.isEmpty(envelopes)) throw new DocuSignException(Label.UndefinedArgument);
+
+		List<Envelope.Status> ess = new List<Envelope.Status>();
+		for (Envelope e : envelopes) {
+			if (e == null
+				|| String.isNotBlank(e.id)
+				|| UUID.isEmpty(e.docuSignId)
+				|| e.sent == null
+				|| (e.error != null && e.error != APIError.none)) {
+
+				throw new DocuSignException(Label.InvalidSentEnvelopes);
+			}
+
+			ess.add(e.toEnvelopeStatus());
+		}
+
+		Map<Id, Envelope> result = new Map<Id, Envelope>();
+		Map<Id, List<Document>> documents = new Map<Id, List<Document>>();
+		Map<Id, List<Recipient>> recipients = new Map<Id, List<Recipient>>();
+		for (Envelope e : DB.insertSentEnvelopes(envelopes)) {
+			if (e == null || String.isBlank(e.id)) continue;
+
+			result.put(e.id, e);
+			if (Collection.isNotEmpty(e.documents)) documents.put(e.id, e.documents);
+			if (Collection.isNotEmpty(e.recipients)) recipients.put(e.id, e.recipients);
+		}
+
+		documents = DocumentService.addEnvelopeDocuments(documents);
+		for (Id eId : documents.keySet()) {
+			if (eId != null && result.containsKey(eId)) {
+				result.put(eId, result.get(eId).withDocuments(documents.get(eId)));
+			}
+		}
+
+		recipients = RecipientService.addEnvelopeRecipients(recipients);
+		for (Id eId : recipients.keySet()) {
+			if (eId != null && result.containsKey(eId)) {
+				result.put(eId, result.get(eId).withRecipients(recipients.get(eId)));
+			}
+		}
+
+		StatusService.createStatus(ess);
+
+		return result.values();
 	}
 
 	/**

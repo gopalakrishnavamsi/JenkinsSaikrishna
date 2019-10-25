@@ -8512,4 +8512,18 @@
 		<shortDescription>CLM - MapNewSalesforceObject</shortDescription>
 		<value>Map New Salesforce Object</value>
 	</labels>
+	<labels>
+		<fullName>MultiSendEnvelopeLimitExceeded</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Multi-send envelope limit exceeded</shortDescription>
+		<value>Envelope transaction limit exceeded.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSentEnvelopes</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid sent envelopes</shortDescription>
+		<value>One or more envelopes was not sent successfully.</value>
+	</labels>
 </CustomLabels>

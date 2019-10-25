@@ -258,6 +258,41 @@ global with sharing class RecipientService {
 			return result;
 		}
 
+		public Map<Id, List<Recipient>> insertRecipients(final Map<Id, List<Recipient>> recipients) {
+			Permissions.verifyIsCreateable(TYPE_RECIPIENT, new List<String> {
+				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
+				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
+				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
+				'SigningGroupName__c', 'SourceId__c'
+			});
+
+			Map<Id, List<Recipient>> result = new Map<Id, List<Recipient>>();
+			if (Collection.isNotEmpty(recipients)) {
+				List<Recipient__c> rs = new List<Recipient__c>();
+				for (Id eId : recipients.keySet()) {
+					List<Recipient> recips = recipients.get(eId);
+					if (Collection.isNotEmpty(recips)) {
+						Integer sequence = 0;
+						for (Recipient r : recips) {
+							rs.add(convert(r, eId, ++sequence));
+						}
+					}
+				}
+				insert rs;
+
+				for (Recipient__c r : rs) {
+					if (r == null || r.Envelope__c == null) continue;
+
+					if (result.containsKey(r.Envelope__c)) {
+						result.get(r.Envelope__c).add(convert(r));
+					} else {
+						result.put(r.Envelope__c, new List<Recipient> { convert(r) });
+					}
+				}
+			}
+			return result;
+		}
+
 		private void verifySource(final Entity source) {
 			if (source == null || !source.isValid) throw new DocuSignException(Label.InvalidSource);
 		}
@@ -928,6 +963,21 @@ global with sharing class RecipientService {
 		if (Collection.isEmpty(recipients)) throw new DocuSignException(Label.UndefinedRecipient);
 
 		return DB.insertRecipients(envelopeId, recipients);
+	}
+
+	/**
+	 * Adds recipients to one or more DocuSign envelopes. This method is called during envelope bulk insert.
+	 *
+	 * @param recipients A map of envelope IDs to recipients.
+	 *
+	 * @return The added map of envelope IDs to recipients.
+	 */
+	public static Map<Id, List<Recipient>> addEnvelopeRecipients(final Map<Id, List<Recipient>> recipients) {
+		if (Collection.isEmpty(recipients)) return new Map<Id, List<Recipient>>();
+
+		Permissions.verifyIsOwner(recipients.keySet());
+
+		return DB.insertRecipients(recipients);
 	}
 
 	/**

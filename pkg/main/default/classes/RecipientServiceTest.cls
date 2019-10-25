@@ -1846,4 +1846,67 @@ private class RecipientServiceTest {
 			System.assertEquals(new Set<String> { 'sg1', 'sg2', 'sg3' }, result.keySet());
 		}
 	}
+
+	@IsTest
+	static void test_addEnvelopeRecipients_multi_send_unauthorized() {
+		Envelope__c e1, e2, e3;
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			e1 = TestUtils.createEnvelope(a.Id);
+			e2 = TestUtils.createEnvelope(a.Id);
+			e3 = TestUtils.createEnvelope(a.Id);
+		}
+
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Recipient e1r1 = Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null);
+			Recipient e1r2 = Recipient.fromSource('e1r2', 'e1r2@unit.test', '2222222', 'r2', null);
+			Recipient e3r1 = Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null);
+			Map<Id, List<Recipient>> rs = new Map<Id, List<Recipient>> {
+				e1.Id => new List<Recipient> { e1r1, e1r2 },
+				e2.Id => null,
+				e3.Id => new List<Recipient> { e3r1 }
+			};
+
+			Test.startTest();
+			try {
+				RecipientService.addEnvelopeRecipients(rs);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addEnvelopeRecipients_multi_send_success() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			Envelope__c e1 = TestUtils.createEnvelope(a.Id);
+			Recipient e1r1 = Recipient.fromSource('e1r1', 'e1r1@unit.test', '1111111', 'r1', null);
+			Recipient e1r2 = Recipient.fromSource('e1r2', 'e1r2@unit.test', '2222222', 'r2', null);
+			Envelope__c e2 = TestUtils.createEnvelope(a.Id);
+			Envelope__c e3 = TestUtils.createEnvelope(a.Id);
+			Recipient e3r1 = Recipient.fromSource('e2r1', 'e2r1@unit.test', '1111111', 'r1', null);
+			Map<Id, List<Recipient>> rs = new Map<Id, List<Recipient>> {
+				e1.Id => new List<Recipient> { e1r1, e1r2 },
+				e2.Id => null,
+				e3.Id => new List<Recipient> { e3r1 }
+			};
+
+			Test.startTest();
+			Map<Id, List<Recipient>> result = RecipientService.addEnvelopeRecipients(rs);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<Id> { e1.Id, e3.Id }, result.keySet());
+			System.assertNotEquals(null, result.get(e1.Id)[0]);
+			System.assertNotEquals(null, result.get(e1.Id)[0].id);
+			System.assertNotEquals(null, result.get(e1.Id)[1]);
+			System.assertNotEquals(null, result.get(e1.Id)[1].id);
+			System.assertEquals(1, Collection.size(result.get(e3.Id)));
+			System.assertNotEquals(null, result.get(e3.Id)[0]);
+			System.assertNotEquals(null, result.get(e3.Id)[0].id);
+		}
+	}
 }

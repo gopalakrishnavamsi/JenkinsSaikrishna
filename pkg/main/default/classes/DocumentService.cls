@@ -262,6 +262,38 @@ global with sharing class DocumentService {
 			return result;
 		}
 
+		public Map<Id, List<Document>> insertDocuments(final Map<Id, List<Document>> documents) {
+			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
+				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
+			});
+
+			Map<Id, List<Document>> result = new Map<Id, List<Document>>();
+			if (Collection.isNotEmpty(documents)) {
+				List<Document__c> ds = new List<Document__c>();
+				for (Id eId : documents.keySet()) {
+					List<Document> docs = documents.get(eId);
+					if (Collection.isNotEmpty(docs)) {
+						Integer sequence = 0;
+						for (Document d : docs) {
+							ds.add(convert(d, eId, ++sequence));
+						}
+					}
+				}
+				insert ds;
+
+				for (Document__c d : ds) {
+					if (d == null || d.Envelope__c == null) continue;
+
+					if (result.containsKey(d.Envelope__c)) {
+						result.get(d.Envelope__c).add(convert(d));
+					} else {
+						result.put(d.Envelope__c, new List<Document> { convert(d) });
+					}
+				}
+			}
+			return result;
+		}
+
 		public List<Document> upsertDocuments(final Id envelopeId, final List<Document> documents) {
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
 				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
@@ -487,6 +519,21 @@ global with sharing class DocumentService {
 		Permissions.verifyIsOwner(envelopeId);
 
 		return DB.insertDocuments(envelopeId, documents);
+	}
+
+	/**
+	 * Adds documents to one or more DocuSign envelopes. This method is called during envelope bulk insert.
+	 *
+	 * @param documents A map of envelope IDs to documents.
+	 *
+	 * @return The added map of envelope IDs to documents.
+	 */
+	public static Map<Id, List<Document>> addEnvelopeDocuments(final Map<Id, List<Document>> documents) {
+		if (Collection.isEmpty(documents)) return new Map<Id, List<Document>>();
+
+		Permissions.verifyIsOwner(documents.keySet());
+
+		return DB.insertDocuments(documents);
 	}
 
 	/**
