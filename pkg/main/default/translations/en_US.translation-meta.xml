@@ -3410,6 +3410,30 @@
 		<name>SetupPageTitle</name>
 	</customLabels>
 	<customLabels>
+		<label>Add Components to Your Layouts</label>
+		<name>ComponentSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignature Envelope Status</label>
+		<name>EsignatureEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Get real time status updates on your envelopes right from Salesforce. DocuSign eSignature Envelope Status gets your documents signed faster, so you can get more work done.</label>
+		<name>ComponentSectionEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to place components in your layouts</label>
+		<name>LearnToPlaceComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Keep track of the files you are collaborating on without leaving Salesforce. DocuSign Files keeps your documents organized and easy to find.</label>
+		<name>ComponentSectionDocuSigFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Get more from DocuSign Apps Launcher.</label>
+		<name>GetMoreFromAppsLauncher</name>
+	</customLabels>
+	<customLabels>
 		<label>Environment Name</label>
 		<name>EnvironmentName</name>
 	</customLabels>
@@ -3696,6 +3720,14 @@
 	<customLabels>
 		<label>Send for Review or Approval</label>
 		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Manage Users and Their Permission Profiles</label>
+		<name>LearnAddUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>How to Add Components into Layouts</label>
+		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>Try DocuSign Gen</label>
@@ -4100,6 +4132,10 @@
 	<customLabels>
 		<label>Help Guides</label>
 		<name>HelpGuides</name>
+	</customLabels>
+	<customLabels>
+		<label>Useful Links</label>
+		<name>UsefulLinks</name>
 	</customLabels>
 	<customLabels>
 		<label>This is your one-stop shop for the tools you need to get the most out of Docusign CLM for Salesforce. You can browse through FAQs, product documentation, white papers, and more.</label>

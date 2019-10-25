@@ -8,6 +8,10 @@
     background: #ee7fae;
 }
 
+.THIS .ds-components-icon-background {
+    background: #a094ed;
+}
+
 .THIS .ds-trialMessage {
     font-size: t(fontSize4);
 }

@@ -16,7 +16,8 @@
                     <div class="slds-media__figure">
                         <lightning:icon iconName="{!v.headerIconName}" size="large"
                                         class="{!if(v.sectionHeader == $Label.c.TabUserManagement, 'ds-userManagement-icon-background')
-                                                +if(v.sectionHeader == $Label.c.TabNegotiation, 'ds-negotiation-icon-background')}"/>
+                                                +if(v.sectionHeader == $Label.c.TabNegotiation, 'ds-negotiation-icon-background')
+                                                +if(v.sectionHeader == $Label.c.TabComponents, 'ds-components-icon-background')}"/>
                     </div>
                     <div class="slds-media__body slds-media__body slds-m-top_xx-small">
                         <p class="slds-text-title_caps">{!v.sectionCategory}</p>

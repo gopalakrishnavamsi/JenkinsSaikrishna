@@ -40,7 +40,12 @@
     border-radius: 4px;
 }
 
-.THIS .ds-userManagement-section, .THIS .ds-documentGeneration-section, .THIS .ds-negotiation-section, .THIS .ds-esignature-section {
+.THIS .ds-userManagement-section, 
+.THIS .ds-documentGeneration-section, 
+.THIS .ds-negotiation-section, 
+.THIS .ds-esignature-section, 
+.THIS .ds-components-section, 
+.THIS .ds-help-section {
     background: rgb(255, 255, 255);
 }
 

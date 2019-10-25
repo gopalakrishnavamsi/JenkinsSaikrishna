@@ -1,0 +1,39 @@
+.THIS.ds-components-section {
+    min-height: 1325px;
+}
+
+.THIS .ds-components-section-header {
+    color: rgb(49, 45, 43);
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-components-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize5);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-components-help-section {
+    height: 92px;
+}
+
+.THIS .ds-components-image-box {
+    width: 200px;
+}
+
+.THIS .ds-components-image-helpTextbox {
+    display: grid;
+    height: 92px;
+    width: 530px;
+}
+
+.THIS .ds-components-image-text {
+    color: rgb(62, 62, 60);
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-components-image-link {
+    font-size: t(fontSize3);
+    align-self: flex-end;
+}

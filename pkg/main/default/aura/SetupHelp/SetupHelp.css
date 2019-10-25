@@ -1,0 +1,50 @@
+.THIS.ds-help-section {
+    min-height: 1325px;
+}
+
+.THIS .ds-help-section-header {
+    color: rgb(49, 45, 43);
+    font-size: t(fontSize8);
+    font-weight: t(fontWeightBold);
+}
+
+.THIS .ds-help-section-text {
+    color: rgb(3, 3, 3);
+    font-size: t(fontSize3);
+}
+
+.THIS .ds-learn-image-tile {
+    height: 240px;
+    border: 1px solid rgb(221, 219, 218);
+    color: rgb(8, 7, 7);
+}
+
+.THIS .ds-learn-image-tile:hover {
+    cursor: pointer;
+    border: 1px solid rgb(0, 112, 210);
+    color: rgb(0, 109, 204);
+    background-color: #f6fbff;
+    background-image: url(/resource/New_Window);
+    background-repeat: no-repeat;
+    background-position-x: 98.5%;
+    background-position-y: 2%;
+}
+
+.THIS .ds-learn-image {
+    height: 145px;
+    width: 174px;
+    cursor: pointer;
+}
+
+.THIS .ds-learn-image-title {
+    font-size: t(fontSize5);
+}
+
+.THIS .ds-fonts-color {
+  color: #0070d2;
+  font-size: 1rem;
+}
+
+.THIS .ds-icon-color svg {
+  fill: #0070d2;
+}

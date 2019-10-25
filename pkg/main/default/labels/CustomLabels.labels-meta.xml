@@ -6674,6 +6674,54 @@
 		<value>At DocuSign, we are dedicated to your success. We've created a Help page to provide answers to common questions for DocuSign Applications.</value>
 	</labels>
 	<labels>
+		<fullName>ComponentSectionHeader</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ComponentSectionHeader</shortDescription>
+		<value>Add Components to Your Layouts</value>
+	</labels>
+	<labels>
+		<fullName>EsignatureEnvelopeStatus</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EsignatureEnvelopeStatus</shortDescription>
+		<value>eSignature Envelope Status</value>
+	</labels>
+	<labels>
+		<fullName>ComponentSectionEnvelopeStatus</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ComponentSectionEnvelopeStatus</shortDescription>
+		<value>Get real time status updates on your envelopes right from Salesforce. DocuSign eSignature Envelope Status gets your documents signed faster, so you can get more work done.</value>
+	</labels>
+	<labels>
+		<fullName>LearnToPlaceComponents</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnToPlaceComponents</shortDescription>
+		<value>Learn how to place components in your layouts</value>
+	</labels>
+	<labels>
+		<fullName>ComponentSectionDocuSigFiles</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ComponentSectionDocuSigFiles</shortDescription>
+		<value>Keep track of the files you are collaborating on without leaving Salesforce. DocuSign Files keeps your documents organized and easy to find.</value>
+	</labels>
+	<labels>
+		<fullName>GetMoreFromAppsLauncher</fullName>
+		<categories>SetupComponents</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GetMoreFromAppsLauncher</shortDescription>
+		<value>Get more from DocuSign Apps Launcher.</value>
+	</labels>
+	<labels>
 		<fullName>SetupPageTitle</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -7255,6 +7303,22 @@
 		<protected>true</protected>
 		<shortDescription>LearnNegotiateLabel</shortDescription>
 		<value>Send for Review or Approval</value>
+	</labels>
+	<labels>
+		<fullName>LearnAddUsersLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnAddUsersLabel</shortDescription>
+		<value>Manage Users and Their Permission Profiles</value>
+	</labels>
+	<labels>
+		<fullName>LearnAddComponentsLabel</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnAddComponentsLabel</shortDescription>
+		<value>How to Add Components into Layouts</value>
 	</labels>
 	<labels>
 		<fullName>TryDocuSignGen</fullName>
@@ -7875,6 +7939,14 @@
 		<protected>true</protected>
 		<shortDescription>CLM -Help Guides</shortDescription>
 		<value>Help Guides</value>
+	</labels>
+	<labels>
+		<fullName>UsefulLinks</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UsefulLinks</shortDescription>
+		<value>Useful Links</value>
 	</labels>
 	<labels>
 		<fullName>HelpGuidesSummary</fullName>

@@ -274,13 +274,23 @@
 
                 <!-- components section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_components'}">
-                    <c:SetupComponents/>
+                    <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
+                                          sectionHeader="{!$Label.c.TabComponents}"
+                                          headerIconName="standard:canvas"/>  
+                    <div class="ds-components-section slds-m-top_x-large">
+                        <c:SetupComponents/>
+                    </div>
                 </aura:if>
                 <!-- components section ends here -->
 
                 <!-- help section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_help'}">
-                    <c:SetupHelp/>
+                    <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
+                                          sectionHeader="{!$Label.c.TabHelp}"
+                                          headerIconName="standard:sossession"/>
+                    <div class="ds-help-section slds-m-top_x-large">
+                        <c:SetupHelp/>
+                    </div>
                 </aura:if>
                 <!-- help section ends here -->
             </div>
