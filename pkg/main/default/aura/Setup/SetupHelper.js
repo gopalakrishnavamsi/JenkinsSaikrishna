@@ -143,9 +143,11 @@
     component.set('v.message', message);
     component.set('v.mode', mode);
     component.set('v.showToast', true);
-    window.setTimeout($A.getCallback(function () {
-      component.set('v.showToast', false);
-    }), 5000);
+    if (mode === 'success') {
+      window.setTimeout($A.getCallback(function () {
+        component.set('v.showToast', false);
+      }), 5000);
+    }
   },
 
   hideToast: function (component) {
