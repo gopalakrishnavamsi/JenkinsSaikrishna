@@ -761,7 +761,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement</shortDescription>
-		<value>Save time, reduce risk and increase productivity without every leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM's secure cloud platform.</value>
+		<value>Save time, reduce risk and increase productivity without ever leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM&apos;s secure cloud platform.</value>
 	</labels>
 	<labels>
 		<fullName>Done</fullName>
@@ -4904,7 +4904,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Choose Location Info</shortDescription>
-		<value>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create will be independent of other mappings.</value>
+		<value>Choose an easy-to-find location within DocuSign CLM for your folder or folders to go. The folder path you create will be independent of other mappings.</value>
 	</labels>
 	<labels>
 		<fullName>ChooseLocationTitleHelpText</fullName>
@@ -4976,7 +4976,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Select a field info</shortDescription>
-		<value>Browse for and select a field to name the folder that you have just created</value>
+		<value>Choose the field or fields you'd like to use. This will dynamically name your object folders in DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>SelectFolderHelpBody</fullName>
@@ -4992,7 +4992,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Select Object Help Body</shortDescription>
-		<value>Choose the Salesforce object you want to be the source for your documents.</value>
+		<value>Choose the Salesforce object you want to be the source for your documents. You&apos;ll choose one object at a time.</value>
 	</labels>
 	<labels>
 		<fullName>ShowSteps</fullName>
@@ -5144,14 +5144,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Opportunity</shortDescription>
 		<value>Opportunity</value>
-	</labels>
-	<labels>
-		<fullName>SelectObjectHelpBody2</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Select Object Help Body 2</shortDescription>
-		<value>You&apos;ll choose one object at a time.</value>
 	</labels>
 	<labels>
 		<fullName>CaseFolderContentsHelp</fullName>
@@ -8581,5 +8573,13 @@
 		<protected>true</protected>
 		<shortDescription>Invalid sent envelopes</shortDescription>
 		<value>One or more envelopes was not sent successfully.</value>
+	</labels>
+	<labels>
+		<fullName>EditSalesforceObject</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - Edit Salesforce Object</shortDescription>
+		<value>Edit Salesforce Object</value>
 	</labels>
 </CustomLabels>

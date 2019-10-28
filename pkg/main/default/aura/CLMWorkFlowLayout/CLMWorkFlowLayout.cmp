@@ -22,8 +22,8 @@
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" showButton="true"
-				buttonLabel="{!$Label.c.GoToWorkflow}" imageURL="{!($Resource.WorkflowDesigner)}"
-				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}"/>
+				buttonLabel="{!$Label.c.GoToWorkflow}" imageURL="{!($Resource.WorkflowDesigner)}" hyperlinkedURI="['tab','8']"
+				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" firstButtonNavigation="{!v.redirectCLM}"/>
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowSteps}" showButton="false"

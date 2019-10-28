@@ -7,6 +7,9 @@
 			{ label: $A.get('$Label.c.ChooseLocation'), index: '3' }
 		];
 		component.set('v.pathValues', defaultPathValues);
+		component.set('v.cardtitle', $A.get('$Label.c.SelectObject'));
+		component.set('v.cardSummary', $A.get('$Label.c.SelectObjectHelpBody'));
+		component.set('v.headerTitle', component.get('v.isEdit') ? $A.get('$Label.c.EditSalesforceObject') : $A.get('$Label.c.MapNewSalesforceObject'));
 		helper.showLoader(component);
 		component.set('v.clmFolderTree', [
 			{

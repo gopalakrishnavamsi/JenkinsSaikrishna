@@ -1,4 +1,6 @@
 <aura:component>
+	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
+	<ltng:require scripts="{!$Resource.navUtils}"/>
 	<aura:attribute name="isSubTitle" type="Boolean" default="false"/>
 	<aura:attribute name="subTitle" type="String"/>
 	<aura:attribute name="imageURL" type="String"/>
@@ -7,6 +9,8 @@
 	<aura:attribute name="steps" type="String[]"/>
 	<aura:attribute name="showButton" type="Boolean" default="true"/>
 	<aura:attribute name="buttonLabel" type="String" default=""/>
+	<aura:attribute name="hyperlinkedURI" type="List" />
+	<aura:attribute name="firstButtonNavigation" type="String" />
 
 	<div class="slds-grid ">
 		<div class="slds-col slds-size_1-of-2 slds-p-top_small">
@@ -27,7 +31,7 @@
 				<div class="slds-p-top_medium">
 					<aura:if isTrue="{!v.showButton}">
 						<lightning:button label="{!v.buttonLabel}" title="{!v.buttonLabel}" class="ds-button-width "
-							iconName="utility:new_window" iconPosition="right" onclick="navigateToSection"/>
+							iconName="utility:new_window" iconPosition="right" onclick="{!c.buttonClick}"/>
 					</aura:if>
 				</div>
 			</div>

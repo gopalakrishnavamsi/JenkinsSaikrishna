@@ -2643,10 +2643,6 @@
 		<name>Opportunity</name>
 	</customLabels>
 	<customLabels>
-		<label>1回の操作で選択できるオブジェクトは1つのみです。</label>
-		<name>SelectObjectHelpBody2</name>
-	</customLabels>
-	<customLabels>
 		<label>項目を選択するのはなぜですか?</label>
 		<name>WhyAmISelectingFields</name>
 	</customLabels>

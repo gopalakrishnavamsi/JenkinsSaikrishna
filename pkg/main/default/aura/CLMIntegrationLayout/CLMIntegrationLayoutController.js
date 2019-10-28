@@ -14,7 +14,7 @@
       component,
       {
         title: $A.get('$Label.c.SelectObject'),
-        summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
+        summary: $A.get('$Label.c.SelectObjectHelpBody'),
         index: '1',
         fromComponent: 'CLMIntegrationLayout',
         toComponent: 'CLMCardModel',
@@ -54,7 +54,7 @@
           component,
           {
             title: $A.get('$Label.c.SelectObject'),
-            summary: $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')),
+            summary: $A.get('$Label.c.SelectObjectHelpBody'),
             index: '1',
             fromComponent: 'CLMIntegrationLayout',
             toComponent: 'CLMCardModel',

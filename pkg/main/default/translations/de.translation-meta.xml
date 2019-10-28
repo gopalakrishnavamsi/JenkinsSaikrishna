@@ -2642,10 +2642,6 @@
 		<name>Opportunity</name>
 	</customLabels>
 	<customLabels>
-		<label>Wählen Sie jeweils ein Objekt aus.</label>
-		<name>SelectObjectHelpBody2</name>
-	</customLabels>
-	<customLabels>
 		<label>Warum müssen Felder ausgewählt werden?</label>
 		<name>WhyAmISelectingFields</name>
 	</customLabels>

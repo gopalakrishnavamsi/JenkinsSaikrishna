@@ -2298,7 +2298,7 @@
 		<name>DocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>Save time, reduce risk and increase productivity without every leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM's secure cloud platform.</label>
+		<label>Save time, reduce risk and increase productivity without ever leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM&apos;s secure cloud platform.</label>
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -2514,7 +2514,7 @@
 		<name>AllObjectsListed</name>
 	</customLabels>
 	<customLabels>
-		<label>Allocate an easy-to-find location with DocuSign CLM for your folder to live. The folder path you create will be independent of other mappings.</label>
+		<label>Choose an easy-to-find location within DocuSign CLM for your folder or folders to go. The folder path you create will be independent of other mappings.</label>
 		<name>ChooseLocationInfo</name>
 	</customLabels>
 	<customLabels>
@@ -2550,7 +2550,7 @@
 		<name>OpenFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>Browse for and select a field to name the folder that you have just created</label>
+		<label>Choose the field or fields you'd like to use. This will dynamically name your object folders in DocuSign CLM.</label>
 		<name>SelectFieldInfo</name>
 	</customLabels>
 	<customLabels>
@@ -2558,7 +2558,7 @@
 		<name>SelectFolderHelpBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Choose the Salesforce object you want to be the source for your documents.</label>
+		<label>Choose the Salesforce object you want to be the source for your documents. You&apos;ll choose one object at a time.</label>
 		<name>SelectObjectHelpBody</name>
 	</customLabels>
 	<customLabels>
@@ -2644,10 +2644,6 @@
 	<customLabels>
 		<label>Opportunity</label>
 		<name>Opportunity</name>
-	</customLabels>
-	<customLabels>
-		<label>You&apos;ll choose one object at a time.</label>
-		<name>SelectObjectHelpBody2</name>
 	</customLabels>
 	<customLabels>
 		<label>Why am I selecting fields?</label>
@@ -4456,6 +4452,10 @@
 	<customLabels>
 		<label>One or more envelopes was not sent successfully.</label>
 		<name>InvalidSentEnvelopes</name>
+	</customLabels>
+	<customLabels>
+		<label>Edit Salesforce Object</label>
+		<name>EditSalesforceObject</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

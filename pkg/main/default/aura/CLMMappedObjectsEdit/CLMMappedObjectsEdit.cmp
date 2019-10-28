@@ -50,9 +50,8 @@
     <aura:attribute name="isDeleteFolder" type="Boolean" default="true" access="private"/>
     <aura:attribute name="loader" type="Boolean" default="false" access="private"/>
 
-    <aura:attribute name="cardtitle" type="String" default="{!$Label.c.SelectObject}" access="private"/>
-    <aura:attribute name="cardSummary" type="String"
-        default="{!$Label.c.SelectObjectHelpBody+' '+$Label.c.SelectObjectHelpBody2}" access="private"/>
+    <aura:attribute name="cardtitle" type="String" access="private"/>
+    <aura:attribute name="cardSummary" type="String" access="private"/>
     <aura:attribute name="pathValues" type="List" access="private"/>
 
     <!--modal attributes-->
@@ -65,10 +64,10 @@
     <aura:attribute name="isRemove" type="Boolean" default="false" access="private"/>
     <aura:attribute name="strikeModelFooterButtons" type="Aura.Component[]"/>
     <aura:attribute name="modalBodyText" type="String" default=""/>
-    <aura:attribute name="headerTitle" type="String" access="private" default="{!$Label.c.MapNewSalesforceObject}"/>
+    <aura:attribute name="headerTitle" type="String" access="private"/>
     <aura:attribute name="iconUrl" type="String" access="private" default="standard:social"/>
     <aura:attribute name="sectionTitle" type="String" access="private" default="{!$Label.c.CLM}"/>
-    <aura:attribute name="modalSize" type="String" default="large" access="private" />
+    <aura:attribute name="modalSize" type="String" default="large" access="private"/>
 
     <!--child components-->
     <aura:if isTrue="{!v.showModal}">
@@ -123,7 +122,7 @@
         </div>
     </div>
     <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large">
-        <c:CLMPath steps="{!v.pathValues}"/>
+        <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large"><c:CLMPath steps="{!v.pathValues}"/></div>
     </div>
     <div
         class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large slds-card__body slds-is-relative slds-p-left_x-large slds-p-right_x-large">
@@ -133,7 +132,7 @@
         <div>
             <lightning:layout multipleRows="true">
                 <lightning:layoutItem size="12">
-                    <div class="slds-p-right_x-large slds-p-top_x-large slds-p-bottom_small">
+                    <div class="slds-p-right_x-large slds-p-top_large slds-p-bottom_small">
                         <span class="medium-fonts-size blue-text-color">
                             <b>{!v.cardtitle}</b>
                         </span>
@@ -145,7 +144,7 @@
                         <span class="medium-fonts-size blue-text-color">
                             <b>{!v.title} </b>
                         </span>
-                        <span>
+                        <span class="slds-p-left_x-small">
                             <lightning:helptext content="{!v.titleHelpText}"/>
                         </span>
                     </div>
@@ -222,7 +221,7 @@
                                 </ul>
                             </aura:if>
                             <aura:if isTrue="{!v.currentStep=='2'}">
-                                <div class="slds-box slds-p-around_none">
+                                <div class="slds-box slds-p-around_none slds-border_bottom">
                                     <ul class="slds-tree" role="tree">
                                         <aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
                                             <li aria-expanded="{!objectData.selected}" aria-level="1"
@@ -282,7 +281,7 @@
                                                 onclick="{!c.onCLMFolderSelection}">
                                                 <div class="slds-tree__item ds-gray-folder">
                                                     <lightning:icon size="x-small" class="slds-p-right_xx-small" iconName="utility:open_folder"
-                                                        alternativeText="{!$Label.c.OtherSourcesText}" />
+                                                        alternativeText="{!$Label.c.OtherSourcesText}"/>
                                                     <span title="{!$Label.c.OtherSourcesText}" class="slds-has-flexi-truncate ds-parent-folder-text-color">
                                                         {!$Label.c.OtherSourcesText}
                                                     </span>

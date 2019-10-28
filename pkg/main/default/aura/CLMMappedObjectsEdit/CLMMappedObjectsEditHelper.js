@@ -192,7 +192,7 @@
 			helper.updatePath(component);
 		} else {
 			component.set('v.cardtitle', $A.get('$Label.c.SelectObject'));
-			component.set('v.cardSummary', $A.get('$Label.c.SelectObjectHelpBody').concat(' ', $A.get('$Label.c.SelectObjectHelpBody2')));
+			component.set('v.cardSummary', $A.get('$Label.c.SelectObjectHelpBody'));
 			component.set('v.currentStep', '1');
 			component.set('v.title', $A.get('$Label.c.YourSalesforceObjects'));
 			component.set('v.titleHelpText', $A.get('$Label.c.AllObjectsListed'));
