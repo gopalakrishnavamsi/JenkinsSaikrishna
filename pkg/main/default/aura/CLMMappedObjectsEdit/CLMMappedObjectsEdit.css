@@ -63,3 +63,11 @@
 .THIS .ds-icon-green {
     background-color: #7dc37d;
 }
+
+.THIS .ds-parent-folder-text-color {
+    color: rgb(221, 219, 218);
+}
+
+.THIS .ds-example-folder-name {
+    color: #b0adab;
+}

@@ -68,11 +68,12 @@
     <aura:attribute name="headerTitle" type="String" access="private" default="{!$Label.c.MapNewSalesforceObject}"/>
     <aura:attribute name="iconUrl" type="String" access="private" default="standard:social"/>
     <aura:attribute name="sectionTitle" type="String" access="private" default="{!$Label.c.CLM}"/>
+    <aura:attribute name="modalSize" type="String" default="large" access="private" />
 
     <!--child components-->
     <aura:if isTrue="{!v.showModal}">
         <c:strike_modal aura:id="popupModel" footerButtons="{!v.strikeModelFooterButtons}"
-            body="{!v.modalBodyText ? v.modalBodyText : v.modalBody}" title="{!v.modalTitleText}" size="large"
+            body="{!v.modalBodyText ? v.modalBodyText : v.modalBody}" title="{!v.modalTitleText}" size="{!v.modalSize}"
             primaryButtonLabel="{!v.modalPrimaryButtonText}" secondaryButtonLabel="{!v.modalSecondaryButtonText}"/>
     </aura:if>
 
@@ -175,8 +176,8 @@
                         </aura:if>
                         <aura:if isTrue="{!v.currentStep=='3'}">
                             <b>{!$Label.c.PathInDocuSignCLM}:</b><span
-                                class="slds-p-left_medium blue-text-color"><strong>{!format($Label.c.OtherSources,
-                                    v.pathInCLM)}</strong></span>
+                                class="slds-p-left_medium blue-text-color">{!format($Label.c.OtherSources,
+                                    v.pathInCLM)}</span>
                         </aura:if>
                     </div>
                 </lightning:layoutItem>
@@ -277,13 +278,23 @@
                                             {!$Label.c.YourDocuSignCLMFolders}
                                         </div>
                                         <ul class="slds-tree slds-p-around_medium" role="tree">
+                                            <li aria-expanded="true" aria-level="1" data-id="-1" tabindex="-1" data-type="main"
+                                                onclick="{!c.onCLMFolderSelection}">
+                                                <div class="slds-tree__item ds-gray-folder">
+                                                    <lightning:icon size="x-small" class="slds-p-right_xx-small" iconName="utility:open_folder"
+                                                        alternativeText="{!$Label.c.OtherSourcesText}" />
+                                                    <span title="{!$Label.c.OtherSourcesText}" class="slds-has-flexi-truncate ds-parent-folder-text-color">
+                                                        {!$Label.c.OtherSourcesText}
+                                                    </span>
+                                                </div>
+                                            </li>
                                             <aura:iteration items="{!v.clmFolderTree}" var="tree">
-                                                <li aria-expanded="true" aria-level="{!tree.level}"
+                                                <li aria-expanded="true" aria-level="{!tree.level+1}"
                                                     class="{!tree.selected?'ds-gray-background':''}"
                                                     tabindex="{!tree.selected?'0':'-1'}" data-id="{!tree.id}"
                                                     data-value="{!tree.type}" onclick="{!c.onCLMFolderSelection}">
                                                     <div
-                                                        class="{!tree.level==1?'ds-gray-folder slds-tree__item':tree.type=='tail'?'ds-blue-folder slds-tree__item':'ds-yellow-folder slds-tree__item'}">
+                                                        class="{!tree.type=='tail'?'ds-blue-folder slds-tree__item':'ds-yellow-folder slds-tree__item'}">
                                                         <lightning:icon size="x-small" class="slds-p-right_xx-small"
                                                             iconName="utility:open_folder"
                                                             alternativeText="{!$Label.c.OpenFolder}"/>
@@ -306,7 +317,7 @@
                                                     iconName="utility:open_folder"
                                                     alternativeText="{!$Label.c.OpenFolder}"/>
                                                 <span title="{!$Label.c.OtherSources}"
-                                                    class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate">
+                                                    class="slds-p-bottom_small slds-p-left_x-small slds-has-flexi-truncate ds-example-folder-name">
                                                     {!format($Label.c.ObjFolderImgExample, v.SelectedFolderExample)}
                                                 </span>
                                             </li>

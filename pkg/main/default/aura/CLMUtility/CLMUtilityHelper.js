@@ -32,7 +32,12 @@
       } else if (state === 'ERROR') {
         var errors = response.getError();
         if (errors && errors[0] && errors[0].message) {
-          _self.fireToast(component, errors[0].message, this.ERROR);
+          if (serverMethod === 'c.setMappedObject' && (errors[0].message.indexOf('FIELD_INTEGRITY_EXCEPTION') !== -1
+            || errors[0].message.indexOf('REQUIRED_FIELD_MISSING') !== -1)) {
+            _self.fireToast(component, $A.get('$Label.c.DuplicateMappingInsertion'), this.ERROR);
+          } else {
+            self.fireToast(component, errors[0].message, this.ERROR);
+          }
         }
       }
     });

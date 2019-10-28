@@ -761,7 +761,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Docusign Agreement</shortDescription>
-		<value>DocuSign CLM for Salesforce integrates your Salesforce data smoothly into DocuSign CLM.</value>
+		<value>Save time, reduce risk and increase productivity without every leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM's secure cloud platform.</value>
 	</labels>
 	<labels>
 		<fullName>Done</fullName>
@@ -801,7 +801,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Modal Body for Mapped objects</shortDescription>
-		<value>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</value>
+		<value>The edits you&apos;re making to this mapped object will change any future instances of the object. This may not change the objects you already have. Are you sure you want to edit this object?</value>
 	</labels>
 	<labels>
 		<fullName>Editor</fullName>
@@ -5019,14 +5019,6 @@
 		<value>page to talk about the powerful document generation capabilities of DocuSign CLM.</value>
 	</labels>
 	<labels>
-		<fullName>DocusignAgreement2</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Docusign Agreement 2</shortDescription>
-		<value>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</value>
-	</labels>
-	<labels>
 		<fullName>InvalidTrialProduct_1</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -8360,7 +8352,7 @@
 		<shortDescription>CLM - Generate Document on Single Click </shortDescription>
 		<value>6. Use that button to generate documents with a single click.</value>
 	</labels>
-  <labels>
+	<labels>
 		<fullName>MissingDocuSignCLMSettings</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -8512,7 +8504,7 @@
 		<shortDescription>CLM - Overview image alt text</shortDescription>
 		<value>Overview Image</value>
 	</labels>
-  <labels>
+	<labels>
 		<fullName>FetchingSalesforceFiles</fullName>
 		<categories>DocuSign Files</categories>
 		<language>en_US</language>
@@ -8527,7 +8519,7 @@
 		<protected>true</protected>
 		<shortDescription>Fetching DocuSign Files</shortDescription>
 		<value>Fetching DocuSign Files</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>ImportingToDocuSignFiles</fullName>
 		<categories>DocuSign Files</categories>
@@ -8535,7 +8527,7 @@
 		<protected>true</protected>
 		<shortDescription>Creating a copy and importing to DocuSign Files...</shortDescription>
 		<value>Creating a copy and importing to DocuSign Files...</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>SettingUpUploadWidget</fullName>
 		<categories>DocuSign Files</categories>
@@ -8543,16 +8535,16 @@
 		<protected>true</protected>
 		<shortDescription>Setting up Upload Widget</shortDescription>
 		<value>Setting up Upload Widget</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>Authorizing</fullName>
-		<categories>Setup</categories>		
+		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Authorizing</shortDescription>
 		<value>Authorizing</value>
 	</labels>
-  	<labels>
+	<labels>
 		<fullName>OtherSourcesText</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -8567,6 +8559,14 @@
 		<protected>true</protected>
 		<shortDescription>CLM - MapNewSalesforceObject</shortDescription>
 		<value>Map New Salesforce Object</value>
+	</labels>
+	<labels>
+		<fullName>DuplicateMappingInsertion</fullName>
+		<categories>CLM</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CLM - DuplicateMappingInsertion</shortDescription>
+		<value>An object mapping for this object and field combination already exists. Please edit the existing mapping or delete it before creating a new one.</value>
 	</labels>
 	<labels>
 		<fullName>MultiSendEnvelopeLimitExceeded</fullName>

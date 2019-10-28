@@ -217,6 +217,7 @@
 			component.set('v.modalTitleText', modalTitleText);
 			component.set('v.modalBodyText', modelbodyText);
 			component.set('v.showModal', 'true');
+			component.set('v.modalSize', 'small');
 			var modelComponent = component.find('popupModel');
 			setTimeout(
 				$A.getCallback(function () {
@@ -387,7 +388,7 @@
 			component.set('v.isDeleteFolder', true);
 			component.set('v.isAddSubFolder', true);
 			component.set('v.isRenameFolder', true);
-			component.set('v.selectedFolderParentExample', $A.get('$Label.c.OtherSources'));
+			component.set('v.selectedFolderParentExample', $A.get('$Label.c.OtherSourcesText'));
 			component.set('v.SelectedFolderExample', $A.get('$Label.c.Salesforce'));
 		}
 		clmFolderTree.forEach(function (treeData, treeIndex) {
@@ -623,6 +624,7 @@
 	},
 
 	closeModal: function (component) {
+		component.set('v.modalSize', 'large');
 		component.set('v.showModal', 'false');
 		component.set('v.modalValueHolder', {});
 	}

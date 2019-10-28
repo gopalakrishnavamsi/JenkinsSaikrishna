@@ -78,7 +78,7 @@
             </aura:if>
             <aura:if isTrue="{!v.showHelp}">
                 <lightning:layoutItem size="12" class="slds-p-left_large slds-p-right_large">
-                    <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}" imageURL="{!($Resource.CLMHavingTrouble)}"
+                    <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}" imageURL="{!($Resource.HavingTroubleOnHome)}"
                         firstButtonName="{!$Label.c.LearnMore}" showIcon="true" isIcon="false" showSecondButton="false"
                         summary="{!$Label.c.MappingObjectsGuideText}" />
                 </lightning:layoutItem>

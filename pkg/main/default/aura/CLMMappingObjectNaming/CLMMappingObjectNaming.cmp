@@ -2,7 +2,7 @@
 	<aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
 	<aura:registerEvent name="CLMMappingObjectEvent_UpdateName" type="c:CLMMappingObjectEvent"/>
 
-	<aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+	<aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 	<aura:attribute name="selectedFolderName" type="List"/>
 	<aura:attribute type="string" name="title"/>
 	<aura:attribute type="string" name="summary"/>
@@ -19,15 +19,14 @@
 			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
 			<div class="slds-modal__container">
 				<header class="slds-modal__header">
-					<button onclick="{!c.closePopUp}"
-						class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
-						<span class="slds-assistive-text">Close</span>
-					</button>
+					<lightning:buttonIcon onclick="{!c.closePopUp}" iconName="utility:close" alternativeText="{!$Label.c.Close}" name="Close"
+						size="large" variant="bare" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+						title="{!$Label.c.Close}"/>
 					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
 						{!$Label.c.WhyAmISelectingFields}</h2>
 				</header>
 				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-					<c:CLMSelectingFields />
+					<c:CLMSelectingFields/>
 				</div>
 				<footer class="slds-modal__footer">
 					<button onclick="{!c.closePopUp}" class="slds-button slds-button_brand">{!$Label.c.Close}</button>
@@ -44,18 +43,18 @@
 		</lightning:layoutItem>
 		<lightning:layoutItem size="12" padding="around-small">
 			<lightning:input onchange="{!c.onchangeName}" aura:id="search-fileName" value="{!v.folderName}"
-				name="fileName" label="{!$Label.c.SelectFieldToNameTheSubFolder}" />
+				name="fileName" label="{!$Label.c.SelectFieldToNameTheSubFolder}"/>
 			<div class="slds-grid">
 				<div>
 					<lightning:button variant="base" label="{!$Label.c.WhyAmISelectingFields}"
-						title="{!$Label.c.WhyAmISelectingFields}" onclick="{!c.openWhyExample}" />
+						title="{!$Label.c.WhyAmISelectingFields}" onclick="{!c.openWhyExample}"/>
 				</div>			
 			</div>
 		</lightning:layoutItem>
 		<lightning:layoutItem size="12" padding="around-small">
 			<div onkeyup="{! c.handleSearchField }">
 				<lightning:input aura:id="search-field" placeholder="{!$Label.c.SearchFields}" type="search"
-					variant="label-hidden" />
+					variant="label-hidden"/>
 			</div>
 			<div class="slds-p-around_none">
 				<ul class="slds-tree" role="tree">
@@ -65,9 +64,9 @@
 							<div class="slds-tree__item">
 								<lightning:icon size="x-small" class="slds-p-left_xx-small"
 									iconName="{!objectData.selected?'utility:down':'utility:right'}"
-									alternativeText="{!$Label.c.OpenFolder}" />
+									alternativeText="{!$Label.c.OpenFolder}"/>
 								<lightning:icon size="x-small" class="slds-p-left_xx-small"
-									iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
+									iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}"/>
 								<span class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
 									{!objectData.label}
 								</span>
@@ -78,14 +77,14 @@
 										id="{!fieldData.name}" role="treeitem" onclick="{!c.onObjFieldSelection}">
 										<div class="slds-grid slds-tree__item">
 											<lightning:icon size="x-small" class="slds-p-left_xx-small"
-												iconName="utility:topic2" alternativeText="{!$Label.c.OpenFolder}" />
+												iconName="utility:topic2" alternativeText="{!$Label.c.OpenFolder}"/>
 											<span
 												class="slds-p-left_x-small slds-tree__item-label slds-has-flexi-truncate">
 												{!fieldData.label}
 											</span>
 											<div class="slds-col_bump-left ds-hover slds-p-right_small">
 												<lightning:button variant="base" class="ds-no-extra-height"
-													label="{!$Label.c.ClickToAdd}" title="{!$Label.c.ClickToAdd}" />
+													label="{!$Label.c.ClickToAdd}" title="{!$Label.c.ClickToAdd}"/>
 											</div>
 										</div>
 									</li>

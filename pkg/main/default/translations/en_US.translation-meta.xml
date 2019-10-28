@@ -2298,15 +2298,11 @@
 		<name>DocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM for Salesforce integrates your Salesforce data smoothly into DocuSign CLM.</label>
+		<label>Save time, reduce risk and increase productivity without every leaving Salesforce. DocuSign CLM for Salesforce integrates your objects with DocuSign CLM's secure cloud platform.</label>
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>This allows you to use your Salesforce objects to generate documents and contracts which you can view from inside of Salesforce.</label>
-		<name>DocusignAgreement2</name>
-	</customLabels>
-	<customLabels>
-		<label>The edits you&apos;re making to this mapped object will affect future instances. They may not change existing objects.Are you sure you want to edit this object.</label>
+		<label>The edits you&apos;re making to this mapped object will change any future instances of the object. This may not change the objects you already have. Are you sure you want to edit this object?</label>
 		<name>EditModalBody</name>
 	</customLabels>
 	<customLabels>
@@ -4345,7 +4341,7 @@
 		<label>6. Use that button to generate documents with a single click.</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
-  <customLabels>
+	<customLabels>
 		<label>Unable to find DocuSign CLM settings. Please contact DocuSign Support for assistance.</label>
 		<name>MissingDocuSignCLMSettings</name>
 	</customLabels>
@@ -4421,7 +4417,7 @@
 		<label>Overview Image</label>
 		<name>OverviewImage</name>
 	</customLabels>
-  <customLabels>
+	<customLabels>
 		<label>Fetching Salesforce files</label>
 		<name>FetchingSalesforceFiles</name>
 	</customLabels>
@@ -4448,6 +4444,10 @@
 	<customLabels>
 		<label>Map New Salesforce Object</label>
 		<name>MapNewSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>An object mapping for this object and field combination already exists. Please edit the existing mapping or delete it before creating a new one.</label>
+		<name>DuplicateMappingInsertion</name>
 	</customLabels>
 	<customLabels>
 		<label>Envelope transaction limit exceeded.</label>

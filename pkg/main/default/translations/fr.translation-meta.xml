@@ -2299,10 +2299,6 @@
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Cela vous permet d’utiliser vos objets Salesforce pour produire des documents et des contrats que vous pouvez afficher directement depuis Salesforce.</label>
-		<name>DocusignAgreement2</name>
-	</customLabels>
-	<customLabels>
 		<label>Les modifications que vous faites à cet objet mappé auront une incidence sur les instances futures. Elles peuvent ne pas modifier les objets existants. Voulez‑vous vraiment modifier cet objet ?</label>
 		<name>EditModalBody</name>
 	</customLabels>

@@ -2299,10 +2299,6 @@
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>これにより、Salesforceオブジェクトのデータを使用して契約書などの文書を生成し、Salesforceの画面内でその文書を表示することができます。</label>
-		<name>DocusignAgreement2</name>
-	</customLabels>
-	<customLabels>
 		<label>このマッピング済みオブジェクトに対する編集内容は、今後のインスタンスに反映されます。既存のオブジェクトには反映されません。このオブジェクトを編集してもよろしいですか?</label>
 		<name>EditModalBody</name>
 	</customLabels>

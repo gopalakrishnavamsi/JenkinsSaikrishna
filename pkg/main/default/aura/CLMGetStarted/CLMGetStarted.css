@@ -1,10 +1,15 @@
-.THIS .ds-card-heading{
-    color:t(colorTextLinkActive);
-    font-size:1.5rem
+.THIS .ds-card-heading {
+    color: t(colorTextLinkActive);
+    font-size: 1.5rem;
 }
 
-.THIS .ds-button-width{
-    min-width:142px;
-    max-width:144px;
+.THIS .ds-button-width {
+    min-width: 142px;
+    max-width: 144px;
     height: 100%;
+}
+
+.THIS .ds-img-size {
+    max-width: 90%;
+    max-height: 80%;
 }

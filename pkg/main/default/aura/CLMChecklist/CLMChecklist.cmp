@@ -188,7 +188,7 @@
                                 <a id="step2" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
                             </aura:if>
                         </div>
-                        <div class="slds-col_bump-left ds-green">
+                        <div class="slds-col_bump-left ds-green" id="step2" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step2}">
                                     <lightning:button class="ds-button-width" variant="neutral"

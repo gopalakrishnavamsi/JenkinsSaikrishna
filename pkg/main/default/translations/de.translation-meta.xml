@@ -2298,10 +2298,6 @@
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Generieren Sie mit Salesforce-Objekten Dokumente und Verträge, die Sie dann innerhalb von Salesforce einsehen können.</label>
-		<name>DocusignAgreement2</name>
-	</customLabels>
-	<customLabels>
 		<label>Die Bearbeitung des zugeordneten Objekts kann sich auf künftige Instanzen auswirken. Bestehende Objekte werden möglicherweise nicht geändert. Möchten Sie das Objekt wirklich bearbeiten?</label>
 		<name>EditModalBody</name>
 	</customLabels>

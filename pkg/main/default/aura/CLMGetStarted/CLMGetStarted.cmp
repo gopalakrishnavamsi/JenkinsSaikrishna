@@ -2,23 +2,29 @@
     <ltng:require scripts="{!$Resource.stringUtils}"/>
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:attribute name="namespace" type="string" default="c"/>
-    <!--event fire-->
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
-    <article class="slds-card slds-grid slds-p-around_xx-large">
-        <div class="slds-col slds-size_2-of-4 slds-align_absolute-center slds-p-right_x-large">
-            <img src="{!($Resource.Overview)}" alt="{!$Label.c.OverviewImage}"/>
+    
+    <lightning:card>
+        <div class="slds-grid slds-p-left_medium slds-p-right_medium slds-grid_vertical">
+            <div class="slds-col">
+                <div class="slds-grid slds-p-around_medium">
+                    <div class="slds-col slds-size_1-of-2 slds-m-right_small slds-p-top_medium slds-p-left_medium">
+                        <div class="ds-img-size"><img src="{!($Resource.Overview)}" alt="{!$Label.c.OverviewImage}"/></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-p-right_small">
+                        <div class="slds-col slds-m-bottom_medium ds-card-heading">
+                            <h1><b>{!$Label.c.WelcomeToDocuSign}</b></h1>
+                        </div>
+                        <div class="slds-col slds-m-bottom_medium">
+                            {!$Label.c.DocusignAgreement}
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-top_medium">
+                            <lightning:button variant="brand" onclick="{!c.gotoHome}" class="ds-button-width"
+                                label="{!$Label.c.GetStarted}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="slds-col slds-p-left_large slds-size_2-of-4 slds-grid slds-grid_vertical">
-            <div class="slds-col slds-m-bottom_medium ds-card-heading">
-                <h1><b>{!$Label.c.WelcomeToDocuSign} </b></h1>
-            </div>
-            <div class="slds-col slds-m-bottom_medium">
-                {!$Label.c.DocusignAgreement}&nbsp;{!$Label.c.DocusignAgreement2}
-            </div>
-            <div class="slds-col slds-size_1-of-2">
-                <lightning:button variant="brand" onclick="{!c.gotoHome}" class="ds-button-width"
-                    label="{!$Label.c.GetStarted}"/>
-            </div>
-        </div>
-    </article>
+    </lightning:card>
 </aura:component>
