@@ -2284,15 +2284,7 @@
 	<customLabels>
 		<label>DISCOVER DOCUSIGN CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a</label>
-		<name>DocGenInfo</name>
-	</customLabels>
-	<customLabels>
-		<label>page to talk about the powerful document generation capabilities of DocuSign CLM.</label>
-		<name>DocGenInfo2</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Document Generation</label>
 		<name>DocumentGeneration</name>
@@ -2312,15 +2304,7 @@
 	<customLabels>
 		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>
-	<customLabels>
-		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a</label>
-		<name>HelpInfoBodyPart1</name>
-	</customLabels>
-	<customLabels>
-		<label>page to provide answers to common questions.</label>
-		<name>HelpInfoBodyPart2</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Home</label>
 		<name>Home</name>
@@ -3984,11 +3968,7 @@
 	<customLabels>
 		<label>Apply</label>
 		<name>Apply</name>
-	</customLabels>
-	<customLabels>
-		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
-		<name>Component2Summary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>

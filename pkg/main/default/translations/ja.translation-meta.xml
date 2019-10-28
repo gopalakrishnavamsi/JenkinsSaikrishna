@@ -2281,15 +2281,7 @@
 	<customLabels>
 		<label>DocuSign CLMについて</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>
-	<customLabels>
-		<label>ビジネスを加速するDocuSign CLMをご紹介します。</label>
-		<name>DocGenInfo</name>
-	</customLabels>
-	<customLabels>
-		<label>では、DocuSign CLMのパワフルな文書生成機能について説明しています。</label>
-		<name>DocGenInfo2</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>文書生成</label>
 		<name>DocumentGeneration</name>
@@ -2309,15 +2301,7 @@
 	<customLabels>
 		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。ヘルプページでは、DocuSign Agreementsに関する一般的な質問に対する回答を提供しています。</label>
 		<name>HelpInfoBody</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。</label>
-		<name>HelpInfoBodyPart1</name>
-	</customLabels>
-	<customLabels>
-		<label>ページでは、DocuSign Agreementsに関する一般的な質問に対する回答を提供しています。</label>
-		<name>HelpInfoBodyPart2</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>ホーム</label>
 		<name>Home</name>
@@ -3923,11 +3907,7 @@
 	<customLabels>
 		<label>適用</label>
 		<name>Apply</name>
-	</customLabels>
-	<customLabels>
-		<label>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</label>
-		<name>Component2Summary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>ダッシュボード</label>
 		<name>Dashboard</name>

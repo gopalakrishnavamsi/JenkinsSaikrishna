@@ -722,15 +722,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Discover DocuSign CLM</shortDescription>
 		<value>DISCOVER DOCUSIGN CLM</value>
-	</labels>
-	<labels>
-		<fullName>DocGenInfo</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Document Generation Info</shortDescription>
-		<value>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a</value>
-	</labels>
+	</labels>	
 	<labels>
 		<fullName>DocuSign</fullName>
 		<categories>General</categories>
@@ -1131,23 +1123,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
 		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</value>
-	</labels>
-	<labels>
-		<fullName>HelpInfoBodyPart1</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Help Info Body</shortDescription>
-		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a</value>
-	</labels>
-	<labels>
-		<fullName>HelpInfoBodyPart2</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Help Info Body 2</shortDescription>
-		<value>page to provide answers to common questions.</value>
-	</labels>
+	</labels>	
 	<labels>
 		<fullName>HelpfulLinks</fullName>
 		<categories>Support</categories>
@@ -5009,15 +4985,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
 		<value>Your Salesforce Objects</value>
-	</labels>
-	<labels>
-		<fullName>DocGenInfo2</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Document Generation Info2</shortDescription>
-		<value>page to talk about the powerful document generation capabilities of DocuSign CLM.</value>
-	</labels>
+	</labels>	
 	<labels>
 		<fullName>InvalidTrialProduct_1</fullName>
 		<categories>CLM</categories>
@@ -7839,15 +7807,7 @@
 		<protected>true</protected>
 		<shortDescription>Apply</shortDescription>
 		<value>Apply</value>
-	</labels>
-	<labels>
-		<fullName>Component2Summary</fullName>
-		<categories>CLM, Post Install</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Component#2Summary</shortDescription>
-		<value>Fringilla ut morbi tincidunt augue interdum velit euismod. Aliquam nulla facilisi cras fermentum odio. In fermentum et sollicitudin ac orci phasellus egestas.</value>
-	</labels>
+	</labels>	
 	<labels>
 		<fullName>Dashboard</fullName>
 		<categories>CLM</categories>
