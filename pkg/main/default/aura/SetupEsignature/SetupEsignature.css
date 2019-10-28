@@ -1,10 +1,10 @@
-.THIS.ds-esignature-setupSection, .THIS .ds-add-button-section {
+.THIS.ds-esignature-setupSection {
     min-height: 1325px;
 }
 
 .THIS .ds-button-location-section {
     background: rgb(243, 242, 242);
-    min-height: 1325px;
+    height: 461px;
 }
 
 .THIS .ds-add-button-section-header {

@@ -121,6 +121,14 @@
 		<value>Advanced Options</value>
 	</labels>
 	<labels>
+		<fullName>AdvancedSettings</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AdvancedSettings</shortDescription>
+		<value>Advanced Settings</value>
+	</labels>
+	<labels>
 		<fullName>Agent</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
@@ -2838,7 +2846,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>System senders</shortDescription>
-		<value>System sender</value>
+		<value>Enable System sender</value>
 	</labels>
 	<labels>
 		<fullName>SendAction</fullName>
@@ -5032,7 +5040,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>eSignature enabled</shortDescription>
-		<value>eSignature enabled</value>
+		<value>Enable Built-in eSignature</value>
 	</labels>
 	<labels>
 		<fullName>ESignatureEnabledHelp</fullName>

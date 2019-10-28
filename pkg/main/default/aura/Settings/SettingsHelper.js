@@ -7,24 +7,31 @@
     );
   },
 
-  getSettings: function(component) {
-    var self = this;
-    component
-      .get('v.uiHelper')
-      .invokeAction(component.get('c.getSettings'), null, function(s) {
-        component.set('v.settings', s.account);
-        component.set('v.availableSystemSenders', s.availableSystemSenders);
-        if (self._useSystemSender(s.account)) {
-          component.set('v.systemSenderId', s.account.systemSenderId.value);
+  getSettings: function(component, event, helper) {
+    component.set('v.loading', true);
+    var getSettingsAction = component.get('c.getSettings');
+    getSettingsAction.setCallback(this, $A.getCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        var settings = response.getReturnValue();
+        component.set('v.settings', settings.account);
+        component.set('v.availableSystemSenders', settings.availableSystemSenders);
+        if (helper._useSystemSender(settings.account)) {
+          component.set('v.systemSenderId', settings.account.systemSenderId.value);
         } else {
           component.set('v.systemSenderId', null);
         }
-      });
+      }
+      else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+      }
+      component.set('v.loading', false);
+    }));
+    $A.enqueueAction(getSettingsAction);
   },
 
-  saveSettings: function(component) {
-    var self = this;
-    var uiHelper = component.get('v.uiHelper');
+  saveSettings: function(component, event, helper) {
+    component.set('v.loading', true);
     var settings = component.get('v.settings');
     var ssId = component.get('v.systemSenderId');
     if (!$A.util.isEmpty(ssId)) {
@@ -32,22 +39,30 @@
     } else {
       settings.systemSenderId = null;
     }
-    uiHelper.invokeAction(
-      component.get('c.saveSettings'),
-      { settingsJson: JSON.stringify(settings) },
-      function(ss) {
-        component.set('v.settings', ss);
-        self.exit(component);
-        uiHelper.showToast($A.get('$Label.c.SettingsSaved'), 'success');
+    var saveSettingsAction = component.get('c.saveSettings');
+    saveSettingsAction.setParams({
+      settingsJson: JSON.stringify(settings)
+    });
+    saveSettingsAction.setCallback(this, $A.getCallback(function (response) {
+      var state = response.getState();
+      if (state === 'SUCCESS') {
+        component.set('v.settings', response.getReturnValue());
+      } 
+      else {
+        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');  
       }
-    );
+      component.set('v.loading', false);
+    }));
+    $A.enqueueAction(saveSettingsAction);
   },
 
-  exit: function(component) {
-    var navToSection = component.getEvent('exitClicked');
-    navToSection.setParams({
-      section: 'landing'
+  showToast: function (component, message, mode) {
+    var fireToastEvent = component.getEvent('toastEvent');
+    fireToastEvent.setParams({
+      show: true,
+      message: message,
+      mode: mode
     });
-    navToSection.fire();
+    fireToastEvent.fire();
   }
 });

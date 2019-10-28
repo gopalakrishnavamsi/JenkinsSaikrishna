@@ -1,0 +1,12 @@
+.THIS .ds-settings-item-border {
+    border-bottom: solid 0.5px rgb(243, 242, 242);
+}
+
+.THIS .ds-settings-item-align {
+    align-self: center;
+}
+
+.THIS .ds-settings-spinner {
+    position: relative;
+    height: 150px;
+}

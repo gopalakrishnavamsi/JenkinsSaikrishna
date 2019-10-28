@@ -50,6 +50,10 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Advanced Settings</label>
+		<name>AdvancedSettings</name>
+	</customLabels>
+	<customLabels>
 		<label>Specify Recipients</label>
 		<name>Agent</name>
 	</customLabels>
@@ -1274,7 +1278,7 @@
 		<name>GenServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>System sender</label>
+		<label>Enable System sender</label>
 		<name>SystemSender</name>
 	</customLabels>
 	<customLabels>
@@ -2590,7 +2594,7 @@
 		<name>AgreementExportFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>eSignature enabled</label>
+		<label>Enable Built-in eSignature</label>
 		<name>ESignatureEnabled</name>
 	</customLabels>
 	<customLabels>
