@@ -109,7 +109,10 @@
       var agreementHistoryItems = component.get('v.agreementHistoryItems');
       var historyItems = [];
       Object.assign(historyItems, agreementHistoryItems);
-      var options = {iconPath: $A.get('$Resource.scmwidgetsspritemap')};
+      var options = {
+        language: $A.get('$Locale.langLocale') ? $A.get('$Locale.langLocale').toLowerCase() : undefined,
+        iconPath: $A.get('$Resource.scmwidgetsspritemap')
+      };
       var historyWidget = new SpringCM.Widgets.History(options);
       var historyContainerId =
         '#historyContainer' + component.get('v.agreementIndex');

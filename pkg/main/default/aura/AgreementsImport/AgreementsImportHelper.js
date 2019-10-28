@@ -62,6 +62,7 @@
                 $A.enqueueAction(limitedAccessToken);
               });
             },
+            language: $A.get('$Locale.langLocale') ? $A.get('$Locale.langLocale').toLowerCase() : undefined,
             apiBaseDomain: result.apiUploadBaseUrl,
             accountId: result.accountId.value,
             allowedFileTypes: ['.pdf', '.docx']

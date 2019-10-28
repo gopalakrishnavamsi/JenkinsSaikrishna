@@ -27,6 +27,7 @@
               });
             },
             apiBaseDomain: result.apiUploadBaseUrl,
+            language: $A.get('$Locale.langLocale') ? $A.get('$Locale.langLocale').toLowerCase() : undefined,
             accountId: result.accountId.value
           };
           var uploadWidget = new SpringCM.Widgets.Upload(options);
@@ -44,7 +45,7 @@
       }
     });
     $A.enqueueAction(limitedAccessToken);
-  },
+  },  
 
   fetchAgreementVersions: function (component) {
     var agreementVersions = [];

@@ -58,6 +58,7 @@
               },
               uploadApiBaseDomain: token.apiUploadBaseUrl,
               downloadApiBaseDomain: token.apiDownloadBaseUrl,
+              language: $A.get('$Locale.langLocale') ? $A.get('$Locale.langLocale').toLowerCase() : undefined,
               accountId: token.accountId.value
             })
           );
