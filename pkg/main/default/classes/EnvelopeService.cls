@@ -22,7 +22,7 @@ global with sharing class EnvelopeService {
 	private static final LoggerService LOG = LoggerService.getInstance();
 	private static final String SENDER_TOKEN = 'Apex Toolkit';
 	@TestVisible
-	private static final Integer MULTI_SEND_ENVELOPE_LIMIT = 100;
+	private static final Integer MULTI_SEND_ENVELOPE_LIMIT = 99;
 
 	public static ValidationResult validate(final Envelope envelope, final Boolean sendNow) {
 		if (envelope == null) return new ValidationResult(Label.UndefinedEnvelope);
@@ -749,7 +749,7 @@ global with sharing class EnvelopeService {
 	 * transaction, <code>dfsle.EnvelopeService.saveSentEnvelopes</code> should be called. Otherwise the associated
 	 * envelope and status records will not be created.
 	 * <p>
-	 * This call is limited to 100 envelopes at a time, and subject to hourly API and Salesforce Governor limits.
+	 * This call is limited to 99 envelopes at a time, and subject to hourly API and Salesforce Governor limits.
 	 * <p>
 	 * Every envelope must be valid or else a <code>ValidationException</code> will be thrown and no envelopes will be
 	 * sent. If all envelopes pass validation, any API error for an envelope will be logged on the <code>error</code>

@@ -1709,6 +1709,35 @@ private class EnvelopeServiceTest {
 	}
 
 	@IsTest
+	static void test_sendEnvelopes_limit() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignSender()) {
+			List<Envelope> es = new List<Envelope>();
+			for (Integer i = 0; i < EnvelopeService.MULTI_SEND_ENVELOPE_LIMIT; i++) {
+				es.add(new Envelope(null, 's' + i, 'm' + i, null)
+					.withDocuments(new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 't' + i)
+					})
+					.withRecipients(new List<Recipient> {
+						Recipient.fromSource('r' + i, 'r' + i + '@unit.test', null, 'Signer 1', null)
+					}));
+			}
+
+			Test.startTest();
+			List<Envelope> result = EnvelopeService.sendEnvelopes(es);
+			Test.stopTest();
+
+			System.assertEquals(EnvelopeService.MULTI_SEND_ENVELOPE_LIMIT, Collection.size(result));
+			for (Envelope e : result) {
+				System.assertNotEquals(null, e);
+				System.assertEquals(null, e.error);
+				System.assertNotEquals(null, e.docuSignId);
+				System.assertNotEquals(null, e.sent);
+			}
+		}
+	}
+
+	@IsTest
 	static void test_saveSentEnvelopes_unauthorized() {
 		System.runAs(UserMock.createAdministrator()) {
 			Test.startTest();
