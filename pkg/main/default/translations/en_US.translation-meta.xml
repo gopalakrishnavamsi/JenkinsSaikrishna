@@ -3622,8 +3622,8 @@
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>View Pricing</label>
-		<name>ViewPricing</name>
+		<label>Contact Sales</label>
+		<name>ContactSales</name>
 	</customLabels>
 	<customLabels>
 		<label>One-Click Document Generation</label>
@@ -3638,6 +3638,10 @@
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
+		<label>https://www.docusign.com/products/gen</label>
+		<name>GenMarketingLink</name>
+	</customLabels>
+	<customLabels>
 		<label>Faster Reviews and Approvals</label>
 		<name>NegotiateMarketingHeader</name>
 	</customLabels>
@@ -3648,6 +3652,10 @@
 	<customLabels>
 		<label>Whether with internal or external parties, enjoy version control and redlining for faster and less painful reviews.</label>
 		<name>NegotiateMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/products/negotiate</label>
+		<name>NegotiateMarketingLink</name>
 	</customLabels>
 	<customLabels>
 		<label>Try it out</label>
@@ -3698,8 +3706,12 @@
 		<name>RoutingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about pricing</label>
+		<label>Contact sales for pricing information</label>
 		<name>LearnMoreAboutPricing</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/contact-sales</label>
+		<name>ContactSalesLink</name>
 	</customLabels>
 	<customLabels>
 		<label>Learn how to get the most from DocuSign Apps Launcher</label>
@@ -3768,6 +3780,18 @@
 	<customLabels>
 		<label>Currently on Trial</label>
 		<name>CurrentlyOnTrial</name>
+	</customLabels>
+	<customLabels>
+		<label>Currently Using</label>
+		<name>CurrentlyUsing</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about DocuSign Gen</label>
+		<name>LearnMoreAboutDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about DocuSign Negotiate</label>
+		<name>LearnMoreAboutDocuSignNegotiate</name>
 	</customLabels>
 	<customLabels>
 		<label>Start Collaborating and Negotiating</label>

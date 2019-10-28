@@ -3600,7 +3600,7 @@
 	</customLabels>
 	<customLabels>
 		<label>Afficher les tarifs</label>
-		<name>ViewPricing</name>
+		<name>ContactSales</name>
 	</customLabels>
 	<customLabels>
 		<label>Création de documents en un clic</label>

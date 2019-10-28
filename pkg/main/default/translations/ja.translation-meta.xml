@@ -3598,7 +3598,7 @@
 	</customLabels>
 	<customLabels>
 		<label>価格の表示</label>
-		<name>ViewPricing</name>
+		<name>ContactSales</name>
 	</customLabels>
 	<customLabels>
 		<label>ワンクリックでの文書生成</label>

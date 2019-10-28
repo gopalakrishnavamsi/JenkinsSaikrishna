@@ -10,7 +10,7 @@
     <div class="ds-documentGeneration-marketing">
         <div class="ds-documentGeneration-marketing-helpSection">
             <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-p-bottom_xx-large">
-                <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-grid slds-grid_align-spread slds-gutters_xx-small">
                     <div class="slds-col slds-size_1-of-2">
                         <div class="ds-marketing-section-header">
                             {!$Label.c.GenMarketingHeader}
@@ -21,9 +21,12 @@
                         <div class="ds-marketing-section-body slds-m-top_small">
                             {!$Label.c.GenMarketingBody2}
                         </div>
+                        <div class="ds-marketing-section-body slds-m-top_small">
+                            <a href="{!$Label.c.GenMarketingLink}" target="_blank">{!$Label.c.LearnMoreAboutDocuSignGen}</a>
+                        </div>
                     </div>
                     <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
-                        <img src="{!$Resource.GenMarketingVideo}" class="ds-marketing-video-image"/>
+                        <img src="{!$Resource.GenMarketingVideo}"/>
                     </div>
                 </div>
             </div>
@@ -181,7 +184,7 @@
                     <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right slds-text-align_center">
                         <div class="slds-p-around_medium">
                             <div class="ds-pricing-link">
-                                <a aura:id="showPricing">{!$Label.c.LearnMoreAboutPricing}</a>
+                                <a href="{!$Label.c.ContactSalesLink}" aura:id="showPricing" target="_blank">{!$Label.c.LearnMoreAboutPricing}</a>
                             </div>
                         </div>
                     </div>

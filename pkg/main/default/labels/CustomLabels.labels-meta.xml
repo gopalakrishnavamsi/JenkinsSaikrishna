@@ -7105,12 +7105,12 @@
 		<value>Days Left in {0} trial</value>
 	</labels>
 	<labels>
-		<fullName>ViewPricing</fullName>
+		<fullName>ContactSales</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>ViewPricing</shortDescription>
-		<value>View Pricing</value>
+		<shortDescription>ContactSales</shortDescription>
+		<value>Contact Sales</value>
 	</labels>
 	<labels>
 		<fullName>GenMarketingHeader</fullName>
@@ -7137,6 +7137,14 @@
 		<value>Speed up your business processes by quickly generating documents with the Salesforce data you need in the format you want.</value>
 	</labels>
 	<labels>
+		<fullName>GenMarketingLink</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenMarketingLink</shortDescription>
+		<value>https://www.docusign.com/products/gen</value>
+	</labels>
+	<labels>
 		<fullName>NegotiateMarketingHeader</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
@@ -7159,6 +7167,14 @@
 		<protected>true</protected>
 		<shortDescription>NegotiateMarketingBody2</shortDescription>
 		<value>Whether with internal or external parties, enjoy version control and redlining for faster and less painful reviews.</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateMarketingLink</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>GenMarketingLink</shortDescription>
+		<value>https://www.docusign.com/products/negotiate</value>
 	</labels>
 	<labels>
 		<fullName>TryItOut</fullName>
@@ -7262,7 +7278,15 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>LearnMoreAboutPricing</shortDescription>
-		<value>Learn more about pricing</value>
+		<value>Contact sales for pricing information</value>
+	</labels>
+	<labels>
+		<fullName>ContactSalesLink</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ContactSalesLink</shortDescription>
+		<value>https://www.docusign.com/contact-sales</value>
 	</labels>
 	<labels>
 		<fullName>LearnSectionHeader</fullName>
@@ -7399,6 +7423,30 @@
 		<protected>true</protected>
 		<shortDescription>CurrentlyOnTrial</shortDescription>
 		<value>Currently on Trial</value>
+	</labels>
+	<labels>
+		<fullName>CurrentlyUsing</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrentlyUsing</shortDescription>
+		<value>Currently Using</value>
+	</labels>
+	<labels>
+		<fullName>LearnMoreAboutDocuSignGen</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnMoreAboutDocuSignGen</shortDescription>
+		<value>Learn more about DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>LearnMoreAboutDocuSignNegotiate</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>LearnMoreAboutDocuSignNegotiate</shortDescription>
+		<value>Learn more about DocuSign Negotiate</value>
 	</labels>
 	<labels>
 		<fullName>NegotiateHelpHeader</fullName>

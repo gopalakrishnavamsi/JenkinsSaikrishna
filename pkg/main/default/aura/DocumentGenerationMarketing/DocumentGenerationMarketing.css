@@ -20,10 +20,6 @@
     text-align: end;
 }
 
-.THIS .ds-marketing-video-image {
-    cursor: pointer;
-}
-
 .THIS .ds-marketing-features-section {
     background: rgb(243, 242, 242);
     border-top: 1px solid rgb(243, 242, 242);
@@ -54,6 +50,7 @@
 .THIS .ds-marketing-features-product-header {
     font-size: t(fontSize6);
     font-weight: t(fontWeightBold);
+    white-space: nowrap;
 }
 
 .THIS .ds-marketing-features-supportedProduct-section {

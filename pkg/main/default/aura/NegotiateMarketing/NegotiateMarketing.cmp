@@ -10,7 +10,7 @@
     <div class="ds-negotiation-marketing">
         <div class="ds-negotiation-marketing-helpSection">
             <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-p-bottom_xx-large">
-                <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-grid slds-grid_align-spread slds-gutters_xx-small">
                     <div class="slds-col slds-size_1-of-2">
                         <div class="ds-marketing-section-header">
                             {!$Label.c.NegotiateMarketingHeader}
@@ -21,9 +21,12 @@
                         <div class="ds-marketing-section-body slds-m-top_small">
                             {!$Label.c.NegotiateMarketingBody2}
                         </div>
+                        <div class="ds-marketing-section-body slds-m-top_small">
+                            <a href="{!$Label.c.NegotiateMarketingLink}" target="_blank">{!$Label.c.LearnMoreAboutDocuSignNegotiate}</a>
+                        </div>
                     </div>
                     <div class="slds-col slds-size_1-of-2 ds-marketing-video-col">
-                        <img src="{!$Resource.NegotiateMarketingVideo}" class="ds-marketing-video-image"/>
+                        <img src="{!$Resource.NegotiateMarketingVideo}"/>
                     </div>
                 </div>
             </div>
@@ -51,18 +54,21 @@
                                 {!$Label.c.GenBadgeText}
                             </div>
                             <div class="slds-m-top_small">
+                                <aura:if isTrue="{!empty(v.genProduct)}">
+                                    <lightning:button variant="brand" label="{!$Label.c.TryItOut}" onclick="{!c.showGenTrialModal}"/>
+                                </aura:if>
                                 <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == true)}">
                                     <ul class="slds-list_horizontal slds-m-left_x-large">
                                         <li>
                                             <lightning:icon size="x-small" iconName="utility:clock"></lightning:icon>
                                         </li>
-                                        <li class="slds-m-left_xx-small slds-m-top_xxx-small">
-                                            {!$Label.c.CurrentlyOnTrial}</li>
+                                        <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyOnTrial}</li>
                                     </ul>
-                                    <aura:set attribute="else">
-                                        <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
-                                            onclick="{!c.showGenTrialModal}"/>
-                                    </aura:set>
+                                </aura:if>
+                                <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == false, v.genProduct.status == 'active')}">
+                                    <ul class="slds-list_horizontal slds-m-left_x-large">
+                                        <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyUsing}</li>
+                                    </ul>
                                 </aura:if>
                             </div>
                         </div>
@@ -192,7 +198,7 @@
                     <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right slds-text-align_center">
                         <div class="slds-p-around_medium">
                             <div class="ds-pricing-link">
-                                <a aura:id="showPricing">{!$Label.c.LearnMoreAboutPricing}</a>
+                                <a href="{!$Label.c.ContactSalesLink}" aura:id="showPricing" target="_blank">{!$Label.c.LearnMoreAboutPricing}</a>
                             </div>
                         </div>
                     </div>
