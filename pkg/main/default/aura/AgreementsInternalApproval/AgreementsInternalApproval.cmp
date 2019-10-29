@@ -52,13 +52,14 @@
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
-                        <div class="slds-text-body_small">
-                            <lightning:input type="checkbox" label="{!$Label.c.SetApprovalOrder}"
-                                             onchange="{!c.setApprovalOrder}"
-                                             checked="{!v.showApprovalOrder}"
-                                             aura:id="approvalOrderCheckbox"
-                                             disabled="{!if(v.recipients.length lt 2, true, false)}"></lightning:input>
-                        </div>
+                    <!-- commenting multiple approvers -->
+<!--                        <div class="slds-text-body_small">-->
+<!--                            <lightning:input type="checkbox" label="{!$Label.c.SetApprovalOrder}"-->
+<!--                                             onchange="{!c.setApprovalOrder}"-->
+<!--                                             checked="{!v.showApprovalOrder}"-->
+<!--                                             aura:id="approvalOrderCheckbox"-->
+<!--                                             disabled="{!if(v.recipients.length lt 2, true, false)}"></lightning:input>-->
+<!--                        </div>-->
                         <div class="slds-text-body_small  slds-p-top--medium">
                             <b class="required-textcolor">* </b>{!$Label.c.AddApprovers}
                         </div>
@@ -97,15 +98,16 @@
                                                         currentUserId="{!v.currentUserId}"
                                                 />
                                             </li>
-                                            <li>
-                                                <lightning:buttonIcon iconName="utility:close"
-                                                                      variant="container"
-                                                                      alternativeText="{!$Label.c.Remove}"
-                                                                      class="slds-button ds-remove slds-m-top_x-small slds-m-right_x-small"
-                                                                      onclick="{!c.removeRecipient}"
-                                                                      value="{!recipientIndex}"
-                                                                      disabled="{!if(v.recipients.length lt 2, true, false)}"/>
-                                            </li>
+                                            <!-- commenting multiple approvers -->
+<!--                                            <li>-->
+<!--                                                <lightning:buttonIcon iconName="utility:close"-->
+<!--                                                                      variant="container"-->
+<!--                                                                      alternativeText="{!$Label.c.Remove}"-->
+<!--                                                                      class="slds-button ds-remove slds-m-top_x-small slds-m-right_x-small"-->
+<!--                                                                      onclick="{!c.removeRecipient}"-->
+<!--                                                                      value="{!recipientIndex}"-->
+<!--                                                                      disabled="{!if(v.recipients.length lt 2, true, false)}"/>-->
+<!--                                            </li>-->
 
                                         </ul>
                                     </li>
@@ -113,10 +115,11 @@
                             </ul>
                         </div>
                         <div class="slds-p-top_large">
-                            <lightning:button class="slds-theme_brand" variant="neutral"
-                                              label="{!$Label.c.AddAnotherApprover}" iconName="utility:add"
-                                              onclick="{!c.addRecipient}"
-                                              disabled="{!if(v.recipients.length gt 15 , true, false)}"/>
+                        <!-- commenting multiple approvers -->
+<!--                            <lightning:button class="slds-theme_brand" variant="neutral"-->
+<!--                                              label="{!$Label.c.AddAnotherApprover}" iconName="utility:add"-->
+<!--                                              onclick="{!c.addRecipient}"-->
+<!--                                              disabled="{!if(v.recipients.length gt 15 , true, false)}"/>-->
                         </div>
 
                     </div>
