@@ -793,6 +793,10 @@
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
+		<apexPage>GenDocumentGenerator</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
 		<apexPage>ReturnFromDocuSign</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
@@ -810,6 +814,10 @@
 	</pageAccesses>
 	<pageAccesses>
 		<apexPage>AgreementPreview</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>Agreements</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>	
 	<tabSettings>

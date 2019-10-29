@@ -37,11 +37,15 @@
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
 	<pageAccesses>
-		<apexPage>AgreementPreview</apexPage>
+		<apexPage>CompleteOAuth</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
-		<apexPage>CompleteOAuth</apexPage>
+		<apexPage>Agreements</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>AgreementPreview</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
 </PermissionSet>
