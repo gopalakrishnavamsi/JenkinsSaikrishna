@@ -50,6 +50,10 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>詳細設定</label>
+		<name>AdvancedSettings</name>
+	</customLabels>
+	<customLabels>
 		<label>受信者の指定</label>
 		<name>Agent</name>
 	</customLabels>
@@ -1275,7 +1279,7 @@
 		<name>GenServiceDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>System Sender</label>
+		<label>System Senderアカウントを有効にする</label>
 		<name>SystemSender</name>
 	</customLabels>
 	<customLabels>
@@ -1291,7 +1295,7 @@
 		<name>SelectSalesforceObject</name>
 	</customLabels>
 	<customLabels>
-		<label>ボタンの追加</label>
+		<label>レイアウトの更新</label>
 		<name>Publish</name>
 	</customLabels>
 	<customLabels>
@@ -1519,7 +1523,7 @@
 		<name>OtherObjects</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforceフィールド</label>
+		<label>Salesforce項目</label>
 		<name>SalesforceFields</name>
 	</customLabels>
 	<customLabels>
@@ -1527,7 +1531,7 @@
 		<name>SalesforceFieldsMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>データフィールドをWordテンプレートに追加</label>
+		<label>データ項目をWordテンプレートに追加</label>
 		<name>AddMergeFields</name>
 	</customLabels>
 	<customLabels>
@@ -2281,17 +2285,17 @@
 	<customLabels>
 		<label>DocuSign CLMについて</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>文書生成</label>
 		<name>DocumentGeneration</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM for Salesforceを使用して、Salesforce内のデータをDocuSign CLMに統合させることができます。</label>
+		<label>DocuSign CLM for Salesforceでは、既存のSalesforceオブジェクトとDocuSign CLMのセキュアなクラウドプラットフォームとのインテグレーションにより、Salesforce内でDocuSign操作が完結するため、時間の節約、リスクの軽減、生産性の向上に役立ちます。</label>
 		<name>DocusignAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>このマッピング済みオブジェクトに対する編集内容は、今後のインスタンスに反映されます。既存のオブジェクトには反映されません。このオブジェクトを編集してもよろしいですか?</label>
+		<label>このマッピング済みオブジェクトに対する編集内容は、今後のインスタンスに反映されます。オブジェクトの既存のインスタンスには反映されません。このオブジェクトを編集してもよろしいですか?</label>
 		<name>EditModalBody</name>
 	</customLabels>
 	<customLabels>
@@ -2301,7 +2305,7 @@
 	<customLabels>
 		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。製品に関する一般的な疑問に対する回答を提供しています。</label>
 		<name>HelpInfoBody</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>ホーム</label>
 		<name>Home</name>
@@ -2495,7 +2499,7 @@
 		<name>AllObjectsListed</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLMで見つけやすい場所にフォルダーを作成します。ここで作成したフォルダーパスはほかのマッピングでは使用されません。</label>
+		<label>フォルダーの作成場所を選択します。DocuSign CLMで見つけやすい場所を選択してください。ここで作成したフォルダーパスはほかのマッピングでは使用されません。</label>
 		<name>ChooseLocationInfo</name>
 	</customLabels>
 	<customLabels>
@@ -2531,7 +2535,7 @@
 		<name>OpenFolder</name>
 	</customLabels>
 	<customLabels>
-		<label>作成したフォルダーの名前に適用する項目を参照して選択します</label>
+		<label>使用する項目を選択します。この項目により、DocuSign CLM内のオブジェクトフォルダーに動的な名前が設定されます。</label>
 		<name>SelectFieldInfo</name>
 	</customLabels>
 	<customLabels>
@@ -2539,7 +2543,7 @@
 		<name>SelectFolderHelpBody</name>
 	</customLabels>
 	<customLabels>
-		<label>文書ソースとして使用するSalesforceオブジェクトを選択します。</label>
+		<label>文書ソースとして使用するSalesforceオブジェクトを選択します。1回の操作で選択できるオブジェクトは1つのみです。</label>
 		<name>SelectObjectHelpBody</name>
 	</customLabels>
 	<customLabels>
@@ -2571,7 +2575,7 @@
 		<name>AgreementExportFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>電子署名有効</label>
+		<label>組み込みのeSignature機能を有効にする</label>
 		<name>ESignatureEnabled</name>
 	</customLabels>
 	<customLabels>
@@ -3385,6 +3389,30 @@
 		<name>SetupPageTitle</name>
 	</customLabels>
 	<customLabels>
+		<label>レイアウトへのコンポーネントの追加</label>
+		<name>ComponentSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignatureエンベロープのステータス</label>
+		<name>EsignatureEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>［DocuSign eSignatureエンベロープステータス］では、Salesforce内でエンベロープのステータスをリアルタイムで確認できます。文書の署名がすばやく完了し、作業効率が向上します。</label>
+		<name>ComponentSectionEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>レイアウトにコンポーネントを追加するには</label>
+		<name>LearnToPlaceComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>［DocuSignファイル］では、自分の文書をかんたんに管理できます。ここでは、Salesforceを離れることなくコラボレーション中のファイルの状態を確認できます。</label>
+		<name>ComponentSectionDocuSigFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignアプリケーションランチャーの便利な機能を使用する。</label>
+		<name>GetMoreFromAppsLauncher</name>
+	</customLabels>
+	<customLabels>
 		<label>環境名</label>
 		<name>EnvironmentName</name>
 	</customLabels>
@@ -3573,6 +3601,10 @@
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign担当者へのお問い合わせ</label>
+		<name>ContactSales</name>
+	</customLabels>
+	<customLabels>
 		<label>ワンクリックでの文書生成</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
@@ -3585,6 +3617,10 @@
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
+		<label>https://www.docusign.com/products/gen</label>
+		<name>GenMarketingLink</name>
+	</customLabels>
+	<customLabels>
 		<label>迅速なレビューと承認</label>
 		<name>NegotiateMarketingHeader</name>
 	</customLabels>
@@ -3595,6 +3631,10 @@
 	<customLabels>
 		<label>社内外の担当者との共同作業で文書のバージョン管理や修正を効率的に行えます。</label>
 		<name>NegotiateMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/products/negotiate</label>
+		<name>NegotiateMarketingLink</name>
 	</customLabels>
 	<customLabels>
 		<label>使ってみる</label>
@@ -3645,8 +3685,12 @@
 		<name>RoutingFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>価格についての詳細</label>
+		<label>DocuSign担当者へのお問い合わせ − 価格情報について</label>
 		<name>LearnMoreAboutPricing</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.jp/contact-us</label>
+		<name>ContactSalesLink</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignアプリケーションランチャーを活用するには</label>
@@ -3667,6 +3711,14 @@
 	<customLabels>
 		<label>レビューまたは承認担当者への送信</label>
 		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザーとユーザーの権限プロファイルを管理する</label>
+		<name>LearnAddUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>レイアウト上にコンポーネントを追加するには</label>
+		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Genを使ってみる</label>
@@ -3707,6 +3759,18 @@
 	<customLabels>
 		<label>現在トライアル中</label>
 		<name>CurrentlyOnTrial</name>
+	</customLabels>
+	<customLabels>
+		<label>現在使用している</label>
+		<name>CurrentlyUsing</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Genの詳細情報</label>
+		<name>LearnMoreAboutDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiateの詳細情報</label>
+		<name>LearnMoreAboutDocuSignNegotiate</name>
 	</customLabels>
 	<customLabels>
 		<label>コラボレーションと交渉を開始</label>
@@ -3903,7 +3967,7 @@
 	<customLabels>
 		<label>適用</label>
 		<name>Apply</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>ダッシュボード</label>
 		<name>Dashboard</name>
@@ -4067,6 +4131,10 @@
 	<customLabels>
 		<label>ヘルプガイド</label>
 		<name>HelpGuides</name>
+	</customLabels>
+	<customLabels>
+		<label>関連情報のリンク</label>
+		<name>UsefulLinks</name>
 	</customLabels>
 	<customLabels>
 		<label>ここでは、Docusign CLM for Salesforceを活用するためのすべての情報を入手できます。FAQ、製品ガイド、ホワイトペーパーなどを参照できます。</label>
@@ -4248,7 +4316,7 @@
 		<label>6. このボタンをクリックして文書を生成します。</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
-  <customLabels>  
+	<customLabels>
 		<label>DocuSign CLM設定が見つかりません。DocuSignサポートにお問い合わせください。</label>
 		<name>MissingDocuSignCLMSettings</name>
 	</customLabels>
@@ -4324,33 +4392,49 @@
 		<label>概要イメージ</label>
 		<name>OverviewImage</name>
 	</customLabels>
-  <customLabels>  
+	<customLabels>
 		<label>Salesforceファイルを取得しています</label>
-		<name>FetchingSalesforceFiles</name>	
+		<name>FetchingSalesforceFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignファイルを取得しています</label>
-		<name>FetchingDocuSignFiles</name>	
-	</customLabels>	
+		<name>FetchingDocuSignFiles</name>
+	</customLabels>
 	<customLabels>
 		<label>コピーを作成してDocuSignファイルにインポートしています...</label>
-		<name>ImportingToDocuSignFiles</name>		
-	</customLabels>	
+		<name>ImportingToDocuSignFiles</name>
+	</customLabels>
 	<customLabels>
 		<label>アップロードウィジェットの設定</label>
-		<name>SettingUpUploadWidget</name>		
-	</customLabels>	
+		<name>SettingUpUploadWidget</name>
+	</customLabels>
 	<customLabels>
 		<label>認証しています</label>
 		<name>Authorizing</name>
 	</customLabels>
-  <customLabels>
+	<customLabels>
 		<label>ほかのソース</label>
 		<name>OtherSourcesText</name>
 	</customLabels>
 	<customLabels>
 		<label>新しいSalesforceオブジェクトのマッピング</label>
 		<name>MapNewSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>このオブジェクトとフィールドとのマッピングはすでに存在します。既存のマッピングを編集するか削除してから新しいマッピングを作成してください。</label>
+		<name>DuplicateMappingInsertion</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープトランザクションの上限を超えました。</label>
+		<name>MultiSendEnvelopeLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープが送信されませんでした。</label>
+		<name>InvalidSentEnvelopes</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforceオブジェクトの編集</label>
+		<name>EditSalesforceObject</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign セットアップ</label>
