@@ -5,10 +5,6 @@
         <plural>false</plural>
         <value>DocuSignエンベロープ設定</value>
     </caseValues>
-    <caseValues>
-        <plural>false</plural>
-        <value>DocuSignエンベロープ設定</value>
-    </caseValues>
     <layouts>
         <layout>DocuSign Envelope Configuration Layout</layout>
         <sections>

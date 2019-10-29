@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>编辑此电子邮件消息文本（最多 2,000 个字符），它将显示在您的 DocuSign 收件人的
+			签名通知中。
+		</help>
+    <label>电子邮件消息</label>
+    <name>EmailMessage__c</name>
+</CustomFieldTranslation>

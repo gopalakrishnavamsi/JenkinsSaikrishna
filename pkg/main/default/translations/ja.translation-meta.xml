@@ -1042,7 +1042,7 @@
 		<name>SelectFile</name>
 	</customLabels>
 	<customLabels>
-		<label>新しい契約書が作成されました</label>
+		<label>新しい文書が追加されました</label>
 		<name>NewAgreementCreated</name>
 	</customLabels>
 	<customLabels>
@@ -1070,11 +1070,11 @@
 		<name>ChooseSalesforceFiles2</name>
 	</customLabels>
 	<customLabels>
-		<label>以下のファイルがSalesforceファイルからコピーされ、DocuSign Filesにインポートされました。これを交渉、承認、または署名を行う相手に送信できます。</label>
+		<label>以下のファイルがSalesforceファイルからコピーされ、［DocuSignファイル］にインポートされました。これを交渉、承認、または署名を行う相手に送信できます。</label>
 		<name>SalesforceFileCopyComplete</name>
 	</customLabels>
 	<customLabels>
-		<label>以下のファイルがアップロードされ、DocuSign Filesにインポートされました。これを交渉、承認、または署名を行う相手に送信できます。</label>
+		<label>以下のファイルがアップロードされ、［DocuSignファイル］にインポートされました。これを交渉、承認、または署名を行う相手に送信できます。</label>
 		<name>UploadFileComplete</name>
 	</customLabels>
 	<customLabels>
@@ -1098,7 +1098,7 @@
 		<name>SendForSignature</name>
 	</customLabels>
 	<customLabels>
-		<label>この契約書への署名をDocuSignで依頼します。</label>
+		<label>DocuSignを使用してこの文書を署名者に送信します。</label>
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
@@ -1327,19 +1327,19 @@
 		<name>ImportButtonLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>契約がありません。</label>
+		<label>文書を送信してレビュー、承認、または署名を依頼する</label>
 		<name>NoAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の作成</label>
+		<label>開始</label>
 		<name>CreateAgreementsIllustration</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の削除</label>
+		<label>ファイルの削除</label>
 		<name>DeleteAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>この契約を削除すると、その文書、アクティビティ履歴、バージョン履歴、および赤線表示にアクセスできなくなります。</label>
+		<label>このファイルを削除すると、その文書、アクティビティ履歴、バージョン履歴、および修正内容にアクセスできなくなります。</label>
 		<name>DeleteAgreementMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1355,7 +1355,7 @@
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>契約名</label>
+		<label>文書名</label>
 		<name>AgreementName</name>
 	</customLabels>
 	<customLabels>
@@ -1859,15 +1859,15 @@
 		<name>Modified</name>
 	</customLabels>
 	<customLabels>
-		<label>契約がインポートされました。</label>
+		<label>文書がインポートされました。</label>
 		<name>AgreementImportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<label>契約インポートの処理中です。後で［契約］スペースで処理結果を確認してください。</label>
+		<label>文書インポートの処理中です。後で［DocuSignファイル］コンポーネントで処理結果を確認してください。</label>
 		<name>AgreementImportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>契約のインポートに失敗しました。やり直してください。</label>
+		<label>文書のインポートに失敗しました。やり直してください。</label>
 		<name>AgreementImportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -1879,7 +1879,7 @@
 		<name>InvalidCharacters</name>
 	</customLabels>
 	<customLabels>
-		<label>契約名の変更</label>
+		<label>文書名の変更</label>
 		<name>RenameAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -1887,7 +1887,7 @@
 		<name>Rename</name>
 	</customLabels>
 	<customLabels>
-		<label>契約名の変更時にエラーが発生しました。後でやり直してください</label>
+		<label>文書名の変更時にエラーが発生しました。後でやり直してください</label>
 		<name>AgreementRenameErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1895,15 +1895,15 @@
 		<name>AgreementRenamed_1</name>
 	</customLabels>
 	<customLabels>
-		<label>{0}契約が削除されました。</label>
+		<label>{0}文書が削除されました。</label>
 		<name>AgreementDeleted</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の削除時にエラーが発生しました。後でやり直してください</label>
+		<label>文書の削除時にエラーが発生しました。後でやり直してください</label>
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の再送信時にエラーが発生しました。後でやり直してください</label>
+		<label>文書の再送信時にエラーが発生しました。後でやり直してください</label>
 		<name>AgreementResendErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1923,15 +1923,15 @@
 		<name>AgreementCancelExternalReviewMessage_1</name>
 	</customLabels>
 	<customLabels>
-		<label>契約のキャンセル時にエラーが発生しました。後でやり直してください</label>
+		<label>キャンセル時にエラーが発生しました。後でやり直してください</label>
 		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>文書がレビューに送信され、［DocuSign契約］スペースにコピーされました。</label>
+		<label>文書がレビューに送信され、［DocuSignファイル］にコピーされました。</label>
 		<name>ExternalReviewSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>文書の外部レビューへの送信要求はまだ処理中です。後で［契約］スペースを確認してください。</label>
+		<label>文書の外部レビューへの送信要求はまだ処理中です。後で［DocuSignファイル］を確認してください。</label>
 		<name>ExternalReviewProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1939,11 +1939,11 @@
 		<name>ExternalReviewFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>文書が内部承認に送信され、［DocuSign契約］スペースにコピーされました。</label>
+		<label>文書が内部承認に送信され、［DocuSignファイル］にコピーされました。</label>
 		<name>InternalApprovalSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>文書の内部承認への送信要求はまだ処理中です。後で［契約］スペースを確認してください。</label>
+		<label>文書の内部承認への送信要求はまだ処理中です。後で［DocuSignファイル］を確認してください。</label>
 		<name>InternalApprovalProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1983,7 +1983,7 @@
 		<name>ExternalReviewEditEmailAndSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>ファイル名</label>
+		<label>文書名</label>
 		<name>ExternalReviewFileName</name>
 	</customLabels>
 	<customLabels>
@@ -2068,7 +2068,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementButtonText</name>
-		<label>契約のレビュー</label>
+		<label>レビュー</label>
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
@@ -2076,7 +2076,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailButtonText</name>
-		<label>契約を開く</label>
+		<label>文書を開く</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailSubject</name>
@@ -2108,7 +2108,7 @@
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailButtonText</name>
-		<label>契約を開く</label>
+		<label>文書を開く</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
@@ -2136,7 +2136,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailButtonText</name>
-		<label>契約を開く</label>
+		<label>文書を開く</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
@@ -2167,15 +2167,15 @@
 		<name>ApprovalFailureEmailHeaderTitleText</name>
 	</customLabels>
 	<customLabels>
-		<label>契約をアップロードしています</label>
+		<label>文書のアップロード中</label>
 		<name>UploadingAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>契約承認の応答が送信されました。</label>
+		<label>承認の応答が送信されました。</label>
 		<name>AgreementApprovalResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の承認拒否の応答が送信されました。</label>
+		<label>承認拒否の応答が送信されました。</label>
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
@@ -2195,7 +2195,7 @@
 		<name>LinkLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>契約のリンクを共有</label>
+		<label>リンクの共有</label>
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
 	<customLabels>
@@ -2203,7 +2203,7 @@
 		<name>UploadNewVersionSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>この契約の新しいバージョンのアップロード時にエラーが発生しました。</label>
+		<label>この文書の新しいバージョンのアップロード時にエラーが発生しました。</label>
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
@@ -2281,7 +2281,7 @@
 	<customLabels>
 		<label>DocuSign CLMについて</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>文書生成</label>
 		<name>DocumentGeneration</name>
@@ -2299,9 +2299,9 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。ヘルプページでは、DocuSign Agreementsに関する一般的な質問に対する回答を提供しています。</label>
+		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。製品に関する一般的な疑問に対する回答を提供しています。</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>ホーム</label>
 		<name>Home</name>
@@ -2555,7 +2555,7 @@
 		<name>InvalidTrialProduct_1</name>
 	</customLabels>
 	<customLabels>
-		<label>契約がエクスポートされました。</label>
+		<label>文書がエクスポートされました。</label>
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
@@ -2563,11 +2563,11 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>契約エクスポートの処理中です。後で［メモ＆添付ファイル］セクションを確認してください。</label>
+		<label>文書エクスポートの処理中です。後で［メモ＆添付ファイル］セクションを確認してください。</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>契約のエクスポートに失敗しました。やり直してください。</label>
+		<label>文書のエクスポートに失敗しました。やり直してください。</label>
 		<name>AgreementExportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -2695,15 +2695,15 @@
 		<name>FailedToTriggerDocumentComparisonTask</name>
 	</customLabels>
 	<customLabels>
-		<label>契約のバージョン比較で指定できない入力パラメーターです。</label>
+		<label>文書のバージョン比較で指定できない入力パラメーターです。</label>
 		<name>InvalidInputsAgreementComparison</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の代理外部レビューが完了しました。</label>
+		<label>代理外部レビューが完了しました。</label>
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>契約の代理外部レビューが失敗しました。</label>
+		<label>代理外部レビューが失敗しました。</label>
 		<name>AgreementExternalReviewOnBehalfOfFailed</name>
 	</customLabels>
 	<customLabels>
@@ -3007,11 +3007,11 @@
 		<name>Collapse</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLMは何をしますか?</label>
+		<label>DocuSign CLM for Salesforceとは?</label>
 		<name>WhatIsDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>これは、SalesforceのデータをDocuSign CLMに接続するアプリです。これにより、Salesforce内のデータを取り込んで契約書や同意書を作成できます。DocuSign CLM for Salesforceを使用して、作成した文書を保存および管理できます。</label>
+		<label>これは、SalesforceのデータをDocuSign CLMに接続するアプリです。これにより、Salesforce内のデータを取り込んで文書を作成できます。DocuSign CLM for Salesforceを使用して、作成した文書を保存および管理できます。</label>
 		<name>WhatIsDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -3043,7 +3043,7 @@
 		<name>WhatIsDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLMは、DocuSign CLM for Salesforceを使用するための安全なクラウドアプリです。文書を生成したり、担当者とコラボレーションしたり、プロセスを自動化したりできます。DocuSign CLM for Salesforceにより、Salesforce組織とCLMが関連付けられます。</label>
+		<label>DocuSign CLMは、DocuSign CLM for Salesforceを使用するための安全なクラウドアプリです。文書を生成したり、担当者とコラボレーションしたり、プロセスを自動化したりできます。DocuSign CLM for Salesforceにより、Salesforce組織とDocuSign CLMが関連付けられます。</label>
 		<name>WhatIsDocuSignCLMAns</name>
 	</customLabels>
 	<customLabels>
@@ -3051,7 +3051,7 @@
 		<name>InstallDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>まず、Salesforce AppExchangeを開きます。次に、「DocuSign CLM for Salesforce」を検索し、説明に従ってインストールします。これを行うには、Salesforce管理者である必要があります。</label>
+		<label>まず、Salesforce AppExchangeを開きます。次に、「DocuSignアプリケーションランチャー」を検索し、説明に従ってインストールします。これを行うには、Salesforce管理者である必要があります。</label>
 		<name>InstallAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3059,7 +3059,7 @@
 		<name>AuthenticateAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>SalesforceアプリケーションランチャーでDocuSign CLM for Salesforceを開き、DocuSignとSalesforceの資格情報を使ってサインインします。これにより、2つの組織間のインテグレーションが有効になります。</label>
+		<label>インストールが完了したら、DocuSignアプリケーションランチャーを開きます。DocuSign CLMが有効なDocuSignアカウントの資格情報を使ってサインインし、説明に従って自分のSalesforceアカウントとの関連付け（逆接続）を確立します。これにより、2つのシステム間のインテグレーションが有効になります。</label>
 		<name>AuthenticateAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3123,7 +3123,7 @@
 		<name>WhatIsObjMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>オブジェクトマッピングとは、Salesforce組織のオブジェクトをDocuSign CLMに関連付けることを指します。この手順は、DocuSign CLMをセットアップするときに表示されます。</label>
+		<label>オブジェクトマッピングとは、Salesforce組織のオブジェクトをDocuSign CLMに関連付けることを指します。この手順は、DocuSignアプリケーションランチャーをセットアップするときに表示されます。</label>
 		<name>WhatIsObjMappingAns</name>
 	</customLabels>
 	<customLabels>
@@ -3235,7 +3235,7 @@
 		<name>Section1</name>
 	</customLabels>
 	<customLabels>
-		<label>agreementHelp</label>
+		<label>ヘルプ</label>
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
@@ -3361,11 +3361,11 @@
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforceデータを反映させたカスタマイズ可能な契約文書をワンクリックで生成します。</label>
+		<label>Salesforceデータを反映させたカスタマイズ可能な文書をワンクリックで生成します。</label>
 		<name>TabDocumentGenerationHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>契約文書を内部承認や外部レビューにすばやく送信します。</label>
+		<label>文書を内部承認や外部レビューにすばやく送信します。</label>
 		<name>TabNegotiationHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3433,7 +3433,7 @@
 		<name>InfoIcon</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLMで契約を作成します</label>
+		<label>DocuSign CLMで文書を作成しています</label>
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
@@ -3573,15 +3573,11 @@
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>価格の表示</label>
-		<name>ContactSales</name>
-	</customLabels>
-	<customLabels>
 		<label>ワンクリックでの文書生成</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>この製品を使用すると、Salesforce内で洗練された契約文書を自動的に生成できるようになります。</label>
+		<label>この製品を使用すると、Salesforce内で洗練された文書を自動的に生成できるようになります。</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
@@ -3633,11 +3629,11 @@
 		<name>ESignatureCompatibleFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>契約文書を簡単に承認</label>
+		<label>文書を簡単に承認</label>
 		<name>ApproversFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>外部のレビュー担当者による契約文書の更新</label>
+		<label>外部のレビュー担当者による文書の更新</label>
 		<name>ExternalReviewFeature</name>
 	</customLabels>
 	<customLabels>
@@ -3665,11 +3661,11 @@
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>洗練された契約文書の生成</label>
+		<label>洗練された文書の生成</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>レビューまたは承認担当者への契約文書の送信</label>
+		<label>レビューまたは承認担当者への送信</label>
 		<name>LearnNegotiateLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3689,7 +3685,7 @@
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>既存のSalesforceデータを取り込んで、カスタマイズ可能な契約文書をワンクリックで生成できます。</label>
+		<label>既存のSalesforceデータを取り込んで、カスタマイズ可能な文書をワンクリックで生成できます。</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
@@ -3907,7 +3903,7 @@
 	<customLabels>
 		<label>適用</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>ダッシュボード</label>
 		<name>Dashboard</name>
@@ -3981,7 +3977,7 @@
 		<name>ExpiredReviewSenderEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>契約を開く</label>
+		<label>文書を開く</label>
 		<name>OpenAgreementButton</name>
 	</customLabels>
 	<customLabels>
@@ -4047,6 +4043,10 @@
 	<customLabels>
 		<label>/sfc/servlet.shepherd/document/download/</label>
 		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>プレビュー</label>
+		<name>DocumentPreviewPageTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>以下のファイルが生成され、署名者に送信できるようになりました</label>
@@ -4248,6 +4248,10 @@
 		<label>6. このボタンをクリックして文書を生成します。</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
+  <customLabels>  
+		<label>DocuSign CLM設定が見つかりません。DocuSignサポートにお問い合わせください。</label>
+		<name>MissingDocuSignCLMSettings</name>
+	</customLabels>
 	<customLabels>
 		<label>CLMへ移動</label>
 		<name>GoToCLM</name>
@@ -4319,6 +4323,34 @@
 	<customLabels>
 		<label>概要イメージ</label>
 		<name>OverviewImage</name>
+	</customLabels>
+  <customLabels>  
+		<label>Salesforceファイルを取得しています</label>
+		<name>FetchingSalesforceFiles</name>	
+	</customLabels>
+	<customLabels>
+		<label>DocuSignファイルを取得しています</label>
+		<name>FetchingDocuSignFiles</name>	
+	</customLabels>	
+	<customLabels>
+		<label>コピーを作成してDocuSignファイルにインポートしています...</label>
+		<name>ImportingToDocuSignFiles</name>		
+	</customLabels>	
+	<customLabels>
+		<label>アップロードウィジェットの設定</label>
+		<name>SettingUpUploadWidget</name>		
+	</customLabels>	
+	<customLabels>
+		<label>認証しています</label>
+		<name>Authorizing</name>
+	</customLabels>
+  <customLabels>
+		<label>ほかのソース</label>
+		<name>OtherSourcesText</name>
+	</customLabels>
+	<customLabels>
+		<label>新しいSalesforceオブジェクトのマッピング</label>
+		<name>MapNewSalesforceObject</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign セットアップ</label>

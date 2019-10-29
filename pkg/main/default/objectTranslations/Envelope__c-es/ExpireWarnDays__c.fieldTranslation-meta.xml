@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Indique cuántos días antes de la caducidad desea que un mensaje de correo electrónico alerte a los destinatarios de que se acerca la fecha límite para la finalización. Este se enviará únicamente a los destinatarios que aún no hayan completado la transacción.
+		</help>
+    <label>Advertir de caducidad N días antes</label>
+    <name>ExpireWarnDays__c</name>
+</CustomFieldTranslation>

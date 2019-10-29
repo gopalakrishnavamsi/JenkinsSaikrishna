@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+    <help>Указывает оставшийся срок действия операции в днях.</help>
+    <label>Истечение срока действия/аннулирование конверта через N дн.</label>
+    <name>ExpireAfterDays__c</name>
+</CustomFieldTranslation>

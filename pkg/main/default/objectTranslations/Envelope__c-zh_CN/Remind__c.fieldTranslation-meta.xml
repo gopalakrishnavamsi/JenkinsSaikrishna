@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>选中此复选框可向尚未完成任务的信封收件人发送电子邮件提醒。
+		</help>
+    <label>通过电子邮件提醒签名者</label>
+    <name>Remind__c</name>
+</CustomFieldTranslation>

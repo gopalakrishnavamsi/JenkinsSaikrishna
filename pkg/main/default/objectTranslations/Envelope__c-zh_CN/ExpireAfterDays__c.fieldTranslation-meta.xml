@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+    <help>指定此事务到期前的天数。</help>
+    <label>N 天后信封到期/作废</label>
+    <name>ExpireAfterDays__c</name>
+</CustomFieldTranslation>

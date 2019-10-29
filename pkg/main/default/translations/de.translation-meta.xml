@@ -1042,7 +1042,7 @@
 		<name>SelectFile</name>
 	</customLabels>
 	<customLabels>
-		<label>Neue Vereinbarung erstellt</label>
+		<label>New Document Added</label>
 		<name>NewAgreementCreated</name>
 	</customLabels>
 	<customLabels>
@@ -1098,7 +1098,7 @@
 		<name>SendForSignature</name>
 	</customLabels>
 	<customLabels>
-		<label>Holen Sie mit DocuSign Signaturen für diese Vereinbarung ein.</label>
+		<label>Collect signatures for this document with DocuSign.</label>
 		<name>CollectSignatures</name>
 	</customLabels>
 	<customLabels>
@@ -1326,19 +1326,19 @@
 		<name>ImportButtonLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Noch keine Vereinbarungen verfügbar.</label>
+		<label>Send for Review, Approval or Signature</label>
 		<name>NoAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung erstellen</label>
+		<label>Jetzt starten</label>
 		<name>CreateAgreementsIllustration</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung löschen</label>
+		<label>Delete File</label>
 		<name>DeleteAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Wenn Sie die Vereinbarung löschen, steht Ihnen das Dokument, der Dokumenten-Aktivitätsverlauf sowie vorherige Versionen und Korrekturen nicht mehr zur Verfügung.</label>
+		<label>By deleting this file, you&apos;ll no longer have access to the document, its activity trail, previous versions, or ability to view redlines.</label>
 		<name>DeleteAgreementMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1354,7 +1354,7 @@
 		<name>UploadMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarungsname</label>
+		<label>Document Name</label>
 		<name>AgreementName</name>
 	</customLabels>
 	<customLabels>
@@ -1858,15 +1858,15 @@
 		<name>Modified</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wurde importiert.</label>
+		<label>Document has been imported successfully.</label>
 		<name>AgreementImportSuccessful</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wird noch importiert. Sie können später hierher zurückkehren und den Status prüfen.</label>
+		<label>Document import in progress. Check the DocuSign Files component after some time.</label>
 		<name>AgreementImportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Import der Vereinbarung. Versuchen Sie es erneut.</label>
+		<label>Document Import failed. Please try again.</label>
 		<name>AgreementImportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -1878,7 +1878,7 @@
 		<name>InvalidCharacters</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung umbenennen</label>
+		<label>Rename Document</label>
 		<name>RenameAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -1886,7 +1886,7 @@
 		<name>Rename</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Umbenennen der Vereinbarung. Versuchen Sie es später erneut.</label>
+		<label>There was an error in renaming the document. Please try again after some time.</label>
 		<name>AgreementRenameErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1894,15 +1894,15 @@
 		<name>AgreementRenamed_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung {0} wurde gelöscht.</label>
+		<label>The {0} document has been deleted.</label>
 		<name>AgreementDeleted</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Löschen der Vereinbarung. Versuchen Sie es später erneut.</label>
+		<label>There was an error in deleting the document. Please try again after some time.</label>
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim erneuten Senden der Vereinbarung. Versuchen Sie es später erneut.</label>
+		<label>There was an error in resending the document. Please try again after some time.</label>
 		<name>AgreementResendErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1922,15 +1922,15 @@
 		<name>AgreementCancelExternalReviewMessage_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Abbrechen der Vereinbarung. Versuchen Sie es später erneut.</label>
+		<label>There was an error while cancelling. Please try again after some time.</label>
 		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihr Dokument wurde zur Prüfung gesendet und in DocuSign Agreements kopiert.</label>
+		<label>Your document has been sent for review and copied to DocuSign Files.</label>
 		<name>ExternalReviewSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihre Anfrage, das Dokument zur externen Prüfung zu senden, wird noch verarbeitet. Sie können später hierher zurückkehren und den Status prüfen.</label>
+		<label>Your request for sending your document for external review is still in progress. Check DocuSign Files after some time.</label>
 		<name>ExternalReviewProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1938,11 +1938,11 @@
 		<name>ExternalReviewFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihr Dokument wurde zur internen Genehmigung gesendet und in DocuSign Agreements kopiert.</label>
+		<label>Your document has been sent for internal approval and copied to DocuSign Files.</label>
 		<name>InternalApprovalSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Ihre Anfrage, das Dokument zur internen Genehmigung zu senden, wird noch verarbeitet. Sie können später hierher zurückkehren und den Status prüfen.</label>
+		<label>Your request for sending your document for internal approval is still in progress. Check DocuSign Files after some time.</label>
 		<name>InternalApprovalProcessing</name>
 	</customLabels>
 	<customLabels>
@@ -1970,7 +1970,7 @@
 		<name>ExternalReviewAddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>Fälligkeitsdatum festlegen</label>
+		<label>Set a Due Date</label>
 		<name>ExternalReviewSetDueDate</name>
 	</customLabels>
 	<customLabels>
@@ -1982,7 +1982,7 @@
 		<name>ExternalReviewEditEmailAndSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Dateiname</label>
+		<label>Document Name</label>
 		<name>ExternalReviewFileName</name>
 	</customLabels>
 	<customLabels>
@@ -2067,7 +2067,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementButtonText</name>
-		<label>VEREINBARUNG EINSEHEN</label>
+		<label>REVIEW</label>
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
@@ -2075,7 +2075,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailButtonText</name>
-		<label>VEREINBARUNG ÖFFNEN</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailSubject</name>
@@ -2107,7 +2107,7 @@
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailButtonText</name>
-		<label>VEREINBARUNG ÖFFNEN</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
@@ -2135,7 +2135,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailButtonText</name>
-		<label>VEREINBARUNG ÖFFNEN</label>
+		<label>OPEN DOCUMENT</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
@@ -2166,15 +2166,15 @@
 		<name>ApprovalFailureEmailHeaderTitleText</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wird hochgeladen</label>
+		<label>Uploading Document</label>
 		<name>UploadingAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Antwort für die Genehmigung der Vereinbarung gesendet.</label>
+		<label>Response for approval submitted successfully.</label>
 		<name>AgreementApprovalResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Antwort für die Ablehnung der Vereinbarung gesendet.</label>
+		<label>Response for rejection submitted successfully.</label>
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
@@ -2194,7 +2194,7 @@
 		<name>LinkLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Freigabelink für Vereinbarung</label>
+		<label>Freigabelink</label>
 		<name>ShareAgreementLinkHeader</name>
 	</customLabels>
 	<customLabels>
@@ -2202,7 +2202,7 @@
 		<name>UploadNewVersionSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Hochladen der neuen Vereinbarungsversion.</label>
+		<label>Error while uploading a new version of the document.</label>
 		<name>UploadNewVersionError</name>
 	</customLabels>
 	<customLabels>
@@ -2280,7 +2280,7 @@
 	<customLabels>
 		<label>DOCUSIGN CLM ERKUNDEN</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dokumentenerstellung</label>
 		<name>DocumentGeneration</name>
@@ -2298,9 +2298,9 @@
 		<name>Help</name>
 	</customLabels>
 	<customLabels>
-		<label>Kundensupport wird bei uns großgeschrieben. Auf unserer Hilfeseite finden Sie alles rund um DocuSign Agreements.</label>
+		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Startseite</label>
 		<name>Home</name>
@@ -2554,7 +2554,7 @@
 		<name>InvalidTrialProduct_1</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wurde exportiert.</label>
+		<label>Document has been exported successfully.</label>
 		<name>AgreementExportSuccessful</name>
 	</customLabels>
 	<customLabels>
@@ -2562,11 +2562,11 @@
 		<name>AddToSalesforce</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung wird noch exportiert. Sie finden sie später im Bereich „Notizen und Anhänge“.</label>
+		<label>Document export in progress. Please check Notes and Attachments section after some time.</label>
 		<name>AgreementExportProcessing</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Exportieren der Vereinbarung. Versuchen Sie es erneut.</label>
+		<label>Document Export failed. Please try again.</label>
 		<name>AgreementExportFailed</name>
 	</customLabels>
 	<customLabels>
@@ -2694,15 +2694,15 @@
 		<name>FailedToTriggerDocumentComparisonTask</name>
 	</customLabels>
 	<customLabels>
-		<label>Ungültige Eingabeparameter für das Vergleichen von Vereinbarungsversionen.</label>
+		<label>Invalid input parameters for comparing document versions.</label>
 		<name>InvalidInputsAgreementComparison</name>
 	</customLabels>
 	<customLabels>
-		<label>„Externe Prüfung im Auftrag von“ für Vereinbarung abgeschlossen.</label>
+		<label>External review on behalf of completed.</label>
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>„Externe Prüfung im Auftrag von“ für Vereinbarung fehlgeschlagen.</label>
+		<label>External review on behalf of has failed.</label>
 		<name>AgreementExternalReviewOnBehalfOfFailed</name>
 	</customLabels>
 	<customLabels>
@@ -3006,11 +3006,11 @@
 		<name>Collapse</name>
 	</customLabels>
 	<customLabels>
-		<label>Was ist DocuSign CLM?</label>
+		<label>What is DocuSign CLM for Salesforce?</label>
 		<name>WhatIsDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit dieser App verbinden Sie Salesforce-Daten mit DocuSign CLM, damit Sie Salesforce-Daten zum Erstellen Ihrer Verträge und Vereinbarungen nutzen können. Speichern und verwalten Sie dann diese Dokumente mit DocuSign CLM für Salesforce.</label>
+		<label>It&apos;s an app that connects your Salesforce data with DocuSign CLM. This lets you use your Salesforce data to create business documents. DocuSign CLM for Salesforce lets you store and manage those documents.</label>
 		<name>WhatIsDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -3042,7 +3042,7 @@
 		<name>WhatIsDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM ist eine sichere Cloud-App für DocuSign CLM für Salesforce. Mit DocuSign CLM können Sie Dokumente generieren, mit anderen zusammenarbeiten und Prozesse automatisieren. DocuSign CLM für Salesforce ist das Verbindungsglied zwischen CLM und Ihrer Salesforce-Organisation.</label>
+		<label>DocuSign CLM is the secure cloud app for DocuSign CLM for Salesforce. It lets you generate documents, collaborate with stakeholders and automate your processes. DocuSign CLM for Salesforce connects DocuSign CLM with your Salesforce org.</label>
 		<name>WhatIsDocuSignCLMAns</name>
 	</customLabels>
 	<customLabels>
@@ -3050,7 +3050,7 @@
 		<name>InstallDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Öffnen Sie zunächst Salesforce AppExchange. Rufen Sie dann DocuSign CLM für Salesforce auf und folgen Sie der Installationsanleitung. Sie benötigen hierzu Salesforce-Administratorrechte.</label>
+		<label>First, go to the Salesforce AppExchange. Then search for the DocuSign Apps Launcher and follow the installation steps. You&apos;ll need to be a Salesforce administrator to do this.</label>
 		<name>InstallAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3058,7 +3058,7 @@
 		<name>AuthenticateAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Öffnen Sie DocuSign CLM für Salesforce vom Salesforce App Launcher. Melden Sie sich mit Ihren DocuSign- und Salesforce-Anmeldedaten an. Dadurch wird die Integration zwischen den beiden Organisationen aktiviert.</label>
+		<label>Open the DocuSign Apps Launcher in Salesforce after installation. Then sign in with your DocuSign CLM-enabled DocuSign login credentials and follow the the prompts to establish the reverse connection with your Salesforce credentials. This enables integration between the two systems.</label>
 		<name>AuthenticateAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3122,7 +3122,7 @@
 		<name>WhatIsObjMapping</name>
 	</customLabels>
 	<customLabels>
-		<label>Die Objektzuordnung ist das Verbinden von Objekten der Salesforce.org mit DocuSign CLM. Beim Setup von DocuSign CLM werden Sie durch die Anleitung geführt.</label>
+		<label>Object mapping is the process of connecting objects from your Salesforce org to DocuSign CLM. The DocuSign Apps Launcher setup walks you through the steps.</label>
 		<name>WhatIsObjMappingAns</name>
 	</customLabels>
 	<customLabels>
@@ -3130,7 +3130,7 @@
 		<name>WhyToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>Bei DocuSign CLM für Salesforce sind zum Generieren von Dokumenten Daten Ihrer Objekte erforderlich. Durch das Zuordnen der Salesforce-Objekte kann auf die Daten zugegriffen werden. Nur Admins von DocuSign CLM für Salesforce können Objekte zuordnen.</label>
+		<label>DocuSign CLM for Salesforce needs the data in your objects to generate documents. Mapping your Salesforce objects is how you give access to that data. Only DocuSign CLM for Salesforce admins can map objects.</label>
 		<name>WhyToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3234,7 +3234,7 @@
 		<name>Section1</name>
 	</customLabels>
 	<customLabels>
-		<label>agreementHelp</label>
+		<label>Hilfe</label>
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
@@ -3360,11 +3360,11 @@
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Generieren Sie per 1-Klick ausgearbeitete, anpassbare Vereinbarungen mit Salesforce-Daten.</label>
+		<label>In one click, generate polished, customizable documents with your Salesforce data.</label>
 		<name>TabDocumentGenerationHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Senden Sie Vereinbarungen intern zur Prüfung und binden Sie Dritte mit ein.</label>
+		<label>Send documents for approval internally, and review with third parties with ease.</label>
 		<name>TabNegotiationHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3432,7 +3432,7 @@
 		<name>InfoIcon</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarungen in DocuSign CLM erstellen</label>
+		<label>Creating Documents in DocuSign CLM</label>
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
@@ -3468,7 +3468,7 @@
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Sobald die Dokumentenerstellung eingerichtet wurde, können Daten von Salesforce für eine Vorlage und zum Erstellen einer neuen Vereinbarung abgerufen werden. Das Erstellen eines Dokuments kann dann auch dazu verwendet werden, einen neuen Workflow zu starten.</label>
+		<label>After it&apos;s set up, document generation can take your data from Salesforce and merge it on to a template to generate contracts or any document. You can even use creating a document as a trigger to start a new workflow.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3572,15 +3572,11 @@
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Preise anzeigen</label>
-		<name>ContactSales</name>
-	</customLabels>
-	<customLabels>
 		<label>1-Klick-Dokumentenerstellung</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Lassen Sie Ihre Kunden direkt in Salesforce professionelle und konfigurierbare Vereinbarungen automatisch erstellen.</label>
+		<label>Give your users the power to automatically generate polished, configurable documents directly from Salesforce.</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
@@ -3632,11 +3628,11 @@
 		<name>ESignatureCompatibleFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarungen schneller genehmigen lassen</label>
+		<label>Make it easy for approvers to sign off on documents</label>
 		<name>ApproversFeature</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarungen durch externe Prüfer aktualisieren lassen</label>
+		<label>Allow external reviewers to update documents</label>
 		<name>ExternalReviewFeature</name>
 	</customLabels>
 	<customLabels>
@@ -3664,11 +3660,11 @@
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Professionelle und anpassbare Vereinbarungen generieren</label>
+		<label>Generate Polished, Customized Documents</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarungen zur Prüfung und Genehmigung senden</label>
+		<label>Send for Review or Approval</label>
 		<name>LearnNegotiateLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3688,7 +3684,7 @@
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit einem einzigen Klick erstellen Sie professionelle, konfigurierbare und vollständig anpassbare Vereinbarungen mit Ihren verfügbaren Salesforce-Daten.</label>
+		<label>With a single click you’ll be generating polished, configurable, and fully customizable documents using the Salesforce data you already have.</label>
 		<name>GenerateProductTrialHelpInfo</name>
 	</customLabels>
 	<customLabels>
@@ -3792,7 +3788,7 @@
 		<name>DocuSignUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM für Salesforce-Benutzer</label>
+		<label>DocuSign CLM for Salesforce Users</label>
 		<name>DocuSignCLMUsers</name>
 	</customLabels>
 	<customLabels>
@@ -3906,7 +3902,7 @@
 	<customLabels>
 		<label>Anwenden</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>
@@ -3980,7 +3976,7 @@
 		<name>ExpiredReviewSenderEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>Vereinbarung öffnen</label>
+		<label>Open Document</label>
 		<name>OpenAgreementButton</name>
 	</customLabels>
 	<customLabels>
@@ -4046,6 +4042,10 @@
 	<customLabels>
 		<label>/sfc/servlet.shepherd/document/download/</label>
 		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorschau</label>
+		<name>DocumentPreviewPageTitle</name>
 	</customLabels>
 	<customLabels>
 		<label>Die Dateien unten wurden generiert und können nun für das Signieren gesendet werden</label>
@@ -4247,6 +4247,10 @@
 		<label>6. Über diese Schaltfläche können Sie dann per Klick Dokumente generieren.</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
+  <customLabels>  
+		<label>Unable to find DocuSign CLM settings. Please contact DocuSign Support for assistance.</label>
+		<name>MissingDocuSignCLMSettings</name>
+	</customLabels>
 	<customLabels>
 		<label>Zu CLM wechseln</label>
 		<name>GoToCLM</name>
@@ -4318,6 +4322,34 @@
 	<customLabels>
 		<label>Übersichtsgrafik</label>
 		<name>OverviewImage</name>
+	</customLabels>
+  <customLabels>  
+		<label>Fetching Salesforce files</label>
+		<name>FetchingSalesforceFiles</name>	
+	</customLabels>
+	<customLabels>
+		<label>Fetching DocuSign Files</label>
+		<name>FetchingDocuSignFiles</name>	
+	</customLabels>	
+	<customLabels>
+		<label>Creating a copy and importing to DocuSign Files...</label>
+		<name>ImportingToDocuSignFiles</name>		
+	</customLabels>	
+	<customLabels>
+		<label>Setting up Upload Widget</label>
+		<name>SettingUpUploadWidget</name>		
+	</customLabels>	
+	<customLabels>
+		<label>Authorizing</label>
+		<name>Authorizing</name>
+	</customLabels>
+  <customLabels>
+		<label>Andere Quellen</label>
+		<name>OtherSourcesText</name>
+	</customLabels>
+	<customLabels>
+		<label>Map New Salesforce Object</label>
+		<name>MapNewSalesforceObject</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>

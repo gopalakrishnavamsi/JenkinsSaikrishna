@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+    <help>Indique con qué frecuencia (en días) se debe repetir el recordatorio hasta que se complete la transacción.</help>
+    <label>Recordar cada N día(s) hasta que se complete</label>
+    <name>RemindFrequencyDays__c</name>
+</CustomFieldTranslation>

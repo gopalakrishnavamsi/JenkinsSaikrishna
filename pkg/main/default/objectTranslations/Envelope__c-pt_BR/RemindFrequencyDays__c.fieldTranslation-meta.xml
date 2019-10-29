@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+    <help>Indica a frequência (em dias) que o lembrete deve repetir até que a transação esteja completa.</help>
+    <label>Lembrar a cada N dia(s) até completar</label>
+    <name>RemindFrequencyDays__c</name>
+</CustomFieldTranslation>

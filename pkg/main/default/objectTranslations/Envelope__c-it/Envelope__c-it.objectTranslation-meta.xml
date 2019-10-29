@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
+    <caseValues>
+        <plural>false</plural>
+        <value>Busta DocuSign</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Buste DocuSign</value>
+    </caseValues>
+    <layouts>
+        <layout>DocuSign Envelope Layout</layout>
+        <sections>
+            <label>Collegamento personalizzati</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <gender>Masculine</gender>
+</CustomObjectTranslation>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- smartling.translate_paths = CustomFieldTranslation/label -->
+    <label>발송된 봉투</label>
+    <name>SentEnvelopes__c</name>
+</CustomFieldTranslation>

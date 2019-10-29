@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Data e ora di invio</help>
+    <label>Inviato</label>
+    <name>Sent__c</name>
+</CustomFieldTranslation>

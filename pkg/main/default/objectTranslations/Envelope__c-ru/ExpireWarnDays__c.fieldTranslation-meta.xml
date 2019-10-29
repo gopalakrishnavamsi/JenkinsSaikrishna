@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Указывает, за сколько дней до истечения срока действия предупреждать получателей по электронной почте о приближающемся
+			 сроке исполнения. Предупреждение отправляется только тем получателям, которые не завершили операцию.
+		</help>
+    <label>Предупреждать об истечении срока действия за N дн.</label>
+    <name>ExpireWarnDays__c</name>
+</CustomFieldTranslation>

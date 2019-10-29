@@ -5,8 +5,4 @@
         <plural>false</plural>
         <value>DocuSignエンベロープ受信者</value>
     </caseValues>
-    <caseValues>
-        <plural>false</plural>
-        <value>DocuSignエンベロープ受信者</value>
-    </caseValues>
 </CustomObjectTranslation>

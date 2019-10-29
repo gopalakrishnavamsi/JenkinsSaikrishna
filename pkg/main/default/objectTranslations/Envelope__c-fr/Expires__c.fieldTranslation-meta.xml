@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
 	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
-	<help>Parfois, vous devrez peut‑être encourager vos destinataires à compléter une enveloppe plus rapidement. Lorsqu’une enveloppe expire, DocuSign pour Salesforce invalide l’enveloppe et envoie une notification à l’expéditeur et au destinataire.
-		</help>
+	<help>Parfois, vous pourriez avoir à encourager vos destinataires à traiter une enveloppe plus rapidement. Lorsqu’une enveloppe expire, DocuSign invalide l’enveloppe et envoie une notification à l’expéditeur et au destinataire.</help>
     <label>Expirer/invalider l’enveloppe</label>
     <name>Expires__c</name>
 </CustomFieldTranslation>

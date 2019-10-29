@@ -3,11 +3,11 @@
     <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value -->
     <caseValues>
         <plural>false</plural>
-        <value>État de l’envoi groupé DocuSign</value>
+        <value>Statut de l’envoi groupé DocuSign</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
-        <value>État de l’envoi groupé DocuSign</value>
+        <value>Statut de l’envoi groupé DocuSign</value>
     </caseValues>
     <startsWith>Consonant</startsWith>
     <gender>Masculine</gender>

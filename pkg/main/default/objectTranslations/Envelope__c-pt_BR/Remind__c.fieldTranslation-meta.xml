@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Marque esta caixa para que um lembrete de e-mail seja enviado aos destinatários do envelope que ainda não completaram
+			suas tarefas.
+		</help>
+    <label>Lembrar signatários via e-mail</label>
+    <name>Remind__c</name>
+</CustomFieldTranslation>

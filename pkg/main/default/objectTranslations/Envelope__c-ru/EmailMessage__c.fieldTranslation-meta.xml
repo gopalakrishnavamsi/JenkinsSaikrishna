@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Указанный здесь текст сообщения электронной почты (до 2000 символов) будет отображаться в уведомлении для получателя DocuSign
+			о необходимости поставить подпись.
+		</help>
+    <label>Сообщение электронной почты</label>
+    <name>EmailMessage__c</name>
+</CustomFieldTranslation>

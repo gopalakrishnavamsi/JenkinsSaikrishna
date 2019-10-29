@@ -5,10 +5,6 @@
         <plural>false</plural>
         <value>DocuSignエンベロープ</value>
     </caseValues>
-    <caseValues>
-        <plural>false</plural>
-        <value>DocuSignエンベロープ</value>
-    </caseValues>
     <layouts>
         <layout>DocuSign Envelope Layout</layout>
         <sections>

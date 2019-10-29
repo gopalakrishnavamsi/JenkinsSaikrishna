@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
+	<help>Edite el mensaje de este correo electrónico (hasta 2000 caracteres), que aparecerá en la notificación de firma que recibirá
+			el destinatario de este sobre de DocuSign.
+		</help>
+    <label>Mensaje del correo electrónico</label>
+    <name>EmailMessage__c</name>
+</CustomFieldTranslation>

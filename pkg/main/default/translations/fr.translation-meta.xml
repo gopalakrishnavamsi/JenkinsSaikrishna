@@ -2281,7 +2281,7 @@
 	<customLabels>
 		<label>DÉCOUVREZ DOCUSIGN CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Création de documents</label>
 		<name>DocumentGeneration</name>
@@ -2301,7 +2301,7 @@
 	<customLabels>
 		<label>Chez DocuSign, nous sommes attachés à votre réussite. Nous avons créé une page d’aide pour répondre aux questions courantes relatives à DocuSign Agreements.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Accueil</label>
 		<name>Home</name>
@@ -3575,10 +3575,6 @@
 		<name>TrialExpirationMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Afficher les tarifs</label>
-		<name>ContactSales</name>
-	</customLabels>
-	<customLabels>
 		<label>Création de documents en un clic</label>
 		<name>GenMarketingHeader</name>
 	</customLabels>
@@ -3909,7 +3905,7 @@
 	<customLabels>
 		<label>Appliquer</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Tableau de bord</label>
 		<name>Dashboard</name>
