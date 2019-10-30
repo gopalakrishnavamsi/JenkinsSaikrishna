@@ -18,6 +18,9 @@ private class ESignatureAPITest {
 		ESignatureAPI.ErrorDetails ed5 = new ESignatureAPI.ErrorDetails();
 		ed5.errorCode = 'SOME_ERROR';
 		ed5.message = 'Some error';
+		ESignatureAPI.ErrorDetails ed6 = new ESignatureAPI.ErrorDetails();
+		ed6.errorCode = 'HOURLY_APIINVOCATION_LIMIT_EXCEEDED';
+		ed6.message = 'Hourly API limit exceeded';
 
 		Test.startTest();
 		APIError e1 = ed1.toExternalForm();
@@ -25,6 +28,7 @@ private class ESignatureAPITest {
 		APIError e3 = ed3.toExternalForm();
 		APIError e4 = ed4.toExternalForm();
 		APIError e5 = ed5.toExternalForm();
+		APIError e6 = ed6.toExternalForm();
 		Test.stopTest();
 
 		System.assertEquals(APIError.none, e1);
@@ -52,6 +56,12 @@ private class ESignatureAPITest {
 		System.assertEquals(APIErrorCode.BAD_REQUEST, e5.code);
 		System.assertEquals('Some error', e5.description);
 		System.assertEquals('SOME_ERROR', ((ESignatureAPI.Error)e5).docuSignCode);
+
+		System.assertNotEquals(null, e6);
+		System.assert(e6 instanceof ESignatureAPI.Error);
+		System.assertEquals(APIErrorCode.HOURLY_API_LIMIT_EXCEEDED, e6.code);
+		System.assertEquals('Hourly API limit exceeded', e6.description);
+		System.assertEquals('HOURLY_APIINVOCATION_LIMIT_EXCEEDED', ((ESignatureAPI.Error)e6).docuSignCode);
 	}
 
 	@IsTest
@@ -163,6 +173,29 @@ private class ESignatureAPITest {
 			System.assertEquals(Label.MustBeActivated, ex.getMessage());
 			System.assertEquals(UserInfo.getUserId(), ex.userId);
 			System.assertEquals(UnauthorizedException.AccessRequirement.DocuSignUser, ex.requirement);
+		}
+	}
+
+	@IsTest
+	static void test_getError_hourly_api_limit_exceeded() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			ESignatureAPI client = ESignatureAPI.getInstance();
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"errorCode":"HOURLY_APIINVOCATION_LIMIT_EXCEEDED","message":"Hourly API limit exceeded"}');
+			UnauthorizedException ex;
+
+			Test.startTest();
+			APIError result = client.getError(response);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result instanceof ESignatureAPI.Error);
+			System.assertEquals(APIErrorCode.HOURLY_API_LIMIT_EXCEEDED, result.code);
+			System.assertEquals('Hourly API limit exceeded', result.description);
+			System.assertEquals('HOURLY_APIINVOCATION_LIMIT_EXCEEDED', ((ESignatureAPI.Error)result).docuSignCode);
 		}
 	}
 

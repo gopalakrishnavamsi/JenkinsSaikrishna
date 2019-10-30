@@ -24,7 +24,7 @@ public class APIErrorCode {
 	public static final Integer TRIAL_ACCOUNT_EXPIRED = 1011;
 	public static final Integer FAILED_TO_MEET_21_CFR_PART_11 = 1012;
 	public static final Integer USER_NOT_ACTIVATED = 1013;
-	//public static final Integer TEMPLATE_TYPES_OR_ROLES_NOT_MAPPED = 1014;
+	public static final Integer HOURLY_API_LIMIT_EXCEEDED = 1014;
 	public static final Integer INVALID_DOCUMENT = 1015;
 	public static final Integer INVALID_SIGNING_GROUP = 1015;
 	public static final Integer INVALID_RECIPIENT = 1016;

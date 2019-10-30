@@ -1737,6 +1737,46 @@ private class EnvelopeServiceTest {
 		}
 	}
 
+	private class ApiLimitExceededMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(400);
+			response.setStatus('BAD_REQUEST');
+			response.setHeader('Content-Type', 'application/json');
+			response.setBody('{"errorCode":"HOURLY_APIINVOCATION_LIMIT_EXCEEDED","message":"Hourly API limit exceeded"}');
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_sendEnvelopes_api_limit_exceeded() {
+		Test.setMock(HttpCalloutMock.class, new ApiLimitExceededMock());
+		System.runAs(UserMock.createDocuSignSender()) {
+			List<Envelope> es = new List<Envelope>();
+			for (Integer i = 0; i < 3; i++) {
+				es.add(new Envelope(null, 's' + i, 'm' + i, null)
+					.withDocuments(new List<Document> {
+						Document.fromTemplate(UUID.randomUUID(), 't' + i)
+					})
+					.withRecipients(new List<Recipient> {
+						Recipient.fromSource('r' + i, 'r' + i + '@unit.test', null, 'Signer 1', null)
+					}));
+			}
+
+			Test.startTest();
+			List<Envelope> result = EnvelopeService.sendEnvelopes(es);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			for (Envelope e : result) {
+				System.assertNotEquals(null, e);
+				System.assertNotEquals(null, e.error);
+				System.assertEquals(APIErrorCode.HOURLY_API_LIMIT_EXCEEDED, e.error.code);
+			}
+		}
+	}
+
 	@IsTest
 	static void test_saveSentEnvelopes_unauthorized() {
 		System.runAs(UserMock.createAdministrator()) {

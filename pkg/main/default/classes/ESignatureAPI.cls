@@ -21,6 +21,7 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 	private static final String INVALID_TOKEN = 'AUTHORIZATION_INVALID_TOKEN';
 	private static final String AUTH_FAILED = 'USER_AUTHENTICATION_FAILED';
 	private static final String PARTNER_AUTHENTICATION_FAILED = 'PARTNER_AUTHENTICATION_FAILED';
+	private static final String HOURLY_API_LIMIT_EXCEEDED = 'HOURLY_APIINVOCATION_LIMIT_EXCEEDED';
 
 	@TestVisible
 	protected ESignatureAPI(
@@ -51,15 +52,21 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 	}
 
 	protected virtual RestAPI.Response get(final String path, final Integer timeout) {
-		return super.get(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), timeout);
+		return super.get(getBaseUrl(), new List<Object> {
+			path
+		}, QueryString.empty, getDefaultHeaders(), timeout);
 	}
 
 	protected virtual RestAPI.Response get(final String path, final QueryString queryString, final Integer timeout) {
-		return super.get(getBaseUrl(), new List<Object> { path }, queryString, getDefaultHeaders(), timeout);
+		return super.get(getBaseUrl(), new List<Object> {
+			path
+		}, queryString, getDefaultHeaders(), timeout);
 	}
 
 	protected virtual RestAPI.Response post(final String path, final String body, final Integer timeout) {
-		return super.post(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.post(getBaseUrl(), new List<Object> {
+			path
+		}, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	protected virtual RestAPI.Response post(final List<Object> path, final String body, final Integer timeout) {
@@ -81,7 +88,9 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 	}
 
 	protected virtual RestAPI.Response del(final String path, final String body, final Integer timeout) {
-		return super.del(getBaseUrl(), new List<Object> { path }, QueryString.empty, getDefaultHeaders(), body, timeout);
+		return super.del(getBaseUrl(), new List<Object> {
+			path
+		}, QueryString.empty, getDefaultHeaders(), body, timeout);
 	}
 
 	// UGH. Apex doesn't allow protected inner classes, so we either leak an API implementation-specific type or
@@ -106,6 +115,8 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 				|| errorCode == PARTNER_AUTHENTICATION_FAILED) {
 
 				return new Error(APIErrorCode.UNAUTHORIZED, errorCode, message);
+			} else if (errorCode == HOURLY_API_LIMIT_EXCEEDED) {
+				return new Error(APIErrorCode.HOURLY_API_LIMIT_EXCEEDED, errorCode, message);
 			} else {
 				return new Error(APIErrorCode.BAD_REQUEST, errorCode, message);
 			}
@@ -142,7 +153,9 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 		try {
 			super.get(
 				this.getBaseUrl(),
-				new List<Object> { 'service_information' },
+				new List<Object> {
+					'service_information'
+				},
 				QueryString.empty,
 				new Map<String, String>(),
 				timeout);
