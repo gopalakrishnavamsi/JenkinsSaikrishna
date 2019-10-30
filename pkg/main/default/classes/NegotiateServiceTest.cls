@@ -484,9 +484,7 @@ private class NegotiateServiceTest {
 	@IsTest
 	static void test_externalReviewCompleteOnBehalf_success() {
 		DocuSignAPIMock.success();
-		User user = UserMock.createDocuSignAdministrator();
-		System.runAs(user) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
+		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			Boolean result = NegotiateService.externalReviewCompleteOnBehalf('this is the comment',
 				ScmAPIMock.DOCUMENT_HREF, ScmAPIMock.DOCUMENT_ID);

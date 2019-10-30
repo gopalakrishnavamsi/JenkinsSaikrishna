@@ -346,7 +346,6 @@ public with sharing class NegotiateService {
 	}
 
 	public static Boolean externalReviewCompleteOnBehalf(final String comments, final Url newVersionUrl, final UUID documentId) {
-		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID externalReviewId = NegotiateAPI.getInstance().getDocumentReview(documentId);
 		return NegotiateAPI.getInstance().externalReviewCompleteOnBehalf(comments, newVersionUrl, externalReviewId);

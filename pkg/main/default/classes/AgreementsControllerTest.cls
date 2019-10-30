@@ -616,9 +616,7 @@ private class AgreementsControllerTest {
 	@IsTest
 	static void test_externalReviewOnBehalfOfRequest_Success() {
 		ScmAPIMock.success();
-		User user = UserMock.createDocuSignAdministrator();
-		System.runAs(user) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
+		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
 			Boolean isExternalReviewCompleted = AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', ScmAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueOf(ScmAPIMock.DOCUMENT_ID));
 			Test.stopTest();
@@ -634,7 +632,7 @@ private class AgreementsControllerTest {
 				AgreementsController.externalReviewOnBehalfOfRequest('Test Comment', ScmAPIMock.DOCUMENT_HREF.toExternalForm(), String.valueOf(ScmAPIMock.DOCUMENT_ID));
 				throw new AssertException('Expected externalreview on behalf of to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
