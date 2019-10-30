@@ -1181,7 +1181,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsCreateable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isCreateable(type, fieldNames);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	/**
@@ -1205,7 +1205,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsDeletable(final SObjectType type) {
 		FlsResults results = isDeletable(type);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	/**
@@ -1231,7 +1231,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsQueryable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isQueryable(type, fieldNames);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	/**
@@ -1257,7 +1257,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsUpdateable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isUpdateable(type, fieldNames);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	/**
@@ -1282,7 +1282,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsFilterable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isFilterable(type, fieldNames);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	/**
@@ -1307,7 +1307,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsUnencrypted(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isUnencrypted(type, fieldNames);
-		if (!results.isAuthorized) throw new UnauthorizedException(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
 	}
 
 	@TestVisible

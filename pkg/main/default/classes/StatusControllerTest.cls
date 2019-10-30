@@ -36,7 +36,7 @@ private class StatusControllerTest {
 				StatusController.getStatus(UserInfo.getUserId(), 1);
 				throw new AssertException('Expected getStatus to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.UnauthorizedUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
 			Test.stopTest();
 		}

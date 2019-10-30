@@ -42,7 +42,8 @@ global class UnauthorizedException extends Exception {
 		ClmViewer,
 		SalesforceAdministrator,
 		EnvelopeOwner,
-		ConfigureAccount
+		ConfigureAccount,
+		SecurityPermission
 	}
 
 	/**
@@ -208,4 +209,16 @@ global class UnauthorizedException extends Exception {
 		ex.requirement = AccessRequirement.ConfigureAccount;
 		return ex;
 	}
+
+	/**
+ 	* Factory method to construct an exception when Salesforce object or Field has missing security permission
+ 	*
+ 	* @return The new exception.
+ 	*/
+	public static UnauthorizedException missingSecurityPermission(final String message) {
+		final UnauthorizedException ex = new UnauthorizedException(message);
+		ex.requirement = AccessRequirement.SecurityPermission;
+		return ex;
+	}
+
 }

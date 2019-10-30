@@ -218,11 +218,8 @@
         })
       )
       .catch(
-        $A.getCallback(function () {
-          component.set(
-            'v.errMsg',
-            $A.get('$Label.c.FailedInitiateDocGeneration')
-          );
+        $A.getCallback(function (error) {
+          component.set('v.errMsg', error);
           component.set('v.errType', 'error');
           component.set('v.isGenerating', false);
         })
