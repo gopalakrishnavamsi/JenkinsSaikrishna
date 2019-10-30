@@ -842,10 +842,6 @@
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Paramètres enregistrés avec succès.</label>
-		<name>SettingsSaved</name>
-	</customLabels>
-	<customLabels>
 		<label>Afficher</label>
 		<name>Show</name>
 	</customLabels>
@@ -1276,10 +1272,6 @@
 	<customLabels>
 		<label>Expéditeur système</label>
 		<name>SystemSender</name>
-	</customLabels>
-	<customLabels>
-		<label>Bouton Envoyer avec DocuSign</label>
-		<name>SendAction</name>
 	</customLabels>
 	<customLabels>
 		<label>Objet Salesforce</label>
@@ -1902,10 +1894,6 @@
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Une erreur s’est produite lors du renvoi de l’accord. Veuillez réessayer après quelque temps.</label>
-		<name>AgreementResendErrorMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>{0} renvoyé pour évaluation externe.</label>
 		<name>AgreementResendExternalReviewMessage_1</name>
 	</customLabels>
@@ -1920,10 +1908,6 @@
 	<customLabels>
 		<label>Évaluation externe annulée pour {0}.</label>
 		<name>AgreementCancelExternalReviewMessage_1</name>
-	</customLabels>
-	<customLabels>
-		<label>Une erreur s’est produite lors de l’annulation de l’accord. Veuillez réessayer après quelque temps.</label>
-		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Votre document a été envoyé pour évaluation et copié dans l’espace DocuSign Agreements.</label>
@@ -2163,10 +2147,6 @@
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Erreur lors de l’envoi de la réponse pour autorisation.</label>
-		<name>AgreementApprovalError</name>
-	</customLabels>
-	<customLabels>
 		<label>Lien copié !</label>
 		<name>AgreementShareLinkCopiedMessage</name>
 	</customLabels>
@@ -2299,10 +2279,6 @@
 		<name>LEXObjectManagerURL</name>
 	</customLabels>
 	<customLabels>
-		<label>En savoir plus sur la génération de documents</label>
-		<name>LearnAboutDocGen</name>
-	</customLabels>
-	<customLabels>
 		<label>En savoir plus</label>
 		<name>LearnMore</name>
 	</customLabels>
@@ -2335,10 +2311,6 @@
 		<name>NameObjectFolderTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous n’avez pas encore d’objets mappés. Mapper un nouvel objet.</label>
-		<name>NoMappedObjectsFound</name>
-	</customLabels>
-	<customLabels>
 		<label>Toute instance d’un objet mappé aura un dossier dédié dans DocuSign CLM. C’est là que vous trouverez les documents produits en utilisant les données de cet objet.</label>
 		<name>ObjectFolderBody</name>
 	</customLabels>
@@ -2349,14 +2321,6 @@
 	<customLabels>
 		<label>Qu’est‑ce qu’un dossier d’objets ?</label>
 		<name>ObjectFolderTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>MAPPAGE D’OBJETS</label>
-		<name>ObjectMapping</name>
-	</customLabels>
-	<customLabels>
-		<label>OPTIMISER LA GÉNÉRATION DE DOCUMENTS</label>
-		<name>OptimizeDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign CLM conserve vos contrats au même endroit. Avec les paramètres avancés, vous pouvez ajouter ou importer des attributs à chaque document pour que tout reste organisé.</label>
@@ -2687,10 +2651,6 @@
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>L’évaluation externe de l’accord « au nom de » a échoué</label>
-		<name>AgreementExternalReviewOnBehalfOfFailed</name>
-	</customLabels>
-	<customLabels>
 		<label>Personnaliser et afficher vos dossiers d’objets DocuSign CLM dans Salesforce est simple. Après le mappage des objets, ajoutez simplement dans Salesforce une vue personnalisée à vos présentations de page d’objet.</label>
 		<name>ViewObjectFoldersCardBody</name>
 	</customLabels>
@@ -2871,10 +2831,6 @@
 		<name>CallbackFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>Visiter la FAQ</label>
-		<name>VisitFAQ</name>
-	</customLabels>
-	<customLabels>
 		<label>Assistance</label>
 		<name>SUPPORT</name>
 	</customLabels>
@@ -2915,20 +2871,12 @@
 		<name>TrustCenterTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Vérifier le statut</label>
-		<name>CheckStatusBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>Commencez votre formation pour forger votre expertise.</label>
 		<name>DocuSignUniversitySummary</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign University</label>
 		<name>DocuSignUniversityTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>Commencer votre formation</label>
-		<name>GetTrainingBtn</name>
 	</customLabels>
 	<customLabels>
 		<label>Communauté</label>
@@ -2951,10 +2899,6 @@
 		<name>KnowledgeMarketSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Consulter les ressources</label>
-		<name>ViewResourcesBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>FOIRE AUX QUESTIONS</label>
 		<name>FrequentlyAskedQuestions</name>
 	</customLabels>
@@ -2971,20 +2915,12 @@
 		<name>ManagingDocuSignUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Découvrez comment ajouter et gérer des utilisateurs.</label>
-		<name>ManageAddUsers</name>
-	</customLabels>
-	<customLabels>
 		<label>Mappage d’objets Salesforce</label>
 		<name>MappingSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>Gestion des dossiers d’objets et des configurations de présentations</label>
 		<name>MapObjectFolders</name>
-	</customLabels>
-	<customLabels>
-		<label>Découvrez comment exploiter au mieux vos dossiers d’objets et de vos configurations de présentations.</label>
-		<name>MapObjectFoldersSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Réduire</label>
@@ -3175,14 +3111,6 @@
 		<name>NeedObjectFolderLocationAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Liens</label>
-		<name>Links</name>
-	</customLabels>
-	<customLabels>
-		<label>FAQ</label>
-		<name>FAQs</name>
-	</customLabels>
-	<customLabels>
 		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
 		<name>GetSupportURL</name>
 	</customLabels>
@@ -3209,14 +3137,6 @@
 	<customLabels>
 		<label>Indique Vers le bas</label>
 		<name>IndicatesDown</name>
-	</customLabels>
-	<customLabels>
-		<label>Description de la section</label>
-		<name>SectionDescription</name>
-	</customLabels>
-	<customLabels>
-		<label>Section 1</label>
-		<name>Section1</name>
 	</customLabels>
 	<customLabels>
 		<label>agreementHelp</label>
@@ -3395,10 +3315,6 @@
 		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>Modifier un objet</label>
-		<name>EditObject</name>
-	</customLabels>
-	<customLabels>
 		<label>Affichage des dossiers d’objets dans Salesforce</label>
 		<name>ViewingObjectFoldersSummary</name>
 	</customLabels>
@@ -3539,20 +3455,12 @@
 		<name>FolderPortalViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
-		<label>Composant n° 2</label>
-		<name>Component2</name>
-	</customLabels>
-	<customLabels>
 		<label>The folder portal component lets you manage your object folders right in Salesforce. To use it, you&apos;ll add the folder portal component to your Salesforce object layout after mapping objects.</label>
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Découvrez comment configurer vos présentations</label>
 		<name>LearnHowToConfigureYourLayouts</name>
-	</customLabels>
-	<customLabels>
-		<label>Découvrez comment disposer des composants dans vos présentations</label>
-		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
 		<label>Jours restants de la période d’essai {0}</label>
@@ -3907,10 +3815,6 @@
 		<name>CouldNotConnectToCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez actualiser la page pour réessayer ou contacter votre administrateur Salesforce.</label>
-		<name>RefreshToLoadFolders</name>
-	</customLabels>
-	<customLabels>
 		<label>Rechercher un objet</label>
 		<name>SearchObject</name>
 	</customLabels>
@@ -3929,10 +3833,6 @@
 	<customLabels>
 		<label>Saisissez ou sélectionnez un champ ci‑dessous pour donner un nom au sous‑dossier</label>
 		<name>SelectFieldToNameTheSubFolder</name>
-	</customLabels>
-	<customLabels>
-		<label>Actif</label>
-		<name>Active</name>
 	</customLabels>
 	<customLabels>
 		<label>Ne plus afficher</label>
@@ -4088,14 +3988,6 @@
 		<name>FAQ</name>
 	</customLabels>
 	<customLabels>
-		<label>Date de l’ajout</label>
-		<name>DateAdded</name>
-	</customLabels>
-	<customLabels>
-		<label>Date de modification</label>
-		<name>DateModified</name>
-	</customLabels>
-	<customLabels>
 		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
 		<name>LearnDocGenBasicsURL</name>
 	</customLabels>
@@ -4186,10 +4078,6 @@
 	<customLabels>
 		<label>3</label>
 		<name>NumberThree</name>
-	</customLabels>
-	<customLabels>
-		<label>DocuSign CLM empowers your business to do more, faster. We&apos;ve created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM.</label>
-		<name>DocGenCardText</name>
 	</customLabels>
 	<customLabels>
 		<label>Great! You&apos;ve Created Your First Agreement With Salesforce Data</label>

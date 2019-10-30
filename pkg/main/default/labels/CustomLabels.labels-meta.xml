@@ -41,14 +41,6 @@
 		<value>DocuSign has not yet been configured for this account.</value>
 	</labels>
 	<labels>
-		<fullName>Active</fullName>
-		<categories>Users</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Active</shortDescription>
-		<value>Active</value>
-	</labels>
-	<labels>
 		<fullName>Add</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -722,7 +714,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Discover DocuSign CLM</shortDescription>
 		<value>DISCOVER DOCUSIGN CLM</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>DocuSign</fullName>
 		<categories>General</categories>
@@ -1123,7 +1115,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Help Info Body</shortDescription>
 		<value>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>HelpfulLinks</fullName>
 		<categories>Support</categories>
@@ -1452,14 +1444,6 @@
 		<value>Last Status Update</value>
 	</labels>
 	<labels>
-		<fullName>LearnAboutDocGen</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Learn More About Doc Gen</shortDescription>
-		<value>Learn more about Document Generation</value>
-	</labels>
-	<labels>
 		<fullName>LearnMore</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -1764,14 +1748,6 @@
 		<value>What is an Object Folder?</value>
 	</labels>
 	<labels>
-		<fullName>ObjectMapping</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Object Mapping</shortDescription>
-		<value>OBJECT MAPPING</value>
-	</labels>
-	<labels>
 		<fullName>Other</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
@@ -2002,14 +1978,6 @@
 		<protected>true</protected>
 		<shortDescription>Sent an envelope</shortDescription>
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</value>
-	</labels>
-	<labels>
-		<fullName>SettingsSaved</fullName>
-		<categories>Settings</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Settings saved</shortDescription>
-		<value>Successfully saved settings.</value>
 	</labels>
 	<labels>
 		<fullName>Show</fullName>
@@ -2825,13 +2793,6 @@
 		<value>Enable System sender</value>
 	</labels>
 	<labels>
-		<fullName>SendAction</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Send Action</shortDescription>
-		<value>Send with DocuSign Button</value>
-	</labels>
-	<labels>
 		<fullName>SalesforceObject</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -2893,14 +2854,6 @@
 		<protected>true</protected>
 		<shortDescription>No layouts for selected object</shortDescription>
 		<value>No layouts are associated with the selected object</value>
-	</labels>
-	<labels>
-		<fullName>NoMappedObjectsFound</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - No Mapped Objects Found</shortDescription>
-		<value>You have no mapped objects yet. Map a new object.</value>
 	</labels>
 	<labels>
 		<fullName>DocuSignAgreements</fullName>
@@ -3928,13 +3881,6 @@
 		<value>External review on behalf of completed.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementExternalReviewOnBehalfOfFailed</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AgreementExternalReviewOnBehalfOfFailed</shortDescription>
-		<value>External review on behalf of has failed.</value>
-	</labels>
-	<labels>
 		<fullName>RequiredField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -3984,13 +3930,6 @@
 		<value>There was an error in deleting the document. Please try again after some time.</value>
 	</labels>
 	<labels>
-		<fullName>AgreementResendErrorMessage</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AgreementResendErrorMessage</shortDescription>
-		<value>There was an error in resending the document. Please try again after some time.</value>
-	</labels>
-	<labels>
 		<fullName>AgreementResendExternalReviewMessage_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4017,13 +3956,6 @@
 		<protected>true</protected>
 		<shortDescription>AgreementCancelExternalReviewMessage</shortDescription>
 		<value>External Review canceled for {0}.</value>
-	</labels>
-	<labels>
-		<fullName>AgreementCancelErrorMessage</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AgreementCancelErrorMessage</shortDescription>
-		<value>There was an error while cancelling. Please try again after some time.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementDeleted</fullName>
@@ -4306,14 +4238,6 @@
 		<value>Open Document</value>
 	</labels>
 	<labels>
-		<fullName>OptimizeDocumentGeneration</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Optimize Document Generation</shortDescription>
-		<value>OPTIMIZE DOCUMENT GENERATION</value>
-	</labels>
-	<labels>
 		<fullName>CompletedReviewEmailSubject_1</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4564,13 +4488,6 @@
 		<protected>true</protected>
 		<shortDescription>AgreementRejectionResponseSuccess</shortDescription>
 		<value>Response for rejection submitted successfully.</value>
-	</labels>
-	<labels>
-		<fullName>AgreementApprovalError</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>AgreementApprovalError</shortDescription>
-		<value>Error while submitting Approval response.</value>
 	</labels>
 	<labels>
 		<fullName>AgreementShareLinkCopiedMessage</fullName>
@@ -4957,7 +4874,7 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Your Salesforce Objects</shortDescription>
 		<value>Your Salesforce Objects</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>InvalidTrialProduct_1</fullName>
 		<categories>CLM</categories>
@@ -5004,14 +4921,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Default Account Folder Name</shortDescription>
 		<value>{!Account.Name}</value>
-	</labels>
-	<labels>
-		<fullName>DefaultAccountObjectMappingPath</fullName>
-		<categories>CLM, Post Install</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Default Account Object Mapping Path</shortDescription>
-		<value>/Salesforce/Account/</value>
 	</labels>
 	<labels>
 		<fullName>DefaultAccountPathFormat</fullName>
@@ -5594,14 +5503,6 @@
 		<value>Callback failed.</value>
 	</labels>
 	<labels>
-		<fullName>FAQs</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - FAQs</shortDescription>
-		<value>FAQs</value>
-	</labels>
-	<labels>
 		<fullName>MapError</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -5650,14 +5551,6 @@
 		<value>White papers, value studies and tools to drive adoption.</value>
 	</labels>
 	<labels>
-		<fullName>ViewResourcesBtn</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - View Resources</shortDescription>
-		<value>View Resources</value>
-	</labels>
-	<labels>
 		<fullName>FrequentlyAskedQuestions</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -5690,14 +5583,6 @@
 		<value>Managing DocuSign CLM Users</value>
 	</labels>
 	<labels>
-		<fullName>ManageAddUsers</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Add and Manage Users</shortDescription>
-		<value>Learn how to add and manage users.</value>
-	</labels>
-	<labels>
 		<fullName>MappingSalesforceObjects</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -5712,14 +5597,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Mapping Objects Folders</shortDescription>
 		<value>Managing Object Folders and Layout Configurations</value>
-	</labels>
-	<labels>
-		<fullName>MapObjectFoldersSummary</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Mapping Objects Folders Summary</shortDescription>
-		<value>Learn how to get the most out of your object folders and layout configurations.</value>
 	</labels>
 	<labels>
 		<fullName>Collapse</fullName>
@@ -6098,22 +5975,6 @@
 		<value>Choosing a location for your object folder keeps your documents organized.</value>
 	</labels>
 	<labels>
-		<fullName>Links</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Links</shortDescription>
-		<value>Links</value>
-	</labels>
-	<labels>
-		<fullName>VisitFAQ</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Visit FAQ</shortDescription>
-		<value>Visit FAQ</value>
-	</labels>
-	<labels>
 		<fullName>SUPPORT</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -6194,14 +6055,6 @@
 		<value>Trust Center</value>
 	</labels>
 	<labels>
-		<fullName>CheckStatusBtn</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Check Status</shortDescription>
-		<value>Check Status</value>
-	</labels>
-	<labels>
 		<fullName>DocuSignUniversitySummary</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -6216,14 +6069,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - DocuSign University Title</shortDescription>
 		<value>DocuSign University</value>
-	</labels>
-	<labels>
-		<fullName>GetTrainingBtn</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Get Training</shortDescription>
-		<value>Get Training</value>
 	</labels>
 	<labels>
 		<fullName>ClickToAdd</fullName>
@@ -6296,22 +6141,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Indicates Down</shortDescription>
 		<value>Indicates Down</value>
-	</labels>
-	<labels>
-		<fullName>SectionDescription</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Description of the section</shortDescription>
-		<value>Description of the section</value>
-	</labels>
-	<labels>
-		<fullName>Section1</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Section 1</shortDescription>
-		<value>Section1</value>
 	</labels>
 	<labels>
 		<fullName>agreementHelp</fullName>
@@ -6702,13 +6531,6 @@
 		<value>DocuSign eSignature is not configured for your account.</value>
 	</labels>
 	<labels>
-		<fullName>EditObject</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Edit Object</shortDescription>
-		<value>Edit Object</value>
-	</labels>
-	<labels>
 		<fullName>ViewingObjectFoldersSummary</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -6997,14 +6819,6 @@
 		<value>Folder Portal - View Your Object Folders by Adding a View</value>
 	</labels>
 	<labels>
-		<fullName>Component2</fullName>
-		<categories>CLM, Post Install</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Component#2</shortDescription>
-		<value>Component #2</value>
-	</labels>
-	<labels>
 		<fullName>FolderPortalSummary</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>
@@ -7019,14 +6833,6 @@
 		<protected>true</protected>
 		<shortDescription>LearnHowToConfigureYourLayouts</shortDescription>
 		<value>Learn how to configure your layouts</value>
-	</labels>
-	<labels>
-		<fullName>LearnHowTPlaceComponentsIntoYourLayouts</fullName>
-		<categories>CLM, Post Install</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>LearnHowTPlaceComponentsIntoYourLayouts</shortDescription>
-		<value>Learn how to place components into your layouts</value>
 	</labels>
 	<labels>
 		<fullName>TrialExpirationMessage</fullName>
@@ -7779,7 +7585,7 @@
 		<protected>true</protected>
 		<shortDescription>Apply</shortDescription>
 		<value>Apply</value>
-	</labels>	
+	</labels>
 	<labels>
 		<fullName>Dashboard</fullName>
 		<categories>CLM</categories>
@@ -7811,14 +7617,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - CouldNotConnectToCLM</shortDescription>
 		<value>We couldn't connect to DocuSign CLM.</value>
-	</labels>
-	<labels>
-		<fullName>RefreshToLoadFolders</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - RefreshToLoadFolders</shortDescription>
-		<value>You can refresh the page to retry or contact your Salesforce admin.</value>
 	</labels>
 	<labels>
 		<fullName>SearchObject</fullName>
@@ -7991,22 +7789,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - FAQs</shortDescription>
 		<value>FAQ</value>
-	</labels>
-	<labels>
-		<fullName>DateAdded</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Date Added</shortDescription>
-		<value>Date Added</value>
-	</labels>
-	<labels>
-		<fullName>DateModified</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Date Modified</shortDescription>
-		<value>Date Modified</value>
 	</labels>
 	<labels>
 		<fullName>LearnDocGenBasicsURL</fullName>
@@ -8187,14 +7969,6 @@
 		<protected>true</protected>
 		<shortDescription>CLM - number three</shortDescription>
 		<value>3</value>
-	</labels>
-	<labels>
-		<fullName>DocGenCardText</fullName>
-		<categories>CLM</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>CLM - Doc Gen card text</shortDescription>
-		<value>DocuSign CLM empowers your business to do more, faster. We've created a Document generation page to talk about the powerful document generation capabilities of DocuSign CLM.</value>
 	</labels>
 	<labels>
 		<fullName>CLCreatedAgreement</fullName>

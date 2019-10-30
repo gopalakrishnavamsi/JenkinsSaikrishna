@@ -846,10 +846,6 @@
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
-		<label>設定が保存されました。</label>
-		<name>SettingsSaved</name>
-	</customLabels>
-	<customLabels>
 		<label>表示</label>
 		<name>Show</name>
 	</customLabels>
@@ -1281,10 +1277,6 @@
 	<customLabels>
 		<label>System Senderアカウントを有効にする</label>
 		<name>SystemSender</name>
-	</customLabels>
-	<customLabels>
-		<label>［DocuSignで送信］ボタン</label>
-		<name>SendAction</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforceオブジェクト</label>
@@ -1907,10 +1899,6 @@
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>文書の再送信時にエラーが発生しました。後でやり直してください</label>
-		<name>AgreementResendErrorMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>{0}が外部レビューに再送信されました。</label>
 		<name>AgreementResendExternalReviewMessage_1</name>
 	</customLabels>
@@ -1925,10 +1913,6 @@
 	<customLabels>
 		<label>{0}の外部レビューがキャンセルされました。</label>
 		<name>AgreementCancelExternalReviewMessage_1</name>
-	</customLabels>
-	<customLabels>
-		<label>キャンセル時にエラーが発生しました。後でやり直してください</label>
-		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>文書がレビューに送信され、［DocuSignファイル］にコピーされました。</label>
@@ -2167,10 +2151,6 @@
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>承認応答の送信時にエラーが発生しました。</label>
-		<name>AgreementApprovalError</name>
-	</customLabels>
-	<customLabels>
 		<label>リンクがコピーされました。</label>
 		<name>AgreementShareLinkCopiedMessage</name>
 	</customLabels>
@@ -2303,10 +2283,6 @@
 		<name>LEXObjectManagerURL</name>
 	</customLabels>
 	<customLabels>
-		<label>文書生成についての詳細情報</label>
-		<name>LearnAboutDocGen</name>
-	</customLabels>
-	<customLabels>
 		<label>詳細</label>
 		<name>LearnMore</name>
 	</customLabels>
@@ -2339,10 +2315,6 @@
 		<name>NameObjectFolderTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>オブジェクトがマッピングされていません。新しいマッピングを作成してください。</label>
-		<name>NoMappedObjectsFound</name>
-	</customLabels>
-	<customLabels>
 		<label>マッピングされたオブジェクトの各インスタンスには、DocuSign CLM内に対応するフォルダーが作成されます。これらのフォルダーに、各オブジェクトのデータで生成された文書が追加されます。</label>
 		<name>ObjectFolderBody</name>
 	</customLabels>
@@ -2353,14 +2325,6 @@
 	<customLabels>
 		<label>オブジェクトフォルダーとは</label>
 		<name>ObjectFolderTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>オブジェクトマッピング</label>
-		<name>ObjectMapping</name>
-	</customLabels>
-	<customLabels>
-		<label>文書生成の最適化</label>
-		<name>OptimizeDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
 		<label>すべての契約がDocuSign CLMで一元管理されます。詳細設定では、各文書に属性を追加したりインポートしたりして管理できます。</label>
@@ -2691,10 +2655,6 @@
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>代理外部レビューが失敗しました。</label>
-		<name>AgreementExternalReviewOnBehalfOfFailed</name>
-	</customLabels>
-	<customLabels>
 		<label>Salesforce内で簡単にDocuSign CLMのオブジェクトフォルダーを表示したりカスタマイズしたりできます。オブジェクトをマッピングした後で、Salesforceのオブジェクトページレイアウトにカスタムビューを追加してください。</label>
 		<name>ViewObjectFoldersCardBody</name>
 	</customLabels>
@@ -2875,10 +2835,6 @@
 		<name>CallbackFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>FAQの参照</label>
-		<name>VisitFAQ</name>
-	</customLabels>
-	<customLabels>
 		<label>サポート</label>
 		<name>SUPPORT</name>
 	</customLabels>
@@ -2919,20 +2875,12 @@
 		<name>TrustCenterTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>ステータスの確認</label>
-		<name>CheckStatusBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>専門的な知識を身に付けるためのさまざまなトレーニングが用意されています。</label>
 		<name>DocuSignUniversitySummary</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignユニバーシティ</label>
 		<name>DocuSignUniversityTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>トレーニングの受講</label>
-		<name>GetTrainingBtn</name>
 	</customLabels>
 	<customLabels>
 		<label>コミュニティ</label>
@@ -2955,10 +2903,6 @@
 		<name>KnowledgeMarketSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>リソースの表示</label>
-		<name>ViewResourcesBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>よく寄せられる質問（FAQ）</label>
 		<name>FrequentlyAskedQuestions</name>
 	</customLabels>
@@ -2975,20 +2919,12 @@
 		<name>ManagingDocuSignUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>ユーザーを追加および管理する方法について説明します。</label>
-		<name>ManageAddUsers</name>
-	</customLabels>
-	<customLabels>
 		<label>Salesforceオブジェクトのマッピング</label>
 		<name>MappingSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>オブジェクトフォルダーの管理とレイアウト設定</label>
 		<name>MapObjectFolders</name>
-	</customLabels>
-	<customLabels>
-		<label>オブジェクトフォルダーとレイアウト設定の使用方法について説明します。</label>
-		<name>MapObjectFoldersSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>折りたたみ</label>
@@ -3179,14 +3115,6 @@
 		<name>NeedObjectFolderLocationAns</name>
 	</customLabels>
 	<customLabels>
-		<label>リンク</label>
-		<name>Links</name>
-	</customLabels>
-	<customLabels>
-		<label>FAQ</label>
-		<name>FAQs</name>
-	</customLabels>
-	<customLabels>
 		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
 		<name>GetSupportURL</name>
 	</customLabels>
@@ -3213,14 +3141,6 @@
 	<customLabels>
 		<label>下</label>
 		<name>IndicatesDown</name>
-	</customLabels>
-	<customLabels>
-		<label>セクションの説明</label>
-		<name>SectionDescription</name>
-	</customLabels>
-	<customLabels>
-		<label>Section 1</label>
-		<name>Section1</name>
 	</customLabels>
 	<customLabels>
 		<label>ヘルプ</label>
@@ -3421,10 +3341,6 @@
 		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>オブジェクトの編集</label>
-		<name>EditObject</name>
-	</customLabels>
-	<customLabels>
 		<label>Salesforceでのオブジェクトフォルダーの表示</label>
 		<name>ViewingObjectFoldersSummary</name>
 	</customLabels>
@@ -3565,20 +3481,12 @@
 		<name>FolderPortalViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
-		<label>コンポーネント#2</label>
-		<name>Component2</name>
-	</customLabels>
-	<customLabels>
 		<label>フォルダーポータルでは、Salesforceから自分のオブジェクトフォルダーにアクセスできます。このコンポーネントを使用するには、オブジェクトをマッピングした後でSalesforceオブジェクトレイアウトにフォルダーポータルコンポーネントを追加します。</label>
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>レイアウトを設定するには</label>
 		<name>LearnHowToConfigureYourLayouts</name>
-	</customLabels>
-	<customLabels>
-		<label>レイアウト上にコンポーネントを追加するには</label>
-		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
 		<label>トライアルの残り: {0}日</label>
@@ -3969,10 +3877,6 @@
 		<name>CouldNotConnectToCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>このページの表示を更新してやり直すか、Salesforce管理者に問い合わせてください。</label>
-		<name>RefreshToLoadFolders</name>
-	</customLabels>
-	<customLabels>
 		<label>オブジェクトの検索</label>
 		<name>SearchObject</name>
 	</customLabels>
@@ -3991,10 +3895,6 @@
 	<customLabels>
 		<label>サブフォルダーの名前を入力するか、名前に適用する項目を選択します</label>
 		<name>SelectFieldToNameTheSubFolder</name>
-	</customLabels>
-	<customLabels>
-		<label>アクティブ</label>
-		<name>Active</name>
 	</customLabels>
 	<customLabels>
 		<label>今後表示しない</label>
@@ -4157,14 +4057,6 @@
 		<name>FAQ</name>
 	</customLabels>
 	<customLabels>
-		<label>追加日</label>
-		<name>DateAdded</name>
-	</customLabels>
-	<customLabels>
-		<label>変更日</label>
-		<name>DateModified</name>
-	</customLabels>
-	<customLabels>
 		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
 		<name>LearnDocGenBasicsURL</name>
 	</customLabels>
@@ -4255,10 +4147,6 @@
 	<customLabels>
 		<label>3</label>
 		<name>NumberThree</name>
-	</customLabels>
-	<customLabels>
-		<label>ビジネスを加速するDocuSign CLMをご紹介します。文書生成ページDocuSign CLMのパワフルな文書生成機能について説明しています。</label>
-		<name>DocGenCardText</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforceデータを取り込んだ最初の契約文書が作成されました。</label>

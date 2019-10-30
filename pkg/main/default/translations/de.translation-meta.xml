@@ -842,10 +842,6 @@
 		<name>SentAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Einstellungen gespeichert.</label>
-		<name>SettingsSaved</name>
-	</customLabels>
-	<customLabels>
 		<label>Anzeigen</label>
 		<name>Show</name>
 	</customLabels>
@@ -1276,10 +1272,6 @@
 	<customLabels>
 		<label>Systemabsender</label>
 		<name>SystemSender</name>
-	</customLabels>
-	<customLabels>
-		<label>Schaltfläche „Mit DocuSign senden“</label>
-		<name>SendAction</name>
 	</customLabels>
 	<customLabels>
 		<label>Salesforce-Objekt</label>
@@ -1902,10 +1894,6 @@
 		<name>AgreementDeleteErrorMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>There was an error in resending the document. Please try again after some time.</label>
-		<name>AgreementResendErrorMessage</name>
-	</customLabels>
-	<customLabels>
 		<label>{0} wurde erneut zur externen Prüfung gesendet.</label>
 		<name>AgreementResendExternalReviewMessage_1</name>
 	</customLabels>
@@ -1920,10 +1908,6 @@
 	<customLabels>
 		<label>Externe Prüfung wurde für {0} abgebrochen.</label>
 		<name>AgreementCancelExternalReviewMessage_1</name>
-	</customLabels>
-	<customLabels>
-		<label>There was an error while cancelling. Please try again after some time.</label>
-		<name>AgreementCancelErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Your document has been sent for review and copied to DocuSign Files.</label>
@@ -2162,10 +2146,6 @@
 		<name>AgreementRejectionResponseSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>Fehler beim Senden der Antwort für die Genehmigung.</label>
-		<name>AgreementApprovalError</name>
-	</customLabels>
-	<customLabels>
 		<label>Link kopiert.</label>
 		<name>AgreementShareLinkCopiedMessage</name>
 	</customLabels>
@@ -2298,10 +2278,6 @@
 		<name>LEXObjectManagerURL</name>
 	</customLabels>
 	<customLabels>
-		<label>Informationen zur Dokumentenerstellung</label>
-		<name>LearnAboutDocGen</name>
-	</customLabels>
-	<customLabels>
 		<label>Weitere Informationen</label>
 		<name>LearnMore</name>
 	</customLabels>
@@ -2334,10 +2310,6 @@
 		<name>NameObjectFolderTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Sie haben noch keine zugeordneten Objekte. Ordnen Sie ein neues Objekt zu.</label>
-		<name>NoMappedObjectsFound</name>
-	</customLabels>
-	<customLabels>
 		<label>Jede Instanz eines zugeordneten Objekts hat für DocuSign CLM einen Ordner. Dort finden Sie die Dokumente, die mit den Daten des Objekts generiert wurden.</label>
 		<name>ObjectFolderBody</name>
 	</customLabels>
@@ -2348,14 +2320,6 @@
 	<customLabels>
 		<label>Was ist ein Objektordner?</label>
 		<name>ObjectFolderTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>OBJEKTZUORDNUNG</label>
-		<name>ObjectMapping</name>
-	</customLabels>
-	<customLabels>
-		<label>DOKUMENTENERSTELLUNG OPTIMIEREN</label>
-		<name>OptimizeDocumentGeneration</name>
 	</customLabels>
 	<customLabels>
 		<label>Mit DocuSign CLM sind Ihre Verträge immer an einer Stelle. Bewahren Sie die Ordnung mit den erweiterten Einstellungen, indem Sie Attribute zu Dokumenten hinzufügen oder für Dokumente importieren.</label>
@@ -2686,10 +2650,6 @@
 		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
 	</customLabels>
 	<customLabels>
-		<label>External review on behalf of has failed.</label>
-		<name>AgreementExternalReviewOnBehalfOfFailed</name>
-	</customLabels>
-	<customLabels>
 		<label>DocuSign-CLM-Objektordner lassen sich in Salesforce ganz einfach anpassen und einsehen. Fügen Sie nach der Objektzuordnung den Objektseitenlayouts eine benutzerdefinierte Ansicht in Salesforce hinzu.</label>
 		<name>ViewObjectFoldersCardBody</name>
 	</customLabels>
@@ -2870,10 +2830,6 @@
 		<name>CallbackFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>FAQs aufrufen</label>
-		<name>VisitFAQ</name>
-	</customLabels>
-	<customLabels>
 		<label>Support</label>
 		<name>SUPPORT</name>
 	</customLabels>
@@ -2914,20 +2870,12 @@
 		<name>TrustCenterTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Status überprüfen</label>
-		<name>CheckStatusBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>Lernen Sie mit Onlinekursen alles rund um DocuSign.</label>
 		<name>DocuSignUniversitySummary</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign University</label>
 		<name>DocuSignUniversityTitle</name>
-	</customLabels>
-	<customLabels>
-		<label>An Schulungen teilnehmen</label>
-		<name>GetTrainingBtn</name>
 	</customLabels>
 	<customLabels>
 		<label>Community</label>
@@ -2950,10 +2898,6 @@
 		<name>KnowledgeMarketSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Ressourcen aufrufen</label>
-		<name>ViewResourcesBtn</name>
-	</customLabels>
-	<customLabels>
 		<label>HÄUFIG GESTELLTE FRAGEN</label>
 		<name>FrequentlyAskedQuestions</name>
 	</customLabels>
@@ -2970,20 +2914,12 @@
 		<name>ManagingDocuSignUsers</name>
 	</customLabels>
 	<customLabels>
-		<label>Fügen Sie Benutzer hinzu und verwalten Sie diese.</label>
-		<name>ManageAddUsers</name>
-	</customLabels>
-	<customLabels>
 		<label>Salesforce-Objekte zuordnen</label>
 		<name>MappingSalesforceObjects</name>
 	</customLabels>
 	<customLabels>
 		<label>Objektordner und Layoutkonfigurationen verwalten</label>
 		<name>MapObjectFolders</name>
-	</customLabels>
-	<customLabels>
-		<label>Objektordner und Layoutkonfigurationen optimal nutzen.</label>
-		<name>MapObjectFoldersSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Minimieren</label>
@@ -3174,14 +3110,6 @@
 		<name>NeedObjectFolderLocationAns</name>
 	</customLabels>
 	<customLabels>
-		<label>Links</label>
-		<name>Links</name>
-	</customLabels>
-	<customLabels>
-		<label>FAQs</label>
-		<name>FAQs</name>
-	</customLabels>
-	<customLabels>
 		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
 		<name>GetSupportURL</name>
 	</customLabels>
@@ -3208,14 +3136,6 @@
 	<customLabels>
 		<label>Nach unten</label>
 		<name>IndicatesDown</name>
-	</customLabels>
-	<customLabels>
-		<label>Beschreibung des Bereichs</label>
-		<name>SectionDescription</name>
-	</customLabels>
-	<customLabels>
-		<label>Bereich 1</label>
-		<name>Section1</name>
 	</customLabels>
 	<customLabels>
 		<label>Hilfe</label>
@@ -3392,10 +3312,6 @@
 		<name>ESignatureNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>Objekt bearbeiten</label>
-		<name>EditObject</name>
-	</customLabels>
-	<customLabels>
 		<label>Objektordner in Salesforce einsehen</label>
 		<name>ViewingObjectFoldersSummary</name>
 	</customLabels>
@@ -3536,20 +3452,12 @@
 		<name>FolderPortalViewYourObjectFolders</name>
 	</customLabels>
 	<customLabels>
-		<label>Komponente 2</label>
-		<name>Component2</name>
-	</customLabels>
-	<customLabels>
 		<label>Mithilfe der Komponente Ordnerportal können Sie Ihre Objektordner direkt in Salesforce verwalten. Fügen Sie hierzu Ihrem Salesforce-Objektlayout nach der Objektzuordnung die Komponente Ordnerportal hinzu.</label>
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Layouts konfigurieren</label>
 		<name>LearnHowToConfigureYourLayouts</name>
-	</customLabels>
-	<customLabels>
-		<label>Komponenten in Layouts positionieren</label>
-		<name>LearnHowTPlaceComponentsIntoYourLayouts</name>
 	</customLabels>
 	<customLabels>
 		<label>Probeaccount noch {0} Tage gültig</label>
@@ -3904,10 +3812,6 @@
 		<name>CouldNotConnectToCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Versuchen Sie es erneut, indem Sie die Seite aktualisieren, oder wenden Sie sich an den Salesforce-Administrator.</label>
-		<name>RefreshToLoadFolders</name>
-	</customLabels>
-	<customLabels>
 		<label>Objekt suchen</label>
 		<name>SearchObject</name>
 	</customLabels>
@@ -3926,10 +3830,6 @@
 	<customLabels>
 		<label>Zum Benennen des Unterordners unten ein Feld eingeben oder auswählen</label>
 		<name>SelectFieldToNameTheSubFolder</name>
-	</customLabels>
-	<customLabels>
-		<label>Aktiv</label>
-		<name>Active</name>
 	</customLabels>
 	<customLabels>
 		<label>Nicht mehr anzeigen</label>
@@ -4088,14 +3988,6 @@
 		<name>FAQ</name>
 	</customLabels>
 	<customLabels>
-		<label>Hinzugefügt am</label>
-		<name>DateAdded</name>
-	</customLabels>
-	<customLabels>
-		<label>Geändert am</label>
-		<name>DateModified</name>
-	</customLabels>
-	<customLabels>
 		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
 		<name>LearnDocGenBasicsURL</name>
 	</customLabels>
@@ -4186,10 +4078,6 @@
 	<customLabels>
 		<label>3</label>
 		<name>NumberThree</name>
-	</customLabels>
-	<customLabels>
-		<label>Mit DocuSign CLM wickeln Sie Geschäfte optimaler ab. Auf der Seite zur Dokumentenerstellung finden Sie eine Übersicht mit den Vorteilen der Dokumentenerstellung von DocuSign CLM.</label>
-		<name>DocGenCardText</name>
 	</customLabels>
 	<customLabels>
 		<label>Ihre erste Vereinbarung mit Salesforce-Daten wurde erstellt</label>
