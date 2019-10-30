@@ -24,6 +24,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public static final String SCM_SORT_DIRECTION = 'desc';
 	public static final Integer API_RETRY_LIMIT = 25;
 
+	private static final String APPROVAL_COMMENTS_PLACEHOLDER = '&lt;%#ApproveComments%&gt;';
 	private static NegotiateAPI self = null;
 
 	private NegotiateAPI(
@@ -236,19 +237,19 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			),
 			'ApprovalEmail' => new APIEmail(
 				String.format(Label.ApprovalEmailSubject, new List<String> { documentName }),
-				Label.ApprovalEmailBodyText,
+				APPROVAL_COMMENTS_PLACEHOLDER,
 				Label.ApprovalEmailButtonText,
 				String.format(Label.ApprovalEmailHeaderTitleText, new List<String> { documentName })
 			),
 			'ApprovalOnBehalfEmail' => new APIEmail(
 				String.format(Label.ApprovalOnBehalfEmailSubject, new List<String> { documentName }),
-				Label.ApprovalOnBehalfEmailBodyText,
+				APPROVAL_COMMENTS_PLACEHOLDER,
 				Label.ApprovalOnBehalfEmailButtonText,
 				String.format(Label.ApprovalOnBehalfEmailHeaderTitleText, new List<String> { documentName })
 			),
 			'RejectOnBehalfEmail' => new APIEmail(
 				String.format(Label.RejectOnBehalfEmailSubject, new List<String> { documentName }),
-				Label.RejectOnBehalfEmailBodyText,
+				APPROVAL_COMMENTS_PLACEHOLDER,
 				Label.RejectOnBehalfEmailButtonText,
 				String.format(Label.RejectOnBehalfEmailHeaderTitleText, new List<String> { documentName })
 			),
@@ -260,7 +261,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			),
 			'RejectEmail' => new APIEmail(
 				String.format(Label.ApprovalRejectEmailSubject, new List<String> { documentName }),
-				Label.ApprovalRejectEmailBodyText,
+				APPROVAL_COMMENTS_PLACEHOLDER,
 				Label.ApprovalRejectEmailButtonText,
 				String.format(Label.ApprovalRejectEmailHeaderTitleText, new List<String> { documentName })
 			),
