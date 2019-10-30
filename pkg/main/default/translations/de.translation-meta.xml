@@ -2082,10 +2082,6 @@
 		<label>{0} wurde genehmigt</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalEmailBodyText</name>
-		<label>Genehmigungskommentare</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalEmailHeaderTitleText</name>
 		<label>Dokument genehmigt {0}</label>
 	</customLabels>
@@ -2098,10 +2094,6 @@
 		<label>Dokument genehmigt {0}</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalOnBehalfEmailBodyText</name>
-		<label>Genehmigungskommentare</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
 		<label>Dokument genehmigt {0}</label>
 	</customLabels>
@@ -2112,10 +2104,6 @@
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
 		<label>Genehmigung abgelehnt {0}</label>
-	</customLabels>
-	<customLabels>
-		<name>RejectOnBehalfEmailBodyText</name>
-		<label>Genehmigungskommentare</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailHeaderTitleText</name>
@@ -2140,10 +2128,6 @@
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
 		<label>{0} wurde abgelehnt</label>
-	</customLabels>
-	<customLabels>
-		<name>ApprovalRejectEmailBodyText</name>
-		<label>Genehmigungskommentare</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailHeaderTitleText</name>

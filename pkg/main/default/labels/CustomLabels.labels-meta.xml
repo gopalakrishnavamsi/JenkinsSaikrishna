@@ -4426,13 +4426,6 @@
 		<value>{0} was approved</value>
 	</labels>
 	<labels>
-		<fullName>ApprovalEmailBodyText</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalEmailBodyText</shortDescription>
-		<value>Approval Comments</value>
-	</labels>
-	<labels>
 		<fullName>ApprovalEmailHeaderTitleText</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4454,13 +4447,6 @@
 		<value>>Document approved {0}</value>
 	</labels>
 	<labels>
-		<fullName>ApprovalOnBehalfEmailBodyText</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalOnBehalfEmailBodyText</shortDescription>
-		<value>Approval Comments</value>
-	</labels>
-	<labels>
 		<fullName>ApprovalOnBehalfEmailHeaderTitleText</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4480,13 +4466,6 @@
 		<protected>true</protected>
 		<shortDescription>RejectOnBehalfEmailSubject</shortDescription>
 		<value>Approval rejected {0}</value>
-	</labels>
-	<labels>
-		<fullName>RejectOnBehalfEmailBodyText</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>RejectOnBehalfEmailBodyText</shortDescription>
-		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>RejectOnBehalfEmailHeaderTitleText</fullName>
@@ -4529,13 +4508,6 @@
 		<protected>true</protected>
 		<shortDescription>ApprovalRejectEmailSubject</shortDescription>
 		<value>{0} was rejected</value>
-	</labels>
-	<labels>
-		<fullName>ApprovalRejectEmailBodyText</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ApprovalRejectEmailBodyText</shortDescription>
-		<value>Approval Comments</value>
 	</labels>
 	<labels>
 		<fullName>ApprovalRejectEmailHeaderTitleText</fullName>

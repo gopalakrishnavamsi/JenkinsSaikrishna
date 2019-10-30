@@ -2083,10 +2083,6 @@
 		<label>{0} a été approuvé</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalEmailBodyText</name>
-		<label>Commentaires de validation</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalEmailHeaderTitleText</name>
 		<label>Document approuvé {0}</label>
 	</customLabels>
@@ -2099,10 +2095,6 @@
 		<label>Document approuvé {0}</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalOnBehalfEmailBodyText</name>
-		<label>Commentaires de validation</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
 		<label>Document approuvé {0}</label>
 	</customLabels>
@@ -2113,10 +2105,6 @@
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
 		<label>Autorisation rejetée {0}</label>
-	</customLabels>
-	<customLabels>
-		<name>RejectOnBehalfEmailBodyText</name>
-		<label>Commentaires de validation</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailHeaderTitleText</name>
@@ -2141,10 +2129,6 @@
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
 		<label>{0} a été rejeté</label>
-	</customLabels>
-	<customLabels>
-		<name>ApprovalRejectEmailBodyText</name>
-		<label>Commentaires de validation</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailHeaderTitleText</name>

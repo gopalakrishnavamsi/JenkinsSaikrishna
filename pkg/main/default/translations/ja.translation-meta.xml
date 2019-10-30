@@ -2087,10 +2087,6 @@
 		<label>{0}が承認されました</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalEmailBodyText</name>
-		<label>承認コメント</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalEmailHeaderTitleText</name>
 		<label>承認された文書: {0}</label>
 	</customLabels>
@@ -2103,10 +2099,6 @@
 		<label>承認された文書: {0}</label>
 	</customLabels>
 	<customLabels>
-		<name>ApprovalOnBehalfEmailBodyText</name>
-		<label>承認コメント</label>
-	</customLabels>
-	<customLabels>
 		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
 		<label>承認された文書: {0}</label>
 	</customLabels>
@@ -2117,10 +2109,6 @@
 	<customLabels>
 		<name>RejectOnBehalfEmailSubject</name>
 		<label>承認が拒否された文書: {0}</label>
-	</customLabels>
-	<customLabels>
-		<name>RejectOnBehalfEmailBodyText</name>
-		<label>承認コメント</label>
 	</customLabels>
 	<customLabels>
 		<name>RejectOnBehalfEmailHeaderTitleText</name>
@@ -2145,10 +2133,6 @@
 	<customLabels>
 		<name>ApprovalRejectEmailSubject</name>
 		<label>{0}が拒否されました</label>
-	</customLabels>
-	<customLabels>
-		<name>ApprovalRejectEmailBodyText</name>
-		<label>承認コメント</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalRejectEmailHeaderTitleText</name>
