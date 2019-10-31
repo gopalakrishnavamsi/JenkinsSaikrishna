@@ -168,6 +168,9 @@
                 children.push(childrenObject);
               }
             });
+            if ($A.util.isEmpty(fields)) {
+              fields.push('Id');
+            }
             var inputParamter = {
               type: objMap.apiName,
               relationship: '',
