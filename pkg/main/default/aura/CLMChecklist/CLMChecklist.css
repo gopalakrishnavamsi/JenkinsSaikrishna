@@ -22,9 +22,13 @@
 }
 
 .THIS .ds-padding-toggle {
-  padding-top: 5.5rem;
+  padding-top: 4rem;
 }
 
 .THIS .ds-icon-pink {
   background-color: #00cec9;
+}
+
+.THIS .ds-cursor-style {
+  cursor: pointer;
 }

@@ -103,79 +103,79 @@
     }
   },
 
-  onChecked: function (component, event, helper) {
+  onSelection: function (component, event, helper) {
     var name = event.getSource().get('v.name');
     var progress = component.get('v.progress');
     switch (name) {
       case 'input1':
         if (component.get('v.step1') === true) {
           progress += 17;
-          helper.updateState(component, 'InstallChecklistStep1');
           component.set('v.isStep2Disabled', false);
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep1', component.get('v.step1'));
         break;
       case 'input2':
         if (component.get('v.step2') === true) {
           progress += 17;
-          helper.updateState(component, 'InstallChecklistStep2');
           component.set('v.isStep3Disabled', false);
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep2', component.get('v.step2'));
         break;
       case 'input3':
         if (component.get('v.step3') === true) {
           progress += 17;
-          helper.updateState(component, 'InstallChecklistStep3');
           component.set('v.isStep4Disabled', false);
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep3', component.get('v.step3'));
         break;
       case 'input4':
         if (component.get('v.step4') === true) {
           progress += 17;
-          helper.updateState(component, 'InstallChecklistStep4');
           component.set('v.isStep5Disabled', false);
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep4', component.get('v.step4'));
         break;
       case 'input5':
         if (component.get('v.step5') === true) {
           progress += 17;
-          helper.updateState(component, 'InstallChecklistStep5');
           component.set('v.isStep6Disabled', false);
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep5', component.get('v.step5'));
         break;
       case 'input6':
         if (component.get('v.step6') === true) {
-          helper.updateState(component, 'InstallChecklistStep6');
           progress += 17;
         }
         else {
           progress -= 17;
+          component.set('v.isComplete', false);
         }
+        helper.updateState(component, 'InstallChecklistStep6', component.get('v.step6'));
         break;
       default:
     }
     if (progress > 100) {
-      progress = 100;
-      setTimeout($A.getCallback(function () {
-        component.set('v.isComplete', true);
-      }), 2000);
-    }
-    if (progress < 0) {
-      progress = 0;
+      component.set('v.isComplete', true);
     }
     component.set('v.progress', progress);
   },

@@ -23,20 +23,18 @@
         } else {
           navUtils.navigateToUrl($A.get('$Label.c.ClassicObjectManagerURL'));
         }
-      } else if (state === 'ERROR') {
-        var errors = response.getError();
-        if (errors && errors[0] && errors[0].message) {
-          _this.fireToast(component, errors[0].message, this.ERROR);
-        }
+      } else {
+        _this.fireToast(component, stringUtils.getErrorMessage(response), 'error');
       }
     });
     $A.enqueueAction(action);
   },
 
-  updateState: function (component, step) {
+  updateState: function (component, step, checked) {
     var action = component.get('c.setProgressStatus');
     action.setParams({
-      step: step
+      step: step,
+      checked: checked
     });
     $A.enqueueAction(action);
   }

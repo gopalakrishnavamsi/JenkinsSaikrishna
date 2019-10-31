@@ -3,7 +3,7 @@
     <ltng:require scripts="{!$Resource.navUtils}" afterScriptsLoaded="{!c.onLoad}"/>
 
     <aura:attribute name="progress" type="Integer" default="0" access="private"/>
-    <aura:attribute name="isProgressing" type="Boolean" default="false" access="private"/>    
+    <aura:attribute name="isProgressing" type="Boolean" default="false" access="private"/>
     <aura:attribute name="openClass" type="String" default="" access="private"/>
     <aura:attribute name="step1" type="Boolean" default="false" access="private"/>
     <aura:attribute name="step2" type="Boolean" default="false" access="private"/>
@@ -18,7 +18,7 @@
     <aura:attribute name="isStep4Disabled" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isStep5Disabled" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isStep6Disabled" type="Boolean" default="true" access="private"/>
-
+    
     <lightning:card>
         <aura:if isTrue="{!v.isComplete}">
             <div class="slds-grid slds-grid_vertical">
@@ -87,31 +87,41 @@
                             </div>
                         </lightning:card>
                     </div>
-                    <div class="slds-col_bump-left">
-                        <div class="slds-p-right_large slds-m-top_small ">
+                    <div class="slds-col">
+                        <div class="slds-p-right_large slds-p-left_large slds-m-top_small">
                             <aura:if isTrue="{!!v.isFinished}">
-                                <div class="slds-m-bottom_small">{!format($Label.c.OnboardingProgressPercent,
+                                <section>
+                                <div class="slds-float_right">
+                                    <div class="slds-m-bottom_small">{!format($Label.c.OnboardingProgressPercent,
                                     v.progress)}</div>
-                                <lightning:progressBar value="{! v.progress }"/>
-                            </aura:if>
-                            <div class="{!!v.isFinished?'slds-m-top_small slds-m-bottom_medium':'slds-m-top_small slds-m-bottom_medium ds-padding-toggle'}"
-                                style="cursor: pointer;" onclick="{!c.toggleSection}">
-                                <section class="slds-clearfix">
-
-                                    <div class="slds-float_right">
-                                        <lightning:icon class="slds-show" aura:id="objMapping"
-                                            iconName="utility:chevrondown" size="x-small"
-                                            alternativeText="Indicates add"/>
-                                        <lightning:icon class="slds-hide" aura:id="objMapping"
-                                            iconName="utility:chevronup" size="x-small"
-                                            alternativeText="Indicates dash"/>
                                     </div>
-                                    <a href="javascript:void(0)" class="slds-show slds-float_right slds-m-right_small"
-                                        aura:id="objMapping">{!$Label.c.ShowSteps}</a>
-                                    <a href="javascript:void(0)" class="slds-hide slds-float_right slds-m-right_small"
-                                        aura:id="objMapping">{!$Label.c.HideSteps}</a>
-                                </section>
-                            </div>
+                                    </section>                                                                
+                            </aura:if>
+                            <aura:if isTrue="{!!v.isFinished}">
+                                <div class="slds-p-left_xx-large slds-m-left_xx-large">
+                                    <div class="slds-m-bottom_small">&nbsp;</div>
+                                    <div>
+                                        <lightning:progressBar value="{!if(v.progress > 100, 100, v.progress)}"/>
+                                    </div>
+                                </div>
+                            </aura:if>
+                                <div class="{!!v.isFinished?'slds-m-top_small slds-m-bottom_medium ds-cursor-style':'slds-m-top_small slds-m-bottom_medium ds-padding-toggle ds-cursor-style'}"
+                                    onclick="{!c.toggleSection}">
+                                    <section class="slds-clearfix">
+                                        <div class="slds-float_right">
+                                            <lightning:icon class="slds-show" aura:id="objMapping"
+                                                iconName="utility:chevrondown" size="x-small"
+                                                alternativeText="{!$Label.c.IndicatesDown}"/>
+                                            <lightning:icon class="slds-hide" aura:id="objMapping"
+                                                iconName="utility:chevronup" size="x-small"
+                                                alternativeText="{!$Label.c.IndicatesUp}"/>
+                                        </div>
+                                        <a href="javascript:void(0)" class="slds-show slds-float_right slds-m-right_small"
+                                            aura:id="objMapping">{!$Label.c.ShowSteps}</a>
+                                        <a href="javascript:void(0)" class="slds-hide slds-float_right slds-m-right_small"
+                                            aura:id="objMapping">{!$Label.c.HideSteps}</a>
+                                    </section>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -128,7 +138,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-m-top_x-small">
                                 <lightning:input type="checkbox" checked="{!v.step1}" name="input1"
-                                    onchange="{!c.onChecked}"/>
+                                    onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div class="slds-col slds-size_8-of-12 slds-p-top_x-small">
@@ -172,7 +182,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-p-top_x-small">
                                 <lightning:input type="checkbox" disabled="{!v.isStep2Disabled}" checked="{!v.step2}"
-                                    name="input2" onchange="{!c.onChecked}"/>
+                                    name="input2" onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div
@@ -205,7 +215,6 @@
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
-
                                 </aura:if>
                             </span>
                         </div>
@@ -216,7 +225,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-m-top_x-small">
                                 <lightning:input type="checkbox" disabled="{!v.isStep3Disabled}" checked="{!v.step3}"
-                                    name="input3" onchange="{!c.onChecked}"/>
+                                    name="input3" onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div
@@ -261,7 +270,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-m-top_x-small">
                                 <lightning:input type="checkbox" disabled="{!v.isStep4Disabled}" checked="{!v.step4}"
-                                    name="input4" onchange="{!c.onChecked}"/>
+                                    name="input4" onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div
@@ -304,7 +313,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-m-top_x-small">
                                 <lightning:input type="checkbox" disabled="{!v.isStep5Disabled}" checked="{!v.step5}"
-                                    name="input5" onchange="{!c.onChecked}"/>
+                                    name="input5" onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div
@@ -349,7 +358,7 @@
                         <aura:if isTrue="{!!v.isFinished}">
                             <div class="slds-m-right_medium slds-m-top_x-small">
                                 <lightning:input type="checkbox" disabled="{!v.isStep6Disabled}" checked="{!v.step6}"
-                                    name="input6" onchange="{!c.onChecked}"/>
+                                    name="input6" onchange="{!c.onSelection}"/>
                             </div>
                         </aura:if>
                         <div

@@ -17,14 +17,16 @@ public with sharing class CLMChecklist {
 	}
 
 	@AuraEnabled
-	public static void setProgressStatus(String step) {
+	public static void setProgressStatus(final String step, final Boolean checked) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			User_Activity__c state=User_Activity__c.getValues(step);
-			if(state==null) {
-				User_Activity__c newState=new User_Activity__c();
-				newState.Name=step;
+			User_Activity__c state = User_Activity__c.getValues(step);
+			if (checked == true && state == null) {
+				User_Activity__c newState = new User_Activity__c();
+				newState.Name = step;
 				insert newState;
+			} else if (state != null) {
+				delete state;
 			}
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to update status of progress bar on onboarding checklist.');
