@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
 	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
-	<help>您應不定期提醒收件人儘早處理信封。一旦信封到期，DocuSign 將會作廢信封，並傳送通知給寄件人和收件人。</help>
-    <label>信封到期/作廢</label>
+	<help>A volte è necessario invitare i destinatari a completare una busta più velocemente. Alla scadenza di una busta, DocuSign annulla la busta e invia una notifica sia al mittente che al destinatario.</help>
+    <label>Scadenza/Annullamento busta</label>
     <name>Expires__c</name>
 </CustomFieldTranslation>
