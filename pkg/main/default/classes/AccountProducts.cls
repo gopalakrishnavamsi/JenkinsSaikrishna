@@ -30,8 +30,6 @@ public with sharing class AccountProducts {
 	private DocuSign.Environment environment;
 	@TestVisible
 	private static List<Product.Role> newRoles;
-	@TestVisible
-	private static final String ESIGN = Product.ESIGNATURE;
 
 	@AuraEnabled
 	public ESignatureProduct eSignature {
@@ -263,22 +261,6 @@ public with sharing class AccountProducts {
 			return products;
 		}
 
-		private List<Product> upsertProducts(final List<Product> products) {
-			if (products == null) return null;
-
-			Map<String, ProductSettings__c> settings = ProductSettings__c.getAll();
-			List<ProductSettings__c> toUpsert = new List<ProductSettings__c>();
-			for (Product p : products) {
-				ProductSettings__c ps = convert(p);
-				if (settings.containsKey(p.name)) {
-					ps.Id = settings.get(p.name).Id;
-				}
-				toUpsert.add(ps);
-			}
-			upsert toUpsert;
-			return products;
-		}
-
 		private Product.Role convert(final ProductRoleSettings__c pr) {
 			if (pr == null) return null;
 
@@ -361,6 +343,20 @@ public with sharing class AccountProducts {
 	public Boolean isClmEnabled() {
 		Product p = this.products.get(Product.CLM);
 		return p != null && !p.isExpired;
+	}
+
+	@TestVisible
+	private static AccountProducts refreshProducts() {
+		Credentials c = Credentials.getInstance();
+		return resolveProducts(
+			null,
+			null,
+			null,
+			c.environment.environment,
+			c.environment.provisioningBaseUrl,
+			c.environment.eSignatureBaseUrl,
+			c.account.id,
+			c.token.token);
 	}
 
 	@TestVisible
@@ -480,17 +476,33 @@ public with sharing class AccountProducts {
 
 		List<Product> result = new List<Product>();
 		ProductAPI client = ProductAPI.getInstance();
+		Boolean activated = false;
 		for (String pn : productNames) {
-			if (pn == null || !VALID_PRODUCT_TRIALS.contains(pn.toLowerCase())) {
+			String key = pn == null ? '' : pn.toLowerCase();
+			if (!VALID_PRODUCT_TRIALS.contains(key)) {
 				throw new DocuSignException(String.format(Label.InvalidTrialProduct_1, new List<String> { pn }));
 			}
 
-			Product p = client.activateProduct(pn.toLowerCase(), true);
-			this.products.put(p.name.toLowerCase(), p);
-			result.add(p);
+			// Do not attempt to start a trial if we already have the products
+			if (!this.products.containsKey(key)) {
+				client.activateProduct(key, true);
+				activated = true;
+			}
 		}
-		this.isDirty = true;
-		return DB.upsertProducts(result);
+
+		if (activated) {
+			// Refresh products from API. There is logic there to extend trials that we should not replicate here.
+			AccountProducts aps = refreshProducts();
+			if (Collection.isNotEmpty(aps.products)) this.products.putAll(aps.products);
+			this.isDirty = true;
+		}
+
+		for (String pn : productNames) {
+			Product p = this.products.get(pn.toLowerCase());
+			if (p != null) result.add(p);
+		}
+
+		return result;
 	}
 
 	public Url getScmWebBaseUrl() {
@@ -640,6 +652,8 @@ public with sharing class AccountProducts {
 			self.isDirty = false;
 			result = true;
 		}
+
+		Credentials.save();
 
 		return result;
 	}

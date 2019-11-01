@@ -1294,7 +1294,7 @@ public with sharing class AuthService {
 		}
 	}
 
-	@future (callout=true) 
+	@Future(Callout=true)
 	public static void setRootLevelFolderSecurity() {
 		NegotiateService.setRootLevelFolderSecurity();
 	}

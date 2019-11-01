@@ -306,7 +306,6 @@ public with sharing class SetupController extends Controller {
 		try {
 			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 			return (settings != null && String.isNotBlank(settings.ScmWebBaseUrl__c));
-
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
 		}
@@ -316,7 +315,6 @@ public with sharing class SetupController extends Controller {
 	public static List<Product> getProductsOnAccount() {
 		try {
 			return AccountProducts.getProducts();
-
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
@@ -326,29 +324,28 @@ public with sharing class SetupController extends Controller {
 	public static String getProductRoles() {
 		try {
 			return JSON.serialize(Product.getValidProductRoles());
-
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}
 	}
 
 	@AuraEnabled
-	public static string getNewGenTemplateUrl(){
+	public static String getNewGenTemplateUrl() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 			return GenService.getNewGenTemplateUrl().toExternalForm();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get url for creating new gen template');
-		}	
+		}
 	}
 
 	@AuraEnabled
-	public static List<Gen.GenTemplateDisplay> getGenTemplates(){
+	public static List<Gen.GenTemplateDisplay> getGenTemplates() {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 			return GenService.queryGenTemplatesForDisplay();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get gen templates');
-		}	
+		}
 	}
 }

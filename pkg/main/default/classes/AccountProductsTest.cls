@@ -377,14 +377,16 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_startTrials_success() {
-		ProductAPIMock.success();
+		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			delete ProductSettings__c.getAll().values();
-			ProductSettings__c ps = new ProductSettings__c(
-				Name = Product.GEN
+			insert new ProductSettings__c(
+				Name = Product.GEN,
+				IsTrial__c = true,
+				Status__c = Product.STATUS_ACTIVE,
+				TrialExpires__c = Date.today().addDays(1)
 			);
-			insert ps;
 
 			Test.startTest();
 			List<Product> result = AccountProducts.getInstance().startTrials(
@@ -392,19 +394,11 @@ private class AccountProductsTest {
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
-
-			Map<String, ProductSettings__c> pss = ProductSettings__c.getAll();
-			System.assertNotEquals(null, pss);
-			System.assertEquals(2, pss.size());
-			System.assertEquals(new Set<String> { Product.GEN, Product.NEGOTIATE }, pss.keySet());
-			System.assertEquals(ps.Id, pss.get(Product.GEN).Id);
-			System.assertEquals(true, pss.get(Product.GEN).IsTrial__c);
-			System.assertEquals(true, pss.get(Product.NEGOTIATE).IsTrial__c);
-
 		}
 	}
 
 	class ProductActivationMock extends OAuthTokenMock {
+
 		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();
 			response.setStatusCode(200);
@@ -473,7 +467,7 @@ private class AccountProductsTest {
 	static void test_product_activation() {
 		Test.setMock(HttpCalloutMock.class, new ProductActivationMock());
 
-		System.runAs(UserMock.createDocuSignSender()) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.ProductsLastChecked__c = null;
 			update s;
@@ -976,5 +970,165 @@ private class AccountProductsTest {
 
 		System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
 		System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
+	}
+
+	static Boolean firstInvocation = false;
+
+	class GenExpiredTrialMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			if (request.getMethod() == 'GET') {
+				response.setStatusCode(200);
+				response.setStatus('OK');
+
+				if (request.getEndpoint().contains('/provision')) {
+					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+					if (firstInvocation) {
+						ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
+						ps.id = s.AccountId__c;
+						ps.name = s.AccountName__c;
+						ProductAPI.APIProduct gen = new ProductAPI.APIProduct();
+						gen.product_id = Product.GEN;
+						gen.free_trial = true;
+						gen.provision_status = 'expired';
+						gen.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(-7));
+						gen.activation_properties = new List<ProductAPI.APIProductProperty> {
+							new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
+							new ProductAPI.APIProductProperty('merge_uri', 'https://test.springcm.com/merge'),
+							new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+						};
+						ps.products = new List<ProductAPI.APIProduct> {
+							gen
+						};
+						response.setBody(JSON.serialize(ps));
+						firstInvocation = false;
+					} else {
+						ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
+						ps.id = s.AccountId__c;
+						ps.name = s.AccountName__c;
+						ProductAPI.APIProduct gen = new ProductAPI.APIProduct();
+						gen.product_id = Product.GEN;
+						gen.free_trial = true;
+						gen.provision_status = 'active';
+						gen.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+						gen.activation_properties = new List<ProductAPI.APIProductProperty> {
+							new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
+							new ProductAPI.APIProductProperty('merge_uri', 'https://test.springcm.com/merge'),
+							new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+						};
+						ProductAPI.APIProduct negotiate = new ProductAPI.APIProduct();
+						negotiate.product_id = Product.NEGOTIATE;
+						negotiate.free_trial = true;
+						negotiate.provision_status = 'active';
+						negotiate.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+						negotiate.activation_properties = new List<ProductAPI.APIProductProperty> {
+							new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
+							new ProductAPI.APIProductProperty('merge_uri', 'https://test.springcm.com/merge'),
+							new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+						};
+						ps.products = new List<ProductAPI.APIProduct> {
+							gen, negotiate
+						};
+						response.setBody(JSON.serialize(ps));
+					}
+				} else if (request.getEndpoint().contains('/settings')) {
+					Map<String, Object> settings = new Map<String, Object> {
+						'accountSettings' => new List<UserAPI.APISetting> {
+							new UserAPI.APISetting('allowMergeFields', 'true'),
+							new UserAPI.APISetting('sharedCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('savingCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldRegexEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldSizeEnabled', 'true'),
+							new UserAPI.APISetting('tabTextFormattingEnabled', 'true'),
+							new UserAPI.APISetting('allowSigningGroups', 'true'),
+							new UserAPI.APISetting('tabDataLabelEnabled', 'true'),
+							new UserAPI.APISetting('enableSMSAuthentication', 'true'),
+							new UserAPI.APISetting('allowServerTemplates', 'true'),
+							new UserAPI.APISetting('allowBulkSend', 'true')
+						}
+					};
+					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+					response.setBody(JSON.serialize(settings));
+				} else if (request.getEndpoint().contains('/billing_plan')) {
+					ESignatureProductAPI.PlanId pid = new ESignatureProductAPI.PlanId();
+					pid.planId = '8b7c743b-5321-401f-8615-275021832201';
+					ESignatureProductAPI.BillingPlans bps = new ESignatureProductAPI.BillingPlans();
+					bps.billingPlan = pid;
+					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+					response.setBody(JSON.serialize(bps));
+				} else { // get account
+					ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
+					a.currentPlanId = 'd1d8e549-4f0f-464a-a474-813b21c659da';
+					a.planName = 'DEVCENTER_DEMO_APRIL2013';
+					a.planStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.planEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.billingPeriodStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.billingPeriodEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.accountName = s.AccountName__c;
+					a.accountIdGuid = s.AccountId__c;
+					a.externalAccountId = String.valueOf(s.AccountNumber__c);
+					a.connectPermission = 'full';
+					a.suspensionStatus = null;
+					a.suspensionDate = null;
+					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+					response.setBody(JSON.serialize(a));
+				}
+			} else { // activate product
+				String toActivate = (String)((Map<String, Object>)JSON.deserializeUntyped(request.getBody())).get('product');
+				if (toActivate == 'gen') {
+					response.setStatusCode(400);
+					response.setStatus('BAD_REQUEST');
+					response.setHeader('X-DocuSign-TraceToken', UUID.randomUUID().toString());
+					response.setBody('{"error":"accountproduct_activation_failed","error_description":"Status must be Pending before activating the product.","reference_id":"' + UUID.randomUUID() + '"}');
+				} else { // negotiate
+					response.setStatusCode(200);
+					response.setStatus('OK');
+					ProductAPI.APIProduct p = new ProductAPI.APIProduct();
+					p.product_id = toActivate;
+					p.free_trial = true;
+					p.provision_status = 'active';
+					p.expiration_date = StringUtils.formatDatetime(Datetime.now().addDays(7));
+					p.activation_properties = new List<ProductAPI.APIProductProperty> {
+						new ProductAPI.APIProductProperty('api_base_uri', 'https://api.test.springcm.com'),
+						new ProductAPI.APIProductProperty('merge_uri', 'https://api.test.springcm.com/gen'),
+						new ProductAPI.APIProductProperty('web_base_uri', 'https://test.springcm.com/atlas/')
+					};
+					response.setBody(JSON.serialize(p));
+				}
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_startTrials_gen_expired() {
+		Test.setMock(HttpCalloutMock.class, new GenExpiredTrialMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			delete ProductSettings__c.getAll().values();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ProductsLastChecked__c = null;
+			update s;
+
+			Test.startTest();
+			List<Product> result = AccountProducts.getInstance().startTrials(
+				new Set<String> { Product.GEN, Product.NEGOTIATE });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assert(result[0].isTrial);
+			System.assert(!result[0].isExpired);
+			System.assertEquals(Product.STATUS_ACTIVE, result[0].status);
+			System.assertNotEquals(null, result[1]);
+			System.assert(result[1].isTrial);
+			System.assert(!result[1].isExpired);
+			System.assertEquals(Product.STATUS_ACTIVE, result[1].status);
+			System.assertEquals(result[0].trialExpires, result[1].trialExpires);
+			System.assertEquals(new Set<String> { Product.GEN, Product.NEGOTIATE }, new Set<String> { result[0].name, result[1].name });
+		}
 	}
 }
