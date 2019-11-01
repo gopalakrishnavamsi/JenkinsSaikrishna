@@ -1027,7 +1027,7 @@ private class EnvelopeAPITest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			Document__c d = TestUtils.createEnvelopeDocument(e1.Id);
+			TestUtils.createEnvelopeDocument(e1.Id);
 			Envelope e2 = new Envelope(e1.Id, e1.Name, null, null,
 				new List<Document>(),
 				new List<Recipient> {
@@ -1832,5 +1832,34 @@ private class EnvelopeAPITest {
 			System.assertEquals('', result4.roleName);
 			System.assertEquals('', result4.routingOrder);
 		}
+	}
+
+	@IsTest
+	static void test_APIEnvelope_recipient_email_settings() {
+		Envelope e = new Envelope(null, 'Envelope subject', 'Envelope message', null)
+			.withRecipients(new List<Recipient> {
+				Recipient.fromSource('r1', 'r1@unit.test', null, 'r1', null)
+					.withEmailSettings(new Recipient.EmailSettings(Localization.FR, Label.French, 'r1 subject', 'r1 message')),
+				Recipient.fromSource('r2', 'r2@unit.test', null, 'r2', null)
+					.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Label.English, 'r2 subject', 'r2 message')),
+				Recipient.fromSource('r3', 'r3@unit.test', null, 'r3', null)
+			});
+
+		Test.startTest();
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e, false, false, false, true);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals('Envelope subject', result.emailSubject);
+		System.assertEquals('Envelope message', result.emailBlurb);
+		System.assertNotEquals(null, result.recipients);
+		System.assertEquals(3, Collection.size(result.recipients.signers));
+		System.assertNotEquals(null, result.recipients.signers[0].emailNotification);
+		System.assertEquals('r1 subject', result.recipients.signers[0].emailNotification.emailSubject);
+		System.assertEquals('r1 message', result.recipients.signers[0].emailNotification.emailBody);
+		System.assertNotEquals(null, result.recipients.signers[1].emailNotification);
+		System.assertEquals('r2 subject', result.recipients.signers[1].emailNotification.emailSubject);
+		System.assertEquals('r2 message', result.recipients.signers[1].emailNotification.emailBody);
+		System.assertEquals(null, result.recipients.signers[2].emailNotification);
 	}
 }

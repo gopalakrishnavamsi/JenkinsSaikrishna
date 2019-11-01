@@ -699,9 +699,12 @@ global with sharing class EnvelopeService {
 				result = DB.updateEnvelope2(result, sendNow);
 			} else {
 				result = DB.insertEnvelope(result);
-				result = result
-					.withDocuments(DocumentService.addEnvelopeDocuments(result.id, result.documents))
-					.withRecipients(RecipientService.addEnvelopeRecipients(result.id, result.recipients));
+				if (Collection.isNotEmpty(result.documents)) {
+					result = result.withDocuments(DocumentService.addEnvelopeDocuments(result.id, result.documents));
+				}
+				if (Collection.isNotEmpty(result.recipients)) {
+					result = result.withRecipients(RecipientService.addEnvelopeRecipients(result.id, result.recipients));
+				}
 			}
 			if (sendNow) StatusService.createStatus(new List<Envelope.Status> { result.toEnvelopeStatus() });
 		}

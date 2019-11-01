@@ -620,8 +620,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.routingOrder = hasTemplates ? '' : String.valueOf(r.routingOrder);
 				this.signingGroupId = r.isSigningGroup ? String.valueOf(r.signingGroup.id) : null;
 				this.customFields = getRecipientCustomFields(r);
-				this.emailNotification = Localization.isEmailLocalizationEnabled()
-					? new EnvelopeAPI.RecipientNotification(r.emailSettings) : null;
+				this.emailNotification = r.emailSettings == null
+					? null : new EnvelopeAPI.RecipientNotification(r.emailSettings);
 				if (r.authentication != null) {
 					this.accessCode = r.authentication.accessCode;
 					this.requireIdLookup = String.valueOf(r.authentication.idCheckRequired);
