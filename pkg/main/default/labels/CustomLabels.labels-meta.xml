@@ -1652,6 +1652,14 @@
 		<value>Sign up for free.</value>
 	</labels>
 	<labels>
+		<fullName>FreeTrialURL</fullName>
+		<categories>Login</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>URL for free DocuSign trial registration</shortDescription>
+		<value>https://go.docusign.com/trial/partners/salesforce/</value>
+	</labels>
+	<labels>
 		<fullName>NoEnvelopesSent</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>

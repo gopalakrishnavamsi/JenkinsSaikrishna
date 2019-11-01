@@ -7,10 +7,6 @@
     helper.selectStep(component, event, helper);
   },
 
-  signUp: function (component, event, helper) {
-    helper.signUp();
-  },
-
   toggleAdvancedOptions: function (component, event, helper) {
     helper.toggleAdvancedOptions(component);
   },

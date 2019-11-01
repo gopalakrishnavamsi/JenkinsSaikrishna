@@ -94,10 +94,6 @@
     }));
   },
 
-  signUp: function () {
-    //Implement sign up link
-  },
-
   toggleAdvancedOptions: function (component) {
     component.set('v.advancedOptionsExpanded', !component.get('v.advancedOptionsExpanded'));
   },
@@ -110,12 +106,12 @@
           component.set('v.isLoggedIn', false);
           component.set('v.selectedAccountNumber', null);
           var beginOAuth = component.get('v.beginOAuth');
-        beginOAuth(component, component.get('v.environment'), component.get('v.otherUrl') || null);
+          beginOAuth(component, component.get('v.environment'), component.get('v.otherUrl') || null);
         }
       )
       .catch(function (error) {
           helper.showToast(component, error, 'error');
-        component.set('v.loading', false);
+          component.set('v.loading', false);
         }
       );
   },

@@ -101,8 +101,11 @@
                                                             <ul class="slds-list_horizontal ds-bold-text">
                                                                 <li>{!$Label.c.DontHaveAnAccount}</li>
                                                                 <li class="slds-m-left_xxx-small">
-                                                                    <a aura:id="signupLink"
-                                                                       onclick="{!c.signUp}">{!$Label.c.SignUpForFree}</a>
+                                                                    <b>
+                                                                        <lightning:formattedUrl
+                                                                                label="{!$Label.c.SignUpForFree}"
+                                                                                value="{!$Label.c.FreeTrialURL}"/>
+                                                                    </b>
                                                                 </li>
                                                             </ul>
 
@@ -110,7 +113,6 @@
                                                     </ul>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

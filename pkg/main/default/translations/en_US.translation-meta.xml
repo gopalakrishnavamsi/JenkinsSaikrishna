@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>No envelopes have been sent</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
