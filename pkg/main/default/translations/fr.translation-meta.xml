@@ -1466,15 +1466,15 @@
 		<name>MergeFieldsGuidance2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Charger des modèles Word&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Chargez tous les modèles Word pour cette configuration. Pour chaque modèle, vous pouvez choisir, parmi les options, un suffixe pour les documents produits. Vous pouvez aussi décider si les utilisateurs peuvent produire un document Word ou un PDF.&lt;/p&gt;</label>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Charger des modèles Word&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Chargez tous les modèles Word pour cette configuration. Pour chaque modèle, vous pouvez choisir, parmi les options, un suffixe pour les documents générés. Vous pouvez aussi décider si les utilisateurs peuvent générer un document Word ou un PDF.&lt;/p&gt;</label>
 		<name>ImportTemplatesGuidance1</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer quelle option de création groupée de documents choisir&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Si vous avez chargé plusieurs modèles Word avec cette configuration, vous pouvez choisir si tous les documents doivent être produits à chaque fois. Par défaut, les utilisateurs peuvent choisir ceux qu’ils veulent produire. Toutefois, si vos utilisateurs doivent produire tous les documents, sélectionnez &lt;strong&gt;Production groupée de documents.&lt;/strong&gt;&lt;/p&gt;</label>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer quelle option de création groupée de documents choisir&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Si vous avez chargé plusieurs modèles Word avec cette configuration, vous pouvez choisir si tous les documents doivent être générés à chaque fois. Par défaut, les utilisateurs peuvent choisir ceux qu’ils veulent générer. Toutefois, si vos utilisateurs doivent générer tous les documents, sélectionnez &lt;strong&gt;Production groupée de documents.&lt;/strong&gt;&lt;/p&gt;</label>
 		<name>ImportTemplatesGuidance2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Tester vos modèles&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choisissez les sources de données dans Salesforce, puis cliquez sur &lt;strong&gt;Aperçu&lt;/strong&gt; pour produire des exemples de documents.&lt;/p&gt;</label>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Tester vos modèles&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Choisissez les sources de données dans Salesforce, puis cliquez sur &lt;strong&gt;Aperçu&lt;/strong&gt; pour générer des exemples de documents.&lt;/p&gt;</label>
 		<name>PreviewGuidance1</name>
 	</customLabels>
 	<customLabels>
@@ -1482,7 +1482,7 @@
 		<name>PreviewGuidance2</name>
 	</customLabels>
 	<customLabels>
-		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer l’étiquette de votre bouton&lt;/strong&gt;&lt;/h3&gt; &lt;p&gt;Attribuez à votre bouton une étiquette descriptive, telle que &lt;strong&gt;Produire une commande client.&lt;/strong&gt;&lt;/p&gt;</label>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Déterminer l’étiquette de votre bouton&lt;/strong&gt;&lt;/h3&gt; &lt;p&gt;Attribuez à votre bouton une étiquette descriptive, telle que &lt;strong&gt;Générer une commande client.&lt;/strong&gt;&lt;/p&gt;</label>
 		<name>PublishGuidance1</name>
 	</customLabels>
 	<customLabels>
@@ -1682,7 +1682,7 @@
 		<name>BulkDocumentCreation</name>
 	</customLabels>
 	<customLabels>
-		<label>Produire en un clic tous les documents dans cette configuration</label>
+		<label>Générer en un clic tous les documents dans cette configuration</label>
 		<name>BulkDocumentCreationCheckboxInfo</name>
 	</customLabels>
 	<customLabels>
@@ -1710,7 +1710,7 @@
 		<name>Removing</name>
 	</customLabels>
 	<customLabels>
-		<label>Nom du fichier produit</label>
+		<label>Nom du fichier généré</label>
 		<name>GeneratedFileName</name>
 	</customLabels>
 	<customLabels>
@@ -1762,11 +1762,11 @@
 		<name>TestYourTemplateMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Cela prend un peu de temps pour produire votre ou vos fichiers. Si vous préférez revenir ultérieurement, vous trouverez les fichiers sous l’onglet Fichiers dans Salesforce.</label>
+		<label>Cela prend un peu de temps pour générer votre ou vos fichiers. Si vous préférez revenir ultérieurement, vous trouverez les fichiers sous l’onglet Fichiers dans Salesforce.</label>
 		<name>GeneratorComeBackMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Cela prend trop de temps à produire. Veuillez vérifier cet enregistrement ultérieurement pour afficher le(s) fichier(s) produit(s).</label>
+		<label>Cela prend trop de temps à générer. Veuillez vérifier cet enregistrement ultérieurement pour afficher le(s) fichier(s) généré(s).</label>
 		<name>GeneratorTooLongMsg</name>
 	</customLabels>
 	<customLabels>
@@ -1782,11 +1782,11 @@
 		<name>Templates</name>
 	</customLabels>
 	<customLabels>
-		<label>Produire</label>
+		<label>Générer</label>
 		<name>Generate</name>
 	</customLabels>
 	<customLabels>
-		<label>Ne peut produire les fichiers suivants :</label>
+		<label>Ne peut générer les fichiers suivants :</label>
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
@@ -1802,7 +1802,7 @@
 		<name>GeneratorBannerErrorMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Nouveaux documents produits</label>
+		<label>Nouveaux documents générés</label>
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
@@ -1818,7 +1818,7 @@
 		<name>PublishCustomButtons</name>
 	</customLabels>
 	<customLabels>
-		<label>Avec un bouton personnalisé et à partir de cette configuration de modèle, laissez les utilisateurs produire des documents. Vous pouvez aussi choisir de placer le bouton sur des présentations de page spécifiques à votre source de données principale. Si vous ajoutez un bouton personnalisé et si vous modifiez cette configuration de modèle, vous n’avez pas besoin d’ajouter à nouveau le bouton.</label>
+		<label>Avec un bouton personnalisé et à partir de cette configuration de modèle, laissez les utilisateurs générer des documents. Vous pouvez aussi choisir de placer le bouton sur des présentations de page spécifiques à votre source de données principale. Si vous ajoutez un bouton personnalisé et si vous modifiez cette configuration de modèle, vous n’avez pas besoin d’ajouter à nouveau le bouton.</label>
 		<name>PublishMsg</name>
 	</customLabels>
 	<customLabels>
@@ -2314,7 +2314,7 @@
 		<name>NameObjectFolderTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Toute instance d’un objet mappé aura un dossier dédié dans DocuSign CLM. C’est là que vous trouverez les documents produits en utilisant les données de cet objet.</label>
+		<label>Toute instance d’un objet mappé aura un dossier dédié dans DocuSign CLM. C’est là que vous trouverez les documents générés en utilisant les données de cet objet.</label>
 		<name>ObjectFolderBody</name>
 	</customLabels>
 	<customLabels>
@@ -2382,7 +2382,7 @@
 		<name>RemoveModalBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Produisez des graphiques et des rapports détaillés sur vos documents, attributs et flux de travail. Ceux‑ci vous permettront de suivre l’activité et les performances de votre compte.</label>
+		<label>Générez des graphiques et des rapports détaillés sur vos documents, attributs et flux de travail. Ceux‑ci vous permettront de suivre l’activité et les performances de votre compte.</label>
 		<name>RunReportsAndAnalyticsBody</name>
 	</customLabels>
 	<customLabels>
@@ -2390,7 +2390,7 @@
 		<name>RunReportsAndAnalyticsTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Mappez d’abord les objets Salesforce à DocuSign CLM Vous pouvez ensuite créer des modèles et produire des documents en utilisant vos données Salesforce.</label>
+		<label>Mappez d’abord les objets Salesforce à DocuSign CLM Vous pouvez ensuite créer des modèles et générer des documents en utilisant vos données Salesforce.</label>
 		<name>MapObjectsSummary</name>
 	</customLabels>
 	<customLabels>
@@ -2942,7 +2942,7 @@
 		<name>WhyDocuSignAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM pour Salesforce utilise vos données Salesforce pour produire des documents. Cela accélère la production des documents et élimine toute erreur humaine potentielle.</label>
+		<label>DocuSign CLM pour Salesforce utilise vos données Salesforce pour générer des documents. Cela accélère la production des documents et élimine toute erreur humaine potentielle.</label>
 		<name>WhyDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -2950,7 +2950,7 @@
 		<name>DocumentGenerationProcess</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez produire des documents à l’aide d’un simple bouton dans Salesforce. Pour cela, vous devrez créer un bouton personnalisé sur la présentation de page de vos objets.</label>
+		<label>Vous pouvez générer des documents à l’aide d’un simple bouton dans Salesforce. Pour cela, vous devrez créer un bouton personnalisé sur la présentation de page de vos objets.</label>
 		<name>DocumentGenerationAns</name>
 	</customLabels>
 	<customLabels>
@@ -2958,7 +2958,7 @@
 		<name>WhyOnlyDocuSign</name>
 	</customLabels>
 	<customLabels>
-		<label>Si vous stockez des documents dans Salesforce, ils ne sont pas organisés et sont ainsi difficiles d’accès. Cela ralentit les traitements, les workflows et l’obtention de signatures. DocuSign CLM pour Salesforce organise tout pour vous. Il organise automatiquement les documents, même lorsque vous produisez de nouveaux documents. De plus, vous pouvez accéder à vos documents directement depuis Salesforce.</label>
+		<label>Si vous stockez des documents dans Salesforce, ils ne sont pas organisés et sont ainsi difficiles d’accès. Cela ralentit les traitements, les workflows et l’obtention de signatures. DocuSign CLM pour Salesforce organise tout pour vous. Il organise automatiquement les documents, même lorsque vous générez de nouveaux documents. De plus, vous pouvez accéder à vos documents directement depuis Salesforce.</label>
 		<name>WhyOnlyDocuSignAns</name>
 	</customLabels>
 	<customLabels>
@@ -2966,7 +2966,7 @@
 		<name>WhatIsDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM est l’application cloud sécurisée pour DocuSign CLM pour Salesforce. Il vous permet de produire des documents, de collaborer avec les parties prenantes et d’automatiser vos processus. DocuSign CLM pour Salesforce connecte DocuSign CLM à votre organisation Salesforce.</label>
+		<label>DocuSign CLM est l’application cloud sécurisée pour DocuSign CLM pour Salesforce. Il vous permet de générer des documents, de collaborer avec les parties prenantes et d’automatiser vos processus. DocuSign CLM pour Salesforce connecte DocuSign CLM à votre organisation Salesforce.</label>
 		<name>WhatIsDocuSignCLMAns</name>
 	</customLabels>
 	<customLabels>
@@ -3054,7 +3054,7 @@
 		<name>WhyToMapObject</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM pour Salesforce a besoin des données de vos objets pour produire des documents. Le fait de mapper vos objets Salesforce est la façon dont vous donnez accès à ces données. Seuls les administrateurs de DocuSign CLM for Salesforce peuvent mapper des objets.</label>
+		<label>DocuSign CLM pour Salesforce a besoin des données de vos objets pour générer des documents. Le fait de mapper vos objets Salesforce est la façon dont vous donnez accès à ces données. Seuls les administrateurs de DocuSign CLM for Salesforce peuvent mapper des objets.</label>
 		<name>WhyToMapObjectAns</name>
 	</customLabels>
 	<customLabels>
@@ -3270,7 +3270,7 @@
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>En un clic, produisez des documents sophistiqués et personnalisables avec vos données Salesforce.</label>
+		<label>En un clic, générez des documents sophistiqués et personnalisables avec vos données Salesforce.</label>
 		<name>TabDocumentGenerationHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3366,7 +3366,7 @@
 		<name>CreatingAgreementsInDocuSignCLM</name>
 	</customLabels>
 	<customLabels>
-		<label>Produire des documents avec des données CLM Salesforce</label>
+		<label>Générer des documents avec des données CLM Salesforce</label>
 		<name>CreateAndManageDocumentGenerationConfigurations</name>
 	</customLabels>
 	<customLabels>
@@ -3382,11 +3382,11 @@
 		<name>CreateAndManageDocSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign CLM vous permet de produire des documents d’un seul clic. Pour ce faire, vous devez ajouter un bouton avec une URL de configuration de production de documents à votre présentation de page Salesforce.</label>
+		<label>DocuSign CLM vous permet de générer des documents d’un seul clic. Pour ce faire, vous devez ajouter un bouton avec une URL de configuration de production de documents à votre présentation de page Salesforce.</label>
 		<name>CreateAndManageDocSummary2</name>
 	</customLabels>
 	<customLabels>
-		<label>Découvrez comment produire des documents dans DocuSign CLM</label>
+		<label>Découvrez comment générer des documents dans DocuSign CLM</label>
 		<name>LearnHowToGenDoc</name>
 	</customLabels>
 	<customLabels>
@@ -3394,11 +3394,11 @@
 		<name>LearnHowToAddAButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Pour produire un document, vous devez configurer des paramètres de production de documents. Chaque paramètre se compose de trois parties :</label>
+		<label>Pour générer un document, vous devez configurer des paramètres de production de documents. Chaque paramètre se compose de trois parties :</label>
 		<name>DocumentGenerationConfigurationsSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Une fois configurée, la production de documents peut récupérer vos données de Salesforce et les fusionner dans un modèle pour produire des contrats ou tout autre document. Vous pouvez même utiliser la création d’un document comme déclencheur pour lancer un nouveau workflow.</label>
+		<label>Une fois configurée, la production de documents peut récupérer vos données de Salesforce et les fusionner dans un modèle pour générer des contrats ou tout autre document. Vous pouvez même utiliser la création d’un document comme déclencheur pour lancer un nouveau workflow.</label>
 		<name>DocumentGenerationProcessSummary</name>
 	</customLabels>
 	<customLabels>
@@ -3502,7 +3502,7 @@
 		<name>GenMarketingHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Donnez à vos utilisateurs la possibilité de produire automatiquement des documents soignés et configurables, directement depuis Salesforce.</label>
+		<label>Donnez à vos utilisateurs la possibilité de générer automatiquement des documents soignés et configurables, directement depuis Salesforce.</label>
 		<name>GenMarketingBody1</name>
 	</customLabels>
 	<customLabels>
@@ -3598,7 +3598,7 @@
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Produire des documents personnalisés et soignés</label>
+		<label>Générer des documents personnalisés et soignés</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3622,11 +3622,11 @@
 		<name>TryDocuSignNegotiate</name>
 	</customLabels>
 	<customLabels>
-		<label>Créer des documents gratuitement pendant 30 jours</label>
+		<label>Générer des documents gratuitement pendant 30 jours</label>
 		<name>GenerateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Créer, négocier et collaborer gratuitement pendant 30 jours</label>
+		<label>Générer, négocier et collaborer gratuitement pendant 30 jours</label>
 		<name>NegotiateProductTrialHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3670,7 +3670,7 @@
 		<name>NegotiateHelpHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez désormais envoyer un document pour évaluation ou autorisation dès qu’il est produit. Pour commencer :</label>
+		<label>Vous pouvez désormais envoyer un document pour évaluation ou autorisation dès qu’il est généré. Pour commencer :</label>
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
@@ -3678,7 +3678,7 @@
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
-		<label>Produisez un document avec le modèle</label>
+		<label>Générez un document avec le modèle</label>
 		<name>NegotiateHelpText2</name>
 	</customLabels>
 	<customLabels>
@@ -3999,7 +3999,7 @@
 		<name>DocumentPreviewPageTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>Les fichiers ci‑dessous ont été produits avec succès et peuvent désormais être envoyés à signer</label>
+		<label>Les fichiers ci‑dessous ont été générés avec succès et peuvent désormais être envoyés à signer</label>
 		<name>GenSendSignatureMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4155,7 +4155,7 @@
 		<name>CLCreatedAgreement</name>
 	</customLabels>
 	<customLabels>
-		<label>Vous pouvez toujours revoir ces étapes dans la section d’aide. Consultez la rubrique « Produire un accord en utilisant des données Salesforce » pour les trouver.</label>
+		<label>Vous pouvez toujours revoir ces étapes dans la section d’aide. Consultez la rubrique « Générer un accord en utilisant des données Salesforce » pour les trouver.</label>
 		<name>CLGeneratedAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -4187,7 +4187,7 @@
 		<name>ConfigureDocGenURL</name>
 	</customLabels>
 	<customLabels>
-		<label>6. Utilisez ce bouton pour produire des documents en un seul clic.</label>
+		<label>6. Utilisez ce bouton pour générer des documents en un seul clic.</label>
 		<name>SingleClickGenDoc</name>
 	</customLabels>
 	<customLabels>
@@ -4203,7 +4203,7 @@
 		<name>HomeViewMappings</name>
 	</customLabels>
 	<customLabels>
-		<label>Produire votre premier accord commercial</label>
+		<label>Générer votre premier accord commercial</label>
 		<name>CheckListGenerateAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -4215,7 +4215,7 @@
 		<name>HomeGetStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Ces étapes vous aideront à produire un accord en utilisant des données Salesforce.</label>
+		<label>Ces étapes vous aideront à générer un accord en utilisant des données Salesforce.</label>
 		<name>CheckListCreateAgreement</name>
 	</customLabels>
 	<customLabels>
@@ -4247,7 +4247,7 @@
 		<name>HomeAddButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Ces étapes vous aideront à produire votre premier accord commercial en utilisant des données Salesforce. Décochez‑les au fur et à mesure que vous les complétez.</label>
+		<label>Ces étapes vous aideront à générer votre premier accord commercial en utilisant des données Salesforce. Décochez‑les au fur et à mesure que vous les complétez.</label>
 		<name>CheckListFirstAgreement</name>
 	</customLabels>
 	<customLabels>

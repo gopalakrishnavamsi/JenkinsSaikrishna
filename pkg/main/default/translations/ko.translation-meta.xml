@@ -1,0 +1,4320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- smartling.translate_paths = Translations/customApplications/label, Translations/customLabels/label, Translations/customPageWebLinks/label, Translations/customTabs/label -->
+<Translations xmlns="http://soap.sforce.com/2006/04/metadata">
+	<customApplications>
+		<label>DocuSign Apps Launcher</label>
+		<name>DocuSignForSalesforceCore</name>
+	</customApplications>
+	<customLabels>
+		<label>액세스 인증</label>
+		<name>AccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>액세스 코드</label>
+		<name>AccessCode</name>
+	</customLabels>
+	<customLabels>
+		<label>계정</label>
+		<name>Account</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. DocuSign 계정에 세션 중 서명을 사용할 수 있는지 확인합니다.</label>
+		<name>AccountInSessionSigningMustBeEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>이 계정에는 DocuSign이 아직 구성되지 않았습니다.</label>
+		<name>AccountNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>추가</label>
+		<name>Add</name>
+	</customLabels>
+	<customLabels>
+		<label>받는 사람 추가</label>
+		<name>AddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 추가</label>
+		<name>AddTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 추가</label>
+		<name>AddUser</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자</label>
+		<name>Admin</name>
+	</customLabels>
+	<customLabels>
+		<label>고급 옵션</label>
+		<name>AdvancedOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>고급 설정</label>
+		<name>AdvancedSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인 지정</label>
+		<name>Agent</name>
+	</customLabels>
+	<customLabels>
+		<label>어떤 값도 공백이면 안 됩니다.</label>
+		<name>AllValuesMustNotBeBlank</name>
+	</customLabels>
+	<customLabels>
+		<label>이미 완료</label>
+		<name>AlreadyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>승인</label>
+		<name>Approve</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 관리자 권한 집합 할당</label>
+		<name>AssignAdminPermissionSet</name>
+	</customLabels>
+	<customLabels>
+		<label>1개 이상의 문서가 필요합니다.</label>
+		<name>AtLeastOneDocumentIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>1개 이상의 봉투가 필요합니다.</label>
+		<name>AtLeastOneEnvelopeIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>1명 이상의 수신인이 필요합니다.</label>
+		<name>AtLeastOneRecipientIsRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>뒤로</label>
+		<name>Back</name>
+	</customLabels>
+	<customLabels>
+		<label>일괄 목록을 찾을 수 없습니다.</label>
+		<name>BulkListNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정 관리</label>
+		<name>CanManage</name>
+	</customLabels>
+	<customLabels>
+		<label>취소</label>
+		<name>Cancel</name>
+	</customLabels>
+	<customLabels>
+		<label>취소됨</label>
+		<name>Canceled</name>
+	</customLabels>
+	<customLabels>
+		<label>수정은 봉투가 &apos;전송됨&apos; 또는 &apos;배달됨&apos; 상태인 경우에만 가능합니다.</label>
+		<name>CannotCorrectEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 {0}개의 필드는 생성이 승인되지 않았습니다: {1}</label>
+		<name>CannotCreateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 개체는 생성이 승인되지 않았습니다:</label>
+		<name>CannotCreateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>상태를 생성할 수 없습니다.</label>
+		<name>CannotCreateStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 개체는 삭제가 승인되지 않았습니다:</label>
+		<name>CannotDeleteObject</name>
+	</customLabels>
+	<customLabels>
+		<label>필드: {1}에서 {0}을(를) 필터링할 수 없습니다</label>
+		<name>CannotFilterFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 {0}개의 필드는 쿼리가 승인되지 않았습니다: {1}</label>
+		<name>CannotQueryFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 개체는 쿼리가 승인되지 않았습니다:</label>
+		<name>CannotQueryObject</name>
+	</customLabels>
+	<customLabels>
+		<label>문서: {0}의 콘텐츠를 읽을 수 없습니다.</label>
+		<name>CannotReadDocumentContent_1</name>
+	</customLabels>
+	<customLabels>
+		<label>활성 DocuSign 사용자에서 본인은 제거할 수 없습니다. 이렇게 하면 DocuSign 관리 권한도 제거됩니다.</label>
+		<name>CannotRemoveSelf</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 재발송할 수 없습니다. &apos;전송됨&apos; 또는 &apos;배달됨&apos; 상태가 아닙니다.</label>
+		<name>CannotResendEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 형식 {0}을(를) 해결할 수 없습니다.</label>
+		<name>CannotResolveDocumentType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>수신자 소스 {0}을(를) 해결할 수 없습니다.</label>
+		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 {0}개의 필드는 업데이트가 승인되지 않았습니다: {1}</label>
+		<name>CannotUpdateFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 개체는 업데이트가 승인되지 않았습니다:</label>
+		<name>CannotUpdateObject</name>
+	</customLabels>
+	<customLabels>
+		<label>무효화는 봉투가 &apos;전송됨&apos; 또는 &apos;배달됨&apos; 상태인 경우에만 가능합니다.</label>
+		<name>CannotVoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>사본 수신</label>
+		<name>CarbonCopy</name>
+	</customLabels>
+	<customLabels>
+		<label>확인해야 함</label>
+		<name>CertifiedDelivery</name>
+	</customLabels>
+	<customLabels>
+		<label>확인란</label>
+		<name>Checkbox</name>
+	</customLabels>
+	<customLabels>
+		<label>중국어(간체)</label>
+		<name>ChineseSimplified</name>
+	</customLabels>
+	<customLabels>
+		<label>닫기</label>
+		<name>Close</name>
+	</customLabels>
+	<customLabels>
+		<label>커뮤니티</label>
+		<name>Community</name>
+	</customLabels>
+	<customLabels>
+		<label>회사</label>
+		<name>Company</name>
+	</customLabels>
+	<customLabels>
+		<label>완료됨</label>
+		<name>Completed</name>
+	</customLabels>
+	<customLabels>
+		<label>계정에 로그인하거나 평가판을 시작하여 Salesforce 조직에 DocuSign을 연결하십시오.</label>
+		<name>ConnectDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에 DocuSign 연결</label>
+		<name>ConnectDocuSignToSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>지원팀 문의</label>
+		<name>ContactSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>콘텐츠 유형은 지원되지 않습니다.</label>
+		<name>ContentTypeNotSupported</name>
+	</customLabels>
+	<customLabels>
+		<label>계속 및 태그</label>
+		<name>ContinueAndTag</name>
+	</customLabels>
+	<customLabels>
+		<label>계속</label>
+		<name>ContinueLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>기본 수신인 역할 생성</label>
+		<name>CreateDefaultRecipientRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>생성됨</label>
+		<name>Created</name>
+	</customLabels>
+	<customLabels>
+		<label>--- 현재 설정 ---</label>
+		<name>CurrentChatterLanguageSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 이메일 메시지</label>
+		<name>CustomEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 이메일 제목</label>
+		<name>CustomEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>서명 날짜</label>
+		<name>DateSigned</name>
+	</customLabels>
+	<customLabels>
+		<label>일 후 봉투 만료</label>
+		<name>DaysBeforeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>일 후 만료가 예정된 시점에 서명인에게 경고</label>
+		<name>DaysBeforeExpiresWarn</name>
+	</customLabels>
+	<customLabels>
+		<label>일 후 첫 번째 미리 알림 전송</label>
+		<name>DaysBeforeFirstReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>일 간격으로 미리 알림 전송</label>
+		<name>DaysBetweenReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>거부</label>
+		<name>Decline</name>
+	</customLabels>
+	<customLabels>
+		<label>거부됨</label>
+		<name>Declined</name>
+	</customLabels>
+	<customLabels>
+		<label>배달됨</label>
+		<name>Delivered</name>
+	</customLabels>
+	<customLabels>
+		<label>비활성됨</label>
+		<name>Disabled</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign </label>
+		<name>DocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 템플릿</label>
+		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>완료</label>
+		<name>Done</name>
+	</customLabels>
+	<customLabels>
+		<label>드롭다운</label>
+		<name>DropDown</name>
+	</customLabels>
+	<customLabels>
+		<label>네덜란드어</label>
+		<name>Dutch</name>
+	</customLabels>
+	<customLabels>
+		<label>편집</label>
+		<name>Edit</name>
+	</customLabels>
+	<customLabels>
+		<label>편집 허용</label>
+		<name>Editor</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 주소</label>
+		<name>EmailAddress</name>
+	</customLabels>
+	<customLabels>
+		<label>이전 단계에서 구성된 사용자 지정 이메일 메시지가 이 설정을 대체합니다</label>
+		<name>EmailHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 메시지</label>
+		<name>EmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 메시지는 2,000자로 제한됩니다.</label>
+		<name>EmailMessageTooLarge</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 주소는 필수 항목입니다.</label>
+		<name>EmailRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 제목은 필수이며 길이는 100자 이하여야 합니다.</label>
+		<name>EmailSubjectRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. 서명 그룹에 멤버가 없습니다.</label>
+		<name>EmptySigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>활성화됨</label>
+		<name>Enabled</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 {0}에 암호화된 필드: {1}이(가) 있습니다</label>
+		<name>EncryptedFields_2</name>
+	</customLabels>
+	<customLabels>
+		<label>영어</label>
+		<name>English</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 만료</label>
+		<name>EnvelopeExpires</name>
+	</customLabels>
+	<customLabels>
+		<label>(봉투는 &lt;strong&gt;{0}&lt;/strong&gt;에 만료됩니다.)</label>
+		<name>EnvelopeExpiresOn_1</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 ID</label>
+		<name>EnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>이 봉투는 잠겨 있습니다. 봉투 수정이 이미 진행 중입니다.</label>
+		<name>EnvelopeLockedCorrectionInProgress</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 찾을 수 없습니다.</label>
+		<name>EnvelopeNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투가 존재하지 않거나 봉투에 대한 권한이 없습니다.</label>
+		<name>EnvelopeNotFoundOrUnauthorized</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 봉투 상태</label>
+		<name>EnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 봉투는 연관된 상태 레코드를 작성하기 위해 유효한 DocID ID를 사용하여 &apos;전송됨&apos; 또는 &apos;생성됨&apos; 상태여야 합니다.</label>
+		<name>EnvelopesMustBeSent</name>
+	</customLabels>
+	<customLabels>
+		<label>환경</label>
+		<name>Environment</name>
+	</customLabels>
+	<customLabels>
+		<label>확장</label>
+		<name>Expand</name>
+	</customLabels>
+	<customLabels>
+		<label>만료</label>
+		<name>Expiration</name>
+	</customLabels>
+	<customLabels>
+		<label>만료</label>
+		<name>Expires</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. 21 CFR Part 11을 준수해야 하는 서명자에게는 하나 이상의 필수 비조건부 서명 또는 이니셜 탭이 있어야 합니다.</label>
+		<name>Failed21CFRPart11</name>
+	</customLabels>
+	<customLabels>
+		<label>이 파일은 허용된 최대 크기 제한 {0}을(를) 초과합니다. 선택한 파일 크기: {1}.</label>
+		<name>FileSizeLimitReached_2</name>
+	</customLabels>
+	<customLabels>
+		<label>파일</label>
+		<name>Files</name>
+	</customLabels>
+	<customLabels>
+		<label>마침</label>
+		<name>Finish</name>
+	</customLabels>
+	<customLabels>
+		<label>이름</label>
+		<name>FirstName</name>
+	</customLabels>
+	<customLabels>
+		<label>에 대한</label>
+		<name>ForLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>수식</label>
+		<name>Formula</name>
+	</customLabels>
+	<customLabels>
+		<label>프랑스어</label>
+		<name>French</name>
+	</customLabels>
+	<customLabels>
+		<label>전체 이름</label>
+		<name>FullName</name>
+	</customLabels>
+	<customLabels>
+		<label>독일어</label>
+		<name>German</name>
+	</customLabels>
+	<customLabels>
+		<label>시작하기</label>
+		<name>GetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투를 완료했습니다</label>
+		<name>HasCompleted_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 서명을 거부했습니다</label>
+		<name>HasDeclined_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투에 서명했습니다</label>
+		<name>HasSigned_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투를 확인했습니다</label>
+		<name>HasViewed_2</name>
+	</customLabels>
+	<customLabels>
+		<label>문제가 있습니까?</label>
+		<name>HavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>유용한 링크</label>
+		<name>HelpfulLinks</name>
+	</customLabels>
+	<customLabels>
+		<label>숨김</label>
+		<name>Hide</name>
+	</customLabels>
+	<customLabels>
+		<label>정보</label>
+		<name>Info</name>
+	</customLabels>
+	<customLabels>
+		<label>여기에 약자 입력</label>
+		<name>InitialHere</name>
+	</customLabels>
+	<customLabels>
+		<label>여기에 약자 입력(선택 사항)</label>
+		<name>InitialHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 설정 초기화</label>
+		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>채터 설정 초기화</label>
+		<name>InitializeChatterSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 설정 초기화</label>
+		<name>InitializeEnvelopeSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인 업데이트</label>
+		<name>Intermediary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정에 하나 이상의 설정 문제가 있을 수 있습니다. DfS 및 DocuSign 간의 통합을 활성화하기 위해 자격 증명을 사용한 사용자(때로 SOBO 사용자로 통칭)의 경우 &apos;계정을 관리할 수 있음&apos;, &apos;봉투를 전송할 수 있음&apos;, &apos;대신 전송을 허용함&apos; 및 &apos;API 계정 전반 액세스&apos;와 같은 권한 및 플래그가 모두 선택되어 있어야 합니다. DocuSign에 직접 로그인하고, 기본 설정을 클릭한 다음, 관리 콘솔의 권한 영역을 선택하면 이러한 설정 모두에 액세스할 수 있습니다. 이 설정을 모두 활성화하지 않으면 통합이 제대로 작동하지 않습니다. 문제가 이 설정과 관련되지 않을 수도 있지만, 먼저 이 설정을 확인해야 합니다. DocuSign 관리자에게 문의하여 DocuSign에서 최근 변경된 설정이 있는지 확인해 주십시오.</label>
+		<name>InvalidAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Chatter 텍스트가 유효하지 않습니다. 어떤 값도 공백이면 안 됩니다.</label>
+		<name>InvalidChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>수정을 허용하려면 수정 권한을 설정하고 봉투가 \&apos;Sent\&apos; 또는 \&apos;Delivered\&apos; 상태여야 합니다.</label>
+		<name>InvalidCorrectionState</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 문서 해결기: {0}.</label>
+		<name>InvalidDocumentResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일 설정이 올바르지 않습니다. 어떤 값도 공백이면 안 됩니다.</label>
+		<name>InvalidEmailSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 엔터티 해결기: {0}.</label>
+		<name>InvalidEntityResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투가 유효하지 않습니다.</label>
+		<name>InvalidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>잘못된 DocuSign 환경입니다.</label>
+		<name>InvalidEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. 제출된 파일에 파일 확장자가 없거나 확장자 유형이 DocuSign 인식하지 못하는 것일 수 있습니다.</label>
+		<name>InvalidFileExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>지원되지 않는 파일 형식입니다.</label>
+		<name>InvalidFileType</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 미리 알림 및 만료 설정입니다. 지정된 경우 값은 음수가 아니어야 합니다.</label>
+		<name>InvalidNotificationSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 수신인 해결기: {0}.</label>
+		<name>InvalidRecipientResolver_1</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투가 만들어진 후 수신인 순서가 변경되었습니다.</label>
+		<name>InvalidRecipientSequence</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. 유효하지 않은 수신인 사용자 이름입니다. </label>
+		<name>InvalidRecipientUsername</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 관련 연락처입니다.  1명의 수신자는 유효한 테이블 관계 및 열 맵핑으로 정확하게 정의되어야 합니다.</label>
+		<name>InvalidRelatedContact</name>
+	</customLabels>
+	<customLabels>
+		<label>소스가 유효하지 않습니다.</label>
+		<name>InvalidSource</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 상태를 찾을 수 없거나 유효하지 않습니다.</label>
+		<name>InvalidStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 유형입니다. </label>
+		<name>InvalidType</name>
+	</customLabels>
+	<customLabels>
+		<label>잘못된 UUID입니다.</label>
+		<name>InvalidUUID</name>
+	</customLabels>
+	<customLabels>
+		<label>페이지 URL에 유효하지 않은 매개변수입니다. </label>
+		<name>InvalidUrlParameter</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 이름 또는 비밀번호가 유효하지 않습니다.</label>
+		<name>InvalidUsernameOrPassword</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투를 받기 위해 대기 중입니다</label>
+		<name>IsQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>이탈리아어</label>
+		<name>Italian</name>
+	</customLabels>
+	<customLabels>
+		<label>일본</label>
+		<name>Japan</name>
+	</customLabels>
+	<customLabels>
+		<label>일본어</label>
+		<name>Japanese</name>
+	</customLabels>
+	<customLabels>
+		<label>한국어</label>
+		<name>Korean</name>
+	</customLabels>
+	<customLabels>
+		<label>Language</label>
+		<name>Language</name>
+	</customLabels>
+	<customLabels>
+		<label>성</label>
+		<name>LastName</name>
+	</customLabels>
+	<customLabels>
+		<label>최종 상태 업데이트</label>
+		<name>LastStatusUpdate</name>
+	</customLabels>
+	<customLabels>
+		<label>로드 중...</label>
+		<name>Loading</name>
+	</customLabels>
+	<customLabels>
+		<label>로그인</label>
+		<name>LogIn</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정에 로그인</label>
+		<name>LogInToDocuSignAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>메시지</label>
+		<name>Message</name>
+	</customLabels>
+	<customLabels>
+		<label>여러 개의 계정이 사용자가 제공한 자격증명과 관련되어 있습니다. Salesforce 조직에 연결할 계정을 선택하십시오.</label>
+		<name>MultipleAccountsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 액세스 권한이 있는지, 계정 설정이 올바른지, 모든 활성화 이메일에 회신했는지 확인하십시오.</label>
+		<name>MustBeActivated</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 관리자 권한이 있어야 합니다.</label>
+		<name>MustBeAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 관리자 권한이 있어야 합니다</label>
+		<name>MustBeDocuSignAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 발송인 권한이 있어야 합니다</label>
+		<name>MustBeDocuSignSender</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 사용자 권한이 있어야 합니다</label>
+		<name>MustBeDocuSignUser</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 생성기 권한이 있어야 합니다</label>
+		<name>MustBeDocuSignGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 협상가 권한이 있어야 합니다</label>
+		<name>MustBeDocuSignNegotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign CLM 관리자 권한이 있어야 합니다.</label>
+		<name>MustBeClmAdministrator</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign CLM 사용자 권한이 있어야 합니다.</label>
+		<name>MustBeClmUser</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign CLM 열람자 권한이 있어야 합니다.</label>
+		<name>MustBeClmViewer</name>
+	</customLabels>
+	<customLabels>
+		<label>내 개인 콘텐츠</label>
+		<name>MyPersonalContent</name>
+	</customLabels>
+	<customLabels>
+		<label>회사 이름은 필수 항목입니다. </label>
+		<name>NameRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>다음</label>
+		<name>Next</name>
+	</customLabels>
+	<customLabels>
+		<label>아니요</label>
+		<name>No</name>
+	</customLabels>
+	<customLabels>
+		<label>무료로 가입하세요.</label>
+		<name>SignUpForFree</name>
+	</customLabels>
+	<customLabels>
+		<label>전송된 봉투가 없습니다</label>
+		<name>NoEnvelopesSent</name>
+	</customLabels>
+	<customLabels>
+		<label>첨부 파일 없음</label>
+		<name>NoFilesAttached</name>
+	</customLabels>
+	<customLabels>
+		<label>역할 없음</label>
+		<name>NoRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>검색에서 반환된 결과가 없습니다</label>
+		<name>NoSearchResults</name>
+	</customLabels>
+	<customLabels>
+		<label>고객 서비스 담당자가 계정을 업데이트해야 합니다. 1-800-379-9973으로 전화 주십시오.</label>
+		<name>NoValidAccounts</name>
+	</customLabels>
+	<customLabels>
+		<label>없음</label>
+		<name>None</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 소유자가 아닙니다.</label>
+		<name>NotEnvelopeOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>메모</label>
+		<name>Note</name>
+	</customLabels>
+	<customLabels>
+		<label>API에서 받은 응답이 없습니다.</label>
+		<name>NullApiResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>기타</label>
+		<name>Other</name>
+	</customLabels>
+	<customLabels>
+		<label>자리 표시자 수신인은 역할이 있어야 합니다.</label>
+		<name>PlaceholderRecipientMustHaveRole</name>
+	</customLabels>
+	<customLabels>
+		<label>포르투갈어(브라질)</label>
+		<name>PortugueseBrazilian</name>
+	</customLabels>
+	<customLabels>
+		<label>설치 후 스크립트 기준이 충족되지 않음</label>
+		<name>PostInstallCriteriaNotMet</name>
+	</customLabels>
+	<customLabels>
+		<label>조직: {0}\n다음에서 업그레이드: {1}\n다음에서 업그레이드: {2}\n{3}</label>
+		<name>PostInstallEmailBody_4</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}으로부터 DocuSign Apps Launcher 설치 후 스크립트 결과</label>
+		<name>PostInstallEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>개인 메시지</label>
+		<name>PrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>라디오 버튼</label>
+		<name>RadioButton</name>
+	</customLabels>
+	<customLabels>
+		<label>이유</label>
+		<name>Reason</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투를 전송할 수 없습니다. 계정 설정에 수신인은 활성 DocuSign 사용자여야 한다고 명시되어 있습니다.</label>
+		<name>RecipientMustBeUser</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인</label>
+		<name>Recipients</name>
+	</customLabels>
+	<customLabels>
+		<label>미리 알림</label>
+		<name>Reminders</name>
+	</customLabels>
+	<customLabels>
+		<label>제거</label>
+		<name>Remove</name>
+	</customLabels>
+	<customLabels>
+		<label>필수 사용자 정의 필드 &apos;{0}&apos; 값이 누락되었습니다.</label>
+		<name>RequiredCustomField_1</name>
+	</customLabels>
+	<customLabels>
+		<label>계정의 사용자 정의 필드 &apos;{0}&apos;이(가) 올바르게 구성되지 않았습니다. 필수 목록 필드에 옵션이 없습니다. 사용자 정의 필드를 수정하려면 DocuSign 관리자에게 문의하십시오.</label>
+		<name>RequiredEmptyList_1</name>
+	</customLabels>
+	<customLabels>
+		<label>러시아어</label>
+		<name>Russian</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce API 에서 예기치 않은 응답이 발생했습니다.</label>
+		<name>SalesforceApiErrorUnexpectedResponse</name>
+	</customLabels>
+	<customLabels>
+		<label>이 Salesforce 조직의 저장 한도를 초과했습니다. 시스템 관리자에게 문의하십시오.</label>
+		<name>SalesforceOrgStorageLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>저장</label>
+		<name>Save</name>
+	</customLabels>
+	<customLabels>
+		<label>이름별 검색</label>
+		<name>SearchByName</name>
+	</customLabels>
+	<customLabels>
+		<label>종료하시겠습니까?</label>
+		<name>SectionModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Setup Assistant를 그대로 두면 저장되지 않은 변경 사항은 손실됩니다.</label>
+		<name>SectionModalWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>선택</label>
+		<name>Select</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 선택</label>
+		<name>SelectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 선택</label>
+		<name>SelectAccountOption</name>
+	</customLabels>
+	<customLabels>
+		<label>자동 알림 전송</label>
+		<name>SendAutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 전송</label>
+		<name>SendEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>보냄</label>
+		<name>Sent</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt; {1} &lt;/a&gt;이(가) 봉투를 보냈습니다.</label>
+		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>표시</label>
+		<name>Show</name>
+	</customLabels>
+	<customLabels>
+		<label>간략히 보기</label>
+		<name>ShowLess</name>
+	</customLabels>
+	<customLabels>
+		<label>더 보기</label>
+		<name>ShowMore</name>
+	</customLabels>
+	<customLabels>
+		<label>여기에 서명</label>
+		<name>SignHere</name>
+	</customLabels>
+	<customLabels>
+		<label>여기에 서명(선택 사항)</label>
+		<name>SignHereOptional</name>
+	</customLabels>
+	<customLabels>
+		<label>서명됨</label>
+		<name>Signed</name>
+	</customLabels>
+	<customLabels>
+		<label>서명해야 함</label>
+		<name>Signer</name>
+	</customLabels>
+	<customLabels>
+		<label>서명인 첨부파일</label>
+		<name>SignerAttachment</name>
+	</customLabels>
+	<customLabels>
+		<label>서명 그룹이 존재하지 않습니다.</label>
+		<name>SigningGroupNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 계정에서 서명 그룹을 사용할 수 없습니다.</label>
+		<name>SigningGroupsProhibited</name>
+	</customLabels>
+	<customLabels>
+		<label>스페인어</label>
+		<name>Spanish</name>
+	</customLabels>
+	<customLabels>
+		<label>상태</label>
+		<name>Status</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 {0}을(를) 위한 DocuSign 상태를 찾을 수 없습니다.</label>
+		<name>StatusNotFound_1</name>
+	</customLabels>
+	<customLabels>
+		<label>실패</label>
+		<name>StepFailure</name>
+	</customLabels>
+	<customLabels>
+		<label>건너뜀</label>
+		<name>StepSkipped</name>
+	</customLabels>
+	<customLabels>
+		<label>성공</label>
+		<name>StepSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>알 수 없음</label>
+		<name>StepUnknown</name>
+	</customLabels>
+	<customLabels>
+		<label>제목</label>
+		<name>Subject</name>
+	</customLabels>
+	<customLabels>
+		<label>지원 </label>
+		<name>SupportCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign은 사용자의 성공을 위해 최선을 다합니다. DocuSign 기능을 지원하고 일반적인 질문에 답변을 제공하고 시스템 성능 정보를 표시하는&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;지원 센터&lt;/a&gt;를 만들었습니다.</label>
+		<name>SupportInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>지원 계획</label>
+		<name>SupportPlans</name>
+	</customLabels>
+	<customLabels>
+		<label>찾고 있는 항목이 없는 경우 언제든지 지원팀에 직접 문의하실 수 있습니다. 답변을 더 빨리 받을 수 있도록 &lt;a href=&quot;https://support.docusign.com/en/articles/What-information-is-needed-when-engaging-DocuSign-Customer-Support&quot; target=&quot;_blank&quot;&gt;등의 항목&lt;/a&gt;을 준비해 주십시오.</label>
+		<name>SupportPrep</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 역할</label>
+		<name>TemplateRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>텍스트 필드</label>
+		<name>TextField</name>
+	</customLabels>
+	<customLabels>
+		<label>직함</label>
+		<name>Title</name>
+	</customLabels>
+	<customLabels>
+		<label>무료 평가판이 종료되었습니다. Docusign을 계속 사용하려면 &lt;a href=&quot;https://go.docusign.com/cobranded/salesforce/essentials/&quot; target=&quot;_blank&quot;&gt;계정을 업그레이드합니다&lt;/a&gt;.</label>
+		<name>TrialAccountExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenter</name>
+	</customLabels>
+	<customLabels>
+		<label>종류</label>
+		<name>Type</name>
+	</customLabels>
+	<customLabels>
+		<label>죄송하지만 이 페이지에 대한 액세스 권한이 없습니다.</label>
+		<name>UnauthorizedPageAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>현재 DocuSign 사용이 승인되지 않았습니다. DocuSign 관리자에게 문의하여 액세스 권한을 부여받으십시오. </label>
+		<name>UnauthorizedUser</name>
+	</customLabels>
+	<customLabels>
+		<label>인수가 정의되지 않았습니다.</label>
+		<name>UndefinedArgument</name>
+	</customLabels>
+	<customLabels>
+		<label>일괄 목록이 정의되지 않았습니다.</label>
+		<name>UndefinedBulkList</name>
+	</customLabels>
+	<customLabels>
+		<label>Chatter 텍스트가 정의되지 않았습니다.</label>
+		<name>UndefinedChatterText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 봉투 ID가 정의되지 않았습니다.</label>
+		<name>UndefinedDocuSignEnvelopeId</name>
+	</customLabels>
+	<customLabels>
+		<label>문서가 정의되지 않았습니다.</label>
+		<name>UndefinedDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투가 정의되지 않았습니다.</label>
+		<name>UndefinedEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>정의되지 않은 ID</label>
+		<name>UndefinedId</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인이 정의되지 않았습니다.</label>
+		<name>UndefinedRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>정의되지 않은 서명 그룹입니다.</label>
+		<name>UndefinedSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>--</label>
+		<name>UndefinedString</name>
+	</customLabels>
+	<customLabels>
+		<label>정의되지 않은 유형</label>
+		<name>UndefinedType</name>
+	</customLabels>
+	<customLabels>
+		<label>정의된 사용자가 없습니다.</label>
+		<name>UndefinedUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>알 수 없음</label>
+		<name>Unknown</name>
+	</customLabels>
+	<customLabels>
+		<label>확인한 수신인이 지정한 봉투의 유효한 수신인이 아닙니다.</label>
+		<name>UnknownEnvelopeRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>인식할 수 없는 언어 코드입니다.</label>
+		<name>UnrecognizedLanguageCode</name>
+	</customLabels>
+	<customLabels>
+		<label>업로드</label>
+		<name>Upload</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 업로드</label>
+		<name>UploadFile</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 가져오기</label>
+		<name>ImportFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 선택</label>
+		<name>SelectFile</name>
+	</customLabels>
+	<customLabels>
+		<label>신규 문서 추가됨</label>
+		<name>NewAgreementCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 파일을 불러올 소스를 선택하여 시작합니다.</label>
+		<name>ChooseFile</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 파일에서 선택</label>
+		<name>ChooseSalesforceFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>이 레코드와 관련된 파일 중 하나를 선택합니다.</label>
+		<name>SelectAssociatedFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>PC에서 업로드</label>
+		<name>UploadFromPC</name>
+	</customLabels>
+	<customLabels>
+		<label>컴퓨터에서 문서를 직접 업로드합니다.</label>
+		<name>UploadFromComputer</name>
+	</customLabels>
+	<customLabels>
+		<label>이 Salesforce 레코드에서 사용 가능한 파일 중 하나를 선택합니다.</label>
+		<name>ChooseSalesforceFiles2</name>
+	</customLabels>
+	<customLabels>
+		<label>아래 파일은 Salesforce 파일에서 복사하여 DocuSign 파일로 가져왔습니다. 이제 협상, 승인 또는 서명을 위해 전송할 수 있습니다.</label>
+		<name>SalesforceFileCopyComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>아래 파일은 업로드되어 DocuSign 파일로 가져왔습니다. 이제 협상, 승인 또는 서명을 위해 전송할 수 있습니다.</label>
+		<name>UploadFileComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토를 위해 전송</label>
+		<name>SendForExternalReview</name>
+	</customLabels>
+	<customLabels>
+		<label>제3자와 협상하고 핵심 사항을 비교합니다.</label>
+		<name>NegotiateCompare</name>
+	</customLabels>
+	<customLabels>
+		<label>승인을 위한 전송</label>
+		<name>SendForApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>팀원들 승인 및 피드백을 요청하세요.</label>
+		<name>RequestApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>서명을 위해 전송</label>
+		<name>SendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign을 사용하여 이 문서를 위한 서명을 수집합니다.</label>
+		<name>CollectSignatures</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 다운로드 중 오류 발생</label>
+		<name>ErrorDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>성공적으로 다운로드됨</label>
+		<name>SuccessDownloadingFile</name>
+	</customLabels>
+	<customLabels>
+		<label>이를 사용하면, DocuSign 계정의 구성원이 아닌 사용자가 봉투 전송 및 서명을 할 수 있습니다. 이 경우 전송자는 구성된 DocuSign 관리자입니다.</label>
+		<name>UseSystemSenderHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 사용자를 제공해야 합니다.</label>
+		<name>UserMustBeProvided</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투에 액세스할 수 있는 권한이 없습니다.</label>
+		<name>UserNotAuthorizedForEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 찾을 수 없음</label>
+		<name>UserNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>값</label>
+		<name>Value</name>
+	</customLabels>
+	<customLabels>
+		<label>모두 보기</label>
+		<name>ViewAll</name>
+	</customLabels>
+	<customLabels>
+		<label>무효화됨</label>
+		<name>Voided</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투를 수신하지 않습니다</label>
+		<name>WillNotReceive_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;이(가) 봉투를 곧 수신합니다</label>
+		<name>WillReceive_2</name>
+	</customLabels>
+	<customLabels>
+		<label>예</label>
+		<name>Yes</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} ({1})</label>
+		<name>AccountDisplay_2</name>
+	</customLabels>
+	<customLabels>
+		<label>OAuth 액세스 토큰이 너무 깁니다({0} &gt; {1}).</label>
+		<name>AccessTokenTooLong_2</name>
+	</customLabels>
+	<customLabels>
+		<label>RSA 키가 너무 깁니다({0} &gt; {1}).</label>
+		<name>KeyTooLong_2</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 설치 후 스크립트 버전 2</label>
+		<name>PostInstall2</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 승인 상태입니다.</label>
+		<name>InvalidAuthState</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하는 Docusign Apps Launcher 허가를 받지 않았거나 동의를 취소했습니다.</label>
+		<name>ConsentRequired</name>
+	</customLabels>
+	<customLabels>
+		<label>여러 개의 승인 요청이 유효하지 않습니다.</label>
+		<name>InvalidGrant</name>
+	</customLabels>
+	<customLabels>
+		<label>계정을 찾을 수 없습니다.</label>
+		<name>AccountNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정이 유효하지 않습니다.</label>
+		<name>InvalidAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>암호화 키를 찾을 수 없습니다.</label>
+		<name>KeyNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}: ({1}) {2}</label>
+		<name>MetadataError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 메타데이터 항목을 업데이트하지 못했습니다 : {0}</label>
+		<name>UpdateMetadataFailure_1</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign으로 발송</label>
+		<name>SendWithDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 레이아웃을 찾을 수 없습니다.</label>
+		<name>LayoutsNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 레이아웃이 제공된 소스 유형과 일치하지 않습니다.</label>
+		<name>InvalidLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 복제 실패</label>
+		<name>FailedToCloneGenTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿을 찾을 수 없습니다.</label>
+		<name>GenTemplateNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} (사본 {1})</label>
+		<name>GenTemplateCopyName_2</name>
+	</customLabels>
+	<customLabels>
+		<label>제목 없음</label>
+		<name>Untitled</name>
+	</customLabels>
+	<customLabels>
+		<label>최대 개체 길이가 초과되었습니다.</label>
+		<name>MaxObjectDepthExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>대기</label>
+		<name>Queued</name>
+	</customLabels>
+	<customLabels>
+		<label>실패</label>
+		<name>Failure</name>
+	</customLabels>
+	<customLabels>
+		<label>성공</label>
+		<name>Success</name>
+	</customLabels>
+	<customLabels>
+		<label>[{0}] {1} 참조 ID: {2}</label>
+		<name>ApiError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>쿼리가 유효하지 않습니다.</label>
+		<name>InvalidGenQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정 서비스</label>
+		<name>AccountServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign ESignature 서비스</label>
+		<name>ESignatureServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 웹 서비스</label>
+		<name>ScmWebServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign API 서비스</label>
+		<name>ScmApiServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Auth 서비스</label>
+		<name>ScmAuthServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen/협상 서비스</label>
+		<name>GenServiceDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>시스템 발송인 활성화</label>
+		<name>SystemSender</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체</label>
+		<name>SalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>-- Salesforce 개체 선택 --</label>
+		<name>SelectSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃 업데이트</label>
+		<name>Publish</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃 수정</label>
+		<name>ModifyLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃</label>
+		<name>Layout</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃이 성공적으로 수정되었습니다. </label>
+		<name>SuccessfullyModifiedLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>일반적으로 사용되는 개체</label>
+		<name>CommonObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 개체 </label>
+		<name>AllObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>선택한 개체와 관련된 레이아웃이 없습니다</label>
+		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 파일</label>
+		<name>DocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>가져오기</label>
+		<name>ImportButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>검토, 승인 또는 서명을 위해 전송</label>
+		<name>NoAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>시작하기</label>
+		<name>CreateAgreementsIllustration</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 삭제</label>
+		<name>DeleteAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>이 파일을 삭제하면, 문서, 활동 내역, 이전 버전, 또는 핵심 사항 보기 기능에 더 이상 액세스할 수 없습니다.</label>
+		<name>DeleteAgreementMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>삭제</label>
+		<name>DeleteButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>새 버전 업로드</label>
+		<name>UploadNewVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>파일을 업로드하면 이 문서의 새 버전이 생성되고 문서의 활동 타임라인을 업데이트합니다. 맨 위에 최신 버전이 있는 내림차순으로 나열된 버을 확인할 수 있습니다.</label>
+		<name>UploadMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 이름</label>
+		<name>AgreementName</name>
+	</customLabels>
+	<customLabels>
+		<label>업로드한 날짜</label>
+		<name>CurrentVersion</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 검색 개체: {0}</label>
+		<name>InvalidSearchObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>무료 평가판이 종료되었습니다. DocuSign을 계속 사용하려면 계정을 업그레이드합니다. DocuSign 설정을 선택하여 계정을 업그레이드한 후에는 로그아웃한 후 다시 로그인하십시오.</label>
+		<name>ExpiredTrialAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>종료</label>
+		<name>Exit</name>
+	</customLabels>
+	<customLabels>
+		<label>성공을 위한 단계</label>
+		<name>StepsForSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>변경 사항을 저장하시겠습니까?</label>
+		<name>CancelModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>저장하지 않으면 현재 단계의 변경 사항이 손실됩니다. </label>
+		<name>CancelModalMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>저장하지 않음</label>
+		<name>DontSave</name>
+	</customLabels>
+	<customLabels>
+		<label>세부 사항 편집</label>
+		<name>EditModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>필요한 사항</label>
+		<name>WhatYouWillNeed</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 구성을 완료하려면 필요한 몇 가지 사항이 있습니다.</label>
+		<name>WhatYouWillNeedInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Microsoft Word 템플릿</label>
+		<name>WhatYouWillNeedStep1Title</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 데이터와 DocuSign 필드를 동적으로 삽입하기 위해 파일에 앵커 텍스트를 복사하여 붙여 넣습니다.</label>
+		<name>WhatYouWillNeedStep1Info</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 데이터 소스 및 필드</label>
+		<name>WhatYouWillNeedStep2Title</name>
+	</customLabels>
+	<customLabels>
+		<label>문서에 추가하려는 Salesforce 데이터 소스와 필드가 한 개 이상 있어야 합니다.</label>
+		<name>WhatYouWillNeedStep2Info</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 필드</label>
+		<name>WhatYouWillNeedStep3Title</name>
+	</customLabels>
+	<customLabels>
+		<label>또한 Word 템플릿에 서명 또는 날짜 서명과 같은 DocuSign 필드를 추가할 수 있습니다.</label>
+		<name>WhatYouWillNeedStep3Info</name>
+	</customLabels>
+	<customLabels>
+		<label>데이터 소스</label>
+		<name>AddObjectsStep</name>
+	</customLabels>
+	<customLabels>
+		<label>데이터 필드</label>
+		<name>AddMergeFieldsStep</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿</label>
+		<name>WordTemplatesStep</name>
+	</customLabels>
+	<customLabels>
+		<label>미리 보기</label>
+		<name>PreviewStep</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 버튼</label>
+		<name>PublishStep</name>
+	</customLabels>
+	<customLabels>
+		<label>이름</label>
+		<name>NameLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen 템플릿</label>
+		<name>TemplateConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt; &lt;strong&gt;메인 데이터 소스 선택 &lt;/strong&gt; &lt;/h3&gt; &lt;p&gt;사용자가 문서 생성을 시작할 데이터 소스를 선택합니다. 예를 들어, 기회를 선택하면 사용자는 기회 및 계정과 같은 관련 개체에서 데이터를 가져올 수 있습니다. &lt;/p&gt;</label>
+		<name>StartingObjectGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt; &lt;strong&gt; 도움이 필요하십니까? &lt;/strong&gt; &lt;/h3&gt; &lt;p&gt; &lt;a href=&quot;https://support.docusign.com/&quot; target=&quot;_blank&quot;&gt;DocuSign 지원 센터 &lt;/a&gt;에서 템플릿 구성에 대해 자세히 알아보십시오. &lt;/p&gt;</label>
+		<name>StartingObjectGuidance3</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Salesforce 필드 추가&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce 필드를 사용하면 Salesforce에서 문서에 정보를 동적으로 직접 채울 수 있습니다. 예를 들어, 계정을 메인 데이터 소스로 선택한 경우 계정 이름 또는 비용 청구 주소를 가져올 수 있습니다. 해당하는 앵커 텍스트를 복사하여 Word 템플릿에 붙여 넣으십시오. 드롭다운 메뉴에서 서식과 조건부 옵션을 결정할 수 있습니다.&lt;/p&gt;</label>
+		<name>MergeFieldsGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;DocuSign 필드 추가 &lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;또한, 서명과 같은 DocuSign 필드를 수신인을 위해 자동으로 준비할 수 있습니다. Word 템플릿에 해당하는 앵커 텍스트를 복사하여 붙여 넣어야 합니다.&lt;/p&gt;</label>
+		<name>MergeFieldsGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;Word 템플릿 업로드&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;이 구성의 모든 Word 템플릿을 업로드합니다. 각 템플릿에서 생성된 문서에 대해 추가 옵션을 선택할 수 있습니다. 또한, 사용자가 Word 문서 또는 PDF 파일을 생성할 수 있는지도 결정할 수 있습니다.&lt;/p&gt;</label>
+		<name>ImportTemplatesGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;일괄 문서 생성 옵션 결정&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;이 구성을 통해 여러 개의 Word 템플릿을 업로드한 경우, 매번 모든 문서를 생성할지 선택할 수 있습니다. 사용자는 기본값으로 어떤 문서를 생성할지 선택할 수 있습니다. 하지만 사용자가 모든 문서를 생성해야 한다면 &lt;strong&gt;일괄 문서 생성&lt;/strong&gt;&lt;/p&gt;을 선택합니다.</label>
+		<name>ImportTemplatesGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt;&lt;strong&gt;템플릿 테스트&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;Salesforce에서 데이터 소스를 선택하고 &lt;strong&gt;미리 보기&lt;/strong&gt;를 클릭하여 사례 문서를 생성합니다.&lt;/p&gt;</label>
+		<name>PreviewGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt; &lt;strong&gt;검토 및 업데이트&lt;/strong&gt; &lt;/h3&gt; &lt;p&gt;Word에서 문서를 확인하여 텍스트 배치 및 서식을 확인합니다. 진행률을 그대로 유지한 채 이 구성 마법사의 이전 단계로 돌아가 템플릿을 업데이트할 수 있습니다. &lt;/p&gt;</label>
+		<name>PreviewGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt; &lt;strong&gt; 버튼 레이블 결정 &lt;/strong&gt; &lt;/h3&gt; &lt;p&gt; 버튼에 &lt;strong&gt; 판매 주문 생성과 같은 설명 레이블을 지정합니다. &lt;/strong&gt; &lt;/p&gt;</label>
+		<name>PublishGuidance1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;h3 class=&quot;slds-text-heading_small slds-m-bottom_none&quot;&gt; &lt;strong&gt; 페이지 레이아웃 및 배포 옵션 선택 &lt;/strong&gt; &lt;/h3&gt; &lt;p&gt;버튼을 표시할 위치를 결정하고 세부 사항 페이지 버튼(Salesforce Classic) 또는 빠른 작업(Lightning Experience)으로 배포하도록 선택합니다. 레이아웃에 버튼을 표시하지 않으려면 &lt;strong&gt;버튼 생성&lt;/strong&gt;을 클릭하기 전에 모든 레이아웃 옵션 선택을 취소합니다. Salesforce Object Manager 설정에서 버튼을 사용할 수 있습니다. &lt;/p&gt;</label>
+		<name>PublishGuidance2</name>
+	</customLabels>
+	<customLabels>
+		<label>알 수 없는 오류</label>
+		<name>UnknownError</name>
+	</customLabels>
+	<customLabels>
+		<label>데이터 소스 선택</label>
+		<name>AddObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿에서 원하는 Salesforce 데이터 소스를 선택합니다.</label>
+		<name>StartingObjectMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>메인 데이터 소스</label>
+		<name>MainDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>일반적으로 사용되는 개체</label>
+		<name>CommonlyUsedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>다른 개체</label>
+		<name>OtherObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 필드</label>
+		<name>SalesforceFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 데이터 필드를 선택한 후, Word 템플릿을 표시하려는 곳에 앵커 텍스트를 복사하여 붙여 넣습니다.</label>
+		<name>SalesforceFieldsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿에 데이터 필드 추가</label>
+		<name>AddMergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 필드</label>
+		<name>DocusignFields</name>
+	</customLabels>
+	<customLabels>
+		<label>각 서명인을 위한 DocuSign 필드를 선택한 후, Word 템플릿의 알맞는 위치에 해당하는 앵커 텍스트를 복사해 붙여 넣습니다.</label>
+		<name>DocusignFieldsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>서명인</label>
+		<name>SignerText</name>
+	</customLabels>
+	<customLabels>
+		<label>필드</label>
+		<name>FieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>앵커 텍스트</label>
+		<name>AnchorText</name>
+	</customLabels>
+	<customLabels>
+		<label>서명인 추가</label>
+		<name>AddSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>데이터 필드 옵션</label>
+		<name>MergeFieldOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>날짜 포맷</label>
+		<name>DateFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>날짜 미리 보기</label>
+		<name>DatePreview</name>
+	</customLabels>
+	<customLabels>
+		<label>로캘 기본값</label>
+		<name>LocaleDefault</name>
+	</customLabels>
+	<customLabels>
+		<label>통화 형식</label>
+		<name>CurrencyFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>ISO 코드로 표시</label>
+		<name>DisplayAsISO</name>
+	</customLabels>
+	<customLabels>
+		<label>ISO 코드로 표시(소수점 없음)</label>
+		<name>DisplayAsISONoDecimals</name>
+	</customLabels>
+	<customLabels>
+		<label>기호로 표시</label>
+		<name>DisplayAsSymbol</name>
+	</customLabels>
+	<customLabels>
+		<label>ISO 기호로 표시(소수점 없음)</label>
+		<name>DisplaySymbolNoDecimals</name>
+	</customLabels>
+	<customLabels>
+		<label>표시 옵션</label>
+		<name>DisplaysOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>필드 값인 경우 추가 콘텐츠 포함</label>
+		<name>DisplaysOptionsMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>통화 미리 보기</label>
+		<name>CurrencyPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>일치</label>
+		<name>MatchesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>일치하지 않음</label>
+		<name>DoesNotMatch</name>
+	</customLabels>
+	<customLabels>
+		<label>예: 캘리포니아</label>
+		<name>ExampleCalifornia</name>
+	</customLabels>
+	<customLabels>
+		<label>문서에서 이 필드를 항상 표시합니다</label>
+		<name>AlwaysDisplayThisField</name>
+	</customLabels>
+	<customLabels>
+		<label>이 필드에 설정한 조건이 충족되면 다른 콘텐츠를 포함합니다</label>
+		<name>IncludeOtherContent</name>
+	</customLabels>
+	<customLabels>
+		<label>복사</label>
+		<name>Copy</name>
+	</customLabels>
+	<customLabels>
+		<label>서명</label>
+		<name>Signature</name>
+	</customLabels>
+	<customLabels>
+		<label>이니셜</label>
+		<name>Initial</name>
+	</customLabels>
+	<customLabels>
+		<label>이니셜(선택 사항)</label>
+		<name>OptionalInitial</name>
+	</customLabels>
+	<customLabels>
+		<label>클립보드에 성공적으로 복사했습니다!</label>
+		<name>SuccessCopyClipboard</name>
+	</customLabels>
+	<customLabels>
+		<label>필드 검색 중...</label>
+		<name>RetrievingFields</name>
+	</customLabels>
+	<customLabels>
+		<label>메인 데이터 소스</label>
+		<name>StartingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>--옵션 선택--</label>
+		<name>SelectAnOption</name>
+	</customLabels>
+	<customLabels>
+		<label>옵션</label>
+		<name>Options</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}이 (가) 이미 병합 필드로 존재합니다.</label>
+		<name>FieldPickerFieldExists_1</name>
+	</customLabels>
+	<customLabels>
+		<label>문서의 콘텐츠로 이 필드의 값을 표시합니다</label>
+		<name>MergeFieldDisplayCurrent</name>
+	</customLabels>
+	<customLabels>
+		<label>조건에 따라 다른 문서 콘텐츠를 포함시키기 위해 이 필드의 값을 사용합니다</label>
+		<name>MergeFieldDisplayConditional</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 관계</label>
+		<name>ChildRelations</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿 업로드</label>
+		<name>DocumentTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿에 앵커 텍스트가 준비되면 업로드할 수 있습니다.</label>
+		<name>ImportTemplatesDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>일괄 문서 생성</label>
+		<name>BulkDocumentCreation</name>
+	</customLabels>
+	<customLabels>
+		<label>이 구성에서 한 번의 클릭으로 모든 문서 생성</label>
+		<name>BulkDocumentCreationCheckboxInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>업로드 중</label>
+		<name>Uploading</name>
+	</customLabels>
+	<customLabels>
+		<label>파일이 성공적으로 삭제되었습니다.</label>
+		<name>FileUploadSuccessDeleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>파일이 성공적으로 업로드되었습니다.</label>
+		<name>FileUploadSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 삭제에 실패했습니다. 다시 시도하십시오.</label>
+		<name>FileUploadFailDeleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>업로드에 실패. 다시 시도해 주십시오.</label>
+		<name>FileUploadFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>제거 중</label>
+		<name>Removing</name>
+	</customLabels>
+	<customLabels>
+		<label>생성된 파일 이름</label>
+		<name>GeneratedFileName</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 포맷</label>
+		<name>FileFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>파일 추가 사항</label>
+		<name>FileSuffix</name>
+	</customLabels>
+	<customLabels>
+		<label>메인 데이터 소스 이름</label>
+		<name>StartingObjectName</name>
+	</customLabels>
+	<customLabels>
+		<label>날짜</label>
+		<name>Date</name>
+	</customLabels>
+	<customLabels>
+		<label>메인 데이터 소스 이름 및 날짜</label>
+		<name>StartingObjectNameAndDate</name>
+	</customLabels>
+	<customLabels>
+		<label>Microsoft Word</label>
+		<name>MicrosoftWord</name>
+	</customLabels>
+	<customLabels>
+		<label>PDF</label>
+		<name>Pdf</name>
+	</customLabels>
+	<customLabels>
+		<label>첨부파일</label>
+		<name>Attachment</name>
+	</customLabels>
+	<customLabels>
+		<label>지원되는 파일 크기는 최대 3MB로 제한됩니다. 더 큰 파일을 업로드하려면 DocuSign Gen 템플릿의 파일 관련 목록을 사용하십시오. </label>
+		<name>FileTooLarge</name>
+	</customLabels>
+	<customLabels>
+		<label>Word 템플릿 미리 보기</label>
+		<name>Preview</name>
+	</customLabels>
+	<customLabels>
+		<label>실제 Salesforce 데이터를 사용하여 템플릿을 테스트합니다.</label>
+		<name>PreviewTemplatesInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce의 실제 데이터를 사용하여 템플릿을 테스트합니다.</label>
+		<name>TestYourTemplateMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>파일을 생성하려면 시간이 걸립니다. 나중에 다시 확인하고자 하는 경우, Salesforce의 파일 탭 아래에서 파일을 찾을 수 있습니다.</label>
+		<name>GeneratorComeBackMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>생성하는 데 시간이 오래 걸립니다. 생성된 파일을 보려면 나중에 이 레코드를 확인하십시오. </label>
+		<name>GeneratorTooLongMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>옵션 선택</label>
+		<name>SelectAnOptionNoDash</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 입력</label>
+		<name>InvalidInput</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿</label>
+		<name>Templates</name>
+	</customLabels>
+	<customLabels>
+		<label>생성</label>
+		<name>Generate</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 파일을 생성할 수 없습니다.</label>
+		<name>GenerateFileFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>죄송합니다. 이 구성을 위한 문서 템플릿이 없습니다.</label>
+		<name>NoDocForTemplateMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성을 시작하는 데 실패했습니다. 나중에 다시 시도하거나 관리자에게 문의하여 도움을 받으십시오. </label>
+		<name>FailedInitiateDocGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성과 관련된 문제가 발생했습니다</label>
+		<name>GeneratorBannerErrorMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>새 문서 생성됨</label>
+		<name>GeneratorBannerSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성 완료를 확인할 수 없음</label>
+		<name>GeneratorCompletionErrorMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>게시 중...</label>
+		<name>Publishing</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 버튼 생성</label>
+		<name>PublishCustomButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>이 템플릿 구성에서 사용자 지정 버튼을 사용하여 문서를 생성하도록 합니다. 또한 메인 데이터 소스를 위해 특정한 페이지 레이아웃에 버튼 배치를 선택할 수 있습니다. 사용자 지정 버튼을 추가하여 이 템플릿 구성을 변경하는 경우 버튼을 다시 추가하지 않아도 됩니다.</label>
+		<name>PublishMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼 레이블</label>
+		<name>ButtonLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>페이지 레이아웃</label>
+		<name>PageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼이 성공적으로 생성되었습니다!</label>
+		<name>SuccessfullyPublished</name>
+	</customLabels>
+	<customLabels>
+		<label>초안</label>
+		<name>Drafts</name>
+	</customLabels>
+	<customLabels>
+		<label>현재 DocuSign에 연결하지 못했습니다. 도움이 필요하면 DocuSign 지원팀에 문의하십시오.</label>
+		<name>UnableToConnectDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign에 성공적으로 연결 및 승인되었습니다.</label>
+		<name>SuccessDocuSignAuthorization</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 승인을 위한 설정을 찾을 수 없습니다. 도움이 필요하면 DocuSign 지원팀에 문의하십시오.</label>
+		<name>MissingDocuSignGenAuthorizationSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>수정됨</label>
+		<name>Modified</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 성공적으로 가져왔습니다.</label>
+		<name>AgreementImportSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>계약 가져오기가 진행 중입니다. 일정 기간 이후 DocuSign 파일 구성 요소를 확인하십시오.</label>
+		<name>AgreementImportProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 가져오기에 실패했습니다. 다시 시도해 주십시오.</label>
+		<name>AgreementImportFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>이 필드는 필수 항목입니다. </label>
+		<name>RequiredField</name>
+	</customLabels>
+	<customLabels>
+		<label>이름에 유효하지 않은 문자가 있습니다</label>
+		<name>InvalidCharacters</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 이름 바꾸기</label>
+		<name>RenameAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>이름 바꾸기</label>
+		<name>Rename</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 이름 변경 도중 오류가 발생했습니다. 나중에 다시 시도하십시오.</label>
+		<name>AgreementRenameErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}의 이름이 변경되었습니다.</label>
+		<name>AgreementRenamed_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 문서가 삭제되었습니다.</label>
+		<name>AgreementDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 삭제하는 동안 오류가 발생했습니다. 나중에 다시 시도하십시오.</label>
+		<name>AgreementDeleteErrorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토를 위해 {0}을(를) 재전송했습니다.</label>
+		<name>AgreementResendExternalReviewMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 승인을 위해 {0}을(를) 재전송했습니다.</label>
+		<name>AgreementResendInternalApprovalMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}의 내부 승인이 취소되었습니다.</label>
+		<name>AgreementCancelInternalApprovalMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}의 외부 검토가 취소되었습니다.</label>
+		<name>AgreementCancelExternalReviewMessage_1</name>
+	</customLabels>
+	<customLabels>
+		<label>검토를 위해 문서가 전송되었으며 DocuSign 파일에 복사되었습니다.</label>
+		<name>ExternalReviewSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토를 위한 문서 전송 요청이 여전히 진행 중입니다. 일정 기간 이후 DocuSign 파일을 확인하십시오.</label>
+		<name>ExternalReviewProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토를 위해 문서를 전송하는 데 실패했습니다. 나중에 다시 시도하십시오.</label>
+		<name>ExternalReviewFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 승인을 위해 문서가 전송되었으며 DocuSign 파일에 복사되었습니다.</label>
+		<name>InternalApprovalSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 검토를 위한 문서 전송 요청이 여전히 진행 중입니다. 일정 기간 이후 DocuSign 파일을 확인하십시오.</label>
+		<name>InternalApprovalProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 승인을 위해 문서를 전송하는 데 실패했습니다. 나중에 다시 시도하십시오.</label>
+		<name>InternalApprovalFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>검토를 위해 문서를 전송했습니다</label>
+		<name>ExternalReviewEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>가능한 신속하게 이 문서를 검토해 주십시오.</label>
+		<name>ExternalReviewEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>검토자 선택</label>
+		<name>ExternalReviewModalTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 연락처를 선택합니다.</label>
+		<name>ExternalReviewChooseRecipientMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>검토자 추가</label>
+		<name>ExternalReviewAddRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>만료 날짜 설정</label>
+		<name>ExternalReviewSetDueDate</name>
+	</customLabels>
+	<customLabels>
+		<label>메시지 개인 설정</label>
+		<name>ExternalReviewPersonalizeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인이 받게 될 이메일 제목과 메시지를 편집합니다.</label>
+		<name>ExternalReviewEditEmailAndSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 이름</label>
+		<name>ExternalReviewFileName</name>
+	</customLabels>
+	<customLabels>
+		<label>수신인</label>
+		<name>ExternalReviewRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>전송</label>
+		<name>Send</name>
+	</customLabels>
+	<customLabels>
+		<label>다운로드</label>
+		<name>Download</name>
+	</customLabels>
+	<customLabels>
+		<label>링크 공유</label>
+		<name>AgreementsShareLink</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토</label>
+		<name>AgreementsExternalReview</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 승인</label>
+		<name>AgreementsInternalApproval</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 연락처 검색...</label>
+		<name>ExternalReviewSearchMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>이름 또는 이메일로 검색</label>
+		<name>InternalApprovalSearchActorMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>승인자</label>
+		<name>Approvers</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자가 찾는 것을 수신인에게 알립니다.</label>
+		<name>InternalApprovalEmailHelpMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>다른 승인자 추가</label>
+		<name>AddAnotherApprover</name>
+	</customLabels>
+	<customLabels>
+		<label>승인자 추가</label>
+		<name>AddApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>승인 순서 설정</label>
+		<name>SetApprovalOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 조직의 Salesforce 사용자 중에서 선택합니다.</label>
+		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>승인자 선택</label>
+		<name>SelectApprovers</name>
+	</customLabels>
+	<customLabels>
+		<label>승인을 위한 문서</label>
+		<name>InternalApprovalEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>가능한 신속하게 이 문서를 승인해 주십시오.</label>
+		<name>InternalApprovalEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 Salesforce 이벤트 대상입니다.</label>
+		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign을 사용하기 전, 귀하를 대신하여 요청을 할 수 있도록 이 애플리케이션을 위한 동의를 허용해야 합니다.&lt;br/&gt;&lt;br/&gt;계속하려면 &amp;quot;승인&amp;quot; 버튼을 클릭합니다.</label>
+		<name>AuthorizeDocuSignInstructions</name>
+	</customLabels>
+	<customLabels>
+		<label>인증</label>
+		<name>AuthorizeButton</name>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementButtonText</name>
+		<label>검토</label>
+	</customLabels>
+	<customLabels>
+		<name>ReviewAgreementHeaderTitleText</name>
+		<label>{0}을(를) 승인하기 위한 문서입니다.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailButtonText</name>
+		<label>문서 열기</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailSubject</name>
+		<label>{0}이(가) 승인되었습니다</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalEmailHeaderTitleText</name>
+		<label>문서 승인 됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailButtonText</name>
+		<label>문서 보기</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailSubject</name>
+		<label>문서 승인 됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalOnBehalfEmailHeaderTitleText</name>
+		<label>문서 승인 됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailButtonText</name>
+		<label>문서 열기</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailSubject</name>
+		<label>승인 거부됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>RejectOnBehalfEmailHeaderTitleText</name>
+		<label>승인 거부됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailSubject</name>
+		<label>{0}을(를) 위한 승인 요청이 취소되었습니다</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailBodyText</name>
+		<label>{0}을(를) 위한 승인 요청이 취소되었습니다. 취해야 할 조치가 없습니다. </label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalCancelEmailHeaderTitleText</name>
+		<label>승인 요청이 취소되었습니다.</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailButtonText</name>
+		<label>문서 열기</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailSubject</name>
+		<label>{0}이(가) 거부되었습니다</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalRejectEmailHeaderTitleText</name>
+		<label>문서 거부됨 {0}</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailButtonText</name>
+		<label>문서 보기</label>
+	</customLabels>
+	<customLabels>
+		<name>ApprovalFailureEmailSubject</name>
+		<label>승인 실패함</label>
+	</customLabels>
+	<customLabels>
+		<label>승인 요청에 문제가 있어 전송되지 않았습니다. 요청을 재전송하는 경우 문제를 자체적으로 해결해야 합니다.</label>
+		<name>ApprovalFailureEmailBodyText</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 요청에 문제가 있습니다.</label>
+		<name>ApprovalFailureEmailHeaderTitleText</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 업로드 중</label>
+		<name>UploadingAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>승인을 위한 응답이 성공적으로 제출되었습니다.</label>
+		<name>AgreementApprovalResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>거부를 위한 응답이 성공적으로 제출되었습니다.</label>
+		<name>AgreementRejectionResponseSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>링크가 복사되었습니다!</label>
+		<name>AgreementShareLinkCopiedMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>링크 복사</label>
+		<name>CopyLinkPrompt</name>
+	</customLabels>
+	<customLabels>
+		<label>링크</label>
+		<name>LinkLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>링크 공유</label>
+		<name>ShareAgreementLinkHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>&quot;{0}&quot;의 새 버전이 업로드되었습니다.</label>
+		<name>UploadNewVersionSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>문서의 새 버전을 업로드하는 중 오류가 발생했습니다.</label>
+		<name>UploadNewVersionError</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체를 맵핑한 후에는 Salesforce 에서 DocuSign CLM 개체 폴더를 보고 작업할 수 있습니다. 보기를 추가하여 Salesforce 개체 페이지 레이아웃을 사용자 지정하기만 하면 됩니다.</label>
+		<name>AddLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>관리</label>
+		<name>Administration</name>
+	</customLabels>
+	<customLabels>
+		<label>자동 문서 생성</label>
+		<name>AutomateDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 템플릿에 데이터를 병합하여 계약 생성 시간을 절약합니다.</label>
+		<name>AutomateDocumentGenerationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM의 워크플로를 사용하여 작업을 자동화하고 계약을 라우트하며 인적 오류를 줄입니다.</label>
+		<name>AutomateYourProcessesBody</name>
+	</customLabels>
+	<customLabels>
+		<label>프로세스를 자동화합니다</label>
+		<name>AutomateYourProcessesTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>구성 요소</label>
+		<name>ButtonsAndComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM</label>
+		<name>CLM</name>
+	</customLabels>
+	<customLabels>
+		<label>위치 선택</label>
+		<name>ChooseLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더의 위치를 선택하면 문서의 구성 상태가 유지됩니다. 나중에 레이아웃을 사용자 지정하여 Salesforce에서 CLM 폴더 텐츠를 볼 수 있습니다.</label>
+		<name>ChooseLocationBody</name>
+	</customLabels>
+	<customLabels>
+		<label>위치를 선택해야 하는 이유는 무엇입니까?</label>
+		<name>ChooseLocationTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>/ui/setup/Setup?setupid=Customize</label>
+		<name>ClassicObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성 구성 URL을 시작하기 위해 Salesforce에 사용자 지정 버튼을 생성할 수 있습니다. 사용자 지정 단추를 클릭하면 관련 문서 생성 양식이 열립니다.</label>
+		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼 구성</label>
+		<name>ConfigureButtons</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃 구성</label>
+		<name>ConfigureLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 페이지 레이아웃 구성</label>
+		<name>ConfigureObjectPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 또는 Salesforce에서 폴더를 보려면 개체 페이지의 레이아웃을 구성해야 합니다. 그리고 나서 해당 레이아웃에 DocuSign CLM을 위한 사용자 지정 섹션을 추가합니다.</label>
+		<name>ConfigureObjectPageLayoutInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>편집 확인</label>
+		<name>ConfirmEdits</name>
+	</customLabels>
+	<customLabels>
+		<label>DOCUSIGN CLM 안내</label>
+		<name>DiscoverDocuSignCLM</name>
+	</customLabels>	
+	<customLabels>
+		<label>문서 생성</label>
+		<name>DocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce를 이용하지 않고 시간을 절약하고, 위험을 줄입니다. DocuSign CLM for Salesforce는 DocuSign CLM의 보안 클라우드 플랫폼에 개체를 통합합니다.</label>
+		<name>DocusignAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>이 매핑된 개체에서 편집한 내용은 개체의 향후 인스턴스에 영향을 미칩니다. 기존의 개체를 변경하지 않습니다. 이 개체를 편집하시겠습니까?</label>
+		<name>EditModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말</label>
+		<name>Help</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign은 사용자의 성공을 위해 최선을 다합니다. 이를 위해 일반적인 질문에 답변을 제공하는 도움말 페이지를 만들었습니다.</label>
+		<name>HelpInfoBody</name>
+	</customLabels>	
+	<customLabels>
+		<label>자택</label>
+		<name>Home</name>
+	</customLabels>
+	<customLabels>
+		<label>통합</label>
+		<name>Integration</name>
+	</customLabels>
+	<customLabels>
+		<label>/lightning/setup/ObjectManager/home</label>
+		<name>LEXObjectManagerURL</name>
+	</customLabels>
+	<customLabels>
+		<label>자세히</label>
+		<name>LearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>관리</label>
+		<name>Manage</name>
+	</customLabels>
+	<customLabels>
+		<label>새로 매핑</label>
+		<name>MapNew</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체 매핑하기</label>
+		<name>MapYourSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체</label>
+		<name>MappedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더 이름 지정</label>
+		<name>NameObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>항상 매핑된 Salesforce 개체 필드에 따라 폴더에 이름을 붙이는 것이 좋습니다. 이렇게 하면 개체 데이터가 업데이트될 때 폴더가 업데이트됩니다.</label>
+		<name>NameObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더에 어떤 이름을 지정해야 합니까?</label>
+		<name>NameObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체의 모든 인스턴스는 DocuSign CLM에 전용 폴더를 갖게 됩니다. 이곳에서 해당 개체의 데이터를 사용하여 생성한 문서를 찾을 수 있습니다.</label>
+		<name>ObjectFolderBody</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더 이름</label>
+		<name>ObjectFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더는 무엇입니까?</label>
+		<name>ObjectFolderTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM은 계약을 한 곳에서 유지합니다. 고급 설정을 사용하면, 모든 문서에 속성을 추가하거나 가져올 수 있으므로 구성된 상태를 유지할 수 있습니다.</label>
+		<name>OrganizeAndSearchDocumentsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 구성 및 검색</label>
+		<name>OrganizeAndSearchDocumentsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>개요</label>
+		<name>Overview</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM의 경로</label>
+		<name>PathInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더의 위치를 한 번 설정하면 새로운 폴더에 동적 이름을 생성하기 위해 여러 개의 필드를 찾아보고 선택할 수 있습니다.</label>
+		<name>PickAFieldBody</name>
+	</customLabels>
+	<customLabels>
+		<label>필드를 어떻게 선택합니까?</label>
+		<name>PickAFieldTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에는 1,000개의 개체가 있으나, 계약을 생성할 때 데이터를 가져올 수 있는 중요한 몇 개만 필요합니다. 한 번에 하나씩 중요한 개체를 선택하면 CLM 개체 맵핑 프로세스가 시작됩니다.</label>
+		<name>PickObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑하기 위해 개체를 선택하는 이유는 무엇입니까?</label>
+		<name>PickObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>맵핑하기 위해 모든 표준 또는 사용자 지정 Salesforce 개체를 선택할 수 있습니다. 모든 기업은 다양한 요구와 개체를 가집니다. Account and Opportunity는 아주 좋은 사례입니다.</label>
+		<name>PickSpecificObjectBody</name>
+	</customLabels>
+	<customLabels>
+		<label>어떤 개체를 선택해야 합니까?</label>
+		<name>PickSpecificObjectTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하를 위해 개체 2개를 매핑했습니다</label>
+		<name>PreSetObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하는 DocuSign CLM에 &apos;Accounts&apos; 및 &apos;Opportunities&apos;를 이미 매핑했습니다. 이렇게 하면 시간을 확보하고 다른 개체에 집중하는 데 도움이 됩니다. 필요하지 않으신가요? 개체를 제거하려면 &apos;제거&apos;를 클릭합니다.</label>
+		<name>PreSetObjMappingsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑 제거</label>
+		<name>RemoveMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 매핑을 제거하는 경우. DocuSign CLM에서 해당 개체의 데이터를 더 이상 사용하지 못합니다. 매핑에서 이 개체를 제거하시겠습니까?</label>
+		<name>RemoveModalBody</name>
+	</customLabels>
+	<customLabels>
+		<label>문서, 속성 및 워크플로에 대해 상세한 차트 및 보고서를 생성합니다. 이렇게 하면 계정 활동 및 성과를 추적할 수 있습니다.</label>
+		<name>RunReportsAndAnalyticsBody</name>
+	</customLabels>
+	<customLabels>
+		<label>보고서 및 분석 실행</label>
+		<name>RunReportsAndAnalyticsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에 Salesforce 개체를 먼저 매핑합니다. 그 후, Salesforce 데이터를 사용하여 템플릿을 생성하고 문서를 생성할 수 있습니다.</label>
+		<name>MapObjectsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 선택</label>
+		<name>SelectObject</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM의 버전화기능으로 인해 믿고 협력할 수 있습니다. 협상 시 중요한 문서의 피드백과 핵심 사항을 파악할 수 있습니다.</label>
+		<name>ShareAndCollaborateBody</name>
+	</customLabels>
+	<customLabels>
+		<label>공유 및 협력</label>
+		<name>ShareAndCollaborateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성의 속도를 높입니다 </label>
+		<name>SpeedUpDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>계약 수명주기를 통해 모든 문서를 추적할 수 있습니다. 작업을 지정하고, 승인에 소요되는 기간을 추적하고, 문서가 검토되는 방법을 제어합니다.</label>
+		<name>TrackDocumentStatusAndActivityBody</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 상태와 활동을 추적합니다</label>
+		<name>TrackDocumentStatusAndActivityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 관리</label>
+		<name>UserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>앱을 나가지 않아도 Salesforce에서 DocuSign CLM 사용자를 추가, 수정 및 관리할 수 있습니다. </label>
+		<name>UserManagementInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더 보기</label>
+		<name>ViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce에 오신 것을 환영합니다!</label>
+		<name>WelcomeToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>다음 단계는 무엇입니까?</label>
+		<name>WhatsNext</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로</label>
+		<name>Workflow</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 표준 및 사용자 정의 Salesforce 개체를 아래에 나열했습니다.</label>
+		<name>AllObjectsListed</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더를 할당할 위치를 DocuSign CLM 내 찾기 쉬운 곳으로 선택하십시오. 생성하는 폴더 경로는 다른 매핑과 무관합니다.</label>
+		<name>ChooseLocationInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 유형 {0}의 모든 인스턴스에는 계층 구조에서 파란색 폴더로 보이는 위치에 각 폴더가 할당됩니다.</label>
+		<name>ChooseLocationTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>구성 요소 생성 실패함: {0}</label>
+		<name>ComponentCreationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>절차 숨기기</label>
+		<name>HideSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>정보 아이콘</label>
+		<name>InformationIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>이름이 {0}인 이벤트를 찾지 못했습니다.</label>
+		<name>NoEventFound</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 개체가 성공적으로 편집되었습니다.</label>
+		<name>ObjectEditSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑에서 {0} 개체가 제거되었습니다.</label>
+		<name>ObjectRemoved</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 열기</label>
+		<name>OpenFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>사용할 필드를 선택하십시오. 그러면 DocuSign CLM 내 개체 폴더 이름이 동적으로 지적됩니다.</label>
+		<name>SelectFieldInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에서 &apos;{0}&apos;의 모든 인스턴스에는 자체 폴더가 있습니다. 아래의 이러한 폴더 위치를 변경할 수 있습니다.</label>
+		<name>SelectFolderHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>문서의 원본으로 하려는 Salesforce 개체를 선택합니다. 한 번에 하나의 개체를 선택할 수 있습니다.</label>
+		<name>SelectObjectHelpBody</name>
+	</customLabels>
+	<customLabels>
+		<label>절차 보기</label>
+		<name>ShowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체</label>
+		<name>YourSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>제품 &apos;{0}&apos;을 위한 평가판을 시작할 수 없습니다</label>
+		<name>InvalidTrialProduct_1</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 성공적으로 내보냈습니다.</label>
+		<name>AgreementExportSuccessful</name>
+	</customLabels>
+	<customLabels>
+		<label>메모 및 첨부 파일에 복사</label>
+		<name>AddToSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 내보내기가 진행 중입니다. 일정 기간 후 참고 및 첨부 사항 섹션을 확인합니다.</label>
+		<name>AgreementExportProcessing</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 내보내기에 실패했습니다. 다시 시도해 주십시오.</label>
+		<name>AgreementExportFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>기본으로 제공되는 eSignature 활성화</label>
+		<name>ESignatureEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 허가 설정: {0}</label>
+		<name>InvalidPermissionSet_1</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign eSignature와 같은 다른 eSignature 솔루션을 사용하는 경우에만 이 패키지의 eSignature 기능을 사용 중지시킬 수 있습니다.</label>
+		<name>ESignatureEnabledHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>이것은 매핑된 개체(예를 들어 &apos;새로운 계정 1&apos;) 의 모든 인스턴스가 DocuSign CLM에 자체 폴더를 가지는 방법에 대한 논리적인 해석입니다.</label>
+		<name>CaseFolderContentsHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>기본값 CLM 개체 매핑 생성</label>
+		<name>CreateDefaultCLMObjMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>DefaultAccountFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/</label>
+		<name>DefaultAccountPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name</label>
+		<name>DefaultAccountVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>{1}</label>
+		<name>DefaultFolderNameFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Opportunity.Name}</label>
+		<name>DefaultOpportunityFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/{!Account.Name}/Opportunity</label>
+		<name>DefaultOpportunityObjectMappingPath</name>
+	</customLabels>
+	<customLabels>
+		<label>/Salesforce/Account/{0}/Opportunity</label>
+		<name>DefaultOpportunityPathFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Account.Name, Opportunity.Name</label>
+		<name>DefaultOpportunityVariables</name>
+	</customLabels>
+	<customLabels>
+		<label>기회</label>
+		<name>Opportunity</name>
+	</customLabels>
+	<customLabels>
+		<label>필드를 선택하는 이유는 무엇입니까?</label>
+		<name>WhyAmISelectingFields</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 표준 및 사용자 정의 Salesforce 를 아래에 나열했습니다.</label>
+		<name>MapEditObjectsTitleHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>사례 참조 </label>
+		<name>SeeExample</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 폴더</label>
+		<name>YourDocuSignCLMFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체</label>
+		<name>MapEditObjectsTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 이름을 지정하려면 아래 필드를 선택합니다</label>
+		<name>SelectFieldToNameTheFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>최대 배치 크기 초과됨: {0} &gt; {1}</label>
+		<name>MaximumBatchSizeExceeded_2</name>
+	</customLabels>
+	<customLabels>
+		<label>발송인</label>
+		<name>Sender</name>
+	</customLabels>
+	<customLabels>
+		<label>생성기</label>
+		<name>Generator</name>
+	</customLabels>
+	<customLabels>
+		<label>협상가</label>
+		<name>Negotiator</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자</label>
+		<name>Administrator</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자</label>
+		<name>User</name>
+	</customLabels>
+	<customLabels>
+		<label>열람자</label>
+		<name>Viewer</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Apps Launcher에서 관리하는 역할</label>
+		<name>ProductRoleDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 제품이 지원되지 않습니다.</label>
+		<name>UnsupportedProducts</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 제품 역할이 지원되지 않습니다.</label>
+		<name>UnsupportedProductRoles</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 비교 작업을 트리거하는 데 실패했습니다.</label>
+		<name>FailedToTriggerDocumentComparisonTask</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 버전 비교에 유효하지 않은 입력 매개변수입니다.</label>
+		<name>InvalidInputsAgreementComparison</name>
+	</customLabels>
+	<customLabels>
+		<label>대신하는 검토가 완료되었습니다.</label>
+		<name>AgreementExternalReviewOnBehalfOfSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서 DocuSign CLM 개체 폴더의 사용자 지정과 보기는 어렵지 않습니다. 개체 매핑 후 Salesforce의 개체 페이지 레이아웃에 사용자 지정 보기만 추가하면 됩니다.</label>
+		<name>ViewObjectFoldersCardBody</name>
+	</customLabels>
+	<customLabels>
+		<label>이름 지정 구문</label>
+		<name>NamingSyntax</name>
+	</customLabels>
+	<customLabels>
+		<label>{!Account.Name}</label>
+		<name>AccountNameMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>위쪽을 의미합니다</label>
+		<name>IndicatesUp</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 1</label>
+		<name>Account1</name>
+	</customLabels>
+	<customLabels>
+		<label>구문</label>
+		<name>Syntax</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 이름</label>
+		<name>AccountName</name>
+	</customLabels>
+	<customLabels>
+		<label>Levis</label>
+		<name>Levis</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.name}</label>
+		<name>AccountNameMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 2</label>
+		<name>Account2</name>
+	</customLabels>
+	<customLabels>
+		<label>Zara</label>
+		<name>Zara</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM의 해당 폴더</label>
+		<name>CorrespondingFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM</label>
+		<name>DocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>다른 소스{0}</label>
+		<name>OtherSources</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce</label>
+		<name>Salesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>계정</label>
+		<name>Accounts</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 번호</label>
+		<name>AccountNumber</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 소유자</label>
+		<name>AccountOwner</name>
+	</customLabels>
+	<customLabels>
+		<label>생성자</label>
+		<name>CreatedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>01</label>
+		<name>ZeroOne</name>
+	</customLabels>
+	<customLabels>
+		<label>Strauss</label>
+		<name>Strauss</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.number}</label>
+		<name>AccountNumberMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>{!account.owner}</label>
+		<name>AccountOwnerMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>	{!account.created_by}</label>
+		<name>CreatedByMergeFieldLowerCase</name>
+	</customLabels>
+	<customLabels>
+		<label>02</label>
+		<name>ZeroTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 및 Salesforce는 사용자가 선택하는 필드를 사용하여 매핑된 개체 폴더에 자동으로 이름을 지정합니다. 폴더 이름은 필드의 컨텐츠가 변경될 때마다 업데이트됩니다. 또한 DocuSign CLM은 새로운 개체를 추가할 때마다 새로운 폴더를 생성합니다.</label>
+		<name>WhyAmISelectingFieldsBodyPart1</name>
+	</customLabels>
+	<customLabels>
+		<label>따라서 정적 이름을 입력하는 대신 필드를 선택하는 것이 좋습니다. 정적 이름을 사용하면 모든 개체 폴더에 동일한 이름이 지정되어 혼동을 일으킬 수 있습니다.</label>
+		<name>WhyAmISelectingFieldsBodyPart2</name>
+	</customLabels>
+	<customLabels>
+		<label>차이점 이해하기 </label>
+		<name>UnderstandTheDifference</name>
+	</customLabels>
+	<customLabels>
+		<label>정적 이름</label>
+		<name>StaticName</name>
+	</customLabels>
+	<customLabels>
+		<label>필드를 사용하는 동적 이름</label>
+		<name>DynamicName</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 A</label>
+		<name>AccountA</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 B</label>
+		<name>AccountB</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 C</label>
+		<name>AccountC</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 D</label>
+		<name>AccountD</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 사례</label>
+		<name>FolderExample</name>
+	</customLabels>
+	<customLabels>
+		<label>확인</label>
+		<name>Confirm</name>
+	</customLabels>
+	<customLabels>
+		<label>&apos;{0}&apos; 개체 유형이 DocuSign CLM에 성공적으로 매핑되었습니다.</label>
+		<name>MappingSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 폴더 이름 지정</label>
+		<name>NameYourSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 폴더의 변수 이름을 생성하려면 정적 이름을 입력하거나 필드를 추가합니다. 완료되면 확인을 클릭합니다.</label>
+		<name>NameSubFolderSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 폴더 이름 지정</label>
+		<name>NameSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 이름 지정</label>
+		<name>NameYourFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 이름 변경</label>
+		<name>RenameFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 위치</label>
+		<name>FolderLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 이름</label>
+		<name>FolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>콜백에 실패했습니다.</label>
+		<name>CallbackFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>지원</label>
+		<name>SUPPORT</name>
+	</customLabels>
+	<customLabels>
+		<label>더 많은 리소스</label>
+		<name>MORERESOURCES</name>
+	</customLabels>
+	<customLabels>
+		<label>지원 </label>
+		<name>SupportCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 고객이 질문에 답변해 드립니다.</label>
+		<name>SupportCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>지원 받기</label>
+		<name>GetSupport</name>
+	</customLabels>
+	<customLabels>
+		<label>API에 대해 자세히 알아보세요. </label>
+		<name>DeveloperCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>개발자 센터</label>
+		<name>DeveloperCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>자세히</label>
+		<name>LearnMoreBtn</name>
+	</customLabels>
+	<customLabels>
+		<label>보안 및 시스템 성능 정보.</label>
+		<name>TrustCenterSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Trust Center</label>
+		<name>TrustCenterTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>학습을 통해 전문 지식을 구축합니다.</label>
+		<name>DocuSignUniversitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 대학</label>
+		<name>DocuSignUniversityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>커뮤니티</label>
+		<name>CommunityTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 고객이 질문에 답변해 드립니다.</label>
+		<name>CommunitySummary</name>
+	</customLabels>
+	<customLabels>
+		<label>커뮤니티 방문</label>
+		<name>VisitCommunity</name>
+	</customLabels>
+	<customLabels>
+		<label>관련 자료 </label>
+		<name>KnowledgeMarket</name>
+	</customLabels>
+	<customLabels>
+		<label>백서, 가치 연구 및 채택을 지원하는 도구를 제공합니다.</label>
+		<name>KnowledgeMarketSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>자주 묻는 질문</label>
+		<name>FrequentlyAskedQuestions</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce 이해하기</label>
+		<name>UnderstandingDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>설치 및 시작하기</label>
+		<name>InstallationandGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 사용자 관리</label>
+		<name>ManagingDocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체 매핑</label>
+		<name>MappingSalesforceObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더와 레이아웃 구성 관리</label>
+		<name>MapObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>축소</label>
+		<name>Collapse</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce란 무엇입니까?</label>
+		<name>WhatIsDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 데이터를 DocuSign CLM과 연결하는 앱입니다. 이를 통해 Salesforce 데이터를 사용하여 사업 문서를 만들 수 있습니다. DocuSign CLM for Salesforce을 사용하면 이러한 문서를 저장하고 관리할 수 있습니다.</label>
+		<name>WhatIsDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce를 사용해야 하는 이유는 무엇입니까?</label>
+		<name>WhyDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce는 Salesforce 데이터를 사용하여 문서를 만듭니다. 이렇게 하면 신속하게 문서를 만들고 인간 오류의 가능성을 제거할 수 있습니다.</label>
+		<name>WhyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce가 어떻게 내 문서 생성 프로세스를 신속하게 만들어 줍니까?</label>
+		<name>DocumentGenerationProcess</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서는 하나의 버튼만 누르면 문서를 생성할 수 있습니다. 이렇게 하려면 개체 페이지 레이아웃에서 사용자 정의 버튼을 생성해야 합니다.</label>
+		<name>DocumentGenerationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에 내 문서를 저장하는 대신 이 앱을 사용해야 하는 이유는 무엇입니까?</label>
+		<name>WhyOnlyDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에 문서를 저장하는 경우 문서는 구성되지 않으며 문서에 액세스하기 어렵습니다. 이렇게 하면 검토, 워크플로 및 서명 가져오기가 느려집니다. DocuSign CLM for Salesforce는 사용자를 위해 항목을 체계적으로 정리합니다. 새 문서를 생성할 때에도 자동으로 문서를 구성합니다. 또한, Salesforce에서 직접 문서에 액세스할 수 있습니다.</label>
+		<name>WhyOnlyDocuSignAns</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM은 무엇입니까?</label>
+		<name>WhatIsDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM은 DocuSign CLM for Salesforce를 위한 보안 클라우드 앱입니다. 이를 통해 문서를 생성하고 이해 관계자와 협업하고 프로세스를 자동화할 수 있습니다. DocuSign CLM for Salesforce는 DocuSign CLM을 Salesforce 조직과 연결합니다.</label>
+		<name>WhatIsDocuSignCLMAns</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce를 어떻게 설치합니까?</label>
+		<name>InstallDocuSignAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>먼저, Salesforce AppExchange로 이동합니다. 그런 다음, DocuSign Apps Launcher를 검색하고 설치 단계를 따릅니다. 이 작업을 수행하려면 Salesforce 관리자여야 합니다.</label>
+		<name>InstallAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce를 어떻게 인증합니까?</label>
+		<name>AuthenticateAgreements</name>
+	</customLabels>
+	<customLabels>
+		<label>설치 후 Salesforce에서 DocuSign Apps Launcher를 엽니다. 그다음 DocuSign CLM 활성화 DocuSign 로그인 자격 증명을 통해 로그인하고 Salesforce 자격 증명과 역방향 연결을 수립하는 안내에 따릅니다. 이렇게 하면 두 가지의 시스템을 통합할 수 있습니다.</label>
+		<name>AuthenticateAgreementsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자는 무엇입니까?</label>
+		<name>WhatIsAnAdmin</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자는 DocuSign CLM for Salesforce에서 특별한 권한과 책임이 있는 사용자입니다. 관리자는 개체를 매핑하고 사용자를 관리할 수 있습니다.</label>
+		<name>WhatIsAnAdminAns</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자는 어떻게 사용자를 추가하고 관리합니까?</label>
+		<name>HowAdminManageUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>관리자는 사용자 관리 페이지에서 사용자를 추가하거나 관리할 수 있습니다.</label>
+		<name>HowAdminManageUsersAns</name>
+	</customLabels>
+	<customLabels>
+		<label>앱 설치 후 사용자당 추가 비용을 지불해야 합니까?</label>
+		<name>InstallationFees</name>
+	</customLabels>
+	<customLabels>
+		<label>아니요. AppExchange 페이지에 표시된 비용은 DocuSign CLM 패키지를 구매했을 때 사용자당 일반 비용을 나타냅니다. DocuSign 앱 설치와 관련된 추가 비용은 없습니다.</label>
+		<name>InstallationFeesAns</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃을 구성해야 하는 이유는 무엇입니까?</label>
+		<name>WhyConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃을 구성하면 Salesforce 및 DocuSign CLM에서 개체 폴더를 볼 수 있습니다. 그런 다음 연결된 개체 페이지에서 DocuSign CLM 파일 및 폴더를 사용할 수 있습니다.</label>
+		<name>WhyConfigureLayoutAns</name>
+	</customLabels>
+	<customLabels>
+		<label>개체를 매핑한 후 다음 단계는 무엇입니까?</label>
+		<name>AfterMappingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce는 개체의 데이터를 Visualforce 라이브러리에 추가합니다. 개체의 폴더와 파일을 보려면 관련 Salesforce 페이지 레이아웃에 폴더와 파일을 추가해야 합니다.</label>
+		<name>AfterMappingObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더를 보지 못하는 이유는 무엇입니까?</label>
+		<name>CannotSeeObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체를 보지 못하는 경우, Salesforce에서 페이지 레이아웃을 편집해야 합니다. 이 작업을 수행하려면 Salesforce 관리자여야 합니다.</label>
+		<name>CannotSeeObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체와 필드는 무엇입니까?</label>
+		<name>SalesforceObjectsFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체는 Salesforce에서 데이터를 저장하는 방법입니다. 개체마다 데이터가 포함된 연관 필드가 여러 개 있습니다. DocuSign CLM for Salesforce에서 개체 및 필드를 사용하려면 먼저 개체를 매핑해야 합니다.</label>
+		<name>SalesforceObjectsFieldsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 매핑은 무엇입니까?</label>
+		<name>WhatIsObjMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 매핑은 Salesforce 조직에서 DocuSign CLM으로 개체를 연결하는 프로세스입니다. DocuSign Apps Launcher 설정에서 관련 안내를 제공합니다.</label>
+		<name>WhatIsObjMappingAns</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체를 매핑해야 하는 이유는 무엇입니까?</label>
+		<name>WhyToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 만들려면 DocuSign CLM for Salesforce는 개체에 데이터가 있어야 합니다. Salesforce 개체 맵핑은 해당 데이터의 액세스 권한을 제공하는 방법입니다. DocuSign CLM for Salesforce 관리자만 개체를 맵핑할 수 있습니다.</label>
+		<name>WhyToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>개체를 어떻게 매핑합니까?</label>
+		<name>HowToMapObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체를 매핑하려면 CLM 통합 페이지로 이동합니다. 그 후 &quot;새로 매핑&quot;을 선택합니다. 안내에 따라 설정을 완료합니다.</label>
+		<name>HowToMapObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체를 제거할 수 있습니까?</label>
+		<name>RemoveMappedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM Integration 페이지에서 매핑된 개체를 편집 또는 제거할 수 있습니다. 개체를 제거하면 문서 생성을 위해 해당 개체의 데이터를 더 이상 사용하지 못하게 됩니다.</label>
+		<name>RemoveMappedObjectAns</name>
+	</customLabels>
+	<customLabels>
+		<label>반드시 매핑해야 하는 표준 개체가 있습니까?</label>
+		<name>MappingStandardObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 비즈니스는 모두 다르며 요구 사항도 저마다 다릅니다. &quot;계정&quot; 및 &quot;기회&quot;는 많은 기업에서 사용하는 표준 개체의 사례입니다. DocuSign CLM for Salesforce는 기본적으로 이러한 개체를 매핑합니다.</label>
+		<name>MappingStandardObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 개체를 매핑할 수 있습니까?</label>
+		<name>MappingCustomObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자는 사용자 정의 Salesforce 개체를 매핑할 수 있습니다. 사용자 정의 개체를 사용하려면 먼저 Salesforce에서 개체를 만들어야 합니다.</label>
+		<name>MappingCustomObjectsAns</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 개체 폴더에는 어떤 이름을 지정해야 합니까?</label>
+		<name>CustomObjectFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>명명 규칙은 개체의 병합 필드에 의해 설정됩니다. 이 프로세스는 Salesforce 개체를 매핑할 때 시작합니다. 필드의 콘텐츠가 변경될 때마다 해당 폴더의 이름이 업데이트됩니다.</label>
+		<name>CustomObjectFolderAns</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정 개체 폴더의 이름을 입력하지 못하는 이유는 무엇입니까?</label>
+		<name>TypeFolderName</name>
+	</customLabels>
+	<customLabels>
+		<label>해당 폴더의 이름을 입력하는 경우 개체의 모든 인스턴스는 동일한 폴더 이름을 갖게 됩니다. Salesforce는 폴더 이름 중복을 허용하지 않습니다. 따라서 필드 선택을 권장합니다.</label>
+		<name>TypeFolderNameAns</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더의 위치를 선택해야 하는 이유는 무엇입니까?</label>
+		<name>NeedObjectFolderLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 폴더의 위치를 선택하면 문서를 지속적으로 정리할 수 있습니다.</label>
+		<name>NeedObjectFolderLocationAns</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.com/supportdocs/docusign-clm-for-salesforce/Content/docusign-clm.htm</label>
+		<name>GetSupportURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://developers.docusign.com</label>
+		<name>LearnMoreURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/trust</label>
+		<name>CheckStatusURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/docusignuniversity</label>
+		<name>GetTrainingURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/forum</label>
+		<name>VisitCommunityURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/knowledgeMarket</label>
+		<name>ViewResourcesURL</name>
+	</customLabels>
+	<customLabels>
+		<label>아래쪽을 의미합니다</label>
+		<name>IndicatesDown</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말</label>
+		<name>agreementHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>로그인하기 전에 브라우저의 팝업 차단 기능을 비활성화하십시오.</label>
+		<name>DisablePopUp</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign에 로그인</label>
+		<name>LoginToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>계정이 없으십니까?</label>
+		<name>DontHaveAnAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>프로덕션 계정을 사용하지 않으면 대체 DocuSign 환경만 선택합니다.</label>
+		<name>NonProductionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 데모&lt;</label>
+		<name>DocuSignDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 데모 또는 샌드박스 계정을 사용하는 경우에 이것을 사용합니다.</label>
+		<name>DemoHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>데모 계정에 로그인</label>
+		<name>LoginToDemo</name>
+	</customLabels>
+	<customLabels>
+		<label>스테이지 또는 테스트 환경</label>
+		<name>TestingEnvironment</name>
+	</customLabels>
+	<customLabels>
+		<label>테스트 또는 스테이지 계정에 사용자 정의 URL이 있는 경우 이를 사용합니다.</label>
+		<name>TestingEnvironmentHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정을 선택했습니다. &apos;다음&apos;을 클릭하여 승인 단계로 진행합니다.</label>
+		<name>AccountSelected</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에 액세스 권한 부여</label>
+		<name>AuthorizeAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>이 액세스를 통해 기업의 요구에 맞게 Salesforce에 문서를 업로드하고 레코드에 연결할 수 있습니다
+		.
+		</label>
+		<name>AuthorizeHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>선택한 DocuSign 계정에는 승인 설정이 없습니다. Salesforce에 액세스하려면 DocuSign 시스템이 필요한 제품이 계정에 추가된 이후에 이 옵션을 사용할 수 있습니다
+			.
+		</label>
+		<name>AuthorizationSettingsNotPresent</name>
+	</customLabels>
+	<customLabels>
+		<label>액세스 허용</label>
+		<name>AllowAccess</name>
+	</customLabels>
+	<customLabels>
+		<label>설정 완료</label>
+		<name>CompleteSetupAuthorization</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Apps Launcher 시작하기</label>
+		<name>GetStartedSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>연결된 계정</label>
+		<name>ConnectedAccountSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>연결 해제</label>
+		<name>DisconnectSetupAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>자택</label>
+		<name>TabHome</name>
+	</customLabels>
+	<customLabels>
+		<label>구성</label>
+		<name>ConfigurationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignature</label>
+		<name>TabESignature</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성</label>
+		<name>TabDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>공동 작업 및 협상</label>
+		<name>TabNegotiation</name>
+	</customLabels>
+	<customLabels>
+		<label>관리</label>
+		<name>AdministrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 관리</label>
+		<name>TabUserManagement</name>
+	</customLabels>
+	<customLabels>
+		<label>구성 요소</label>
+		<name>TabComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말</label>
+		<name>TabHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>구성</label>
+		<name>SetupConfigure</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 보기</label>
+		<name>SetupGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>기본 이메일 메시지를 사용자 지정하고, 미리 알림 및 봉투 만기 날짜를 설정합니다.</label>
+		<name>TabESignatureHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>한 번의 클릭으로 귀사의 Salesforce 데이터를 사용하여 잘 정의된 사용자 지정 가능 문서를 생성할 수 있습니다.</label>
+		<name>TabDocumentGenerationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 승인을 위해 문서 전송하고, 제3자와 손쉽게 검토합니다.</label>
+		<name>TabNegotiationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>팀원이 DocuSign 애플리케이션에 액세스할 수 있도록 권한을 부여합니다.</label>
+		<name>TabUserManagementHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼과 구성 요소를 추가하여 레이아웃 및 환경을 사용자 지정합니다.</label>
+		<name>TabComponentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign은 사용자의 성공을 위해 최선을 다합니다. DocuSign 애플리케이션에 대한 일반적 질문에 답변을 제공하는 도움말 페이지를 만들었습니다.</label>
+		<name>TabHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 설정</label>
+		<name>SetupPageTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃에 구성 요소 추가</label>
+		<name>ComponentSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignature 봉투 상태</label>
+		<name>EsignatureEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서 봉투에 대한 실시간 상태 업데이트를 가져옵니다. DocuSign eSignature 봉투 상태는 문서가 더 빨리 서명되므로 더 많은 작업을 수행할 수 있습니다.</label>
+		<name>ComponentSectionEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃에 구성 요소를 배치하는 방법 안내</label>
+		<name>LearnToPlaceComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce를 떠나지 않고 협업하고 있는 파일을 계속 추적합니다. DocuSign 파일을 통해 문서를 잘 정리하고 쉽게 찾을 수 있습니다.</label>
+		<name>ComponentSectionDocuSigFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Apps Launcher 더 알아보기</label>
+		<name>GetMoreFromAppsLauncher</name>
+	</customLabels>
+	<customLabels>
+		<label>환경 이름</label>
+		<name>EnvironmentName</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 열기 </label>
+		<name>OpenDocuSignCLMButton</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 계정을 위한 DocuSign Gen이 구성되지 않았습니다.</label>
+		<name>GenNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 계정을 위한 DocuSign Negotiate가 구성되지 않았습니다.</label>
+		<name>NegotiateNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 계정을 위한 DocuSign CLM 구성되지 않았습니다.</label>
+		<name>CLMNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자의 계정에는 DocuSign eSignature가 구성되지 않았습니다.</label>
+		<name>ESignatureNotConfigured</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서 개체 폴더 보기</label>
+		<name>ViewingObjectFoldersSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen</label>
+		<name>GenBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate</label>
+		<name>NegotiateBadgeText</name>
+	</customLabels>
+	<customLabels>
+		<label>잠금 해제</label>
+		<name>UnlockFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>정보 아이콘</label>
+		<name>InfoIcon</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에서 문서 생성 중</label>
+		<name>CreatingAgreementsInDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM Salesforce 데이터에서 문서 생성하기</label>
+		<name>CreateAndManageDocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성 구성 생성하기</label>
+		<name>DocumentGenerationConfigurations</name>
+	</customLabels>
+	<customLabels>
+		<label>진행 과정 신속화</label>
+		<name>DocumentGenerationProcessTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성을 통해 새로운 문서 작성, 업로드 및 생성을 간소화할 수 있습니다. 이는 DocuSign CLM에서 구성 및 관리할 수 있습니다.</label>
+		<name>CreateAndManageDocSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM을 통해 한 번의 클릭만으로 문서를 생성할 수 있습니다. 이를 설정하려면 Salesforce 페이지 레이아웃에서 문서 생성 구성 URL 버튼을 추가해야 합니다.</label>
+		<name>CreateAndManageDocSummary2</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에서 문서를 생성하는 방법을 학습합니다</label>
+		<name>LearnHowToGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체 페이지에 버튼을 추가하는 방법을 학습합니다</label>
+		<name>LearnHowToAddAButton</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 생성하려면 문서 생성 구성(Document Generation Configuration)을 설정해야 합니다. 각 구성은 다음과 같은 세 가지 부분으로 이루어져 있습니다.</label>
+		<name>DocumentGenerationConfigurationsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>설정이 끝나 문서 생성은 Salesforce에서 데이터를 가져와 템플릿에 통합하여 계약 또는 모든 종류의 문서를 생성합니다. 새로운 워크플로 시작을 위한 트리거로서 문서 작성을 사용할 수도 있습니다.</label>
+		<name>DocumentGenerationProcessSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. MS Word 템플릿 문서(.doc 또는 .docx)</label>
+		<name>DocumentStep1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. 양식 구성 파일(.xml 또는 CLM 네이티브 포맷)</label>
+		<name>DocumentStep2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. 매핑된 Salesforce 개체(Salesforce에서 데이터를 가져온 경우)</label>
+		<name>DocumentStep3</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 관리자 열기 </label>
+		<name>OpenObjectManagerButton</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에서 Workflow Designer 사용하는 방법을 학습합니다</label>
+		<name>LearnHowTo</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로 생성 및 관리</label>
+		<name>CreateAndManageWorkflows</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM의 사업 자동화 프로세스</label>
+		<name>AutomateprocessesinDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Designer</label>
+		<name>WorkflowDesigner</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로 절차</label>
+		<name>WorkflowSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로는 반복 작업을 자동화하여 인적 오류를 줄이고 운용비를 절감합니다. 이 도구는 DocuSign CLM에서 사용할 수 있습니다.</label>
+		<name>CreateAndManageSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Workflow Designer는 워크플로를 디자인하고 업데이트할 수 있는 캔버스입니다. 이를 통해 워크플로를 특정 필요 사항에 맞게 범주화하고 자동화할 수 있습니다.</label>
+		<name>WorkflowDesignerSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로를 만들려면 몇 가지 단계를 연결해야 합니다. 각 단계는 프로세스 활동을 나타냅니다. 미리 정의된 단계에는 5개의 다양한 유형이 있습니다.</label>
+		<name>WorkflowStepsSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>1. 자동 문서 관리 절차</label>
+		<name>WorkflowSteps1</name>
+	</customLabels>
+	<customLabels>
+		<label>2. 휴먼 절차</label>
+		<name>WorkflowSteps2</name>
+	</customLabels>
+	<customLabels>
+		<label>3. 엔진 절차</label>
+		<name>WorkflowSteps3</name>
+	</customLabels>
+	<customLabels>
+		<label>4. 통합 절차</label>
+		<name>WorkflowSteps4</name>
+	</customLabels>
+	<customLabels>
+		<label>5. 일정관리 및 정보 교환 절차</label>
+		<name>WorkflowSteps5</name>
+	</customLabels>
+	<customLabels>
+		<label>단 한 번의 버튼 클릭으로 고급 워크플로를 트리거할 수 있습니다. Salesforce 페이지 레이아웃에 버튼을 추가해 이 작업을 활성화하십시오.</label>
+		<name>CustomWorkflowButtonSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 구성 요소를 Salesforce에 추가</label>
+		<name>AddComponentsByConfiguringYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 포털 - 보기를 추가하여 개체 폴더 보기</label>
+		<name>FolderPortalViewYourObjectFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>폴더 포털 구성요소를 통해 Salesforce에서 개체 폴더를 관리할 수 있습니다. 이를 사용하려면 개체를 매핑한 후 폴더 포털 구성 요소를 Salesforce 개체 레이아웃에 추가합니다.</label>
+		<name>FolderPortalSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃을 구성하는 방법 안내 </label>
+		<name>LearnHowToConfigureYourLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 평가판의 남은 날짜</label>
+		<name>TrialExpirationMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>판매 팀에 문의하기</label>
+		<name>ContactSales</name>
+	</customLabels>
+	<customLabels>
+		<label>원클릭 문서 생성</label>
+		<name>GenMarketingHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자는 잘 정의되고, 구성 가능한 문서를 Salesforce에서 곧바로 자동 생성할 수 있습니다.</label>
+		<name>GenMarketingBody1</name>
+	</customLabels>
+	<customLabels>
+		<label>원하는 형식으로 필요한 Salesforce 데이터를 사용 문서를 신속하게 생성하여 비즈니스 프로세스 속도를 높이십시오.</label>
+		<name>GenMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/products/gen</label>
+		<name>GenMarketingLink</name>
+	</customLabels>
+	<customLabels>
+		<label>보다 빠른 검토 및 승인</label>
+		<name>NegotiateMarketingHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서 협상과 검토를 쉽게 추적할 수 있습니다.</label>
+		<name>NegotiateMarketingBody1</name>
+	</customLabels>
+	<customLabels>
+		<label>내부 또는 외부 당사자 여부와 무관하게, 보다 빠르고 손쉬운 검토를 위해 버전을 제어하고 핵심 사항을 관리합니다.</label>
+		<name>NegotiateMarketingBody2</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/products/negotiate</label>
+		<name>NegotiateMarketingLink</name>
+	</customLabels>
+	<customLabels>
+		<label>사용하기</label>
+		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>기능 비교</label>
+		<name>CompareFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>보다 빠른 계약 프로세스에 필요한 기능을 찾습니다.</label>
+		<name>FindFeatures</name>
+	</customLabels>
+	<customLabels>
+		<label>Microsoft Word 또는 PDF 문서 생성</label>
+		<name>GenerateWordOrPdfFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 데이터 병합</label>
+		<name>MergeDataFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>조건이 있는 콘텐츠 사용자 지정</label>
+		<name>ConditionalContentFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>동적 가격 책정 및 데이터 테이블 사용</label>
+		<name>DynamicPricingFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign eSignature와 호환 가능 </label>
+		<name>ESignatureCompatibleFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>승인자가 문서에 쉽게 서명할 수 있게 합니다</label>
+		<name>ApproversFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토자의 문서 업데이트를 허용합니다</label>
+		<name>ExternalReviewFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>버전 제어 간소화</label>
+		<name>VersionControlFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>승인 라우팅 및 알림</label>
+		<name>RoutingFeature</name>
+	</customLabels>
+	<customLabels>
+		<label>영업팀에 가격 정보 문의</label>
+		<name>LearnMoreAboutPricing</name>
+	</customLabels>
+	<customLabels>
+		<label>https://www.docusign.com/contact-sales</label>
+		<name>ContactSalesLink</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Apps Launcher 활용 방법 자세히 알아보기 </label>
+		<name>LearnSectionHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 가이드를 참조하여 자세하고 상세하게 학습합니다.</label>
+		<name>LearnSectionHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>서명을 위한 봉투 전송</label>
+		<name>LearnEsignLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>잘 정의된 사용자 지정 문서 생성</label>
+		<name>LearnGenLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 또는 승인을 위한 전송</label>
+		<name>LearnNegotiateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 및 해당 권한 프로필 관리</label>
+		<name>LearnAddUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃에 구성 요소를 추가하는 방법</label>
+		<name>LearnAddComponentsLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen 사용해 보기 </label>
+		<name>TryDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate 사용해 보기 </label>
+		<name>TryDocuSignNegotiate</name>
+	</customLabels>
+	<customLabels>
+		<label>30일 동안 무료로 문서 생성 </label>
+		<name>GenerateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>30일 동안 무료로 생성, 협상 및 협력합니다</label>
+		<name>NegotiateProductTrialHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>한 번만 클릭하면 이미 소유한 Salesforce 데이터를 사용하여 잘 정의되고, 구성 가능하며, 완전한 사용자 지정 문서를 생성할 수 있습니다.</label>
+		<name>GenerateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>계약 프로세스의 모든 절차 속도를 높일 수 있습니다.  문서 생성부터 제3의 승인자 협상까지 빠르게 처리할 수 있습니다. </label>
+		<name>NegotiateProductTrialHelpInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>어떠한 의무 사항, 조건도 없습니다. 시작해 보겠습니다.</label>
+		<name>NoObligation</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen 평가판이 시작되었습니다</label>
+		<name>GenTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate 평가판이 시작되었습니다</label>
+		<name>NegotiateTrialStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>현재 평가판을 사용 중입니다</label>
+		<name>CurrentlyOnTrial</name>
+	</customLabels>
+	<customLabels>
+		<label>현재 사용 중</label>
+		<name>CurrentlyUsing</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen에 대해 자세히 알아보기</label>
+		<name>LearnMoreAboutDocuSignGen</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate에 대해 자세히 알아보기</label>
+		<name>LearnMoreAboutDocuSignNegotiate</name>
+	</customLabels>
+	<customLabels>
+		<label>협업 및 협상 시작</label>
+		<name>NegotiateHelpHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>이제 문서가 생성되는 즉시 검토 또는 승인을 위해 문서를 보낼 수 있습니다. 시작하려면:</label>
+		<name>NegotiateHelpGettingStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성에서 템플릿 만들기</label>
+		<name>NegotiateHelpText1</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿이 있는 문서 만들기</label>
+		<name>NegotiateHelpText2</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토, 내부 승인 및 서명을 위해 문서를 보냅니다.</label>
+		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>문서로 이동</label>
+		<name>GoToDocumentation</name>
+	</customLabels>
+	<customLabels>
+		<label>eSignature를 사용할 버튼 추가하기</label>
+		<name>AddButtonEsignature</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼 위치</label>
+		<name>AddButtonLocation</name>
+	</customLabels>
+	<customLabels>
+		<label>버튼은 선택한 레이아웃에서 다른 사용자 지정 버튼 옆에 표시됩니다.</label>
+		<name>AddButtonPosition</name>
+	</customLabels>
+	<customLabels>
+		<label>다음에서 버튼의 순서를 변경할 수 있습니다.</label>
+		<name>AddButtonOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 설정에서 개체 관리자 &gt; [개체] &gt; 페이지 레이아웃 순입니다.</label>
+		<name>AddButtonPath</name>
+	</customLabels>
+	<customLabels>
+		<label>먼저 개체를 선택합니다.</label>
+		<name>ChooseObjectFirst</name>
+	</customLabels>
+	<customLabels>
+		<label>해당 개체와 연관된 레이아웃을 보려면 Salesforce 개체를 선택합니다. &quot;DocuSign으로 발송&quot; 버튼를 추가할 수 있는 레이아웃을 선택하십시오. 한 번에 하나씩 개체 및 레이아웃을 추가해야 합니다.</label>
+		<name>ChooseObjectHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>첫 번째 템플릿을 시작할 준비가 되셨습니까?</label>
+		<name>StartFirstTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 구성 만들기</label>
+		<name>CreateTemplateConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성 템플릿에 익숙하지 않습니까?</label>
+		<name>NotFamiliarWithDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;빠른 설명서&lt;/a&gt;를 참조하십시오.</label>
+		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 구성</label>
+		<name>TemplateConfigurationLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>최근 수정된 날짜</label>
+		<name>LastModfiedDateLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 사용자</label>
+		<name>DocuSignUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 사용자를 위한 DocuSign CLM</label>
+		<name>DocuSignCLMUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>권한 편집</label>
+		<name>EditPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>제거 및 닫기</label>
+		<name>RemoveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>추가된 날짜</label>
+		<name>AddedDate</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM 역할</label>
+		<name>CLMRole</name>
+	</customLabels>
+	<customLabels>
+		<label>프로필</label>
+		<name>ProfileLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>권한 집합</label>
+		<name>PermissionSetLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>필터링 기준</label>
+		<name>FilteredByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>위의 필터를 사용하여 검색을 시작합니다.</label>
+		<name>BeginFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>명의 사용자 선택됨</label>
+		<name>UsersSelectedLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자</label>
+		<name>UsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>정렬 기준</label>
+		<name>SortedByLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>현재 사용자는 사용자 제거 및 해지의 일부가 될 수 없습니다.</label>
+		<name>CannotCloseCurrentUser</name>
+	</customLabels>
+	<customLabels>
+		<label>역할 선택</label>
+		<name>SelectApplicationRole</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 필터링</label>
+		<name>FilterUsersLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>애플리케이션 역할</label>
+		<name>ApplicationRolesLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 계정 액세스</label>
+		<name>ApplicationAccountAccessLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 제거</label>
+		<name>RemoveSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 사용자 일괄 제거</label>
+		<name>RemoveBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign에서 {0}을(를) 제거하시겠습니까?</label>
+		<name>RemoveSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign에서 {0} 사용자를 일괄 제거하시겠습니까?</label>
+		<name>RemoveBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>선택 사용자가 성공적으로 추가되었습니다.</label>
+		<name>UsersAddedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}이(가) 제거되었으며 성공적으로 해지되었습니다. </label>
+		<name>SingleUserClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 사용자가 제거되었으며 성공적으로 해지되었습니다. </label>
+		<name>MultipleUsersClosedSuccessfully</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 권한 편집</label>
+		<name>EditSingleUserTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 사용자를 위한 권한 편집</label>
+		<name>EditBulkUsersTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 권한이 성공적으로 편집되었습니다.</label>
+		<name>EditSingleUserMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 사용자를 위한 권한이 성공적으로 편집되었습니다.</label>
+		<name>EditBulkUsersMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>적용</label>
+		<name>Apply</name>
+	</customLabels>	
+	<customLabels>
+		<label>대시보드</label>
+		<name>Dashboard</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에 &apos;{0}&apos; 개체를 매핑하지 않았습니다.</label>
+		<name>ObjectNotMappedToDocuSignCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>이 페이지의 폴더를 보기 위해 개체를 매핑합니다.</label>
+		<name>MapToViewFolders</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM에 연결하지 못했습니다.</label>
+		<name>CouldNotConnectToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 검색</label>
+		<name>SearchObject</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 폴더 추가</label>
+		<name>AddSubfolder</name>
+	</customLabels>
+	<customLabels>
+		<label>사례 폴더 이미지</label>
+		<name>ExampleFolderImage</name>
+	</customLabels>
+	<customLabels>
+		<label>이메일</label>
+		<name>Email</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 폴더 이름을 지정하려면 입력하거나 아래의 필드를 선택합니다</label>
+		<name>SelectFieldToNameTheSubFolder</name>
+	</customLabels>
+	<customLabels>
+		<label>이 메시지 다시 표시 안 함</label>
+		<name>DontShowThisAgain</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 보기</label>
+		<name>ViewDocumentButton</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 요청에 문제가 있어 전송되지 않았습니다. 요청을 재전송하는 경우 문제를 자체적으로 해결해야 합니다.</label>
+		<name>ExternalReviewFailureEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>외부 검토 실패함</label>
+		<name>ExternalReviewFailureEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청을 보낼 수 없습니다</label>
+		<name>ExternalReviewFailureEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청이 만료되었습니다. 계속해서 검토하려면 새 검토 요청을 전송해야 합니다</label>
+		<name>ExpiredReviewSenderEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 요청이 만료되었습니다</label>
+		<name>ExpiredReviewSenderEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 </label>
+		<name>OpenAgreementButton</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토가 완료되었습니다</label>
+		<name>CompletedReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 완료</label>
+		<name>CompletedReviewEmailHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청이 완료되었습니다. 취해야 할 조치가 없습니다.</label>
+		<name>CompletedReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청이 만료되었습니다. 취해야 할 조치가 없습니다.</label>
+		<name>ExpiredReviewReviewerEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>검토 요청이 만료되었습니다</label>
+		<name>ExpiredReviewReviewerEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청이 만료되었습니다.</label>
+		<name>ExpiredReviewHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토 요청이 취소되었습니다. 취해야 할 조치가 없습니다.</label>
+		<name>CanceledReviewEmailBody_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토가 취소되었습니다.</label>
+		<name>CanceledReviewEmailSubject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}을(를) 위한 검토가 취소되었습니다.</label>
+		<name>CanceledReviewEmailHeader_1</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}개의 폴더 콘텐츠</label>
+		<name>FolderContents</name>
+	</customLabels>
+	<customLabels>
+		<label>계정 개체</label>
+		<name>AccountObject</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 개체 유형이 DocuSign CLM에 매핑되지 않았습니다.</label>
+		<name>MapError</name>
+	</customLabels>
+	<customLabels>
+		<label>클릭하여 추가하기</label>
+		<name>ClickToAdd</name>
+	</customLabels>
+	<customLabels>
+		<label>필드 검색</label>
+		<name>SearchFields</name>
+	</customLabels>
+	<customLabels>
+		<label>필터 추가</label>
+		<name>AddFilterLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>/sfc/servlet.shepherd/document/download/</label>
+		<name>DocumentPreviewLink</name>
+	</customLabels>
+	<customLabels>
+		<label>미리 보기</label>
+		<name>DocumentPreviewPageTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>아래의 파일이 성공적으로 생성되었으며 이제 서명을 위해 전송할 수 있습니다</label>
+		<name>GenSendSignatureMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>서명 준비</label>
+		<name>SendingForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce FAQ</label>
+		<name>DocuSignCLMFAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce와 관련하여 자주 묻는 질문에 대한 답변을 얻으십시오. 도움말 페이지에서 종합적인 안내로 연결됩니다.</label>
+		<name>DocuSignCLMFAQSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 가이드</label>
+		<name>HelpGuides</name>
+	</customLabels>
+	<customLabels>
+		<label>유용한 링크</label>
+		<name>UsefulLinks</name>
+	</customLabels>
+	<customLabels>
+		<label>여기는 Docusign CLM for Salesforce를 가장 잘 사용하기 위해 필요한 도구를 찾을 수 있는 원스톱 숍입니다. 사용자는 FAQ, 제품 문서, 백서 등을 찾아볼 수 있습니다.</label>
+		<name>HelpGuidesSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>자주 묻는 질문</label>
+		<name>FrequentlyAskedQuestionsInHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성의 기본 사항 학습</label>
+		<name>BasicsOfDocGen</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃에 구성 요소를 추가하는 방법</label>
+		<name>AddComponentsToLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체가 없습니다.</label>
+		<name>YouHaveNoMappedObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 매핑에 익숙하지 않습니까?</label>
+		<name>DontKnowObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 페이지를 참조하십시오.</label>
+		<name>TakeALook</name>
+	</customLabels>
+	<customLabels>
+		<label> {0} 매핑된 개체 </label>
+		<name>NoOfUsersMapped</name>
+	</customLabels>
+	<customLabels>
+		<label>FAQ</label>
+		<name>FAQ</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
+		<name>LearnDocGenBasicsURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Configure-Visualforce-Page-Layouts-Docusign-CLM</label>
+		<name>AddCompToLayoutsURL</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 매핑된 개체</label>
+		<name>MappedObjectsPlainText</name>
+	</customLabels>
+	<customLabels>
+		<label>전송 후 검토</label>
+		<name>SendForReview</name>
+	</customLabels>
+	<customLabels>
+		<label>아이콘에 문제가 있습니다</label>
+		<name>HavingTroubleImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 센터 아이콘</label>
+		<name>HelpCenterImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑된 개체 없음 이미지</label>
+		<name>NoMappedObjImgAltText</name>
+	</customLabels>
+	<customLabels>
+		<label>정렬 기준: {0}</label>
+		<name>ObjectsSortedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 페이지로 이동</label>
+		<name>GoToHelpPage</name>
+	</customLabels>
+	<customLabels>
+		<label>자세한 정보는 Salesforce 관리자 가이드를 방문하십시오.</label>
+		<name>VisitSalesforceAdminGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/SpringCM-for-Salesforce-Administrator-Guide</label>
+		<name>SalesforceAdminGuideUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign은 DocuSign CLM for Salesforce를 사용하여 개체를 매핑하는 방법을 학습할 수 있는 가이드를 만들었습니다.</label>
+		<name>MappingObjectsGuideText</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 개체 1</label>
+		<name>ObjFolderImgExample</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Knowledge/Map-Docusign-CLM-Objects</label>
+		<name>MappingGuideURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/Add-a-Custom-Button-to-a-Page-Layout-for-DocuSign-for-CLM</label>
+		<name>AddButtonToLayoutURL</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}%</label>
+		<name>OnboardingProgressPercent</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen 평가판이 만료되었습니다.</label>
+		<name>GenTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Negotiate 평가판이 만료되었습니다.</label>
+		<name>NegotiateTrialExpired</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 매핑에 대해 자세히 알아보기</label>
+		<name>LearnMoreAboutObjectMapping</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 </label>
+		<name>MapObjects</name>
+	</customLabels>
+	<customLabels>
+		<label>1</label>
+		<name>NumberOne</name>
+	</customLabels>
+	<customLabels>
+		<label>2</label>
+		<name>NumberTwo</name>
+	</customLabels>
+	<customLabels>
+		<label>3</label>
+		<name>NumberThree</name>
+	</customLabels>
+	<customLabels>
+		<label>좋습니다! Salesforce 데이터로 첫 번째 계약을 만드셨습니다</label>
+		<name>CLCreatedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>이 단계들은 도움말 섹션에서 언제든 검토하실 수 있습니다. &quot;Salesforce 데이터를 사용해 계약 생성&quot; 아래에서 확인하십시오.</label>
+		<name>CLGeneratedAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>확인</label>
+		<name>GotIt</name>
+	</customLabels>
+	<customLabels>
+		<label>완료 표시</label>
+		<name>MarkedComplete</name>
+	</customLabels>
+	<customLabels>
+		<label>1. DocuSign CLM에 새로운 Salesforce 개체를 매핑합니다. 사용자를 위해 사전 매핑된 &apos;계정&apos; 및 &apos;기회&apos; 개체를 사용하실 수도 있습니다.</label>
+		<name>MapNewObjectsToDocuSign</name>
+	</customLabels>
+	<customLabels>
+		<label>2. 개체 페이지 레이아웃을 구성하고 폴더 포털 구성 요소를 추가하여 개체 폴더를 확인하십시오.</label>
+		<name>ConfigureObjPageLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>3. DocuSign CLM으로 이동해 매핑된 Salesforce 개체를 사용해 양식을 생성하십시오.</label>
+		<name>CreateFormUsingObject</name>
+	</customLabels>
+	<customLabels>
+		<label>4. 생성한 양식을 사용해 DocuSign CLM에서 문서 생성 템플릿을 설정하십시오.</label>
+		<name>SetupDocGenTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>5. 문서 생성 URL을 복사하십시오. Salesforce 개체 페이지 레이아웃에 새로운 버튼을 추가합니다.</label>
+		<name>ConfigureDocGenURL</name>
+	</customLabels>
+	<customLabels>
+		<label>6. 해당 버튼을 사용해 한 번의 클릭으로 문서를 생성합니다.</label>
+		<name>SingleClickGenDoc</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM 설정을 찾지 못했습니다. 도움이 필요하면 DocuSign 지원팀에 문의하십시오.</label>
+		<name>MissingDocuSignCLMSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM으로 이동</label>
+		<name>GoToCLM</name>
+	</customLabels>
+	<customLabels>
+		<label>매핑 보기</label>
+		<name>HomeViewMappings</name>
+	</customLabels>
+	<customLabels>
+		<label>첫 번째 계약 생성하기</label>
+		<name>CheckListGenerateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>6가지 단계</label>
+		<name>ChecklistSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>시작하기</label>
+		<name>HomeGetStarted</name>
+	</customLabels>
+	<customLabels>
+		<label>이 단계들을 통해 Salesforce 데이터를 사용하여 계약을 만들 수 있습니다.</label>
+		<name>CheckListCreateAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>계약 생성 단계</label>
+		<name>CreateAgreementSteps</name>
+	</customLabels>
+	<customLabels>
+		<label>구성 요소</label>
+		<name>HomeComponents</name>
+	</customLabels>
+	<customLabels>
+		<label>구성 요소를 추가하여 레이아웃 및 환경을 사용자 지정합니다.</label>
+		<name>HomeComponentSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign CLM for Salesforce에 대한 일반적 질문에 답변을 제공하는 도움말 페이지를 만들었습니다.</label>
+		<name>HomeHavingTrouble</name>
+	</customLabels>
+	<customLabels>
+		<label>도움말 보기</label>
+		<name>HomeGetHelp</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce에서 레이아웃을 구성하는 방법 알아보기</label>
+		<name>HomeConfigureLayout</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 페이지에 버튼을 추가하는 방법 알아보기</label>
+		<name>HomeAddButton</name>
+	</customLabels>
+	<customLabels>
+		<label>이 단계들을 통해 Salesforce 데이터를 사용하여 첫 번째 계약을 만들 수 있습니다. 완료할 때마다 체크하십시오.</label>
+		<name>CheckListFirstAgreement</name>
+	</customLabels>
+	<customLabels>
+		<label>개체 관리자</label>
+		<name>CLObjectManager</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로로 이동</label>
+		<name>GoToWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성으로 </label>
+		<name>GoToDocumentGeneration</name>
+	</customLabels>
+	<customLabels>
+		<label>이미지 개요</label>
+		<name>OverviewImage</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 파일 가져오기</label>
+		<name>FetchingSalesforceFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 파일 가져오기</label>
+		<name>FetchingDocuSignFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>사본을 생성하고 DocuSign 파일로 가져오기...</label>
+		<name>ImportingToDocuSignFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>업로드 위젯 설정</label>
+		<name>SettingUpUploadWidget</name>
+	</customLabels>
+	<customLabels>
+		<label>승인 중</label>
+		<name>Authorizing</name>
+	</customLabels>
+	<customLabels>
+		<label>기타 소스</label>
+		<name>OtherSourcesText</name>
+	</customLabels>
+	<customLabels>
+		<label>새로운 Salesforce 개체 매핑하기</label>
+		<name>MapNewSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>이 개체 및 필드 조합에 대한 개체 매핑이 이미 존재합니다. 새 맵핑을 생성하려면 기존 맵핑을 편집하거나 삭제하십시오.</label>
+		<name>DuplicateMappingInsertion</name>
+	</customLabels>
+	<customLabels>
+		<label>봉투 트랜잭션 한계를 초과했습니다.</label>
+		<name>MultiSendEnvelopeLimitExceeded</name>
+	</customLabels>
+	<customLabels>
+		<label>하나 이상의 봉투가 송신되지 않았습니다.</label>
+		<name>InvalidSentEnvelopes</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce 개체 편집</label>
+		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customPageWebLinks>
+		<label>DocuSign 설정</label>
+		<name>Setup</name>
+	</customPageWebLinks>
+	<customTabs>
+		<label>DocuSign 설정</label>
+		<name>Setup</name>
+	</customTabs>
+</Translations>

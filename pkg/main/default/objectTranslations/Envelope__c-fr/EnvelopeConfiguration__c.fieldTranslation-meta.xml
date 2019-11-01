@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
     <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label,CustomFieldTranslation/relationshipLabel -->
-    <help>La configuration utilisée pour produire cette enveloppe.</help>
+    <help>La configuration utilisée pour générer cette enveloppe.</help>
     <label>Configuration de l’enveloppe</label>
     <name>EnvelopeConfiguration__c</name>
     <relationshipLabel>Enveloppes DocuSign</relationshipLabel>
