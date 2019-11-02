@@ -709,36 +709,40 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_save_uninitialized() {
-		Test.startTest();
-		System.assert(!AccountProducts.save());
-		Test.stopTest();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(!AccountProducts.save());
+			Test.stopTest();
 
-		System.assert(ProductSettings__c.getAll().isEmpty());
+			System.assert(ProductSettings__c.getAll().isEmpty());
+		}
 	}
 
 	@IsTest
 	static void test_save_clean() {
-		ESignatureProduct esign = new ESignatureProduct(
-			'active', false, null, new Set<ESignatureProduct.Feature>());
-		ProductSettings__c p = AccountProducts.DB.convert(esign);
-		insert p;
-		AccountSettings__c a = AccountSettings__c.getOrgDefaults();
-		a.ProductsLastChecked__c = Datetime.now();
-		a.ProductsCheckFrequency__c = 60;
-		insert a;
-		AccountProducts ap = AccountProducts.initialize(
-			DocuSign.Environment.Demo,
-			new Url('https://provisioning.test.docusign.net'),
-			new Url('https://esign.test.docusign.net'),
-			UUID.randomUUID(),
-			'unit.test');
-		System.assertNotEquals(null, ap);
-		System.assert(ap === AccountProducts.self);
-		System.assert(!ap.isDirty);
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			ESignatureProduct esign = new ESignatureProduct(
+				'active', false, null, new Set<ESignatureProduct.Feature>());
+			ProductSettings__c p = AccountProducts.DB.convert(esign);
+			insert p;
+			AccountSettings__c a = AccountSettings__c.getOrgDefaults();
+			a.ProductsLastChecked__c = Datetime.now();
+			a.ProductsCheckFrequency__c = 60;
+			insert a;
+			AccountProducts ap = AccountProducts.initialize(
+				DocuSign.Environment.Demo,
+				new Url('https://provisioning.test.docusign.net'),
+				new Url('https://esign.test.docusign.net'),
+				UUID.randomUUID(),
+				'unit.test');
+			System.assertNotEquals(null, ap);
+			System.assert(ap === AccountProducts.self);
+			System.assert(!ap.isDirty);
 
-		Test.startTest();
-		System.assert(!AccountProducts.save());
-		Test.stopTest();
+			Test.startTest();
+			System.assert(!AccountProducts.save());
+			Test.stopTest();
+		}
 	}
 
 	@IsTest
@@ -772,29 +776,31 @@ private class AccountProductsTest {
 
 	@IsTest
 	static void test_save_newRoles() {
-		UUID r1Id = UUID.randomUUID();
-		UUID r2Id = UUID.randomUUID();
-		List<Product.Role> roles = new List<Product.Role> {
-			new Product.Role(r1Id, Product.ESIGNATURE, ESignatureProduct.ROLE_USER, Label.User, false),
-			new Product.Role(r2Id, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true)
-		};
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UUID r1Id = UUID.randomUUID();
+			UUID r2Id = UUID.randomUUID();
+			List<Product.Role> roles = new List<Product.Role> {
+				new Product.Role(r1Id, Product.ESIGNATURE, ESignatureProduct.ROLE_USER, Label.User, false),
+				new Product.Role(r2Id, Product.CLM, ClmProduct.ROLE_ADMINISTRATOR, Label.Administrator, true)
+			};
 
-		Test.startTest();
-		System.assert(!AccountProducts.save());
-		AccountProducts.newRoles = roles;
-		System.assert(AccountProducts.save());
-		Test.stopTest();
+			Test.startTest();
+			System.assert(!AccountProducts.save());
+			AccountProducts.newRoles = roles;
+			System.assert(AccountProducts.save());
+			Test.stopTest();
 
-		List<ProductRoleSettings__c> prs = ProductRoleSettings__c.getAll().values();
-		System.assertEquals(2, Collection.size(prs));
-		for (ProductRoleSettings__c pr : prs) {
-			if (pr.RoleId__c == String.valueOf(r1Id)) {
-				System.assertEquals(pr.ProductName__c, Product.ESIGNATURE);
-				System.assertEquals(pr.RoleName__c, ESignatureProduct.ROLE_USER.toLowerCase());
-			} else {
-				System.assertEquals(pr.RoleId__c, String.valueOf(r2Id));
-				System.assertEquals(pr.ProductName__c, Product.CLM);
-				System.assertEquals(pr.RoleName__c, ClmProduct.ROLE_ADMINISTRATOR.toLowerCase());
+			List<ProductRoleSettings__c> prs = ProductRoleSettings__c.getAll().values();
+			System.assertEquals(2, Collection.size(prs));
+			for (ProductRoleSettings__c pr : prs) {
+				if (pr.RoleId__c == String.valueOf(r1Id)) {
+					System.assertEquals(pr.ProductName__c, Product.ESIGNATURE);
+					System.assertEquals(pr.RoleName__c, ESignatureProduct.ROLE_USER.toLowerCase());
+				} else {
+					System.assertEquals(pr.RoleId__c, String.valueOf(r2Id));
+					System.assertEquals(pr.ProductName__c, Product.CLM);
+					System.assertEquals(pr.RoleName__c, ClmProduct.ROLE_ADMINISTRATOR.toLowerCase());
+				}
 			}
 		}
 	}
