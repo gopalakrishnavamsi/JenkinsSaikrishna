@@ -3538,6 +3538,10 @@
 		<name>TryItOut</name>
 	</customLabels>
 	<customLabels>
+		<label>Upgrade Trial</label>
+		<name>UpgradeTrial</name>
+	</customLabels>
+	<customLabels>
 		<label>Compare Features</label>
 		<name>CompareFeatures</name>
 	</customLabels>

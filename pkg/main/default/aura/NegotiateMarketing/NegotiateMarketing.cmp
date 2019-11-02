@@ -80,7 +80,7 @@
                                 {!$Label.c.NegotiateBadgeText}
                             </div>
                             <div class="slds-m-top_small">
-                                <lightning:button variant="brand" label="{!$Label.c.TryItOut}"
+                                <lightning:button variant="brand" label="{!if(and(!empty(v.genProduct), v.genProduct.isTrial == true), $Label.c.UpgradeTrial, $Label.c.TryItOut)}"
                                     onclick="{!c.showNegotiateTrialModal}"/>
                             </div>
                         </div>

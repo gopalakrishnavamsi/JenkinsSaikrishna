@@ -6931,6 +6931,14 @@
 		<value>Try it out</value>
 	</labels>
 	<labels>
+		<fullName>UpgradeTrial</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UpgradeTrial</shortDescription>
+		<value>Upgrade Trial</value>
+	</labels>
+	<labels>
 		<fullName>CompareFeatures</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
