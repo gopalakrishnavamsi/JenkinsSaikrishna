@@ -26,4 +26,24 @@ public with sharing class CLMApexUtility {
 			throw Controller.wrapException(e.getMessage());
 		}
 	}
+
+	@AuraEnabled
+	public static String getDocGenButtonLink() {
+		try {			
+			Url docGenUrl =  CLMService.getDocumentGenerationLink();
+			return docGenUrl == null ? null : docGenUrl.toExternalForm();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to fetch Document Generation configuration Url');
+		}
+	}
+
+	@AuraEnabled
+	public static String getWorkflowButtonLink() {
+		try {			
+			Url workflowUrl =  CLMService.getWorkflowLink();
+			return workflowUrl == null ? null : workflowUrl.toExternalForm();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'getWorkflowButtonLink: Failed to fetch Document Generation configuration Url');
+		}
+	}
 }

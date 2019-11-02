@@ -1,4 +1,4 @@
-<aura:component controller="CLMWorkflowController" extends="c:CLMUtility">
+<aura:component controller="CLMApexUtility" extends="c:CLMUtility">
 	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
 	<aura:attribute name="currentTabId" type="string" default="{!$Label.c.Dashboard}"/>
 	<aura:attribute name="steps" type="String[]"/>
@@ -13,17 +13,17 @@
 			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.CreateAndManageWorkflows}"
 				imageURL="{!($Resource.WorkflowDesignerCard)}" summary="{!$Label.c.CreateAndManageSummary}"
 				isLink="true" link="{!$Label.c.LearnHowTo}" hyperlinkedURI="['tab','8']"
-				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" firstButtonNavigation="{!v.redirectCLM}"/>
+				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" invokedBy="Workflow-OpenDocuSignCLM"/>
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMInformationHelp isSubTitle="false" imageURL="{!($Resource.WorkflowButtonConfig)}"
 				summary="{!$Label.c.CustomWorkflowButtonSummary}" isLink="true" link="{!$Label.c.LearnHowToAddAButton}"
-				hyperlinkedURI="['tab','8']" firstButtonName="{!$Label.c.OpenObjectManagerButton}"/>
+				hyperlinkedURI="['tab','8']" firstButtonName="{!$Label.c.OpenObjectManagerButton}" invokedBy="Workflow-OpenObjectManager"/>
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" showButton="true"
 				buttonLabel="{!$Label.c.GoToWorkflow}" imageURL="{!($Resource.WorkflowDesigner)}" hyperlinkedURI="['tab','8']"
-				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" firstButtonNavigation="{!v.redirectCLM}"/>
+				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" invokedBy="Workflow-GoToWorkflow"/>
 		</div>
 		<div class="slds-p-top_medium">
 			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowSteps}" showButton="false"

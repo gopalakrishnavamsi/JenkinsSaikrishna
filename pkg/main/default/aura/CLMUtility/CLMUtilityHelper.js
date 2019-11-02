@@ -36,7 +36,7 @@
             || errors[0].message.indexOf('REQUIRED_FIELD_MISSING') !== -1)) {
             _self.fireToast(component, $A.get('$Label.c.DuplicateMappingInsertion'), this.ERROR);
           } else {
-            self.fireToast(component, errors[0].message, this.ERROR);
+            _self.fireToast(component, errors[0].message, this.ERROR);
           }
         }
       }
