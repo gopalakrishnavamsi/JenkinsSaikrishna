@@ -99,6 +99,7 @@ public class MetadataAPIMock implements WebServiceMock {
 						for (String fn : req.fullNames) {
 							MetadataAPI.WebLink record = new MetadataAPI.WebLink();
 							record.fullName = fn;
+							record.masterLabel = 'test';
 							records.add(record);
 						}
 						MetadataAPI.ReadWebLinkResult result = new MetadataAPI.ReadWebLinkResult();

@@ -319,6 +319,17 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	private static String getActionLabel(final SObjectType type, final String apiName) {
+		if (type == null || String.isBlank(apiName)) return null;
+		String result;
+		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
+				'WebLink', new List<String> { getActionFullName(type, apiName) }));
+		if (webLink != null && String.isNotBlank(webLink.masterLabel)) {
+			result = webLink.masterLabel;
+		}
+		return result;
+	}
+
 	private static String getActionType(final String apiName) {
 		if (apiName == Layout.ACTION_NAME_SEND) {
 			return Layout.ACTION_TYPE_SEND;
@@ -329,7 +340,7 @@ public with sharing class MetadataService {
 		}
 	}
 
-	private static List<Layout.Action> getActions(final MetadataAPI.Layout mdLayout) {
+	private static List<Layout.Action> getActions(final MetadataAPI.Layout mdLayout, final SObjectType type) {
 		List<Layout.Action> result = new List<Layout.Action>();
 		if (mdLayout != null
 			&& Collection.isNotEmpty(mdLayout.customButtons)) {
@@ -337,7 +348,8 @@ public with sharing class MetadataService {
 			for (String apiName : mdLayout.customButtons) {
 				result.add(new Layout.Action(
 					getActionType(apiName),
-					apiName));
+					apiName, 
+					getActionLabel(type,apiName)));
 			}
 		}
 		return result;
@@ -355,7 +367,7 @@ public with sharing class MetadataService {
 			props.id,
 			props.namespacePrefix,
 			getLayoutName(props.fullName),
-			getActions(layout));
+			getActions(layout, type));
 	}
 
 	private static List<Layout> readLayouts(
@@ -668,6 +680,10 @@ public with sharing class MetadataService {
 				actionLabel,
 				Page.GenDocumentGenerator,
 				parametersMap);
+		}
+		else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
+			webLink.masterLabel = actionLabel;
+			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));			
 		}
 		return webLink;
 	}

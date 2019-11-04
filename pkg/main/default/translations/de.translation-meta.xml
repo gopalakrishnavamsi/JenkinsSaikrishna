@@ -1830,10 +1830,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Schaltfäche wurde erstellt.</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>Entwürfe</label>
 		<name>Drafts</name>
 	</customLabels>

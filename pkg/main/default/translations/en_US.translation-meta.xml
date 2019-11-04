@@ -1834,10 +1834,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Button successfully created!</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>drafts</label>
 		<name>Drafts</name>
 	</customLabels>

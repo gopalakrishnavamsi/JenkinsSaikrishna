@@ -1830,10 +1830,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>버튼이 성공적으로 생성되었습니다!</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>초안</label>
 		<name>Drafts</name>
 	</customLabels>

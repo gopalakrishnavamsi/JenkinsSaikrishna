@@ -1830,10 +1830,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Кнопка создана.</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>черновики</label>
 		<name>Drafts</name>
 	</customLabels>

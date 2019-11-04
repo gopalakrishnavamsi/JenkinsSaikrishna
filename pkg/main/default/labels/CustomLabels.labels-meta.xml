@@ -3798,13 +3798,6 @@
 		<value>Page Layouts</value>
 	</labels>
 	<labels>
-		<fullName>SuccessfullyPublished</fullName>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>SuccessfullyPublished</shortDescription>
-		<value>Button successfully created!</value>
-	</labels>
-	<labels>
 		<fullName>Drafts</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

@@ -5,7 +5,7 @@ public class Layout implements Comparable {
 
 	public static final String ACTION_TYPE_SEND = 'SEND';
 	public static final String ACTION_NAME_SEND = MetadataAPI.NAMESPACE_PREFIX + 'SendWithDocuSign';
-	public static final String ACTION_NAME_GEN = MetadataAPI.NAMESPACE_PREFIX + Label.Generate;
+	public static final String ACTION_NAME_GEN = MetadataAPI.NAMESPACE_PREFIX + 'Generate';
 	public static final String ACTION_TYPE_GEN = 'GEN';
 	public static final String ACTION_TYPE_OTHER = 'OTHER';
 
@@ -79,6 +79,12 @@ public class Layout implements Comparable {
 		public String name { get; private set; }
 
 		/**
+		 * The label of the DocuSign action.
+		 */
+		@AuraEnabled
+		public String label { get; private set; }
+
+		/**
 		 * Constructs a DocuSign action.
 		 *
 		 * @param type The type of the DocuSign action: <code>SEND</code> or <code>GEN</code>.
@@ -86,10 +92,12 @@ public class Layout implements Comparable {
 		 */
 		public Action(
 			final String type,
-			final String name) {
+			final String name,
+			final String label) {
 
 			this.type = type;
 			this.name = name;
+			this.label = label;
 		}
 	}
 

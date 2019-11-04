@@ -1830,10 +1830,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>按钮创建成功！</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>草稿</label>
 		<name>Drafts</name>
 	</customLabels>

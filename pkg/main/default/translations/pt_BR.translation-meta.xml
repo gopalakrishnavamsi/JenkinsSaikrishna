@@ -1830,10 +1830,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>Botão criado com sucesso.</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>rascunhos</label>
 		<name>Drafts</name>
 	</customLabels>

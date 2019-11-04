@@ -1831,10 +1831,6 @@
 		<name>PageLayouts</name>
 	</customLabels>
 	<customLabels>
-		<label>El botón se ha creado correctamente.</label>
-		<name>SuccessfullyPublished</name>
-	</customLabels>
-	<customLabels>
 		<label>Borradores</label>
 		<name>Drafts</name>
 	</customLabels>

@@ -1,26 +1,22 @@
 ({
   init: function(component, event, helper) {
-    helper.getLayouts(component, event, helper);
-    helper.getGenActionName(component, event, helper);
+    helper.init(component, event, helper);
+  },
+
+  makeDirty: function (component, event, helper) {
+    component.set('v.isDirty', helper.isDirty(component.get('v.layouts'), component));
+  },
+
+  updateGenActionLabel: function (component, event, helper) {
+    var validity = event.getSource().get('v.validity');
+    if (validity.valid === true) {
+      helper.updateGenActionLabel(component.get('v.layouts'), component);
+      component.set('v.isDirty', helper.isDirty(component.get('v.layouts'), component));
+    } 
   },
 
   publish: function(component, event, helper) {
     helper.publishGenButtons(component, event, helper);
-  },
-
-  checkValidState: function(component) {
-    var layouts = component.get('v.layouts');
-    var selectedLayouts = [];
-    layouts.forEach(function(layout) {
-      if (layout.checked) {
-        selectedLayouts.push(layout);
-      }
-    });
-    var invalid = false;
-    if ($A.util.isEmpty(selectedLayouts)) {
-      invalid = true;
-    }
-    component.set('v.invalidState', invalid);
   },
 
   validate: function() {

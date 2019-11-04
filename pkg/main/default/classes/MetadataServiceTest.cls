@@ -587,7 +587,7 @@ private class MetadataServiceTest {
 			'ns',
 			'n',
 			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND)
+				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, 'testLabel')
 			});
 		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
 		currentLayout.customButtons = new List<String> { Layout.ACTION_NAME_SEND };
@@ -616,7 +616,7 @@ private class MetadataServiceTest {
 			'ns',
 			'n',
 			new List<Layout.Action> {
-				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND)
+				new Layout.Action(Layout.ACTION_TYPE_SEND, Layout.ACTION_NAME_SEND, 'testLabel')
 			});
 		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
 		currentLayout.customButtons = null;
@@ -713,11 +713,33 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
+	static void test_getGenWebLink_not_found() {
+		Test.setMock(WebServiceMock.class, new WebLinkNotFoundMock());
+
+		Test.startTest();
+		MetadataAPI.WebLink result = MetadataService.getGenWebLink(Lead.getSObjectType(), 'TestAction', 'TestLabel', UserInfo.getUserId());
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@IsTest
 	static void test_getWebLink_already_exists() {
 		MetadataAPIMock.success();
 
 		Test.startTest();
 		MetadataAPI.WebLink result = MetadataService.getWebLink(Lead.getSObjectType(), 'TestAction');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@IsTest
+	static void test_getGenWebLink_already_exists() {
+		MetadataAPIMock.success();
+
+		Test.startTest();
+		MetadataAPI.WebLink result = MetadataService.getGenWebLink(Lead.getSObjectType(), 'TestAction', 'TestLabel', UserInfo.getUserId());
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -814,7 +836,8 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND)
+						Layout.ACTION_NAME_SEND,
+						'testLabel')
 				});
 			Layout l2 = new Layout(
 				Contact.getSObjectType(),
@@ -824,7 +847,8 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_SEND,
-						Layout.ACTION_NAME_SEND)
+						Layout.ACTION_NAME_SEND,
+						'testLabel')
 				});
 
 			Test.startTest();
@@ -849,7 +873,8 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_GEN,
-						Layout.ACTION_NAME_GEN)
+						Layout.ACTION_NAME_GEN,
+						'testLabel')
 				});
 			Layout l2 = new Layout(
 				Contact.getSObjectType(),
@@ -859,7 +884,8 @@ private class MetadataServiceTest {
 				new List<Layout.Action> {
 					new Layout.Action(
 						Layout.ACTION_TYPE_GEN,
-						Layout.ACTION_NAME_GEN)
+						Layout.ACTION_NAME_GEN,
+						'testLabel')
 				});
 
 			Test.startTest();

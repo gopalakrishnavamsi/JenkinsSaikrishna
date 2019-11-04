@@ -1,20 +1,19 @@
 <aura:component controller="MetadataController">
 
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-
     <!-- attributes -->
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="layouts" type="Object[]" access="private"/>
     <aura:attribute name="isClassic" type="Boolean"/>
-    <aura:attribute name="invalidState" type="Boolean" default="{!false}"/>
+    <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
     <aura:attribute name="creatingButtons" type="Boolean" default="{!false}"/>
     <aura:attribute name="genActionName" type="String" access="private"/>
+    <aura:attribute name="genActionAPIName" type="String" access="private"/>
+    <aura:attribute name="genButtonLabel" type="String"/>
+
+    <!-- required scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}" />
 
     <!-- Events -->
-
-    <!-- handlers -->
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
-
     <aura:registerEvent name="showToast" type="c:strike_evt"/>
     <aura:registerEvent name="publishedButtons" type="c:strike_evt"/>
 
@@ -40,9 +39,13 @@
         <p>{!$Label.c.PublishMsg}</p>
     </div>
 
-    <lightning:input aura:id="buttonLabel" type="text" label="{!$Label.c.ButtonLabel}"
-                     value="{!$Label.c.Generate + ' '+v.config.name}" maxlength="40" onchange="{!c.checkValidState}"
-                     readonly="true"/>
+    <lightning:input aura:id="buttonLabel" type="text" 
+                     label="{!$Label.c.ButtonLabel}"
+                     value="{!v.genButtonLabel}"
+                     maxlength="40"
+                     onchange="{!c.updateGenActionLabel}"
+                     pattern="[a-zA-Z0-9 ]+"
+                     messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"/>
 
     <div class="slds-m-top_medium slds-clearfix">
         <p class="slds-form-element__legend slds-form-element__label">{!$Label.c.PageLayouts}</p>
@@ -51,8 +54,11 @@
         <!-- Page Layout -->
         <label class="ds-mouse-through slds-media slds-media_center slds-m-bottom_x-small">
             <div class="slds-media__figure slds-m-right_x-small slds-p-top_xx-small">
-                <lightning:input type="checkbox" checked="{!layout.checked}" label="{!layout.name}"
-                                 class="ds-checkbox_no-label ds-checkbox_large" onchange="{!c.checkValidState}"/>
+                <lightning:input type="checkbox" 
+                                 label="{!layout.name}"
+                                 onchange="{!c.makeDirty}" 
+                                 checked="{!layout.hasGenAction}" 
+                                 class="ds-checkbox_no-label ds-checkbox_large"/>
             </div>
             <div class="slds-media__content">
                 <p class="slds-m-top_xxx-small">{!layout.name}</p>
@@ -62,7 +68,7 @@
     </aura:iteration>
 
     <aura:if isTrue="{!not(v.config.Sample__c)}">
-        <lightning:button label="{!$Label.c.PublishCustomButtons}" class="slds-m-top_xx-small"
-                          onclick="{!c.publish}" disabled="{!v.invalidState}"/>
+        <lightning:button label="{!$Label.c.Publish}" class="slds-m-top_xx-small"
+                          onclick="{!c.publish}" disabled="{!(not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons)}"/>
     </aura:if>
 </aura:component>
