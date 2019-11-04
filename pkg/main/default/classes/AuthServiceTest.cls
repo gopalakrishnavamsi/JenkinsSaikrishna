@@ -1617,6 +1617,42 @@ private class AuthServiceTest {
 		}
 	}
 
+	@IsTest
+	static void test_saveSetupCredentials_active_clmAdmin() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+
+		System.runAs(UserMock.createClmAdministrator(false)) {
+			List<PermissionSetAssignment> psas = [
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				LIMIT 1
+			];
+			System.assert(Collection.isNotEmpty(psas));
+			AuthService.State state = new AuthService.State(
+				TestUtils.getOrigin(),
+				DocuSign.Environment.Other,
+				new Url('https://unit.test.docusign.net'),
+				true);
+
+			Test.startTest();
+			LoginInformation result = AuthService.saveSetupCredentials('unit.test', state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			psas = [
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+			];
+			System.assertEquals(psas.size(), 1);
+		}
+	}
+
 	private class NoAccountsMock extends OAuthTokenMock {
 		override public HttpResponse getResponse(final HttpRequest request) {
 			HttpResponse response = new HttpResponse();

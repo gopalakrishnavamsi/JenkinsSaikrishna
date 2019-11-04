@@ -968,7 +968,7 @@ public with sharing class AuthService {
 	@Future
 	private static void assignClmAdministratorPermissionSet(final Id userId) {
 		if (String.isBlank(userId)) return;
-
+		
 		Permissions.assignClmAdministratorPermissionSet(new Set<Id> { userId });
 	}
 
@@ -1011,8 +1011,10 @@ public with sharing class AuthService {
 					l.loginInformation,
 					l.loginInformation.accounts[0],
 					l.token);
-				// DFS-6068: Make sure setup user has CLM Administrator role
-				if (aps.isClmEnabled()) assignClmAdministratorPermissionSet(UserInfo.getUserId());
+				// DFS-6068: Make sure setup user has CLM Administrator role; DFS-6296: Assign CLM admin perm set only if not already assigned
+				if (aps.isClmEnabled() && !Permissions.isClmAdministrator()) {
+					assignClmAdministratorPermissionSet(UserInfo.getUserId());
+				}	
 			} finally {
 				AccountProducts.save();
 			}
