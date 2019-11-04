@@ -12,6 +12,7 @@
     <aura:attribute name="currentStep" type="String" access="private"/>
     <aura:attribute name="dueDate" type="Date" access="private"/>
     <aura:attribute name="minimumDueDate" type="Date" access="private"/>
+    <aura:attribute name="maximumDueDate" type="Date" access="private"/>
     <aura:attribute name="requestExpirationDays" type="Integer" access="private"/>
     <aura:attribute name="emailSubject" type="String"
                     default="{!$Label.c.ExternalReviewEmailSubject}" access="private"/>
@@ -80,8 +81,11 @@
                                     <lightning:input aura:id="externalReviewDueDate" type="date"
                                                      label="{!$Label.c.ExternalReviewSetDueDate}"
                                                      name="date"
+                                                     onfocus="{!c.blurDueDateComponent}"
+                                                     onkeydown="{!c.blurDueDateComponent}"
                                                      value="{!v.dueDate}"
-                                                     min="{!v.minimumDueDate}"/>
+                                                     min="{!v.minimumDueDate}"
+                                                     max="{!v.maximumDueDate}"/>
                                 </div>
                             </div>
                         </div>

@@ -4,9 +4,11 @@
     recipients.push(helper.newRecipient());
     var now = new Date();
     var minimumDueDate = helper.getDateWithDaysOffset(now, 1);
+    var maximumDueDate = helper.getDateWithDaysOffset(now, 366 * 2);
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
     component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
+    component.set('v.maximumDueDate', helper.getFormattedDate(maximumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
     var dueDate = helper.getDateWithDaysOffset(now, 30);
     if (dueDateElement) {
@@ -141,6 +143,7 @@
     var dateToday = helper.getFormattedDate(new Date()); // today's date
     var daysDifference = helper.computeDaysDifference(dueDate, dateToday);
     component.set('v.requestExpirationDays', daysDifference);
+    helper.blurDueDateComponent(component);
   },
 
   initializeRecipients: function (component) {
@@ -216,5 +219,9 @@
   // output date format: 'YYYY-MM-DD'
   getFormattedDate: function (date) {
     return date.toISOString().slice(0, 10);
+  },
+
+  blurDueDateComponent: function (component) {
+    component.find('externalReviewDueDate').blur();
   }
 });
