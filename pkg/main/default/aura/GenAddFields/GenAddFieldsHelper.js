@@ -1,5 +1,5 @@
 ({
-  getFieldMapping: function(component, optionModalParams) {
+  getFieldMapping: function (component, optionModalParams) {
     var config = component.get('v.config');
     var fieldMapping;
     var objMapping = config.objectMappings[optionModalParams.objIndex];
@@ -16,7 +16,7 @@
     return fieldMapping;
   },
 
-  setConditionalRadio: function(component) {
+  setConditionalRadio: function (component) {
     var mergeFieldDisplayOptions = [
       {
         label: $A.get('$Label.c.AlwaysDisplayThisField'),
@@ -32,7 +32,7 @@
   },
 
   // TOOD: Generalize formatDate and formatCurrency and move to stringUtils
-  formatDate: function(component, dateFormat) {
+  formatDate: function (component, dateFormat) {
     var date = new Date();
 
     if (dateFormat === 'default') {
@@ -45,7 +45,7 @@
     }
   },
 
-  formatCurrency: function(component, currencyFormat) {
+  formatCurrency: function (component, currencyFormat) {
     var number = 123456.78;
     var locale = $A.get('$Locale');
 
