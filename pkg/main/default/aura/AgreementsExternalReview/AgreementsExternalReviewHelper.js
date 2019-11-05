@@ -3,14 +3,14 @@
     var recipients = component.get('v.recipients');
     recipients.push(helper.newRecipient());
     var now = new Date();
-    var minimumDueDate = helper.getDateWithDaysOffset(now, 1);
-    var maximumDueDate = helper.getDateWithDaysOffset(now, 366 * 2);
+    var minimumDueDate = helper.getDateWithOffset(now, 0, 1);
+    var maximumDueDate = helper.getDateWithOffset(now, 2, 0);
     component.set('v.recipients', recipients);
     component.set('v.currentStep', '1');
     component.set('v.minimumDueDate', helper.getFormattedDate(minimumDueDate));
     component.set('v.maximumDueDate', helper.getFormattedDate(maximumDueDate));
     var dueDateElement = component.find('externalReviewDueDate');
-    var dueDate = helper.getDateWithDaysOffset(now, 30);
+    var dueDate = helper.getDateWithOffset(now, 0, 30);
     if (dueDateElement) {
       dueDateElement.set('v.value', helper.getFormattedDate(dueDate));
     }
@@ -211,9 +211,11 @@
     );
   },
 
-  // add or subtract days from given date
-  getDateWithDaysOffset: function (date, days) {
-    return new Date(date.valueOf() + 86400 * 1000 * days);
+  // add or subtract years and/or days from given date
+  getDateWithOffset: function (date, years, days) {
+    var newDate = new Date(date);
+    newDate.setFullYear(date.getFullYear() + years);
+    return new Date(newDate.valueOf() + 86400 * 1000 * days);
   },
 
   // output date format: 'YYYY-MM-DD'
