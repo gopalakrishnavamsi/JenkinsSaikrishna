@@ -3,20 +3,20 @@
     <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
     <caseValues>
         <plural>false</plural>
-        <value>État DocuSign</value>
+        <value>Statut DocuSign</value>
     </caseValues>
     <caseValues>
         <plural>true</plural>
-        <value>État DocuSign</value>
+        <value>Statut DocuSign</value>
     </caseValues>
     <layouts>
         <layout>DocuSign Envelope Status Layout</layout>
         <sections>
-            <label><!-- Information --></label>
+            <label><!--Informations--></label>
             <section>Information</section>
         </sections>
         <sections>
-            <label><!-- System Information --></label>
+            <label><!--Informations système--></label>
             <section>System Information</section>
         </sections>
     </layouts>
