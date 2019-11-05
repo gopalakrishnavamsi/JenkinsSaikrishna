@@ -33,7 +33,7 @@
 			component,
 			{
 				data: { objDetails: objDetails },
-				componentName: 'CLMCardModel',
+				componentName: 'CLMMappedObjectsEdit',
 				fromComponent: 'CLMMappedObjectsHome',
 				toComponent: 'CLMIntegrationLayout',
 				type: 'edit'
@@ -86,6 +86,19 @@
 				modelComponent.show();
 			}),
 			5
+		);
+	},
+
+	showNoObjectsUI: function (component) {
+		this.fireApplicationEvent(
+			component,
+			{
+				componentName: 'CLMMappedObjectsEdit',
+				fromComponent: 'CLMMappedObjectsHome',
+				toComponent: 'CLMIntegrationLayout',
+				type: 'hide'
+			},
+			'CLMNavigationEvent'
 		);
 	}
 });

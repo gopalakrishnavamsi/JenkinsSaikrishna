@@ -3,7 +3,7 @@
     <aura:attribute name="notificationTitle" type="String" default="{!$Label.c.PreSetObjMappings}" />
     <aura:attribute name="notificationText" type="String" default="{!$Label.c.PreSetObjMappingsBody}" />
     <aura:attribute name="notificationIconSize" type="String" />
-    <aura:attribute name="isVisible" type="Boolean" default="show" />
+    <aura:attribute name="isVisible" type="Boolean" default="false" />
 
     <aura:handler event="c:CLMEvent" action="{!c.handleScopedNotification}" />
     <aura:if isTrue="{!v.isVisible}">

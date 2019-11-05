@@ -17,3 +17,7 @@
     background-color: t(colorBackground);
     color: black;
 }
+
+.THIS .ds-overflow-hide{
+    overflow: hidden;
+}

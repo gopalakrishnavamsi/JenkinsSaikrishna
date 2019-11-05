@@ -70,10 +70,10 @@ public with sharing class CLMMapObjectController {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static Map<String, EOS_Type__c> getMappedObjectsList() {
+	public static List<EOS_Type__c> getMappedObjectsList() {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			return EOS_Type__c.getAll();
+			return EOS_Type__c.getAll().values();
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get all mapped objects list.');
 		}

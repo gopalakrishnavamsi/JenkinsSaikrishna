@@ -1,7 +1,6 @@
 <aura:component extends="c:CLMUtility" controller="CLMApexUtility">
     <ltng:require scripts="{!$Resource.navUtils}"/>
     <aura:attribute name="login" type="Object"/>
-    <aura:attribute name="imageURL" type="String" default="{!($Resource.CLMHavingTrouble)}"/>
     <aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
     <!--event handlers-->
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>

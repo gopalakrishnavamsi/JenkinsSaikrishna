@@ -32,3 +32,18 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
+
+.THIS .ds-havingTrouble-img-size {
+    height: 10rem;
+    width: 10rem;
+}
+
+.THIS .ds-helpBasics-img-size {
+    height: 10rem;
+    width: 12rem;
+}
+
+.THIS .ds-helpLayouts-img-size {
+    height: 10rem;
+    width: 14rem;
+}

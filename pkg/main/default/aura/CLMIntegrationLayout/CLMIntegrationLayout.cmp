@@ -9,7 +9,6 @@
     <aura:handler name="CLMHelpPrimaryButtonClicked" event="c:CLMHelpCardEvent" action="{!c.onPrimaryButtonClick}"/>
     <aura:handler name="CLMHelpSecondaryButtonClicked" event="c:CLMHelpCardEvent"
         action="{!c.onSecondaryButtonClick}"/>
-    <aura:registerEvent name="CLMCardModelEvent" type="c:CLMCardModelEvent"/>
     <aura:registerEvent name="CLMEvent" type="c:CLMEvent"/>
 
     <!--Place holder attributes-->
@@ -43,7 +42,7 @@
                     <span> {!$Label.c.DontKnowObjectMapping}</span>
                 </div>
                 <div class="slds-col slds-p-bottom_large slds-align-middle">
-                    <span>                        
+                    <span>
                         <a href="javascript:void(0);"
                             onclick="{!c.onSecondaryButtonClick}">{!$Label.c.TakeALook}</a></span>
                 </div>
@@ -56,7 +55,7 @@
                         <c:CLMScopedNotifications/>
                     </lightning:layoutItem>
                 </aura:if>
-            </aura:if>                        
+            </aura:if>
             <aura:if isTrue="{!!v.showPathAndNew}">
                 <lightning:layoutItem size="12" padding="around-none">
                     <c:CLMMappedObjectsHome/>
@@ -64,25 +63,25 @@
             </aura:if>
             <aura:if isTrue="{!v.showPathAndNew}">
                 <lightning:layoutItem size="12" padding="around-none">
-                    {!v.editComponent}
+                    <div class="ds-overflow-hide">{!v.editComponent}</div>
                 </lightning:layoutItem>
             </aura:if>
             <aura:if isTrue="{!v.showTrouble}">
                 <lightning:layoutItem size="12" padding="around-large">
                     <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required"
                         secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true"
-                        firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true"
-                        isIcon="true" secondButtonVariant="neutral"
-                        summary="{!$Label.c.ConfigureObjectPageLayoutInfo}"/>
+                        firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" isIcon="true"
+                        secondButtonVariant="neutral" summary="{!$Label.c.ConfigureObjectPageLayoutInfo}"/>
                 </lightning:layoutItem>
             </aura:if>
             <aura:if isTrue="{!v.showHelp}">
                 <lightning:layoutItem size="12" class="slds-p-left_large slds-p-right_large">
-                    <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}" imageURL="{!($Resource.HavingTroubleOnHome)}"
-                        firstButtonName="{!$Label.c.LearnMore}" showIcon="true" isIcon="false" showSecondButton="false"
-                        summary="{!$Label.c.MappingObjectsGuideText}" />
+                    <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}"
+                        imageURL="{!($Resource.HavingTroubleOnHome)}" secondButtonName="{!$Label.c.HomeGetHelp}" showFirstButton="false"
+                        showIcon="true" isIcon="false" secondButtonVariant="neutral"
+                        summary="{!$Label.c.MappingObjectsGuideText}"/>
                 </lightning:layoutItem>
-            </aura:if>            
+            </aura:if>
         </aura:if>
     </lightning:layout>
 </aura:component>

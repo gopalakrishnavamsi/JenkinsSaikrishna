@@ -545,7 +545,7 @@
 		var navigateTo = event.getParam('navigateTo');
 		var fromComponent = event.getParam('fromComponent');
 		var toComponent = event.getParam('toComponent');
-		if ((toComponent === 'CLMCardModel' || toComponent === 'ANY') && fromComponent !== 'CLMCardModel') {
+		if ((toComponent === 'CLMMappedObjectsEdit' || toComponent === 'ANY') && fromComponent !== 'CLMMappedObjectsEdit') {
 			if (navigateTo !== undefined) {
 				helper.UpdateUI(component, navigateTo.index);
 			}

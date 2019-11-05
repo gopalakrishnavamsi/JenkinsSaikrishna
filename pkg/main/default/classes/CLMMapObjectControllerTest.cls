@@ -4,7 +4,7 @@ public class CLMMapObjectControllerTest {
 	public static void getMappedObjectsListTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
-			Map<String, EOS_Type__c> result = CLMMapObjectController.getMappedObjectsList();
+			List<EOS_Type__c> result = CLMMapObjectController.getMappedObjectsList();
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 		}

@@ -1,22 +1,18 @@
 .THIS {
-  background-color: #fafafb;
-  border-radius: t(borderRadiusMedium);
+    background-color: #fafafb;
+    border-radius: t(borderRadiusMedium);
 }
 
 .THIS .ds-textLabel-color {
-  color: t(colorTextLabel);
+    color: t(colorTextLabel);
 }
 
-.THIS .ds-img-style {
-  height: 7rem;
-  width: 7rem;
-}
 .THIS .ds-button-width {
-  min-width: 142px;
-  max-width: 144px;
+    min-width: 142px;
+    max-width: 144px;
 }
 
 .THIS .ds-card-heading {
-  color: t(colorTextLinkActive);
-  font-size: 1.25rem;
+    color: t(colorTextLinkActive);
+    font-size: 1.25rem;
 }

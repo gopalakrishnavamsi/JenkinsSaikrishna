@@ -11,8 +11,8 @@
             <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border"
                 onclick="{!c.showFAQs}">
                 <ul>
-                    <li class="slds-align_absolute-center">
-                        <img src="{!($Resource.CLMHavingTrouble)}" style="height:10rem;width:10rem;"
+                    <li class="slds-align_absolute-center ds-havingTrouble-img-size">
+                        <img src="{!($Resource.HavingTroubleOnHome4x)}"
                             alt="{!$Label.c.agreementHelp}"/>
                     </li>
                     <li class="ds-text-color ds-not-selectable">
@@ -22,8 +22,8 @@
             </div>
             <div class="slds-box ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="docGenBasics">
                 <ul>
-                    <li class="slds-align_absolute-center">
-                        <img src="{!($Resource.CLMHelpBasics)}" style="height:10rem;width:12rem;"
+                    <li class="slds-align_absolute-center ds-helpBasics-img-size">
+                        <img src="{!($Resource.CLMHelpBasics)}"
                             alt="{!$Label.c.agreementHelp}"/>
                     </li>
                     <li class="ds-text-color ds-not-selectable">
@@ -33,8 +33,8 @@
             </div>
             <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="addCompToLayouts">
                 <ul>
-                    <li class="slds-align_absolute-center">
-                        <img src="{!($Resource.CLMHelpLayouts)}" style="height:10rem;width:14rem;"
+                    <li class="slds-align_absolute-center ds-helpLayouts-img-size">
+                        <img src="{!($Resource.CLMHelpLayouts)}"
                             alt="{!$Label.c.agreementHelp}"/>
                     </li>
                     <li class="ds-text-color ds-not-selectable">

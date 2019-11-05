@@ -201,7 +201,7 @@
                                 </div>
                             </div>
                         </aura:if>
-                        <div class="slds-scrollable_y" style="max-height:500px">
+                        <div class="slds-scrollable_y ds-height" style="max-height:500px">
                             <aura:if isTrue="{!v.currentStep=='1'}">
                                 <ul class="slds-tree" role="tree">
                                     <aura:iteration items="{!v.allObjectsList}" var="data">

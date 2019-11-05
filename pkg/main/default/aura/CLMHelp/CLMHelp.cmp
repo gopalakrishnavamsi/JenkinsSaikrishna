@@ -20,17 +20,15 @@
         <div class="slds-grid slds-wrap">
             <aura:if isTrue="{!v.showIcon}">
                 <div class="slds-p-right_large">
-                    <aura:if isTrue="{!v.isIcon}">
-                        <div class="slds-p-top_medium slds-p-left_small">
-                            <lightning:icon iconName="{!v.imageURL}" size="large"
-                                alternativeText="{!$Label.c.InformationIcon}" class="{!v.iconColorClass}"/>
-                        </div>
-                        <aura:set attribute="else">
-                            <div class="slds-p-top_small slds-p-left_small ds-img-style">
-                                <img src="{!v.imageURL}" alt="{!$Label.c.HavingTroubleImgAltText}" size="large"/>
-                            </div>
-                        </aura:set>
-                    </aura:if>
+                    <div class="slds-p-top_medium slds-p-left_small">
+                        <aura:if isTrue="{!v.isIcon}">
+                            <lightning:icon iconName="{!v.imageURL}" size="large" alternativeText="{!$Label.c.InformationIcon}"
+                                class="{!v.iconColorClass}" />
+                            <aura:set attribute="else">
+                                <img src="{!v.imageURL}" class="ds-img-style" alt="{!$Label.c.HavingTroubleImgAltText}" size="large" />
+                            </aura:set>
+                        </aura:if>
+                    </div>
                 </div>
             </aura:if>
             <div class="slds-col slds-size_6-of-12">

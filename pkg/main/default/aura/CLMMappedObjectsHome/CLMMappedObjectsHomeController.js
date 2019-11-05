@@ -1,101 +1,104 @@
 ({
   onInit: function (component, event, helper) {
-    helper.callServer(component, 'c.getNamespace', false, function (namespace) {
-      namespace = namespace || component.get('v.namespace');
-      var actions = [
-        { label: 'Edit Mapping', name: 'edit' },
-        { label: 'Remove Mapping', name: 'remove' }
-      ];
-      var pathApiName = namespace === 'c' ? 'Path__c' : namespace + '__Path__c';
-      var folderApiName = namespace === 'c' ? 'FolderName__c' : namespace + '__FolderName__c';
-      var column = [
-        {
-          label: $A.get('$Label.c.SalesforceObject'),
-          fieldName: 'Name',
-          type: 'text',
-          sortable: true,
-          cellAttributes: { alignment: 'left' }
-        },
-        {
-          label: $A.get('$Label.c.ObjectFolderName'),
-          fieldName: folderApiName,
-          type: 'text',
-          sortable: true,
-          cellAttributes: { alignment: 'left' },
-          typeAttributes: {
-            label: {
-              fieldName: folderApiName
-            }            
-          }
-        },
-        {
-          label: $A.get('$Label.c.PathInDocuSignCLM'),
-          fieldName: pathApiName,
-          type: 'text',
-          sortable: true,
-          cellAttributes: { alignment: 'left', tooltip: 'actions' },
-          typeAttributes: {
-            label: {
-              fieldName: pathApiName
-            }            
-          }
-        },
-        {
-          label: 'Date Added',
-          fieldName: 'CreatedDate',
-          type: 'date-local',
-          sortable: true,
-          cellAttributes: { alignment: 'left' },
-          typeAttributes: {
-            month: '2-digit',
-            day: '2-digit'
-          }
-        },
-        {
-          label: 'Date Modified',
-          fieldName: 'LastModifiedDate',
-          type: 'date-local',
-          sortable: true,
-          cellAttributes: { alignment: 'left' },
-          typeAttributes: {
-            month: '2-digit',
-            day: '2-digit'
-          }
-        },
-        { type: 'action', typeAttributes: { rowActions: actions } }
-      ];
-      component.set('v.mapColumns', column);
-      helper.callServer(component, 'c.getScopedNotificationStatus', false, function (result) {
-        var renderNotification = (result) ? 'hide' : 'show';
-        helper.fireApplicationEvent(component, {
-          fromComponent: 'CLMMappedObjectsHome',
-          toComponent: 'CLMScopedNotifications',
-          type: renderNotification
-        }, 'CLMEvent');
-      });
-      helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
-        component.set('v.mappedObjData', Object.values(result));
+    helper.callServer(component, 'c.getScopedNotificationStatus', false, function (result) {
+      var renderNotification = (result) ? 'hide' : 'show';
+      helper.fireApplicationEvent(component, {
+        fromComponent: 'CLMMappedObjectsHome',
+        toComponent: 'CLMScopedNotifications',
+        type: renderNotification
+      }, 'CLMEvent');
+    });
+    helper.callServer(component, 'c.getMappedObjectsList', false, function (result) {
+      if ($A.util.isEmpty(result)) {
+        helper.showNoObjectsUI(component);
+      } else {
+        component.set('v.mappedObjData', result);
         component.set('v.sortedByColumn', $A.get('$Label.c.SalesforceObject'));
         component.set('v.sortedBy', 'Name');
         component.set('v.sortedDirection', 'asc');
+        helper.callServer(component, 'c.getNamespace', false, function (namespace) {
+          namespace = namespace || component.get('v.namespace');
+          var actions = [
+            { label: 'Edit Mapping', name: 'edit' },
+            { label: 'Remove Mapping', name: 'remove' }
+          ];
+          var pathApiName = namespace === 'c' ? 'Path__c' : namespace + '__Path__c';
+          var folderApiName = namespace === 'c' ? 'FolderName__c' : namespace + '__FolderName__c';
+          var column = [
+            {
+              label: $A.get('$Label.c.SalesforceObject'),
+              fieldName: 'Name',
+              type: 'text',
+              sortable: true,
+              cellAttributes: { alignment: 'left' }
+            },
+            {
+              label: $A.get('$Label.c.ObjectFolderName'),
+              fieldName: folderApiName,
+              type: 'text',
+              sortable: true,
+              cellAttributes: { alignment: 'left' },
+              typeAttributes: {
+                label: {
+                  fieldName: folderApiName
+                }
+              }
+            },
+            {
+              label: $A.get('$Label.c.PathInDocuSignCLM'),
+              fieldName: pathApiName,
+              type: 'text',
+              sortable: true,
+              cellAttributes: { alignment: 'left', tooltip: 'actions' },
+              typeAttributes: {
+                label: {
+                  fieldName: pathApiName
+                }
+              }
+            },
+            {
+              label: 'Date Added',
+              fieldName: 'CreatedDate',
+              type: 'date-local',
+              sortable: true,
+              cellAttributes: { alignment: 'left' },
+              typeAttributes: {
+                month: '2-digit',
+                day: '2-digit'
+              }
+            },
+            {
+              label: 'Date Modified',
+              fieldName: 'LastModifiedDate',
+              type: 'date-local',
+              sortable: true,
+              cellAttributes: { alignment: 'left' },
+              typeAttributes: {
+                month: '2-digit',
+                day: '2-digit'
+              }
+            },
+            { type: 'action', typeAttributes: { rowActions: actions } }
+          ];
+          component.set('v.mapColumns', column);
+          helper.createComponent(component, 'c:CLMModelFooterButton', {
+            primaryButtonLabel: $A.get('$Label.c.Remove'),
+            secondaryButtonLabel: $A.get('$Label.c.Cancel'),
+            primaryButtonVariant: 'destructive'
+          }, function (newCmp) {
+            component.set('v.strikeModelFooterButtons', newCmp);
+          });
+        });
         helper.sortData(component, 'Name', 'asc');
-      });
-      helper.createComponent(component, 'c:CLMModelFooterButton', {
-        primaryButtonLabel: $A.get('$Label.c.Remove'),
-        secondaryButtonLabel: $A.get('$Label.c.Cancel'),
-        primaryButtonVariant: 'destructive'
-      }, function (newCmp) {
-        component.set('v.strikeModelFooterButtons', newCmp);
-      });
+      }
     });
   },
 
   gotoNew: function (component, event, helper) {
-    //fire event to display CLMCardModel
     helper.fireApplicationEvent(
       component,
       {
-        componentName: 'CLMCardModel',
+        componentName: 'CLMMappedObjectsEdit',
         fromComponent: 'CLMMappedObjectsHome',
         toComponent: 'CLMIntegrationLayout',
         type: 'show'
@@ -157,17 +160,8 @@
               newObjectList.push(obj);
             }
           });
-          if (newObjectList.length === 0) {
-            helper.fireApplicationEvent(
-              component,
-              {
-                componentName: 'CLMCardModel',
-                fromComponent: 'CLMMappedObjectsHome',
-                toComponent: 'CLMIntegrationLayout',
-                type: 'hide'
-              },
-              'CLMNavigationEvent'
-            );
+          if ($A.util.isEmpty(newObjectList)) {
+            helper.showNoObjectsUI(component);
           }
           component.set('v.mappedObjData', newObjectList);
           modalComponent.hide();

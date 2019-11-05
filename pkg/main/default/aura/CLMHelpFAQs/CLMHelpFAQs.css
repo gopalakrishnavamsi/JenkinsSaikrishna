@@ -1,9 +1,14 @@
-.THIS .ds-card-heading{
+.THIS .ds-card-heading {
     color:t(colorTextLinkActive);
     font-size:1.25rem;
     font-weight: bold;
 }
 
-.THIS .ds-pointer-enable{
+.THIS .ds-pointer-enable {
     cursor: pointer;
+}
+
+.THIS .ds-havingTrouble-img-size {
+    height: 10rem;
+    width: 10rem;
 }

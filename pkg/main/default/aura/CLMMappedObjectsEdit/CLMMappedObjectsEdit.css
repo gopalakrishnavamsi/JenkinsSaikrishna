@@ -71,3 +71,7 @@
 .THIS .ds-example-folder-name {
     color: #b0adab;
 }
+
+.THIS .ds-height{
+    max-height:500px
+}

@@ -4,24 +4,11 @@
   },
 
   gotoNew: function (component, event, helper) {
-    //fire event to display CLMCardModel
     helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {});
     component.set('v.showHelp', false);
     component.set('v.showTrouble', false);
     component.set('v.showPathAndNew', true);
-    component.set('v.showObjFolderCard', true);
-    helper.fireApplicationEvent(
-      component,
-      {
-        title: $A.get('$Label.c.SelectObject'),
-        summary: $A.get('$Label.c.SelectObjectHelpBody'),
-        index: '1',
-        fromComponent: 'CLMIntegrationLayout',
-        toComponent: 'CLMCardModel',
-        type: 'update'
-      },
-      'CLMCardModelEvent'
-    );
+    component.set('v.showObjFolderCard', true);    
     helper.fireApplicationEvent(
       component,
       {
@@ -44,30 +31,18 @@
       toComponent === 'CLMIntegrationLayout' &&
       fromComponent !== 'CLMIntegrationLayout'
     ) {
-      if (type === 'show' && componentName === 'CLMCardModel') {
+      if (type === 'show' && componentName === 'CLMMappedObjectsEdit') {
         helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {});
         component.set('v.showHelp', false);
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
         component.set('v.showObjFolderCard', true);
-        helper.fireApplicationEvent(
-          component,
-          {
-            title: $A.get('$Label.c.SelectObject'),
-            summary: $A.get('$Label.c.SelectObjectHelpBody'),
-            index: '1',
-            fromComponent: 'CLMIntegrationLayout',
-            toComponent: 'CLMCardModel',
-            type: 'update'
-          },
-          'CLMCardModelEvent'
-        );
       } else if (type === 'show' && componentName === 'CLMMappedObjectsHome') {
         component.set('v.showHelp', true);
         component.set('v.showTrouble', true);
         component.set('v.showPathAndNew', false);
         component.set('v.showObjFolderCard', false);
-      } else if (type === 'edit' && componentName === 'CLMCardModel') {
+      } else if (type === 'edit' && componentName === 'CLMMappedObjectsEdit') {
         helper.insertComponent(component, 'c:CLMMappedObjectsEdit', {
           selectedObjDetails: data.objDetails,
           isEdit: true
@@ -76,7 +51,7 @@
         component.set('v.showTrouble', false);
         component.set('v.showPathAndNew', true);
         component.set('v.showObjFolderCard', true);
-      } else if (type === 'hide' && componentName === 'CLMCardModel') {
+      } else if (type === 'hide' && componentName === 'CLMMappedObjectsEdit') {
         component.set('v.isEmpty', true);
       }
     }
@@ -84,42 +59,37 @@
 
   onPrimaryButtonClick: function (component, event, helper) {
     var buttonLabel = event.getParam('buttonLabel');
-    var action = component.get('c.getCurrentUserExperience');
-    action.setCallback(this, function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var theme = response.getReturnValue();
-        if (
-          buttonLabel === $A.get('$Label.c.ConfigureLayouts') ||
-          buttonLabel === $A.get('$Label.c.ConfigureButtons')
-        ) {
+    if (buttonLabel === $A.get('$Label.c.HomeGetHelp')) {
+      helper.openHelpPage(component);
+    } else {
+      var action = component.get('c.getCurrentUserExperience');
+      action.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          var theme = response.getReturnValue();
           if (
-            theme === 'Theme4d' ||
-            theme === 'Theme4t' ||
-            theme === 'Theme4u'
+            buttonLabel === $A.get('$Label.c.ConfigureLayouts') ||
+            buttonLabel === $A.get('$Label.c.ConfigureButtons')
           ) {
-            navUtils.navigateToUrl($A.get('$Label.c.LEXObjectManagerURL'));
-          } else {
-            navUtils.navigateToUrl($A.get('$Label.c.ClassicObjectManagerURL'));
+            if (
+              theme === 'Theme4d' ||
+              theme === 'Theme4t' ||
+              theme === 'Theme4u'
+            ) {
+              navUtils.navigateToUrl($A.get('$Label.c.LEXObjectManagerURL'));
+            } else {
+              navUtils.navigateToUrl($A.get('$Label.c.ClassicObjectManagerURL'));
+            }
           }
+        } else if (state === 'ERROR') {
+          helper.fireToast(component, response.getError()[0].message, helper.ERROR);
         }
-      } else if (state === 'ERROR') {
-        helper.fireToast(component, response.getError()[0].message, helper.ERROR);
-      }
-    });
-    $A.enqueueAction(action);
+      });
+      $A.enqueueAction(action);
+    }
   },
 
   onSecondaryButtonClick: function (component, event, helper) {
-    helper.fireApplicationEvent(
-      component,
-      {
-        fromComponent: 'CLMHomeBody',
-        toComponent: 'CLMSetupLayout',
-        type: 'update',
-        tabIndex: '8'
-      },
-      'CLMNavigationEvent'
-    );
-  }  
+    helper.openHelpPage(component);
+  }
 });
