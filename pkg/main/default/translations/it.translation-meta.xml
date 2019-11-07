@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>Passaggi del flusso di lavoro</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>I flussi di lavoro automatizzano le attività ripetitive, riducono la possibilità di errore umano e i costi operativi. Questo strumento è disponibile in DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Workflow designer è un elemento di lavoro che consente di progettare e aggiornare i flussi di lavoro. In questo modo è possibile ridimensionare e automatizzare i flussi di lavoro in base alle tue esigenze specifiche.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>Per creare un flusso di lavoro dovrai collegare una serie di passaggi. Ogni passaggio rappresenta un&apos;attività di processo. Ci sono cinque diversi tipi di passaggi predefiniti:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Passaggi di gestione automatizzata dei documenti</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Passaggi che richiedono l&apos;intervento umano</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Passaggi per il motore</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Passaggi di integrazione</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Passaggi di programmazione e comunicazione</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>Puoi attivare un flusso di lavoro avanzato con un solo clic. Aggiungi un pulsante al layout di pagina Salesforce per abilitare questa azione.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Aggiungi componenti DocuSign CLM a Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,11 +4216,7 @@
 	<customLabels>
 		<label>Gestione oggetti</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>Vai a Flussi di lavoro</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Vai a Document Generation</label>
 		<name>GoToDocumentGeneration</name>

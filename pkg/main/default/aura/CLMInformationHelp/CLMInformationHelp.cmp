@@ -12,6 +12,7 @@
 	<aura:attribute name="firstButtonName" type="String"/>
 	<aura:attribute name="showIcon" type="Boolean" default="true"/>
 	<aura:attribute name="invokedBy" type="String"/>
+	<aura:attribute name="showButton" type="Boolean" default="true"/>
 
 	<aura:if isTrue="{!v.isSubTitle}">
 		<div class="slds-text-title_bold slds-p-bottom_medium ds-card-heading2">
@@ -36,12 +37,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="slds-col_bump-right">
-			<span>
-				<lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
-					iconName="{!v.showIcon ? 'utility:new_window':''}" iconPosition="right"
-					onclick="{!c.buttonClick}"/>
-			</span>
-		</div>
+		<aura:if isTrue="{!v.showButton}">
+			<div class="slds-col_bump-right">
+				<span>
+					<lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
+						iconName="{!v.showIcon ? 'utility:new_window':''}" iconPosition="right"
+						onclick="{!c.buttonClick}"/>
+				</span>
+			</div>
+		</aura:if>
 	</div>
 </aura:component>

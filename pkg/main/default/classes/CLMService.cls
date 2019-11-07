@@ -101,10 +101,5 @@ public with sharing class CLMService {
 	public static Url getDocumentGenerationLink() {
 		Permissions.verifyIsClmUser();
 		return CLMAPI.getInstance().getDocGenUrl();
-	}
-
-	public static Url getWorkflowLink() {
-		Permissions.verifyIsClmUser();
-		return CLMAPI.getInstance().getWorkflowUrl();
-	}
+	}	
 }

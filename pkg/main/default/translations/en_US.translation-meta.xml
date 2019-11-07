@@ -2248,7 +2248,7 @@
 	<customLabels>
 		<label>DISCOVER DOCUSIGN CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Document Generation</label>
 		<name>DocumentGeneration</name>
@@ -2268,7 +2268,7 @@
 	<customLabels>
 		<label>At DocuSign, we&apos;re dedicated to your success. We&apos;ve created a Help page to provide answer to common questions.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Home</label>
 		<name>Home</name>
@@ -3434,44 +3434,12 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow Steps</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>Workflows automate repetitive tasks, reduce human errors and cut down on operating costs. This tool is available in DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow designer is a canvas that let you design and update your workflows. This lets you scale and automate workflows to fit your specific needs.</label>
+		<label>Workflow designer is a canvas that let you design and update your workflows. This lets you scale and automate workflows to fit your specific needs. You can access workflow designer in DocuSign CLM.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>To make a workflow you'll have to connect a series of steps. Each step represents a process activity. There are five different types of pre-defined steps:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Automated Document Management Steps</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Human Steps</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Engine Steps</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Integration Steps</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Scheduling and Communication Steps</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>You can trigger an advanced workflow with a single button click. Add a button to your Salesforce page layout to enable this action.</label>
-		<name>CustomWorkflowButtonSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Add DocuSign CLM Components to Salesforce</label>
@@ -3864,7 +3832,7 @@
 	<customLabels>
 		<label>Apply</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>
@@ -4186,7 +4154,7 @@
 		<name>SetupDocGenTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>5. Copy the document generation configuration URL. Add to it a new button on your Saledforce object page layout.</label>
+		<label>5. Copy the document generation configuration URL. Add to it a new button on your Salesforce object page layout.</label>
 		<name>ConfigureDocGenURL</name>
 	</customLabels>
 	<customLabels>
@@ -4258,10 +4226,6 @@
 		<name>CLObjectManager</name>
 	</customLabels>
 	<customLabels>
-		<label>Go to Workflows</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
-	<customLabels>
 		<label>Go to Document Generation</label>
 		<name>GoToDocumentGeneration</name>
 	</customLabels>
@@ -4312,6 +4276,22 @@
 	<customLabels>
 		<label>Edit Salesforce Object</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to kick off a workflow when a document is generated</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Using workflows gives you flexibility and control over your organization's processes. It automates every process, from generating and routing to signing.</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn how to use workflows to standardize your processes</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>Once you create a workflow in CLM you can integrate it with Salesforce. For example, generating a document could trigger a document review workflow.</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

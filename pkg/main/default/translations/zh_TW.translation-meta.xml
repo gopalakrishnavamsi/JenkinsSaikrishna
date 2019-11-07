@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>工作流程步驟</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>工作流程可以自動處理重複性的工作，藉此降低人為失誤及營運成本。DocuSign CLM 有提供此工具。</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>您可以用工作流程設計工具自由設計並更新工作流程。您可以按照不同需求調整並自動化工作流程。</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>如果想建立工作流程，您需要先連接多個步驟。每一個步驟都代表一項程序活動。預定義步驟有五種類型：</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. 自動化文件管理步驟</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. 人力步驟</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. 引擎步驟</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. 整合步驟</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. 排程及通訊步驟</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>您可以將按一下按鈕設為進階工作流程的觸發條件。在 Salesforce 頁面配置上新增按鈕即可啟用此操作。</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>在 Salesforce 中加入 DocuSign CLM 元件</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,10 +4216,6 @@
 	<customLabels>
 		<label>物件管理員</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>前往工作流程</label>
-		<name>GoToWorkflow</name>
 	</customLabels>
 	<customLabels>
 		<label>前往文件產生</label>

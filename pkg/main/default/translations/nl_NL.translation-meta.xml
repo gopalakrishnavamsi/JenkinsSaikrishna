@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow-stappen</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>Workflows automatiseren repetitieve taken, verminderen menselijke fouten en verlagen de bedrijfskosten. Deze tool is beschikbaar in DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Workflow-ontwerper is een canvas waarmee u uw workflows kunt ontwerpen en bijwerken. Hiermee kunt u workflows schalen en automatiseren om aan uw specifieke behoeften te voldoen.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>Om een workflow te maken, moet u een aantal stappen verbinden. Elke stap vertegenwoordigt een procesactiviteit. Er zijn vijf verschillende soorten vooraf gedefinieerde stappen:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Geautomatiseerde stappen voor documentbeheer</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Menselijke stappen</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Engine-stappen</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Integratiestappen</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Planning- en communicatiestappen</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>U kunt een geavanceerde workflow activeren met een enkele klik op de knop. Voeg een knop toe aan uw Salesforce-paginalay-out om deze actie in te schakelen.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Voeg DocuSign CLM-componenten toe aan Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,11 +4216,7 @@
 	<customLabels>
 		<label>Object Manager</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>Ga naar Workflows</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Ga naar Document genereren</label>
 		<name>GoToDocumentGeneration</name>

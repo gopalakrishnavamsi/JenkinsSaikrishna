@@ -3431,45 +3431,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>Pasos del flujo de trabajo</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>Los flujos de trabajo automatizan las tareas repetitivas, reducen los errores humanos y disminuyen los costes operativos. Esta herramienta está disponible en DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>El diseñador de flujos de trabajo es un lienzo que le permite diseñar y actualizar sus flujos de trabajo. Le permite escalar y automatizar los flujos de trabajo para adaptarlos a sus necesidades específicas.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>Para crear un flujo de trabajo, tendrá que conectar una serie de pasos. Cada paso representa una actividad del proceso. Existen cinco tipos de pasos predefinidos:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Pasos de gestión automatizada de documentos</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Pasos realizados por personas</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Pasos realizados por máquinas</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Pasos de integración</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Pasos de programación y comunicación</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>Puede activar un flujo de trabajo avanzado con solo un clic en un botón. Añada un botón a su formato de página de Salesforce para permitir esta acción.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Añadir componentes de DocuSign CLM a Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4249,11 +4217,7 @@
 	<customLabels>
 		<label>Gestor de objetos</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>Ir a Flujos de trabajo</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Ir a Generación de documentos</label>
 		<name>GoToDocumentGeneration</name>

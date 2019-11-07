@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>Этапы рабочего процесса</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>Рабочие процессы позволяют автоматизировать повторяющиеся задачи, сокращать количество человеческих ошибок и снижать операционные расходы. Этот инструмент доступен в DocuSign CLM.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Workflow Designer — это рабочая среда для настройки и изменения рабочих процессов. Она позволяет масштабировать и автоматизировать рабочие процессы в соответствии с индивидуальными требованиями.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>Для создания рабочего процесса необходимо связать между собой определенные шаги. Каждый шаг представляет собой действие в рамках процесса. Доступно пять типов предварительно настроенных шагов:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Автоматические действия по управлению документами</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Действия человека</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Действия системы</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Интеграционные действия</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Действия планирования и взаимодействия</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>Для вызова расширенного рабочего процесса достаточно одного нажатия кнопки. Добавьте кнопку для этого действия в макет страницы Salesforce.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Добавление компонентов DocuSign CLM в Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,11 +4216,7 @@
 	<customLabels>
 		<label>Диспетчер объектов</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>Перейти в раздел &quot;Рабочие процессы&quot;</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Перейти в раздел &quot;Создание документа&quot;</label>
 		<name>GoToDocumentGeneration</name>

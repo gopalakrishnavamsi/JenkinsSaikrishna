@@ -3426,11 +3426,7 @@
 	<customLabels>
 		<label>Workflow-Designer</label>
 		<name>WorkflowDesigner</name>
-	</customLabels>
-	<customLabels>
-		<label>Workflow-Schritte</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Wiederkehrende Aufgaben werden durch Workflows automatisiert, wodurch manuelle Fehler vermieden und Betriebskosten reduziert werden. Diese Funktion ist in DocuSign CLM verfügbar.</label>
 		<name>CreateAndManageSummary</name>
@@ -3438,35 +3434,7 @@
 	<customLabels>
 		<label>Der Workflow-Designer ist der Bereich, in dem Sie Workflows erstellen und anpassen. Workflows lassen sich skalieren und automatisieren sowie an konkrete Anforderungen anpassen.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>Für einen Workflow müssen mehrere Schritte verknüpft werden. Jeder Schritt stellt eine Aktivität im Prozess dar. Es gibt 5 unterschiedliche vordefinierte Schritte:</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. Automatisierte Dokumentenverwaltungsschritte</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. Manuelle Schritte</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. Systemschritte</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. Integrationsschritte</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. Planungs- und Kommunikationsschritte</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>Ein erweiterter Workflow kann per Klick auf eine Schaltfläche ausgelöst werden. Fügen Sie hierzu Ihrem Salesforce-Seitenlayout einfach eine Schaltfläche hinzu.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>DocuSign-CLM-Komponenten zu Salesforce hinzufügen</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4246,11 +4214,7 @@
 	<customLabels>
 		<label>Objekt-Manager</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>Zu Workflows wechseln</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>Zur Dokumentenerstellung wechseln</label>
 		<name>GoToDocumentGeneration</name>

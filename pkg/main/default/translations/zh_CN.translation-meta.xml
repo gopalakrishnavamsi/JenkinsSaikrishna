@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>工作流步骤</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>工作流可以自动化重复性任务，减少人为错误，并降低运营成本。DocuSign CLM 中提供此工具。</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>工作流设计器是一块画布，让您可以设计和更新工作流。该功能让您可以扩展并自动化工作流，以满足您的特定需求。</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>如需创建工作流，您需要将一系列步骤连接起来。每个步骤代表一个流程活动。我们为您提供 5 种预定义步骤：</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. 自动化文档管理步骤</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. 人工步骤</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. 引擎步骤</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. 集成步骤</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. 预定和沟通步骤</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>您可以一键触发高级工作流。只需在您的 Salesforce 页面布局中添加一个按钮，即可实现此功能。</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>将 DocuSign CLM 组件添加到 Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,11 +4216,7 @@
 	<customLabels>
 		<label>对象管理器</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>转到工作流</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>转到生成文档</label>
 		<name>GoToDocumentGeneration</name>

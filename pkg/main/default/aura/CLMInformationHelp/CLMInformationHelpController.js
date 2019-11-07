@@ -1,7 +1,7 @@
 ({
 	buttonClick: function (component, event, helper) {
 		var invokedBy = component.get('v.invokedBy');
-		if (invokedBy === 'Workflow-OpenObjectManager' || invokedBy === 'DocGen-OpenObjectManager') {
+		if (invokedBy === 'DocGen-OpenObjectManager') {
 			var action = component.get('c.getCurrentUserExperience');
 			action.setCallback(this, function (response) {
 				var state = response.getState();
@@ -23,10 +23,6 @@
 			$A.enqueueAction(action);
 		} else if (invokedBy === 'DocGen-OpenDocuSignCLM') {
 			helper.callServer(component, 'c.getDocGenButtonLink', false, function (result) {
-				navUtils.navigateToUrl(result);
-			});
-		} else if (invokedBy === 'Workflow-OpenDocuSignCLM') {
-			helper.callServer(component, 'c.getWorkflowButtonLink', false, function (result) {
 				navUtils.navigateToUrl(result);
 			});
 		}

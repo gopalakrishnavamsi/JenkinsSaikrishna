@@ -66,31 +66,5 @@ public class CLMApexUtilityTest {
 			}
 			Test.stopTest();
 		}
-	}
-
-	@IsTest
-	static void test_getWorkflowLink_authorized() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createClmUser()) {
-			Test.startTest();
-			System.assertNotEquals(null, CLMApexUtility.getWorkflowButtonLink());
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getWorkflowLink_unauthorized() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				CLMApexUtility.getWorkflowButtonLink();
-				throw new AssertException('Expected fetching workflow url to fail.');
-			}
-			catch (AuraHandledException ae) {
-				System.assertEquals(Label.MustBeClmUser, ae.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
+	}	
 }

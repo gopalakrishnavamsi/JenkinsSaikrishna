@@ -1,34 +1,28 @@
-<aura:component controller="CLMApexUtility" extends="c:CLMUtility">
+<aura:component>
 	<aura:registerEvent name="CLMNavigationEvent" type="c:CLMNavigationEvent"/>
-	<aura:attribute name="currentTabId" type="string" default="{!$Label.c.Dashboard}"/>
-	<aura:attribute name="steps" type="String[]"/>
-	<aura:handler name="init" value="{!this}" action="{!c.init}"/>
-	<aura:attribute name="redirectCLM" type="String"/>
 
 	<div class="slds-p-around_small">
 		<div class="ds-card-heading">
 			<b>{!$Label.c.AutomateprocessesinDocuSignCLM}</b>
 		</div>
-		<div class="slds-p-top_medium">
+		<div class="slds-p-top_medium ds-card-padding">
 			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.CreateAndManageWorkflows}"
 				imageURL="{!($Resource.WorkflowDesignerCard)}" summary="{!$Label.c.CreateAndManageSummary}"
-				isLink="true" link="{!$Label.c.LearnHowTo}" hyperlinkedURI="['tab','8']"
-				firstButtonName="{!$Label.c.OpenDocuSignCLMButton}" invokedBy="Workflow-OpenDocuSignCLM"/>
+				isLink="true" link="{!$Label.c.LearnHowTo}" hyperlinkedURI="['tab','8']" showButton="false"/>				
 		</div>
-		<div class="slds-p-top_medium">
+		<div class="slds-p-top_medium ds-card-padding">
+			<c:CLMInformationHelp isSubTitle="false" imageURL="{!($Resource.WorkflowDesignerCard)}"
+				summary="{!$Label.c.KickoffWorkflowSummary}" isLink="true" link="{!$Label.c.LearnHowToKickoffAWorkflow}"
+				hyperlinkedURI="['tab','8']" showButton="false"/>
+		</div>
+		<div class="slds-p-top_medium ds-card-padding">
 			<c:CLMInformationHelp isSubTitle="false" imageURL="{!($Resource.WorkflowButtonConfig)}"
-				summary="{!$Label.c.CustomWorkflowButtonSummary}" isLink="true" link="{!$Label.c.LearnHowToAddAButton}"
-				hyperlinkedURI="['tab','8']" firstButtonName="{!$Label.c.OpenObjectManagerButton}" invokedBy="Workflow-OpenObjectManager"/>
+				summary="{!$Label.c.WorkflowStandardizeSummary}" isLink="true" link="{!$Label.c.LearnHowToStandardize}"
+				hyperlinkedURI="['tab','8']" showButton="false"/>
 		</div>
 		<div class="slds-border_top slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" showButton="true"
-				buttonLabel="{!$Label.c.GoToWorkflow}" imageURL="{!($Resource.WorkflowDesigner)}" hyperlinkedURI="['tab','8']"
-				summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false" steps="{!$Label.c.LearnHowTo}" invokedBy="Workflow-GoToWorkflow"/>
-		</div>
-		<div class="slds-p-top_medium">
-			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowSteps}" showButton="false"
-				imageURL="{!($Resource.WorkflowDesignerSteps)}" summary="{!$Label.c.WorkflowStepsSummary}"
-				isSteps="true" steps="{!v.steps}"/>
-		</div>
+			<c:CLMPreviewHelp isSubTitle="true" subTitle="{!$Label.c.WorkflowDesigner}" showButton="false"
+				imageURL="{!($Resource.WorkflowDesigner)}" summary="{!$Label.c.WorkflowDesignerSummary}" isSteps="false"/>
+		</div>		
 	</div>
 </aura:component>

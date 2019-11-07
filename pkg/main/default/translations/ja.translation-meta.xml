@@ -3429,45 +3429,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>ワークフローステップ</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>「ワークフロー」では、繰り返し実行するタスクの自動化により、ヒューマンエラーを排除して運用コストを削減します。このツールは、DocuSign CLM内で使用可能です。</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>ワークフローを設計および更新するためのキャンバスとして、ワークフローデザイナーを使用します。必要に応じて、ワークフローを拡張して自動化できます。</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>ワークフローを作成するには、一連のステップを関連付けます。各ステップが1つのプロセスアクティビティになります。事前定義されたステップとして、以下の5つタイプがあります。</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. 自動化された文書管理ステップ</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. 手動操作ステップ</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. エンジンステップ</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. インテグレーションステップ</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. スケジュール設定と通信のステップ</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>ボタンを1回クリックするだけで高度なワークフローを実行できます。クリックするボタンは、自分のSalesforceページレイアウト上に追加しておきます。</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>SalesforceにDocuSign CLMコンポーネントを追加する</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4247,11 +4215,7 @@
 	<customLabels>
 		<label>オブジェクトマネージャー</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>ワークフローに移動</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>文書生成に移動</label>
 		<name>GoToDocumentGeneration</name>

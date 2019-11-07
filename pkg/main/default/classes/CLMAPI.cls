@@ -11,7 +11,6 @@ public with sharing class CLMAPI extends ScmAPI {
 	private static final String AID='aid';
 	private static final String POST_REQ_PATH_FOLDER_VIEW = 'EOS/GetEosInformation.aspx';
 	private static final String POST_REQ_PATH_DOC_GEN = 'Admin/DocLauncherConfig';
-	private static final String POST_REQ_PATH_WORKFLOW = 'workflow';
 
 	private CLMAPI(final Url baseUrl, final String api, final String apiVersion) {
 		super(new Url (baseUrl, String.format('/{0}/{1}/',
@@ -67,26 +66,6 @@ public with sharing class CLMAPI extends ScmAPI {
 		accountId = c.account.Id;
 		QueryString queryParams =  new QueryString(new Map<String, String> {AID => String.valueOf(c.account.accountNumber)});
 		String spec = String.format('{0}?{1}', new List<String> {POST_REQ_PATH_DOC_GEN, queryParams.toString()});
-		Url formattedPostReqUrl = new Url(getResourceAuthUrl(), spec);
-		final RestAPI.Response response = post(
-			new List<Object> {String.valueOf(accountId), GET_SESSION_URL},
-			JSON.serialize(new Map<String, Object> {
-			'url' => formattedPostReqUrl.toExternalForm()
-		}),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to fetch response: ' + response.error);
-			throw new APIException(response.error);
-		}
-		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		return new Url(String.valueOf(body.get('Url')));
-	}
-
-	public Url getWorkflowUrl() {
-		Credentials c = Credentials.getInstance();
-		accountId = c.account.Id;
-		QueryString queryParams =  new QueryString(new Map<String, String> {AID => String.valueOf(c.account.accountNumber)});
-		String spec = String.format('{0}?{1}', new List<String> {POST_REQ_PATH_WORKFLOW, queryParams.toString()});
 		Url formattedPostReqUrl = new Url(getResourceAuthUrl(), spec);
 		final RestAPI.Response response = post(
 			new List<Object> {String.valueOf(accountId), GET_SESSION_URL},

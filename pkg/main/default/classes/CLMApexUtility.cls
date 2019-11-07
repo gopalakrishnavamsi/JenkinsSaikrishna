@@ -35,15 +35,5 @@ public with sharing class CLMApexUtility {
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to fetch Document Generation configuration Url');
 		}
-	}
-
-	@AuraEnabled
-	public static String getWorkflowButtonLink() {
-		try {			
-			Url workflowUrl =  CLMService.getWorkflowLink();
-			return workflowUrl == null ? null : workflowUrl.toExternalForm();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'getWorkflowButtonLink: Failed to fetch Document Generation configuration Url');
-		}
-	}
+	}	
 }

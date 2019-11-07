@@ -3430,45 +3430,13 @@
 		<name>WorkflowDesigner</name>
 	</customLabels>
 	<customLabels>
-		<label>워크플로 절차</label>
-		<name>WorkflowSteps</name>
-	</customLabels>
-	<customLabels>
 		<label>워크플로는 반복 작업을 자동화하여 인적 오류를 줄이고 운용비를 절감합니다. 이 도구는 DocuSign CLM에서 사용할 수 있습니다.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
 		<label>Workflow Designer는 워크플로를 디자인하고 업데이트할 수 있는 캔버스입니다. 이를 통해 워크플로를 특정 필요 사항에 맞게 범주화하고 자동화할 수 있습니다.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>워크플로를 만들려면 몇 가지 단계를 연결해야 합니다. 각 단계는 프로세스 활동을 나타냅니다. 미리 정의된 단계에는 5개의 다양한 유형이 있습니다.</label>
-		<name>WorkflowStepsSummary</name>
-	</customLabels>
-	<customLabels>
-		<label>1. 자동 문서 관리 절차</label>
-		<name>WorkflowSteps1</name>
-	</customLabels>
-	<customLabels>
-		<label>2. 휴먼 절차</label>
-		<name>WorkflowSteps2</name>
-	</customLabels>
-	<customLabels>
-		<label>3. 엔진 절차</label>
-		<name>WorkflowSteps3</name>
-	</customLabels>
-	<customLabels>
-		<label>4. 통합 절차</label>
-		<name>WorkflowSteps4</name>
-	</customLabels>
-	<customLabels>
-		<label>5. 일정관리 및 정보 교환 절차</label>
-		<name>WorkflowSteps5</name>
-	</customLabels>
-	<customLabels>
-		<label>단 한 번의 버튼 클릭으로 고급 워크플로를 트리거할 수 있습니다. Salesforce 페이지 레이아웃에 버튼을 추가해 이 작업을 활성화하십시오.</label>
-		<name>CustomWorkflowButtonSummary</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>DocuSign CLM 구성 요소를 Salesforce에 추가</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -4248,11 +4216,7 @@
 	<customLabels>
 		<label>개체 관리자</label>
 		<name>CLObjectManager</name>
-	</customLabels>
-	<customLabels>
-		<label>워크플로로 이동</label>
-		<name>GoToWorkflow</name>
-	</customLabels>
+	</customLabels>	
 	<customLabels>
 		<label>문서 생성으로 </label>
 		<name>GoToDocumentGeneration</name>
