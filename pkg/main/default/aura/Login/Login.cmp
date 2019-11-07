@@ -95,7 +95,8 @@
                                                         <li class="slds-m-top_medium">
                                                             <lightning:button variant="brand"
                                                                               label="{!$Label.c.LoginToDocuSign}"
-                                                                              onclick="{!c.loginToProductionDocuSignEnvironment}"></lightning:button>
+                                                                              onclick="{!c.loginToProductionDocuSignEnvironment}">
+                                                            </lightning:button>
                                                         </li>
                                                         <li class="slds-m-top_large">
                                                             <ul class="slds-list_horizontal ds-bold-text">
@@ -104,7 +105,8 @@
                                                                     <b>
                                                                         <lightning:formattedUrl
                                                                                 label="{!$Label.c.SignUpForFree}"
-                                                                                value="{!$Label.c.FreeTrialURL}"/>
+                                                                                value="{!$Label.c.FreeTrialURL}"
+                                                                                target="_blank"/>
                                                                     </b>
                                                                 </li>
                                                             </ul>

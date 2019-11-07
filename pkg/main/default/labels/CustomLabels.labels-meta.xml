@@ -7020,6 +7020,54 @@
 		<value>How to Add Components into Layouts</value>
 	</labels>
 	<labels>
+		<fullName>LearnEsignUserURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Essentials User Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</value>
+	</labels>
+	<labels>
+		<fullName>LearnGenAdminURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Gen Admin Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</value>
+	</labels>
+	<labels>
+		<fullName>LearnGenUserURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Gen User Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</value>
+	</labels>
+	<labels>
+		<fullName>LearnNegotiateUserURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Negotiate User Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</value>
+	</labels>
+	<labels>
+		<fullName>LearnAppsLauncherAdminURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocuSign Apps Launcher Admin Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</value>
+	</labels>
+	<labels>
+		<fullName>LearnComponentsLayoutsURL</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Components and Layouts Guide</shortDescription>
+		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</value>
+	</labels>
+	<labels>
 		<fullName>TryDocuSignGen</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
