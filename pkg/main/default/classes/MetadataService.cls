@@ -77,7 +77,7 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static List<MergeField> getFields(final DescribeSObjectResult type, final String relationShipName) {
+	private static List<MergeField> getFields(final DescribeSObjectResult type, final String relationShipName, final Boolean isChild) {
 		List<MergeField> result = new List<MergeField>();
 		if (MergeObject.isValid(type)) {
 			for (SObjectField f : type.fields.getMap().values()) {
@@ -85,6 +85,10 @@ public with sharing class MetadataService {
 				if (MergeField.isValid(field)) {
 					if (field.getReferenceTo().isEmpty() || String.isNotBlank(relationShipName)) {
 						result.add(MergeField.forField(field, relationShipName));
+					} else if (!isChild && !field.getReferenceTo().isEmpty() && field.getRelationShipName() != null && String.isNotBlank(field.getRelationShipName())) {
+						for (Schema.SObjectType parentObjectType : field.getReferenceTo()) {
+							result.addAll(getParentFields(parentObjectType, field.getRelationShipName()));
+						}
 					}
 				}
 			}
@@ -98,7 +102,7 @@ public with sharing class MetadataService {
 		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
 		isChildObj = isChild;
 		DescribeSObjectResult typeDesc = type.getDescribe();
-		List<MergeField> result = getFields(typeDesc, null);
+		List<MergeField> result = getFields(typeDesc, null, isChild);
 		if (!isChildObj) {
 			result.addAll(getChildRelationships(typeDesc));
 		}
@@ -115,6 +119,19 @@ public with sharing class MetadataService {
 					if (!field.getReferenceTo().isEmpty()) {
 						result.add(MergeField.forField(field, ''));
 					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private static List<MergeField> getParentFields(final SObjectType type, final String relationShipName) {
+		List<MergeField> result = new List<MergeField>();
+		for (SObjectField f : type.getDescribe().fields.getMap().values()) {
+			DescribeFieldResult field = f.getDescribe();
+			if (MergeField.isValid(field)) {
+				if (field.getReferenceTo().isEmpty()) {
+					result.add(MergeField.forField(field, relationShipName));
 				}
 			}
 		}
@@ -323,7 +340,7 @@ public with sharing class MetadataService {
 		if (type == null || String.isBlank(apiName)) return null;
 		String result;
 		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
-				'WebLink', new List<String> { getActionFullName(type, apiName) }));
+			'WebLink', new List<String> { getActionFullName(type, apiName) }));
 		if (webLink != null && String.isNotBlank(webLink.masterLabel)) {
 			result = webLink.masterLabel;
 		}
@@ -348,8 +365,8 @@ public with sharing class MetadataService {
 			for (String apiName : mdLayout.customButtons) {
 				result.add(new Layout.Action(
 					getActionType(apiName),
-					apiName, 
-					getActionLabel(type,apiName)));
+					apiName,
+					getActionLabel(type, apiName)));
 			}
 		}
 		return result;
@@ -680,10 +697,9 @@ public with sharing class MetadataService {
 				actionLabel,
 				Page.GenDocumentGenerator,
 				parametersMap);
-		}
-		else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
+		} else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
 			webLink.masterLabel = actionLabel;
-			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));			
+			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));
 		}
 		return webLink;
 	}
