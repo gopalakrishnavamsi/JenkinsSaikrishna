@@ -2,6 +2,7 @@
            extensions="GenController" title="{!$Label.DocuSign}">
     <apex:slds/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
 
     <style type="text/css">
         .bodyDiv {
@@ -32,21 +33,27 @@
                     </svg>
                 </span>
                 <div class="slds-notify__content">
-                    <h2 class="slds-text-heading_small">{!$Label.FailedToCloneGenTemplate}</h2>
+                    <h2 id="errorMessage" class="slds-text-heading_small"></h2>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script>
-      Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.GenController.clone}', '{!GenTemplate__c.Id}', function (result, event) {
-        if (event && event.status) {
-          navUtils.navigateToSObject(result);
-        } else {
-          document.getElementById('spinner').style.display = 'none';
-          document.getElementById('error').style.display = 'block';
-        }
-      }, {escape: false});
+        var errorMessage = '{!JSENCODE($Label.FailedToCloneGenTemplate)}';
+        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.GenController.clone}', '{!GenTemplate__c.Id}',
+            function (result, event) {
+                if (event.status === true) {
+                    var cloneRecordId = result.id;
+                    navUtils.navigateToSObject(cloneRecordId);        
+                }
+                else {
+                    document.getElementById('spinner').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('errorMessage').innerHTML = stringUtils.format('{0} {1}', errorMessage, event.message);
+                    
+                }
+            });
     </script>
+
 </apex:page>
