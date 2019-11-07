@@ -9,12 +9,12 @@
     font-size: t(fontSize3);
 }
 
-.THIS .ds-negotiateHelp-badgeText {
-    border: 3px solid rgb(221, 219, 218);
-    border-radius: 100%;
-    height: 24px;
-    width: 24px;
-    text-align: center;
-    font-size: t(fontSize2);
-    background-color: rgb(255, 255, 255);
+.THIS .ds-negotiateHelp-image-box {
+    width: 200px;
+}
+
+.THIS .ds-negotiateHelp-image-header {
+    color: rgb(43, 40, 38);
+    font-size: t(fontSize6);
+    font-weight: t(fontWeightBold);
 }

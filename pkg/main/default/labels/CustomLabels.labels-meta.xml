@@ -6393,7 +6393,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabESignatureHelpText</shortDescription>
-		<value>Customize default email messaging, set up reminders and envelope expiration days.</value>
+		<value>Easily send documents for signature from within Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>TabDocumentGenerationHelpText</fullName>
@@ -6425,7 +6425,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TabComponentsHelpText</shortDescription>
-		<value>Customize layouts and experiences by adding buttons and components.</value>
+		<value>Customize layouts and experiences by adding components.</value>
 	</labels>
 	<labels>
 		<fullName>TabHelpText</fullName>
@@ -7153,7 +7153,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>NegotiateHelpText1</shortDescription>
-		<value>Create a template in Document Generation</value>
+		<value>Create or use an existing template in Document Generation</value>
 	</labels>
 	<labels>
 		<fullName>NegotiateHelpText2</fullName>
@@ -7170,6 +7170,30 @@
 		<protected>true</protected>
 		<shortDescription>NegotiateHelpText3</shortDescription>
 		<value>Send the document for external review, internal approval, and signing</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpText4</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpText3</shortDescription>
+		<value>Add the DocuSign Files component to keep track of your documents</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpImageHeader</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpImageHeader</shortDescription>
+		<value>Add the DocuSign Files Component to Your Layouts</value>
+	</labels>
+	<labels>
+		<fullName>NegotiateHelpImageBody</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NegotiateHelpImageBody</shortDescription>
+		<value>DocuSign Files helps you keep track of the documents you are collaborating on. It automatically keeps your documents organized and easy to find in Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>GoToDocumentation</fullName>

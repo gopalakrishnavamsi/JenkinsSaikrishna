@@ -1,13 +1,24 @@
 <aura:component description="SetupLearnAboutProducts">
+    <aura:attribute name="selectedItem" type="String"/>
 
     <div class="slds-box ds-white-background">
         <!-- Learn section header -->
         <div class="slds-grid slds-grid_vertical slds-p-around_medium">
-            <div class="slds-col ds-learn-section-header">
-                {!$Label.c.LearnSectionHeader}
-            </div>
-            <div class="slds-col ds-learn-section-info">
-                {!$Label.c.LearnSectionHelpText}
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col slds-p-bottom_medium">
+                    <div class="slds-media slds-media_large">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:sossession" size="large" />
+                        </div>
+                        <div class="slds-media__body">
+                            <p class="ds-learn-section-header">{!$Label.c.TabHelp}</p>
+                            <p class="ds-learn-section-info">{!$Label.c.LearnSectionHeader}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_medium">
+                    <lightning:button label="{!$Label.c.SetupGetHelp}" onclick="{!c.navigateToHelpTab}"></lightning:button>
+                </div>
             </div>
         </div>
         <div class="slds-grid">

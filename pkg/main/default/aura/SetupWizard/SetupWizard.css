@@ -24,11 +24,11 @@
 
 .THIS .ds-admin-sidebarSection {
     min-width: 280px;
+    background: rgb(255, 255, 255) repeat-y 50% 0;
 }
 
 .THIS .ds-admin-sidebar {
     background: rgb(255, 255, 255);
-    min-height: 1440px;
 }
 
 .THIS .ds-home-centerSpaceSection {
@@ -47,12 +47,12 @@
 .THIS .ds-components-section, 
 .THIS .ds-help-section {
     background: rgb(255, 255, 255);
+    border-radius: 4px;
 }
 
 .THIS .ds-setupSection-heading {
-    background: rgb(243, 242, 242);
-    max-height: 80px;
     border-radius: 4px;
+    flex-grow: 1;
 }
 
 .THIS .ds-configuration-detail {

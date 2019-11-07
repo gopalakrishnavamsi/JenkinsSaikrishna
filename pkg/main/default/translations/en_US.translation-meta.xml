@@ -3266,7 +3266,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Customize default email messaging, set up reminders and envelope expiration days.</label>
+		<label>Easily send documents for signature from within Salesforce.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3282,7 +3282,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Customize layouts and experiences by adding buttons and components.</label>
+		<label>Customize layouts and experiences by adding components.</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3646,7 +3646,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Create a template in Document Generation</label>
+		<label>Create or use an existing template in Document Generation</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3656,6 +3656,18 @@
 	<customLabels>
 		<label>Send the document for external review, internal approval, and signing</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Add the DocuSign Files component to keep track of your documents</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>Add the DocuSign Files Component to Your Layouts</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Files helps you keep track of the documents you are collaborating on. It automatically keeps your documents organized and easy to find in Salesforce.</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>Go to Documentation</label>

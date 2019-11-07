@@ -9,7 +9,7 @@
 
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.initializeComponent}"/>
 
-    <div class="slds-m-around_small">
+    <div class="slds-p-around_medium">
         <div class="slds-grid slds-grid_align-spread">
             <div class="slds-col">
                 <div class="slds-media">

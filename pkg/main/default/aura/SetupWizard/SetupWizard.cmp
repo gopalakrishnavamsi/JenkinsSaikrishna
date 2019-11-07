@@ -66,16 +66,11 @@
                     <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <c:SetupAccount login="{!v.login}"/>
                     </div>
-                    <!-- Help guide details -->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <c:SetupLearnAboutProducts/>
-                    </div>
                     <!-- Configuration details -->
                     <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.ConfigurationSection}</div>
                         <div class="slds-box ds-white-background">
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col">
+                                <div class="slds-col slds-p-bottom_medium">
                                     <div class="slds-media slds-media_large">
                                         <div class="slds-media__figure">
                                             <lightning:icon iconName="standard:email_chatter" size="large"/>
@@ -92,7 +87,7 @@
                                 </div>
                             </div>
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col slds-p-top_medium">
+                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
                                     <div class="slds-media slds-media_large">
                                         <div class="slds-media__figure">
                                             <lightning:icon iconName="standard:contract" size="large"/>
@@ -117,8 +112,8 @@
                                     </aura:if>
                                 </div>
                             </div>
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
-                                <div class="slds-col slds-p-top_medium">
+                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
+                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
                                     <div class="slds-media slds-media_large">
                                         <div class="slds-media__figure">
                                             <lightning:icon iconName="standard:approval" size="large"
@@ -144,19 +139,12 @@
                                     </aura:if>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <!-- Administration details -->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <div class="slds-text-title_caps slds-m-bottom_small">{!$Label.c.AdministrationSection}</div>
-                        <div class="slds-box ds-white-background">
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col">
+                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
                                     <div class="slds-media slds-media_large">
                                         <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:avatar" size="large"
-                                                            class="ds-userManagement-icon-background"/>
+                                            <lightning:icon iconName="standard:avatar" size="large" class="ds-userManagement-icon-background" />
                                         </div>
                                         <div class="slds-media__body">
                                             <p class="ds-configuration-detail">{!$Label.c.TabUserManagement}</p>
@@ -165,16 +153,14 @@
                                     </div>
                                 </div>
                                 <div class="slds-col slds-p-bottom_medium">
-                                    <lightning:button label="{!$Label.c.Manage}"
-                                                      onclick="{!c.navigateToUserManagementTab}"></lightning:button>
+                                    <lightning:button label="{!$Label.c.Manage}" onclick="{!c.navigateToUserManagementTab}"></lightning:button>
                                 </div>
                             </div>
                             <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
-                                <div class="slds-col slds-p-top_medium">
+                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
                                     <div class="slds-media slds-media_large">
                                         <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:canvas" size="large"
-                                                            class="ds-components-icon-background"/>
+                                            <lightning:icon iconName="standard:canvas" size="large" class="ds-components-icon-background" />
                                         </div>
                                         <div class="slds-media__body">
                                             <p class="ds-configuration-detail">{!$Label.c.TabComponents}</p>
@@ -183,37 +169,17 @@
                                     </div>
                                 </div>
                                 <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                    <lightning:button label="{!$Label.c.Manage}"
-                                                      onclick="{!c.navigateToComponentsTab}"></lightning:button>
+                                    <lightning:button label="{!$Label.c.Manage}" onclick="{!c.navigateToComponentsTab}"></lightning:button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <!-- support -->
+                    
+                    <!-- Help guide details -->
                     <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_xx-large">
-                        <div class="slds-box">
-                            <div class="slds-grid slds-grid_align-spread slds-m-around_xx-small">
-                                <div class="slds-col slds-size_3-of-4">
-                                    <div class="slds-media">
-                                        <div class="slds-media__figure ds-havingTrouble-illustration">
-                                            <img src="{!$Resource.HavingTrouble}"/>
-                                        </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.HavingTrouble}</p>
-                                            <p>{!$Label.c.TabHelpText}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-p-bottom_medium slds-m-right_medium">
-                                    <lightning:button label="{!$Label.c.SetupGetHelp}"
-                                                      onclick="{!c.navigateToHelpTab}"></lightning:button>
-                                </div>
-                            </div>
-                        </div>
-
+                        <c:SetupLearnAboutProducts selectedItem="{!v.selectedItem}"/>
                     </div>
-
+                    
                     <div class="slds-p-top_large slds-p-bottom_large">
                     </div>
                 </aura:if>
@@ -224,7 +190,7 @@
                     <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}" 
                                           sectionHeader="{!$Label.c.TabESignature}" 
                                           headerIconName="standard:email_chatter"/>
-                    <div class="ds-esignature-section slds-m-top_x-large">
+                    <div class="ds-esignature-section slds-m-top_small">
                         <c:SetupEsignature />
                     </div>   
                 </aura:if>
@@ -239,7 +205,7 @@
                                           trialDaysLeft="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), v.genProduct.daysUntilExpires , 0)}"
                                           trialProductName="{!$Label.c.GenBadgeText}"/>
 
-                    <div class="ds-documentGeneration-section slds-m-top_x-large">
+                    <div class="ds-documentGeneration-section slds-m-top_small">
                         <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
                     </div>
                 </aura:if>
@@ -254,7 +220,7 @@
                                           trialDaysLeft="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), v.negotiateProduct.daysUntilExpires , 0)}"
                                           trialProductName="{!$Label.c.NegotiateBadgeText}"/>
 
-                    <div class="ds-negotiation-section slds-m-top_x-large">
+                    <div class="ds-negotiation-section slds-m-top_small">
                         <c:SetupNegotiation genProduct="{!v.genProduct}" negotiateProduct="{!v.negotiateProduct}"/>
                     </div>
                 </aura:if>
@@ -266,7 +232,7 @@
                                           sectionHeader="{!$Label.c.TabUserManagement}"
                                           headerIconName="standard:avatar"/>
                     <!-- Section for managing users -->
-                    <div class="ds-userManagement-section slds-m-top_x-large">
+                    <div class="ds-userManagement-section slds-m-top_small">
                         <c:SetupUsers products="{!v.products}" context='e_sign'/>
                     </div>
                 </aura:if>
@@ -277,7 +243,7 @@
                     <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
                                           sectionHeader="{!$Label.c.TabComponents}"
                                           headerIconName="standard:canvas"/>  
-                    <div class="ds-components-section slds-m-top_x-large">
+                    <div class="ds-components-section slds-m-top_small">
                         <c:SetupComponents/>
                     </div>
                 </aura:if>
@@ -288,7 +254,7 @@
                     <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
                                           sectionHeader="{!$Label.c.TabHelp}"
                                           headerIconName="standard:sossession"/>
-                    <div class="ds-help-section slds-m-top_x-large">
+                    <div class="ds-help-section slds-m-top_small">
                         <c:SetupHelp/>
                     </div>
                 </aura:if>

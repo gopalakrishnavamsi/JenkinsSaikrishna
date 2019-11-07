@@ -1,3 +1,8 @@
+.THIS {
+    background: rgb(243, 242, 242);
+    border-radius: 4px;
+}
+
 .THIS .ds-sectionHeader {
     color: t(colorTextActionLabelActive);
     font-size: t(fontSize7);

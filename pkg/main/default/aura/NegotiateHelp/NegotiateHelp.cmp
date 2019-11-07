@@ -16,10 +16,19 @@
         <div class="ds-negotiateHelp-body slds-m-top_large">
             <aura:iteration items="{!v.helpSteps}" var="step">
                 <ul class="slds-list_horizontal slds-m-bottom_large">
-                    <li class="ds-negotiateHelp-badgeText">{!step.stepNumber}</li>
-                    <li class="slds-m-left_large">{!step.stepDetail}</li>
+                    <li>{!step.stepNumber}</li>
+                    <li class="slds-m-left_x-small">{!step.stepDetail}</li>
                 </ul>
             </aura:iteration>
+        </div>
+        <div class="slds-m-left_x-small slds-m-bottom_large slds-media slds-media_large">
+            <div class="slds-media__figure ds-negotiateHelp-image-box">
+                <img src="{!$Resource.NegotiateHelpVideo}"/>
+            </div>
+            <div class="slds-media__body">
+                <div class="ds-negotiateHelp-image-header">{!$Label.c.NegotiateHelpImageHeader}</div>
+                <div class="slds-m-top_small ds-negotiateHelp-body">{!$Label.c.NegotiateHelpImageBody}</div>
+            </div>
         </div>
         <lightning:button label="{!$Label.c.GoToDocumentation}"/>
     </div>
