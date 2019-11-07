@@ -3,8 +3,7 @@
         <div class="slds-p-around_large">
             <ul>
                 <li class="ds-components-section-header">{!$Label.c.ComponentSectionHeader}</li>
-                <li class="slds-m-top_large ds-components-header">{!$Label.c.DocuSignAgreements}</li>
-                <li class="slds-m-top_small">
+                <li class="slds-m-top_xx-large">
                     <div class="slds-grid slds-grid_align-spread ds-components-help-section">
                         <div class="slds-col">
                             <div class="slds-media slds-media_large">
@@ -12,18 +11,18 @@
                                     <img src="{!$Resource.DocuSignFilesComponent}"/>
                                 </div>
                                 <div class="slds-media__body ds-components-image-helpTextbox">
-                                    <p class="ds-components-image-text">{!$Label.c.ComponentSectionEnvelopeStatus}</p>
-                                    <a class="slds-m-top_small ds-components-image-link">{!$Label.c.LearnToPlaceComponents}</a>
+                                    <div class="ds-components-header">{!$Label.c.DocuSignAgreements}</div>
+                                    <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionDocuSignFiles}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="slds-col slds-p-bottom_medium">
-                            <lightning:button label="{!$Label.c.LearnMoreBtn}"></lightning:button>
+                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
                         </div>
                     </div>
                 </li>
-                <li class="slds-m-top_xx-large ds-components-header">{!$Label.c.EsignatureEnvelopeStatus}</li>
-                <li class="slds-m-top_small">
+                <li class="slds-m-top_xx-large ds-components-item-border"/>
+                <li class="slds-m-top_xx-large">
                     <div class="slds-grid slds-grid_align-spread ds-components-help-section">
                         <div class="slds-col">
                             <div class="slds-media slds-media_large">
@@ -31,13 +30,13 @@
                                     <img src="{!$Resource.EnvelopeStatusComponent}"/>
                                 </div>
                                 <div class="slds-media__body ds-components-image-helpTextbox">
-                                    <p class="ds-components-image-text">{!$Label.c.ComponentSectionDocuSigFiles}</p>
-                                    <a class="ds-components-image-link">{!$Label.c.LearnToPlaceComponents}</a>
+                                    <div class="ds-components-header">{!$Label.c.EsignatureEnvelopeStatus}</div>
+                                    <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionEnvelopeStatus}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="slds-col slds-p-bottom_medium">
-                            <lightning:button label="{!$Label.c.LearnMoreBtn}"></lightning:button>
+                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
                         </div>
                     </div>
                 </li>

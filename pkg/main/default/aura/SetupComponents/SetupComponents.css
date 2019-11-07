@@ -14,6 +14,10 @@
     font-weight: t(fontWeightBold);
 }
 
+.THIS .ds-components-item-border {
+    border-bottom: solid 0.5px rgb(243, 242, 242);
+}
+
 .THIS .ds-components-help-section {
     height: 92px;
 }
@@ -25,15 +29,10 @@
 .THIS .ds-components-image-helpTextbox {
     display: grid;
     height: 92px;
-    width: 530px;
+    width: 460px;
 }
 
 .THIS .ds-components-image-text {
     color: rgb(62, 62, 60);
     font-size: t(fontSize3);
-}
-
-.THIS .ds-components-image-link {
-    font-size: t(fontSize3);
-    align-self: flex-end;
 }

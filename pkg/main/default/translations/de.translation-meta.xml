@@ -3300,12 +3300,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Komponenten in Layouts einfügen</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Verfolgen Sie Dateien, an denen Sie mit anderen zusammenarbeiten, direkt in Salesforce. Mit DocuSign-Dateien sind Ihre Dokumente sortiert und einfach zu finden.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Alle Vorteile vom DocuSign Apps Launcher nutzen.</label>

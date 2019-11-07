@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Узнайте, как разместить компоненты в макетах</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Отслеживайте файлы, над которыми работаете совместно с другими пользователями, прямо в Salesforce. Файлы DocuSign позволяют упорядочить документы и легко их находить.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Используйте средство запуска приложений DocuSign максимально эффективно.</label>

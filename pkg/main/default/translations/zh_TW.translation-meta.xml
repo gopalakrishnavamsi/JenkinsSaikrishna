@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>瞭解如何在版面配置內置放元件</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>在 Salesforce 內追蹤您的協作檔案。DocuSign Files 可以為您整理文件，便於搜尋。</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>進一步運用 DocuSign 應用程式啟動器。</label>

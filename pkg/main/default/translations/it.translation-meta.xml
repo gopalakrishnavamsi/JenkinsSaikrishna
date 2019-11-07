@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Scopri come inserire i componenti nei tuoi layout</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Tieni traccia dei file a cui stai collaborando senza uscire da Salesforce. DocuSign Files mantiene i documenti organizzati e facili da trovare.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Sfrutta al massimo DocuSign Apps Launcher.</label>

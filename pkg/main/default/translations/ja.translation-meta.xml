@@ -3301,12 +3301,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>レイアウトにコンポーネントを追加するには</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>［DocuSignファイル］では、自分の文書をかんたんに管理できます。ここでは、Salesforceを離れることなくコラボレーション中のファイルの状態を確認できます。</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignアプリケーションランチャーの便利な機能を使用する。</label>

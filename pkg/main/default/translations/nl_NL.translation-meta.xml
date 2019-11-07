@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Meer informatie over het plaatsen van componenten in uw lay-outs</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Blijf op de hoogte van de bestanden waaraan u samenwerkt zonder Salesforce te verlaten. DocuSign Files houdt uw documenten overzichtelijk en ze zijn gemakkelijk terug te vinden.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Haal meer uit DocuSign Apps Launcher.</label>

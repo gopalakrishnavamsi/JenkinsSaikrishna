@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Découvrez comment disposer des composants dans vos présentations</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Gardez une trace des fichiers sur lesquels vous collaborez sans quitter Salesforce. DocuSign Files garde vos documents organisés et les rend faciles à trouver.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Tirez le meilleur parti du lanceur d’applications DocuSign</label>

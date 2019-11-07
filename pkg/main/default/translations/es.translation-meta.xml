@@ -3303,12 +3303,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Aprenda a situar componentes en los formatos</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>Realice un seguimiento de los archivos en los que está colaborando sin salir de Salesforce. Los archivos de Docusign le permiten mantener sus documentos organizados y fácilmente localizables.</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>Conozca mejor DocuSign Apps Launcher.</label>

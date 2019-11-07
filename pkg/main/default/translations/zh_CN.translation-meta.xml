@@ -3302,12 +3302,8 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>了解如何在布局中放置组件</label>
-		<name>LearnToPlaceComponents</name>
-	</customLabels>
-	<customLabels>
 		<label>无需离开 Salesforce 即可跟踪正在协作的文件。DocuSign 文件让您的文档井井有条，且易于查找。</label>
-		<name>ComponentSectionDocuSigFiles</name>
+		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
 		<label>充分利用 DocuSign 应用程序启动器。</label>

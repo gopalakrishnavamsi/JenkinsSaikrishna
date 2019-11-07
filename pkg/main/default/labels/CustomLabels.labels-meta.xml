@@ -6460,20 +6460,12 @@
 		<value>Get real time status updates on your envelopes right from Salesforce. DocuSign eSignature Envelope Status gets your documents signed faster, so you can get more work done.</value>
 	</labels>
 	<labels>
-		<fullName>LearnToPlaceComponents</fullName>
+		<fullName>ComponentSectionDocuSignFiles</fullName>
 		<categories>SetupComponents</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>LearnToPlaceComponents</shortDescription>
-		<value>Learn how to place components in your layouts</value>
-	</labels>
-	<labels>
-		<fullName>ComponentSectionDocuSigFiles</fullName>
-		<categories>SetupComponents</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ComponentSectionDocuSigFiles</shortDescription>
-		<value>Keep track of the files you are collaborating on without leaving Salesforce. DocuSign Files keeps your documents organized and easy to find.</value>
+		<shortDescription>ComponentSectionDocuSignFiles</shortDescription>
+		<value>DocuSign Files helps you keep track of the documents you are collaborating on. It automatically keeps your documents organized and easy to find in Salesforce.</value>
 	</labels>
 	<labels>
 		<fullName>GetMoreFromAppsLauncher</fullName>
