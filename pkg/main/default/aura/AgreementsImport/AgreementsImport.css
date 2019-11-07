@@ -20,6 +20,13 @@
     max-height: 300px;
 }
 
+.THIS .ds-import-spinner_loadingAgreement::after {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 3em);
+}
+
 .THIS .ds-import-spinner_setupFileUpload::after {
     position: absolute;
     content: var(--uploadWidgitInitMessage);

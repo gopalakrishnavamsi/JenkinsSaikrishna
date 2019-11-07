@@ -47,53 +47,23 @@
     component.set('v.currentStep', '1');
   },
 
-  createInternalApprovalComponent: function (component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsInternalApproval',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails,
-        sourceId: component.get('v.recordId')
-      },
-      function (componentBody) {
-        if (component.isValid()) {
-          component.set('v.showModal', false);
-          var targetCmp = component.find('internalApprovalModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
-  },
-
-  createExternalReviewComponent: function (component) {
-    var agreementDetails = component.get('v.agreementDetails');
-    $A.createComponent(
-      'c:AgreementsExternalReview',
-      {
-        showModal: true,
-        agreementDetails: agreementDetails,
-        sourceId: component.get('v.recordId')
-      },
-      function (componentBody) {
-        if (component.isValid()) {
-          component.set('v.showModal', false);
-          var targetCmp = component.find('externalReviewModal');
-          var body = targetCmp.get('v.body');
-          targetCmp.set('v.body', []);
-          body.push(componentBody);
-          targetCmp.set('v.body', body);
-        }
-      }
-    );
-  },
-
   navigateToSendForSignature: function (component, event, helper) {
     if (component.get('v.isESignatureEnabled')) {
       helper.navigateToSendForSignature(component, event, helper);
+    }
+  },
+
+  sendForActivityAfterUpload: function (component, event, helper) {
+    helper.sendForActivityAfterUpload(component, event);
+  },
+
+  // when agreement details data is loaded, initiate a workflow based on the activity type that was set post-import
+  onAgreementDetailsChange: function (component, event, helper) {
+    var agreementDetails = component.get('v.agreementDetails');
+    var activity = component.get('v.activityAfterUpload');
+    var allowActivity = !$A.util.isUndefinedOrNull(agreementDetails) && !$A.util.isUndefinedOrNull(activity);
+    if (allowActivity) {
+      helper.initiateActivityAfterUpload(component, activity);
     }
   }
 

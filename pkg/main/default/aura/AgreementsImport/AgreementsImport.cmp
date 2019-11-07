@@ -4,6 +4,7 @@
     <aura:attribute name="loading" type="Boolean"/>
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
+    <aura:attribute name="activityAfterUpload" type="String" access="private"/>
     <aura:attribute name="currentStep" type="String"/>
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="salesforceFiles" type="Object[]" access="private"/>
@@ -17,6 +18,7 @@
     <aura:attribute name="uploadCompleteMessage" type="String" access="private"/>
 
     <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelButtonClicked}"/>
+    <aura:handler name="change" value="{!v.agreementDetails}" action="{!c.onAgreementDetailsChange}"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.scmwidgetsjs, $Resource.stringUtils, $Resource.navUtils)}"/>
 
@@ -43,7 +45,8 @@
                     successHeader="{!if(and(v.currentStep == '4', not(v.loading)), true,false)}">
 
         <aura:if isTrue="{!v.loading}">
-            <div class="{!'ds-import-spinner_container' + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
+            <div class="{!'ds-import-spinner_container' + if(v.currentStep == '5', ' ds-import-spinner_loadingAgreement')
+                                                        + if(v.currentStep == '3', ' ds-import-spinner_setupFileUpload')
                                                         + if(v.currentStep == '2', ' ds-import-spinner_setupSalesforceFiles')
                                                         + if(and(v.currentStep == '4', !v.isSendingForSignature), ' ds-import-spinner_uploadingAgreement'
                                                         + if(and(v.currentStep == '4' , v.isSendingForSignature), ' ds-import-spinner_sendingForSignature'))}">
@@ -163,7 +166,8 @@
                     <div class="slds-col slds-p-top_medium">
                         <div class="slds-grid slds-grid_vertical">
                             <div class="{!'slds-col slds-p-bottom_xx-small'+if(!v.isNegotiateEnabled,' slds-hide','')}"
-                                 onclick="{!c.createExternalReviewComponent}">
+                                 onclick="{!c.sendForActivityAfterUpload}"
+                                 data-activity="{!'review'}">
                                 <a
                                         class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
@@ -181,7 +185,8 @@
                                 </a>
                             </div>
                             <div class="{!'slds-col slds-p-bottom_xx-small'+if(!v.isNegotiateEnabled,' slds-hide','')}"
-                                 onclick="{!c.createInternalApprovalComponent}">
+                                 onclick="{!c.sendForActivityAfterUpload}"
+                                 data-activity="{!'approval'}">
                                 <a
                                         class="slds-box slds-box_link slds-box_x-small slds-media">
                                     <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
@@ -249,7 +254,8 @@
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand"
                                       onclick="{!c.pcFileImportTriggered}"
-                                      label="{!$Label.c.ImportButtonLabel}" disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"></lightning:button>
+                                      label="{!$Label.c.ImportButtonLabel}"
+                                      disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"></lightning:button>
                 </div>
             </aura:if>
 

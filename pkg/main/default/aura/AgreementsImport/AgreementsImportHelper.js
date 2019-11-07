@@ -281,7 +281,7 @@
     document.addEventListener('springcm:upload:fileChange', function (event) {
       component.set('v.disableSalesforceFileImport', $A.util.isEmpty(event.detail.files));
     });
-  },  
+  },
 
   exportFileAndSend: function (component, event, helper) {
     component.set('v.loading', true);
@@ -301,5 +301,62 @@
       }
     });
     $A.enqueueAction(exportSalesforceAction);
+  },
+
+  createExternalReviewComponent: function (component) {
+    this.createActivityComponent(component, 'c:AgreementsExternalReview', 'externalReviewModal');
+  },
+
+  createInternalApprovalComponent: function (component) {
+    this.createActivityComponent(component, 'c:AgreementsInternalApproval', 'internalApprovalModal');
+  },
+
+  createActivityComponent: function (component, activityComponent, activityContainerId) {
+    var agreementDetails = component.get('v.agreementDetails');
+    $A.createComponent(
+      activityComponent,
+      {
+        showModal: true,
+        agreementDetails: agreementDetails,
+        sourceId: component.get('v.recordId')
+      },
+      function (componentBody) {
+        if (component.isValid()) {
+          component.set('v.showModal', false);
+          component.set('v.loading', false);
+          var targetCmp = component.find(activityContainerId);
+          var body = targetCmp.get('v.body');
+          targetCmp.set('v.body', []);
+          body.push(componentBody);
+          targetCmp.set('v.body', body);
+        }
+      }
+    );
+  },
+
+  // if agreement details data is loaded, initiate the review or approval workflow after a document upload
+  // otherwise, set the activity type to initiate the workflow when the data is ready
+  sendForActivityAfterUpload: function (component, event) {
+    var component_target = event.currentTarget;
+    var activity = component_target.dataset.activity;
+    var agreementDetails = component.get('v.agreementDetails');
+
+    component.set('v.loading', true);
+    component.set('v.currentStep', '5');
+
+    if ($A.util.isUndefinedOrNull(agreementDetails)) {
+      component.set('v.activityAfterUpload', activity);
+    } else {
+      this.initiateActivityAfterUpload(component, activity);
+    }
+  },
+
+  initiateActivityAfterUpload: function (component, activity) {
+    if (activity === 'review') {
+      this.createExternalReviewComponent(component);
+    } else if (activity === 'approval') {
+      this.createInternalApprovalComponent(component);
+    }
+    component.set('v.activityAfterUpload', null);
   }
 });
