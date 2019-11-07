@@ -295,8 +295,9 @@ public with sharing class AuthService {
 					'Authorization' => 'Bearer ' + accessToken,
 					'Content-Type' => 'application/json; charset=utf-8'
 				},
+				//updated the name of instance application to 'DocuSign' here so that it matches with the client application name of root IK
 				JSON.serialize(new Map<String, Object> {
-					'name' => 'DocuSign Apps Launcher',
+					'name' => 'DocuSign',
 					'redirect_uris' => uris,
 					'is_client_app' => true
 				}),
