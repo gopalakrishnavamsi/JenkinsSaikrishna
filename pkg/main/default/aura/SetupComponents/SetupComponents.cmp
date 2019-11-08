@@ -8,7 +8,9 @@
                         <div class="slds-col">
                             <div class="slds-media slds-media_large">
                                 <div class="slds-media__figure ds-components-image-box">
-                                    <img src="{!$Resource.DocuSignFilesComponent}"/>
+                                    <a href="{!$Label.c.ComponentsDocuSignFilesVideo}" target="_blank">
+                                        <img src="{!$Resource.DocuSignFilesComponent}"/>
+                                    </a>
                                 </div>
                                 <div class="slds-media__body ds-components-image-helpTextbox">
                                     <div class="ds-components-header">{!$Label.c.DocuSignAgreements}</div>
@@ -17,7 +19,9 @@
                             </div>
                         </div>
                         <div class="slds-col slds-p-bottom_medium">
-                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                            <a href="{!$Label.c.LearnNegotiateUserURL}" target="_blank">
+                                <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                            </a>
                         </div>
                     </div>
                 </li>
@@ -27,7 +31,9 @@
                         <div class="slds-col">
                             <div class="slds-media slds-media_large">
                                 <div class="slds-media__figure ds-components-image-box">
-                                    <img src="{!$Resource.EnvelopeStatusComponent}"/>
+                                    <a href="{!$Label.c.ComponentsEnvelopeStatusVideo}" target="_blank">
+                                        <img src="{!$Resource.EnvelopeStatusComponent}"/>
+                                    </a>
                                 </div>
                                 <div class="slds-media__body ds-components-image-helpTextbox">
                                     <div class="ds-components-header">{!$Label.c.EsignatureEnvelopeStatus}</div>
@@ -36,7 +42,9 @@
                             </div>
                         </div>
                         <div class="slds-col slds-p-bottom_medium">
-                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                            <a href="{!$Label.c.LearnEsignUserURL}" target="_blank">
+                                <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                            </a>
                         </div>
                     </div>
                 </li>

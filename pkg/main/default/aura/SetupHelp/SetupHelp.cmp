@@ -86,7 +86,7 @@
                                             iconName="utility:help_center"
                                             alternativeText="{!$Label.c.HelpCenterImgAltText}"/>
                             <span class="ds-fonts-color slds-p-left_large">
-                                <b><lightning:formattedUrl label="{!$Label.c.SupportCenterTitle}" value="{!$Label.c.GetSupportURL}"/></b>
+                                <b><lightning:formattedUrl label="{!$Label.c.SupportCenterTitle}" value="{!$Label.c.SupportSiteURL}"/></b>
                             </span>
                             <div class="slds-p-left_xx-large">{!$Label.c.SupportCenterSummary}</div>
                         </div>

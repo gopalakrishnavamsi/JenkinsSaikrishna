@@ -6120,6 +6120,14 @@
 		<value>https://support.docusign.com/en/docusignuniversity</value>
 	</labels>
 	<labels>
+		<fullName>SupportSiteURL</fullName>
+		<categories>Help</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SupportSiteURL</shortDescription>
+		<value>https://support.docusign.com/</value>
+	</labels>
+	<labels>
 		<fullName>VisitCommunityURL</fullName>
 		<categories>CLM</categories>
 		<language>en_US</language>
@@ -7050,6 +7058,22 @@
 		<protected>true</protected>
 		<shortDescription>Negotiate User Guide</shortDescription>
 		<value>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</value>
+	</labels>
+	<labels>
+		<fullName>ComponentsDocuSignFilesVideo</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ComponentsDocuSignFilesVideo</shortDescription>
+		<value>https://support.docusign.com/</value>
+	</labels>
+	<labels>
+		<fullName>ComponentsEnvelopeStatusVideo</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ComponentsEnvelopeStatusVideo</shortDescription>
+		<value>https://support.docusign.com/</value>
 	</labels>
 	<labels>
 		<fullName>LearnAppsLauncherAdminURL</fullName>

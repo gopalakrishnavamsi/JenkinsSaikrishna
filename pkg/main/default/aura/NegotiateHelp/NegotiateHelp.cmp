@@ -23,14 +23,18 @@
         </div>
         <div class="slds-m-left_x-small slds-m-bottom_large slds-media slds-media_large">
             <div class="slds-media__figure ds-negotiateHelp-image-box">
-                <img src="{!$Resource.NegotiateHelpVideo}"/>
+                <a href="{!$Label.c.ComponentsDocuSignFilesVideo}" target="_blank">
+                    <img src="{!$Resource.NegotiateHelpVideo}"/>
+                </a>
             </div>
             <div class="slds-media__body">
                 <div class="ds-negotiateHelp-image-header">{!$Label.c.NegotiateHelpImageHeader}</div>
                 <div class="slds-m-top_small ds-negotiateHelp-body">{!$Label.c.NegotiateHelpImageBody}</div>
             </div>
         </div>
-        <lightning:button label="{!$Label.c.GoToDocumentation}"/>
+        <a href="{!$Label.c.LearnNegotiateUserURL}" target="_blank">
+            <lightning:button label="{!$Label.c.GoToDocumentation}"/>
+        </a>
     </div>
 
 </aura:component>

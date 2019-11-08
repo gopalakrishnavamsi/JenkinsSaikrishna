@@ -56,10 +56,9 @@
                             <div class="slds-media__body">
                                 <div class="slds-page-header__name">
                                     <div class="slds-page-header__name-title">
-                                        <p class="slds-page-header__name-meta">{!$CurrentPage.parameters.recordName}</p>
                                         <h1>
                                         <span class="slds-page-header__title slds-truncate"
-                                              title="{!$CurrentPage.parameters.title}"><strong>{!$CurrentPage.parameters.title}</strong></span>
+                                              title="{!$CurrentPage.parameters.title}"><strong>{!$CurrentPage.parameters.recordName}</strong></span>
                                         </h1>
                                     </div>
                                 </div>
