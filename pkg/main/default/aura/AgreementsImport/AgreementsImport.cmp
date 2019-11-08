@@ -153,8 +153,10 @@
                                 <!-- /File Icon -->
                             </div>
                             <div class="slds-media__body">
-                                <h3 class="slds-tile__title slds-truncate" title="{!v.importedFile.name}"><a
-                                            href="javascript:void(0);">{!v.importedFile.name}</a>
+                                <h3 class="slds-tile__title slds-truncate" title="{!v.importedFile.name}">
+                                    <a onclick="{!c.sendForActivityAfterUpload}" data-activity="{!'preview'}">
+                                        {!v.importedFile.name}
+                                    </a>
                                 </h3>
                                 <div class="slds-truncate slds-text-color_weak">
                                     {!v.importedFile.formattedSize} • {!v.importedFile.extension}

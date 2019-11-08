@@ -136,6 +136,23 @@
     }
   },
 
+  launchAgreementPreview: function (component) {
+    var agreement = component.get('v.agreementDetails');
+    var action = component.get('c.redirectToAgreementPreview');
+    action.setParams({
+      sourceId: component.get('v.recordId'),
+      agreementId: agreement.id.value
+    });
+    action.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        navUtils.navigateToUrl(response.getReturnValue());
+      }
+      component.set('v.loading', false);
+      component.set('v.currentStep', '4');
+    });
+    $A.enqueueAction(action);
+  },
+
   getAgreementDetails: function (agreementId, component) {
     var action = component.get('c.getAgreement');
     action.setParams({
@@ -323,7 +340,6 @@
       function (componentBody) {
         if (component.isValid()) {
           component.set('v.showModal', false);
-          component.set('v.loading', false);
           var targetCmp = component.find(activityContainerId);
           var body = targetCmp.get('v.body');
           targetCmp.set('v.body', []);
@@ -356,6 +372,8 @@
       this.createExternalReviewComponent(component);
     } else if (activity === 'approval') {
       this.createInternalApprovalComponent(component);
+    } else if (activity === 'preview') {
+      this.launchAgreementPreview(component);
     }
     component.set('v.activityAfterUpload', null);
   }
