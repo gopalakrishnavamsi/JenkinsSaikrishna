@@ -64,7 +64,7 @@
     return false;
   },
 
-  copyLayout: function(layout) {
+  copyLayout: function (layout) {
     var result = null;
     if (!$A.util.isUndefinedOrNull(layout)) {
       result = JSON.parse(JSON.stringify(layout));
@@ -97,11 +97,11 @@
             if (action.type === 'GEN' && action.name === component.get('v.genActionAPIName')) {
               action.label = component.get('v.genButtonLabel');
               return;
-            }  
+            }
           }
         }
       }
-    }  
+    }
   },
 
   isDirty: function (layouts, component) {
@@ -142,12 +142,10 @@
 
       if (originalLabel !== currentLabel && layout.hasGenAction) {
         return true;
-      }
-      else {
+      } else {
         return false;
       }
-    }
-    else {
+    } else {
       return false;
     }
   },
@@ -173,7 +171,11 @@
     return ls;
   },
 
-  publishGenButtons: function(component, event, helper) {
+  publishGenButtons: function (component, event, helper) {
+    var buttonIsValid = helper.getButtonLabelValidity(component);
+    if (!buttonIsValid) {
+      return;
+    }
     component.set('v.creatingButtons', true);
     var config = component.get('v.config');
     var action = component.get('c.updateLayouts');
@@ -192,11 +194,11 @@
       parameters: JSON.stringify(parameters)
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         component.getEvent('publishedButtons').fire();
         helper.getLayouts(component, event, helper);
-        helper.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'),'success');
+        helper.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
       } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
@@ -205,7 +207,7 @@
     $A.enqueueAction(action);
   },
 
-  showToast: function(component, msg, variant) {
+  showToast: function (component, msg, variant) {
     var evt = component.getEvent('showToast');
     evt.setParams({
       data: {
@@ -214,5 +216,9 @@
       }
     });
     evt.fire();
+  },
+
+  getButtonLabelValidity: function (component) {
+    return component.find('buttonLabel').get('v.validity').valid;
   }
 });

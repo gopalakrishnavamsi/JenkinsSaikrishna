@@ -9,9 +9,10 @@
     <aura:attribute name="genActionName" type="String" access="private"/>
     <aura:attribute name="genActionAPIName" type="String" access="private"/>
     <aura:attribute name="genButtonLabel" type="String"/>
+    <aura:attribute name="invalidButtonName" type="Boolean" default="false"/>
 
     <!-- required scripts -->
-    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}" />
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
 
     <!-- Events -->
     <aura:registerEvent name="showToast" type="c:strike_evt"/>
@@ -39,12 +40,12 @@
         <p>{!$Label.c.PublishMsg}</p>
     </div>
 
-    <lightning:input aura:id="buttonLabel" type="text" 
+    <lightning:input aura:id="buttonLabel" type="text"
                      label="{!$Label.c.ButtonLabel}"
                      value="{!v.genButtonLabel}"
                      maxlength="40"
                      onchange="{!c.updateGenActionLabel}"
-                     pattern="[a-zA-Z0-9 ]+"
+                     pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
                      messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"/>
 
     <div class="slds-m-top_medium slds-clearfix">
@@ -54,10 +55,10 @@
         <!-- Page Layout -->
         <label class="ds-mouse-through slds-media slds-media_center slds-m-bottom_x-small">
             <div class="slds-media__figure slds-m-right_x-small slds-p-top_xx-small">
-                <lightning:input type="checkbox" 
+                <lightning:input type="checkbox"
                                  label="{!layout.name}"
-                                 onchange="{!c.makeDirty}" 
-                                 checked="{!layout.hasGenAction}" 
+                                 onchange="{!c.makeDirty}"
+                                 checked="{!layout.hasGenAction}"
                                  class="ds-checkbox_no-label ds-checkbox_large"/>
             </div>
             <div class="slds-media__content">
@@ -69,6 +70,7 @@
 
     <aura:if isTrue="{!not(v.config.Sample__c)}">
         <lightning:button label="{!$Label.c.Publish}" class="slds-m-top_xx-small"
-                          onclick="{!c.publish}" disabled="{!(not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons)}"/>
+                          onclick="{!c.publish}"
+                          disabled="{!(v.invalidButtonName || not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons)}"/>
     </aura:if>
 </aura:component>
