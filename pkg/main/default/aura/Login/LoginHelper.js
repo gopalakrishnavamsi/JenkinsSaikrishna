@@ -239,7 +239,7 @@
   },
 
   endSpringOAuth: function (component, response, loginInformation, helper) {
-    if (loginInformation && loginInformation.status !== 'Fail') {
+    if (loginInformation && loginInformation.success) {
       helper.showToast(component, loginInformation.message, 'success');
       window.setTimeout($A.getCallback(function () {
         component.getEvent('reloadEvent').fire();
