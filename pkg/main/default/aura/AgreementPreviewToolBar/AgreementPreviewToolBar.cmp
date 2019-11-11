@@ -72,6 +72,9 @@
                     <lightning:menuItem label="{!$Label.c.SendForSignature}"
                                         value="{!$Label.c.SendForSignature}"
                                         onactive="{!c.sendForSignature}"
+                                        disabled="{!v.agreement.status == 'PENDING REVIEW'
+                                               || v.agreement.status == 'PENDING APPROVAL'
+                                               || v.agreement.status == 'PENDING SIGNATURE'}"
                                         class="{!if(!v.isESignatureEnabled,'slds-hide','')}"/>
                 </lightning:buttonMenu>
             </div>
