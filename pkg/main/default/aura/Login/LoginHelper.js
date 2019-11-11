@@ -26,7 +26,7 @@
       component.set('v.accountOptions', accountOptions);
       config = {'stepsCompleted': 1};
       component.set('v.config', config);
-      helper.gotoAuthorizationStep(component, helper);
+      helper.gotoAuthorizationStep(component, helper, false);
     }
 
     //User not yet logged in so show first step
@@ -38,18 +38,25 @@
     }
   },
 
-  gotoAuthorizationStep: function (component, helper) {
+  gotoAuthorizationStep: function (component, helper, reloadPage) {
     component.set('v.loading', true);
-    helper.checkPlatformAuthorizationSettings(component)
-      .then($A.getCallback(function (response) {
-        component.set('v.platformAuthorizationSettingsFound', response);
-        helper.goToStep(component, 2);
-        component.set('v.loading', false);
-      }))
-      .catch(function (error) {
-        helper.showToast(component, error, 'error');
-        component.set('v.loading', false);
-      });
+    //reloadPage is set to true when the user logs in to a account in the first step and completes DocuSign Authentication.
+    //The page needs to be refreshed here in order to prevent Remoting Exception 
+    if (reloadPage) {
+      window.location.reload();
+    }
+    else {
+      helper.checkPlatformAuthorizationSettings(component)
+        .then($A.getCallback(function (response) {
+          component.set('v.platformAuthorizationSettingsFound', response);
+          helper.goToStep(component, 2);
+          component.set('v.loading', false);
+        }))
+        .catch(function (error) {
+          helper.showToast(component, error, 'error');
+          component.set('v.loading', false);
+        });
+    }
   },
 
   gotoAccountSelectionStep: function (component, helper) {
@@ -189,7 +196,7 @@
           var loginInformation = response.getReturnValue();
           helper.setLoggedIn(component, loginInformation);
           component.set('v.loading', false);
-          helper.gotoAuthorizationStep(component, helper);
+          helper.gotoAuthorizationStep(component, helper, true);
         } else {
           helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
         }
@@ -197,7 +204,7 @@
       $A.enqueueAction(setAccountAction);
     } else {
       component.set('v.loading', false);
-      helper.gotoAuthorizationStep(component, helper);
+      helper.gotoAuthorizationStep(component, helper, true);
     }
   },
 
