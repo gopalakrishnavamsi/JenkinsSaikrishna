@@ -3590,15 +3590,15 @@
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-for-salesforce-gen-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3610,11 +3610,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
