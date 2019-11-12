@@ -1843,6 +1843,7 @@ private class EnvelopeAPITest {
 				Recipient.fromSource('r2', 'r2@unit.test', null, 'r2', null)
 					.withEmailSettings(new Recipient.EmailSettings(Localization.EN, Label.English, 'r2 subject', 'r2 message')),
 				Recipient.fromSource('r3', 'r3@unit.test', null, 'r3', null)
+					.withEmailSettings(new Recipient.EmailSettings(Localization.ZH_CN, Label.ChineseSimplified, null, ''))
 			});
 
 		Test.startTest();

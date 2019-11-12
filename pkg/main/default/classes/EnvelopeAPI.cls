@@ -621,6 +621,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.signingGroupId = r.isSigningGroup ? String.valueOf(r.signingGroup.id) : null;
 				this.customFields = getRecipientCustomFields(r);
 				this.emailNotification = r.emailSettings == null
+					|| (String.isBlank(r.emailSettings.subject) && String.isBlank(r.emailSettings.message))
 					? null : new EnvelopeAPI.RecipientNotification(r.emailSettings);
 				if (r.authentication != null) {
 					this.accessCode = r.authentication.accessCode;
