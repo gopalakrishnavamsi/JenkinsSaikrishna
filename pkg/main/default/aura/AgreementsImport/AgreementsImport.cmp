@@ -240,7 +240,7 @@
             <aura:if isTrue="{!v.currentStep == '2'}">
                 <div class="slds-grid slds-grid_align-spread">
                     <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}"
-                                      label="Back" disabled="{!v.loading}">
+                                      label="{!$Label.c.Back}" disabled="{!v.loading}">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button_brand"
                                       onclick="{!c.salesforceFileImportTriggered}"
@@ -252,7 +252,7 @@
             <aura:if isTrue="{!v.currentStep == '3'}">
                 <div class="slds-grid slds-grid_align-spread">
                     <lightning:button class="slds-button slds-button--neutral" onclick="{!c.navigateToFirstStep}"
-                                      label="Back" disabled="{!v.loading}">
+                                      label="{!$Label.c.Back}" disabled="{!v.loading}">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button--brand"
                                       onclick="{!c.pcFileImportTriggered}"
